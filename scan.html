@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Control de Acceso · InvitaME</title>
+<link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#12100f;color:#f3efe6;min-height:100vh}
+  .wrap{max-width:480px;margin:0 auto;padding:18px}
+  h1{font-size:19px;font-weight:700;letter-spacing:.3px;margin-bottom:2px}
+  .sub{font-size:12.5px;color:#9a948a;margin-bottom:16px}
+  .card{background:#1c1a18;border:1px solid #2c2926;border-radius:14px;padding:16px;margin-bottom:14px}
+  label{display:block;font-size:12px;color:#b9b2a6;margin-bottom:6px}
+  input{width:100%;padding:13px;border-radius:10px;border:1px solid #3a3631;background:#12100f;color:#fff;font-size:16px}
+  button{width:100%;padding:14px;border:0;border-radius:10px;background:#2e433c;color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px}
+  button.alt{background:#3a3631}
+  #reader{width:100%;border-radius:14px;overflow:hidden;margin-bottom:12px}
+  .hidden{display:none!important}
+  .stat{display:flex;gap:10px;margin-bottom:12px}
+  .stat .b{flex:1;background:#1c1a18;border:1px solid #2c2926;border-radius:12px;padding:10px;text-align:center}
+  .stat .n{font-size:22px;font-weight:700}.stat .l{font-size:11px;color:#9a948a}
+  /* panel resultado */
+  #res{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(8,7,6,.86)}
+  .rc{width:100%;max-width:400px;border-radius:20px;padding:26px 22px;text-align:center;animation:pop .18s ease}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  .ok{background:linear-gradient(160deg,#1f7a4d,#14603b)}
+  .bad{background:linear-gradient(160deg,#8a2b2b,#6d1f1f)}
+  .warn{background:linear-gradient(160deg,#8a6d1f,#6d551a)}
+  .rc .ico{font-size:52px;line-height:1}
+  .rc .nom{font-size:26px;font-weight:800;margin:8px 0 2px}
+  .rc .est{font-size:15px;opacity:.95;margin-bottom:14px}
+  .rc .grid{display:flex;gap:10px;justify-content:center;margin-bottom:6px}
+  .rc .g{background:rgba(255,255,255,.16);border-radius:12px;padding:10px 14px;min-width:78px}
+  .rc .g .gn{font-size:22px;font-weight:800}.rc .g .gl{font-size:11px;opacity:.85}
+  .rc .rest{font-size:13px;background:rgba(255,255,255,.16);border-radius:10px;padding:8px;margin-top:10px}
+  .rc button{background:rgba(255,255,255,.22)}
+  .msg{font-size:12.5px;color:#9a948a;text-align:center;margin-top:6px;min-height:16px}
+</style></head>
+<body>
+<div id="authgate" style="position:fixed;inset:0;z-index:99999;background:#12100f;display:flex;align-items:center;justify-content:center;padding:22px">
+  <div style="background:#1c1a18;border:1px solid #2c2926;border-radius:16px;padding:26px 22px;width:100%;max-width:340px">
+    <div style="font-weight:800;font-size:19px;color:#f3efe6;margin-bottom:2px">🎟️ Control de Acceso</div>
+    <div style="color:#9a948a;font-size:13px;margin-bottom:16px">Ingresá con el usuario del equipo</div>
+    <input id="ag-mail" type="email" placeholder="Correo" autocomplete="username" style="width:100%;padding:13px;border-radius:10px;border:1px solid #3a3631;background:#12100f;color:#fff;font-size:16px;margin-bottom:10px">
+    <input id="ag-pass" type="password" placeholder="Contraseña" autocomplete="current-password" style="width:100%;padding:13px;border-radius:10px;border:1px solid #3a3631;background:#12100f;color:#fff;font-size:16px;margin-bottom:6px">
+    <div id="ag-err" style="color:#e88;font-size:12.5px;min-height:16px;margin-bottom:8px"></div>
+    <button id="ag-btn" style="width:100%;padding:14px;border:0;border-radius:10px;background:#2e433c;color:#fff;font-weight:600;font-size:15px;cursor:pointer">Entrar</button>
+  </div>
+</div>
+<script>
+(function(){
+  function wire(){
+    if(!window.INV||!window.INV.auth){ setTimeout(wire,300); return; }
+    window.INV.onAuth(function(u){ var g=document.getElementById('authgate'); if(g) g.style.display=u?'none':'flex'; });
+    function entrar(){
+      var e=(document.getElementById('ag-mail').value||'').trim(), p=document.getElementById('ag-pass').value, err=document.getElementById('ag-err');
+      if(!e||!p){ err.textContent='Completá el correo y la contraseña'; return; }
+      err.textContent='Entrando…';
+      window.INV.login(e,p).then(function(){err.textContent='';}).catch(function(){ err.textContent='Correo o contraseña incorrectos'; });
+    }
+    document.getElementById('ag-btn').onclick=entrar;
+    document.getElementById('ag-pass').addEventListener('keydown',function(ev){ if(ev.key==='Enter')entrar(); });
+  }
+  wire();
+})();
+</script>
+<div class="wrap">
+  <h1>🎟️ Control de Acceso</h1>
+  <div class="sub">InvitaME · escaneá el QR de cada invitado en la puerta</div>
+  <button type="button" onclick="window.INV&&window.INV.logout&&window.INV.logout()" style="background:none;border:0;color:#9a948a;font-size:12px;text-decoration:underline;cursor:pointer;padding:0;margin-bottom:12px">Cerrar sesión</button>
+
+  <!-- PASO 1: cargar evento -->
+  <div class="card" id="login">
+    <label>Dirección del evento</label>
+    <input id="slug" placeholder="maria-y-diego" autocapitalize="off" autocorrect="off">
+    <button onclick="cargar()" id="btnLoad">Cargar lista de invitados</button>
+    <div class="msg" id="loadmsg"></div>
+  </div>
+
+  <!-- PASO 2: escanear -->
+  <div id="panel" class="hidden">
+    <div class="stat">
+      <div class="b"><div class="n" id="s-tot">0</div><div class="l">Invitados</div></div>
+      <div class="b"><div class="n" id="s-in">0</div><div class="l">Ingresaron</div></div>
+      <div class="b"><div class="n" id="s-fal">0</div><div class="l">Faltan</div></div>
+    </div>
+    <div id="reader"></div>
+    <button class="alt" onclick="manual()">Ingresar código a mano</button>
+    <div class="msg" id="scanmsg">Apuntá la cámara al QR</div>
+  </div>
+</div>
+
+<div id="res" class="hidden"><div class="rc" id="rc"></div></div>
+
+<script>
+  const el=i=>document.getElementById(i);
+  let SLUG="", MAPA=new Map(), scanner=null, pausa=false, INGRESOS=0;
+
+  async function cargar(){
+    SLUG=(el('slug').value||"").trim().toLowerCase();
+    if(!SLUG){el('loadmsg').textContent="Escribí la dirección del evento.";return;}
+    if(!window.INV||!INV.ok){el('loadmsg').textContent="Conectando a la base… probá de nuevo en 2 seg.";return;}
+    el('btnLoad').textContent="Cargando…";el('btnLoad').disabled=true;
+    try{
+      const lista=await INV.listInvitados(SLUG);
+      const activos=lista.filter(g=>g.activo!==false);
+      if(!activos.length){el('loadmsg').textContent="No encontré invitados para ese evento. Revisá la dirección.";el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;return;}
+      MAPA.clear(); INGRESOS=0;
+      activos.forEach(g=>{ MAPA.set(g.token,g); if((g.usosMax||0)-(g.usos||0)>0) INGRESOS+=(g.usosMax-(g.usos||0)); });
+      el('s-tot').textContent=activos.reduce((a,g)=>a+(g.usosMax||1),0);
+      actualizarStats();
+      el('login').classList.add('hidden'); el('panel').classList.remove('hidden');
+      iniciarCamara();
+    }catch(e){console.error(e);el('loadmsg').textContent="Error: "+(e.message||e);el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;}
+  }
+  function actualizarStats(){
+    let usados=0,tot=0; MAPA.forEach(g=>{tot+=(g.usosMax||1);usados+=((g.usosMax||1)-(g.usos!=null?g.usos:g.usosMax||1));});
+    el('s-in').textContent=usados; el('s-fal').textContent=Math.max(0,tot-usados);
+  }
+  function iniciarCamara(){
+    scanner=new Html5Qrcode("reader");
+    scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:230,height:230}},onScan,()=>{})
+      .catch(e=>{el('scanmsg').textContent="No pude abrir la cámara. Usá 'Ingresar código a mano'.";});
+  }
+  function parseToken(txt){ try{ if(txt.includes('g=')){const u=new URL(txt,location.href);return u.searchParams.get('g');} }catch(e){} return (txt||"").trim(); }
+
+  async function onScan(txt){
+    if(pausa)return; pausa=true;
+    const token=parseToken(txt); validar(token);
+  }
+  function manual(){ const t=prompt("Código del invitado (token):"); if(t){pausa=true;validar(t.trim());} }
+
+  async function validar(token){
+    const g=MAPA.get(token);
+    if(!g){ mostrar('bad','✕','Código no válido','Este QR no pertenece a este evento',null); return; }
+    const usos=(g.usos!=null)?g.usos:(g.usosMax||1);
+    if(usos<=0){ mostrar('warn','⚠','Ya ingresó','Sin usos disponibles',g); return; }
+    // descontar 1 uso (local inmediato + base best-effort)
+    g.usos=usos-1; MAPA.set(token,g); actualizarStats();
+    mostrar('ok','✓','¡Habilitado!','Ingreso registrado',g);
+    if(window.INV&&INV.ok){ INV.marcarUso(SLUG,token).catch(()=>{ el('scanmsg').textContent="(Sin internet: se registró local, se sincroniza después)"; }); }
+  }
+  function mostrar(clase,ico,titulo,estado,g){
+    const rc=el('rc'); rc.className='rc '+clase;
+    let extra='';
+    if(g){ const usos=(g.usos!=null)?g.usos:(g.usosMax||1);
+      extra='<div class="grid"><div class="g"><div class="gn">'+(g.usosMax||1)+'</div><div class="gl">Pases</div></div>'+
+        '<div class="g"><div class="gn">'+usos+'</div><div class="gl">Quedan</div></div>'+
+        '<div class="g"><div class="gn">'+(g.mesa||'-')+'</div><div class="gl">Mesa</div></div></div>'+
+        (g.restriccion?'<div class="rest">🍽️ '+g.restriccion+'</div>':'');
+    }
+    rc.innerHTML='<div class="ico">'+ico+'</div><div class="nom">'+(g?g.nombre:'—')+'</div><div class="est">'+estado+'</div>'+extra+'<button onclick="siguiente()">Siguiente ›</button>';
+    el('res').classList.remove('hidden');
+  }
+  function siguiente(){ el('res').classList.add('hidden'); setTimeout(()=>{pausa=false;el('scanmsg').textContent="Apuntá la cámara al QR";},300); }
+  // Auto-cargar el evento si viene por el link (?e=slug), p.ej. desde el botón del admin
+  (function(){ const e=new URLSearchParams(location.search).get('e'); if(!e)return; el('slug').value=e; el('loadmsg').textContent='Cargando el evento…'; const t=setInterval(()=>{ if(window.INV&&window.INV.ok){ clearInterval(t); cargar(); } },400); setTimeout(()=>clearInterval(t),9000); })();
+</script>
+<script type="module" src="firebase-inv.js?v=20"></script>
+</body></html>

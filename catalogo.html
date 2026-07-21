@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invítame · Elegí tu invitación</title>
+<link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root{--uva:#6D1233;--rosa:#F56770;--ink:#3f3730;--muted:#9a8f88;--line:#ece2d8}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#f7efe9,#f2e8e1);color:var(--ink)}
+  .top{background:var(--uva);color:#fff;padding:24px 20px;text-align:center}
+  .top .brand{font-weight:900;font-size:24px}.top .brand span{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600}
+  .top h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:26px;margin:10px 0 2px}
+  .top p{opacity:.85;font-size:14px;margin:0}
+  .wrap{max-width:900px;margin:0 auto;padding:22px 16px 60px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 22px rgba(73,17,26,.06);display:flex;flex-direction:column}
+  .mock{height:230px;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center;overflow:hidden}
+  .mock .kk{font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.85;position:relative;z-index:2}
+  .mock .nm{font-family:'Great Vibes',cursive;font-size:38px;line-height:1;margin:6px 0;position:relative;z-index:2;text-shadow:0 2px 8px rgba(0,0,0,.25)}
+  .mock .dt{font-size:11px;letter-spacing:2px;position:relative;z-index:2;opacity:.9}
+  .mock::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18)}
+  .body{padding:14px 15px 16px}
+  .body h3{margin:0 0 3px;color:var(--uva);font-size:18px;font-weight:800}
+  .body .pal{display:flex;gap:6px;margin:8px 0 12px}
+  .body .pal i{width:20px;height:20px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.06)}
+  .acts{display:flex;gap:8px}
+  .acts a{flex:1;text-align:center;text-decoration:none;font-weight:800;font-size:13px;padding:11px;border-radius:22px}
+  .ver{color:var(--uva);border:1.5px solid var(--line);background:#fff}
+  .eleg{color:#fff;background:var(--rosa)}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">invítame!</div>
+    <h1>Elegí el modelo de tu invitación</h1>
+    <p>Mirá un ejemplo, elegí el que más te guste y completá tus datos.</p>
+  </div>
+  <div class="wrap"><div class="grid" id="grid"></div></div>
+<script>
+  const MODELOS=[
+    {id:'boho',   n:'Boho',            v:'#a5674f',v2:'#8a5240',pal:['#a5674f','#efe3d0','#b98c6a','#5a3a2a'],demo:'julieta-y-bruno'},
+    {id:'rustica',n:'Rústica Campestre',v:'#2e433c',v2:'#26372f',pal:['#2e433c','#f4efe6','#7f9079','#26372f'],demo:'maria-y-diego'},
+    {id:'blanco', n:'Blanco Clásico',  v:'#8a8177',v2:'#5f574d',pal:['#efece7','#5f574d','#b7ad9e','#463f37'],demo:'maria-y-diego'},
+    {id:'uva',    n:'Uva Elegante',    v:'#5b2a4e',v2:'#43203a',pal:['#5b2a4e','#f6efe8','#a06d92','#43203a'],demo:'maria-y-diego'},
+    {id:'xv',     n:'XV Rosa',         v:'#b06a7e',v2:'#8a4f60',pal:['#b06a7e','#f7eef0','#c9a0b0','#8a4f60'],demo:'maria-y-diego'}
+  ];
+  document.getElementById('grid').innerHTML=MODELOS.map(m=>`
+    <div class="card">
+      <div class="mock" style="background:linear-gradient(160deg,${m.v},${m.v2})">
+        <div class="kk">Nuestra Boda</div>
+        <div class="nm">${m.n.split(' ')[0]}</div>
+        <div class="dt">SÁBADO · 2026</div>
+      </div>
+      <div class="body">
+        <h3>${m.n}</h3>
+        <div class="pal">${m.pal.map(c=>`<i style="background:${c}"></i>`).join('')}</div>
+        <div class="acts">
+          <a class="ver" href="/i/?e=${m.demo}" target="_blank">Ver ejemplo</a>
+          <a class="eleg" href="crear.html?tpl=${m.id}">Elegir este →</a>
+        </div>
+      </div>
+    </div>`).join('');
+</script>
+</body>
+</html>

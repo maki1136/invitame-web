@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel de Control · Invítame</title>
+<link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{--uva:#6D1233;--uva2:#49111A;--rosa:#F56770;--cream:#faf6f0;--ink:#3f3730;--muted:#9a8f88;--line:#ece2d8}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Nunito',sans-serif;background:#f5eee7;color:var(--ink)}
+  .top{background:var(--uva);color:#fff;padding:18px 22px;display:flex;align-items:center;gap:12px}
+  .top .brand{font-weight:900;font-size:20px}.top .brand span{font-family:'Cormorant Garamond',serif;font-style:italic}
+  .top .sub{opacity:.8;font-size:12.5px}
+  .top .sp{flex:1}
+  .top button{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:20px;padding:8px 15px;font-weight:800;font-family:'Nunito';cursor:pointer;font-size:13px}
+  .wrap{max-width:1050px;margin:0 auto;padding:20px 16px 60px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 6px 18px rgba(73,17,26,.05)}
+  .card .n{font-size:30px;font-weight:900;color:var(--uva);line-height:1}
+  .card .l{font-size:12.5px;color:var(--muted);margin-top:4px;font-weight:700}
+  .card.rosa .n{color:var(--rosa)}
+  h2{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:22px;margin:26px 0 10px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 6px 18px rgba(73,17,26,.05)}
+  .box h3{margin:0 0 10px;font-size:14px;color:var(--uva);font-weight:800}
+  canvas{max-height:260px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  td{padding:6px 4px;border-bottom:1px solid #f2ebe2}
+  td:last-child{text-align:right;font-weight:800;color:var(--uva)}
+  .lim{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+  .lim .bar{height:10px;background:#efe6da;border-radius:6px;overflow:hidden;margin:6px 0 2px}
+  .lim .bar i{display:block;height:100%;background:linear-gradient(90deg,#7fbf8e,#e0b95a)}
+  .lim a{color:var(--rosa);font-weight:800;text-decoration:none}
+  .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .pedidos{background:#fff6f0;border:2px solid var(--rosa);border-radius:16px;padding:14px 18px;margin-bottom:18px}
+  .pedido{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f2d9d3;flex-wrap:wrap}
+  .pedido:last-of-type{border-bottom:0}
+  .pacts{display:flex;gap:8px}
+  .pacts button{border:0;border-radius:20px;padding:10px 16px;font-weight:800;font-family:'Nunito';font-size:13px;cursor:pointer}
+  .pacts .ok{background:#2e7d46;color:#fff}
+  .pacts .no{background:#fff;color:var(--muted);border:1.5px solid var(--line)}
+  #gate{position:fixed;inset:0;z-index:99999;background:var(--uva);display:flex;align-items:center;justify-content:center;padding:24px}
+  #gate .gbox{background:#fff;border-radius:16px;padding:30px 26px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  #gate .gwm{font-weight:900;color:var(--uva);font-size:24px;margin-bottom:2px}
+  #gate p{font-size:13px;color:var(--muted);margin-bottom:16px}
+  #gate input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:15px;margin-bottom:10px;font-family:'Nunito'}
+  #gate button{width:100%;padding:12px;border:0;border-radius:22px;background:var(--rosa);color:#fff;font-weight:800;font-family:'Nunito';font-size:15px;cursor:pointer}
+  #gate #gm{color:var(--rosa);font-size:12.5px;margin-top:10px;min-height:16px}
+  #loading{text-align:center;padding:60px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="gbox">
+    <div class="gwm">📊 Panel</div>
+    <p>Ingresá con tu usuario (solo el dueño)</p>
+    <input id="gmail" type="email" placeholder="Correo" autocomplete="username" autofocus>
+    <input id="gp" type="password" placeholder="Contraseña" autocomplete="current-password" onkeydown="if(event.key==='Enter')entrar()">
+    <button onclick="entrar()">Entrar</button>
+    <div id="gm"></div>
+  </div>
+</div>
+
+<div class="top">
+  <div class="brand">in<span>vítame!</span></div>
+  <div class="sub">Panel de Control</div>
+  <div class="sp"></div>
+  <button onclick="recargar()">↻ Actualizar</button>
+  <button onclick="window.INV&&window.INV.logout&&window.INV.logout()">Salir</button>
+</div>
+
+<div class="wrap" id="wrap"><div id="loading">Cargando datos…</div></div>
+
+<script>
+  const OWNER=['littlemomentsok@gmail.com']; // dueño (cambiar/añadir si hace falta)
+  function entrar(){
+    const e=(document.getElementById('gmail').value||'').trim(), p=document.getElementById('gp').value, m=document.getElementById('gm');
+    if(!e||!p){m.textContent='Completá correo y contraseña';return;}
+    m.textContent='Entrando…';
+    (function t(){ if(!window.INV||!window.INV.auth){setTimeout(t,300);return;} window.INV.login(e,p).then(()=>m.textContent='').catch(()=>{m.textContent='Correo o contraseña incorrectos';document.getElementById('gp').value='';}); })();
+  }
+  (function watch(){ if(!window.INV||!window.INV.auth){setTimeout(watch,300);return;}
+    window.INV.onAuth(u=>{ const g=document.getElementById('gate');
+      if(!u){ g.style.display='flex'; return; }
+      if(OWNER.indexOf((u.email||'').toLowerCase())<0){ g.style.display='flex'; document.getElementById('gm').textContent='Este panel es solo para el dueño.'; window.INV.logout(); return; }
+      g.style.display='none'; cargarDatos();
+    });
+  })();
+
+  const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const TIPO={boda:'Boda',xv:'XV años',bautismo:'Bautismo',comunion:'Comunión',cumple:'Cumpleaños',otro:'Otro'};
+  const TEMA={boho:'Boho',rustica:'Rústica',blanco:'Blanco',uva:'Uva',xv:'XV Rosa'};
+  let charts=[];
+  function recargar(){ location.reload(); }
+
+  let _ev=[],_gu=[],_so=[];
+  async function cargarDatos(){
+    const {collection,getDocs}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const [evS,guS,soS,peS]=await Promise.all([
+      getDocs(collection(window.INV.db,'inv_eventos')),
+      getDocs(collection(window.INV.db,'inv_invitados')),
+      getDocs(collection(window.INV.db,'inv_solicitudes')),
+      getDocs(collection(window.INV.db,'inv_pedidos')).catch(()=>({docs:[]}))
+    ]);
+    _ev=evS.docs.map(d=>d.data()); _gu=guS.docs.map(d=>d.data()); _so=soS.docs.map(d=>d.data());
+    const ped=peS.docs.map(d=>{const x=d.data(); let t=''; try{const dt=x.creado&&x.creado.toDate?x.creado.toDate():(x.creadoMs?new Date(x.creadoMs):null); if(dt)t='Pedido el '+dt.toLocaleDateString('es-AR')+' '+dt.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});}catch(_e){} return {__id:d.id,creadoTxt:t,...x};}).filter(p=>p.estado==='pendiente');
+    render(_ev,_gu,_so,ped);
+  }
+
+  // ---- Aprobación de borrado (Maki da el OK) ----
+  window.aprobarPedido=async function(id){
+    const {collection,getDocs,query,where,deleteDoc,updateDoc,doc,serverTimestamp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    // recalcular vencidas AHORA (más seguro que una lista vieja)
+    const now=Date.now(), venc=[];
+    const evS=await getDocs(collection(window.INV.db,'inv_eventos'));
+    evS.forEach(d=>{ const e=d.data(); if(e.sinVencimiento||!e.fecha)return; const f=new Date(e.fecha); if(isNaN(f))return; const dias=(typeof e.diasVigencia==='number'&&e.diasVigencia>0)?e.diasVigencia:90; if(now>(f.getTime()+dias*86400000)) venc.push({id:d.id, nombre:((e.n1||'')+(e.n2?' & '+e.n2:''))||d.id}); });
+    if(!venc.length){ alert('Ya no hay invitaciones vencidas para borrar.'); await updateDoc(doc(window.INV.db,'inv_pedidos',id),{estado:'aprobado',resueltoAt:serverTimestamp(),borradas:0}); cargarDatos(); return; }
+    if(!confirm('APROBAR el borrado de '+venc.length+' invitación(es) vencida(s):\n\n'+venc.slice(0,25).map(v=>'• '+v.nombre).join('\n')+(venc.length>25?'\n…y más':'')+'\n\n¿Confirmás? Esto borra el evento y sus invitados.'))return;
+    let bEv=0,bG=0;
+    for(const v of venc){
+      try{ const gs=await getDocs(query(collection(window.INV.db,'inv_invitados'),where('slug','==',v.id))); for(const g of gs.docs){ await deleteDoc(doc(window.INV.db,'inv_invitados',g.id)); bG++; } }catch(_e){}
+      await deleteDoc(doc(window.INV.db,'inv_eventos',v.id)); bEv++;
+    }
+    await updateDoc(doc(window.INV.db,'inv_pedidos',id),{estado:'aprobado',resueltoAt:serverTimestamp(),borradas:bEv});
+    alert('✅ Aprobado. Borré '+bEv+' invitación(es) y '+bG+' invitado(s).');
+    cargarDatos();
+  };
+  window.rechazarPedido=async function(id){
+    if(!confirm('¿Rechazar este pedido de borrado? No se borra nada.'))return;
+    const {updateDoc,doc,serverTimestamp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await updateDoc(doc(window.INV.db,'inv_pedidos',id),{estado:'rechazado',resueltoAt:serverTimestamp()});
+    cargarDatos();
+  };
+
+  function cuenta(arr,keyFn,map){ const o={}; arr.forEach(x=>{ let k=keyFn(x); if(k==null||k==='')return; if(map&&map[k])k=map[k]; o[k]=(o[k]||0)+1; }); return o; }
+  function ordenar(o){ return Object.entries(o).sort((a,b)=>b[1]-a[1]); }
+
+  function render(ev,gu,so,ped){
+    ped=ped||[];
+    const now=Date.now();
+    const conFecha=ev.filter(e=>e.fecha&&!isNaN(new Date(e.fecha)));
+    const fut=conFecha.filter(e=>new Date(e.fecha).getTime()>now).length;
+    const pas=conFecha.filter(e=>new Date(e.fecha).getTime()<=now).length;
+    const venc=conFecha.filter(e=>{const d=(typeof e.diasVigencia==='number'&&e.diasVigencia>0)?e.diasVigencia:90; return !e.sinVencimiento && (new Date(e.fecha).getTime()+d*86400000)<now;}).length;
+    const pasesTot=gu.reduce((a,g)=>a+(parseInt(g.usosMax,10)||1),0);
+    const confirm=gu.filter(g=>g.rsvp==='si'||g.rsvp==='asiste'||g.rsvp===true).length;
+    const solicPend=so.filter(s=>s.estado==='pendiente').length;
+
+    // por mes (próximos y pasados)
+    const porMes={}; conFecha.forEach(e=>{const d=new Date(e.fecha); const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); porMes[k]=(porMes[k]||0)+1;});
+    const mesesOrd=Object.keys(porMes).sort();
+    const porTipo=cuenta(ev,e=>(e.tipoEvento||e.tipo||'boda'),TIPO);
+    const porTema=cuenta(ev,e=>(e.tema||e.tpl||''),TEMA);
+    const porCiudad=cuenta(ev,e=>(e.ciudad||'').trim());
+    const porPais=cuenta(ev,e=>(e.pais||'').trim());
+
+    // estimación de uso Cloudinary (aprox: 2 MB fotos por invitación de promedio)
+    const estStorageGB=(ev.length*2/1024).toFixed(2);
+
+    const pedHtml = ped.length ? `
+      <div class="pedidos">
+        <h2 style="margin-top:0">🗑️ Pedidos de borrado — necesitan tu OK (${ped.length})</h2>
+        ${ped.map(p=>`
+          <div class="pedido">
+            <div>
+              <b>${p.solicitante||'Una diseñadora'}</b> pidió borrar las invitaciones <b>vencidas</b>.
+              <div style="font-size:12px;color:var(--muted)">${p.creadoTxt||''}${p.detalle?(' · '+p.detalle):''}</div>
+            </div>
+            <div class="pacts">
+              <button class="ok" onclick="aprobarPedido('${p.__id}')">✔ Dar el OK y borrar</button>
+              <button class="no" onclick="rechazarPedido('${p.__id}')">✖ Rechazar</button>
+            </div>
+          </div>`).join('')}
+        <div class="note" style="margin-top:6px">Solo vos podés aprobar. Al dar el OK, el sistema borra únicamente las invitaciones vencidas (fiesta + 90 días) en ese momento.</div>
+      </div>` : '';
+    document.getElementById('wrap').innerHTML=pedHtml+`
+      <div class="cards">
+        <div class="card"><div class="n">${ev.length}</div><div class="l">Invitaciones totales</div></div>
+        <div class="card"><div class="n">${fut}</div><div class="l">Futuras (por venir)</div></div>
+        <div class="card"><div class="n">${pas}</div><div class="l">Ya pasaron</div></div>
+        <div class="card rosa"><div class="n">${venc}</div><div class="l">Vencidas (para limpiar)</div></div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="n">${gu.length}</div><div class="l">Invitados cargados</div></div>
+        <div class="card"><div class="n">${pasesTot}</div><div class="l">Pases totales</div></div>
+        <div class="card"><div class="n">${confirm}</div><div class="l">Confirmaron asistencia</div></div>
+        <div class="card rosa"><div class="n">${solicPend}</div><div class="l">Solicitudes pendientes</div></div>
+      </div>
+
+      <h2>Estadísticas</h2>
+      <div class="grid2">
+        <div class="box"><h3>📅 Invitaciones por mes</h3><canvas id="cMes"></canvas></div>
+        <div class="box"><h3>💍 Por tipo de evento</h3><canvas id="cTipo"></canvas></div>
+        <div class="box"><h3>🎨 Por plantilla elegida</h3><canvas id="cTema"></canvas></div>
+        <div class="box"><h3>🏙️ Por ciudad</h3>${tablaHtml(ordenar(porCiudad),'Sin datos de ciudad todavía')}</div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="box"><h3>🌎 Por país</h3>${tablaHtml(ordenar(porPais),'Sin datos de país todavía')}</div>
+        <div class="box"><h3>📈 Resumen rápido</h3>
+          <table>
+            <tr><td>Promedio de invitados por evento</td><td>${ev.length?Math.round(gu.length/ev.length):0}</td></tr>
+            <tr><td>% que ya confirmó</td><td>${gu.length?Math.round(confirm/gu.length*100):0}%</td></tr>
+            <tr><td>Solicitudes recibidas (total)</td><td>${so.length}</td></tr>
+            <tr><td>Solicitudes ya resueltas</td><td>${so.filter(s=>s.estado!=='pendiente').length}</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <h2>Límites y costos</h2>
+      <div class="lim" id="limBox">
+        <div style="font-weight:800;color:var(--uva);margin-bottom:2px">Almacenamiento de fotos/videos (estimado)</div>
+        <div class="bar"><i style="width:${Math.min(100,estStorageGB/25*100)}%"></i></div>
+        <div style="font-size:13px">~${estStorageGB} GB estimados · plan gratis Cloudinary: 25 GB</div>
+        <div class="note">⏳ Buscando los números reales de Cloudinary…<br>
+        · <a href="https://console.firebase.google.com/project/invitame-9b51f/usage" target="_blank">Uso de Firebase →</a>
+        · <a href="https://console.cloudinary.com/" target="_blank">Uso de Cloudinary →</a></div>
+      </div>
+    `;
+    // charts
+    charts.forEach(c=>c.destroy&&c.destroy()); charts=[];
+    const COL=['#6D1233','#F56770','#a5674f','#2e433c','#5b2a4e','#b06a7e','#c9a36a','#7f9079'];
+    if(document.getElementById('cMes')) charts.push(new Chart(document.getElementById('cMes'),{type:'bar',data:{labels:mesesOrd.map(k=>{const [y,m]=k.split('-');return MESES[+m-1]+' '+y.slice(2);}),datasets:[{data:mesesOrd.map(k=>porMes[k]),backgroundColor:'#F56770',borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}}));
+    const te=ordenar(porTipo); if(document.getElementById('cTipo')&&te.length) charts.push(new Chart(document.getElementById('cTipo'),{type:'doughnut',data:{labels:te.map(x=>x[0]),datasets:[{data:te.map(x=>x[1]),backgroundColor:COL}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}}));
+    const tm=ordenar(porTema); if(document.getElementById('cTema')&&tm.length) charts.push(new Chart(document.getElementById('cTema'),{type:'doughnut',data:{labels:tm.map(x=>x[0]),datasets:[{data:tm.map(x=>x[1]),backgroundColor:COL}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}}));
+    cargarUsoReal();
+  }
+
+  // ---- Números REALES de Cloudinary (vía uso.php en el servidor) ----
+  async function cargarUsoReal(){
+    const box=document.getElementById('limBox'); if(!box) return;
+    const gb=b=>(b/1073741824); // bytes → GB
+    const fila=(t,html)=>`<div style="font-weight:800;color:var(--uva);margin:10px 0 2px">${t}</div>${html}`;
+    const barra=(pct)=>`<div class="bar"><i style="width:${Math.min(100,Math.max(0,pct))}%"></i></div>`;
+    try{
+      const r=await fetch('uso.php',{cache:'no-store'});
+      const d=await r.json();
+      if(!d.ok){
+        if(d.error==='faltan_credenciales'){
+          box.querySelector('.note').innerHTML='🔑 Falta pegar tu API Key y API Secret de Cloudinary en el archivo <b>uso.php</b> del servidor. Mientras tanto, mostramos el estimado.<br>· <a href="https://console.cloudinary.com/" target="_blank">Uso de Cloudinary →</a>';
+        } else {
+          box.querySelector('.note').innerHTML='⚠️ No pude leer Cloudinary ('+(d.error||'error')+'). Mostramos el estimado.<br>· <a href="https://console.cloudinary.com/" target="_blank">Uso de Cloudinary →</a>';
+        }
+        return;
+      }
+      const cr=d.credits||{}, st=d.storage||{}, bw=d.bandwidth||{}, tr=d.transformations||{};
+      const usados=(cr.usage!=null)?(+cr.usage).toFixed(2):'?';
+      const lim=(cr.limit!=null)?cr.limit:25;
+      const pct=(cr.used_percent!=null)?(+cr.used_percent):(lim?usados/lim*100:0);
+      let html=fila('Créditos usados este mes ('+(d.plan||'Free')+')',
+        barra(pct)+`<div style="font-size:13px">${usados} / ${lim} créditos · <b>${(+pct).toFixed(1)}%</b> usado</div>`);
+      if(st.usage!=null) html+=fila('Almacenamiento', `<div style="font-size:13px">${gb(st.usage).toFixed(2)} GB guardados</div>`);
+      if(bw.usage!=null) html+=fila('Tráfico (bandwidth) este mes', `<div style="font-size:13px">${gb(bw.usage).toFixed(2)} GB servidos</div>`);
+      if(tr.usage!=null) html+=fila('Transformaciones', `<div style="font-size:13px">${(+tr.usage).toLocaleString('es-AR')} este mes</div>`);
+      const alerta = pct>=80 ? '<div class="note" style="color:#c0392b"><b>⚠️ Ojo:</b> estás por encima del 80% de tu plan gratis. Momento de mirar Blaze/plan pago antes de que se frene.</div>'
+                    : pct>=50 ? '<div class="note">Vas por la mitad del plan gratis. Todo bien, seguí de cerca los fines de semana.</div>'
+                    : '<div class="note">Muy tranquilo dentro del plan gratis.</div>';
+      box.innerHTML='<div style="font-weight:900;color:var(--rosa);margin-bottom:6px">✅ Datos reales de Cloudinary</div>'+html+alerta+
+        '<div class="note">Actualizado: '+(d.requested_at?new Date(d.requested_at).toLocaleString('es-AR'):'ahora')+' · <a href="https://console.cloudinary.com/" target="_blank">Ver en Cloudinary →</a> · <a href="https://console.firebase.google.com/project/invitame-9b51f/usage" target="_blank">Uso de Firebase →</a></div>';
+    }catch(e){
+      const note=box.querySelector('.note'); if(note) note.innerHTML='⚠️ No pude conectar con uso.php (¿ya lo subiste?). Mostramos el estimado.<br>· <a href="https://console.cloudinary.com/" target="_blank">Uso de Cloudinary →</a>';
+    }
+  }
+  function tablaHtml(pairs,vacio){ if(!pairs.length) return '<div class="note">'+vacio+'</div>'; return '<table>'+pairs.slice(0,10).map(p=>'<tr><td>'+p[0]+'</td><td>'+p[1]+'</td></tr>').join('')+'</table>'; }
+</script>
+<script type="module" src="firebase-inv.js?v=20"></script>
+</body>
+</html>

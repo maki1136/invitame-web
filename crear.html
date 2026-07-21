@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invítame · Completá tu invitación</title>
+<link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{--uva:#6D1233;--uva2:#49111A;--rosa:#F56770;--rosa2:#e04f59;--cream:#faf6f0;--line:#ece2d8;--ink:#3f3730;--muted:#9a8f88}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#f7efe9,#f3e9e2);color:var(--ink)}
+  .top{background:var(--uva);color:#fff;padding:18px 20px;text-align:center}
+  .top .brand{font-weight:900;font-size:22px;letter-spacing:.5px}
+  .top .brand span{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600}
+  .top .sub{opacity:.85;font-size:13px;margin-top:2px}
+  .wrap{max-width:620px;margin:0 auto;padding:18px 16px 60px}
+  .modelo{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(73,17,26,.05)}
+  .modelo .sw{width:42px;height:42px;border-radius:10px;flex:none}
+  .modelo b{color:var(--uva)}
+  .modelo .ch{margin-left:auto}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 16px;margin-bottom:16px;box-shadow:0 6px 18px rgba(73,17,26,.05)}
+  .card h2{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:22px;margin:0 0 3px}
+  .card .desc{color:var(--muted);font-size:13px;margin:0 0 14px}
+  label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}
+  .req{color:var(--rosa)}
+  input[type=text],input[type=datetime-local],input[type=tel],textarea,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:'Nunito';font-size:15px;background:#fff;color:var(--ink)}
+  textarea{resize:vertical;min-height:70px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hint{font-size:12px;color:var(--muted);margin-top:5px}
+  .up{border:1.5px dashed #d9c7bd;border-radius:12px;padding:16px;text-align:center;cursor:pointer;color:var(--uva);font-weight:700;background:#fdf8f4}
+  .up.small{padding:11px;font-size:13px}
+  .prev{max-height:150px;border-radius:10px;margin-top:10px;display:block}
+  .prevmini{height:52px;border-radius:8px;margin:6px 6px 0 0}
+  .btn{display:block;width:100%;border:0;border-radius:26px;padding:16px;font-family:'Nunito';font-weight:900;font-size:16px;cursor:pointer;background:var(--rosa);color:#fff;box-shadow:0 8px 20px rgba(245,103,112,.35)}
+  .btn:disabled{opacity:.6}
+  .rowinv{display:grid;grid-template-columns:1fr 64px 64px 34px;gap:7px;margin-bottom:7px;align-items:center}
+  .rowinv input{padding:9px 10px;font-size:14px}
+  .rmx{border:0;background:#f5e7e9;color:var(--uva);border-radius:8px;height:38px;cursor:pointer;font-weight:800}
+  .addg{background:var(--uva);color:#fff;border:0;border-radius:20px;padding:9px 16px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer;margin-top:4px}
+  .done{display:none;text-align:center;padding:40px 20px}
+  .done .big{font-size:52px}
+  .done h1{font-family:'Cormorant Garamond',serif;color:var(--uva);font-size:30px;margin:10px 0 6px}
+  .done p{color:var(--ink);font-size:15px;line-height:1.6}
+  .helpbtn{display:inline-flex;align-items:center;gap:5px;background:#fbf3f6;color:var(--uva);border:1px solid #e6cdd7;border-radius:20px;padding:6px 13px;font-size:12.5px;font-weight:800;cursor:pointer;margin-top:10px;font-family:'Nunito'}
+  .helpbtn:hover{background:#f6e8ee}
+  .helpbox{display:none;margin-top:10px;background:#fdf8f4;border:1px solid var(--line);border-radius:13px;padding:13px;gap:14px;align-items:flex-start}
+  .helpbox.open{display:flex;flex-wrap:wrap}
+  .helpbox .vis{flex:none;width:132px}
+  .helpbox .vis svg{width:100%;height:auto;display:block}
+  .helpbox .txt{flex:1;min-width:190px;font-size:13px;line-height:1.6;color:var(--ink)}
+  .helpbox .txt b{color:var(--uva)}
+  .helpbox .txt ul{margin:6px 0 0;padding-left:18px}
+  .helpbox .txt li{margin:3px 0}
+  .helpbox .vis{position:relative}
+  .helpbox .vis .zoomtag{position:absolute;right:6px;bottom:6px;background:rgba(73,17,26,.82);color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:20px;pointer-events:none}
+  .lbox{position:fixed;inset:0;background:rgba(30,8,14,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:14px;cursor:zoom-out}
+  .lbox.open{display:flex}
+  .lbox img{max-width:96vw;max-height:88vh;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .lbox .x{position:absolute;top:14px;right:18px;color:#fff;font-size:30px;font-weight:800;cursor:pointer;line-height:1}
+  .lbox .cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.85}
+  .err{background:#fdecec;color:#b0334a;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px;display:none}
+  .loadingbar{position:fixed;inset:0;background:rgba(73,17,26,.35);display:none;align-items:center;justify-content:center;z-index:50}
+  .loadingbar .box{background:#fff;border-radius:14px;padding:22px 26px;font-weight:800;color:var(--uva)}
+</style>
+</head>
+<body>
+  <div class="top"><div class="brand">invítame!</div><div class="sub">Completá los datos y armamos tu invitación ✨</div></div>
+  <div class="wrap" id="wrap">
+    <div class="modelo" id="modelo"><div class="sw" style="background:#a5674f"></div><div><div style="font-size:12px;color:var(--muted)">Modelo elegido</div><b id="modelo-nom">Boho</b></div><a class="ch" href="catalogo.html" style="color:var(--rosa);font-weight:800;text-decoration:none;font-size:13px">cambiar</a></div>
+
+    <div class="card">
+      <h2>¿Qué festejás?</h2>
+      <p class="desc">Elegí el tipo de evento.</p>
+      <label>Tipo de evento</label>
+      <select id="tipo">
+        <option value="boda">Boda 💍</option>
+        <option value="xv">XV años 👑</option>
+        <option value="bautismo">Bautismo 🕊️</option>
+        <option value="comunion">Comunión ✝️</option>
+        <option value="cumple">Cumpleaños 🎂</option>
+        <option value="otro">Otro evento</option>
+      </select>
+      <div data-help="tipo"></div>
+      <label>Título (el textito de arriba)</label><input type="text" id="kick" placeholder="Nuestra Boda">
+      <div class="hint">Es el texto chiquito que aparece arriba de los nombres en la portada (ej: "Nuestra Boda", "Mis XV").</div>
+      <div data-help="kick"></div>
+    </div>
+
+    <div class="card">
+      <h2 id="h-prot">Los protagonistas</h2>
+      <p class="desc" id="d-prot">¿Quiénes se casan / festejan?</p>
+      <div class="two">
+        <div><label>Nombre 1 <span class="req">*</span></label><input type="text" id="n1" placeholder="María"></div>
+        <div><label>Nombre 2</label><input type="text" id="n2" placeholder="Diego"></div>
+      </div>
+      <div data-help="nombres"></div>
+      <label>Fecha y hora del evento <span class="req">*</span></label><input type="datetime-local" id="fecha">
+      <div data-help="fecha"></div>
+      <label>Frase o dedicatoria</label><textarea id="frase" placeholder="Una frase linda para la portada…"></textarea>
+      <div class="hint">💡 Aparece en una sección propia, en letra cursiva. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre."</div>
+      <div data-help="frase"></div>
+    </div>
+
+    <div class="card">
+      <h2>Portada: foto o video</h2>
+      <p class="desc">La primera pantalla, a pantalla completa. Puede ser una <b>foto</b> o un <b>video</b> corto. <b>Vertical</b> se ve mejor (llena el celular).</p>
+      <div class="two">
+        <div class="up" id="up-cover" onclick="document.getElementById('f-cover').click()">⬆ Subir foto</div>
+        <div class="up" id="up-covervid" onclick="document.getElementById('f-covervid').click()">🎬 Subir video</div>
+      </div>
+      <input type="file" id="f-cover" accept="image/*" style="display:none">
+      <input type="file" id="f-covervid" accept="video/*" style="display:none">
+      <div id="prev-cover"></div>
+      <div class="hint">🎬 <b>Si subís video:</b> vertical (9:16), cortito (6 a 15 seg), en MP4, ideal menos de 40 MB. Nosotros lo optimizamos. Si subís los dos, mostramos el video.</div>
+      <div data-help="foto"></div>
+    </div>
+
+    <div class="card">
+      <h2>¿Dónde y cuándo?</h2>
+      <p class="desc">Ceremonia y fiesta (lo que tengas).</p>
+      <label>Ceremonia — lugar</label><input type="text" id="ev1t" placeholder="Basílica de Santa María">
+      <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev1f" placeholder="12:00 hs"></div>
+      <div><label>Dirección</label><input type="text" id="ev1d" placeholder="Calle 123, Ciudad"></div></div>
+      <label>Link de Google Maps de la ceremonia (opcional)</label><input type="text" id="ev1maps" placeholder="Pegá el link de Google Maps">
+      <label>Fiesta — lugar</label><input type="text" id="ev2t" placeholder="Salón Las Rosas">
+      <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev2f" placeholder="14:00 hs"></div>
+      <div><label>Dirección</label><input type="text" id="ev2d" placeholder="Av. Siempre 456, Ciudad"></div></div>
+      <label>Link de Google Maps de la fiesta (opcional)</label><input type="text" id="ev2maps" placeholder="Pegá el link de Google Maps">
+      <div class="hint">📍 Con la <b>dirección</b> ya armamos el mapa. Si querés que el pin caiga exacto, abrí Google Maps, buscá el lugar, tocá "Compartir" y pegá el link acá.</div>
+      <div data-help="eventos"></div>
+    </div>
+
+    <div class="card">
+      <h2>Detalles</h2>
+      <label>Código de vestimenta (dress code)</label><input type="text" id="dress" placeholder="Elegante / Formal / Campestre…">
+      <div data-help="dress"></div>
+      <label>Mesa de regalos / datos</label><textarea id="regalos" placeholder="Alias, CBU, tienda de regalos, o lo que quieras poner…"></textarea>
+      <div data-help="regalos"></div>
+      <label>Música de fondo (opcional)</label><input type="text" id="musica" placeholder="Link de la canción (YouTube/Spotify) o nombre">
+      <div class="hint">🎵 Poné el link o el nombre de la canción que querés de fondo. Si lo dejás vacío, elegimos una acorde al estilo.</div>
+    </div>
+
+    <div class="card">
+      <h2>✨ Extras</h2>
+      <label>Fondo con movimiento (frase principal)</label>
+      <select id="fraseFx"><option value="">Ninguno</option><option value="bokeh">Bokeh (círculos suaves)</option><option value="destellos">Destellos</option><option value="estrellas">Estrellas doradas</option><option value="petalos">Pétalos cayendo</option><option value="gradiente">Degradado animado</option><option value="ondas">Ondas suaves</option></select>
+      <label>Hashtag de Instagram (opcional)</label><input type="text" id="igHashtag" placeholder="#MariaYDiego2026">
+      <label>Playlist de Spotify (opcional)</label><input type="text" id="spotifyUrl" placeholder="Link de la playlist de Spotify">
+      <div class="hint">🎶 En Spotify: Compartir → Copiar enlace de la playlist.</div>
+      <label style="margin-top:16px;display:block;font-weight:800;color:var(--uva)">🎁 Mesa de Regalos (botones)</label>
+      <div class="hint" style="margin-bottom:8px">Pegá el link de cada tienda. Los que dejes vacíos no aparecen.</div>
+      <label>Liverpool</label><input type="text" id="reg_liverpool" placeholder="link Liverpool">
+      <label>Amazon</label><input type="text" id="reg_amazon" placeholder="link Amazon">
+      <label>Sears</label><input type="text" id="reg_sears" placeholder="link Sears">
+      <label>Mercado Libre</label><input type="text" id="reg_mercadolibre" placeholder="link Mercado Libre">
+      <label>Palacio de Hierro</label><input type="text" id="reg_palacio" placeholder="link Palacio de Hierro">
+      <label>Venmo</label><input type="text" id="reg_venmo" placeholder="link o usuario Venmo">
+      <label>PayPal</label><input type="text" id="reg_paypal" placeholder="link PayPal">
+      <div class="hint" style="margin-top:6px">🌤️ El clima del día se muestra automático si pegás el link de Google Maps de la ceremonia arriba.</div>
+    </div>
+
+    <div class="card">
+      <h2>Galería (opcional)</h2>
+      <p class="desc">Fotos que quieras mostrar en la invitación.</p>
+      <div class="up small" id="up-gal" onclick="document.getElementById('f-gal').click()">⬆ Subir fotos de la galería</div>
+      <input type="file" id="f-gal" accept="image/*" multiple style="display:none">
+      <div id="prev-gal"></div>
+      <div data-help="galeria"></div>
+    </div>
+
+    <div class="card">
+      <h2>Invitados</h2>
+      <p class="desc">Cada uno recibe su link + QR único.</p>
+      <div data-help="invitados"></div>
+      <div style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px;margin-bottom:12px">
+        <b style="color:var(--uva);font-size:13px">📊 ¿Tenés muchos invitados? Subí un Excel</b>
+        <div class="hint" style="margin-top:4px">Columnas en este orden: <b>Nombre</b> · <b>Personas</b> · <b>Mesa</b>. Formato .xlsx o .csv.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px">
+          <div class="up small" style="flex:1;min-width:150px" id="up-xls" onclick="document.getElementById('f-xls').click()">⬆ Subir Excel / CSV</div>
+          <input type="file" id="f-xls" accept=".xlsx,.xls,.csv" style="display:none">
+          <a href="#" id="tpl-xls" class="up small" style="flex:1;min-width:140px;text-decoration:none">⬇ Descargar plantilla</a>
+        </div>
+      </div>
+      <div id="guests"></div>
+      <button class="addg" type="button" onclick="addGuest()">+ Agregar invitado a mano</button>
+    </div>
+
+    <div class="card">
+      <h2>¿Querés algo especial?</h2>
+      <p class="desc">Contanos si querés algún cambio, color, detalle o pedido particular. Lo vemos nosotros.</p>
+      <textarea id="obs" placeholder="Ej: me gustaría que los nombres sean dorados, agregar una sección de padrinos, cambiar la música…"></textarea>
+      <div data-help="observaciones"></div>
+    </div>
+
+    <div class="card">
+      <h2>Tus datos de contacto</h2>
+      <p class="desc">Para avisarte cuando esté lista.</p>
+      <div class="two"><div><label>Tu nombre <span class="req">*</span></label><input type="text" id="cnom" placeholder="Tu nombre"></div>
+      <div><label>WhatsApp <span class="req">*</span></label><input type="tel" id="cwsp" placeholder="+54 9 …"></div></div>
+      <label>Email <span class="req">*</span></label><input type="email" id="cmail" placeholder="tucorreo@gmail.com">
+      <div class="hint">Te avisamos por acá cuando la invitación esté lista.</div>
+      <div data-help="contacto"></div>
+    </div>
+
+    <div class="err" id="err"></div>
+    <button class="btn" id="send" onclick="enviar()">Enviar mis datos 💌</button>
+    <p class="hint" style="text-align:center;margin-top:14px">Al enviar, nuestro equipo arma tu invitación y te avisa cuando esté lista.</p>
+  </div>
+
+  <div class="done" id="done">
+    <div class="big">💌</div>
+    <h1>¡Listo! Recibimos tus datos</h1>
+    <p>Ya estamos armando tu invitación.<br>Te vamos a avisar por WhatsApp cuando esté lista. ¡Gracias! 🤍</p>
+  </div>
+
+  <div class="lbox" id="lbox" onclick="closeLB()"><span class="x">✕</span><img id="lbimg" src="" alt=""><div class="cap">Tocá en cualquier lado para cerrar</div></div>
+  <div class="loadingbar" id="loading"><div class="box">Enviando… ⏳</div></div>
+
+<script type="module" src="firebase-inv.js?v=20"></script>
+<script type="module">
+  import { collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  const $=id=>document.getElementById(id);
+  const TEMAS={rustica:{n:"Rústica Campestre",c:"#2e433c"},uva:{n:"Uva Elegante",c:"#5b2a4e"},blanco:{n:"Blanco Clásico",c:"#5f574d"},xv:{n:"XV Rosa",c:"#b06a7e"},boho:{n:"Boho",c:"#a5674f"}};
+  const tpl=(new URLSearchParams(location.search).get('tpl')||'boho').toLowerCase();
+  const T=TEMAS[tpl]||TEMAS.boho;
+  $('modelo-nom').textContent=T.n; document.querySelector('.modelo .sw').style.background=T.c;
+
+  // ---- Tipo de evento ----
+  const TITDEF={boda:'Nuestra Boda',xv:'Mis XV',bautismo:'Mi Bautismo',comunion:'Mi Comunión',cumple:'Mi Cumpleaños',otro:''};
+  const PROT={boda:['Los protagonistas','¿Quiénes se casan?'],xv:['La quinceañera','¿Quién cumple los XV?'],bautismo:['El/la homenajeado/a','¿Quién se bautiza?'],comunion:['El/la homenajeado/a','¿Quién toma la comunión?'],cumple:['El/la homenajeado/a','¿Quién cumple?'],otro:['Los protagonistas','¿Quiénes festejan?']};
+  function aplicarTipo(){ const t=$('tipo').value; $('kick').placeholder=TITDEF[t]||'Título'; if(!$('kick').dataset.touched)$('kick').value=TITDEF[t]||''; const p=PROT[t]||PROT.boda; $('h-prot').textContent=p[0]; $('d-prot').textContent=p[1]; if(t==='boda'||t==='xv'){$('n2').closest('div').style.display=t==='xv'?'none':'';} }
+  $('tipo').addEventListener('change',aplicarTipo);
+  $('kick').addEventListener('input',()=>{$('kick').dataset.touched='1';});
+  aplicarTipo();
+
+  // ================= AYUDA VISUAL POR CAMPO =================
+  function phone(rows){
+    const n=rows.length, top=18, bot=196, gap=4, rowH=(bot-top-gap*(n-1))/n; let y=top, inner='';
+    rows.forEach(([t,hot])=>{ inner+='<rect x="15" y="'+y.toFixed(1)+'" width="90" height="'+rowH.toFixed(1)+'" rx="6" fill="'+(hot?'#F56770':'#e5d8ca')+'"/><text x="60" y="'+(y+rowH/2+2.6).toFixed(1)+'" text-anchor="middle" font-size="7.5" font-weight="700" fill="'+(hot?'#fff':'#8a7a6a')+'" font-family="Nunito,sans-serif">'+t+'</text>'; y+=rowH+gap; });
+    return '<svg viewBox="0 0 120 214" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="4" width="110" height="206" rx="18" fill="#efe6da" stroke="#d3c4b4"/><rect x="10" y="10" width="100" height="194" rx="13" fill="#fbf6ef"/>'+inner+'</svg>';
+  }
+  const FOTOVIS='<svg viewBox="0 0 120 214" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="4" width="110" height="206" rx="18" fill="#efe6da" stroke="#d3c4b4"/><rect x="10" y="10" width="100" height="194" rx="13" fill="#b98c6a"/><text x="60" y="104" text-anchor="middle" font-size="30">📷</text><text x="60" y="128" text-anchor="middle" font-size="8" fill="#fff" font-family="Nunito,sans-serif">tu foto de fondo</text></svg>';
+  let _qr=''; for(let i=0;i<7;i++)for(let j=0;j<7;j++){ if((i*j+i+j)%3===0)_qr+='<rect x="'+(20+j*6)+'" y="'+(18+i*6)+'" width="6" height="6" fill="#3f3730"/>'; }
+  const QRVIS='<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="13" fill="#fbf6ef" stroke="#e5d8ca"/>'+_qr+'<rect x="16" y="70" width="88" height="9" rx="4" fill="#F56770"/><rect x="16" y="84" width="66" height="7" rx="3" fill="#e5d8ca"/><text x="60" y="108" text-anchor="middle" font-size="8" font-weight="700" fill="#6D1233" font-family="Nunito,sans-serif">link + QR único</text></svg>';
+  const NOTEVIS='<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="13" fill="#fbf6ef" stroke="#e5d8ca"/><rect x="26" y="24" width="68" height="72" rx="7" fill="#fff" stroke="#e5d8ca"/><rect x="34" y="36" width="52" height="6" rx="3" fill="#F56770"/><rect x="34" y="50" width="44" height="5" rx="2" fill="#e5d8ca"/><rect x="34" y="62" width="50" height="5" rx="2" fill="#e5d8ca"/><rect x="34" y="74" width="36" height="5" rx="2" fill="#e5d8ca"/><text x="88" y="30" font-size="15">✏️</text></svg>';
+  const HELP={
+    tipo:{rows:[['Título',1],['Nombres',0],['Fecha ⏳',0]],txt:'<b>Elegí qué estás festejando.</b> Con esto adaptamos los textos automáticamente. Ej: si elegís <b>XV</b>, el título sugerido pasa a "Mis XV"; si es <b>Bautismo</b>, "Mi Bautismo". Igual después podés escribir el título que quieras.'},
+    kick:{rows:[['Título',1],['Nombres',0],['Fecha',0],['Cuenta ⏳',0]],txt:'<b>Es el textito chico de arriba de todo</b>, arriba de los nombres, en la portada. Ejemplos: "Nuestra Boda", "Mis XV", "¡Nos casamos!". Va en mayúsculas y separado. Si lo dejás con el sugerido, está perfecto.'},
+    nombres:{rows:[['Título',0],['Nombres',1],['Fecha',0],['Cuenta ⏳',0]],txt:'<b>Los nombres de los protagonistas</b>, en letra grande y destacada en la portada. Si es una pareja, poné los dos; si es una persona (XV, bautismo), con el primero alcanza.'},
+    fecha:{rows:[['Título',0],['Nombres',0],['Fecha',1],['Cuenta ⏳',1]],txt:'<b>La fecha y hora del evento.</b> Se usa para dos cosas: se muestra escrita en la portada (ej: "Sábado 28 · Noviembre") <b>y</b> alimenta la <b>cuenta regresiva</b> (los días/horas/minutos que faltan). Elegí la fecha exacta.'},
+    foto:{special:'foto',txt:'<b>Es el fondo de toda la portada</b> (la primera pantalla). Puede ser <b>foto o video</b>. Consejos: que sea <b>vertical</b> y de buena calidad (llena mejor el celular), con la pareja/protagonista bien visible. La foto la achicamos sola; el video, si lo subís, que sea vertical, de 6 a 15 seg y en MP4 (ideal menos de 40 MB) — nosotros lo optimizamos. Los nombres van encima, así que evitá imágenes muy cargadas en el centro.'},
+    frase:{rows:[['Portada',0],['La frase',1],['Eventos',0],['Galería',0]],txt:'<b>Una frase o dedicatoria</b> que aparece en una sección propia, en letra cursiva elegante. Puede ser romántica, un versículo, o algo tuyo. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre." Si no ponés nada, se saltea esa sección.'},
+    eventos:{rows:[['Portada',0],['La frase',0],['Dónde y cuándo',1],['Galería',0]],txt:'<b>El lugar y horario de la ceremonia y la fiesta.</b> Cada uno aparece como una tarjeta con foto, dirección y un botón de "Ver mapa". Completá lo que tengas: si es un solo lugar, dejá el otro vacío.'},
+    dress:{rows:[['Eventos',0],['Dress code',1],['Regalos',0]],txt:'<b>El código de vestimenta.</b> Aparece en su propia sección. Ej: "Elegante", "Formal", "Campestre", "De gala". Podés aclarar algo (ej: "evitar el blanco").'},
+    regalos:{rows:[['Dress code',0],['Mesa de regalos',1],['Galería',0]],txt:'<b>Datos para los regalos.</b> Aparece en una sección con un botón. Podés poner el alias/CBU para transferencias, el link de una tienda de regalos, o lo que prefieras. Si no querés mostrarlo, dejalo vacío.'},
+    galeria:{rows:[['Frase',0],['Galería',1],['Invitados',0]],txt:'<b>Fotos que se muestran en un carrusel</b> dentro de la invitación. Subí las que quieras (las achicamos solas). Es opcional: si no subís, no aparece la sección.'},
+    invitados:{special:'qr',txt:'<b>Cada invitado recibe su propio link + QR.</b> Con eso entran a la invitación con su nombre, y en la puerta escaneás el QR para controlar el ingreso.<br><br><b>Para cargar muchos de una:</b><ul><li>Descargá la <b>plantilla</b> (botón de arriba).</li><li>Completá una fila por invitado con: <b>Nombre</b> (ej: "Familia Pérez"), <b>Personas</b> (cuántos entran, ej: 4) y <b>Mesa</b> (número o nombre).</li><li>Guardá el Excel y subilo con "Subir Excel / CSV". ¡Listo, se cargan todos solos!</li></ul>También podés cargar de a uno a mano.'},
+    observaciones:{special:'note',txt:'<b>Contanos cualquier pedido especial</b> que quieras. Ej: "que los nombres sean dorados", "agregar una sección de padrinos", "cambiar la música", "quiero un color distinto". Nuestro equipo lo revisa y lo arma. Si no se puede automático, te avisamos.'},
+    contacto:{special:'note',txt:'<b>Tus datos para avisarte</b> cuando la invitación esté lista. El WhatsApp y el email son para contactarte y mandarte el link final.'}
+  };
+  window.toggleHelp=function(btn){ const box=btn.nextElementSibling; const op=box.classList.toggle('open'); btn.innerHTML=op?'✕ Cerrar':'ℹ️ ¿Qué es y cómo lo completo?'; };
+  window.openLB=function(src){ $('lbimg').src=src; $('lbox').classList.add('open'); document.body.style.overflow='hidden'; };
+  window.closeLB=function(){ $('lbox').classList.remove('open'); document.body.style.overflow=''; };
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLB(); });
+  const REALIMG={tipo:1,kick:1,nombres:1,fecha:1,foto:1,frase:1,eventos:1,dress:1,galeria:1};
+  // imágenes reales alojadas en Cloudinary (capturas de la invitación real)
+  const IMGURL={
+    regalos:'https://res.cloudinary.com/dlicangft/image/upload/v1784225229/invitame/ghj7atohchfzkjvkkulm.jpg',
+    invitados:'https://res.cloudinary.com/dlicangft/image/upload/v1784226714/invitame/wbfijcpjtnbyo8mmi0vh.jpg'
+  };
+  const imgVis=src=>'<img src="'+src+'" alt="" onclick="openLB(this.src)" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
+  function injectHelp(){ document.querySelectorAll('[data-help]').forEach(ph=>{ const k=ph.getAttribute('data-help'); const h=HELP[k]; if(!h)return;
+    let vis=null;
+    if(IMGURL[k]) vis=imgVis(IMGURL[k]);
+    else if(REALIMG[k]) vis='<img src="ayuda-'+k+'.jpg?v=3" alt="" onclick="openLB(this.src)" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
+    else if(h.special==='qr') vis=QRVIS;
+    const w=document.createElement('div'); w.innerHTML='<button type="button" class="helpbtn" onclick="toggleHelp(this)">ℹ️ ¿Qué es y cómo lo completo?</button><div class="helpbox">'+(vis?'<div class="vis">'+vis+'</div>':'')+'<div class="txt">'+h.txt+'</div></div>'; ph.replaceWith(w); }); }
+  injectHelp();
+
+  // ---- Comprimir imágenes antes de subir (para que la invitación abra rápido) ----
+  async function comprimir(file, maxW, q){
+    try{ if(!file.type.startsWith('image/')) return file;
+      const bmp=await createImageBitmap(file); const sc=Math.min(1, maxW/bmp.width);
+      if(sc>=1 && file.size<500000) return file;
+      const c=document.createElement('canvas'); c.width=Math.round(bmp.width*sc); c.height=Math.round(bmp.height*sc);
+      c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+      const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',q||0.82));
+      return blob?new File([blob],(file.name||'foto').replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'}):file;
+    }catch(e){ return file; }
+  }
+
+  function ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }
+  let coverURL='', coverVideoURL='', galURLs=[];
+
+  // subir foto portada
+  $('f-cover').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f)return; $('up-cover').textContent='Subiendo…'; try{ await ready(); coverURL=await window.INV.uploadImage(await comprimir(f,1600,0.85)); $('prev-cover').innerHTML='<img class="prev" src="'+coverURL+'">'; $('up-cover').textContent='✓ Foto cargada — cambiar'; }catch(err){ $('up-cover').textContent='⬆ Subir foto'; alert('No se pudo subir: '+(err.message||err)); } });
+  // subir video portada (no se comprime en el navegador; Cloudinary lo optimiza al entregar)
+  $('f-covervid').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f)return; const mb=Math.round(f.size/1048576); if(f.size>80*1024*1024){ if(!confirm('El video pesa '+mb+' MB, puede tardar bastante o fallar. Lo ideal es menos de 40 MB. ¿Subir igual?')) { e.target.value=''; return; } } $('up-covervid').textContent='Subiendo video… ⏳'; try{ await ready(); coverVideoURL=await window.INV.uploadVideo(f); $('prev-cover').innerHTML='<video class="prev" src="'+coverVideoURL+'" muted autoplay loop playsinline></video>'; $('up-covervid').textContent='✓ Video cargado — cambiar'; }catch(err){ $('up-covervid').textContent='🎬 Subir video'; alert('No se pudo subir el video: '+(err.message||err)); } });
+  // subir galería
+  $('f-gal').addEventListener('change',async e=>{ const fs=[...e.target.files]; if(!fs.length)return; $('up-gal').textContent='Subiendo…'; try{ await ready(); for(const f of fs){ const u=await window.INV.uploadImage(await comprimir(f,1400,0.8)); galURLs.push(u); $('prev-gal').innerHTML+='<img class="prevmini" src="'+u+'">'; } $('up-gal').textContent='⬆ Agregar más fotos'; }catch(err){ $('up-gal').textContent='⬆ Subir fotos de la galería'; alert('No se pudo subir: '+(err.message||err)); } });
+
+  // ---- Invitados por Excel/CSV ----
+  window.addGuest=function(n,p,m){ const d=document.createElement('div'); d.className='rowinv'; d.innerHTML='<input type="text" placeholder="Nombre (ej: Familia Pérez)"><input type="text" placeholder="Pers." value="2"><input type="text" placeholder="Mesa"><button class="rmx" type="button">✕</button>'; const ins=d.querySelectorAll('input'); if(typeof n==='string'){ins[0].value=n; if(p)ins[1].value=p; if(m)ins[2].value=m;} d.querySelector('.rmx').onclick=()=>d.remove(); $('guests').appendChild(d); };
+  $('f-xls').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; if(typeof XLSX==='undefined'){alert('Esperá unos segundos y volvé a intentar.');return;} const rd=new FileReader(); rd.onload=ev=>{ try{ const wb=XLSX.read(ev.target.result,{type:'array'}); const ws=wb.Sheets[wb.SheetNames[0]]; const rows=XLSX.utils.sheet_to_json(ws,{header:1}); document.querySelectorAll('#guests .rowinv').forEach(r=>{ if(!r.querySelector('input').value.trim())r.remove(); }); let added=0; rows.forEach((r,i)=>{ if(!r||r[0]==null)return; const nom=String(r[0]).trim(); if(!nom)return; if(i===0&&/nombre/i.test(nom))return; addGuest(nom, r[1]!=null?String(r[1]).trim():'', r[2]!=null?String(r[2]).trim():''); added++; }); $('up-xls').textContent='✓ '+added+' invitados cargados'; }catch(err){ alert('No pude leer el archivo. Revisá que tenga las columnas Nombre, Personas, Mesa.'); } }; rd.readAsArrayBuffer(f); });
+  $('tpl-xls').addEventListener('click',e=>{ e.preventDefault(); if(typeof XLSX==='undefined')return; const ws=XLSX.utils.aoa_to_sheet([['Nombre','Personas','Mesa'],['Familia Pérez',4,'1'],['Juan y Ana',2,'2'],['Carlos López',1,'3']]); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Invitados'); XLSX.writeFile(wb,'plantilla-invitados.xlsx'); });
+
+  // invitados: fila inicial vacía
+  addGuest();
+
+  window.enviar=async function(){
+    $('err').style.display='none';
+    const n1=$('n1').value.trim(), fecha=$('fecha').value, cnom=$('cnom').value.trim(), cwsp=$('cwsp').value.trim(), cmail=$('cmail').value.trim();
+    if(!n1){ return showErr('Poné al menos el primer nombre.'); }
+    if(!fecha){ return showErr('Poné la fecha del evento.'); }
+    if(!cnom||!cwsp||!cmail){ return showErr('Dejanos tu nombre, WhatsApp y email para poder avisarte.'); }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cmail)){ return showErr('Revisá el email, parece que tiene un error.'); }
+    const invitados=[...document.querySelectorAll('#guests .rowinv')].map(r=>{const i=r.querySelectorAll('input');return {n:i[0].value.trim(),p:i[1].value.trim()||'1',m:i[2].value.trim()||'-'};}).filter(g=>g.n);
+    const data={
+      estado:'pendiente', creado:serverTimestamp(),
+      tpl, tplNombre:T.n, tipoEvento:$('tipo').value, kick:$('kick').value.trim(),
+      n1, n2:$('n2').value.trim(), fecha, frase:$('frase').value.trim(),
+      cover:coverURL, coverVideo:coverVideoURL, galeria:galURLs,
+      ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1maps:$('ev1maps').value.trim(),
+      ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2maps:$('ev2maps').value.trim(),
+      dress:$('dress').value.trim(), regalos:$('regalos').value.trim(), musica:$('musica').value.trim(),
+      fraseFx:$('fraseFx').value, igHashtag:$('igHashtag').value.trim(), spotifyUrl:$('spotifyUrl').value.trim(),
+      reg_liverpool:$('reg_liverpool').value.trim(), reg_amazon:$('reg_amazon').value.trim(), reg_sears:$('reg_sears').value.trim(),
+      reg_mercadolibre:$('reg_mercadolibre').value.trim(), reg_palacio:$('reg_palacio').value.trim(), reg_venmo:$('reg_venmo').value.trim(), reg_paypal:$('reg_paypal').value.trim(),
+      invitados, observaciones:$('obs').value.trim(),
+      contactoNombre:cnom, contactoWsp:cwsp, contactoEmail:cmail,
+      origen:'formulario-cliente'
+    };
+    $('loading').style.display='flex'; $('send').disabled=true;
+    try{
+      await ready();
+      const ref=doc(collection(window.INV.db,'inv_solicitudes'));
+      await setDoc(ref, data);
+      $('loading').style.display='none';
+      $('wrap').style.display='none'; document.querySelector('.top .sub').textContent='¡Gracias!';
+      $('done').style.display='block'; window.scrollTo(0,0);
+    }catch(err){ $('loading').style.display='none'; $('send').disabled=false; showErr('No se pudo enviar: '+(err.message||err)); }
+  };
+  function showErr(m){ const e=$('err'); e.textContent=m; e.style.display='block'; e.scrollIntoView({block:'center'}); }
+</script>
+</body>
+</html>
