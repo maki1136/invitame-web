@@ -11,9 +11,8 @@ header('Cache-Control: no-store');
 // ============================================================
 //  El SECRETO no vive acá (este archivo está en el repo PÚBLICO y
 //  se sobrescribe en cada deploy). Vive en un archivo APARTE, FUERA
-//  de la carpeta web y FUERA del repo, que el deploy nunca toca:
-//     <carpeta home de Hostinger>/invitame-config.php
-//  (o sea, un nivel ARRIBA de public_html)
+//  del repo, que el deploy nunca toca:
+//     public_html/invitame-config.php   (un nivel ARRIBA de la carpeta invitame)
 //
 //  Ese archivo tiene que verse así (pegando tus datos reales):
 //     <?php
@@ -25,11 +24,14 @@ $CLOUD_NAME = 'oc8cgqt4';   // por defecto la cuenta de Invítame
 $API_KEY    = '';
 $API_SECRET = '';
 
-// 1) intentar leer el config seguro (arriba de public_html)
-$cfgPath = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php';
-if (is_readable($cfgPath)) { include $cfgPath; }
-// 2) fallback: config al lado de este archivo (por si preferís ahí) — NO recomendado en repo público
-elseif (is_readable(__DIR__ . '/invitame-config.php')) { include __DIR__ . '/invitame-config.php'; }
+// 1) ruta principal (DETERMINISTA): un nivel ARRIBA de la carpeta invitame,
+//    o sea en  public_html/invitame-config.php  (fuera de la carpeta que se deploya)
+$cfgArriba = dirname(dirname(__FILE__)) . '/invitame-config.php';   // .../public_html/invitame-config.php
+$cfgHome   = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php'; // por si el doc root es la carpeta invitame
+$cfgLado   = __DIR__ . '/invitame-config.php';                       // fallback (NO recomendado en repo público)
+if      (is_readable($cfgArriba)) { include $cfgArriba; }
+elseif  (is_readable($cfgHome))   { include $cfgHome; }
+elseif  (is_readable($cfgLado))   { include $cfgLado; }
 
 if ($API_KEY === '' || $API_SECRET === '') {
   echo json_encode(['ok' => false, 'error' => 'faltan_credenciales']);
