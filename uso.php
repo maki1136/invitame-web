@@ -8,14 +8,30 @@ header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Cache-Control: no-store');
 
-// ====== PEGÁ TUS DATOS DE CLOUDINARY ACÁ ======
-// Los sacás de: https://console.cloudinary.com/  →  Settings (rueda) → API Keys
-$CLOUD_NAME = 'oc8cgqt4';                   // cuenta PROPIA de Invítame, no lo toques
-$API_KEY    = 'PEGAR_API_KEY';             // ← API Key de la cuenta NUEVA (oc8cgqt4)
-$API_SECRET = 'PEGAR_API_SECRET';          // ← API Secret de la cuenta NUEVA (¡NO lo compartas!)
-// ==============================================
+// ============================================================
+//  El SECRETO no vive acá (este archivo está en el repo PÚBLICO y
+//  se sobrescribe en cada deploy). Vive en un archivo APARTE, FUERA
+//  de la carpeta web y FUERA del repo, que el deploy nunca toca:
+//     <carpeta home de Hostinger>/invitame-config.php
+//  (o sea, un nivel ARRIBA de public_html)
+//
+//  Ese archivo tiene que verse así (pegando tus datos reales):
+//     <?php
+//     $CLOUD_NAME = 'oc8cgqt4';
+//     $API_KEY    = 'tu_api_key';
+//     $API_SECRET = 'tu_api_secret';
+// ============================================================
+$CLOUD_NAME = 'oc8cgqt4';   // por defecto la cuenta de Invítame
+$API_KEY    = '';
+$API_SECRET = '';
 
-if ($API_KEY === 'PEGAR_API_KEY' || $API_SECRET === 'PEGAR_API_SECRET' || $API_KEY === '' || $API_SECRET === '') {
+// 1) intentar leer el config seguro (arriba de public_html)
+$cfgPath = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php';
+if (is_readable($cfgPath)) { include $cfgPath; }
+// 2) fallback: config al lado de este archivo (por si preferís ahí) — NO recomendado en repo público
+elseif (is_readable(__DIR__ . '/invitame-config.php')) { include __DIR__ . '/invitame-config.php'; }
+
+if ($API_KEY === '' || $API_SECRET === '') {
   echo json_encode(['ok' => false, 'error' => 'faltan_credenciales']);
   exit;
 }
