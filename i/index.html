@@ -94,11 +94,43 @@
   #env.reveal #env-vid,#env.reveal #env-vseal,#env.reveal .vhint{display:none!important}
   #env.reveal #env-bloom{opacity:0;transition:opacity .9s ease}
   /* ===== Apertura por TRIÁNGULOS (imagen del sobre partida en 4 solapas, puro CSS) ===== */
-  #env.tri-mode{background:#efe4cd;perspective:1500px;transition:opacity .8s,visibility .8s}
+  #env.tri-mode{background:var(--flap-base,#efe4cd);perspective:1500px;transition:opacity .8s,visibility .8s}
   #env.tri-mode #env-vid,#env.tri-mode #env-bloom,#env.tri-mode #env-vseal,#env.tri-mode .scene,#env.tri-mode .hint{display:none!important}
   #env.tri-mode.tri-open{background:transparent}
-  .triflap{position:absolute;inset:0;z-index:2;display:none;background:url('sobre-marfil-limpio.jpg') center/cover no-repeat;
+  /* ===== Sobre de entrada: color + textura (CSS puro, sin imágenes) ===== */
+  /* --flap-base = color del papel (lo pinta el "Color del sobre"); --flap-tex = capa de textura encima */
+  :root{--flap-base:#efe4cd;
+    --flap-tex:
+      radial-gradient(120% 90% at 30% 12%, rgba(255,255,255,.55), rgba(255,255,255,0) 46%),
+      repeating-linear-gradient(90deg, rgba(120,96,58,.05) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(0deg, rgba(120,96,58,.05) 0 1px, transparent 1px 4px);}
+  .triflap{position:absolute;inset:0;z-index:2;display:none;
+    background:var(--flap-tex), var(--flap-base,#efe4cd);background-size:cover;
+    box-shadow:inset 0 0 90px rgba(70,52,26,.14);
     backface-visibility:hidden;transition:transform 1.25s cubic-bezier(.55,.03,.25,1),opacity 1s ease .2s}
+  body.no-relieve .triflap{box-shadow:none;--flap-tex:radial-gradient(120% 90% at 30% 12%, rgba(255,255,255,.4), rgba(255,255,255,0) 50%)}
+  /* Texturas elegibles */
+  .tex-liso{--flap-tex:linear-gradient(120deg, rgba(255,255,255,.45), rgba(255,255,255,0) 55%)}
+  .tex-lino{--flap-tex:
+      radial-gradient(120% 90% at 30% 12%, rgba(255,255,255,.5), rgba(255,255,255,0) 46%),
+      repeating-linear-gradient(90deg, rgba(120,96,58,.055) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(0deg, rgba(120,96,58,.055) 0 1px, transparent 1px 4px)}
+  .tex-kraft{--flap-tex:
+      radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,.28), rgba(0,0,0,.06) 80%),
+      repeating-linear-gradient(28deg, rgba(90,62,30,.07) 0 2px, transparent 2px 5px)}
+  .tex-acuarela{--flap-tex:
+      radial-gradient(45% 40% at 26% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
+      radial-gradient(50% 45% at 72% 64%, rgba(0,0,0,.05), rgba(0,0,0,0) 60%),
+      radial-gradient(38% 34% at 60% 22%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%)}
+  .tex-marmol{--flap-tex:
+      linear-gradient(118deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,0) 22%, rgba(0,0,0,.05) 30%, rgba(255,255,255,0) 42%, rgba(255,255,255,.4) 58%, rgba(0,0,0,.05) 66%, rgba(255,255,255,0) 78%),
+      radial-gradient(120% 100% at 20% 10%, rgba(255,255,255,.4), rgba(255,255,255,0) 55%)}
+  .tex-floral{--flap-tex:
+      radial-gradient(circle at 20% 24%, rgba(255,255,255,.5) 0 3px, transparent 4px),
+      radial-gradient(circle at 62% 40%, rgba(120,96,58,.10) 0 3px, transparent 5px),
+      radial-gradient(circle at 82% 76%, rgba(255,255,255,.45) 0 3px, transparent 4px),
+      radial-gradient(circle at 38% 72%, rgba(120,96,58,.09) 0 3px, transparent 5px),
+      radial-gradient(120% 90% at 30% 10%, rgba(255,255,255,.4), rgba(255,255,255,0) 50%)}
   #env.tri-mode .triflap{display:block}
   .tri-t{clip-path:polygon(0 0,100% 0,50% 50%);transform-origin:50% 0}
   .tri-r{clip-path:polygon(100% 0,100% 100%,50% 50%);transform-origin:100% 50%}
@@ -669,7 +701,7 @@
   /* ===== MOTOR DE EFECTOS — todo personalizable (on/off, color, texto, tipografía) =====
      El admin escribe ev.fx en Firebase; acá se fusiona sobre estos valores por defecto. */
   const FX_DEF={
-    sobre:   { relieve:true, color:'', sello:true, selloColor:'', ini:'', emblema:'iniciales' },
+    sobre:   { relieve:true, textura:'lino', color:'', sello:true, selloColor:'', ini:'', emblema:'iniciales' },
     particulas:{ on:true, tipo:'hoja', color:'auto', densidad:'suave' },
     carta:   { on:true, sobreImg:'https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262784/invitame/dc2sgshzghouc5b9uii8.png', frenteImg:'https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262787/invitame/pmqhmccpaibs8bsn78ce.png', sobreColor:'', kicker:'Con cariño', titulo:'Queridos amigos y familia',
                texto:'Hoy queremos compartir con ustedes uno de los días más felices de nuestras vidas. Gracias por acompañarnos en este camino de amor.',
@@ -844,9 +876,12 @@
 
   function aplicarFX(){ const r=document.documentElement.style;
     // --- Sobre de entrada ---
-    if(FX.sobre.color) r.setProperty('--sobre-c',FX.sobre.color);
+    if(FX.sobre.color){ r.setProperty('--sobre-c',FX.sobre.color); r.setProperty('--flap-base',FX.sobre.color); }
     if(FX.sobre.selloColor) r.setProperty('--seal-c',FX.sobre.selloColor);
     document.body.classList.toggle('no-relieve',FX.sobre.relieve===false);
+    // Textura del sobre de entrada (variedad, CSS puro)
+    ['tex-liso','tex-lino','tex-kraft','tex-acuarela','tex-marmol','tex-floral'].forEach(c=>document.body.classList.remove(c));
+    var _tex=FX.sobre.textura||'lino'; if(_tex!=='ninguno') document.body.classList.add('tex-'+_tex);
     [['seal-ini'],['cf-ini']].forEach(([id])=>{const e=el(id);if(!e)return;
       if(FX.sobre.emblema==='corazon')e.textContent='❤'; else if(FX.sobre.emblema==='anillos')e.textContent='⚭'; else if(FX.sobre.ini)e.textContent=FX.sobre.ini;});
     const seal=document.querySelector('.seal'); if(seal)seal.style.display=(FX.sobre.sello===false)?'none':'';
