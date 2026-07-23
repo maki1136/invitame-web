@@ -1425,6 +1425,17 @@
   (function(){
     var p=new URLSearchParams(location.search);
     if(p.get('preview')!=='1') return;
+    // En PREVIEW la portada 100vh + el scroll-lock impiden ver las secciones de abajo.
+    // Neutralizamos SOLO en preview: layout estable y scrolleable para que el admin
+    // pueda mostrar cada sección que la diseñadora edita.
+    (function(){
+      var st=document.createElement('style');
+      st.textContent='html,body{height:auto!important;overflow:visible!important}'
+        +'.portada{min-height:0!important;height:560px!important}'
+        +'.footer{min-height:0!important;height:auto!important}'
+        +'#env{display:none!important}';
+      (document.head||document.documentElement).appendChild(st);
+    })();
     function abrirYa(){
       try{
         var env=document.getElementById('env');
