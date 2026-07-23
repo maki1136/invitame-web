@@ -586,7 +586,15 @@
 
   let cur="PRINCIPAL";
   function buildTabs(){el('tabs').innerHTML=ORDER.map(t=>'<div class="tab '+(t===cur?'on':'')+(t==='INVITADOS'||t==='EFECTOS'?' nuevo':'')+'" onclick="go(\''+t+'\')">'+(t==='INVITADOS'?'INVITADOS ✦':t==='EFECTOS'?'✨ EFECTOS':t)+'</div>').join('');}
-  function go(t){cur=t;buildTabs();renderPanel();}
+  // Cada pestaña edita principalmente una sección de la invitación.
+  // Al cambiar de pestaña, scrolleamos el preview a esa sección para que
+  // la diseñadora VEA lo que está tocando (antes el preview se quedaba en la portada).
+  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',EFECTOS:'',INVITADOS:''};
+  function scrollPreviewTo(sec){
+    const fr=el('pv-frame'); if(!fr||!fr.contentWindow)return;
+    try{ fr.contentWindow.postMessage({type:'inv-scroll', sec:(sec||'')},'*'); }catch(e){}
+  }
+  function go(t){cur=t;buildTabs();renderPanel(); setTimeout(function(){ scrollPreviewTo(TAB2SEC[t]); },250);}
   function renderPanel(){
     if(cur==='INVITADOS'){el('panel').innerHTML=invitadosHtml();renderGuests();return;}
     if(cur==='EFECTOS'){el('panel').innerHTML=efectosHtml();return;}
