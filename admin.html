@@ -203,7 +203,7 @@
   D.trivia=[{q:'¿Dónde se conocieron?',o:['En un viaje','En la facultad','En el trabajo'],c:0},{q:'¿Primer viaje juntos?',o:['Brasil','Bariloche','Europa'],c:1},{q:'¿Quién dijo te amo primero?',o:['Ella','Él'],c:1}];
   // ==== EFECTOS (todo personalizable: on/off, color, texto, tipografía) ====
   const FXD={
-    sobre:{relieve:true,color:'#efe6d2',sello:true,selloColor:'#3a5643',ini:'',emblema:'iniciales'},
+    sobre:{relieve:true,textura:'lino',color:'#efe6d2',sello:true,selloColor:'#3a5643',ini:'',emblema:'iniciales'},
     particulas:{on:true,tipo:'hoja',color:'auto',densidad:'suave'},
     carta:{on:true,sobreColor:'',kicker:'Con cariño',titulo:'Queridos amigos y familia',texto:'Hoy queremos compartir con ustedes uno de los días más felices de nuestras vidas. Gracias por acompañarnos en este camino de amor.',fuente:'Lora',colorTexto:'#5a5145'},
     ambiente:{on:true,tipo:'nubes',colorTop:'#cfe4f2',colorBot:'#eaf4fb',seccion:'itinerario'},
@@ -468,11 +468,11 @@
   }
   // ==== PANEL DE EFECTOS ====
   const CFFONTS=[['Lora','Lora (clásica)'],['Great Vibes','Great Vibes ✒'],['Forum','Forum'],['Montserrat','Montserrat'],['Rouge Script','Rouge Script ✒']];
-  function chk(grp,key,label){ensureFX();return '<label class="chk"><input type="checkbox" '+(D.fx[grp][key]?'checked':'')+' onchange="D.fx.'+grp+'.'+key+'=this.checked"> '+label+'</label>';}
-  function col(grp,key){ensureFX();return '<input type="color" value="'+(D.fx[grp][key]||'#ffffff')+'" oninput="D.fx.'+grp+'.'+key+'=this.value">';}
-  function txt(grp,key,ph){ensureFX();return '<input type="text" value="'+String(D.fx[grp][key]||'').replace(/"/g,'&quot;')+'" oninput="D.fx.'+grp+'.'+key+'=this.value" placeholder="'+(ph||'')+'">';}
-  function area(grp,key){ensureFX();return '<textarea oninput="D.fx.'+grp+'.'+key+'=this.value">'+String(D.fx[grp][key]||'')+'</textarea>';}
-  function sel(grp,key,opts){ensureFX();return '<select onchange="D.fx.'+grp+'.'+key+'=this.value">'+opts.map(o=>'<option value="'+o[0]+'" '+(D.fx[grp][key]===o[0]?'selected':'')+'>'+o[1]+'</option>').join('')+'</select>';}
+  function chk(grp,key,label){ensureFX();return '<label class="chk"><input type="checkbox" '+(D.fx[grp][key]?'checked':'')+' onchange="D.fx.'+grp+'.'+key+'=this.checked;postPreview()"> '+label+'</label>';}
+  function col(grp,key){ensureFX();return '<input type="color" value="'+(D.fx[grp][key]||'#ffffff')+'" oninput="D.fx.'+grp+'.'+key+'=this.value;postPreview()">';}
+  function txt(grp,key,ph){ensureFX();return '<input type="text" value="'+String(D.fx[grp][key]||'').replace(/"/g,'&quot;')+'" oninput="D.fx.'+grp+'.'+key+'=this.value;postPreview()" placeholder="'+(ph||'')+'">';}
+  function area(grp,key){ensureFX();return '<textarea oninput="D.fx.'+grp+'.'+key+'=this.value;postPreview()">'+String(D.fx[grp][key]||'')+'</textarea>';}
+  function sel(grp,key,opts){ensureFX();return '<select onchange="D.fx.'+grp+'.'+key+'=this.value;postPreview()">'+opts.map(o=>'<option value="'+o[0]+'" '+(D.fx[grp][key]===o[0]?'selected':'')+'>'+o[1]+'</option>').join('')+'</select>';}
   function setAdorno(id){ ensureFX(); D.fx.diseno.adorno=id; D.fx.diseno.adornoCustom=''; renderPanel(); }
   async function subirAdorno(input){ const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
@@ -484,7 +484,8 @@
     const pauto=(D.fx.particulas.color==='auto');
     return '<div class="mejoras"><div class="h">✨ Efectos — sobre de entrada</div>'+
         '<div class="hint" style="margin-bottom:10px">El sobre que se abre al inicio. Todo se puede prender/apagar y cambiar de color.</div>'+
-        '<div class="grp">'+chk('sobre','relieve','Relieve / textura del papel')+'</div>'+
+        '<div class="grp">'+chk('sobre','relieve','Relieve / volumen del papel')+'</div>'+
+        '<div class="grp"><label>Textura del sobre</label>'+sel('sobre','textura',[['lino','Lino (tela suave)'],['liso','Liso / satinado'],['kraft','Kraft (papel rústico)'],['acuarela','Acuarela'],['marmol','Mármol'],['floral','Floral punteado'],['ninguno','Sin textura']])+'<div class="hint">El color de abajo se combina con la textura.</div></div>'+
         '<div class="two"><div class="grp"><label>Color del sobre</label>'+col('sobre','color')+'</div>'+
         '<div class="grp"><label>Color del lacre</label>'+col('sobre','selloColor')+'</div></div>'+
         '<div class="grp">'+chk('sobre','sello','Mostrar sello de lacre')+'</div>'+
