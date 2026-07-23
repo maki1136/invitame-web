@@ -1145,6 +1145,18 @@
     })();
     S('it-h2',ev.itTitulo); S('hosp-h2',ev.hotTitulo); S('dress-h2',ev.dressTitulo); S('gal-h2',ev.galTitulo);
     S('reg-h2',ev.regTitulo); S('cf-h2',ev.cfTitulo); S('fin-frase',ev.fraseFinal);
+    // ===== FRASE FINAL: color, tamaño y posición (antes se guardaban pero no se aplicaban) =====
+    (function(){
+      var ff=el('fin-frase'); var foot=document.querySelector('.footer'); if(!ff&&!foot)return;
+      var cFin=ev['c_color-titulo-y-texto-final'];
+      var tFin=ev['c_tamano-de-la-seccion-final-por-defecto-a'];
+      var pFin=ev['c_posicion-frase-final'];
+      var xFin=ev['c_texto-final'];
+      if(cFin){ if(ff)ff.style.color=cFin; if(foot)foot.querySelectorAll('.s,.sm').forEach(function(e){e.style.color=cFin;}); }
+      if(tFin){ var n=parseInt(tFin,10); if(!isNaN(n)&&n>0&&ff)ff.style.fontSize=n+'px'; }
+      if(pFin){ var al=(/centr/i.test(pFin)?'center':/derech/i.test(pFin)?'right':/izq/i.test(pFin)?'left':'center'); if(foot)foot.style.textAlign=al; if(ff)ff.style.textAlign=al; }
+      if(xFin&&foot){ var sline=foot.querySelector('.s'); if(sline)sline.textContent=xFin; }
+    })();
     if(ev.regColor){ ['reg-h2','reg-kick'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.regColor;}); }
     if(ev.cfColor){ ['cf-h2','cf-kick2'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.cfColor;}); }
     if(ev.padresColor){ ['padres-h2','padres-kick'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.padresColor;}); }
