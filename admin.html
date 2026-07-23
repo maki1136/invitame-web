@@ -591,8 +591,26 @@
   // la diseñadora VEA lo que está tocando (antes el preview se quedaba en la portada).
   const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',EFECTOS:'',INVITADOS:''};
   function scrollPreviewTo(sec){
-    const fr=el('pv-frame'); if(!fr||!fr.contentWindow)return;
-    try{ fr.contentWindow.postMessage({type:'inv-scroll', sec:(sec||'')},'*'); }catch(e){}
+    const fr=el('pv-frame'); if(!fr||!fr.contentDocument)return;
+    try{
+      const doc=fr.contentDocument, scr=fr.parentElement;
+      // Agrandamos el iframe a la altura de su contenido para que el "celular"
+      // (.screen, overflow-y:auto) pueda scrollearlo. La invitación ya neutralizó
+      // el 100vh en modo preview, así que la altura es estable.
+      const h=Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+      fr.style.height=h+'px';
+      setTimeout(function(){
+        try{
+          if(!sec){ scr.scrollTop=0; return; }
+          const target=[].slice.call(doc.querySelectorAll('[data-sec="'+sec+'"]'))
+                        .find(function(e){return e.querySelector('h2,h3');}) || doc.querySelector('[data-sec="'+sec+'"]');
+          if(target){
+            const rt=target.getBoundingClientRect(), rs=scr.getBoundingClientRect();
+            scr.scrollTop = scr.scrollTop + (rt.top - rs.top) - 6;
+          }
+        }catch(e){}
+      },140);
+    }catch(e){}
   }
   function go(t){cur=t;buildTabs();renderPanel(); setTimeout(function(){ scrollPreviewTo(TAB2SEC[t]); },250);}
   function renderPanel(){
