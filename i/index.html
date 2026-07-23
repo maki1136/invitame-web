@@ -1445,6 +1445,18 @@
         abrirYa();
       }catch(err){ console.warn('preview:',err); }
     });
+    // Cuando el admin cambia de pestaña, scrolleamos la invitación a esa sección
+    // para que la diseñadora VEA lo que está editando.
+    window.addEventListener('message', function(e){
+      var d=e&&e.data; if(!d||d.type!=='inv-scroll') return;
+      try{
+        abrirYa();
+        var sec=d.sec;
+        if(!sec){ window.scrollTo({top:0,behavior:'smooth'}); return; }
+        var el2=document.querySelector('[data-sec="'+sec+'"]');
+        if(el2){ el2.scrollIntoView({behavior:'smooth',block:'start'}); }
+      }catch(err){}
+    });
     function avisar(){ try{ if(window.parent && window.parent!==window) window.parent.postMessage({type:'inv-preview-ready'},'*'); }catch(e){} }
     if(document.readyState==='complete')avisar(); else window.addEventListener('load',avisar);
   })();
