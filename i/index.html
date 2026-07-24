@@ -680,7 +680,7 @@
     <p>Ayudanos a que no falte nadie en nuestro gran día.</p>
     <div style="margin-top:16px"><a class="wsp" id="wa-share" href="https://wa.me/?text=" target="_blank">💬 Compartir por WhatsApp</a></div></section>
 
-  <section class="sec" id="contacto-sec" style="padding-top:30px">    <div class="kick">Cualquier duda</div><h2>Contacto</h2>
+  <section class="sec" id="contacto-sec" style="padding-top:30px">    <div class="kick">Cualquier duda</div><h2 id="contacto-h2">Contacto</h2><p id="contacto-frase" style="display:none;max-width:520px;margin:0 auto 6px"></p>
     <a class="wsp" id="wa-p1" href="https://wa.me/" target="_blank">💬 Escribir a María</a>
     <a class="wsp" id="wa-p2" href="https://wa.me/" target="_blank">💬 Escribir a Diego</a></section>
 
@@ -1228,19 +1228,25 @@
     const rt=document.documentElement.style;
     if(ev['img_f-foto-para-el-fin-de-p-gina'])rt.setProperty('--final',"url('"+cldOpt(ev['img_f-foto-para-el-fin-de-p-gina'],'w_1600,c_limit')+"')");
     if(ev['img_f-foto-principal-jpg-2000x1200-']&&!ev.cover)rt.setProperty('--cover',"url('"+cldOpt(ev['img_f-foto-principal-jpg-2000x1200-'],'w_1600,c_limit')+"')");
-    // ---- Contacto (personalizado con los nombres reales) + compartir ----
+    // ---- Contacto: lee los campos reales del panel (Número de whatsapp 1/2, textos, toggle) ----
     (function(){
       var digits=function(s){return String(s||'').replace(/[^\d]/g,'');};
-      var tel1=digits(ev.waN1||ev.telNovia||ev['c_whatsapp-1']||ev['c_whatsapp-persona-1']||'');
-      var tel2=digits(ev.waN2||ev.telNovio||ev['c_whatsapp-2']||ev['c_whatsapp-persona-2']||'');
+      var tel1=digits(ev['c_numero-de-whatsapp']||ev.waN1||'');
+      var tel2=digits(ev['c_numero-de-whatsapp-2']||ev.waN2||'');
+      var txt1=(ev['c_texto-corto-boton-wsp']||'').trim();
+      var txt2=(ev['c_texto-corto-boton-wsp-2']||'').trim();
+      var mostrar=ev['c_mostrar-seccion-de-contacto'];   // checkbox: si viene explícito en false, respeta
       var b1=el('wa-p1'), b2=el('wa-p2'), sec=el('contacto-sec');
-      if(b1){ if(ev.n1){b1.textContent='💬 Escribir a '+ev.n1;} b1.style.display=tel1?'':'none'; if(tel1)b1.href='https://wa.me/'+tel1; }
-      if(b2){ if(ev.n2){b2.textContent='💬 Escribir a '+ev.n2;} b2.style.display=tel2?'':'none'; if(!ev.n2||!tel2)b2.style.display='none'; else b2.href='https://wa.me/'+tel2; }
-      if(sec && !tel1 && !tel2) sec.style.display='none';   // sin teléfonos: ocultar la sección en vez de mostrar links vacíos
+      if(b1){ if(tel1){ b1.textContent='💬 '+(txt1||('Escribir a '+(ev.n1||''))); b1.href='https://wa.me/'+tel1; b1.style.display=''; } else b1.style.display='none'; }
+      if(b2){ if(tel2){ b2.textContent='💬 '+(txt2||('Escribir a '+(ev.n2||''))); b2.href='https://wa.me/'+tel2; b2.style.display=''; } else b2.style.display='none'; }
+      var h2=el('contacto-h2'); if(h2&&ev['c_titulo-contacto'])h2.textContent=ev['c_titulo-contacto'];
+      var fr=el('contacto-frase'); if(fr){ var fv=ev['c_frase-para-seccion-contacto']||ev['c_frase-para-secci-n-de-contacto']||''; if(fv){fr.textContent=fv;fr.style.display='';} }
+      var hay=!!(tel1||tel2);
+      if(sec) sec.style.display=(hay && mostrar!==false)?'':'none';   // sin números o toggle apagado => oculta
       var sh=el('wa-share');
       if(sh){ var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ')||'nuestra boda';
-        var txt='¡Estás invitado a la boda de '+nombres+'! Mirá la invitación: '+location.href.split('#')[0];
-        sh.href='https://wa.me/?text='+encodeURIComponent(txt); }
+        var t='¡Estás invitado a la boda de '+nombres+'! Mirá la invitación: '+location.href.split('#')[0];
+        sh.href='https://wa.me/?text='+encodeURIComponent(t); }
     })();
     aplicarFeatures(ev);
     document.title=(ev.n1||'Invitación')+(ev.n2?' & '+ev.n2:'');
