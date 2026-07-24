@@ -678,11 +678,11 @@
 
   <section class="sec" id="share-sec" style="padding-bottom:30px">    <div class="kick">Pasá la voz</div><h2>Compartí la invitación</h2>
     <p>Ayudanos a que no falte nadie en nuestro gran día.</p>
-    <div style="margin-top:16px"><a class="wsp" href="https://wa.me/?text=%C2%A1Est%C3%A1s%20invitado%20a%20la%20boda%20de%20Mar%C3%ADa%20%26%20Diego!%20Mir%C3%A1%20la%20invitaci%C3%B3n%3A%20https%3A%2F%2Finvitaciones.tumarca.com%2Fmaria-diego" target="_blank">💬 Compartir por WhatsApp</a></div></section>
+    <div style="margin-top:16px"><a class="wsp" id="wa-share" href="https://wa.me/?text=" target="_blank">💬 Compartir por WhatsApp</a></div></section>
 
-  <section class="sec" style="padding-top:30px">    <div class="kick">Cualquier duda</div><h2>Contacto</h2>
-    <a class="wsp" href="https://wa.me/" target="_blank">💬 Escribir a María</a>
-    <a class="wsp" href="https://wa.me/" target="_blank">💬 Escribir a Diego</a></section>
+  <section class="sec" id="contacto-sec" style="padding-top:30px">    <div class="kick">Cualquier duda</div><h2>Contacto</h2>
+    <a class="wsp" id="wa-p1" href="https://wa.me/" target="_blank">💬 Escribir a María</a>
+    <a class="wsp" id="wa-p2" href="https://wa.me/" target="_blank">💬 Escribir a Diego</a></section>
 
   <div class="footer">
     <div class="n" id="fin-frase">¡Gracias!</div>
@@ -1228,6 +1228,20 @@
     const rt=document.documentElement.style;
     if(ev['img_f-foto-para-el-fin-de-p-gina'])rt.setProperty('--final',"url('"+cldOpt(ev['img_f-foto-para-el-fin-de-p-gina'],'w_1600,c_limit')+"')");
     if(ev['img_f-foto-principal-jpg-2000x1200-']&&!ev.cover)rt.setProperty('--cover',"url('"+cldOpt(ev['img_f-foto-principal-jpg-2000x1200-'],'w_1600,c_limit')+"')");
+    // ---- Contacto (personalizado con los nombres reales) + compartir ----
+    (function(){
+      var digits=function(s){return String(s||'').replace(/[^\d]/g,'');};
+      var tel1=digits(ev.waN1||ev.telNovia||ev['c_whatsapp-1']||ev['c_whatsapp-persona-1']||'');
+      var tel2=digits(ev.waN2||ev.telNovio||ev['c_whatsapp-2']||ev['c_whatsapp-persona-2']||'');
+      var b1=el('wa-p1'), b2=el('wa-p2'), sec=el('contacto-sec');
+      if(b1){ if(ev.n1){b1.textContent='💬 Escribir a '+ev.n1;} b1.style.display=tel1?'':'none'; if(tel1)b1.href='https://wa.me/'+tel1; }
+      if(b2){ if(ev.n2){b2.textContent='💬 Escribir a '+ev.n2;} b2.style.display=tel2?'':'none'; if(!ev.n2||!tel2)b2.style.display='none'; else b2.href='https://wa.me/'+tel2; }
+      if(sec && !tel1 && !tel2) sec.style.display='none';   // sin teléfonos: ocultar la sección en vez de mostrar links vacíos
+      var sh=el('wa-share');
+      if(sh){ var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ')||'nuestra boda';
+        var txt='¡Estás invitado a la boda de '+nombres+'! Mirá la invitación: '+location.href.split('#')[0];
+        sh.href='https://wa.me/?text='+encodeURIComponent(txt); }
+    })();
     aplicarFeatures(ev);
     document.title=(ev.n1||'Invitación')+(ev.n2?' & '+ev.n2:'');
   }
