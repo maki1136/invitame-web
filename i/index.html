@@ -571,13 +571,14 @@
     </div></section>
 
   <section data-sec="itinerario" class="sec">    <div class="kick">El gran día</div><h2 id="it-h2">Itinerario</h2>
-    <div class="tl reveal">
+    <div class="tl reveal" id="it-lista">
       <div class="it"><div class="h">12:00 · Ceremonia</div><div class="d">Recibimos a los invitados en la Basílica.</div></div>
       <div class="it"><div class="h">14:00 · Recepción</div><div class="d">Cóctel de bienvenida en el jardín.</div></div>
       <div class="it"><div class="h">15:30 · Banquete</div><div class="d">Almuerzo y brindis de los novios.</div></div>
       <div class="it"><div class="h">18:00 · Fiesta</div><div class="d">¡A bailar hasta el amanecer!</div></div>
     </div>
-    <div style="font-size:11px;color:var(--muted);margin-top:14px;font-style:italic">También puede cargarse como imagen diseñada por ustedes.</div></section>
+    <img id="it-img" alt="" style="display:none;max-width:100%;border-radius:14px;margin-top:6px">
+    <div id="it-nota" style="font-size:11px;color:var(--muted);margin-top:14px;font-style:italic">También puede cargarse como imagen diseñada por ustedes.</div></section>
 
   <section data-sec="hospedaje" class="sec verde"><div class="kick">Para tu comodidad</div><h2 id="hosp-h2">Hospedaje</h2>
     <p style="color:#d7cebb">Tenemos tarifas especiales para nuestros invitados.</p>
@@ -639,6 +640,11 @@
     <p style="color:#d7cebb">Subí tus fotos y videos con nuestro hashtag y revivamos el día entre todos.</p>
     <div class="reveal" id="hashtag-big" style="font-family:'Forum',serif;font-size:34px;color:#fff;margin:16px auto;letter-spacing:.5px;text-align:center">#Hashtag</div>
     <a class="btn lt" id="hashtag-link" href="#" target="_blank" rel="noopener">Ver en Instagram</a></section>
+
+  <section data-sec="video" class="sec" id="video-sec" style="display:none"><div class="kick" id="video-kick">Para verlo juntos</div><h2 id="video-h2">Nuestro video</h2>
+    <p id="video-frase">Un ratito de nuestra historia.</p>
+    <div class="reveal" id="video-embed" style="margin-top:16px;border-radius:14px;overflow:hidden;max-width:520px;margin-left:auto;margin-right:auto"></div>
+    <div style="margin-top:14px"><a class="btn" id="video-link" href="#" target="_blank" rel="noopener">Ver video</a></div></section>
 
   <section data-sec="spotify" class="sec" id="spotify-sec" style="display:none"><div class="kick">La banda sonora</div><h2>Playlist del evento</h2>
     <p>Escuchá la música de la fiesta y sugerí las canciones que no pueden faltar.</p>
@@ -1181,6 +1187,25 @@
     S('it-h2',ev.itTitulo); S('hosp-h2',ev.hotTitulo); S('dress-h2',ev.dressTitulo); S('gal-h2',ev.galTitulo);
     // Bajadas / kickers editables (Dónde & Cuándo, Elegante, Recuerdos)
     S('dq-kick',ev.evKicker); S('dress-kick',ev.dressKicker); S('gal-kick',ev.galKicker);
+    // ---- Itinerario editable (antes eran 4 filas fijas que no se podían borrar) ----
+    (function(){
+      var lista=el('it-lista'), nota=el('it-nota'), im=el('it-img');
+      // imagen propia del itinerario (si la cargan, reemplaza la lista)
+      var iu=null, ks=['img_c_itinerario-imagen','img_f-itinerario-imagen','img_c_itinerario-imagen-'];
+      for(var i=0;i<ks.length;i++){ if(ev[ks[i]]){iu=ev[ks[i]];break;} }
+      if(iu&&im){ im.src=cldOpt(iu,'w_1000,c_limit'); im.style.display=''; if(lista)lista.style.display='none'; if(nota)nota.style.display='none'; return; }
+      // texto propio: una línea por ítem, formato "12:00 · Ceremonia | descripción"
+      var txt=(ev['c_itinerario-descripcion']||ev['c_itinerario-descripci-n']||ev.itDescrip||'').trim();
+      if(!txt || !lista) return;
+      var filas=txt.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
+      if(!filas.length){ lista.innerHTML=''; if(nota)nota.style.display='none'; return; }
+      lista.innerHTML=filas.map(function(f){
+        var p=f.split(/\s*[|–—]\s*/);   // separador | o guión largo
+        var h=(p[0]||'').trim(), d=(p.slice(1).join(' — ')||'').trim();
+        return '<div class="it"><div class="h">'+h.replace(/</g,'&lt;')+'</div>'+(d?'<div class="d">'+d.replace(/</g,'&lt;')+'</div>':'')+'</div>';
+      }).join('');
+      if(nota)nota.style.display='none';
+    })();
     S('reg-h2',ev.regTitulo); S('cf-h2',ev.cfTitulo); S('fin-frase',ev.fraseFinal);
     // ===== FRASE FINAL: color, tamaño y posición (antes se guardaban pero no se aplicaban) =====
     (function(){
@@ -1350,6 +1375,23 @@
     // --- Playlist de Spotify ---
     const ss=el('spotify-sec');
     if(ss){ const u=(ev.spotifyUrl||'').trim(); const mm=u.match(/(playlist|album|track|artist)\/([A-Za-z0-9]+)/); if(mm){ const emb=el('spotify-embed'); if(emb)emb.innerHTML='<iframe style="border-radius:12px;width:100%;height:'+(mm[1]==='track'?152:352)+'px" src="https://open.spotify.com/embed/'+mm[1]+'/'+mm[2]+'" frameborder="0" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy"></iframe>'; ss.style.display=''; } else ss.style.display='none'; }
+    // --- Video (YouTube / Vimeo / mp4) ---
+    (function(){
+      var vs=el('video-sec'); if(!vs) return;
+      var u=String(ev.videoUrl||'').trim();
+      if(!u){ vs.style.display='none'; return; }
+      var emb=el('video-embed'), lk=el('video-link'), html='';
+      var yt=u.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+      var vi=u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      if(yt) html='<iframe style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px" src="https://www.youtube.com/embed/'+yt[1]+'" allowfullscreen loading="lazy"></iframe>';
+      else if(vi) html='<iframe style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px" src="https://player.vimeo.com/video/'+vi[1]+'" allowfullscreen loading="lazy"></iframe>';
+      else if(/\.(mp4|webm|mov)(\?|$)/i.test(u)) html='<video src="'+u+'" controls playsinline style="width:100%;border-radius:12px"></video>';
+      if(emb) emb.innerHTML=html;
+      if(lk){ lk.href=u; var bt=(ev['c_texto-boton-ver-video']||ev['c_texto-bot-n-ver-v-deo']||'').trim(); if(bt)lk.textContent=bt; lk.style.display=html?'none':''; }
+      var _t=(ev['c_titulo-seccion-video']||'').trim(); if(_t){var h=el('video-h2'); if(h)h.textContent=_t;}
+      var _f=(ev['c_frase-seccion-video']||'').trim(); if(_f){var p=el('video-frase'); if(p)p.textContent=_f;}
+      vs.style.display='';
+    })();
     // --- Clima ---
     _clima(ev);
   }
@@ -1483,9 +1525,12 @@
         const p = el.querySelector('p'); if(p) p.textContent = val(cfg.frase);
       }
       if(cfg.alpha && val(cfg.alpha)!==null){
+        // 100 = recuadro opaco (como viene), 0 = totalmente transparente
         const a = Math.max(0, Math.min(100, parseInt(val(cfg.alpha),10)))/100;
-        el.querySelectorAll('.card,.ev-card,.p-card,.box').forEach(function(c){
+        // los recuadros REALES: .evento (eventos), .p (personas), .hotel, .card/.box (compat)
+        el.querySelectorAll('.evento,.p,.hotel,.card,.ev-card,.p-card,.box').forEach(function(c){
           c.style.backgroundColor = 'rgba(255,255,255,'+a+')';
+          if(a<1){ c.style.backdropFilter='blur(2px)'; c.style.borderColor='rgba(255,255,255,'+Math.min(1,a+.25)+')'; }
         });
       }
     });
