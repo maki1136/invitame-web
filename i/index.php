@@ -36,18 +36,38 @@ if ($slug !== '') {
     $f = isset($data['fields']) ? $data['fields'] : [];
     $sv = function ($k) use ($f) { return isset($f[$k]['stringValue']) ? trim($f[$k]['stringValue']) : ''; };
 
+    // Devuelve el primer valor no vacío de una lista de claves.
+    // (El admin cambió de convención con los acentos: antes 'im-gen', ahora 'imagen'.
+    //  Probamos todas para no depender de eso y que nunca se desconecte en silencio.)
+    $firstOf = function ($keys) use ($sv) {
+      foreach ($keys as $k) {
+        $v = $sv($k);
+        if ($v !== '') return $v;
+      }
+      return '';
+    };
+
     // 1) imagen: primero la "miniatura al compartir", si no, la portada (cover)
-    $img = $sv('img_f-im-gen-miniatura-al-compartir');
+    $img = $firstOf(array(
+      'img_c_imagen-miniatura-al-compartir',
+      'img_f-im-gen-miniatura-al-compartir',
+      'img_c_im-gen-miniatura-al-compartir',
+      'img_f-imagen-miniatura-al-compartir'
+    ));
     if ($img === '') $img = $sv('cover');
 
-    // 2) titulo: nombres de la pareja
-    $n1 = $sv('n1'); $n2 = $sv('n2');
-    if ($n1 !== '' || $n2 !== '') {
-      $title = trim($n1 . ($n1 && $n2 ? ' & ' : '') . $n2);
+    // 2) titulo: el "Titulo al compartir" si lo cargaron; si no, los nombres de la pareja
+    $title = $firstOf(array('c_titulo-al-compartir'));
+    if ($title === '') {
+      $n1 = $sv('n1');
+      $n2 = $sv('n2');
+      if ($n1 !== '' || $n2 !== '') {
+        $title = trim($n1 . ($n1 && $n2 ? ' & ' : '') . $n2);
+      }
     }
 
-    // 3) descripcion: la frase del evento
-    $desc = $sv('frase');
+    // 3) descripcion: la "Descripción al compartir" si la cargaron; si no, la frase del evento
+    $desc = $firstOf(array('c_descripcion-al-compartir', 'c_descripci-n-al-compartir', 'frase'));
 
     // 4) textito de arriba (Nuestra Boda / Mis XV / Mi Bautismo...) para el subtítulo
     $kick = $sv('kick');

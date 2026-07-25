@@ -581,9 +581,10 @@
     <div id="it-nota" style="font-size:11px;color:var(--muted);margin-top:14px;font-style:italic">También puede cargarse como imagen diseñada por ustedes.</div></section>
 
   <section data-sec="hospedaje" class="sec verde"><div class="kick">Para tu comodidad</div><h2 id="hosp-h2">Hospedaje</h2>
-    <p style="color:#d7cebb">Tenemos tarifas especiales para nuestros invitados.</p>
+    <p style="color:#d7cebb" id="hosp-texto">Tenemos tarifas especiales para nuestros invitados.</p>
+    <img id="hosp-img" alt="" style="display:none;max-width:100%;border-radius:14px;margin:12px auto 0">
     <div style="margin-top:16px"><button class="btn lt acc-btn" onclick="acc(this)">Ver hoteles <span class="chev">▾</span></button></div>
-    <div class="acc-panel"><div class="acc-inner">
+    <div class="acc-panel"><div class="acc-inner" id="hosp-lista">
       <div class="hotel"><h4>Hotel Los Robles</h4><div class="d">A 5 min del salón · desde $8.000</div><a class="btn" href="https://www.google.com/search?q=Hotel+Los+Robles" target="_blank" rel="noopener">Reservar</a></div>
       <div class="hotel"><h4>Posada del Valle</h4><div class="d">A 10 min · desde $6.500</div><a class="btn" href="https://www.google.com/search?q=Posada+del+Valle" target="_blank" rel="noopener">Reservar</a></div>
       <div class="hotel"><h4>Cabañas El Sauce</h4><div class="d">A 15 min · ideal familias</div><a class="btn" href="https://www.google.com/search?q=Caba%C3%B1as+El+Sauce" target="_blank" rel="noopener">Reservar</a></div>
@@ -606,7 +607,13 @@
         <path d="M22 53 L44 53"/>
       </svg>
     </div>
-    <p>La fiesta se viste de color y alegría. Te pedimos reservar el blanco para la novia.</p>
+    <p id="dress-texto">La fiesta se viste de color y alegría. Te pedimos reservar el blanco para la novia.</p>
+    <img id="dress-img" alt="" style="display:none;max-width:250px;border-radius:12px;margin:14px auto 0">
+    <div id="dress-bloque2" style="display:none;margin-top:22px">
+      <div class="kick" id="dress-kick2"></div>
+      <p id="dress-texto2"></p>
+      <img id="dress-img2" alt="" style="display:none;max-width:250px;border-radius:12px;margin:12px auto 0">
+    </div>
     <div style="margin-top:16px"><button class="btn acc-btn" onclick="acc(this)">Ver inspiración <span class="chev">▾</span></button></div>
     <div class="acc-panel"><div class="acc-inner">
       <div class="inspgrid">
@@ -1187,6 +1194,40 @@
     S('it-h2',ev.itTitulo); S('hosp-h2',ev.hotTitulo); S('dress-h2',ev.dressTitulo); S('gal-h2',ev.galTitulo);
     // Bajadas / kickers editables (Dónde & Cuándo, Elegante, Recuerdos)
     S('dq-kick',ev.evKicker); S('dress-kick',ev.dressKicker); S('gal-kick',ev.galKicker);
+    // ---- Dress code: texto, imagen y segundo bloque (pedido de Jazmín) ----
+    (function(){
+      var T=function(k){ return String(ev[k]||'').trim(); };
+      var IM=function(){ for(var i=0;i<arguments.length;i++){ if(ev[arguments[i]]) return ev[arguments[i]]; } return null; };
+      var tx=T('c_dresscode-texto'); if(tx){ var p=el('dress-texto'); if(p)p.textContent=tx; }
+      var im=IM('img_c_dresscode-imagen-aprox-jpg-250x250','img_f-dresscode-imagen-aprox-jpg-250x250');
+      if(im){ var i1=el('dress-img'); if(i1){ i1.src=cldOpt(im,'w_500,c_limit'); i1.style.display='block'; var mo=el('dc-mono'); if(mo)mo.style.display='none'; } }
+      var t2=T('c_dresscode-texto-2'), k2=T('c_vestimenta-titulo-2');
+      var im2=IM('img_c_dresscode-imagen-2-aprox-jpg-250x250','img_f-dresscode-imagen-2-aprox-jpg-250x250');
+      if(t2||k2||im2){ var b=el('dress-bloque2'); if(b)b.style.display='';
+        if(k2){var e1=el('dress-kick2'); if(e1)e1.textContent=k2;}
+        if(t2){var e2=el('dress-texto2'); if(e2)e2.textContent=t2;}
+        if(im2){var e3=el('dress-img2'); if(e3){e3.src=cldOpt(im2,'w_500,c_limit'); e3.style.display='block';}}
+      }
+    })();
+    // ---- Hospedaje: descripción, imagen y lista de hoteles editable ----
+    (function(){
+      var tx=String(ev['c_descripcion-hotel']||ev['c_descripci-n-hotel']||'').trim();
+      if(tx){ var p=el('hosp-texto'); if(p)p.textContent=tx; }
+      var im=ev['img_c_imagen-hoteles']||ev['img_f-imagen-hoteles'];
+      if(im){ var i1=el('hosp-img'); if(i1){ i1.src=cldOpt(im,'w_1000,c_limit'); i1.style.display='block'; } }
+      // "Datos de hoteles recomendados": una línea por hotel -> Nombre | detalle | link
+      var datos=String(ev['c_datos-de-hoteles-recomendados']||'').trim();
+      var cont=el('hosp-lista'); if(!datos||!cont) return;
+      var filas=datos.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
+      if(!filas.length) return;
+      cont.innerHTML=filas.map(function(f){
+        var p=f.split(/\s*\|\s*/);
+        var n=(p[0]||'').replace(/</g,'&lt;'), d=(p[1]||'').replace(/</g,'&lt;'), u=(p[2]||'').trim();
+        if(!u) u='https://www.google.com/search?q='+encodeURIComponent(p[0]||'');
+        return '<div class="hotel"><h4>'+n+'</h4>'+(d?'<div class="d">'+d+'</div>':'')+
+               '<a class="btn" href="'+u.replace(/"/g,'')+'" target="_blank" rel="noopener">Reservar</a></div>';
+      }).join('');
+    })();
     // ---- Itinerario editable (antes eran 4 filas fijas que no se podían borrar) ----
     (function(){
       var lista=el('it-lista'), nota=el('it-nota'), im=el('it-img');
