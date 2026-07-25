@@ -723,7 +723,8 @@
 
   <div class="footer">
     <div class="n" id="fin-frase">¡Gracias!</div>
-    <div class="s" id="fin-nombres">María &amp; Diego · 28.11.2026</div>
+    <div class="s" id="fin-texto">María &amp; Diego · 28.11.2026</div>
+    <div class="s" id="fin-nombres" style="display:none"></div>
     <img id="fin-logo" alt="" style="display:none;max-width:150px;margin:14px auto 0">
     <div class="sm" id="pie-pub">Invitación creada con InvitaME</div>
   </div>
@@ -1323,7 +1324,15 @@
       var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ');
       var f=ev.fecha?new Date(ev.fecha):null;
       var fech=(f&&!isNaN(f))?(String(f.getDate()).padStart(2,'0')+'.'+String(f.getMonth()+1).padStart(2,'0')+'.'+f.getFullYear()):'';
-      var e=el('fin-nombres'); if(e&&(nombres||fech)) e.textContent=[nombres,fech].filter(Boolean).join(' · ');
+      // nombres · fecha van en SU PROPIA línea (el "Texto final" usa #fin-texto, no lo pisamos)
+      var e=el('fin-nombres');
+      if(e&&(nombres||fech)){ e.textContent=[nombres,fech].filter(Boolean).join(' · '); e.style.display=''; }
+      // si NO cargaron "Texto final", la línea de ejemplo se reemplaza por los nombres y se oculta la duplicada
+      var ft=el('fin-texto');
+      if(ft && !String(ev['c_texto-final']||'').trim()){
+        if(nombres||fech){ ft.textContent=[nombres,fech].filter(Boolean).join(' · '); if(e)e.style.display='none'; }
+        else ft.style.display='none';
+      }
       var lg=ev['img_c_imagen-del-logo-150px-ancho-50px-alto']||ev['img_c_imagen-del-logo']||ev['img_f-imagen-del-logo-150px-ancho-50px-al'];
       if(lg){ var i=el('fin-logo'); if(i){ i.src=cldOpt(lg,'w_300,c_limit'); i.style.display='block'; } }
       var enc=function(v){return v===true||v==='true'||v===1||v==='1'||v==='si'||v==='sí';};
@@ -1427,7 +1436,7 @@
       if(cFin){ if(ff)ff.style.color=cFin; if(foot)foot.querySelectorAll('.s,.sm').forEach(function(e){e.style.color=cFin;}); }
       if(tFin){ var n=parseInt(tFin,10); if(!isNaN(n)&&n>0&&ff)ff.style.fontSize=n+'px'; }
       if(pFin){ var al=(/centr/i.test(pFin)?'center':/derech/i.test(pFin)?'right':/izq/i.test(pFin)?'left':'center'); if(foot)foot.style.textAlign=al; if(ff)ff.style.textAlign=al; }
-      if(xFin&&foot){ var sline=foot.querySelector('.s'); if(sline)sline.textContent=xFin; }
+      if(xFin&&foot){ var sline=el('fin-texto')||foot.querySelector('.s'); if(sline){sline.textContent=xFin;sline.style.display='';} }
     })();
     if(ev.regColor){ ['reg-h2','reg-kick'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.regColor;}); }
     if(ev.cfColor){ ['cf-h2','cf-kick2'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.cfColor;}); }
