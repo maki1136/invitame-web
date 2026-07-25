@@ -1009,8 +1009,29 @@
     // guarda la confirmación en la base (si la invitación tiene evento+invitado reales)
     if(window.INVDATA&&INVDATA.slug&&INVDATA.token&&window.INV&&INV.ok){
       const per=parseInt((el('pv-per')&&el('pv-per').textContent)||'0',10)||null;
-      INV.saveRSVP(INVDATA.slug,INVDATA.token,r==='si'?'confirmado':'rechazado',r==='si'?per:0).catch(()=>{});
+      const estado=(r==='si'?'confirmado':'rechazado');
+      const cant=(r==='si'?per:0);
+      INV.saveRSVP(INVDATA.slug,INVDATA.token,estado,cant).catch(()=>{});
+      avisarPorMail(estado,cant);
     }}
+  // Aviso por mail a los anfitriones (el destinatario lo decide el servidor, no el navegador)
+  function avisarPorMail(estado,personas){ /* personas puede recalcularse abajo */
+    try{
+      // el nombre lo escribe el invitado en el formulario (#rname); si no, el del pase
+      var nom=(el('rname')&&el('rname').value||'').trim();
+      if(!nom) nom=(el('pv-nombre')&&el('pv-nombre').textContent||'').trim();
+      var ta=document.querySelector('.rsvpform textarea');
+      var msj=(ta&&ta.value)||'';
+      // cantidad real elegida en el select del formulario
+      var sel=document.querySelector('.rsvpform select');
+      if(sel&&sel.value&&!isNaN(parseInt(sel.value,10))) personas=parseInt(sel.value,10);
+      fetch('/aviso-rsvp.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({slug:INVDATA.slug,token:INVDATA.token,estado:estado,personas:personas||0,nombre:nom,mensaje:String(msj).slice(0,500)})
+      }).catch(function(){});   // si falla el mail, la confirmación ya quedó guardada igual
+    }catch(e){}
+  }
 
   // carrusel
   const car=el('car'); let cimgs=[...car.querySelectorAll('img')]; const dots=el('dots');
