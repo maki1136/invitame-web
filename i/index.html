@@ -287,6 +287,22 @@
   .banco .l{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
   .banco .val{font-family:'Forum',serif;font-size:17px;color:var(--verde);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
   .banco .copy{font-size:10px;color:var(--oro);cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+  /* Galería en modo MOSAICO (opción del panel) */
+  .carousel.mosaico{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;height:auto!important;aspect-ratio:auto!important}
+  .carousel.mosaico img{position:static!important;opacity:1!important;width:100%;height:150px;object-fit:cover;border-radius:10px;display:block!important}
+  /* Pantalla de bloqueo: contraseña del evento / invitación deshabilitada */
+  #lock{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(130% 100% at 50% 30%,#3d493f,#111510);color:#f3ece0;text-align:center;padding:28px}
+  #lock.on{display:flex}
+  #lock h3{font-family:'Cormorant Garamond',serif;font-size:26px;margin-bottom:8px;color:#fff}
+  #lock p{font-size:13px;opacity:.85;max-width:320px;line-height:1.7}
+  #lock input{margin-top:18px;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.1);color:#fff;text-align:center;letter-spacing:2px;font-size:15px;max-width:220px}
+  #lock button{margin-top:12px;padding:11px 26px;border:0;border-radius:30px;background:#c9a36a;color:#20261f;
+    font-family:'Forum',serif;letter-spacing:2px;text-transform:uppercase;font-size:12px;cursor:pointer}
+  #lock .err{color:#f5a3a3;font-size:12px;margin-top:10px;min-height:16px}
+  #demo-badge{position:fixed;top:0;left:0;right:0;z-index:150;background:#c9a36a;color:#20261f;text-align:center;
+    font-family:'Forum',serif;letter-spacing:2px;text-transform:uppercase;font-size:11px;padding:6px;display:none}
   .inspgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;max-width:360px;margin:0 auto}
   .inspgrid img{width:100%;height:80px;object-fit:cover;border-radius:8px}
   .swatches{display:flex;gap:8px;justify-content:center;margin-top:10px}
@@ -452,6 +468,14 @@
   </symbol>
 </defs></svg>
 
+<div id="demo-badge"></div>
+<div id="lock">
+  <h3 id="lock-tit">Invitación privada</h3>
+  <p id="lock-txt">Ingresá la clave que te compartieron los anfitriones para ver la invitación.</p>
+  <input id="lock-in" type="password" placeholder="clave" autocomplete="off">
+  <button onclick="probarClave()">Entrar</button>
+  <div class="err" id="lock-err"></div>
+</div>
 <div id="env"><video id="env-vid" muted playsinline autoplay preload="auto"></video><div id="env-bloom"></div><div class="triflap tri-t"></div><div class="triflap tri-r"></div><div class="triflap tri-b"></div><div class="triflap tri-l"></div><div id="tri-glow"></div><div id="tri-seal"><svg class="triseal-svg" viewBox="0 0 100 100" aria-hidden="true"><text id="triseal-ini" x="50" y="50" text-anchor="middle"></text></svg></div><div id="env-vseal"><svg class="waxsvg" viewBox="0 0 100 100" aria-hidden="true"><use href="#sealbase"/><text id="vseal-ini" class="waxmono" x="50" y="50" text-anchor="middle"></text></svg></div><div class="vhint">Tocá el sello para abrir</div><button id="btn-ingresar" onclick="event.stopPropagation();this.style.display='none';var s=document.getElementById('tri-seal');if(s){s.click();}else if(window.abrir){window.abrir();}" style="position:fixed;left:50%;bottom:74px;transform:translateX(-50%);z-index:101;background:rgba(255,255,255,.14);color:#fbf7ef;border:1px solid rgba(255,255,255,.55);border-radius:40px;padding:11px 32px;font-family:'Cormorant Garamond',serif;font-size:17px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)">Ingresá</button><div class="scene" id="scene" onclick="abrir()">
   <div class="envelope">
     <div class="e-back"></div>
@@ -554,12 +578,12 @@
     <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-1-imagen-jpg-480x320-" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=700&q=80')"></div>
       <div class="bd"><h3 id="ev1-t">Ceremonia</h3><div class="sub" id="ev1-s">Basílica de Santa María</div><div class="addr" id="ev1-a">28 nov · 12:00 hs · Fray Juan de Zumárraga 2</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
-      <a class="btn gh" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Ceremonia+-+Boda+Mar%C3%ADa+y+Diego&dates=20261128T120000/20261128T140000&ctz=America/Mexico_City&location=Bas%C3%ADlica+de+Santa+Mar%C3%ADa&details=%C2%A1Te+esperamos!" target="_blank">Agendar</a></div>
+      <a class="btn gh" id="ev1-cal" href="#" target="_blank">Agendar</a></div>
       <div class="acc-panel"><div class="acc-inner"><iframe id="ev1-map" src="https://www.google.com/maps?q=19.4847,-99.1176&z=15&output=embed" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div>
     <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-2-imagen-jpg-480x320-" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=700&q=80')"></div>
       <div class="bd"><h3 id="ev2-t">Recepción</h3><div class="sub" id="ev2-s">Masía Mas Badó</div><div class="addr" id="ev2-a">28 nov · 14:00 hs · Juan Vázquez de Mella 525</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
-      <a class="btn gh" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Recepci%C3%B3n+-+Boda+Mar%C3%ADa+y+Diego&dates=20261128T140000/20261128T230000&ctz=America/Mexico_City&location=Mas%C3%ADa+Mas+Bad%C3%B3&details=%C2%A1A+festejar!" target="_blank">Agendar</a></div>
+      <a class="btn gh" id="ev2-cal" href="#" target="_blank">Agendar</a></div>
       <div class="acc-panel"><div class="acc-inner"><iframe id="ev2-map" src="https://www.google.com/maps?q=19.4326,-99.1332&z=15&output=embed" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div></section>
 
   <section data-sec="clima" class="sec" id="clima-sec" style="display:none"><div class="kick">El gran día</div><h2>El clima nos acompaña</h2>
@@ -616,7 +640,7 @@
     </div>
     <div style="margin-top:16px"><button class="btn acc-btn" onclick="acc(this)">Ver inspiración <span class="chev">▾</span></button></div>
     <div class="acc-panel"><div class="acc-inner">
-      <div class="inspgrid">
+      <div class="inspgrid" id="insp-grid">
         <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=300&q=80" alt="">
         <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&q=80" alt="">
         <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300&q=80" alt="">
@@ -699,8 +723,9 @@
 
   <div class="footer">
     <div class="n" id="fin-frase">¡Gracias!</div>
-    <div class="s">María &amp; Diego · 28.11.2026</div>
-    <div class="sm">Invitación creada con InvitaME</div>
+    <div class="s" id="fin-nombres">María &amp; Diego · 28.11.2026</div>
+    <img id="fin-logo" alt="" style="display:none;max-width:150px;margin:14px auto 0">
+    <div class="sm" id="pie-pub">Invitación creada con InvitaME</div>
   </div>
 </div>
 
@@ -887,6 +912,19 @@
       a.innerHTML=h; }
     sec.insertBefore(a,sec.firstChild); }
 
+  // Chequeo de la clave del evento (la usa el botón de la pantalla de bloqueo)
+  window.probarClave=function(){
+    var i=el('lock-in'), e=el('lock-err'), lock=el('lock'), env=el('env');
+    var v=(i&&i.value||'').trim();
+    if(!v){ if(e)e.textContent='Escribí la clave.'; return; }
+    if(v===String(window.__claveEvento||'')){
+      try{ sessionStorage.setItem('inv_ok_'+(window.INVDATA&&INVDATA.slug||''),'1'); }catch(err){}
+      if(lock)lock.classList.remove('on');
+      document.documentElement.style.overflow='';
+      if(env)env.style.display='';
+      window.__invBloqueada=false;
+    } else { if(e)e.textContent='Clave incorrecta.'; if(i){i.value='';i.focus();} }
+  };
   function aplicarFX(){ const r=document.documentElement.style;
     // --- Sobre de entrada ---
     if(FX.sobre.color){ r.setProperty('--sobre-c',FX.sobre.color); r.setProperty('--flap-base',FX.sobre.color); }
@@ -1194,6 +1232,137 @@
     S('it-h2',ev.itTitulo); S('hosp-h2',ev.hotTitulo); S('dress-h2',ev.dressTitulo); S('gal-h2',ev.galTitulo);
     // Bajadas / kickers editables (Dónde & Cuándo, Elegante, Recuerdos)
     S('dq-kick',ev.evKicker); S('dress-kick',ev.dressKicker); S('gal-kick',ev.galKicker);
+    // ============ CANDADOS: invitación deshabilitada / clave del evento / marca DEMO ============
+    (function(){
+      var enc=function(v){return v===true||v==='true'||v===1||v==='1'||v==='si'||v==='sí';};
+      var lock=el('lock'), env=el('env');
+      function bloquear(tit,txt,conInput){
+        if(!lock) return;
+        var t=el('lock-tit'), p=el('lock-txt'), i=el('lock-in'), b=lock.querySelector('button');
+        if(t)t.textContent=tit; if(p)p.textContent=txt;
+        if(!conInput){ if(i)i.style.display='none'; if(b)b.style.display='none'; }
+        lock.classList.add('on');
+        document.documentElement.style.overflow='hidden';
+        if(env) env.style.display='none';               // que no se vea el sobre detrás
+      }
+      // 1) Invitación deshabilitada
+      if(enc(ev['c_deshabilitar-invitacion'])){
+        bloquear('Invitación no disponible','Esta invitación fue dada de baja. Si creés que es un error, escribile a quien te la envió.',false);
+        window.__invBloqueada=true; return;
+      }
+      // 2) Clave del evento
+      var clave=String(ev['c_contrasena-para-el-evento']||'').trim();
+      if(clave){
+        var ok=false;
+        try{ ok=(sessionStorage.getItem('inv_ok_'+(INVDATA&&INVDATA.slug||''))==='1'); }catch(e){}
+        if(!ok){
+          window.__claveEvento=clave;
+          bloquear('Invitación privada','Ingresá la clave que te compartieron los anfitriones para ver la invitación.',true);
+          window.__invBloqueada=true;
+        }
+      }
+      // 3) Marca DEMO
+      if(enc(ev['c_es-demo'])){
+        var b=el('demo-badge');
+        if(b){ b.textContent=(ev['c_nombre-de-la-demo']||'Muestra / Demo')+' — invitación de ejemplo'; b.style.display='block'; }
+      }
+    })();
+    // ================= BLOQUE NUEVO: nada de datos de muestra en una invitación real =================
+    // 1) Botones "Agendar": se arman con la fecha y los datos REALES (antes iban fijos a "Boda María y Diego")
+    (function(){
+      function dosHoras(f){ // Date -> "YYYYMMDDTHHMMSS/YYYYMMDDTHHMMSS" (+3hs de duración)
+        function z(n){return String(n).padStart(2,'0');}
+        function fmt(d){return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+'T'+z(d.getHours())+z(d.getMinutes())+'00';}
+        var fin=new Date(f.getTime()+3*60*60*1000);
+        return fmt(f)+'/'+fmt(fin);
+      }
+      var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ');
+      var tipo=(ev.kick||'').trim();          // "Nuestra Boda", "Mis XV", etc.
+      [['ev1-cal','ev1t','ev1sub','ev1dir','fechaEv1'],['ev2-cal','ev2t','ev2sub','ev2dir','fechaEv2']].forEach(function(c,i){
+        var a=el(c[0]); if(!a) return;
+        var titSec=(ev[c[1]]||(i?'Recepción':'Ceremonia'));
+        var lugar=(ev[c[2]]||'').trim();
+        var dir=(ev[c[3]]||'').trim();
+        // fecha: la del evento puntual si existe, si no la general de la invitación
+        var raw=ev['c_ceremonia-'+(i+1)+'-fecha']||ev.fecha;
+        var f=raw?new Date(raw):null;
+        if(!f||isNaN(f)){ a.style.display='none'; return; }   // sin fecha válida NO ofrecemos agendar
+        var texto=titSec+(nombres?(' — '+(tipo?tipo+' ':'')+nombres):'');
+        var u='https://calendar.google.com/calendar/render?action=TEMPLATE'
+             +'&text='+encodeURIComponent(texto)
+             +'&dates='+dosHoras(f)
+             +(lugar||dir?('&location='+encodeURIComponent([lugar,dir].filter(Boolean).join(', '))):'')
+             +'&details='+encodeURIComponent('¡Te esperamos!');
+        a.href=u; a.style.display='';
+      });
+    })();
+    // 2) Personas: si NO cargaron ninguna, se oculta la sección (antes quedaban 4 padres inventados)
+    (function(){
+      var arr=Array.isArray(ev.personas)?ev.personas.filter(function(p){return p&&(p.nombre||p.foto);}):[];
+      if(arr.length) return;                       // hay personas propias: las dibuja el bloque de abajo
+      var sec=document.querySelector('[data-sec="padres"]');
+      if(sec) sec.style.display='none';
+    })();
+    // 3) Fotos de inspiración del dress code: propias o se esconde el botón (antes eran 3 fijas de ejemplo)
+    (function(){
+      var raw=String(ev['c_fotos-de-inspiracion-dress-code']||ev['c_fotos-de-inspiracion']||'').trim();
+      var g=el('insp-grid'); if(!g) return;
+      var btn=null, sec=document.querySelector('[data-sec="dresscode"]');
+      if(sec) sec.querySelectorAll('.acc-btn').forEach(function(b){ if(/inspiraci/i.test(b.textContent)) btn=b; });
+      if(raw){
+        var urls=raw.split(/[\s,\n]+/).filter(function(u){return /^https?:\/\//.test(u);}).slice(0,6);
+        if(urls.length){ g.innerHTML=urls.map(function(u){return '<img src="'+u.replace(/"/g,'')+'" alt="">';}).join(''); return; }
+      }
+      // sin fotos propias: no mostramos fotos de otra gente
+      g.innerHTML='';
+      if(btn) btn.style.display='none';
+      var pan=g.closest('.acc-panel'); if(pan) pan.style.display='none';
+    })();
+    // 4) Pie: nombres reales, logo propio y publicidad de Invítame apagable
+    (function(){
+      var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ');
+      var f=ev.fecha?new Date(ev.fecha):null;
+      var fech=(f&&!isNaN(f))?(String(f.getDate()).padStart(2,'0')+'.'+String(f.getMonth()+1).padStart(2,'0')+'.'+f.getFullYear()):'';
+      var e=el('fin-nombres'); if(e&&(nombres||fech)) e.textContent=[nombres,fech].filter(Boolean).join(' · ');
+      var lg=ev['img_c_imagen-del-logo-150px-ancho-50px-alto']||ev['img_c_imagen-del-logo']||ev['img_f-imagen-del-logo-150px-ancho-50px-al'];
+      if(lg){ var i=el('fin-logo'); if(i){ i.src=cldOpt(lg,'w_300,c_limit'); i.style.display='block'; } }
+      var enc=function(v){return v===true||v==='true'||v===1||v==='1'||v==='si'||v==='sí';};
+      if(enc(ev['c_deshabilitar-publicidad-de-invitame'])){ var p=el('pie-pub'); if(p)p.style.display='none'; }
+    })();
+    // 4b) Sueltos que el panel ofrecía y no hacían nada
+    (function(){
+      var V=function(k){ var v=ev[k]; return (v===undefined||v===null||v==='')?null:v; };
+      // colores de la sección Contacto
+      var cs=el('contacto-sec');
+      if(cs){ var cf=V('c_color-fondo-contacto'), ct=V('c_color-texto-contacto');
+        if(cf)cs.style.backgroundColor=cf;
+        if(ct){cs.style.color=ct; cs.querySelectorAll('h2,.kick,p').forEach(function(e){e.style.color=ct;});}
+        var ci=ev['img_c_imagen-de-fondo-seccion-contacto']||ev['img_f-imagen-de-fondo-seccion-contacto'];
+        if(ci){cs.style.backgroundImage="url('"+cldOpt(ci,'w_1200,c_limit')+"')";cs.style.backgroundSize='cover';cs.style.backgroundPosition='center';}
+      }
+      // fondo de la sección del QR / pase
+      var qi=ev['img_c_imagen-fondo-qr']||ev['img_f-imagen-fondo-qr'], qc=V('c_color-de-fondo-seccion-qr');
+      var qs=document.querySelector('[data-sec="pase"]')||document.querySelector('.pase,.qrsec');
+      if(qs){ if(qc)qs.style.backgroundColor=qc;
+        if(qi){qs.style.backgroundImage="url('"+cldOpt(qi,'w_1200,c_limit')+"')";qs.style.backgroundSize='cover';} }
+      // Instagram: usuario y frase de la sección
+      var hs=el('hashtag-sec');
+      if(hs){ var fr=V('c_frase-seccion-instagram'); if(fr){var p=hs.querySelector('p'); if(p)p.textContent=fr;}
+        var us=String(V('c_usuario-de-instragram')||'').replace(/^@/,'').trim();
+        if(us){ var lk=el('hashtag-link'); if(lk){ lk.href='https://www.instagram.com/'+encodeURIComponent(us)+'/'; lk.textContent='Ver @'+us+' en Instagram'; } }
+      }
+      // texto del botón de datos bancarios
+      var bt=V('c_texto-boton-ver-datos-bancarios');
+      if(bt){ var bw=el('reg-banco-wrap'); if(bw){ var b=bw.querySelector('.acc-btn'); if(b){ var ch=b.querySelector('.chev'); b.textContent=bt+' '; if(ch)b.appendChild(ch); } } }
+    })();
+    // 5) Galería estilo Mosaico (el panel lo ofrecía y no hacía nada)
+    (function(){
+      var est=String(ev['c_estilo-de-la-galeria-de-fotos']||'').trim().toLowerCase();
+      if(est!=='mosaico') return;
+      var car=el('car'); if(!car) return;
+      car.classList.add('mosaico');
+      car.querySelectorAll('.ar,.dots,.dot').forEach(function(e){e.style.display='none';});
+    })();
     // ---- Dress code: texto, imagen y segundo bloque (pedido de Jazmín) ----
     (function(){
       var T=function(k){ return String(ev[k]||'').trim(); };
