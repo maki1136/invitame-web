@@ -103,6 +103,15 @@
     if(!window.INV||!INV.ok){el('loadmsg').textContent="Conectando a la base… probá de nuevo en 2 seg.";return;}
     el('btnLoad').textContent="Cargando…";el('btnLoad').disabled=true;
     try{
+      // El panel puede bloquear el control de accesos de un evento ("Bloquear control de accesos QR y mesas")
+      try{
+        const _ev=await INV.getEvento(SLUG);
+        const _b=_ev&&_ev['c_bloquear-control-de-accesos-qr-y-mesas'];
+        if(_b===true||_b==='true'||_b===1||_b==='1'||_b==='si'||_b==='sí'){
+          el('loadmsg').textContent="El control de accesos de este evento está bloqueado desde el panel.";
+          el('btnLoad').textContent="Cargar lista de invitados"; el('btnLoad').disabled=false; return;
+        }
+      }catch(_e){ /* si no se puede leer el evento, seguimos como antes */ }
       const lista=await INV.listInvitados(SLUG);
       const activos=lista.filter(g=>g.activo!==false);
       if(!activos.length){el('loadmsg').textContent="No encontré invitados para ese evento. Revisá la dirección.";el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;return;}
