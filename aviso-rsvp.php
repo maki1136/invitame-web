@@ -53,19 +53,37 @@ if ($slug === '' || ($estado !== 'confirmado' && $estado !== 'rechazado')) {
   exit;
 }
 
+// helper para leer un documento de Firestore
+function traerDoc($project, $coleccion, $id) {
+  $url = 'https://firestore.googleapis.com/v1/projects/' . $project .
+         '/databases/(default)/documents/' . $coleccion . '/' . rawurlencode($id);
+  $ch = curl_init($url);
+  curl_setopt_array($ch, array(
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CONNECTTIMEOUT => 3,
+    CURLOPT_TIMEOUT        => 5,
+    CURLOPT_SSL_VERIFYPEER => true,
+  ));
+  $r = curl_exec($ch);
+  $c = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  return array($r, $c);
+}
+
+// ---------- el token tiene que ser un invitado REAL de este evento ----------
+// (así nadie de afuera puede disparar avisos y llenar la casilla de mails)
+if ($token === '') {
+  echo json_encode(array('ok' => false, 'error' => 'token'));
+  exit;
+}
+list($ri, $ci) = traerDoc($PROJECT, 'inv_invitados', $slug . '__' . $token);
+if (!$ri || $ci != 200) {
+  echo json_encode(array('ok' => false, 'error' => 'invitado'));
+  exit;
+}
+
 // ---------- leer el evento (de ahí sale el mail de destino) ----------
-$url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
-       '/databases/(default)/documents/inv_eventos/' . rawurlencode($slug);
-$ch = curl_init($url);
-curl_setopt_array($ch, array(
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_CONNECTTIMEOUT => 3,
-  CURLOPT_TIMEOUT        => 5,
-  CURLOPT_SSL_VERIFYPEER => true,
-));
-$res  = curl_exec($ch);
-$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+list($res, $code) = traerDoc($PROJECT, 'inv_eventos', $slug);
 
 if (!$res || $code != 200) {
   echo json_encode(array('ok' => false, 'error' => 'evento'));
