@@ -58,6 +58,7 @@ if ($slug !== '') {
 
     // 2) titulo: el "Titulo al compartir" si lo cargaron; si no, los nombres de la pareja
     $title = $firstOf(array('c_titulo-al-compartir'));
+    if ($title !== '') $titleEsPropio = true;   // si es propio, NO se le agrega el sufijo
     if ($title === '') {
       $n1 = $sv('n1');
       $n2 = $sv('n2');
@@ -116,7 +117,7 @@ if ($img !== '') {
 }
 if ($title !== '') {
   // Suffix con el textito real del evento (ej: "Mis XV"). Si no hay, solo los nombres.
-  $sfx = ($kick !== '') ? ' — ' . $kick : '';
+  $sfx = ($kick !== '' && empty($titleEsPropio)) ? ' — ' . $kick : '';
   $tpl = setMeta($tpl, 'property', 'og:title', $title . $sfx);
   $tpl = setMeta($tpl, 'name', 'twitter:title', $title . $sfx);
 }
