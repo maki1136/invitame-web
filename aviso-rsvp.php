@@ -131,18 +131,93 @@ $cuerpo .= "\nVer todas las confirmaciones en el panel:\n";
 $cuerpo .= $SITE . "/admin.html?e=" . rawurlencode($slug) . "\n\n";
 $cuerpo .= "-- \nInvítame · aviso automático\n";
 
-// Remitente: del dominio propio, para que no lo tomen por falsificado
-$deDominio = parse_url($SITE, PHP_URL_HOST);
-$de = 'invitaciones@' . $deDominio;
+// ============================================================
+//  ENVÍO
+//  Camino A (RECOMENDADO): servicio de mail por API (Brevo / Resend).
+//    La clave vive FUERA del repo público, en:
+//        public_html/invitame-config.php
+//    con estas líneas (además de las de Cloudinary):
+//        $MAIL_KEY  = 'la_clave_del_servicio';
+//        $MAIL_FROM = 'littlemomentsok@gmail.com';   // remitente verificado
+//        // $MAIL_API = 'brevo';  // o 'resend' (si no se pone, se detecta solo)
+//
+//  Camino B (fallback): mail() de Hostinger. Funciona sólo si el dominio
+//    tiene MX/SPF/DKIM configurados; si no, Gmail lo descarta en silencio.
+// ============================================================
+$MAIL_KEY = ''; $MAIL_FROM = ''; $MAIL_API = '';
+$cfgArriba = dirname(dirname(__FILE__)) . '/invitame-config.php';
+$cfgHome   = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php';
+$cfgLado   = __DIR__ . '/invitame-config.php';
+if      (is_readable($cfgArriba)) { include $cfgArriba; }
+elseif  (is_readable($cfgHome))   { include $cfgHome; }
+elseif  (is_readable($cfgLado))   { include $cfgLado; }
 
-$headers  = "From: Invitame <" . $de . ">\r\n";
-$headers .= "Reply-To: " . $para . "\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-$headers .= "X-Mailer: Invitame\r\n";
+$deDominio = parse_url($SITE, PHP_URL_HOST);
+$de = ($MAIL_FROM !== '' && filter_var($MAIL_FROM, FILTER_VALIDATE_EMAIL))
+      ? $MAIL_FROM
+      : 'invitaciones@' . $deDominio;
 
 $enviado = false;
-if (function_exists('mail')) {
-  $enviado = @mail($para, '=?UTF-8?B?' . base64_encode($asunto) . '?=', $cuerpo, $headers, '-f' . $de);
+$via     = 'mail';
+$detalle = '';
+
+if ($MAIL_KEY !== '') {
+  $api = $MAIL_API !== '' ? strtolower($MAIL_API)
+                          : ((strpos($MAIL_KEY, 're_') === 0) ? 'resend' : 'brevo');
+  if ($api === 'resend') {
+    $url = 'https://api.resend.com/emails';
+    $hdr = array('Authorization: Bearer ' . $MAIL_KEY, 'Content-Type: application/json');
+    $pay = json_encode(array(
+      'from'     => 'Invitame <' . $de . '>',
+      'to'       => array($para),
+      'reply_to' => $para,
+      'subject'  => $asunto,
+      'text'     => $cuerpo,
+    ));
+  } else {
+    $url = 'https://api.brevo.com/v3/smtp/email';
+    $hdr = array('api-key: ' . $MAIL_KEY, 'Content-Type: application/json', 'accept: application/json');
+    $pay = json_encode(array(
+      'sender'      => array('name' => 'Invitame', 'email' => $de),
+      'to'          => array(array('email' => $para)),
+      'replyTo'     => array('email' => $para),
+      'subject'     => $asunto,
+      'textContent' => $cuerpo,
+    ));
+  }
+  $ch = curl_init($url);
+  curl_setopt_array($ch, array(
+    CURLOPT_POST           => true,
+    CURLOPT_POSTFIELDS     => $pay,
+    CURLOPT_HTTPHEADER     => $hdr,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CONNECTTIMEOUT => 4,
+    CURLOPT_TIMEOUT        => 8,
+  ));
+  $rr = curl_exec($ch);
+  $cc = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  $via     = $api;
+  $enviado = ($cc >= 200 && $cc < 300);
+  if (!$enviado) $detalle = 'http' . $cc . ' ' . substr((string) $rr, 0, 200);
 }
 
-echo json_encode(array('ok' => (bool) $enviado, 'destino_ok' => true, 'enviado' => (bool) $enviado));
+// fallback: mail() del hosting
+if (!$enviado && $MAIL_KEY === '') {
+  $headers  = "From: Invitame <" . $de . ">\r\n";
+  $headers .= "Reply-To: " . $para . "\r\n";
+  $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+  $headers .= "X-Mailer: Invitame\r\n";
+  if (function_exists('mail')) {
+    $enviado = @mail($para, '=?UTF-8?B?' . base64_encode($asunto) . '?=', $cuerpo, $headers, '-f' . $de);
+  }
+  $via = 'mail';
+}
+
+echo json_encode(array(
+  'ok'         => (bool) $enviado,
+  'destino_ok' => true,
+  'enviado'    => (bool) $enviado,
+  'via'        => $via,
+  'detalle'    => $detalle,
+));
