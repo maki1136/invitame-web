@@ -14,7 +14,7 @@
 <meta name="twitter:image" content="https://invitame.littlemomentsok.com/i/novios-poster.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Forum&family=Rouge+Script&family=Great+Vibes&family=Lora:ital@0;1&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Rouge+Script&family=Dancing+Script:wght@400;600&family=Parisienne&family=Tangerine:wght@400;700&family=Sacramento&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;600;700&family=Forum&family=Marcellus&family=EB+Garamond:ital@0;1&family=Lora:ital@0;1&family=Cinzel:wght@400;600&family=Prata&family=Montserrat:wght@300;400;500&family=Poppins:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{--verde:#2e433c;--verde2:#26372f;--lino:#f4efe6;--lino2:#faf7f1;--sage:#7f9079;--sage-cl:#a9b8a0;
@@ -550,7 +550,7 @@
 
   <section data-sec="frase" class="sec fraseSec"><div class="frasefx" id="frasefx"></div>    <p class="frase reveal">"Hay un instante en la vida en que se decide caminar juntos para siempre. Ese día llegó, y queremos vivirlo con ustedes."</p></section>
 
-  <section data-sec="eventos" class="sec verde"><div class="kick">Dónde &amp; Cuándo</div><h2 id="dq-h2">Los eventos</h2>
+  <section data-sec="eventos" class="sec verde"><div class="kick" id="dq-kick">Dónde &amp; Cuándo</div><h2 id="dq-h2">Los eventos</h2>
     <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-1-imagen-jpg-480x320-" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=700&q=80')"></div>
       <div class="bd"><h3 id="ev1-t">Ceremonia</h3><div class="sub" id="ev1-s">Basílica de Santa María</div><div class="addr" id="ev1-a">28 nov · 12:00 hs · Fray Juan de Zumárraga 2</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
@@ -624,7 +624,7 @@
       <div class="p"><div class="av" style="background-image:url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&q=80')"></div><div class="nm">Jorge Medina</div><div class="rl">Papá del novio</div></div>
     </div></section>
 
-  <section data-sec="galeria" class="sec">    <div class="kick">Recuerdos</div><h2 id="gal-h2">Nuestra Galería</h2>
+  <section data-sec="galeria" class="sec">    <div class="kick" id="gal-kick">Recuerdos</div><h2 id="gal-h2">Nuestra Galería</h2>
     <div class="carousel reveal" id="car">
       <img class="on" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&q=80" alt="">
       <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80" alt="">
@@ -1179,6 +1179,8 @@
       if(ev.evBtnTextColor){ s.querySelectorAll('.btn').forEach(function(e){e.style.color=ev.evBtnTextColor;}); }
     })();
     S('it-h2',ev.itTitulo); S('hosp-h2',ev.hotTitulo); S('dress-h2',ev.dressTitulo); S('gal-h2',ev.galTitulo);
+    // Bajadas / kickers editables (Dónde & Cuándo, Elegante, Recuerdos)
+    S('dq-kick',ev.evKicker); S('dress-kick',ev.dressKicker); S('gal-kick',ev.galKicker);
     S('reg-h2',ev.regTitulo); S('cf-h2',ev.cfTitulo); S('fin-frase',ev.fraseFinal);
     // ===== FRASE FINAL: color, tamaño y posición (antes se guardaban pero no se aplicaban) =====
     (function(){
@@ -1223,11 +1225,25 @@
     if(ev.n1){const _i=(ev.n1.trim()[0]||'')+'&'+((ev.n2||'').trim()[0]||''); const _s=el('seal-ini'); if(_s)_s.textContent=_i.toUpperCase();}
     if(ev.galeria&&ev.galeria.length&&window.rebuildCarousel)rebuildCarousel(ev.galeria.map(u=>cldOpt(u,'w_1400,c_limit')));
     if(ev.secOrden&&ev.secOrden.length)reordenarSecciones(ev.secOrden);
-    // ---- Imágenes subidas desde el admin ----
-    document.querySelectorAll('[data-imgbg]').forEach(e=>{const u=ev[e.dataset.imgbg];if(u)e.style.backgroundImage="url('"+cldOpt(u,'w_900,c_limit')+"')";});
+    // ---- Imágenes subidas desde el admin (búsqueda tolerante: el admin guarda img_c_<slug>, el HTML pide img_f-<slug>-) ----
+    document.querySelectorAll('[data-imgbg]').forEach(function(e){
+      var b=e.dataset.imgbg;
+      var cands=[b, b.replace(/-+$/,''),
+                 b.replace(/^img_f-/,'img_c_'), b.replace(/^img_f-/,'img_c_').replace(/-+$/,''),
+                 b.replace(/^img_c_/,'img_f-'), b.replace(/^img_c_/,'img_f-').replace(/-+$/,'')];
+      var u=null; for(var i=0;i<cands.length;i++){ if(ev[cands[i]]){u=ev[cands[i]];break;} }
+      if(u)e.style.backgroundImage="url('"+cldOpt(u,'w_900,c_limit')+"')";
+    });
     const rt=document.documentElement.style;
-    if(ev['img_f-foto-para-el-fin-de-p-gina'])rt.setProperty('--final',"url('"+cldOpt(ev['img_f-foto-para-el-fin-de-p-gina'],'w_1600,c_limit')+"')");
-    if(ev['img_f-foto-principal-jpg-2000x1200-']&&!ev.cover)rt.setProperty('--cover',"url('"+cldOpt(ev['img_f-foto-principal-jpg-2000x1200-'],'w_1600,c_limit')+"')");
+    // helper: encuentra una imagen probando las dos convenciones de clave (img_c_ y img_f-)
+    var IMGV=function(){ for(var i=0;i<arguments.length;i++){ if(ev[arguments[i]]) return ev[arguments[i]]; } return null; };
+    var _fin=IMGV('img_c_foto-para-el-fin-de-pagina','img_f-foto-para-el-fin-de-p-gina','img_c_foto-para-el-fin-de-p-gina');
+    if(_fin)rt.setProperty('--final',"url('"+cldOpt(_fin,'w_1600,c_limit')+"')");
+    var _cov=IMGV('img_c_foto-principal-jpg-2000x1200','img_f-foto-principal-jpg-2000x1200-','img_c_foto-principal-jpg-2000x1200-');
+    if(_cov&&!ev.cover)rt.setProperty('--cover',"url('"+cldOpt(_cov,'w_1600,c_limit')+"')");
+    // Fondo de la sección "frase larga" (antes no se aplicaba nunca)
+    var _fb=IMGV('img_c_fondo-seccion-frase-larga','img_c_fondo-secci-n-frase-larga','img_f-fondo-secci-n-frase-larga');
+    if(_fb){var _fs=document.querySelector('[data-sec="frase"]'); if(_fs){_fs.style.backgroundImage="url('"+cldOpt(_fb,'w_1400,c_limit')+"')";_fs.style.backgroundSize='cover';_fs.style.backgroundPosition='center';}}
     // ---- Contacto: lee los campos reales del panel (Número de whatsapp 1/2, textos, toggle) ----
     (function(){
       var digits=function(s){return String(s||'').replace(/[^\d]/g,'');};
