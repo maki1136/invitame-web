@@ -703,7 +703,7 @@
     </div></section>
 
   <section data-sec="confirmacion" class="sec verde" style="background:var(--verde2)"><div class="kick" id="cf-kick2">Te esperamos</div><h2 id="cf-h2">Confirmar Asistencia</h2>
-    <p style="color:#d7cebb">Tu lugar ya está reservado. Confirmá antes del 1 de noviembre.</p>
+    <p style="color:#d7cebb">Tu lugar ya está reservado. Por favor confirmanos tu asistencia.</p>
     <div class="rsvpform reveal">
       <label>Tu nombre</label><input id="rname" value="Hugo y Lucía">
       <label>¿Cuántos asistirán?</label><select><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
@@ -1443,9 +1443,15 @@
       if(iu&&im){ im.src=cldOpt(iu,'w_1000,c_limit'); im.style.display=''; if(lista)lista.style.display='none'; if(nota)nota.style.display='none'; return; }
       // texto propio: una línea por ítem, formato "12:00 · Ceremonia | descripción"
       var txt=(ev['c_itinerario-descripcion']||ev['c_itinerario-descripci-n']||ev.itDescrip||'').trim();
-      if(!txt || !lista) return;
-      var filas=txt.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
-      if(!filas.length){ lista.innerHTML=''; if(nota)nota.style.display='none'; return; }
+      var filas=txt?txt.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean):[];
+      // Sin itinerario cargado: ocultar la sección entera. Antes quedaban las 4 filas
+      // de ejemplo (12:00 Ceremonia...) y la nota interna "También puede cargarse como imagen".
+      if(!filas.length || !lista){
+        if(lista) lista.innerHTML='';
+        if(nota) nota.style.display='none';
+        var _is=document.querySelector('[data-sec="itinerario"]'); if(_is)_is.style.display='none';
+        return;
+      }
       lista.innerHTML=filas.map(function(f){
         var p=f.split(/\s*[|–—]\s*/);   // separador | o guión largo
         var h=(p[0]||'').trim(), d=(p.slice(1).join(' — ')||'').trim();
@@ -1472,6 +1478,16 @@
     if(ev.galTextColor){ var gs=document.querySelector('[data-sec="galeria"]'); if(gs)gs.querySelectorAll('h2,.kick').forEach(function(e){e.style.color=ev.galTextColor;}); }
     if(ev.ev1fecha||ev.ev1dir){const e=el('ev1-a');if(e)e.textContent=[ev.ev1fecha,ev.ev1dir].filter(Boolean).join(' · ');}
     if(ev.ev2fecha||ev.ev2dir){const e=el('ev2-a');if(e)e.textContent=[ev.ev2fecha,ev.ev2dir].filter(Boolean).join(' · ');}
+    // Evento 2 vacío (muy común: un solo lugar) -> ocultar el bloque.
+    // Antes quedaba "Recepción · Masía Mas Badó · 28 nov" inventado.
+    (function(){
+      var bloques=document.querySelectorAll('[data-sec="eventos"] .evento');
+      [[1,bloques[0]],[2,bloques[1]]].forEach(function(par){
+        var n=par[0], caja=par[1]; if(!caja) return;
+        var hay=(ev['ev'+n+'t']||ev['ev'+n+'sub']||ev['ev'+n+'fecha']||ev['ev'+n+'dir']||ev['ev'+n+'maps']);
+        if(!String(hay||'').trim()) caja.style.display='none';
+      });
+    })();
     // ---- Mapa dinámico: usa el link/coords de Maps si hay, si no la dirección escrita ----
     (function(){
       function mapEmbed(q){ q=(q||'').trim(); if(!q) return null;
@@ -1612,6 +1628,10 @@
       P.forEach(([n,k])=>{ if(ev[k]) h+='<a href="'+ev[k]+'" target="_blank" rel="noopener">'+n+'</a>'; });
       if(ev.reg_otro_u) h+='<a href="'+ev.reg_otro_u+'" target="_blank" rel="noopener">'+(ev.reg_otro_n||'Mesa de regalos')+'</a>';
       rb.innerHTML=h; rb.style.display=h?'flex':'none';
+      // Sin ningún botón NI datos de transferencia, la sección queda vacía: se oculta.
+      var hayBanco=!!((ev.regClabe||'').trim()||(ev.regCbu||'').trim());
+      var rs=document.querySelector('[data-sec="regalos"]');
+      if(rs) rs.style.display=(h||hayBanco)?'':'none';
     }
     // --- Datos para transferencia (opcional) ---
     const bw=el('reg-banco-wrap');
