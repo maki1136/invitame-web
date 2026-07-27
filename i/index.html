@@ -1416,9 +1416,16 @@
       if(im){ var i1=el('hosp-img'); if(i1){ i1.src=cldOpt(im,'w_1000,c_limit'); i1.style.display='block'; } }
       // "Datos de hoteles recomendados": una línea por hotel -> Nombre | detalle | link
       var datos=String(ev['c_datos-de-hoteles-recomendados']||'').trim();
-      var cont=el('hosp-lista'); if(!datos||!cont) return;
-      var filas=datos.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
-      if(!filas.length) return;
+      var cont=el('hosp-lista');
+      var filas=datos?datos.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean):[];
+      // Sin hoteles cargados NO dejamos los de ejemplo (Los Robles / Posada del Valle / El Sauce):
+      // si tampoco hay texto ni imagen, la sección entera se oculta.
+      if(!filas.length){
+        if(cont) cont.innerHTML='';
+        if(!tx && !im){ var _hs=document.querySelector('[data-sec="hospedaje"]'); if(_hs)_hs.style.display='none'; }
+        return;
+      }
+      if(!cont) return;
       cont.innerHTML=filas.map(function(f){
         var p=f.split(/\s*\|\s*/);
         var n=(p[0]||'').replace(/</g,'&lt;'), d=(p[1]||'').replace(/</g,'&lt;'), u=(p[2]||'').trim();
@@ -1477,7 +1484,10 @@
       const u1=mapEmbed(q1), f1=el('ev1-map'); if(u1&&f1)f1.src=u1;
       const u2=mapEmbed(q2), f2=el('ev2-map'); if(u2&&f2)f2.src=u2;
     })();
-    if(ev.trivia&&ev.trivia.length){PREGUNTAS=ev.trivia;}
+    // Trivia: si el evento no cargó preguntas propias, NO mostrar las de ejemplo
+    // (antes salían "¿Dónde se conocieron María y Diego?" en invitaciones reales)
+    if(ev.trivia&&ev.trivia.length){ PREGUNTAS=ev.trivia; }
+    else { var _tvs=document.querySelector('[data-sec="trivia"]'); if(_tvs)_tvs.style.display='none'; }
     if(ev.fecha){const _f=new Date(ev.fecha); if(!isNaN(_f)){const _d=el('sc-day'),_m=el('sc-mon'); if(_d)_d.textContent=_f.getDate(); if(_m)_m.textContent=_meses[_f.getMonth()]+' '+_f.getFullYear();}}
     if(typeof ev.petalos!=='undefined')FX.particulas.on=ev.petalos; // compat viejo
     if(ev.fx)mergeFX(ev.fx);
@@ -1488,7 +1498,9 @@
       if(ev.coverVideo){ if(pv){ if(!v){v=document.createElement('video');v.className='cover-vid';v.muted=true;v.loop=true;v.autoplay=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0';pv.insertBefore(v,pv.firstChild);} if(ev.cover)v.poster=cldOpt(ev.cover,'w_1600,c_limit'); v.src=cldOpt(ev.coverVideo,'q_auto'); v.style.display=''; if(pbg)pbg.style.display='none'; const p=v.play&&v.play(); if(p&&p.catch)p.catch(()=>{});} }
       else if(v){ v.removeAttribute('src'); if(v.load)v.load(); v.style.display='none'; if(pbg)pbg.style.display=''; } }
     if(ev.n1){const _i=(ev.n1.trim()[0]||'')+'&'+((ev.n2||'').trim()[0]||''); const _s=el('seal-ini'); if(_s)_s.textContent=_i.toUpperCase();}
-    if(ev.galeria&&ev.galeria.length&&window.rebuildCarousel)rebuildCarousel(ev.galeria.map(u=>cldOpt(u,'w_1400,c_limit')));
+    // Galería: si no cargaron fotos, ocultar la sección en vez de dejar las de ejemplo
+    if(ev.galeria&&ev.galeria.length){ if(window.rebuildCarousel)rebuildCarousel(ev.galeria.map(u=>cldOpt(u,'w_1400,c_limit'))); }
+    else { var _gs=document.querySelector('[data-sec="galeria"]'); if(_gs)_gs.style.display='none'; }
     if(ev.secOrden&&ev.secOrden.length)reordenarSecciones(ev.secOrden);
     // ---- Imágenes subidas desde el admin (búsqueda tolerante: el admin guarda img_c_<slug>, el HTML pide img_f-<slug>-) ----
     document.querySelectorAll('[data-imgbg]').forEach(function(e){
