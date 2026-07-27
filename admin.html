@@ -800,8 +800,32 @@
       '<span class="x" onclick="delGuest('+i+')">✕</span></div>';}).join('')||'<div class="hint">Todavía no cargaste invitados. (Los links quedan activos después de \'Guardar y publicar\'.)</div>';}
   // ==== GUARDAR/PUBLICAR EN FIREBASE (de verdad) ====
   const BASEURL="https://invitame.littlemomentsok.com/i/";
+  // ¿Quedó algo del ejemplo sin cambiar? El panel arranca con la demo cargada,
+  // así que lo que no se toca se publica tal cual. Esto avisa ANTES de publicar.
+  function restosDemo(){
+    const av=[];
+    const P=(D.n1||'')+' '+(D.n2||'');
+    if(/Mar[íi]a/.test(D.n1||'')||/Diego/.test(D.n2||'')) av.push('Los nombres siguen siendo «'+P.trim()+'»');
+    if((D.slug||'')==='maria-y-diego') av.push('La dirección del link sigue siendo «maria-y-diego»');
+    if(String(D.fecha||'').indexOf('2026-11-28')===0) av.push('La fecha sigue siendo la del ejemplo (28/11/2026)');
+    if(/Hay un instante en la vida/.test(D.frase||'')) av.push('La frase principal es la del ejemplo');
+    if(/Bas[íi]lica de Santa Mar[íi]a/.test(D.cer||'')) av.push('El lugar dice «Basílica de Santa María»');
+    if(/Hugo y Luc[íi]a/.test(D.pnom||'')) av.push('Los papás dicen «Hugo y Lucía»');
+    if(/images\.unsplash\.com/.test(D.cover||'')) av.push('La foto de portada es una del ejemplo (no es de la pareja)');
+    if((D.tpl||'')==='Rústica Campestre') av.push('El nombre de la plantilla sigue en «Rústica Campestre»');
+    if(D.trivia&&D.trivia[0]&&/D[óo]nde se conocieron\?$/.test(D.trivia[0].q||'')) av.push('Las preguntas de la trivia son las de ejemplo');
+    return av;
+  }
+  let _demoAvisado=false;
   async function publicar(){
     if(!window.INV||!window.INV.ok){alert("Todavía no se conectó la base de datos. Esperá 2 segundos y probá de nuevo.");return;}
+    const _rd=restosDemo();
+    if(_rd.length && !_demoAvisado){
+      _demoAvisado=true;
+      if(!confirm('⚠️ Antes de publicar, revisá esto:\n\n· '+_rd.join('\n· ')+
+        '\n\nEsos datos son del EJEMPLO y se van a ver así en la invitación del cliente.\n\n'+
+        'Aceptar = publicar igual   ·   Cancelar = volver y corregir')) return;
+    }
     const slug=(D.slug||"").trim();
     if(!D.nEvento){ try{ const _all=await INV.exportAll(); const _mx=_all.eventos.reduce((m,e)=>Math.max(m,parseInt(e.nEvento,10)||0),0); D.nEvento=_mx+1; }catch(_e){ D.nEvento=1; } }
     if(!slug){alert("Poné la 'Dirección del evento' en la pestaña PRINCIPAL (ej: maria-y-diego).");return;}
