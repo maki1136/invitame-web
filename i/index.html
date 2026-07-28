@@ -954,10 +954,19 @@
   let playing=false; const audio=el('audio-bg');
   function playMusic(){ if(!CONFIG.musica)return; playing=true; el('music').classList.remove('paused'); if(audio&&audio.src){audio.play().catch(()=>{});} }
   function toggleMusic(){ playing=!playing; el('music').classList.toggle('paused',!playing); if(audio&&audio.src){ playing?audio.play().catch(()=>{}):audio.pause(); } }
+  // "Ya confirmaron N personas": el 87 que estaba escrito en el HTML era un número
+  // INVENTADO y se publicaba en TODAS las invitaciones reales. Ahora solo se muestra
+  // si el evento trae un número de verdad (campo rsvpCount); si no, la línea se oculta.
+  function refrescarContadorRSVP(){
+    var box=el('rsvp-count'); if(!box) return;
+    var n=(window.INVEV&&typeof window.INVEV.rsvpCount==='number')?window.INVEV.rsvpCount:null;
+    if(!CONFIG.contadorRSVP || n===null || n<=0){ box.style.display='none'; return; }
+    var c=el('rcount'); if(c)c.textContent=n; box.style.display='';
+  }
   function applyConfig(){
     if(!CONFIG.compartir) el('share-sec').style.display='none';
     if(!CONFIG.musica) el('music').style.display='none';
-    if(!CONFIG.contadorRSVP) el('rsvp-count').style.display='none';
+    refrescarContadorRSVP();
     if(CONFIG.mostrarFecha===false){ var f=el('pv-fecha'); if(f)f.style.display='none'; }
     if(CONFIG.mostrarCountdown===false){ var c=document.querySelector('.portada .count'); if(c)c.style.display='none'; }
     if(CONFIG.musica && CONFIG.musicaUrl && audio) audio.src=CONFIG.musicaUrl;
@@ -1005,7 +1014,7 @@
   let confirmado=false;
   function rsvp(r){el('rmsg').style.color=r==='si'?'#e7ddc8':'#e6c6cd';
     el('rmsg').textContent=r==='si'?'¡Genial! Te esperamos con alegría 🌿':'Gracias por avisarnos 💛';
-    if(r==='si'&&!confirmado&&CONFIG.contadorRSVP){confirmado=true;const c=el('rcount');if(c)c.textContent=parseInt(c.textContent,10)+2;}
+    if(r==='si'&&!confirmado){confirmado=true;} // (ya no se toca el contador: era un número inventado)
     // guarda la confirmación en la base (si la invitación tiene evento+invitado reales)
     if(window.INVDATA&&INVDATA.slug&&INVDATA.token&&window.INV&&INV.ok){
       const per=parseInt((el('pv-per')&&el('pv-per').textContent)||'0',10)||null;
@@ -1493,12 +1502,24 @@
       function mapEmbed(q){ q=(q||'').trim(); if(!q) return null;
         let m=q.match(/^(-?\d{1,3}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)$/)||q.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)||q.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
         if(m) return 'https://www.google.com/maps?q='+m[1]+','+m[2]+'&z=16&output=embed';
+        // Un link corto de Maps (maps.app.goo.gl / goo.gl/maps) NO se puede resolver
+        // desde el navegador: si lo mandamos como texto de búsqueda, el mapa muestra
+        // cualquier cosa. Mejor devolver null y que se use la dirección escrita.
+        if(/^https?:\/\//i.test(q)) return null;
         return 'https://www.google.com/maps?q='+encodeURIComponent(q)+'&z=15&output=embed';
       }
-      const q1=ev.ev1maps||[ev.ev1sub,ev.ev1dir].filter(Boolean).join(', ');
-      const q2=ev.ev2maps||[ev.ev2sub,ev.ev2dir].filter(Boolean).join(', ');
-      const u1=mapEmbed(q1), f1=el('ev1-map'); if(u1&&f1)f1.src=u1;
-      const u2=mapEmbed(q2), f2=el('ev2-map'); if(u2&&f2)f2.src=u2;
+      // Si el campo de Maps no sirve (link corto), se cae a la dirección escrita.
+      const dir1=[ev.ev1sub,ev.ev1dir].filter(Boolean).join(', ');
+      const dir2=[ev.ev2sub,ev.ev2dir].filter(Boolean).join(', ');
+      [[mapEmbed(ev.ev1maps)||mapEmbed(dir1),'ev1-map'],[mapEmbed(ev.ev2maps)||mapEmbed(dir2),'ev2-map']].forEach(function(par){
+        var u=par[0], f=el(par[1]); if(!f) return;
+        if(u){ f.src=u; return; }
+        // Sin dato de mapa: esconder el botón "Ver mapa" en vez de dejar el mapa
+        // de ejemplo (que apuntaba a unas coordenadas fijas de Ciudad de México).
+        f.removeAttribute('src');
+        var caja=f.closest('.acc-panel'); if(caja)caja.style.display='none';
+        var fila=f.closest('.bd'); var btn=fila&&fila.querySelector('.acc-btn'); if(btn)btn.style.display='none';
+      });
     })();
     // Trivia: si el evento no cargó preguntas propias, NO mostrar las de ejemplo
     // (antes salían "¿Dónde se conocieron María y Diego?" en invitaciones reales)
@@ -1616,7 +1637,12 @@
   }
   function aplicarFeatures(ev){
     // --- Música de fondo ---
-    { const mb=el('music'), a=el('audio-bg'), url=(ev.musicaUrl||ev.musica||'').trim();
+    // Solo se acepta un link de audio REAL. El cliente muchas veces escribe el
+    // nombre de la canción o un link de YouTube/Spotify: con eso el botón de
+    // música aparecía y no sonaba nada. Si no es audio, no se muestra el botón.
+    { const mb=el('music'), a=el('audio-bg');
+      let url=(ev.musicaUrl||ev.musica||'').trim();
+      if(url && !(/^https?:\/\//i.test(url) && /\.(mp3|m4a|aac|ogg|wav)(\?|$)/i.test(url) && !/youtube|youtu\.be|spotify/i.test(url))) url='';
       if(url){ if(typeof CONFIG!=='undefined'){CONFIG.musica=true;CONFIG.musicaUrl=url;} if(a)a.src=url; if(mb)mb.style.display=''; }
       else { if(typeof CONFIG!=='undefined')CONFIG.musica=false; if(mb)mb.style.display='none'; } }
     // --- Frase con movimiento ---
@@ -1708,16 +1734,30 @@
     document.title=nombres+' — Invitación';
   }
   async function cargarInvitacion(){
-    const p=new URLSearchParams(location.search); const slug=p.get('e'), token=p.get('g');
-    if(!slug||!token||token==='demo'){ return; } // sin parámetros = queda la demo
+    const p=new URLSearchParams(location.search); const slug=p.get('e'); let token=p.get('g');
+    if(!slug){ return; }                    // sin ?e= queda la muestra del catálogo
     if(!window.INV||!INV.ok){ return; }
+    // Con ?e=SLUG pero SIN token se muestra la invitación REAL en modo vidriera
+    // (sin nombre de invitado y sin formulario de confirmación). Antes se salía
+    // acá y el catálogo terminaba mostrando siempre la demo de María y Diego.
+    const vidriera = (!token || token==='demo');
+    if(vidriera) token=null;
     INVDATA.slug=slug; INVDATA.token=token;
     try{
       const ev=await INV.getEvento(slug);
+      if(!ev){ return; }
       if(invitacionVencida(ev)){ mostrarVencida(ev); return; }
       window.INVEV=ev; aplicarEvento(ev); aplicarEstilosSectores(ev); aplicarInterruptores(ev);
+      try{ refrescarContadorRSVP(); }catch(_e){}
       try{ if(window.__i18nBoot)window.__i18nBoot(); }catch(_e){}
-      const g=await INV.getInvitado(slug,token); aplicarInvitado(g,slug);
+      if(vidriera){
+        document.querySelectorAll('.rsvpform').forEach(function(f){ f.style.display='none'; });
+        var pv=el('pv-nombre'); if(pv)pv.textContent='';
+        var pase=document.querySelector('[data-sec="pase"]'); if(pase)pase.style.display='none';
+        var av=el('rsvp-aviso'); if(av)av.textContent='Esta es una muestra: la invitación real llega con el nombre de cada invitado.';
+      } else {
+        const g=await INV.getInvitado(slug,token); aplicarInvitado(g,slug);
+      }
     }catch(e){ console.warn('No se pudo cargar la invitación:',e); }
   }
   // Sello: mostrar las iniciales al instante desde el link (ej: sofia-y-mateo → S&M), sin esperar la base
@@ -2018,7 +2058,7 @@
     document.addEventListener('click',function(e){ if(panel.classList.contains('show') && !panel.contains(e.target) && e.target!==btn) close(); });
   })();
 </script>
-<script type="module" src="../firebase-inv.js?v=20"></script>
+<script type="module" src="../firebase-inv.js?v=21"></script>
 <div class="fxlayer" id="fxlayer"></div>
 </body>
 </html>
