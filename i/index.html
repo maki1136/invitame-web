@@ -1751,10 +1751,14 @@
       try{ refrescarContadorRSVP(); }catch(_e){}
       try{ if(window.__i18nBoot)window.__i18nBoot(); }catch(_e){}
       if(vidriera){
+        // Muestra sin invitado: se esconde todo lo personal (pase con QR, nombre,
+        // mesa) y el formulario de confirmación, que no tendría a quién anotar.
         document.querySelectorAll('.rsvpform').forEach(function(f){ f.style.display='none'; });
-        var pv=el('pv-nombre'); if(pv)pv.textContent='';
-        var pase=document.querySelector('[data-sec="pase"]'); if(pase)pase.style.display='none';
-        var av=el('rsvp-aviso'); if(av)av.textContent='Esta es una muestra: la invitación real llega con el nombre de cada invitado.';
+        var pase=document.querySelector('.pase'); if(pase)pase.style.display='none';
+        ['pv-gname','pv-per','pv-mesa','pv-estado'].forEach(function(id){ var e=el(id); if(e)e.textContent=''; });
+        var rn=el('rname'); if(rn)rn.value='';
+        var cf=document.querySelector('[data-sec="confirmacion"] p');
+        if(cf)cf.textContent='Esta es una muestra. En la invitación real, cada invitado entra con su propio link y confirma desde acá.';
       } else {
         const g=await INV.getInvitado(slug,token); aplicarInvitado(g,slug);
       }
