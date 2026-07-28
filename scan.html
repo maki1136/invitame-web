@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="es"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Control de Acceso · InvitaME</title>
 <link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -27,6 +27,7 @@
   .ok{background:linear-gradient(160deg,#1f7a4d,#14603b)}
   .bad{background:linear-gradient(160deg,#8a2b2b,#6d1f1f)}
   .warn{background:linear-gradient(160deg,#8a6d1f,#6d551a)}
+  .wait{background:linear-gradient(160deg,#454b52,#33383d)}
   .rc .ico{font-size:52px;line-height:1}
   .rc .nom{font-size:26px;font-weight:800;margin:8px 0 2px}
   .rc .est{font-size:15px;opacity:.95;margin-bottom:14px}
@@ -81,13 +82,14 @@
   <!-- PASO 2: escanear -->
   <div id="panel" class="hidden">
     <div class="stat">
-      <div class="b"><div class="n" id="s-tot">0</div><div class="l">Invitados</div></div>
+      <div class="b"><div class="n" id="s-tot">0</div><div class="l">Pases</div></div>
       <div class="b"><div class="n" id="s-in">0</div><div class="l">Ingresaron</div></div>
       <div class="b"><div class="n" id="s-fal">0</div><div class="l">Faltan</div></div>
     </div>
     <div id="reader"></div>
     <button class="alt" onclick="manual()">Ingresar código a mano</button>
     <div class="msg" id="scanmsg">Apuntá la cámara al QR</div>
+    <button type="button" onclick="cambiarEvento()" style="background:none;border:0;color:#9a948a;font-size:12px;text-decoration:underline;cursor:pointer;padding:8px 0;margin-top:4px">← Cambiar de evento</button>
   </div>
 </div>
 
@@ -121,7 +123,15 @@
       actualizarStats();
       el('login').classList.add('hidden'); el('panel').classList.remove('hidden');
       iniciarCamara();
-    }catch(e){console.error(e);el('loadmsg').textContent="Error: "+(e.message||e);el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;}
+    }catch(e){console.error(e);
+      var m=String(e&&e.message||e);
+      // el operador de puerta no tiene que leer errores técnicos
+      el('loadmsg').textContent = /permission|insufficient/i.test(m)
+        ? "No tenés permiso para ver este evento. Iniciá sesión de nuevo."
+        : (/network|offline|unavailable/i.test(m)
+            ? "Sin internet. Revisá la conexión y probá de nuevo."
+            : "No pude cargar el evento. Revisá la dirección y probá de nuevo.");
+      el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;}
   }
   function actualizarStats(){
     let usados=0,tot=0; MAPA.forEach(g=>{tot+=(g.usosMax||1);usados+=((g.usosMax||1)-(g.usos!=null?g.usos:g.usosMax||1));});
@@ -142,29 +152,62 @@
 
   async function validar(token){
     const g=MAPA.get(token);
-    if(!g){ mostrar('bad','✕','Código no válido','Este QR no pertenece a este evento',null); return; }
+    if(!g){ mostrar('bad','✕','Código no válido','Este QR no es de este evento',null); return; }
     const usos=(g.usos!=null)?g.usos:(g.usosMax||1);
-    if(usos<=0){ mostrar('warn','⚠','Ya ingresó','Sin usos disponibles',g); return; }
-    // descontar 1 uso (local inmediato + base best-effort)
-    g.usos=usos-1; MAPA.set(token,g); actualizarStats();
+    if(usos<=0){ mostrar('warn','⚠','Ya ingresó','No le quedan pases',g); return; }
+
+    // El cartel verde SOLO sale si la base confirmó el ingreso.
+    // Antes se mostraba "¡Habilitado!" y después se intentaba descontar: con dos
+    // celulares en la puerta, el mismo QR entraba dos veces.
+    mostrar('wait','⏳','Verificando…','Un segundo',g);
+    if(!(window.INV&&INV.ok)){
+      mostrar('bad','✕','Sin conexión','No puedo verificar el pase. Reintentá.',g);
+      return;
+    }
+    let r=null;
+    try{ r=await INV.marcarUso(SLUG,token); }
+    catch(e){ mostrar('bad','✕','Sin conexión','No se registró el ingreso. Reintentá.',g); return; }
+
+    if(!r||!r.ok){
+      if(r&&r.motivo==='sin-usos'){ g.usos=0; MAPA.set(token,g); actualizarStats();
+        mostrar('warn','⚠','Ya ingresó','No le quedan pases',g); }
+      else { mostrar('bad','✕','No pude registrarlo','Reintentá o anotalo a mano',g); }
+      return;
+    }
+    g.usos=(typeof r.restantes==='number')?r.restantes:Math.max(0,usos-1);
+    MAPA.set(token,g); actualizarStats();
     mostrar('ok','✓','¡Habilitado!','Ingreso registrado',g);
-    if(window.INV&&INV.ok){ INV.marcarUso(SLUG,token).catch(()=>{ el('scanmsg').textContent="(Sin internet: se registró local, se sincroniza después)"; }); }
   }
+  function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function mostrar(clase,ico,titulo,estado,g){
     const rc=el('rc'); rc.className='rc '+clase;
     let extra='';
     if(g){ const usos=(g.usos!=null)?g.usos:(g.usosMax||1);
-      extra='<div class="grid"><div class="g"><div class="gn">'+(g.usosMax||1)+'</div><div class="gl">Pases</div></div>'+
-        '<div class="g"><div class="gn">'+usos+'</div><div class="gl">Quedan</div></div>'+
-        '<div class="g"><div class="gn">'+(g.mesa||'-')+'</div><div class="gl">Mesa</div></div></div>'+
-        (g.restriccion?'<div class="rest">🍽️ '+g.restriccion+'</div>':'');
+      // esc(): el nombre y la mesa vienen del Excel que sube el cliente, así que
+      // se escapan antes de meterlos en el HTML (si no, un nombre con etiquetas
+      // ejecuta código en el celular de la puerta).
+      extra='<div class="grid"><div class="g"><div class="gn">'+esc(g.usosMax||1)+'</div><div class="gl">Pases</div></div>'+
+        '<div class="g"><div class="gn">'+esc(usos)+'</div><div class="gl">Quedan</div></div>'+
+        '<div class="g"><div class="gn">'+esc(g.mesa||'-')+'</div><div class="gl">Mesa</div></div></div>'+
+        (g.restriccion?'<div class="rest">🍽️ '+esc(g.restriccion)+'</div>':'');
     }
-    rc.innerHTML='<div class="ico">'+ico+'</div><div class="nom">'+(g?g.nombre:'—')+'</div><div class="est">'+estado+'</div>'+extra+'<button onclick="siguiente()">Siguiente ›</button>';
+    rc.innerHTML='<div class="ico">'+esc(ico)+'</div><div class="nom">'+esc(g?g.nombre:'—')+'</div><div class="est">'+esc(estado)+'</div>'+extra+'<button onclick="siguiente()">Siguiente ›</button>';
     el('res').classList.remove('hidden');
   }
   function siguiente(){ el('res').classList.add('hidden'); setTimeout(()=>{pausa=false;el('scanmsg').textContent="Apuntá la cámara al QR";},300); }
-  // Auto-cargar el evento si viene por el link (?e=slug), p.ej. desde el botón del admin
-  (function(){ const e=new URLSearchParams(location.search).get('e'); if(!e)return; el('slug').value=e; el('loadmsg').textContent='Cargando el evento…'; const t=setInterval(()=>{ if(window.INV&&window.INV.ok){ clearInterval(t); cargar(); } },400); setTimeout(()=>clearInterval(t),9000); })();
+  function cambiarEvento(){
+    try{ if(scanner&&scanner.stop) scanner.stop().catch(()=>{}); }catch(e){}
+    scanner=null; MAPA.clear(); SLUG=""; pausa=false;
+    el('panel').classList.add('hidden'); el('login').classList.remove('hidden');
+    el('loadmsg').textContent=''; el('btnLoad').textContent="Cargar lista de invitados"; el('btnLoad').disabled=false;
+    el('slug').value=''; el('slug').focus();
+  }
+  // Auto-cargar el evento si viene por el link (?e=slug), p.ej. desde el botón del admin.
+  // Espera a que HAYA SESIÓN: sin login no se pide la lista de invitados.
+  (function(){ const e=new URLSearchParams(location.search).get('e'); if(!e)return; el('slug').value=e; el('loadmsg').textContent='Cargando el evento…';
+    const t=setInterval(()=>{ if(window.INV&&window.INV.ok&&window.INV.user){ clearInterval(t); cargar(); } },400);
+    setTimeout(()=>{ clearInterval(t); if(!SLUG&&!(window.INV&&window.INV.user)) el('loadmsg').textContent='Iniciá sesión para cargar el evento.'; },12000); })();
 </script>
-<script type="module" src="firebase-inv.js?v=20"></script>
+<script type="module" src="firebase-inv.js?v=21"></script>
 </body></html>

@@ -189,7 +189,7 @@
    REGALOS:["Color fondo \"Regalos\":","Imagen de fondo sección \"Regalos\"","TITULO SECCIÓN \"REGALOS\" Y MENÚ:","COLOR SECCIÓN \"REGALOS\" Y MENÚ:","Frase para sección regalos (mesa):","Color para sección regalos (mesa):","Datos bancarios para transferencias (Borrar texto en caso de no necesitar):","TEXTO BOTÓN \"Ver datos bancarios\":"],
    "CONFIRMACIÓN":["Color texto Confirmación:","Color fondo Confirmación:","Imagen de fondo sección \"Confirmación\"","Email para confirmaciones:","TÍTULO DEL CORREO:","CONFIRMAR ASISTENCIA (MENÚ Y TITULOS):","Frase para sección confirmación:","Ocultar Formulario:","Color texto Contacto:","Color fondo Contacto:","Imagen de fondo sección \"Contacto\"","Título Contacto:","Frase para sección contacto:","Número de whatsapp:","Número de whatsapp 2:","Texto corto botón wsp:","Texto corto botón wsp 2:","Mostrar sección de contacto:"],
    MUSIC_PASES:["Música de la web","Color de fondo sección QR:","Imagen fondo QR"],
-   AVANZADO:["IDIOMA de la invitación:","Detectar el del celular del invitado:","Mostrar botón para que el invitado elija:","Deshabilitar publicidad de invitame:","Deshabilitar invitación:","Contraseña para el evento:","ES DEMO ?:","NOMBRE DE LA DEMO:","Tipo de evento:","Imagen del logo - 150px ancho / 50px alto","Bloquear control de accesos QR y mesas:","Habilitar trivia:"],
+   AVANZADO:["IDIOMA de la invitación:","Detectar el del celular del invitado:","Mostrar botón para que el invitado elija:","Deshabilitar publicidad de invitame:","Deshabilitar invitación:","Contraseña para el evento:","ES DEMO ?:","NOMBRE DE LA DEMO:","Tipo de evento:","Imagen del logo - 150px ancho / 50px alto","Bloquear control de accesos QR y mesas:","Habilitar trivia:","Pedido especial del cliente:"],
    TRIVIA:["Texto sobre título:","Texto 'Puntos':","Texto 'Pregunta':","Texto del campo para ingresar el nombre:","Texto tabla de resultados:","Texto botón \"Iniciar Sesión\":","Texto \"Hola\" antes del nombre:","Texto botón \"Comenzar trivia\":","Texto botón \"Cerrar sesion\":","Texto \"No sos\" para cerrar sesión:","Texto columna \"Nombre\" en tabla de resultados:","Texto \"tabla de posiciones\":","Color 1 titulo trivia:","Color 2 titulo trivia:"]
   };
   FIELDS.EFECTOS=[];
@@ -326,6 +326,7 @@
     "Dresscode Imagen (aprox JPG 250x250)":"Si subís una imagen, reemplaza los dibujitos del traje y el vestido.",
     "vestimenta titulo 2:":"Opcional: un SEGUNDO bloque de dress code (ej: 'Para la fiesta'). Se muestra solo si lo llenás.",
     "Dresscode Texto 2:":"El texto del segundo bloque de dress code.",
+    "Pedido especial del cliente:":"📝 Lo que el cliente escribió en el formulario. Es SOLO para ustedes: no se publica en la invitación. Se carga solo cuando traés una solicitud desde 📥 Solicitudes.",
     "Email para confirmaciones:":"📩 Acá te llega un mail cada vez que un invitado confirma o rechaza. Si lo dejás vacío, no se manda nada. Ojo: el envío de mails se activa una sola vez para todo el sistema (lo configura Maki); las confirmaciones SIEMPRE se ven en la pestaña INVITADOS, con o sin mail.",
     "TÍTULO DEL CORREO:":"El asunto del mail que te llega (ej: Confirmación de asistencia). Se le agrega el nombre del invitado.",
     "Frase para sección confirmación:":"El textito que ve el invitado arriba del formulario de confirmación."
@@ -794,7 +795,15 @@
   function addGuest(){const n=el('gname').value.trim();if(!n)return;D.invitados.push({n:n,p:el('gper').value||'1',m:el('gmesa').value||'-',t:Math.random().toString(36).slice(2,8)});el('gname').value='';renderGuests();}
   function delGuest(i){D.invitados.splice(i,1);renderGuests();}
   function renderGuests(){if(!el('st-inv'))return;el('st-inv').textContent=D.invitados.length;el('st-per').textContent=D.invitados.reduce((a,g)=>a+(parseInt(g.p,10)||0),0);
-    el('guests').innerHTML=D.invitados.map((g,i)=>{const url=BASEURL+'?e='+encodeURIComponent(D.slug||'')+'&g='+g.t;return '<div class="guest"><b>'+g.n+'</b>'+
+    // Estado de la confirmación al lado de cada invitado. Antes el RSVP se guardaba
+    // en la base y NO se veía en ninguna pantalla: la diseñadora no tenía forma de
+    // saber quién confirmó.
+    const _RS={confirmado:['✅','confirmó','#1f7a4d'],rechazado:['✖','no puede','#8a2b2b'],pendiente:['·','sin responder','#a39a90']};
+    el('guests').innerHTML=D.invitados.map((g,i)=>{const url=BASEURL+'?e='+encodeURIComponent(D.slug||'')+'&g='+g.t;
+      const r=_RS[g.rsvp||'pendiente']||_RS.pendiente;
+      const cuantos=(g.rsvp==='confirmado'&&g.rsvpPersonas)?(' ('+g.rsvpPersonas+')'):'';
+      return '<div class="guest"><b>'+g.n+'</b>'+
+      '<span title="'+r[1]+'" style="font-size:12px;font-weight:800;color:'+r[2]+';margin-left:8px;white-space:nowrap">'+r[0]+' '+r[1]+cuantos+'</span>'+
       '<button class="lnk" style="margin-left:auto;color:#6D1233" onclick="navigator.clipboard.writeText(\''+url+'\');this.textContent=\'¡copiado!\';setTimeout(()=>this.textContent=\'🔗 copiar link\',1500)">🔗 copiar link</button>'+
       '<a class="lnk" href="'+url+'" target="_blank" style="text-decoration:none;color:#6D1233">👁 ver</a>'+
       '<span class="x" onclick="delGuest('+i+')">✕</span></div>';}).join('')||'<div class="hint">Todavía no cargaste invitados. (Los links quedan activos después de \'Guardar y publicar\'.)</div>';}
@@ -846,7 +855,7 @@
       const arr=D.invitados.map(g=>({n:g.n,p:g.p,m:g.m,restriccion:g.restriccion,token:g.t}));
       const res=await INV.saveInvitados(slug, arr);
       // devuelve tokens -> los reflejo en D para mostrar el link
-      res.forEach((r,i)=>{ if(D.invitados[i]) D.invitados[i].t=r.token; });
+      res.forEach((r,i)=>{ if(D.invitados[i]){ D.invitados[i].t=r.token; D.invitados[i].rsvp=r.rsvp; D.invitados[i].rsvpPersonas=r.rsvpPersonas; D.invitados[i].usos=r.usos; } });
       renderGuests();
       showLinks(slug, res);
     }catch(e){console.error(e);alert("Error al guardar: "+(e.message||e));}
@@ -867,7 +876,7 @@
   async function cargarEvento(){
     const p=new URLSearchParams(location.search),slug=p.get('e');if(!slug||!window.INV||!INV.ok)return;
     const ev=await INV.getEvento(slug);if(ev){Object.assign(D,ev);}ensureFX();
-    const gs=await INV.listInvitados(slug);if(gs.length)D.invitados=gs.filter(g=>g.activo!==false).map(g=>({n:g.nombre,p:g.pases,m:g.mesa,restriccion:g.restriccion,t:g.token}));
+    const gs=await INV.listInvitados(slug);if(gs.length)D.invitados=gs.filter(g=>g.activo!==false).map(g=>({n:g.nombre,p:g.pases,m:g.mesa,restriccion:g.restriccion,t:g.token,rsvp:g.rsvp,rsvpPersonas:g.rsvpPersonas,usos:g.usos}));
     renderPanel();render();if(cur==='INVITADOS')renderGuests();
   }
 
@@ -1036,6 +1045,11 @@
     ['reg_liverpool','reg_amazon','reg_sears','reg_mercadolibre','reg_palacio','reg_venmo','reg_paypal','reg_otro_n','reg_otro_u','regClabe','regTitular','regBanco'].forEach(k=>{ if(s[k])D[k]=s[k]; });
     D.ev1t=s.ev1t||''; D.ev1dir=s.ev1d||''; D.ev1fecha=s.ev1f||''; D.ev1maps=s.ev1maps||''; D.ev2t=s.ev2t||''; D.ev2dir=s.ev2d||''; D.ev2fecha=s.ev2f||''; D.ev2maps=s.ev2maps||'';
     D.slug=slug((s.n1||'pareja')+(s.n2?'-y-'+s.n2:''));
+    // Dress code, mesa de regalos y pedido especial: antes solo aparecían en un
+    // alert() y la diseñadora tenía que retipearlos a mano (o se perdían).
+    if(s.dress) D['c_dresscode-texto']=s.dress;
+    if(s.regalos) D['c_frase-para-seccion-regalos-mesa']=s.regalos;
+    if(s.observaciones) D['c_pedido-especial-del-cliente']=s.observaciones;
     D.invitados=(s.invitados||[]).map(g=>({n:g.n,p:g.p||'1',m:g.m||'-',t:Math.random().toString(36).slice(2,8)}));
     D._solicId=s.id;
     const bx=el('solicbox'); if(bx)bx.remove();
@@ -1048,7 +1062,7 @@
   if(window.INV) cargarEvento(); else window.addEventListener('inv-ready',cargarEvento);
   {var _tb=new URLSearchParams(location.search).get('tab'); if(_tb&&ORDER.indexOf(_tb)>-1){go(_tb);}}
 </script>
-<script type="module" src="firebase-inv.js?v=20"></script>
+<script type="module" src="firebase-inv.js?v=21"></script>
 <script type="module">
   import { collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   function _ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }

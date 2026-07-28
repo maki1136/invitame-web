@@ -26,7 +26,7 @@
   .card .desc{color:var(--muted);font-size:13px;margin:0 0 14px}
   label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}
   .req{color:var(--rosa)}
-  input[type=text],input[type=datetime-local],input[type=tel],textarea,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:'Nunito';font-size:15px;background:#fff;color:var(--ink)}
+  input[type=text],input[type=email],input[type=datetime-local],input[type=tel],textarea,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:'Nunito';font-size:15px;background:#fff;color:var(--ink)}
   textarea{resize:vertical;min-height:70px}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .hint{font-size:12px;color:var(--muted);margin-top:5px}
@@ -129,7 +129,7 @@
       <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev2f" placeholder="14:00 hs"></div>
       <div><label>Dirección</label><input type="text" id="ev2d" placeholder="Av. Siempre 456, Ciudad"></div></div>
       <label>Link de Google Maps de la fiesta (opcional)</label><input type="text" id="ev2maps" placeholder="Pegá el link de Google Maps">
-      <div class="hint">📍 Con la <b>dirección</b> ya armamos el mapa. Si querés que el pin caiga exacto, abrí Google Maps, buscá el lugar, tocá "Compartir" y pegá el link acá.</div>
+      <div class="hint">📍 Con la <b>dirección</b> ya armamos el mapa, así que este campo es opcional. Si querés que el pin caiga exacto, lo que sirve son las <b>coordenadas</b>: abrí Google Maps en la computadora, hacé clic derecho sobre el lugar y copiá los dos números que aparecen arriba (ej: <i>-34.6037, -58.3816</i>). El link corto de "Compartir" no sirve para esto.</div>
       <div data-help="eventos"></div>
     </div>
 
@@ -159,7 +159,7 @@
       <label>Palacio de Hierro</label><input type="text" id="reg_palacio" placeholder="link Palacio de Hierro">
       <label>Venmo</label><input type="text" id="reg_venmo" placeholder="link o usuario Venmo">
       <label>PayPal</label><input type="text" id="reg_paypal" placeholder="link PayPal">
-      <div class="hint" style="margin-top:6px">🌤️ El clima del día se muestra automático si pegás el link de Google Maps de la ceremonia arriba.</div>
+      <div class="hint" style="margin-top:6px">🌤️ El clima del día se muestra automático solo si arriba cargaste las <b>coordenadas</b> de la ceremonia (los dos números). Con la dirección sola no se puede.</div>
     </div>
 
     <div class="card">
@@ -219,7 +219,7 @@
   <div class="lbox" id="lbox" onclick="closeLB()"><span class="x">✕</span><img id="lbimg" src="" alt=""><div class="cap">Tocá en cualquier lado para cerrar</div></div>
   <div class="loadingbar" id="loading"><div class="box">Enviando… ⏳</div></div>
 
-<script type="module" src="firebase-inv.js?v=20"></script>
+<script type="module" src="firebase-inv.js?v=21"></script>
 <script type="module">
   import { collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   const $=id=>document.getElementById(id);
@@ -231,7 +231,15 @@
   // ---- Tipo de evento ----
   const TITDEF={boda:'Nuestra Boda',xv:'Mis XV',bautismo:'Mi Bautismo',comunion:'Mi Comunión',cumple:'Mi Cumpleaños',otro:''};
   const PROT={boda:['Los protagonistas','¿Quiénes se casan?'],xv:['La quinceañera','¿Quién cumple los XV?'],bautismo:['El/la homenajeado/a','¿Quién se bautiza?'],comunion:['El/la homenajeado/a','¿Quién toma la comunión?'],cumple:['El/la homenajeado/a','¿Quién cumple?'],otro:['Los protagonistas','¿Quiénes festejan?']};
-  function aplicarTipo(){ const t=$('tipo').value; $('kick').placeholder=TITDEF[t]||'Título'; if(!$('kick').dataset.touched)$('kick').value=TITDEF[t]||''; const p=PROT[t]||PROT.boda; $('h-prot').textContent=p[0]; $('d-prot').textContent=p[1]; if(t==='boda'||t==='xv'){$('n2').closest('div').style.display=t==='xv'?'none':'';} }
+  function aplicarTipo(){ const t=$('tipo').value; $('kick').placeholder=TITDEF[t]||'Título'; if(!$('kick').dataset.touched)$('kick').value=TITDEF[t]||''; const p=PROT[t]||PROT.boda; $('h-prot').textContent=p[0]; $('d-prot').textContent=p[1];
+    // "Nombre 2" solo se esconde en los eventos de UNA persona. Antes solo se
+    // evaluaba para boda/xv, así que al pasar de XV a Bautismo quedaba escondido
+    // para siempre (y encima se seguía guardando el valor viejo).
+    const solo1 = (t==='xv'||t==='bautismo'||t==='comunion'||t==='cumple');
+    const cajaN2 = $('n2').closest('div');
+    if(cajaN2) cajaN2.style.display = solo1 ? 'none' : '';
+    if(solo1) $('n2').value='';
+  }
   $('tipo').addEventListener('change',aplicarTipo);
   $('kick').addEventListener('input',()=>{$('kick').dataset.touched='1';});
   aplicarTipo();
@@ -275,7 +283,10 @@
   function injectHelp(){ document.querySelectorAll('[data-help]').forEach(ph=>{ const k=ph.getAttribute('data-help'); const h=HELP[k]; if(!h)return;
     let vis=null;
     if(IMGURL[k]) vis=imgVis(IMGURL[k]);
-    else if(REALIMG[k]) vis='<img src="ayuda-'+k+'.jpg?v=3" alt="" onclick="openLB(this.src)" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
+    // Las capturas ayuda-*.jpg todavía no están subidas al servidor. Si no existen,
+    // el bloque visual se saca solo en vez de mostrar el ícono de imagen rota
+    // (que es justo lo contrario de dar confianza).
+    else if(REALIMG[k]) vis='<img src="ayuda-'+k+'.jpg?v=3" alt="" onclick="openLB(this.src)" onerror="var v=this.closest(\'.vis\'); if(v)v.remove();" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
     else if(h.special==='qr') vis=QRVIS;
     const w=document.createElement('div'); w.innerHTML='<button type="button" class="helpbtn" onclick="toggleHelp(this)">ℹ️ ¿Qué es y cómo lo completo?</button><div class="helpbox">'+(vis?'<div class="vis">'+vis+'</div>':'')+'<div class="txt">'+h.txt+'</div></div>'; ph.replaceWith(w); }); }
   injectHelp();
@@ -292,7 +303,18 @@
     }catch(e){ return file; }
   }
 
-  function ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }
+  // ready() con tope de espera: si firebase-inv.js no cargó (404, caché vieja, red
+  // bloqueada) el evento 'inv-ready' no llega nunca y antes el botón quedaba
+  // "Enviando… ⏳" para siempre, sin decir nada.
+  function ready(){
+    if(window.INV&&window.INV.ok) return Promise.resolve();
+    return new Promise((res,rej)=>{
+      let listo=false;
+      window.addEventListener('inv-ready',()=>{listo=true;res();},{once:true});
+      const t=setInterval(()=>{ if(window.INV&&window.INV.ok){listo=true;clearInterval(t);res();} },300);
+      setTimeout(()=>{ clearInterval(t); if(!listo) rej(new Error('No se pudo conectar con el servidor. Revisá tu internet y volvé a intentar (tus datos quedaron guardados).')); },12000);
+    });
+  }
   let coverURL='', coverVideoURL='', galURLs=[];
 
   // subir foto portada
@@ -309,6 +331,44 @@
 
   // invitados: fila inicial vacía
   addGuest();
+
+  // ---- Borrador automático ----
+  // El formulario tiene 30+ campos. Antes, un refresh o un toque de "atrás" y el
+  // cliente perdía TODO. Ahora se guarda solo en el navegador y se ofrece recuperarlo.
+  const BORR='inv_borrador_'+(tpl||'x');
+  const CAMPOS=['tipo','kick','n1','n2','fecha','frase','ev1t','ev1f','ev1d','ev1maps',
+    'ev2t','ev2f','ev2d','ev2maps','dress','regalos','musica','fraseFx','igHashtag','spotifyUrl',
+    'reg_liverpool','reg_amazon','reg_sears','reg_mercadolibre','reg_palacio','reg_venmo','reg_paypal',
+    'obs','cnom','cwsp','cmail'];
+  function guardarBorrador(){
+    try{
+      const d={_t:Date.now()};
+      CAMPOS.forEach(function(k){ const e=$(k); if(e) d[k]=e.value; });
+      d._inv=[...document.querySelectorAll('#guests .rowinv')].map(function(r){
+        const i=r.querySelectorAll('input'); return [i[0].value,i[1].value,i[2].value]; })
+        .filter(function(x){return x[0];});
+      localStorage.setItem(BORR, JSON.stringify(d));
+    }catch(e){}
+  }
+  function borrarBorrador(){ try{ localStorage.removeItem(BORR); }catch(e){} }
+  function recuperarBorrador(){
+    let d=null; try{ d=JSON.parse(localStorage.getItem(BORR)||'null'); }catch(e){}
+    if(!d||!d.n1) return;
+    const dias=(Date.now()-(d._t||0))/86400000;
+    if(dias>30){ borrarBorrador(); return; }
+    if(!confirm('Encontramos lo que habías empezado a cargar. ¿Lo recuperamos?\n\n(Si decís que no, arrancás de cero.)')){ borrarBorrador(); return; }
+    CAMPOS.forEach(function(k){ const e=$(k); if(e&&d[k]!=null) e.value=d[k]; });
+    if(d.kick) $('kick').dataset.touched='1';
+    try{ aplicarTipo(); }catch(e){}
+    if(d._inv&&d._inv.length){
+      document.getElementById('guests').innerHTML='';
+      d._inv.forEach(function(g){ addGuest(); const filas=document.querySelectorAll('#guests .rowinv');
+        const i=filas[filas.length-1].querySelectorAll('input'); i[0].value=g[0]||''; i[1].value=g[1]||''; i[2].value=g[2]||''; });
+    }
+  }
+  document.addEventListener('input', function(e){ if(e.target&&e.target.closest('.card,#guests')) guardarBorrador(); });
+  document.addEventListener('change', function(e){ if(e.target&&e.target.closest('.card,#guests')) guardarBorrador(); });
+  setTimeout(recuperarBorrador, 600);
 
   window.enviar=async function(){
     $('err').style.display='none';
@@ -338,6 +398,7 @@
       await ready();
       const ref=doc(collection(window.INV.db,'inv_solicitudes'));
       await setDoc(ref, data);
+      borrarBorrador();
       $('loading').style.display='none';
       $('wrap').style.display='none'; document.querySelector('.top .sub').textContent='¡Gracias!';
       $('done').style.display='block'; window.scrollTo(0,0);

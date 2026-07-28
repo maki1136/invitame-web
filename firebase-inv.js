@@ -76,6 +76,18 @@ const INV = {
     for (const g of arr) {
       const token = g.token || rndToken();
       const usosMax = parseInt(g.p, 10) || 1;
+      const ref = doc(db, GU, gid(slug, token));
+
+      // IMPORTANTE: si el invitado YA existe, no se pisan los datos que genera
+      // la fiesta (ingresos por la puerta y confirmación de asistencia).
+      // Antes, apretar "Guardar y publicar" durante el evento reseteaba `usos`
+      // (todos podían volver a entrar) y borraba todos los RSVP.
+      let previo = null;
+      try {
+        const snap = await getDoc(ref);
+        if (snap.exists()) previo = snap.data();
+      } catch (e) { previo = null; }
+
       const payload = {
         slug, token,
         nombre: g.n || "",
@@ -83,13 +95,27 @@ const INV = {
         mesa: (g.m ?? "-") + "",
         restriccion: g.restriccion || "",
         usosMax,
-        usos: (typeof g.usos === "number") ? g.usos : usosMax,
-        rsvp: g.rsvp || "pendiente",
-        rsvpPersonas: g.rsvpPersonas ?? null,
         updatedAt: serverTimestamp()
       };
-      await setDoc(doc(db, GU, gid(slug, token)), payload, { merge: true });
-      out.push({ ...payload, link: token });
+
+      // usos: lo que venga explícito > lo que ya había > los pases
+      if (typeof g.usos === "number") payload.usos = g.usos;
+      else if (previo && typeof previo.usos === "number") {
+        // si le cambiaron la cantidad de pases, ajusto los usos restantes
+        // por la diferencia, sin regalar ingresos ya consumidos.
+        const usados = Math.max(0, (previo.usosMax || previo.pases || usosMax) - previo.usos);
+        payload.usos = Math.max(0, usosMax - usados);
+      } else payload.usos = usosMax;
+
+      // rsvp: nunca se pisa una respuesta ya dada
+      if (g.rsvp) payload.rsvp = g.rsvp;
+      else if (!previo || !previo.rsvp) payload.rsvp = "pendiente";
+
+      if (g.rsvpPersonas !== undefined && g.rsvpPersonas !== null) payload.rsvpPersonas = g.rsvpPersonas;
+      else if (!previo) payload.rsvpPersonas = null;
+
+      await setDoc(ref, payload, { merge: true });
+      out.push({ ...(previo || {}), ...payload, link: token });
     }
     return out;
   },

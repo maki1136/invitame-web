@@ -41,12 +41,16 @@
   </div>
   <div class="wrap"><div class="grid" id="grid"></div></div>
 <script>
+  // OJO: `demo` tiene que ser una invitación que EXISTA y que sea una muestra nuestra
+  // (nunca la de un cliente real). Si un modelo todavía no tiene muestra, se deja
+  // vacío y el botón "Ver ejemplo" no aparece: antes los 5 botones abrían la misma
+  // invitación de María y Diego, así que al tocar "XV Rosa" salía una boda verde.
   const MODELOS=[
     {id:'boho',   n:'Boho',            v:'#a5674f',v2:'#8a5240',pal:['#a5674f','#efe3d0','#b98c6a','#5a3a2a'],demo:'julieta-y-bruno'},
     {id:'rustica',n:'Rústica Campestre',v:'#2e433c',v2:'#26372f',pal:['#2e433c','#f4efe6','#7f9079','#26372f'],demo:'maria-y-diego'},
-    {id:'blanco', n:'Blanco Clásico',  v:'#8a8177',v2:'#5f574d',pal:['#efece7','#5f574d','#b7ad9e','#463f37'],demo:'maria-y-diego'},
-    {id:'uva',    n:'Uva Elegante',    v:'#5b2a4e',v2:'#43203a',pal:['#5b2a4e','#f6efe8','#a06d92','#43203a'],demo:'maria-y-diego'},
-    {id:'xv',     n:'XV Rosa',         v:'#b06a7e',v2:'#8a4f60',pal:['#b06a7e','#f7eef0','#c9a0b0','#8a4f60'],demo:'maria-y-diego'}
+    {id:'blanco', n:'Blanco Clásico',  v:'#8a8177',v2:'#5f574d',pal:['#efece7','#5f574d','#b7ad9e','#463f37'],demo:'pavel-y-lada'},
+    {id:'uva',    n:'Uva Elegante',    v:'#5b2a4e',v2:'#43203a',pal:['#5b2a4e','#f6efe8','#a06d92','#43203a'],demo:''},
+    {id:'xv',     n:'XV Rosa',         v:'#b06a7e',v2:'#8a4f60',pal:['#b06a7e','#f7eef0','#c9a0b0','#8a4f60'],demo:''}
   ];
   document.getElementById('grid').innerHTML=MODELOS.map(m=>`
     <div class="card">
@@ -59,7 +63,7 @@
         <h3>${m.n}</h3>
         <div class="pal">${m.pal.map(c=>`<i style="background:${c}"></i>`).join('')}</div>
         <div class="acts">
-          <a class="ver" href="/i/?e=${m.demo}" target="_blank">Ver ejemplo</a>
+          ${m.demo?`<a class="ver" href="/i/?e=${m.demo}" target="_blank">Ver ejemplo</a>`:''}
           <a class="eleg" href="crear.html?tpl=${m.id}">Elegir este →</a>
         </div>
       </div>
