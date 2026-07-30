@@ -338,7 +338,9 @@
     /* ORDEN pedido por Jazmín: nombre de plantilla → número de orden → usuario asignado → protagonistas */
     var _usuarios=['Otro','Jime','Vale','Aylen','Flor'];
     return '<div class="mejoras"><div class="h">✨ Empezá por acá</div>'+
-      '<div class="grp"><label>Nombre de esta plantilla</label><input type="text" value="'+String(D.tpl||'').replace(/"/g,'&quot;')+'" oninput="D.tpl=this.value" placeholder="Ej: Editorial Perlas"></div>'+
+      /* "Nombre de esta plantilla" sacado a pedido de Jazmín (estaba DOS veces y no
+         aporta nada a quien arma la invitación). El valor sigue existiendo en D.tpl
+         para uso interno: lo fija la plantilla base que se elige más abajo. */
       '<div class="two"><div class="grp"><label>Número de orden para seguimiento</label><input type="text" value="'+String(D.orden||'').replace(/"/g,'&quot;')+'" oninput="setB(\'orden\',this.value)" placeholder="Ej: 128"></div>'+
       '<div class="grp"><label>Usuario asignado</label><select onchange="setB(\'c_usuario-asignado\',this.value)">'+_usuarios.map(function(u){return '<option'+((D['c_usuario-asignado']===u)?' selected':'')+'>'+u+'</option>';}).join('')+'</select></div></div>'+
       '<div class="two"><div class="grp"><label>Protagonista 1 (nombre)</label><input type="text" value="'+String(D.n1||'').replace(/"/g,'&quot;')+'" oninput="setB(\'n1\',this.value)" placeholder="María"></div>'+
@@ -350,11 +352,14 @@
           +'<div class="hint" style="margin:4px 0 8px">Se mantiene tal cual la entregaste. Los cambios que hacemos en la plataforma NO la tocan.</div>'
           +'<button class="addbtn" style="background:#8a6d3b" onclick="actualizarVersion()">↑ Actualizar al diseño más nuevo</button></div>'
         : '')+
-      '<div class="grp"><label>Nombre de esta plantilla</label><input type="text" value="'+D.tpl+'" oninput="D.tpl=this.value"></div>'+
       '<div class="grp"><label>Orden de las secciones</label><button class="addbtn" style="background:var(--uva)" onclick="verOrden()">↕ Reordenar secciones</button></div>'+
       '<div class="grp"><label>Plantilla base</label><div class="temas" id="temas"></div></div>'+
       '<div class="two"><div class="grp"><label>Tipografía de los nombres</label><select id="mf-nfont" onchange="setB(\'nfont\',this.value)">'+FONTS.map(f=>'<option value="'+f[0]+'">'+f[1]+'</option>').join('')+'</select></div>'+
-      '<div class="grp"><label>Disposición nombres</label><select onchange="setB(\'layout\',this.value)"><option value="apilados">Uno debajo del otro</option><option value="juntos">Juntos (misma línea)</option></select></div></div>'+
+      /* el select ahora muestra lo que está guardado (antes volvía siempre a "apilados") */
+      '<div class="grp"><label>Disposición nombres</label><select onchange="setB(\'layout\',this.value)">'+
+      '<option value="apilados"'+((D.layout!=='juntos')?' selected':'')+'>Uno debajo del otro</option>'+
+      '<option value="juntos"'+((D.layout==='juntos')?' selected':'')+'>Juntos (misma línea)</option>'+
+      '</select><div class="hint">Con nombres largos, "juntos" achica la letra para que entren en una sola línea.</div></div></div>'+
       '<div class="two"><div class="grp"><label>Color nombres</label><input type="color" value="#fbf7ef" oninput="setB(\'ncolor\',this.value)"></div>'+
       '<div class="grp"><label>Tamaño nombres</label><input type="range" min="30" max="90" value="52" oninput="setB(\'nsize\',this.value)"></div></div>'+
       '<div class="grp"><label>Foto de portada</label><select onchange="setB(\'cover\',this.value)"><option value="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80">Campo</option><option value="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=80">Elegante</option><option value="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1000&q=80">Rosas</option></select><div class="file" style="margin-top:6px" id="coverbtn" onclick="document.getElementById(\'coverfile\').click()">⬆ Subir tu propia foto</div><input type="file" id="coverfile" accept="image/*" style="display:none" onchange="subirFoto(this,\'cover\')"></div>'+
