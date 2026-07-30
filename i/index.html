@@ -233,6 +233,10 @@
   .kicker{font-family:'Forum',serif;font-size:15px;letter-spacing:4px;color:#e7ddc8;text-transform:uppercase;opacity:0;animation:rise .9s ease .3s forwards}
   .names{font-family:'Rouge Script',cursive;font-size:80px;line-height:1.02;margin:8px 0 22px;color:#fbf7ef;text-shadow:0 2px 18px rgba(0,0,0,.45)}
   .names span{display:inline-block;padding-bottom:.08em;opacity:0;transform:translateY(26px);animation:rise .8s ease forwards}
+  /* "Juntos (misma línea)": sin esto los nombres se partían igual por falta de ancho
+     y la diseñadora veía exactamente lo mismo que en "uno debajo del otro". */
+  .names.juntos{white-space:nowrap}
+  .names.juntos span{display:inline}
   @keyframes rise{to{opacity:1;transform:none}}
   .fecha{font-family:'Forum',serif;font-size:14px;letter-spacing:4px;color:#efe7d6;text-transform:uppercase;margin-top:0;opacity:0;animation:rise .9s ease 1.1s forwards}
   .count{display:flex;justify-content:center;gap:6px;margin-top:18px;opacity:0;animation:rise .9s ease 1.3s forwards}
@@ -1194,13 +1198,38 @@
         r.removeProperty('--sec-col'); r.removeProperty('--sec-col-v');
       }
     }
-    if(ev.cover){ r.setProperty('--cover',"url('"+cldOpt(ev.cover,'w_1600,c_limit')+"')"); const pbg=el('pbg'); if(pbg&&(ev.cx!=null)) pbg.style.backgroundPosition=(ev.cx)+'% '+(ev.cy)+'%'; }
+    if(ev.cover){ r.setProperty('--cover',"url('"+cldOpt(ev.cover,'w_1600,c_limit')+"')");
+      const pbg=el('pbg');
+      if(pbg&&(ev.cx!=null)) pbg.style.backgroundPosition=(ev.cx)+'% '+(ev.cy)+'%';
+      // ZOOM de la foto de portada: el panel lo guardaba en `cz` y la invitación
+      // NUNCA lo leía, así que mover el zoom no hacía absolutamente nada.
+      if(pbg){
+        var z=parseInt(ev.cz,10);
+        pbg.style.backgroundSize = (z && z>100) ? ('auto '+z+'%') : 'cover';
+      }
+    }
     // nombres
     const nm=ev.n2?('<span>'+ev.n1+'</span>'+(ev.layout==='juntos'?' <span>&amp; '+ev.n2+'</span>':'<br><span>&amp; '+ev.n2+'</span>')):('<span>'+ev.n1+'</span>');
     if(ev.n1){ ['pv-names','ep-names'].forEach(id=>{const e=el(id);if(e)e.innerHTML=nm;});
       if(ev.nfont){const e=el('pv-names');if(e)e.style.fontFamily=ev.nfont;} if(ev.ncolor){const e=el('pv-names');if(e)e.style.color=ev.ncolor;}
       // TAMAÑO DE NOMBRES (pág. 2 de Jazmín): el panel lo guardaba y la invitación lo ignoraba.
-      if(ev.nsize){const e=el('pv-names');if(e)e.style.fontSize=parseInt(ev.nsize,10)+'px';} }
+      if(ev.nsize){const e=el('pv-names');if(e)e.style.fontSize=parseInt(ev.nsize,10)+'px';}
+      // DISPOSICIÓN (juntos / apilados): además de sacar el <br>, en "juntos" hay que
+      // forzar una sola línea y encoger la letra hasta que entre, si no se parte igual.
+      ['pv-names','ep-names'].forEach(function(id){
+        var e=el(id); if(!e) return;
+        var juntos = (ev.layout==='juntos') && !!ev.n2;
+        e.classList.toggle('juntos', juntos);
+        e.style.removeProperty('white-space');
+        if(!juntos) return;
+        var base = ev.nsize ? parseInt(ev.nsize,10) : parseFloat(getComputedStyle(e).fontSize);
+        var caja = e.parentElement ? e.parentElement.clientWidth : e.clientWidth;
+        if(!caja) return;
+        var px = base;
+        e.style.fontSize = px+'px';
+        var guarda = 0;
+        while(e.scrollWidth > caja && px > 18 && guarda++ < 60){ px -= 2; e.style.fontSize = px+'px'; }
+      }); }
     if(ev.kick){ ['pv-kick','ep-kick'].forEach(id=>{const e=el(id);if(e)e.textContent=ev.kick;}); }
 
     // CUENTA REGRESIVA: tipografía y posición (pág. 3 de Jazmín)
@@ -1228,6 +1257,14 @@
     if(ev.kickColor){ ['pv-kick','ep-kick'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.kickColor;}); }
     if(ev.fTit2){ document.documentElement.style.setProperty('--fTit2',ev.fTit2); cargarFont(ev.fTit2);
       document.querySelectorAll('.sec h2, .sec .h2, .dq-h2, .stitle').forEach(function(e){e.style.fontFamily=ev.fTit2;}); }
+    // TIPOGRAFÍAS EN LA SECCIÓN FINAL: la frase final y el texto de abajo se quedaban
+    // siempre con la fuente del diseño, aunque se cambiara la principal o la secundaria.
+    // Principal (fTit) → la frase grande; secundaria (fTit2) → los textos chicos.
+    (function(){
+      var ff=el('fin-frase');
+      if(ff && ev.fTit){ cargarFont(ev.fTit); ff.style.fontFamily=ev.fTit; }
+      if(ev.fTit2){ ['fin-texto','fin-nombres'].forEach(function(id){ var e=el(id); if(e)e.style.fontFamily=ev.fTit2; }); }
+    })();
     // ---- Adaptar textos según el tipo de evento (XV, bautismo, comunión, cumple) ----
     (function(){
       const t=(ev.tipoEvento||ev.tipo||'boda').toLowerCase();
