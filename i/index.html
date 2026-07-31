@@ -385,19 +385,26 @@
 
   /* ===== Sección "carta que sale del sobre" (letra grande + movimiento) ===== */
   /* Sobre = 2 imágenes reales (fondo abierto + frente/bolsillo), carta cuadrada que sale entre las dos */
-  .cartafx{width:300px;max-width:86vw;margin:30px auto 0;position:relative;height:430px}
-  .cf-back{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:300px;height:405px;z-index:1;
+  .cartafx{width:340px;max-width:92vw;margin:30px auto 0;position:relative;height:490px}
+  /* La carta se armaba en 300px fijos: la tarjeta quedaba de 184px útiles y el
+     texto salía apretado (lo marcó Jazmín). Ahora todo es ~13% más grande, la
+     tarjeta respira y con textos largos achica la letra en vez de desbordar. */
+  .cf-back{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:340px;height:459px;z-index:1;
     background:var(--cf-img,url('https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262784/invitame/dc2sgshzghouc5b9uii8.png')) center bottom/contain no-repeat;filter:drop-shadow(0 14px 24px rgba(0,0,0,.16))}
-  .cf-back-tint{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:300px;height:405px;z-index:2;background:var(--cf-sobre,transparent);mix-blend-mode:multiply;opacity:var(--cf-tint,0);pointer-events:none;
+  .cf-back-tint{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:340px;height:459px;z-index:2;background:var(--cf-sobre,transparent);mix-blend-mode:multiply;opacity:var(--cf-tint,0);pointer-events:none;
     -webkit-mask:var(--cf-img,url('https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262784/invitame/dc2sgshzghouc5b9uii8.png')) center bottom/contain no-repeat;mask:var(--cf-img,url('https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262784/invitame/dc2sgshzghouc5b9uii8.png')) center bottom/contain no-repeat}
-  .cf-letter{position:absolute;left:0;right:0;margin:0 auto;width:232px;bottom:150px;z-index:3;background:linear-gradient(#fffefb,#faf5ea);border:1px solid rgba(120,110,90,.12);border-radius:4px;padding:24px 20px 20px;text-align:center;
+  .cf-letter{position:absolute;left:0;right:0;margin:0 auto;width:270px;bottom:172px;z-index:3;background:linear-gradient(#fffefb,#faf5ea);border:1px solid rgba(120,110,90,.12);border-radius:4px;padding:24px 20px 20px;text-align:center;
     box-shadow:0 12px 24px rgba(0,0,0,.16);transform:translateY(160px) scale(.97);opacity:0;transform-origin:center bottom;transition:opacity .25s ease}
   .cf-letter::before{content:"";position:absolute;inset:6px;border:1px solid rgba(120,110,90,.16);border-radius:2px;pointer-events:none}
-  .cf-letter h4{font-family:var(--cf-font,'Lora'),serif;font-size:17px;color:var(--verde);margin-bottom:9px}
-  .cf-letter p{font-family:var(--cf-font,'Lora'),serif;font-style:italic;font-size:13px;line-height:1.7;color:var(--cf-col,#5a5145)}
-  .cf-front{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:300px;height:205px;z-index:4;pointer-events:none;
+  .cf-letter h4{font-family:var(--cf-font,'Lora'),serif;font-size:19px;line-height:1.25;color:var(--verde);margin-bottom:10px}
+  .cf-letter p{font-family:var(--cf-font,'Lora'),serif;font-style:italic;font-size:14.5px;line-height:1.65;color:var(--cf-col,#5a5145)}
+  .cf-letter.cf-largo h4{font-size:17px}
+  .cf-letter.cf-largo p{font-size:12.5px;line-height:1.55}
+  .cf-letter.cf-xlargo h4{font-size:16px}
+  .cf-letter.cf-xlargo p{font-size:11.5px;line-height:1.5}
+  .cf-front{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:340px;height:232px;z-index:4;pointer-events:none;
     background:var(--cf-front,url('https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262787/invitame/pmqhmccpaibs8bsn78ce.png')) center bottom/contain no-repeat;filter:drop-shadow(0 8px 14px rgba(0,0,0,.10))}
-  .cf-front-tint{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:300px;height:205px;z-index:5;background:var(--cf-sobre,transparent);mix-blend-mode:multiply;opacity:var(--cf-tint,0);pointer-events:none;
+  .cf-front-tint{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:340px;height:232px;z-index:5;background:var(--cf-sobre,transparent);mix-blend-mode:multiply;opacity:var(--cf-tint,0);pointer-events:none;
     -webkit-mask:var(--cf-front,url('https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262787/invitame/pmqhmccpaibs8bsn78ce.png')) center bottom/contain no-repeat;mask:var(--cf-front,url('https://res.cloudinary.com/oc8cgqt4/image/upload/v1784262787/invitame/pmqhmccpaibs8bsn78ce.png')) center bottom/contain no-repeat}
 
   /* ===== Fondo ambiente (nubes / degradado / bokeh) para una sección ===== */
@@ -946,6 +953,22 @@
     if(cs){ if(FX.carta.on===false){cs.style.display='none';} else{ cs.style.display='';
       const S=(id,v)=>{const e=el(id);if(e&&v!=null&&v!=='')e.textContent=v;};
       S('cf-kick',FX.carta.kicker); S('cf-titulo',FX.carta.titulo); S('cf-texto',FX.carta.texto);
+      // Ajuste al largo del texto: con cartas largas se achica la letra y, si hace
+      // falta, crece la escena para que la hoja no se salga del sobre.
+      (function(){
+        var hoja=document.querySelector('.cf-letter'), caja=el('cartafx');
+        if(!hoja||!caja) return;
+        var largo=String((FX.carta.texto||'')+(FX.carta.titulo||'')).length;
+        hoja.classList.toggle('cf-largo',  largo>210 && largo<=340);
+        hoja.classList.toggle('cf-xlargo', largo>340);
+        // la hoja está anclada abajo y crece hacia arriba: si se pasa del alto de
+        // la escena, agrandamos la escena en vez de dejar que se desborde.
+        setTimeout(function(){
+          var hH=hoja.offsetHeight||0, base=490, abajo=172;
+          var necesita=hH+abajo+30;
+          caja.style.height=Math.max(base,necesita)+'px';
+        },30);
+      })();
       if(FX.carta.sobreImg)r.setProperty('--cf-img',"url('"+FX.carta.sobreImg+"')");
       if(FX.carta.frenteImg)r.setProperty('--cf-front',"url('"+FX.carta.frenteImg+"')");
       if(FX.carta.sobreColor){r.setProperty('--cf-sobre',FX.carta.sobreColor);r.setProperty('--cf-tint','.88');}else{r.setProperty('--cf-tint','0');}
@@ -1542,8 +1565,27 @@
     if(ev.cfColor){ ['cf-h2','cf-kick2'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.cfColor;}); }
     if(ev.padresColor){ ['padres-h2','padres-kick'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.padresColor;}); }
     if(ev.galTextColor){ var gs=document.querySelector('[data-sec="galeria"]'); if(gs)gs.querySelectorAll('h2,.kick').forEach(function(e){e.style.color=ev.galTextColor;}); }
-    if(ev.ev1fecha||ev.ev1dir){const e=el('ev1-a');if(e)e.textContent=[ev.ev1fecha,ev.ev1dir].filter(Boolean).join(' · ');}
-    if(ev.ev2fecha||ev.ev2dir){const e=el('ev2-a');if(e)e.textContent=[ev.ev2fecha,ev.ev2dir].filter(Boolean).join(' · ');}
+    // Fecha de cada lugar. Hay DOS campos en el panel:
+    //  · "Ceremonia N - Fecha"            -> c_ceremonia-N-fecha  (calendario, sirve para "Agendar")
+    //  · "Ceremonia N - Fecha descripción" -> evNfecha            (texto libre, ej: "20 mar · 19:00 hs")
+    // Antes sólo se mostraba el texto libre: si la diseñadora cargaba la fecha del
+    // calendario, la pantalla no cambiaba (lo reportó Jazmín). Ahora, si no hay texto
+    // libre, se muestra la fecha del calendario ya formateada.
+    (function(){
+      var MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+      function lindo(v){
+        if(!v) return '';
+        var d=new Date(v); if(isNaN(d)) return '';
+        var hs=(d.getHours()||d.getMinutes())?(' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' hs'):'';
+        return d.getDate()+' '+MES[d.getMonth()]+hs;
+      }
+      [1,2].forEach(function(n){
+        var e=el('ev'+n+'-a'); if(!e) return;
+        var fecha=String(ev['ev'+n+'fecha']||'').trim() || lindo(ev['c_ceremonia-'+n+'-fecha']);
+        var dir=String(ev['ev'+n+'dir']||'').trim();
+        if(fecha||dir) e.textContent=[fecha,dir].filter(Boolean).join(' · ');
+      });
+    })();
     // Evento 2 vacío (muy común: un solo lugar) -> ocultar el bloque.
     // Antes quedaba "Recepción · Masía Mas Badó · 28 nov" inventado.
     (function(){
