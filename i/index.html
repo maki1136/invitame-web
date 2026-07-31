@@ -1176,6 +1176,15 @@
     l2.href='https://fonts.googleapis.com/css2?family='+f.replace(/\s+/g,'+')+':ital,wght@0,400;0,600;1,400&display=swap';
     document.head.appendChild(l2);
   }
+  // Mostrar/ocultar una sección SIEMPRE en los dos sentidos.
+  // Bug real (lo reportó Jazmín): las secciones que se ocultan cuando están vacías
+  // no se volvían a mostrar al cargar los datos. En la vista previa, que aplica el
+  // evento muchas veces, la primera pasada (vacía) las escondía y ya no volvían:
+  // ella cargaba hoteles/itinerario y "no se reflejaba nada".
+  function verSeccion(nombre, mostrar){
+    var e=document.querySelector('[data-sec="'+nombre+'"]');
+    if(e) e.style.display = mostrar ? '' : 'none';
+  }
   function aplicarEvento(ev){
     if(!ev)return; const r=document.documentElement.style;
     if(ev.nfont)cargarFont(ev.nfont); if(ev.fTit)cargarFont(ev.fTit);
@@ -1367,9 +1376,7 @@
     // 2) Personas: si NO cargaron ninguna, se oculta la sección (antes quedaban 4 padres inventados)
     (function(){
       var arr=Array.isArray(ev.personas)?ev.personas.filter(function(p){return p&&(p.nombre||p.foto);}):[];
-      if(arr.length) return;                       // hay personas propias: las dibuja el bloque de abajo
-      var sec=document.querySelector('[data-sec="padres"]');
-      if(sec) sec.style.display='none';
+      verSeccion('padres', arr.length>0);          // en los DOS sentidos: si cargan personas, vuelve a aparecer
     })();
     // 3) Fotos de inspiración del dress code: propias o se esconde el botón (antes eran 3 fijas de ejemplo)
     (function(){
@@ -1379,7 +1386,14 @@
       if(sec) sec.querySelectorAll('.acc-btn').forEach(function(b){ if(/inspiraci/i.test(b.textContent)) btn=b; });
       if(raw){
         var urls=raw.split(/[\s,\n]+/).filter(function(u){return /^https?:\/\//.test(u);}).slice(0,6);
-        if(urls.length){ g.innerHTML=urls.map(function(u){return '<img src="'+u.replace(/"/g,'')+'" alt="">';}).join(''); return; }
+        if(urls.length){
+          g.innerHTML=urls.map(function(u){return '<img src="'+u.replace(/"/g,'')+'" alt="">';}).join('');
+          // volver a MOSTRAR el botón y el panel (si una pasada anterior los escondió,
+          // cargar las fotos no se veía: es lo que reportó Jazmín)
+          if(btn) btn.style.display='';
+          var _p=g.closest('.acc-panel'); if(_p) _p.style.display='';
+          return;
+        }
       }
       // sin fotos propias: no mostramos fotos de otra gente
       g.innerHTML='';
@@ -1445,9 +1459,12 @@
       var IM=function(){ for(var i=0;i<arguments.length;i++){ if(ev[arguments[i]]) return ev[arguments[i]]; } return null; };
       var tx=T('c_dresscode-texto'); if(tx){ var p=el('dress-texto'); if(p)p.textContent=tx; }
       var im=IM('img_c_dresscode-imagen-aprox-jpg-250x250','img_f-dresscode-imagen-aprox-jpg-250x250');
-      if(im){ var i1=el('dress-img'); if(i1){ i1.src=cldOpt(im,'w_500,c_limit'); i1.style.display='block'; var mo=el('dc-mono'); if(mo)mo.style.display='none'; } }
+      { var i1=el('dress-img'), mo=el('dc-mono');
+        if(im){ if(i1){ i1.src=cldOpt(im,'w_500,c_limit'); i1.style.display='block'; } if(mo)mo.style.display='none'; }
+        else { if(i1){ i1.removeAttribute('src'); i1.style.display='none'; } if(mo)mo.style.display=''; } }
       var t2=T('c_dresscode-texto-2'), k2=T('c_vestimenta-titulo-2');
       var im2=IM('img_c_dresscode-imagen-2-aprox-jpg-250x250','img_f-dresscode-imagen-2-aprox-jpg-250x250');
+      { var _b2=el('dress-bloque2'); if(_b2 && !(t2||k2||im2)) _b2.style.display='none'; }
       if(t2||k2||im2){ var b=el('dress-bloque2'); if(b)b.style.display='';
         if(k2){var e1=el('dress-kick2'); if(e1)e1.textContent=k2;}
         if(t2){var e2=el('dress-texto2'); if(e2)e2.textContent=t2;}
@@ -1468,9 +1485,10 @@
       // si tampoco hay texto ni imagen, la sección entera se oculta.
       if(!filas.length){
         if(cont) cont.innerHTML='';
-        if(!tx && !im){ var _hs=document.querySelector('[data-sec="hospedaje"]'); if(_hs)_hs.style.display='none'; }
+        verSeccion('hospedaje', !!(tx||im));   // con texto o imagen la sección sigue viva
         return;
       }
+      verSeccion('hospedaje', true);
       if(!cont) return;
       cont.innerHTML=filas.map(function(f){
         var p=f.split(/\s*\|\s*/);
@@ -1486,7 +1504,7 @@
       // imagen propia del itinerario (si la cargan, reemplaza la lista)
       var iu=null, ks=['img_c_itinerario-imagen','img_f-itinerario-imagen','img_c_itinerario-imagen-'];
       for(var i=0;i<ks.length;i++){ if(ev[ks[i]]){iu=ev[ks[i]];break;} }
-      if(iu&&im){ im.src=cldOpt(iu,'w_1000,c_limit'); im.style.display=''; if(lista)lista.style.display='none'; if(nota)nota.style.display='none'; return; }
+      if(iu&&im){ verSeccion('itinerario', true); im.src=cldOpt(iu,'w_1000,c_limit'); im.style.display=''; if(lista)lista.style.display='none'; if(nota)nota.style.display='none'; return; }
       // texto propio: una línea por ítem, formato "12:00 · Ceremonia | descripción"
       var txt=(ev['c_itinerario-descripcion']||ev['c_itinerario-descripci-n']||ev.itDescrip||'').trim();
       var filas=txt?txt.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean):[];
@@ -1495,9 +1513,11 @@
       if(!filas.length || !lista){
         if(lista) lista.innerHTML='';
         if(nota) nota.style.display='none';
-        var _is=document.querySelector('[data-sec="itinerario"]'); if(_is)_is.style.display='none';
+        verSeccion('itinerario', false);
         return;
       }
+      verSeccion('itinerario', true);
+      if(lista) lista.style.display='';
       lista.innerHTML=filas.map(function(f){
         var p=f.split(/\s*[|–—]\s*/);   // separador | o guión largo
         var h=(p[0]||'').trim(), d=(p.slice(1).join(' — ')||'').trim();
@@ -1531,7 +1551,7 @@
       [[1,bloques[0]],[2,bloques[1]]].forEach(function(par){
         var n=par[0], caja=par[1]; if(!caja) return;
         var hay=(ev['ev'+n+'t']||ev['ev'+n+'sub']||ev['ev'+n+'fecha']||ev['ev'+n+'dir']||ev['ev'+n+'maps']);
-        if(!String(hay||'').trim()) caja.style.display='none';
+        caja.style.display = String(hay||'').trim() ? '' : 'none';
       });
     })();
     // ---- Mapa dinámico: usa el link/coords de Maps si hay, si no la dirección escrita ----
@@ -1550,7 +1570,9 @@
       const dir2=[ev.ev2sub,ev.ev2dir].filter(Boolean).join(', ');
       [[mapEmbed(ev.ev1maps)||mapEmbed(dir1),'ev1-map'],[mapEmbed(ev.ev2maps)||mapEmbed(dir2),'ev2-map']].forEach(function(par){
         var u=par[0], f=el(par[1]); if(!f) return;
-        if(u){ f.src=u; return; }
+        var _caja=f.closest('.acc-panel'); var _fila=f.closest('.bd');
+        var _btn=_fila&&_fila.querySelector('.acc-btn');
+        if(u){ f.src=u; if(_caja)_caja.style.display=''; if(_btn)_btn.style.display=''; return; }
         // Sin dato de mapa: esconder el botón "Ver mapa" en vez de dejar el mapa
         // de ejemplo (que apuntaba a unas coordenadas fijas de Ciudad de México).
         f.removeAttribute('src');
@@ -1560,8 +1582,8 @@
     })();
     // Trivia: si el evento no cargó preguntas propias, NO mostrar las de ejemplo
     // (antes salían "¿Dónde se conocieron María y Diego?" en invitaciones reales)
-    if(ev.trivia&&ev.trivia.length){ PREGUNTAS=ev.trivia; }
-    else { var _tvs=document.querySelector('[data-sec="trivia"]'); if(_tvs)_tvs.style.display='none'; }
+    if(ev.trivia&&ev.trivia.length){ PREGUNTAS=ev.trivia; verSeccion('trivia', true); }
+    else { verSeccion('trivia', false); }
     if(ev.fecha){const _f=new Date(ev.fecha); if(!isNaN(_f)){const _d=el('sc-day'),_m=el('sc-mon'); if(_d)_d.textContent=_f.getDate(); if(_m)_m.textContent=_meses[_f.getMonth()]+' '+_f.getFullYear();}}
     if(typeof ev.petalos!=='undefined')FX.particulas.on=ev.petalos; // compat viejo
     if(ev.fx)mergeFX(ev.fx);
@@ -1573,8 +1595,8 @@
       else if(v){ v.removeAttribute('src'); if(v.load)v.load(); v.style.display='none'; if(pbg)pbg.style.display=''; } }
     if(ev.n1){const _i=(ev.n1.trim()[0]||'')+'&'+((ev.n2||'').trim()[0]||''); const _s=el('seal-ini'); if(_s)_s.textContent=_i.toUpperCase();}
     // Galería: si no cargaron fotos, ocultar la sección en vez de dejar las de ejemplo
-    if(ev.galeria&&ev.galeria.length){ if(window.rebuildCarousel)rebuildCarousel(ev.galeria.map(u=>cldOpt(u,'w_1400,c_limit'))); }
-    else { var _gs=document.querySelector('[data-sec="galeria"]'); if(_gs)_gs.style.display='none'; }
+    if(ev.galeria&&ev.galeria.length){ verSeccion('galeria', true); if(window.rebuildCarousel)rebuildCarousel(ev.galeria.map(u=>cldOpt(u,'w_1400,c_limit'))); }
+    else { verSeccion('galeria', false); }
     if(ev.secOrden&&ev.secOrden.length)reordenarSecciones(ev.secOrden);
     // ---- Imágenes subidas desde el admin (búsqueda tolerante: el admin guarda img_c_<slug>, el HTML pide img_f-<slug>-) ----
     document.querySelectorAll('[data-imgbg]').forEach(function(e){
