@@ -834,7 +834,19 @@
     _bajar('links-invitados.csv', filas.map(f=>f.map(x=>{x=(x==null?'':x).toString();return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}).join(',')).join('\n'));
   }
   function addGuest(){const n=el('gname').value.trim();if(!n)return;D.invitados.push({n:n,p:el('gper').value||'1',m:el('gmesa').value||'-',t:Math.random().toString(36).slice(2,8)});el('gname').value='';renderGuests();}
-  function delGuest(i){D.invitados.splice(i,1);renderGuests();}
+  // Invitados borrados del panel: hay que darlos de baja TAMBIÉN en la base.
+  // Antes `delGuest` sólo los sacaba de la lista local: el documento quedaba vivo,
+  // el link del invitado seguía funcionando y el escáner de puerta lo seguía
+  // dejando entrar. Ahora se anotan y se dan de baja al publicar.
+  let _borrados=[];
+  function delGuest(i){
+    const g=D.invitados[i];
+    if(!g) return;
+    if(g.rsvp==='confirmado' && !confirm('"'+(g.n||'Este invitado')+'" ya confirmó su asistencia.\n\n¿Lo borrás igual? Su link va a dejar de funcionar.')) return;
+    if(g.t) _borrados.push(g.t);
+    D.invitados.splice(i,1);
+    renderGuests();
+  }
   function renderGuests(){if(!el('st-inv'))return;el('st-inv').textContent=D.invitados.length;el('st-per').textContent=D.invitados.reduce((a,g)=>a+(parseInt(g.p,10)||0),0);
     // Estado de la confirmación al lado de cada invitado. Antes el RSVP se guardaba
     // en la base y NO se veía en ninguna pantalla: la diseñadora no tenía forma de
@@ -897,9 +909,26 @@
       const res=await INV.saveInvitados(slug, arr);
       // devuelve tokens -> los reflejo en D para mostrar el link
       res.forEach((r,i)=>{ if(D.invitados[i]){ D.invitados[i].t=r.token; D.invitados[i].rsvp=r.rsvp; D.invitados[i].rsvpPersonas=r.rsvpPersonas; D.invitados[i].usos=r.usos; } });
+      // dar de baja en la base a los que se borraron del panel
+      if(_borrados.length){
+        const quedan=[];
+        for(const tk of _borrados){
+          if(D.invitados.some(g=>g.t===tk)) continue;   // lo volvió a agregar
+          try{ await INV.delInvitado(slug, tk); }catch(e){ console.error('baja',tk,e); quedan.push(tk); }
+        }
+        _borrados=quedan;
+        if(quedan.length) alert('Ojo: '+quedan.length+' invitado(s) que borraste no se pudieron dar de baja. Volvé a tocar "Guardar y publicar".');
+      }
       renderGuests();
       showLinks(slug, res);
-    }catch(e){console.error(e);alert("Error al guardar: "+(e.message||e));}
+    }catch(e){console.error(e);
+      var m=String(e&&e.message||e);
+      // "Missing or insufficient permissions" casi siempre = se cayó la sesión.
+      // Antes salía el error técnico y la diseñadora no sabía qué hacer.
+      if(/permission|insufficient/i.test(m)) alert('⚠️ Se cerró tu sesión, por eso no se pudo guardar.\n\nNO cierres esta pestaña: iniciá sesión de nuevo en la ventana que aparece y volvé a tocar "Guardar y publicar". Lo que cargaste sigue acá.');
+      else if(/network|offline|unavailable|failed to fetch/i.test(m)) alert('Sin internet: no se pudo guardar. Revisá la conexión y volvé a tocar "Guardar y publicar" (no cierres la pestaña).');
+      else alert("No se pudo guardar: "+m);
+    }
     if(btn){btn.textContent=txt||'Guardar';btn.disabled=false;}
   }
   function showLinks(slug, res){
