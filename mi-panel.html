@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi panel · Invítame</title>
+<link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{--uva:#6D1233;--uva2:#49111A;--rosa:#F56770;--cream:#faf6f0;--line:#ece2d8;--ink:#3f3730;--muted:#9a8f88;--ok:#3f7d54;--no:#b0334a}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#f7efe9,#f3e9e2);color:var(--ink)}
+  .top{background:var(--uva);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .top .brand{font-weight:900;font-size:21px}
+  .top .brand span{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600}
+  .top .sub{opacity:.85;font-size:13px}
+  .top .der{margin-left:auto;display:flex;gap:8px}
+  .top button{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:20px;padding:8px 15px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer}
+  .top button:hover{background:rgba(255,255,255,.26)}
+  .wrap{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+
+  /* ---- entrada ---- */
+  .login{max-width:400px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px 22px;box-shadow:0 10px 30px rgba(73,17,26,.08)}
+  .login h1{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:26px;margin:0 0 4px;text-align:center}
+  .login p{color:var(--muted);font-size:13.5px;text-align:center;margin:0 0 18px;line-height:1.5}
+  label{display:block;font-weight:700;font-size:13px;margin:14px 0 5px}
+  input{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:'Nunito';font-size:15px;background:#fff;color:var(--ink)}
+  .btn{display:block;width:100%;border:0;border-radius:24px;padding:14px;margin-top:18px;font-family:'Nunito';font-weight:900;font-size:15px;cursor:pointer;background:var(--rosa);color:#fff;box-shadow:0 8px 20px rgba(245,103,112,.32)}
+  .btn:disabled{opacity:.6;cursor:default}
+  .msg{background:#fdecec;color:var(--no);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:14px;display:none;line-height:1.5}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+  /* ---- tarjetas ---- */
+  .cabecera{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:16px}
+  .cabecera h2{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:25px;margin:0}
+  .cabecera .f{color:var(--muted);font-size:13.5px;margin-top:2px}
+  .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px}
+  .num{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .num b{display:block;font-size:28px;color:var(--uva);line-height:1.1}
+  .num span{font-size:12.5px;color:var(--muted)}
+  .num.si b{color:var(--ok)} .num.no b{color:var(--no)}
+
+  .barra{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  .barra input[type=text]{flex:1;min-width:180px;padding:10px 12px}
+  .filtro{background:#fff;border:1.5px solid var(--line);color:var(--ink);border-radius:20px;padding:8px 14px;font-family:'Nunito';font-weight:800;font-size:12.5px;cursor:pointer}
+  .filtro.on{background:var(--uva);border-color:var(--uva);color:#fff}
+  .lnk{background:none;border:0;color:var(--uva);font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer;text-decoration:underline}
+
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th{text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:11px 13px;border-bottom:1px solid var(--line);font-weight:800}
+  td{padding:12px 13px;border-bottom:1px solid #f4ece4;font-size:14.5px;vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  .et{display:inline-block;border-radius:20px;padding:3px 11px;font-size:12px;font-weight:800;white-space:nowrap}
+  .et.si{background:#e6f2ea;color:var(--ok)}
+  .et.no{background:#fdecec;color:var(--no)}
+  .et.pend{background:#f2ede6;color:var(--muted)}
+  .men{color:var(--muted);font-size:13px;font-style:italic;margin-top:4px;line-height:1.45}
+  .vacio{text-align:center;color:var(--muted);padding:26px;font-size:14px}
+  .cargando{text-align:center;color:var(--muted);padding:30px}
+  @media(max-width:560px){
+    .ocultar-chico{display:none}
+    td,th{padding:10px 9px;font-size:13.5px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== ENTRADA ====== -->
+<div id="entrar">
+  <div class="login">
+    <h1>Mi panel</h1>
+    <p>Mirá quién confirmó su asistencia a tu evento.</p>
+    <label>Dirección de tu invitación</label>
+    <input type="text" id="slug" placeholder="maria-y-diego" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="hint">Es lo que va después de <b>/i/?e=</b> en el link de tu invitación.</div>
+    <label>Tu clave</label>
+    <input type="password" id="clave" placeholder="La clave que te dimos" autocomplete="current-password">
+    <button class="btn" id="btn-entrar">Entrar</button>
+    <div class="msg" id="msg"></div>
+    <p class="hint" style="text-align:center;margin-top:18px">¿No tenés la clave? Escribinos y te la pasamos.</p>
+  </div>
+</div>
+
+<!-- ====== PANEL ====== -->
+<div id="panel" style="display:none">
+  <div class="top">
+    <div>
+      <div class="brand">inv<span>ítame!</span></div>
+      <div class="sub">Mi panel de invitados</div>
+    </div>
+    <div class="der">
+      <button id="btn-refrescar">↻ Actualizar</button>
+      <button id="btn-salir">Salir</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="cabecera">
+      <h2 id="ev-nombres">—</h2>
+      <div class="f" id="ev-fecha"></div>
+    </div>
+
+    <div class="nums">
+      <div class="num"><b id="n-inv">0</b><span>Invitaciones enviadas</span></div>
+      <div class="num"><b id="n-pases">0</b><span>Personas invitadas</span></div>
+      <div class="num si"><b id="n-si">0</b><span>Confirmaron</span></div>
+      <div class="num no"><b id="n-no">0</b><span>No pueden</span></div>
+      <div class="num"><b id="n-pend">0</b><span>Sin responder</span></div>
+      <div class="num si"><b id="n-personas">0</b><span>Personas que vienen</span></div>
+    </div>
+
+    <div class="barra">
+      <input type="text" id="buscar" placeholder="Buscar por nombre o mesa…">
+      <button class="filtro on" data-f="todos">Todos</button>
+      <button class="filtro" data-f="si">Confirmaron</button>
+      <button class="filtro" data-f="no">No pueden</button>
+      <button class="filtro" data-f="pend">Sin responder</button>
+      <button class="lnk" id="btn-csv">Descargar lista</button>
+    </div>
+
+    <div id="tabla"><div class="cargando">Cargando tu lista…</div></div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Config pública del proyecto (la apiKey web NO es secreta: lo que protege son las reglas).
+  const firebaseConfig = {
+    apiKey: "AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc",
+    authDomain: "invitame-9b51f.firebaseapp.com",
+    projectId: "invitame-9b51f",
+    storageBucket: "invitame-9b51f.firebasestorage.app",
+    messagingSenderId: "1060290054006",
+    appId: "1:1060290054006:web:938ea367197d2a6462dc57"
+  };
+  const db = getFirestore(initializeApp(firebaseConfig));
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s==null?'':s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const limpiarSlug = s => String(s||'').trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+
+  let ESTADO = { slug:'', clave:'', evento:null, invitados:[], filtro:'todos' };
+
+  function aviso(t){ const m=$('msg'); m.textContent=t; m.style.display=t?'block':'none'; }
+
+  // ---- ENTRAR ----
+  // La clave no se compara en el navegador: es parte de la DIRECCIÓN del documento.
+  // Si la clave está mal, el documento sencillamente no existe. Así nadie puede
+  // "mirar el código" para averiguarla.
+  async function entrar(slug, clave){
+    const ref = doc(db, 'inv_paneles', slug + '__' + clave);
+    const snap = await getDoc(ref);
+    if(!snap.exists()) return null;
+    return snap.data();
+  }
+
+  async function traerInvitados(slug, tokens){
+    const out = [];
+    for(const t of tokens){
+      try{
+        const s = await getDoc(doc(db, 'inv_invitados', slug + '__' + t));
+        if(s.exists()) out.push(Object.assign({ _t:t }, s.data()));
+      }catch(e){ /* si uno falla, seguimos con el resto */ }
+    }
+    return out;
+  }
+
+  function estadoDe(g){
+    const r = String(g.rsvp||'').toLowerCase();
+    if(r === 'confirmado') return 'si';
+    if(r === 'rechazado')  return 'no';
+    return 'pend';
+  }
+
+  function pintar(){
+    const ev = ESTADO.evento || {};
+    $('ev-nombres').textContent = ev.nombres || ESTADO.slug;
+    $('ev-fecha').textContent   = ev.fechaTexto || '';
+
+    const gs = ESTADO.invitados;
+    const cont = { si:0, no:0, pend:0 };
+    let pases = 0, personasVienen = 0;
+    gs.forEach(g => {
+      const e = estadoDe(g); cont[e]++;
+      pases += parseInt(g.usosMax || g.pases || 0, 10) || 0;
+      if(e === 'si') personasVienen += parseInt(g.rsvpPersonas || g.usosMax || g.pases || 0, 10) || 0;
+    });
+    $('n-inv').textContent      = gs.length;
+    $('n-pases').textContent    = pases;
+    $('n-si').textContent       = cont.si;
+    $('n-no').textContent       = cont.no;
+    $('n-pend').textContent     = cont.pend;
+    $('n-personas').textContent = personasVienen;
+
+    const q = ($('buscar').value || '').trim().toLowerCase();
+    const lista = gs.filter(g => {
+      if(ESTADO.filtro !== 'todos' && estadoDe(g) !== ESTADO.filtro) return false;
+      if(!q) return true;
+      return (String(g.nombre||g.n||'') + ' ' + String(g.mesa||g.m||'')).toLowerCase().indexOf(q) > -1;
+    });
+
+    if(!lista.length){
+      $('tabla').innerHTML = '<div class="vacio">' +
+        (gs.length ? 'No hay invitados con ese filtro.' : 'Todavía no hay invitados cargados en tu evento.') +
+        '</div>';
+      return;
+    }
+
+    const ET = { si:['si','Confirmó ✓'], no:['no','No puede'], pend:['pend','Sin responder'] };
+    const filas = lista.map(g => {
+      const e = estadoDe(g), et = ET[e];
+      const per = (e==='si' && g.rsvpPersonas!=null) ? g.rsvpPersonas : (g.usosMax || g.pases || '—');
+      const men = g.rsvpMensaje ? '<div class="men">“' + esc(g.rsvpMensaje) + '”</div>' : '';
+      return '<tr>' +
+        '<td><b>' + esc(g.nombre || g.n || '(sin nombre)') + '</b>' + men + '</td>' +
+        '<td>' + esc(per) + '</td>' +
+        '<td class="ocultar-chico">' + esc(g.mesa || g.m || '—') + '</td>' +
+        '<td><span class="et ' + et[0] + '">' + et[1] + '</span></td>' +
+      '</tr>';
+    }).join('');
+
+    $('tabla').innerHTML = '<table><thead><tr>' +
+      '<th>Invitado</th><th>Personas</th><th class="ocultar-chico">Mesa</th><th>Estado</th>' +
+      '</tr></thead><tbody>' + filas + '</tbody></table>';
+  }
+
+  async function cargar(){
+    $('tabla').innerHTML = '<div class="cargando">Cargando tu lista…</div>';
+    const p = await entrar(ESTADO.slug, ESTADO.clave);
+    if(!p){ salir(); aviso('No encontramos ese panel. Revisá la dirección y la clave.'); return; }
+    ESTADO.evento = p;
+    ESTADO.invitados = await traerInvitados(ESTADO.slug, Array.isArray(p.tokens) ? p.tokens : []);
+    pintar();
+  }
+
+  function salir(){
+    try{ localStorage.removeItem('inv_panel_novios'); }catch(e){}
+    ESTADO = { slug:'', clave:'', evento:null, invitados:[], filtro:'todos' };
+    $('panel').style.display = 'none';
+    $('entrar').style.display = '';
+  }
+
+  $('btn-entrar').addEventListener('click', async () => {
+    aviso('');
+    const slug  = limpiarSlug($('slug').value);
+    const clave = ($('clave').value || '').trim();
+    if(!slug || !clave){ aviso('Completá la dirección de tu invitación y tu clave.'); return; }
+    const b = $('btn-entrar'); b.disabled = true; b.textContent = 'Entrando…';
+    try{
+      const p = await entrar(slug, clave);
+      if(!p){ aviso('No encontramos ese panel. Revisá la dirección y la clave.'); return; }
+      ESTADO.slug = slug; ESTADO.clave = clave; ESTADO.evento = p;
+      try{ localStorage.setItem('inv_panel_novios', JSON.stringify({slug, clave})); }catch(e){}
+      $('entrar').style.display = 'none';
+      $('panel').style.display  = '';
+      ESTADO.invitados = await traerInvitados(slug, Array.isArray(p.tokens) ? p.tokens : []);
+      pintar();
+    }catch(err){
+      aviso('No pudimos conectar. Revisá tu internet y probá de nuevo.');
+    }finally{
+      b.disabled = false; b.textContent = 'Entrar';
+    }
+  });
+
+  $('clave').addEventListener('keydown', e => { if(e.key === 'Enter') $('btn-entrar').click(); });
+  $('slug').addEventListener('keydown',  e => { if(e.key === 'Enter') $('clave').focus(); });
+
+  $('btn-refrescar').addEventListener('click', cargar);
+  $('btn-salir').addEventListener('click', salir);
+  $('buscar').addEventListener('input', pintar);
+
+  document.querySelectorAll('.filtro').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.filtro').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      ESTADO.filtro = b.getAttribute('data-f');
+      pintar();
+    });
+  });
+
+  $('btn-csv').addEventListener('click', () => {
+    const ET = { si:'Confirmo', no:'No puede', pend:'Sin responder' };
+    const filas = [['Invitado','Personas','Mesa','Estado','Mensaje']].concat(
+      ESTADO.invitados.map(g => [
+        g.nombre || g.n || '',
+        (estadoDe(g)==='si' && g.rsvpPersonas!=null) ? g.rsvpPersonas : (g.usosMax || g.pases || ''),
+        g.mesa || g.m || '',
+        ET[estadoDe(g)],
+        g.rsvpMensaje || ''
+      ])
+    );
+    const csv = filas.map(f => f.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8'}));
+    a.download = 'invitados-' + ESTADO.slug + '.csv';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+  });
+
+  // Si ya entró antes en este dispositivo, lo dejamos adentro.
+  (function(){
+    let g = null;
+    try{ g = JSON.parse(localStorage.getItem('inv_panel_novios') || 'null'); }catch(e){}
+    if(g && g.slug && g.clave){
+      ESTADO.slug = g.slug; ESTADO.clave = g.clave;
+      $('entrar').style.display = 'none';
+      $('panel').style.display  = '';
+      cargar();
+    }
+    // Permite abrir directo con ?e=slug para que solo tengan que poner la clave.
+    const qs = new URLSearchParams(location.search).get('e');
+    if(qs && !g) $('slug').value = limpiarSlug(qs);
+  })();
+</script>
+</body>
+</html>
