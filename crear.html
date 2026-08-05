@@ -44,6 +44,10 @@
   .done .big{font-size:52px}
   .done h1{font-family:'Cormorant Garamond',serif;color:var(--uva);font-size:30px;margin:10px 0 6px}
   .done p{color:var(--ink);font-size:15px;line-height:1.6}
+  .sectorfoto{position:relative;margin-top:10px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fdf8f4;max-width:230px}
+  .sectorfoto img{width:100%;height:auto;display:block;cursor:zoom-in}
+  .sectorfoto .cap{display:block;font-size:11px;color:var(--muted);padding:6px 9px;line-height:1.35}
+  @media(min-width:560px){.sectorfoto{max-width:260px}}
   .helpbtn{display:inline-flex;align-items:center;gap:5px;background:#fbf3f6;color:var(--uva);border:1px solid #e6cdd7;border-radius:20px;padding:6px 13px;font-size:12.5px;font-weight:800;cursor:pointer;margin-top:10px;font-family:'Nunito'}
   .helpbtn:hover{background:#f6e8ee}
   .helpbox{display:none;margin-top:10px;background:#fdf8f4;border:1px solid var(--line);border-radius:13px;padding:13px;gap:14px;align-items:flex-start}
@@ -273,22 +277,41 @@
   window.openLB=function(src){ $('lbimg').src=src; $('lbox').classList.add('open'); document.body.style.overflow='hidden'; };
   window.closeLB=function(){ $('lbox').classList.remove('open'); document.body.style.overflow=''; };
   document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLB(); });
-  const REALIMG={tipo:1,kick:1,nombres:1,fecha:1,foto:1,frase:1,eventos:1,dress:1,galeria:1};
-  // imágenes reales alojadas en Cloudinary (capturas de la invitación real)
+  // Fotos REALES de cada sector, capturadas de una invitacion de verdad y alojadas
+  // en la Cloudinary de Invitame. Antes habia 9 archivos ayuda-*.jpg que nunca se
+  // subieron (se veian rotos) y 2 colgando de la cuenta de Little Moments.
+  const CLD='https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/';
   const IMGURL={
+    tipo: CLD+'zxvzwxpvokz0lpnposht.jpg',
+    kick: CLD+'zxvzwxpvokz0lpnposht.jpg',
+    nombres: CLD+'zxvzwxpvokz0lpnposht.jpg',
+    fecha: CLD+'zxvzwxpvokz0lpnposht.jpg',
+    foto: CLD+'zxvzwxpvokz0lpnposht.jpg',
+    frase: CLD+'owywct18dlmpaotq5fwq.jpg',
+    eventos: CLD+'vddxbw2v4i6wb4eh72by.jpg',
+    itinerario: CLD+'qrvs0c2lwe5ol1ud26tj.jpg',
+    hospedaje: CLD+'s10d7dddrdwlq09dpijq.jpg',
+    dress: CLD+'sceawxxrov6afrnuvokk.jpg',
+    galeria: CLD+'r5oieumem4awipqgxeqg.jpg',
     regalos:'https://res.cloudinary.com/dlicangft/image/upload/v1784225229/invitame/ghj7atohchfzkjvkkulm.jpg',
     invitados:'https://res.cloudinary.com/dlicangft/image/upload/v1784226714/invitame/wbfijcpjtnbyo8mmi0vh.jpg'
   };
   const imgVis=src=>'<img src="'+src+'" alt="" onclick="openLB(this.src)" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
-  function injectHelp(){ document.querySelectorAll('[data-help]').forEach(ph=>{ const k=ph.getAttribute('data-help'); const h=HELP[k]; if(!h)return;
-    let vis=null;
-    if(IMGURL[k]) vis=imgVis(IMGURL[k]);
-    // Las capturas ayuda-*.jpg todavía no están subidas al servidor. Si no existen,
-    // el bloque visual se saca solo en vez de mostrar el ícono de imagen rota
-    // (que es justo lo contrario de dar confianza).
-    else if(REALIMG[k]) vis='<img src="ayuda-'+k+'.jpg?v=3" alt="" onclick="openLB(this.src)" onerror="var v=this.closest(\'.vis\'); if(v)v.remove();" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
-    else if(h.special==='qr') vis=QRVIS;
-    const w=document.createElement('div'); w.innerHTML='<button type="button" class="helpbtn" onclick="toggleHelp(this)">ℹ️ ¿Qué es y cómo lo completo?</button><div class="helpbox">'+(vis?'<div class="vis">'+vis+'</div>':'')+'<div class="txt">'+h.txt+'</div></div>'; ph.replaceWith(w); }); }
+  // Jazmin pidio que se vea la FOTO del sector, no que haya que abrir un desplegable.
+  // La miniatura va siempre visible (se amplia al tocarla) y el texto queda detras del boton.
+  function injectHelp(){
+    document.querySelectorAll('[data-help]').forEach(ph=>{
+      const k=ph.getAttribute('data-help'); const h=HELP[k]; if(!h) return;
+      const w=document.createElement('div'); let html='';
+      if(IMGURL[k]){
+        html+='<div class="sectorfoto"><img src="'+IMGURL[k]+'" alt="Asi se ve este sector en la invitacion" loading="lazy" onclick="openLB(this.src)" onerror="var c=this.closest(\\'.sectorfoto\\'); if(c)c.remove();"><span class="cap">Asi se ve en la invitacion \u00b7 toc\u00e1 para ampliar</span></div>';
+      } else if(h.special==='qr' && typeof QRVIS!=='undefined'){
+        html+='<div class="helpbox open"><div class="vis">'+QRVIS+'</div></div>';
+      }
+      html+='<button type="button" class="helpbtn" onclick="toggleHelp(this)">\u2139\ufe0f \u00bfQu\u00e9 es y c\u00f3mo lo completo?</button><div class="helpbox"><div class="txt">'+h.txt+'</div></div>';
+      w.innerHTML=html; ph.replaceWith(w);
+    });
+  }
   injectHelp();
 
   // ---- Comprimir imágenes antes de subir (para que la invitación abra rápido) ----
