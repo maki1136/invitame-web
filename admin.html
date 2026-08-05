@@ -725,6 +725,37 @@
     document.removeEventListener('touchmove',edMove);document.removeEventListener('touchend',edEnd);}
 
   // ==== Subir foto propia a Cloudinary ====
+  // Revisa si una foto sirve como FONDO a pantalla completa. Una foto muy alta y
+  // angosta (por ejemplo la captura larga de una pantalla) se recorta y queda a la
+  // vista solo una tira del medio; una casi blanca desaparece bajo el velo oscuro.
+  function avisarFotoFondo(url,id){
+    const caja=el('prev-'+id); if(!caja)return;
+    const previo=caja.querySelector('.avisoFoto'); if(previo)previo.remove();
+    const img=new Image(); img.crossOrigin='anonymous';
+    img.onload=function(){
+      const alto=img.naturalHeight/img.naturalWidth; let msg='';
+      if(alto>1.5) msg='Esta foto es muy alta y angosta ('+img.naturalWidth+'&times;'+img.naturalHeight+'). En esta franja se va a ver <b>solo una tira del medio</b>. Para que se luzca, sub&iacute; una foto <b>horizontal</b> (apaisada).';
+      if(!msg){
+        try{
+          const c=document.createElement('canvas'); c.width=40; c.height=40;
+          const x=c.getContext('2d'); x.drawImage(img,0,0,40,40);
+          const d=x.getImageData(0,0,40,40).data;
+          let suma=0,n=0;
+          for(let i=0;i<d.length;i+=4){ suma+=(d[i]+d[i+1]+d[i+2])/3; n++; }
+          const prom=suma/n; let dif=0;
+          for(let i=0;i<d.length;i+=4){ dif+=Math.abs((d[i]+d[i+1]+d[i+2])/3-prom); }
+          if(prom>222 && dif/n<16) msg='Esta foto es casi toda blanca y sin contraste. Encima lleva un velo oscuro para que se lea la frase, as&iacute; que va a verse como <b>un gris parejo</b>. Sub&iacute; una foto con m&aacute;s color.';
+        }catch(e){}
+      }
+      if(!msg) return;
+      const av=document.createElement('div');
+      av.className='avisoFoto';
+      av.style.cssText='margin-top:6px;padding:8px 10px;border-radius:8px;background:#FFF4E5;border:1px solid #F0C48A;color:#7A4A00;font-size:12px;line-height:1.45';
+      av.innerHTML='\u26A0\uFE0F '+msg;
+      caja.appendChild(av);
+    };
+    img.src=url;
+  }
   async function subirImg(input,key,id){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
@@ -733,6 +764,7 @@
     try{const url=await INV.uploadImage(f); D[key]=url;
       if(box)box.textContent='✓ Imagen subida (tocá para cambiar)';
       const p=el('prev-'+id); if(p)p.innerHTML='<img src="'+url+'" style="max-height:60px;border-radius:8px;margin-top:6px">';
+      if(/fondo/i.test(key)) avisarFotoFondo(url,id);
     }catch(e){console.error(e); if(box)box.textContent=prev||'⬆ Subir imagen'; alert('No se pudo subir: '+(e.message||e));}
     input.value='';
   }
