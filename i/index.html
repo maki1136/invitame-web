@@ -1059,6 +1059,11 @@
   // Aviso por mail a los anfitriones (el destinatario lo decide el servidor, no el navegador)
   function avisarPorMail(estado,personas){ /* personas puede recalcularse abajo */
     try{
+      // El aviso por mail es OPCIONAL y viene APAGADO. Se prende por invitación desde
+      // el panel ("Habilitar aviso por mail"). Si está apagado ni siquiera llamamos al
+      // servidor: la confirmación ya quedó guardada y se ve en el panel de invitados.
+      // (El servidor vuelve a chequear lo mismo, por si alguien llama el endpoint a mano.)
+      if(!(window.INVEV && INVEV['c_habilitar-aviso-por-mail'])) return;
       // el nombre lo escribe el invitado en el formulario (#rname); si no, el del pase
       var nom=(el('rname')&&el('rname').value||'').trim();
       if(!nom) nom=(el('pv-nombre')&&el('pv-nombre').textContent||'').trim();
