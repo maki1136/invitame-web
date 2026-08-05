@@ -1137,12 +1137,43 @@
     if(s.fraseFx)D.fraseFx=s.fraseFx; if(s.igHashtag)D.igHashtag=s.igHashtag; if(s.spotifyUrl)D.spotifyUrl=s.spotifyUrl;
     ['reg_liverpool','reg_amazon','reg_sears','reg_mercadolibre','reg_palacio','reg_venmo','reg_paypal','reg_otro_n','reg_otro_u','regClabe','regTitular','regBanco'].forEach(k=>{ if(s[k])D[k]=s[k]; });
     D.ev1t=s.ev1t||''; D.ev1dir=s.ev1d||''; D.ev1fecha=s.ev1f||''; D.ev1maps=s.ev1maps||''; D.ev2t=s.ev2t||''; D.ev2dir=s.ev2d||''; D.ev2fecha=s.ev2f||''; D.ev2maps=s.ev2maps||'';
+    D.ev3t=s.ev3t||''; D.ev3dir=s.ev3d||''; D.ev3fecha=s.ev3f||''; D.ev3maps=s.ev3maps||'';
     D.slug=slug((s.n1||'pareja')+(s.n2?'-y-'+s.n2:''));
     // Dress code, mesa de regalos y pedido especial: antes solo aparecían en un
     // alert() y la diseñadora tenía que retipearlos a mano (o se perdían).
     if(s.dress) D['c_dresscode-texto']=s.dress;
     if(s.regalos) D['c_frase-para-seccion-regalos-mesa']=s.regalos;
-    if(s.observaciones) D['c_pedido-especial-del-cliente']=s.observaciones;
+    // El resto de lo que ahora pide el formulario. Cada uno va a la MISMA clave que
+    // usa su campo del panel, así la invitación queda armada sin retipear nada.
+    if(s.orden)       D.orden=s.orden;
+    if(s.hoteles)     D['c_datos-de-hoteles-recomendados']=s.hoteles;
+    if(s.hotDesc)     D['c_descripcion-hotel']=s.hotDesc;
+    if(s.itinerario)  D['c_itinerario-descripcion']=s.itinerario;
+    if(s.persFrase)   D['c_frase-para-la-seccion-personas']=s.persFrase;
+    if(s.galEstilo)   D['c_estilo-de-la-galeria-de-fotos']=s.galEstilo;
+    if(s.videoUrl)    D.videoUrl=s.videoUrl;
+    if(s.igUser)      D['c_usuario-de-instragram']=s.igUser;
+    if(s.cfFrase)     D['c_frase-para-seccion-confirmacion']=s.cfFrase;
+    if(s.cfMail)      D['c_email-para-confirmaciones']=s.cfMail;
+    if(s.cfWsp1)      D['c_numero-de-whatsapp']=s.cfWsp1;
+    if(s.cfWsp1n)     D['c_texto-corto-boton-wsp']=s.cfWsp1n;
+    if(s.cfWsp2)      D['c_numero-de-whatsapp-2']=s.cfWsp2;
+    if(s.cfWsp2n)     D['c_texto-corto-boton-wsp-2']=s.cfWsp2n;
+    if(s.fraseFinal)  D.fraseFinal=s.fraseFinal;
+    if(s.textoFinal)  D['c_texto-final']=s.textoFinal;
+    if(Array.isArray(s.personas)&&s.personas.length){
+      D.personas=s.personas.slice(0,12).map(p=>({nombre:p.nombre||'',rel:p.rel||'',foto:p.foto||''}));
+    }
+    // Lo que NO tiene un lugar propio en la invitación (preferencias de color y letra,
+    // el link de la música) va al pedido especial, que la diseñadora ve al abrir.
+    {
+      const notas=[];
+      if(s.observaciones) notas.push(s.observaciones);
+      if(s.colorSug)  notas.push('Colores que pidió: '+s.colorSug);
+      if(s.tipoSug)   notas.push('Estilo de letra que pidió: '+s.tipoSug);
+      if(s.musica)    notas.push('Música que pidió: '+s.musica);
+      if(notas.length) D['c_pedido-especial-del-cliente']=notas.join('\n');
+    }
     D.invitados=(s.invitados||[]).map(g=>({n:g.n,p:g.p||'1',m:g.m||'-',t:Math.random().toString(36).slice(2,8)}));
     D._solicId=s.id;
     const bx=el('solicbox'); if(bx)bx.remove();
