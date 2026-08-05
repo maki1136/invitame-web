@@ -623,7 +623,8 @@
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     const lbl=input.parentElement; const prev=lbl?lbl.firstChild.textContent:'';
     if(lbl)lbl.childNodes[0].textContent='⏳ Subiendo…';
-    try{const url=await INV.uploadImage(f); if(D.personas[i])D.personas[i].foto=url; renderPersonas();}
+    try{const url=await INV.uploadImage(f); if(D.personas[i])D.personas[i].foto=url; renderPersonas();
+      if(typeof postPreview==='function') postPreview();}
     catch(e){alert('No pude subir la foto. Probá de nuevo.'); if(lbl)lbl.childNodes[0].textContent=prev;}
   }
 
@@ -765,6 +766,9 @@
       if(box)box.textContent='✓ Imagen subida (tocá para cambiar)';
       const p=el('prev-'+id); if(p)p.innerHTML='<img src="'+url+'" style="max-height:60px;border-radius:8px;margin-top:6px">';
       if(/fondo/i.test(key)) avisarFotoFondo(url,id);
+      // La vista previa NO se refrescaba al subir una foto: la diseñadora cargaba la
+      // imagen y seguía viendo la de antes ("elijo la foto y no se aplica").
+      if(typeof postPreview==='function') postPreview();
     }catch(e){console.error(e); if(box)box.textContent=prev||'⬆ Subir imagen'; alert('No se pudo subir: '+(e.message||e));}
     input.value='';
   }
