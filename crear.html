@@ -44,6 +44,10 @@
   .done .big{font-size:52px}
   .done h1{font-family:'Cormorant Garamond',serif;color:var(--uva);font-size:30px;margin:10px 0 6px}
   .done p{color:var(--ink);font-size:15px;line-height:1.6}
+  .sectorfoto{position:relative;margin-top:10px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fdf8f4;max-width:230px}
+  .sectorfoto img{width:100%;height:auto;display:block;cursor:zoom-in}
+  .sectorfoto .cap{display:block;font-size:11px;color:var(--muted);padding:6px 9px;line-height:1.35}
+  @media(min-width:560px){.sectorfoto{max-width:260px}}
   .helpbtn{display:inline-flex;align-items:center;gap:5px;background:#fbf3f6;color:var(--uva);border:1px solid #e6cdd7;border-radius:20px;padding:6px 13px;font-size:12.5px;font-weight:800;cursor:pointer;margin-top:10px;font-family:'Nunito'}
   .helpbtn:hover{background:#f6e8ee}
   .helpbox{display:none;margin-top:10px;background:#fdf8f4;border:1px solid var(--line);border-radius:13px;padding:13px;gap:14px;align-items:flex-start}
@@ -61,6 +65,15 @@
   .lbox img{max-width:96vw;max-height:88vh;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
   .lbox .x{position:absolute;top:14px;right:18px;color:#fff;font-size:30px;font-weight:800;cursor:pointer;line-height:1}
   .lbox .cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#fff;font-size:13px;opacity:.85}
+  .avisos ul{margin:6px 0 0;padding-left:19px;font-size:13.5px;line-height:1.65}
+  .avisos li{margin:7px 0}
+  .avisos b{color:var(--uva)}
+  .fotoslista{margin-top:14px;background:#fdf8f4;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px}
+  .fotoslista ul{padding-left:18px;margin:6px 0 0;line-height:1.6}
+  .rowpers{display:grid;grid-template-columns:1fr 1fr 34px;gap:7px;margin-bottom:7px;align-items:center}
+  .rowpers input{padding:9px 10px;font-size:14px}
+  .subt{font-weight:800;color:var(--uva);font-size:13.5px;margin:18px 0 2px;padding-top:14px;border-top:1px solid var(--line)}
+  .subt:first-of-type{border-top:0;padding-top:0;margin-top:8px}
   .err{background:#fdecec;color:#b0334a;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px;display:none}
   .loadingbar{position:fixed;inset:0;background:rgba(73,17,26,.35);display:none;align-items:center;justify-content:center;z-index:50}
   .loadingbar .box{background:#fff;border-radius:14px;padding:22px 26px;font-weight:800;color:var(--uva)}
@@ -69,11 +82,38 @@
 <body>
   <div class="top"><div class="brand">invítame!</div><div class="sub">Completá los datos y armamos tu invitación ✨</div></div>
   <div class="wrap" id="wrap">
+
+    <!-- Lo que el formulario viejo de Google decía al principio. Sin esto el cliente
+         no sabe qué esperar y después reclama correcciones infinitas. -->
+    <div class="card avisos">
+      <h2>Antes de empezar, tres cosas</h2>
+      <ul>
+        <li><b>Escribí los datos tal cual los querés ver.</b> Los cargamos como los mandás: nombres, horarios, direcciones y acentos se copian exactamente. Revisá antes de enviar.</li>
+        <li><b>Las fotos van como las mandás.</b> No las retocamos ni las recortamos. Si querés una foto editada, mandala ya editada.</li>
+        <li><b>Tiempos:</b> la primera versión llega en <b>48 horas hábiles</b>. Después tenés <b>una instancia de corrección con hasta 3 cambios</b>. Si algún dato lo dejás vacío o escribís <i>"lo dejo a criterio del diseñador"</i>, decidimos nosotros y eso no cuenta como corrección.</li>
+      </ul>
+      <div class="fotoslista">
+        <b>📸 Fotos que conviene tener a mano</b>
+        <ul>
+          <li><b>Portada:</b> 1 foto vertical (o un video corto vertical).</li>
+          <li><b>Frase / dedicatoria:</b> 1 foto de fondo (opcional).</li>
+          <li><b>Cada lugar:</b> 1 foto del salón, la iglesia o la locación.</li>
+          <li><b>Dress code:</b> 1 o 2 fotos de inspiración (opcional).</li>
+          <li><b>Galería:</b> las que quieras, entre 6 y 20 quedan lindas.</li>
+          <li><b>Personas importantes:</b> 1 foto de cada una (opcional).</li>
+          <li><b>Cierre:</b> 1 foto para el final de la invitación.</li>
+        </ul>
+        <div class="hint" style="margin-top:6px">Las que no tengas ahora, se pueden sumar después. Nada de esto frena el envío.</div>
+      </div>
+    </div>
+
     <div class="modelo" id="modelo"><div class="sw" style="background:#a5674f"></div><div><div style="font-size:12px;color:var(--muted)">Modelo elegido</div><b id="modelo-nom">Boho</b></div><a class="ch" href="catalogo.html" style="color:var(--rosa);font-weight:800;text-decoration:none;font-size:13px">cambiar</a></div>
 
     <div class="card">
       <h2>¿Qué festejás?</h2>
       <p class="desc">Elegí el tipo de evento.</p>
+      <label>Número de clave / pedido</label><input type="text" id="orden" placeholder="Ej: 128">
+      <div class="hint">Es el número que te dimos al contratar. Si no tenés ninguno, dejalo vacío.</div>
       <label>Tipo de evento</label>
       <select id="tipo">
         <option value="boda">Boda 💍</option>
@@ -120,17 +160,53 @@
 
     <div class="card">
       <h2>¿Dónde y cuándo?</h2>
-      <p class="desc">Ceremonia y fiesta (lo que tengas).</p>
+      <p class="desc">Hasta tres lugares. Completá los que tengas: los vacíos no aparecen.</p>
+      <div class="subt">1 · Ceremonia</div>
       <label>Ceremonia — lugar</label><input type="text" id="ev1t" placeholder="Basílica de Santa María">
       <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev1f" placeholder="12:00 hs"></div>
       <div><label>Dirección</label><input type="text" id="ev1d" placeholder="Calle 123, Ciudad"></div></div>
       <label>Link de Google Maps de la ceremonia (opcional)</label><input type="text" id="ev1maps" placeholder="Pegá el link de Google Maps">
+      <div class="subt">2 · Fiesta</div>
       <label>Fiesta — lugar</label><input type="text" id="ev2t" placeholder="Salón Las Rosas">
       <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev2f" placeholder="14:00 hs"></div>
       <div><label>Dirección</label><input type="text" id="ev2d" placeholder="Av. Siempre 456, Ciudad"></div></div>
       <label>Link de Google Maps de la fiesta (opcional)</label><input type="text" id="ev2maps" placeholder="Pegá el link de Google Maps">
+      <div class="subt">3 · Un tercer lugar (opcional)</div>
+      <div class="hint" style="margin-bottom:2px">Para la tornaboda, el after, el civil o lo que sea que pase en otro lado. Si no tenés un tercer lugar, dejalo vacío y no aparece.</div>
+      <label>Tercer lugar — nombre</label><input type="text" id="ev3t" placeholder="Tornaboda">
+      <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev3f" placeholder="Domingo 10:00 hs"></div>
+      <div><label>Dirección</label><input type="text" id="ev3d" placeholder="Calle 789, Ciudad"></div></div>
+      <label>Link de Google Maps del tercer lugar (opcional)</label><input type="text" id="ev3maps" placeholder="Pegá el link de Google Maps">
       <div class="hint">📍 Con la <b>dirección</b> ya armamos el mapa, así que este campo es opcional. Si querés que el pin caiga exacto, lo que sirve son las <b>coordenadas</b>: abrí Google Maps en la computadora, hacé clic derecho sobre el lugar y copiá los dos números que aparecen arriba (ej: <i>-34.6037, -58.3816</i>). El link corto de "Compartir" no sirve para esto.</div>
       <div data-help="eventos"></div>
+    </div>
+
+    <div class="card">
+      <h2>Hospedaje (opcional)</h2>
+      <p class="desc">Si vienen invitados de afuera, acá van los hoteles que recomendás.</p>
+      <label>Frase de la sección</label><input type="text" id="hotDesc" placeholder="Estos son los hoteles que recomendamos">
+      <label>Hoteles recomendados</label>
+      <textarea id="hoteles" rows="6" placeholder="Hotel Casa del Sol&#10;Calle 60 nº 123, Centro&#10;www.casadelsol.com&#10;999 123 4567&#10;Código de descuento: BODAMD26&#10;&#10;(dejá un renglón vacío y seguí con el próximo hotel)"></textarea>
+      <div class="hint">Por cada hotel poné: <b>nombre</b>, <b>dirección</b>, <b>página web</b>, <b>teléfono</b> y el <b>código de descuento</b> si conseguiste uno. Uno debajo del otro, y un renglón en blanco entre hotel y hotel.</div>
+      <div data-help="hospedaje"></div>
+    </div>
+
+    <div class="card">
+      <h2>Itinerario (opcional)</h2>
+      <p class="desc">El paso a paso del día, para que nadie pregunte "¿a qué hora es…?".</p>
+      <label>Cronograma</label>
+      <textarea id="itinerario" rows="6" placeholder="17:00 · Ceremonia&#10;18:30 · Recepción y brindis&#10;20:00 · Cena&#10;22:00 · Baile&#10;02:00 · Tornafiesta"></textarea>
+      <div class="hint">Un renglón por momento. Nosotros lo maquetamos.</div>
+      <div data-help="itinerario"></div>
+    </div>
+
+    <div class="card">
+      <h2>Personas importantes (opcional)</h2>
+      <p class="desc">Papás, padrinos, madrinas, testigos, chambelanes. Hasta 9.</p>
+      <label>Frase de la sección</label><input type="text" id="persFrase" placeholder="Con la bendición de nuestros padres">
+      <div id="personas" style="margin-top:12px"></div>
+      <button class="addg" type="button" id="pers-add" onclick="addPersona()">+ Agregar persona</button>
+      <div class="hint" style="margin-top:8px">Las fotos de cada persona se cargan después, con la diseñadora. Si no cargás ninguna persona, la sección no aparece.</div>
     </div>
 
     <div class="card">
@@ -139,8 +215,25 @@
       <div data-help="dress"></div>
       <label>Mesa de regalos / datos</label><textarea id="regalos" placeholder="Alias, CBU, tienda de regalos, o lo que quieras poner…"></textarea>
       <div data-help="regalos"></div>
-      <label>Música de fondo (opcional)</label><input type="text" id="musica" placeholder="Link de la canción (YouTube/Spotify) o nombre">
-      <div class="hint">🎵 Poné el link o el nombre de la canción que querés de fondo. Si lo dejás vacío, elegimos una acorde al estilo.</div>
+      <label>Música de fondo (opcional)</label><input type="text" id="musica" placeholder="Pegá el link de YouTube de la canción">
+      <div class="hint">🎵 Pegá el <b>link de YouTube</b> de la canción que querés de fondo. Si lo dejás vacío, elegimos una acorde al estilo.</div>
+    </div>
+
+    <div class="card">
+      <h2>Confirmación de asistencia</h2>
+      <p class="desc">Cómo te avisan los invitados si vienen.</p>
+      <label>Frase de la sección</label><input type="text" id="cfFrase" placeholder="Confirmanos tu asistencia antes del 1 de marzo">
+      <label>Email donde querés recibir las confirmaciones</label><input type="email" id="cfMail" placeholder="tucorreo@gmail.com">
+      <div class="hint">Cada vez que alguien confirme, te llega un correo acá. Puede ser el mismo que dejás abajo o uno distinto.</div>
+      <div class="two">
+        <div><label>WhatsApp de contacto 1</label><input type="tel" id="cfWsp1" placeholder="+52 999 123 4567"></div>
+        <div><label>¿De quién es?</label><input type="text" id="cfWsp1n" placeholder="Ej: Mamá de la novia"></div>
+      </div>
+      <div class="two">
+        <div><label>WhatsApp de contacto 2 (opcional)</label><input type="tel" id="cfWsp2" placeholder="+52 999 765 4321"></div>
+        <div><label>¿De quién es?</label><input type="text" id="cfWsp2n" placeholder="Ej: Wedding planner"></div>
+      </div>
+      <div class="hint">📞 Poné el número <b>con código de país</b> (+52 México, +54 Argentina). Sin el código, el botón de WhatsApp no abre desde el exterior.</div>
     </div>
 
     <div class="card">
@@ -148,6 +241,10 @@
       <label>Fondo con movimiento (frase principal)</label>
       <select id="fraseFx"><option value="">Ninguno</option><option value="bokeh">Bokeh (círculos suaves)</option><option value="destellos">Destellos</option><option value="estrellas">Estrellas doradas</option><option value="petalos">Pétalos cayendo</option><option value="gradiente">Degradado animado</option><option value="ondas">Ondas suaves</option></select>
       <label>Hashtag de Instagram (opcional)</label><input type="text" id="igHashtag" placeholder="#MariaYDiego2026">
+      <label>Cuenta de Instagram (opcional)</label><input type="text" id="igUser" placeholder="@mariaydiego">
+      <div class="hint">📸 La cuenta donde querés que suban las fotos del evento. Va con arroba.</div>
+      <label>Video por link (opcional)</label><input type="text" id="videoUrl" placeholder="Link de YouTube o Vimeo">
+      <div class="hint">🎬 Si tenés un video (el save the date, la propuesta), pegá el link y aparece con un botón "Ver video".</div>
       <label>Playlist de Spotify (opcional)</label><input type="text" id="spotifyUrl" placeholder="Link de la playlist de Spotify">
       <div class="hint">🎶 En Spotify: Compartir → Copiar enlace de la playlist.</div>
       <label style="margin-top:16px;display:block;font-weight:800;color:var(--uva)">🎁 Mesa de Regalos (botones)</label>
@@ -168,7 +265,21 @@
       <div class="up small" id="up-gal" onclick="document.getElementById('f-gal').click()">⬆ Subir fotos de la galería</div>
       <input type="file" id="f-gal" accept="image/*" multiple style="display:none">
       <div id="prev-gal"></div>
+      <label>¿Cómo querés que se vean?</label>
+      <select id="galEstilo">
+        <option value="">Lo dejo a criterio del diseñador</option>
+        <option value="Slider">Slider — una foto a la vez, se pasan con flechas</option>
+        <option value="Mosaico">Mosaico — todas juntas en grilla</option>
+      </select>
       <div data-help="galeria"></div>
+    </div>
+
+    <div class="card">
+      <h2>El cierre</h2>
+      <p class="desc">Lo último que ve el invitado antes de salir de la invitación.</p>
+      <label>Frase final</label><input type="text" id="fraseFinal" placeholder="¡Te esperamos!">
+      <label>Texto final</label><textarea id="textoFinal" placeholder="Gracias por acompañarnos en este día tan importante."></textarea>
+      <div class="hint">Si lo dejás vacío, ponemos algo acorde al estilo.</div>
     </div>
 
     <div class="card">
@@ -191,6 +302,12 @@
     <div class="card">
       <h2>¿Querés algo especial?</h2>
       <p class="desc">Contanos si querés algún cambio, color, detalle o pedido particular. Lo vemos nosotros.</p>
+      <div class="two">
+        <div><label>Colores que te gustaría</label><input type="text" id="colorSug" placeholder="Ej: verde oliva y dorado"></div>
+        <div><label>Estilo de letra</label><input type="text" id="tipoSug" placeholder="Ej: cursiva elegante"></div>
+      </div>
+      <div class="hint">Si no tenés preferencia, dejalos vacíos: elegimos lo que mejor le quede al modelo.</div>
+      <label>Cualquier otra cosa</label>
       <textarea id="obs" placeholder="Ej: me gustaría que los nombres sean dorados, agregar una sección de padrinos, cambiar la música…"></textarea>
       <div data-help="observaciones"></div>
     </div>
@@ -262,6 +379,8 @@
     foto:{special:'foto',txt:'<b>Es el fondo de toda la portada</b> (la primera pantalla). Puede ser <b>foto o video</b>. Consejos: que sea <b>vertical</b> y de buena calidad (llena mejor el celular), con la pareja/protagonista bien visible. La foto la achicamos sola; el video, si lo subís, que sea vertical, de 6 a 15 seg y en MP4 (ideal menos de 40 MB) — nosotros lo optimizamos. Los nombres van encima, así que evitá imágenes muy cargadas en el centro.'},
     frase:{rows:[['Portada',0],['La frase',1],['Eventos',0],['Galería',0]],txt:'<b>Una frase o dedicatoria</b> que aparece en una sección propia, en letra cursiva elegante. Puede ser romántica, un versículo, o algo tuyo. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre." Si no ponés nada, se saltea esa sección.'},
     eventos:{rows:[['Portada',0],['La frase',0],['Dónde y cuándo',1],['Galería',0]],txt:'<b>El lugar y horario de la ceremonia y la fiesta.</b> Cada uno aparece como una tarjeta con foto, dirección y un botón de "Ver mapa". Completá lo que tengas: si es un solo lugar, dejá el otro vacío.'},
+    hospedaje:{rows:[['Eventos',0],['Hospedaje',1],['Dress code',0]],txt:'<b>Los hoteles que recomendás</b> para los invitados que vienen de otra ciudad. Aparece como una sección propia. Poné el nombre, la dirección, la web, el teléfono y el código de descuento si conseguiste uno. Si no cargás ninguno, la sección no aparece.'},
+    itinerario:{rows:[['Eventos',0],['Itinerario',1],['Dress code',0]],txt:'<b>El cronograma del día</b>, momento por momento, con la hora. Se muestra como una lista vertical. Ej: "17:00 · Ceremonia". Si lo dejás vacío, la sección no aparece.'},
     dress:{rows:[['Eventos',0],['Dress code',1],['Regalos',0]],txt:'<b>El código de vestimenta.</b> Aparece en su propia sección. Ej: "Elegante", "Formal", "Campestre", "De gala". Podés aclarar algo (ej: "evitar el blanco").'},
     regalos:{rows:[['Dress code',0],['Mesa de regalos',1],['Galería',0]],txt:'<b>Datos para los regalos.</b> Aparece en una sección con un botón. Podés poner el alias/CBU para transferencias, el link de una tienda de regalos, o lo que prefieras. Si no querés mostrarlo, dejalo vacío.'},
     galeria:{rows:[['Frase',0],['Galería',1],['Invitados',0]],txt:'<b>Fotos que se muestran en un carrusel</b> dentro de la invitación. Subí las que quieras (las achicamos solas). Es opcional: si no subís, no aparece la sección.'},
@@ -273,33 +392,49 @@
   window.openLB=function(src){ $('lbimg').src=src; $('lbox').classList.add('open'); document.body.style.overflow='hidden'; };
   window.closeLB=function(){ $('lbox').classList.remove('open'); document.body.style.overflow=''; };
   document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLB(); });
-  const REALIMG={tipo:1,kick:1,nombres:1,fecha:1,foto:1,frase:1,eventos:1,dress:1,galeria:1};
-  // imágenes reales alojadas en Cloudinary (capturas de la invitación real)
+  // Fotos REALES de cada sector, capturadas de una invitación de verdad y alojadas
+  // en la Cloudinary de Invítame (oc8cgqt4). Antes había 9 archivos ayuda-*.jpg que
+  // nunca se subieron (se veían rotos) y 2 que colgaban de la cuenta de Little Moments.
+  const CLD='https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/';
   const IMGURL={
-    tipo:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/zxvzwxpvokz0lpnposht.jpg',
-    kick:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/zxvzwxpvokz0lpnposht.jpg',
-    nombres:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/zxvzwxpvokz0lpnposht.jpg',
-    fecha:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/zxvzwxpvokz0lpnposht.jpg',
-    foto:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/zxvzwxpvokz0lpnposht.jpg',
-    frase:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/owywct18dlmpaotq5fwq.jpg',
-    eventos:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/vddxbw2v4i6wb4eh72by.jpg',
-    itinerario:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/qrvs0c2lwe5ol1ud26tj.jpg',
-    hospedaje:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/s10d7dddrdwlq09dpijq.jpg',
-    dress:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/sceawxxrov6afrnuvokk.jpg',
-    galeria:'https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_620/invitame/ayuda/r5oieumem4awipqgxeqg.jpg',
+    tipo:      CLD+'zxvzwxpvokz0lpnposht.jpg',
+    kick:      CLD+'zxvzwxpvokz0lpnposht.jpg',
+    nombres:   CLD+'zxvzwxpvokz0lpnposht.jpg',
+    fecha:     CLD+'zxvzwxpvokz0lpnposht.jpg',
+    foto:      CLD+'zxvzwxpvokz0lpnposht.jpg',
+    frase:     CLD+'owywct18dlmpaotq5fwq.jpg',
+    eventos:   CLD+'vddxbw2v4i6wb4eh72by.jpg',
+    itinerario:CLD+'qrvs0c2lwe5ol1ud26tj.jpg',
+    hospedaje: CLD+'s10d7dddrdwlq09dpijq.jpg',
+    dress:     CLD+'sceawxxrov6afrnuvokk.jpg',
+    galeria:   CLD+'r5oieumem4awipqgxeqg.jpg',
     regalos:'https://res.cloudinary.com/dlicangft/image/upload/v1784225229/invitame/ghj7atohchfzkjvkkulm.jpg',
     invitados:'https://res.cloudinary.com/dlicangft/image/upload/v1784226714/invitame/wbfijcpjtnbyo8mmi0vh.jpg'
   };
   const imgVis=src=>'<img src="'+src+'" alt="" onclick="openLB(this.src)" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
-  function injectHelp(){ document.querySelectorAll('[data-help]').forEach(ph=>{ const k=ph.getAttribute('data-help'); const h=HELP[k]; if(!h)return;
-    let vis=null;
-    if(IMGURL[k]) vis=imgVis(IMGURL[k]);
-    // Las capturas ayuda-*.jpg todavía no están subidas al servidor. Si no existen,
-    // el bloque visual se saca solo en vez de mostrar el ícono de imagen rota
-    // (que es justo lo contrario de dar confianza).
-    else if(REALIMG[k]) vis='<img src="ayuda-'+k+'.jpg?v=3" alt="" onclick="openLB(this.src)" onerror="var v=this.closest(\'.vis\'); if(v)v.remove();" style="width:100%;height:auto;display:block;border-radius:11px;box-shadow:0 5px 14px rgba(0,0,0,.16);cursor:zoom-in"><span class="zoomtag">🔍 ampliar</span>';
-    else if(h.special==='qr') vis=QRVIS;
-    const w=document.createElement('div'); w.innerHTML='<button type="button" class="helpbtn" onclick="toggleHelp(this)">ℹ️ ¿Qué es y cómo lo completo?</button><div class="helpbox">'+(vis?'<div class="vis">'+vis+'</div>':'')+'<div class="txt">'+h.txt+'</div></div>'; ph.replaceWith(w); }); }
+  // Jazmín pidió que se vea la FOTO del sector, no que haya que abrir un desplegable.
+  // Ahora la miniatura va siempre visible arriba del campo (se amplía al tocarla) y
+  // el texto explicativo queda detrás del botón, para quien lo necesite.
+  function injectHelp(){
+    document.querySelectorAll('[data-help]').forEach(ph=>{
+      const k=ph.getAttribute('data-help'); const h=HELP[k]; if(!h) return;
+      const w=document.createElement('div');
+      let html='';
+      if(IMGURL[k]){
+        html+='<div class="sectorfoto">'
+            + '<img src="'+IMGURL[k]+'" alt="Así se ve este sector en la invitación" loading="lazy"'
+            + ' onclick="openLB(this.src)" onerror="var c=this.closest(\'.sectorfoto\'); if(c)c.remove();">'
+            + '<span class="cap">Así se ve en la invitación · tocá para ampliar</span>'
+            + '</div>';
+      } else if(h.special==='qr' && typeof QRVIS!=='undefined'){
+        html+='<div class="helpbox open"><div class="vis">'+QRVIS+'</div></div>';
+      }
+      html+='<button type="button" class="helpbtn" onclick="toggleHelp(this)">ℹ️ ¿Qué es y cómo lo completo?</button>'
+          + '<div class="helpbox"><div class="txt">'+h.txt+'</div></div>';
+      w.innerHTML=html;
+      ph.replaceWith(w);
+    });
+  }
   injectHelp();
 
   // ---- Comprimir imágenes antes de subir (para que la invitación abra rápido) ----
@@ -343,20 +478,48 @@
   // invitados: fila inicial vacía
   addGuest();
 
+  // ---- Personas importantes (hasta 9, igual que el formulario viejo) ----
+  window.addPersona=function(nombre,rel){
+    const cont=$('personas');
+    if(cont.querySelectorAll('.rowpers').length>=9) return;
+    const d=document.createElement('div'); d.className='rowpers';
+    d.innerHTML='<input type="text" placeholder="Nombre y apellido"><input type="text" placeholder="Qué es (mamá, padrino…)"><button class="rmx" type="button">✕</button>';
+    const ins=d.querySelectorAll('input');
+    if(typeof nombre==='string'){ ins[0].value=nombre; if(rel)ins[1].value=rel; }
+    d.querySelector('.rmx').onclick=()=>{ d.remove(); actualizarBotonPersona(); };
+    cont.appendChild(d); actualizarBotonPersona();
+  };
+  function actualizarBotonPersona(){
+    const b=$('pers-add'); if(!b) return;
+    b.style.display = $('personas').querySelectorAll('.rowpers').length>=9 ? 'none' : '';
+  }
+  function leerPersonas(){
+    return [...$('personas').querySelectorAll('.rowpers')].map(function(r){
+      const i=r.querySelectorAll('input');
+      return {nombre:i[0].value.trim(), rel:i[1].value.trim(), foto:''};
+    }).filter(function(p){ return p.nombre; });
+  }
+
   // ---- Borrador automático ----
   // El formulario tiene 30+ campos. Antes, un refresh o un toque de "atrás" y el
   // cliente perdía TODO. Ahora se guarda solo en el navegador y se ofrece recuperarlo.
   const BORR='inv_borrador_'+(tpl||'x');
-  const CAMPOS=['tipo','kick','n1','n2','fecha','frase','ev1t','ev1f','ev1d','ev1maps',
-    'ev2t','ev2f','ev2d','ev2maps','dress','regalos','musica','fraseFx','igHashtag','spotifyUrl',
+  const CAMPOS=['orden','tipo','kick','n1','n2','fecha','frase','ev1t','ev1f','ev1d','ev1maps',
+    'ev2t','ev2f','ev2d','ev2maps','ev3t','ev3f','ev3d','ev3maps',
+    'hotDesc','hoteles','itinerario','persFrase',
+    'dress','regalos','musica','fraseFx','igHashtag','igUser','videoUrl','spotifyUrl','galEstilo',
+    'cfFrase','cfMail','cfWsp1','cfWsp1n','cfWsp2','cfWsp2n','fraseFinal','textoFinal',
     'reg_liverpool','reg_amazon','reg_sears','reg_mercadolibre','reg_palacio','reg_venmo','reg_paypal',
-    'obs','cnom','cwsp','cmail'];
+    'colorSug','tipoSug','obs','cnom','cwsp','cmail'];
   function guardarBorrador(){
     try{
       const d={_t:Date.now()};
       CAMPOS.forEach(function(k){ const e=$(k); if(e) d[k]=e.value; });
       d._inv=[...document.querySelectorAll('#guests .rowinv')].map(function(r){
         const i=r.querySelectorAll('input'); return [i[0].value,i[1].value,i[2].value]; })
+        .filter(function(x){return x[0];});
+      d._pers=[...document.querySelectorAll('#personas .rowpers')].map(function(r){
+        const i=r.querySelectorAll('input'); return [i[0].value,i[1].value]; })
         .filter(function(x){return x[0];});
       localStorage.setItem(BORR, JSON.stringify(d));
     }catch(e){}
@@ -376,6 +539,10 @@
       d._inv.forEach(function(g){ addGuest(); const filas=document.querySelectorAll('#guests .rowinv');
         const i=filas[filas.length-1].querySelectorAll('input'); i[0].value=g[0]||''; i[1].value=g[1]||''; i[2].value=g[2]||''; });
     }
+    if(d._pers&&d._pers.length){
+      document.getElementById('personas').innerHTML='';
+      d._pers.forEach(function(p){ addPersona(p[0]||'', p[1]||''); });
+    }
   }
   document.addEventListener('input', function(e){ if(e.target&&e.target.closest('.card,#guests')) guardarBorrador(); });
   document.addEventListener('change', function(e){ if(e.target&&e.target.closest('.card,#guests')) guardarBorrador(); });
@@ -394,8 +561,19 @@
       tpl, tplNombre:T.n, tipoEvento:$('tipo').value, kick:$('kick').value.trim(),
       n1, n2:$('n2').value.trim(), fecha, frase:$('frase').value.trim(),
       cover:coverURL, coverVideo:coverVideoURL, galeria:galURLs,
+      orden:$('orden').value.trim(),
       ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1maps:$('ev1maps').value.trim(),
       ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2maps:$('ev2maps').value.trim(),
+      ev3t:$('ev3t').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3maps:$('ev3maps').value.trim(),
+      hotDesc:$('hotDesc').value.trim(), hoteles:$('hoteles').value.trim(),
+      itinerario:$('itinerario').value.trim(),
+      persFrase:$('persFrase').value.trim(), personas:leerPersonas(),
+      galEstilo:$('galEstilo').value, videoUrl:$('videoUrl').value.trim(), igUser:$('igUser').value.trim(),
+      cfFrase:$('cfFrase').value.trim(), cfMail:$('cfMail').value.trim(),
+      cfWsp1:$('cfWsp1').value.trim(), cfWsp1n:$('cfWsp1n').value.trim(),
+      cfWsp2:$('cfWsp2').value.trim(), cfWsp2n:$('cfWsp2n').value.trim(),
+      fraseFinal:$('fraseFinal').value.trim(), textoFinal:$('textoFinal').value.trim(),
+      colorSug:$('colorSug').value.trim(), tipoSug:$('tipoSug').value.trim(),
       dress:$('dress').value.trim(), regalos:$('regalos').value.trim(), musica:$('musica').value.trim(),
       fraseFx:$('fraseFx').value, igHashtag:$('igHashtag').value.trim(), spotifyUrl:$('spotifyUrl').value.trim(),
       reg_liverpool:$('reg_liverpool').value.trim(), reg_amazon:$('reg_amazon').value.trim(), reg_sears:$('reg_sears').value.trim(),
