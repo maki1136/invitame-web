@@ -30,7 +30,7 @@
   @media(min-width:680px){
     .frame{max-width:none;width:100%;margin:0;border-radius:0;box-shadow:none;background:linear-gradient(180deg,#ece3d3,#e2d6bf)}
     .sec{padding:74px 24px}
-    .sec > *:not(.cut):not(.adorno):not(.frasefx):not(.reg-btns):not(.ambiente):not(.cartafx){max-width:640px;margin-left:auto;margin-right:auto}
+    .sec > *:not(.cut):not(.adorno):not(.frasefx):not(.frase):not(.reg-btns):not(.ambiente):not(.cartafx){max-width:640px;margin-left:auto;margin-right:auto}
     .sec > .frase{max-width:760px}
     .ambiente{max-width:none!important;width:100%!important;left:0!important;right:0!important}
     .cartafx{margin-top:40px}
@@ -43,7 +43,7 @@
   }
   @media(min-width:1100px){
     .sec{padding:90px 24px}
-    .sec > *:not(.cut):not(.adorno):not(.frasefx):not(.reg-btns):not(.ambiente):not(.cartafx){max-width:680px}
+    .sec > *:not(.cut):not(.adorno):not(.frasefx):not(.frase):not(.reg-btns):not(.ambiente):not(.cartafx){max-width:680px}
   }
 
   /* ===== SOBRE full screen (elegante) ===== */
@@ -543,6 +543,10 @@
 
 <style id="feat-css">
   .fraseSec{position:relative;overflow:hidden}
+  /* La frase va sobre una foto, así que por defecto es blanca y grande (como se veía
+     la banda decorativa). Si la diseñadora carga color/tipografía/tamaño en el panel,
+     eso manda por encima de esto. */
+  .band .frase{color:#fff;font-family:'Forum',serif;font-size:26px;max-width:420px;padding:0 32px;text-align:center;text-shadow:0 2px 12px rgba(0,0,0,.45)}
   .frasefx{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
   .fraseSec .frase{position:relative;z-index:2}
   .frasefx.fx-gradiente{background:linear-gradient(120deg,rgba(109,18,51,.10),rgba(245,103,112,.12),rgba(201,163,106,.14),rgba(109,18,51,.10));background-size:320% 320%;animation:fgrad 15s ease infinite}
@@ -577,13 +581,17 @@
       <div class="cf-front-tint"></div>
     </div></section>
 
-  <div class="band" style="position:relative;height:52vh;overflow:hidden;display:flex;align-items:center;justify-content:center;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%)">
+  <!-- UNA sola sección de frase (pedido de Jazmín). Antes había DOS: esta banda con
+       foto, que quedaba linda pero NO se podía tocar desde el panel, y abajo otra de
+       fondo liso que sí se editaba. Quedó una sola: la de la foto, y ahora TODO se
+       maneja desde el panel — el texto con "Frase Larga", su color, tipografía y
+       tamaño, y la foto con "Fondo sección frase larga". -->
+  <section data-sec="frase" class="sec fraseSec band" style="padding:0;min-height:52vh;display:flex;align-items:center;justify-content:center;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%)">
     <div class="bg" id="bandbg" style="position:absolute;inset:-15% 0;background:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=80') center/cover"></div>
-    <div style="position:absolute;inset:0;background:rgba(28,34,26,.5)"></div>
-    <div class="reveal" style="position:relative;z-index:2;color:#fff;font-family:'Forum',serif;font-size:26px;font-style:italic;text-align:center;padding:0 32px;max-width:420px">"El amor no se mira, se siente — y hoy queremos compartirlo con ustedes."</div>
-  </div>
-
-  <section data-sec="frase" class="sec fraseSec"><div class="frasefx" id="frasefx"></div>    <p class="frase reveal">"Hay un instante en la vida en que se decide caminar juntos para siempre. Ese día llegó, y queremos vivirlo con ustedes."</p></section>
+    <div id="frase-tint" style="position:absolute;inset:0;background:rgba(28,34,26,.5)"></div>
+    <div class="frasefx" id="frasefx"></div>
+    <p class="frase reveal">"Hay un instante en la vida en que se decide caminar juntos para siempre. Ese día llegó, y queremos vivirlo con ustedes."</p>
+  </section>
 
   <section data-sec="eventos" class="sec verde"><div class="kick" id="dq-kick">Dónde &amp; Cuándo</div><h2 id="dq-h2">Los eventos</h2>
     <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-1-imagen-jpg-480x320-" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=700&q=80')"></div>
@@ -1670,7 +1678,13 @@
     if(_cov&&!ev.cover)rt.setProperty('--cover',"url('"+cldOpt(_cov,'w_1600,c_limit')+"')");
     // Fondo de la sección "frase larga" (antes no se aplicaba nunca)
     var _fb=IMGV('img_c_fondo-seccion-frase-larga','img_c_fondo-secci-n-frase-larga','img_f-fondo-secci-n-frase-larga');
-    if(_fb){var _fs=document.querySelector('[data-sec="frase"]'); if(_fs){_fs.style.backgroundImage="url('"+cldOpt(_fb,'w_1400,c_limit')+"')";_fs.style.backgroundSize='cover';_fs.style.backgroundPosition='center';}}
+    // Va sobre la capa de fondo de la banda (#bandbg), NO sobre la sección: así queda
+    // debajo del tinte oscuro y sigue funcionando el movimiento de parallax.
+    if(_fb){
+      var _bb=el('bandbg');
+      if(_bb){ _bb.style.backgroundImage="url('"+cldOpt(_fb,'w_1400,c_limit')+"')"; _bb.style.backgroundSize='cover'; _bb.style.backgroundPosition='center'; }
+      else { var _fs=document.querySelector('[data-sec="frase"]'); if(_fs){_fs.style.backgroundImage="url('"+cldOpt(_fb,'w_1400,c_limit')+"')";_fs.style.backgroundSize='cover';_fs.style.backgroundPosition='center';} }
+    }
     // ---- Contacto: lee los campos reales del panel (Número de whatsapp 1/2, textos, toggle) ----
     (function(){
       var digits=function(s){return String(s||'').replace(/[^\d]/g,'');};
