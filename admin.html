@@ -797,7 +797,15 @@
   function drawQR(){const b=el('pv-qr');if(!b)return;b.innerHTML='';if(window.QRCode)new QRCode(b,{text:'https://invitaciones.tumarca.com/x?g='+encodeURIComponent(D.pnom),width:58,height:58,colorDark:D.color,colorLight:'#fff'});}
 
   function tcsv(){const b=el('csvbox');b.style.display=b.style.display==='none'?'block':'none';}
-  function impcsv(){el('csv').value.split(/\r?\n/).forEach(r=>{const c=r.split(',');if(c[0]&&c[0].trim())D.invitados.push({n:c[0].trim(),p:(c[1]||'1').trim(),m:(c[2]||'-').trim(),t:Math.random().toString(36).slice(2,8)});});el('csv').value='';renderGuests();}
+  function impcsv(){
+    // "Pegar la lista a mano" tenia SU PROPIO codigo para agregar invitados,
+    // distinto del de Excel/CSV: por eso duplicaba aunque el otro camino ya no,
+    // y ademas ignoraba la columna de restriccion. Ahora los dos usan _cargarFilas.
+    const filas=el('csv').value.split(/\r?\n/).filter(l=>l.trim()!=='').map(_parseCSVline);
+    el('csv').value='';
+    if(!filas.length){ alert('Peg\u00e1 la lista primero: un invitado por rengl\u00f3n, separando con comas (Nombre, Personas, Mesa).'); return; }
+    _cargarFilas(filas);
+  }
   // ==== CARGA MASIVA POR EXCEL ====
   function _bajar(nombre,contenido,tipo){const blob=new Blob(['﻿'+contenido],{type:tipo||'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nombre;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},200);}
   function descargarPlantilla(){
