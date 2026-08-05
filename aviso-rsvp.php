@@ -96,6 +96,18 @@ $sv = function ($k) use ($f) {
   return isset($f[$k]['stringValue']) ? trim($f[$k]['stringValue']) : '';
 };
 
+// El aviso por mail es OPCIONAL y viene APAGADO en todas las invitaciones.
+// Se prende una por una desde el panel ("Habilitar aviso por mail"), porque cada
+// mail enviado tiene costo. Este chequeo va del lado del SERVIDOR a propósito:
+// aunque alguien llame este archivo a mano, sin el interruptor no se manda nada.
+$bv = function ($k) use ($f) {
+  return isset($f[$k]['booleanValue']) && $f[$k]['booleanValue'] === true;
+};
+if (!$bv('c_habilitar-aviso-por-mail')) {
+  echo json_encode(array('ok' => false, 'error' => 'aviso-apagado'));
+  exit;
+}
+
 // el campo del panel: "Email para confirmaciones:"
 $para = $sv('c_email-para-confirmaciones');
 if ($para === '' || !filter_var($para, FILTER_VALIDATE_EMAIL)) {
