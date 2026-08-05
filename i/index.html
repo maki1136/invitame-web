@@ -595,7 +595,13 @@
       <div class="bd"><h3 id="ev2-t">Recepción</h3><div class="sub" id="ev2-s">Masía Mas Badó</div><div class="addr" id="ev2-a">28 nov · 14:00 hs · Juan Vázquez de Mella 525</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
       <a class="btn gh" id="ev2-cal" href="#" target="_blank">Agendar</a></div>
-      <div class="acc-panel"><div class="acc-inner"><iframe id="ev2-map" src="https://www.google.com/maps?q=19.4326,-99.1332&z=15&output=embed" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div></section>
+      <div class="acc-panel"><div class="acc-inner"><iframe id="ev2-map" src="https://www.google.com/maps?q=19.4326,-99.1332&z=15&output=embed" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div>
+    <!-- TERCER lugar (el form viejo permitia hasta 3). Se oculta solo si no lo cargan. -->
+    <div class="evento reveal" style="display:none"><div class="ph" data-imgbg="img_f-ceremonia-3-imagen-jpg-480x320-"></div>
+      <div class="bd"><h3 id="ev3-t">Fiesta</h3><div class="sub" id="ev3-s"></div><div class="addr" id="ev3-a"></div>
+      <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">&#9662;</span></button>
+      <a class="btn gh" id="ev3-cal" href="#" target="_blank">Agendar</a></div>
+      <div class="acc-panel"><div class="acc-inner"><iframe id="ev3-map" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div></section>
 
   <section data-sec="clima" class="sec" id="clima-sec" style="display:none"><div class="kick">El gran día</div><h2>El clima nos acompaña</h2>
     <div class="clima-card reveal">
@@ -1322,7 +1328,7 @@
     })();
     // ---- Dónde y cuándo (editable desde el admin) ----
     const S=(id,v)=>{const e=el(id);if(e&&v)e.textContent=v;};
-    S('dq-h2',ev.evTitulo); S('ev1-t',ev.ev1t); S('ev1-s',ev.ev1sub); S('ev2-t',ev.ev2t); S('ev2-s',ev.ev2sub);
+    S('dq-h2',ev.evTitulo); S('ev1-t',ev.ev1t); S('ev1-s',ev.ev1sub); S('ev2-t',ev.ev2t); S('ev2-s',ev.ev2sub); S('ev3-t',ev.ev3t); S('ev3-s',ev.ev3sub);
     (function(){ var s=document.querySelector('[data-sec="eventos"]'); if(!s)return;
       if(ev.evColor){ var _h=s.querySelector('#dq-h2'), _k=s.querySelector('.kick'); if(_h)_h.style.color=ev.evColor; if(_k)_k.style.color=ev.evColor; s.querySelectorAll('h3').forEach(function(e){e.style.color=ev.evColor;}); }
       if(ev.evTextColor){ s.querySelectorAll('.sub,.addr').forEach(function(e){e.style.color=ev.evTextColor;}); }
@@ -1378,7 +1384,7 @@
       }
       var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ');
       var tipo=(ev.kick||'').trim();          // "Nuestra Boda", "Mis XV", etc.
-      [['ev1-cal','ev1t','ev1sub','ev1dir','fechaEv1'],['ev2-cal','ev2t','ev2sub','ev2dir','fechaEv2']].forEach(function(c,i){
+      [['ev1-cal','ev1t','ev1sub','ev1dir','fechaEv1'],['ev2-cal','ev2t','ev2sub','ev2dir','fechaEv2'],['ev3-cal','ev3t','ev3sub','ev3dir','fechaEv3']].forEach(function(c,i){
         var a=el(c[0]); if(!a) return;
         var titSec=(ev[c[1]]||(i?'Recepción':'Ceremonia'));
         var lugar=(ev[c[2]]||'').trim();
@@ -1579,7 +1585,7 @@
         var hs=(d.getHours()||d.getMinutes())?(' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' hs'):'';
         return d.getDate()+' '+MES[d.getMonth()]+hs;
       }
-      [1,2].forEach(function(n){
+      [1,2,3].forEach(function(n){
         var e=el('ev'+n+'-a'); if(!e) return;
         var fecha=String(ev['ev'+n+'fecha']||'').trim() || lindo(ev['c_ceremonia-'+n+'-fecha']);
         var dir=String(ev['ev'+n+'dir']||'').trim();
@@ -1590,7 +1596,7 @@
     // Antes quedaba "Recepción · Masía Mas Badó · 28 nov" inventado.
     (function(){
       var bloques=document.querySelectorAll('[data-sec="eventos"] .evento');
-      [[1,bloques[0]],[2,bloques[1]]].forEach(function(par){
+      [[1,bloques[0]],[2,bloques[1]],[3,bloques[2]]].forEach(function(par){
         var n=par[0], caja=par[1]; if(!caja) return;
         var hay=(ev['ev'+n+'t']||ev['ev'+n+'sub']||ev['ev'+n+'fecha']||ev['ev'+n+'dir']||ev['ev'+n+'maps']);
         caja.style.display = String(hay||'').trim() ? '' : 'none';
@@ -1610,7 +1616,8 @@
       // Si el campo de Maps no sirve (link corto), se cae a la dirección escrita.
       const dir1=[ev.ev1sub,ev.ev1dir].filter(Boolean).join(', ');
       const dir2=[ev.ev2sub,ev.ev2dir].filter(Boolean).join(', ');
-      [[mapEmbed(ev.ev1maps)||mapEmbed(dir1),'ev1-map'],[mapEmbed(ev.ev2maps)||mapEmbed(dir2),'ev2-map']].forEach(function(par){
+      const dir3=[ev.ev3sub,ev.ev3dir].filter(Boolean).join(', ');
+      [[mapEmbed(ev.ev1maps)||mapEmbed(dir1),'ev1-map'],[mapEmbed(ev.ev2maps)||mapEmbed(dir2),'ev2-map'],[mapEmbed(ev.ev3maps)||mapEmbed(dir3),'ev3-map']].forEach(function(par){
         var u=par[0], f=el(par[1]); if(!f) return;
         var _caja=f.closest('.acc-panel'); var _fila=f.closest('.bd');
         var _btn=_fila&&_fila.querySelector('.acc-btn');
