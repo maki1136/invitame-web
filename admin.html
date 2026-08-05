@@ -811,11 +811,25 @@
   function _cargarFilas(filas){
     let ini=0;
     if(filas.length){const h=(filas[0][0]||'').toString().toLowerCase();if(h.indexOf('nombre')>=0||h.indexOf('name')>=0)ini=1;}
-    let n=0;
+    // Anti-duplicados: si sube o pega la misma lista dos veces (pasa siempre,
+    // porque uno duda de si se cargo), antes se duplicaban TODOS en silencio y
+    // el dia del evento habia el doble de pases. Ahora se saltean y se avisa.
+    const _norm=s=>(s||'').toString().trim().toLowerCase().replace(/\s+/g,' ');
+    const yaEstan=new Set(D.invitados.map(g=>_norm(g.n)));
+    let n=0, repes=[];
     for(let i=ini;i<filas.length;i++){const c=filas[i];if(!c)continue;const nom=(c[0]||'').toString().trim();if(!nom)continue;
+      const k=_norm(nom);
+      if(yaEstan.has(k)){ repes.push(nom); continue; }
+      yaEstan.add(k);
       D.invitados.push({n:nom,p:((c[1]!=null&&c[1]!=='')?c[1]:'1').toString().trim(),m:((c[2]!=null&&c[2]!=='')?c[2]:'-').toString().trim(),restriccion:(c[3]||'').toString().trim(),t:Math.random().toString(36).slice(2,8)});n++;}
     renderGuests();
-    alert(n>0?('✅ Se cargaron '+n+' invitados.\n\nRevisá la lista y tocá "Guardar y publicar" para activar todos los links.'):'No encontré invitados en el archivo. Revisá que la primera columna tenga los nombres.');
+    let msg;
+    if(n>0){ msg='\u2705 Se cargaron '+n+' invitados.';
+      if(repes.length) msg+='\n\n\u21b7 Salte\u00e9 '+repes.length+' que ya estaban en la lista:\n\u00b7 '+repes.slice(0,8).join('\n\u00b7 ')+(repes.length>8?'\n\u2026y m\u00e1s':'');
+      msg+='\n\nRevis\u00e1 la lista y toc\u00e1 "Guardar y publicar" para activar todos los links.';
+    } else if(repes.length){ msg='Esos '+repes.length+' invitados YA estaban cargados, as\u00ed que no agregu\u00e9 ninguno.\n\nSi quer\u00e9s cargarlos igual, cambiales un poco el nombre.';
+    } else { msg='No encontr\u00e9 invitados en el archivo. Revis\u00e1 que la primera columna tenga los nombres.'; }
+    alert(msg);
   }
   function _cargarSheetJS(cb){if(window.XLSX)return cb();const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=cb;s.onerror=function(){alert('No pude leer el Excel (sin internet). Guardalo como CSV y subilo de nuevo.');};document.head.appendChild(s);}
   function importarArchivo(inp){
