@@ -134,10 +134,15 @@ const INV = {
   },
 
   // ---- Confirmación (RSVP) desde la invitación ----
-  async saveRSVP(slug, token, estado, personas) {
-    await updateDoc(doc(db, GU, gid(slug, token)), {
+  async saveRSVP(slug, token, estado, personas, mensaje) {
+    // El mensaje que deja el invitado se GUARDA en su ficha. Antes sólo viajaba al
+    // aviso por mail (que está apagado), así que se perdía.
+    const payload = {
       rsvp: estado, rsvpPersonas: personas ?? null, rsvpAt: serverTimestamp()
-    });
+    };
+    const m = (mensaje == null) ? '' : String(mensaje).slice(0, 500).trim();
+    if (m) payload.rsvpMensaje = m;
+    await updateDoc(doc(db, GU, gid(slug, token)), payload);
     return true;
   },
 

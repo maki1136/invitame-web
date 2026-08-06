@@ -4,316 +4,740 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mi panel · Invítame</title>
-<link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
-<meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root{--uva:#6D1233;--uva2:#49111A;--rosa:#F56770;--cream:#faf6f0;--line:#ece2d8;--ink:#3f3730;--muted:#9a8f88;--ok:#3f7d54;--no:#b0334a}
+  :root{--uva:#6D1233;--uva2:#49111A;--rosa:#F56770;--cream:#faf6f0;--line:#ece2d8;
+        --ink:#3f3730;--muted:#9a8f88;--ok:#3f7d54;--no:#b0334a;--sin:#b9ada3}
   *{box-sizing:border-box}
-  body{margin:0;font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#f7efe9,#f3e9e2);color:var(--ink)}
-  .top{background:var(--uva);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .top .brand{font-weight:900;font-size:21px}
-  .top .brand span{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600}
-  .top .sub{opacity:.85;font-size:13px}
-  .top .der{margin-left:auto;display:flex;gap:8px}
-  .top button{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:20px;padding:8px 15px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer}
-  .top button:hover{background:rgba(255,255,255,.26)}
-  .wrap{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+  body{margin:0;background:var(--cream);font-family:'Nunito',system-ui,sans-serif;color:var(--ink)}
+  a{color:inherit}
 
-  /* ---- entrada ---- */
-  .login{max-width:400px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px 22px;box-shadow:0 10px 30px rgba(73,17,26,.08)}
-  .login h1{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:26px;margin:0 0 4px;text-align:center}
-  .login p{color:var(--muted);font-size:13.5px;text-align:center;margin:0 0 18px;line-height:1.5}
-  label{display:block;font-weight:700;font-size:13px;margin:14px 0 5px}
-  input{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:'Nunito';font-size:15px;background:#fff;color:var(--ink)}
-  .btn{display:block;width:100%;border:0;border-radius:24px;padding:14px;margin-top:18px;font-family:'Nunito';font-weight:900;font-size:15px;cursor:pointer;background:var(--rosa);color:#fff;box-shadow:0 8px 20px rgba(245,103,112,.32)}
-  .btn:disabled{opacity:.6;cursor:default}
-  .msg{background:#fdecec;color:var(--no);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:14px;display:none;line-height:1.5}
-  .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+  /* ---------- login ---------- */
+  .login{max-width:380px;margin:8vh auto;background:#fff;border:1px solid var(--line);
+         border-radius:18px;padding:26px 22px;box-shadow:0 10px 30px rgba(73,17,26,.07)}
+  .login h1{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);
+            font-size:26px;margin:0 0 4px;text-align:center}
+  .login p.sub{text-align:center;color:var(--muted);font-size:13px;margin:0 0 18px}
+  label{display:block;font-size:12px;font-weight:800;color:var(--uva);margin:14px 0 5px}
+  input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;
+        font-family:'Nunito';font-size:14px;background:#fff;color:var(--ink)}
+  .hint{font-size:11px;color:var(--muted);margin-top:4px}
+  .btn{display:block;width:100%;border:0;border-radius:24px;padding:14px;margin-top:18px;
+       font-family:'Nunito';font-weight:900;font-size:15px;cursor:pointer;background:var(--rosa);
+       color:#fff;box-shadow:0 8px 20px rgba(245,103,112,.32)}
+  .err{color:var(--no);font-size:13px;text-align:center;margin-top:12px;min-height:18px}
 
-  /* ---- tarjetas ---- */
-  .cabecera{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:16px}
-  .cabecera h2{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:25px;margin:0}
-  .cabecera .f{color:var(--muted);font-size:13.5px;margin-top:2px}
-  .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px}
-  .num{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-  .num b{display:block;font-size:28px;color:var(--uva);line-height:1.1}
-  .num span{font-size:12.5px;color:var(--muted)}
-  .num.si b{color:var(--ok)} .num.no b{color:var(--no)}
+  /* ---------- estructura ---------- */
+  .top{background:var(--uva);color:#fff;padding:13px 18px;display:flex;align-items:center;gap:12px;
+       position:sticky;top:0;z-index:40}
+  .top .marca{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;flex:1;line-height:1.1}
+  .top .marca small{display:block;font-family:'Nunito';font-size:11px;opacity:.75;font-weight:700}
+  .tbtn{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:18px;padding:8px 14px;
+        font-family:'Nunito';font-weight:800;font-size:12px;cursor:pointer}
+  .burger{display:none;background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:10px;
+          padding:8px 11px;font-size:16px;cursor:pointer;line-height:1}
 
-  .barra{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-  .barra input[type=text]{flex:1;min-width:180px;padding:10px 12px}
-  .filtro{background:#fff;border:1.5px solid var(--line);color:var(--ink);border-radius:20px;padding:8px 14px;font-family:'Nunito';font-weight:800;font-size:12.5px;cursor:pointer}
+  .cuerpo{display:flex;align-items:flex-start;gap:0}
+  .lat{width:214px;flex:0 0 214px;background:#fff;border-right:1px solid var(--line);
+       min-height:calc(100vh - 52px);padding:16px 0}
+  .lat a{display:flex;align-items:center;gap:10px;padding:11px 18px;font-size:13.5px;
+         font-weight:700;color:var(--ink);text-decoration:none;cursor:pointer;border-left:3px solid transparent}
+  .lat a:hover{background:#fbf7f2}
+  .lat a.on{background:#fbf1f2;color:var(--uva);border-left-color:var(--rosa)}
+  .lat .ico{width:18px;text-align:center;opacity:.8}
+  .lat .sep{font-size:10px;font-weight:900;color:var(--muted);letter-spacing:.09em;
+            padding:16px 18px 6px;text-transform:uppercase}
+  .main{flex:1;min-width:0;padding:20px 22px 60px}
+
+  .cabecera{margin-bottom:16px}
+  .cabecera h2{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);
+               font-size:26px;margin:0}
+  .cabecera .fecha{color:var(--muted);font-size:13px;margin-top:2px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+  .card h3{margin:0 0 12px;font-size:15px;color:var(--uva);font-weight:900}
+
+  .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin-bottom:18px}
+  .num{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px}
+  .num b{display:block;font-size:27px;color:var(--uva);line-height:1.15;font-weight:900}
+  .num span{font-size:11.5px;color:var(--muted);font-weight:700}
+  .num .barra{height:3px;border-radius:2px;background:#f0e8e0;margin-top:7px;overflow:hidden}
+  .num .barra i{display:block;height:100%;background:var(--ok)}
+  .num.rojo .barra i{background:var(--no)}
+
+  .barrita{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .filtro{background:#fff;border:1px solid var(--line);border-radius:18px;padding:7px 14px;
+          font-family:'Nunito';font-weight:800;font-size:12.5px;cursor:pointer;color:var(--ink)}
   .filtro.on{background:var(--uva);border-color:var(--uva);color:#fff}
-  .lnk{background:none;border:0;color:var(--uva);font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer;text-decoration:underline}
+  .accion{background:var(--rosa);border:0;color:#fff;border-radius:18px;padding:8px 15px;
+          font-family:'Nunito';font-weight:800;font-size:12.5px;cursor:pointer}
+  .accion.gris{background:#efe7de;color:var(--uva2)}
+  .accion.peligro{background:#fdecef;color:var(--no)}
+  .lnk{background:none;border:0;color:var(--uva);font-family:'Nunito';font-weight:800;
+       font-size:12.5px;cursor:pointer;text-decoration:underline}
+  .buscador{flex:1;min-width:180px;max-width:320px}
+  .buscador input{padding:8px 12px;border-radius:18px}
 
-  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  th{text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:11px 13px;border-bottom:1px solid var(--line);font-weight:800}
-  td{padding:12px 13px;border-bottom:1px solid #f4ece4;font-size:14.5px;vertical-align:top}
+  /* ---------- tabla ---------- */
+  .tablaWrap{background:#fff;border:1px solid var(--line);border-radius:14px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+  th{text-align:left;padding:11px 12px;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+     color:var(--muted);border-bottom:1px solid var(--line);white-space:nowrap;font-weight:900}
+  td{padding:9px 12px;border-bottom:1px solid #f5efe8;vertical-align:middle}
   tr:last-child td{border-bottom:0}
-  .et{display:inline-block;border-radius:20px;padding:3px 11px;font-size:12px;font-weight:800;white-space:nowrap}
-  .et.si{background:#e6f2ea;color:var(--ok)}
-  .et.no{background:#fdecec;color:var(--no)}
-  .et.pend{background:#f2ede6;color:var(--muted)}
-  .men{color:var(--muted);font-size:13px;font-style:italic;margin-top:4px;line-height:1.45}
-  .vacio{text-align:center;color:var(--muted);padding:26px;font-size:14px}
-  .cargando{text-align:center;color:var(--muted);padding:30px}
-  @media(max-width:560px){
-    .ocultar-chico{display:none}
-    td,th{padding:10px 9px;font-size:13.5px}
-  }
+  tr.par td{background:#fdfaf7}
+  .mini{width:56px;padding:5px 7px;border-radius:8px;text-align:center;font-weight:800;font-size:13px}
+  .chip{display:inline-block;border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:900}
+  .chip.si{background:#e8f3ec;color:var(--ok)}
+  .chip.no{background:#fdecef;color:var(--no)}
+  .chip.sin{background:#f2ede8;color:var(--muted)}
+  .chip.azul{background:#e9f0fb;color:#3a5f97}
+  .lapiz{background:none;border:0;cursor:pointer;color:var(--muted);font-size:14px;padding:0 6px 0 0}
+  .lapiz:hover{color:var(--uva)}
+  .comp{display:flex;gap:7px}
+  .comp button{background:none;border:0;cursor:pointer;font-size:15px;opacity:.55;padding:0}
+  .comp button:hover{opacity:1}
+  .vacio{padding:26px;text-align:center;color:var(--muted);font-size:13.5px}
 </style>
 </head>
+<style>
+  /* ---------- mesas ---------- */
+  .refs{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:12.5px;
+        color:var(--muted);font-weight:700}
+  .refs i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .grillaMesas{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:14px}
+  .mesa{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+        display:flex;flex-direction:column}
+  .mesa .cab{padding:10px 13px;color:#fff;display:flex;align-items:center;gap:8px;font-weight:900;font-size:13.5px}
+  .mesa .cab .n{flex:1;background:none;border:0;color:#fff;font-family:'Nunito';font-weight:900;
+                font-size:13.5px;padding:2px 4px;border-radius:6px;min-width:0}
+  .mesa .cab .n:focus{background:rgba(255,255,255,.2);outline:0}
+  .mesa .cab .cuenta{font-size:12px;opacity:.9;white-space:nowrap;font-weight:800}
+  .mesa .cab .x{background:none;border:0;color:#fff;opacity:.7;cursor:pointer;font-size:15px;padding:0 2px}
+  .mesa .cab .x:hover{opacity:1}
+  .mesa.sinmesa .cab{background:#5b8ac9}
+  .mesa .cab{background:var(--rosa)}
+  .mesa.llena .cab{background:#c0392b}
+  .zona{padding:8px;min-height:74px;flex:1;background:#fff}
+  .zona.sobre{background:#fdf3f4;outline:2px dashed var(--rosa);outline-offset:-6px}
+  .pers{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:9px;
+        background:#fdfaf7;border:1px solid #f3ece5;margin-bottom:6px;cursor:grab;font-size:13px}
+  .pers:last-child{margin-bottom:0}
+  .pers.arrastrando{opacity:.4}
+  .pers .pto{width:11px;height:11px;border-radius:50%;flex:0 0 11px}
+  .pers .nom{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+  .pers .cant{font-weight:900;color:var(--uva)}
+  .pers .mover{color:var(--muted);font-size:13px}
+  .mesaVacia{color:var(--muted);font-size:12px;text-align:center;padding:14px 0;font-style:italic}
+
+  /* ---------- mensajes ---------- */
+  .grillaMsj{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px}
+  .msj{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;
+       display:flex;flex-direction:column}
+  .msj .de{font-weight:900;font-size:14px;color:var(--uva2);margin-bottom:7px}
+  .msj .txt{font-style:italic;color:#6b6058;font-size:13.5px;line-height:1.5;flex:1}
+  .msj .pie{margin-top:11px;font-size:11.5px;color:var(--muted);font-weight:700}
+
+  /* ---------- ventanas ---------- */
+  .fondo{position:fixed;inset:0;background:rgba(73,17,26,.5);display:flex;align-items:flex-start;
+         justify-content:center;padding:24px 16px;overflow:auto;z-index:60}
+  .vent{background:#fff;border-radius:16px;max-width:430px;width:100%;padding:22px;margin:auto}
+  .vent h3{margin:0 0 4px;color:var(--uva);font-size:18px;font-weight:900}
+  .vent .fila{display:flex;gap:10px}
+  .vent .fila>div{flex:1}
+  .vent .pie{display:flex;gap:10px;margin-top:20px}
+  .vent .pie .btn{margin-top:0}
+  .vent .btn.gris{background:#efe7de;color:var(--uva2);box-shadow:none}
+
+  /* ---------- hoja de QR ---------- */
+  .hojaQR{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px}
+  .hojaQR table{min-width:0}
+  .hojaQR td{padding:14px 12px;vertical-align:middle}
+  .hojaQR img{display:block;width:130px;height:130px}
+  .hojaQR .lk{font-size:11.5px;color:var(--muted);word-break:break-all}
+
+  .aviso{background:#FFF4E5;border:1px solid #F0C48A;color:#7A4A00;border-radius:10px;
+         padding:10px 13px;font-size:12.5px;line-height:1.45;margin-bottom:14px}
+  .guardando{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;background:var(--uva2);
+             color:#fff;padding:9px 18px;border-radius:22px;font-size:12.5px;font-weight:800;
+             z-index:70;opacity:0;transition:opacity .2s;pointer-events:none}
+  .guardando.ver{opacity:1}
+
+  @media(max-width:820px){
+    .burger{display:block}
+    .lat{position:fixed;left:0;top:52px;bottom:0;z-index:50;transform:translateX(-100%);
+         transition:transform .22s;box-shadow:0 0 30px rgba(0,0,0,.18);min-height:0;overflow:auto}
+    .lat.abierto{transform:none}
+    .main{padding:16px 14px 60px}
+    .ocultar-chico{display:none}
+  }
+  @media print{
+    .top,.lat,.barrita,.aviso{display:none!important}
+    .main{padding:0}
+    .hojaQR{border:0}
+  }
+</style>
 <body>
 
-<!-- ====== ENTRADA ====== -->
+<!-- ======================= LOGIN ======================= -->
 <div id="entrar">
   <div class="login">
     <h1>Mi panel</h1>
-    <p>Mirá quién confirmó su asistencia a tu evento.</p>
-    <label>Dirección de tu invitación</label>
-    <input type="text" id="slug" placeholder="maria-y-diego" autocomplete="off" autocapitalize="off" spellcheck="false">
-    <div class="hint">Es lo que va después de <b>/i/?e=</b> en el link de tu invitación.</div>
-    <label>Tu clave</label>
-    <input type="password" id="clave" placeholder="La clave que te dimos" autocomplete="current-password">
-    <button class="btn" id="btn-entrar">Entrar</button>
-    <div class="msg" id="msg"></div>
-    <p class="hint" style="text-align:center;margin-top:18px">¿No tenés la clave? Escribinos y te la pasamos.</p>
+    <p class="sub">Mirá quién confirmó y armá tus mesas.</p>
+    <label for="slug">Dirección de tu invitación</label>
+    <input type="text" id="slug" placeholder="maria-y-diego" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <div class="hint">Es lo que va después de /i/?e= en el link de tu invitación.</div>
+    <label for="clave">Tu clave</label>
+    <input type="password" id="clave" placeholder="La clave que te dimos">
+    <button class="btn" id="btnEntrar">Entrar</button>
+    <div class="err" id="errLogin"></div>
   </div>
 </div>
 
-<!-- ====== PANEL ====== -->
+<!-- ======================= PANEL ======================= -->
 <div id="panel" style="display:none">
   <div class="top">
-    <div>
-      <div class="brand">inv<span>ítame!</span></div>
-      <div class="sub">Mi panel de invitados</div>
-    </div>
-    <div class="der">
-      <button id="btn-refrescar">↻ Actualizar</button>
-      <button id="btn-salir">Salir</button>
-    </div>
+    <button class="burger" id="burger">&#9776;</button>
+    <div class="marca">invítame!<small id="topSub">Mi panel</small></div>
+    <button class="tbtn" id="btnRecargar">&#8635; Actualizar</button>
+    <button class="tbtn" id="btnSalir">Salir</button>
   </div>
 
-  <div class="wrap">
-    <div class="cabecera">
-      <h2 id="ev-nombres">—</h2>
-      <div class="f" id="ev-fecha"></div>
-    </div>
+  <div class="cuerpo">
+    <nav class="lat" id="lat">
+      <div class="sep">Resumen</div>
+      <a data-vista="resumen" class="on"><span class="ico">&#9788;</span> Panel de control</a>
+      <div class="sep">Invitados</div>
+      <a data-vista="invitados"><span class="ico">&#128101;</span> Personas y pases</a>
+      <a data-vista="mesas"><span class="ico">&#127869;</span> Mesas</a>
+      <a data-vista="mensajes"><span class="ico">&#9993;</span> Mensajes</a>
+      <div class="sep">Herramientas</div>
+      <a data-vista="qr"><span class="ico">&#9635;</span> QR para imprimir</a>
+      <a data-vista="opciones"><span class="ico">&#9881;</span> Opciones</a>
+      <div class="sep">&nbsp;</div>
+      <a id="verInv"><span class="ico">&#128065;</span> Ver mi invitación</a>
+    </nav>
 
-    <div class="nums">
-      <div class="num"><b id="n-inv">0</b><span>Invitaciones enviadas</span></div>
-      <div class="num"><b id="n-pases">0</b><span>Personas invitadas</span></div>
-      <div class="num si"><b id="n-si">0</b><span>Confirmaron</span></div>
-      <div class="num no"><b id="n-no">0</b><span>No pueden</span></div>
-      <div class="num"><b id="n-pend">0</b><span>Sin responder</span></div>
-      <div class="num si"><b id="n-personas">0</b><span>Personas que vienen</span></div>
-    </div>
-
-    <div class="barra">
-      <input type="text" id="buscar" placeholder="Buscar por nombre o mesa…">
-      <button class="filtro on" data-f="todos">Todos</button>
-      <button class="filtro" data-f="si">Confirmaron</button>
-      <button class="filtro" data-f="no">No pueden</button>
-      <button class="filtro" data-f="pend">Sin responder</button>
-      <button class="lnk" id="btn-csv">Descargar lista</button>
-    </div>
-
-    <div id="tabla"><div class="cargando">Cargando tu lista…</div></div>
+    <main class="main">
+      <div class="cabecera">
+        <h2 id="ttNombres">…</h2>
+        <div class="fecha" id="ttFecha"></div>
+      </div>
+      <div id="vista"></div>
+    </main>
   </div>
 </div>
-
+<div class="guardando" id="toast">Guardado</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   // Config pública del proyecto (la apiKey web NO es secreta: lo que protege son las reglas).
   const firebaseConfig = {
     apiKey: "AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc",
     authDomain: "invitame-9b51f.firebaseapp.com",
     projectId: "invitame-9b51f",
-    storageBucket: "invitame-9b51f.firebasestorage.app",
+    storageBucket: "invitame-9b51f.appspot.com",
     messagingSenderId: "1060290054006",
     appId: "1:1060290054006:web:938ea367197d2a6462dc57"
   };
   const db = getFirestore(initializeApp(firebaseConfig));
 
-  const $ = id => document.getElementById(id);
-  const esc = s => String(s==null?'':s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-  const limpiarSlug = s => String(s||'').trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  const $  = id => document.getElementById(id);
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const limpiarSlug = s => String(s||'').trim().toLowerCase()
+    .replace(/^https?:\/\/[^/]+\//,'').replace(/^i\/\?e=/,'').replace(/[^a-z0-9-]/g,'');
 
-  let ESTADO = { slug:'', clave:'', evento:null, invitados:[], filtro:'todos' };
+  // ---------------- estado ----------------
+  let SLUG='', CLAVE='', PANEL=null, GENTE=[], VISTA='resumen', FILTRO='todos', BUSCA='';
+  let arrastrando = null;
 
-  function aviso(t){ const m=$('msg'); m.textContent=t; m.style.display=t?'block':'none'; }
+  const num = v => { const n=parseInt(v,10); return isNaN(n)?0:n; };
+  const personasDe = g => (g.rsvp==='confirmado')
+        ? (num(g.rsvpPersonas) || num(g.pases))
+        : (g.rsvp==='rechazado' ? 0 : num(g.pases));
+  const estadoDe = g => g.rsvp==='confirmado' ? 'si' : (g.rsvp==='rechazado' ? 'no' : 'sin');
+  const colorDe  = e => e==='si' ? 'var(--ok)' : (e==='no' ? 'var(--no)' : 'var(--sin)');
+  const linkDe   = g => location.origin + '/i/?e=' + encodeURIComponent(SLUG) + '&g=' + encodeURIComponent(g.token);
 
-  // ---- ENTRAR ----
-  // La clave no se compara en el navegador: es parte de la DIRECCIÓN del documento.
-  // Si la clave está mal, el documento sencillamente no existe. Así nadie puede
-  // "mirar el código" para averiguarla.
-  async function entrar(slug, clave){
-    const ref = doc(db, 'inv_paneles', slug + '__' + clave);
-    const snap = await getDoc(ref);
+  function toast(txt){ const t=$('toast'); t.textContent=txt||'Guardado'; t.classList.add('ver');
+    clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('ver'),1600); }
+
+  // ---------------- datos ----------------
+  async function traerPanel(slug, clave){
+    const snap = await getDoc(doc(db,'inv_paneles', slug + '__' + clave));
     if(!snap.exists()) return null;
     return snap.data();
   }
-
-  async function traerInvitados(slug, tokens){
-    const out = [];
-    for(const t of tokens){
+  async function traerGente(slug, tokens){
+    const out=[];
+    for(const t of (tokens||[])){
       try{
-        const s = await getDoc(doc(db, 'inv_invitados', slug + '__' + t));
-        if(s.exists()) out.push(Object.assign({ _t:t }, s.data()));
-      }catch(e){ /* si uno falla, seguimos con el resto */ }
+        const s = await getDoc(doc(db,'inv_invitados', slug + '__' + t));
+        if(s.exists()){ const d=s.data(); if(d.activo!==false) out.push(Object.assign({token:t}, d)); }
+      }catch(e){}
     }
     return out;
   }
-
-  function estadoDe(g){
-    const r = String(g.rsvp||'').toLowerCase();
-    if(r === 'confirmado') return 'si';
-    if(r === 'rechazado')  return 'no';
-    return 'pend';
+  // Los novios NO escriben en la ficha de cada invitado (eso lo protege la regla).
+  // Todo lo que tocan queda guardado en SU propio documento de panel, cuyo id lleva
+  // la clave adentro: sin la clave, ese documento no se puede ni encontrar ni tocar.
+  async function guardarPanel(cambios){
+    try{
+      await updateDoc(doc(db,'inv_paneles', SLUG + '__' + CLAVE),
+        Object.assign({}, cambios, {actualizado:new Date().toISOString()}));
+      Object.assign(PANEL, cambios);
+      toast('Guardado');
+      return true;
+    }catch(e){ console.error(e); toast('No se pudo guardar'); return false; }
   }
 
+  // ---------------- mesas ----------------
+  const mesasDe   = () => Array.isArray(PANEL.mesas) ? PANEL.mesas : [];
+  const asigDe    = () => (PANEL.asig && typeof PANEL.asig==='object') ? PANEL.asig : {};
+  const mesaDe    = g => { const a=asigDe(); if(a[g.token]) return a[g.token];
+                           return g.mesa ? String(g.mesa) : ''; };
+  const enMesa    = id => GENTE.filter(g => mesaDe(g)===String(id));
+  const sinMesa   = () => GENTE.filter(g => !mesaDe(g));
+  const sumaPers  = arr => arr.reduce((s,g)=>s+personasDe(g),0);
+
+  // ---------------- cuentas ----------------
+  function cuentas(){
+    const c={inv:GENTE.length, pers:0, si:0, no:0, sin:0, vienen:0, mesas:mesasDe().length};
+    GENTE.forEach(g=>{
+      c.pers += num(g.pases);
+      const e=estadoDe(g);
+      if(e==='si'){ c.si++; c.vienen += personasDe(g); }
+      else if(e==='no') c.no++;
+      else c.sin++;
+    });
+    return c;
+  }
+
+  // =====================================================================
+  //  VISTAS
+  // =====================================================================
   function pintar(){
-    const ev = ESTADO.evento || {};
-    $('ev-nombres').textContent = ev.nombres || ESTADO.slug;
-    $('ev-fecha').textContent   = ev.fechaTexto || '';
+    $('ttNombres').textContent = PANEL.nombres || SLUG;
+    $('ttFecha').textContent   = PANEL.fechaTexto || '';
+    $('topSub').textContent    = ({resumen:'Panel de control', invitados:'Personas y pases',
+      mesas:'Mesas', mensajes:'Mensajes', qr:'QR para imprimir', opciones:'Opciones'})[VISTA] || 'Mi panel';
+    document.querySelectorAll('.lat a[data-vista]').forEach(a=>
+      a.classList.toggle('on', a.dataset.vista===VISTA));
+    ({resumen:vResumen, invitados:vInvitados, mesas:vMesas,
+      mensajes:vMensajes, qr:vQR, opciones:vOpciones}[VISTA] || vResumen)();
+  }
 
-    const gs = ESTADO.invitados;
-    const cont = { si:0, no:0, pend:0 };
-    let pases = 0, personasVienen = 0;
-    gs.forEach(g => {
-      const e = estadoDe(g); cont[e]++;
-      pases += parseInt(g.usosMax || g.pases || 0, 10) || 0;
-      if(e === 'si') personasVienen += parseInt(g.rsvpPersonas || g.usosMax || g.pases || 0, 10) || 0;
-    });
-    $('n-inv').textContent      = gs.length;
-    $('n-pases').textContent    = pases;
-    $('n-si').textContent       = cont.si;
-    $('n-no').textContent       = cont.no;
-    $('n-pend').textContent     = cont.pend;
-    $('n-personas').textContent = personasVienen;
+  function bloqueNumeros(){
+    const c=cuentas(), t=c.si+c.no+c.sin || 1;
+    return '<div class="nums">'+
+      '<div class="num"><b>'+c.inv+'</b><span>Invitaciones enviadas</span></div>'+
+      '<div class="num"><b>'+c.pers+'</b><span>Personas invitadas</span></div>'+
+      '<div class="num"><b>'+c.si+'</b><span>Confirmaron</span><div class="barra"><i style="width:'+(c.si/t*100)+'%"></i></div></div>'+
+      '<div class="num rojo"><b>'+c.no+'</b><span>No pueden</span><div class="barra"><i style="width:'+(c.no/t*100)+'%"></i></div></div>'+
+      '<div class="num"><b>'+c.sin+'</b><span>Sin responder</span></div>'+
+      '<div class="num"><b>'+c.vienen+'</b><span>Personas que vienen</span></div>'+
+      '<div class="num"><b>'+c.mesas+'</b><span>Mesas armadas</span></div>'+
+    '</div>';
+  }
 
-    const q = ($('buscar').value || '').trim().toLowerCase();
-    const lista = gs.filter(g => {
-      if(ESTADO.filtro !== 'todos' && estadoDe(g) !== ESTADO.filtro) return false;
+  // ---------- 1. RESUMEN ----------
+  function vResumen(){
+    const conMsj = GENTE.filter(g=>g.rsvpMensaje).slice(0,6);
+    const respondieron = GENTE.filter(g=>estadoDe(g)!=='sin').slice(0,12);
+    $('vista').innerHTML = bloqueNumeros() +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">'+
+        '<div class="card"><h3>Mensajes que te dejaron</h3>'+
+          (conMsj.length
+            ? conMsj.map(g=>'<div style="margin-bottom:12px"><div style="font-weight:900;font-size:13.5px">'+esc(g.nombre)+'</div>'+
+                '<div style="color:#6b6058;font-size:13px;font-style:italic">'+esc(g.rsvpMensaje)+'</div></div>').join('')
+              + (GENTE.filter(g=>g.rsvpMensaje).length>6 ? '<button class="lnk" data-ir="mensajes">Ver todos</button>' : '')
+            : '<div class="vacio">Todavía no te dejaron mensajes.</div>')+
+        '</div>'+
+        '<div class="card"><h3>Quiénes ya respondieron</h3>'+
+          (respondieron.length
+            ? '<div>'+respondieron.map(g=>{const e=estadoDe(g);
+                return '<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #f5efe8">'+
+                  '<span style="width:9px;height:9px;border-radius:50%;background:'+colorDe(e)+'"></span>'+
+                  '<span style="flex:1;font-weight:700;font-size:13.5px">'+esc(g.nombre)+'</span>'+
+                  '<span class="chip '+e+'">'+(e==='si'?'Asistirá':'No asistirá')+'</span></div>';}).join('')+'</div>'+
+              '<button class="lnk" data-ir="invitados" style="margin-top:10px">Ver todos</button>'
+            : '<div class="vacio">Todavía no respondió nadie.</div>')+
+        '</div>'+
+      '</div>';
+  }
+
+  // ---------- 2. INVITADOS ----------
+  function filtrada(){
+    const q=BUSCA.trim().toLowerCase();
+    return GENTE.filter(g=>{
+      const e=estadoDe(g);
+      if(FILTRO==='si'&&e!=='si')return false;
+      if(FILTRO==='no'&&e!=='no')return false;
+      if(FILTRO==='sin'&&e!=='sin')return false;
       if(!q) return true;
-      return (String(g.nombre||g.n||'') + ' ' + String(g.mesa||g.m||'')).toLowerCase().indexOf(q) > -1;
+      return (String(g.nombre||'')+' '+mesaDe(g)).toLowerCase().indexOf(q)>-1;
     });
+  }
+  function vInvitados(){
+    const lista=filtrada();
+    $('vista').innerHTML = bloqueNumeros()+
+      '<div class="barrita">'+
+        '<div class="buscador"><input type="text" id="buscar" placeholder="Buscar por nombre o mesa…" value="'+esc(BUSCA)+'"></div>'+
+        '<button class="filtro'+(FILTRO==='todos'?' on':'')+'" data-f="todos">Todos</button>'+
+        '<button class="filtro'+(FILTRO==='si'?' on':'')+'" data-f="si">Confirmaron</button>'+
+        '<button class="filtro'+(FILTRO==='no'?' on':'')+'" data-f="no">No pueden</button>'+
+        '<button class="filtro'+(FILTRO==='sin'?' on':'')+'" data-f="sin">Sin responder</button>'+
+        '<button class="lnk" id="bajar">Descargar lista</button>'+
+      '</div>'+
+      '<div class="tablaWrap">'+
+        (lista.length ? '<table><thead><tr>'+
+          '<th>Invitado</th><th>Personas</th><th>Mesa</th><th class="ocultar-chico">Usos</th>'+
+          '<th>Estado</th><th class="ocultar-chico">Mensaje</th><th>Compartir</th>'+
+        '</tr></thead><tbody>'+ lista.map((g,i)=>{
+          const e=estadoDe(g);
+          return '<tr class="'+(i%2?'par':'')+'">'+
+            '<td><button class="lapiz" data-ver="'+esc(g.token)+'" title="Ver ficha">&#9998;</button><b>'+esc(g.nombre)+'</b></td>'+
+            '<td>'+personasDe(g)+' <span style="color:var(--muted);font-size:11.5px">de '+num(g.pases)+'</span></td>'+
+            '<td><input class="mini mesaInput" data-tok="'+esc(g.token)+'" value="'+esc(mesaDe(g))+'" placeholder="—"></td>'+
+            '<td class="ocultar-chico">'+num(g.usos)+'/'+(num(g.usosMax)||num(g.pases))+'</td>'+
+            '<td><span class="chip '+e+'">'+(e==='si'?'Confirmó ✓':(e==='no'?'No puede':'Sin responder'))+'</span></td>'+
+            '<td class="ocultar-chico" style="max-width:210px;color:#6b6058;font-size:12.5px">'+
+              (g.rsvpMensaje?'<span title="'+esc(g.rsvpMensaje)+'">'+esc(String(g.rsvpMensaje).slice(0,48))+(String(g.rsvpMensaje).length>48?'…':'')+'</span>':'')+'</td>'+
+            '<td><div class="comp">'+
+              '<button data-wa="'+esc(g.token)+'" title="Enviar por WhatsApp">&#128241;</button>'+
+              '<button data-tg="'+esc(g.token)+'" title="Enviar por Telegram">&#9992;</button>'+
+              '<button data-cp="'+esc(g.token)+'" title="Copiar el link">&#128203;</button>'+
+            '</div></td></tr>';
+        }).join('')+'</tbody></table>'
+        : '<div class="vacio">No hay invitados que coincidan.</div>')+
+      '</div>'+
+      '<div class="hint" style="margin-top:10px">Podés cambiar el número de mesa escribiéndolo directo en la tabla. '+
+        'Para cambiar nombres o cantidad de personas, escribile a quien te armó la invitación.</div>';
+  }
 
-    if(!lista.length){
-      $('tabla').innerHTML = '<div class="vacio">' +
-        (gs.length ? 'No hay invitados con ese filtro.' : 'Todavía no hay invitados cargados en tu evento.') +
-        '</div>';
+  // ---------- 3. MESAS ----------
+  function tarjetaMesa(id, titulo, gente, esSin, cap){
+    const total = sumaPers(gente);
+    const llena = (!esSin && cap>0 && total>cap);
+    return '<div class="mesa'+(esSin?' sinmesa':'')+(llena?' llena':'')+'" data-mesa="'+esc(id)+'">'+
+      '<div class="cab">'+
+        (esSin ? '<span class="n" style="padding-left:0">Sin mesa</span>'
+               : '<input class="n" data-nombre="'+esc(id)+'" value="'+esc(titulo)+'">')+
+        '<span class="cuenta">'+total+' '+(total===1?'persona':'personas')+'</span>'+
+        (esSin ? '' : '<button class="x" data-borrar="'+esc(id)+'" title="Quitar esta mesa">&times;</button>')+
+      '</div>'+
+      '<div class="zona" data-zona="'+esc(id)+'">'+
+        (gente.length ? gente.map(g=>{const e=estadoDe(g);
+          return '<div class="pers" draggable="true" data-tok="'+esc(g.token)+'">'+
+            '<span class="pto" style="background:'+colorDe(e)+'"></span>'+
+            '<span class="nom">'+esc(g.nombre)+'</span>'+
+            '<span class="cant">'+personasDe(g)+'</span>'+
+            '<span class="mover">&#10021;</span></div>';}).join('')
+          : '<div class="mesaVacia">— vacía —</div>')+
+      '</div></div>';
+  }
+  function vMesas(){
+    const cap = num(PANEL.capacidad) || 10;
+    const ms = mesasDe();
+    $('vista').innerHTML =
+      '<div class="barrita">'+
+        '<button class="accion" id="nuevaMesa">+ Nueva mesa</button>'+
+        '<button class="accion gris" id="bajarMesas">Descargar</button>'+
+        '<span style="font-size:12.5px;color:var(--muted);font-weight:700;margin-left:6px">Lugares por mesa</span>'+
+        '<input type="number" min="1" id="capMesa" value="'+cap+'" style="width:64px;padding:7px;border-radius:10px">'+
+      '</div>'+
+      '<div class="refs">'+
+        '<span><i style="background:var(--ok)"></i>Asistirán</span>'+
+        '<span><i style="background:var(--no)"></i>No asistirán</span>'+
+        '<span><i style="background:var(--sin)"></i>Sin confirmar</span>'+
+      '</div>'+
+      '<div class="aviso">Arrastrá cada invitado a su mesa. Se guarda solo. '+
+        'Si una mesa se pasa de lugares, se pone roja.</div>'+
+      '<div class="grillaMesas">'+
+        tarjetaMesa('', '', sinMesa(), true, cap)+
+        ms.map(m=>tarjetaMesa(m.id, m.nombre, enMesa(m.id), false, cap)).join('')+
+      '</div>';
+    conectarArrastre();
+  }
+  function conectarArrastre(){
+    document.querySelectorAll('.pers').forEach(p=>{
+      p.addEventListener('dragstart', e=>{ arrastrando=p.dataset.tok; p.classList.add('arrastrando');
+        try{ e.dataTransfer.setData('text/plain', p.dataset.tok); e.dataTransfer.effectAllowed='move'; }catch(_){} });
+      p.addEventListener('dragend', ()=>{ arrastrando=null; p.classList.remove('arrastrando'); });
+      // en el celular no hay arrastre: al tocar, se elige la mesa de una lista
+      p.addEventListener('click', ()=>{ if(window.matchMedia('(max-width:820px)').matches) elegirMesa(p.dataset.tok); });
+    });
+    document.querySelectorAll('.zona').forEach(z=>{
+      z.addEventListener('dragover', e=>{ e.preventDefault(); z.classList.add('sobre'); });
+      z.addEventListener('dragleave', ()=> z.classList.remove('sobre'));
+      z.addEventListener('drop', e=>{ e.preventDefault(); z.classList.remove('sobre');
+        const tok = arrastrando || (e.dataTransfer && e.dataTransfer.getData('text/plain'));
+        if(tok) moverA(tok, z.dataset.zona); });
+    });
+  }
+  async function moverA(token, mesaId){
+    const a = Object.assign({}, asigDe());
+    if(mesaId) a[token] = String(mesaId); else delete a[token];
+    PANEL.asig = a; vMesas();
+    await guardarPanel({asig:a});
+  }
+  function elegirMesa(token){
+    const ms = mesasDe();
+    if(!ms.length){ alert('Primero creá una mesa con "+ Nueva mesa".'); return; }
+    const g = GENTE.find(x=>x.token===token); if(!g) return;
+    const op = ms.map((m,i)=>(i+1)+') '+m.nombre).join('\n');
+    const r = prompt('¿A qué mesa va '+g.nombre+'?\n\n'+op+'\n\n0) Sacarlo de la mesa', '1');
+    if(r===null) return;
+    const n = parseInt(r,10);
+    if(n===0) return moverA(token,'');
+    if(n>=1 && n<=ms.length) moverA(token, ms[n-1].id);
+  }
+  async function nuevaMesa(){
+    const ms = mesasDe().slice();
+    const id = 'm'+Date.now().toString(36);
+    ms.push({id, nombre:'Mesa '+(ms.length+1)});
+    PANEL.mesas = ms; vMesas();
+    await guardarPanel({mesas:ms});
+  }
+  async function borrarMesa(id){
+    const gente = enMesa(id);
+    if(gente.length && !confirm('Esa mesa tiene '+gente.length+' invitado(s). Se van a quedar sin mesa. ¿Seguimos?')) return;
+    const ms = mesasDe().filter(m=>m.id!==id);
+    const a = Object.assign({}, asigDe());
+    Object.keys(a).forEach(k=>{ if(a[k]===String(id)) delete a[k]; });
+    PANEL.mesas=ms; PANEL.asig=a; vMesas();
+    await guardarPanel({mesas:ms, asig:a});
+  }
+  async function renombrarMesa(id, nombre){
+    const ms = mesasDe().map(m => m.id===id ? Object.assign({},m,{nombre:nombre||'Mesa'}) : m);
+    PANEL.mesas = ms;
+    await guardarPanel({mesas:ms});
+  }
+
+  // ---------- 4. MENSAJES ----------
+  function vMensajes(){
+    const con = GENTE.filter(g=>g.rsvpMensaje);
+    $('vista').innerHTML = con.length
+      ? '<div class="grillaMsj">'+con.map(g=>{const e=estadoDe(g);
+          return '<div class="msj"><div class="de">'+esc(g.nombre)+'</div>'+
+            '<div style="margin-bottom:9px"><span class="chip '+e+'">'+
+              (e==='si'?'Asistirá':(e==='no'?'No asistirá':'Sin responder'))+'</span></div>'+
+            '<div class="txt">“'+esc(g.rsvpMensaje)+'”</div>'+
+            '<div class="pie">'+esc(fechaCorta(g.rsvpAt))+'</div></div>';}).join('')+'</div>'
+      : '<div class="card"><div class="vacio">Todavía no te dejaron mensajes.<br>'+
+        '<span style="font-size:12.5px">Aparecen acá cuando un invitado escribe algo al confirmar.</span></div></div>';
+  }
+  function fechaCorta(ts){
+    try{
+      let d = null;
+      if(!ts) return '';
+      if(ts.seconds) d = new Date(ts.seconds*1000);
+      else if(ts.toDate) d = ts.toDate();
+      else d = new Date(ts);
+      if(isNaN(d.getTime())) return '';
+      return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+
+             ' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    }catch(e){ return ''; }
+  }
+
+  // ---------- 5. QR PARA IMPRIMIR ----------
+  function vQR(){
+    $('vista').innerHTML =
+      '<div class="barrita"><button class="accion" id="imprimir">Imprimir esta hoja</button></div>'+
+      '<div class="aviso">Una fila por invitado, con su link y su código. Sirve para imprimir '+
+        'y repartir en mano, o para pegar en un sobre.</div>'+
+      '<div class="hojaQR"><table><thead><tr><th>Invitado</th><th>Su link</th><th>Código</th></tr></thead><tbody>'+
+        GENTE.map(g=>'<tr><td><b>'+esc(g.nombre)+'</b><br><span style="color:var(--muted);font-size:12px">'+
+          num(g.pases)+' '+(num(g.pases)===1?'lugar':'lugares')+'</span></td>'+
+          '<td class="lk">'+esc(linkDe(g))+'</td>'+
+          '<td><div class="qrbox" data-qr="'+esc(linkDe(g))+'"></div></td></tr>').join('')+
+      '</tbody></table></div>';
+    // los códigos se dibujan acá, en el navegador: no viaja nada a ningún servidor de afuera
+    document.querySelectorAll('.qrbox').forEach(b=>{
+      try{ new QRCode(b,{text:b.dataset.qr,width:130,height:130,correctLevel:QRCode.CorrectLevel.M}); }
+      catch(e){ b.textContent='—'; }
+    });
+  }
+
+  // ---------- 6. OPCIONES ----------
+  function vOpciones(){
+    const msj = PANEL.msjCompartir || 'Te esperamos en nuestro gran día. Acá está tu invitación:';
+    $('vista').innerHTML =
+      '<div class="card" style="max-width:560px">'+
+        '<h3>Mensaje para compartir</h3>'+
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 10px">Es el texto que se manda junto '+
+          'con el link cuando tocás el botón de WhatsApp o Telegram en la lista de invitados.</p>'+
+        '<textarea id="msjComp" rows="3">'+esc(msj)+'</textarea>'+
+        '<button class="btn" id="guardarOps" style="max-width:200px">Guardar</button>'+
+      '</div>'+
+      '<div class="card" style="max-width:560px">'+
+        '<h3>Tu invitación</h3>'+
+        '<p style="font-size:13px;color:#6b6058;margin:0 0 10px">Dirección: <b>'+esc(SLUG)+'</b></p>'+
+        '<button class="accion gris" id="verInv2">Abrir mi invitación</button>'+
+      '</div>'+
+      '<div class="card" style="max-width:560px">'+
+        '<h3>Cosas que no podés cambiar desde acá</h3>'+
+        '<p style="font-size:13px;color:#6b6058;margin:0;line-height:1.6">Los nombres de tus invitados, '+
+          'cuántos lugares tiene cada uno, y el diseño de la invitación los maneja quien te la armó. '+
+          'Escribile y lo cambia en el momento. Vos manejás las mesas, que es lo que se mueve todo el tiempo.</p>'+
+      '</div>';
+  }
+
+  // ---------- descargas ----------
+  function bajarCSV(nombre, filas){
+    const csv = filas.map(f => f.map(c => '"'+String(c==null?'':c).replace(/"/g,'""')+'"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8'}));
+    a.download = nombre; a.click(); URL.revokeObjectURL(a.href);
+  }
+  function bajarLista(){
+    bajarCSV('invitados-'+SLUG+'.csv',
+      [['Invitado','Lugares','Vienen','Mesa','Usos','Estado','Mensaje']].concat(
+        filtrada().map(g=>{ const e=estadoDe(g);
+          return [g.nombre, num(g.pases), personasDe(g), mesaDe(g), num(g.usos)+'/'+(num(g.usosMax)||num(g.pases)),
+                  e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder'), g.rsvpMensaje||'']; })));
+  }
+  function bajarMesas(){
+    const filas=[['Mesa','Invitado','Personas','Estado']];
+    mesasDe().forEach(m => enMesa(m.id).forEach(g=>{ const e=estadoDe(g);
+      filas.push([m.nombre, g.nombre, personasDe(g), e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder')]); }));
+    sinMesa().forEach(g=>{ const e=estadoDe(g);
+      filas.push(['Sin mesa', g.nombre, personasDe(g), e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder')]); });
+    bajarCSV('mesas-'+SLUG+'.csv', filas);
+  }
+
+  // =====================================================================
+  //  EVENTOS (uno solo, delegado: la vista se redibuja todo el tiempo)
+  // =====================================================================
+  function textoCompartir(g){
+    const base = PANEL.msjCompartir || 'Te esperamos en nuestro gran día. Acá está tu invitación:';
+    return base + ' ' + linkDe(g);
+  }
+  document.addEventListener('click', async e=>{
+    const t = e.target.closest('button, a[data-vista], .lnk');
+    if(!t) return;
+
+    if(t.dataset && t.dataset.vista){ VISTA=t.dataset.vista; $('lat').classList.remove('abierto'); pintar(); return; }
+    if(t.dataset && t.dataset.ir){ VISTA=t.dataset.ir; pintar(); return; }
+    if(t.dataset && t.dataset.f){ FILTRO=t.dataset.f; pintar(); return; }
+
+    if(t.id==='bajar')      return bajarLista();
+    if(t.id==='bajarMesas') return bajarMesas();
+    if(t.id==='imprimir')   return window.print();
+    if(t.id==='nuevaMesa')  return nuevaMesa();
+    if(t.id==='verInv' || t.id==='verInv2') return window.open('/i/?e='+encodeURIComponent(SLUG),'_blank');
+
+    if(t.dataset && t.dataset.borrar) return borrarMesa(t.dataset.borrar);
+
+    if(t.dataset && t.dataset.ver){
+      const g = GENTE.find(x=>x.token===t.dataset.ver); if(!g) return;
+      const e2 = estadoDe(g);
+      alert(g.nombre+'\n\n'+
+        'Lugares: '+num(g.pases)+'\n'+
+        'Vienen: '+personasDe(g)+'\n'+
+        'Mesa: '+(mesaDe(g)||'sin asignar')+'\n'+
+        'Entradas usadas: '+num(g.usos)+' de '+(num(g.usosMax)||num(g.pases))+'\n'+
+        'Estado: '+(e2==='si'?'Confirmó':(e2==='no'?'No puede venir':'Sin responder'))+
+        (g.rsvpMensaje ? '\n\nMensaje que dejó:\n"'+g.rsvpMensaje+'"' : '')+
+        '\n\nSu link:\n'+linkDe(g));
       return;
     }
+    if(t.dataset && t.dataset.wa){
+      const g=GENTE.find(x=>x.token===t.dataset.wa); if(!g) return;
+      window.open('https://wa.me/?text='+encodeURIComponent(textoCompartir(g)),'_blank'); return;
+    }
+    if(t.dataset && t.dataset.tg){
+      const g=GENTE.find(x=>x.token===t.dataset.tg); if(!g) return;
+      window.open('https://t.me/share/url?url='+encodeURIComponent(linkDe(g))+
+        '&text='+encodeURIComponent(PANEL.msjCompartir||''),'_blank'); return;
+    }
+    if(t.dataset && t.dataset.cp){
+      const g=GENTE.find(x=>x.token===t.dataset.cp); if(!g) return;
+      try{ await navigator.clipboard.writeText(linkDe(g)); toast('Link copiado'); }
+      catch(_){ prompt('Copiá el link:', linkDe(g)); }
+      return;
+    }
+    if(t.id==='guardarOps'){
+      const v=$('msjComp').value.slice(0,300);
+      PANEL.msjCompartir=v; await guardarPanel({msjCompartir:v}); return;
+    }
+  });
 
-    const ET = { si:['si','Confirmó ✓'], no:['no','No puede'], pend:['pend','Sin responder'] };
-    const filas = lista.map(g => {
-      const e = estadoDe(g), et = ET[e];
-      const per = (e==='si' && g.rsvpPersonas!=null) ? g.rsvpPersonas : (g.usosMax || g.pases || '—');
-      const men = g.rsvpMensaje ? '<div class="men">“' + esc(g.rsvpMensaje) + '”</div>' : '';
-      return '<tr>' +
-        '<td><b>' + esc(g.nombre || g.n || '(sin nombre)') + '</b>' + men + '</td>' +
-        '<td>' + esc(per) + '</td>' +
-        '<td class="ocultar-chico">' + esc(g.mesa || g.m || '—') + '</td>' +
-        '<td><span class="et ' + et[0] + '">' + et[1] + '</span></td>' +
-      '</tr>';
-    }).join('');
+  document.addEventListener('input', e=>{
+    if(e.target.id==='buscar'){ BUSCA=e.target.value; const p=e.target.selectionStart;
+      vInvitados(); const n=$('buscar'); if(n){ n.focus(); try{n.setSelectionRange(p,p);}catch(_){} } }
+  });
+  document.addEventListener('change', async e=>{
+    if(e.target.classList.contains('mesaInput')){
+      const v=e.target.value.trim();
+      const tok=e.target.dataset.tok;
+      // si escribe un número suelto, lo tomamos como nombre de mesa y la creamos si no existe
+      let ms=mesasDe().slice(), destino='';
+      if(v){
+        let m = ms.find(x=>String(x.nombre).toLowerCase()===v.toLowerCase());
+        if(!m){ m={id:'m'+Date.now().toString(36), nombre:v}; ms.push(m); PANEL.mesas=ms; }
+        destino=m.id;
+      }
+      const a=Object.assign({}, asigDe());
+      if(destino) a[tok]=destino; else delete a[tok];
+      PANEL.asig=a;
+      await guardarPanel({mesas:mesasDe(), asig:a});
+      pintar(); return;
+    }
+    if(e.target.dataset && e.target.dataset.nombre)
+      return renombrarMesa(e.target.dataset.nombre, e.target.value.trim());
+    if(e.target.id==='capMesa'){
+      const c=Math.max(1, num(e.target.value)||10);
+      PANEL.capacidad=c; await guardarPanel({capacidad:c}); vMesas(); return;
+    }
+  });
+  $('burger').addEventListener('click', ()=> $('lat').classList.toggle('abierto'));
 
-    $('tabla').innerHTML = '<table><thead><tr>' +
-      '<th>Invitado</th><th>Personas</th><th class="ocultar-chico">Mesa</th><th>Estado</th>' +
-      '</tr></thead><tbody>' + filas + '</tbody></table>';
-  }
-
+  // =====================================================================
+  //  ENTRAR / CARGAR / SALIR
+  // =====================================================================
   async function cargar(){
-    $('tabla').innerHTML = '<div class="cargando">Cargando tu lista…</div>';
-    const p = await entrar(ESTADO.slug, ESTADO.clave);
-    if(!p){ salir(); aviso('No encontramos ese panel. Revisá la dirección y la clave.'); return; }
-    ESTADO.evento = p;
-    ESTADO.invitados = await traerInvitados(ESTADO.slug, Array.isArray(p.tokens) ? p.tokens : []);
+    GENTE = await traerGente(SLUG, PANEL.tokens);
+    GENTE.sort((a,b)=>String(a.nombre||'').localeCompare(String(b.nombre||''),'es'));
     pintar();
   }
-
-  function salir(){
-    try{ localStorage.removeItem('inv_panel_novios'); }catch(e){}
-    ESTADO = { slug:'', clave:'', evento:null, invitados:[], filtro:'todos' };
-    $('panel').style.display = 'none';
-    $('entrar').style.display = '';
+  async function hacerLogin(slug, clave){
+    const p = await traerPanel(slug, clave);
+    if(!p) return false;
+    SLUG=slug; CLAVE=clave; PANEL=p;
+    $('entrar').style.display='none';
+    $('panel').style.display='';
+    await cargar();
+    return true;
   }
-
-  $('btn-entrar').addEventListener('click', async () => {
-    aviso('');
-    const slug  = limpiarSlug($('slug').value);
-    const clave = ($('clave').value || '').trim();
-    if(!slug || !clave){ aviso('Completá la dirección de tu invitación y tu clave.'); return; }
-    const b = $('btn-entrar'); b.disabled = true; b.textContent = 'Entrando…';
-    try{
-      const p = await entrar(slug, clave);
-      if(!p){ aviso('No encontramos ese panel. Revisá la dirección y la clave.'); return; }
-      ESTADO.slug = slug; ESTADO.clave = clave; ESTADO.evento = p;
-      try{ localStorage.setItem('inv_panel_novios', JSON.stringify({slug, clave})); }catch(e){}
-      $('entrar').style.display = 'none';
-      $('panel').style.display  = '';
-      ESTADO.invitados = await traerInvitados(slug, Array.isArray(p.tokens) ? p.tokens : []);
-      pintar();
-    }catch(err){
-      aviso('No pudimos conectar. Revisá tu internet y probá de nuevo.');
-    }finally{
-      b.disabled = false; b.textContent = 'Entrar';
-    }
+  $('btnEntrar').addEventListener('click', async ()=>{
+    const slug=limpiarSlug($('slug').value), clave=$('clave').value.trim();
+    const err=$('errLogin');
+    if(!slug || !clave){ err.textContent='Completá la dirección de tu invitación y tu clave.'; return; }
+    err.textContent='Buscando…';
+    const ok = await hacerLogin(slug, clave);
+    if(ok){ err.textContent=''; try{ localStorage.setItem('inv_panel_novios', JSON.stringify({slug,clave})); }catch(_){} }
+    else err.textContent='No encontramos ese panel. Revisá la dirección y la clave.';
+  });
+  $('clave').addEventListener('keydown', e=>{ if(e.key==='Enter') $('btnEntrar').click(); });
+  $('btnRecargar').addEventListener('click', async ()=>{
+    const p=await traerPanel(SLUG,CLAVE); if(p) PANEL=p;
+    await cargar(); toast('Actualizado');
+  });
+  $('btnSalir').addEventListener('click', ()=>{
+    try{ localStorage.removeItem('inv_panel_novios'); }catch(_){}
+    location.href = location.pathname;
   });
 
-  $('clave').addEventListener('keydown', e => { if(e.key === 'Enter') $('btn-entrar').click(); });
-  $('slug').addEventListener('keydown',  e => { if(e.key === 'Enter') $('clave').focus(); });
-
-  $('btn-refrescar').addEventListener('click', cargar);
-  $('btn-salir').addEventListener('click', salir);
-  $('buscar').addEventListener('input', pintar);
-
-  document.querySelectorAll('.filtro').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('.filtro').forEach(x => x.classList.remove('on'));
-      b.classList.add('on');
-      ESTADO.filtro = b.getAttribute('data-f');
-      pintar();
-    });
-  });
-
-  $('btn-csv').addEventListener('click', () => {
-    const ET = { si:'Confirmo', no:'No puede', pend:'Sin responder' };
-    const filas = [['Invitado','Personas','Mesa','Estado','Mensaje']].concat(
-      ESTADO.invitados.map(g => [
-        g.nombre || g.n || '',
-        (estadoDe(g)==='si' && g.rsvpPersonas!=null) ? g.rsvpPersonas : (g.usosMax || g.pases || ''),
-        g.mesa || g.m || '',
-        ET[estadoDe(g)],
-        g.rsvpMensaje || ''
-      ])
-    );
-    const csv = filas.map(f => f.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8'}));
-    a.download = 'invitados-' + ESTADO.slug + '.csv';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 3000);
-  });
-
-  // Si ya entró antes en este dispositivo, lo dejamos adentro.
-  (function(){
-    let g = null;
-    try{ g = JSON.parse(localStorage.getItem('inv_panel_novios') || 'null'); }catch(e){}
-    if(g && g.slug && g.clave){
-      ESTADO.slug = g.slug; ESTADO.clave = g.clave;
-      $('entrar').style.display = 'none';
-      $('panel').style.display  = '';
-      cargar();
-    }
-    // Permite abrir directo con ?e=slug para que solo tengan que poner la clave.
+  (async function(){
+    let g=null; try{ g=JSON.parse(localStorage.getItem('inv_panel_novios')||'null'); }catch(_){}
+    if(g && g.slug && g.clave){ if(await hacerLogin(g.slug,g.clave)) return; }
     const qs = new URLSearchParams(location.search).get('e');
-    if(qs && !g) $('slug').value = limpiarSlug(qs);
+    if(qs) $('slug').value = limpiarSlug(qs);
   })();
 </script>
 </body>
