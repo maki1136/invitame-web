@@ -1691,6 +1691,28 @@
       if(_bb){ _bb.style.backgroundImage=_u; _bb.style.backgroundSize='cover'; _bb.style.backgroundPosition='center'; }
       if(_bf){ _bf.style.backgroundImage=_u; }
       else { var _fs=document.querySelector('[data-sec="frase"]'); if(_fs){_fs.style.backgroundImage="url('"+cldOpt(_fb,'w_1400,c_limit')+"')";_fs.style.backgroundSize='cover';_fs.style.backgroundPosition='center';} }
+      // La franja toma la FORMA de la foto: si es vertical se hace alta (en el celular
+      // queda casi a pantalla completa), si es apaisada queda baja. Con tope, para que
+      // en la computadora no ocupe media pantalla.
+      (function(){
+        var _im=new Image();
+        _im.onload=function(){
+          var _sec=document.querySelector('[data-sec="frase"]');
+          if(!_sec||!_im.naturalWidth||!_im.naturalHeight) return;
+          var ajustar=function(){
+            var w=_sec.clientWidth||window.innerWidth;
+            var ideal=w*(_im.naturalHeight/_im.naturalWidth);
+            var tope=Math.round(window.innerHeight*0.68);
+            var alto=Math.max(200, Math.min(ideal, tope));
+            _sec.style.minHeight='0';
+            _sec.style.maxHeight='none';
+            _sec.style.height=Math.round(alto)+'px';
+          };
+          ajustar();
+          var _t; window.addEventListener('resize',function(){clearTimeout(_t);_t=setTimeout(ajustar,150);});
+        };
+        _im.src=cldOpt(_fb,'w_1400,c_limit');
+      })();
     }
     // ---- Contacto: lee los campos reales del panel (Número de whatsapp 1/2, textos, toggle) ----
     (function(){
