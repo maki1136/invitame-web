@@ -298,8 +298,14 @@
   // ---------------- mesas ----------------
   const mesasDe   = () => Array.isArray(PANEL.mesas) ? PANEL.mesas : [];
   const asigDe    = () => (PANEL.asig && typeof PANEL.asig==='object') ? PANEL.asig : {};
-  const mesaDe    = g => { const a=asigDe(); if(a[g.token]) return a[g.token];
-                           return g.mesa ? String(g.mesa) : ''; };
+  const mesaDe    = g => {
+    const a=asigDe(); if(a[g.token]) return String(a[g.token]);
+    const n = g.mesa ? String(g.mesa).trim() : '';
+    if(!n || n==='-') return '';
+    const m = mesasDe().find(x=>String(x.nombre)===n);
+    return m ? String(m.id) : '';
+  };
+  const nombreMesa = id => { const m=mesasDe().find(x=>String(x.id)===String(id)); return m?m.nombre:''; };
   const enMesa    = id => GENTE.filter(g => mesaDe(g)===String(id));
   const sinMesa   = () => GENTE.filter(g => !mesaDe(g));
   const sumaPers  = arr => arr.reduce((s,g)=>s+personasDe(g),0);
@@ -402,7 +408,7 @@
           return '<tr class="'+(i%2?'par':'')+'">'+
             '<td><button class="lapiz" data-ver="'+esc(g.token)+'" title="Ver ficha">&#9998;</button><b>'+esc(g.nombre)+'</b></td>'+
             '<td>'+personasDe(g)+' <span style="color:var(--muted);font-size:11.5px">de '+num(g.pases)+'</span></td>'+
-            '<td><input class="mini mesaInput" data-tok="'+esc(g.token)+'" value="'+esc(mesaDe(g))+'" placeholder="—"></td>'+
+            '<td><input class="mini mesaInput" data-tok="'+esc(g.token)+'" value="'+esc(nombreMesa(mesaDe(g)))+'" placeholder="—"></td>'+
             '<td class="ocultar-chico">'+num(g.usos)+'/'+(num(g.usosMax)||num(g.pases))+'</td>'+
             '<td><span class="chip '+e+'">'+(e==='si'?'Confirmó ✓':(e==='no'?'No puede':'Sin responder'))+'</span></td>'+
             '<td class="ocultar-chico" style="max-width:210px;color:#6b6058;font-size:12.5px">'+
@@ -598,7 +604,7 @@
     bajarCSV('invitados-'+SLUG+'.csv',
       [['Invitado','Lugares','Vienen','Mesa','Usos','Estado','Mensaje']].concat(
         filtrada().map(g=>{ const e=estadoDe(g);
-          return [g.nombre, num(g.pases), personasDe(g), mesaDe(g), num(g.usos)+'/'+(num(g.usosMax)||num(g.pases)),
+          return [g.nombre, num(g.pases), personasDe(g), nombreMesa(mesaDe(g)), num(g.usos)+'/'+(num(g.usosMax)||num(g.pases)),
                   e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder'), g.rsvpMensaje||'']; })));
   }
   function bajarMesas(){
@@ -639,7 +645,7 @@
       alert(g.nombre+'\n\n'+
         'Lugares: '+num(g.pases)+'\n'+
         'Vienen: '+personasDe(g)+'\n'+
-        'Mesa: '+(mesaDe(g)||'sin asignar')+'\n'+
+        'Mesa: '+(nombreMesa(mesaDe(g))||'sin asignar')+'\n'+
         'Entradas usadas: '+num(g.usos)+' de '+(num(g.usosMax)||num(g.pases))+'\n'+
         'Estado: '+(e2==='si'?'Confirmó':(e2==='no'?'No puede venir':'Sin responder'))+
         (g.rsvpMensaje ? '\n\nMensaje que dejó:\n"'+g.rsvpMensaje+'"' : '')+
@@ -703,6 +709,19 @@
   async function cargar(){
     GENTE = await traerGente(SLUG, PANEL.tokens);
     GENTE.sort((a,b)=>String(a.nombre||'').localeCompare(String(b.nombre||''),'es'));
+    // Las mesas que ya venían puestas desde el panel de la diseñadora se convierten en
+    // tarjetas de verdad. Si no, esos invitados no aparecían en ninguna parte del tablero.
+    {
+      const ms = Array.isArray(PANEL.mesas) ? PANEL.mesas.slice() : [];
+      const hay = new Set(ms.map(m=>String(m.nombre)));
+      const a = asigDe();
+      GENTE.forEach(g=>{
+        if(a[g.token]) return;
+        const n = g.mesa ? String(g.mesa).trim() : '';
+        if(n && n!=='-' && !hay.has(n)){ hay.add(n); ms.push({id:'jz'+n.replace(/[^a-zA-Z0-9]/g,'')||'jz', nombre:n}); }
+      });
+      PANEL.mesas = ms;
+    }
     pintar();
   }
   async function hacerLogin(slug, clave){
