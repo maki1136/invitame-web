@@ -638,7 +638,7 @@
     const btn=f.querySelector('#np-guardar');
     btn.disabled=true; btn.textContent='Creando…'; err.textContent='';
     try{
-      const r=await fetch('/invitame/pase-nuevo.php',{
+      const r=await fetch('/pase-nuevo.php',{
         method:'POST', headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
           slug:SLUG, clave:CLAVE, nombre,
