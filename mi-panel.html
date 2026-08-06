@@ -398,6 +398,7 @@
         '<button class="filtro'+(FILTRO==='si'?' on':'')+'" data-f="si">Confirmaron</button>'+
         '<button class="filtro'+(FILTRO==='no'?' on':'')+'" data-f="no">No pueden</button>'+
         '<button class="filtro'+(FILTRO==='sin'?' on':'')+'" data-f="sin">Sin responder</button>'+
+        '<button class="accion" id="cargarPase">+ Cargar pases</button>'+
         '<button class="lnk" id="bajar">Descargar lista</button>'+
       '</div>'+
       '<div class="tablaWrap">'+
@@ -595,6 +596,82 @@
       '</div>';
   }
 
+  // ---------- alta de un invitado nuevo ----------
+  function ventanaNuevoPase(){
+    const f=document.createElement('div');
+    f.className='fondo'; f.id='ventPase';
+    f.innerHTML =
+      '<div class="vent">'+
+        '<h3>Nuevo pase de invitado</h3>'+
+        '<p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 6px">'+
+          'Se crea con su c\u00f3digo QR al instante.</p>'+
+        '<label>Nombre</label><input type="text" id="np-nombre" placeholder="Familia P\u00e9rez">'+
+        '<div class="fila">'+
+          '<div><label>Personas</label><input type="number" id="np-personas" min="1" max="30" value="1"></div>'+
+          '<div><label>N\u00famero de mesa</label><input type="text" id="np-mesa" placeholder="\u2014"></div>'+
+        '</div>'+
+        '<label>Cantidad de usos</label><input type="number" id="np-usos" min="1" max="30" value="1">'+
+        '<div class="hint">Cu\u00e1ntas veces se puede escanear su QR en la puerta. '+
+          'Normalmente, igual que la cantidad de personas.</div>'+
+        '<label>Descripci\u00f3n personas</label>'+
+        '<input type="text" id="np-desc" placeholder="Ej: 2 adultos y 1 ni\u00f1o">'+
+        '<label>Mensaje</label><textarea id="np-msj" rows="2" placeholder="Opcional"></textarea>'+
+        '<div class="err" id="np-err"></div>'+
+        '<div class="pie">'+
+          '<button class="btn gris" id="np-cerrar">Cerrar</button>'+
+          '<button class="btn" id="np-guardar">Guardar</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(f);
+    const per=f.querySelector('#np-personas'), uso=f.querySelector('#np-usos');
+    per.addEventListener('input',()=>{ uso.value=per.value; });
+    f.querySelector('#np-cerrar').addEventListener('click',()=>f.remove());
+    f.addEventListener('click',e=>{ if(e.target===f) f.remove(); });
+    f.querySelector('#np-guardar').addEventListener('click',()=>guardarNuevoPase(f));
+    f.querySelector('#np-nombre').focus();
+  }
+
+  async function guardarNuevoPase(f){
+    const err=f.querySelector('#np-err');
+    const nombre=f.querySelector('#np-nombre').value.trim();
+    if(!nombre){ err.textContent='Poneles un nombre.'; return; }
+    const btn=f.querySelector('#np-guardar');
+    btn.disabled=true; btn.textContent='Creando…'; err.textContent='';
+    try{
+      const r=await fetch('/invitame/pase-nuevo.php',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          slug:SLUG, clave:CLAVE, nombre,
+          personas:parseInt(f.querySelector('#np-personas').value,10)||1,
+          mesa:f.querySelector('#np-mesa').value.trim(),
+          usos:parseInt(f.querySelector('#np-usos').value,10)||1,
+          desc:f.querySelector('#np-desc').value.trim(),
+          mensaje:f.querySelector('#np-msj').value.trim()
+        })
+      });
+      const j=await r.json();
+      if(!j.ok){
+        const porQue={
+          'clave':'No pudimos verificar tu clave. Volv\u00e9 a entrar al panel.',
+          'sin-config':'Falta terminar una configuraci\u00f3n del sistema. Escribinos.',
+          'login':'El sistema no pudo conectarse. Escribinos.',
+          'faltan-datos':'Falta el nombre.'
+        };
+        err.textContent = porQue[j.error] || 'No se pudo crear. Prob\u00e1 de nuevo.';
+        btn.disabled=false; btn.textContent='Guardar';
+        return;
+      }
+      f.remove();
+      PANEL.tokens=(PANEL.tokens||[]).concat([j.token]);
+      await cargar();
+      toast('Invitado creado');
+    }catch(e){
+      console.error(e);
+      err.textContent='No se pudo crear. Revis\u00e1 tu conexi\u00f3n.';
+      btn.disabled=false; btn.textContent='Guardar';
+    }
+  }
+
   // ---------- descargas ----------
   function bajarCSV(nombre, filas){
     const csv = filas.map(f => f.map(c => '"'+String(c==null?'':c).replace(/"/g,'""')+'"').join(',')).join('\n');
@@ -633,6 +710,7 @@
     if(t.dataset && t.dataset.ir){ VISTA=t.dataset.ir; pintar(); return; }
     if(t.dataset && t.dataset.f){ FILTRO=t.dataset.f; pintar(); return; }
 
+    if(t.id==='cargarPase') return ventanaNuevoPase();
     if(t.id==='bajar')      return bajarLista();
     if(t.id==='bajarMesas') return bajarMesas();
     if(t.id==='imprimir')   return window.print();
