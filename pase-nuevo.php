@@ -90,12 +90,20 @@ $campos = isset($panel['fields']) ? $panel['fields'] : array();
 
 // ---------- 2. credenciales del sistema ----------
 $PANEL_USER = ''; $PANEL_PASS = '';
-$rutas = array(
-  dirname(dirname(__FILE__)) . '/invitame-config.php',
-  dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php',
-  __DIR__ . '/invitame-config.php',
-);
-foreach ($rutas as $ruta) { if (is_readable($ruta)) { include $ruta; break; } }
+// Se busca hacia ARRIBA desde esta carpeta. El archivo vive fuera de public_html
+// (no es alcanzable desde internet), y segun el dominio la profundidad cambia.
+$dir = __DIR__;
+for ($i = 0; $i < 5; $i++) {
+  $ruta = $dir . '/invitame-config.php';
+  if (is_readable($ruta)) { include $ruta; break; }
+  $padre = dirname($dir);
+  if ($padre === $dir) break;
+  $dir = $padre;
+}
+if ($PANEL_USER === '' && isset($_SERVER['DOCUMENT_ROOT'])) {
+  $alt = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php';
+  if (is_readable($alt)) include $alt;
+}
 
 if ($PANEL_USER === '' || $PANEL_PASS === '') {
   echo json_encode(array('ok' => false, 'error' => 'sin-config'));
