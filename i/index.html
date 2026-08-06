@@ -1061,7 +1061,7 @@
       const per=parseInt((el('pv-per')&&el('pv-per').textContent)||'0',10)||null;
       const estado=(r==='si'?'confirmado':'rechazado');
       const cant=(r==='si'?per:0);
-      INV.saveRSVP(INVDATA.slug,INVDATA.token,estado,cant).catch(()=>{});
+      INV.saveRSVP(INVDATA.slug,INVDATA.token,estado,cant,(function(){var t=document.querySelector('.rsvpform textarea');return t?t.value:'';})()).catch(()=>{});
       avisarPorMail(estado,cant);
     }}
   // Aviso por mail a los anfitriones (el destinatario lo decide el servidor, no el navegador)
