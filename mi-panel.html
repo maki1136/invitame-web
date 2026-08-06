@@ -299,7 +299,8 @@
   const mesasDe   = () => Array.isArray(PANEL.mesas) ? PANEL.mesas : [];
   const asigDe    = () => (PANEL.asig && typeof PANEL.asig==='object') ? PANEL.asig : {};
   const mesaDe    = g => {
-    const a=asigDe(); if(a[g.token]) return String(a[g.token]);
+    const a=asigDe();
+    if(Object.prototype.hasOwnProperty.call(a,g.token)) return String(a[g.token]||'');
     const n = g.mesa ? String(g.mesa).trim() : '';
     if(!n || n==='-') return '';
     const m = mesasDe().find(x=>String(x.nombre)===n);
@@ -487,7 +488,8 @@
   }
   async function moverA(token, mesaId){
     const a = Object.assign({}, asigDe());
-    if(mesaId) a[token] = String(mesaId); else delete a[token];
+    // Vacío en vez de borrar la clave: así la diseñadora sabe que lo sacaron a propósito.
+    a[token] = mesaId ? String(mesaId) : '';
     PANEL.asig = a; vMesas();
     await guardarPanel({asig:a});
   }
@@ -689,7 +691,7 @@
         destino=m.id;
       }
       const a=Object.assign({}, asigDe());
-      if(destino) a[tok]=destino; else delete a[tok];
+      a[tok] = destino || '';
       PANEL.asig=a;
       await guardarPanel({mesas:mesasDe(), asig:a});
       pintar(); return;
@@ -716,11 +718,14 @@
       const hay = new Set(ms.map(m=>String(m.nombre)));
       const a = asigDe();
       GENTE.forEach(g=>{
-        if(a[g.token]) return;
+        if(Object.prototype.hasOwnProperty.call(a,g.token)) return;
         const n = g.mesa ? String(g.mesa).trim() : '';
         if(n && n!=='-' && !hay.has(n)){ hay.add(n); ms.push({id:'jz'+n.replace(/[^a-zA-Z0-9]/g,'')||'jz', nombre:n}); }
       });
+      const cambio = JSON.stringify(ms)!==JSON.stringify(PANEL.mesas||[]);
       PANEL.mesas = ms;
+      // Hay que guardarlas: si no, el panel de la diseñadora recibe ids que no conoce.
+      if(cambio && ms.length) guardarPanel({mesas:ms});
     }
     pintar();
   }

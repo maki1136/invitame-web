@@ -963,9 +963,13 @@
       let tocados=0;
       (D.invitados||[]).forEach(g=>{
         const t=g.t||g.token; if(!t) return;
+        // Si los novios no lo tocaron, NO se le cambia nada. Antes esto borraba la mesa
+        // de todos los que no habian movido, que es justo lo contrario de lo que se espera.
+        if(!Object.prototype.hasOwnProperty.call(asig,t)) return;
         const id=asig[t];
-        const nuevo=id?(nombreDe[id]||''):'-';
-        if(nuevo && String(g.m||'')!==String(nuevo)){ g.m=nuevo; tocados++; }
+        if(id && !nombreDe[id]) return;              // mesa que no conozco: no piso nada
+        const nuevo = id ? nombreDe[id] : '-';
+        if(String(g.m||'')!==String(nuevo)){ g.m=nuevo; tocados++; }
       });
       renderGuests();
       alert(tocados ? ('Listo: actualice la mesa de '+tocados+' invitado(s). Acordate de tocar Guardar y publicar.')
