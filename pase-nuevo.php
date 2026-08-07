@@ -13,7 +13,7 @@
  *     2. Recién entonces este archivo entra a Firebase como un usuario del sistema
  *        (el de $PANEL_USER) y crea el invitado con su token, que es su QR.
  *
- * El usuario y la contraseña viven FUERA del repositorio, en invitame-config.php.
+ * El usuario y la contraseña viven FUERA del repositorio, en invitame-panel.php (fuera del repo y fuera de public_html).
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -92,17 +92,29 @@ $campos = isset($panel['fields']) ? $panel['fields'] : array();
 $PANEL_USER = ''; $PANEL_PASS = '';
 // Se busca hacia ARRIBA desde esta carpeta. El archivo vive fuera de public_html
 // (no es alcanzable desde internet), y segun el dominio la profundidad cambia.
+//
+// OJO: en public_html ya hay OTRO invitame-config.php, el de Cloudinary (lo usa
+// uso.php). Si nos frenamos en el primer archivo que encontramos, cargamos ese y
+// nos quedamos sin credenciales. Por eso el archivo del panel se llama distinto
+// (invitame-panel.php) y ademas solo cortamos la busqueda cuando de verdad
+// quedaron cargadas las dos variables.
+$candidatos = array();
 $dir = __DIR__;
-for ($i = 0; $i < 5; $i++) {
-  $ruta = $dir . '/invitame-config.php';
-  if (is_readable($ruta)) { include $ruta; break; }
+for ($i = 0; $i < 6; $i++) {
+  $candidatos[] = $dir . '/invitame-panel.php';
+  $candidatos[] = $dir . '/invitame-config.php';
   $padre = dirname($dir);
   if ($padre === $dir) break;
   $dir = $padre;
 }
-if ($PANEL_USER === '' && isset($_SERVER['DOCUMENT_ROOT'])) {
-  $alt = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php';
-  if (is_readable($alt)) include $alt;
+if (isset($_SERVER['DOCUMENT_ROOT'])) {
+  $candidatos[] = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-panel.php';
+  $candidatos[] = dirname(dirname($_SERVER['DOCUMENT_ROOT'])) . '/invitame-panel.php';
+}
+foreach (array_unique($candidatos) as $ruta) {
+  if (!is_readable($ruta)) continue;
+  include $ruta;
+  if ($PANEL_USER !== '' && $PANEL_PASS !== '') break;
 }
 
 if ($PANEL_USER === '' || $PANEL_PASS === '') {
