@@ -229,5 +229,64 @@ if (!location.pathname.startsWith('/i/')) {
   };
 }
 
+// ---- RESTAURAR un backup ----
+// Es la operacion mas peligrosa del sistema: escribe encima de los datos de clientes
+// reales. Por eso: (1) valida la estructura antes de tocar nada, (2) sabe simular sin
+// escribir, (3) escribe con merge (nunca borra lo que no esta en el backup), y
+// (4) NO pisa un RSVP ni los usos ya consumidos en la puerta si el backup es mas viejo.
+if (!location.pathname.startsWith('/i/')) {
+  INV.revisarBackup = function (data) {
+    if (!data || typeof data !== 'object') return { ok: false, error: 'El archivo no es un backup valido.' };
+    const ev = Array.isArray(data.eventos) ? data.eventos : null;
+    const gu = Array.isArray(data.invitados) ? data.invitados : null;
+    if (!ev || !gu) return { ok: false, error: 'Al archivo le faltan las listas de eventos o invitados.' };
+    const sinId = ev.filter(e => !e || !e.id).length + gu.filter(g => !g || !g.id).length;
+    if (sinId) return { ok: false, error: 'Hay ' + sinId + ' registros sin identificador. El archivo esta danado.' };
+    return { ok: true, eventos: ev.length, invitados: gu.length, fecha: data.exportedAt || '(sin fecha)' };
+  };
+
+  // simular:true -> no escribe nada, solo cuenta que pasaria.
+  INV.importAll = async function (data, opciones) {
+    const op = opciones || {};
+    const chequeo = INV.revisarBackup(data);
+    if (!chequeo.ok) throw new Error(chequeo.error);
+
+    const r = { eventosNuevos: 0, eventosPisados: 0, invitadosNuevos: 0, invitadosPisados: 0, rsvpProtegidos: 0, errores: [] };
+
+    for (const e of data.eventos) {
+      const { id, ...campos } = e;
+      const actual = await getDoc(doc(db, EV, id));
+      if (actual.exists()) r.eventosPisados++; else r.eventosNuevos++;
+      if (op.simular) continue;
+      try { await setDoc(doc(db, EV, id), { ...campos, slug: id, restauradoAt: serverTimestamp() }, { merge: true }); }
+      catch (err) { r.errores.push('evento ' + id + ': ' + (err.message || err)); }
+    }
+
+    for (const g of data.invitados) {
+      const { id, ...campos } = g;
+      const ref = doc(db, GU, id);
+      const actual = await getDoc(ref);
+      if (actual.exists()) r.invitadosPisados++; else r.invitadosNuevos++;
+      if (op.simular) continue;
+      const previo = actual.exists() ? actual.data() : null;
+      // Lo que paso DESPUES del backup no se pisa: si el invitado ya confirmo o si ya
+      // entro por la puerta, esos datos ganan. Restaurar no puede dejar entrar dos veces
+      // a alguien ni borrar una confirmacion.
+      if (previo) {
+        if (previo.rsvp && previo.rsvp !== 'pendiente' && campos.rsvp !== previo.rsvp) {
+          delete campos.rsvp; delete campos.rsvpPersonas; delete campos.rsvpMensaje; delete campos.rsvpAt;
+          r.rsvpProtegidos++;
+        }
+        if (typeof previo.usos === 'number' && typeof campos.usos === 'number' && previo.usos < campos.usos) {
+          delete campos.usos;
+        }
+      }
+      try { await setDoc(ref, { ...campos, restauradoAt: serverTimestamp() }, { merge: true }); }
+      catch (err) { r.errores.push('invitado ' + id + ': ' + (err.message || err)); }
+    }
+    return r;
+  };
+}
+
 window.INV = INV;
 window.dispatchEvent(new CustomEvent("inv-ready", { detail: { ok: INV.ok, error: initError } }));

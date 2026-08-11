@@ -161,6 +161,7 @@
   <button class="btn-c" onclick="duplicarActual()" title="Hacer una copia de esta invitación para otra pareja">⧉ Duplicar</button>
   <button class="btn-c" onclick="abrirEscaner()" title="Abrir el control de acceso para escanear los QR en la puerta">🎟️ Escáner puerta</button>
   <button class="btn-c" onclick="backup()" title="Descargar copia de seguridad">⬇ Backup</button>
+  <button class="btn-c" onclick="restaurar()" title="Volver a subir una copia de seguridad">⬆ Restaurar</button>
   <button class="btn-c" onclick="limpiarVencidas()" title="Borrar invitaciones vencidas (+90 días de la fecha) para liberar la base">🧹 Limpiar vencidas</button>
   <button class="btn-g" onclick="publicar()">Guardar y publicar</button>
   <button class="btn-c" onclick="salir()" title="Cerrar sesión del equipo">Salir</button>
@@ -1241,6 +1242,59 @@
       setTimeout(()=>URL.revokeObjectURL(a.href),3000);
     }catch(e){console.error(e);alert('No se pudo exportar: '+(e.message||e));}
   }
+
+  // ==== RESTAURAR un backup ====
+  // Es el boton mas peligroso del sistema: escribe encima de datos de clientes reales.
+  // Por eso pide el archivo, MUESTRA que va a pasar antes de tocar nada, obliga a
+  // escribir la palabra RESTAURAR, y se baja sola una copia de seguridad previa.
+  async function restaurar(){
+    if(!window.INV || !INV.importAll){ alert('Todavia no cargo la base. Espera 2 segundos.'); return; }
+    const inp=document.createElement('input'); inp.type='file'; inp.accept='application/json,.json';
+    inp.onchange=async ()=>{
+      const f=inp.files && inp.files[0]; if(!f) return;
+      let data;
+      try{ data=JSON.parse(await f.text()); }
+      catch(e){ alert('Ese archivo no se puede leer. Tiene que ser el .json que baja el boton Backup.'); return; }
+      const chk=INV.revisarBackup(data);
+      if(!chk.ok){ alert('No puedo usar ese archivo:\n\n'+chk.error); return; }
+
+      let sim;
+      try{ sim=await INV.importAll(data,{simular:true}); }
+      catch(e){ alert('No pude revisar el backup: '+(e.message||e)); return; }
+
+      const msg='COPIA DEL '+String(chk.fecha).slice(0,10)+'\n\n'+
+        'Tiene '+chk.eventos+' invitaciones y '+chk.invitados+' invitados.\n\n'+
+        'Si restauras:\n'+
+        '  • '+sim.eventosNuevos+' invitaciones se van a CREAR\n'+
+        '  • '+sim.eventosPisados+' invitaciones se van a PISAR con la version del backup\n'+
+        '  • '+sim.invitadosNuevos+' invitados se van a CREAR\n'+
+        '  • '+sim.invitadosPisados+' invitados se van a PISAR\n\n'+
+        'Lo que NO se toca: las confirmaciones de asistencia y los ingresos por la puerta\n'+
+        'que pasaron despues de esta copia. Eso siempre gana.\n\n'+
+        'Antes de empezar se baja sola una copia de como esta TODO ahora, por las dudas.\n\n'+
+        'Escribi RESTAURAR para confirmar:';
+      const conf=prompt(msg,'');
+      if(String(conf||'').trim().toUpperCase()!=='RESTAURAR'){ alert('Cancelado. No se toco nada.'); return; }
+
+      try{ await backup(); }catch(e){ if(!confirm('No pude bajar la copia previa. Restauro igual?')) return; }
+
+      const btn=document.querySelector('[onclick="restaurar()"]'); const txt=btn?btn.textContent:'';
+      if(btn){ btn.textContent='Restaurando...'; btn.disabled=true; }
+      try{
+        const r=await INV.importAll(data,{});
+        let res='Listo.\n\n'+
+          'Invitaciones: '+r.eventosNuevos+' creadas, '+r.eventosPisados+' actualizadas\n'+
+          'Invitados: '+r.invitadosNuevos+' creados, '+r.invitadosPisados+' actualizados';
+        if(r.rsvpProtegidos) res+='\n\nSe protegieron '+r.rsvpProtegidos+' confirmaciones mas nuevas que el backup (no se pisaron).';
+        if(r.errores.length) res+='\n\nHubo '+r.errores.length+' errores:\n'+r.errores.slice(0,5).join('\n');
+        alert(res);
+        location.reload();
+      }catch(e){ console.error(e); alert('Fallo la restauracion: '+(e.message||e)+'\n\nLa copia previa quedo bajada en tu compu.'); }
+      finally{ if(btn){ btn.textContent=txt; btn.disabled=false; } }
+    };
+    inp.click();
+  }
+  window.restaurar=restaurar;
   // ==== SOLICITUDES (autoservicio: lo que cargan los clientes) ====
   function _esc(s){return String(s==null?'':s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));}
   async function actualizarBadgeSolic(){ try{ if(!window.solicListar)return; const l=await window.solicListar(); const b=el('solic-badge'); if(b){ if(l.length){b.textContent=l.length;b.style.display='';}else{b.style.display='none';} } }catch(e){} }
