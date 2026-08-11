@@ -448,7 +448,10 @@
   @media(max-width:860px){.vids{grid-template-columns:1fr}}
 
   /* ===== wedding planners band ===== */
-  .wp{background:linear-gradient(160deg,#2a1020,var(--wine-deep));color:#fff;text-align:center}
+  .wp{position:relative;color:#fff;text-align:center;background:linear-gradient(160deg,#2a1020,var(--wine-deep));overflow:hidden}
+  .wp::before{content:"";position:absolute;inset:0;background-image:url(/img/planner.jpg);background-size:cover;background-position:center 38%;opacity:.28}
+  .wp::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(42,16,32,.82),rgba(110,23,56,.86))}
+  .wp .wrap{position:relative;z-index:2}
   .wp .eyebrow{color:var(--gold)}
   .wp h2{color:#fff;font-size:clamp(28px,3.6vw,44px);font-weight:800;letter-spacing:-1px;margin-top:12px}
   .wp h2 .it{font-style:italic;color:var(--gold)}
