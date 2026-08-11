@@ -1264,7 +1264,11 @@
       }
     }
     // nombres
-    const nm=ev.n2?('<span>'+ev.n1+'</span>'+(ev.layout==='juntos'?' <span>&amp; '+ev.n2+'</span>':'<br><span>&amp; '+ev.n2+'</span>')):('<span>'+ev.n1+'</span>');
+    // SEGURIDAD: n1/n2 los escribe el cliente en crear.html. Si van crudos a innerHTML,
+    // un <script> cargado ahi se ejecuta en la invitacion de TODOS los invitados.
+    const _esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const _n1=_esc(ev.n1), _n2=_esc(ev.n2);
+    const nm=ev.n2?('<span>'+_n1+'</span>'+(ev.layout==='juntos'?' <span>&amp; '+_n2+'</span>':'<br><span>&amp; '+_n2+'</span>')):('<span>'+_n1+'</span>');
     if(ev.n1){ ['pv-names','ep-names'].forEach(id=>{const e=el(id);if(e)e.innerHTML=nm;});
       if(ev.nfont){const e=el('pv-names');if(e)e.style.fontFamily=ev.nfont;} if(ev.ncolor){const e=el('pv-names');if(e)e.style.color=ev.ncolor;}
       // TAMAÑO DE NOMBRES (pág. 2 de Jazmín): el panel lo guardaba y la invitación lo ignoraba.
@@ -1807,8 +1811,12 @@
     const rb=el('reg-btns');
     if(rb){ const P=[['Liverpool','reg_liverpool'],['Amazon','reg_amazon'],['Sears','reg_sears'],['Mercado Libre','reg_mercadolibre'],['Palacio de Hierro','reg_palacio'],['Venmo','reg_venmo'],['PayPal','reg_paypal']];
       let h='';
-      P.forEach(([n,k])=>{ if(ev[k]) h+='<a href="'+ev[k]+'" target="_blank" rel="noopener">'+n+'</a>'; });
-      if(ev.reg_otro_u) h+='<a href="'+ev.reg_otro_u+'" target="_blank" rel="noopener">'+(ev.reg_otro_n||'Mesa de regalos')+'</a>';
+      // SEGURIDAD: solo se aceptan links http(s) y se escapan. Sin esto, un "link" tipo
+      // javascript:... cargado desde el formulario se ejecuta al tocar el boton.
+      const _escA=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      P.forEach(([n,k])=>{ const u=String(ev[k]||'').trim(); if(u && /^https?:\/\//i.test(u)) h+='<a href="'+_escA(u)+'" target="_blank" rel="noopener">'+n+'</a>'; });
+      const _ou=String(ev.reg_otro_u||'').trim();
+      if(_ou && /^https?:\/\//i.test(_ou)) h+='<a href="'+_escA(_ou)+'" target="_blank" rel="noopener">'+_escA(ev.reg_otro_n||'Mesa de regalos')+'</a>';
       rb.innerHTML=h; rb.style.display=h?'flex':'none';
       // Sin ningún botón NI datos de transferencia, la sección queda vacía: se oculta.
       var hayBanco=!!((ev.regClabe||'').trim()||(ev.regCbu||'').trim());
