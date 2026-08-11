@@ -368,6 +368,93 @@
   .mscreen .mn,.cover2 .nm{transition:opacity .35s}
   .mscreen .mn.sw,.cover2 .nm.sw{opacity:0}
 
+
+  /* ===== premio ===== */
+  .awardpill{display:inline-flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--gold);border-radius:999px;padding:9px 17px;font-size:13.5px;font-weight:700;color:var(--bronze);box-shadow:0 14px 30px -24px rgba(30,27,19,.5);margin-top:12px}
+  .awardpill .t{font-size:17px}
+  @media(max-width:920px){.awardpill{margin-left:auto;margin-right:auto}}
+
+  /* ===== sobre con iniciales ===== */
+  .sobre{background:var(--cream)}
+  .sobre-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;margin-top:52px}
+  .env-stage{display:flex;justify-content:center;perspective:900px}
+  .env{position:relative;width:330px;height:232px;border-radius:10px;background:linear-gradient(155deg,#fbf6ec,#efe4cf);box-shadow:0 38px 70px -34px rgba(30,27,19,.55),0 0 0 1px rgba(116,90,52,.12) inset;cursor:pointer}
+  .env .card{position:absolute;left:9%;right:9%;bottom:26px;height:122px;background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 26px -18px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .9s cubic-bezier(.6,.05,.2,1) .2s;z-index:2}
+  .env.open .card{transform:translateY(-94px)}
+  .env .card .k{font-size:9.5px;letter-spacing:3px;text-transform:uppercase;color:var(--bronze);font-weight:700}
+  .env .card .nm{font-family:'Epilogue';font-style:italic;font-size:24px;color:var(--wine);margin-top:5px;line-height:1.1;padding:0 12px}
+  .env .pocket{position:absolute;left:0;right:0;bottom:0;height:142px;background:linear-gradient(180deg,#f5eddd,#e9dcc4);border-radius:0 0 10px 10px;z-index:3;box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
+  .env .flap{position:absolute;left:0;top:0;width:100%;height:120px;background:linear-gradient(175deg,#f8f1e4,#e6d9c0);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top center;transition:transform .9s cubic-bezier(.6,.05,.2,1);z-index:4;border-radius:10px 10px 0 0}
+  .env.open .flap{transform:rotateX(178deg)}
+  .env .seal{position:absolute;left:50%;top:112px;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#a8305c,var(--wine-deep));display:grid;place-items:center;color:#fff;font-family:'Epilogue';font-weight:800;font-size:18px;letter-spacing:1px;box-shadow:0 10px 20px -10px rgba(0,0,0,.55),0 0 0 3px rgba(255,255,255,.14) inset;z-index:5;transition:opacity .45s,transform .55s}
+  .env.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.7)}
+  .env-hint{text-align:center;color:var(--ink-soft);font-size:14px;margin-top:20px}
+  @media(max-width:860px){.sobre-grid{grid-template-columns:1fr;gap:34px}.env{width:290px;height:210px}.env .seal{top:104px}.env .pocket{height:126px}.env .card{height:110px;bottom:22px}.env.open .card{transform:translateY(-84px)}}
+
+  /* ===== pasos ===== */
+  .pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+  .paso{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px 28px;position:relative}
+  .paso .num{font-family:'Epilogue';font-size:52px;font-weight:800;color:var(--sand);line-height:1}
+  .paso h4{font-family:'Epilogue';font-size:21px;font-weight:700;margin-top:6px}
+  .paso p{color:var(--ink-soft);font-size:15px;margin-top:9px}
+  @media(max-width:860px){.pasos{grid-template-columns:1fr}}
+
+  /* ===== save the date ===== */
+  .std{background:var(--card);border-block:1px solid var(--line)}
+  .std-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:52px;align-items:center;margin-top:48px}
+  .std-tag{display:inline-flex;align-items:center;gap:8px;background:var(--wine);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:7px 15px;border-radius:999px}
+  .std h2{font-size:clamp(28px,3.6vw,44px);font-weight:800;letter-spacing:-1px;margin-top:16px}
+  .std h2 .it{font-style:italic;color:var(--wine)}
+  .std p.lead{color:var(--ink-soft);font-size:17px;margin-top:14px;max-width:470px}
+  .std ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .std li{display:flex;gap:10px;font-size:15px;color:var(--ink)}
+  .std li::before{content:"✦";color:var(--gold);flex:none}
+  .stdcards{display:flex;justify-content:center;gap:16px}
+  .stdc{width:150px;height:250px;border-radius:20px;padding:18px 14px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;color:#fff;box-shadow:0 30px 56px -32px rgba(30,27,19,.55)}
+  .stdc .k{font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;opacity:.92}
+  .stdc .nm{font-family:'Epilogue';font-style:italic;font-size:21px;margin-top:4px;line-height:1.08}
+  .stdc .dt{font-size:9px;letter-spacing:1.6px;margin-top:7px;opacity:.92}
+  .stdc:nth-child(1){background:linear-gradient(160deg,#c3caa9,#6f7a58);transform:rotate(-6deg)}
+  .stdc:nth-child(2){background:linear-gradient(160deg,#cbb2d6,#5e4674);transform:translateY(-14px)}
+  .stdc:nth-child(3){background:linear-gradient(160deg,#dcc39c,#8a6636);transform:rotate(6deg)}
+  @media(max-width:860px){.std-grid{grid-template-columns:1fr;gap:34px}.stdc{width:118px;height:200px}}
+
+  /* ===== garantía ===== */
+  .garantia{background:linear-gradient(150deg,var(--cream-2),var(--sand));border-block:1px solid var(--line);text-align:center}
+  .garantia .ic{width:62px;height:62px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;margin:0 auto 18px;font-size:27px}
+  .garantia h2{font-size:clamp(26px,3.4vw,42px);font-weight:800;letter-spacing:-1px}
+  .garantia h2 .it{font-style:italic;color:var(--wine)}
+  .garantia p{color:var(--ink-soft);max-width:620px;margin:16px auto 0;font-size:17px}
+
+  /* ===== equipo ===== */
+  .team{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:52px}
+  .tm{text-align:center}
+  .tm .av{width:132px;height:132px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;font-family:'Epilogue';font-weight:800;font-size:40px;color:#fff;box-shadow:0 24px 44px -26px rgba(30,27,19,.5);position:relative;overflow:hidden}
+  .tm .av::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.28),transparent 55%)}
+  .tm:nth-child(1) .av{background:linear-gradient(150deg,#a8305c,#6E1738)}
+  .tm:nth-child(2) .av{background:linear-gradient(150deg,#98a37a,#5a6142)}
+  .tm:nth-child(3) .av{background:linear-gradient(150deg,#b98f5e,#7a5628)}
+  .tm:nth-child(4) .av{background:linear-gradient(150deg,#8a6ea6,#4e3a66)}
+  .tm h4{font-family:'Epilogue';font-size:21px;font-weight:700}
+  .tm .rol{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:var(--bronze);font-weight:700;margin-top:3px}
+  .tm p{color:var(--ink-soft);font-size:14px;margin-top:9px}
+  @media(max-width:860px){.team{grid-template-columns:1fr 1fr;gap:30px}}
+
+  /* ===== videos ===== */
+  .vids{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
+  .vid{aspect-ratio:9/14;border-radius:18px;background:linear-gradient(160deg,var(--cream-2),var(--sand));border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--bronze)}
+  .vid .pl{width:58px;height:58px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:20px;color:var(--wine);box-shadow:0 14px 28px -18px rgba(0,0,0,.4)}
+  .vid span{font-size:13px;font-weight:700;letter-spacing:.5px}
+  @media(max-width:860px){.vids{grid-template-columns:1fr}}
+
+  /* ===== wedding planners band ===== */
+  .wp{background:linear-gradient(160deg,#2a1020,var(--wine-deep));color:#fff;text-align:center}
+  .wp .eyebrow{color:var(--gold)}
+  .wp h2{color:#fff;font-size:clamp(28px,3.6vw,44px);font-weight:800;letter-spacing:-1px;margin-top:12px}
+  .wp h2 .it{font-style:italic;color:var(--gold)}
+  .wp p{color:rgba(255,255,255,.85);max-width:600px;margin:16px auto 26px;font-size:17px}
+  .wp .btn-wine{background:var(--gold);color:#2a1020}.wp .btn-wine:hover{background:#d8b877}
+
 </style>
 </head>
 <body>
@@ -378,6 +465,7 @@
     <li><a href="#incluye">Cómo funciona</a></li>
     <li><a href="#precios">Precios</a></li>
     <li><a href="#blog">Blog</a></li>
+    <li><a href="nuestra-historia.html">Nosotras</a></li>
     <li><a href="#sorteo">Sorteo</a></li>
     <li><a href="crear.html" class="cta">Crear mi invitación</a></li>
   </ul>
@@ -388,6 +476,7 @@
   <a href="#incluye">Cómo funciona</a>
   <a href="#precios">Precios</a>
   <a href="#blog">Blog</a>
+  <a href="nuestra-historia.html">Nosotras</a>
   <a href="#sorteo">Sorteo</a>
   <a href="crear.html" class="cta">Crear mi invitación</a>
 </div></header>
@@ -403,6 +492,7 @@
       <a href="#colecciones" class="btn btn-sand">Ver colecciones</a>
     </div>
     <div class="rating reveal"><span class="st">★★★★★</span> <span><b>5.0</b> · +700 familias nos eligieron en Google y Facebook</span></div>
+    <div class="awardpill reveal"><span class="t">🏆</span> Ganadores <b>Wedding Awards</b></div>
   </div>
   <div class="canvas-col">
     <div class="halo"></div>
@@ -497,6 +587,31 @@
   </div>
 </section>
 
+<!-- SOBRE CON INICIALES -->
+<section class="sec sobre" id="sobre">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">El primer toque</span><h2 class="reveal" style="margin-top:12px">Un sobre lacrado con sus iniciales</h2><p class="reveal">Tus invitados no abren un link: abren un sobre. Con el sello de cera y sus iniciales, y una animación de apertura que da ganas de mirarla dos veces.</p></div>
+    <div class="sobre-grid">
+      <div class="env-stage reveal">
+        <div class="env" id="env">
+          <div class="card"><div class="k">Nuestra Boda</div><div class="nm" id="envNm">Sofía &amp; Mateo</div></div>
+          <div class="pocket"></div>
+          <div class="flap"></div>
+          <div class="seal" id="envSeal">S&amp;M</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:16px">
+          <li style="display:flex;gap:13px"><span style="color:var(--wine);font-weight:800">✦</span><span><b>Sus iniciales en el sello</b><br><span style="color:var(--ink-soft);font-size:15px">Grabadas en el lacre, como en una invitación de papel de verdad.</span></span></li>
+          <li style="display:flex;gap:13px"><span style="color:var(--wine);font-weight:800">✦</span><span><b>Animación de apertura</b><br><span style="color:var(--ink-soft);font-size:15px">El sobre se abre solo al entrar y la invitación aparece adentro.</span></span></li>
+          <li style="display:flex;gap:13px"><span style="color:var(--wine);font-weight:800">✦</span><span><b>Incluido en todas</b><br><span style="color:var(--ink-soft);font-size:15px">No es un extra: viene con cualquiera de nuestras colecciones.</span></span></li>
+        </ul>
+        <p class="env-hint" style="text-align:left;margin-top:22px">Tocá el sobre para abrirlo ↖</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- QUE INCLUYE -->
 <section class="sec incl" id="incluye">
   <div class="wrap">
@@ -506,6 +621,18 @@
       <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3M20 13v7M16 20h4"/></svg></div><h4>Control de acceso QR</h4><p>Boletos digitales con código único. Escaneás en la puerta.</p></div>
       <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></div><h4>Todo en un link</h4><p>Cuenta regresiva, mapa, música, galería y mesa de regalos.</p></div>
       <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2.5-7.5L3 11z"/></svg></div><h4>Envíos ilimitados</h4><p>Compartís por WhatsApp, Instagram o mail, sin costo extra.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PASOS -->
+<section class="sec" id="pasos">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">Cómo trabajamos</span><h2 class="reveal" style="margin-top:12px">Así creamos la tuya, juntas</h2><p class="reveal">Vos nos contás cómo la soñás. Del resto nos encargamos nosotros.</p></div>
+    <div class="pasos">
+      <div class="paso reveal"><div class="num">01</div><h4>Elegí tu estilo</h4><p>Mirá nuestras colecciones y quedate con la que más te representa. Si ninguna te cierra, la diseñamos desde cero.</p></div>
+      <div class="paso reveal"><div class="num">02</div><h4>Contanos tu evento</h4><p>Nombres, fecha, lugar, tus fotos y todo lo que quieras que tus invitados sepan del gran día.</p></div>
+      <div class="paso reveal"><div class="num">03</div><h4>Nosotros hacemos el resto</h4><p>La diseñamos cuidando cada detalle, la revisamos con vos y te la entregamos lista para compartir.</p></div>
     </div>
   </div>
 </section>
@@ -577,6 +704,29 @@
   </div>
 </section>
 
+<!-- SAVE THE DATE -->
+<section class="sec std" id="savethedate">
+  <div class="wrap">
+    <div class="std-grid">
+      <div class="reveal">
+        <span class="std-tag">🎁 De regalo</span>
+        <h2>Tu <span class="it">Save the Date</span>, incluido</h2>
+        <p class="lead">Un anticipo elegante para avisar la fecha mucho antes que la invitación. Se lo mandás a tus invitados apenas cierran el salón, y va de regalo con tu invitación.</p>
+        <ul>
+          <li>Diseñado a juego con tu invitación</li>
+          <li>Listo para mandar por WhatsApp o Instagram</li>
+          <li>Sin costo: va incluido con tu invitación</li>
+        </ul>
+      </div>
+      <div class="stdcards reveal">
+        <div class="stdc"><div class="k">Save the Date</div><div class="nm">Sofía &amp; Mateo</div><div class="dt">14 · 12 · 2026</div></div>
+        <div class="stdc"><div class="k">Guardá la fecha</div><div class="nm">Valentina</div><div class="dt">20 · 04 · 2026</div></div>
+        <div class="stdc"><div class="k">Save the Date</div><div class="nm">Camila &amp; Diego</div><div class="dt">07 · 03 · 2027</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- PRECIOS -->
 <section class="sec" id="precios">
   <div class="wrap">
@@ -625,6 +775,16 @@
   </div>
 </section>
 
+<!-- GARANTIA -->
+<section class="sec garantia" id="garantia">
+  <div class="wrap">
+    <div class="ic reveal">💛</div>
+    <span class="eyebrow reveal">Nuestra garantía</span>
+    <h2 class="reveal" style="margin-top:10px">Te vas a <span class="it">enamorar</span></h2>
+    <p class="reveal">Trabajamos con vos, cambio tras cambio, hasta que la invitación te emocione. No sale al mundo hasta que cada detalle esté exactamente como lo soñaste.</p>
+  </div>
+</section>
+
 <!-- BLOG / SEO -->
 <section class="sec" id="blog">
   <div class="wrap">
@@ -646,6 +806,32 @@
       <div class="tcard reveal"><div class="st">★★★★★</div><p>"El control de acceso con QR nos ordenó la entrada por completo. Elegante y práctico, superó lo que esperábamos."</p><div class="who">Lucía Fernández<span>XV Años</span></div></div>
       <div class="tcard reveal"><div class="st">★★★★★</div><p>"Nos hicieron el diseño a medida y quedó como lo soñábamos. Atención de primera de punta a punta."</p><div class="who">Martín Acosta<span>Boda</span></div></div>
     </div>
+  </div>
+</section>
+
+<!-- VIDEOS DE CLIENTAS ·· PARA MOSTRAR ESTA SECCION: borrá  style="display:none"  de la linea de abajo -->
+<section class="sec" id="videos" style="display:none">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">En sus propias palabras</span><h2 class="reveal" style="margin-top:12px">Lo que nos cuentan</h2><p class="reveal">Novias y quinceañeras contando cómo vivieron su invitación.</p></div>
+    <div class="vids">
+      <div class="vid reveal"><div class="pl">▶</div><span>Video 1</span></div>
+      <div class="vid reveal"><div class="pl">▶</div><span>Video 2</span></div>
+      <div class="vid reveal"><div class="pl">▶</div><span>Video 3</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section class="sec" id="equipo" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">Nuestro equipo</span><h2 class="reveal" style="margin-top:12px">Las personas detrás de tu invitación</h2><p class="reveal">Somos un equipo chico y eso es a propósito: cada invitación pasa por nuestras manos, no por una plantilla automática. Cuando nos escribís, hablás con quien la está diseñando.</p></div>
+    <div class="team">
+      <div class="tm reveal"><div class="av">M</div><h4>Maki</h4><div class="rol">Fundadora</div><p>Empezó Invítame y hoy sigue de cerca cada evento que pasa por acá.</p></div>
+      <div class="tm reveal"><div class="av">R</div><h4>Romi</h4><div class="rol">Fundadora y diseñadora</div><p>Da forma a las colecciones y diseña las invitaciones a medida.</p></div>
+      <div class="tm reveal"><div class="av">J</div><h4>Jazmín</h4><div class="rol">Diseñadora</div><p>Arma tu invitación pieza por pieza hasta que queda como la imaginaste.</p></div>
+      <div class="tm reveal"><div class="av">P</div><h4>Pía</h4><div class="rol">Marketing</div><p>Está del otro lado cuando escribís y te acompaña desde la primera consulta.</p></div>
+    </div>
+    <div class="center" style="margin-top:44px"><a href="nuestra-historia.html" class="btn btn-sand reveal">Conocé nuestra historia →</a></div>
   </div>
 </section>
 
@@ -712,6 +898,16 @@
   </div>
 </section>
 
+<!-- WEDDING PLANNERS -->
+<section class="sec wp" id="planners">
+  <div class="wrap">
+    <span class="eyebrow reveal">Para profesionales</span>
+    <h2 class="reveal">¿Sos <span class="it">wedding planner</span>?</h2>
+    <p class="reveal">Diferenciate de tu competencia ofreciendo invitaciones digitales premium. Trabajá con nosotros y sorprendé a tus parejas con algo que nunca vieron.</p>
+    <a href="wedding-planners.html" class="btn btn-wine reveal">Ver cómo trabajamos juntos →</a>
+  </div>
+</section>
+
 <!-- FINAL CTA -->
 <section class="final" id="contacto">
   <div class="wrap">
@@ -729,7 +925,7 @@
         <a href="/" class="brand"><span style="width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;margin-right:6px"></span>Invítame</a>
         <p style="max-width:320px;margin-top:14px;color:#cfc7b8;font-size:14px">Invitaciones digitales premium para bodas y XV años, con confirmación de asistencia y control de acceso.</p>
       </div>
-      <div><h5>Servicios</h5><a href="catalogo.html">Invitaciones para boda</a><a href="catalogo.html">Invitaciones para XV</a><a href="catalogo.html">Control de acceso QR</a></div>
+      <div><h5>Servicios</h5><a href="catalogo.html">Invitaciones para boda</a><a href="catalogo.html">Invitaciones para XV</a><a href="catalogo.html">Control de acceso QR</a><a href="wedding-planners.html">Para wedding planners</a><a href="nuestra-historia.html">Nuestra historia</a></div>
       <div><h5>Contacto</h5><a href="mailto:info@invitameok.com">info@invitameok.com</a><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital%20%F0%9F%92%8D" target="_blank" rel="noopener">WhatsApp</a><a href="crear.html">Crear mi invitación</a></div>
     </div>
     <div class="fb">© 2026 Invítame · Invitaciones digitales para bodas y XV años</div>
@@ -908,6 +1104,31 @@
   }
   BT.addEventListener('click',go);
   IN.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});
+})();
+</script>
+<script>
+(function(){
+  var env=document.getElementById('env'),seal=document.getElementById('envSeal'),nm=document.getElementById('envNm');
+  if(!env)return;
+  env.addEventListener('click',function(){env.classList.toggle('open');});
+  // abre solo la primera vez que entra en pantalla
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting){setTimeout(function(){env.classList.add('open');},700);io.disconnect();}
+    });},{threshold:.5});
+    io.observe(env);
+  }
+  // las iniciales siguen los nombres que carga el visitante
+  function inis(v){
+    var parts=v.split(/\s*&\s*|\s+y\s+/i).filter(Boolean);
+    if(parts.length>1)return (parts[0].trim()[0]||'')+'&'+(parts[1].trim()[0]||'');
+    return (v.trim()[0]||'').toUpperCase();
+  }
+  var last=null;
+  setInterval(function(){
+    var v=window.__invNames;
+    if(v!==last){last=v; if(v){nm.textContent=v; seal.innerHTML=inis(v).toUpperCase();}}
+  },600);
 })();
 </script>
 </body>
