@@ -455,6 +455,89 @@
   .wp p{color:rgba(255,255,255,.85);max-width:600px;margin:16px auto 26px;font-size:17px}
   .wp .btn-wine{background:var(--gold);color:#2a1020}.wp .btn-wine:hover{background:#d8b877}
 
+
+  /* iconos svg elegantes (reemplazan emojis) */
+  .awardpill .t svg{width:17px;height:17px;stroke:var(--gold);display:block}
+  .awardpill .t{display:grid;place-items:center}
+  .garantia .ic svg{width:28px;height:28px;stroke:var(--wine)}
+  .std-tag svg{width:15px;height:15px;stroke:#fff}
+  .std-tag{display:inline-flex;align-items:center;gap:8px}
+  .vid .pl svg{width:26px;height:26px;stroke:var(--wine)}
+  .sform .ok-msg .big svg{width:46px;height:46px;stroke:var(--gold);margin:0 auto}
+  .pfloat .chk svg{width:18px;height:18px;stroke:#4d6b2f;stroke-width:2}
+  .chipf .ic svg{width:16px;height:16px;stroke:var(--wine);display:block}
+  .chipf .ic{display:grid;place-items:center;margin-right:0}
+  .chipf{display:inline-flex;align-items:center;gap:9px}
+  .imap .pin svg{width:20px;height:20px;stroke:#5a6142}
+  .vs li::before{display:none}
+  .vs li .m{flex:none;display:grid;place-items:center;width:19px;height:19px;margin-top:1px}
+  .vs li .m svg{width:17px;height:17px}
+  .vs.old li .m svg{stroke:#b9ae9a}
+  .vs.new li .m svg{stroke:var(--wine)}
+  .navtog svg{width:24px;height:24px;stroke:var(--wine)}
+  .navtog .i-close{display:none}
+  .navtog[aria-expanded="true"] .i-menu{display:none}
+  .navtog[aria-expanded="true"] .i-close{display:block}
+
+
+  /* ===== precios ===== */
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .planbar{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px;align-items:stretch}
+  .planh{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px 26px;text-align:center;position:relative;display:flex;flex-direction:column}
+  .planh.feat{border:1.5px solid var(--wine);box-shadow:0 30px 60px -38px rgba(142,33,72,.5)}
+  .planh .tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--wine);color:#fff;font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:6px 15px;border-radius:999px;white-space:nowrap}
+  .planh .pn{font-family:'Epilogue';font-size:23px;font-weight:800;color:var(--ink)}
+  .planh .pd{color:var(--ink-soft);font-size:14px;margin-top:6px;min-height:40px}
+  .planh .pr{font-family:'Epilogue';font-size:38px;font-weight:800;color:var(--wine);margin-top:14px;line-height:1}
+  .planh .pr span{font-size:15px;font-weight:700;color:var(--bronze);letter-spacing:1px}
+  .planh .pnote{font-size:11.5px;color:var(--ink-soft);margin-top:7px}
+  .planh .btn{margin-top:20px;justify-content:center;width:100%}
+  @media(max-width:860px){.planbar{grid-template-columns:1fr;gap:26px}}
+
+  .ptbl-wrap{margin-top:44px;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow-x:auto;max-width:100%;contain:paint}
+  .ptbl{width:100%;border-collapse:collapse;min-width:560px}
+  .ptbl th,.ptbl td{padding:15px 18px;text-align:center;border-bottom:1px solid var(--line)}
+  .ptbl thead th{background:var(--cream);font-family:'Manrope';font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--bronze);font-weight:800}
+  .ptbl thead th:first-child,.ptbl tbody th{text-align:left}
+  .ptbl tbody th{font-family:'Manrope';font-weight:600;font-size:15px;color:var(--ink)}
+  .ptbl tbody tr:last-child th,.ptbl tbody tr:last-child td{border-bottom:none}
+  .ptbl .yes svg{width:19px;height:19px;stroke:var(--wine);stroke-width:2}
+  .ptbl .yes{display:inline-grid;place-items:center}
+  .ptbl .no{color:#c9bfae}
+
+
+  /* ===== panel interactivo de mesas ===== */
+  .seatstats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+  .seatgrid{display:grid;grid-template-columns:236px 1fr;gap:18px}
+  .pool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;min-height:230px;align-content:start}
+  .pool.hot,.mesa.hot{outline:2px dashed var(--wine);outline-offset:2px}
+  .pooltit{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--bronze);font-weight:800;margin-bottom:2px}
+  .gchip{display:flex;align-items:center;gap:9px;background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:7px 12px 7px 7px;font-family:'Manrope';font-size:13px;font-weight:600;color:var(--ink);cursor:grab;touch-action:none;user-select:none;text-align:left;width:100%}
+  .gchip:hover{border-color:var(--wine)}
+  .gchip.sel{background:var(--wine);color:#fff;border-color:var(--wine)}
+  .gchip.sel .av{background:rgba(255,255,255,.22)}
+  .gchip.sel .px{background:rgba(255,255,255,.22);color:#fff}
+  .gchip .av{width:26px;height:26px;border-radius:50%;background:linear-gradient(150deg,#c3caa9,#6f7a58);color:#fff;display:grid;place-items:center;font-family:'Epilogue';font-size:10.5px;font-weight:700;flex:none}
+  .gchip .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gchip .px{background:var(--sand);color:var(--bronze);border-radius:999px;font-size:11px;font-weight:800;padding:2px 8px;flex:none}
+  .gchip.drag{position:fixed;z-index:999;pointer-events:none;box-shadow:0 18px 34px -18px rgba(0,0,0,.5);width:auto;cursor:grabbing}
+  .mesas{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-content:start}
+  .mesa{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;transition:border-color .2s,transform .2s}
+  .mesa.full{opacity:.6}
+  .mesa .gchip{display:none}
+  .ring{width:70px;height:70px;border-radius:50%;margin:0 auto;display:grid;place-items:center;background:var(--cream);border:2px solid var(--sand);transition:border-color .25s}
+  .mesa.has .ring{border-color:var(--wine)}
+  .ring .mn{font-family:'Epilogue';font-size:21px;font-weight:800;color:var(--ink);line-height:1}
+  .ring .ms{font-size:10px;color:var(--ink-soft);font-weight:700;margin-top:1px}
+  .seats{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:10px;min-height:22px}
+  .seats .s{background:var(--cream);border:1px solid var(--line);border-radius:999px;font-size:10.5px;font-weight:700;color:var(--ink-soft);padding:3px 8px;cursor:pointer;touch-action:none}
+  .seats .s:hover{border-color:var(--wine);color:var(--wine)}
+  .seatfoot{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:16px;flex-wrap:wrap}
+  .seatfoot .hint{font-size:13px;color:var(--ink-soft)}
+  .seatfoot .reset{background:none;border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-family:'Manrope';font-weight:700;font-size:12.5px;color:var(--ink-soft);cursor:pointer}
+  .seatfoot .reset:hover{border-color:var(--wine);color:var(--wine)}
+  @media(max-width:860px){.seatgrid{grid-template-columns:1fr}.mesas{grid-template-columns:repeat(2,1fr)}.pool{min-height:0}}
+
 </style>
 </head>
 <body>
@@ -469,7 +552,7 @@
     <li><a href="#sorteo">Sorteo</a></li>
     <li><a href="crear.html" class="cta">Crear mi invitación</a></li>
   </ul>
-  <button class="navtog" id="navtog" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  <button class="navtog" id="navtog" aria-label="Abrir menú" aria-expanded="false"><svg class="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 </div>
 <div class="mmenu" id="mmenu">
   <a href="#muestras">Colecciones</a>
@@ -492,14 +575,14 @@
       <a href="#colecciones" class="btn btn-sand">Ver colecciones</a>
     </div>
     <div class="rating reveal"><span class="st">★★★★★</span> <span><b>5.0</b> · +700 familias nos eligieron en Google y Facebook</span></div>
-    <div class="awardpill reveal"><span class="t">🏆</span> Ganadores <b>Wedding Awards</b></div>
+    <div class="awardpill reveal"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8v5a4 4 0 0 1-8 0V3z"/><path d="M8 5H5.5a2.5 2.5 0 0 0 2.5 2.5M16 5h2.5A2.5 2.5 0 0 1 16 7.5"/><path d="M12 12v4M9.5 20h5M12 16c-1 0-2.5 1.4-2.5 4M12 16c1 0 2.5 1.4 2.5 4"/></svg></span> Ganadores <b>Wedding Awards</b></div>
   </div>
   <div class="canvas-col">
     <div class="halo"></div>
     <div class="stage"><div class="phone"><div class="screen"><div class="track" id="track"></div></div></div></div>
     <div class="chipf cf-cd reveal"><span class="e">Falta poco</span><span class="v" data-cd>128 días</span></div>
-    <div class="chipf cf-1 reveal" id="chip1"><span class="ic">✓</span>Confirmó <b>Valentina</b></div>
-    <div class="chipf cf-2 reveal" id="chip2"><span class="ic">📍</span>Cómo llegar al salón</div>
+    <div class="chipf cf-1 reveal" id="chip1"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>Confirmó <b>Valentina</b></div>
+    <div class="chipf cf-2 reveal" id="chip2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>Cómo llegar al salón</div>
   </div>
 </section>
 
@@ -522,7 +605,7 @@
 <!-- COLECCIONES -->
 <section class="sec" id="colecciones" style="padding-top:0">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Colecciones</span><h2 class="reveal" style="margin-top:12px">Diseñadas para cada historia</h2><p class="reveal">Elegí un estilo y nuestro equipo lo personaliza para tu evento.</p></div>
+    <div class="head"><span class="eyebrow reveal">Colecciones</span><h2 class="reveal" style="margin-top:12px">Diseñadas para cada historia</h2><p class="reveal">Elige un estilo y nuestro equipo lo personaliza para tu evento.</p></div>
     <div class="cats">
       <a href="catalogo.html" class="cat c-bodas reveal"><span class="e">Uniones</span><h3>Bodas</h3><p>Invitaciones elegantes y atemporales para el día más importante.</p><span class="l">Ver colección →</span></a>
       <a href="catalogo.html" class="cat c-xv reveal"><span class="e">Celebraciones</span><h3>XV Años</h3><p>Piezas vibrantes y sofisticadas para una noche inolvidable.</p><span class="l">Ver colección →</span></a>
@@ -534,7 +617,7 @@
 <!-- DEMO INVITACION -->
 <section class="sec demo" id="demo-invitacion" style="background:var(--card);border-block:1px solid var(--line)">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Probala vos</span><h2 class="reveal" style="margin-top:12px">Así se ve tu invitación</h2><p class="reveal">Elegí un estilo y mirá cómo cambia. Después la personalizamos 100% a tu evento.</p></div>
+    <div class="head"><span class="eyebrow reveal">Pruébala tú</span><h2 class="reveal" style="margin-top:12px">Así se ve tu invitación</h2><p class="reveal">Elige un estilo y mira cómo cambia. Después la personalizamos 100% a tu evento.</p></div>
     <div class="demo-grid">
       <div class="demo-chips reveal">
         <button class="chip active dot-bodas" data-th="bodas"><span class="dot"></span>Boda · Olivo</button>
@@ -568,9 +651,9 @@
 <!-- MUESTRAS -->
 <section class="sec muestras" id="muestras">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Nuestras colecciones</span><h2 class="reveal" style="margin-top:12px">Elegancia que se nota desde el sobre</h2><p class="reveal">Cada colección tiene su propia paleta, tipografía y apertura animada. Escribí sus nombres y miralas con ellos puestos.</p></div>
+    <div class="head"><span class="eyebrow reveal">Nuestras colecciones</span><h2 class="reveal" style="margin-top:12px">Elegancia que se nota desde el sobre</h2><p class="reveal">Cada colección tiene su propia paleta, tipografía y apertura animada. Escribe sus nombres y míralas con ellos puestos.</p></div>
     <div class="namebox reveal">
-      <input id="nameIn" type="text" maxlength="42" placeholder="Ej. Sofía y Mateo" aria-label="Escribí sus nombres" autocomplete="off">
+      <input id="nameIn" type="text" maxlength="42" placeholder="Ej. Sofía y Mateo" aria-label="Escribe sus nombres" autocomplete="off">
       <button class="btn btn-wine" id="nameGo" type="button">Ver con nuestros nombres</button>
     </div>
     <p class="namedone" id="nameOk">Listo ✦ así se verían sus invitaciones</p>
@@ -582,7 +665,7 @@
       <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-noche"><div class="mk">Nuestra Boda</div><div class="mn">Fernanda &amp; Carlos</div><div class="md">28 · 11 · 2026</div></div></div><div class="mname">Noche</div><div class="mdesc">Boda · azul noche y estrellas</div></a>
       <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-bronce"><div class="mk">Te invitamos</div><div class="mn">Benjamín</div><div class="md">05 · 10 · 2026</div></div></div><div class="mname">Bronce</div><div class="mdesc">Otros eventos · tierra y dorado</div></a>
     </div>
-    <p class="mhint reveal">Deslizá para ver más colecciones →</p>
+    <p class="mhint reveal">Desliza para ver más colecciones →</p>
     <div class="center" style="margin-top:26px"><a href="catalogo.html" class="btn btn-wine reveal">Ver todas las colecciones</a></div>
   </div>
 </section>
@@ -606,7 +689,7 @@
           <li style="display:flex;gap:13px"><span style="color:var(--wine);font-weight:800">✦</span><span><b>Animación de apertura</b><br><span style="color:var(--ink-soft);font-size:15px">El sobre se abre solo al entrar y la invitación aparece adentro.</span></span></li>
           <li style="display:flex;gap:13px"><span style="color:var(--wine);font-weight:800">✦</span><span><b>Incluido en todas</b><br><span style="color:var(--ink-soft);font-size:15px">No es un extra: viene con cualquiera de nuestras colecciones.</span></span></li>
         </ul>
-        <p class="env-hint" style="text-align:left;margin-top:22px">Tocá el sobre para abrirlo ↖</p>
+        <p class="env-hint" style="text-align:left;margin-top:22px">Toca el sobre para abrirlo ↖</p>
       </div>
     </div>
   </div>
@@ -617,10 +700,10 @@
   <div class="wrap">
     <div class="head"><span class="eyebrow reveal">Todo en un link</span><h2 class="reveal" style="margin-top:12px">La invitación que hace todo</h2><p class="reveal">Una cobertura integral: todo lo que tu evento necesita, en una sola invitación.</p></div>
     <div class="feats">
-      <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M8 12l3 3 5-6"/><circle cx="12" cy="12" r="9"/></svg></div><h4>Confirmación de asistencia</h4><p>Armá tus mesas y acomodá a tus invitados desde un panel.</p></div>
-      <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3M20 13v7M16 20h4"/></svg></div><h4>Control de acceso QR</h4><p>Boletos digitales con código único. Escaneás en la puerta.</p></div>
+      <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M8 12l3 3 5-6"/><circle cx="12" cy="12" r="9"/></svg></div><h4>Confirmación de asistencia</h4><p>Arma tus mesas y acomoda a tus invitados desde un panel.</p></div>
+      <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3M20 13v7M16 20h4"/></svg></div><h4>Control de acceso QR</h4><p>Boletos digitales con código único. Escaneas en la puerta.</p></div>
       <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></div><h4>Todo en un link</h4><p>Cuenta regresiva, mapa, música, galería y mesa de regalos.</p></div>
-      <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2.5-7.5L3 11z"/></svg></div><h4>Envíos ilimitados</h4><p>Compartís por WhatsApp, Instagram o mail, sin costo extra.</p></div>
+      <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2.5-7.5L3 11z"/></svg></div><h4>Envíos ilimitados</h4><p>Compartes por WhatsApp, Instagram o mail, sin costo extra.</p></div>
     </div>
   </div>
 </section>
@@ -628,11 +711,11 @@
 <!-- PASOS -->
 <section class="sec" id="pasos">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Cómo trabajamos</span><h2 class="reveal" style="margin-top:12px">Así creamos la tuya, juntas</h2><p class="reveal">Vos nos contás cómo la soñás. Del resto nos encargamos nosotros.</p></div>
+    <div class="head"><span class="eyebrow reveal">Cómo trabajamos</span><h2 class="reveal" style="margin-top:12px">Así creamos la tuya, juntos</h2><p class="reveal">Tú nos cuentas cómo la sueñas. Del resto nos encargamos nosotros.</p></div>
     <div class="pasos">
-      <div class="paso reveal"><div class="num">01</div><h4>Elegí tu estilo</h4><p>Mirá nuestras colecciones y quedate con la que más te representa. Si ninguna te cierra, la diseñamos desde cero.</p></div>
-      <div class="paso reveal"><div class="num">02</div><h4>Contanos tu evento</h4><p>Nombres, fecha, lugar, tus fotos y todo lo que quieras que tus invitados sepan del gran día.</p></div>
-      <div class="paso reveal"><div class="num">03</div><h4>Nosotros hacemos el resto</h4><p>La diseñamos cuidando cada detalle, la revisamos con vos y te la entregamos lista para compartir.</p></div>
+      <div class="paso reveal"><div class="num">01</div><h4>Elige tu estilo</h4><p>Mira nuestras colecciones y quédate con la que más te represente. Si ninguna te convence, la diseñamos desde cero.</p></div>
+      <div class="paso reveal"><div class="num">02</div><h4>Cuéntanos tu evento</h4><p>Nombres, fecha, lugar, tus fotos y todo lo que quieras que tus invitados sepan del gran día.</p></div>
+      <div class="paso reveal"><div class="num">03</div><h4>Nosotros hacemos el resto</h4><p>La diseñamos cuidando cada detalle, la revisamos contigo y te la entregamos lista para compartir.</p></div>
     </div>
   </div>
 </section>
@@ -640,28 +723,44 @@
 <!-- PANEL / ORGANIZADOR -->
 <section class="sec" id="panel">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Tu panel de organización</span><h2 class="reveal" style="margin-top:12px">No es solo una invitación: es tu organizador</h2><p class="reveal">Desde un panel controlás tus invitados, las mesas, las confirmaciones y el acceso con QR en la puerta.</p></div>
+    <div class="head"><span class="eyebrow reveal">Tu panel de organización</span><h2 class="reveal" style="margin-top:12px">No es solo una invitación: es tu organizador</h2><p class="reveal">Desde un panel controlas tus invitados, las mesas, las confirmaciones y el acceso con QR en la puerta.</p></div>
     <div class="panel-wrap reveal">
       <div class="browser">
         <div class="br-bar"><i></i><i></i><i></i><span class="u">invitame.littlemomentsok.com/admin</span></div>
-        <div class="br-tabs"><span class="t on">Invitados</span><span class="t">Mesas</span><span class="t">Confirmaciones</span><span class="t">Accesos QR</span></div>
+        <div class="br-tabs"><span class="t">Invitados</span><span class="t on">Mesas</span><span class="t">Confirmaciones</span><span class="t">Accesos QR</span></div>
         <div class="br-body">
-          <div class="pstats">
-            <div class="pstat"><div class="v">142</div><div class="l">Invitados</div></div>
-            <div class="pstat"><div class="v">128</div><div class="l">Confirmados</div></div>
-            <div class="pstat"><div class="v">14</div><div class="l">Pendientes</div></div>
+          <div class="seatstats">
+            <div class="pstat"><div class="v" id="stTot">24</div><div class="l">Confirmados</div></div>
+            <div class="pstat"><div class="v" id="stSent">0</div><div class="l">Sentados</div></div>
+            <div class="pstat"><div class="v" id="stSin">24</div><div class="l">Sin mesa</div></div>
           </div>
-          <div class="ptable">
-            <div class="prow h"><span>Invitado</span><span>Pases</span><span class="m3">Mesa</span><span class="m4">Estado</span></div>
-            <div class="prow"><span class="who"><span class="av">SM</span>Sofía Martínez</span><span>2</span><span class="m3">Mesa 5</span><span class="m4"><span class="badge ok">Confirmado</span></span></div>
-            <div class="prow"><span class="who"><span class="av p">LF</span>Lucía Fernández</span><span>4</span><span class="m3">Mesa 2</span><span class="m4"><span class="badge ok">Confirmado</span></span></div>
-            <div class="prow"><span class="who"><span class="av o">MA</span>Martín Acosta</span><span>2</span><span class="m3">—</span><span class="m4"><span class="badge pend">Pendiente</span></span></div>
-            <div class="prow"><span class="who"><span class="av">CR</span>Carla Ríos</span><span>3</span><span class="m3">Mesa 8</span><span class="m4"><span class="badge ok">Confirmado</span></span></div>
+          <div class="seatgrid">
+            <div class="pool" id="pool">
+              <div class="pooltit">Sin acomodar</div>
+          <button class="gchip" data-pax="4" type="button"><span class="av">FM</span><span class="nm">Familia Martínez</span><span class="px">4</span></button>
+          <button class="gchip" data-pax="1" type="button"><span class="av">AM</span><span class="nm">Abuela Marta</span><span class="px">1</span></button>
+          <button class="gchip" data-pax="2" type="button"><span class="av">LA</span><span class="nm">Lucía & Andrés</span><span class="px">2</span></button>
+          <button class="gchip" data-pax="3" type="button"><span class="av">LF</span><span class="nm">Los Fernández</span><span class="px">3</span></button>
+          <button class="gchip" data-pax="2" type="button"><span class="av">TC</span><span class="nm">Tía Carmen</span><span class="px">2</span></button>
+          <button class="gchip" data-pax="2" type="button"><span class="av">DP</span><span class="nm">Diego & Paula</span><span class="px">2</span></button>
+          <button class="gchip" data-pax="4" type="button"><span class="av">PR</span><span class="nm">Primos Ríos</span><span class="px">4</span></button>
+          <button class="gchip" data-pax="1" type="button"><span class="av">SG</span><span class="nm">Sofía Gómez</span><span class="px">1</span></button>
+          <button class="gchip" data-pax="3" type="button"><span class="av">FR</span><span class="nm">Familia Reyes</span><span class="px">3</span></button>
+          <button class="gchip" data-pax="2" type="button"><span class="av">MA</span><span class="nm">Mateo & Ana</span><span class="px">2</span></button>
+            </div>
+            <div class="mesas" id="mesas">
+          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">1</span><span class="ms">0/8</span></div><div class="seats"></div></div>
+          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">2</span><span class="ms">0/8</span></div><div class="seats"></div></div>
+          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">3</span><span class="ms">0/8</span></div><div class="seats"></div></div>
+          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">4</span><span class="ms">0/8</span></div><div class="seats"></div></div>
+          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">5</span><span class="ms">0/8</span></div><div class="seats"></div></div>
+            </div>
           </div>
+          <div class="seatfoot"><span class="hint" id="seatHint">Arrastra un invitado a una mesa — o tócalo y luego toca la mesa</span><button class="reset" id="seatReset" type="button">Reiniciar</button></div>
         </div>
       </div>
       <div class="pfloat">
-        <div class="chk">✓</div>
+        <div class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></div>
         <div class="qricon"><i></i><i class="o"></i><i></i><i></i><i></i><i></i><i class="o"></i><i></i><i class="o"></i><i></i><i></i><i class="o"></i><i></i><i></i><i class="o"></i><i></i></div>
         <div class="tt">Acceso válido</div>
         <div class="ss">Escaneado en la puerta</div>
@@ -673,33 +772,33 @@
 <!-- COMPARATIVA -->
 <section class="sec" id="comparativa" style="background:var(--card);border-block:1px solid var(--line)">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Por qué cambiar</span><h2 class="reveal" style="margin-top:12px">La invitación de papel ya no alcanza</h2><p class="reveal">Lo que antes era una tarjeta linda, hoy puede organizarte la fiesta entera.</p></div>
+    <div class="head"><span class="eyebrow reveal">Por qué cambiar</span><h2 class="reveal" style="margin-top:12px">La invitación de papel ya no alcanza</h2><p class="reveal">Lo que antes era una tarjeta bonita, hoy puede organizarte la fiesta entera.</p></div>
     <div class="vs-grid">
       <div class="vs old reveal">
         <h3>La invitación de siempre</h3>
         <ul>
-          <li>Se imprime, se reparte y se termina perdiendo</li>
-          <li>Perseguís uno por uno para que confirmen</li>
-          <li>Si cambia el horario o el lugar, ya está impresa</li>
-          <li>No sabés cuánta gente llega hasta el día de la fiesta</li>
-          <li>Cada tanda de impresión es un gasto más</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Se imprime, se reparte y se termina perdiendo</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Persigues uno por uno para que confirmen</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Si cambia el horario o el lugar, ya está impresa</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span>No sabes cuánta gente llega hasta el día de la fiesta</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Cada tanda de impresión es un gasto más</li>
         </ul>
       </div>
       <div class="vs new reveal">
         <h3>Con Invítame</h3>
         <ul>
-          <li>Un link elegante que se abre en cualquier celular, sin apps</li>
-          <li>Las confirmaciones llegan solas y quedan ordenadas</li>
-          <li>Cambiás lo que quieras, cuando quieras, en el mismo link</li>
-          <li>Sabés en vivo quién viene, con cuántos y en qué mesa</li>
-          <li>La compartís las veces que quieras, sin costo extra</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>Un link elegante que se abre en cualquier celular, sin apps</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>Las confirmaciones llegan solas y quedan ordenadas</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>Cambias lo que quieras, cuando quieras, en el mismo link</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>Sabes en vivo quién viene, con cuántos y en qué mesa</li>
+          <li><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>La compartes las veces que quieras, sin costo extra</li>
         </ul>
       </div>
     </div>
     <div class="medida reveal">
-      <h3>¿Y si la soñás <span class="it">distinta a todo</span>?</h3>
-      <p>Si ninguna de nuestras colecciones es la tuya, nuestro equipo de diseño la crea desde cero, exclusiva para tu evento. Nos contás cómo la imaginás y la vamos armando con vos.</p>
-      <a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20una%20invitaci%C3%B3n%20dise%C3%B1ada%20a%20medida%20%E2%9C%A8" target="_blank" rel="noopener" class="btn btn-wine">Quiero mi diseño a medida</a>
+      <h3>¿Y si la sueñas <span class="it">distinta a todo</span>?</h3>
+      <p>Si ninguna de nuestras colecciones es la tuya, nuestro equipo de diseño la crea desde cero, exclusiva para tu evento. Nos cuentas cómo la imaginas y la vamos armando contigo.</p>
+      <a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20una%20invitaci%C3%B3n%20dise%C3%B1ada%20a%20medida" target="_blank" rel="noopener" class="btn btn-wine">Quiero mi diseño a medida</a>
     </div>
   </div>
 </section>
@@ -709,9 +808,9 @@
   <div class="wrap">
     <div class="std-grid">
       <div class="reveal">
-        <span class="std-tag">🎁 De regalo</span>
+        <span class="std-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M3.5 13h17M12 9v11"/><path d="M12 9S10.5 4 8 4a2 2 0 0 0 0 4h4zM12 9s1.5-5 4-5a2 2 0 0 1 0 4h-4z"/></svg> De regalo</span>
         <h2>Tu <span class="it">Save the Date</span>, incluido</h2>
-        <p class="lead">Un anticipo elegante para avisar la fecha mucho antes que la invitación. Se lo mandás a tus invitados apenas cierran el salón, y va de regalo con tu invitación.</p>
+        <p class="lead">Un anticipo elegante para avisar la fecha mucho antes que la invitación. Se lo mandas a tus invitados apenas cierran el salón, y va de regalo con tu invitación.</p>
         <ul>
           <li>Diseñado a juego con tu invitación</li>
           <li>Listo para mandar por WhatsApp o Instagram</li>
@@ -720,7 +819,7 @@
       </div>
       <div class="stdcards reveal">
         <div class="stdc"><div class="k">Save the Date</div><div class="nm">Sofía &amp; Mateo</div><div class="dt">14 · 12 · 2026</div></div>
-        <div class="stdc"><div class="k">Guardá la fecha</div><div class="nm">Valentina</div><div class="dt">20 · 04 · 2026</div></div>
+        <div class="stdc"><div class="k">Guarda la fecha</div><div class="nm">Valentina</div><div class="dt">20 · 04 · 2026</div></div>
         <div class="stdc"><div class="k">Save the Date</div><div class="nm">Camila &amp; Diego</div><div class="dt">07 · 03 · 2027</div></div>
       </div>
     </div>
@@ -730,58 +829,65 @@
 <!-- PRECIOS -->
 <section class="sec" id="precios">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Planes</span><h2 class="reveal" style="margin-top:12px">Un plan para cada evento</h2><p class="reveal">Elegí cómo querés vivir tu invitación. La personalización siempre está incluida.</p></div>
-    <div class="plans">
-      <div class="plan reveal">
-        <div class="pn">Esencial</div>
-        <div class="pd">La invitación digital completa para informar y emocionar.</div>
-        <div class="pr">Consultá el precio</div>
-        <ul>
-          <li>Diseño personalizado a tu medida</li>
-          <li>Cuenta regresiva y ubicación con mapa</li>
-          <li>Galería y mesa de regalos</li>
-          <li>Confirmación de asistencia (RSVP)</li>
-          <li>Envíos ilimitados por un solo link</li>
-        </ul>
-        <a href="crear.html" class="btn btn-sand">Crear mi invitación</a>
+    <div class="head"><span class="eyebrow reveal">Planes</span><h2 class="reveal" style="margin-top:12px">Un plan para cada evento</h2><p class="reveal">Elige cómo quieres vivir tu invitación. La personalización siempre está incluida.</p></div>
+
+    <div class="planbar reveal">
+      <div class="planh">
+        <div class="pn">Estándar</div>
+        <div class="pd">Lo esencial para informar y emocionar.</div>
+        <div class="pr">$850 <span>MXN</span></div>
+        <div class="pnote">Precio con descuento incluido</div>
+        <a href="crear.html" class="btn btn-sand">Elegir Estándar</a>
       </div>
-      <div class="plan feat reveal">
+      <div class="planh feat">
         <span class="tag">Más elegido</span>
-        <div class="pn">Platinum QR</div>
-        <div class="pd">Todo lo esencial + control de acceso en la puerta.</div>
-        <div class="pr">Consultá el precio</div>
-        <ul>
-          <li>Todo lo del plan Esencial</li>
-          <li>Boletos digitales con QR único</li>
-          <li>Escaneo y control de acceso en la puerta</li>
-          <li>Panel de invitados, pases y mesas</li>
-          <li>Acompañamiento de nuestro equipo</li>
-        </ul>
-        <a href="crear.html" class="btn btn-wine">Crear mi invitación</a>
+        <div class="pn">Premium</div>
+        <div class="pd">Todo lo anterior, con música y pases.</div>
+        <div class="pr">$1,600 <span>MXN</span></div>
+        <div class="pnote">Precio con descuento incluido</div>
+        <a href="crear.html" class="btn btn-wine">Elegir Premium</a>
       </div>
-      <div class="plan reveal">
-        <div class="pn">A medida</div>
-        <div class="pd">Para bodas grandes, eventos corporativos y proyectos especiales.</div>
-        <div class="pr">Cotización personalizada</div>
-        <ul>
-          <li>Diseño y funciones a pedido</li>
-          <li>Múltiples eventos o idiomas</li>
-          <li>Integraciones especiales</li>
-          <li>Soporte prioritario</li>
-        </ul>
-        <a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital%20%F0%9F%92%8D" target="_blank" rel="noopener" class="btn btn-sand">Hablar por WhatsApp</a>
+      <div class="planh">
+        <div class="pn">Platinum QR</div>
+        <div class="pd">Todo, más control de acceso en la puerta.</div>
+        <div class="pr">$2,000 <span>MXN</span></div>
+        <div class="pnote">Precio con descuento incluido</div>
+        <a href="crear.html" class="btn btn-sand">Elegir Platinum</a>
       </div>
     </div>
+
+    <div class="ptbl-wrap reveal">
+      <table class="ptbl">
+        <caption class="sr">Qué incluye cada plan</caption>
+        <thead><tr><th scope="col">¿Qué incluye?</th><th scope="col">Estándar</th><th scope="col">Premium</th><th scope="col">Platinum QR</th></tr></thead>
+        <tbody>
+        <tr><th scope="row">Cuenta regresiva</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Ubicación</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Itinerario</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Hospedaje</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Dress Code</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Galería de fotos</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Mesa de regalos</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">#Instagram</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Confirmación de asistencia</th><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Pases personalizados</th><td><span class="no">—</span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Música</th><td><span class="no">—</span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">¡Pregúntame!</th><td><span class="no">—</span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        <tr><th scope="row">Control de acceso QR</th><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="center" style="color:var(--ink-soft);font-size:14px;margin-top:22px">¿Necesitas tu invitación en otro idioma? <a href="https://wa.me/5219992963119" target="_blank" rel="noopener" style="color:var(--wine);font-weight:700">Consulta las opciones</a></p>
   </div>
 </section>
 
 <!-- GARANTIA -->
 <section class="sec garantia" id="garantia">
   <div class="wrap">
-    <div class="ic reveal">💛</div>
+    <div class="ic reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/></svg></div>
     <span class="eyebrow reveal">Nuestra garantía</span>
     <h2 class="reveal" style="margin-top:10px">Te vas a <span class="it">enamorar</span></h2>
-    <p class="reveal">Trabajamos con vos, cambio tras cambio, hasta que la invitación te emocione. No sale al mundo hasta que cada detalle esté exactamente como lo soñaste.</p>
+    <p class="reveal">Trabajamos contigo, cambio tras cambio, hasta que la invitación te emocione. No sale al mundo hasta que cada detalle esté exactamente como lo soñaste.</p>
   </div>
 </section>
 
@@ -814,9 +920,9 @@
   <div class="wrap">
     <div class="head"><span class="eyebrow reveal">En sus propias palabras</span><h2 class="reveal" style="margin-top:12px">Lo que nos cuentan</h2><p class="reveal">Novias y quinceañeras contando cómo vivieron su invitación.</p></div>
     <div class="vids">
-      <div class="vid reveal"><div class="pl">▶</div><span>Video 1</span></div>
-      <div class="vid reveal"><div class="pl">▶</div><span>Video 2</span></div>
-      <div class="vid reveal"><div class="pl">▶</div><span>Video 3</span></div>
+      <div class="vid reveal"><div class="pl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10.2 8.6l5.2 3.4-5.2 3.4V8.6z"/></svg></div><span>Video 1</span></div>
+      <div class="vid reveal"><div class="pl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10.2 8.6l5.2 3.4-5.2 3.4V8.6z"/></svg></div><span>Video 2</span></div>
+      <div class="vid reveal"><div class="pl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10.2 8.6l5.2 3.4-5.2 3.4V8.6z"/></svg></div><span>Video 3</span></div>
     </div>
   </div>
 </section>
@@ -824,14 +930,14 @@
 <!-- EQUIPO -->
 <section class="sec" id="equipo" style="background:var(--cream)">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Nuestro equipo</span><h2 class="reveal" style="margin-top:12px">Las personas detrás de tu invitación</h2><p class="reveal">Somos un equipo chico y eso es a propósito: cada invitación pasa por nuestras manos, no por una plantilla automática. Cuando nos escribís, hablás con quien la está diseñando.</p></div>
+    <div class="head"><span class="eyebrow reveal">Nuestro equipo</span><h2 class="reveal" style="margin-top:12px">Las personas detrás de tu invitación</h2><p class="reveal">Somos un equipo pequeño y eso es a propósito: cada invitación pasa por nuestras manos, no por una plantilla automática. Cuando nos escribes, hablas con quien la está diseñando.</p></div>
     <div class="team">
-      <div class="tm reveal"><div class="av">M</div><h4>Maki</h4><div class="rol">Fundadora</div><p>Empezó Invítame y hoy sigue de cerca cada evento que pasa por acá.</p></div>
+      <div class="tm reveal"><div class="av">M</div><h4>Maki</h4><div class="rol">Fundador</div><p>Fundó Invítame y hoy sigue de cerca cada evento que pasa por aquí.</p></div>
       <div class="tm reveal"><div class="av">R</div><h4>Romi</h4><div class="rol">Fundadora y diseñadora</div><p>Da forma a las colecciones y diseña las invitaciones a medida.</p></div>
       <div class="tm reveal"><div class="av">J</div><h4>Jazmín</h4><div class="rol">Diseñadora</div><p>Arma tu invitación pieza por pieza hasta que queda como la imaginaste.</p></div>
-      <div class="tm reveal"><div class="av">P</div><h4>Pía</h4><div class="rol">Marketing</div><p>Está del otro lado cuando escribís y te acompaña desde la primera consulta.</p></div>
+      <div class="tm reveal"><div class="av">P</div><h4>Pía</h4><div class="rol">Marketing</div><p>Está del otro lado cuando escribes y te acompaña desde la primera consulta.</p></div>
     </div>
-    <div class="center" style="margin-top:44px"><a href="nuestra-historia.html" class="btn btn-sand reveal">Conocé nuestra historia →</a></div>
+    <div class="center" style="margin-top:44px"><a href="nuestra-historia.html" class="btn btn-sand reveal">Conoce nuestra historia →</a></div>
   </div>
 </section>
 
@@ -841,10 +947,10 @@
     <div class="head"><span class="eyebrow reveal">Preguntas frecuentes</span><h2 class="reveal" style="margin-top:12px">Preguntas frecuentes sobre Invítame</h2></div>
     <div class="faq-list reveal">
       <details open><summary>¿Qué es una invitación digital de Invítame?</summary><p>Es una invitación web viva en el celular de tus invitados, con cuenta regresiva, ubicación, confirmación de asistencia, galería, mesa de regalos y acceso por QR — todo en un solo link, sin apps que descargar.</p></details>
-      <details><summary>¿Incluye confirmación de asistencia y control de acceso?</summary><p>Sí. Podés recibir las confirmaciones para armar tus mesas, y con el plan Platinum QR sumás boletos digitales con código para controlar el acceso en la puerta.</p></details>
+      <details><summary>¿Incluye confirmación de asistencia y control de acceso?</summary><p>Sí. Puedes recibir las confirmaciones para armar tus mesas, y con el plan Platinum QR sumas boletos digitales con código para controlar el acceso en la puerta.</p></details>
       <details><summary>¿El diseño es personalizado?</summary><p>Totalmente. Nuestro equipo crea tu invitación a tu gusto, la publica y se asegura de que funcione perfecto en cualquier dispositivo.</p></details>
-      <details><summary>¿Cómo la comparto con mis invitados?</summary><p>Con un link que enviás por WhatsApp, Instagram o mail las veces que quieras, sin costo extra.</p></details>
-      <details><summary>¿Cómo reservo?</summary><p>Escribinos por WhatsApp o completá el formulario de contacto. Coordinamos todo y te entregamos tu invitación lista.</p></details>
+      <details><summary>¿Cómo la comparto con mis invitados?</summary><p>Con un link que envías por WhatsApp, Instagram o mail las veces que quieras, sin costo extra.</p></details>
+      <details><summary>¿Cómo reservo?</summary><p>Escríbenos por WhatsApp o completa el formulario de contacto. Coordinamos todo y te entregamos tu invitación lista.</p></details>
     </div>
   </div>
 </section>
@@ -856,7 +962,7 @@
       <div>
         <span class="eyebrow reveal">Sorteo del mes</span>
         <h2 class="reveal">Sorteamos una invitación <span class="it">gratis</span> todos los meses</h2>
-        <p class="lead reveal">¿Te casás o festejás tus XV? Dejá tus datos y participá. Todos los meses elegimos a una pareja o quinceañera y le regalamos su invitación digital completa.</p>
+        <p class="lead reveal">¿Te casas o festejas tus XV? Deja tus datos y participa. Todos los meses elegimos a una pareja o quinceañera y le regalamos su invitación digital completa.</p>
         <ul class="perks reveal">
           <li>Una invitación digital premium, sin costo</li>
           <li>Diseño personalizado a tu evento</li>
@@ -886,12 +992,12 @@
             </div>
           </div>
           <button type="submit">Participar del sorteo →</button>
-          <p class="legal">Al participar aceptás recibir novedades de Invítame. Podés darte de baja cuando quieras.</p>
+          <p class="legal">Al participar aceptas recibir novedades de Invítame. Puedes darte de baja cuando quieras.</p>
         </form>
         <div class="ok-msg">
-          <div class="big">🎉</div>
+          <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z"/></svg></div>
           <h3>¡Ya estás participando!</h3>
-          <p class="mini" style="margin-top:6px">Te vamos a escribir por WhatsApp si sos el ganador del mes. ¡Mucha suerte!</p>
+          <p class="mini" style="margin-top:6px">Te escribimos por WhatsApp si eres el ganador del mes. ¡Mucha suerte!</p>
         </div>
       </div>
     </div>
@@ -902,8 +1008,8 @@
 <section class="sec wp" id="planners">
   <div class="wrap">
     <span class="eyebrow reveal">Para profesionales</span>
-    <h2 class="reveal">¿Sos <span class="it">wedding planner</span>?</h2>
-    <p class="reveal">Diferenciate de tu competencia ofreciendo invitaciones digitales premium. Trabajá con nosotros y sorprendé a tus parejas con algo que nunca vieron.</p>
+    <h2 class="reveal">¿Eres <span class="it">wedding planner</span>?</h2>
+    <p class="reveal">Diferénciate de tu competencia ofreciendo invitaciones digitales premium. Trabaja con nosotros y sorprende a tus parejas con algo que nunca han visto.</p>
     <a href="wedding-planners.html" class="btn btn-wine reveal">Ver cómo trabajamos juntos →</a>
   </div>
 </section>
@@ -913,8 +1019,8 @@
   <div class="wrap">
     <span class="eyebrow reveal" style="color:var(--gold)">Empecemos</span>
     <h2 class="reveal" style="margin-top:14px">Que tu evento empiece con algo <span class="it">hermoso</span>.</h2>
-    <p class="reveal">Contanos tu visión y la transformamos en una invitación a la altura de tu gran día.</p>
-    <div class="cta-row reveal"><a href="crear.html" class="btn btn-wine">Crear mi invitación</a><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital%20%F0%9F%92%8D" target="_blank" rel="noopener" class="btn btn-ghost">Hablar por WhatsApp</a></div>
+    <p class="reveal">Cuéntanos tu visión y la transformamos en una invitación a la altura de tu gran día.</p>
+    <div class="cta-row reveal"><a href="crear.html" class="btn btn-wine">Crear mi invitación</a><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital" target="_blank" rel="noopener" class="btn btn-ghost">Hablar por WhatsApp</a></div>
   </div>
 </section>
 
@@ -926,7 +1032,7 @@
         <p style="max-width:320px;margin-top:14px;color:#cfc7b8;font-size:14px">Invitaciones digitales premium para bodas y XV años, con confirmación de asistencia y control de acceso.</p>
       </div>
       <div><h5>Servicios</h5><a href="catalogo.html">Invitaciones para boda</a><a href="catalogo.html">Invitaciones para XV</a><a href="catalogo.html">Control de acceso QR</a><a href="wedding-planners.html">Para wedding planners</a><a href="nuestra-historia.html">Nuestra historia</a></div>
-      <div><h5>Contacto</h5><a href="mailto:info@invitameok.com">info@invitameok.com</a><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital%20%F0%9F%92%8D" target="_blank" rel="noopener">WhatsApp</a><a href="crear.html">Crear mi invitación</a></div>
+      <div><h5>Contacto</h5><a href="mailto:info@invitameok.com">info@invitameok.com</a><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital" target="_blank" rel="noopener">WhatsApp</a><a href="crear.html">Crear mi invitación</a></div>
     </div>
     <div class="fb">© 2026 Invítame · Invitaciones digitales para bodas y XV años</div>
   </div>
@@ -959,8 +1065,8 @@
 (function(){
   var inv='<div class="cover"><div class="k">Nuestra Boda</div><div class="nm">Sofía &amp; Mateo</div><div class="dt">14 · DICIEMBRE · 2026</div></div>'+
   '<div class="isec"><h5>Falta poco</h5><div class="cd"><div class="b"><div class="n" data-d>--</div><div class="l">Días</div></div><div class="b"><div class="n" data-h>--</div><div class="l">Hs</div></div><div class="b"><div class="n" data-m>--</div><div class="l">Min</div></div><div class="b"><div class="n" data-s>--</div><div class="l">Seg</div></div></div></div>'+
-  '<div class="isec"><h5>¿Nos acompañás?</h5><button class="ibtn">Confirmar asistencia</button></div>'+
-  '<div class="isec"><h5>Cómo llegar</h5><div class="imap"><div class="r r1"></div><div class="r r2"></div><div class="pin">📍</div></div></div>'+
+  '<div class="isec"><h5>¿Nos acompañas?</h5><button class="ibtn">Confirmar asistencia</button></div>'+
+  '<div class="isec"><h5>Cómo llegar</h5><div class="imap"><div class="r r1"></div><div class="r r2"></div><div class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></div></div></div>'+
   '<div class="isec"><h5>Nuestra historia</h5><div class="igal"><div></div><div></div><div></div><div></div><div></div><div></div></div></div>'+
   '<div class="isec"><h5>Tu acceso</h5><div class="iqr"><div class="g" data-qr></div></div></div>'+
   '<div class="ifoot">Gracias por ser parte ♡</div>';
@@ -980,8 +1086,8 @@
 (function(){
   var t=document.getElementById('navtog'),m=document.getElementById('mmenu');
   if(t&&m){
-    t.addEventListener('click',function(){var o=m.classList.toggle('open');t.setAttribute('aria-expanded',o);t.textContent=o?'✕':'☰';});
-    m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){m.classList.remove('open');t.textContent='☰';t.setAttribute('aria-expanded',false);});});
+    t.addEventListener('click',function(){var o=m.classList.toggle('open');t.setAttribute('aria-expanded',o);});
+    m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){m.classList.remove('open');t.setAttribute('aria-expanded',false);});});
   }
 })();
 </script>
@@ -1048,8 +1154,8 @@
   },4200);}
 
   /* ---- chips flotantes rotativos ---- */
-  var C1=['<span class="ic">\u2713</span>Confirm\u00f3 <b>Valentina</b>','<span class="ic">\ud83c\udfb5</span>Canci\u00f3n pedida por <b>Marcos</b>','<span class="ic">\ud83c\udf81</span>Mesa de regalos','<span class="ic">\ud83d\udcf7</span>Galer\u00eda compartida'];
-  var C2=['<span class="ic">\ud83d\udccd</span>C\u00f3mo llegar al sal\u00f3n','<span class="ic">\ud83d\udc57</span>C\u00f3digo de vestimenta','<span class="ic">\ud83d\udcf2</span>Acceso con <b>QR</b>','<span class="ic">\u2713</span>Confirmaron <b>142</b> invitados'];
+  var C1=['<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>Confirm\u00f3 <b>Valentina</b>','<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></span>Canci\u00f3n pedida por <b>Marcos</b>','<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M3.5 13h17M12 9v11"/><path d="M12 9S10.5 4 8 4a2 2 0 0 0 0 4h4zM12 9s1.5-5 4-5a2 2 0 0 1 0 4h-4z"/></svg></span>Mesa de regalos','<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5h3l1.5-2.5h8L17.5 8.5h3v11h-17z"/><circle cx="12" cy="13.5" r="3.4"/></svg></span>Galer\u00eda compartida'];
+  var C2=['<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>C\u00f3mo llegar al sal\u00f3n','<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3l3 2 3-2"/><path d="M9 3l-1 4 4 2 4-2-1-4"/><path d="M8 7L5.5 20h13L16 7"/></svg></span>C\u00f3digo de vestimenta','<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h3v3M20.5 14v6.5M17 20.5h3.5"/></svg></span>Acceso con <b>QR</b>','<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg></span>Confirmaron <b>142</b> invitados'];
   function cycle(el,arr,delay){
     if(!el)return; var i=0;
     setTimeout(function(){ setInterval(function(){
@@ -1129,6 +1235,102 @@
     var v=window.__invNames;
     if(v!==last){last=v; if(v){nm.textContent=v; seal.innerHTML=inis(v).toUpperCase();}}
   },600);
+})();
+</script>
+<script>
+(function(){
+  var pool=document.getElementById('pool'), mesas=document.getElementById('mesas');
+  if(!pool||!mesas)return;
+  var stTot=document.getElementById('stTot'),stSent=document.getElementById('stSent'),stSin=document.getElementById('stSin');
+  var hint=document.getElementById('seatHint'), reset=document.getElementById('seatReset');
+  var sel=null, drag=null, ghost=null, startX=0, startY=0, moved=false;
+
+  function pax(c){return parseInt(c.getAttribute('data-pax'),10)||1;}
+  function seated(m){var t=0;m.querySelectorAll('.gchip').forEach(function(c){t+=pax(c);});return t;}
+  function refresh(){
+    var tot=0,sent=0;
+    document.querySelectorAll('.gchip').forEach(function(c){if(!c.classList.contains('drag'))tot+=pax(c);});
+    mesas.querySelectorAll('.mesa').forEach(function(m){
+      var s=seated(m),cap=parseInt(m.getAttribute('data-cap'),10);
+      sent+=s;
+      m.querySelector('.ms').textContent=s+'/'+cap;
+      m.classList.toggle('has',s>0);
+      m.classList.toggle('full',s>=cap);
+      var box=m.querySelector('.seats'); box.innerHTML='';
+      m.querySelectorAll('.gchip').forEach(function(c){
+        var b=document.createElement('span'); b.className='s'; b.textContent=c.querySelector('.nm').textContent;
+        b.addEventListener('click',function(e){e.stopPropagation();pool.appendChild(c);refresh();});
+        box.appendChild(b);
+      });
+    });
+    stTot.textContent=tot; stSent.textContent=sent; stSin.textContent=tot-sent;
+  }
+  function fits(m,c){
+    var cap=parseInt(m.getAttribute('data-cap'),10);
+    return seated(m)+pax(c)<=cap;
+  }
+  function place(m,c){
+    if(m===pool){pool.appendChild(c);refresh();return true;}
+    if(!fits(m,c)){hint.textContent='Esa mesa ya no tiene lugar para '+pax(c)+' personas';return false;}
+    m.appendChild(c); refresh();
+    hint.textContent='Listo — puedes seguir moviendo invitados entre mesas';
+    return true;
+  }
+  function targetAt(x,y){
+    var el=document.elementFromPoint(x,y); if(!el)return null;
+    return el.closest('.mesa')||el.closest('#pool');
+  }
+  function clearHot(){document.querySelectorAll('.hot').forEach(function(e){e.classList.remove('hot');});}
+
+  document.addEventListener('pointerdown',function(e){
+    var c=e.target.closest('.gchip'); if(!c)return;
+    e.preventDefault();
+    drag=c; moved=false; startX=e.clientX; startY=e.clientY;
+    c.setPointerCapture&&c.setPointerCapture(e.pointerId);
+  });
+  document.addEventListener('pointermove',function(e){
+    if(!drag)return;
+    if(!moved && Math.abs(e.clientX-startX)+Math.abs(e.clientY-startY)<6)return;
+    if(!moved){
+      moved=true;
+      ghost=drag.cloneNode(true); ghost.classList.add('drag');
+      ghost.style.width=drag.offsetWidth+'px';
+      document.body.appendChild(ghost);
+      drag.style.opacity='.35';
+    }
+    ghost.style.left=(e.clientX-40)+'px'; ghost.style.top=(e.clientY-16)+'px';
+    clearHot(); var t=targetAt(e.clientX,e.clientY); if(t)t.classList.add('hot');
+  });
+  document.addEventListener('pointerup',function(e){
+    if(!drag)return;
+    var c=drag, wasMoved=moved;
+    drag=null; moved=false;
+    if(ghost){ghost.remove();ghost=null;}
+    c.style.opacity='';
+    clearHot();
+    if(wasMoved){
+      var t=targetAt(e.clientX,e.clientY);
+      if(t)place(t===pool?pool:t,c);
+    }else{
+      if(sel===c){c.classList.remove('sel');sel=null;hint.textContent='Arrastra un invitado a una mesa — o tócalo y luego toca la mesa';}
+      else{if(sel)sel.classList.remove('sel');sel=c;c.classList.add('sel');hint.textContent='Ahora toca la mesa donde quieres sentarlos';}
+    }
+  });
+  mesas.addEventListener('click',function(e){
+    var m=e.target.closest('.mesa'); if(!m||!sel)return;
+    if(place(m,sel)){sel.classList.remove('sel');sel=null;}
+  });
+  pool.addEventListener('click',function(e){
+    if(!sel)return; if(e.target.closest('.gchip'))return;
+    place(pool,sel); sel.classList.remove('sel'); sel=null;
+  });
+  reset.addEventListener('click',function(){
+    mesas.querySelectorAll('.gchip').forEach(function(c){pool.appendChild(c);});
+    if(sel){sel.classList.remove('sel');sel=null;}
+    hint.textContent='Arrastra un invitado a una mesa — o tócalo y luego toca la mesa';
+    refresh();
+  });
+  refresh();
 })();
 </script>
 </body>

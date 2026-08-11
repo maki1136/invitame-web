@@ -453,6 +453,30 @@
   .wp p{color:rgba(255,255,255,.85);max-width:600px;margin:16px auto 26px;font-size:17px}
   .wp .btn-wine{background:var(--gold);color:#2a1020}.wp .btn-wine:hover{background:#d8b877}
 
+
+  /* iconos svg elegantes (reemplazan emojis) */
+  .awardpill .t svg{width:17px;height:17px;stroke:var(--gold);display:block}
+  .awardpill .t{display:grid;place-items:center}
+  .garantia .ic svg{width:28px;height:28px;stroke:var(--wine)}
+  .std-tag svg{width:15px;height:15px;stroke:#fff}
+  .std-tag{display:inline-flex;align-items:center;gap:8px}
+  .vid .pl svg{width:26px;height:26px;stroke:var(--wine)}
+  .sform .ok-msg .big svg{width:46px;height:46px;stroke:var(--gold);margin:0 auto}
+  .pfloat .chk svg{width:18px;height:18px;stroke:#4d6b2f;stroke-width:2}
+  .chipf .ic svg{width:16px;height:16px;stroke:var(--wine);display:block}
+  .chipf .ic{display:grid;place-items:center;margin-right:0}
+  .chipf{display:inline-flex;align-items:center;gap:9px}
+  .imap .pin svg{width:20px;height:20px;stroke:#5a6142}
+  .vs li::before{display:none}
+  .vs li .m{flex:none;display:grid;place-items:center;width:19px;height:19px;margin-top:1px}
+  .vs li .m svg{width:17px;height:17px}
+  .vs.old li .m svg{stroke:#b9ae9a}
+  .vs.new li .m svg{stroke:var(--wine)}
+  .navtog svg{width:24px;height:24px;stroke:var(--wine)}
+  .navtog .i-close{display:none}
+  .navtog[aria-expanded="true"] .i-menu{display:none}
+  .navtog[aria-expanded="true"] .i-close{display:block}
+
 </style><style>
   body{padding-top:80px}
   .phero{text-align:center;padding:96px 0 74px}
@@ -513,7 +537,7 @@
     <li><a href="#sorteo">Sorteo</a></li>
     <li><a href="crear.html" class="cta">Crear mi invitación</a></li>
   </ul>
-  <button class="navtog" id="navtog" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  <button class="navtog" id="navtog" aria-label="Abrir menú" aria-expanded="false"><svg class="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 </div>
 <div class="mmenu" id="mmenu">
   <a href="#muestras">Colecciones</a>
@@ -528,23 +552,23 @@
 <section class="phero">
   <div class="wrap">
     <span class="eyebrow reveal">Para profesionales</span>
-    <h1 class="reveal">¿Sos <span class="it">wedding planner</span>?</h1>
+    <h1 class="reveal">¿Eres <span class="it">wedding planner</span>?</h1>
     <div class="rule"></div>
-    <p class="sub reveal">Diferenciate de tu competencia ofreciendo invitaciones digitales premium. Trabajá con nosotros y sorprendé a tus parejas con algo que nunca vieron.</p>
-    <div class="cta-row" style="justify-content:center;display:flex;gap:14px;margin-top:32px"><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20soy%20wedding%20planner%20y%20quiero%20trabajar%20con%20ustedes%20%E2%9C%A8" target="_blank" rel="noopener" class="btn btn-wine reveal">Colaboremos juntos</a></div>
+    <p class="sub reveal">Diferénciate de tu competencia ofreciendo invitaciones digitales premium. Trabaja con nosotros y sorprende a tus parejas con algo que nunca han visto.</p>
+    <div class="cta-row" style="justify-content:center;display:flex;gap:14px;margin-top:32px"><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20soy%20wedding%20planner%20y%20quiero%20trabajar%20con%20ustedes" target="_blank" rel="noopener" class="btn btn-wine reveal">Colaboremos juntos</a></div>
   </div>
 </section>
 
 <section class="sec" style="background:var(--card);border-block:1px solid var(--line);padding-top:70px">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Cómo trabajamos</span><h2 class="reveal" style="margin-top:12px">Lo que ganás sumándonos a tu equipo</h2></div>
+    <div class="head"><span class="eyebrow reveal">Cómo trabajamos</span><h2 class="reveal" style="margin-top:12px">Lo que ganas sumándonos a tu equipo</h2></div>
     <div class="bens">
-      <div class="ben reveal"><div class="num">01</div><h4>Marca blanca o co-branding</h4><p>Tu marca en cada invitación. Lo ofrecés como un servicio premium exclusivo tuyo, o firmamos juntos.</p></div>
-      <div class="ben reveal"><div class="num">02</div><h4>Precio fijo por evento</h4><p>Sin sorpresas. Tarifa especial para profesionales, así la metés en tu presupuesto con tu margen ya calculado.</p></div>
-      <div class="ben reveal"><div class="num">03</div><h4>Soporte directo y prioritario</h4><p>Hablás con nuestro equipo sin intermediarios. Respondemos rápido para que nunca dejes esperando a tus parejas.</p></div>
-      <div class="ben reveal"><div class="num">04</div><h4>Sorprendé a tus parejas</h4><p>Diferenciate ofreciendo algo que la mayoría todavía no vio. Es de esas cosas que después cuentan.</p></div>
-      <div class="ben reveal"><div class="num">05</div><h4>Fidelizá a tus clientes</h4><p>Un detalle premium que hace que te recomienden. La invitación es la primera impresión del evento entero.</p></div>
-      <div class="ben reveal"><div class="num">06</div><h4>Ampliá tus servicios</h4><p>Sumás un servicio más sin trabajo extra: nosotros hacemos la invitación, vos te llevás el mérito.</p></div>
+      <div class="ben reveal"><div class="num">01</div><h4>Marca blanca o co-branding</h4><p>Tu marca en cada invitación. Lo ofreces como un servicio premium exclusivo tuyo, o firmamos juntos.</p></div>
+      <div class="ben reveal"><div class="num">02</div><h4>Precio fijo por evento</h4><p>Sin sorpresas. Tarifa especial para profesionales, así la metes en tu presupuesto con tu margen ya calculado.</p></div>
+      <div class="ben reveal"><div class="num">03</div><h4>Soporte directo y prioritario</h4><p>Hablas con nuestro equipo sin intermediarios. Respondemos rápido para que nunca dejes esperando a tus parejas.</p></div>
+      <div class="ben reveal"><div class="num">04</div><h4>Sorprende a tus parejas</h4><p>Diferénciate ofreciendo algo que la mayoría todavía no ha visto. Es de esas cosas que después cuentan.</p></div>
+      <div class="ben reveal"><div class="num">05</div><h4>Fideliza a tus clientes</h4><p>Un detalle premium que hace que te recomienden. La invitación es la primera impresión del evento entero.</p></div>
+      <div class="ben reveal"><div class="num">06</div><h4>Amplía tus servicios</h4><p>Sumas un servicio más sin trabajo extra: nosotros hacemos la invitación, tú te llevas el mérito.</p></div>
     </div>
   </div>
 </section>
@@ -553,8 +577,8 @@
   <div class="wrap">
     <span class="eyebrow reveal">Sin compromiso</span>
     <h2 class="reveal" style="margin-top:10px;font-size:clamp(26px,3.4vw,42px);font-weight:800;letter-spacing:-1px">Colaboremos <span class="it" style="font-style:italic;color:var(--wine)">juntos</span></h2>
-    <p class="reveal" style="color:var(--ink-soft);max-width:620px;margin:16px auto 26px;font-size:17px">Escribinos y te contamos cómo podemos trabajar en equipo, qué tarifas manejamos para profesionales y cómo sería el día a día con tus parejas.</p>
-    <a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20soy%20wedding%20planner%20y%20quiero%20trabajar%20con%20ustedes%20%E2%9C%A8" target="_blank" rel="noopener" class="btn btn-wine reveal">Contactanos por WhatsApp</a>
+    <p class="reveal" style="color:var(--ink-soft);max-width:620px;margin:16px auto 26px;font-size:17px">Escríbenos y te contamos cómo podemos trabajar en equipo, qué tarifas manejamos para profesionales y cómo sería el día a día con tus parejas.</p>
+    <a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20soy%20wedding%20planner%20y%20quiero%20trabajar%20con%20ustedes" target="_blank" rel="noopener" class="btn btn-wine reveal">Contáctanos por WhatsApp</a>
   </div>
 </section>
 
@@ -566,7 +590,7 @@
         <p style="max-width:320px;margin-top:14px;color:#cfc7b8;font-size:14px">Invitaciones digitales premium para bodas y XV años, con confirmación de asistencia y control de acceso.</p>
       </div>
       <div><h5>Servicios</h5><a href="catalogo.html">Invitaciones para boda</a><a href="catalogo.html">Invitaciones para XV</a><a href="catalogo.html">Control de acceso QR</a><a href="wedding-planners.html">Para wedding planners</a><a href="nuestra-historia.html">Nuestra historia</a></div>
-      <div><h5>Contacto</h5><a href="mailto:info@invitameok.com">info@invitameok.com</a><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital%20%F0%9F%92%8D" target="_blank" rel="noopener">WhatsApp</a><a href="crear.html">Crear mi invitación</a></div>
+      <div><h5>Contacto</h5><a href="mailto:info@invitameok.com">info@invitameok.com</a><a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20crear%20mi%20invitaci%C3%B3n%20digital" target="_blank" rel="noopener">WhatsApp</a><a href="crear.html">Crear mi invitación</a></div>
     </div>
     <div class="fb">© 2026 Invítame · Invitaciones digitales para bodas y XV años</div>
   </div>
@@ -574,7 +598,7 @@
 <script>
 document.querySelectorAll('.reveal').forEach(function(el){el.style.opacity=1;el.style.transform='none';});
 (function(){var t=document.getElementById('navtog'),m=document.getElementById('mmenu');
-if(t&&m){t.addEventListener('click',function(){var o=m.classList.toggle('open');t.textContent=o?'✕':'☰';});}})();
+if(t&&m){t.addEventListener('click',function(){var o=m.classList.toggle('open');t.setAttribute('aria-expanded',o);});}})();
 </script>
 </body>
 </html>
