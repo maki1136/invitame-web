@@ -538,6 +538,27 @@
   .seatfoot .reset:hover{border-color:var(--wine);color:var(--wine)}
   @media(max-width:860px){.seatgrid{grid-template-columns:1fr}.mesas{grid-template-columns:repeat(2,1fr)}.pool{min-height:0}}
 
+
+  /* paneles del organizador */
+  .br-tabs .t{background:none;border:none;font-family:'Manrope';cursor:pointer}
+  .br-body .pane{display:none}
+  .br-body .pane.on{display:block}
+  .prow.tap{cursor:pointer;transition:background .15s}
+  .prow.tap:hover{background:var(--cream)}
+  .qrgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .tick{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-family:'Manrope';transition:border-color .2s,opacity .2s}
+  .tick:hover{border-color:var(--wine)}
+  .tick.used{opacity:.55;background:var(--cream)}
+  .tick .qrbox{width:52px;height:52px;background:var(--ink);border-radius:9px;display:grid;place-items:center;color:#fff;padding:6px}
+  .tick.used .qrbox{background:#4d6b2f}
+  .tick .qrbox svg{width:100%;height:100%}
+  .tick .tn{font-size:12.5px;font-weight:700;color:var(--ink);text-align:center;line-height:1.25}
+  .tick .tp{font-size:11px;color:var(--ink-soft)}
+  .tick .tst{font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--bronze);display:inline-flex;align-items:center;gap:4px}
+  .tick.used .tst{color:#4d6b2f}
+  .tick .tst svg{width:13px;height:13px}
+  @media(max-width:860px){.qrgrid{grid-template-columns:repeat(2,1fr)}}
+
 </style>
 </head>
 <body>
@@ -727,36 +748,40 @@
     <div class="panel-wrap reveal">
       <div class="browser">
         <div class="br-bar"><i></i><i></i><i></i><span class="u">invitame.littlemomentsok.com/admin</span></div>
-        <div class="br-tabs"><span class="t">Invitados</span><span class="t on">Mesas</span><span class="t">Confirmaciones</span><span class="t">Accesos QR</span></div>
+        <div class="br-tabs" id="brTabs">
+          <button class="t on" data-pane="inv" type="button">Invitados</button>
+          <button class="t" data-pane="mesas" type="button">Mesas</button>
+          <button class="t" data-pane="conf" type="button">Confirmaciones</button>
+          <button class="t" data-pane="qr" type="button">Accesos QR</button>
+        </div>
         <div class="br-body">
-          <div class="seatstats">
-            <div class="pstat"><div class="v" id="stTot">24</div><div class="l">Confirmados</div></div>
-            <div class="pstat"><div class="v" id="stSent">0</div><div class="l">Sentados</div></div>
-            <div class="pstat"><div class="v" id="stSin">24</div><div class="l">Sin mesa</div></div>
+          <div class="seatstats" id="stats"></div>
+
+          <!-- INVITADOS -->
+          <div class="pane on" data-pane="inv">
+            <div class="ptable" id="tblInv"></div>
           </div>
-          <div class="seatgrid">
-            <div class="pool" id="pool">
-              <div class="pooltit">Sin acomodar</div>
-          <button class="gchip" data-pax="4" type="button"><span class="av">FM</span><span class="nm">Familia Martínez</span><span class="px">4</span></button>
-          <button class="gchip" data-pax="1" type="button"><span class="av">AM</span><span class="nm">Abuela Marta</span><span class="px">1</span></button>
-          <button class="gchip" data-pax="2" type="button"><span class="av">LA</span><span class="nm">Lucía & Andrés</span><span class="px">2</span></button>
-          <button class="gchip" data-pax="3" type="button"><span class="av">LF</span><span class="nm">Los Fernández</span><span class="px">3</span></button>
-          <button class="gchip" data-pax="2" type="button"><span class="av">TC</span><span class="nm">Tía Carmen</span><span class="px">2</span></button>
-          <button class="gchip" data-pax="2" type="button"><span class="av">DP</span><span class="nm">Diego & Paula</span><span class="px">2</span></button>
-          <button class="gchip" data-pax="4" type="button"><span class="av">PR</span><span class="nm">Primos Ríos</span><span class="px">4</span></button>
-          <button class="gchip" data-pax="1" type="button"><span class="av">SG</span><span class="nm">Sofía Gómez</span><span class="px">1</span></button>
-          <button class="gchip" data-pax="3" type="button"><span class="av">FR</span><span class="nm">Familia Reyes</span><span class="px">3</span></button>
-          <button class="gchip" data-pax="2" type="button"><span class="av">MA</span><span class="nm">Mateo & Ana</span><span class="px">2</span></button>
+
+          <!-- MESAS -->
+          <div class="pane" data-pane="mesas">
+            <div class="seatgrid">
+              <div class="pool" id="pool"><div class="pooltit">Sin acomodar</div></div>
+              <div class="mesas" id="mesas"></div>
             </div>
-            <div class="mesas" id="mesas">
-          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">1</span><span class="ms">0/8</span></div><div class="seats"></div></div>
-          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">2</span><span class="ms">0/8</span></div><div class="seats"></div></div>
-          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">3</span><span class="ms">0/8</span></div><div class="seats"></div></div>
-          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">4</span><span class="ms">0/8</span></div><div class="seats"></div></div>
-          <div class="mesa" data-cap="8"><div class="ring"><span class="mn">5</span><span class="ms">0/8</span></div><div class="seats"></div></div>
-            </div>
+            <div class="seatfoot"><span class="hint" id="seatHint">Arrastra un invitado a una mesa — o tócalo y luego toca la mesa</span><button class="reset" id="seatReset" type="button">Reiniciar mesas</button></div>
           </div>
-          <div class="seatfoot"><span class="hint" id="seatHint">Arrastra un invitado a una mesa — o tócalo y luego toca la mesa</span><button class="reset" id="seatReset" type="button">Reiniciar</button></div>
+
+          <!-- CONFIRMACIONES -->
+          <div class="pane" data-pane="conf">
+            <div class="ptable" id="tblConf"></div>
+            <div class="seatfoot"><span class="hint">Toca a un invitado para cambiar su confirmación</span></div>
+          </div>
+
+          <!-- ACCESOS QR -->
+          <div class="pane" data-pane="qr">
+            <div class="qrgrid" id="qrGrid"></div>
+            <div class="seatfoot"><span class="hint" id="qrHint">Toca un boleto para escanearlo en la puerta</span><button class="reset" id="qrScan" type="button">Simular escaneo</button></div>
+          </div>
         </div>
       </div>
       <div class="pfloat">
@@ -1239,98 +1264,180 @@
 </script>
 <script>
 (function(){
-  var pool=document.getElementById('pool'), mesas=document.getElementById('mesas');
-  if(!pool||!mesas)return;
-  var stTot=document.getElementById('stTot'),stSent=document.getElementById('stSent'),stSin=document.getElementById('stSin');
-  var hint=document.getElementById('seatHint'), reset=document.getElementById('seatReset');
-  var sel=null, drag=null, ghost=null, startX=0, startY=0, moved=false;
+  var host=document.getElementById('brTabs'); if(!host)return;
+  var G=[
+    {id:1,n:'Familia Martínez',i:'FM',p:4,k:1,d:'Sin gluten',m:null,r:1,ing:0},
+    {id:2,n:'Abuela Marta',i:'AM',p:1,k:0,d:'Sin gluten',m:null,r:1,ing:0},
+    {id:3,n:'Lucía & Andrés',i:'LA',p:2,k:0,d:'',m:null,r:1,ing:0},
+    {id:4,n:'Los Fernández',i:'LF',p:3,k:2,d:'',m:null,r:1,ing:0},
+    {id:5,n:'Tía Carmen',i:'TC',p:2,k:0,d:'Vegetariana',m:null,r:1,ing:0},
+    {id:6,n:'Diego & Paula',i:'DP',p:2,k:0,d:'',m:null,r:0,ing:0},
+    {id:7,n:'Primos Ríos',i:'PR',p:4,k:1,d:'',m:null,r:1,ing:0},
+    {id:8,n:'Sofía Gómez',i:'SG',p:1,k:0,d:'',m:null,r:0,ing:0},
+    {id:9,n:'Familia Reyes',i:'FR',p:3,k:1,d:'Sin lactosa',m:null,r:1,ing:0},
+    {id:10,n:'Mateo & Ana',i:'MA',p:2,k:0,d:'',m:null,r:1,ing:0}
+  ];
+  var MESAS=[1,2,3,4,5], CAP=8, pane='inv', sel=null;
+  var CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>';
+  var stats=document.getElementById('stats'), pool=document.getElementById('pool'), mesas=document.getElementById('mesas');
+  var tblInv=document.getElementById('tblInv'), tblConf=document.getElementById('tblConf'), qrGrid=document.getElementById('qrGrid');
+  var seatHint=document.getElementById('seatHint'), qrHint=document.getElementById('qrHint');
 
-  function pax(c){return parseInt(c.getAttribute('data-pax'),10)||1;}
-  function seated(m){var t=0;m.querySelectorAll('.gchip').forEach(function(c){t+=pax(c);});return t;}
-  function refresh(){
-    var tot=0,sent=0;
-    document.querySelectorAll('.gchip').forEach(function(c){if(!c.classList.contains('drag'))tot+=pax(c);});
-    mesas.querySelectorAll('.mesa').forEach(function(m){
-      var s=seated(m),cap=parseInt(m.getAttribute('data-cap'),10);
-      sent+=s;
-      m.querySelector('.ms').textContent=s+'/'+cap;
-      m.classList.toggle('has',s>0);
-      m.classList.toggle('full',s>=cap);
-      var box=m.querySelector('.seats'); box.innerHTML='';
-      m.querySelectorAll('.gchip').forEach(function(c){
-        var b=document.createElement('span'); b.className='s'; b.textContent=c.querySelector('.nm').textContent;
-        b.addEventListener('click',function(e){e.stopPropagation();pool.appendChild(c);refresh();});
+  function conf(){return G.filter(function(g){return g.r;});}
+  function sum(a,f){var t=0;a.forEach(function(x){t+=f(x);});return t;}
+  function enMesa(m){return conf().filter(function(g){return g.m===m;});}
+  function ocup(m){return sum(enMesa(m),function(g){return g.p;});}
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+  function setStats(items){
+    stats.innerHTML=items.map(function(x){
+      return '<div class="pstat"><div class="v">'+x[0]+'</div><div class="l">'+x[1]+'</div></div>';
+    }).join('');
+  }
+
+  function render(){
+    // ---- stats por pestaña ----
+    var totPax=sum(G,function(g){return g.p;}), cPax=sum(conf(),function(g){return g.p;});
+    var sent=sum(MESAS,function(m){return ocup(m);});
+    if(pane==='inv') setStats([[G.length,'Grupos'],[totPax,'Personas'],[G.filter(function(g){return !g.r;}).length,'Pendientes']]);
+    if(pane==='mesas') setStats([[cPax,'Confirmados'],[sent,'Sentados'],[cPax-sent,'Sin mesa']]);
+    if(pane==='conf') setStats([[sum(conf(),function(g){return g.p;}),'Confirmados'],[sum(G.filter(function(g){return !g.r;}),function(g){return g.p;}),'Pendientes'],[sum(conf(),function(g){return g.k;}),'Niños']]);
+    if(pane==='qr'){var ing=sum(conf().filter(function(g){return g.ing;}),function(g){return g.p;});setStats([[ing,'Ingresaron'],[cPax-ing,'Faltan'],[cPax,'Pases emitidos']]);}
+
+    // ---- INVITADOS ----
+    tblInv.innerHTML='<div class="prow h"><span>Invitado</span><span>Pases</span><span class="m3">Mesa</span><span class="m4">Estado</span></div>'+
+      G.map(function(g){
+        return '<div class="prow"><span class="who"><span class="av">'+g.i+'</span>'+esc(g.n)+'</span>'+
+        '<span>'+g.p+'</span><span class="m3">'+(g.m?('Mesa '+g.m):'—')+'</span>'+
+        '<span class="m4"><span class="badge '+(g.r?'ok':'pend')+'">'+(g.r?'Confirmado':'Pendiente')+'</span></span></div>';
+      }).join('');
+
+    // ---- MESAS ----
+    pool.innerHTML='<div class="pooltit">Sin acomodar</div>';
+    conf().filter(function(g){return !g.m;}).forEach(function(g){pool.appendChild(chip(g));});
+    mesas.innerHTML='';
+    MESAS.forEach(function(m){
+      var o=ocup(m), d=document.createElement('div');
+      d.className='mesa'+(o>0?' has':'')+(o>=CAP?' full':'');
+      d.setAttribute('data-m',m);
+      d.innerHTML='<div class="ring"><span class="mn">'+m+'</span><span class="ms">'+o+'/'+CAP+'</span></div><div class="seats"></div>';
+      var box=d.querySelector('.seats');
+      enMesa(m).forEach(function(g){
+        var b=document.createElement('span'); b.className='s'; b.textContent=g.n;
+        b.addEventListener('click',function(e){e.stopPropagation();g.m=null;render();});
         box.appendChild(b);
       });
+      mesas.appendChild(d);
     });
-    stTot.textContent=tot; stSent.textContent=sent; stSin.textContent=tot-sent;
+
+    // ---- CONFIRMACIONES ----
+    tblConf.innerHTML='<div class="prow h"><span>Invitado</span><span>Pases</span><span class="m3">Detalle</span><span class="m4">Estado</span></div>'+
+      G.map(function(g){
+        var det=[]; if(g.k)det.push(g.k+' niño'+(g.k>1?'s':'')); if(g.d)det.push(g.d);
+        return '<div class="prow tap" data-id="'+g.id+'"><span class="who"><span class="av">'+g.i+'</span>'+esc(g.n)+'</span>'+
+        '<span>'+g.p+'</span><span class="m3" style="color:var(--ink-soft);font-size:13px">'+(det.join(' · ')||'—')+'</span>'+
+        '<span class="m4"><span class="badge '+(g.r?'ok':'pend')+'">'+(g.r?'Confirmado':'Pendiente')+'</span></span></div>';
+      }).join('');
+
+    // ---- QR ----
+    qrGrid.innerHTML=conf().map(function(g){
+      return '<button class="tick'+(g.ing?' used':'')+'" data-id="'+g.id+'" type="button">'+
+        '<span class="qrbox">'+qrsvg(g.id)+'</span><span class="tn">'+esc(g.n)+'</span>'+
+        '<span class="tp">'+g.p+' pases</span><span class="tst">'+(g.ing?CHK+' Ingresó':'Sin usar')+'</span></button>';
+    }).join('');
   }
-  function fits(m,c){
-    var cap=parseInt(m.getAttribute('data-cap'),10);
-    return seated(m)+pax(c)<=cap;
+
+  function qrsvg(seed){
+    var r=[],x=seed*9301+49297,out='';
+    for(var i=0;i<25;i++){x=(x*9301+49297)%233280;r.push(x/233280>0.45?1:0);}
+    for(var i=0;i<25;i++){ if(r[i]) out+='<rect x="'+((i%5)*4+1)+'" y="'+(Math.floor(i/5)*4+1)+'" width="3.2" height="3.2" rx="0.5"/>'; }
+    return '<svg viewBox="0 0 21 21" fill="currentColor" aria-hidden="true">'+out+'</svg>';
   }
-  function place(m,c){
-    if(m===pool){pool.appendChild(c);refresh();return true;}
-    if(!fits(m,c)){hint.textContent='Esa mesa ya no tiene lugar para '+pax(c)+' personas';return false;}
-    m.appendChild(c); refresh();
-    hint.textContent='Listo — puedes seguir moviendo invitados entre mesas';
-    return true;
+
+  function chip(g){
+    var b=document.createElement('button');
+    b.className='gchip'+(sel===g.id?' sel':''); b.type='button'; b.setAttribute('data-id',g.id);
+    b.innerHTML='<span class="av">'+g.i+'</span><span class="nm">'+esc(g.n)+'</span><span class="px">'+g.p+'</span>';
+    return b;
   }
-  function targetAt(x,y){
-    var el=document.elementFromPoint(x,y); if(!el)return null;
-    return el.closest('.mesa')||el.closest('#pool');
+  function byId(id){return G.filter(function(g){return g.id==id;})[0];}
+
+  // ---------- pestañas ----------
+  host.addEventListener('click',function(e){
+    var t=e.target.closest('.t'); if(!t)return;
+    host.querySelectorAll('.t').forEach(function(x){x.classList.remove('on');});
+    t.classList.add('on'); pane=t.getAttribute('data-pane');
+    document.querySelectorAll('.br-body .pane').forEach(function(pn){
+      pn.classList.toggle('on', pn.getAttribute('data-pane')===pane);
+    });
+    sel=null; render();
+  });
+
+  // ---------- confirmaciones: tocar para cambiar ----------
+  tblConf.addEventListener('click',function(e){
+    var row=e.target.closest('.prow.tap'); if(!row)return;
+    var g=byId(row.getAttribute('data-id'));
+    g.r=g.r?0:1;
+    if(!g.r){g.m=null;g.ing=0;}
+    render();
+  });
+
+  // ---------- QR ----------
+  qrGrid.addEventListener('click',function(e){
+    var t=e.target.closest('.tick'); if(!t)return;
+    var g=byId(t.getAttribute('data-id'));
+    if(g.ing){g.ing=0;qrHint.textContent='Boleto de '+g.n+' liberado';}
+    else{g.ing=1;qrHint.textContent='Acceso válido · '+g.n+' · '+g.p+(g.p>1?' pases':' pase');}
+    render();
+  });
+  document.getElementById('qrScan').addEventListener('click',function(){
+    var next=conf().filter(function(g){return !g.ing;})[0];
+    if(!next){qrHint.textContent='Ya ingresaron todos los invitados';return;}
+    next.ing=1; qrHint.textContent='Acceso válido · '+next.n+' · '+next.p+(next.p>1?' pases':' pase'); render();
+  });
+
+  // ---------- mesas: arrastrar / tocar ----------
+  var drag=null,ghost=null,sx=0,sy=0,moved=false;
+  function fits(m,g){return ocup(m)+g.p<=CAP;}
+  function place(m,g){
+    if(m===null){g.m=null;render();return true;}
+    if(!fits(m,g)){seatHint.textContent='La mesa '+m+' ya no tiene lugar para '+g.p+' personas';return false;}
+    g.m=m; render(); seatHint.textContent='Listo — puedes seguir moviendo invitados entre mesas';return true;
   }
+  function tgt(x,y){var el=document.elementFromPoint(x,y);if(!el)return undefined;
+    var m=el.closest('.mesa'); if(m)return parseInt(m.getAttribute('data-m'),10);
+    if(el.closest('#pool'))return null; return undefined;}
   function clearHot(){document.querySelectorAll('.hot').forEach(function(e){e.classList.remove('hot');});}
 
   document.addEventListener('pointerdown',function(e){
-    var c=e.target.closest('.gchip'); if(!c)return;
-    e.preventDefault();
-    drag=c; moved=false; startX=e.clientX; startY=e.clientY;
-    c.setPointerCapture&&c.setPointerCapture(e.pointerId);
+    var c=e.target.closest('#pool .gchip'); if(!c)return;
+    e.preventDefault(); drag=byId(c.getAttribute('data-id')); moved=false; sx=e.clientX; sy=e.clientY;
   });
   document.addEventListener('pointermove',function(e){
     if(!drag)return;
-    if(!moved && Math.abs(e.clientX-startX)+Math.abs(e.clientY-startY)<6)return;
-    if(!moved){
-      moved=true;
-      ghost=drag.cloneNode(true); ghost.classList.add('drag');
-      ghost.style.width=drag.offsetWidth+'px';
-      document.body.appendChild(ghost);
-      drag.style.opacity='.35';
-    }
+    if(!moved && Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)<6)return;
+    if(!moved){moved=true; ghost=chip(drag); ghost.classList.add('drag'); document.body.appendChild(ghost);}
     ghost.style.left=(e.clientX-40)+'px'; ghost.style.top=(e.clientY-16)+'px';
-    clearHot(); var t=targetAt(e.clientX,e.clientY); if(t)t.classList.add('hot');
+    clearHot(); var el=document.elementFromPoint(e.clientX,e.clientY);
+    var h=el&&(el.closest('.mesa')||el.closest('#pool')); if(h)h.classList.add('hot');
   });
   document.addEventListener('pointerup',function(e){
-    if(!drag)return;
-    var c=drag, wasMoved=moved;
-    drag=null; moved=false;
-    if(ghost){ghost.remove();ghost=null;}
-    c.style.opacity='';
-    clearHot();
-    if(wasMoved){
-      var t=targetAt(e.clientX,e.clientY);
-      if(t)place(t===pool?pool:t,c);
-    }else{
-      if(sel===c){c.classList.remove('sel');sel=null;hint.textContent='Arrastra un invitado a una mesa — o tócalo y luego toca la mesa';}
-      else{if(sel)sel.classList.remove('sel');sel=c;c.classList.add('sel');hint.textContent='Ahora toca la mesa donde quieres sentarlos';}
-    }
+    if(!drag)return; var g=drag, wm=moved; drag=null; moved=false;
+    if(ghost){ghost.remove();ghost=null;} clearHot();
+    if(wm){var t=tgt(e.clientX,e.clientY); if(t!==undefined)place(t,g);}
+    else{ if(sel===g.id){sel=null;seatHint.textContent='Arrastra un invitado a una mesa — o tócalo y luego toca la mesa';}
+          else{sel=g.id;seatHint.textContent='Ahora toca la mesa donde quieres sentarlos';} render(); }
   });
   mesas.addEventListener('click',function(e){
-    var m=e.target.closest('.mesa'); if(!m||!sel)return;
-    if(place(m,sel)){sel.classList.remove('sel');sel=null;}
+    var m=e.target.closest('.mesa'); if(!m||sel===null)return;
+    var g=byId(sel); if(place(parseInt(m.getAttribute('data-m'),10),g)){sel=null;render();}
   });
-  pool.addEventListener('click',function(e){
-    if(!sel)return; if(e.target.closest('.gchip'))return;
-    place(pool,sel); sel.classList.remove('sel'); sel=null;
+  document.getElementById('seatReset').addEventListener('click',function(){
+    G.forEach(function(g){g.m=null;}); sel=null;
+    seatHint.textContent='Arrastra un invitado a una mesa — o tócalo y luego toca la mesa'; render();
   });
-  reset.addEventListener('click',function(){
-    mesas.querySelectorAll('.gchip').forEach(function(c){pool.appendChild(c);});
-    if(sel){sel.classList.remove('sel');sel=null;}
-    hint.textContent='Arrastra un invitado a una mesa — o tócalo y luego toca la mesa';
-    refresh();
-  });
-  refresh();
+
+  render();
 })();
 </script>
 </body>
