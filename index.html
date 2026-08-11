@@ -356,6 +356,18 @@
   .medida h3 .it{font-style:italic;color:var(--wine)}
   .medida p{color:var(--ink-soft);max-width:620px;margin:14px auto 24px;font-size:16.5px}
 
+
+  /* ===== escribí sus nombres ===== */
+  .namebox{display:flex;gap:10px;justify-content:center;margin:28px auto 0;max-width:560px;flex-wrap:wrap}
+  .namebox input{flex:1;min-width:230px;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:15px 24px;font-family:'Manrope';font-size:15.5px;color:var(--ink);transition:border-color .2s}
+  .namebox input::placeholder{color:#a89e8c}
+  .namebox input:focus{outline:none;border-color:var(--wine)}
+  .namebox .btn{padding:15px 28px}
+  .namedone{text-align:center;color:var(--bronze);font-size:14.5px;margin-top:14px;font-weight:700;opacity:0;transition:opacity .4s}
+  .namedone.on{opacity:1}
+  .mscreen .mn,.cover2 .nm{transition:opacity .35s}
+  .mscreen .mn.sw,.cover2 .nm.sw{opacity:0}
+
 </style>
 </head>
 <body>
@@ -466,7 +478,12 @@
 <!-- MUESTRAS -->
 <section class="sec muestras" id="muestras">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Nuestras colecciones</span><h2 class="reveal" style="margin-top:12px">Elegancia que se nota desde el sobre</h2><p class="reveal">Cada colección tiene su propia paleta, tipografía y apertura animada. Después la personalizamos con tus nombres, tus fotos y tu historia.</p></div>
+    <div class="head"><span class="eyebrow reveal">Nuestras colecciones</span><h2 class="reveal" style="margin-top:12px">Elegancia que se nota desde el sobre</h2><p class="reveal">Cada colección tiene su propia paleta, tipografía y apertura animada. Escribí sus nombres y miralas con ellos puestos.</p></div>
+    <div class="namebox reveal">
+      <input id="nameIn" type="text" maxlength="42" placeholder="Ej. Sofía y Mateo" aria-label="Escribí sus nombres" autocomplete="off">
+      <button class="btn btn-wine" id="nameGo" type="button">Ver con nuestros nombres</button>
+    </div>
+    <p class="namedone" id="nameOk">Listo ✦ así se verían sus invitaciones</p>
     <div class="mrow reveal">
       <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-olivo"><div class="mk">Nuestra Boda</div><div class="mn">Sofía &amp; Mateo</div><div class="md">14 · 12 · 2026</div></div></div><div class="mname">Olivo</div><div class="mdesc">Boda · verde salvia y crema</div></a>
       <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-lavanda"><div class="mk">Mis XV Años</div><div class="mn">Valentina</div><div class="md">20 · 04 · 2026</div></div></div><div class="mname">Lavanda</div><div class="mdesc">XV Años · lila y plata</div></a>
@@ -788,7 +805,7 @@
       c.classList.add('active');
       var th=c.getAttribute('data-th'),t=THEMES[th];
       cover.className='cover2 th-'+th; cd.className='cd2 th-'+th;
-      dk.textContent=t.k; dnm.innerHTML=t.nm; ddt.textContent=t.dt;
+      dk.textContent=t.k; dnm.innerHTML=(window.__invNames||t.nm); ddt.textContent=t.dt;
     });
   });
 
@@ -846,6 +863,51 @@
   }
   cycle(document.getElementById('chip1'),C1,0);
   cycle(document.getElementById('chip2'),C2,1800);
+})();
+</script>
+<script>
+(function(){
+  var IN=document.getElementById('nameIn'),BT=document.getElementById('nameGo'),OK=document.getElementById('nameOk');
+  if(!IN||!BT)return;
+
+  function fmt(v){
+    v=v.replace(/[<>&]/g,'').replace(/\s+/g,' ').trim().slice(0,42);
+    return v.replace(/\s+(y|Y)\s+/,' & ');
+  }
+  function swap(el,html){
+    if(!el)return;
+    el.classList.add('sw');
+    setTimeout(function(){el.innerHTML=html;el.classList.remove('sw');},340);
+  }
+  function apply(v){
+    window.__invNames = v || null;
+    // tarjetas del carrusel
+    document.querySelectorAll('.mscreen .mn').forEach(function(e){
+      if(!e.dataset.orig)e.dataset.orig=e.innerHTML;
+      swap(e, v || e.dataset.orig);
+    });
+    // celular del demo
+    var dnm=document.getElementById('dnm');
+    if(dnm){
+      if(!dnm.dataset.orig)dnm.dataset.orig=dnm.innerHTML;
+      if(v){swap(dnm,v);}
+      else{var act=document.querySelector('.demo-chips .chip.active');if(act)act.click();}
+    }
+    // celular del hero
+    document.querySelectorAll('.cover .nm').forEach(function(e){
+      if(!e.dataset.orig)e.dataset.orig=e.innerHTML;
+      e.innerHTML = v || e.dataset.orig;
+    });
+    if(OK)OK.classList.toggle('on', !!v);
+  }
+  function go(){
+    var v=fmt(IN.value);
+    if(!v){IN.focus();return;}
+    apply(v);
+    if(window.fbq)fbq('trackCustom','VerConNombres',{nombres:v});
+  }
+  BT.addEventListener('click',go);
+  IN.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});
 })();
 </script>
 </body>
