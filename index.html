@@ -559,6 +559,17 @@
   .tick .tst svg{width:13px;height:13px}
   @media(max-width:860px){.qrgrid{grid-template-columns:repeat(2,1fr)}}
 
+
+  .playnote{display:inline-flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--wine);border-radius:999px;padding:13px 24px;margin:26px auto 0;font-size:15px;color:var(--ink);max-width:760px;text-align:left;box-shadow:0 20px 40px -28px rgba(142,33,72,.55)}
+  .playnote b{color:var(--wine)}
+  .playnote .dot{width:10px;height:10px;border-radius:50%;background:var(--wine);flex:none;animation:pulsa 1.8s ease-in-out infinite}
+  @keyframes pulsa{0%,100%{box-shadow:0 0 0 0 rgba(142,33,72,.5)}50%{box-shadow:0 0 0 8px rgba(142,33,72,0)}}
+  @media(max-width:640px){.playnote{font-size:14px;padding:13px 18px;border-radius:18px;align-items:flex-start}}
+  .br-tabs .t{position:relative}
+  .br-tabs .t:hover{color:var(--wine)}
+  .br-tabs .t:not(.on)::after{content:"";position:absolute;left:50%;bottom:2px;transform:translateX(-50%);width:0;height:2px;background:var(--wine);transition:width .25s}
+  .br-tabs .t:hover::after{width:60%}
+
 </style>
 </head>
 <body>
@@ -744,7 +755,7 @@
 <!-- PANEL / ORGANIZADOR -->
 <section class="sec" id="panel">
   <div class="wrap">
-    <div class="head"><span class="eyebrow reveal">Tu panel de organización</span><h2 class="reveal" style="margin-top:12px">No es solo una invitación: es tu organizador</h2><p class="reveal">Desde un panel controlas tus invitados, las mesas, las confirmaciones y el acceso con QR en la puerta.</p></div>
+    <div class="head"><span class="eyebrow reveal">Tu panel de organización</span><h2 class="reveal" style="margin-top:12px">No es solo una invitación: es tu organizador</h2><p class="reveal">Desde un panel controlas tus invitados, las mesas, las confirmaciones y el acceso con QR en la puerta.</p><div class="playnote reveal"><span class="dot"></span><span><b>Esto es un demo de verdad, pruébalo.</b> Cambia de pestaña, arrastra invitados a las mesas y escanea los códigos QR.</span></div></div>
     <div class="panel-wrap reveal">
       <div class="browser">
         <div class="br-bar"><i></i><i></i><i></i><span class="u">invitame.littlemomentsok.com/admin</span></div>
@@ -1319,7 +1330,7 @@
     MESAS.forEach(function(m){
       var o=ocup(m), d=document.createElement('div');
       d.className='mesa'+(o>0?' has':'')+(o>=CAP?' full':'');
-      d.setAttribute('data-m',m);
+      d.setAttribute('data-mesa',m);
       d.innerHTML='<div class="ring"><span class="mn">'+m+'</span><span class="ms">'+o+'/'+CAP+'</span></div><div class="seats"></div>';
       var box=d.querySelector('.seats');
       enMesa(m).forEach(function(g){
@@ -1405,7 +1416,7 @@
     g.m=m; render(); seatHint.textContent='Listo — puedes seguir moviendo invitados entre mesas';return true;
   }
   function tgt(x,y){var el=document.elementFromPoint(x,y);if(!el)return undefined;
-    var m=el.closest('.mesa'); if(m)return parseInt(m.getAttribute('data-m'),10);
+    var m=el.closest('.mesa'); if(m)return parseInt(m.getAttribute('data-mesa'),10);
     if(el.closest('#pool'))return null; return undefined;}
   function clearHot(){document.querySelectorAll('.hot').forEach(function(e){e.classList.remove('hot');});}
 
@@ -1430,7 +1441,7 @@
   });
   mesas.addEventListener('click',function(e){
     var m=e.target.closest('.mesa'); if(!m||sel===null)return;
-    var g=byId(sel); if(place(parseInt(m.getAttribute('data-m'),10),g)){sel=null;render();}
+    var g=byId(sel); if(place(parseInt(m.getAttribute('data-mesa'),10),g)){sel=null;render();}
   });
   document.getElementById('seatReset').addEventListener('click',function(){
     G.forEach(function(g){g.m=null;}); sel=null;
