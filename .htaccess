@@ -5,10 +5,18 @@
     Header set Pragma "no-cache"
     Header set Expires "0"
   </FilesMatch>
+  # Los .js y .css TAMBIEN tienen que revalidar. Sin esto el navegador se los guarda
+  # 7 dias: si arreglamos un bug del motor o volvemos atras, el invitado que ya entro
+  # sigue viendo la version rota hasta una semana. Con "no-cache" el navegador igual
+  # los guarda, pero pregunta si cambiaron (responde 304, no vuelve a bajar el archivo).
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
 </IfModule>
 <IfModule Litespeed>
   RewriteEngine On
   RewriteRule .*\.html$ - [E=Cache-Control:no-cache]
+  RewriteRule .*\.(js|css)$ - [E=Cache-Control:no-cache]
 </IfModule>
 
 # --- Seguridad ---
