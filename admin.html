@@ -1018,7 +1018,13 @@
       // 1) guarda la config del evento (todo el objeto de diseño)
       if(!D.ver) D.ver=VERSION;              // primera publicación => queda clavada a esta versión
       const {invitados, ...cfg}=D;
+      // La clave del panel y el mail NO van al documento publico (lo lee cualquiera que
+      // tenga el link de la invitacion). Se guardan aparte, en inv_privado.
+      const _priv={};
+      (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _priv[k]=cfg[k]; delete cfg[k]; } });
       await INV.saveEvento(slug, cfg);
+      if(Object.keys(_priv).length) await INV.savePrivado(slug, _priv);
+      await INV.limpiarPrivadosDelPublico(slug);   // saca los que habian quedado de antes
       // 2) guarda cada invitado y obtiene su token/link
       const arr=D.invitados.map(g=>({n:g.n,p:g.p,m:g.m,restriccion:g.restriccion,token:g.t}));
       const res=await INV.saveInvitados(slug, arr);
@@ -1084,7 +1090,10 @@
   // cargar evento existente si viene ?e=slug
   async function cargarEvento(){
     const p=new URLSearchParams(location.search),slug=p.get('e');if(!slug||!window.INV||!INV.ok)return;
-    const ev=await INV.getEvento(slug);if(ev){Object.assign(D,ev);}ensureFX();
+    const ev=await INV.getEvento(slug);if(ev){Object.assign(D,ev);}
+    // la clave del panel y el mail viven aparte: se traen con la sesion de la disenadora
+    const pv=await INV.getPrivado(slug); if(pv){ (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(pv[k]!==undefined) D[k]=pv[k]; }); }
+    ensureFX();
     const gs=await INV.listInvitados(slug);if(gs.length)D.invitados=gs.filter(g=>g.activo!==false).map(g=>({n:g.nombre,p:g.pases,m:g.mesa,restriccion:g.restriccion,t:g.token,rsvp:g.rsvp,rsvpPersonas:g.rsvpPersonas,usos:g.usos}));
     renderPanel();render();if(cur==='INVITADOS')renderGuests();
   }
@@ -1194,7 +1203,9 @@
       if(existe && !confirm('Ya existe una invitación en "'+ns+'". ¿La querés sobrescribir?')) return;
       const {invitados, ...cfg}=D;
       let nEvento; try{ const _all=await INV.exportAll(); const _mx=_all.eventos.reduce((m,e)=>Math.max(m,parseInt(e.nEvento,10)||0),0); nEvento=_mx+1; }catch(_e){ nEvento=(parseInt(D.nEvento,10)||1)+1; }
+      const _pv={}; (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _pv[k]=cfg[k]; delete cfg[k]; } });
       await INV.saveEvento(ns,{...cfg, slug:ns, nEvento, tpl:(D.tpl||'')+' (copia)'});
+      if(Object.keys(_pv).length) await INV.savePrivado(ns, _pv);
       alert('✓ ¡Listo! Se creó la copia en "'+ns+'".\n\nAhora la vas a abrir para cambiarle los nombres, la fecha y las fotos. Los invitados NO se copian (cada pareja tiene los suyos).');
       location.href='admin.html?e='+encodeURIComponent(ns);
     }catch(e){alert('No se pudo duplicar: '+(e.message||e));}
@@ -1203,7 +1214,10 @@
     const nuevo=prompt('Dirección de la copia (minúsculas, sin espacios):', slug+'-copia'); if(!nuevo)return;
     const ns=nuevo.toLowerCase().replace(/[^a-z0-9-]+/g,'-');
     try{const ev=await INV.getEvento(slug); if(!ev){alert('No encontré el evento');return;}
-      await INV.saveEvento(ns,{...ev,slug:ns,tpl:(ev.tpl||'')+' (copia)'});
+      const _c={...ev}; const _pv2={};
+      (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(_c[k]!==undefined){ _pv2[k]=_c[k]; delete _c[k]; } });
+      await INV.saveEvento(ns,{..._c,slug:ns,tpl:(ev.tpl||'')+' (copia)'});
+      if(Object.keys(_pv2).length) await INV.savePrivado(ns, _pv2);
       alert('✓ Clonada como '+ns); verInvitaciones();
     }catch(e){alert('No se pudo clonar: '+(e.message||e));}
   }
@@ -1302,7 +1316,7 @@
   if(window.INV) cargarEvento(); else window.addEventListener('inv-ready',cargarEvento);
   {var _tb=new URLSearchParams(location.search).get('tab'); if(_tb&&ORDER.indexOf(_tb)>-1){go(_tb);}}
 </script>
-<script type="module" src="firebase-inv.js?v=21"></script>
+<script type="module" src="firebase-inv.js?v=22"></script>
 <script type="module">
   import { collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   function _ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }

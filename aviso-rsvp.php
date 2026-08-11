@@ -70,6 +70,48 @@ function traerDoc($project, $coleccion, $id) {
   return array($r, $c);
 }
 
+// Igual que traerDoc pero con sesion iniciada. Hace falta para leer inv_privado,
+// que a proposito NO se puede leer sin login.
+function traerDocAuth($project, $coleccion, $id, $idToken) {
+  $url = 'https://firestore.googleapis.com/v1/projects/' . $project .
+         '/databases/(default)/documents/' . $coleccion . '/' . rawurlencode($id);
+  $ch = curl_init($url);
+  curl_setopt_array($ch, array(
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CONNECTTIMEOUT => 3,
+    CURLOPT_TIMEOUT        => 5,
+    CURLOPT_SSL_VERIFYPEER => true,
+    CURLOPT_HTTPHEADER     => array('Authorization: Bearer ' . $idToken),
+  ));
+  $r = curl_exec($ch);
+  $c = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  return array($r, $c);
+}
+
+// Entra a Firebase con la cuenta del sistema y devuelve el idToken (o '' si no puede).
+function entrarAlSistema($apikey) {
+  $PANEL_USER = ''; $PANEL_PASS = '';
+  $raiz = dirname($_SERVER['DOCUMENT_ROOT'] ?? '/');
+  foreach (array($raiz . '/invitame-panel.php', dirname($raiz) . '/invitame-panel.php') as $ruta) {
+    if (is_readable($ruta)) { include $ruta; if ($PANEL_USER !== '') break; }
+  }
+  if ($PANEL_USER === '' || $PANEL_PASS === '') return '';
+  $ch = curl_init('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' . $apikey);
+  curl_setopt_array($ch, array(
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST           => true,
+    CURLOPT_POSTFIELDS     => json_encode(array('email'=>$PANEL_USER,'password'=>$PANEL_PASS,'returnSecureToken'=>true)),
+    CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+    CURLOPT_CONNECTTIMEOUT => 3,
+    CURLOPT_TIMEOUT        => 6,
+    CURLOPT_SSL_VERIFYPEER => true,
+  ));
+  $r = curl_exec($ch); curl_close($ch);
+  $j = json_decode((string)$r, true);
+  return isset($j['idToken']) ? $j['idToken'] : '';
+}
+
 // ---------- el token tiene que ser un invitado REAL de este evento ----------
 // (así nadie de afuera puede disparar avisos y llenar la casilla de mails)
 if ($token === '') {
@@ -108,8 +150,23 @@ if (!$bv('c_habilitar-aviso-por-mail')) {
   exit;
 }
 
-// el campo del panel: "Email para confirmaciones:"
-$para = $sv('c_email-para-confirmaciones');
+// El mail de los novios YA NO vive en el documento publico del evento: ese lo lee
+// cualquiera que tenga el link de una invitacion, y era una fuga de datos personales.
+// Ahora vive en inv_privado/{slug}, que solo se lee con sesion iniciada.
+$para = '';
+$APIKEY_WEB = 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc';
+$idToken = entrarAlSistema($APIKEY_WEB);
+if ($idToken !== '') {
+  list($rpv, $cpv) = traerDocAuth($PROJECT, 'inv_privado', $slug, $idToken);
+  if ($cpv == 200) {
+    $jpv = json_decode((string)$rpv, true);
+    if (isset($jpv['fields']['c_email-para-confirmaciones']['stringValue'])) {
+      $para = trim($jpv['fields']['c_email-para-confirmaciones']['stringValue']);
+    }
+  }
+}
+// Compatibilidad con invitaciones viejas que todavia lo tienen en el doc publico.
+if ($para === '') $para = $sv('c_email-para-confirmaciones');
 if ($para === '' || !filter_var($para, FILTER_VALIDATE_EMAIL)) {
   // sin mail configurado no es un error: simplemente no se avisa
   echo json_encode(array('ok' => false, 'error' => 'sin-mail'));

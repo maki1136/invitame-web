@@ -15,7 +15,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc, collection,
-  query, where, getDocs, runTransaction, serverTimestamp
+  query, where, getDocs, runTransaction, serverTimestamp, deleteField
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
@@ -44,6 +44,7 @@ catch (e) { initError = e; console.error("INV init error", e); }
 
 const EV = "inv_eventos";
 const GU = "inv_invitados";
+const PV = "inv_privado";   // datos que NO puede ver un invitado
 const gid = (slug, token) => slug + "__" + token;
 const rndToken = () => Math.random().toString(36).slice(2, 8);
 
@@ -67,6 +68,30 @@ const INV = {
   async getEvento(slug) {
     const s = await getDoc(doc(db, EV, slug));
     return s.exists() ? s.data() : null;
+  },
+
+  // ---- Datos PRIVADOS del evento (no se leen sin login) ----
+  // La clave del panel de los novios y el mail de confirmaciones NO pueden vivir en
+  // inv_eventos: ese documento lo lee cualquiera que tenga el link de una invitacion
+  // (basta con saber la direccion). Con la clave a la vista, un desconocido entraba al
+  // panel de esos novios y hasta podia generar pases con QR. Van en inv_privado, que la
+  // regla de Firestore solo deja leer con sesion iniciada.
+  CAMPOS_PRIVADOS: ['c_clave-del-panel-de-los-novios', 'c_email-para-confirmaciones'],
+  async savePrivado(slug, data) {
+    await setDoc(doc(db, PV, slug), { ...data, slug, updatedAt: serverTimestamp() }, { merge: true });
+    return slug;
+  },
+  async getPrivado(slug) {
+    try {
+      const s = await getDoc(doc(db, PV, slug));
+      return s.exists() ? s.data() : null;
+    } catch (e) { return null; }   // sin login no se puede: no es un error, es la regla
+  },
+  // Borra del documento PUBLICO los campos privados que quedaron de antes de este cambio.
+  async limpiarPrivadosDelPublico(slug) {
+    const borrar = {};
+    this.CAMPOS_PRIVADOS.forEach(k => { borrar[k] = deleteField(); });
+    try { await updateDoc(doc(db, EV, slug), borrar); } catch (e) { /* si no existe, nada */ }
   },
 
   // ---- Invitados ----
