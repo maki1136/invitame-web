@@ -204,6 +204,92 @@
   .iqr .g{width:100%;height:100%;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:2px}
   .iqr i{background:#5a6142;border-radius:1px}.iqr i.o{background:transparent}
   .ifoot{background:#5a6142;color:#fff;text-align:center;padding:14px;font-family:'Epilogue';font-size:15px}
+
+  /* ===== demo invitacion (theme switch) ===== */
+  .demo .demo-grid{display:grid;grid-template-columns:1fr .9fr;gap:48px;align-items:center;margin-top:52px}
+  .demo-chips{display:flex;flex-direction:column;gap:12px;align-items:flex-start;max-width:420px}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:13px 22px;font-family:'Manrope';font-weight:700;font-size:15px;color:var(--ink);cursor:pointer;transition:all .2s;width:100%;text-align:left;display:flex;align-items:center;gap:12px}
+  .chip .dot{width:14px;height:14px;border-radius:50%;flex:none}
+  .chip.dot-bodas .dot{background:#8ea06a}.chip.dot-xv .dot{background:#9a7bb8}.chip.dot-otros .dot{background:#bd935f}
+  .chip:hover{border-color:var(--wine)}
+  .chip.active{background:var(--wine);color:#fff;border-color:var(--wine)}
+  .demo-note{color:var(--ink-soft);font-size:14.5px;margin:6px 0 4px}
+  .demo-phone{display:flex;justify-content:center}
+  .phone2{position:relative;width:270px;height:552px;border-radius:44px;background:linear-gradient(160deg,#2b2620,#4a4238);padding:11px;box-shadow:0 50px 80px -34px rgba(30,27,19,.5),0 0 0 2px rgba(255,255,255,.06) inset}
+  .phone2::after{content:"";position:absolute;left:50%;top:10px;transform:translateX(-50%);width:84px;height:22px;background:#17130f;border-radius:100px;z-index:6}
+  .screen2{position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;background:#F5EFE6;display:flex;flex-direction:column}
+  .cover2{flex:0 0 62%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding:22px 18px 26px;color:#fff;transition:background .5s ease}
+  .cover2 .k{font-family:'Epilogue';font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.92}
+  .cover2 .nm{font-family:'Epilogue';font-style:italic;font-weight:600;font-size:40px;line-height:1.02;text-shadow:0 2px 12px rgba(0,0,0,.25);margin-top:4px}
+  .cover2 .dt{font-size:11px;letter-spacing:2px;margin-top:10px;opacity:.95}
+  .cover2.th-bodas{background:linear-gradient(180deg,rgba(70,74,54,.05),rgba(70,74,54,.42)),linear-gradient(160deg,#c3caa9,#98a37a 55%,#6f7a58)}
+  .cover2.th-xv{background:linear-gradient(180deg,rgba(70,54,74,.05),rgba(70,54,74,.42)),linear-gradient(160deg,#cbb2d6,#8a6ea6 55%,#5e4674)}
+  .cover2.th-otros{background:linear-gradient(180deg,rgba(74,58,40,.05),rgba(74,58,40,.42)),linear-gradient(160deg,#dcc39c,#b98f5e 55%,#8a6636)}
+  .screen2 .body2{flex:1;padding:16px 18px;text-align:center}
+  .screen2 .body2 h6{font-family:'Epilogue';font-size:16px;color:var(--ink);font-weight:700;margin-bottom:10px}
+  .cd2{display:flex;justify-content:center;gap:6px}
+  .cd2 .b{background:#fff;border:1px solid var(--line);border-radius:9px;width:50px;padding:8px 2px}
+  .cd2 .n{font-family:'Epilogue';font-size:20px;font-weight:700;color:var(--ink);line-height:1}
+  .cd2 .l{font-size:7.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);margin-top:3px}
+  .cd2.th-bodas .n{color:#6f7a58}.cd2.th-xv .n{color:#7a5f92}.cd2.th-otros .n{color:#a9754b}
+  @media(max-width:860px){.demo .demo-grid{grid-template-columns:1fr}.demo-chips{max-width:none;order:2}.demo-phone{order:1}}
+
+  /* ===== panel / organizador (mockup ilustrado) ===== */
+  .panel-wrap{position:relative;margin-top:56px;display:flex;justify-content:center}
+  .browser{width:100%;max-width:920px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 40px 80px -46px rgba(30,27,19,.5)}
+  .br-bar{display:flex;align-items:center;gap:7px;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--cream)}
+  .br-bar i{width:11px;height:11px;border-radius:50%;background:#e0d7c6;display:block}
+  .br-bar .u{margin-left:14px;font-size:12px;color:var(--ink-soft);font-family:'Manrope'}
+  .br-tabs{display:flex;gap:4px;padding:14px 18px 0;flex-wrap:wrap}
+  .br-tabs .t{font-size:13px;font-weight:700;font-family:'Manrope';color:var(--ink-soft);padding:9px 16px;border-radius:10px 10px 0 0;cursor:default}
+  .br-tabs .t.on{background:var(--cream);color:var(--wine)}
+  .br-body{padding:22px;background:var(--cream)}
+  .pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+  .pstat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .pstat .v{font-family:'Epilogue';font-size:28px;font-weight:800;color:var(--wine)}
+  .pstat .l{font-size:12px;color:var(--ink-soft);font-weight:600;margin-top:2px}
+  .ptable{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .prow{display:grid;grid-template-columns:1.6fr .7fr .7fr .9fr;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);font-size:14px}
+  .prow:last-child{border-bottom:none}
+  .prow.h{background:var(--cream);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--bronze);font-weight:700}
+  .prow .who{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink)}
+  .prow .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(150deg,#c3caa9,#6f7a58);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;font-family:'Epilogue';flex:none}
+  .prow .av.p{background:linear-gradient(150deg,#cbb2d6,#7a5f92)}.prow .av.o{background:linear-gradient(150deg,#dcc39c,#a9754b)}
+  .badge{font-size:11px;font-weight:700;padding:5px 11px;border-radius:999px;width:fit-content}
+  .badge.ok{background:#e7efe0;color:#4d6b2f}.badge.pend{background:#f6ece0;color:#a56a2b}
+  .pfloat{position:absolute;right:-8px;bottom:-26px;width:150px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 14px;box-shadow:0 30px 60px -34px rgba(30,27,19,.5);text-align:center}
+  .pfloat .qricon{width:46px;height:46px;margin:0 auto 8px;border-radius:12px;background:var(--ink);display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:2px;padding:7px}
+  .pfloat .qricon i{background:#fff;border-radius:1px}.pfloat .qricon i.o{background:transparent}
+  .pfloat .chk{width:34px;height:34px;border-radius:50%;background:#e7efe0;color:#4d6b2f;display:grid;place-items:center;margin:0 auto 6px;font-size:18px;font-weight:800}
+  .pfloat .tt{font-family:'Epilogue';font-weight:700;font-size:14px;color:var(--ink)}
+  .pfloat .ss{font-size:11px;color:var(--ink-soft);margin-top:2px}
+  @media(max-width:760px){.prow{grid-template-columns:1.4fr .9fr}.prow .m3,.prow .m4{display:none}.pfloat{display:none}}
+
+  /* ===== sorteo ===== */
+  .sorteo{background:linear-gradient(160deg,#2a1020,var(--wine-deep));color:#fff}
+  .sorteo .sg{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .sorteo .eyebrow{color:var(--gold)}
+  .sorteo h2{color:#fff;font-size:clamp(30px,4vw,50px);font-weight:800;letter-spacing:-1px;margin-top:12px}
+  .sorteo h2 .it{font-style:italic;color:var(--gold)}
+  .sorteo .lead{color:rgba(255,255,255,.85);font-size:17px;margin-top:16px;max-width:460px}
+  .sorteo ul.perks{list-style:none;margin:20px 0 0;display:flex;flex-direction:column;gap:10px}
+  .sorteo ul.perks li{display:flex;gap:10px;align-items:flex-start;color:rgba(255,255,255,.9);font-size:15px}
+  .sorteo ul.perks li::before{content:"✦";color:var(--gold);flex:none}
+  .sform{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:30px;backdrop-filter:blur(6px)}
+  .sform h3{font-family:'Epilogue';color:#fff;font-size:22px;font-weight:800;margin-bottom:4px}
+  .sform p.mini{color:rgba(255,255,255,.7);font-size:13.5px;margin-bottom:18px}
+  .sform label{display:block;font-size:12px;font-weight:700;letter-spacing:.5px;color:rgba(255,255,255,.8);margin:14px 0 6px}
+  .sform input,.sform select{width:100%;background:rgba(255,255,255,.95);border:none;border-radius:12px;padding:14px 16px;font-family:'Manrope';font-size:15px;color:var(--ink)}
+  .sform .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .sform button{margin-top:22px;width:100%;background:var(--gold);color:#2a1020;border:none;border-radius:999px;padding:16px;font-family:'Manrope';font-weight:800;font-size:16px;cursor:pointer;transition:all .2s}
+  .sform button:hover{background:#d8b877;transform:translateY(-2px)}
+  .sform .legal{color:rgba(255,255,255,.55);font-size:11.5px;margin-top:12px;text-align:center}
+  .sform .ok-msg{display:none;text-align:center;padding:20px 0}
+  .sform .ok-msg .big{font-size:44px}
+  .sform .ok-msg h3{margin-top:8px}
+  .sform.done form{display:none}.sform.done .ok-msg{display:block}
+  @media(max-width:860px){.sorteo .sg{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -214,6 +300,7 @@
     <li><a href="#incluye">Cómo funciona</a></li>
     <li><a href="#precios">Precios</a></li>
     <li><a href="#blog">Blog</a></li>
+    <li><a href="#sorteo">Sorteo</a></li>
     <li><a href="crear.html" class="cta">Crear mi invitación</a></li>
   </ul>
   <button class="navtog" id="navtog" aria-label="Abrir menú" aria-expanded="false">☰</button>
@@ -223,6 +310,7 @@
   <a href="#incluye">Cómo funciona</a>
   <a href="#precios">Precios</a>
   <a href="#blog">Blog</a>
+  <a href="#sorteo">Sorteo</a>
   <a href="crear.html" class="cta">Crear mi invitación</a>
 </div></header>
 
@@ -274,6 +362,40 @@
   </div>
 </section>
 
+<!-- DEMO INVITACION -->
+<section class="sec demo" id="demo-invitacion" style="background:var(--card);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">Probala vos</span><h2 class="reveal" style="margin-top:12px">Así se ve tu invitación</h2><p class="reveal">Elegí un estilo y mirá cómo cambia. Después la personalizamos 100% a tu evento.</p></div>
+    <div class="demo-grid">
+      <div class="demo-chips reveal">
+        <button class="chip active dot-bodas" data-th="bodas"><span class="dot"></span>Boda · Olivo</button>
+        <button class="chip dot-xv" data-th="xv"><span class="dot"></span>XV Años · Lavanda</button>
+        <button class="chip dot-otros" data-th="otros"><span class="dot"></span>Otro evento · Bronce</button>
+        <p class="demo-note">Cada invitación se diseña a tu gusto: colores, tipografía, fotos y secciones.</p>
+        <a href="crear.html" class="btn btn-wine">Crear la mía</a>
+      </div>
+      <div class="demo-phone reveal">
+        <div class="phone2"><div class="screen2">
+          <div class="cover2 th-bodas" id="cover2">
+            <div class="k" id="dk">Nuestra Boda</div>
+            <div class="nm" id="dnm">Sofía &amp; Mateo</div>
+            <div class="dt" id="ddt">14 · DICIEMBRE · 2026</div>
+          </div>
+          <div class="body2">
+            <h6>Falta poco</h6>
+            <div class="cd2 th-bodas" id="cd2">
+              <div class="b"><div class="n">128</div><div class="l">Días</div></div>
+              <div class="b"><div class="n">06</div><div class="l">Hs</div></div>
+              <div class="b"><div class="n">42</div><div class="l">Min</div></div>
+              <div class="b"><div class="n">18</div><div class="l">Seg</div></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- QUE INCLUYE -->
 <section class="sec incl" id="incluye">
   <div class="wrap">
@@ -283,6 +405,39 @@
       <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3M20 13v7M16 20h4"/></svg></div><h4>Control de acceso QR</h4><p>Boletos digitales con código único. Escaneás en la puerta.</p></div>
       <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></div><h4>Todo en un link</h4><p>Cuenta regresiva, mapa, música, galería y mesa de regalos.</p></div>
       <div class="feat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2.5-7.5L3 11z"/></svg></div><h4>Envíos ilimitados</h4><p>Compartís por WhatsApp, Instagram o mail, sin costo extra.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PANEL / ORGANIZADOR -->
+<section class="sec" id="panel">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">Tu panel de organización</span><h2 class="reveal" style="margin-top:12px">No es solo una invitación: es tu organizador</h2><p class="reveal">Desde un panel controlás tus invitados, las mesas, las confirmaciones y el acceso con QR en la puerta.</p></div>
+    <div class="panel-wrap reveal">
+      <div class="browser">
+        <div class="br-bar"><i></i><i></i><i></i><span class="u">invitame.littlemomentsok.com/admin</span></div>
+        <div class="br-tabs"><span class="t on">Invitados</span><span class="t">Mesas</span><span class="t">Confirmaciones</span><span class="t">Accesos QR</span></div>
+        <div class="br-body">
+          <div class="pstats">
+            <div class="pstat"><div class="v">142</div><div class="l">Invitados</div></div>
+            <div class="pstat"><div class="v">128</div><div class="l">Confirmados</div></div>
+            <div class="pstat"><div class="v">14</div><div class="l">Pendientes</div></div>
+          </div>
+          <div class="ptable">
+            <div class="prow h"><span>Invitado</span><span>Pases</span><span class="m3">Mesa</span><span class="m4">Estado</span></div>
+            <div class="prow"><span class="who"><span class="av">SM</span>Sofía Martínez</span><span>2</span><span class="m3">Mesa 5</span><span class="m4"><span class="badge ok">Confirmado</span></span></div>
+            <div class="prow"><span class="who"><span class="av p">LF</span>Lucía Fernández</span><span>4</span><span class="m3">Mesa 2</span><span class="m4"><span class="badge ok">Confirmado</span></span></div>
+            <div class="prow"><span class="who"><span class="av o">MA</span>Martín Acosta</span><span>2</span><span class="m3">—</span><span class="m4"><span class="badge pend">Pendiente</span></span></div>
+            <div class="prow"><span class="who"><span class="av">CR</span>Carla Ríos</span><span>3</span><span class="m3">Mesa 8</span><span class="m4"><span class="badge ok">Confirmado</span></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="pfloat">
+        <div class="chk">✓</div>
+        <div class="qricon"><i></i><i class="o"></i><i></i><i></i><i></i><i></i><i class="o"></i><i></i><i class="o"></i><i></i><i></i><i class="o"></i><i></i><i></i><i class="o"></i><i></i></div>
+        <div class="tt">Acceso válido</div>
+        <div class="ss">Escaneado en la puerta</div>
+      </div>
     </div>
   </div>
 </section>
@@ -373,6 +528,55 @@
   </div>
 </section>
 
+<!-- SORTEO -->
+<section class="sec sorteo" id="sorteo">
+  <div class="wrap">
+    <div class="sg">
+      <div>
+        <span class="eyebrow reveal">Sorteo del mes</span>
+        <h2 class="reveal">Sorteamos una invitación <span class="it">gratis</span> todos los meses</h2>
+        <p class="lead reveal">¿Te casás o festejás tus XV? Dejá tus datos y participá. Todos los meses elegimos a una pareja o quinceañera y le regalamos su invitación digital completa.</p>
+        <ul class="perks reveal">
+          <li>Una invitación digital premium, sin costo</li>
+          <li>Diseño personalizado a tu evento</li>
+          <li>Con confirmación de asistencia y acceso por QR</li>
+        </ul>
+      </div>
+      <div class="sform reveal" id="sform">
+        <form id="sorteoForm" novalidate>
+          <h3>Quiero participar</h3>
+          <p class="mini">Un ganador por mes. Te avisamos por WhatsApp.</p>
+          <label for="s_nombre">Tu nombre</label>
+          <input id="s_nombre" name="nombre" type="text" placeholder="Nombre y apellido" required>
+          <label for="s_wa">WhatsApp</label>
+          <input id="s_wa" name="whatsapp" type="tel" inputmode="tel" placeholder="Ej. 999 123 4567" required>
+          <div class="row2">
+            <div>
+              <label for="s_tipo">Tu evento</label>
+              <select id="s_tipo" name="evento">
+                <option value="Boda">Boda</option>
+                <option value="XV Años">XV Años</option>
+                <option value="Otro">Otro evento</option>
+              </select>
+            </div>
+            <div>
+              <label for="s_fecha">Fecha (aprox.)</label>
+              <input id="s_fecha" name="fecha" type="text" placeholder="Mes / Año">
+            </div>
+          </div>
+          <button type="submit">Participar del sorteo →</button>
+          <p class="legal">Al participar aceptás recibir novedades de Invítame. Podés darte de baja cuando quieras.</p>
+        </form>
+        <div class="ok-msg">
+          <div class="big">🎉</div>
+          <h3>¡Ya estás participando!</h3>
+          <p class="mini" style="margin-top:6px">Te vamos a escribir por WhatsApp si sos el ganador del mes. ¡Mucha suerte!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FINAL CTA -->
 <section class="final" id="contacto">
   <div class="wrap">
@@ -447,6 +651,54 @@
   if(t&&m){
     t.addEventListener('click',function(){var o=m.classList.toggle('open');t.setAttribute('aria-expanded',o);t.textContent=o?'✕':'☰';});
     m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){m.classList.remove('open');t.textContent='☰';t.setAttribute('aria-expanded',false);});});
+  }
+})();
+</script>
+<script>
+(function(){
+  /* ---- theme switch (demo invitacion) ---- */
+  var THEMES={
+    bodas:{k:'Nuestra Boda',nm:'Sof\u00eda &amp; Mateo',dt:'14 · DICIEMBRE · 2026'},
+    xv:{k:'Mis XV A\u00f1os',nm:'Valentina',dt:'20 · ABRIL · 2026'},
+    otros:{k:'Te invitamos',nm:'Benjam\u00edn',dt:'05 · OCTUBRE · 2026'}
+  };
+  var cover=document.getElementById('cover2'),cd=document.getElementById('cd2');
+  var dk=document.getElementById('dk'),dnm=document.getElementById('dnm'),ddt=document.getElementById('ddt');
+  document.querySelectorAll('.demo-chips .chip').forEach(function(c){
+    c.addEventListener('click',function(){
+      document.querySelectorAll('.demo-chips .chip').forEach(function(x){x.classList.remove('active')});
+      c.classList.add('active');
+      var th=c.getAttribute('data-th'),t=THEMES[th];
+      cover.className='cover2 th-'+th; cd.className='cd2 th-'+th;
+      dk.textContent=t.k; dnm.innerHTML=t.nm; ddt.textContent=t.dt;
+    });
+  });
+
+  /* ---- sorteo form ---- */
+  /* >>> PEGAR ACÁ para automatizar: <<< */
+  var META_PIXEL_ID="";        // ID del Pixel de Meta (retargeting)
+  var SORTEO_WEBHOOK="";       // URL del webhook de n8n (email marketing)
+  var WA_NUM="5219992963119";  // WhatsApp de Invítame (fallback)
+
+  if(META_PIXEL_ID){
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init',META_PIXEL_ID); fbq('track','PageView');
+  }
+  var f=document.getElementById('sorteoForm'),box=document.getElementById('sform');
+  if(f){
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var d={nombre:f.nombre.value.trim(),whatsapp:f.whatsapp.value.trim(),evento:f.evento.value,fecha:f.fecha.value.trim(),origen:'sorteo-web',ts:new Date().toISOString()};
+      if(!d.nombre||!d.whatsapp){f.nombre.focus();return;}
+      if(window.fbq){fbq('track','Lead',{content_name:'Sorteo Invitame',content_category:d.evento});}
+      if(SORTEO_WEBHOOK){
+        try{fetch(SORTEO_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});}catch(err){}
+      }else{
+        var msg='Hola Inv\u00edtame! Quiero participar del sorteo.%0A%0ANombre: '+encodeURIComponent(d.nombre)+'%0AWhatsApp: '+encodeURIComponent(d.whatsapp)+'%0AEvento: '+encodeURIComponent(d.evento)+'%0AFecha: '+encodeURIComponent(d.fecha||'-');
+        window.open('https://wa.me/'+WA_NUM+'?text='+msg,'_blank');
+      }
+      box.classList.add('done');
+    });
   }
 })();
 </script>
