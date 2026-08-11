@@ -943,17 +943,53 @@
       a.innerHTML=h; }
     sec.insertBefore(a,sec.firstChild); }
 
+  // Saca la pantalla de bloqueo (se usa cuando la clave resulto correcta)
+  function abrirCandado(){
+    var lock=el('lock'), env=el('env');
+    if(lock)lock.classList.remove('on');
+    document.documentElement.style.overflow='';
+    if(env)env.style.display='';
+    window.__invBloqueada=false;
+  }
   // Chequeo de la clave del evento (la usa el botón de la pantalla de bloqueo)
-  window.probarClave=function(){
-    var i=el('lock-in'), e=el('lock-err'), lock=el('lock'), env=el('env');
+  //
+  // Hay DOS caminos, a proposito:
+  //  1) SERVIDOR (invitaciones nuevas): el evento es privado de verdad, Firestore no lo
+  //     entrega, y los datos recien bajan si el servidor valida la clave. Este es el bueno.
+  //  2) NAVEGADOR (invitaciones viejas, publicadas antes del 2026-08-11): la clave venia
+  //     dentro del evento. Se sigue soportando para no romperlas, pero ese candado es
+  //     decorativo: los datos ya estaban descargados.
+  window.probarClave=async function(){
+    var i=el('lock-in'), e=el('lock-err'), lock=el('lock');
     var v=(i&&i.value||'').trim();
+    var slug=(window.INVDATA&&INVDATA.slug)||'';
     if(!v){ if(e)e.textContent='Escribí la clave.'; return; }
+
+    // --- camino 1: la valida el servidor ---
+    if(window.__claveServidor){
+      var b=lock&&lock.querySelector('button'); var txtB=b?b.textContent:'';
+      if(b){ b.disabled=true; b.textContent='Verificando…'; }
+      if(e)e.textContent='';
+      var r=await INV.getEventoConClave(slug, v);
+      if(b){ b.disabled=false; b.textContent=txtB; }
+      if(r&&r.ok&&r.evento){
+        try{ sessionStorage.setItem('inv_clave_'+slug, v); }catch(err){}
+        abrirCandado();
+        try{ await pintarEvento(r.evento); }catch(err){ console.warn(err); }
+        return;
+      }
+      var msg='No se pudo verificar. Probá de nuevo.';
+      if(r&&r.error==='clave')      msg='Clave incorrecta.';
+      else if(r&&r.error==='limite')msg='Demasiados intentos. Esperá un rato.';
+      else if(r&&r.error==='sin-clave') msg='Esta invitación ya no tiene clave. Recargá la página.';
+      if(e)e.textContent=msg; if(i){i.value='';i.focus();}
+      return;
+    }
+
+    // --- camino 2: compatibilidad con invitaciones viejas ---
     if(v===String(window.__claveEvento||'')){
-      try{ sessionStorage.setItem('inv_ok_'+(window.INVDATA&&INVDATA.slug||''),'1'); }catch(err){}
-      if(lock)lock.classList.remove('on');
-      document.documentElement.style.overflow='';
-      if(env)env.style.display='';
-      window.__invBloqueada=false;
+      try{ sessionStorage.setItem('inv_ok_'+slug,'1'); }catch(err){}
+      abrirCandado();
     } else { if(e)e.textContent='Clave incorrecta.'; if(i){i.value='';i.focus();} }
   };
   function aplicarFX(){ const r=document.documentElement.style;
@@ -1378,7 +1414,9 @@
         bloquear('Invitación no disponible','Esta invitación fue dada de baja. Si creés que es un error, escribile a quien te la envió.',false);
         window.__invBloqueada=true; return;
       }
-      // 2) Clave del evento
+      // 2) Clave del evento — SOLO invitaciones viejas.
+      // En las nuevas la clave ya no viaja en el evento (vive en inv_privado y la
+      // verifica evento-privado.php), asi que este bloque no llega a ejecutarse.
       var clave=String(ev['c_contrasena-para-el-evento']||'').trim();
       if(clave){
         var ok=false;
@@ -1908,26 +1946,61 @@
     const vidriera = (!token || token==='demo');
     if(vidriera) token=null;
     INVDATA.slug=slug; INVDATA.token=token;
+    window.__vidriera=vidriera;
     try{
       const ev=await INV.getEvento(slug);
       if(!ev){ return; }
-      if(invitacionVencida(ev)){ mostrarVencida(ev); return; }
-      window.INVEV=ev; aplicarEvento(ev); aplicarEstilosSectores(ev); aplicarInterruptores(ev);
-      try{ refrescarContadorRSVP(); }catch(_e){}
-      try{ if(window.__i18nBoot)window.__i18nBoot(); }catch(_e){}
-      if(vidriera){
-        // Muestra sin invitado: se esconde todo lo personal (pase con QR, nombre,
-        // mesa) y el formulario de confirmación, que no tendría a quién anotar.
-        document.querySelectorAll('.rsvpform').forEach(function(f){ f.style.display='none'; });
-        var pase=document.querySelector('.pase'); if(pase)pase.style.display='none';
-        ['pv-gname','pv-per','pv-mesa','pv-estado'].forEach(function(id){ var e=el(id); if(e)e.textContent=''; });
-        var rn=el('rname'); if(rn)rn.value='';
-        var cf=document.querySelector('[data-sec="confirmacion"] p');
-        if(cf)cf.textContent='Esta es una muestra. En la invitación real, cada invitado entra con su propio link y confirma desde acá.';
-      } else {
-        const g=await INV.getInvitado(slug,token); aplicarInvitado(g,slug);
-      }
-    }catch(e){ console.warn('No se pudo cargar la invitación:',e); }
+      await pintarEvento(ev);
+    }catch(e){
+      // Evento PRIVADO: la regla de Firestore no lo entrega sin la clave. No es un
+      // error, es el candado funcionando. Se muestra la pantalla de clave con la
+      // pagina TODAVIA VACIA: los datos no estan en el navegador hasta que el
+      // servidor los entregue.
+      if(e && e.privado){ await pedirClaveAlInvitado(slug); return; }
+      console.warn('No se pudo cargar la invitación:',e);
+    }
+  }
+  // Dibuja la invitación con un evento ya obtenido (venga de Firestore o del servidor).
+  async function pintarEvento(ev){
+    const slug=INVDATA.slug, token=INVDATA.token, vidriera=!!window.__vidriera;
+    if(invitacionVencida(ev)){ mostrarVencida(ev); return; }
+    window.INVEV=ev; aplicarEvento(ev); aplicarEstilosSectores(ev); aplicarInterruptores(ev);
+    try{ refrescarContadorRSVP(); }catch(_e){}
+    try{ if(window.__i18nBoot)window.__i18nBoot(); }catch(_e){}
+    if(vidriera){
+      // Muestra sin invitado: se esconde todo lo personal (pase con QR, nombre,
+      // mesa) y el formulario de confirmación, que no tendría a quién anotar.
+      document.querySelectorAll('.rsvpform').forEach(function(f){ f.style.display='none'; });
+      var pase=document.querySelector('.pase'); if(pase)pase.style.display='none';
+      ['pv-gname','pv-per','pv-mesa','pv-estado'].forEach(function(id){ var e=el(id); if(e)e.textContent=''; });
+      var rn=el('rname'); if(rn)rn.value='';
+      var cf=document.querySelector('[data-sec="confirmacion"] p');
+      if(cf)cf.textContent='Esta es una muestra. En la invitación real, cada invitado entra con su propio link y confirma desde acá.';
+    } else {
+      try{ const g=await INV.getInvitado(slug,token); aplicarInvitado(g,slug); }catch(_e){}
+    }
+  }
+  // Pantalla de clave para una invitación privada de verdad.
+  async function pedirClaveAlInvitado(slug){
+    window.__claveServidor=true;
+    // Si ya la puso en esta sesión, se reintenta sola y no se le pide de nuevo.
+    var guardada=''; try{ guardada=sessionStorage.getItem('inv_clave_'+slug)||''; }catch(_e){}
+    if(guardada){
+      const r=await INV.getEventoConClave(slug, guardada);
+      if(r&&r.ok&&r.evento){ await pintarEvento(r.evento); return; }
+      try{ sessionStorage.removeItem('inv_clave_'+slug); }catch(_e){}
+    }
+    var lock=el('lock'), env=el('env');
+    if(!lock) return;
+    var t=el('lock-tit'), p=el('lock-txt'), i=el('lock-in'), b=lock.querySelector('button');
+    if(t)t.textContent='Invitación privada';
+    if(p)p.textContent='Ingresá la clave que te compartieron los anfitriones para ver la invitación.';
+    if(i)i.style.display=''; if(b)b.style.display='';
+    lock.classList.add('on');
+    document.documentElement.style.overflow='hidden';
+    if(env) env.style.display='none';
+    window.__invBloqueada=true;
+    if(i){ try{ i.focus(); }catch(_e){} }
   }
   // Sello: mostrar las iniciales al instante desde el link (ej: sofia-y-mateo → S&M), sin esperar la base
   (function(){ try{
@@ -2227,7 +2300,7 @@
     document.addEventListener('click',function(e){ if(panel.classList.contains('show') && !panel.contains(e.target) && e.target!==btn) close(); });
   })();
 </script>
-<script type="module" src="../firebase-inv.js?v=22"></script>
+<script type="module" src="../firebase-inv.js?v=23"></script>
 <div class="fxlayer" id="fxlayer"></div>
 </body>
 </html>
