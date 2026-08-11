@@ -29,6 +29,7 @@ $APIKEY  = 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc';
 $FS      = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT . '/databases/(default)/documents/';
 
 // ---------- entrada ----------
+if ((int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 8192) { http_response_code(413); echo json_encode(array('ok'=>false,'error'=>'muy-grande')); exit; }
 $in = json_decode(file_get_contents('php://input'), true);
 if (!is_array($in)) $in = array();
 
@@ -53,6 +54,22 @@ if ($slug === '' || $clave === '' || $nombre === '') {
   http_response_code(400);
   echo json_encode(array('ok' => false, 'error' => 'faltan-datos'));
   exit;
+}
+
+// Freno anti-abuso: sin esto alguien puede crear miles de invitados falsos y quemar
+// la cuota de Firebase. Los topes son generosos para un uso normal (una pareja carga
+// sus invitados de a poco) pero cortan el abuso automatizado.
+$rutaLim = __DIR__ . '/invitame-limite.php';
+if (is_readable($rutaLim)) {
+  include_once $rutaLim;
+  iv_frenar(array(
+    // Calibrado a proposito MUY por encima del uso real: una pareja puede cargar su
+    // lista entera de 100+ invitados de una sentada, y no la podemos frenar por eso.
+    // Lo que se corta es el abuso automatizado, que son miles.
+    array('pn-ip-'   . iv_ip(), 300,  3600),   // 300 altas por hora desde una conexion
+    array('pn-inv-'  . $slug,   500,  3600),   // 500 por hora en una misma invitacion
+    array('pn-glob',            3000, 3600),   // 3000 por hora en todo el sistema
+  ));
 }
 
 // ---------- helper HTTP ----------
@@ -140,7 +157,7 @@ $auth = array('Authorization: Bearer ' . $idToken);
 function nuevoToken() {
   $abc = 'abcdefghijkmnpqrstuvwxyz23456789';   // sin l/o/0/1: se confunden al dictarlas
   $t = '';
-  for ($i = 0; $i < 6; $i++) $t .= $abc[random_int(0, strlen($abc) - 1)];
+  for ($i = 0; $i < 10; $i++) $t .= $abc[random_int(0, strlen($abc) - 1)];
   return $t;
 }
 $token = '';

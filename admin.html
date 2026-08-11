@@ -871,7 +871,7 @@
       const k=_norm(nom);
       if(yaEstan.has(k)){ repes.push(nom); continue; }
       yaEstan.add(k);
-      D.invitados.push({n:nom,p:((c[1]!=null&&c[1]!=='')?c[1]:'1').toString().trim(),m:((c[2]!=null&&c[2]!=='')?c[2]:'-').toString().trim(),restriccion:(c[3]||'').toString().trim(),t:Math.random().toString(36).slice(2,8)});n++;}
+      D.invitados.push({n:nom,p:((c[1]!=null&&c[1]!=='')?c[1]:'1').toString().trim(),m:((c[2]!=null&&c[2]!=='')?c[2]:'-').toString().trim(),restriccion:(c[3]||'').toString().trim(),t:nuevoTokenSeguro()});n++;}
     renderGuests();
     let msg;
     if(n>0){ msg='✅ Se cargaron '+n+' invitados.';
@@ -897,7 +897,7 @@
     D.invitados.forEach(g=>{filas.push([g.n||'',g.p||'',g.m||'',BASEURL+'?e='+slug+'&g='+g.t]);});
     _bajar('links-invitados.csv', filas.map(f=>f.map(x=>{x=(x==null?'':x).toString();return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}).join(',')).join('\n'));
   }
-  function addGuest(){const n=el('gname').value.trim();if(!n)return;D.invitados.push({n:n,p:el('gper').value||'1',m:el('gmesa').value||'-',t:Math.random().toString(36).slice(2,8)});el('gname').value='';renderGuests();}
+  function addGuest(){const n=el('gname').value.trim();if(!n)return;D.invitados.push({n:n,p:el('gper').value||'1',m:el('gmesa').value||'-',t:nuevoTokenSeguro()});el('gname').value='';renderGuests();}
   // Invitados borrados del panel: hay que darlos de baja TAMBIÉN en la base.
   // Antes `delGuest` sólo los sacaba de la lista local: el documento quedaba vivo,
   // el link del invitado seguía funcionando y el escáner de puerta lo seguía
@@ -1085,6 +1085,16 @@
       bloquePanelNovios()+
       links.map(l=>'<div style="border:1px solid #eee;border-radius:8px;padding:10px;margin-bottom:8px"><b style="font-size:13px">'+l.nombre+'</b><br><input readonly value="'+l.url+'" style="width:100%;font-size:11px;padding:6px;margin-top:4px;border:1px solid #ddd;border-radius:6px" onclick="this.select()"><button style="margin-top:6px;font-size:12px;padding:5px 10px;border:0;background:#5b2a4e;color:#fff;border-radius:6px;cursor:pointer" onclick="navigator.clipboard.writeText(\''+l.url+'\');this.textContent=\'¡Copiado!\'">Copiar link</button> <a href="'+l.url+'" target="_blank" style="font-size:12px;margin-left:6px">Abrir ↗</a></div>').join('')+
       '<button style="margin-top:8px;padding:8px 16px;border:0;background:#333;color:#fff;border-radius:8px;cursor:pointer" onclick="document.getElementById(\'linksbox\').remove()">Cerrar</button></div>';
+  }
+
+  // Token seguro (mismo criterio que firebase-inv.js y pase-nuevo.php).
+  // Antes se usaba Math.random(), que es predecible: con unos pocos tokens de una boda
+  // se podian adivinar los demas y entrar con un QR falso.
+  function nuevoTokenSeguro(){
+    if(window.INV && typeof INV.rndToken==='function') return INV.rndToken();
+    const abc='abcdefghijkmnpqrstuvwxyz23456789';
+    const b=new Uint8Array(10); crypto.getRandomValues(b);
+    return Array.from(b,x=>abc[x%abc.length]).join('');
   }
 
   // cargar evento existente si viene ?e=slug
@@ -1304,7 +1314,7 @@
       if(s.musica)    notas.push('Música que pidió: '+s.musica);
       if(notas.length) D['c_pedido-especial-del-cliente']=notas.join('\n');
     }
-    D.invitados=(s.invitados||[]).map(g=>({n:g.n,p:g.p||'1',m:g.m||'-',t:Math.random().toString(36).slice(2,8)}));
+    D.invitados=(s.invitados||[]).map(g=>({n:g.n,p:g.p||'1',m:g.m||'-',t:nuevoTokenSeguro()}));
     D._solicId=s.id;
     const bx=el('solicbox'); if(bx)bx.remove();
     go('PRINCIPAL'); render(); if(typeof renderPanel==='function')renderPanel();

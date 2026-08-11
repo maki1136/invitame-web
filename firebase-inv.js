@@ -46,7 +46,16 @@ const EV = "inv_eventos";
 const GU = "inv_invitados";
 const PV = "inv_privado";   // datos que NO puede ver un invitado
 const gid = (slug, token) => slug + "__" + token;
-const rndToken = () => Math.random().toString(36).slice(2, 8);
+// El token de un invitado es su QR de entrada Y la llave que abre su ficha.
+// Math.random() NO es criptografico: viendo unos pocos tokens de una boda se pueden
+// predecir los demas (entrar con un QR falso, o leer los datos de otro invitado).
+// crypto.getRandomValues si lo es. 10 caracteres del alfabeto de abajo = ~50 bits.
+const ABC_TOKEN = 'abcdefghijkmnpqrstuvwxyz23456789';   // sin l/o/0/1: se confunden al dictarlas
+const rndToken = () => {
+  const b = new Uint8Array(10);
+  (self.crypto || window.crypto).getRandomValues(b);
+  return Array.from(b, x => ABC_TOKEN[x % ABC_TOKEN.length]).join('');
+};
 
 const INV = {
   db,

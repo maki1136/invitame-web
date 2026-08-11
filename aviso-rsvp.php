@@ -150,6 +150,25 @@ if (!$bv('c_habilitar-aviso-por-mail')) {
   exit;
 }
 
+// Freno anti-abuso. Este endpoint es el mas caro de todos: cada llamada puede mandar
+// un mail. Sin tope, alguien con un solo link de invitado valido puede disparar miles
+// de mails a los novios y agotar la cuota PAGA de mails de toda la plataforma (lo que
+// ademas puede hacer que el proveedor suspenda la cuenta por reputacion).
+// El tope por token tambien evita el aviso duplicado si el invitado toca dos veces.
+$rutaLim = dirname(__FILE__) . '/invitame-limite.php';
+if (is_readable($rutaLim)) {
+  include_once $rutaLim;
+  iv_frenar(array(
+    // El tope por invitado (3/dia) es el que corta el abuso de verdad y ademas evita
+    // el aviso duplicado. Los otros estan holgados: una boda de 300 personas
+    // confirmando el mismo dia NO se puede topar.
+    array('rsvp-tok-' . $slug . '__' . $token, 3,    86400),  // 3 avisos por invitado por dia
+    array('rsvp-inv-' . $slug,                 800,  86400),  // 800 por invitacion por dia
+    array('rsvp-ip-'  . iv_ip(),               60,   3600),   // 60 por hora por conexion
+    array('rsvp-glob',                         5000, 86400),  // 5000 por dia en todo el sistema
+  ));
+}
+
 // El mail de los novios YA NO vive en el documento publico del evento: ese lo lee
 // cualquiera que tenga el link de una invitacion, y era una fuga de datos personales.
 // Ahora vive en inv_privado/{slug}, que solo se lee con sesion iniciada.
