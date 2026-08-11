@@ -290,13 +290,76 @@
   .sform.done form{display:none}.sform.done .ok-msg{display:block}
   @media(max-width:860px){.sorteo .sg{grid-template-columns:1fr}}
 
+
+  /* ===== hero: titular rotativo + chips ===== */
+  .hero h1{min-height:3.3em}
+  .hrot{display:inline-block;transition:opacity .5s ease,transform .5s ease}
+  .hrot.out{opacity:0;transform:translateY(14px)}
+  .rating{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 18px;width:fit-content;box-shadow:0 14px 30px -24px rgba(30,27,19,.5)}
+  @media(max-width:920px){.rating{margin-left:auto;margin-right:auto}.hero h1{min-height:0}}
+  .chipf{position:absolute;z-index:4;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:14px;padding:12px 17px;box-shadow:0 26px 50px -30px rgba(30,27,19,.45);font-family:'Manrope';font-size:13.5px;color:var(--ink-soft);white-space:nowrap;transition:opacity .5s ease,transform .5s ease}
+  .chipf b{color:var(--wine);font-weight:700}
+  .chipf .ic{margin-right:7px}
+  .chipf.out{opacity:0;transform:translateY(10px)}
+  .cf-cd{left:2%;top:24%}
+  .cf-1{right:5%;top:34%}
+  .cf-2{left:4%;bottom:22%}
+  .cf-cd .e{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--bronze);font-weight:700;display:block}
+  .cf-cd .v{font-family:'Epilogue';font-size:21px;font-weight:700;color:var(--wine);margin-top:2px}
+  @media(max-width:920px){.chipf{display:none}}
+
+  /* ===== muestras (carrusel) ===== */
+  .muestras{background:var(--card);border-block:1px solid var(--line)}
+  .mrow{display:flex;gap:22px;overflow-x:auto;padding:12px 4px 10px;scroll-snap-type:x mandatory;margin-top:52px;scrollbar-width:none}
+  .mrow::-webkit-scrollbar{display:none}
+  .mcard{flex:0 0 208px;scroll-snap-align:center;display:block;transition:transform .25s}
+  .mcard:hover{transform:translateY(-8px)}
+  .mphone{width:208px;height:414px;border-radius:34px;background:linear-gradient(160deg,#2b2620,#4a4238);padding:8px;box-shadow:0 36px 60px -34px rgba(30,27,19,.55);position:relative}
+  .mphone::after{content:"";position:absolute;left:50%;top:16px;transform:translateX(-50%);width:62px;height:16px;background:#17130f;border-radius:100px;z-index:3}
+  .mscreen{width:100%;height:100%;border-radius:27px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding:20px 14px 26px;color:#fff}
+  .mscreen .mk{font-family:'Epilogue';font-size:9.5px;letter-spacing:2.5px;text-transform:uppercase;opacity:.9}
+  .mscreen .mn{font-family:'Epilogue';font-style:italic;font-weight:600;font-size:27px;line-height:1.05;margin-top:5px;text-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .mscreen .md{font-size:9px;letter-spacing:2px;margin-top:8px;opacity:.92}
+  .m-olivo{background:linear-gradient(180deg,rgba(70,74,54,.04),rgba(70,74,54,.44)),linear-gradient(160deg,#c3caa9,#98a37a 55%,#6f7a58)}
+  .m-lavanda{background:linear-gradient(180deg,rgba(70,54,74,.04),rgba(70,54,74,.44)),linear-gradient(160deg,#cbb2d6,#8a6ea6 55%,#5e4674)}
+  .m-bronce{background:linear-gradient(180deg,rgba(74,58,40,.04),rgba(74,58,40,.44)),linear-gradient(160deg,#dcc39c,#b98f5e 55%,#8a6636)}
+  .m-marfil{background:linear-gradient(180deg,rgba(90,80,64,.03),rgba(90,80,64,.3)),linear-gradient(160deg,#faf4e9,#e8dcc6 55%,#cdbb9c)}
+  .m-marfil .mk,.m-marfil .mn,.m-marfil .md{color:#6b5c45;text-shadow:none}
+  .m-rosa{background:linear-gradient(180deg,rgba(90,50,60,.04),rgba(90,50,60,.4)),linear-gradient(160deg,#f0cdd0,#d79ba1 55%,#b0707c)}
+  .m-noche{background:linear-gradient(180deg,rgba(10,14,40,.1),rgba(10,14,40,.5)),linear-gradient(160deg,#4a5a86,#2b3560 55%,#161d3a)}
+  .mname{font-family:'Epilogue';font-style:italic;font-size:23px;font-weight:600;color:var(--ink);text-align:center;margin-top:16px}
+  .mdesc{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--bronze);text-align:center;margin-top:5px;font-weight:700;line-height:1.5}
+  .mhint{text-align:center;color:var(--ink-soft);font-size:14px;margin-top:26px}
+  @media(max-width:860px){.mrow{margin-top:38px}}
+
+  /* ===== comparativa ===== */
+  .vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px}
+  .vs{border-radius:18px;padding:34px 30px}
+  .vs.old{background:var(--cream-2);border:1px solid var(--line)}
+  .vs.new{background:var(--card);border:1.5px solid var(--wine);box-shadow:0 34px 66px -40px rgba(142,33,72,.5)}
+  .vs h3{font-family:'Epilogue';font-size:22px;font-weight:800;margin-bottom:20px}
+  .vs.old h3{color:var(--ink-soft)}.vs.new h3{color:var(--wine)}
+  .vs ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .vs li{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
+  .vs.old li{color:var(--ink-soft)}
+  .vs.old li::before{content:"✕";color:#b9ae9a;font-weight:800;flex:none}
+  .vs.new li{color:var(--ink)}
+  .vs.new li::before{content:"✓";color:var(--wine);font-weight:800;flex:none}
+  @media(max-width:760px){.vs-grid{grid-template-columns:1fr}}
+
+  /* ===== a medida ===== */
+  .medida{margin-top:56px;background:linear-gradient(150deg,var(--cream-2),var(--sand));border:1px solid var(--line);border-radius:20px;padding:44px 38px;text-align:center}
+  .medida h3{font-family:'Epilogue';font-size:clamp(24px,3vw,34px);font-weight:800;color:var(--ink)}
+  .medida h3 .it{font-style:italic;color:var(--wine)}
+  .medida p{color:var(--ink-soft);max-width:620px;margin:14px auto 24px;font-size:16.5px}
+
 </style>
 </head>
 <body>
 <header><div class="wrap nav">
   <a href="/" class="brand"><span class="mk"></span>Invítame</a>
   <ul>
-    <li><a href="#colecciones">Colecciones</a></li>
+    <li><a href="#muestras">Colecciones</a></li>
     <li><a href="#incluye">Cómo funciona</a></li>
     <li><a href="#precios">Precios</a></li>
     <li><a href="#blog">Blog</a></li>
@@ -306,7 +369,7 @@
   <button class="navtog" id="navtog" aria-label="Abrir menú" aria-expanded="false">☰</button>
 </div>
 <div class="mmenu" id="mmenu">
-  <a href="#colecciones">Colecciones</a>
+  <a href="#muestras">Colecciones</a>
   <a href="#incluye">Cómo funciona</a>
   <a href="#precios">Precios</a>
   <a href="#blog">Blog</a>
@@ -318,7 +381,7 @@
 <section class="hero">
   <div class="copy">
     <div class="eyebrow reveal">Invitaciones digitales · Bodas & XV</div>
-    <h1 class="reveal" style="margin-top:18px">Invitaciones que se sienten como el <span class="it">gran día</span>.</h1>
+    <h1 class="reveal" style="margin-top:18px"><span class="hrot" id="hrot">Invitaciones que se sienten como el <span class="it">gran día</span>.</span></h1>
     <p class="kline reveal">Con <b>confirmación de asistencia</b> y <b>control de acceso por QR</b>. Todo tu evento en un link — elegante, vivo y sin apps que descargar.</p>
     <div class="cta-row reveal">
       <a href="crear.html" class="btn btn-wine">Crear mi invitación</a>
@@ -329,8 +392,9 @@
   <div class="canvas-col">
     <div class="halo"></div>
     <div class="stage"><div class="phone"><div class="screen"><div class="track" id="track"></div></div></div></div>
-    <div class="fcard fc-top reveal"><div class="e">Falta poco</div><div class="v" data-cd>128 días</div></div>
-    <div class="fcard fc-bot reveal"><div class="e">Confirmados</div><div class="v">142 invitados</div><div class="n">Sofía &amp; Mateo · 14.12.26</div></div>
+    <div class="chipf cf-cd reveal"><span class="e">Falta poco</span><span class="v" data-cd>128 días</span></div>
+    <div class="chipf cf-1 reveal" id="chip1"><span class="ic">✓</span>Confirmó <b>Valentina</b></div>
+    <div class="chipf cf-2 reveal" id="chip2"><span class="ic">📍</span>Cómo llegar al salón</div>
   </div>
 </section>
 
@@ -396,6 +460,23 @@
   </div>
 </section>
 
+<!-- MUESTRAS -->
+<section class="sec muestras" id="muestras">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">Nuestras colecciones</span><h2 class="reveal" style="margin-top:12px">Elegancia que se nota desde el sobre</h2><p class="reveal">Cada colección tiene su propia paleta, tipografía y apertura animada. Después la personalizamos con tus nombres, tus fotos y tu historia.</p></div>
+    <div class="mrow reveal">
+      <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-olivo"><div class="mk">Nuestra Boda</div><div class="mn">Sofía &amp; Mateo</div><div class="md">14 · 12 · 2026</div></div></div><div class="mname">Olivo</div><div class="mdesc">Boda · verde salvia y crema</div></a>
+      <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-lavanda"><div class="mk">Mis XV Años</div><div class="mn">Valentina</div><div class="md">20 · 04 · 2026</div></div></div><div class="mname">Lavanda</div><div class="mdesc">XV Años · lila y plata</div></a>
+      <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-marfil"><div class="mk">Nos casamos</div><div class="mn">Camila &amp; Diego</div><div class="md">07 · 03 · 2027</div></div></div><div class="mname">Marfil</div><div class="mdesc">Boda · lino y sello de cera</div></a>
+      <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-rosa"><div class="mk">Mis XV Años</div><div class="mn">Renata</div><div class="md">15 · 08 · 2026</div></div></div><div class="mname">Rosa Palo</div><div class="mdesc">XV Años · rosa y oro</div></a>
+      <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-noche"><div class="mk">Nuestra Boda</div><div class="mn">Fernanda &amp; Carlos</div><div class="md">28 · 11 · 2026</div></div></div><div class="mname">Noche</div><div class="mdesc">Boda · azul noche y estrellas</div></a>
+      <a href="catalogo.html" class="mcard"><div class="mphone"><div class="mscreen m-bronce"><div class="mk">Te invitamos</div><div class="mn">Benjamín</div><div class="md">05 · 10 · 2026</div></div></div><div class="mname">Bronce</div><div class="mdesc">Otros eventos · tierra y dorado</div></a>
+    </div>
+    <p class="mhint reveal">Deslizá para ver más colecciones →</p>
+    <div class="center" style="margin-top:26px"><a href="catalogo.html" class="btn btn-wine reveal">Ver todas las colecciones</a></div>
+  </div>
+</section>
+
 <!-- QUE INCLUYE -->
 <section class="sec incl" id="incluye">
   <div class="wrap">
@@ -438,6 +519,40 @@
         <div class="tt">Acceso válido</div>
         <div class="ss">Escaneado en la puerta</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVA -->
+<section class="sec" id="comparativa" style="background:var(--card);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow reveal">Por qué cambiar</span><h2 class="reveal" style="margin-top:12px">La invitación de papel ya no alcanza</h2><p class="reveal">Lo que antes era una tarjeta linda, hoy puede organizarte la fiesta entera.</p></div>
+    <div class="vs-grid">
+      <div class="vs old reveal">
+        <h3>La invitación de siempre</h3>
+        <ul>
+          <li>Se imprime, se reparte y se termina perdiendo</li>
+          <li>Perseguís uno por uno para que confirmen</li>
+          <li>Si cambia el horario o el lugar, ya está impresa</li>
+          <li>No sabés cuánta gente llega hasta el día de la fiesta</li>
+          <li>Cada tanda de impresión es un gasto más</li>
+        </ul>
+      </div>
+      <div class="vs new reveal">
+        <h3>Con Invítame</h3>
+        <ul>
+          <li>Un link elegante que se abre en cualquier celular, sin apps</li>
+          <li>Las confirmaciones llegan solas y quedan ordenadas</li>
+          <li>Cambiás lo que quieras, cuando quieras, en el mismo link</li>
+          <li>Sabés en vivo quién viene, con cuántos y en qué mesa</li>
+          <li>La compartís las veces que quieras, sin costo extra</li>
+        </ul>
+      </div>
+    </div>
+    <div class="medida reveal">
+      <h3>¿Y si la soñás <span class="it">distinta a todo</span>?</h3>
+      <p>Si ninguna de nuestras colecciones es la tuya, nuestro equipo de diseño la crea desde cero, exclusiva para tu evento. Nos contás cómo la imaginás y la vamos armando con vos.</p>
+      <a href="https://wa.me/5219992963119?text=Hola%20Inv%C3%ADtame%2C%20quiero%20una%20invitaci%C3%B3n%20dise%C3%B1ada%20a%20medida%20%E2%9C%A8" target="_blank" rel="noopener" class="btn btn-wine">Quiero mi diseño a medida</a>
     </div>
   </div>
 </section>
@@ -700,6 +815,34 @@
       box.classList.add('done');
     });
   }
+})();
+</script>
+<script>
+(function(){
+  /* ---- titular rotativo del hero ---- */
+  var PHRASES=[
+    'Invitaciones que se sienten como el <span class="it">gran día</span>.',
+    'Tus invitados abren el sobre y <span class="it">se emocionan</span>.',
+    'Toda tu fiesta en <span class="it">un solo link</span>.'
+  ];
+  var h=document.getElementById('hrot'),hi=0;
+  if(h){setInterval(function(){
+    h.classList.add('out');
+    setTimeout(function(){hi=(hi+1)%PHRASES.length;h.innerHTML=PHRASES[hi];h.classList.remove('out');},520);
+  },4200);}
+
+  /* ---- chips flotantes rotativos ---- */
+  var C1=['<span class="ic">\u2713</span>Confirm\u00f3 <b>Valentina</b>','<span class="ic">\ud83c\udfb5</span>Canci\u00f3n pedida por <b>Marcos</b>','<span class="ic">\ud83c\udf81</span>Mesa de regalos','<span class="ic">\ud83d\udcf7</span>Galer\u00eda compartida'];
+  var C2=['<span class="ic">\ud83d\udccd</span>C\u00f3mo llegar al sal\u00f3n','<span class="ic">\ud83d\udc57</span>C\u00f3digo de vestimenta','<span class="ic">\ud83d\udcf2</span>Acceso con <b>QR</b>','<span class="ic">\u2713</span>Confirmaron <b>142</b> invitados'];
+  function cycle(el,arr,delay){
+    if(!el)return; var i=0;
+    setTimeout(function(){ setInterval(function(){
+      el.classList.add('out');
+      setTimeout(function(){i=(i+1)%arr.length;el.innerHTML=arr[i];el.classList.remove('out');},520);
+    },3600); },delay);
+  }
+  cycle(document.getElementById('chip1'),C1,0);
+  cycle(document.getElementById('chip2'),C2,1800);
 })();
 </script>
 </body>
