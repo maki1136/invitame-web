@@ -200,7 +200,11 @@
   // la que se publico: index.php sirve i/v/{VERSION}/index.html si esa carpeta existe.
   // Asi, cuando cambiamos el motor, las invitaciones ya entregadas NO se enteran.
   // AL SUBIR ESTE NUMERO HAY QUE CREAR LA CARPETA i/v/{nueva-version}/index.html.
-  const VERSION='2026-08-11';
+  const VERSION='2026-08-11b';
+  // Primera version del motor que sabe pedirle al servidor un evento privado.
+  // Una invitacion clavada a una version anterior NO entiende el candado nuevo, asi que
+  // al ponerle clave se la sube a esta (con aviso). Ver "invitacion privada" mas abajo.
+  const VER_CANDADO_SERVIDOR='2026-08-11b';
   const ORDER=["PRINCIPAL","LUGAR_VEST","GALERIA_INSTA_VID","PERSONAS","REGALOS","CONFIRMACIÓN","MUSIC_PASES","AVANZADO","TRIVIA","EFECTOS","INVITADOS"];
   /* Lista CURADA: solo fuentes que la invitación carga sí o sí (ver <link> en i/index.html). Menos, pero TODAS funcionan. */
   const FONTS=[["'Great Vibes',cursive","Great Vibes ✒"],["'Rouge Script',cursive","Rouge Script ✒"],["'Dancing Script',cursive","Dancing Script ✒"],["'Parisienne',cursive","Parisienne ✒"],["'Tangerine',cursive","Tangerine ✒"],["'Sacramento',cursive","Sacramento ✒"],["'Cormorant Garamond',serif","Cormorant"],["'Playfair Display',serif","Playfair Display"],["'Forum',serif","Forum"],["'Marcellus',serif","Marcellus"],["'EB Garamond',serif","EB Garamond"],["'Lora',serif","Lora"],["'Cinzel',serif","Cinzel"],["'Prata',serif","Prata"],["'Montserrat',sans-serif","Montserrat"],["'Poppins',sans-serif","Poppins"],["'Jost',sans-serif","Jost"]];
@@ -1027,6 +1031,20 @@
       // tenga el link de la invitacion). Se guardan aparte, en inv_privado.
       const _priv={};
       (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _priv[k]=cfg[k]; delete cfg[k]; } });
+      // INVITACION PRIVADA (candado de verdad, 2026-08-11):
+      // la clave ya no viaja en el documento publico. En su lugar queda una marca
+      // "privado", y la REGLA de Firestore usa esa marca para no entregar el evento
+      // a nadie. Los datos solo salen por evento-privado.php, con la clave correcta.
+      const _esPrivado = !!String(_priv['c_contrasena-para-el-evento']||'').trim();
+      cfg.privado = _esPrivado;
+      if(_esPrivado && cfg.ver && cfg.ver < VER_CANDADO_SERVIDOR){
+        if(!confirm('Esta invitación tiene clave.\n\nPara que la clave proteja de verdad (y no sea solo un cartel), hay que pasarla al diseño '+VER_CANDADO_SERVIDOR+'.\n\nSe ve igual, pero si cancelás la invitación va a quedar sin candado.\n\n¿La actualizo?')){
+          cfg.privado=false;                     // sin motor nuevo no se marca privada: quedaria en blanco
+          _priv['c_contrasena-para-el-evento']=''; // y la clave no sirve de nada
+        } else {
+          cfg.ver=VER_CANDADO_SERVIDOR; D.ver=cfg.ver;
+        }
+      }
       await INV.saveEvento(slug, cfg);
       if(Object.keys(_priv).length) await INV.savePrivado(slug, _priv);
       await INV.limpiarPrivadosDelPublico(slug);   // saca los que habian quedado de antes
@@ -1384,7 +1402,7 @@
   if(window.INV) cargarEvento(); else window.addEventListener('inv-ready',cargarEvento);
   {var _tb=new URLSearchParams(location.search).get('tab'); if(_tb&&ORDER.indexOf(_tb)>-1){go(_tb);}}
 </script>
-<script type="module" src="firebase-inv.js?v=22"></script>
+<script type="module" src="firebase-inv.js?v=23"></script>
 <script type="module">
   import { collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   function _ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }

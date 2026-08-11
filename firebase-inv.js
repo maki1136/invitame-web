@@ -75,8 +75,33 @@ const INV = {
     return slug;
   },
   async getEvento(slug) {
-    const s = await getDoc(doc(db, EV, slug));
-    return s.exists() ? s.data() : null;
+    try {
+      const s = await getDoc(doc(db, EV, slug));
+      return s.exists() ? s.data() : null;
+    } catch (e) {
+      // Si el evento es PRIVADO, la regla de Firestore no deja leerlo sin la clave.
+      // No es un error: hay que pedirlo por evento-privado.php. Se avisa con una
+      // marca para que la invitacion sepa mostrar el candado en vez de una pagina vacia.
+      const err = new Error('privado');
+      err.privado = (String(e && e.code || '').indexOf('permission-denied') >= 0);
+      err.original = e;
+      throw err;
+    }
+  },
+  // Pide el evento al servidor mandando la clave. El servidor compara contra
+  // inv_privado (que tampoco se puede leer sin sesion) y recien ahi devuelve los datos.
+  // Devuelve {ok:true, evento} o {ok:false, error:'clave'|'sin-clave'|...}.
+  async getEventoConClave(slug, clave) {
+    try {
+      const r = await fetch('/evento-privado.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug, clave })
+      });
+      const j = await r.json().catch(() => null);
+      if (j && typeof j === 'object') return j;
+      return { ok: false, error: 'respuesta' };
+    } catch (e) { return { ok: false, error: 'red' }; }
   },
 
   // ---- Datos PRIVADOS del evento (no se leen sin login) ----
@@ -85,7 +110,10 @@ const INV = {
   // (basta con saber la direccion). Con la clave a la vista, un desconocido entraba al
   // panel de esos novios y hasta podia generar pases con QR. Van en inv_privado, que la
   // regla de Firestore solo deja leer con sesion iniciada.
-  CAMPOS_PRIVADOS: ['c_clave-del-panel-de-los-novios', 'c_email-para-confirmaciones'],
+  // 'c_contrasena-para-el-evento' se sumo el 2026-08-11: antes la clave de la
+  // "invitacion privada" viajaba en el documento publico y la comparaba el navegador,
+  // asi que el candado era decorativo. Ahora la clave vive aca y la verifica el servidor.
+  CAMPOS_PRIVADOS: ['c_clave-del-panel-de-los-novios', 'c_email-para-confirmaciones', 'c_contrasena-para-el-evento'],
   async savePrivado(slug, data) {
     await setDoc(doc(db, PV, slug), { ...data, slug, updatedAt: serverTimestamp() }, { merge: true });
     return slug;
