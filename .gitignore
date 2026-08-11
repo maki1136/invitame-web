@@ -1,0 +1,15 @@
+# Secretos: viven FUERA del repo. Nunca subir estos archivos.
+invitame-config.php
+invitame-panel.php
+.env
+.env.*
+*.key
+*.pem
+# Backups y volcados de datos
+*.sql
+*.zip
+*.bak
+backup*
+# Basura del sistema
+.DS_Store
+Thumbs.db

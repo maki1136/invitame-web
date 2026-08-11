@@ -10,3 +10,18 @@
   RewriteEngine On
   RewriteRule .*\.html$ - [E=Cache-Control:no-cache]
 </IfModule>
+
+# --- Seguridad ---
+# Referrer-Policy es la clave: evita que el link de la invitación (con el token del
+# invitado) se filtre a sitios de afuera cuando el invitado toca un mapa o mesa de regalos.
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# Bloquear archivos ocultos (.git, .env, etc.) por si alguna vez llegan al servidor
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>

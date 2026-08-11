@@ -185,11 +185,15 @@ const INV = {
   }
 };
 
-INV.exportAll = async function(){
-  const ev=(await getDocs(collection(db, EV))).docs.map(d=>({id:d.id, ...d.data()}));
-  const gu=(await getDocs(collection(db, GU))).docs.map(d=>({id:d.id, ...d.data()}));
-  return { exportedAt:new Date().toISOString(), eventos:ev, invitados:gu };
-};
+// El backup (bajar TODA la base) solo tiene sentido en el admin. NO se expone en la
+// invitacion publica (/i/): ahi no hace falta y no debe estar al alcance de un invitado.
+if (!location.pathname.startsWith('/i/')) {
+  INV.exportAll = async function(){
+    const ev=(await getDocs(collection(db, EV))).docs.map(d=>({id:d.id, ...d.data()}));
+    const gu=(await getDocs(collection(db, GU))).docs.map(d=>({id:d.id, ...d.data()}));
+    return { exportedAt:new Date().toISOString(), eventos:ev, invitados:gu };
+  };
+}
 
 window.INV = INV;
 window.dispatchEvent(new CustomEvent("inv-ready", { detail: { ok: INV.ok, error: initError } }));
