@@ -196,7 +196,11 @@
   FIELDS.EFECTOS=[];
   // VERSIÓN ACTUAL de la plataforma. Cada invitación se publica clavada a una versión
   // y NO cambia cuando mejoramos el sistema (pedido de Jazmín, pág. 35).
-  const VERSION='2026-07-20';
+  // VERSION del motor de la invitacion. Cada invitacion queda CLAVADA a la version con
+  // la que se publico: index.php sirve i/v/{VERSION}/index.html si esa carpeta existe.
+  // Asi, cuando cambiamos el motor, las invitaciones ya entregadas NO se enteran.
+  // AL SUBIR ESTE NUMERO HAY QUE CREAR LA CARPETA i/v/{nueva-version}/index.html.
+  const VERSION='2026-08-11';
   const ORDER=["PRINCIPAL","LUGAR_VEST","GALERIA_INSTA_VID","PERSONAS","REGALOS","CONFIRMACIÓN","MUSIC_PASES","AVANZADO","TRIVIA","EFECTOS","INVITADOS"];
   /* Lista CURADA: solo fuentes que la invitación carga sí o sí (ver <link> en i/index.html). Menos, pero TODAS funcionan. */
   const FONTS=[["'Great Vibes',cursive","Great Vibes ✒"],["'Rouge Script',cursive","Rouge Script ✒"],["'Dancing Script',cursive","Dancing Script ✒"],["'Parisienne',cursive","Parisienne ✒"],["'Tangerine',cursive","Tangerine ✒"],["'Sacramento',cursive","Sacramento ✒"],["'Cormorant Garamond',serif","Cormorant"],["'Playfair Display',serif","Playfair Display"],["'Forum',serif","Forum"],["'Marcellus',serif","Marcellus"],["'EB Garamond',serif","EB Garamond"],["'Lora',serif","Lora"],["'Cinzel',serif","Cinzel"],["'Prata',serif","Prata"],["'Montserrat',sans-serif","Montserrat"],["'Poppins',sans-serif","Poppins"],["'Jost',sans-serif","Jost"]];
