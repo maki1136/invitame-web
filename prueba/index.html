@@ -553,7 +553,9 @@
      eso manda por encima de esto. */
   .band .frase{color:#fff;font-family:'Forum',serif;font-size:26px;max-width:420px;padding:0 32px;text-align:center;text-shadow:0 2px 12px rgba(0,0,0,.45)}
   .frasefx{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .fraseSec .frase{position:relative;z-index:2;text-shadow:0 1px 10px rgba(0,0,0,.30)}
+  /* Halo: el mismo recurso que ya usa la portada. Sin esto una frase blanca sobre
+     un fondo claro queda lavada y no se lee (reporte de Jazmin 11/08). */
+  .fraseSec .frase{position:relative;z-index:2;text-shadow:0 2px 12px rgba(0,0,0,.45),0 0 30px rgba(0,0,0,.35)}
   /* Adorno de la seccion Regalos: chico, centrado y ARRIBA del titulo. */
   #reg-adorno{display:block;width:42%;max-width:150px;height:auto;margin:0 auto 12px}
   .frasefx.fx-gradiente{background:linear-gradient(120deg,rgba(109,18,51,.10),rgba(245,103,112,.12),rgba(201,163,106,.14),rgba(109,18,51,.10));background-size:320% 320%;animation:fgrad 15s ease infinite}
