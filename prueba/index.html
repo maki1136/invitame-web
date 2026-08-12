@@ -267,7 +267,9 @@
   .kick{font-family:'Rouge Script',cursive;font-size:34px;color:var(--sage);line-height:.9}
   .sec h2{font-family:'Forum',serif;font-size:30px;color:var(--verde);margin:2px 0 12px}
   .sec p{font-family:'Lora',serif;font-size:15px;line-height:1.85;color:var(--muted);max-width:350px;margin:0 auto}
-  .frase{font-family:'Lora',serif;font-style:italic;font-size:20px;line-height:1.7;color:var(--verde);max-width:350px;margin:0 auto}
+  /* La frase es protagonista: escala con la pantalla en vez de quedar clavada en 20px.
+     Antes, en un celular de 390px se leia mas chica que el texto comun. */
+  .frase{font-family:'Lora',serif;font-style:italic;font-size:clamp(26px,7.2vw,34px);line-height:1.55;color:var(--verde);max-width:min(460px,90%);margin:0 auto}
   .sec.verde{background-color:var(--sec-col-v,var(--verde));background-image:var(--sec-tex-v,none);background-size:cover;background-position:center;background-blend-mode:multiply;color:var(--cream)}.sec.verde .kick{color:var(--sage-cl)}.sec.verde h2{color:#fff}.sec.verde p{color:#d7cebb}
   .evento{background:var(--lino2);border:1px solid #e7ddcd;border-radius:16px;overflow:hidden;margin:0 auto 16px;max-width:400px;box-shadow:0 10px 26px rgba(46,67,60,.1)}
   .evento .ph{height:160px;background-size:cover;background-position:center}
@@ -551,7 +553,9 @@
      eso manda por encima de esto. */
   .band .frase{color:#fff;font-family:'Forum',serif;font-size:26px;max-width:420px;padding:0 32px;text-align:center;text-shadow:0 2px 12px rgba(0,0,0,.45)}
   .frasefx{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .fraseSec .frase{position:relative;z-index:2}
+  .fraseSec .frase{position:relative;z-index:2;text-shadow:0 1px 10px rgba(0,0,0,.30)}
+  /* Adorno de la seccion Regalos: chico, centrado y ARRIBA del titulo. */
+  #reg-adorno{display:block;width:42%;max-width:150px;height:auto;margin:0 auto 12px}
   .frasefx.fx-gradiente{background:linear-gradient(120deg,rgba(109,18,51,.10),rgba(245,103,112,.12),rgba(201,163,106,.14),rgba(109,18,51,.10));background-size:320% 320%;animation:fgrad 15s ease infinite}
   @keyframes fgrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
   .frasefx.fx-ondas::before,.frasefx.fx-ondas::after{content:"";position:absolute;left:-20%;right:-20%;height:70%;border-radius:45%;background:radial-gradient(closest-side,rgba(245,103,112,.16),transparent)}
@@ -719,7 +723,7 @@
       <div id="tv-end" style="display:none"><div class="tv-prog">Tu puntaje</div><div class="tv-score" id="tv-final"></div><div class="tv-prog" style="margin-top:16px">Tabla de posiciones</div><div class="board" id="tv-board"></div></div>
     </div></section>
 
-  <section data-sec="regalos" class="sec">    <div class="kick" id="reg-kick">Con cariño</div><h2 id="reg-h2">Mesa de Regalos</h2>
+  <section data-sec="regalos" class="sec">    <img id="reg-adorno" alt="" style="display:none"><div class="kick" id="reg-kick">Con cariño</div><h2 id="reg-h2">Mesa de Regalos</h2>
     <p>Tu presencia es nuestro mejor regalo. Si querés tener un detalle, dejamos nuestras mesas.</p>
     <div class="reg-btns" id="reg-btns"></div>
     <div id="reg-banco-wrap" style="display:none">
@@ -1348,7 +1352,10 @@
       if(_fr){ if(ev.frase)_fr.textContent='“'+ev.frase+'”';
         if(ev.fraseColor)_fr.style.color=ev.fraseColor;
         if(ev.fraseFont){_fr.style.fontFamily=ev.fraseFont; cargarFont(ev.fraseFont);}
-        if(ev.fraseSize)_fr.style.fontSize=parseInt(ev.fraseSize,10)+'px'; } }
+        if(ev.fraseSize){ var _n=parseInt(ev.fraseSize,10)||26;
+          // Se respeta el numero que puso la disenadora, pero se deja crecer con la
+          // pantalla: un 25 fijo se leia mas chico que el texto comun en un celular.
+          _fr.style.fontSize='clamp('+_n+'px, 7.2vw, '+Math.round(_n*1.35)+'px)'; } } }
     if(ev.kickColor){ ['pv-kick','ep-kick'].forEach(function(id){var e=el(id);if(e)e.style.color=ev.kickColor;}); }
     if(ev.fTit2){ document.documentElement.style.setProperty('--fTit2',ev.fTit2); cargarFont(ev.fTit2);
       document.querySelectorAll('.sec h2, .sec .h2, .dq-h2, .stitle').forEach(function(e){e.style.fontFamily=ev.fTit2;}); }
@@ -1861,6 +1868,16 @@
       var rs=document.querySelector('[data-sec="regalos"]');
       if(rs) rs.style.display=(h||hayBanco)?'':'none';
     }
+    // --- Adorno de la seccion Regalos (el sobre o el regalo dibujado) ---
+    // Va ARRIBA del titulo, chico y centrado, asi NUNCA tapa el texto.
+    // Antes la unica opcion era "imagen de fondo": esa se estira a cover y las lineas
+    // del dibujo terminaban cruzando por encima de la frase (reporte de Jazmin 11/08).
+    (function(){
+      const ad=el('reg-adorno'); if(!ad) return;
+      const u=String(ev['img_c_imagen-decorativa-sobre-o-regalo']||ev['c_imagen-decorativa-sobre-o-regalo']||'').trim();
+      if(u && /^https?:\/\//i.test(u)){ ad.src=cldOpt(u,'w_400,c_limit'); ad.style.display=''; }
+      else ad.style.display='none';
+    })();
     // --- Datos para transferencia (opcional) ---
     const bw=el('reg-banco-wrap');
     if(bw){ const cbu=(ev.regClabe||ev.regCbu||'').trim();
@@ -2050,6 +2067,16 @@
     });
   }
 
+  // Pasa un color css a rgba con la transparencia pedida (lo usan los velos de fondo).
+  function _rgba(c, a){
+    c = String(c||'').trim();
+    let m = c.match(/^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i);
+    if(m) return 'rgba('+m[1]+','+m[2]+','+m[3]+','+a+')';
+    m = c.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
+    if(m){ let h=m[1]; if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+      return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')'; }
+    return 'rgba(255,255,255,'+a+')';
+  }
   function aplicarEstilosSectores(ev){
     if(!ev) return;
     const val = k => { const v = ev[k]; return (v===undefined||v===null||v==='') ? null : v; };
@@ -2063,7 +2090,12 @@
 
       if(cfg.bg  && val(cfg.bg))  el.style.backgroundColor = val(cfg.bg);
       if(cfg.img && img(cfg.img)){
-        el.style.backgroundImage    = "url('"+img(cfg.img)+"')";
+        // El fondo va SIEMPRE con un velo del propio color del sector. Sin esto, una
+        // imagen que no es textura (por ejemplo el dibujo de un sobre) se estira a
+        // "cover" y sus lineas quedan cruzando por encima del texto: era ilegible.
+        const _base = val(cfg.bg) || getComputedStyle(el).backgroundColor || '#ffffff';
+        const _velo = _rgba(_base, .62);
+        el.style.backgroundImage    = "linear-gradient("+_velo+","+_velo+"), url('"+img(cfg.img)+"')";
         el.style.backgroundSize     = 'cover';
         el.style.backgroundPosition = 'center';
       }
