@@ -93,6 +93,40 @@
   #env.reveal{background:transparent!important}
   #env.reveal #env-vid,#env.reveal #env-vseal,#env.reveal .vhint{display:none!important}
   #env.reveal #env-bloom{opacity:0;transition:opacity .9s ease}
+  /* ===== Apertura tipo CARTA: la tarjeta sale del sobre y se convierte en la portada =====
+     Se activa solo con sobreTipo="carta". Si no, nada de esto se usa. ===== */
+  #env.carta-mode{background:var(--ct-fondo,#efe9e0);perspective:none}
+  #env.carta-mode #env-vid,#env.carta-mode .scene,#env.carta-mode .triflap,
+  #env.carta-mode #tri-seal,#env.carta-mode #env-vseal,#env.carta-mode #env-bloom,
+  #env.carta-mode #tri-glow{display:none!important}
+  .ct-cap{position:absolute;background-image:var(--ct-tex,none);background-size:cover;background-position:center}
+  .ct-cap::after{content:"";position:absolute;inset:0;border-radius:inherit;
+    background:var(--ct-color,transparent);mix-blend-mode:multiply;opacity:var(--ct-op,0)}
+  .ct-atras{left:6%;right:6%;bottom:6%;height:56%;z-index:2;border-radius:5px;
+    box-shadow:0 8px 22px rgba(70,52,26,.22);
+    transition:transform 1.1s cubic-bezier(.5,0,.2,1) .55s,opacity .8s ease 1.1s}
+  .ct-frente{left:6%;right:6%;bottom:6%;height:30%;z-index:4;border-radius:0 0 5px 5px;
+    background-position:center 70%;
+    clip-path:polygon(0 0,50% 34%,100% 0,100% 100%,0 100%);
+    box-shadow:0 -3px 14px rgba(70,52,26,.16);
+    transition:transform 1.1s cubic-bezier(.5,0,.2,1) .55s,opacity .8s ease 1.1s}
+  .ct-carta{position:absolute;left:11%;right:11%;bottom:12%;height:46%;z-index:3;
+    background:var(--ct-papel,#fbf7f4);border-radius:4px;overflow:hidden;
+    box-shadow:0 6px 18px rgba(70,52,26,.2);
+    transition:transform 1.35s cubic-bezier(.34,.03,.2,1),
+               left .95s cubic-bezier(.5,0,.2,1) 1.15s,
+               right .95s cubic-bezier(.5,0,.2,1) 1.15s,
+               bottom .95s cubic-bezier(.5,0,.2,1) 1.15s,
+               height .95s cubic-bezier(.5,0,.2,1) 1.15s,
+               border-radius .8s ease 1.15s}
+  .ct-port{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:9px;text-align:center;padding:8% 10%;color:var(--ct-texto,#6b5f52)}
+  .ct-k{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.62}
+  .ct-n{font-size:clamp(24px,7.5vw,40px);line-height:1.12}
+  .ct-f{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.72}
+  #env.carta-abierto .ct-carta{transform:translateY(-42%);left:0;right:0;bottom:0;height:100%;border-radius:0}
+  #env.carta-abierto .ct-atras,#env.carta-abierto .ct-frente{transform:translateY(58%);opacity:0}
+  #env.carta-abierto .vhint{opacity:0}
   /* ===== Apertura por TRIÁNGULOS (imagen del sobre partida en 4 solapas, puro CSS) ===== */
   #env.tri-mode{background:var(--flap-base,#efe4cd);perspective:1500px;transition:opacity .8s,visibility .8s}
   #env.tri-mode #env-vid,#env.tri-mode #env-bloom,#env.tri-mode #env-vseal,#env.tri-mode .scene,#env.tri-mode .hint{display:none!important}
@@ -489,7 +523,7 @@
   <button onclick="probarClave()">Entrar</button>
   <div class="err" id="lock-err"></div>
 </div>
-<div id="env"><video id="env-vid" muted playsinline autoplay preload="auto"></video><div id="env-bloom"></div><div class="triflap tri-t"></div><div class="triflap tri-r"></div><div class="triflap tri-b"></div><div class="triflap tri-l"></div><div id="tri-glow"></div><div id="tri-seal"><svg class="triseal-svg" viewBox="0 0 100 100" aria-hidden="true"><text id="triseal-ini" x="50" y="50" text-anchor="middle"></text></svg></div><div id="env-vseal"><svg class="waxsvg" viewBox="0 0 100 100" aria-hidden="true"><use href="#sealbase"/><text id="vseal-ini" class="waxmono" x="50" y="50" text-anchor="middle"></text></svg></div><div class="vhint">Tocá el sello para abrir</div><button id="btn-ingresar" onclick="event.stopPropagation();this.style.display='none';var s=document.getElementById('tri-seal');if(s){s.click();}else if(window.abrir){window.abrir();}" style="position:fixed;left:50%;bottom:74px;transform:translateX(-50%);z-index:101;background:rgba(255,255,255,.14);color:#fbf7ef;border:1px solid rgba(255,255,255,.55);border-radius:40px;padding:11px 32px;font-family:'Cormorant Garamond',serif;font-size:17px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)">Ingresá</button><div class="scene" id="scene" onclick="abrir()">
+<div id="env"><video id="env-vid" muted playsinline autoplay preload="auto"></video><div id="env-bloom"></div><div class="triflap tri-t"></div><div class="triflap tri-r"></div><div class="triflap tri-b"></div><div class="triflap tri-l"></div><div id="tri-glow"></div><div id="tri-seal"><svg class="triseal-svg" viewBox="0 0 100 100" aria-hidden="true"><text id="triseal-ini" x="50" y="50" text-anchor="middle"></text></svg></div><div id="env-vseal"><svg class="waxsvg" viewBox="0 0 100 100" aria-hidden="true"><use href="#sealbase"/><text id="vseal-ini" class="waxmono" x="50" y="50" text-anchor="middle"></text></svg></div><div class="ct-cap ct-atras"></div><div class="ct-carta"><div class="ct-port"><div class="ct-k" id="ct-kick"></div><div class="ct-n" id="ct-nom"></div><div class="ct-f" id="ct-fecha"></div></div></div><div class="ct-cap ct-frente"></div><div class="vhint">Tocá el sello para abrir</div><button id="btn-ingresar" onclick="event.stopPropagation();this.style.display='none';var s=document.getElementById('tri-seal');if(s){s.click();}else if(window.abrir){window.abrir();}" style="position:fixed;left:50%;bottom:74px;transform:translateX(-50%);z-index:101;background:rgba(255,255,255,.14);color:#fbf7ef;border:1px solid rgba(255,255,255,.55);border-radius:40px;padding:11px 32px;font-family:'Cormorant Garamond',serif;font-size:17px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)">Ingresá</button><div class="scene" id="scene" onclick="abrir()">
   <div class="envelope">
     <div class="e-back"></div>
     <div class="e-pocket"></div>
@@ -1982,7 +2016,7 @@
   async function pintarEvento(ev){
     const slug=INVDATA.slug, token=INVDATA.token, vidriera=!!window.__vidriera;
     if(invitacionVencida(ev)){ mostrarVencida(ev); return; }
-    window.INVEV=ev; aplicarEvento(ev); aplicarEstilosSectores(ev); aplicarInterruptores(ev);
+    window.INVEV=ev; aplicarEvento(ev); aplicarEstilosSectores(ev); aplicarInterruptores(ev); try{activarSobreCarta(ev);}catch(_e){}
     try{ refrescarContadorRSVP(); }catch(_e){}
     try{ if(window.__i18nBoot)window.__i18nBoot(); }catch(_e){}
     if(vidriera){
@@ -2079,6 +2113,40 @@
       return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')'; }
     return 'rgba(255,255,255,'+a+')';
   }
+  // ===== Apertura tipo CARTA: la tarjeta sale del sobre, crece y ya es la portada.
+  // Se activa SOLO si el evento pide sobreTipo="carta". Si no, el sobre funciona igual que siempre.
+  function activarSobreCarta(ev){
+    try{
+      if(!ev || String(ev.sobreTipo||"").toLowerCase()!=="carta") return false;
+      var env=el("env"); if(!env) return false;
+      env.classList.add("carta-mode");
+      var tex=String(ev["img_c_textura-del-sobre"]||ev.sobreTextura||"").trim();
+      if(/^https?:\/\//i.test(tex)) env.style.setProperty("--ct-tex","url('"+tex+"')");
+      var col=String(ev.sobreColorCarta||ev.sobreColor||"").trim();
+      if(col){ env.style.setProperty("--ct-color",col); env.style.setProperty("--ct-op",".85"); }
+      if(ev.cartaPapel) env.style.setProperty("--ct-papel",ev.cartaPapel);
+      if(ev.cartaTexto) env.style.setProperty("--ct-texto",ev.cartaTexto);
+      var k=el("ct-kick"); if(k) k.textContent=ev.kick||"";
+      var n=el("ct-nom");
+      if(n){ n.textContent="";
+        n.appendChild(document.createTextNode(ev.n1||""));
+        n.appendChild(document.createElement("br"));
+        n.appendChild(document.createTextNode("& "+(ev.n2||""))); }
+      var f=el("ct-fecha");
+      if(f && ev.fecha){ try{ var d=new Date(ev.fecha);
+        if(!isNaN(d)) f.textContent=d.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}); }catch(_e){} }
+      try{ var cs=getComputedStyle(document.body);
+        if(n) n.style.fontFamily=cs.getPropertyValue("--f-nom")||"Georgia,serif"; }catch(_e){}
+      env.addEventListener("click", function(e){
+        if(env.classList.contains("carta-abierto")) return;
+        e.stopPropagation();
+        env.classList.add("carta-abierto");
+        setTimeout(function(){ try{ if(window.abrir) window.abrir(); }catch(_e){} }, 2050);
+      }, true);
+      return true;
+    }catch(_e){ return false; }
+  }
+
   function aplicarEstilosSectores(ev){
     if(!ev) return;
     const val = k => { const v = ev[k]; return (v===undefined||v===null||v==='') ? null : v; };
