@@ -96,33 +96,34 @@
   /* ===== Apertura tipo CARTA: la tarjeta sale del sobre y se convierte en la portada =====
      Se activa solo con sobreTipo="carta". Todo el movimiento va por transform: no depende
      del tamano del contenedor, asi se comporta igual en celular y en pantalla ancha. ===== */
-  #env.carta-mode{background:var(--ct-fondo,#efe9e0)!important;perspective:none}
-  #env.carta-mode #env-vid,#env.carta-mode .scene,#env.carta-mode .triflap,
-  #env.carta-mode #tri-seal,#env.carta-mode #env-vseal,#env.carta-mode #env-bloom,
-  #env.carta-mode #tri-glow,#env.carta-mode #btn-ingresar,#env.carta-mode .vhint,
-  #env.carta-mode .hint{display:none!important}
-  /* caja 9:16 centrada: en desktop el sobre NO se estira a lo ancho */
-  .ct-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    height:100%;aspect-ratio:9/16;max-width:100%;overflow:hidden;z-index:2}
-  .ct-cap{position:absolute;background-image:var(--ct-tex,none);background-size:cover;
-    background-position:center}
-  .ct-cap::after{content:"";position:absolute;inset:0;border-radius:inherit;
-    background:var(--ct-color,transparent);mix-blend-mode:multiply;opacity:var(--ct-op,0)}
-  .ct-atras{left:6%;right:6%;bottom:6%;height:52%;z-index:2;border-radius:5px;
-    box-shadow:0 8px 22px rgba(70,52,26,.22);
-    transition:transform 1s cubic-bezier(.5,0,.2,1) .7s,opacity .7s ease 1.1s}
-  .ct-frente{left:6%;right:6%;bottom:6%;height:32%;z-index:4;border-radius:0 0 5px 5px;
-    background-position:center 78%;
-    clip-path:polygon(0 0,50% 38%,100% 0,100% 100%,0 100%);
-    box-shadow:0 -3px 14px rgba(70,52,26,.16);
-    transition:transform 1s cubic-bezier(.5,0,.2,1) .7s,opacity .7s ease 1.1s}
-  /* la carta: siempre centrada, se la baja con transform. Al abrir vuelve al centro y escala. */
-  .ct-carta{position:absolute;left:50%;top:50%;width:56%;aspect-ratio:9/16;z-index:3;
+     Copiado del reel de thebloom.invites, medido cuadro por cuadro:
+       1. cerrado, sobre a pantalla completa, 4 solapas en X, lacre al medio
+       2. se abre SOLO la solapa de arriba, y se lleva el lacre pegado  (1,2s)
+       3. la tarjeta sube desde adentro y crece hasta llenar la pantalla (1,6s),
+          pasando POR DETRAS de las solapas de los costados y la de abajo
+     Por eso este modo NO dibuja un sobre propio: reusa el sobre de tri-mode, que
+     es el mismo que usan todas las invitaciones y el que Jazmin ya configura
+     (color, textura, lacre, iniciales). Solo cambia QUE pasa al abrir. ===== */
+  #env.carta-mode{perspective:1500px}
+  #env.carta-mode #env-vid,#env.carta-mode .scene,#env.carta-mode #env-vseal,
+  #env.carta-mode #env-bloom,#env.carta-mode .hint{display:none!important}
+  /* las solapas de los costados y la de abajo tapan a la tarjeta mientras sube */
+  #env.carta-mode .tri-r,#env.carta-mode .tri-b,#env.carta-mode .tri-l{z-index:3}
+  #env.carta-mode .tri-t{z-index:4}
+  #env.carta-mode #tri-seal{z-index:5}
+  /* la tarjeta vive por debajo de las solapas */
+  .ct-wrap{position:absolute;inset:0;overflow:hidden;z-index:2}
+  .ct-cap{display:none}
+  /* La tarjeta arranca chica y metida adentro del sobre, y termina a pantalla
+     completa. El 56% y el 1.786 (=1/0.56) son la misma cuenta: cuando escala,
+     el clon queda a tamano 1 y calza exacto con la portada de abajo. */
+  .ct-carta{position:absolute;left:50%;top:50%;width:56%;aspect-ratio:9/16;z-index:2;
     background:var(--ct-papel,#fbf7f4);border-radius:4px;overflow:hidden;
     box-shadow:0 6px 18px rgba(70,52,26,.22);
     transform-origin:50% 50%;
-    transform:translate(-50%,-50%) translateY(23%);
-    transition:transform 1.5s cubic-bezier(.4,.02,.2,1),border-radius .5s ease 1s}
+    transform:translate(-50%,-50%) translateY(46%);
+    transition:transform 1.6s cubic-bezier(.33,0,.2,1) 1.2s,
+               border-radius .5s ease 2.3s,box-shadow .5s ease 2.3s}
   /* la carta muestra la PORTADA REAL clonada, escalada al tamano de la tarjeta.
      Al abrir, la carta escala 1/0.56 y el clon queda a tamano 1: calza exacto
      con la portada de abajo y no se nota el corte. */
@@ -134,8 +135,25 @@
   .ct-k{font-size:5px;letter-spacing:.3em;text-transform:uppercase;opacity:.62}
   .ct-n{font-size:19px;line-height:1.15}
   .ct-f{font-size:5.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.72}
-  #env.carta-abierto .ct-carta{transform:translate(-50%,-50%) scale(1.786);border-radius:0}
-  #env.carta-abierto .ct-atras,#env.carta-abierto .ct-frente{transform:translateY(62%);opacity:0}
+  #env.carta-abierto .ct-carta{transform:translate(-50%,-50%) scale(1.786);
+    border-radius:0;box-shadow:none}
+  /* Al abrir se va SOLO la solapa de arriba. Las otras tres se quedan quietas y
+     la tarjeta las tapa al crecer, igual que en el reel. */
+  #env.carta-mode.carta-abierto .tri-t{transform:rotateX(-172deg);opacity:0;
+    transition:transform 1.2s cubic-bezier(.5,.02,.25,1),opacity .35s ease .95s}
+  #env.carta-mode.carta-abierto .tri-r,
+  #env.carta-mode.carta-abierto .tri-b,
+  #env.carta-mode.carta-abierto .tri-l{transform:none;opacity:1}
+  /* el lacre esta pegado a la solapa de arriba: gira con ella sobre la MISMA
+     bisagra (el borde superior de la pantalla), por eso primero parece bajar
+     y despues se va por arriba. */
+  /* La bisagra tiene que ser la MISMA que la de .tri-t: el borde de arriba de la
+     pantalla. El lacre esta centrado (su caja arranca en 50vh) y ademas lleva un
+     translate(-50%,-50%), asi que el borde superior le queda a calc(50% - 50vh). */
+  #env.carta-mode #tri-seal{transform-origin:50% calc(50% - 50vh);
+    transition:transform 1.2s cubic-bezier(.5,.02,.25,1),opacity .3s ease .9s}
+  #env.carta-mode.carta-abierto #tri-seal{
+    transform:translate(-50%,-50%) rotateX(-172deg);opacity:0}
   /* ===== Apertura por TRIÁNGULOS (imagen del sobre partida en 4 solapas, puro CSS) ===== */
   #env.tri-mode{background:var(--flap-base,#efe4cd);perspective:1500px;transition:opacity .8s,visibility .8s}
   #env.tri-mode #env-vid,#env.tri-mode #env-bloom,#env.tri-mode #env-vseal,#env.tri-mode .scene,#env.tri-mode .hint{display:none!important}
@@ -870,6 +888,13 @@
     posTriSeal(); window.addEventListener('resize',posTriSeal); setTimeout(posTriSeal,120);
     var opened=false;
     function abrirTri(){
+      // Si la invitacion usa apertura tipo CARTA, el sobre es el mismo pero se
+      // abre distinto (solo la solapa de arriba). Delegamos y NO tocamos tri-open,
+      // que volaria las cuatro solapas.
+      if(env.classList.contains('carta-mode')){
+        if(window.__abrirCarta) window.__abrirCarta();
+        return;
+      }
       if(opened)return; opened=true;
       playMusic();
       env.classList.add('tri-open');                 // dispara la apertura CSS (solapas + sello a la izquierda + glow)
@@ -2142,14 +2167,21 @@
       var tipo=String(fxs.tipo||ev.sobreTipo||"").toLowerCase();
       if(tipo!=="carta") return false;
       var env=el("env"); if(!env) return false;
+      // El modo carta se monta ENCIMA del sobre de siempre: necesita las cuatro
+      // solapas y el lacre de tri-mode, asi que nos aseguramos de que este puesto.
+      env.classList.add("tri-mode");
       env.classList.add("carta-mode");
       var cat=SOBRES[String(fxs.modelo||"").trim()]||null;
       var tex=String(fxs.texturaUrl||ev["img_c_textura-del-sobre"]||ev.sobreTextura||"").trim();
       if(!tex && cat) tex=cat.img;
-      if(/^(https?:\/\/|\/)/i.test(tex)) env.style.setProperty("--ct-tex","url('"+tex+"')");
+      // La imagen del catalogo es el PAPEL DEL SOBRE: va a las solapas (--flap-tex),
+      // que es la misma variable que usan las texturas de siempre (lino, kraft...).
+      if(/^(https?:\/\/|\/)/i.test(tex)) env.style.setProperty("--flap-tex","url('"+tex+"')");
       var col=String(fxs.colorCarta||ev.sobreColorCarta||ev.sobreColor||"").trim();
       if(!col && cat) col=cat.color;
-      if(col){ env.style.setProperty("--ct-color",col); env.style.setProperty("--ct-op",".85"); }
+      // El color tinta el papel del sobre. Si hay imagen de catalogo la dejamos
+      // mandar sola: el papel ya viene con su color y superponer otro lo ensucia.
+      if(col && !tex){ env.style.setProperty("--flap-base",col); }
       if(ev.cartaPapel) env.style.setProperty("--ct-papel",ev.cartaPapel);
       if(ev.cartaTexto) env.style.setProperty("--ct-texto",ev.cartaTexto);
       var k=el("ct-kick"); if(k) k.textContent=ev.kick||"";
@@ -2202,10 +2234,15 @@
       }catch(_e){}
       try{ var cs=getComputedStyle(document.body);
         if(n) n.style.fontFamily=cs.getPropertyValue("--f-nom")||"Georgia,serif"; }catch(_e){}
-      env.addEventListener("click", function(e){
+      // Una sola funcion de apertura, para que el click en el lacre, el click en
+      // cualquier parte del sobre y el boton "Ingresa" hagan todos lo mismo.
+      window.__abrirCarta=function(){
         if(env.classList.contains("carta-abierto")) return;
-        e.stopPropagation();
         env.classList.add("carta-abierto");
+        try{ if(window.playMusic) window.playMusic(); }catch(_e){}
+        // 1,2s la solapa de arriba + 1,6s la tarjeta subiendo y creciendo = 2,8s.
+        // Recien ahi la portada real toma el relevo. Si cambias estos numeros,
+        // cambialos tambien en las transitions de .ct-carta y .tri-t.
         setTimeout(function(){
           try{ if(window.abrir) window.abrir(); }catch(_e){}
           // el motor le pone "gone" pero en este modo no alcanza: lo apagamos a mano.
@@ -2222,7 +2259,11 @@
               }
             }catch(_e){}
           }, 650);
-        }, 2050);
+        }, 2850);
+      };
+      env.addEventListener("click", function(e){
+        e.stopPropagation();
+        window.__abrirCarta();
       }, true);
       return true;
     }catch(_e){ return false; }
