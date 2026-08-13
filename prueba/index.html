@@ -110,7 +110,11 @@
   /* las solapas de los costados y la de abajo tapan a la tarjeta mientras sube */
   #env.carta-mode .tri-r,#env.carta-mode .tri-b,#env.carta-mode .tri-l{z-index:3}
   #env.carta-mode .tri-t{z-index:4}
-  #env.carta-mode #tri-seal{z-index:5}
+  /* El lacre: 'sello-marfil.png' no existe en el repo (da 404), asi que en este
+     modo se dibuja con el sello vectorial #sealbase, el mismo del sobre clasico.
+     El 0.62 lo achica al tamano que tiene en el reel (~27% del ancho). */
+  #env.carta-mode #tri-seal{z-index:5;background-image:none}
+  #env.carta-mode .triseal-svg{transform:scale(.62);transform-origin:50% 50%}
   /* la tarjeta vive por debajo de las solapas */
   .ct-wrap{position:absolute;inset:0;overflow:hidden;z-index:2}
   .ct-cap{display:none}
@@ -2182,6 +2186,18 @@
       // El color tinta el papel del sobre. Si hay imagen de catalogo la dejamos
       // mandar sola: el papel ya viene con su color y superponer otro lo ensucia.
       if(col && !tex){ env.style.setProperty("--flap-base",col); }
+      // Dibujamos el lacre vectorial dentro del sello de tri-mode (la imagen PNG
+      // que trae por defecto no existe en el repo y quedaba solo el monograma).
+      try{
+        var _svg=env.querySelector("#tri-seal .triseal-svg");
+        if(_svg && !_svg.querySelector("use")){
+          var _u=document.createElementNS("http://www.w3.org/2000/svg","use");
+          _u.setAttribute("href","#sealbase");
+          _svg.insertBefore(_u,_svg.firstChild);
+        }
+        var _sc=String((ev.fx&&ev.fx.sobre&&ev.fx.sobre.selloColor)||"").trim();
+        if(_sc) env.style.setProperty("--seal-c",_sc);
+      }catch(_e){}
       if(ev.cartaPapel) env.style.setProperty("--ct-papel",ev.cartaPapel);
       if(ev.cartaTexto) env.style.setProperty("--ct-texto",ev.cartaTexto);
       var k=el("ct-kick"); if(k) k.textContent=ev.kick||"";
