@@ -95,7 +95,7 @@
   #env.reveal #env-bloom{opacity:0;transition:opacity .9s ease}
   /* ===== Apertura tipo CARTA: la tarjeta sale del sobre y se convierte en la portada =====
      Se activa solo con sobreTipo="carta". Todo el movimiento va por transform: no depende
-     del tamano del contenedor, asi se comporta igual en celular y en pantalla ancha. ===== */
+     del tamano del contenedor, asi se comporta igual en celular y en pantalla ancha.
      Copiado del reel de thebloom.invites, medido cuadro por cuadro:
        1. cerrado, sobre a pantalla completa, 4 solapas en X, lacre al medio
        2. se abre SOLO la solapa de arriba, y se lleva el lacre pegado  (1,2s)
@@ -125,13 +125,12 @@
   /* la tarjeta vive por debajo de las solapas */
   .ct-wrap{position:absolute;inset:0;overflow:hidden;z-index:2}
   .ct-cap{display:none}
-  /* La tarjeta arranca chica y metida adentro del sobre, y termina a pantalla
-     completa. El 56% y el 1.786 (=1/0.56) son la misma cuenta: cuando escala,
-     el clon queda a tamano 1 y calza exacto con la portada de abajo. */
+  /* La tarjeta arranca metida adentro del sobre y termina a pantalla completa.
      El translateY(52%) la deja escondida: el 50% clavado pone su borde de arriba
      justo en el centro de la pantalla (la cuenta da 50% sea cual sea el alto),
      y ahi la tapan las solapas de los costados y la de abajo.
-     El 72% y el 1.3889 (=1/0.72) son la misma cuenta. */
+     El 72% y el 1.3889 (=1/0.72) son la misma cuenta: cuando escala, el clon
+     queda a tamano 1 y calza exacto con la portada de abajo. */
   .ct-carta{position:absolute;left:50%;top:50%;width:72%;aspect-ratio:9/16;z-index:2;
     background:var(--ct-papel,#fbf7f4);border-radius:4px;overflow:hidden;
     box-shadow:0 6px 18px rgba(70,52,26,.22);
