@@ -2176,9 +2176,24 @@
           // Va DESPUES del remove de arriba, que todavia necesita #btn-ingresar.
           _clon.removeAttribute("id");
           _clon.querySelectorAll("[id]").forEach(function(e){e.removeAttribute("id");});
+          // El video NO se clona. Un <video> clonado no arranca en Safari (ni en
+          // el iPhone, que es donde lo ve casi todo el invitado): queda negro con
+          // el icono de roto. Ademas serian dos videos decodificando a la vez.
+          // En su lugar va el poster del video, que es su primer cuadro, como
+          // imagen de fondo. La carta se ve 2 segundos y despues manda la portada
+          // real, que si tiene el video andando.
           _clon.querySelectorAll("video").forEach(function(v){
-            v.muted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
-            try{ v.play(); }catch(_e){}
+            var poster=v.getAttribute("poster")||"";
+            var quieto=document.createElement("div");
+            quieto.className=v.className;
+            quieto.style.cssText="position:absolute;inset:0;width:100%;height:100%;z-index:0";
+            if(poster){
+              quieto.style.background="#000 url('"+poster+"') center/cover no-repeat";
+            }else{
+              // Sin poster caemos a la foto de portada, que vive en --cover.
+              quieto.style.background="var(--cover) center/cover no-repeat";
+            }
+            v.parentNode.replaceChild(quieto,v);
           });
           _cont.textContent="";
           _cont.appendChild(_clon);
