@@ -1432,7 +1432,7 @@
   if(window.INV) cargarEvento(); else window.addEventListener('inv-ready',cargarEvento);
   {var _tb=new URLSearchParams(location.search).get('tab'); if(_tb&&ORDER.indexOf(_tb)>-1){go(_tb);}}
 </script>
-<script type="module" src="firebase-inv.js?v=23"></script>
+<script type="module" src="/firebase-inv.js?v=23"></script>
 <script type="module">
   import { collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   function _ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }
