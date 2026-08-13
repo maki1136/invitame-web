@@ -2153,6 +2153,12 @@
           var _clon=_port.cloneNode(true);
           _clon.className="ct-clon";
           _clon.querySelectorAll(".scrollcue,#btn-ingresar").forEach(function(e){e.remove();});
+          // Sin esto el clon duplica los ids de la portada (d,h,m,s,pbg,coverv,
+          // pv-names, pv-fecha...) y getElementById empieza a devolver los del
+          // clon: el contador de la portada REAL se congela al abrir el sobre.
+          // Va DESPUES del remove de arriba, que todavia necesita #btn-ingresar.
+          _clon.removeAttribute("id");
+          _clon.querySelectorAll("[id]").forEach(function(e){e.removeAttribute("id");});
           _clon.querySelectorAll("video").forEach(function(v){
             v.muted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
             try{ v.play(); }catch(_e){}
@@ -2173,7 +2179,17 @@
           // el motor le pone "gone" pero en este modo no alcanza: lo apagamos a mano.
           env.style.transition="opacity .55s ease";
           env.style.opacity="0"; env.style.pointerEvents="none";
-          setTimeout(function(){ env.style.display="none"; }, 650);
+          setTimeout(function(){
+            env.style.display="none";
+            // el clon ya no se ve: lo sacamos para que su video deje de correr.
+            try{
+              var _c=env.querySelector(".ct-clon");
+              if(_c){
+                _c.querySelectorAll("video").forEach(function(v){ try{ v.pause(); }catch(_e){} });
+                _c.remove();
+              }
+            }catch(_e){}
+          }, 650);
         }, 2050);
       }, true);
       return true;
