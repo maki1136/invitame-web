@@ -2122,16 +2122,33 @@
       return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')'; }
     return 'rgba(255,255,255,'+a+')';
   }
+  // ===== CATALOGO DE SOBRES =====================================================
+  // Para sumar un sobre nuevo: subir la imagen del papel a /sobres/ y agregar UNA
+  // linea aca. El mismo catalogo esta copiado en admin.html (constante SOBRES) para
+  // armar la lista que ve la disenadora: si agregas uno, agregalo en los DOS lados.
+  // El evento guarda solo el id (fx.sobre.modelo); asi la imagen se puede cambiar
+  // despues sin tocar ninguna invitacion ya entregada.
+  var SOBRES={
+    floral:{ nombre:"Floral en relieve (marfil)", img:"/sobres/sobre-floral.jpg", color:"#d9a7ae" }
+  };
   // ===== Apertura tipo CARTA: la tarjeta sale del sobre, crece y ya es la portada.
-  // Se activa SOLO si el evento pide sobreTipo="carta". Si no, el sobre funciona igual que siempre.
+  // Se activa SOLO si el evento pide apertura "carta". Si no, el sobre funciona igual que siempre.
   function activarSobreCarta(ev){
     try{
-      if(!ev || String(ev.sobreTipo||"").toLowerCase()!=="carta") return false;
+      if(!ev) return false;
+      // De donde sale la config, en orden: el bloque fx del panel (lo nuevo) y
+      // despues las claves planas sueltas (como quedo maria-y-diego al probar).
+      var fxs=(ev.fx&&ev.fx.sobre)||{};
+      var tipo=String(fxs.tipo||ev.sobreTipo||"").toLowerCase();
+      if(tipo!=="carta") return false;
       var env=el("env"); if(!env) return false;
       env.classList.add("carta-mode");
-      var tex=String(ev["img_c_textura-del-sobre"]||ev.sobreTextura||"").trim();
-      if(/^https?:\/\//i.test(tex)) env.style.setProperty("--ct-tex","url('"+tex+"')");
-      var col=String(ev.sobreColorCarta||ev.sobreColor||"").trim();
+      var cat=SOBRES[String(fxs.modelo||"").trim()]||null;
+      var tex=String(fxs.texturaUrl||ev["img_c_textura-del-sobre"]||ev.sobreTextura||"").trim();
+      if(!tex && cat) tex=cat.img;
+      if(/^(https?:\/\/|\/)/i.test(tex)) env.style.setProperty("--ct-tex","url('"+tex+"')");
+      var col=String(fxs.colorCarta||ev.sobreColorCarta||ev.sobreColor||"").trim();
+      if(!col && cat) col=cat.color;
       if(col){ env.style.setProperty("--ct-color",col); env.style.setProperty("--ct-op",".85"); }
       if(ev.cartaPapel) env.style.setProperty("--ct-papel",ev.cartaPapel);
       if(ev.cartaTexto) env.style.setProperty("--ct-texto",ev.cartaTexto);
@@ -2272,6 +2289,7 @@
         aplicarEvento(d.ev);
         aplicarEstilosSectores(d.ev);
         aplicarInterruptores(d.ev);
+        try{ activarSobreCarta(d.ev); }catch(_e){}
         if(window.__i18nBoot) window.__i18nBoot();
         abrirYa();
       }catch(err){ console.warn('preview:',err); }
