@@ -115,31 +115,42 @@
      El 0.62 lo achica al tamano que tiene en el reel (~27% del ancho). */
   #env.carta-mode #tri-seal{z-index:5;background-image:none}
   #env.carta-mode .triseal-svg{transform:scale(.62);transform-origin:50% 50%}
+  /* Las cuatro solapas usan la misma imagen, asi que sin esto el papel se ve
+     plano y no se leen los dobleces. Un tono distinto por solapa dibuja la X. */
+  #env.carta-mode .triflap::after{content:"";position:absolute;inset:0;pointer-events:none}
+  #env.carta-mode .tri-t::after{background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(0,0,0,.05))}
+  #env.carta-mode .tri-b::after{background:linear-gradient(0deg,rgba(255,255,255,.10),rgba(0,0,0,.11))}
+  #env.carta-mode .tri-l::after{background:linear-gradient(90deg,rgba(255,255,255,.20),rgba(0,0,0,.07))}
+  #env.carta-mode .tri-r::after{background:linear-gradient(270deg,rgba(255,255,255,.05),rgba(0,0,0,.13))}
   /* la tarjeta vive por debajo de las solapas */
   .ct-wrap{position:absolute;inset:0;overflow:hidden;z-index:2}
   .ct-cap{display:none}
   /* La tarjeta arranca chica y metida adentro del sobre, y termina a pantalla
      completa. El 56% y el 1.786 (=1/0.56) son la misma cuenta: cuando escala,
      el clon queda a tamano 1 y calza exacto con la portada de abajo. */
-  .ct-carta{position:absolute;left:50%;top:50%;width:56%;aspect-ratio:9/16;z-index:2;
+     El translateY(52%) la deja escondida: el 50% clavado pone su borde de arriba
+     justo en el centro de la pantalla (la cuenta da 50% sea cual sea el alto),
+     y ahi la tapan las solapas de los costados y la de abajo.
+     El 72% y el 1.3889 (=1/0.72) son la misma cuenta. */
+  .ct-carta{position:absolute;left:50%;top:50%;width:72%;aspect-ratio:9/16;z-index:2;
     background:var(--ct-papel,#fbf7f4);border-radius:4px;overflow:hidden;
     box-shadow:0 6px 18px rgba(70,52,26,.22);
     transform-origin:50% 50%;
-    transform:translate(-50%,-50%) translateY(46%);
+    transform:translate(-50%,-50%) translateY(52%);
     transition:transform 1.6s cubic-bezier(.33,0,.2,1) 1.2s,
                border-radius .5s ease 2.3s,box-shadow .5s ease 2.3s}
   /* la carta muestra la PORTADA REAL clonada, escalada al tamano de la tarjeta.
-     Al abrir, la carta escala 1/0.56 y el clon queda a tamano 1: calza exacto
+     Al abrir, la carta escala 1/0.72 y el clon queda a tamano 1: calza exacto
      con la portada de abajo y no se nota el corte. */
-  .ct-carta .ct-clon{position:absolute;left:0;top:0;width:178.57%;height:178.57%;
-    transform:scale(.56);transform-origin:0 0;pointer-events:none}
+  .ct-carta .ct-clon{position:absolute;left:0;top:0;width:138.889%;height:138.889%;
+    transform:scale(.72);transform-origin:0 0;pointer-events:none}
   .ct-carta.con-clon{background:transparent}
   .ct-port{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
     justify-content:center;gap:5%;text-align:center;padding:10% 8%;color:var(--ct-texto,#6b5f52)}
   .ct-k{font-size:5px;letter-spacing:.3em;text-transform:uppercase;opacity:.62}
   .ct-n{font-size:19px;line-height:1.15}
   .ct-f{font-size:5.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.72}
-  #env.carta-abierto .ct-carta{transform:translate(-50%,-50%) scale(1.786);
+  #env.carta-abierto .ct-carta{transform:translate(-50%,-50%) scale(1.3889);
     border-radius:0;box-shadow:none}
   /* Al abrir se va SOLO la solapa de arriba. Las otras tres se quedan quietas y
      la tarjeta las tapa al crecer, igual que en el reel. */
@@ -2180,7 +2191,15 @@
       if(!tex && cat) tex=cat.img;
       // La imagen del catalogo es el PAPEL DEL SOBRE: va a las solapas (--flap-tex),
       // que es la misma variable que usan las texturas de siempre (lino, kraft...).
-      if(/^(https?:\/\/|\/)/i.test(tex)) env.style.setProperty("--flap-tex","url('"+tex+"')");
+      if(/^(https?:\/\/|\/)/i.test(tex)){
+        env.style.setProperty("--flap-tex","url('"+tex+"')");
+        // Lo que queda a la vista cuando se abre la solapa de arriba es el FONDO
+        // de #env, o sea el interior del sobre. Con el mismo papel apagado se ve
+        // como el forro; si no, se veia el color plano del sobre y cantaba.
+        env.style.backgroundImage="linear-gradient(rgba(28,20,10,.34),rgba(28,20,10,.34)),url('"+tex+"')";
+        env.style.backgroundSize="cover";
+        env.style.backgroundPosition="center";
+      }
       var col=String(fxs.colorCarta||ev.sobreColorCarta||ev.sobreColor||"").trim();
       if(!col && cat) col=cat.color;
       // El color tinta el papel del sobre. Si hay imagen de catalogo la dejamos
