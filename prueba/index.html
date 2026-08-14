@@ -184,6 +184,13 @@
   /* Las iniciales van ENCIMA del lacre del video, y solo mientras el sobre esta
      quieto. Apenas arranca la apertura se desvanecen: si el lacre se mueve y las
      iniciales se quedan clavadas, canta. Se van antes de que eso pase. */
+  /* Cuando termina el video el sobre queda abierto. La portada entra creciendo
+     desde ahi, como si fuera la tarjeta saliendo. Sin esto el corte se nota. */
+  .portada.ct-entra{animation:ctEntra .78s cubic-bezier(.22,.72,.24,1) both}
+  @keyframes ctEntra{
+    from{transform:scale(.78) translateY(7%);opacity:0}
+    60%{opacity:1}
+    to{transform:none;opacity:1} }
   .ct-ini{position:absolute;z-index:3;transform:translate(-50%,-50%);
     font-family:'Great Vibes',cursive;color:var(--ct-ini-color,#7a6647);
     text-shadow:0 1px 1px rgba(255,255,255,.5),0 -1px 1px rgba(0,0,0,.18);
@@ -2197,6 +2204,9 @@
   //   img   : sin video, el sobre se dibuja por CSS con esta imagen de papel
   //           (el modo viejo; queda como respaldo).
   var SOBRES={
+    lacre:{ nombre:"Lacre dorado (video)",
+            video:"/sobres/sobre-lacre.mp4",
+            poster:"/sobres/sobre-lacre-poster.jpg" },
     marfil:{ nombre:"Marfil en relieve",
              img:"/sobres/sobre-marfil.jpg",
              lacre:"/sobres/lacre-marfil.png" },
@@ -2251,6 +2261,7 @@
       function relevo(){
         if(listo) return; listo=true;
         try{ if(window.abrir) window.abrir(); }catch(_e){}
+        try{ var _p=document.querySelector(".portada"); if(_p) _p.classList.add("ct-entra"); }catch(_e){}
         // Cruce corto: el ultimo cuadro del video y la portada se funden.
         env.style.transition="opacity .45s ease";
         env.style.opacity="0"; env.style.pointerEvents="none";
