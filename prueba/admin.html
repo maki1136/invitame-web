@@ -524,7 +524,14 @@
   // la invitacion (constante SOBRES en index.html): si agregas uno, agregalo en LOS DOS.
   // El evento guarda solo el id, asi la imagen se puede cambiar despues sin tocar
   // ninguna invitacion ya entregada.
+  // Hay dos clases de sobre. Los que tienen "video" se REPRODUCEN: el sobre se
+  // abre en la filmacion y despues entra la invitacion real. Los que tienen solo
+  // "img" se dibujan por CSS con esa foto de papel (el modo viejo). En los de
+  // video, "poster" es el primer cuadro y es lo que se muestra en la miniatura.
   const SOBRES={
+    lacre:{ nombre:'Lacre dorado (video)', video:'/sobres/sobre-lacre.mp4',
+            poster:'/sobres/sobre-lacre-poster.jpg', color:'#efe9e0' },
+    marfil:{ nombre:'Marfil en relieve', img:'/sobres/sobre-marfil.jpg', color:'#efe4cd' },
     floral:{ nombre:'Floral en relieve (marfil)', img:'/sobres/sobre-floral.jpg', color:'#d9a7ae' }
   };
   const CFFONTS=[['Lora','Lora (clásica)'],['Great Vibes','Great Vibes ✒'],['Forum','Forum'],['Montserrat','Montserrat'],['Rouge Script','Rouge Script ✒']];
@@ -557,7 +564,8 @@
               selR('sobre','modelo',[['','— Elegí un sobre —']].concat(Object.keys(SOBRES).map(k=>[k,SOBRES[k].nombre])))+
               '<div class="hint">Cada sobre trae su papel y su color sugerido. Si querés otro color, cambialo abajo.</div>'+
               (D.fx.sobre.modelo&&SOBRES[D.fx.sobre.modelo]
-                ? '<img src="'+SOBRES[D.fx.sobre.modelo].img+'" alt="" style="max-height:90px;border-radius:8px;margin-top:8px">'
+                ? '<img src="'+(SOBRES[D.fx.sobre.modelo].poster||SOBRES[D.fx.sobre.modelo].img||'')+'" alt="" style="max-height:90px;border-radius:8px;margin-top:8px">'+
+                  (SOBRES[D.fx.sobre.modelo].video?'<div class="hint">Este sobre es un video: se abre solo y despues entra la invitacion.</div>':'')
                 : '')+
             '</div>'+
             '<div class="grp"><label>Color de la carta (se multiplica sobre el papel, conserva el relieve)</label>'+

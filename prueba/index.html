@@ -179,8 +179,9 @@
   #env.carta-video .triflap,#env.carta-video #tri-seal,#env.carta-video .ct-wrap,
   #env.carta-video #tri-glow,#env.carta-video #env-bloom,#env.carta-video #env-vseal,
   #env.carta-video .scene,#env.carta-video .hint{display:none!important}
-  #env.carta-video #env-vid{display:block;position:absolute;inset:0;
+  #env.carta-video #env-vid{display:block!important;position:absolute;inset:0;
     width:100%;height:100%;object-fit:cover;z-index:2}
+  #env.carta-video #env-bloom{display:none!important}
   /* Las iniciales van ENCIMA del lacre del video, y solo mientras el sobre esta
      quieto. Apenas arranca la apertura se desvanecen: si el lacre se mueve y las
      iniciales se quedan clavadas, canta. Se van antes de que eso pase. */
@@ -197,8 +198,12 @@
     pointer-events:none;transition:opacity .22s ease;white-space:nowrap}
   #env.carta-video.carta-abierto .ct-ini{opacity:0}
   /* ===== Apertura por TRIÁNGULOS (imagen del sobre partida en 4 solapas, puro CSS) ===== */
-  #env.tri-mode{background:var(--flap-base,#efe4cd);perspective:1500px;transition:opacity .8s,visibility .8s}
-  #env.tri-mode #env-vid,#env.tri-mode #env-bloom,#env.tri-mode #env-vseal,#env.tri-mode .scene,#env.tri-mode .hint{display:none!important}
+  /* OJO: el motor deja puesta la clase tri-mode aunque el sobre sea de video,
+     porque otras partes la miran. Sin el :not(.carta-video) estas dos reglas le
+     ganan al modo video: le pintan el fondo del sobre viejo encima y le apagan
+     el <video> con un !important. Resultado: pantalla lisa y nada que abrir. */
+  #env.tri-mode:not(.carta-video){background:var(--flap-base,#efe4cd);perspective:1500px;transition:opacity .8s,visibility .8s}
+  #env.tri-mode:not(.carta-video) #env-vid,#env.tri-mode #env-bloom,#env.tri-mode #env-vseal,#env.tri-mode .scene,#env.tri-mode .hint{display:none!important}
   #env.tri-mode.tri-open{background:transparent}
   /* ===== Sobre de entrada: color + textura (CSS puro, sin imágenes) ===== */
   /* --flap-base = color del papel (lo pinta el "Color del sobre"); --flap-tex = capa de textura encima */
@@ -2210,12 +2215,8 @@
     marfil:{ nombre:"Marfil en relieve",
              img:"/sobres/sobre-marfil.jpg",
              lacre:"/sobres/lacre-marfil.png" },
-    // Sobre de PRUEBA. No es un diseno: existe solo para verificar el empalme
-    // entre el video y la invitacion. Se borra cuando entre el primero de verdad.
-    prueba:{ nombre:"Prueba de empalme (no usar)",
-             video:"/sobres/sobre-prueba.mp4",
-             poster:"/sobres/sobre-prueba-poster.jpg",
-             lacre:{ x:50, y:50, tam:5.4, color:"#7a6647" } }
+    floral:{ nombre:"Floral en relieve (marfil)",
+             img:"/sobres/sobre-floral.jpg" }
   };
   // ===== SOBRE POR VIDEO ========================================================
   // El invitado ve el primer cuadro (sobre cerrado) al instante gracias al poster.
@@ -2275,16 +2276,39 @@
       // deja a un invitado mirando un sobre que no abre.
       v.addEventListener("error", relevo);
 
+      // Un solo reintento. En el celular la primera llamada a play() se puede
+      // rechazar porque el video todavia no tiene ni un cuadro cargado; no es
+      // que el navegador lo prohiba, es que no llego. Si pasa eso esperamos a
+      // que pueda y volvemos a intentar. Recien si el segundo intento tambien
+      // falla entramos sin animacion: un invitado nunca queda mirando un sobre
+      // que no abre.
+      function arrancar(reintento){
+        var p=null;
+        try{ p=v.play(); }catch(_e){ p=null; }
+        if(p && p.catch) p.catch(function(){
+          if(reintento){ relevo(); return; }
+          var t=setTimeout(relevo,3000);
+          v.addEventListener("canplay",function(){ clearTimeout(t); arrancar(true); },{once:true});
+        });
+      }
       window.__abrirCarta=function(){
         if(env.classList.contains("carta-abierto")) return;
         env.classList.add("carta-abierto");
         try{ if(window.playMusic) window.playMusic(); }catch(_e){}
-        var p=null;
-        try{ p=v.play(); }catch(_e){}
-        if(p && p.catch) p.catch(function(){ relevo(); });   // si iOS lo bloquea, entra igual
-        // Si el video termina y por lo que sea no dispara "ended", cortamos igual.
-        var dur=(isFinite(v.duration)&&v.duration>0)?v.duration:6;
-        setTimeout(relevo, dur*1000+900);
+        arrancar(false);
+        // El corte de seguridad se cuenta desde que el video EMPIEZA A CORRER,
+        // no desde el toque. Contado desde el toque, un video que tarda en
+        // cargar se come su propio tiempo y la invitacion entra de golpe.
+        var corte=null;
+        function armar(){
+          clearTimeout(corte);
+          var dur=(isFinite(v.duration)&&v.duration>0)?v.duration:3;
+          corte=setTimeout(relevo,Math.max(600,(dur-v.currentTime)*1000+900));
+        }
+        v.addEventListener("playing",armar);
+        v.addEventListener("loadedmetadata",armar);
+        // Y si a los 7 segundos ni siquiera arranco, entramos igual.
+        setTimeout(function(){ if(v.paused) relevo(); },7000);
       };
       env.addEventListener("click", function(e){
         e.stopPropagation();
