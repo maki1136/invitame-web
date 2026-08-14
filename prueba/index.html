@@ -113,15 +113,14 @@
   /* El lacre: 'sello-marfil.png' no existe en el repo (da 404), asi que en este
      modo se dibuja con el sello vectorial #sealbase, el mismo del sobre clasico.
      El 0.62 lo achica al tamano que tiene en el reel (~27% del ancho). */
-  #env.carta-mode #tri-seal{z-index:5;background-image:none}
+  #env.carta-mode #tri-seal{z-index:5;
+    background:var(--ct-lacre,none) center/contain no-repeat}
   #env.carta-mode .triseal-svg{transform:scale(.62);transform-origin:50% 50%}
-  /* Las cuatro solapas usan la misma imagen, asi que sin esto el papel se ve
-     plano y no se leen los dobleces. Un tono distinto por solapa dibuja la X. */
-  #env.carta-mode .triflap::after{content:"";position:absolute;inset:0;pointer-events:none}
-  #env.carta-mode .tri-t::after{background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(0,0,0,.05))}
-  #env.carta-mode .tri-b::after{background:linear-gradient(0deg,rgba(255,255,255,.10),rgba(0,0,0,.11))}
-  #env.carta-mode .tri-l::after{background:linear-gradient(90deg,rgba(255,255,255,.20),rgba(0,0,0,.07))}
-  #env.carta-mode .tri-r::after{background:linear-gradient(270deg,rgba(255,255,255,.05),rgba(0,0,0,.13))}
+  /* Nada de tintes ni sombras dibujadas por CSS. La imagen del sobre es una foto
+     de papel con sus dobleces y su luz ya adentro: si le sumo sombras encima se
+     duplican y el papel se ensucia. El recorte del CSS cae justo sobre el doblez
+     pintado porque la imagen se arma con las cuatro solapas juntandose en el
+     centro exacto — la misma cuenta que usan los clip-path de aca abajo. */
   /* la tarjeta vive por debajo de las solapas */
   .ct-wrap{position:absolute;inset:0;overflow:hidden;z-index:2}
   .ct-cap{display:none}
@@ -161,13 +160,35 @@
   /* el lacre esta pegado a la solapa de arriba: gira con ella sobre la MISMA
      bisagra (el borde superior de la pantalla), por eso primero parece bajar
      y despues se va por arriba. */
-  /* La bisagra tiene que ser la MISMA que la de .tri-t: el borde de arriba de la
-     pantalla. El lacre esta centrado (su caja arranca en 50vh) y ademas lleva un
-     translate(-50%,-50%), asi que el borde superior le queda a calc(50% - 50vh). */
-  #env.carta-mode #tri-seal{transform-origin:50% calc(50% - 50vh);
+  /* En el celular el lacre se iba a cualquier lado: el JS lo ubicaba con
+     window.innerHeight y el CSS usaba 50vh, y en el navegador del telefono esos
+     dos numeros NO son el mismo (la barra de direcciones entra y sale). Por eso
+     el lacre va centrado a mano y la bisagra se calcula con --envh, que es la
+     altura REAL del sobre medida en vivo. Asi coincide en cualquier pantalla. */
+  #env.carta-mode #tri-seal{left:50%!important;top:50%!important;
+    transform-origin:50% calc(50% - var(--envh,100vh)/2);
     transition:transform 1.2s cubic-bezier(.5,.02,.25,1),opacity .3s ease .9s}
   #env.carta-mode.carta-abierto #tri-seal{
     transform:translate(-50%,-50%) rotateX(-172deg);opacity:0}
+  /* ===== SOBRE POR VIDEO ==================================================
+     El sobre deja de dibujarse y pasa a REPRODUCIRSE. El video es generico:
+     solo la apertura, sin nombres ni fechas. Cuando termina, toma el relevo la
+     invitacion real, que es la que tiene la foto y los datos de cada pareja.
+     Asi un sobre nuevo del catalogo es un archivo, no codigo. ===== */
+  #env.carta-video{background:var(--ct-fondo,#efe9e0);perspective:none}
+  #env.carta-video .triflap,#env.carta-video #tri-seal,#env.carta-video .ct-wrap,
+  #env.carta-video #tri-glow,#env.carta-video #env-bloom,#env.carta-video #env-vseal,
+  #env.carta-video .scene,#env.carta-video .hint{display:none!important}
+  #env.carta-video #env-vid{display:block;position:absolute;inset:0;
+    width:100%;height:100%;object-fit:cover;z-index:2}
+  /* Las iniciales van ENCIMA del lacre del video, y solo mientras el sobre esta
+     quieto. Apenas arranca la apertura se desvanecen: si el lacre se mueve y las
+     iniciales se quedan clavadas, canta. Se van antes de que eso pase. */
+  .ct-ini{position:absolute;z-index:3;transform:translate(-50%,-50%);
+    font-family:'Great Vibes',cursive;color:var(--ct-ini-color,#7a6647);
+    text-shadow:0 1px 1px rgba(255,255,255,.5),0 -1px 1px rgba(0,0,0,.18);
+    pointer-events:none;transition:opacity .22s ease;white-space:nowrap}
+  #env.carta-video.carta-abierto .ct-ini{opacity:0}
   /* ===== Apertura por TRIÁNGULOS (imagen del sobre partida en 4 solapas, puro CSS) ===== */
   #env.tri-mode{background:var(--flap-base,#efe4cd);perspective:1500px;transition:opacity .8s,visibility .8s}
   #env.tri-mode #env-vid,#env.tri-mode #env-bloom,#env.tri-mode #env-vseal,#env.tri-mode .scene,#env.tri-mode .hint{display:none!important}
@@ -905,7 +926,7 @@
       // Si la invitacion usa apertura tipo CARTA, el sobre es el mismo pero se
       // abre distinto (solo la solapa de arriba). Delegamos y NO tocamos tri-open,
       // que volaria las cuatro solapas.
-      if(env.classList.contains('carta-mode')){
+      if(env.classList.contains('carta-mode') || env.classList.contains('carta-video')){
         if(window.__abrirCarta) window.__abrirCarta();
         return;
       }
@@ -2162,14 +2183,106 @@
     return 'rgba(255,255,255,'+a+')';
   }
   // ===== CATALOGO DE SOBRES =====================================================
-  // Para sumar un sobre nuevo: subir la imagen del papel a /sobres/ y agregar UNA
-  // linea aca. El mismo catalogo esta copiado en admin.html (constante SOBRES) para
-  // armar la lista que ve la disenadora: si agregas uno, agregalo en los DOS lados.
-  // El evento guarda solo el id (fx.sobre.modelo); asi la imagen se puede cambiar
+  // Para sumar un sobre nuevo: subir el VIDEO de la apertura a /sobres/ y agregar
+  // UNA linea aca. El mismo catalogo esta copiado en admin.html (constante SOBRES)
+  // para armar la lista que ve la disenadora: si agregas uno, agregalo en los DOS.
+  // El evento guarda solo el id (fx.sobre.modelo); asi el video se puede cambiar
   // despues sin tocar ninguna invitacion ya entregada.
+  //
+  //   video : la apertura del sobre, sin nombres ni fechas. Generico y reusable.
+  //           Termina cuando la tarjeta llena la pantalla: ahi toma el relevo la
+  //           invitacion real, que es la que tiene la foto y los datos.
+  //   poster: el primer cuadro, para que el sobre cerrado se vea al instante
+  //           mientras el video todavia carga.
+  //   img   : sin video, el sobre se dibuja por CSS con esta imagen de papel
+  //           (el modo viejo; queda como respaldo).
   var SOBRES={
-    floral:{ nombre:"Floral en relieve (marfil)", img:"/sobres/sobre-floral.jpg", color:"#d9a7ae" }
+    marfil:{ nombre:"Marfil en relieve",
+             img:"/sobres/sobre-marfil.jpg",
+             lacre:"/sobres/lacre-marfil.png" },
+    // Sobre de PRUEBA. No es un diseno: existe solo para verificar el empalme
+    // entre el video y la invitacion. Se borra cuando entre el primero de verdad.
+    prueba:{ nombre:"Prueba de empalme (no usar)",
+             video:"/sobres/sobre-prueba.mp4",
+             poster:"/sobres/sobre-prueba-poster.jpg",
+             lacre:{ x:50, y:50, tam:5.4, color:"#7a6647" } }
   };
+  // ===== SOBRE POR VIDEO ========================================================
+  // El invitado ve el primer cuadro (sobre cerrado) al instante gracias al poster.
+  // Toca, el video corre una sola vez, y cuando termina aparece la invitacion real.
+  // El video NO lleva nombres ni fechas: es el mismo para todas las parejas.
+  function activarSobreVideo(ev,env,cat,url,fxs){
+    try{
+      env.classList.remove("carta-mode");
+      env.classList.add("carta-video");
+      var v=el("env-vid"); if(!v) return false;
+
+      // Asi arranca en iPhone: mudo, adentro de la pagina (nada de pantalla
+      // completa) y disparado por el toque del invitado, que es el gesto que
+      // iOS pide. No lleva autoplay a proposito: queremos el sobre quieto.
+      v.muted=true; v.defaultMuted=true; v.loop=false; v.autoplay=false;
+      v.setAttribute("muted","");
+      v.setAttribute("playsinline","");
+      v.setAttribute("webkit-playsinline","");
+      v.setAttribute("preload","auto");
+      var poster=String(fxs.poster||(cat&&cat.poster)||"").trim();
+      if(poster) v.setAttribute("poster",poster);
+      v.src=url;
+      try{ v.load(); }catch(_e){}
+
+      // Iniciales sobre el lacre del video. El video trae el lacre SIN iniciales,
+      // asi sirve para cualquier pareja; las letras se ponen aca encima.
+      try{
+        var ini=String(fxs.iniciales!=null?fxs.iniciales:
+                 ((ev.n1||"").trim()[0]||"")+"&"+((ev.n2||"").trim()[0]||"")).trim();
+        var pos=(cat&&cat.lacre)||fxs.lacre||null;   // {x,y,tam} en % de la pantalla
+        if(ini && ini!=="&" && pos){
+          var d=document.createElement("div");
+          d.className="ct-ini";
+          d.textContent=ini.toUpperCase();
+          d.style.left=pos.x+"%"; d.style.top=pos.y+"%";
+          d.style.fontSize=(pos.tam||6)+"vmin";
+          if(pos.color) env.style.setProperty("--ct-ini-color",pos.color);
+          env.appendChild(d);
+        }
+      }catch(_e){}
+
+      var listo=false;
+      function relevo(){
+        if(listo) return; listo=true;
+        try{ if(window.abrir) window.abrir(); }catch(_e){}
+        // Cruce corto: el ultimo cuadro del video y la portada se funden.
+        env.style.transition="opacity .45s ease";
+        env.style.opacity="0"; env.style.pointerEvents="none";
+        setTimeout(function(){
+          env.style.display="none";
+          try{ v.pause(); v.removeAttribute("src"); v.load(); }catch(_e){}
+        }, 520);
+      }
+      v.addEventListener("ended", relevo);
+      // Red de seguridad: si el video no carga o se traba, igual entra. Nunca se
+      // deja a un invitado mirando un sobre que no abre.
+      v.addEventListener("error", relevo);
+
+      window.__abrirCarta=function(){
+        if(env.classList.contains("carta-abierto")) return;
+        env.classList.add("carta-abierto");
+        try{ if(window.playMusic) window.playMusic(); }catch(_e){}
+        var p=null;
+        try{ p=v.play(); }catch(_e){}
+        if(p && p.catch) p.catch(function(){ relevo(); });   // si iOS lo bloquea, entra igual
+        // Si el video termina y por lo que sea no dispara "ended", cortamos igual.
+        var dur=(isFinite(v.duration)&&v.duration>0)?v.duration:6;
+        setTimeout(relevo, dur*1000+900);
+      };
+      env.addEventListener("click", function(e){
+        e.stopPropagation();
+        window.__abrirCarta();
+      }, true);
+      return true;
+    }catch(_e){ return false; }
+  }
+
   // ===== Apertura tipo CARTA: la tarjeta sale del sobre, crece y ya es la portada.
   // Se activa SOLO si el evento pide apertura "carta". Si no, el sobre funciona igual que siempre.
   function activarSobreCarta(ev){
@@ -2178,13 +2291,33 @@
       // De donde sale la config, en orden: el bloque fx del panel (lo nuevo) y
       // despues las claves planas sueltas (como quedo maria-y-diego al probar).
       var fxs=(ev.fx&&ev.fx.sobre)||{};
+      // ?sobre=<id> fuerza un sobre del catalogo, solo para probar. No toca la
+      // invitacion guardada: sirve para mandarse un link al celular y mirarlo.
+      try{
+        var _p=new URLSearchParams(location.search).get("sobre");
+        if(_p && SOBRES[_p]) fxs=Object.assign({},fxs,{tipo:"carta",modelo:_p});
+      }catch(_e){}
       var tipo=String(fxs.tipo||ev.sobreTipo||"").toLowerCase();
       if(tipo!=="carta") return false;
       var env=el("env"); if(!env) return false;
+      // Si el sobre elegido tiene VIDEO, ese manda y no se dibuja nada por CSS.
+      var _cat=SOBRES[String(fxs.modelo||"").trim()]||null;
+      var _vid=String(fxs.video||(_cat&&_cat.video)||"").trim();
+      if(_vid) return activarSobreVideo(ev,env,_cat,_vid,fxs);
       // El modo carta se monta ENCIMA del sobre de siempre: necesita las cuatro
       // solapas y el lacre de tri-mode, asi que nos aseguramos de que este puesto.
       env.classList.add("tri-mode");
       env.classList.add("carta-mode");
+      // --envh = alto real del sobre, medido en vivo. No sirve 100vh: en el
+      // navegador del celular vh se refiere a la pantalla con la barra de
+      // direcciones escondida, y la bisagra del lacre quedaba corrida.
+      var medirEnv=function(){
+        try{ env.style.setProperty("--envh", env.getBoundingClientRect().height+"px"); }catch(_e){}
+      };
+      medirEnv();
+      window.addEventListener("resize",medirEnv);
+      window.addEventListener("orientationchange",medirEnv);
+      if(window.visualViewport) window.visualViewport.addEventListener("resize",medirEnv);
       var cat=SOBRES[String(fxs.modelo||"").trim()]||null;
       var tex=String(fxs.texturaUrl||ev["img_c_textura-del-sobre"]||ev.sobreTextura||"").trim();
       if(!tex && cat) tex=cat.img;
@@ -2204,17 +2337,11 @@
       // El color tinta el papel del sobre. Si hay imagen de catalogo la dejamos
       // mandar sola: el papel ya viene con su color y superponer otro lo ensucia.
       if(col && !tex){ env.style.setProperty("--flap-base",col); }
-      // Dibujamos el lacre vectorial dentro del sello de tri-mode (la imagen PNG
-      // que trae por defecto no existe en el repo y quedaba solo el monograma).
+      // El lacre es una imagen de cera con fondo transparente. Las iniciales las
+      // sigue escribiendo el motor encima, asi el mismo lacre sirve para todos.
       try{
-        var _svg=env.querySelector("#tri-seal .triseal-svg");
-        if(_svg && !_svg.querySelector("use")){
-          var _u=document.createElementNS("http://www.w3.org/2000/svg","use");
-          _u.setAttribute("href","#sealbase");
-          _svg.insertBefore(_u,_svg.firstChild);
-        }
-        var _sc=String((ev.fx&&ev.fx.sobre&&ev.fx.sobre.selloColor)||"").trim();
-        if(_sc) env.style.setProperty("--seal-c",_sc);
+        var _lac=String(fxs.lacreImg||(cat&&cat.lacre)||"").trim();
+        if(_lac) env.style.setProperty("--ct-lacre","url('"+_lac+"')");
       }catch(_e){}
       if(ev.cartaPapel) env.style.setProperty("--ct-papel",ev.cartaPapel);
       if(ev.cartaTexto) env.style.setProperty("--ct-texto",ev.cartaTexto);
