@@ -2299,16 +2299,20 @@
         // El corte de seguridad se cuenta desde que el video EMPIEZA A CORRER,
         // no desde el toque. Contado desde el toque, un video que tarda en
         // cargar se come su propio tiempo y la invitacion entra de golpe.
-        var corte=null;
+        var corte=null, arranco=false;
         function armar(){
+          arranco=true;
           clearTimeout(corte);
           var dur=(isFinite(v.duration)&&v.duration>0)?v.duration:3;
           corte=setTimeout(relevo,Math.max(600,(dur-v.currentTime)*1000+900));
         }
         v.addEventListener("playing",armar);
         v.addEventListener("loadedmetadata",armar);
-        // Y si a los 7 segundos ni siquiera arranco, entramos igual.
-        setTimeout(function(){ if(v.paused) relevo(); },7000);
+        // Y si a los 7 segundos el video no arranco de verdad, entramos igual.
+        // Se mira "arranco", no v.paused: con mala señal el navegador dice que
+        // no esta pausado y sin embargo no llego ni un cuadro. Mirando paused,
+        // el invitado se quedaba para siempre con el sobre cerrado.
+        setTimeout(function(){ if(!arranco) relevo(); },7000);
       };
       env.addEventListener("click", function(e){
         e.stopPropagation();
