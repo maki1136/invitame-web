@@ -2319,8 +2319,11 @@
       window.addEventListener("orientationchange",medirEnv);
       if(window.visualViewport) window.visualViewport.addEventListener("resize",medirEnv);
       var cat=SOBRES[String(fxs.modelo||"").trim()]||null;
-      var tex=String(fxs.texturaUrl||ev["img_c_textura-del-sobre"]||ev.sobreTextura||"").trim();
-      if(!tex && cat) tex=cat.img;
+      // Si eligio un sobre del catalogo, MANDA el catalogo. Las claves planas de
+      // abajo son solo el respaldo para invitaciones viejas que nunca eligieron
+      // ninguno: si ganaban ellas, elegir un sobre no cambiaba nada.
+      var tex=String(fxs.texturaUrl||(cat&&cat.img)||
+                     ev["img_c_textura-del-sobre"]||ev.sobreTextura||"").trim();
       // La imagen del catalogo es el PAPEL DEL SOBRE: va a las solapas (--flap-tex),
       // que es la misma variable que usan las texturas de siempre (lino, kraft...).
       if(/^(https?:\/\/|\/)/i.test(tex)){
