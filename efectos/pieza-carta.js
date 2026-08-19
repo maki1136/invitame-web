@@ -25,7 +25,7 @@
    De medir la imagen, no de estimarla. Para la tarjeta toscana: el eje está en
    x=399 (la corona de arriba y la hojita de abajo están las dos centradas ahí),
    la cara útil va de y=330 a y=775, y a la altura de las mayúsculas la cara
-   mide 390 px de ancho — por eso el texto no puede pasar de 300.
+   mide 390 px de ancho.
 
    QUÉ NO HACE
    No toca el motor. El video ya trae al final unos segundos de imagen quieta;
@@ -97,18 +97,18 @@
     return t;
   }
 
+  function ancho(t) {
+    try { return t.getComputedTextLength(); } catch (e) { return 0; }
+  }
+
   /* Achica la tipografía hasta que el renglón entre en el ancho disponible.
-     Se mide de verdad con getComputedTextLength(): un número escrito a mano se
-     desactualiza en silencio el día que se cambia la tipografía. */
+     Se mide de verdad: un número escrito a mano se desactualiza en silencio el
+     día que se cambia la tipografía o el texto. */
   function entrar(t, maxw, size, minimo) {
     var s = size;
     t.setAttribute('font-size', s);
-    while (s > (minimo || 8)) {
-      var w = 0;
-      try { w = t.getComputedTextLength(); } catch (e) { break; }
-      if (w <= maxw) break;
-      t.setAttribute('font-size', --s);
-    }
+    while (s > (minimo || 8) && ancho(t) > maxw) t.setAttribute('font-size', --s);
+    return s;
   }
 
   function construir(svg, D, G) {
@@ -122,13 +122,22 @@
       if (!txt) return null;
       var t = svgTexto(txt, eje, y, fam, size, tr, G.tinta);
       svg.appendChild(t);
-      entrar(t, maxw, size, minimo);
+      t.__cuerpo = entrar(t, maxw, size, minimo);
       (el[clave] = el[clave] || []).push(t);
       return t;
     }
 
-    add('k', D.k1, L.k1, SERIF, T.k, 4.0, A.k);
-    add('k', D.k2, L.k2, SERIF, T.k, 4.0, A.k);
+    /* Los dos renglones en mayúsculas son UN bloque: si uno se achica porque
+       la frase es larga, el otro lo acompaña. Con cuerpos distintos se lee
+       como un error de maquetación, no como una jerarquía. */
+    var k1 = add('k', D.k1, L.k1, SERIF, T.k, 4.0, A.k, 9);
+    var k2 = add('k', D.k2, L.k2, SERIF, T.k, 4.0, A.k, 9);
+    if (k1 && k2) {
+      var menor = Math.min(k1.__cuerpo, k2.__cuerpo);
+      k1.setAttribute('font-size', menor);
+      k2.setAttribute('font-size', menor);
+    }
+
     var t1 = add('n1', D.n1, L.n1, SCRIPT, T.n, 0, A.n, 44);
     var t2 = add('n2', D.n2, L.n2, SCRIPT, T.n, 0, A.n, 44);
 
@@ -188,35 +197,44 @@
     }
   }
 
-  /* ---- 4. las tipografías ---------------------------------------------- */
+  /* ---- 4. las tipografías: hay que esperarlas ANTES de medir ------------
 
-  function cargarTipografias(fams) {
-    if (!fams || document.getElementById('pieza-fuentes')) return;
-    var l = document.createElement('link');
-    l.id = 'pieza-fuentes'; l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?' + fams + '&display=swap';
-    document.head.appendChild(l);
-  }
+     El módulo achica cada renglón midiéndolo. Si mide antes de que llegue la
+     tipografía de Google, mide con la de respaldo — más ancha — y achica de
+     más: en una primera versión "TIENEN EL AGRADO DE INVITARTE" salía en 11 px
+     en vez de 15 y no había forma de darse cuenta leyendo el código.
 
-  /* ⚠️ HAY QUE ESPERARLAS ANTES DE MEDIR.
-     El módulo achica cada renglón midiéndolo con getComputedTextLength(). Si
-     mide antes de que llegue la tipografía de Google, mide con la de respaldo
-     — que es bastante más ancha — y achica de más: en la primera versión
-     "TIENEN EL AGRADO DE INVITARTE" salía en 11 px en vez de 15, y no había
-     forma de darse cuenta mirando el código.
-     Igual no lo esperamos para siempre: a los 3 segundos seguimos con lo que
-     haya, que es mejor que quedarse sin texto. */
+     ⚠️ Y ojo con el atajo obvio: `document.fonts.load('84px "Pinyon Script"')`
+     llamado justo después de insertar el <link> resuelve AL INSTANTE, porque
+     todavía no hay ninguna @font-face con ese nombre y el navegador contesta
+     "no hay nada que cargar". Hay que esperar primero a que cargue el <link>.
+     ---------------------------------------------------------------------- */
+
   function conTipografias(G, cb) {
     var hecho = false;
     function fin() { if (!hecho) { hecho = true; cb(); } }
-    setTimeout(fin, 3000);
-    if (!document.fonts || !document.fonts.load) return fin();
-    var script = (G.script || '').replace(/,.*$/, '').replace(/'/g, '');
-    var serif  = (G.serif  || '').replace(/,.*$/, '').replace(/'/g, '');
-    Promise.all([
-      document.fonts.load('84px "' + script + '"'),
-      document.fonts.load('15px "' + serif  + '"')
-    ]).then(function () { return document.fonts.ready; }).then(fin)['catch'](fin);
+    setTimeout(fin, 3200);                 /* nunca esperar para siempre */
+
+    if (!G.fuentes || !document.fonts || !document.fonts.load) return fin();
+
+    function pedirGlifos() {
+      var script = (G.script || '').replace(/,[\s\S]*$/, '').replace(/'/g, '').trim();
+      var serif  = (G.serif  || '').replace(/,[\s\S]*$/, '').replace(/'/g, '').trim();
+      Promise.all([
+        document.fonts.load('84px "' + script + '"'),
+        document.fonts.load('15px "' + serif + '"')
+      ]).then(function () { return document.fonts.ready; }).then(fin)['catch'](fin);
+    }
+
+    var l = document.getElementById('pieza-fuentes');
+    if (l) return pedirGlifos();
+    l = document.createElement('link');
+    l.id = 'pieza-fuentes';
+    l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?' + G.fuentes + '&display=swap';
+    l.onload = pedirGlifos;
+    l.onerror = fin;
+    document.head.appendChild(l);
   }
 
   /* ---- 5. engancharse al sobre ----------------------------------------- */
@@ -231,8 +249,6 @@
     var G = (window.SOBRES_INVITAME || {})[modelo] && window.SOBRES_INVITAME[modelo].texto;
     if (!G) return true;                       /* este sobre no se escribe */
     if (document.getElementById('pieza-svg')) return true;
-
-    cargarTipografias(G.fuentes);
 
     var svg = document.createElementNS(NS, 'svg');
     svg.id = 'pieza-svg';
