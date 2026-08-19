@@ -36,6 +36,11 @@
 
    El evento guarda SOLO el id (fx.sobre.modelo), nunca la URL. Así se puede
    cambiar el video de un sobre después sin tocar ninguna invitación entregada.
+
+   ⚠️ Los sobres `lazo` y `toscana` TERMINAN EN BLANCO, no en la tarjeta. La
+   invitación entra desde ese blanco, así que el empalme es un fundido y no se
+   ve ningún corte. Por eso su `color` es casi blanco: es el color con el que
+   arranca la pantalla justo cuando el video se apaga.
    ============================================================================ */
 window.SOBRES_INVITAME = {
 
@@ -51,6 +56,20 @@ window.SOBRES_INVITAME = {
     video:  "/sobres/sobre-flores.mp4",
     poster: "/sobres/sobre-flores-poster.jpg",
     color:  "#efe9e0"
+  },
+
+  lazo: {
+    nombre: "Lazo de seda verde salvia (video)",
+    video:  "/sobres/sobre-lazo.mp4",
+    poster: "/sobres/sobre-lazo-poster.jpg",
+    color:  "#f4f6f0"
+  },
+
+  toscana: {
+    nombre: "Toscana grabada, lacre dorado (video)",
+    video:  "/sobres/sobre-toscana.mp4",
+    poster: "/sobres/sobre-toscana-poster.jpg",
+    color:  "#f7f2e8"
   },
 
   marfil: {
