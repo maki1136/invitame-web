@@ -18,12 +18,18 @@
    cargó el itinerario como IMAGEN. En ese caso este archivo no hace nada, y
    está bien que así sea. (En `maria-y-diego` está cargado como imagen.)
 
+   👁 PARA VERLO IGUAL: agregar `?itinerario=lista` a la dirección. Eso muestra
+   la lista y esconde la imagen SÓLO en esa visita — no cambia nada del evento
+   ni de lo que ven los invitados. Es para previsualizar.
+
    ACCESIBILIDAD
    Si la persona tiene activado "reducir movimiento" en su teléfono, se muestra
    todo quieto y completo. Nadie se queda sin ver el itinerario.
    ============================================================================ */
 (function () {
   'use strict';
+
+  var PREVIEW = /[?&]itinerario=lista/.test(location.search);
 
   var CSS = [
     /* la línea original queda de guía tenue; encima se dibuja la de progreso */
@@ -58,6 +64,18 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
+  /* Vista previa: mostrar la lista aunque el evento tenga el itinerario como
+     imagen. No toca los datos: es sólo para esta visita. */
+  function forzarLista() {
+    if (!PREVIEW) return;
+    [].forEach.call(document.querySelectorAll('.tl'), function (tl) {
+      if (getComputedStyle(tl).display === 'none') tl.style.display = 'block';
+      var sec = tl.closest ? tl.closest('section') : null;
+      if (!sec) return;
+      [].forEach.call(sec.querySelectorAll('img'), function (im) { im.style.display = 'none'; });
+    });
+  }
+
   var armados = [];   /* las listas ya preparadas, para no repetir */
 
   function visible(el) {
@@ -85,8 +103,7 @@
     /* el escalonado: cada momento entra un toque después del anterior */
     items.forEach(function (it, i) { it.style.transitionDelay = (i * 0.10) + 's'; });
 
-    /* quién ya entró en pantalla. El observador es lo mismo que usa el resto
-       de la invitación para sus apariciones. */
+    /* quién ya entró en pantalla */
     if (window.IntersectionObserver) {
       var io = new IntersectionObserver(function (ents) {
         ents.forEach(function (e) {
@@ -132,6 +149,7 @@
   }
 
   function buscar() {
+    forzarLista();
     [].forEach.call(document.querySelectorAll('.tl'), armar);
   }
 
