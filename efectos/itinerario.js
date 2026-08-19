@@ -5,52 +5,83 @@
    golpe. Ahora, a medida que el invitado baja:
      · la línea se va DIBUJANDO de arriba hacia abajo, siguiendo el scroll
      · cada momento (hora + título + descripción) ENTRA solo cuando le toca,
-       subiendo apenas y apareciendo, uno atrás del otro
+       uno atrás del otro
      · el puntito de cada momento hace un "pop" al llegar
 
+   DOS ESTILOS
+     · "izquierda" (el de siempre): la línea al costado, todo el texto a la derecha
+     · "centro": la línea en el medio y los momentos alternando — uno a la
+       izquierda, el siguiente a la derecha, en zigzag
+
+   CÓMO SE ELIGE, hoy y mañana
+     1. `document.body.dataset.tlEstilo = 'centro'`  ← por acá va a entrar el
+        campo del panel cuando lo agreguemos a admin.html
+     2. `?tl=centro` en la dirección  ← para probar sin tocar nada
+     3. si no se dice nada: "izquierda"
+
    QUÉ NO TOCA
-   Nada del diseño: ni colores, ni tipografías, ni posiciones. La línea y los
-   puntos son los que ya estaban (.tl::before y .tl .it::before). Esto es
-   solamente el movimiento.
+   Nada del diseño de origen: colores, tipografías y tamaños son los que ya
+   estaban. La línea y los puntos también (.tl::before y .tl .it::before).
 
    ⚠️ SÓLO SE VE SI EL ITINERARIO ESTÁ CARGADO COMO LISTA.
    El motor esconde la lista (`.tl` queda en display:none) cuando la diseñadora
-   cargó el itinerario como IMAGEN. En ese caso este archivo no hace nada, y
-   está bien que así sea. (En `maria-y-diego` está cargado como imagen.)
-
-   👁 PARA VERLO IGUAL: agregar `?itinerario=lista` a la dirección. Eso muestra
-   la lista y esconde la imagen SÓLO en esa visita — no cambia nada del evento
-   ni de lo que ven los invitados. Es para previsualizar.
+   cargó el itinerario como IMAGEN. (En `maria-y-diego` está cargado como imagen.)
+   👁 Para verlo igual: `?itinerario=lista`. Muestra la lista sólo en esa visita,
+   no cambia nada del evento ni de lo que ven los invitados.
 
    ACCESIBILIDAD
    Si la persona tiene activado "reducir movimiento" en su teléfono, se muestra
-   todo quieto y completo. Nadie se queda sin ver el itinerario.
+   todo quieto y completo.
    ============================================================================ */
 (function () {
   'use strict';
 
   var PREVIEW = /[?&]itinerario=lista/.test(location.search);
+  var ESTILO_URL = (location.search.match(/[?&]tl=(centro|izquierda)/) || [])[1];
+
+  function estilo() {
+    return ESTILO_URL || (document.body && document.body.dataset.tlEstilo) || 'izquierda';
+  }
 
   var CSS = [
-    /* la línea original queda de guía tenue; encima se dibuja la de progreso */
+    /* ---------- común a los dos estilos ---------- */
     '.tl.tl-anim::before{opacity:.22}',
-    '.tl.tl-anim .tl-prog{position:absolute;left:6px;top:6px;bottom:6px;width:2px;',
+    '.tl.tl-anim .tl-prog{position:absolute;top:6px;bottom:6px;width:2px;',
     '  background:var(--verde);transform-origin:top center;transform:scaleY(0);',
     '  transition:transform .18s linear;border-radius:2px}',
-
-    /* cada momento entra subiendo apenas */
-    '.tl.tl-anim > .it{opacity:0;transform:translateY(26px);',
-    '  transition:opacity .8s ease,transform .8s cubic-bezier(.22,.72,.28,1)}',
-    '.tl.tl-anim > .it.on{opacity:1;transform:none}',
-
-    /* el puntito hace "pop" cuando llega su momento */
+    '.tl.tl-anim > .it{opacity:0;transition:opacity .8s ease,transform .8s cubic-bezier(.22,.72,.28,1)}',
+    '.tl.tl-anim > .it.on{opacity:1}',
     '.tl.tl-anim > .it::before{transform:scale(.2);opacity:0;',
     '  transition:transform .55s cubic-bezier(.3,1.5,.5,1) .12s,opacity .35s ease .12s}',
     '.tl.tl-anim > .it.on::before{transform:scale(1);opacity:1}',
 
-    /* si pidió menos movimiento: todo quieto y visible */
+    /* ---------- estilo 1: la línea a la izquierda ---------- */
+    '.tl.tl-anim:not(.tl-centro) .tl-prog{left:6px}',
+    '.tl.tl-anim:not(.tl-centro) > .it{transform:translateY(26px)}',
+    '.tl.tl-anim:not(.tl-centro) > .it.on{transform:none}',
+
+    /* ---------- estilo 2: la línea al medio, en zigzag ---------- */
+    '.tl.tl-centro{padding-left:0;text-align:left}',
+    '.tl.tl-centro::before{left:50%;margin-left:-1px}',
+    '.tl.tl-centro .tl-prog{left:50%;margin-left:-1px}',
+    '.tl.tl-centro > .it{width:calc(50% - 20px);margin-bottom:22px}',
+
+    /* los impares quedan a la izquierda de la línea, alineados a la derecha */
+    '.tl.tl-centro > .it:nth-child(odd){margin-right:auto;text-align:right;',
+    '  transform:translate(-14px,26px)}',
+    '.tl.tl-centro > .it:nth-child(odd).on{transform:translate(0,0)}',
+    '.tl.tl-centro > .it:nth-child(odd)::before{left:auto;right:-27px}',
+
+    /* los pares quedan a la derecha, y suben para intercalarse */
+    '.tl.tl-centro > .it:nth-child(even){margin-left:auto;text-align:left;',
+    '  margin-top:-30px;transform:translate(14px,26px)}',
+    '.tl.tl-centro > .it:nth-child(even).on{transform:translate(0,0)}',
+    '.tl.tl-centro > .it:nth-child(even)::before{left:-27px}',
+
+    /* ---------- si pidió menos movimiento ---------- */
     '@media(prefers-reduced-motion:reduce){',
-    '  .tl.tl-anim > .it{opacity:1;transform:none}',
+    '  .tl.tl-anim > .it,.tl.tl-centro > .it:nth-child(odd),',
+    '  .tl.tl-centro > .it:nth-child(even){opacity:1;transform:none}',
     '  .tl.tl-anim > .it::before{opacity:1;transform:none}',
     '  .tl.tl-anim .tl-prog{transform:scaleY(1)}',
     '}'
@@ -76,14 +107,18 @@
     });
   }
 
-  var armados = [];   /* las listas ya preparadas, para no repetir */
+  var armados = [];
 
   function visible(el) {
-    /* el motor esconde la lista cuando el itinerario se cargó como imagen */
     return el.offsetParent !== null && el.getBoundingClientRect().height > 0;
   }
 
+  function aplicarEstilo(tl) {
+    tl.classList.toggle('tl-centro', estilo() === 'centro');
+  }
+
   function armar(tl) {
+    aplicarEstilo(tl);
     if (tl.__tlListo || !visible(tl)) return;
     var items = [].filter.call(tl.children, function (c) {
       return c.classList && c.classList.contains('it');
@@ -103,7 +138,6 @@
     /* el escalonado: cada momento entra un toque después del anterior */
     items.forEach(function (it, i) { it.style.transitionDelay = (i * 0.10) + 's'; });
 
-    /* quién ya entró en pantalla */
     if (window.IntersectionObserver) {
       var io = new IntersectionObserver(function (ents) {
         ents.forEach(function (e) {
@@ -119,8 +153,7 @@
     dibujar();
   }
 
-  /* la línea sigue al scroll: 0 cuando la lista asoma por abajo,
-     1 cuando terminó de pasar */
+  /* la línea sigue al scroll */
   function dibujar() {
     var h = window.innerHeight || 800;
     armados.forEach(function (a) {
@@ -129,8 +162,7 @@
       p = p < 0 ? 0 : (p > 1 ? 1 : p);
       a.prog.style.transform = 'scaleY(' + p.toFixed(3) + ')';
 
-      /* red de seguridad: si por lo que sea el observador no corrió
-         (pasa en pestañas en segundo plano), igual se revelan al pasar */
+      /* red de seguridad por si el observador no corrió */
       if (p > 0.02) {
         a.items.forEach(function (it) {
           if (!it.classList.contains('on') && it.getBoundingClientRect().top < h * 0.88) {
@@ -159,10 +191,12 @@
     addEventListener('scroll', alScroll, { passive: true });
     addEventListener('resize', alScroll);
 
-    /* el motor pinta el evento después, y puede volver a pintarlo:
-       por eso se sigue mirando un rato en vez de una sola vez */
     if (window.MutationObserver) {
       new MutationObserver(buscar).observe(document.body, { childList: true, subtree: true });
+      /* si el panel cambia el estilo en caliente, que se note */
+      new MutationObserver(function () {
+        [].forEach.call(document.querySelectorAll('.tl'), aplicarEstilo);
+      }).observe(document.body, { attributes: true, attributeFilter: ['data-tl-estilo'] });
     }
     var n = 0, t = setInterval(function () { buscar(); if (++n > 40) clearInterval(t); }, 250);
   }
