@@ -4,40 +4,46 @@
    El itinerario ya tenía su línea vertical y sus puntitos, pero aparecía todo de
    golpe. Ahora, a medida que el invitado baja:
      · la línea se va DIBUJANDO de arriba hacia abajo, siguiendo el scroll
-     · cada momento (hora + título + descripción) ENTRA solo cuando le toca,
-       uno atrás del otro
+     · cada momento (hora + título + descripción) ENTRA cuando le toca, uno
+       atrás del otro
      · el puntito de cada momento hace un "pop" al llegar
 
    DOS ESTILOS
-     · "izquierda" (el de siempre): la línea al costado, todo el texto a la derecha
+     · "izquierda" (el de siempre): la línea al costado, el texto a la derecha
      · "centro": la línea en el medio y los momentos alternando — uno a la
        izquierda, el siguiente a la derecha, en zigzag
 
-   CÓMO SE ELIGE, hoy y mañana
+   CÓMO SE ELIGE
      1. `document.body.dataset.tlEstilo = 'centro'`  ← por acá va a entrar el
         campo del panel cuando lo agreguemos a admin.html
      2. `?tl=centro` en la dirección  ← para probar sin tocar nada
      3. si no se dice nada: "izquierda"
 
-   QUÉ NO TOCA
-   Nada del diseño de origen: colores, tipografías y tamaños son los que ya
-   estaban. La línea y los puntos también (.tl::before y .tl .it::before).
-
    ⚠️ SÓLO SE VE SI EL ITINERARIO ESTÁ CARGADO COMO LISTA.
-   El motor esconde la lista (`.tl` queda en display:none) cuando la diseñadora
-   cargó el itinerario como IMAGEN. (En `maria-y-diego` está cargado como imagen.)
-   👁 Para verlo igual: `?itinerario=lista`. Muestra la lista sólo en esa visita,
-   no cambia nada del evento ni de lo que ven los invitados.
+   El motor esconde la lista (`display:none`) cuando la diseñadora cargó el
+   itinerario como IMAGEN.
+   👁 Para verlo igual: `?itinerario=lista`. Muestra la lista sólo en esa visita.
+
+   ⭐ SE REARMA SOLO SI EL PANEL REPINTA
+   En la vista previa, el panel vuelve a dibujar la lista con cada cambio. Eso
+   se lleva puesta la línea de progreso (que es hija de la lista) pero deja las
+   clases en el contenedor. Antes quedaba a medias: con la animación puesta pero
+   sin línea. Ahora se detecta y se rearma.
 
    ACCESIBILIDAD
-   Si la persona tiene activado "reducir movimiento" en su teléfono, se muestra
-   todo quieto y completo.
+   Con "reducir movimiento" activado se muestra todo quieto y completo.
    ============================================================================ */
 (function () {
   'use strict';
 
-  var PREVIEW = /[?&]itinerario=lista/.test(location.search);
+  var PREVIEW_LISTA = /[?&]itinerario=lista/.test(location.search);
   var ESTILO_URL = (location.search.match(/[?&]tl=(centro|izquierda)/) || [])[1];
+
+  /* ¿estamos dentro de la vista previa del panel? ahí todo cambia en vivo */
+  var ES_PREVIEW = (function () {
+    try { return /[?&]preview/.test(location.search) || window.parent !== window; }
+    catch (e) { return true; }
+  })();
 
   function estilo() {
     return ESTILO_URL || (document.body && document.body.dataset.tlEstilo) || 'izquierda';
@@ -66,13 +72,11 @@
     '.tl.tl-centro .tl-prog{left:50%;margin-left:-1px}',
     '.tl.tl-centro > .it{width:calc(50% - 20px);margin-bottom:22px}',
 
-    /* los impares quedan a la izquierda de la línea, alineados a la derecha */
     '.tl.tl-centro > .it:nth-child(odd){margin-right:auto;text-align:right;',
     '  transform:translate(-14px,26px)}',
     '.tl.tl-centro > .it:nth-child(odd).on{transform:translate(0,0)}',
     '.tl.tl-centro > .it:nth-child(odd)::before{left:auto;right:-27px}',
 
-    /* los pares quedan a la derecha, y suben para intercalarse */
     '.tl.tl-centro > .it:nth-child(even){margin-left:auto;text-align:left;',
     '  margin-top:-30px;transform:translate(14px,26px)}',
     '.tl.tl-centro > .it:nth-child(even).on{transform:translate(0,0)}',
@@ -98,7 +102,7 @@
   /* Vista previa: mostrar la lista aunque el evento tenga el itinerario como
      imagen. No toca los datos: es sólo para esta visita. */
   function forzarLista() {
-    if (!PREVIEW) return;
+    if (!PREVIEW_LISTA) return;
     [].forEach.call(document.querySelectorAll('.tl'), function (tl) {
       if (getComputedStyle(tl).display === 'none') tl.style.display = 'block';
       var sec = tl.closest ? tl.closest('section') : null;
@@ -113,18 +117,41 @@
     return el.offsetParent !== null && el.getBoundingClientRect().height > 0;
   }
 
+  function momentos(tl) {
+    return [].filter.call(tl.children, function (c) {
+      return c.classList && c.classList.contains('it');
+    });
+  }
+
+  /* ¿está entero, o el panel repintó y quedó a medias? */
+  function estaEntero(tl) {
+    if (!tl.__tlListo) return false;
+    if (!tl.querySelector('.tl-prog')) return false;      /* se llevó la línea */
+    var its = momentos(tl);
+    if (!its.length) return false;
+    if (!its[its.length - 1].style.transitionDelay) return false;  /* momentos nuevos */
+    return true;
+  }
+
+  function olvidar(tl) {
+    for (var i = armados.length - 1; i >= 0; i--) {
+      if (armados[i].tl === tl) armados.splice(i, 1);
+    }
+  }
+
   function aplicarEstilo(tl) {
     tl.classList.toggle('tl-centro', estilo() === 'centro');
   }
 
   function armar(tl) {
     aplicarEstilo(tl);
-    if (tl.__tlListo || !visible(tl)) return;
-    var items = [].filter.call(tl.children, function (c) {
-      return c.classList && c.classList.contains('it');
-    });
+    if (!visible(tl)) return;
+    if (estaEntero(tl)) return;
+
+    var items = momentos(tl);
     if (!items.length) return;
 
+    olvidar(tl);                       /* si había un registro viejo, se descarta */
     tl.__tlListo = true;
     tl.classList.add('tl-anim');
 
@@ -157,12 +184,14 @@
   function dibujar() {
     var h = window.innerHeight || 800;
     armados.forEach(function (a) {
+      if (!a.prog.isConnected) return;         /* el panel la borró: ya se rearmará */
       var r = a.tl.getBoundingClientRect();
       var p = (h * 0.82 - r.top) / (r.height + h * 0.30);
       p = p < 0 ? 0 : (p > 1 ? 1 : p);
       a.prog.style.transform = 'scaleY(' + p.toFixed(3) + ')';
 
-      /* red de seguridad por si el observador no corrió */
+      /* red de seguridad: si el observador no corrió (pasa en pestañas en
+         segundo plano), igual se revelan al pasar */
       if (p > 0.02) {
         a.items.forEach(function (it) {
           if (!it.classList.contains('on') && it.getBoundingClientRect().top < h * 0.88) {
@@ -170,6 +199,8 @@
           }
         });
       }
+      /* en la previa no hay scroll real: se muestran directamente */
+      if (ES_PREVIEW) a.items.forEach(function (it) { it.classList.add('on'); });
     });
   }
 
@@ -183,6 +214,7 @@
   function buscar() {
     forzarLista();
     [].forEach.call(document.querySelectorAll('.tl'), armar);
+    dibujar();
   }
 
   function arrancar() {
@@ -191,14 +223,22 @@
     addEventListener('scroll', alScroll, { passive: true });
     addEventListener('resize', alScroll);
 
+    /* el panel le habla a la previa por mensajes: cada uno puede repintar */
+    addEventListener('message', function () { setTimeout(buscar, 60); });
+
     if (window.MutationObserver) {
       new MutationObserver(buscar).observe(document.body, { childList: true, subtree: true });
-      /* si el panel cambia el estilo en caliente, que se note */
       new MutationObserver(function () {
         [].forEach.call(document.querySelectorAll('.tl'), aplicarEstilo);
       }).observe(document.body, { attributes: true, attributeFilter: ['data-tl-estilo'] });
     }
-    var n = 0, t = setInterval(function () { buscar(); if (++n > 40) clearInterval(t); }, 250);
+
+    if (ES_PREVIEW) {
+      /* en la previa se vigila siempre: la diseñadora toca y tiene que verlo */
+      setInterval(buscar, 700);
+    } else {
+      var n = 0, t = setInterval(function () { buscar(); if (++n > 40) clearInterval(t); }, 250);
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
