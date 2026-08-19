@@ -15,10 +15,11 @@
    ============================================================================ */
 (function () {
   var MODULOS = [
-    '/efectos/itinerario.js',     /* la línea del itinerario se dibuja con el scroll */
-    '/efectos/calendario.js',     /* el calendario del mes con la fecha marcada */
-    '/efectos/panel-preview.js'   /* TEMPORAL: la previa del panel, mientras el
-                                     admin de prueba esté fuera de su carpeta */
+    '/efectos/itinerario.js',        /* la línea del itinerario se dibuja con el scroll */
+    '/efectos/calendario.js',        /* el calendario del mes con la fecha marcada */
+    '/efectos/encuadre-monitor.js',  /* en compu: todo en una columna, como en el celular */
+    '/efectos/panel-preview.js'      /* TEMPORAL: la previa del panel, mientras el
+                                        admin de prueba esté fuera de su carpeta */
   ];
 
   MODULOS.forEach(function (src) {
