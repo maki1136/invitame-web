@@ -14,15 +14,18 @@
    grandes (index.html y admin.html, de 200 KB, que sólo se pueden subir a mano).
 
    ⚠️ Este archivo lo tocan varias manos. Antes de sobrescribirlo, LEERLO:
-   el 19/8 apareció `encuadre-monitor.js` que no había puesto yo, y más tarde
-   `raspadita.js`. Nunca reescribirlo de memoria: bajarlo, agregar la línea y
-   volver a subirlo.
+   el 19/8 aparecieron `encuadre-monitor.js` y `pieza-carta.js` que no había
+   puesto yo. Nunca reescribirlo de memoria: bajarlo, agregar la línea y subirlo.
+
+   ⚠️ EL ORDEN IMPORTA en un caso: `fecha.js` va ANTES de `raspadita.js`, porque
+   la raspadita se monta encima de lo que la fecha haya dibujado.
    ============================================================================ */
 (function () {
   var MODULOS = [
     '/efectos/itinerario.js',        /* la línea del itinerario se dibuja con el scroll */
     '/efectos/calendario.js',        /* el calendario del mes con la fecha marcada */
-    '/efectos/raspadita.js',         /* la raspadita: por partes, polvillo, destello */
+    '/efectos/fecha.js',             /* las nueve maneras de mostrar la fecha */
+    '/efectos/raspadita.js',         /* la raspadita: se monta sobre la fecha */
     '/efectos/encuadre-monitor.js',  /* en compu: todo en una columna, como en el celular */
     '/efectos/pieza-carta.js',       /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-preview.js'      /* TEMPORAL: la previa del panel, mientras el
