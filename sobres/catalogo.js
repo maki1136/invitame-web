@@ -1,11 +1,17 @@
-/* ===== SOBRES DE INVÍTAME =====================================================
-   Este archivo tiene DOS partes:
+/* ===== SOBRES DE INVÍTAME + PUNTO DE ENTRADA ==================================
+   Este archivo tiene TRES partes:
      1) EL CATÁLOGO  — la lista de sobres disponibles
-     2) LA PUESTA EN PANTALLA — cómo se ve y se encuadra el sobre
+     2) LA PUESTA EN PANTALLA DEL SOBRE — cómo se ve y se encuadra
+     3) LOS MÓDULOS — carga los archivos de /efectos/
 
    Vive aparte a propósito: antes todo esto estaba copiado dentro de
    prueba/index.html y prueba/admin.html (200 KB cada uno) y había que acordarse
    de tocar los dos. Acá es un archivo chico, fácil de cambiar y de revisar.
+
+   ⚠️ Se llama "catalogo.js" por historia: arrancó siendo sólo la lista de
+   sobres. Hoy es además el ÚNICO enganche que tiene la invitación con archivos
+   chicos, así que de acá cuelga todo lo nuevo (ver parte 3). Renombrarlo
+   obligaría a tocar los HTML grandes, que es justo lo que se quiere evitar.
    ============================================================================ */
 
 
@@ -63,7 +69,7 @@ window.SOBRES_INVITAME = {
 };
 
 
-/* ===== 2. LA PUESTA EN PANTALLA ==============================================
+/* ===== 2. LA PUESTA EN PANTALLA DEL SOBRE =====================================
 
    EL PROBLEMA
    Los videos de sobre son verticales (9:16), pensados para el celular. En el
@@ -82,56 +88,45 @@ window.SOBRES_INVITAME = {
    POR QUÉ NO HAY SALTO AL ABRIR
    Le damos al sobre el alto de la portada (84vh) y la proporción del video
    (9:16), así el ancho sale solo. En un monitor de altura normal eso da 474px:
-   el MISMO ancho que `.portada`. Entonces cuando el video termina y aparece la
-   invitación, la caja no se mueve. En ventanas bajas el sobre sale un poco más
-   angosto y la invitación crece al entrar, lo que acompaña la sensación de que
-   la carta sale del sobre.
+   el MISMO ancho que `.portada`.
 
    LOS CONTROLES DE SAFARI
    El `<video>` NO tiene el atributo `controls`. Pero Safari en Mac, cuando la
    preferencia de reproducción automática está en "Detener contenido
-   multimedia", bloquea el autoplay y mete SUS PROPIOS controles encima: play,
-   el tiempo, volumen, pantalla completa. Se veían arriba del sobre y arruinaban
-   la entrada. Se apagan con los pseudo-elementos ::-webkit-media-controls.
+   multimedia", bloquea el autoplay y mete SUS PROPIOS controles encima. Se
+   apagan con los pseudo-elementos ::-webkit-media-controls.
 
-   EN EL CELULAR NO CAMBIA NADA: el encuadre y el fondo viven dentro de un
-   @media de 680px para arriba, y el fondo ni se dibuja. Y todo esto toca sólo
-   el modo `carta-video`; los otros modos de sobre quedan como estaban.
+   EN EL CELULAR NO CAMBIA NADA: vive dentro de un @media de 680px para arriba.
+   Y toca sólo el modo `carta-video`.
    ============================================================================ */
 (function () {
 
   var css = [
-    /* --- fuera los controles que Safari agrega por su cuenta --- */
     '#env.carta-video #env-vid::-webkit-media-controls,',
     '#env.carta-video #env-vid::-webkit-media-controls-enclosure,',
     '#env.carta-video #env-vid::-webkit-media-controls-panel,',
     '#env.carta-video #env-vid::-webkit-media-controls-start-playback-button{',
     '  display:none!important;-webkit-appearance:none!important}',
 
-    /* --- el fondo y el viñeteado sólo existen en pantalla ancha --- */
     '#sobre-fondo,#sobre-vinieta{display:none}',
 
     '@media (min-width:680px){',
     '  #env.carta-video{background:#cfc4b4}',
 
-    /* el mismo papel del sobre, ampliado y desenfocado, llenando la pantalla */
     '  #sobre-fondo{display:block;position:absolute;inset:0;z-index:0;',
     '    background-size:cover;background-position:center;',
     '    filter:blur(64px) saturate(.7) brightness(.94);transform:scale(1.35)}',
 
-    /* un viñeteado apenas perceptible para que el centro respire */
     '  #sobre-vinieta{display:block;position:absolute;inset:0;z-index:1;',
     '    pointer-events:none;background:radial-gradient(120% 85% at 50% 50%,',
     '    rgba(0,0,0,0) 38%, rgba(0,0,0,.16) 78%, rgba(0,0,0,.30) 100%)}',
 
-    /* el sobre, centrado, del tamaño de un celular */
     '  #env.carta-video #env-vid{',
     '    inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;',
     '    height:min(84vh,843px);aspect-ratio:9/16;width:auto;max-width:92vw;',
     '    object-fit:cover;border-radius:30px;',
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
 
-    /* el "tocá el sello para abrir", justo debajo del sobre */
     '  #env.carta-video .vhint{position:absolute;left:50%;transform:translateX(-50%);',
     '    top:calc(50% + min(42vh,421px) + 18px)}',
     '}'
@@ -148,7 +143,7 @@ window.SOBRES_INVITAME = {
   }
 
   /* El motor decide el poster recién cuando arma el sobre, así que esto se
-     vuelve a llamar cada vez que cambia la clase de #env o el poster del video. */
+     vuelve a llamar cada vez que cambia la clase de #env o el poster. */
   function pintarFondo() {
     var env = document.getElementById('env');
     var vid = document.getElementById('env-vid');
@@ -182,10 +177,34 @@ window.SOBRES_INVITAME = {
       new MutationObserver(pintarFondo).observe(env, { attributes: true, attributeFilter: ['class'] });
       if (vid) new MutationObserver(pintarFondo).observe(vid, { attributes: true, attributeFilter: ['poster'] });
     }
-    /* red de seguridad por si el motor arma el sobre más tarde */
     var n = 0, t = setInterval(function () { pintarFondo(); if (++n > 40) clearInterval(t); }, 250);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
+})();
+
+
+/* ===== 3. LOS MÓDULOS =========================================================
+   Cada mejora nueva del front vive en su propio archivo dentro de /efectos/ y
+   se engancha acá con una línea. Así se puede agregar o sacar una sin tocar
+   nunca los HTML grandes (que sólo se pueden subir a mano).
+
+   Para agregar uno: crear /efectos/loquesea.js y sumarlo a la lista.
+   Para apagarlo: sacarlo de la lista. No hace falta nada más.
+
+   Se cargan con `defer`, así que no frenan la carga de la invitación.
+   ============================================================================ */
+(function () {
+  var MODULOS = [
+    '/efectos/itinerario.js'   /* la línea del itinerario se dibuja con el scroll */
+  ];
+
+  MODULOS.forEach(function (src) {
+    if (document.querySelector('script[src="' + src + '"]')) return;
+    var s = document.createElement('script');
+    s.src = src;
+    s.defer = true;
+    (document.head || document.documentElement).appendChild(s);
+  });
 })();
