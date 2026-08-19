@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invítame · cómo mostrar la fecha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Marcellus&family=Prata&family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@200;300;400&family=Great+Vibes&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  :root{ --lino:#f4efe6; --uva:#b06a7e; --tinta:#5d5348; --kraft:#e8e1d6; }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e8e1d6;color:#3a332b;font-family:Montserrat,sans-serif;
+       padding:26px 14px 80px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-family:Forum,serif;font-size:27px;font-weight:400;margin:0 0 6px;text-align:center}
+  .sub{text-align:center;font-size:13.5px;opacity:.72;margin:0 auto 32px;max-width:600px;line-height:1.6}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .caja{background:#fff;border-radius:16px;padding:16px;box-shadow:0 6px 20px rgba(60,45,30,.10)}
+  .et{font-size:11px;letter-spacing:.15em;text-transform:uppercase;opacity:.5;
+      text-align:center;margin-bottom:4px}
+  .nom{font-family:Forum,serif;font-size:16px;text-align:center;margin-bottom:12px;color:var(--uva)}
+  .lienzo{background:var(--lino);border-radius:10px;padding:26px 18px;min-height:190px;
+          display:flex;align-items:center;justify-content:center}
+
+  /* ---------- 1. TRES FOTOS ---------- */
+  .f-fotos{display:flex;gap:8px;width:100%}
+  .f-fotos .celda{position:relative;flex:1;aspect-ratio:3/4;border-radius:4px;overflow:hidden;
+                  background-size:cover;background-position:center}
+  .f-fotos .celda::after{content:"";position:absolute;inset:0;background:rgba(40,30,22,.34)}
+  .f-fotos .num{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;
+                justify-content:center;padding-bottom:10px;
+                font-family:'Cormorant Garamond',serif;font-weight:300;
+                font-size:42px;color:#fff;line-height:1}
+
+  /* ---------- 2. BARRAS ---------- */
+  .f-barras{text-align:center}
+  .f-barras .kick{font-family:Montserrat,sans-serif;font-size:10px;letter-spacing:.42em;
+                  text-transform:uppercase;opacity:.6;margin-bottom:14px}
+  .f-barras .linea{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:44px;
+                   letter-spacing:.02em;color:var(--tinta);display:flex;align-items:center;
+                   justify-content:center;gap:14px}
+  .f-barras .sep{width:1px;height:38px;background:currentColor;opacity:.4}
+
+  /* ---------- 3. APILADA ---------- */
+  .f-apilada{text-align:center;font-family:'Cormorant Garamond',serif;font-weight:300;
+             color:var(--tinta);line-height:.92}
+  .f-apilada .d{font-size:56px}
+  .f-apilada .m{font-size:38px;letter-spacing:.06em;text-transform:uppercase}
+  .f-apilada .a{font-size:56px}
+
+  /* ---------- 4. FILETES ---------- */
+  .f-filetes{text-align:center;color:var(--tinta)}
+  .f-filetes .fila{display:flex;align-items:center;justify-content:center;gap:12px}
+  .f-filetes .mes,.f-filetes .anio{font-family:Marcellus,serif;font-size:15px;
+      letter-spacing:.24em;text-transform:uppercase;opacity:.85}
+  .f-filetes .dia{font-family:Marcellus,serif;font-size:52px;line-height:1}
+  .f-filetes .raya{flex:0 0 42px;height:1px;background:currentColor;opacity:.45}
+  .f-filetes .tit{font-family:Marcellus,serif;font-size:13px;letter-spacing:.3em;
+      text-transform:uppercase;opacity:.7;margin-bottom:14px}
+
+  /* ---------- 5. CON DÍA DE LA SEMANA ---------- */
+  .f-semana{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--tinta)}
+  .f-semana .lado{font-family:Montserrat,sans-serif;font-weight:200;font-size:13px;
+                  letter-spacing:.2em;text-transform:capitalize;text-align:center;line-height:1.5}
+  .f-semana .dia{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:60px;line-height:1}
+  .f-semana .sep{width:1px;height:46px;background:currentColor;opacity:.35}
+
+  /* ---------- 6. MONOGRAMA ---------- */
+  .f-mono{text-align:center;color:var(--tinta)}
+  .f-mono .ini{font-family:Marcellus,serif;font-size:44px;letter-spacing:.06em;
+               padding-bottom:10px;border-bottom:1px solid rgba(93,83,72,.3);
+               display:inline-block;margin-bottom:14px}
+  .f-mono .fecha{font-family:Montserrat,sans-serif;font-weight:300;font-size:13px;
+                 letter-spacing:.3em}
+
+  /* ---------- 7. DÍA GRANDE ---------- */
+  .f-grande{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--tinta)}
+  .f-grande .dia{font-family:Prata,serif;font-size:74px;line-height:.85}
+  .f-grande .col{display:flex;flex-direction:column;gap:6px;font-family:Montserrat,sans-serif;
+                 font-weight:300;font-size:12px;letter-spacing:.26em;text-transform:uppercase}
+  .f-grande .col span:first-child{padding-bottom:6px;border-bottom:1px solid rgba(93,83,72,.28)}
+
+  /* ---------- 8. MANUSCRITA ---------- */
+  .f-manu{text-align:center;color:var(--tinta)}
+  .f-manu .save{font-family:Parisienne,cursive;font-size:38px;color:var(--uva);line-height:1;
+                margin-bottom:12px}
+  .f-manu .fecha{font-family:Marcellus,serif;font-size:26px;letter-spacing:.12em}
+  .f-manu .sub{font-family:Montserrat,sans-serif;font-size:10px;letter-spacing:.3em;
+               text-transform:uppercase;opacity:.6;margin-top:10px}
+
+  /* ---------- 9. TRES CÍRCULOS CON FOTO ---------- */
+  .f-circ{display:flex;gap:14px;align-items:center;justify-content:center}
+  .f-circ .c{position:relative;width:82px;height:82px;border-radius:50%;overflow:hidden;
+             background-size:cover;background-position:center}
+  .f-circ .c::after{content:"";position:absolute;inset:0;background:rgba(40,30,22,.38)}
+  .f-circ .num{position:absolute;inset:0;z-index:2;display:flex;align-items:center;
+               justify-content:center;font-family:Marcellus,serif;font-size:26px;color:#fff}
+
+  .nota{background:#fbf8f3;border:1px dashed #c3b7a2;border-radius:12px;
+        padding:16px 18px;font-size:13px;line-height:1.65;margin-top:34px}
+  .nota b{font-weight:500}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Cómo mostrar la fecha</h1>
+  <p class="sub">Nueve disposiciones, sacadas de las referencias que mandaste. Todas con la fecha
+  real de la invitación de prueba: sábado 28 de noviembre de 2026. Decime cuáles te gustan y las
+  llevo a la raspadita y al sector de la fecha.</p>
+
+  <div class="grid">
+
+    <div class="caja">
+      <div class="et">Opción 1</div><div class="nom">Tres fotos</div>
+      <div class="lienzo"><div class="f-fotos">
+        <div class="celda" style="background-image:url('/sobres/sobre-floral.jpg')"><div class="num">28</div></div>
+        <div class="celda" style="background-image:url('/sobres/sobre-marfil.jpg')"><div class="num">11</div></div>
+        <div class="celda" style="background-image:url('/sobres/sobre-flores-poster.jpg')"><div class="num">26</div></div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 2</div><div class="nom">Barras</div>
+      <div class="lienzo"><div class="f-barras">
+        <div class="kick">Save the date</div>
+        <div class="linea"><span>28</span><i class="sep"></i><span>11</span><i class="sep"></i><span>26</span></div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 3</div><div class="nom">Apilada</div>
+      <div class="lienzo"><div class="f-apilada">
+        <div class="d">28</div><div class="m">Nov</div><div class="a">26</div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 4</div><div class="nom">Con filetes</div>
+      <div class="lienzo"><div class="f-filetes">
+        <div class="tit">Save the date</div>
+        <div class="fila"><span class="mes">Nov</span><i class="raya"></i>
+          <span class="dia">28</span><i class="raya"></i><span class="anio">2026</span></div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 5</div><div class="nom">Con día de la semana</div>
+      <div class="lienzo"><div class="f-semana">
+        <div class="lado">Sábado<br>5:00 pm</div><i class="sep"></i>
+        <div class="dia">28</div><i class="sep"></i>
+        <div class="lado">Noviembre<br>2026</div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 6</div><div class="nom">Monograma arriba</div>
+      <div class="lienzo"><div class="f-mono">
+        <div class="ini">J / D</div>
+        <div class="fecha">28 · 11 · 2026</div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 7</div><div class="nom">Día grande</div>
+      <div class="lienzo"><div class="f-grande">
+        <div class="dia">28</div>
+        <div class="col"><span>Noviembre</span><span>2026</span></div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 8</div><div class="nom">Manuscrita</div>
+      <div class="lienzo"><div class="f-manu">
+        <div class="save">Save the date</div>
+        <div class="fecha">28 · 11 · 2026</div>
+        <div class="sub">Nos casamos</div>
+      </div></div>
+    </div>
+
+    <div class="caja">
+      <div class="et">Opción 9</div><div class="nom">Tres círculos con foto</div>
+      <div class="lienzo"><div class="f-circ">
+        <div class="c" style="background-image:url('/sobres/sobre-floral.jpg')"><div class="num">28</div></div>
+        <div class="c" style="background-image:url('/sobres/sobre-marfil.jpg')"><div class="num">11</div></div>
+        <div class="c" style="background-image:url('/sobres/sobre-flores-poster.jpg')"><div class="num">26</div></div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="nota">
+    <b>Dos aclaraciones.</b> En las opciones 1 y 9 puse texturas de sobre como relleno: ahí van
+    las <b>fotos de los novios</b>, que sube la diseñadora. Son las que más se parecen a tu
+    referencia de Olivia &amp; Jonathan, y son la evolución natural de las tres fichas que
+    armamos hoy: en vez de fichas vacías, cada número va sobre su propia foto.<br><br>
+    Todas se arman solas con la fecha del evento, igual que el calendario, y todas se pueden
+    combinar con la raspadita: se tapa y se revela lo que haya debajo, sea una ficha o una foto.
+  </div>
+
+</div>
+</body>
+</html>
