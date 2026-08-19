@@ -23,8 +23,8 @@
      cal        1 para encender
      calFuente  forum · marcellus · prata · montserrat      (el tipo de número)
      calMarca   corazon · circulo · cuadrado · relleno       (el marcador del día)
-     calNum     color de los números          (hex sin #, ej: 6b5f52)
-     calMk      color del marcador            (hex sin #)
+     calNum     color de los números          (hex sin #, ej: 6b5f52, o un nombre)
+     calMk      color del marcador            (hex sin #, o un nombre)
      calBg      color de fondo                (hex sin #, o un nombre de la paleta)
      calImg     imagen de fondo               (si se pone, manda sobre calBg)
      calVelo    0 a 100: cuánto se aclara la imagen para que se lean los números
@@ -32,7 +32,7 @@
      calPie     el texto de abajo             (por defecto vacío)
      calFecha   AAAA-MM-DD, sólo si hiciera falta forzarla
 
-   LA PALETA (nombres que entiende calBg y calNum)
+   LA PALETA (nombres que entienden calBg, calNum y calMk)
      lino #f4efe6 · kraft #e8e1d6 · uva #b06a7e · uvaclaro #e8d5da
      salvia #a9b8a0 · salviaclaro #dfe6db · oro #b9a56a · champagne #efe6d4
      tinta #4a4038 · blanco #ffffff
@@ -94,13 +94,11 @@
     var elM = document.getElementById('sc-mon');
     if (!elD || !elM) return null;
     var dia = parseInt((elD.textContent || '').trim(), 10);
-    var txt = (elM.textContent || '').trim();
+    var txt = (elM.textContent || '').trim().toLowerCase();
     var anio = (txt.match(/(\d{4})/) || [])[1];
     var mes = -1;
     for (var i = 0; i < 12; i++) {
-      if (txt.toLowerCase().indexOf(MESES[i].toLowerCase()) === 0 ||
-          txt.toLowerCase().indexOf(' ' + MESES[i].toLowerCase()) > -1 ||
-          txt.toLowerCase().indexOf(MESES[i].toLowerCase()) > -1) { mes = i + 1; break; }
+      if (txt.indexOf(MESES[i].toLowerCase()) > -1) { mes = i + 1; break; }
     }
     if (!dia || !anio || mes < 1) return null;
     return { y: +anio, m: mes, d: dia };
@@ -109,7 +107,11 @@
   var CSS = [
     '.ivcal{padding:56px 18px 60px;position:relative;overflow:hidden}',
     '.ivcal .ivcal-bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}',
-    '.ivcal .ivcal-in{position:relative;z-index:2;max-width:390px;margin:0 auto}',
+    /* ⚠️ el !important es a propósito: el motor le pone max-width:680px a todo lo
+       que cuelga de un sector en la compu, y con 680 las celdas quedaban de 95px.
+       Es la única propiedad que se pisa, y sólo acá adentro. */
+    'section.ivcal > .ivcal-in{position:relative;z-index:2;',
+    '  max-width:390px!important;margin-left:auto!important;margin-right:auto!important}',
     '.ivcal .ivcal-kick{font-family:\'Great Vibes\',cursive;font-size:27px;text-align:center;',
     '  margin:0 0 2px;color:var(--ivcal-mk)}',
     '.ivcal .ivcal-mes{font-size:19px;letter-spacing:.06em;text-align:center;',
@@ -124,17 +126,17 @@
     '.ivcal .ivcal-d.marcado{color:var(--ivcal-mk)}',
     '.ivcal .ivcal-num{position:relative;z-index:2}',
     '.ivcal .ivcal-mk{position:absolute;left:50%;top:50%;translate:-50% -50%;',
-    '  width:43px;height:43px;margin-top:2px;z-index:0}',
+    '  width:43px;height:43px;margin-top:1px;z-index:0}',
     '.ivcal .ivcal-mk svg{width:100%;height:100%;display:block;overflow:visible}',
     '.ivcal .ivcal-mk svg *{fill:none;stroke:var(--ivcal-mk);stroke-width:1.4}',
     '.ivcal .ivcal-mk svg .relleno{fill:var(--ivcal-mk);stroke:none;opacity:.15}',
     '.ivcal .ivcal-pie{text-align:center;margin-top:20px;font-size:14px;letter-spacing:.04em;',
     '  color:var(--ivcal-num);opacity:.85;font-family:var(--ivcal-font)}',
     /* aparece al llegar, como el resto de la invitación */
-    '.ivcal .ivcal-in{opacity:0;transform:translateY(26px);',
+    'section.ivcal > .ivcal-in{opacity:0;transform:translateY(26px);',
     '  transition:opacity .9s ease,transform .9s cubic-bezier(.22,.72,.28,1)}',
-    '.ivcal.visto .ivcal-in{opacity:1;transform:none}',
-    '@media(prefers-reduced-motion:reduce){.ivcal .ivcal-in{opacity:1;transform:none}}'
+    'section.ivcal.visto > .ivcal-in{opacity:1;transform:none}',
+    '@media(prefers-reduced-motion:reduce){section.ivcal > .ivcal-in{opacity:1;transform:none}}'
   ].join('\n');
 
   function ponerEstilos() {
