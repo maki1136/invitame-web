@@ -89,8 +89,10 @@ window.SOBRES_INVITAME = {
          · eje 399    la corona de arriba y la hojita de abajo están las dos
                       centradas ahí
          · la cara útil va de y=330 (bajo la corona) a y=775 (sobre el paisaje)
-         · a la altura de las mayúsculas la cara mide 390 px de ancho, así que
-                      el texto no puede pasar de 300 si tiene que respirar
+         · a la altura de las mayúsculas la cara mide 390 px de ancho. Con 330
+                      de tope, los dos renglones entran en cuerpo 12 y quedan
+                      36 px de aire de cada lado. Con 300 caían a 11 y se veían
+                      chicos; con 373 (sin tope) rozaban el borde.
          · la tinta está muestreada del propio grabado del paisaje
          · desde 3.45  el video dura 6,9 s: 3,3 de acercamiento y 3,6 de imagen
                       quieta. La escritura pasa entera en la parte quieta, así
@@ -110,7 +112,7 @@ window.SOBRES_INVITAME = {
       fuentes: "family=Cormorant+Garamond:wght@400&family=Pinyon+Script",
       lineas:  { k1:355, k2:379, n1:473, n2:615, filete:655, fecha:682, hora:711, lug1:743, lug2:764 },
       tam:     { k:15, n:84, nexo:42, fecha:18, hora:14, lug1:15, lug2:13 },
-      ancho:   { k:300, n:318, fecha:300, lug:306 }
+      ancho:   { k:330, n:318, fecha:300, lug:306 }
     }
   },
 
