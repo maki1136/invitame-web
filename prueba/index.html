@@ -180,7 +180,10 @@
   #env.carta-video #tri-glow,#env.carta-video #env-bloom,#env.carta-video #env-vseal,
   #env.carta-video .scene,#env.carta-video .hint{display:none!important}
   #env.carta-video #env-vid{display:block!important;position:absolute;inset:0;
-    width:100%;height:100%;object-fit:cover;z-index:2}
+    width:100%;height:100%;object-fit:cover;z-index:2;
+    /* El CSS base de #env-vid tiene scale(1.42), que era para el sobre viejo.
+       Sin este reset el video del catalogo se ve 42% ampliado y recortado. */
+    transform:none}
   #env.carta-video #env-bloom{display:none!important}
   /* Las iniciales van ENCIMA del lacre del video, y solo mientras el sobre esta
      quieto. Apenas arranca la apertura se desvanecen: si el lacre se mueve y las
@@ -2208,15 +2211,11 @@
   //           mientras el video todavia carga.
   //   img   : sin video, el sobre se dibuja por CSS con esta imagen de papel
   //           (el modo viejo; queda como respaldo).
-  var SOBRES={
-    lacre:{ nombre:"Lacre dorado (video)",
-            video:"/sobres/sobre-lacre.mp4",
-            poster:"/sobres/sobre-lacre-poster.jpg" },
-    marfil:{ nombre:"Marfil en relieve",
-             img:"/sobres/sobre-marfil.jpg",
-             lacre:"/sobres/lacre-marfil.png" },
-    floral:{ nombre:"Floral en relieve (marfil)",
-             img:"/sobres/sobre-floral.jpg" }
+  // El catalogo vive en /sobres/catalogo.js (una sola lista para el motor y el panel).
+  // Si ese archivo no cargara, queda este minimo para que el sobre no desaparezca.
+  var SOBRES = window.SOBRES_INVITAME || {
+    lacre:{ nombre:"Lacre dorado (video)", video:"/sobres/sobre-lacre.mp4",
+            poster:"/sobres/sobre-lacre-poster.jpg" }
   };
   // ===== SOBRE POR VIDEO ========================================================
   // El invitado ve el primer cuadro (sobre cerrado) al instante gracias al poster.
@@ -2727,6 +2726,7 @@
     document.addEventListener('click',function(e){ if(panel.classList.contains('show') && !panel.contains(e.target) && e.target!==btn) close(); });
   })();
 </script>
+<script src="/sobres/catalogo.js"></script>
 <script type="module" src="../firebase-inv.js?v=23"></script>
 <div class="fxlayer" id="fxlayer"></div>
 <div id="banner-prueba" style="position:fixed;top:0;left:0;right:0;z-index:2147483647;background:#b3261e;color:#fff;font:600 13px/1.4 system-ui,sans-serif;text-align:center;padding:7px 10px;letter-spacing:.3px;box-shadow:0 2px 8px rgba(0,0,0,.3)">
