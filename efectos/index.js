@@ -29,7 +29,8 @@
     '/efectos/raspadita.js',         /* la raspadita: se monta sobre la fecha */
     '/efectos/encuadre-monitor.js',  /* en compu: todo en una columna, como en el celular */
     '/efectos/pieza-carta.js',       /* escribe los nombres sobre la tarjeta del sobre */
-    '/efectos/panel-pieza.js'        /* y sus ajustes dentro del bloque ✨ Efectos */
+    '/efectos/panel-pieza.js',       /* y sus ajustes dentro del bloque ✨ Efectos */
+    '/efectos/panel-etiquetas.js'    /* nombres únicos en el panel (había 4 repetidos) */
   ];
 
   MODULOS.forEach(function (src) {
