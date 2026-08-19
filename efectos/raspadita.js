@@ -35,9 +35,16 @@
 
    POR QUÉ EL MES VA ABREVIADO EN LAS FICHAS
    Las tres fichas son iguales y van en fila dentro de una tarjeta de 300 px:
-   quedan de unos 84 px cada una. "Noviembre" entero no entra sin achicarse
+   quedan de unos 82 px cada una. "Noviembre" entero no entra sin achicarse
    tanto que se pierde. Por eso en este modo el mes va en tres letras (NOV),
-   que además le da el aire de ficha de sorteo, parejito con el día y el año.
+   que además le da aire de ficha de sorteo, parejito con el día y el año.
+
+   ⚠️ DETALLES DEL CORAZÓN (costaron dos vueltas)
+   · Las fichas llevan `box-sizing:border-box`. Sin eso, el relleno de abajo las
+     agrandaba y el texto terminaba ASOMANDO por arriba del corazón.
+   · El corazón tiene una muesca en el medio de arriba, así que el número va más
+     abajo y más chico que en las otras formas. Si no, se ve un pedacito del
+     número por la muesca antes de raspar.
 
    DE DÓNDE SACA LA FECHA
    De lo que la invitación ya muestra: #sc-day y #sc-mon.
@@ -90,8 +97,8 @@
 
   function config() {
     var f = String(opt('forma', 'raspForma') || 'cuadrado').toLowerCase();
-    if (['cuadrado','redondo','corazon','corazón'].indexOf(f) < 0) f = 'cuadrado';
     if (f === 'corazón') f = 'corazon';
+    if (['cuadrado','redondo','corazon'].indexOf(f) < 0) f = 'cuadrado';
     return {
       modo:     String(opt('modo', 'raspModo') || 'simple').toLowerCase() === 'partes' ? 'partes' : 'simple',
       forma:    f,
@@ -130,10 +137,12 @@
     /* ---- la maqueta del modo por partes: TRES FICHAS EN FILA ---- */
     '.rasp-3{position:absolute;inset:0;display:flex;align-items:center;',
     '  justify-content:center;gap:var(--r3-sep,14px)}',
-    '.rasp-3 .r3-f{display:flex;align-items:center;justify-content:center;',
-    '  width:var(--r3-lado);height:var(--r3-lado);line-height:1;text-align:center}',
-    /* en el corazón el texto sube un poco: la parte ancha está arriba */
-    '.rasp-3.f-corazon .r3-f{padding-bottom:14%}',
+    /* ⚠️ border-box: sin esto el relleno agranda la ficha y el texto se escapa */
+    '.rasp-3 .r3-f{box-sizing:border-box;display:flex;align-items:center;',
+    '  justify-content:center;width:var(--r3-lado);height:var(--r3-lado);',
+    '  line-height:1;text-align:center}',
+    /* en el corazón el texto baja: arriba está la muesca */
+    '.rasp-3.f-corazon .r3-f{padding-top:10%;padding-bottom:6%}',
     '@media(prefers-reduced-motion:reduce){.rasp-destello{display:none}}'
   ].join('\n');
 
@@ -354,9 +363,9 @@
 
     var rc = card.getBoundingClientRect();
 
-    function nuevaZona(caja) {
+    function nuevaZona(caja, forma) {
       var z = document.createElement('div');
-      z.className = 'rasp-zona f-' + cfg.forma;
+      z.className = 'rasp-zona f-' + (forma || cfg.forma);
       z.style.left = caja.left + 'px'; z.style.top = caja.top + 'px';
       z.style.width = caja.w + 'px';   z.style.height = caja.h + 'px';
       var cv = document.createElement('canvas');
@@ -367,21 +376,19 @@
       return z;
     }
 
-    function cajaDe(el, margen) {
+    function cajaDe(el) {
       var b = el.getBoundingClientRect();
-      margen = margen || 0;
       return {
-        left: Math.round(b.left - rc.left - margen),
-        top:  Math.round(b.top  - rc.top  - margen),
-        w:    Math.round(b.width  + margen * 2),
-        h:    Math.round(b.height + margen * 2)
+        left: Math.round(b.left - rc.left),
+        top:  Math.round(b.top  - rc.top),
+        w:    Math.round(b.width),
+        h:    Math.round(b.height)
       };
     }
 
     if (cfg.modo === 'partes') {
       var m = mon.match(/^(.*?)\s+(\d{4})$/);
       var mesLargo = m ? m[1] : mon, anio = m ? m[2] : '';
-      /* tres letras: entra parejo con el día y el año, y da aire de ficha */
       var mes = mesLargo.slice(0, 3).toUpperCase();
 
       /* el lado de cada ficha: que entren tres en fila con aire entre ellas */
@@ -402,21 +409,24 @@
       under.style.visibility = 'hidden';
       card.appendChild(maq);
 
-      /* tamaños propios: los del diseño original son para la maqueta vertical */
+      /* en el corazón todo va un poco más chico: hay menos superficie útil */
+      var kDia = cfg.forma === 'corazon' ? .38 : .46;
+      var kTxt = cfg.forma === 'corazon' ? .17 : .19;
+
       var d3 = maq.querySelector('#r3-dia');
       d3.style.fontFamily = estiloDia.fontFamily;
       d3.style.color = estiloDia.color;
-      d3.style.fontSize = Math.round(lado * .46) + 'px';
+      d3.style.fontSize = Math.round(lado * kDia) + 'px';
       ['#r3-mes', '#r3-anio'].forEach(function (s) {
         var e = maq.querySelector(s); if (!e) return;
         e.style.fontFamily = estiloMon.fontFamily;
         e.style.color = estiloMon.color;
         e.style.letterSpacing = '.06em';
-        e.style.fontSize = Math.round(lado * .19) + 'px';
+        e.style.fontSize = Math.round(lado * kTxt) + 'px';
       });
 
       var fichas = [
-        { el: d3,                        sig: 'Ahora el mes…' },
+        { el: d3,                            sig: 'Ahora el mes…' },
         { el: maq.querySelector('#r3-mes'),  sig: anio ? 'Y el año…' : '' },
         { el: anio ? maq.querySelector('#r3-anio') : null, sig: '' }
       ].filter(function (o) { return o.el; });
@@ -424,7 +434,7 @@
       decir('✨ Empezá por el día');
 
       var zonas = fichas.map(function (f, i) {
-        var z = nuevaZona(cajaDe(f.el, 0));
+        var z = nuevaZona(cajaDe(f.el));
         if (i > 0) z.classList.add('dormida');
         return { zona: z, sig: f.sig };
       });
@@ -444,8 +454,8 @@
       });
 
     } else {
-      var z = nuevaZona({ left: 0, top: 0, w: rc.width, h: rc.height });
-      z.className = 'rasp-zona f-cuadrado';
+      /* modo simple: una sola raspada sobre toda la tarjeta */
+      var z = nuevaZona({ left: 0, top: 0, w: rc.width, h: rc.height }, 'cuadrado');
       armarZona(z, cfg, function () {
         decir('');
         destellar(card, cfg);
