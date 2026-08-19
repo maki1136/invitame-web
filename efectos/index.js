@@ -15,8 +15,10 @@
    ============================================================================ */
 (function () {
   var MODULOS = [
-    '/efectos/itinerario.js',   /* la línea del itinerario se dibuja con el scroll */
-    '/efectos/calendario.js'    /* el calendario del mes con la fecha marcada */
+    '/efectos/itinerario.js',     /* la línea del itinerario se dibuja con el scroll */
+    '/efectos/calendario.js',     /* el calendario del mes con la fecha marcada */
+    '/efectos/panel-preview.js'   /* TEMPORAL: la previa del panel, mientras el
+                                     admin de prueba esté fuera de su carpeta */
   ];
 
   MODULOS.forEach(function (src) {
