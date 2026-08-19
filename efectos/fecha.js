@@ -25,14 +25,15 @@
      acento      / fechaAcento el color de la bajada y los detalles
      kick        / fechaKick   la bajada de arriba ("Save the date")
      pie         / fechaPie    el texto de abajo
-     hora        / fechaHora   sólo para "semana" (ej: 5:00 pm)
+     hora        / fechaHora   sólo para "semana" (ej: 20:30)
+     ini         / fechaIni    las iniciales, para "monograma"
      foto1/2/3   / fechaFoto1… las tres fotos, para "fotos" y "circulos"
 
    CÓMO SE LLEVA CON LA RASPADITA
    Cada disposición marca sus partes tapables con `data-rasp`. La raspadita las
-   busca y, si encuentra tres, puede hacer el revelado en tres tiempos (día, mes
-   y año); si encuentra una sola, tapa todo junto. Así las dos cosas se combinan
-   sin saber nada una de la otra.
+   busca y, si encuentra tres, hace el revelado en tres tiempos (día, mes y año);
+   si encuentra una sola, tapa todo junto. Así las dos cosas se combinan sin
+   saber nada una de la otra.
 
    ⚠️ Las opciones "fotos" y "circulos" necesitan TRES FOTOS. Sin ellas se
    dibujan con un fondo neutro, que sirve para probar pero no es lo lindo.
@@ -94,7 +95,6 @@
     return VALIDAS.indexOf(d) > -1 ? d : '';
   }
 
-  /* ---------- la fecha, del propio sector que ya la muestra ---------- */
   function leerFecha() {
     var elD = document.getElementById('sc-day');
     var elM = document.getElementById('sc-mon');
@@ -131,6 +131,12 @@
   }
 
   var CSS = [
+    /* ⚠️ REGLA DE CONVIVENCIA: la tapa de la raspadita tiene que quedar POR
+       ENCIMA de los números, que van en z-index 2 dentro de cada foto. Sin
+       esto, los números se leían A TRAVÉS de la capa y se arruinaba la
+       sorpresa. El polvillo va en 6 y el destello en 7, así que la tapa va 5. */
+    '.rasp-zona{z-index:5}',
+
     '.ivf{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;',
     '  padding:10px;color:var(--ivf-col);text-align:center}',
     '.ivf .ivf-kick{font-family:Montserrat,sans-serif;font-size:10px;letter-spacing:.4em;',
@@ -323,7 +329,6 @@
 
     ponerEstilos();
 
-    /* fuera lo anterior, y el canvas viejo de la raspadita del motor */
     var previo = card.querySelector('.ivf');
     if (previo) previo.remove();
     var cv = document.getElementById('scratch-cv');
