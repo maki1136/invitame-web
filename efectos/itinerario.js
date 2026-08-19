@@ -1,34 +1,26 @@
 /* ===== ITINERARIO DINÁMICO =====================================================
 
    QUÉ HACE
-   El itinerario ya tenía su línea vertical y sus puntitos, pero aparecía todo de
-   golpe. Ahora, a medida que el invitado baja:
-     · la línea se va DIBUJANDO de arriba hacia abajo, siguiendo el scroll
-     · cada momento (hora + título + descripción) ENTRA cuando le toca, uno
-       atrás del otro
-     · el puntito de cada momento hace un "pop" al llegar
+   La línea del itinerario se va DIBUJANDO de arriba hacia abajo siguiendo el
+   scroll, y cada momento (hora + título + descripción) ENTRA cuando le toca,
+   uno atrás del otro. El puntito de cada momento hace un "pop" al llegar.
 
    DOS ESTILOS
-     · "izquierda" (el de siempre): la línea al costado, el texto a la derecha
-     · "centro": la línea en el medio y los momentos alternando — uno a la
-       izquierda, el siguiente a la derecha, en zigzag
+     izquierda · la línea al costado, todo el texto a la derecha (el de siempre)
+     centro    · la línea en el medio y los momentos alternando en zigzag
 
-   CÓMO SE ELIGE
-     1. `document.body.dataset.tlEstilo = 'centro'`  ← por acá va a entrar el
-        campo del panel cuando lo agreguemos a admin.html
-     2. `?tl=centro` en la dirección  ← para probar sin tocar nada
-     3. si no se dice nada: "izquierda"
+   CÓMO SE ELIGE (panel → body → dirección web)
+     estilo / tl    izquierda · centro
+   O sea: `INVEV.fx.itinerario.estilo`, o `body.dataset.tlEstilo`, o `?tl=centro`.
 
    ⚠️ SÓLO SE VE SI EL ITINERARIO ESTÁ CARGADO COMO LISTA.
-   El motor esconde la lista (`display:none`) cuando la diseñadora cargó el
-   itinerario como IMAGEN.
-   👁 Para verlo igual: `?itinerario=lista`. Muestra la lista sólo en esa visita.
+   El motor esconde la lista (`display:none`) cuando se cargó como IMAGEN.
+   👁 Para verlo igual: `?itinerario=lista` (sólo para esa visita).
 
    ⭐ SE REARMA SOLO SI EL PANEL REPINTA
-   En la vista previa, el panel vuelve a dibujar la lista con cada cambio. Eso
-   se lleva puesta la línea de progreso (que es hija de la lista) pero deja las
-   clases en el contenedor. Antes quedaba a medias: con la animación puesta pero
-   sin línea. Ahora se detecta y se rearma.
+   En la vista previa el panel vuelve a dibujar la lista con cada cambio, y eso
+   se lleva puesta la línea de progreso. Antes quedaba a medias: con la
+   animación puesta pero sin línea. Ahora se detecta y se rearma.
 
    ACCESIBILIDAD
    Con "reducir movimiento" activado se muestra todo quieto y completo.
@@ -37,16 +29,30 @@
   'use strict';
 
   var PREVIEW_LISTA = /[?&]itinerario=lista/.test(location.search);
-  var ESTILO_URL = (location.search.match(/[?&]tl=(centro|izquierda)/) || [])[1];
+  var URLP = new URLSearchParams(location.search);
 
-  /* ¿estamos dentro de la vista previa del panel? ahí todo cambia en vivo */
   var ES_PREVIEW = (function () {
     try { return /[?&]preview/.test(location.search) || window.parent !== window; }
     catch (e) { return true; }
   })();
 
+  function delPanel(k) {
+    try {
+      var c = window.INVEV && window.INVEV.fx && window.INVEV.fx.itinerario;
+      if (!c) return null;
+      var v = c[k];
+      return (v === undefined || v === null || v === '') ? null : v;
+    } catch (e) { return null; }
+  }
+
   function estilo() {
-    return ESTILO_URL || (document.body && document.body.dataset.tlEstilo) || 'izquierda';
+    var p = delPanel('estilo');
+    if (p) return String(p).toLowerCase() === 'centro' ? 'centro' : 'izquierda';
+    var d = document.body && document.body.dataset ? document.body.dataset.tlEstilo : null;
+    if (d) return String(d).toLowerCase() === 'centro' ? 'centro' : 'izquierda';
+    var u = URLP.get('tl');
+    if (u) return String(u).toLowerCase() === 'centro' ? 'centro' : 'izquierda';
+    return 'izquierda';
   }
 
   var CSS = [
@@ -99,8 +105,6 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
-  /* Vista previa: mostrar la lista aunque el evento tenga el itinerario como
-     imagen. No toca los datos: es sólo para esta visita. */
   function forzarLista() {
     if (!PREVIEW_LISTA) return;
     [].forEach.call(document.querySelectorAll('.tl'), function (tl) {
@@ -126,10 +130,10 @@
   /* ¿está entero, o el panel repintó y quedó a medias? */
   function estaEntero(tl) {
     if (!tl.__tlListo) return false;
-    if (!tl.querySelector('.tl-prog')) return false;      /* se llevó la línea */
+    if (!tl.querySelector('.tl-prog')) return false;
     var its = momentos(tl);
     if (!its.length) return false;
-    if (!its[its.length - 1].style.transitionDelay) return false;  /* momentos nuevos */
+    if (!its[its.length - 1].style.transitionDelay) return false;
     return true;
   }
 
@@ -151,7 +155,7 @@
     var items = momentos(tl);
     if (!items.length) return;
 
-    olvidar(tl);                       /* si había un registro viejo, se descarta */
+    olvidar(tl);
     tl.__tlListo = true;
     tl.classList.add('tl-anim');
 
@@ -162,7 +166,6 @@
       tl.appendChild(prog);
     }
 
-    /* el escalonado: cada momento entra un toque después del anterior */
     items.forEach(function (it, i) { it.style.transitionDelay = (i * 0.10) + 's'; });
 
     if (window.IntersectionObserver) {
@@ -180,18 +183,15 @@
     dibujar();
   }
 
-  /* la línea sigue al scroll */
   function dibujar() {
     var h = window.innerHeight || 800;
     armados.forEach(function (a) {
-      if (!a.prog.isConnected) return;         /* el panel la borró: ya se rearmará */
+      if (!a.prog.isConnected) return;
       var r = a.tl.getBoundingClientRect();
       var p = (h * 0.82 - r.top) / (r.height + h * 0.30);
       p = p < 0 ? 0 : (p > 1 ? 1 : p);
       a.prog.style.transform = 'scaleY(' + p.toFixed(3) + ')';
 
-      /* red de seguridad: si el observador no corrió (pasa en pestañas en
-         segundo plano), igual se revelan al pasar */
       if (p > 0.02) {
         a.items.forEach(function (it) {
           if (!it.classList.contains('on') && it.getBoundingClientRect().top < h * 0.88) {
@@ -199,7 +199,6 @@
           }
         });
       }
-      /* en la previa no hay scroll real: se muestran directamente */
       if (ES_PREVIEW) a.items.forEach(function (it) { it.classList.add('on'); });
     });
   }
@@ -222,8 +221,6 @@
     buscar();
     addEventListener('scroll', alScroll, { passive: true });
     addEventListener('resize', alScroll);
-
-    /* el panel le habla a la previa por mensajes: cada uno puede repintar */
     addEventListener('message', function () { setTimeout(buscar, 60); });
 
     if (window.MutationObserver) {
@@ -234,7 +231,6 @@
     }
 
     if (ES_PREVIEW) {
-      /* en la previa se vigila siempre: la diseñadora toca y tiene que verlo */
       setInterval(buscar, 700);
     } else {
       var n = 0, t = setInterval(function () { buscar(); if (++n > 40) clearInterval(t); }, 250);
