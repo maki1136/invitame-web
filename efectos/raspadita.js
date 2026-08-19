@@ -2,49 +2,52 @@
 
    QUÉ ES
    El "pasá el dedo para descubrir" que tapa la fecha. Ya existía: una capa que
-   se borra con el dedo. Esto le agrega seis cosas y no cambia nada si está
+   se borra con el dedo. Esto le agrega lo de abajo, y no cambia nada si está
    apagado.
 
    ⚠️ VIENE APAGADA. Sin encenderla, la raspadita se comporta como siempre.
 
-   LAS SEIS COSAS
+   LO QUE HACE
    1. SE COMPLETA SOLA. Al llegar al porcentaje que se elija (por defecto 42%),
       el resto se desvanece. Nadie tiene que limpiar hasta el último rincón.
    2. POR PARTES. Tres fichas separadas, UNA AL LADO DE LA OTRA: el día, el mes
       y el año. Se raspan en orden y cada una se habilita cuando terminaste la
       anterior, así la fecha se revela en tres tiempos.
-   3. POLVILLO. Salta polvo finito mientras raspás, para que se sienta material.
-   4. DESTELLO. Cuando termina, un brillo suave cruza la fecha.
-   5. VIBRACIÓN. Una vibración cortita al completar cada ficha.
+   3. LAS FICHAS QUEDAN. No desaparecen dejando el texto suelto: debajo de la
+      capa hay una ficha de verdad — fondo, doble filete y sombra suave — que
+      queda como parte del diseño. Es lo que hace que no se vea básico.
+   4. POLVILLO. Salta polvo finito mientras raspás, para que se sienta material.
+   5. DESTELLO. Cuando termina, un brillo suave cruza la fecha.
+   6. VIBRACIÓN. Una vibración cortita al completar cada ficha.
       ⚠️ Sólo funciona en Android. iPhone no permite vibrar desde una página web
-      — es una limitación de Apple, no un error. En iPhone no pasa nada y todo
-      lo demás funciona igual.
-   6. COLOR Y FORMA ELEGIBLES. La capa puede ser plata, dorada o cualquier color
-      de la paleta; y las fichas pueden ser cuadradas, redondas o corazones.
+      — es una limitación de Apple, no un error.
+   7. COLOR Y FORMA ELEGIBLES. La capa puede ser plata, dorada o cualquier color;
+      y las fichas pueden ser cuadradas, redondas o corazones.
 
    CÓMO SE CONFIGURA (panel → body → dirección web)
-     encendido / rasp        1 para encender
-     modo      / raspModo    simple · partes
-     forma     / raspForma   cuadrado · redondo · corazon   (sólo en "partes")
-     color     / raspColor   plata · oro · o cualquier color
-     auto      / raspAuto    0 a 100 — con cuánto se completa sola (0 = nunca)
-     polvillo  / raspPolvillo   1 / 0
-     destello  / raspDestello   1 / 0
-     vibrar    / raspVibrar      1 / 0
-     grosor    / raspGrosor   el ancho del dedo al raspar (por defecto 26 px)
+     encendido / rasp          1 para encender
+     modo      / raspModo      simple · partes
+     forma     / raspForma     cuadrado · redondo · corazon   (sólo en "partes")
+     color     / raspColor     plata · oro · o cualquier color (la capa de arriba)
+     fondo     / raspFondo     el relleno de la ficha (por defecto crema)
+     linea     / raspLinea     el color del filete (por defecto, el del texto)
+     auto      / raspAuto      0 a 100 — con cuánto se completa sola (0 = nunca)
+     polvillo  / raspPolvillo  1 / 0
+     destello  / raspDestello  1 / 0
+     vibrar    / raspVibrar    1 / 0
+     grosor    / raspGrosor    el ancho del dedo al raspar (por defecto 26 px)
 
    POR QUÉ EL MES VA ABREVIADO EN LAS FICHAS
-   Las tres fichas son iguales y van en fila dentro de una tarjeta de 300 px:
-   quedan de unos 82 px cada una. "Noviembre" entero no entra sin achicarse
-   tanto que se pierde. Por eso en este modo el mes va en tres letras (NOV),
-   que además le da aire de ficha de sorteo, parejito con el día y el año.
+   Las tres son iguales y entran en una tarjeta de 300 px: quedan de unos 82 px.
+   "Noviembre" entero había que achicarlo tanto que se perdía. En tres letras
+   (NOV) queda parejo con el día y el año, con aire de ficha.
 
-   ⚠️ DETALLES DEL CORAZÓN (costaron dos vueltas)
-   · Las fichas llevan `box-sizing:border-box`. Sin eso, el relleno de abajo las
-     agrandaba y el texto terminaba ASOMANDO por arriba del corazón.
-   · El corazón tiene una muesca en el medio de arriba, así que el número va más
-     abajo y más chico que en las otras formas. Si no, se ve un pedacito del
-     número por la muesca antes de raspar.
+   ⚠️ DOS COSAS QUE COSTARON
+   · Las fichas llevan `box-sizing:border-box`. Sin eso el relleno las agrandaba
+     y el texto terminaba ASOMANDO por arriba de la forma.
+   · Los colores del SVG de la ficha van con el `#` escrito como `%23`. Si se
+     mete un `#` crudo en un data URI, el SVG no dibuja y las fichas salen
+     NEGRAS. Pasó en la primera prueba.
 
    DE DÓNDE SACA LA FECHA
    De lo que la invitación ya muestra: #sc-day y #sc-mon.
@@ -54,10 +57,13 @@
 
   var PALETA = {
     plata:'#c9c9c9', oro:'#c9a227', lino:'#f4efe6', kraft:'#e8e1d6',
-    uva:'#b06a7e', salvia:'#a9b8a0', champagne:'#efe6d4', tinta:'#4a4038'
+    uva:'#b06a7e', salvia:'#a9b8a0', champagne:'#efe6d4', tinta:'#4a4038',
+    crema:'#fbf8f3', blanco:'#ffffff'
   };
 
-  var CORAZON = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 21.2C6.2 17 2.4 13.8 2.4 9.7 2.4 6.4 5 4.1 8.1 4.1c1.9 0 3.4 .9 3.9 2.2 .5-1.3 2-2.2 3.9-2.2 3.1 0 5.7 2.3 5.7 5.6 0 4.1-3.8 7.3-9.6 11.5z' fill='black'/></svg>\")";
+  var CORAZON_MASK = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M50 92C22 72 6 58 6 40 6 24 18 14 31 14c8 0 15 4 19 10 4-6 11-10 19-10 13 0 25 10 25 26 0 18-16 32-44 52z' fill='black'/></svg>\")";
+
+  var CORAZON_D = "M50 92C22 72 6 58 6 40 6 24 18 14 31 14c8 0 15 4 19 10 4-6 11-10 19-10 13 0 25 10 25 26 0 18-16 32-44 52z";
 
   var URLP = new URLSearchParams(location.search);
 
@@ -103,12 +109,36 @@
       modo:     String(opt('modo', 'raspModo') || 'simple').toLowerCase() === 'partes' ? 'partes' : 'simple',
       forma:    f,
       color:    color(opt('color', 'raspColor'), '#c9c9c9'),
+      fondo:    color(opt('fondo', 'raspFondo'), '#fbf8f3'),
+      linea:    color(opt('linea', 'raspLinea'), ''),      /* vacío = el del texto */
       auto:     Math.max(0, Math.min(100, parseInt(opt('auto', 'raspAuto') || '42', 10))),
       polvillo: siNo(opt('polvillo', 'raspPolvillo'), true),
       destello: siNo(opt('destello', 'raspDestello'), true),
       vibrar:   siNo(opt('vibrar', 'raspVibrar'), true),
       grosor:   Math.max(10, Math.min(60, parseInt(opt('grosor', 'raspGrosor') || '26', 10)))
     };
+  }
+
+  /* La ficha que queda debajo de la capa: fondo, filete exterior y filete
+     interior. Va como imagen SVG para que sirva igual en las tres formas.
+     ⚠️ el `#` de los colores va como %23 o el SVG no dibuja. */
+  function svgFicha(forma, relleno, linea) {
+    var f = String(relleno).replace(/#/g, '%23');
+    var c = String(linea).replace(/#/g, '%23');
+    var cuerpo;
+    if (forma === 'redondo') {
+      cuerpo = "<circle cx='50' cy='50' r='48' fill='" + f + "' stroke='" + c + "' stroke-width='1.6'/>" +
+               "<circle cx='50' cy='50' r='42' fill='none' stroke='" + c + "' stroke-width='.8' opacity='.45'/>";
+    } else if (forma === 'corazon') {
+      cuerpo = "<path d='" + CORAZON_D + "' fill='" + f + "' stroke='" + c + "' stroke-width='1.6'/>" +
+               "<path d='" + CORAZON_D + "' fill='none' stroke='" + c + "' stroke-width='.8' opacity='.45' " +
+               "transform='translate(50,52) scale(.86) translate(-50,-52)'/>";
+    } else {
+      cuerpo = "<rect x='2' y='2' width='96' height='96' rx='14' fill='" + f + "' stroke='" + c + "' stroke-width='1.6'/>" +
+               "<rect x='7.5' y='7.5' width='85' height='85' rx='10' fill='none' stroke='" + c + "' stroke-width='.8' opacity='.45'/>";
+    }
+    return "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>" +
+           cuerpo + "</svg>\")";
   }
 
   var CSS = [
@@ -120,10 +150,9 @@
        Con opacity se leía el mes de antemano y se arruinaba la sorpresa. */
     '.rasp-zona.dormida canvas{filter:brightness(.84) saturate(.72);cursor:default}',
 
-    /* las formas */
     '.rasp-zona.f-cuadrado{border-radius:12px}',
     '.rasp-zona.f-redondo{border-radius:999px}',
-    '.rasp-zona.f-corazon{-webkit-mask-image:' + CORAZON + ';mask-image:' + CORAZON + ';',
+    '.rasp-zona.f-corazon{-webkit-mask-image:' + CORAZON_MASK + ';mask-image:' + CORAZON_MASK + ';',
     '  -webkit-mask-size:100% 100%;mask-size:100% 100%;',
     '  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}',
 
@@ -134,21 +163,24 @@
     '  transform:skewX(-16deg);animation:raspBrillo 1.05s cubic-bezier(.3,.5,.3,1) forwards}',
     '@keyframes raspBrillo{to{left:118%}}',
 
-    /* ---- la maqueta del modo por partes: TRES FICHAS EN FILA ---- */
+    /* ---- TRES FICHAS EN FILA, cada una con su diseño ---- */
     '.rasp-3{position:absolute;inset:0;display:flex;align-items:center;',
     '  justify-content:center;gap:var(--r3-sep,14px)}',
     /* ⚠️ border-box: sin esto el relleno agranda la ficha y el texto se escapa */
     '.rasp-3 .r3-f{box-sizing:border-box;display:flex;align-items:center;',
     '  justify-content:center;width:var(--r3-lado);height:var(--r3-lado);',
-    '  line-height:1;text-align:center}',
+    '  line-height:1;text-align:center;',
+    '  background-image:var(--r3-fondo);background-size:100% 100%;',
+    '  background-repeat:no-repeat;',
+    '  filter:drop-shadow(0 3px 9px rgba(60,45,30,.18))}',
     /* en el corazón el texto baja: arriba está la muesca */
-    '.rasp-3.f-corazon .r3-f{padding-top:10%;padding-bottom:6%}',
+    '.rasp-3.f-corazon .r3-f{padding-top:12%;padding-bottom:4%}',
     '@media(prefers-reduced-motion:reduce){.rasp-destello{display:none}}'
   ].join('\n');
 
   function ponerEstilos() {
     var v = document.getElementById('rasp-css');
-    if (v) v.remove();                       /* se regenera: el CSS lleva la forma */
+    if (v) v.remove();
     var s = document.createElement('style');
     s.id = 'rasp-css';
     s.textContent = CSS;
@@ -391,17 +423,18 @@
       var mesLargo = m ? m[1] : mon, anio = m ? m[2] : '';
       var mes = mesLargo.slice(0, 3).toUpperCase();
 
-      /* el lado de cada ficha: que entren tres en fila con aire entre ellas */
       var sep = 14;
       var lado = Math.floor(Math.min((rc.width - sep * 2 - 24) / 3, rc.height - 34));
       lado = Math.max(56, lado);
 
       var estiloDia = getComputedStyle(elDia), estiloMon = getComputedStyle(elMon);
+      var linea = cfg.linea || estiloDia.color || '#6b5f52';
 
       var maq = document.createElement('div');
       maq.className = 'rasp-3 f-' + cfg.forma;
       maq.style.setProperty('--r3-lado', lado + 'px');
       maq.style.setProperty('--r3-sep', sep + 'px');
+      maq.style.setProperty('--r3-fondo', svgFicha(cfg.forma, cfg.fondo, linea));
       maq.innerHTML =
         '<div class="r3-f" id="r3-dia">'  + dia + '</div>' +
         '<div class="r3-f" id="r3-mes">'  + mes + '</div>' +
@@ -409,9 +442,9 @@
       under.style.visibility = 'hidden';
       card.appendChild(maq);
 
-      /* en el corazón todo va un poco más chico: hay menos superficie útil */
-      var kDia = cfg.forma === 'corazon' ? .38 : .46;
-      var kTxt = cfg.forma === 'corazon' ? .17 : .19;
+      /* en el corazón todo va más chico: hay menos superficie útil */
+      var kDia = cfg.forma === 'corazon' ? .36 : .44;
+      var kTxt = cfg.forma === 'corazon' ? .16 : .18;
 
       var d3 = maq.querySelector('#r3-dia');
       d3.style.fontFamily = estiloDia.fontFamily;
@@ -454,7 +487,6 @@
       });
 
     } else {
-      /* modo simple: una sola raspada sobre toda la tarjeta */
       var z = nuevaZona({ left: 0, top: 0, w: rc.width, h: rc.height }, 'cuadrado');
       armarZona(z, cfg, function () {
         decir('');
