@@ -102,6 +102,7 @@
      desactualiza en silencio el día que se cambia la tipografía. */
   function entrar(t, maxw, size, minimo) {
     var s = size;
+    t.setAttribute('font-size', s);
     while (s > (minimo || 8)) {
       var w = 0;
       try { w = t.getComputedTextLength(); } catch (e) { break; }
@@ -164,8 +165,6 @@
 
   /* ---- 3. el tiempo ---------------------------------------------------- */
 
-  /* Cada bloque entra un poco después del anterior y sube unos píxeles
-     mientras aparece. Los tiempos son relativos al arranque de la escritura. */
   var GUION = [
     ['k',   0.45, 1.15, 9],
     ['n1',  0.95, 1.75, 14],
@@ -189,7 +188,7 @@
     }
   }
 
-  /* ---- 4. engancharse al sobre ----------------------------------------- */
+  /* ---- 4. las tipografías ---------------------------------------------- */
 
   function cargarTipografias(fams) {
     if (!fams || document.getElementById('pieza-fuentes')) return;
@@ -198,6 +197,29 @@
     l.href = 'https://fonts.googleapis.com/css2?' + fams + '&display=swap';
     document.head.appendChild(l);
   }
+
+  /* ⚠️ HAY QUE ESPERARLAS ANTES DE MEDIR.
+     El módulo achica cada renglón midiéndolo con getComputedTextLength(). Si
+     mide antes de que llegue la tipografía de Google, mide con la de respaldo
+     — que es bastante más ancha — y achica de más: en la primera versión
+     "TIENEN EL AGRADO DE INVITARTE" salía en 11 px en vez de 15, y no había
+     forma de darse cuenta mirando el código.
+     Igual no lo esperamos para siempre: a los 3 segundos seguimos con lo que
+     haya, que es mejor que quedarse sin texto. */
+  function conTipografias(G, cb) {
+    var hecho = false;
+    function fin() { if (!hecho) { hecho = true; cb(); } }
+    setTimeout(fin, 3000);
+    if (!document.fonts || !document.fonts.load) return fin();
+    var script = (G.script || '').replace(/,.*$/, '').replace(/'/g, '');
+    var serif  = (G.serif  || '').replace(/,.*$/, '').replace(/'/g, '');
+    Promise.all([
+      document.fonts.load('84px "' + script + '"'),
+      document.fonts.load('15px "' + serif  + '"')
+    ]).then(function () { return document.fonts.ready; }).then(fin)['catch'](fin);
+  }
+
+  /* ---- 5. engancharse al sobre ----------------------------------------- */
 
   function arrancar() {
     var env = document.getElementById('env');
@@ -231,43 +253,44 @@
       svg.style.width  = r.width  + 'px';
       svg.style.height = r.height + 'px';
     }
-
-    var el = construir(svg, datos(ev), G);
     calzar();
     window.addEventListener('resize', calzar);
 
-    var desde = G.desde || 0;
-    var vivo  = true;
+    conTipografias(G, function () {
+      var el = construir(svg, datos(ev), G);
+      var desde = G.desde || 0;
+      var vivo  = true;
 
-    function tic() {
-      if (!vivo) return;
-      pintar(el, vid.ended ? 999 : (vid.currentTime || 0) - desde);
-      requestAnimationFrame(tic);
-    }
-    requestAnimationFrame(tic);
-
-    /* RESPALDO. Si a los 5 segundos el video ni siquiera arrancó — Safari en
-       Mac bloquea la reproducción automática cuando la preferencia está en
-       "Detener contenido multimedia" — lo llevamos al final y dejamos el texto
-       puesto, para que el cuadro que se ve coincida con el lugar donde está
-       escrito.
-
-       ⚠️ Acá había un error: el respaldo pintaba una vez y el bucle de arriba
-       lo borraba en el cuadro siguiente, porque volvía a calcular todo desde
-       currentTime=0. Por eso ahora corta el bucle con `vivo`.
-
-       Y si el video ni siquiera cargó (readyState 0), NO escribimos: el texto
-       está medido para el cuadro final, y sobre el cuadro de apertura — que es
-       un plano abierto — caería en cualquier lado. Mejor sin texto que torcido.
-       ------------------------------------------------------------------- */
-    setTimeout(function () {
-      if (vid.currentTime > 0) return;
-      vivo = false;
-      if (vid.readyState >= 2) {
-        try { vid.currentTime = Math.max(0, (vid.duration || 0) - 0.05); } catch (e) {}
-        pintar(el, 999);
+      function tic() {
+        if (!vivo) return;
+        pintar(el, vid.ended ? 999 : (vid.currentTime || 0) - desde);
+        requestAnimationFrame(tic);
       }
-    }, 5000);
+      requestAnimationFrame(tic);
+
+      /* RESPALDO. Si a los 5 segundos el video ni siquiera arrancó — Safari en
+         Mac bloquea la reproducción automática cuando la preferencia está en
+         "Detener contenido multimedia" — lo llevamos al final y dejamos el
+         texto puesto, para que el cuadro que se ve coincida con el lugar donde
+         está escrito.
+
+         ⚠️ Acá había un error: el respaldo pintaba una vez y el bucle de
+         arriba lo borraba en el cuadro siguiente, porque volvía a calcular
+         todo desde currentTime=0. Por eso ahora corta el bucle con `vivo`.
+
+         Y si el video ni siquiera cargó (readyState 0), NO escribimos: el
+         texto está medido para el cuadro final, y sobre el cuadro de apertura
+         — que es un plano abierto — caería en cualquier lado. Mejor sin texto
+         que torcido. */
+      setTimeout(function () {
+        if (vid.currentTime > 0) return;
+        vivo = false;
+        if (vid.readyState >= 2) {
+          try { vid.currentTime = Math.max(0, (vid.duration || 0) - 0.05); } catch (e) {}
+          pintar(el, 999);
+        }
+      }, 5000);
+    });
 
     return true;
   }
