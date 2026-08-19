@@ -38,22 +38,18 @@
 
   /* ---- 1. de dónde saco cada dato ------------------------------------- */
 
-  var MESES = ['enero','febrero','marzo','abril','mayo','junio',
-               'julio','agosto','septiembre','octubre','noviembre','diciembre'];
-
-  function dosDigitos(n) { return (n < 10 ? '0' : '') + n; }
-
   function fechaYHora(ev) {
     var s = String(ev.fecha || '');
     var m = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
     if (!m) return { fecha: '', hora: '' };
-    var f = m[3] + ' · ' + m[2] + ' · ' + m[1];
-    var h = (m[4] != null) ? ('A LAS ' + m[4] + ':' + m[5] + ' HORAS') : '';
-    return { fecha: f, hora: h };
+    return {
+      fecha: m[3] + ' · ' + m[2] + ' · ' + m[1],
+      hora:  (m[4] != null) ? ('A LAS ' + m[4] + ':' + m[5] + ' HORAS') : ''
+    };
   }
 
   /* De "Strada della Val d'Orcia 14, Pienza, Siena, Italia" queremos
-     "PIENZA · SIENA": la calle no aporta y no entra. */
+     "PIENZA · SIENA": la calle no aporta y no entra en el ancho de la tarjeta. */
   function zona(dir) {
     var p = String(dir || '').split(',').map(function (s) { return s.trim(); })
               .filter(function (s) { return s.length; });
@@ -61,7 +57,7 @@
     return p.slice(1, 3).join(' · ').toUpperCase();
   }
 
-  function datos(ev, cfg) {
+  function datos(ev) {
     var fh = fechaYHora(ev);
     var pz = (ev.fx && ev.fx.pieza) || {};
     var usarFiesta = (pz.lugar !== 'ceremonia');
@@ -82,7 +78,7 @@
 
   /* ---- 2. dibujar ------------------------------------------------------ */
 
-  function svgTexto(txt, x, y, fam, size, tracking, fill, opacidad) {
+  function svgTexto(txt, x, y, fam, size, tracking, fill) {
     var t = document.createElementNS(NS, 'text');
     t.setAttribute('x', x);
     t.setAttribute('y', y);
@@ -90,30 +86,28 @@
     t.setAttribute('font-family', fam);
     t.setAttribute('font-size', size);
     t.setAttribute('fill', fill);
-    t.setAttribute('opacity', opacidad);
+    t.setAttribute('opacity', 0);
     if (tracking) {
       t.setAttribute('letter-spacing', tracking);
-      /* letter-spacing suma un hueco DESPUÉS de la última letra: sin esto el
-         texto queda corrido media letra a la izquierda. */
+      /* letter-spacing suma un hueco DESPUÉS de la última letra: sin este
+         corrimiento el renglón queda media letra a la izquierda. */
       t.setAttribute('dx', tracking / 2);
     }
     t.textContent = txt;
     return t;
   }
 
-  /* Achica la tipografía hasta que la línea entre en el ancho disponible.
-     Se mide de verdad con getComputedTextLength(): las tipografías cambian y
-     un número escrito a mano se desactualiza en silencio. */
+  /* Achica la tipografía hasta que el renglón entre en el ancho disponible.
+     Se mide de verdad con getComputedTextLength(): un número escrito a mano se
+     desactualiza en silencio el día que se cambia la tipografía. */
   function entrar(t, maxw, size, minimo) {
     var s = size;
     while (s > (minimo || 8)) {
       var w = 0;
       try { w = t.getComputedTextLength(); } catch (e) { break; }
       if (w <= maxw) break;
-      s -= 1;
-      t.setAttribute('font-size', s);
+      t.setAttribute('font-size', --s);
     }
-    return s;
   }
 
   function construir(svg, D, G) {
@@ -121,12 +115,11 @@
     var SERIF  = G.serif  || "'Cormorant Garamond',Georgia,serif";
     var SCRIPT = G.script || "'Pinyon Script',cursive";
     var eje = G.eje, L = G.lineas, T = G.tam, A = G.ancho;
-    var tinta = G.tinta, oro = G.oro;
     var el = {};
 
     function add(clave, txt, y, fam, size, tr, maxw, minimo) {
       if (!txt) return null;
-      var t = svgTexto(txt, eje, y, fam, size, tr, tinta, 0);
+      var t = svgTexto(txt, eje, y, fam, size, tr, G.tinta);
       svg.appendChild(t);
       entrar(t, maxw, size, minimo);
       (el[clave] = el[clave] || []).push(t);
@@ -139,22 +132,21 @@
     var t2 = add('n2', D.n2, L.n2, SCRIPT, T.n, 0, A.n, 44);
 
     /* El nexo va centrado ENTRE LA TINTA de los dos nombres, no entre sus
-       líneas de base: una tipografía manuscrita deja mucho aire arriba y si te
-       guiás por la caja, el nexo queda pegado al segundo nombre. */
+       líneas de base: una manuscrita deja mucho aire arriba y si te guiás por
+       la caja, el nexo queda pegado al segundo nombre. */
     if (D.nexo && t1 && t2) {
       var b1 = t1.getBBox(), b2 = t2.getBBox();
-      var tn = svgTexto(D.nexo, eje, 0, SCRIPT, T.nexo, 0, tinta, 0);
+      var tn = svgTexto(D.nexo, eje, 0, SCRIPT, T.nexo, 0, G.tinta);
       svg.appendChild(tn);
       var bn = tn.getBBox();
-      var medio = (b1.y + b1.height + b2.y) / 2;
-      tn.setAttribute('y', medio - (bn.height / 2) - bn.y);
+      tn.setAttribute('y', (b1.y + b1.height + b2.y) / 2 - bn.height / 2 - bn.y);
       el.y = [tn];
     }
 
     if (D.fecha) {
       var g = document.createElementNS(NS, 'g');
       g.setAttribute('opacity', 0);
-      g.setAttribute('stroke', oro);
+      g.setAttribute('stroke', G.oro);
       g.setAttribute('fill', 'none');
       g.innerHTML =
         '<line x1="' + (eje - 62) + '" y1="' + L.filete + '" x2="' + (eje - 17) + '" y2="' + L.filete + '"/>' +
@@ -163,17 +155,17 @@
       svg.appendChild(g);
       el.f = [g];
     }
-    add('f', D.fecha, L.fecha, SERIF, T.fecha, 6.0, A.fecha);
-    add('f', D.hora,  L.hora,  SERIF, T.hora,  3.0, A.fecha);
-    add('lug', D.lug1, L.lug1, SERIF, T.lug1, 3.2, A.lug);
-    add('lug', D.lug2, L.lug2, SERIF, T.lug2, 2.8, A.lug);
+    add('f',   D.fecha, L.fecha, SERIF, T.fecha, 6.0, A.fecha);
+    add('f',   D.hora,  L.hora,  SERIF, T.hora,  3.0, A.fecha);
+    add('lug', D.lug1,  L.lug1,  SERIF, T.lug1,  3.2, A.lug);
+    add('lug', D.lug2,  L.lug2,  SERIF, T.lug2,  2.8, A.lug);
     return el;
   }
 
   /* ---- 3. el tiempo ---------------------------------------------------- */
 
-  /* Cada bloque entra un poco después del anterior, y sube 7 px mientras
-     aparece. Los tiempos son relativos al arranque de la escritura. */
+  /* Cada bloque entra un poco después del anterior y sube unos píxeles
+     mientras aparece. Los tiempos son relativos al arranque de la escritura. */
   var GUION = [
     ['k',   0.45, 1.15, 9],
     ['n1',  0.95, 1.75, 14],
@@ -214,8 +206,7 @@
     if (!env || !vid || !ev) return false;
 
     var modelo = (ev.fx && ev.fx.sobre && ev.fx.sobre.modelo) || ev.sobreTipo;
-    var cat = window.SOBRES_INVITAME || {};
-    var G = cat[modelo] && cat[modelo].texto;
+    var G = (window.SOBRES_INVITAME || {})[modelo] && window.SOBRES_INVITAME[modelo].texto;
     if (!G) return true;                       /* este sobre no se escribe */
     if (document.getElementById('pieza-svg')) return true;
 
@@ -226,8 +217,7 @@
     svg.setAttribute('viewBox', '0 0 ' + G.base[0] + ' ' + G.base[1]);
     /* "slice" es exactamente lo que hace object-fit:cover */
     svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
-    svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;' +
-                        'pointer-events:none;z-index:3';
+    svg.style.cssText = 'position:absolute;pointer-events:none;z-index:3';
     env.appendChild(svg);
 
     /* El <svg> tiene que quedar EXACTAMENTE encima del video. En la compu el
@@ -236,30 +226,48 @@
     function calzar() {
       var r = vid.getBoundingClientRect(), e = env.getBoundingClientRect();
       if (!r.width) return;
-      svg.style.inset = 'auto';
       svg.style.left   = (r.left - e.left) + 'px';
       svg.style.top    = (r.top  - e.top)  + 'px';
       svg.style.width  = r.width  + 'px';
       svg.style.height = r.height + 'px';
     }
 
-    var el = construir(svg, datos(ev, G), G);
+    var el = construir(svg, datos(ev), G);
     calzar();
     window.addEventListener('resize', calzar);
 
     var desde = G.desde || 0;
+    var vivo  = true;
+
     function tic() {
-      pintar(el, (vid.currentTime || 0) - desde);
-      if (!vid.ended) requestAnimationFrame(tic);
-      else pintar(el, 999);
+      if (!vivo) return;
+      pintar(el, vid.ended ? 999 : (vid.currentTime || 0) - desde);
+      requestAnimationFrame(tic);
     }
     requestAnimationFrame(tic);
 
-    /* Si el video no llega a reproducirse (Safari bloqueando el autoplay, por
-       ejemplo), el texto igual tiene que estar: mejor verlo entero que no verlo. */
+    /* RESPALDO. Si a los 5 segundos el video ni siquiera arrancó — Safari en
+       Mac bloquea la reproducción automática cuando la preferencia está en
+       "Detener contenido multimedia" — lo llevamos al final y dejamos el texto
+       puesto, para que el cuadro que se ve coincida con el lugar donde está
+       escrito.
+
+       ⚠️ Acá había un error: el respaldo pintaba una vez y el bucle de arriba
+       lo borraba en el cuadro siguiente, porque volvía a calcular todo desde
+       currentTime=0. Por eso ahora corta el bucle con `vivo`.
+
+       Y si el video ni siquiera cargó (readyState 0), NO escribimos: el texto
+       está medido para el cuadro final, y sobre el cuadro de apertura — que es
+       un plano abierto — caería en cualquier lado. Mejor sin texto que torcido.
+       ------------------------------------------------------------------- */
     setTimeout(function () {
-      if (!vid.currentTime) pintar(el, 999);
-    }, 4000);
+      if (vid.currentTime > 0) return;
+      vivo = false;
+      if (vid.readyState >= 2) {
+        try { vid.currentTime = Math.max(0, (vid.duration || 0) - 0.05); } catch (e) {}
+        pintar(el, 999);
+      }
+    }, 5000);
 
     return true;
   }
