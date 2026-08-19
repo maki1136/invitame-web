@@ -33,6 +33,7 @@
               (el modo viejo; queda como respaldo).
      lacre  : imagen del sello para el modo sin video.
      color  : color sugerido para la carta, si la diseñadora no elige uno.
+     texto  : sólo en las piezas que SE ESCRIBEN SOLAS (ver más abajo).
 
    El evento guarda SOLO el id (fx.sobre.modelo), nunca la URL. Así se puede
    cambiar el video de un sobre después sin tocar ninguna invitación entregada.
@@ -70,6 +71,47 @@ window.SOBRES_INVITAME = {
     video:  "/sobres/sobre-toscana.mp4",
     poster: "/sobres/sobre-toscana-poster.jpg",
     color:  "#f7f2e8"
+  },
+
+  'carta-toscana': {
+    nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
+    video:  "/sobres/carta-toscana.mp4",
+    poster: "/sobres/carta-toscana-poster.jpg",
+    color:  "#efe7da",
+
+    /* ---- LA PIEZA SE ESCRIBE SOLA ----------------------------------------
+       Este video NO es un sobre que se abre: es una tarjeta troquelada filmada
+       con un acercamiento lento, GENERADA EN BLANCO a propósito. El módulo
+       /efectos/pieza-carta.js escribe encima los datos de la pareja que ya
+       están cargados en la invitación. Así el mismo archivo sirve para todos.
+
+       Todos estos números salen de MEDIR la imagen, no de estimarla:
+         · eje 399    la corona de arriba y la hojita de abajo están las dos
+                      centradas ahí
+         · la cara útil va de y=330 (bajo la corona) a y=775 (sobre el paisaje)
+         · a la altura de las mayúsculas la cara mide 390 px de ancho, así que
+                      el texto no puede pasar de 300 si tiene que respirar
+         · la tinta está muestreada del propio grabado del paisaje
+         · desde 3.45  el video dura 6,9 s: 3,3 de acercamiento y 3,6 de imagen
+                      quieta. La escritura pasa entera en la parte quieta, así
+                      no hay nada que seguir y el texto no se puede correr.
+
+       `lineas` son LÍNEAS DE BASE, no bordes de caja: es lo único que se
+       mantiene en su lugar si algún día cambia la tipografía.
+       -------------------------------------------------------------------- */
+    texto: {
+      base:    [720, 1280],
+      eje:     399,
+      desde:   3.45,
+      tinta:   "#705a42",
+      oro:     "#9e825c",
+      serif:   "'Cormorant Garamond',Georgia,serif",
+      script:  "'Pinyon Script',cursive",
+      fuentes: "family=Cormorant+Garamond:wght@400&family=Pinyon+Script",
+      lineas:  { k1:355, k2:379, n1:473, n2:615, filete:655, fecha:682, hora:711, lug1:743, lug2:764 },
+      tam:     { k:15, n:84, nexo:42, fecha:18, hora:14, lug1:15, lug2:13 },
+      ancho:   { k:300, n:318, fecha:300, lug:306 }
+    }
   },
 
   marfil: {
