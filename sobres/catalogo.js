@@ -2,7 +2,7 @@
    Este archivo tiene TRES partes:
      1) EL CATÁLOGO  — la lista de sobres disponibles
      2) LA PUESTA EN PANTALLA DEL SOBRE — cómo se ve y se encuadra
-     3) LOS MÓDULOS — carga los archivos de /efectos/
+     3) EL ENGANCHE  — carga /efectos/index.js, donde está la lista de módulos
 
    Vive aparte a propósito: antes todo esto estaba copiado dentro de
    prueba/index.html y prueba/admin.html (200 KB cada uno) y había que acordarse
@@ -10,8 +10,8 @@
 
    ⚠️ Se llama "catalogo.js" por historia: arrancó siendo sólo la lista de
    sobres. Hoy es además el ÚNICO enganche que tiene la invitación con archivos
-   chicos, así que de acá cuelga todo lo nuevo (ver parte 3). Renombrarlo
-   obligaría a tocar los HTML grandes, que es justo lo que se quiere evitar.
+   chicos. Renombrarlo obligaría a tocar los HTML grandes, que es justo lo que
+   se quiere evitar.
    ============================================================================ */
 
 
@@ -81,9 +81,7 @@ window.SOBRES_INVITAME = {
    LA SOLUCIÓN — un solo encuadre que sirve para los dos
    En la compu el sobre se muestra en el centro, del mismo tamaño con el que se
    ve en un celular, y el resto de la pantalla se llena con EL MISMO PAPEL del
-   sobre, muy desenfocado, más un viñeteado suave. Así la pantalla queda llena
-   (nada de bandas de color plano) y el sobre queda justo en el medio, idéntico
-   a como se ve en el teléfono.
+   sobre, muy desenfocado, más un viñeteado suave.
 
    POR QUÉ NO HAY SALTO AL ABRIR
    Le damos al sobre el alto de la portada (84vh) y la proporción del video
@@ -185,26 +183,16 @@ window.SOBRES_INVITAME = {
 })();
 
 
-/* ===== 3. LOS MÓDULOS =========================================================
-   Cada mejora nueva del front vive en su propio archivo dentro de /efectos/ y
-   se engancha acá con una línea. Así se puede agregar o sacar una sin tocar
-   nunca los HTML grandes (que sólo se pueden subir a mano).
-
-   Para agregar uno: crear /efectos/loquesea.js y sumarlo a la lista.
-   Para apagarlo: sacarlo de la lista. No hace falta nada más.
-
-   Se cargan con `defer`, así que no frenan la carga de la invitación.
+/* ===== 3. EL ENGANCHE =========================================================
+   La lista de módulos del front vive en /efectos/index.js. Se carga desde acá y
+   nada más. Así, agregar o sacar una mejora es editar ese archivo de 5 líneas,
+   y este nunca se vuelve a tocar.
    ============================================================================ */
 (function () {
-  var MODULOS = [
-    '/efectos/itinerario.js'   /* la línea del itinerario se dibuja con el scroll */
-  ];
-
-  MODULOS.forEach(function (src) {
-    if (document.querySelector('script[src="' + src + '"]')) return;
-    var s = document.createElement('script');
-    s.src = src;
-    s.defer = true;
-    (document.head || document.documentElement).appendChild(s);
-  });
+  var src = '/efectos/index.js';
+  if (document.querySelector('script[src="' + src + '"]')) return;
+  var s = document.createElement('script');
+  s.src = src;
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
 })();
