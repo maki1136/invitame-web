@@ -8,46 +8,46 @@
    ⚠️ VIENE APAGADA. Sin encenderla, la raspadita se comporta como siempre.
 
    LO QUE HACE
-   1. SE COMPLETA SOLA. Al llegar al porcentaje que se elija (por defecto 42%),
-      el resto se desvanece. Nadie tiene que limpiar hasta el último rincón.
-   2. POR PARTES. Tres fichas separadas, UNA AL LADO DE LA OTRA: el día, el mes
-      y el año. Se raspan en orden y cada una se habilita cuando terminaste la
-      anterior, así la fecha se revela en tres tiempos.
-   3. LAS FICHAS QUEDAN. No desaparecen dejando el texto suelto: debajo de la
-      capa hay una ficha de verdad — fondo, doble filete y sombra suave — que
-      queda como parte del diseño. Es lo que hace que no se vea básico.
-   4. POLVILLO. Salta polvo finito mientras raspás, para que se sienta material.
-   5. DESTELLO. Cuando termina, un brillo suave cruza la fecha.
-   6. VIBRACIÓN. Una vibración cortita al completar cada ficha.
-      ⚠️ Sólo funciona en Android. iPhone no permite vibrar desde una página web
-      — es una limitación de Apple, no un error.
-   7. COLOR Y FORMA ELEGIBLES. La capa puede ser plata, dorada o cualquier color;
-      y las fichas pueden ser cuadradas, redondas o corazones.
+   1. SE COMPLETA SOLA al llegar al porcentaje elegido (por defecto 42%).
+   2. POR PARTES: tres fichas separadas, una al lado de la otra — el día, el mes
+      y el año. Se raspan en orden; cada una se habilita al terminar la anterior.
+   3. LAS FICHAS QUEDAN. Debajo de la capa hay una ficha de verdad —fondo, doble
+      filete y sombra suave— que queda como parte del diseño.
+   4. POLVILLO mientras raspás.
+   5. DESTELLO al terminar.
+   6. VIBRACIÓN cortita al completar cada ficha.
+      ⚠️ Sólo en Android. iPhone no permite vibrar desde una web (cosa de Apple).
+   7. COLOR, FORMA Y MES a elección.
 
    CÓMO SE CONFIGURA (panel → body → dirección web)
      encendido / rasp          1 para encender
      modo      / raspModo      simple · partes
      forma     / raspForma     cuadrado · redondo · corazon   (sólo en "partes")
-     color     / raspColor     plata · oro · o cualquier color (la capa de arriba)
+     mes       / raspMes       corto (NOV) · completo (Noviembre)
+     color     / raspColor     la capa que se raspa: plata · oro · o un color
+     num       / raspNum       EL COLOR DE LOS NÚMEROS
      fondo     / raspFondo     el relleno de la ficha (por defecto crema)
-     linea     / raspLinea     el color del filete (por defecto, el del texto)
+     linea     / raspLinea     el color del filete (por defecto, el de los números)
      auto      / raspAuto      0 a 100 — con cuánto se completa sola (0 = nunca)
      polvillo  / raspPolvillo  1 / 0
      destello  / raspDestello  1 / 0
      vibrar    / raspVibrar    1 / 0
      grosor    / raspGrosor    el ancho del dedo al raspar (por defecto 26 px)
 
-   POR QUÉ EL MES VA ABREVIADO EN LAS FICHAS
-   Las tres son iguales y entran en una tarjeta de 300 px: quedan de unos 82 px.
-   "Noviembre" entero había que achicarlo tanto que se perdía. En tres letras
-   (NOV) queda parejo con el día y el año, con aire de ficha.
+   EL MES COMPLETO
+   Con "completo", la ficha del mes se ensancha para que "Noviembre" entre
+   holgado; el día y el año quedan como están. Y si la forma elegida es corazón,
+   la del mes pasa a ser una cinta redondeada: dos corazoncitos y una cinta en el
+   medio. Un corazón estirado a lo ancho se deforma y queda feo.
 
-   ⚠️ DOS COSAS QUE COSTARON
-   · Las fichas llevan `box-sizing:border-box`. Sin eso el relleno las agrandaba
-     y el texto terminaba ASOMANDO por arriba de la forma.
-   · Los colores del SVG de la ficha van con el `#` escrito como `%23`. Si se
-     mete un `#` crudo en un data URI, el SVG no dibuja y las fichas salen
-     NEGRAS. Pasó en la primera prueba.
+   ⚠️ TRES COSAS QUE COSTARON
+   · `box-sizing:border-box` en las fichas. Sin eso el relleno las agranda y el
+     texto se escapa por arriba de la forma.
+   · Los porcentajes de `padding` se calculan sobre el ANCHO DEL CONTENEDOR, no
+     del elemento: un 12% daba 36 px en vez de 10 y el número quedaba abajo de
+     todo. Por eso el ajuste del corazón va en píxeles, calculado en JS.
+   · Los colores dentro del SVG van con el `#` escrito como `%23`. Con un `#`
+     crudo el SVG no dibuja y las fichas salen NEGRAS.
 
    DE DÓNDE SACA LA FECHA
    De lo que la invitación ya muestra: #sc-day y #sc-mon.
@@ -58,12 +58,11 @@
   var PALETA = {
     plata:'#c9c9c9', oro:'#c9a227', lino:'#f4efe6', kraft:'#e8e1d6',
     uva:'#b06a7e', salvia:'#a9b8a0', champagne:'#efe6d4', tinta:'#4a4038',
-    crema:'#fbf8f3', blanco:'#ffffff'
+    crema:'#fbf8f3', blanco:'#ffffff', verde:'#5c6b57'
   };
 
-  var CORAZON_MASK = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M50 92C22 72 6 58 6 40 6 24 18 14 31 14c8 0 15 4 19 10 4-6 11-10 19-10 13 0 25 10 25 26 0 18-16 32-44 52z' fill='black'/></svg>\")";
-
   var CORAZON_D = "M50 92C22 72 6 58 6 40 6 24 18 14 31 14c8 0 15 4 19 10 4-6 11-10 19-10 13 0 25 10 25 26 0 18-16 32-44 52z";
+  var CORAZON_MASK = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='" + CORAZON_D + "' fill='black'/></svg>\")";
 
   var URLP = new URLSearchParams(location.search);
 
@@ -108,9 +107,11 @@
     return {
       modo:     String(opt('modo', 'raspModo') || 'simple').toLowerCase() === 'partes' ? 'partes' : 'simple',
       forma:    f,
+      mes:      String(opt('mes', 'raspMes') || 'corto').toLowerCase() === 'completo' ? 'completo' : 'corto',
       color:    color(opt('color', 'raspColor'), '#c9c9c9'),
+      num:      color(opt('num', 'raspNum'), ''),          /* vacío = el del diseño */
       fondo:    color(opt('fondo', 'raspFondo'), '#fbf8f3'),
-      linea:    color(opt('linea', 'raspLinea'), ''),      /* vacío = el del texto */
+      linea:    color(opt('linea', 'raspLinea'), ''),      /* vacío = el de los números */
       auto:     Math.max(0, Math.min(100, parseInt(opt('auto', 'raspAuto') || '42', 10))),
       polvillo: siNo(opt('polvillo', 'raspPolvillo'), true),
       destello: siNo(opt('destello', 'raspDestello'), true),
@@ -119,16 +120,14 @@
     };
   }
 
-  /* La ficha que queda debajo de la capa: fondo, filete exterior y filete
-     interior. Va como imagen SVG para que sirva igual en las tres formas.
-     ⚠️ el `#` de los colores va como %23 o el SVG no dibuja. */
+  /* ⚠️ el `#` de los colores va como %23 o el SVG no dibuja (fichas negras) */
   function svgFicha(forma, relleno, linea) {
     var f = String(relleno).replace(/#/g, '%23');
     var c = String(linea).replace(/#/g, '%23');
     var cuerpo;
     if (forma === 'redondo') {
-      cuerpo = "<circle cx='50' cy='50' r='48' fill='" + f + "' stroke='" + c + "' stroke-width='1.6'/>" +
-               "<circle cx='50' cy='50' r='42' fill='none' stroke='" + c + "' stroke-width='.8' opacity='.45'/>";
+      cuerpo = "<rect x='2' y='2' width='96' height='96' rx='48' fill='" + f + "' stroke='" + c + "' stroke-width='1.6'/>" +
+               "<rect x='7.5' y='7.5' width='85' height='85' rx='42' fill='none' stroke='" + c + "' stroke-width='.8' opacity='.45'/>";
     } else if (forma === 'corazon') {
       cuerpo = "<path d='" + CORAZON_D + "' fill='" + f + "' stroke='" + c + "' stroke-width='1.6'/>" +
                "<path d='" + CORAZON_D + "' fill='none' stroke='" + c + "' stroke-width='.8' opacity='.45' " +
@@ -146,8 +145,7 @@
     '.rasp-zona canvas{position:absolute;inset:0;width:100%;height:100%;',
     '  touch-action:none;cursor:grab;transition:opacity .55s ease,filter .45s ease}',
     '.rasp-zona.lista canvas{opacity:0;pointer-events:none}',
-    /* ⚠️ las fichas que todavía no tocan NO se transparentan: se apagan.
-       Con opacity se leía el mes de antemano y se arruinaba la sorpresa. */
+    /* las fichas que todavía no tocan NO se transparentan: se apagan */
     '.rasp-zona.dormida canvas{filter:brightness(.84) saturate(.72);cursor:default}',
 
     '.rasp-zona.f-cuadrado{border-radius:12px}',
@@ -166,15 +164,11 @@
     /* ---- TRES FICHAS EN FILA, cada una con su diseño ---- */
     '.rasp-3{position:absolute;inset:0;display:flex;align-items:center;',
     '  justify-content:center;gap:var(--r3-sep,14px)}',
-    /* ⚠️ border-box: sin esto el relleno agranda la ficha y el texto se escapa */
+    /* border-box: sin esto el relleno agranda la ficha y el texto se escapa */
     '.rasp-3 .r3-f{box-sizing:border-box;display:flex;align-items:center;',
-    '  justify-content:center;width:var(--r3-lado);height:var(--r3-lado);',
-    '  line-height:1;text-align:center;',
-    '  background-image:var(--r3-fondo);background-size:100% 100%;',
-    '  background-repeat:no-repeat;',
+    '  justify-content:center;height:var(--r3-lado);line-height:1;text-align:center;',
+    '  background-size:100% 100%;background-repeat:no-repeat;',
     '  filter:drop-shadow(0 3px 9px rgba(60,45,30,.18))}',
-    /* en el corazón el texto baja: arriba está la muesca */
-    '.rasp-3.f-corazon .r3-f{padding-top:12%;padding-bottom:4%}',
     '@media(prefers-reduced-motion:reduce){.rasp-destello{display:none}}'
   ].join('\n');
 
@@ -192,7 +186,6 @@
     try { if (navigator.vibrate) navigator.vibrate(patron); } catch (e) {}
   }
 
-  /* ---------- la capa que se raspa ---------- */
   function comp(hex) {
     var s = hex.replace('#', '');
     if (s.length === 3) s = s[0]+s[0]+s[1]+s[1]+s[2]+s[2];
@@ -212,7 +205,6 @@
     var w = cv.width, h = cv.height;
     g.globalCompositeOperation = 'source-over';
     g.clearRect(0, 0, w, h);
-
     var base = cfg.color;
     var grad = g.createLinearGradient(0, 0, w, h);
     grad.addColorStop(0,   aclarar(base, 26));
@@ -222,7 +214,6 @@
     grad.addColorStop(1,   oscurecer(base, 16));
     g.fillStyle = grad;
     g.fillRect(0, 0, w, h);
-
     for (var i = 0; i < (w * h) / 26; i++) {
       g.fillStyle = 'rgba(255,255,255,' + (Math.random() * .16) + ')';
       g.fillRect(Math.random() * w, Math.random() * h, 1, 1);
@@ -275,7 +266,6 @@
     else { corriendo = false; polvoCtx.clearRect(0, 0, polvo.width, polvo.height); }
   }
 
-  /* ---------- cuánto se raspó ---------- */
   function porcentaje(cv) {
     try {
       var g = cv.getContext('2d');
@@ -289,7 +279,6 @@
     } catch (e) { return 0; }
   }
 
-  /* ---------- una zona raspable ---------- */
   function armarZona(zona, cfg, alTerminar) {
     var cv = zona.querySelector('canvas');
     var g = cv.getContext('2d');
@@ -397,7 +386,7 @@
 
     function nuevaZona(caja, forma) {
       var z = document.createElement('div');
-      z.className = 'rasp-zona f-' + (forma || cfg.forma);
+      z.className = 'rasp-zona f-' + forma;
       z.style.left = caja.left + 'px'; z.style.top = caja.top + 'px';
       z.style.width = caja.w + 'px';   z.style.height = caja.h + 'px';
       var cv = document.createElement('canvas');
@@ -411,63 +400,88 @@
     function cajaDe(el) {
       var b = el.getBoundingClientRect();
       return {
-        left: Math.round(b.left - rc.left),
-        top:  Math.round(b.top  - rc.top),
-        w:    Math.round(b.width),
-        h:    Math.round(b.height)
+        left: Math.round(b.left - rc.left), top: Math.round(b.top - rc.top),
+        w: Math.round(b.width), h: Math.round(b.height)
       };
     }
 
     if (cfg.modo === 'partes') {
       var m = mon.match(/^(.*?)\s+(\d{4})$/);
       var mesLargo = m ? m[1] : mon, anio = m ? m[2] : '';
-      var mes = mesLargo.slice(0, 3).toUpperCase();
-
-      var sep = 14;
-      var lado = Math.floor(Math.min((rc.width - sep * 2 - 24) / 3, rc.height - 34));
-      lado = Math.max(56, lado);
+      var completo = (cfg.mes === 'completo');
+      var mesTxt = completo ? mesLargo : mesLargo.slice(0, 3).toUpperCase();
 
       var estiloDia = getComputedStyle(elDia), estiloMon = getComputedStyle(elMon);
-      var linea = cfg.linea || estiloDia.color || '#6b5f52';
+      var colNum = cfg.num || estiloDia.color || '#4a4038';
+      var colTxt = cfg.num || estiloMon.color || '#6b5f52';
+      var linea  = cfg.linea || colNum;
+
+      var sep = 14;
+      /* con el mes completo su ficha ocupa más, así que el lado se calcula
+         contra un ancho equivalente de ~4.1 fichas en vez de 3 */
+      var equiv = completo ? 4.1 : 3;
+      var lado = Math.floor(Math.min((rc.width - sep * 2 - 20) / equiv, rc.height - 34));
+      lado = Math.max(48, lado);
+      var anchoMes = completo ? Math.round(lado * 2.1) : lado;
+
+      /* con corazón, la ficha del mes completo pasa a cinta: un corazón
+         estirado a lo ancho se deforma */
+      var formaMes = (completo && cfg.forma === 'corazon') ? 'redondo' : cfg.forma;
 
       var maq = document.createElement('div');
-      maq.className = 'rasp-3 f-' + cfg.forma;
+      maq.className = 'rasp-3';
       maq.style.setProperty('--r3-lado', lado + 'px');
       maq.style.setProperty('--r3-sep', sep + 'px');
-      maq.style.setProperty('--r3-fondo', svgFicha(cfg.forma, cfg.fondo, linea));
       maq.innerHTML =
         '<div class="r3-f" id="r3-dia">'  + dia + '</div>' +
-        '<div class="r3-f" id="r3-mes">'  + mes + '</div>' +
+        '<div class="r3-f" id="r3-mes">'  + mesTxt + '</div>' +
         (anio ? '<div class="r3-f" id="r3-anio">' + anio + '</div>' : '');
       under.style.visibility = 'hidden';
       card.appendChild(maq);
 
-      /* en el corazón todo va más chico: hay menos superficie útil */
-      var kDia = cfg.forma === 'corazon' ? .36 : .44;
-      var kTxt = cfg.forma === 'corazon' ? .16 : .18;
+      /* ⚠️ el ajuste del corazón va en PÍXELES: los % de padding se calculan
+         sobre el ancho del contenedor y descolocaban el número */
+      function acomodar(el, forma, ancho) {
+        el.style.width = ancho + 'px';
+        el.style.backgroundImage = svgFicha(forma, cfg.fondo, linea);
+        el.style.paddingTop = '0px';
+        /* en el corazón el texto va un poco ARRIBA del centro: la masa está arriba */
+        el.style.paddingBottom = (forma === 'corazon' ? Math.round(lado * .135) : 0) + 'px';
+      }
 
       var d3 = maq.querySelector('#r3-dia');
+      var m3 = maq.querySelector('#r3-mes');
+      var a3 = anio ? maq.querySelector('#r3-anio') : null;
+
+      acomodar(d3, cfg.forma, lado);
+      acomodar(m3, formaMes, anchoMes);
+      if (a3) acomodar(a3, cfg.forma, lado);
+
+      var kDia = cfg.forma === 'corazon' ? .36 : .44;
+      var kTxt = cfg.forma === 'corazon' ? .16 : .18;
+      if (completo) kTxt = Math.min(kTxt, .155);
+
       d3.style.fontFamily = estiloDia.fontFamily;
-      d3.style.color = estiloDia.color;
+      d3.style.color = colNum;
       d3.style.fontSize = Math.round(lado * kDia) + 'px';
-      ['#r3-mes', '#r3-anio'].forEach(function (s) {
-        var e = maq.querySelector(s); if (!e) return;
+      [m3, a3].forEach(function (e) {
+        if (!e) return;
         e.style.fontFamily = estiloMon.fontFamily;
-        e.style.color = estiloMon.color;
-        e.style.letterSpacing = '.06em';
+        e.style.color = colTxt;
+        e.style.letterSpacing = completo ? '.02em' : '.06em';
         e.style.fontSize = Math.round(lado * kTxt) + 'px';
       });
 
       var fichas = [
-        { el: d3,                            sig: 'Ahora el mes…' },
-        { el: maq.querySelector('#r3-mes'),  sig: anio ? 'Y el año…' : '' },
-        { el: anio ? maq.querySelector('#r3-anio') : null, sig: '' }
+        { el: d3, forma: cfg.forma, sig: 'Ahora el mes…' },
+        { el: m3, forma: formaMes,  sig: anio ? 'Y el año…' : '' },
+        { el: a3, forma: cfg.forma, sig: '' }
       ].filter(function (o) { return o.el; });
 
       decir('✨ Empezá por el día');
 
       var zonas = fichas.map(function (f, i) {
-        var z = nuevaZona(cajaDe(f.el));
+        var z = nuevaZona(cajaDe(f.el), f.forma);
         if (i > 0) z.classList.add('dormida');
         return { zona: z, sig: f.sig };
       });
