@@ -10,32 +10,37 @@
    LAS SEIS COSAS
    1. SE COMPLETA SOLA. Al llegar al porcentaje que se elija (por defecto 42%),
       el resto se desvanece. Nadie tiene que limpiar hasta el último rincón.
-   2. POR PARTES. En vez de una sola raspada, tres: primero el día, después el
-      mes, después el año. Cada uno se habilita cuando terminaste el anterior,
-      así la fecha se revela en tres tiempos.
-   3. POLVILLO. Salta polvo finito mientras raspás, para que se sienta material
-      y no una capa que desaparece.
-   4. DESTELLO. Cuando termina, un brillo suave cruza la fecha y cierra el momento.
-   5. VIBRACIÓN. Una vibración cortita al completar cada parte.
+   2. POR PARTES. Tres fichas separadas, UNA AL LADO DE LA OTRA: el día, el mes
+      y el año. Se raspan en orden y cada una se habilita cuando terminaste la
+      anterior, así la fecha se revela en tres tiempos.
+   3. POLVILLO. Salta polvo finito mientras raspás, para que se sienta material.
+   4. DESTELLO. Cuando termina, un brillo suave cruza la fecha.
+   5. VIBRACIÓN. Una vibración cortita al completar cada ficha.
       ⚠️ Sólo funciona en Android. iPhone no permite vibrar desde una página web
-      — no es un error, es una limitación de Apple. En iPhone simplemente no pasa
-      nada; todo lo demás funciona igual.
-   6. COLOR ELEGIBLE. La capa de arriba puede ser plata, dorada, o cualquier
-      color de la paleta de la invitación, para que combine con el diseño.
+      — es una limitación de Apple, no un error. En iPhone no pasa nada y todo
+      lo demás funciona igual.
+   6. COLOR Y FORMA ELEGIBLES. La capa puede ser plata, dorada o cualquier color
+      de la paleta; y las fichas pueden ser cuadradas, redondas o corazones.
 
-   CÓMO SE CONFIGURA (igual que el resto: panel → body → dirección web)
+   CÓMO SE CONFIGURA (panel → body → dirección web)
      encendido / rasp        1 para encender
      modo      / raspModo    simple · partes
+     forma     / raspForma   cuadrado · redondo · corazon   (sólo en "partes")
      color     / raspColor   plata · oro · o cualquier color
      auto      / raspAuto    0 a 100 — con cuánto se completa sola (0 = nunca)
      polvillo  / raspPolvillo   1 / 0
      destello  / raspDestello   1 / 0
      vibrar    / raspVibrar      1 / 0
-     grosor    / raspGrosor   el ancho del dedo al raspar, en px (por defecto 26)
+     grosor    / raspGrosor   el ancho del dedo al raspar (por defecto 26 px)
+
+   POR QUÉ EL MES VA ABREVIADO EN LAS FICHAS
+   Las tres fichas son iguales y van en fila dentro de una tarjeta de 300 px:
+   quedan de unos 84 px cada una. "Noviembre" entero no entra sin achicarse
+   tanto que se pierde. Por eso en este modo el mes va en tres letras (NOV),
+   que además le da el aire de ficha de sorteo, parejito con el día y el año.
 
    DE DÓNDE SACA LA FECHA
-   De lo que la invitación ya muestra: #sc-day ("28") y #sc-mon ("Noviembre 2026").
-   Para el modo por partes separa el año del mes por el último espacio.
+   De lo que la invitación ya muestra: #sc-day y #sc-mon.
    ============================================================================ */
 (function () {
   'use strict';
@@ -44,6 +49,8 @@
     plata:'#c9c9c9', oro:'#c9a227', lino:'#f4efe6', kraft:'#e8e1d6',
     uva:'#b06a7e', salvia:'#a9b8a0', champagne:'#efe6d4', tinta:'#4a4038'
   };
+
+  var CORAZON = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 21.2C6.2 17 2.4 13.8 2.4 9.7 2.4 6.4 5 4.1 8.1 4.1c1.9 0 3.4 .9 3.9 2.2 .5-1.3 2-2.2 3.9-2.2 3.1 0 5.7 2.3 5.7 5.6 0 4.1-3.8 7.3-9.6 11.5z' fill='black'/></svg>\")";
 
   var URLP = new URLSearchParams(location.search);
 
@@ -82,8 +89,12 @@
   function encendido() { return siNo(opt('encendido', 'rasp'), false); }
 
   function config() {
+    var f = String(opt('forma', 'raspForma') || 'cuadrado').toLowerCase();
+    if (['cuadrado','redondo','corazon','corazón'].indexOf(f) < 0) f = 'cuadrado';
+    if (f === 'corazón') f = 'corazon';
     return {
       modo:     String(opt('modo', 'raspModo') || 'simple').toLowerCase() === 'partes' ? 'partes' : 'simple',
+      forma:    f,
       color:    color(opt('color', 'raspColor'), '#c9c9c9'),
       auto:     Math.max(0, Math.min(100, parseInt(opt('auto', 'raspAuto') || '42', 10))),
       polvillo: siNo(opt('polvillo', 'raspPolvillo'), true),
@@ -94,29 +105,41 @@
   }
 
   var CSS = [
-    '.rasp-zona{position:absolute;overflow:hidden;border-radius:8px}',
+    '.rasp-zona{position:absolute;overflow:hidden}',
     '.rasp-zona canvas{position:absolute;inset:0;width:100%;height:100%;',
     '  touch-action:none;cursor:grab;transition:opacity .55s ease,filter .45s ease}',
     '.rasp-zona.lista canvas{opacity:0;pointer-events:none}',
-    /* ⚠️ las partes que todavía no tocan NO se transparentan: se apagan.
+    /* ⚠️ las fichas que todavía no tocan NO se transparentan: se apagan.
        Con opacity se leía el mes de antemano y se arruinaba la sorpresa. */
     '.rasp-zona.dormida canvas{filter:brightness(.84) saturate(.72);cursor:default}',
+
+    /* las formas */
+    '.rasp-zona.f-cuadrado{border-radius:12px}',
+    '.rasp-zona.f-redondo{border-radius:999px}',
+    '.rasp-zona.f-corazon{-webkit-mask-image:' + CORAZON + ';mask-image:' + CORAZON + ';',
+    '  -webkit-mask-size:100% 100%;mask-size:100% 100%;',
+    '  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}',
+
     '#rasp-polvo{position:absolute;inset:0;pointer-events:none;z-index:6}',
     '.rasp-destello{position:absolute;inset:0;pointer-events:none;z-index:7;overflow:hidden;border-radius:10px}',
     '.rasp-destello i{position:absolute;top:-60%;bottom:-60%;width:38%;left:-45%;',
     '  background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));',
     '  transform:skewX(-16deg);animation:raspBrillo 1.05s cubic-bezier(.3,.5,.3,1) forwards}',
     '@keyframes raspBrillo{to{left:118%}}',
-    /* la maqueta del modo por partes */
-    '.rasp-3{position:absolute;inset:0;display:flex;flex-direction:column;',
-    '  align-items:center;justify-content:center;gap:2px}',
-    '.rasp-3 .r3-dia{line-height:1}',
-    '.rasp-3 .r3-fila{display:flex;align-items:baseline;gap:10px}',
+
+    /* ---- la maqueta del modo por partes: TRES FICHAS EN FILA ---- */
+    '.rasp-3{position:absolute;inset:0;display:flex;align-items:center;',
+    '  justify-content:center;gap:var(--r3-sep,14px)}',
+    '.rasp-3 .r3-f{display:flex;align-items:center;justify-content:center;',
+    '  width:var(--r3-lado);height:var(--r3-lado);line-height:1;text-align:center}',
+    /* en el corazón el texto sube un poco: la parte ancha está arriba */
+    '.rasp-3.f-corazon .r3-f{padding-bottom:14%}',
     '@media(prefers-reduced-motion:reduce){.rasp-destello{display:none}}'
   ].join('\n');
 
   function ponerEstilos() {
-    if (document.getElementById('rasp-css')) return;
+    var v = document.getElementById('rasp-css');
+    if (v) v.remove();                       /* se regenera: el CSS lleva la forma */
     var s = document.createElement('style');
     s.id = 'rasp-css';
     s.textContent = CSS;
@@ -159,7 +182,6 @@
     g.fillStyle = grad;
     g.fillRect(0, 0, w, h);
 
-    /* un grano finito, para que no parezca plástico */
     for (var i = 0; i < (w * h) / 26; i++) {
       g.fillStyle = 'rgba(255,255,255,' + (Math.random() * .16) + ')';
       g.fillRect(Math.random() * w, Math.random() * h, 1, 1);
@@ -218,7 +240,7 @@
       var g = cv.getContext('2d');
       var d = g.getImageData(0, 0, cv.width, cv.height).data;
       var vacios = 0, total = 0;
-      for (var i = 3; i < d.length; i += 4 * 16) {   /* de a 16 píxeles: alcanza */
+      for (var i = 3; i < d.length; i += 4 * 16) {
         total++;
         if (d[i] < 40) vacios++;
       }
@@ -284,10 +306,9 @@
     cv.addEventListener('touchmove', rascar, { passive: false });
     addEventListener('touchend', arriba);
 
-    return { completar: completar, esta: function () { return terminada; } };
+    return { completar: completar };
   }
 
-  /* ---------- el destello final ---------- */
   function destellar(card, cfg) {
     if (!cfg.destello) return;
     var d = document.createElement('div');
@@ -308,8 +329,7 @@
   function armar() {
     var card = document.getElementById('scratchcard');
     if (!card) return;
-
-    if (!encendido()) return;                 /* apagada: se deja como estaba */
+    if (!encendido()) return;
 
     var cfg = config();
     var firma = JSON.stringify(cfg);
@@ -317,24 +337,26 @@
     firmaVieja = firma;
 
     var under = card.querySelector('.scratch-under');
-    var dia = (document.getElementById('sc-day') || {}).textContent || '';
-    var mon = (document.getElementById('sc-mon') || {}).textContent || '';
-    dia = dia.trim(); mon = mon.trim();
+    var elDia = document.getElementById('sc-day');
+    var elMon = document.getElementById('sc-mon');
+    var dia = ((elDia || {}).textContent || '').trim();
+    var mon = ((elMon || {}).textContent || '').trim();
     if (!dia) return;
 
-    /* el canvas original y cualquier armado previo se van */
     var viejo = document.getElementById('scratch-cv');
     if (viejo) viejo.style.display = 'none';
-    [].forEach.call(card.querySelectorAll('.rasp-zona,#rasp-polvo,.rasp-destello,.rasp-3'), function (e) { e.remove(); });
+    [].forEach.call(card.querySelectorAll('.rasp-zona,#rasp-polvo,.rasp-destello,.rasp-3'),
+      function (e) { e.remove(); });
 
     ponerEstilos();
     prepararPolvo(card);
     yaArmado = true;
 
-    var zonas = [];
+    var rc = card.getBoundingClientRect();
+
     function nuevaZona(caja) {
       var z = document.createElement('div');
-      z.className = 'rasp-zona';
+      z.className = 'rasp-zona f-' + cfg.forma;
       z.style.left = caja.left + 'px'; z.style.top = caja.top + 'px';
       z.style.width = caja.w + 'px';   z.style.height = caja.h + 'px';
       var cv = document.createElement('canvas');
@@ -345,10 +367,9 @@
       return z;
     }
 
-    var rc = card.getBoundingClientRect();
     function cajaDe(el, margen) {
       var b = el.getBoundingClientRect();
-      margen = margen || 8;
+      margen = margen || 0;
       return {
         left: Math.round(b.left - rc.left - margen),
         top:  Math.round(b.top  - rc.top  - margen),
@@ -358,48 +379,58 @@
     }
 
     if (cfg.modo === 'partes') {
-      /* se separa el año del mes por el último espacio: "Noviembre 2026" */
       var m = mon.match(/^(.*?)\s+(\d{4})$/);
-      var mes = m ? m[1] : mon, anio = m ? m[2] : '';
+      var mesLargo = m ? m[1] : mon, anio = m ? m[2] : '';
+      /* tres letras: entra parejo con el día y el año, y da aire de ficha */
+      var mes = mesLargo.slice(0, 3).toUpperCase();
 
-      var elDia = document.getElementById('sc-day');
-      var elMon = document.getElementById('sc-mon');
+      /* el lado de cada ficha: que entren tres en fila con aire entre ellas */
+      var sep = 14;
+      var lado = Math.floor(Math.min((rc.width - sep * 2 - 24) / 3, rc.height - 34));
+      lado = Math.max(56, lado);
+
       var estiloDia = getComputedStyle(elDia), estiloMon = getComputedStyle(elMon);
 
       var maq = document.createElement('div');
-      maq.className = 'rasp-3';
+      maq.className = 'rasp-3 f-' + cfg.forma;
+      maq.style.setProperty('--r3-lado', lado + 'px');
+      maq.style.setProperty('--r3-sep', sep + 'px');
       maq.innerHTML =
-        '<div class="r3-dia" id="r3-dia">' + dia + '</div>' +
-        '<div class="r3-fila"><span id="r3-mes">' + mes + '</span>' +
-        (anio ? '<span id="r3-anio">' + anio + '</span>' : '') + '</div>';
+        '<div class="r3-f" id="r3-dia">'  + dia + '</div>' +
+        '<div class="r3-f" id="r3-mes">'  + mes + '</div>' +
+        (anio ? '<div class="r3-f" id="r3-anio">' + anio + '</div>' : '');
       under.style.visibility = 'hidden';
       card.appendChild(maq);
 
+      /* tamaños propios: los del diseño original son para la maqueta vertical */
       var d3 = maq.querySelector('#r3-dia');
-      d3.style.fontFamily = estiloDia.fontFamily; d3.style.fontSize = estiloDia.fontSize;
-      d3.style.color = estiloDia.color; d3.style.fontWeight = estiloDia.fontWeight;
+      d3.style.fontFamily = estiloDia.fontFamily;
+      d3.style.color = estiloDia.color;
+      d3.style.fontSize = Math.round(lado * .46) + 'px';
       ['#r3-mes', '#r3-anio'].forEach(function (s) {
         var e = maq.querySelector(s); if (!e) return;
-        e.style.fontFamily = estiloMon.fontFamily; e.style.fontSize = estiloMon.fontSize;
-        e.style.color = estiloMon.color; e.style.letterSpacing = estiloMon.letterSpacing;
+        e.style.fontFamily = estiloMon.fontFamily;
+        e.style.color = estiloMon.color;
+        e.style.letterSpacing = '.06em';
+        e.style.fontSize = Math.round(lado * .19) + 'px';
       });
 
-      var orden = [
-        { el: maq.querySelector('#r3-dia'),  txt: 'Ahora el mes…' },
-        { el: maq.querySelector('#r3-mes'),  txt: anio ? 'Y el año…' : '' },
-        { el: anio ? maq.querySelector('#r3-anio') : null, txt: '' }
+      var fichas = [
+        { el: d3,                        sig: 'Ahora el mes…' },
+        { el: maq.querySelector('#r3-mes'),  sig: anio ? 'Y el año…' : '' },
+        { el: anio ? maq.querySelector('#r3-anio') : null, sig: '' }
       ].filter(function (o) { return o.el; });
 
       decir('✨ Empezá por el día');
 
-      orden.forEach(function (o, i) {
-        var z = nuevaZona(cajaDe(o.el, i === 0 ? 10 : 8));
+      var zonas = fichas.map(function (f, i) {
+        var z = nuevaZona(cajaDe(f.el, 0));
         if (i > 0) z.classList.add('dormida');
-        zonas.push({ zona: z, sig: o.txt });
+        return { zona: z, sig: f.sig };
       });
 
       zonas.forEach(function (item, i) {
-        item.ctrl = armarZona(item.zona, cfg, function () {
+        armarZona(item.zona, cfg, function () {
           var prox = zonas[i + 1];
           if (prox) {
             prox.zona.classList.remove('dormida');
@@ -413,9 +444,8 @@
       });
 
     } else {
-      /* modo simple: una sola raspada sobre toda la tarjeta */
       var z = nuevaZona({ left: 0, top: 0, w: rc.width, h: rc.height });
-      zonas.push({ zona: z });
+      z.className = 'rasp-zona f-cuadrado';
       armarZona(z, cfg, function () {
         decir('');
         destellar(card, cfg);
@@ -427,6 +457,7 @@
   function arrancar() {
     armar();
     addEventListener('message', function () { setTimeout(armar, 80); });
+    addEventListener('resize', function () { firmaVieja = null; setTimeout(armar, 150); });
     if (ES_PREVIEW) {
       setInterval(armar, 800);
     } else {
