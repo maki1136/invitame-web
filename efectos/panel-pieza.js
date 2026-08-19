@@ -54,20 +54,35 @@
     if (typeof postPreview === 'function') { try { postPreview(); } catch (e) {} }
   }
 
-  /* ---- ¿entra el renglón? ----------------------------------------------
-     El motor achica el texto si no entra en el ancho de la tarjeta. Eso está
-     bien como red, pero la diseñadora tiene que ENTERARSE mientras escribe, no
-     descubrirlo después viendo la letra chiquita. Acá se estima el ancho con
-     el mismo criterio: el texto medido más el espaciado entre letras.
-     Es una estimación, no la medida final — por eso el aviso es suave. */
+  /* ---- ¿va a entrar el renglón? ----------------------------------------
+
+     El motor achica el texto hasta que entre en el ancho de la tarjeta. Eso
+     está bien como red, pero la diseñadora tiene que enterarse MIENTRAS
+     escribe, no descubrirlo después viendo la letra chiquita.
+
+     ⚠️ Ojo con el umbral. La primera versión avisaba en cuanto el texto no
+     entraba en el cuerpo base (15 px), y saltaba con la frase POR DEFECTO —
+     que entra perfecto en 13. Un aviso sobre el texto que viene de fábrica
+     hace parecer que el default está mal. Ahora avisa sólo cuando el renglón
+     quedaría por debajo de 11 px, que es donde empieza a leerse mal.
+     --------------------------------------------------------------------- */
   var lienzo;
-  function anchoAprox(txt, G) {
+  function anchoAprox(txt, G, cuerpo) {
     if (!txt) return 0;
     lienzo = lienzo || document.createElement('canvas');
     var c = lienzo.getContext('2d');
     var fam = (G.serif || 'Georgia,serif').replace(/'/g, '');
-    c.font = (G.tam && G.tam.k ? G.tam.k : 15) + 'px ' + fam;
+    c.font = cuerpo + 'px ' + fam;
+    /* el espaciado entre letras no existe en canvas: se suma a mano */
     return c.measureText(txt.toUpperCase()).width + 4 * Math.max(0, txt.length - 1);
+  }
+
+  function cuerpoFinal(txt, G) {
+    var base = (G.tam && G.tam.k) || 15;
+    var max  = (G.ancho && G.ancho.k) || 330;
+    var w = anchoAprox(txt, G, base);
+    if (!w || w <= max) return base;
+    return Math.max(9, Math.round(base * max / w));
   }
 
   /* ---- armar los controles --------------------------------------------- */
@@ -98,8 +113,8 @@
     i.oninput = function () {
       pieza(d)[clave] = this.value;
       if (aviso) {
-        var largo = anchoAprox(this.value, G) > ((G.ancho && G.ancho.k) || 330);
-        aviso.textContent = largo ? '⚠ es largo: va a entrar más chico' : '';
+        aviso.textContent = (cuerpoFinal(this.value, G) < 11)
+          ? '⚠ muy larga: va a quedar chiquita' : '';
       }
       refrescar();
     };
@@ -170,7 +185,7 @@
   function anclaje() {
     /* El bloque del sobre termina en el campo de las iniciales. Colgamos de
        ahí, que es donde la diseñadora ya está mirando. */
-    var ini = [...document.querySelectorAll('.mejoras input')]
+    var ini = [].slice.call(document.querySelectorAll('.mejoras input'))
                 .filter(function (e) { return /M&D/.test(e.placeholder || ''); })[0];
     if (ini) { var t = ini.closest('.two'); if (t) return t; }
     return document.querySelector('.mejoras');
@@ -179,28 +194,20 @@
   function revisar() {
     var d = borrador();
     var ya = document.getElementById(ID);
-    if (!d || !window.SOBRES_INVITAME) { if (ya) ya.remove(); return; }
-
-    if (!esPiezaEscrita(d)) { if (ya) ya.remove(); return; }
-    if (ya) return;                       /* ya está puesto */
+    if (!d || !window.SOBRES_INVITAME || !esPiezaEscrita(d)) { if (ya) ya.remove(); return; }
+    if (ya) return;                        /* ya está puesto */
 
     var a = anclaje();
-    if (!a) return;                        /* la pestaña de Efectos no está abierta */
-    var caja = construir(d);
-    if (a.parentNode) a.parentNode.insertBefore(caja, a.nextSibling);
+    if (!a || !a.parentNode) return;        /* la pestaña de Efectos no está abierta */
+    a.parentNode.insertBefore(construir(d), a.nextSibling);
   }
 
   /* El panel se redibuja entero cada vez que se toca algo, y se lleva puesto
      lo que hayamos insertado. Por eso revisamos seguido en vez de una sola vez.
-     Es barato: si el bloque ya está, la función sale en la segunda línea. */
-  if (borrador() !== null || document.querySelector('.mejoras')) {
-    setInterval(revisar, 700);
-    revisar();
-  } else {
-    /* En la invitación no hay panel: no hacemos nada. */
-    var n = 0, t = setInterval(function () {
-      if (document.querySelector('.mejoras')) { clearInterval(t); setInterval(revisar, 700); revisar(); }
-      if (++n > 40) clearInterval(t);
-    }, 500);
-  }
+     Es barato: si el bloque ya está, la función sale en la tercera línea. */
+  var n = 0;
+  var t = setInterval(function () {
+    if (borrador() || document.querySelector('.mejoras')) { clearInterval(t); setInterval(revisar, 700); revisar(); }
+    if (++n > 60) clearInterval(t);         /* no es un panel: no hacemos nada */
+  }, 500);
 })();
