@@ -96,10 +96,11 @@
   var CSS = [
     '.rasp-zona{position:absolute;overflow:hidden;border-radius:8px}',
     '.rasp-zona canvas{position:absolute;inset:0;width:100%;height:100%;',
-    '  touch-action:none;cursor:grab;transition:opacity .55s ease}',
+    '  touch-action:none;cursor:grab;transition:opacity .55s ease,filter .45s ease}',
     '.rasp-zona.lista canvas{opacity:0;pointer-events:none}',
-    '.rasp-zona.dormida{opacity:.45}',
-    '.rasp-zona.dormida canvas{cursor:default}',
+    /* ⚠️ las partes que todavía no tocan NO se transparentan: se apagan.
+       Con opacity se leía el mes de antemano y se arruinaba la sorpresa. */
+    '.rasp-zona.dormida canvas{filter:brightness(.84) saturate(.72);cursor:default}',
     '#rasp-polvo{position:absolute;inset:0;pointer-events:none;z-index:6}',
     '.rasp-destello{position:absolute;inset:0;pointer-events:none;z-index:7;overflow:hidden;border-radius:10px}',
     '.rasp-destello i{position:absolute;top:-60%;bottom:-60%;width:38%;left:-45%;',
@@ -128,6 +129,20 @@
   }
 
   /* ---------- la capa que se raspa ---------- */
+  function comp(hex) {
+    var s = hex.replace('#', '');
+    if (s.length === 3) s = s[0]+s[0]+s[1]+s[1]+s[2]+s[2];
+    return [parseInt(s.slice(0,2),16), parseInt(s.slice(2,4),16), parseInt(s.slice(4,6),16)];
+  }
+  function aclarar(hex, n) {
+    var c = comp(hex);
+    return 'rgb(' + Math.min(255,c[0]+n) + ',' + Math.min(255,c[1]+n) + ',' + Math.min(255,c[2]+n) + ')';
+  }
+  function oscurecer(hex, n) {
+    var c = comp(hex);
+    return 'rgb(' + Math.max(0,c[0]-n) + ',' + Math.max(0,c[1]-n) + ',' + Math.max(0,c[2]-n) + ')';
+  }
+
   function pintarCapa(cv, cfg) {
     var g = cv.getContext('2d');
     var w = cv.width, h = cv.height;
@@ -149,20 +164,6 @@
       g.fillStyle = 'rgba(255,255,255,' + (Math.random() * .16) + ')';
       g.fillRect(Math.random() * w, Math.random() * h, 1, 1);
     }
-  }
-
-  function comp(hex) {
-    var s = hex.replace('#', '');
-    if (s.length === 3) s = s[0]+s[0]+s[1]+s[1]+s[2]+s[2];
-    return [parseInt(s.slice(0,2),16), parseInt(s.slice(2,4),16), parseInt(s.slice(4,6),16)];
-  }
-  function aclarar(hex, n) {
-    var c = comp(hex);
-    return 'rgb(' + Math.min(255,c[0]+n) + ',' + Math.min(255,c[1]+n) + ',' + Math.min(255,c[2]+n) + ')';
-  }
-  function oscurecer(hex, n) {
-    var c = comp(hex);
-    return 'rgb(' + Math.max(0,c[0]-n) + ',' + Math.max(0,c[1]-n) + ',' + Math.max(0,c[2]-n) + ')';
   }
 
   /* ---------- el polvillo ---------- */
@@ -324,7 +325,7 @@
     /* el canvas original y cualquier armado previo se van */
     var viejo = document.getElementById('scratch-cv');
     if (viejo) viejo.style.display = 'none';
-    [].forEach.call(card.querySelectorAll('.rasp-zona,#rasp-polvo,.rasp-destello'), function (e) { e.remove(); });
+    [].forEach.call(card.querySelectorAll('.rasp-zona,#rasp-polvo,.rasp-destello,.rasp-3'), function (e) { e.remove(); });
 
     ponerEstilos();
     prepararPolvo(card);
@@ -361,7 +362,6 @@
       var m = mon.match(/^(.*?)\s+(\d{4})$/);
       var mes = m ? m[1] : mon, anio = m ? m[2] : '';
 
-      /* maqueta propia: el día arriba, mes y año abajo, lado a lado */
       var elDia = document.getElementById('sc-day');
       var elMon = document.getElementById('sc-mon');
       var estiloDia = getComputedStyle(elDia), estiloMon = getComputedStyle(elMon);
@@ -376,8 +376,8 @@
       card.appendChild(maq);
 
       var d3 = maq.querySelector('#r3-dia');
-      d3.style.font = estiloDia.font; d3.style.color = estiloDia.color;
       d3.style.fontFamily = estiloDia.fontFamily; d3.style.fontSize = estiloDia.fontSize;
+      d3.style.color = estiloDia.color; d3.style.fontWeight = estiloDia.fontWeight;
       ['#r3-mes', '#r3-anio'].forEach(function (s) {
         var e = maq.querySelector(s); if (!e) return;
         e.style.fontFamily = estiloMon.fontFamily; e.style.fontSize = estiloMon.fontSize;
