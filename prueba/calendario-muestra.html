@@ -30,9 +30,14 @@
      font-size:16.5px;line-height:1;color:var(--tinta)}
   .d.vacio{visibility:hidden}
   .d.hoy{color:var(--uva)}
-  .mk{position:absolute;left:50%;top:50%;translate:-50% -50%;width:34px;height:34px}
+
+  /* el marcador va DETRÁS del número, por eso el número lleva su propio span */
+  .mk{position:absolute;left:50%;top:50%;translate:-50% -50%;
+      width:43px;height:43px;margin-top:2px;z-index:0}
   .mk svg{width:100%;height:100%;display:block;overflow:visible}
   .mk svg *{fill:none;stroke:var(--uva);stroke-width:1.4}
+  .d .num{position:relative;z-index:2}
+
   .pie{text-align:center;margin-top:16px;font-family:Forum,serif;font-size:14px;
        letter-spacing:.04em;color:var(--tinta);opacity:.85}
   .pie .adorno{display:block;margin-top:8px;font-size:12px;opacity:.6}
@@ -53,7 +58,7 @@
   .caja .mes{font-size:14.5px;margin-bottom:11px}
   .caja .d{font-size:12.5px}
   .caja .dow{font-size:8px;letter-spacing:.1em}
-  .caja .mk{width:25px;height:25px}
+  .caja .mk{width:30px;height:30px;margin-top:1px}
   .caja .pie{display:none}
   .nota{background:#fbf8f3;border:1px dashed #c3b7a2;border-radius:12px;
         padding:15px 18px;font-size:13px;line-height:1.65;margin-top:40px}
@@ -160,7 +165,7 @@ function armar(caja){
     const esEl = n===o.d;
     html+='<div class="d'+(esEl?' hoy':'')+'">'+
           (esEl?'<span class="mk">'+(MARCAS[o.marca]||MARCAS.corazon)+'</span>':'')+
-          n+'</div>';
+          '<span class="num">'+n+'</span></div>';
   }
   html+='</div><div class="pie">Nos casamos<span class="adorno">&#9825;</span></div></div>';
   caja.innerHTML=html;
