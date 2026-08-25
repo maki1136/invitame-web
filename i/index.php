@@ -11,11 +11,29 @@ $PROJECT = 'invitame-9b51f';
 // Versión base: la que estaba viva cuando arrancó el versionado.
 $BASE_VER = '2026-07-20';
 
+/* ===== LOS SOBRES QUE SON VIDEO ===============================================
+   ⚠️ ESTA LISTA ESTÁ DUPLICADA A PROPÓSITO. La original vive en
+   /sobres/catalogo.js (los que tienen `video`). Acá hace falta otra vez porque
+   el servidor tiene que saber ANTES de mandar el HTML si este sobre es un
+   video, y no puede leer un archivo .js.
+
+   SI SE AGREGA UN SOBRE CON VIDEO AL CATÁLOGO, HAY QUE SUMARLO ACÁ TAMBIÉN.
+   Si alguien se olvida, no se rompe nada: sólo vuelve a verse el parpadeo feo
+   del sobre viejo mientras carga.
+   ============================================================================ */
+$SOBRES_VIDEO = array(
+  'lacre'         => '/sobres/sobre-lacre-poster.jpg',
+  'flores'        => '/sobres/sobre-flores-poster.jpg',
+  'lazo'          => '/sobres/sobre-lazo-poster.jpg',
+  'toscana'       => '/sobres/sobre-toscana-poster.jpg',
+  'carta-toscana' => '/sobres/carta-toscana-poster.jpg'
+);
+
 // slug seguro
 $slug = isset($_GET['e']) ? strtolower($_GET['e']) : '';
 $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
-$img = ''; $title = ''; $desc = ''; $kick = ''; $ver = '';
+$img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
 
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
@@ -75,6 +93,11 @@ if ($slug !== '') {
 
     // 5) VERSION con la que se publicó esta invitación (para que no la afecten cambios futuros)
     $ver = $sv('ver');
+
+    // 6) QUÉ SOBRE ES. Vive anidado: fx → sobre → modelo.
+    if (isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue'])) {
+      $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
+    }
   }
 }
 
@@ -98,19 +121,11 @@ $tpl = false;
    que carga /sobres/catalogo.js (y con él todos los módulos de /efectos/:
    calendario, música, raspadita, español de México, textos plegados…).
 
-   POR QUÉ HIZO FALTA
-   El motor congelado de /i/ es 24 KB más chico y NO tiene el modo `carta-video`
-   ni el enganche a los módulos. O sea que una invitación servida desde /i/ se
-   veía sin nada de lo nuevo. Y el index.html de 200 KB no se puede subir por
-   API: hay que arrastrarlo a mano. Esto lo resuelve sin mover ese archivo.
-
    ⚠️ NO ES PARA CLIENTES QUE YA PAGARON. Una invitación en `viva` CAMBIA cuando
-   cambia /prueba/. Está pensada para las MUESTRAS. Cuando una invitación de
-   verdad se entrega, se le clava una versión congelada de las de `v/`.
+   cambia /prueba/. Está pensada para las MUESTRAS.
 
    ⚠️ NINGUNA INVITACIÓN YA ENTREGADA SE VE AFECTADA: cada una conserva su
-   propio `ver` y sigue leyendo su carpeta de siempre. Esto es una rama nueva,
-   no un cambio del camino viejo.
+   propio `ver` y sigue leyendo su carpeta de siempre.
 
    El cartel rojo de zona de prueba se apaga con CSS —no se recorta del HTML—
    porque recortar con una expresión regular un div que puede tener otros divs
@@ -118,14 +133,6 @@ $tpl = false;
    ============================================================================ */
 if ($ver === 'viva') {
   $tpl = @file_get_contents(dirname(__DIR__) . '/prueba/index.html');
-  if ($tpl !== false) {
-    $apagar = '<style>#banner-prueba{display:none!important}</style>';
-    if (strpos($tpl, '</head>') !== false) {
-      $tpl = str_replace('</head>', $apagar . '</head>', $tpl);
-    } else {
-      $tpl = $apagar . $tpl;
-    }
-  }
 }
 
 if ($tpl === false && $ver !== '') {
@@ -135,6 +142,83 @@ if ($tpl === false && $ver !== '') {
 // Sin versión (o versión inexistente) => la última. Nunca rompe.
 if ($tpl === false) { $tpl = @file_get_contents(__DIR__ . '/index.html'); }
 if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
+
+
+/* ===== EL ENCUADRE DEL SOBRE, EN EL PRIMER PINTADO ============================
+
+   ⚠️⚠️ ESTO ARREGLA EL BUG MÁS FEO QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
+
+   QUÉ SE VEÍA
+   Al abrir la invitación, durante los primeros segundos —hasta que terminaba de
+   cargar el video del sobre— aparecía el sobre VIEJO (el que se dibuja por CSS)
+   a pantalla completa: una diagonal blanca gigante, el monograma de los novios
+   enorme y borroso, y el papel de fondo estirado. Recién después aparecía el
+   sobre de verdad. Pasaba en Chrome, en Safari, en el iPhone y en incógnito.
+
+   POR QUÉ NO ALCANZABA CON ARREGLARLO EN EL CSS DE /sobres/catalogo.js
+   Porque ese archivo es un `<script defer>`: corre DESPUÉS de que la página se
+   pintó por primera vez. Y sus reglas están escritas contra `#env.carta-video`,
+   una clase que TAMPOCO está en el HTML: se la agrega el motor por JavaScript.
+   O sea que había dos motivos por los que, en el primer pintado, no había NADA
+   que encuadrara el sobre. Se arregló dos veces "en el CSS" y las dos veces
+   siguió pasando, porque el problema nunca fue el CSS: era CUÁNDO llegaba.
+
+   CÓMO SE ARREGLA DE VERDAD
+   El servidor ya sabe qué sobre es (lo leyó de Firestore, más arriba). Entonces
+   mete el encuadre directamente en el `<head>`, antes de mandar el HTML. Llega
+   con la primera línea de la página: no hay ningún instante sin él.
+
+   Y como también sabe cuál es el `poster` del sobre, se lo pone de fondo al
+   `<video>`: la foto del sobre aparece al instante, en su caja correcta,
+   mientras el video todavía está bajando.
+
+   LAS REGLAS NO SE APOYAN EN LA CLASE `carta-video` — se apoyan en `#env-vid`,
+   que sí está en el HTML desde el principio. Es la diferencia entre que ande y
+   que no ande.
+
+   ⚠️ NO USAR `aspect-ratio` PARA EL ANCHO: sobre un `<video>` Safari no lo
+   aplica igual y el video se va a pantalla completa. El ancho va con `calc()`.
+   ============================================================================ */
+if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
+  $poster = $SOBRES_VIDEO[$sobre];
+  $alto  = 'min(84vh,843px)';
+  $ancho = 'calc(' . $alto . ' * 9 / 16)';
+
+  $encuadre =
+    '<style id="sobre-encuadre-servidor">' .
+    /* el sobre viejo no se muestra nunca cuando el sobre es un video */
+    '#env .triflap,#env #tri-seal,#env #triseal-ini,' .
+    '#env #e-back,#env #e-pocket,#env #e-flap{display:none!important}' .
+
+    /* el video ya nace con la foto del sobre puesta, así no hay hueco */
+    '#env-vid{background:#efe9e0 url("' . $poster . '") center/cover no-repeat}' .
+
+    '@media (min-width:680px){' .
+    '  #env{background:#cfc4b4}' .
+    '  #env-vid{' .
+    '    position:absolute!important;inset:auto!important;' .
+    '    left:50%!important;top:50%!important;' .
+    '    transform:translate(-50%,-50%)!important;z-index:2;' .
+    '    height:' . $alto . '!important;width:' . $ancho . '!important;' .
+    '    max-width:92vw!important;object-fit:cover;border-radius:30px;' .
+    '    box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
+    '}' .
+    '</style>';
+} else {
+  $encuadre = '';
+}
+
+/* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
+$apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
+
+$aInyectar = $apagarBanner . $encuadre;
+if ($aInyectar !== '') {
+  if (strpos($tpl, '</head>') !== false) {
+    $tpl = str_replace('</head>', $aInyectar . '</head>', $tpl);
+  } else {
+    $tpl = $aInyectar . $tpl;
+  }
+}
 
 // setter seguro de meta tags (reemplaza solo el content, sin romper el HTML)
 function setMeta($tpl, $attr, $key, $val) {
