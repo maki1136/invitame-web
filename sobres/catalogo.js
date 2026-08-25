@@ -147,9 +147,29 @@ window.SOBRES_INVITAME = {
    sobre, muy desenfocado, más un viñeteado suave.
 
    POR QUÉ NO HAY SALTO AL ABRIR
-   Le damos al sobre el alto de la portada (84vh) y la proporción del video
-   (9:16), así el ancho sale solo. En un monitor de altura normal eso da 474px:
-   el MISMO ancho que `.portada`.
+   Le damos al sobre el alto de la portada (84vh) y de ahí sale el ancho por la
+   proporción del video (9:16). En un monitor de altura normal eso da 474px: el
+   MISMO ancho que `.portada`.
+
+   ⚠️⚠️ NO USAR `aspect-ratio` ACÁ. ESTO SE ROMPIÓ EN PRODUCCIÓN.
+   La primera versión decía `height:min(84vh,843px); aspect-ratio:9/16;
+   width:auto`. En Chrome anda. En **Safari NO**: `aspect-ratio` sobre un
+   elemento reemplazado (`<video>`, `<img>`) no se aplica igual, el ancho se
+   resolvía solo, el video volvía a ocupar la pantalla entera con
+   `object-fit:cover` y en la Mac de Maki se veía un pedazo gigante del sobre:
+   una diagonal blanca enorme y el monograma flotando. Un desastre.
+   Ahora el ancho se calcula a mano con `calc()`, que es aritmética y anda
+   igual en todos lados. **Si alguien vuelve a poner `aspect-ratio` acá, se
+   rompe otra vez en Safari.**
+
+   Los tamaños van con `!important` a propósito: el motor arma el sobre después
+   de que carga este archivo y mete sus propios estilos. Sin `!important` gana
+   el suyo y el sobre queda a pantalla completa.
+
+   TAMPOCO se dejan a la vista las solapas del sobre viejo (`.triflap`) cuando
+   el modo es video: si el video tardaba o fallaba, asomaban abajo a tamaño de
+   pantalla completa y se veía roto. Con el video siempre está el `poster`, así
+   que nunca queda vacío.
 
    LOS CONTROLES DE SAFARI
    El `<video>` NO tiene el atributo `controls`. Pero Safari en Mac, cuando la
@@ -158,9 +178,12 @@ window.SOBRES_INVITAME = {
    apagan con los pseudo-elementos ::-webkit-media-controls.
 
    EN EL CELULAR NO CAMBIA NADA: vive dentro de un @media de 680px para arriba.
-   Y toca sólo el modo `carta-video`.
    ============================================================================ */
 (function () {
+
+  /* el alto del sobre en la compu, y el ancho que sale de la proporción 9:16 */
+  var ALTO  = 'min(84vh, 843px)';
+  var ANCHO = 'calc(' + ALTO + ' * 9 / 16)';
 
   var css = [
     '#env.carta-video #env-vid::-webkit-media-controls,',
@@ -182,11 +205,25 @@ window.SOBRES_INVITAME = {
     '    pointer-events:none;background:radial-gradient(120% 85% at 50% 50%,',
     '    rgba(0,0,0,0) 38%, rgba(0,0,0,.16) 78%, rgba(0,0,0,.30) 100%)}',
 
+    /* ⚠️ ancho por calc(), NUNCA aspect-ratio: ver la nota de arriba */
     '  #env.carta-video #env-vid{',
-    '    inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;',
-    '    height:min(84vh,843px);aspect-ratio:9/16;width:auto;max-width:92vw;',
+    '    position:absolute!important;',
+    '    inset:auto!important;',
+    '    left:50%!important;top:50%!important;',
+    '    transform:translate(-50%,-50%)!important;',
+    '    z-index:2;',
+    '    height:' + ALTO + '!important;',
+    '    width:' + ANCHO + '!important;',
+    '    max-width:92vw!important;',
     '    object-fit:cover;border-radius:30px;',
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
+
+    /* que no asome el sobre viejo por debajo del video */
+    '  #env.carta-video .triflap,',
+    '  #env.carta-video #tri-seal,',
+    '  #env.carta-video #e-back,',
+    '  #env.carta-video #e-pocket,',
+    '  #env.carta-video #e-flap{display:none!important}',
 
     '  #env.carta-video .vhint{position:absolute;left:50%;transform:translateX(-50%);',
     '    top:calc(50% + min(42vh,421px) + 18px)}',
@@ -194,12 +231,13 @@ window.SOBRES_INVITAME = {
   ].join('\n');
 
   function ponerEstilos() {
-    if (document.getElementById('sobre-encuadre')) return;
+    var v = document.getElementById('sobre-encuadre');
+    if (v) v.remove();
     var s = document.createElement('style');
     s.id = 'sobre-encuadre';
     s.textContent = css;
-    /* al final del head: así gana sobre las reglas que ya trae la página,
-       sin necesidad de !important */
+    /* al final del head, y además con !important, porque el motor mete sus
+       propios estilos DESPUÉS de que este archivo corrió */
     (document.head || document.documentElement).appendChild(s);
   }
 
@@ -228,17 +266,45 @@ window.SOBRES_INVITAME = {
     if (fondo.style.backgroundImage !== url) fondo.style.backgroundImage = url;
   }
 
+  /* ⚠️ RED DE SEGURIDAD
+     Si por lo que sea el video quedara a pantalla completa (una regla nueva del
+     motor, un navegador raro), esto lo vuelve a poner en su caja. Se mide y se
+     corrige en vivo en vez de confiar sólo en la hoja de estilo. */
+  function vigilarTamano() {
+    var env = document.getElementById('env');
+    var vid = document.getElementById('env-vid');
+    if (!env || !vid || innerWidth < 680) return;
+    if (!env.classList.contains('carta-video')) return;
+    var b = vid.getBoundingClientRect();
+    if (b.width <= innerWidth * 0.75) return;      /* está bien encuadrado */
+    var alto = Math.min(innerHeight * 0.84, 843);
+    vid.style.setProperty('position', 'absolute', 'important');
+    vid.style.setProperty('inset', 'auto', 'important');
+    vid.style.setProperty('left', '50%', 'important');
+    vid.style.setProperty('top', '50%', 'important');
+    vid.style.setProperty('transform', 'translate(-50%,-50%)', 'important');
+    vid.style.setProperty('height', alto + 'px', 'important');
+    vid.style.setProperty('width', Math.round(alto * 9 / 16) + 'px', 'important');
+  }
+
   function arrancar() {
     ponerEstilos();
     pintarFondo();
+    vigilarTamano();
 
     var env = document.getElementById('env');
     var vid = document.getElementById('env-vid');
     if (window.MutationObserver && env) {
-      new MutationObserver(pintarFondo).observe(env, { attributes: true, attributeFilter: ['class'] });
-      if (vid) new MutationObserver(pintarFondo).observe(vid, { attributes: true, attributeFilter: ['poster'] });
+      new MutationObserver(function () { pintarFondo(); vigilarTamano(); })
+        .observe(env, { attributes: true, attributeFilter: ['class'] });
+      if (vid) new MutationObserver(function () { pintarFondo(); vigilarTamano(); })
+        .observe(vid, { attributes: true, attributeFilter: ['poster', 'style'] });
     }
-    var n = 0, t = setInterval(function () { pintarFondo(); if (++n > 40) clearInterval(t); }, 250);
+    addEventListener('resize', vigilarTamano);
+    var n = 0, t = setInterval(function () {
+      pintarFondo(); vigilarTamano();
+      if (++n > 40) clearInterval(t);
+    }, 250);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
