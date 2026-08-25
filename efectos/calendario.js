@@ -18,8 +18,6 @@
    la configuración y, apenas cambia algo —un color, el tamaño, el marcador—,
    borra el calendario y lo vuelve a dibujar. Si se apaga la casilla, el sector
    desaparece. Todo sin recargar.
-   (Antes miraba sólo durante los primeros 15 segundos y después se dormía: si
-   la diseñadora tildaba la casilla más tarde, no pasaba nada.)
 
    LAS OPCIONES
      encendido / cal     1 para encender
@@ -63,16 +61,52 @@
     tinta:'#4a4038', blanco:'#ffffff', negro:'#1f1b17'
   };
 
+  /* ===== EL MARCADOR DEL DÍA =====================================================
+
+     ⚠️⚠️ EL CORAZÓN TOCABA EL NÚMERO. SE ARREGLÓ DOS VECES MAL ANTES DE ESTA.
+
+     El error no era uno solo, eran dos sumados:
+
+     1. EL DIBUJO ESTABA DESCENTRADO EN SU PROPIA CAJA. El corazón de siempre
+        iba de y=5,7 a y=20,5 dentro de un lienzo de 24×24. O sea que su centro
+        real estaba en 13,1 y no en 12: el trazo ya nacía 1,1 abajo, un 4,6%
+        de la caja.
+     2. Y ENCIMA SE LO EMPUJABA MÁS. `BAJA.corazon` valía .07, que lo bajaba
+        otro 7%.
+
+     Entre las dos cosas el corazón terminaba casi un 12% más abajo que el
+     número. Por eso el número quedaba arriba de todo, justo contra la muesca
+     donde se juntan los dos lóbulos, y parecía que el trazo lo tocaba.
+
+     Los dos intentos anteriores fueron empujones a ojo (`margin-top:2px`,
+     después `BAJA`). Empujar tapa el síntoma en un tamaño y lo rompe en otro,
+     porque el desfasaje es PROPORCIONAL a la caja.
+
+     LA SOLUCIÓN DE VERDAD: se corrigió el dibujo. El corazón de abajo va de
+     y=4,6 a y=19,4 — centro exacto en 12, igual que el lienzo. Ahora
+     `BAJA.corazon` es 0 y no hace falta empujar nada, en ningún tamaño.
+
+     ⚠️ SI ALGUIEN CAMBIA EL DIBUJO DEL CORAZÓN: que el trazo quede centrado en
+     el lienzo (arriba y abajo tienen que sobrar lo mismo). Si no, vuelve a
+     pasar. Y NO se arregla con `margin-top`.
+
+     La caja del corazón es más grande que la de las otras marcas porque el
+     trazo ocupa apenas el 62% de su alto: necesita más lienzo para que el
+     número de dos cifras quede con aire. */
   var MARCAS = {
-    corazon:'<svg viewBox="0 0 24 24"><path d="M12 20.5C7 16.8 3.6 14 3.6 10.4 3.6 7.7 5.7 5.7 8.3 5.7c1.6 0 3 .8 3.7 2 .7-1.2 2.1-2 3.7-2 2.6 0 4.7 2 4.7 4.7 0 3.6-3.4 6.4-8.4 10.1z"/></svg>',
+    corazon:'<svg viewBox="0 0 24 24"><path d="M12 19.4C7 15.7 3.6 12.9 3.6 9.3 3.6 6.6 5.7 4.6 8.3 4.6c1.6 0 3 .8 3.7 2 .7-1.2 2.1-2 3.7-2 2.6 0 4.7 2 4.7 4.7 0 3.6-3.4 6.4-8.4 10.1z"/></svg>',
     circulo:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.6"/></svg>',
     cuadrado:'<svg viewBox="0 0 24 24"><rect x="2.6" y="2.6" width="18.8" height="18.8" rx="2.4"/></svg>',
     relleno:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.6" class="relleno"/><circle cx="12" cy="12" r="9.6"/></svg>'
   };
 
-  /* el corazón necesita más caja: su parte ancha está arriba y el pico abajo */
-  var CAJA = { corazon: 1.05, circulo: .94, cuadrado: .92, relleno: .94 };
-  var BAJA = { corazon: .07, circulo: .02, cuadrado: .02, relleno: .02 };
+  /* cuánto lienzo se le da a cada marca, en proporción al ancho de una celda */
+  var CAJA = { corazon: 1.20, circulo: .94, cuadrado: .92, relleno: .94 };
+
+  /* ⚠️ TODOS EN CERO. El corazón ya viene centrado de origen: si acá se pone
+     un número, se vuelve a descolocar. Se deja la tabla porque una marca
+     futura podría necesitarlo, pero el corazón NO. */
+  var BAJA = { corazon: 0, circulo: 0, cuadrado: 0, relleno: 0 };
 
   var FUENTES = {
     forum:"'Forum',serif", marcellus:"'Marcellus',serif",
@@ -185,6 +219,7 @@
     '.ivcal .ivcal-d.vacio{visibility:hidden}',
     '.ivcal .ivcal-d.marcado{color:var(--ivcal-mk)}',
     '.ivcal .ivcal-num{position:relative;z-index:2}',
+    /* el marcador va centrado en la celda y NO se empuja: ver la nota de arriba */
     '.ivcal .ivcal-mk{position:absolute;left:50%;top:50%;translate:-50% -50%;z-index:0;',
     '  width:calc(var(--ivcal-w)/7*var(--ivcal-caja));',
     '  height:calc(var(--ivcal-w)/7*var(--ivcal-caja));',
@@ -202,7 +237,8 @@
   ].join('\n');
 
   function ponerEstilos() {
-    if (document.getElementById('ivcal-css')) return;
+    var v = document.getElementById('ivcal-css');
+    if (v) v.remove();
     var s = document.createElement('style');
     s.id = 'ivcal-css';
     s.textContent = CSS;
