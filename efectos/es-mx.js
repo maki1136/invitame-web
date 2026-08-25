@@ -13,11 +13,21 @@
    mexicana. Sólo toca los textos FIJOS del motor: nada de lo que escriben las
    diseñadoras ni los novios.
 
-   CÓMO COMPARA — y por qué importa
-   Por PALABRA ENTERA, no por pedacito. Si se buscara "entrá" suelto adentro de
-   cualquier texto, "entrátela" o un nombre propio podrían salir cambiados. Con
-   límite de palabra eso no puede pasar. Y respeta la mayúscula inicial: si
-   decía "Ingresá" queda "Ingresa", y si decía "ingresá" queda "ingresa".
+   DE DÓNDE SALE LA LISTA — esto importa
+   No se armó a ojo mirando la pantalla: se sacó del `index.html` entero,
+   buscando todas las palabras de voseo del motor de una sola vez. Son 18.
+   Buscarlas mirando la pantalla no alcanza, porque muchas recién aparecen
+   cuando el invitado abre el sobre, juega a ¡Pregúntame! o manda el
+   formulario, y así siempre se escapa alguna.
+
+   ⚠️ NO SON VOSEO, no tocarlas nunca: "Mamá", "Papá", "está", "esté", "aquí",
+   "asistiré", "podré". Terminan igual pero son correctas en todo el idioma.
+   Si alguna se colara en la lista, la invitación diría "Mama y Papa".
+
+   CÓMO COMPARA
+   Por PALABRA ENTERA, no por pedacito, así ningún apellido ni palabra larga
+   sale cambiada de adentro. Y respeta la mayúscula inicial: "Ingresá" queda
+   "Ingresa" y "ingresá" queda "ingresa".
 
    CUÁNDO SE ACTIVA
    · Si `INVEV.idioma` dice México (es lo normal), o
@@ -25,9 +35,14 @@
    · con `?mx=1` para probar.
    Si el evento estuviera en español rioplatense, no hace nada.
 
-   ⚠️ OJO AL AGREGAR PALABRAS: no sumar "vos" ni "che" a la lista de palabras
-   sueltas. "vos" aparece adentro de otras palabras y de apellidos, y el
-   reemplazo por "tú" rompería frases enteras.
+   ⚠️ AL AGREGAR PALABRAS: no sumar "vos" ni "che". Aparecen adentro de otras
+   palabras y de apellidos, y el reemplazo rompería frases enteras.
+
+   CÓMO VOLVER A CHEQUEAR SI EL MOTOR CAMBIA
+   En la consola de la invitación:
+     fetch('/prueba/index.html').then(r=>r.text()).then(s=>
+       console.log([...new Set(s.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{3,}(á|é|í)(?![\wÁÉÍÓÚÜÑáéíóúüñ])/g))].sort()))
+   y comparar contra PALABRAS.
 
    PENDIENTE: cuando haya que subir el `index.html` a mano, corregir los textos
    en el origen y borrar este módulo. Mientras tanto esto lo resuelve sin tocar
@@ -36,38 +51,52 @@
 (function () {
   'use strict';
 
-  /* Frases completas. Se cambian primero, porque algunas se traducen distinto
-     que la palabra suelta ("Pasá la voz" no es "Pasa la voz", es "Corre la voz"). */
+  /* Frases completas. Van primero, porque algunas se traducen distinto que la
+     palabra suelta ("Pasá la voz" no es "Pasa la voz", es "Corre la voz"). */
   var FRASES = [
     ['Pasá el dedo para descubrir', 'Desliza el dedo para descubrir'],
     ['Pasá la voz',                 'Corre la voz'],
     ['Si querés tener un detalle',  'Si quieres tener un detalle'],
-    ['dejamos nuestras mesas',      'aquí están nuestras mesas'],
-    ['Tu presencia es nuestro mejor regalo',
-     'Tu presencia es nuestro mejor regalo']
+    ['dejamos nuestras mesas',      'aquí están nuestras mesas']
   ];
 
-  /* Palabras sueltas, comparadas enteras. Todo en minúscula: la mayúscula
-     inicial se devuelve después si la traía. */
+  /* Palabras sueltas, comparadas enteras. En minúscula: la mayúscula inicial
+     se devuelve después si la traía.
+     Las 18 que están de verdad en el motor van marcadas con ★. */
   var PALABRAS = {
-    /* las que se vieron en pantalla */
-    'ingresá': 'Ingresa', 'entrá': 'entra', 'jugá': 'juega', 'escuchá': 'escucha',
-    'tocá': 'toca', 'rascá': 'raspa', 'rasca': 'raspa', 'pasá': 'pasa',
-    'compartí': 'comparte', 'empezá': 'empieza', 'guardá': 'guarda',
-    /* verbos que aparecen en botones, avisos y formularios */
-    'confirmá': 'confirma', 'elegí': 'elige', 'mirá': 'mira', 'agendá': 'agenda',
-    'descargá': 'descarga', 'escribí': 'escribe', 'escribinos': 'escríbenos',
-    'contanos': 'cuéntanos', 'contame': 'cuéntame', 'avisanos': 'avísanos',
-    'avisá': 'avisa', 'acordate': 'recuerda', 'fijate': 'fíjate',
-    'anotá': 'anota', 'seguí': 'sigue', 'buscá': 'busca', 'probá': 'prueba',
-    'sacá': 'saca', 'poné': 'pon', 'dejá': 'deja', 'volvé': 'vuelve',
-    'cerrá': 'cierra', 'abrí': 'abre', 'enviá': 'envía', 'mandá': 'manda',
-    'llená': 'llena', 'revisá': 'revisa', 'copiá': 'copia', 'sumate': 'únete',
-    'vení': 'ven', 'andá': 've', 'hacé': 'haz', 'tené': 'ten', 'esperá': 'espera',
+    'abrí': 'abre',            /* ★ */
+    'compartí': 'comparte',    /* ★ */
+    'entrá': 'entra',          /* ★ */
+    'escribí': 'escribe',      /* ★ */
+    'escuchá': 'escucha',      /* ★ */
+    'esperá': 'espera',        /* ★ */
+    'ingresá': 'ingresa',      /* ★ el botón del sobre */
+    'jugá': 'juega',           /* ★ ¡Pregúntame! */
+    'mirá': 'mira',            /* ★ */
+    'pasá': 'pasa',            /* ★ */
+    'probá': 'prueba',         /* ★ */
+    'rascá': 'raspa',          /* ★ la raspadita de la fecha */
+    'recargá': 'recarga',      /* ★ */
+    'subí': 'sube',            /* ★ subir fotos */
+    'sumá': 'agrega',          /* ★ "Sumá tu canción" → "Agrega tu canción" */
+    'sugerí': 'sugiere',       /* ★ sugerir una canción */
+    'tocá': 'toca',            /* ★ */
+    'rasca': 'raspa',
+
+    /* previsión: si mañana el motor suma alguno, ya está resuelto */
+    'confirmá': 'confirma', 'elegí': 'elige', 'agendá': 'agenda',
+    'descargá': 'descarga', 'escribinos': 'escríbenos', 'contanos': 'cuéntanos',
+    'contame': 'cuéntame', 'avisanos': 'avísanos', 'avisá': 'avisa',
+    'acordate': 'recuerda', 'fijate': 'fíjate', 'anotá': 'anota',
+    'seguí': 'sigue', 'buscá': 'busca', 'sacá': 'saca', 'poné': 'pon',
+    'dejá': 'deja', 'volvé': 'vuelve', 'cerrá': 'cierra', 'enviá': 'envía',
+    'mandá': 'manda', 'llená': 'llena', 'revisá': 'revisa', 'copiá': 'copia',
+    'sumate': 'únete', 'vení': 'ven', 'andá': 've', 'hacé': 'haz',
+    'tené': 'ten', 'empezá': 'empieza', 'guardá': 'guarda',
     'elegila': 'elígela', 'tocalo': 'tócalo', 'mirala': 'mírala',
+
     /* presente del voseo */
-    'querés': 'quieres', 'podés': 'puedes', 'tenés': 'tienes', 'sabés': 'sabes',
-    'sos': 'eres', 'vas a poder': 'vas a poder'
+    'querés': 'quieres', 'podés': 'puedes', 'tenés': 'tienes', 'sabés': 'sabes'
   };
 
   var CLAVES = Object.keys(PALABRAS).sort(function (a, b) { return b.length - a.length; });
@@ -89,11 +118,17 @@
       if (s.indexOf(FRASES[i][0]) > -1) s = s.split(FRASES[i][0]).join(FRASES[i][1]);
     }
     RE.lastIndex = 0;
-    return s.replace(RE, function (todo, antes, palabra) {
-      var destino = PALABRAS[palabra.toLowerCase()];
-      if (!destino) return todo;
-      return antes + conMayuscula(palabra, destino);
-    });
+    /* dos pasadas: si dos palabras van pegadas, la primera se come el espacio
+       que la segunda necesitaba como límite y quedaría sin cambiar */
+    s = s.replace(RE, reemplazo);
+    RE.lastIndex = 0;
+    return s.replace(RE, reemplazo);
+  }
+
+  function reemplazo(todo, antes, palabra) {
+    var destino = PALABRAS[palabra.toLowerCase()];
+    if (!destino) return todo;
+    return antes + conMayuscula(palabra, destino);
   }
 
   function esMexico() {
