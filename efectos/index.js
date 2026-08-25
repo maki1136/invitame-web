@@ -17,12 +17,12 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
-   ⚠️ EL ORDEN IMPORTA en tres casos:
+   ⚠️ EL ORDEN IMPORTA en cuatro casos:
    · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
      los momentos de verdad, después se los anima.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
-   · `es-mx.js` va ÚLTIMO: traduce lo que escribieron todos los anteriores,
-     incluida la sección de música.
+   · `textos-largos.js` va DESPUÉS de `musica.js`: pliega lo que ya está escrito.
+   · `es-mx.js` va ÚLTIMO: traduce lo que escribieron todos los anteriores.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -37,6 +37,7 @@
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
     '/efectos/musica.js',              /* la Platinum vende Música y el motor no la tenía */
+    '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
     '/efectos/es-mx.js'                /* español de México: el motor está en voseo */
   ];
 
