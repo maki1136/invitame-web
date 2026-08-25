@@ -15,12 +15,20 @@
    · La FRASE de los novios: es larga a propósito, es la pieza emocional.
    · La CARTA del sobre: idem.
    · El ITINERARIO: cada momento ya es corto.
-   · Nada que mida menos de 220 caracteres: si entra, no se esconde.
+   · La MÚSICA y los formularios.
    Plegar algo que no hacía falta plegar es peor que no plegar nada.
 
+   ⚠️ EL UMBRAL: 165 CARACTERES. Arrancó en 220 y estaba mal: el texto del
+   código de vestimenta mide 204 y se quedaba afuera justo, que era una de las
+   dos cosas que había que plegar. 165 agarra los dos (hoteles y vestimenta) y
+   sigue dejando tranquilos los textos cortos de las otras secciones.
+
    ⚠️ Se mide en CARACTERES, no en renglones. Los renglones dependen del ancho
-   de la pantalla y del tamaño de letra, así que en un celular chico se habría
+   de la pantalla y del cuerpo de letra, así que en un celular chico se habría
    plegado cualquier cosa.
+
+   Y si al final entraba entero igual, el botón se saca solo: un "Ver más" que
+   no abre nada es peor que no tenerlo.
 
    CÓMO SE APAGA
    Desde el panel, `fx.textos.plegar = false`. O `?plegar=0` en la dirección.
@@ -28,7 +36,7 @@
 (function () {
   'use strict';
 
-  var LARGO_MINIMO = 220;      /* menos que esto no se pliega */
+  var LARGO_MINIMO = 165;      /* menos que esto no se pliega — ver la nota */
   var RENGLONES    = 3;        /* cuántos quedan a la vista */
 
   var URLP = new URLSearchParams(location.search);
@@ -45,15 +53,12 @@
   var CSS = [
     '.iv-plie{position:relative}',
     '.iv-plie .iv-plie-txt{display:-webkit-box;-webkit-box-orient:vertical;',
-    '  -webkit-line-clamp:' + RENGLONES + ';overflow:hidden;',
-    '  transition:none}',
+    '  -webkit-line-clamp:' + RENGLONES + ';overflow:hidden}',
     '.iv-plie.abierto .iv-plie-txt{display:block;-webkit-line-clamp:unset;overflow:visible}',
-    /* el degradado que avisa que hay más abajo */
-    '.iv-plie .iv-plie-txt::after{content:""}',
-    '.iv-plie-btn{display:inline-block;margin-top:8px;cursor:pointer;',
+    '.iv-plie-btn{display:inline-block;margin-top:10px;cursor:pointer;',
     '  background:none;border:0;padding:4px 2px;font:inherit;',
-    '  font-size:.82em;letter-spacing:.09em;text-transform:uppercase;',
-    '  opacity:.7;color:inherit;border-bottom:1px solid currentColor;',
+    '  font-size:.8em;letter-spacing:.1em;text-transform:uppercase;',
+    '  opacity:.65;color:inherit;border-bottom:1px solid currentColor;',
     '  line-height:1.2}',
     '.iv-plie-btn:hover{opacity:1}'
   ].join('\n');
@@ -109,12 +114,10 @@
     };
     caja.appendChild(btn);
 
-    /* ⚠️ Si al final entraba entero, se saca el botón. Pasa cuando la pantalla
-       es ancha: 300 caracteres pueden entrar en tres renglones y el "Ver más"
-       no abriría nada. Un botón que no hace nada es peor que no tenerlo. */
+    /* si al final entraba entero, se saca el botón */
     setTimeout(function () {
       if (cuerpo.scrollHeight <= cuerpo.clientHeight + 4) btn.remove();
-    }, 350);
+    }, 400);
   }
 
   function pasar() {
