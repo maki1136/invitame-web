@@ -20,13 +20,16 @@ $BASE_VER = '2026-07-20';
    SI SE AGREGA UN SOBRE CON VIDEO AL CATÁLOGO, HAY QUE SUMARLO ACÁ TAMBIÉN.
    Si alguien se olvida, no se rompe nada: sólo vuelve a verse el parpadeo feo
    del sobre viejo mientras carga.
+
+   `carta` en true significa que ese sobre usa además el sistema `.ct-*` (la
+   tarjeta que se escribe sola). A ese no se le apaga `.ct-wrap`.
    ============================================================================ */
 $SOBRES_VIDEO = array(
-  'lacre'         => '/sobres/sobre-lacre-poster.jpg',
-  'flores'        => '/sobres/sobre-flores-poster.jpg',
-  'lazo'          => '/sobres/sobre-lazo-poster.jpg',
-  'toscana'       => '/sobres/sobre-toscana-poster.jpg',
-  'carta-toscana' => '/sobres/carta-toscana-poster.jpg'
+  'lacre'         => array('poster' => '/sobres/sobre-lacre-poster.jpg',   'carta' => false),
+  'flores'        => array('poster' => '/sobres/sobre-flores-poster.jpg',  'carta' => false),
+  'lazo'          => array('poster' => '/sobres/sobre-lazo-poster.jpg',    'carta' => false),
+  'toscana'       => array('poster' => '/sobres/sobre-toscana-poster.jpg', 'carta' => false),
+  'carta-toscana' => array('poster' => '/sobres/carta-toscana-poster.jpg', 'carta' => true)
 );
 
 // slug seguro
@@ -115,21 +118,13 @@ $tpl = false;
 
 /* ===== LA VERSIÓN "viva" ======================================================
 
-   QUÉ ES
-   Una invitación con `ver = viva` NO queda congelada: se sirve con el motor
-   que está hoy en /prueba/, que es el único que tiene el sobre en video y el
-   que carga /sobres/catalogo.js (y con él todos los módulos de /efectos/:
-   calendario, música, raspadita, español de México, textos plegados…).
+   Una invitación con `ver = viva` NO queda congelada: se sirve con el motor que
+   está hoy en /prueba/, que es el único que tiene el sobre en video y el que
+   carga /sobres/catalogo.js (y con él los módulos de /efectos/).
 
-   ⚠️ NO ES PARA CLIENTES QUE YA PAGARON. Una invitación en `viva` CAMBIA cuando
-   cambia /prueba/. Está pensada para las MUESTRAS.
-
-   ⚠️ NINGUNA INVITACIÓN YA ENTREGADA SE VE AFECTADA: cada una conserva su
-   propio `ver` y sigue leyendo su carpeta de siempre.
-
-   El cartel rojo de zona de prueba se apaga con CSS —no se recorta del HTML—
-   porque recortar con una expresión regular un div que puede tener otros divs
-   adentro es la clase de cosa que rompe la página entera un domingo.
+   ⚠️ NO ES PARA CLIENTES QUE YA PAGARON: cambia cuando cambia /prueba/. Es para
+   las MUESTRAS. Ninguna invitación ya entregada se ve afectada: cada una
+   conserva su propio `ver` y sigue leyendo su carpeta de siempre.
    ============================================================================ */
 if ($ver === 'viva') {
   $tpl = @file_get_contents(dirname(__DIR__) . '/prueba/index.html');
@@ -150,45 +145,56 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
    QUÉ SE VEÍA
    Al abrir la invitación, durante los primeros segundos —hasta que terminaba de
-   cargar el video del sobre— aparecía el sobre VIEJO (el que se dibuja por CSS)
-   a pantalla completa: una diagonal blanca gigante, el monograma de los novios
-   enorme y borroso, y el papel de fondo estirado. Recién después aparecía el
-   sobre de verdad. Pasaba en Chrome, en Safari, en el iPhone y en incógnito.
+   cargar el video del sobre— aparecía otro sobre a pantalla completa: una
+   diagonal blanca gigante, el monograma de los novios enorme y borroso, y un
+   panel de papel estirado. Recién después aparecía el sobre de verdad. Pasaba
+   en Chrome, en Safari, en el iPhone y en incógnito.
 
-   POR QUÉ NO ALCANZABA CON ARREGLARLO EN EL CSS DE /sobres/catalogo.js
-   Porque ese archivo es un `<script defer>`: corre DESPUÉS de que la página se
-   pintó por primera vez. Y sus reglas están escritas contra `#env.carta-video`,
-   una clase que TAMPOCO está en el HTML: se la agrega el motor por JavaScript.
-   O sea que había dos motivos por los que, en el primer pintado, no había NADA
-   que encuadrara el sobre. Se arregló dos veces "en el CSS" y las dos veces
-   siguió pasando, porque el problema nunca fue el CSS: era CUÁNDO llegaba.
+   POR QUÉ SE ARREGLÓ MAL DOS VECES
+   1. Se lo trató como un bug de Safari. No lo era: pasaba en todos lados.
+   2. Se arregló en el CSS de /sobres/catalogo.js. Ese archivo es un
+      `<script defer>`: corre DESPUÉS del primer pintado. Y sus reglas apuntan a
+      `#env.carta-video`, una clase que el motor agrega por JavaScript y que
+      TAMPOCO existe en el primer pintado. O sea: el CSS estaba bien escrito,
+      pero llegaba tarde y no matcheaba nada. El problema nunca fue el CSS: era
+      CUÁNDO llegaba.
+
+   ⚠️ Y HABÍA UN TERCER ERROR: dentro de `#env` conviven CUATRO sobres
+   superpuestos, no dos. Hay que apagarlos a todos:
+     · `.triflap` + `#tri-glow` + `#tri-seal`   (el de cuatro solapas)
+     · `#scene`  → adentro van `.envelope`, `.e-back`, `.e-pocket`, `.e-flap`,
+                   `.e-tint`, `.seal`, `#ephoto`, `#hint`  (el clásico)
+     · `.ct-wrap` → la tarjeta que se escribe sola
+   La primera vez se escribió `#e-back`, `#e-pocket`, `#e-flap` con almohadilla,
+   y son CLASES, no ids: por eso el panel de papel siguió apareciendo.
 
    CÓMO SE ARREGLA DE VERDAD
-   El servidor ya sabe qué sobre es (lo leyó de Firestore, más arriba). Entonces
-   mete el encuadre directamente en el `<head>`, antes de mandar el HTML. Llega
-   con la primera línea de la página: no hay ningún instante sin él.
+   El servidor ya sabe qué sobre es (lo leyó de Firestore, más arriba). Mete el
+   encuadre directamente en el `<head>` antes de mandar el HTML: llega con la
+   primera línea, no hay ningún instante sin él. Y como sabe cuál es el `poster`,
+   se lo pone de fondo al `<video>`: la foto del sobre aparece al instante, en su
+   caja correcta, mientras el video todavía baja.
 
-   Y como también sabe cuál es el `poster` del sobre, se lo pone de fondo al
-   `<video>`: la foto del sobre aparece al instante, en su caja correcta,
-   mientras el video todavía está bajando.
-
-   LAS REGLAS NO SE APOYAN EN LA CLASE `carta-video` — se apoyan en `#env-vid`,
-   que sí está en el HTML desde el principio. Es la diferencia entre que ande y
-   que no ande.
+   Las reglas se apoyan en `#env-vid` y en las clases del HTML, NUNCA en
+   `carta-video`. Es la diferencia entre que ande y que no ande.
 
    ⚠️ NO USAR `aspect-ratio` PARA EL ANCHO: sobre un `<video>` Safari no lo
    aplica igual y el video se va a pantalla completa. El ancho va con `calc()`.
    ============================================================================ */
+$encuadre = '';
 if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
-  $poster = $SOBRES_VIDEO[$sobre];
+  $poster    = $SOBRES_VIDEO[$sobre]['poster'];
+  $usaCarta  = $SOBRES_VIDEO[$sobre]['carta'];
   $alto  = 'min(84vh,843px)';
   $ancho = 'calc(' . $alto . ' * 9 / 16)';
 
+  /* los otros tres sobres, apagados */
+  $apagar = '#env .triflap,#env #tri-glow,#env #tri-seal,#env #scene';
+  if (!$usaCarta) $apagar .= ',#env .ct-wrap';
+
   $encuadre =
     '<style id="sobre-encuadre-servidor">' .
-    /* el sobre viejo no se muestra nunca cuando el sobre es un video */
-    '#env .triflap,#env #tri-seal,#env #triseal-ini,' .
-    '#env #e-back,#env #e-pocket,#env #e-flap{display:none!important}' .
+    $apagar . '{display:none!important}' .
 
     /* el video ya nace con la foto del sobre puesta, así no hay hueco */
     '#env-vid{background:#efe9e0 url("' . $poster . '") center/cover no-repeat}' .
@@ -204,8 +210,6 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
     '}' .
     '</style>';
-} else {
-  $encuadre = '';
 }
 
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
