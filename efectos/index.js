@@ -21,7 +21,8 @@
    · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
      los momentos de verdad, después se los anima.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
-   · `es-mx.js` va ÚLTIMO: traduce lo que escribieron todos los anteriores.
+   · `es-mx.js` va ÚLTIMO: traduce lo que escribieron todos los anteriores,
+     incluida la sección de música.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -35,6 +36,7 @@
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
+    '/efectos/musica.js',              /* la Platinum vende Música y el motor no la tenía */
     '/efectos/es-mx.js'                /* español de México: el motor está en voseo */
   ];
 
