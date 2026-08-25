@@ -17,10 +17,11 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
-   ⚠️ EL ORDEN IMPORTA en dos casos:
+   ⚠️ EL ORDEN IMPORTA en tres casos:
    · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
      los momentos de verdad, después se los anima.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
+   · `es-mx.js` va ÚLTIMO: traduce lo que escribieron todos los anteriores.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -32,7 +33,8 @@
     '/efectos/encuadre-monitor.js',    /* en compu: todo en una columna */
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
-    '/efectos/panel-etiquetas.js'      /* nombres únicos en el panel */
+    '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
+    '/efectos/es-mx.js'                /* español de México: el motor está en voseo */
   ];
 
   MODULOS.forEach(function (src) {
