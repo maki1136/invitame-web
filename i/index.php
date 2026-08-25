@@ -89,7 +89,46 @@ if ($ver === '') { $ver = $BASE_VER; }
 $ver = preg_replace('/[^a-zA-Z0-9._-]/', '', (string)$ver);
 
 $tpl = false;
-if ($ver !== '') {
+
+/* ===== LA VERSIÓN "viva" ======================================================
+
+   QUÉ ES
+   Una invitación con `ver = viva` NO queda congelada: se sirve con el motor
+   que está hoy en /prueba/, que es el único que tiene el sobre en video y el
+   que carga /sobres/catalogo.js (y con él todos los módulos de /efectos/:
+   calendario, música, raspadita, español de México, textos plegados…).
+
+   POR QUÉ HIZO FALTA
+   El motor congelado de /i/ es 24 KB más chico y NO tiene el modo `carta-video`
+   ni el enganche a los módulos. O sea que una invitación servida desde /i/ se
+   veía sin nada de lo nuevo. Y el index.html de 200 KB no se puede subir por
+   API: hay que arrastrarlo a mano. Esto lo resuelve sin mover ese archivo.
+
+   ⚠️ NO ES PARA CLIENTES QUE YA PAGARON. Una invitación en `viva` CAMBIA cuando
+   cambia /prueba/. Está pensada para las MUESTRAS. Cuando una invitación de
+   verdad se entrega, se le clava una versión congelada de las de `v/`.
+
+   ⚠️ NINGUNA INVITACIÓN YA ENTREGADA SE VE AFECTADA: cada una conserva su
+   propio `ver` y sigue leyendo su carpeta de siempre. Esto es una rama nueva,
+   no un cambio del camino viejo.
+
+   El cartel rojo de zona de prueba se apaga con CSS —no se recorta del HTML—
+   porque recortar con una expresión regular un div que puede tener otros divs
+   adentro es la clase de cosa que rompe la página entera un domingo.
+   ============================================================================ */
+if ($ver === 'viva') {
+  $tpl = @file_get_contents(dirname(__DIR__) . '/prueba/index.html');
+  if ($tpl !== false) {
+    $apagar = '<style>#banner-prueba{display:none!important}</style>';
+    if (strpos($tpl, '</head>') !== false) {
+      $tpl = str_replace('</head>', $apagar . '</head>', $tpl);
+    } else {
+      $tpl = $apagar . $tpl;
+    }
+  }
+}
+
+if ($tpl === false && $ver !== '') {
   $ruta = __DIR__ . '/v/' . $ver . '/index.html';
   if (is_file($ruta)) { $tpl = @file_get_contents($ruta); }
 }
