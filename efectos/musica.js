@@ -24,6 +24,16 @@
    está escrita en el motor y no la incluye. Por eso esta sección se inserta
    sola en un lugar fijo en vez de pedirle permiso a `secOrden`.
 
+   ⚠️ LA CLASE QUE HACE APARECER UN `.reveal` ES `in`, NO `on`.
+   Esto costó un rato: la sección se insertaba bien, medía 649 px de alto,
+   tenía el texto y el reproductor adentro… y en pantalla se veía un rectángulo
+   marfil vacío, porque todo quedaba en `opacity:0`. En el HTML del motor
+   conviven las dos palabras (`.carousel.reveal` tiene un hermano con clase
+   `on`), y es fácil agarrar la equivocada. La correcta es `in`.
+
+   Igual el observador del motor ya no está mirando cuando insertamos esto, así
+   que las encendemos a mano.
+
    ⚠️ El link tiene que ser de Spotify. Se convierte a `/embed/` para poder
    incrustarlo; si el link es de otra cosa (YouTube, Apple Music) se muestra
    igual pero como botón, sin reproductor.
@@ -32,6 +42,7 @@
   'use strict';
 
   var ID = 'inv-musica';
+  var VISIBLE = 'in';          /* ⚠️ no es 'on'. Ver la nota de arriba. */
 
   function ev() { return window.INVEV || {}; }
 
@@ -58,13 +69,10 @@
   }
 
   function donde() {
-    /* antes de la mesa de regalos; si no está, antes del cierre */
-    var secs = [].slice.call(document.querySelectorAll('section.sec'));
-    var regalos = secs.filter(function (s) {
+    /* antes de la mesa de regalos */
+    return [].slice.call(document.querySelectorAll('section.sec')).filter(function (s) {
       return /mesa de regalos|regalos/i.test(s.innerText || '');
-    })[0];
-    if (regalos) return regalos;
-    return null;
+    })[0] || null;
   }
 
   function construir() {
@@ -114,6 +122,12 @@
     return s;
   }
 
+  function encender(s) {
+    [].forEach.call(s.querySelectorAll('.reveal'), function (e) {
+      e.classList.add(VISIBLE);
+    });
+  }
+
   function poner() {
     if (document.getElementById(ID)) return;
     var s = construir();
@@ -121,13 +135,11 @@
     var ancla = donde();
     if (!ancla || !ancla.parentNode) return;
     ancla.parentNode.insertBefore(s, ancla);
-    /* las clases `reveal` del motor aparecen con el scroll; si el observador
-       del motor ya terminó, las dejamos visibles a mano */
-    setTimeout(function () {
-      [].forEach.call(s.querySelectorAll('.reveal'), function (e) {
-        if (!e.classList.contains('on')) e.classList.add('on');
-      });
-    }, 700);
+
+    /* el observador del motor ya terminó de mirar: las encendemos nosotros.
+       Se hace dos veces por si alguna se pisa con una animación en curso. */
+    setTimeout(function () { encender(s); }, 120);
+    setTimeout(function () { encender(s); }, 900);
   }
 
   function arrancar() {
