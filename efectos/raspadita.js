@@ -23,6 +23,17 @@
    Si no hay ninguna disposición, la raspadita arma sus fichas como siempre.
    Las dos cosas no saben nada una de la otra: se entienden por esa marca.
 
+   ⚠️⚠️ UNA VEZ RASPADA, QUEDA RASPADA. ESTO SE ROMPIÓ EN PRODUCCIÓN.
+   Antes, cualquier `resize` borraba la firma y volvía a armar la capa: el
+   invitado raspaba, veía la fecha, y la plata se le ponía de nuevo encima. En
+   el celular es peor todavía, porque al hacer scroll entra y sale la barra de
+   direcciones y eso dispara `resize` a cada rato — o sea que se reponía sola
+   cada dos por tres.
+   Ahora hay una bandera `completado`: cuando se terminó de raspar, `armar()`
+   se va en la primera línea y no vuelve a tocar nada nunca más. Y el `resize`
+   sólo rearma si la tarjeta CAMBIÓ DE TAMAÑO de verdad (más de 4 px), no cada
+   vez que el navegador avisa.
+
    CÓMO SE CONFIGURA (panel → body → dirección web)
      encendido / rasp          1 para encender
      modo      / raspModo      simple · partes
@@ -328,10 +339,20 @@
 
   var yaArmado = false, firmaVieja = null;
 
+  /* ⚠️ LA BANDERA QUE ARREGLA EL BUG DE "SE VUELVE A PONER".
+     Cuando el invitado terminó de raspar, esto queda en true y `armar()` no
+     vuelve a tocar nada. Sin esto, cualquier `resize` —y en el celular el
+     scroll dispara resize— le tapaba la fecha de nuevo. */
+  var completado = false;
+
+  /* el tamaño con el que se armó, para saber si un resize fue de verdad */
+  var medidaVieja = null;
+
   function armar() {
     var card = document.getElementById('scratchcard');
     if (!card) return;
     if (!encendido()) return;
+    if (completado) return;                 /* ⚠️ ya se raspó: no se rearma */
 
     var cfg = config();
 
@@ -364,6 +385,7 @@
     yaArmado = true;
 
     var rc = card.getBoundingClientRect();
+    medidaVieja = Math.round(rc.width) + 'x' + Math.round(rc.height);
 
     function cajaDe(el) {
       var b = el.getBoundingClientRect();
@@ -388,6 +410,7 @@
     }
 
     function cerrar() {
+      completado = true;                    /* ⚠️ desde acá no se rearma más */
       decir('');
       destellar(card, cfg);
       vibrar([12, 45, 22], cfg);
@@ -508,10 +531,33 @@
     }
   }
 
+  /* ⚠️ El resize sólo rearma si la tarjeta cambió de tamaño DE VERDAD.
+     En el celular, al hacer scroll entra y sale la barra de direcciones y eso
+     dispara `resize` constantemente: si acá se borrara la firma sin mirar,
+     la plata se repondría sola cada dos por tres. */
+  function alRedimensionar() {
+    if (completado) return;
+    var card = document.getElementById('scratchcard');
+    if (!card) return;
+    var r = card.getBoundingClientRect();
+    var ahora = Math.round(r.width) + 'x' + Math.round(r.height);
+    if (medidaVieja === null) { medidaVieja = ahora; return; }
+    var v = medidaVieja.split('x'), a = ahora.split('x');
+    if (Math.abs(+v[0] - +a[0]) < 5 && Math.abs(+v[1] - +a[1]) < 5) return;
+    firmaVieja = null;
+    setTimeout(armar, 150);
+  }
+
   function arrancar() {
     armar();
     addEventListener('message', function () { setTimeout(armar, 80); });
-    addEventListener('resize', function () { firmaVieja = null; setTimeout(armar, 150); });
+
+    var espera = null;
+    addEventListener('resize', function () {
+      clearTimeout(espera);
+      espera = setTimeout(alRedimensionar, 220);
+    });
+
     if (ES_PREVIEW) {
       setInterval(armar, 800);
     } else {
