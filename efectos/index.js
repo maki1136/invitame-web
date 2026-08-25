@@ -14,23 +14,25 @@
    grandes (index.html y admin.html, de 200 KB, que sólo se pueden subir a mano).
 
    ⚠️ Este archivo lo tocan varias manos. Antes de sobrescribirlo, LEERLO:
-   el 19/8 aparecieron `encuadre-monitor.js`, `pieza-carta.js` y `panel-pieza.js`
-   de un lado y `fecha.js` y `raspadita.js` del otro, ninguno puesto por el mismo.
-   Nunca reescribirlo de memoria: bajarlo, agregar la línea y subirlo.
+   aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
+   bajarlo, agregar la línea y subirlo.
 
-   ⚠️ EL ORDEN IMPORTA en un caso: `fecha.js` va ANTES de `raspadita.js`, porque
-   la raspadita se monta encima de lo que la fecha haya dibujado.
+   ⚠️ EL ORDEN IMPORTA en dos casos:
+   · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
+     los momentos de verdad, después se los anima.
+   · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    ============================================================================ */
 (function () {
   var MODULOS = [
-    '/efectos/itinerario.js',        /* la línea del itinerario se dibuja con el scroll */
-    '/efectos/calendario.js',        /* el calendario del mes con la fecha marcada */
-    '/efectos/fecha.js',             /* las nueve maneras de mostrar la fecha */
-    '/efectos/raspadita.js',         /* la raspadita: se monta sobre la fecha */
-    '/efectos/encuadre-monitor.js',  /* en compu: todo en una columna, como en el celular */
-    '/efectos/pieza-carta.js',       /* escribe los nombres sobre la tarjeta del sobre */
-    '/efectos/panel-pieza.js',       /* y sus ajustes dentro del bloque ✨ Efectos */
-    '/efectos/panel-etiquetas.js'    /* nombres únicos en el panel (había 4 repetidos) */
+    '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
+    '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
+    '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
+    '/efectos/fecha.js',               /* las nueve maneras de mostrar la fecha */
+    '/efectos/raspadita.js',           /* la raspadita: se monta sobre la fecha */
+    '/efectos/encuadre-monitor.js',    /* en compu: todo en una columna */
+    '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
+    '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
+    '/efectos/panel-etiquetas.js'      /* nombres únicos en el panel */
   ];
 
   MODULOS.forEach(function (src) {
