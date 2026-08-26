@@ -36,7 +36,8 @@ $SOBRES_VIDEO = array(
 $slug = isset($_GET['e']) ? strtolower($_GET['e']) : '';
 $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
-$img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = ''; $coverReal = '';
+$img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
+$coverReal = ''; $idioma = '';
 
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
@@ -98,7 +99,10 @@ if ($slug !== '') {
     // 5) VERSION con la que se publicó esta invitación (para que no la afecten cambios futuros)
     $ver = $sv('ver');
 
-    // 6) QUÉ SOBRE ES. Vive anidado: fx → sobre → modelo.
+    // 6) EL IDIOMA, para saber si hay que pasar los textos a español de México
+    $idioma = $sv('idioma');
+
+    // 7) QUÉ SOBRE ES. Vive anidado: fx → sobre → modelo.
     if (isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue'])) {
       $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
     }
@@ -142,21 +146,24 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
 /* ===== LO QUE SE VE ANTES DE QUE CORRA UN SOLO SCRIPT =========================
 
-   ⚠️⚠️ ACÁ ESTÁN LOS TRES BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
+   ⚠️⚠️ ACÁ ESTÁN LOS CUATRO BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
 
-   EL PATRÓN, QUE ES EL MISMO EN LOS TRES
+   EL PATRÓN, QUE ES EL MISMO EN LOS CUATRO
    El `index.html` trae valores POR DEFECTO escritos a mano —fotos de banco de
-   imágenes, de otra pareja— y el encuadre de la pantalla grande lo pone un
-   `<script defer>`. Las dos cosas llegan DESPUÉS del primer pintado. En ese
-   hueco de uno o dos segundos el invitado ve cosas que no son suyas o mal
-   armadas. Los scripts diferidos no llegan a tiempo: nunca van a llegar.
+   imágenes, textos en argentino— y el encuadre de la pantalla grande lo pone un
+   `<script defer>`. Todo eso llega DESPUÉS del primer pintado. En ese hueco de
+   uno o dos segundos el invitado ve cosas que no son suyas o mal armadas. Los
+   scripts diferidos no llegan a tiempo: nunca van a llegar.
 
    Por eso todo esto se resuelve ACÁ, en el servidor, que ya leyó el evento de
-   Firestore y escribe los valores correctos directo en el `<head>`.
+   Firestore y escribe los valores correctos antes de mandar el HTML.
 
-   ⚠️ REGLA GENERAL, POR SI APARECE OTRO: si algo se ve mal SÓLO EL PRIMER
-   SEGUNDO, y "se acomoda" al recargar o a la segunda vez, NO se arregla en el
-   módulo de /efectos/. Se arregla acá. Es siempre lo mismo: el CSS llega tarde.
+   ⚠️ LA REGLA, QUE YA VALE PARA CUATRO BUGS SEGUIDOS: si algo se ve mal SÓLO EL
+   PRIMER SEGUNDO, y "se acomoda" al recargar o a la segunda vez, NO se arregla
+   en el módulo de /efectos/. Se arregla acá. Es siempre lo mismo: llega tarde.
+
+   ⚠️ Y PARA ENCONTRARLOS HAY QUE PROBAR CON RED LENTA Y CACHÉ VACÍA. En una
+   máquina rápida el archivo llega en 5 ms y el bug no aparece — pero está.
 
    BUG 1 — EL SOBRE ROTO
    Antes de cargar el video se veía OTRO sobre a pantalla completa: una diagonal
@@ -179,19 +186,20 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
    BUG 2 — LA PORTADA DE OTRA INVITACIÓN
    Al tocar el sello se veía la foto de OTRA pareja. `--cover` está escrita a
    mano en el `:root`; el motor la pisa por JS, pero el primer pintado ya pasó.
-   Ahora el servidor escribe `--cover` con la portada de verdad.
 
    BUG 3 — LA PORTADA SALÍA A LO ANCHO UN INSTANTE
-   Al tocar el sello, el primer segundo la foto se veía más grande y asomaba el
-   fondo por los costados; después "se acomodaba". Con la caché caliente no se
-   notaba, con la caché fría sí.
-   La causa: el encuadre de la columna (`.frame{max-width:...}`) lo inyecta
-   `efectos/encuadre-monitor.js`, que es diferido. Hasta que ese script corría,
-   `.frame` no tenía ningún límite y la portada ocupaba todo el ancho.
-   Ahora ese CSS va también en el `<head>`, con EL MISMO `id` que usa el módulo
-   (`encuadre-monitor`), así el módulo ve que ya está puesto y no lo duplica —
-   pero sigue haciendo lo suyo: afinar el ancho exacto y pintar el fondo
-   desenfocado.
+   El encuadre de la columna (`.frame{max-width:...}`) lo inyectaba
+   `efectos/encuadre-monitor.js`, diferido. Hasta que ese script corría, la
+   portada ocupaba todo el ancho y asomaba el fondo por los costados.
+   Ahora ese CSS va también en el `<head>`, con EL MISMO `id` que usa el módulo,
+   así el módulo lo encuentra puesto y no lo duplica.
+
+   BUG 4 — DECÍA "INGRESÁ" Y "TOCÁ EL SELLO"
+   El motor está escrito en voseo argentino y lo traduce `efectos/es-mx.js`, que
+   también es diferido. O sea que el primer segundo una novia mexicana leía
+   "INGRESÁ" y "TOCÁ EL SELLO PARA ABRIR" — justo el primer texto que ve.
+   Ahora los textos se cambian ACÁ, en el HTML, antes de mandarlo. El módulo
+   sigue existiendo para lo que el motor escriba después.
 
    POR QUÉ LA FOTO DEL SOBRE VA EN `#env::before`
    Un `<video>` sin datos no pinta nada: ni su `poster`, ni el `background` que
@@ -285,6 +293,62 @@ if ($aInyectar !== '') {
     $tpl = $aInyectar . $tpl;
   }
 }
+
+
+/* ===== ESPAÑOL DE MÉXICO, EN EL HTML, ANTES DE MANDARLO ======================
+
+   El motor está escrito en voseo argentino. `efectos/es-mx.js` lo traduce, pero
+   es diferido: el primer segundo el invitado igual leía "INGRESÁ" y "TOCÁ EL
+   SELLO PARA ABRIR", que es literalmente el primer texto de la invitación.
+
+   Acá se cambian los textos en el HTML antes de que salga del servidor, así no
+   hay ningún instante en argentino. El módulo sigue existiendo para lo que el
+   motor escriba más tarde por JavaScript.
+
+   ⚠️ NO SON VOSEO Y NO SE TOCAN: "Mamá", "Papá", "está", "esté", "aquí",
+   "asistiré", "podré". Terminan igual pero son correctas en todo el idioma.
+   Si alguna entrara en esta lista, la invitación diría "Mama y Papa".
+
+   ⚠️ Las FRASES van primero: "Pasá la voz" no es "Pasa la voz", es "Corre la
+   voz". Si se reemplazara la palabra suelta antes, se perdería.
+   ============================================================================ */
+if ($idioma !== '' && preg_match('/m[eé]xico|mx/i', $idioma)) {
+
+  $frases = array(
+    'Pasá el dedo para descubrir' => 'Desliza el dedo para descubrir',
+    'Pasá la voz'                 => 'Corre la voz',
+    'si querés tener un detalle'  => 'si quieres tener un detalle',
+    'Si querés tener un detalle'  => 'Si quieres tener un detalle',
+    'dejamos nuestras mesas'      => 'aquí están nuestras mesas'
+  );
+
+  /* las 18 que están de verdad en el motor, en sus dos capitalizaciones */
+  $palabras = array(
+    'Abrí'=>'Abre',          'abrí'=>'abre',
+    'Compartí'=>'Comparte',  'compartí'=>'comparte',
+    'Entrá'=>'Entra',        'entrá'=>'entra',
+    'Escribí'=>'Escribe',    'escribí'=>'escribe',
+    'Escuchá'=>'Escucha',    'escuchá'=>'escucha',
+    'Esperá'=>'Espera',      'esperá'=>'espera',
+    'Ingresá'=>'Ingresa',    'ingresá'=>'ingresa',
+    'Jugá'=>'Juega',         'jugá'=>'juega',
+    'Mirá'=>'Mira',          'mirá'=>'mira',
+    'Pasá'=>'Pasa',          'pasá'=>'pasa',
+    'Probá'=>'Prueba',       'probá'=>'prueba',
+    'Rascá'=>'Raspa',        'rascá'=>'raspa',
+    'Recargá'=>'Recarga',    'recargá'=>'recarga',
+    'Subí'=>'Sube',          'subí'=>'sube',
+    'Sumá'=>'Agrega',        'sumá'=>'agrega',
+    'Sugerí'=>'Sugiere',     'sugerí'=>'sugiere',
+    'Tocá'=>'Toca',          'tocá'=>'toca',
+    'Confirmá'=>'Confirma',  'confirmá'=>'confirma',
+    'querés'=>'quieres',     'podés'=>'puedes',  'tenés'=>'tienes'
+  );
+
+  $tpl = str_replace(array_keys($frases),   array_values($frases),   $tpl);
+  $tpl = str_replace(array_keys($palabras), array_values($palabras), $tpl);
+}
+
 
 // setter seguro de meta tags (reemplaza solo el content, sin romper el HTML)
 function setMeta($tpl, $attr, $key, $val) {
