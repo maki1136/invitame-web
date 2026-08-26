@@ -142,23 +142,27 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
 /* ===== LO QUE SE VE ANTES DE QUE CORRA UN SOLO SCRIPT =========================
 
-   ⚠️⚠️ ACÁ ESTÁN LOS DOS BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
+   ⚠️⚠️ ACÁ ESTÁN LOS TRES BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
 
-   EL PATRÓN, QUE ES EL MISMO EN LOS DOS
-   El `index.html` trae valores POR DEFECTO escritos a mano en el `:root` —fotos
-   de banco de imágenes, de otra pareja— y el motor los reemplaza por los de
-   esta boda RECIÉN cuando corre su JavaScript. Entre el primer pintado y ese
-   momento pasan uno o dos segundos, y en esos segundos el invitado ve cosas que
-   no son suyas. Los `<script defer>` no llegan a tiempo. Nunca van a llegar.
-   Por eso esto se resuelve ACÁ, en el servidor, que ya leyó el evento de
-   Firestore y puede escribir los valores correctos en el `<head>`.
+   EL PATRÓN, QUE ES EL MISMO EN LOS TRES
+   El `index.html` trae valores POR DEFECTO escritos a mano —fotos de banco de
+   imágenes, de otra pareja— y el encuadre de la pantalla grande lo pone un
+   `<script defer>`. Las dos cosas llegan DESPUÉS del primer pintado. En ese
+   hueco de uno o dos segundos el invitado ve cosas que no son suyas o mal
+   armadas. Los scripts diferidos no llegan a tiempo: nunca van a llegar.
+
+   Por eso todo esto se resuelve ACÁ, en el servidor, que ya leyó el evento de
+   Firestore y escribe los valores correctos directo en el `<head>`.
+
+   ⚠️ REGLA GENERAL, POR SI APARECE OTRO: si algo se ve mal SÓLO EL PRIMER
+   SEGUNDO, y "se acomoda" al recargar o a la segunda vez, NO se arregla en el
+   módulo de /efectos/. Se arregla acá. Es siempre lo mismo: el CSS llega tarde.
 
    BUG 1 — EL SOBRE ROTO
    Antes de cargar el video se veía OTRO sobre a pantalla completa: una diagonal
    blanca gigante, el monograma enorme y borroso, un panel de papel estirado.
    Se arregló mal tres veces:
-   1. Se lo trató como bug de Safari. No lo era: pasaba en Chrome, Safari,
-      iPhone e incógnito.
+   1. Se lo trató como bug de Safari. No lo era: pasaba en todos lados.
    2. Se arregló en el CSS de /sobres/catalogo.js, que es `defer` y encima
       apunta a `#env.carta-video`, clase que agrega el JS. Llegaba tarde Y no
       matcheaba nada.
@@ -173,16 +177,26 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
       sin encender el video dejaba la pantalla VACÍA.
 
    BUG 2 — LA PORTADA DE OTRA INVITACIÓN
-   Al tocar el sello, antes de aparecer la foto de los novios, se veía la foto de
-   OTRA pareja. Misma causa: `--cover` está escrita a mano en el `:root`. El
-   motor la pisa por JS, pero el primer pintado ya se hizo. Ahora el servidor
-   escribe `--cover` con la portada de verdad.
+   Al tocar el sello se veía la foto de OTRA pareja. `--cover` está escrita a
+   mano en el `:root`; el motor la pisa por JS, pero el primer pintado ya pasó.
+   Ahora el servidor escribe `--cover` con la portada de verdad.
+
+   BUG 3 — LA PORTADA SALÍA A LO ANCHO UN INSTANTE
+   Al tocar el sello, el primer segundo la foto se veía más grande y asomaba el
+   fondo por los costados; después "se acomodaba". Con la caché caliente no se
+   notaba, con la caché fría sí.
+   La causa: el encuadre de la columna (`.frame{max-width:...}`) lo inyecta
+   `efectos/encuadre-monitor.js`, que es diferido. Hasta que ese script corría,
+   `.frame` no tenía ningún límite y la portada ocupaba todo el ancho.
+   Ahora ese CSS va también en el `<head>`, con EL MISMO `id` que usa el módulo
+   (`encuadre-monitor`), así el módulo ve que ya está puesto y no lo duplica —
+   pero sigue haciendo lo suyo: afinar el ancho exacto y pintar el fondo
+   desenfocado.
 
    POR QUÉ LA FOTO DEL SOBRE VA EN `#env::before`
    Un `<video>` sin datos no pinta nada: ni su `poster`, ni el `background` que
-   le pongas por CSS. Con el fondo puesto sólo en el video quedaba un segundo de
-   pantalla vacía. `#env::before` es un pseudo-elemento común: pinta la foto en
-   la misma caja desde el primer frame, y el video le pasa por encima cuando
+   le pongas por CSS. `#env::before` es un pseudo-elemento común: pinta la foto
+   en la misma caja desde el primer frame, y el video le pasa por encima cuando
    está listo. El empalme no se nota porque son la misma imagen.
 
    ⚠️ NO USAR `aspect-ratio` PARA EL ANCHO DEL VIDEO: en Safari no se aplica
@@ -233,14 +247,37 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
     '}';
 }
 
-$encuadre = ($preFirma !== '')
+$encuadreSobre = ($preFirma !== '')
   ? '<style id="sobre-encuadre-servidor">' . $preFirma . '</style>'
   : '';
+
+/* ===== EL ENCUADRE DE LA COLUMNA, DESDE EL PRIMER FRAME =======================
+   ⚠️ Copia exacta del CSS de `efectos/encuadre-monitor.js`, con el MISMO id.
+   El módulo hace `if (document.getElementById('encuadre-monitor')) return;`
+   antes de inyectar el suyo, así que al encontrarlo ya puesto no lo duplica.
+   SI SE CAMBIA ESE CSS EN EL MÓDULO, HAY QUE CAMBIARLO ACÁ TAMBIÉN.
+   ============================================================================ */
+$encuadreColumna =
+  '<style id="encuadre-monitor">' .
+  '#inv-lienzo,#inv-vinieta{display:none}' .
+  '@media (min-width:680px){' .
+  '  #inv-lienzo{display:block;position:fixed;inset:0;z-index:-2;' .
+  '    background-size:cover;background-position:center;' .
+  '    filter:blur(70px) saturate(.65) brightness(.92);transform:scale(1.3)}' .
+  '  #inv-vinieta{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none;' .
+  '    background:radial-gradient(120% 85% at 50% 45%,rgba(0,0,0,0) 36%,' .
+  '    rgba(0,0,0,.18) 76%, rgba(0,0,0,.34) 100%)}' .
+  '  html{background:#cfc4b4}' .
+  '  .frame{max-width:var(--inv-col,474px);margin-left:auto;margin-right:auto;' .
+  '    overflow:hidden;box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
+  '  .frame img{max-width:100%;height:auto}' .
+  '}' .
+  '</style>';
 
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
 $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
 
-$aInyectar = $apagarBanner . $encuadre;
+$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre;
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
     $tpl = str_replace('</head>', $aInyectar . '</head>', $tpl);
