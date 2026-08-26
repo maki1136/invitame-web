@@ -10,29 +10,54 @@
      · la foto del itinerario y la de hoteles -> 1200 px
      · las bandas de fondo (frase, contacto) -> todo el ancho de la ventana
 
-   O sea: cuatro anchos distintos en la misma pieza. En un monitor de 1440 la
-   foto del itinerario salía dos veces y media más ancha que la tarjeta que
-   tenía justo arriba.
+   O sea: cuatro anchos distintos en la misma pieza.
 
    LA SOLUCIÓN — la misma que ya usa el sobre
    La invitación entera se muestra centrada, del ancho con el que se ve en un
    celular, y el resto de la pantalla se llena con la propia foto de portada muy
-   desenfocada más un viñeteado. La pantalla queda llena, sin bandas de color
-   plano, y la pieza queda igual de uniforme que en el teléfono.
+   desenfocada más un viñeteado.
 
-   POR QUÉ EL ANCHO SE MIDE Y NO SE ESCRIBE
-   El ancho sale de medir `.portada` en vivo, no de un número escrito acá. Si
-   algún día se cambia el `max-width` de la portada en el motor, esto la sigue
-   sola y no hay dos números que mantener sincronizados.
+   ⚠️⚠️ LA COLUMNA SE COMÍA A SÍ MISMA. ESTO SE VIO EN SAFARI Y ERA GRAVE.
+
+   Qué pasaba: se medía el ancho de `.portada` y con ese número se le ponía un
+   `max-width` a `.frame`. Pero **la portada vive ADENTRO del marco**. O sea que
+   en la vuelta siguiente se medía una portada que YA ESTABA LIMITADA por la
+   medición anterior, y salía un número más chico. Y otra vez. Y otra. La
+   medición se realimentaba a sí misma y la columna se iba achicando sola.
+
+   En Chrome se frenaba pronto y casi no se notaba. En Safari seguía bajando:
+   la invitación quedaba como una tira angosta y el contador de días se salía
+   por los costados — se veía "416" cortado a la izquierda y los segundos
+   cortados a la derecha.
+
+   CÓMO SE ARREGLA DE VERDAD
+   1. Se busca el ancho NATURAL de la portada: el `max-width` que le puso el
+      motor. Ese número no depende de nada que hagamos nosotros, así que no se
+      puede realimentar.
+   2. Si el motor no lo declara en píxeles, se mide — pero SACANDO primero la
+      restricción del marco, para medir la portada libre y no la ya apretada.
+   3. Y se FIJA UNA SOLA VEZ. Una vez que hay un número bueno, no se vuelve a
+      medir salvo que cambie el tamaño de la ventana, y ahí se repite el
+      procedimiento completo (soltar, medir, fijar).
+
+   ⚠️ SI ALGUIEN VUELVE A PONER UN `medirColumna()` QUE LEA
+   `getBoundingClientRect()` SIN SOLTAR EL MARCO, VUELVE A PASAR.
+
+   Además hay un piso de 320 px: por debajo de eso ya no es una invitación, es
+   una tira, y conviene que no se aplique nada antes que aplicar algo roto.
 
    EN EL CELULAR NO HACE NADA: vive dentro de un @media de 680px para arriba.
    ============================================================================ */
 (function () {
 
-  var MIN = 680;
+  var MIN_VENTANA = 680;   /* de acá para arriba se encuadra */
+  var MIN_COLUMNA = 320;   /* menos que esto no es una columna, es una tira */
 
   function laPortada() {
     return document.querySelector('.portada');
+  }
+  function elMarco() {
+    return document.querySelector('.frame');
   }
 
   /* La foto de fondo: la misma de la portada, sea <img> o background-image. */
@@ -54,7 +79,7 @@
     s.id = 'encuadre-monitor';
     s.textContent = [
       '#inv-lienzo,#inv-vinieta{display:none}',
-      '@media (min-width:' + MIN + 'px){',
+      '@media (min-width:' + MIN_VENTANA + 'px){',
       '  #inv-lienzo{display:block;position:fixed;inset:0;z-index:-2;',
       '    background-size:cover;background-position:center;',
       '    filter:blur(70px) saturate(.65) brightness(.92);transform:scale(1.3)}',
@@ -71,21 +96,44 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
-  function medirColumna() {
-    var p = laPortada();
-    if (!p) return;
+  /* ⚠️ una vez que hay un ancho bueno, se congela: no se vuelve a medir */
+  var anchoFijado = 0;
+
+  /* El ancho que el motor le declara a la portada. Es el dato bueno porque no
+     depende de nada que hagamos nosotros. */
+  function anchoDeclarado(p) {
+    var mw = getComputedStyle(p).maxWidth || '';
+    var m = mw.match(/^([\d.]+)px$/);
+    return m ? Math.round(parseFloat(m[1])) : 0;
+  }
+
+  /* Medir SOLTANDO el marco, para no medir lo que ya apretamos antes. */
+  function anchoMedidoLibre(p) {
+    var f = elMarco();
+    var previo = f ? f.style.maxWidth : null;
+    if (f) f.style.maxWidth = 'none';
     var w = Math.round(p.getBoundingClientRect().width);
-    /* Si la portada todavía no se dibujó, o quedó a lo ancho de la ventana
-       porque el sobre está encima, no pisamos el valor: reintentamos después. */
-    if (w > 120 && w < window.innerWidth - 40) {
+    if (f) { if (previo) f.style.maxWidth = previo; else f.style.removeProperty('max-width'); }
+    return w;
+  }
+
+  function medirColumna() {
+    if (anchoFijado) return true;
+    var p = laPortada();
+    if (!p) return false;
+
+    var w = anchoDeclarado(p) || anchoMedidoLibre(p);
+
+    if (w >= MIN_COLUMNA && w < window.innerWidth - 40) {
+      anchoFijado = w;
       document.documentElement.style.setProperty('--inv-col', w + 'px');
       return true;
     }
-    return false;
+    return false;   /* todavía no se puede confiar: se reintenta */
   }
 
   function pintarFondo() {
-    var frame = document.querySelector('.frame');
+    var frame = elMarco();
     if (!frame) return;
     var url = fotoDeFondo();
     if (!url) return;
@@ -102,22 +150,30 @@
   }
 
   function arrancar() {
-    if (!document.querySelector('.frame')) return;   /* no es una invitación */
+    if (!elMarco()) return;   /* no es una invitación */
     ponerEstilos();
 
     /* El motor arma la portada y elige la foto después de que corre esto, así
-       que reintentamos un rato hasta que las dos cosas estén listas. */
+       que se reintenta un rato hasta que las dos cosas estén listas. */
     var n = 0;
     var t = setInterval(function () {
-      var listo = medirColumna();
+      medirColumna();
       pintarFondo();
-      if (++n > 40 || (listo && document.getElementById('inv-lienzo'))) {
-        if (n > 40) clearInterval(t);
-      }
+      if (++n > 40) clearInterval(t);
     }, 250);
     setTimeout(function () { clearInterval(t); }, 12000);
 
-    window.addEventListener('resize', function () { medirColumna(); });
+    /* Al cambiar el tamaño de la ventana se vuelve a empezar: se descongela,
+       se suelta el marco y se mide de nuevo. Nunca se mide encima de lo ya
+       apretado. */
+    var espera = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(espera);
+      espera = setTimeout(function () {
+        anchoFijado = 0;
+        medirColumna();
+      }, 200);
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
