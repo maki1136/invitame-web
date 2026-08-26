@@ -36,7 +36,7 @@ $SOBRES_VIDEO = array(
 $slug = isset($_GET['e']) ? strtolower($_GET['e']) : '';
 $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
-$img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
+$img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = ''; $coverReal = '';
 
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
@@ -75,7 +75,8 @@ if ($slug !== '') {
       'img_c_im-gen-miniatura-al-compartir',
       'img_f-imagen-miniatura-al-compartir'
     ));
-    if ($img === '') $img = $sv('cover');
+    $coverReal = $sv('cover');
+    if ($img === '') $img = $coverReal;
 
     // 2) titulo: el "Titulo al compartir" si lo cargaron; si no, los nombres de la pareja
     $title = $firstOf(array('c_titulo-al-compartir'));
@@ -139,59 +140,65 @@ if ($tpl === false) { $tpl = @file_get_contents(__DIR__ . '/index.html'); }
 if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
 
-/* ===== EL ENCUADRE DEL SOBRE, EN EL PRIMER PINTADO ============================
+/* ===== LO QUE SE VE ANTES DE QUE CORRA UN SOLO SCRIPT =========================
 
-   ⚠️⚠️ ESTO ARREGLA EL BUG MÁS FEO QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
+   ⚠️⚠️ ACÁ ESTÁN LOS DOS BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
 
-   QUÉ SE VEÍA
-   Al abrir la invitación, durante los primeros segundos —hasta que cargaba el
-   video del sobre— aparecía OTRO sobre a pantalla completa: una diagonal blanca
-   gigante, el monograma de los novios enorme y borroso, y un panel de papel
-   estirado. Recién después aparecía el sobre de verdad. Pasaba en Chrome, en
-   Safari, en el iPhone y en incógnito.
+   EL PATRÓN, QUE ES EL MISMO EN LOS DOS
+   El `index.html` trae valores POR DEFECTO escritos a mano en el `:root` —fotos
+   de banco de imágenes, de otra pareja— y el motor los reemplaza por los de
+   esta boda RECIÉN cuando corre su JavaScript. Entre el primer pintado y ese
+   momento pasan uno o dos segundos, y en esos segundos el invitado ve cosas que
+   no son suyas. Los `<script defer>` no llegan a tiempo. Nunca van a llegar.
+   Por eso esto se resuelve ACÁ, en el servidor, que ya leyó el evento de
+   Firestore y puede escribir los valores correctos en el `<head>`.
 
-   LOS CUATRO ERRORES QUE HUBO QUE ENCONTRAR — se arregló mal tres veces
-   1. Se lo trató como un bug de Safari. No lo era: pasaba en todos lados.
-   2. Se arregló en el CSS de /sobres/catalogo.js. Ese archivo es un
-      `<script defer>`: corre DESPUÉS del primer pintado. Y sus reglas apuntan a
-      `#env.carta-video`, una clase que el motor agrega por JavaScript y que
-      TAMPOCO existe en el primer pintado. El CSS estaba bien escrito, pero
-      llegaba tarde y no matcheaba nada. El problema nunca fue el CSS: era
-      CUÁNDO llegaba.
-   3. Dentro de `#env` conviven CUATRO sobres superpuestos, no dos:
+   BUG 1 — EL SOBRE ROTO
+   Antes de cargar el video se veía OTRO sobre a pantalla completa: una diagonal
+   blanca gigante, el monograma enorme y borroso, un panel de papel estirado.
+   Se arregló mal tres veces:
+   1. Se lo trató como bug de Safari. No lo era: pasaba en Chrome, Safari,
+      iPhone e incógnito.
+   2. Se arregló en el CSS de /sobres/catalogo.js, que es `defer` y encima
+      apunta a `#env.carta-video`, clase que agrega el JS. Llegaba tarde Y no
+      matcheaba nada.
+   3. Adentro de `#env` conviven CUATRO sobres superpuestos, no dos:
         · `.triflap` + `#tri-glow` + `#tri-seal`   (el de cuatro solapas)
-        · `#scene` → adentro `.envelope`, `.e-back`, `.e-pocket`, `.e-flap`,
-                     `.e-tint`, `.seal`, `#ephoto`, `#hint`   (el clásico)
+        · `#scene` → `.envelope`, `.e-back`, `.e-pocket`, `.e-flap`, `.e-tint`,
+                     `.seal`, `#ephoto`, `#hint`   (el clásico)
         · `.ct-wrap` → la tarjeta que se escribe sola
         · `#env-vid` → el video
-      La primera vez se escribió `#e-back`, `#e-pocket`, `#e-flap` con
-      almohadilla, y son CLASES, no ids: por eso el panel de papel seguía ahí.
-   4. Y EL PRINCIPAL: `#env-vid` nace con `display:none` en la hoja del motor.
-      Sólo se enciende cuando el JS agrega `.carta-video`. Al apagar los otros
-      tres sobres sin encender el video, la pantalla quedaba VACÍA. Hay que
-      hacer las dos cosas: apagar los otros Y encender el video.
+      Se escribió `#e-back` con almohadilla y son CLASES: por eso seguía.
+   4. Y el principal: `#env-vid` nace en `display:none`. Apagar los otros tres
+      sin encender el video dejaba la pantalla VACÍA.
 
-   POR QUÉ LA FOTO VA EN `#env::before` Y NO SÓLO DE FONDO DEL `<video>`
-   Un `<video>` sin datos todavía no pinta nada: ni su `poster`, ni el
-   `background` que le pongas por CSS. Con el fondo puesto sólo en el video,
-   quedaba un segundo de pantalla vacía —mejor que el sobre roto, pero feo—.
-   `#env::before` es un pseudo-elemento común: pinta la foto en el mismo lugar
-   y con la misma caja, en el primer frame, y el video le pasa por encima
-   (z-index 2) cuando está listo. El empalme no se nota porque son la misma
-   imagen.
+   BUG 2 — LA PORTADA DE OTRA INVITACIÓN
+   Al tocar el sello, antes de aparecer la foto de los novios, se veía la foto de
+   OTRA pareja. Misma causa: `--cover` está escrita a mano en el `:root`. El
+   motor la pisa por JS, pero el primer pintado ya se hizo. Ahora el servidor
+   escribe `--cover` con la portada de verdad.
 
-   CÓMO SE ARREGLA DE VERDAD
-   El servidor ya sabe qué sobre es (lo leyó de Firestore, más arriba). Mete el
-   encuadre directamente en el `<head>` antes de mandar el HTML: llega con la
-   primera línea, no hay ningún instante sin él.
+   POR QUÉ LA FOTO DEL SOBRE VA EN `#env::before`
+   Un `<video>` sin datos no pinta nada: ni su `poster`, ni el `background` que
+   le pongas por CSS. Con el fondo puesto sólo en el video quedaba un segundo de
+   pantalla vacía. `#env::before` es un pseudo-elemento común: pinta la foto en
+   la misma caja desde el primer frame, y el video le pasa por encima cuando
+   está listo. El empalme no se nota porque son la misma imagen.
 
-   Las reglas se apoyan en `#env-vid` y en las clases del HTML, NUNCA en
-   `carta-video`. Es la diferencia entre que ande y que no ande.
-
-   ⚠️ NO USAR `aspect-ratio` PARA EL ANCHO: sobre un `<video>` Safari no lo
-   aplica igual y el video se va a pantalla completa. El ancho va con `calc()`.
+   ⚠️ NO USAR `aspect-ratio` PARA EL ANCHO DEL VIDEO: en Safari no se aplica
+   igual sobre elementos reemplazados y el video se va a pantalla completa.
+   El ancho va con `calc()`.
    ============================================================================ */
-$encuadre = '';
+
+$preFirma = '';
+
+/* --- la portada de verdad, desde el primer frame --- */
+if ($coverReal !== '') {
+  $c = str_replace(array('"', '\\'), '', $coverReal);
+  $preFirma .= ':root{--cover:url("' . $c . '")!important}';
+}
+
+/* --- el sobre --- */
 if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
   $poster    = $SOBRES_VIDEO[$sobre]['poster'];
   $usaCarta  = $SOBRES_VIDEO[$sobre]['carta'];
@@ -202,8 +209,7 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
   $apagar = '#env .triflap,#env #tri-glow,#env #tri-seal,#env #scene';
   if (!$usaCarta) $apagar .= ',#env .ct-wrap';
 
-  $encuadre =
-    '<style id="sobre-encuadre-servidor">' .
+  $preFirma .=
     $apagar . '{display:none!important}' .
 
     /* la foto del sobre, pintada en el primer frame (el video tarda) */
@@ -224,9 +230,12 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
     '    height:' . $alto . '!important;width:' . $ancho . '!important;' .
     '    max-width:92vw!important;border-radius:30px;' .
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
-    '}' .
-    '</style>';
+    '}';
 }
+
+$encuadre = ($preFirma !== '')
+  ? '<style id="sobre-encuadre-servidor">' . $preFirma . '</style>'
+  : '';
 
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
 $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
