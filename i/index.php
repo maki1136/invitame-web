@@ -144,29 +144,32 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
    ⚠️⚠️ ESTO ARREGLA EL BUG MÁS FEO QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
 
    QUÉ SE VEÍA
-   Al abrir la invitación, durante los primeros segundos —hasta que terminaba de
-   cargar el video del sobre— aparecía otro sobre a pantalla completa: una
-   diagonal blanca gigante, el monograma de los novios enorme y borroso, y un
-   panel de papel estirado. Recién después aparecía el sobre de verdad. Pasaba
-   en Chrome, en Safari, en el iPhone y en incógnito.
+   Al abrir la invitación, durante los primeros segundos —hasta que cargaba el
+   video del sobre— aparecía OTRO sobre a pantalla completa: una diagonal blanca
+   gigante, el monograma de los novios enorme y borroso, y un panel de papel
+   estirado. Recién después aparecía el sobre de verdad. Pasaba en Chrome, en
+   Safari, en el iPhone y en incógnito.
 
-   POR QUÉ SE ARREGLÓ MAL DOS VECES
+   LOS CUATRO ERRORES QUE HUBO QUE ENCONTRAR — se arregló mal tres veces
    1. Se lo trató como un bug de Safari. No lo era: pasaba en todos lados.
    2. Se arregló en el CSS de /sobres/catalogo.js. Ese archivo es un
       `<script defer>`: corre DESPUÉS del primer pintado. Y sus reglas apuntan a
       `#env.carta-video`, una clase que el motor agrega por JavaScript y que
-      TAMPOCO existe en el primer pintado. O sea: el CSS estaba bien escrito,
-      pero llegaba tarde y no matcheaba nada. El problema nunca fue el CSS: era
+      TAMPOCO existe en el primer pintado. El CSS estaba bien escrito, pero
+      llegaba tarde y no matcheaba nada. El problema nunca fue el CSS: era
       CUÁNDO llegaba.
-
-   ⚠️ Y HABÍA UN TERCER ERROR: dentro de `#env` conviven CUATRO sobres
-   superpuestos, no dos. Hay que apagarlos a todos:
-     · `.triflap` + `#tri-glow` + `#tri-seal`   (el de cuatro solapas)
-     · `#scene`  → adentro van `.envelope`, `.e-back`, `.e-pocket`, `.e-flap`,
-                   `.e-tint`, `.seal`, `#ephoto`, `#hint`  (el clásico)
-     · `.ct-wrap` → la tarjeta que se escribe sola
-   La primera vez se escribió `#e-back`, `#e-pocket`, `#e-flap` con almohadilla,
-   y son CLASES, no ids: por eso el panel de papel siguió apareciendo.
+   3. Dentro de `#env` conviven CUATRO sobres superpuestos, no dos:
+        · `.triflap` + `#tri-glow` + `#tri-seal`   (el de cuatro solapas)
+        · `#scene` → adentro `.envelope`, `.e-back`, `.e-pocket`, `.e-flap`,
+                     `.e-tint`, `.seal`, `#ephoto`, `#hint`   (el clásico)
+        · `.ct-wrap` → la tarjeta que se escribe sola
+        · `#env-vid` → el video
+      La primera vez se escribió `#e-back`, `#e-pocket`, `#e-flap` con
+      almohadilla, y son CLASES, no ids: por eso el panel de papel seguía ahí.
+   4. Y EL PRINCIPAL: `#env-vid` nace con `display:none` en la hoja del motor.
+      Sólo se enciende cuando el JS agrega `.carta-video`. Al apagar los otros
+      tres sobres sin encender el video, la pantalla quedaba VACÍA. Hay que
+      hacer las dos cosas: apagar los otros Y encender el video.
 
    CÓMO SE ARREGLA DE VERDAD
    El servidor ya sabe qué sobre es (lo leyó de Firestore, más arriba). Mete el
@@ -196,17 +199,19 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
     '<style id="sobre-encuadre-servidor">' .
     $apagar . '{display:none!important}' .
 
-    /* el video ya nace con la foto del sobre puesta, así no hay hueco */
-    '#env-vid{background:#efe9e0 url("' . $poster . '") center/cover no-repeat}' .
+    /* ⚠️ encender el video: nace en display:none. Sin esto queda todo vacío. */
+    '#env-vid{display:block!important;position:absolute;inset:0;' .
+    '  width:100%;height:100%;object-fit:cover;' .
+    '  background:#efe9e0 url("' . $poster . '") center/cover no-repeat}' .
 
     '@media (min-width:680px){' .
     '  #env{background:#cfc4b4}' .
     '  #env-vid{' .
-    '    position:absolute!important;inset:auto!important;' .
+    '    inset:auto!important;' .
     '    left:50%!important;top:50%!important;' .
     '    transform:translate(-50%,-50%)!important;z-index:2;' .
     '    height:' . $alto . '!important;width:' . $ancho . '!important;' .
-    '    max-width:92vw!important;object-fit:cover;border-radius:30px;' .
+    '    max-width:92vw!important;border-radius:30px;' .
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
     '}' .
     '</style>';
