@@ -18,33 +18,43 @@
    arma sus propias fichas: tapa lo que la fecha haya puesto. Las disposiciones
    marcan sus pedazos con `data-rasp`:
      · `data-rasp="1|2|3"` → tres pedazos: se puede raspar en tres tiempos
-       (así funcionan "fotos" y "circulos": cada número sobre su propia foto)
      · `data-rasp="0"`     → un solo bloque: se tapa entero
    Si no hay ninguna disposición, la raspadita arma sus fichas como siempre.
-   Las dos cosas no saben nada una de la otra: se entienden por esa marca.
 
-   ⚠️⚠️ UNA VEZ RASPADA, QUEDA RASPADA. ESTO SE ROMPIÓ EN PRODUCCIÓN.
+   ⚠️⚠️ BUG 1 — UNA VEZ RASPADA, QUEDA RASPADA.
    Antes, cualquier `resize` borraba la firma y volvía a armar la capa: el
    invitado raspaba, veía la fecha, y la plata se le ponía de nuevo encima. En
-   el celular es peor todavía, porque al hacer scroll entra y sale la barra de
-   direcciones y eso dispara `resize` a cada rato — o sea que se reponía sola
-   cada dos por tres.
-   Ahora hay una bandera `completado`: cuando se terminó de raspar, `armar()`
-   se va en la primera línea y no vuelve a tocar nada nunca más. Y el `resize`
-   sólo rearma si la tarjeta CAMBIÓ DE TAMAÑO de verdad (más de 4 px), no cada
-   vez que el navegador avisa.
+   el celular es peor, porque al hacer scroll entra y sale la barra de
+   direcciones y eso dispara `resize` a cada rato.
+   Lo arregla la bandera `completado`: cuando se terminó, `armar()` se va en la
+   primera línea. Y el `resize` sólo rearma si la tarjeta CAMBIÓ DE TAMAÑO de
+   verdad (más de 4 px).
+
+   ⚠️⚠️ BUG 2 — LAS TAPAS QUEDABAN CORRIDAS (Safari y iPhone).
+   Se veía un círculo plateado al lado del círculo de la fecha, en vez de encima,
+   y raspar no revelaba nada. Y si recargabas, andaba bien.
+
+   La causa: este módulo MIDE dónde están los pedazos de la fecha con
+   `getBoundingClientRect()` para poner las tapas justo arriba. Si mide antes de
+   que terminen de cargar las tipografías (Great Vibes, Forum, Cormorant…), los
+   números todavía se están dibujando con la letra de reemplazo, ocupan otro
+   ancho, y las cajas dan mal. Al recargar, la fuente ya está en caché, llega a
+   tiempo y por eso "a veces anda". Safari es más propenso porque tarda más en
+   resolver las fuentes web.
+
+   La solución tiene dos partes, las dos necesarias:
+   1. ESPERAR a `document.fonts.ready` antes de armar por primera vez.
+   2. VIGILAR unos segundos: si los pedazos de la fecha se movieron y el
+      invitado TODAVÍA NO EMPEZÓ A RASPAR, se rearma en el lugar correcto.
+      Si ya empezó a raspar no se toca nada, porque perdería su avance —para
+      eso está la bandera `tocado`.
+
+   ⚠️ NO alcanza con sólo esperar las fuentes: también entran a último momento
+   las fotos de la disposición "fotos", que cambian el alto. Por eso la vigilancia.
 
    CÓMO SE CONFIGURA (panel → body → dirección web)
-     encendido / rasp          1 para encender
-     modo      / raspModo      simple · partes
-     forma     / raspForma     cuadrado · redondo · corazon  (sólo con fichas propias)
-     mes       / raspMes       corto (NOV) · completo (Noviembre)
-     color     / raspColor     la capa que se raspa
-     num       / raspNum       el color de los números
-     fondo     / raspFondo     el relleno de la ficha
-     linea     / raspLinea     el color del filete
-     auto      / raspAuto      0 a 100 (0 = nunca se completa sola)
-     polvillo · destello · vibrar · grosor
+     encendido / rasp · modo / raspModo · forma / raspForma · mes / raspMes
+     color · num · fondo · linea · auto · polvillo · destello · vibrar · grosor
 
    ⚠️ TRES COSAS QUE COSTARON
    · `box-sizing:border-box` en las fichas, o el texto se escapa de la forma.
@@ -267,6 +277,10 @@
     } catch (e) { return 0; }
   }
 
+  /* ⚠️ En cuanto el invitado da la primera pasada, esto queda en true y la
+     vigilancia de posición deja de rearmar: si rearmara, le borraría el avance. */
+  var tocado = false;
+
   function armarZona(zona, cfg, alTerminar) {
     var cv = zona.querySelector('canvas');
     var g = cv.getContext('2d');
@@ -287,6 +301,7 @@
     function rascar(ev) {
       if (terminada || zona.classList.contains('dormida')) return;
       if (!raspando) return;
+      tocado = true;
       ev.preventDefault();
       var p = punto(ev);
       g.globalCompositeOperation = 'destination-out';
@@ -310,7 +325,7 @@
       setTimeout(function () { alTerminar(); }, 380);
     }
 
-    function abajo(ev) { raspando = true; ultimo = null; rascar(ev); }
+    function abajo(ev) { raspando = true; ultimo = null; tocado = true; rascar(ev); }
     function arriba() { raspando = false; ultimo = null; }
 
     cv.addEventListener('mousedown', abajo);
@@ -339,14 +354,24 @@
 
   var yaArmado = false, firmaVieja = null;
 
-  /* ⚠️ LA BANDERA QUE ARREGLA EL BUG DE "SE VUELVE A PONER".
-     Cuando el invitado terminó de raspar, esto queda en true y `armar()` no
-     vuelve a tocar nada. Sin esto, cualquier `resize` —y en el celular el
-     scroll dispara resize— le tapaba la fecha de nuevo. */
+  /* ⚠️ Cuando se terminó de raspar, `armar()` se va en la primera línea. */
   var completado = false;
 
   /* el tamaño con el que se armó, para saber si un resize fue de verdad */
   var medidaVieja = null;
+
+  /* ⚠️ Dónde estaban los pedazos de la fecha cuando armamos. Si se mueven
+     —porque recién ahí cargó la tipografía o una foto— hay que recolocar. */
+  var geoVieja = null;
+
+  function geoDe(card) {
+    var rc = card.getBoundingClientRect();
+    return [].map.call(card.querySelectorAll('[data-rasp]'), function (e) {
+      var b = e.getBoundingClientRect();
+      return Math.round(b.left - rc.left) + ',' + Math.round(b.top - rc.top) +
+             ',' + Math.round(b.width) + ',' + Math.round(b.height);
+    }).join('|');
+  }
 
   function armar() {
     var card = document.getElementById('scratchcard');
@@ -439,6 +464,7 @@
         return { zona: z, sig: textos[i] || '' };
       });
       encadenar(zonasA);
+      geoVieja = geoDe(card);
       return;
     }
 
@@ -447,6 +473,7 @@
       var refe = bloqueFecha || card.querySelector('.ivf') || card;
       var z = nuevaZona({ left: 0, top: 0, w: rc.width, h: rc.height }, 'cuadrado');
       armarZona(z, cfg, cerrar);
+      geoVieja = geoDe(card);
       return;
     }
 
@@ -529,12 +556,12 @@
       var zs = nuevaZona({ left: 0, top: 0, w: rc.width, h: rc.height }, 'cuadrado');
       armarZona(zs, cfg, cerrar);
     }
+    geoVieja = geoDe(card);
   }
 
   /* ⚠️ El resize sólo rearma si la tarjeta cambió de tamaño DE VERDAD.
      En el celular, al hacer scroll entra y sale la barra de direcciones y eso
-     dispara `resize` constantemente: si acá se borrara la firma sin mirar,
-     la plata se repondría sola cada dos por tres. */
+     dispara `resize` constantemente. */
   function alRedimensionar() {
     if (completado) return;
     var card = document.getElementById('scratchcard');
@@ -548,8 +575,35 @@
     setTimeout(armar, 150);
   }
 
-  function arrancar() {
+  /* ⚠️ LA VIGILANCIA QUE ARREGLA LAS TAPAS CORRIDAS.
+     Si los pedazos de la fecha se movieron (cargó la tipografía, entró una foto)
+     y el invitado todavía no empezó a raspar, se rearma en el lugar correcto. */
+  function vigilarPosicion() {
+    if (completado || tocado) return;
+    var card = document.getElementById('scratchcard');
+    if (!card || !card.querySelector('.rasp-zona')) return;
+    var ahora = geoDe(card);
+    if (!ahora || ahora === geoVieja) return;
+    firmaVieja = null;
     armar();
+  }
+
+  function arrancar() {
+    /* ⚠️ Esperar las tipografías ANTES de medir. Sin esto, en Safari y en el
+       iPhone las tapas quedan corridas al lado de los números. */
+    var listo = false;
+    function primeraVez() {
+      if (listo) return;
+      listo = true;
+      armar();
+    }
+    try {
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(primeraVez);
+        setTimeout(primeraVez, 2500);   /* red de seguridad si nunca resuelve */
+      } else { primeraVez(); }
+    } catch (e) { primeraVez(); }
+
     addEventListener('message', function () { setTimeout(armar, 80); });
 
     var espera = null;
@@ -557,6 +611,12 @@
       clearTimeout(espera);
       espera = setTimeout(alRedimensionar, 220);
     });
+
+    /* vigilancia de posición durante los primeros segundos */
+    var v = 0, tv = setInterval(function () {
+      vigilarPosicion();
+      if (++v > 40 || completado || tocado) clearInterval(tv);
+    }, 300);
 
     if (ES_PREVIEW) {
       setInterval(armar, 800);
