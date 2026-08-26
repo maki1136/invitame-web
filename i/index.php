@@ -171,12 +171,19 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
       tres sobres sin encender el video, la pantalla quedaba VACÍA. Hay que
       hacer las dos cosas: apagar los otros Y encender el video.
 
+   POR QUÉ LA FOTO VA EN `#env::before` Y NO SÓLO DE FONDO DEL `<video>`
+   Un `<video>` sin datos todavía no pinta nada: ni su `poster`, ni el
+   `background` que le pongas por CSS. Con el fondo puesto sólo en el video,
+   quedaba un segundo de pantalla vacía —mejor que el sobre roto, pero feo—.
+   `#env::before` es un pseudo-elemento común: pinta la foto en el mismo lugar
+   y con la misma caja, en el primer frame, y el video le pasa por encima
+   (z-index 2) cuando está listo. El empalme no se nota porque son la misma
+   imagen.
+
    CÓMO SE ARREGLA DE VERDAD
    El servidor ya sabe qué sobre es (lo leyó de Firestore, más arriba). Mete el
    encuadre directamente en el `<head>` antes de mandar el HTML: llega con la
-   primera línea, no hay ningún instante sin él. Y como sabe cuál es el `poster`,
-   se lo pone de fondo al `<video>`: la foto del sobre aparece al instante, en su
-   caja correcta, mientras el video todavía baja.
+   primera línea, no hay ningún instante sin él.
 
    Las reglas se apoyan en `#env-vid` y en las clases del HTML, NUNCA en
    `carta-video`. Es la diferencia entre que ande y que no ande.
@@ -199,17 +206,21 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
     '<style id="sobre-encuadre-servidor">' .
     $apagar . '{display:none!important}' .
 
+    /* la foto del sobre, pintada en el primer frame (el video tarda) */
+    '#env::before{content:"";position:absolute;inset:0;z-index:1;' .
+    '  background:#efe9e0 url("' . $poster . '") center/cover no-repeat;' .
+    '  pointer-events:none}' .
+
     /* ⚠️ encender el video: nace en display:none. Sin esto queda todo vacío. */
     '#env-vid{display:block!important;position:absolute;inset:0;' .
-    '  width:100%;height:100%;object-fit:cover;' .
-    '  background:#efe9e0 url("' . $poster . '") center/cover no-repeat}' .
+    '  width:100%;height:100%;object-fit:cover;z-index:2}' .
 
     '@media (min-width:680px){' .
     '  #env{background:#cfc4b4}' .
-    '  #env-vid{' .
+    '  #env::before,#env-vid{' .
     '    inset:auto!important;' .
     '    left:50%!important;top:50%!important;' .
-    '    transform:translate(-50%,-50%)!important;z-index:2;' .
+    '    transform:translate(-50%,-50%)!important;' .
     '    height:' . $alto . '!important;width:' . $ancho . '!important;' .
     '    max-width:92vw!important;border-radius:30px;' .
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
