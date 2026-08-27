@@ -306,21 +306,15 @@ if ($aInyectar !== '') {
 
 /* ===== ESPAÑOL DE MÉXICO, EN EL HTML, ANTES DE MANDARLO ======================
 
-   El motor está escrito en voseo argentino. `efectos/es-mx.js` lo traduce, pero
-   es diferido: el primer segundo el invitado igual leía "INGRESÁ" y "TOCÁ EL
-   SELLO PARA ABRIR", que es literalmente el primer texto de la invitación.
+   Ver la nota larga de BUG 4 arriba.
 
-   ⚠️ CÓMO SE DETECTA EL IDIOMA — leer la nota larga de arriba (BUG 4).
-   NO usar expresión regular con la `é`: sin la marca `u` se parte en dos bytes
-   y la condición falla en silencio. Se busca `xico`, que agarra "México" y
-   "Mexico" sin depender del acento.
+   ⚠️ CÓMO SE DETECTA EL IDIOMA: NO con expresión regular. La `é` de "México"
+   son dos bytes en UTF-8 y sin la marca `u` la condición falla EN SILENCIO.
+   Se busca `xico`, que agarra "México" y "Mexico" sin depender del acento.
 
-   ⚠️ NO SON VOSEO Y NO SE TOCAN: "Mamá", "Papá", "está", "esté", "aquí",
-   "asistiré", "podré". Terminan igual pero son correctas en todo el idioma.
-   Si alguna entrara en esta lista, la invitación diría "Mama y Papa".
-
-   ⚠️ Las FRASES van primero: "Pasá la voz" no es "Pasa la voz", es "Corre la
-   voz". Si se reemplazara la palabra suelta antes, se perdería.
+   ⚠️ LA LISTA DE PALABRAS VIVE EN `i/textos-es-mx.php`, no acá. Está separada
+   a propósito: sumar una palabra tiene que costar dos líneas, no reescribir
+   este archivo entero.
    ============================================================================ */
 $idiomaMin = function_exists('mb_strtolower')
   ? mb_strtolower($idioma, 'UTF-8')
@@ -330,40 +324,14 @@ $esMexico = ($idioma !== '') &&
             (strpos($idiomaMin, 'xico') !== false || strpos($idiomaMin, 'mx') !== false);
 
 if ($esMexico) {
-
-  $frases = array(
-    'Pasá el dedo para descubrir' => 'Desliza el dedo para descubrir',
-    'Pasá la voz'                 => 'Corre la voz',
-    'si querés tener un detalle'  => 'si quieres tener un detalle',
-    'Si querés tener un detalle'  => 'Si quieres tener un detalle',
-    'dejamos nuestras mesas'      => 'aquí están nuestras mesas'
-  );
-
-  /* las que están de verdad en el motor, en sus dos capitalizaciones */
-  $palabras = array(
-    'Abrí'=>'Abre',          'abrí'=>'abre',
-    'Compartí'=>'Comparte',  'compartí'=>'comparte',
-    'Entrá'=>'Entra',        'entrá'=>'entra',
-    'Escribí'=>'Escribe',    'escribí'=>'escribe',
-    'Escuchá'=>'Escucha',    'escuchá'=>'escucha',
-    'Esperá'=>'Espera',      'esperá'=>'espera',
-    'Ingresá'=>'Ingresa',    'ingresá'=>'ingresa',
-    'Jugá'=>'Juega',         'jugá'=>'juega',
-    'Mirá'=>'Mira',          'mirá'=>'mira',
-    'Pasá'=>'Pasa',          'pasá'=>'pasa',
-    'Probá'=>'Prueba',       'probá'=>'prueba',
-    'Rascá'=>'Raspa',        'rascá'=>'raspa',
-    'Recargá'=>'Recarga',    'recargá'=>'recarga',
-    'Subí'=>'Sube',          'subí'=>'sube',
-    'Sumá'=>'Agrega',        'sumá'=>'agrega',
-    'Sugerí'=>'Sugiere',     'sugerí'=>'sugiere',
-    'Tocá'=>'Toca',          'tocá'=>'toca',
-    'Confirmá'=>'Confirma',  'confirmá'=>'confirma',
-    'querés'=>'quieres',     'podés'=>'puedes',  'tenés'=>'tienes'
-  );
-
-  $tpl = str_replace(array_keys($frases),   array_values($frases),   $tpl);
-  $tpl = str_replace(array_keys($palabras), array_values($palabras), $tpl);
+  $listas = __DIR__ . '/textos-es-mx.php';
+  if (is_file($listas)) {
+    $ES_MX_FRASES = array(); $ES_MX_PALABRAS = array();
+    include $listas;
+    /* las frases van PRIMERO: "Pasá la voz" es "Corre la voz", no "Pasa la voz" */
+    if ($ES_MX_FRASES)   $tpl = str_replace(array_keys($ES_MX_FRASES),   array_values($ES_MX_FRASES),   $tpl);
+    if ($ES_MX_PALABRAS) $tpl = str_replace(array_keys($ES_MX_PALABRAS), array_values($ES_MX_PALABRAS), $tpl);
+  }
 }
 
 
