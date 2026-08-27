@@ -11,6 +11,27 @@
    sólo vale si es lo primero de la hoja: partir el archivo en dos rompe todo
    en silencio. Todo va acá adentro.
 
+   ⚠️⚠️ LA REGLA MÁS IMPORTANTE DE ESTE ARCHIVO — CUÁNDO VA `!important`
+
+   Lo que la clienta elige en el panel SIEMPRE tiene que ganarle a lo que trae
+   el motor. El panel escribe sus valores como estilo en línea sobre `:root`,
+   y un `!important` de una hoja como ésta le gana a un estilo en línea.
+   O sea: poner `!important` sobre una variable que viene del panel APAGA el
+   control del panel.
+
+   Y pasó de verdad. Al sacar el verde se le puso `!important` a `--verde`, que
+   SÍ viene del panel (campo "color"). Resultado: tres invitaciones que habían
+   elegido colores distintos —un marrón, un verde de playa y un oro— se veían
+   las tres del MISMO marrón. El selector de color principal quedó sin efecto y
+   no se notaba, porque cada invitación se mira de a una.
+
+   REGLA:
+     · Variable que viene del panel  → SIN `!important` (es sólo un valor por
+       defecto mejor que el del motor; si la clienta elige, manda ella).
+     · Variable que sólo vive en el motor → puede llevar `!important`.
+     · Ante la duda, SIN `!important`, y se comprueba abriendo dos invitaciones
+       con colores distintos y mirando si se ven distintas.
+
    ⚠️ CÓMO SE COMPRUEBA QUE UN COLOR "SE LEE". No a ojo. Se mide el contraste
    entre la letra y su fondo: 4.5 o más en texto normal, 3 o más en texto
    grande (24px, o 19px en negrita). El banco de pruebas trae el medidor.
@@ -39,25 +60,19 @@
 
 /* --- EL VERDE, AFUERA -------------------------------------------------------
 
-   EL PROBLEMA ERA MÁS GRANDE QUE UN GUSTO
+   El motor trae dieciséis verdes escritos a mano. Los de estas variables no
+   salían de ningún campo del panel, así que aparecían en TODA invitación sin
+   forma de sacarlos desde el admin.
 
-   El motor tiene DIECISÉIS verdes escritos a mano, con variables `--verde`,
-   `--sage`, `--sage-cl` y `--muted`. No salen de ningún campo del panel: son
-   el color de acento de la plataforma. Por eso aparecían en TODA invitación y
-   no había forma de sacarlos desde el admin.
-
-   Y no era sólo estética. Los verdes eran además los colores que NO SE LEÍAN:
+   Y no era sólo estética. Eran además los colores que NO SE LEÍAN:
 
        --sage   → .kick (títulos chiquitos), .evento .sub (EL NOMBRE DEL
                   LUGAR), .sc-mon (el mes del calendario)      → contraste 3.2
        --muted  → .addr (la fecha y dirección de cada evento),
                   .l (CLABE, Titular, Banco)                   → contraste 3.6
 
-   QUÉ SE PUSO EN SU LUGAR
-
-   Oro viejo para los acentos y gris cálido para el texto secundario. Pega con
-   la paleta que ya tiene la invitación —marfil, arena, chocolate— y con el
-   lacre dorado del sobre.
+   En su lugar: oro viejo para los acentos y gris cálido para el texto
+   secundario.
 
    ⚠️ EL ACENTO SON DOS TONOS, NO UNO, Y NO ES CAPRICHO. `--sage` se usa sobre
    fondo CLARO y `--sage-cl` sobre fondo OSCURO. Un solo color no puede tener
@@ -69,12 +84,20 @@
        #6b6157  gris cálido     → contraste 5.3 ✓  (era 3.6)
    ============================================================================ */
 
+/* SÍ llevan !important: sólo viven en el motor, el panel no los toca. */
 :root{
-  --verde:    #3b2f26 !important;   /* títulos grandes y frase — era verde botella */
-  --verde2:   #2f251e !important;
   --sage:     #7d5f34 !important;   /* acento sobre fondo CLARO  — oro viejo oscuro */
   --sage-cl:  #d8b877 !important;   /* acento sobre fondo OSCURO — oro viejo claro  */
   --muted:    #6b6157 !important;   /* texto secundario — era gris VERDOSO y no se leía */
+}
+
+/* ⚠️ NO llevan !important: `--verde` es el campo "color" del panel, el color
+   principal que elige la clienta. Acá sólo se mejora el valor POR DEFECTO
+   —el motor traía un verde botella— para las invitaciones que no eligieron
+   ninguno. Si la clienta elige, gana ella. */
+:root{
+  --verde:  #3b2f26;
+  --verde2: #2f251e;
 }
 
 /* el "Guarda la fecha" del calendario venía con su propio marrón claro (4.1) */
@@ -118,8 +141,6 @@
 
 /* --- UN VELO SOBRE LAS FOTOS QUE TIENEN TEXTO ENCIMA ------------------------
 
-   EL PROBLEMA QUE NINGÚN MEDIDOR PUEDE VER
-
    Sobre una foto el contraste cambia píxel a píxel: la misma letra blanca se
    lee perfecto sobre el saco negro del novio y desaparece sobre el vestido de
    la novia. Por eso el chequeo de contraste SALTEA todo lo que va sobre foto
@@ -132,12 +153,9 @@
 
    ⚠️ POR QUÉ ES SEGURO HACERLO ASÍ. `.capa` y `.pbg` son capas de foto VACÍAS
    (cero hijos, cero texto) y posicionadas en absoluto. Ponerles un `::after`
-   oscurece la foto y NO PUEDE tapar ningún texto, porque el texto no vive
-   adentro de ellas. Si en cambio se le pusiera el velo a la sección entera,
-   el pseudo-elemento se dibujaría ENCIMA del texto y lo taparía.
-
-   El velo es más fuerte arriba y abajo, y casi transparente en el medio: así
-   protege los títulos y los bordes sin apagar la foto.
+   oscurece la foto y NO PUEDE tapar ningún texto. Si en cambio se le pusiera
+   el velo a la sección entera, el pseudo-elemento se dibujaría ENCIMA del
+   texto y lo taparía.
    ============================================================================ */
 
 .capa::after,
@@ -164,37 +182,28 @@
 
 /* --- EL BLOQUE DE SPOTIFY ---------------------------------------------------
 
-   ERA UN AGUJERO NEGRO Y ADEMÁS TENÍA UN CAJÓN VACÍO
+   Era lo único negro puro de toda la invitación, con esquinas rectas. Adentro
+   no se puede tocar nada —es de otro dominio— pero sí se lo puede ENMARCAR.
 
-   Lo primero: es lo único negro puro de toda la invitación, con esquinas
-   rectas. Adentro no se puede tocar nada —es de otro dominio y el navegador no
-   deja entrar—, pero sí se lo puede ENMARCAR: esquinas redondeadas como las de
-   las tarjetas de eventos y una sombra suave que lo apoye sobre el fondo.
-
-   Lo segundo, y acá me equivoqué DOS VECES:
-
-   En el celular quedaban unos 200 px vacíos debajo del reproductor.
+   Y además tenía un cajón vacío de 200 px en el celular. Acá me equivoqué:
    · 1ª teoría: lo rompí yo con un `border:1px`, porque el borde le come dos
      píxeles de ancho y Spotify cambia de diseño según el ancho. Saqué el
-     borde y el cajón siguió igual. Descartada.
-   · Entonces lo MEDÍ sobre la captura: el reproductor oscuro ocupa unos
-     150 px y el marco 352. Esos 150 son el tamaño "compacto" oficial de
-     Spotify.
+     borde y el cajón siguió. Descartada.
+   · Entonces lo MEDÍ: el reproductor ocupa 150 px y el marco 352. Esos 150
+     son el tamaño "compacto" oficial de Spotify.
 
-   La explicación verdadera es más simple: en pantallas angostas Spotify
-   SIEMPRE usa su versión compacta, mida lo que mida el marco. El cajón vacío
-   no lo causé yo — estaba desde que existe el sector de música, y no se veía
-   porque las muestras se miraban en la compu, donde entra la versión grande.
+   La explicación verdadera: en pantallas angostas Spotify SIEMPRE usa su
+   versión compacta, mida lo que mida el marco. El cajón no lo causé yo —
+   estaba desde que existe el sector de música, y no se veía porque las
+   muestras se miraban en la compu.
 
    ⚠️ LA LECCIÓN: "lo rompí yo con el último cambio" es la primera hipótesis,
-   no la conclusión. Cuando el arreglo no arregla, hay que MEDIR en vez de
-   proponer otra teoría.
+   no la conclusión. Cuando el arreglo no arregla, hay que MEDIR.
 
-   ⚠️ EL CORTE VA EN 520 px, no en el 680 que usa el resto de la invitación:
-   Spotify decide por SU ancho, no por el de la página.
+   ⚠️ EL CORTE VA EN 520 px, no en el 680 del resto: Spotify decide por SU
+   ancho, no por el de la página.
 
-   ⚠️ NO PONERLE BORDE, por lo de los dos píxeles: con la sombra sola se ve
-   igual de bien y no se le toca el ancho al contenido.
+   ⚠️ NO PONERLE BORDE, por lo de los dos píxeles.
    ============================================================================ */
 
 iframe[src*="spotify"]{
@@ -212,17 +221,21 @@ iframe[src*="spotify"]{
 
 /* --- EL BOTÓN "AGENDAR" CASI NO SE VEÍA -------------------------------------
 
-   Al lado del "VER MAPA", que es marrón sólido, el de agendar era beige sobre
-   marfil: se perdía. Los dos son acciones igual de válidas, así que el segundo
-   pasa a ser un botón de contorno — se ve, y sigue siendo el secundario.
+   Al lado del "VER MAPA", que es sólido, el de agendar era beige sobre marfil:
+   se perdía. Pasa a ser un botón de contorno — se ve, y sigue siendo el
+   secundario.
+
+   ⚠️ Usa `currentColor` a propósito, para que tome el color principal que haya
+   elegido la clienta en vez de clavarle un marrón.
    ============================================================================ */
 
 .evento .btn.sec2,
 .evento .btn.ghost,
 .evento .agendar{
   background: transparent !important;
-  border: 1px solid rgba(59, 47, 38, .45) !important;
-  color: #3b2f26 !important;
+  border: 1px solid currentColor !important;
+  color: var(--verde) !important;
+  opacity: .92;
 }
 
 
