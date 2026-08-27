@@ -7,10 +7,13 @@
    ⚠️ Sirve para arreglos que valen para TODAS las invitaciones. Lo que depende
    de los datos de cada evento va en `i/sin-demo.php`.
 
+   ⚠️ NO USAR @import ACÁ. Esto se inyecta adentro de un <style>, y `@import`
+   sólo vale si es lo primero de la hoja: partir el archivo en dos rompe todo
+   en silencio. Todo va acá adentro.
+
    ⚠️ CÓMO SE COMPRUEBA QUE UN COLOR "SE LEE". No a ojo. Se mide el contraste
-   entre la letra y su fondo: tiene que dar 4.5 o más en texto normal, y 3 o
-   más en texto grande (24px, o 19px en negrita). Debajo de eso hay gente que
-   directamente no lo lee. El banco de pruebas trae el medidor.
+   entre la letra y su fondo: 4.5 o más en texto normal, 3 o más en texto
+   grande (24px, o 19px en negrita). El banco de pruebas trae el medidor.
    ============================================================================ */
 
 
@@ -122,10 +125,6 @@
    la novia. Por eso el chequeo de contraste SALTEA todo lo que va sobre foto
    —cualquier número sería inventado— y esto se encuentra mirando.
 
-   Mirando la captura entera apareció: las últimas líneas de la frase larga
-   caen justo sobre el vestido blanco y no se leen. La frase ya tenía sombra;
-   la sombra sola no alcanza contra un fondo casi blanco.
-
    ⚠️ ESTO NO ES UN ARREGLO PARA UNA FOTO. Es una regla para TODAS: cualquier
    foto que tenga texto encima lleva velo. Si mañana la clienta sube otra foto,
    clara u oscura, el texto se lee igual. Por eso se eligió el velo en vez de
@@ -163,31 +162,51 @@
 }
 
 
-/* --- EL BLOQUE DE SPOTIFY DESENTONABA ---------------------------------------
+/* --- EL BLOQUE DE SPOTIFY ---------------------------------------------------
 
-   Es lo único negro puro de toda la invitación, con esquinas rectas, la
-   tipografía de Spotify y su foto de fiesta. En medio del marfil y el
-   chocolate parecía un agujero.
+   ERA UN AGUJERO NEGRO Y ADEMÁS TENÍA UN CAJÓN VACÍO
 
-   No se puede cambiar por dentro —es de otro dominio y el navegador no deja
-   entrar—, pero sí se lo puede ENMARCAR: esquinas redondeadas como las de las
-   tarjetas de eventos y una sombra suave que lo apoye sobre el fondo.
+   Lo primero: es lo único negro puro de toda la invitación, con esquinas
+   rectas. Adentro no se puede tocar nada —es de otro dominio y el navegador no
+   deja entrar—, pero sí se lo puede ENMARCAR: esquinas redondeadas como las de
+   las tarjetas de eventos y una sombra suave que lo apoye sobre el fondo.
 
-   ⚠️⚠️ NO PONERLE BORDE. Se probó con `border:1px` y salió mal: el borde le
-   come dos píxeles de ancho al contenido, y eso alcanzó para cruzar el límite
-   donde Spotify cambia de diseño. Pasó del reproductor grande al compacto, que
-   ocupa como 200 px de los 352 del marco — y quedó un cajón vacío enorme
-   debajo del reproductor.
+   Lo segundo, y acá me equivoqué DOS VECES:
 
-   Es un buen recordatorio: adentro de un iframe ajeno no se puede tocar nada,
-   pero SÍ se lo puede romper desde afuera cambiándole el ancho. Con la sombra
-   sola se ve igual de bien y no se toca el ancho.
+   En el celular quedaban unos 200 px vacíos debajo del reproductor.
+   · 1ª teoría: lo rompí yo con un `border:1px`, porque el borde le come dos
+     píxeles de ancho y Spotify cambia de diseño según el ancho. Saqué el
+     borde y el cajón siguió igual. Descartada.
+   · Entonces lo MEDÍ sobre la captura: el reproductor oscuro ocupa unos
+     150 px y el marco 352. Esos 150 son el tamaño "compacto" oficial de
+     Spotify.
+
+   La explicación verdadera es más simple: en pantallas angostas Spotify
+   SIEMPRE usa su versión compacta, mida lo que mida el marco. El cajón vacío
+   no lo causé yo — estaba desde que existe el sector de música, y no se veía
+   porque las muestras se miraban en la compu, donde entra la versión grande.
+
+   ⚠️ LA LECCIÓN: "lo rompí yo con el último cambio" es la primera hipótesis,
+   no la conclusión. Cuando el arreglo no arregla, hay que MEDIR en vez de
+   proponer otra teoría.
+
+   ⚠️ EL CORTE VA EN 520 px, no en el 680 que usa el resto de la invitación:
+   Spotify decide por SU ancho, no por el de la página.
+
+   ⚠️ NO PONERLE BORDE, por lo de los dos píxeles: con la sombra sola se ve
+   igual de bien y no se le toca el ancho al contenido.
    ============================================================================ */
 
 iframe[src*="spotify"]{
   border-radius: 16px !important;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(59, 47, 38, .16);
+}
+
+@media (max-width: 520px){
+  iframe[src*="spotify"]{
+    height: 152px !important;   /* lo que Spotify de verdad dibuja en celular */
+  }
 }
 
 
