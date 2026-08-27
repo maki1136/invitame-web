@@ -64,10 +64,6 @@
        #7d5f34  sobre marfil    → contraste 5.2 ✓
        #d8b877  sobre chocolate → contraste 5.2 ✓
        #6b6157  gris cálido     → contraste 5.3 ✓  (era 3.6)
-
-   `--verde` (#2e433c) pintaba los títulos GRANDES y la frase larga. Era tan
-   oscuro que parecía negro, pero enfriaba todo. Va un marrón espresso: mismo
-   peso visual, temperatura cálida.
    ============================================================================ */
 
 :root{
@@ -90,9 +86,6 @@
    Había texto de 10 y 11 px. En un celular eso es muy chico, y justo caía en
    lo que la gente NECESITA poder leer y copiar: los datos para transferir el
    regalo, y la dirección de cada evento.
-
-   Se suben apenas, lo justo para que se lean sin romper el diseño. No se toca
-   nada más: el resto de la tipografía está bien.
    ============================================================================ */
 
 .evento .addr{ font-size: 13px !important; line-height: 1.5 !important; }
@@ -103,8 +96,7 @@
 /* --- "INGRESA" NO SE LEÍA ---------------------------------------------------
 
    Es el PRIMER botón que toca el invitado, y medía **1.1 de contraste**: letra
-   blanca sobre el sobre color crema, casi el mismo tono. Se distinguía sólo
-   por el bordecito.
+   blanca sobre el sobre color crema, casi el mismo tono.
 
    No se podía arreglar con el color de la letra: abajo hay un video de sobre y
    no sabemos de qué color es cada cuadro. La solución que funciona con
@@ -118,6 +110,87 @@
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   text-shadow: 0 1px 6px rgba(0, 0, 0, .45);
+}
+
+
+/* --- UN VELO SOBRE LAS FOTOS QUE TIENEN TEXTO ENCIMA ------------------------
+
+   EL PROBLEMA QUE NINGÚN MEDIDOR PUEDE VER
+
+   Sobre una foto el contraste cambia píxel a píxel: la misma letra blanca se
+   lee perfecto sobre el saco negro del novio y desaparece sobre el vestido de
+   la novia. Por eso el chequeo de contraste SALTEA todo lo que va sobre foto
+   —cualquier número sería inventado— y esto se encuentra mirando.
+
+   Mirando la captura entera apareció: las últimas líneas de la frase larga
+   caen justo sobre el vestido blanco y no se leen. La frase ya tenía sombra;
+   la sombra sola no alcanza contra un fondo casi blanco.
+
+   ⚠️ POR QUÉ ES SEGURO HACERLO ASÍ. `.capa` y `.pbg` son capas de foto VACÍAS
+   (cero hijos, cero texto) y posicionadas en absoluto. Ponerles un `::after`
+   oscurece la foto y NO PUEDE tapar ningún texto, porque el texto no vive
+   adentro de ellas. Si en cambio se le pusiera el velo a la sección entera,
+   el pseudo-elemento se dibujaría ENCIMA del texto y lo taparía.
+
+   El velo es más fuerte arriba y abajo, y casi transparente en el medio: así
+   protege los títulos y los bordes sin apagar la foto.
+   ============================================================================ */
+
+.capa::after,
+.pbg::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+              rgba(35, 26, 18, .46) 0%,
+              rgba(35, 26, 18, .16) 42%,
+              rgba(35, 26, 18, .22) 62%,
+              rgba(35, 26, 18, .52) 100%);
+}
+
+/* La raspadita tiene la foto en la sección misma, que SÍ contiene texto, así
+   que ahí no se puede usar un velo: se refuerza la sombra de la letra. */
+.scratch-sec h2,
+.scratch-sec .kick,
+.scratch-sec .sc-hint{
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .55), 0 1px 3px rgba(0, 0, 0, .45) !important;
+}
+
+
+/* --- EL BLOQUE DE SPOTIFY DESENTONABA ---------------------------------------
+
+   Es lo único negro puro de toda la invitación, con esquinas rectas, la
+   tipografía de Spotify y su foto de fiesta. En medio del marfil y el
+   chocolate parecía un agujero.
+
+   No se puede cambiar por dentro —es de otro dominio y el navegador no deja
+   entrar—, pero sí se lo puede ENMARCAR para que parezca una pieza puesta a
+   propósito: esquinas redondeadas como las de las tarjetas de eventos, un
+   borde tenue y una sombra suave que lo apoye sobre el fondo.
+   ============================================================================ */
+
+iframe[src*="spotify"]{
+  border-radius: 16px !important;
+  overflow: hidden;
+  border: 1px solid rgba(59, 47, 38, .16) !important;
+  box-shadow: 0 10px 30px rgba(59, 47, 38, .16);
+}
+
+
+/* --- EL BOTÓN "AGENDAR" CASI NO SE VEÍA -------------------------------------
+
+   Al lado del "VER MAPA", que es marrón sólido, el de agendar era beige sobre
+   marfil: se perdía. Los dos son acciones igual de válidas, así que el segundo
+   pasa a ser un botón de contorno — se ve, y sigue siendo el secundario.
+   ============================================================================ */
+
+.evento .btn.sec2,
+.evento .btn.ghost,
+.evento .agendar{
+  background: transparent !important;
+  border: 1px solid rgba(59, 47, 38, .45) !important;
+  color: #3b2f26 !important;
 }
 
 
