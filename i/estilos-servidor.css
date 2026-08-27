@@ -9,31 +9,35 @@
    ============================================================================ */
 
 
-/* --- LOS DOS BOTONES FLOTANTES SE PISABAN -----------------------------------
+/* --- EL BOTÓN DE MENÚ FLOTANTE, AFUERA --------------------------------------
 
-   Abajo a la derecha hay dos botones: el menú (`#navbtn`, 46x46) y el de
-   WhatsApp (`.wafloat`, 52x52). Los dos estaban anclados a la misma esquina,
-   con el mismo margen, así que quedaban uno ENCIMA del otro: 46 x 46 px de
-   superposición, o sea el menú tapando por completo al de WhatsApp.
+   Decisión de Maki: fuera. La invitación queda más limpia.
 
-   Consecuencias, las dos feas:
-     · se veía una medialuna verde asomando por detrás del botón marrón, que
-       parecía un error de maqueta
-     · el botón de WhatsApp era INTOCABLE: el menú tiene z-index 70 y el de
-       WhatsApp 55, así que todos los toques se los comía el menú
+   Lo que hay que saber si alguna vez se lo quiere devolver:
 
-   No se veía en los chequeos porque ninguno miraba si dos cosas se pisan:
-   los dos botones existían, los dos estaban "visibles", y cada uno por
-   separado estaba bien. Apareció mirando la captura.
+   · Abría un índice con 13 accesos, uno de ellos "Confirmar asistencia".
+   · La invitación mide 11–12 pantallas, así que sin el menú el invitado llega
+     a confirmar scrolleando. Si en algún momento se ve que confirma menos
+     gente, este botón es el primer sospechoso.
+   · Vivía abajo a la derecha, que en un celular alto es la zona del pulgar.
 
-   ⚠️ EL COLOR NO SE TOCA. Se probó ponerlo del mismo marrón que el menú, para
-   que pegara con la paleta de la boda. Está MAL: el verde #25D366 es lo que
-   hace que se entienda de un vistazo que ese botón abre WhatsApp. En un botón
-   cuyo único trabajo es ese, el reconocimiento vale más que la paleta.
-   Va siempre en el verde original de WhatsApp.                              */
+   PARA DEVOLVERLO: borrar la regla de acá abajo. Pero OJO — vuelve también el
+   bug de que se pisaba con el de WhatsApp, porque los dos están anclados a la
+   misma esquina con el mismo margen. En ese caso hay que reponer esto:
+       .wafloat{ bottom:78px !important; width:46px !important; height:46px !important; }
+   que era lo que los separaba.                                              */
 
-.wafloat{
-  bottom: 78px !important;   /* arriba del menú, no encima */
-  width: 46px !important;    /* del mismo tamaño que el menú, para que hagan juego */
-  height: 46px !important;
+#navbtn{
+  display: none !important;
 }
+
+
+/* --- EL VERDE DE WHATSAPP NO SE TOCA ----------------------------------------
+
+   Se probó ponerlo del mismo marrón que el menú, para que pegara con la paleta
+   de la boda. Está MAL: el verde #25D366 es lo que hace que se entienda de un
+   vistazo que ese botón abre WhatsApp. En un botón cuyo único trabajo es ese,
+   el reconocimiento vale más que la paleta. Va siempre en el verde original.
+
+   (No hace falta ninguna regla acá: el motor ya lo trae en su verde. Queda
+   escrito para que a nadie se le ocurra "mejorarlo" de nuevo.)               */
