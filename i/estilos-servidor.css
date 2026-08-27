@@ -126,6 +126,11 @@
    caen justo sobre el vestido blanco y no se leen. La frase ya tenía sombra;
    la sombra sola no alcanza contra un fondo casi blanco.
 
+   ⚠️ ESTO NO ES UN ARREGLO PARA UNA FOTO. Es una regla para TODAS: cualquier
+   foto que tenga texto encima lleva velo. Si mañana la clienta sube otra foto,
+   clara u oscura, el texto se lee igual. Por eso se eligió el velo en vez de
+   retocar colores: para que NO dependa de la foto.
+
    ⚠️ POR QUÉ ES SEGURO HACERLO ASÍ. `.capa` y `.pbg` son capas de foto VACÍAS
    (cero hijos, cero texto) y posicionadas en absoluto. Ponerles un `::after`
    oscurece la foto y NO PUEDE tapar ningún texto, porque el texto no vive
@@ -165,15 +170,23 @@
    chocolate parecía un agujero.
 
    No se puede cambiar por dentro —es de otro dominio y el navegador no deja
-   entrar—, pero sí se lo puede ENMARCAR para que parezca una pieza puesta a
-   propósito: esquinas redondeadas como las de las tarjetas de eventos, un
-   borde tenue y una sombra suave que lo apoye sobre el fondo.
+   entrar—, pero sí se lo puede ENMARCAR: esquinas redondeadas como las de las
+   tarjetas de eventos y una sombra suave que lo apoye sobre el fondo.
+
+   ⚠️⚠️ NO PONERLE BORDE. Se probó con `border:1px` y salió mal: el borde le
+   come dos píxeles de ancho al contenido, y eso alcanzó para cruzar el límite
+   donde Spotify cambia de diseño. Pasó del reproductor grande al compacto, que
+   ocupa como 200 px de los 352 del marco — y quedó un cajón vacío enorme
+   debajo del reproductor.
+
+   Es un buen recordatorio: adentro de un iframe ajeno no se puede tocar nada,
+   pero SÍ se lo puede romper desde afuera cambiándole el ancho. Con la sombra
+   sola se ve igual de bien y no se toca el ancho.
    ============================================================================ */
 
 iframe[src*="spotify"]{
   border-radius: 16px !important;
   overflow: hidden;
-  border: 1px solid rgba(59, 47, 38, .16) !important;
   box-shadow: 0 10px 30px rgba(59, 47, 38, .16);
 }
 
