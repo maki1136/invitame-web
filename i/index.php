@@ -18,11 +18,6 @@ $BASE_VER = '2026-07-20';
    video, y no puede leer un archivo .js.
 
    SI SE AGREGA UN SOBRE CON VIDEO AL CATÁLOGO, HAY QUE SUMARLO ACÁ TAMBIÉN.
-   Si alguien se olvida, no se rompe nada: sólo vuelve a verse el parpadeo feo
-   del sobre viejo mientras carga.
-
-   `carta` en true significa que ese sobre usa además el sistema `.ct-*` (la
-   tarjeta que se escribe sola). A ese no se le apaga `.ct-wrap`.
    ============================================================================ */
 $SOBRES_VIDEO = array(
   'lacre'         => array('poster' => '/sobres/sobre-lacre-poster.jpg',   'carta' => false),
@@ -32,10 +27,10 @@ $SOBRES_VIDEO = array(
   'carta-toscana' => array('poster' => '/sobres/carta-toscana-poster.jpg', 'carta' => true)
 );
 
-/* ===== LA TABLA DE LOS DATOS DE EJEMPLO =======================================
-   Se lee ACÁ ARRIBA, antes de hablar con Firestore, porque de la propia tabla
-   sale la lista de campos que hay que pedirle. Así, sumar un elemento nuevo se
-   hace en `i/sin-demo.php` y NO hay que tocar este archivo.
+/* ===== LAS TABLAS QUE MANDAN ==================================================
+   Se leen ACÁ ARRIBA, antes de hablar con Firestore, porque de ellas sale la
+   lista de campos que hay que pedirle. Así, sumar una paleta, un tamaño o un
+   elemento a apagar NO obliga a tocar este archivo.
    ============================================================================ */
 $DEMO_APAGAR = array();
 $DEMO_CAMPOS = array();
@@ -48,17 +43,18 @@ if (is_file($tablaDemo)) {
   $DEMO_CAMPOS = array_keys($DEMO_CAMPOS);
 }
 
+$PALETAS = array(); $TAMANOS = array();
+$tablaPaletas = __DIR__ . '/paletas.php';
+if (is_file($tablaPaletas)) { include $tablaPaletas; }
+
 // slug seguro
 $slug = isset($_GET['e']) ? strtolower($_GET['e']) : '';
 $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
 $img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
-$coverReal = ''; $idioma = '';
+$coverReal = ''; $idioma = ''; $paleta = '';
 
-/* Los valores de esos campos para ESTE evento.
-   `$leyoEvento` queda en false si Firestore no contestó: en ese caso NO se
-   apaga nada, porque no sabemos qué cargó la clienta. */
-$campos = array(); $leyoEvento = false;
+$campos = array(); $tamElegidos = array(); $leyoEvento = false;
 
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
@@ -80,8 +76,6 @@ if ($slug !== '') {
     $sv = function ($k) use ($f) { return isset($f[$k]['stringValue']) ? trim($f[$k]['stringValue']) : ''; };
 
     // Devuelve el primer valor no vacío de una lista de claves.
-    // (El admin cambió de convención con los acentos: antes 'im-gen', ahora 'imagen'.
-    //  Probamos todas para no depender de eso y que nunca se desconecte en silencio.)
     $firstOf = function ($keys) use ($sv) {
       foreach ($keys as $k) {
         $v = $sv($k);
@@ -100,64 +94,66 @@ if ($slug !== '') {
     $coverReal = $sv('cover');
     if ($img === '') $img = $coverReal;
 
-    // 2) titulo: el "Titulo al compartir" si lo cargaron; si no, los nombres de la pareja
+    // 2) titulo al compartir, o los nombres de la pareja
     $title = $firstOf(array('c_titulo-al-compartir'));
-    if ($title !== '') $titleEsPropio = true;   // si es propio, NO se le agrega el sufijo
+    if ($title !== '') $titleEsPropio = true;
     if ($title === '') {
-      $n1 = $sv('n1');
-      $n2 = $sv('n2');
-      if ($n1 !== '' || $n2 !== '') {
-        $title = trim($n1 . ($n1 && $n2 ? ' & ' : '') . $n2);
-      }
+      $n1 = $sv('n1'); $n2 = $sv('n2');
+      if ($n1 !== '' || $n2 !== '') $title = trim($n1 . ($n1 && $n2 ? ' & ' : '') . $n2);
     }
 
-    // 3) descripcion: la "Descripción al compartir" si la cargaron; si no, la frase del evento
+    // 3) descripcion al compartir, o la frase del evento
     $desc = $firstOf(array('c_descripcion-al-compartir', 'c_descripci-n-al-compartir', 'frase'));
 
-    // 4) textito de arriba (Nuestra Boda / Mis XV / Mi Bautismo...) para el subtítulo
-    $kick = $sv('kick');
-
-    // 5) VERSION con la que se publicó esta invitación (para que no la afecten cambios futuros)
-    $ver = $sv('ver');
-
-    // 6) EL IDIOMA, para saber si hay que pasar los textos a español de México
+    $kick   = $sv('kick');
+    $ver    = $sv('ver');
     $idioma = $sv('idioma');
+    $paleta = strtolower($sv('paleta'));
 
-    // 7) QUÉ SOBRE ES. Vive anidado: fx → sobre → modelo.
+    // QUÉ SOBRE ES. Vive anidado: fx → sobre → modelo.
     if (isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue'])) {
       $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
     }
 
-    // 8) LOS CAMPOS QUE TAPAN LOS DATOS DE EJEMPLO. La lista sale de la tabla.
+    // los campos que tapan los datos de ejemplo (la lista sale de la tabla)
     foreach ($DEMO_CAMPOS as $k) { $campos[$k] = $sv($k); }
+
+    // los tamaños que haya elegido: campo `tam_<clave>`
+    foreach ($TAMANOS as $k => $cfg) {
+      $v = $sv('tam_' . $k);
+      if ($v !== '' && is_numeric($v)) {
+        $n = (float)$v;
+        if ($n >= $cfg[2] && $n <= $cfg[3]) $tamElegidos[$k] = $n;
+      }
+    }
+
     $leyoEvento = true;
   }
 }
 
+/* Para poder PROBAR una paleta o un tamaño sin guardarlos:
+   ?paleta=olivo   ?tam_titulo=40                                            */
+if (isset($_GET['paleta']) && $_GET['paleta'] !== '') {
+  $paleta = strtolower(preg_replace('/[^a-z0-9\-]/i', '', $_GET['paleta']));
+}
+foreach ($TAMANOS as $k => $cfg) {
+  if (isset($_GET['tam_' . $k]) && is_numeric($_GET['tam_' . $k])) {
+    $n = (float)$_GET['tam_' . $k];
+    if ($n >= $cfg[2] && $n <= $cfg[3]) $tamElegidos[$k] = $n;
+  }
+}
+
 // ===== VERSIONADO =====
-// Cada invitación queda clavada a la versión con la que se publicó.
-// Se puede forzar una versión por URL (?ver=) para la vista previa del panel.
 if (isset($_GET['ver']) && $_GET['ver'] !== '') { $ver = $_GET['ver']; }
-// Las invitaciones publicadas ANTES del versionado no tienen 'ver' guardado.
 if ($ver === '') { $ver = $BASE_VER; }
 $ver = preg_replace('/[^a-zA-Z0-9._-]/', '', (string)$ver);
 
 $tpl = false;
-
-/* ===== LA VERSIÓN "viva" ======================================================
-
-   Una invitación con `ver = viva` se sirve con el motor que está hoy en
-   /prueba/. Es para las MUESTRAS.
-   ============================================================================ */
-if ($ver === 'viva') {
-  $tpl = @file_get_contents(dirname(__DIR__) . '/prueba/index.html');
-}
-
+if ($ver === 'viva') { $tpl = @file_get_contents(dirname(__DIR__) . '/prueba/index.html'); }
 if ($tpl === false && $ver !== '') {
   $ruta = __DIR__ . '/v/' . $ver . '/index.html';
   if (is_file($ruta)) { $tpl = @file_get_contents($ruta); }
 }
-// Sin versión (o versión inexistente) => la última. Nunca rompe.
 if ($tpl === false) { $tpl = @file_get_contents(__DIR__ . '/index.html'); }
 if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
@@ -166,78 +162,46 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
    ⚠️⚠️ ACÁ ESTÁN LOS SEIS BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
 
-   EL PATRÓN, QUE ES EL MISMO EN CASI TODOS
-   El `index.html` trae valores POR DEFECTO escritos a mano —fotos de banco de
-   imágenes, textos en argentino, una boda entera inventada— y el encuadre de la
-   pantalla grande lo pone un `<script defer>`. Todo eso llega DESPUÉS del primer
-   pintado. En ese hueco de uno o dos segundos el invitado ve cosas que no son
-   suyas o mal armadas. Los scripts diferidos no llegan a tiempo.
+   EL PATRÓN: el `index.html` trae valores POR DEFECTO escritos a mano y el
+   encuadre lo pone un `<script defer>`. Todo eso llega DESPUÉS del primer
+   pintado, y en ese hueco el invitado ve cosas que no son suyas.
 
-   Por eso todo esto se resuelve ACÁ, en el servidor, que ya leyó el evento de
-   Firestore y escribe los valores correctos antes de mandar el HTML.
+   ⚠️ LA REGLA: si algo se ve mal SÓLO EL PRIMER SEGUNDO y "se acomoda" al
+   recargar, NO se arregla en un módulo de /efectos/. Se arregla acá.
 
-   ⚠️ LA REGLA: si algo se ve mal SÓLO EL PRIMER SEGUNDO, y "se acomoda" al
-   recargar, NO se arregla en el módulo de /efectos/. Se arregla acá.
+   ⚠️ Y PARA ENCONTRARLOS HAY QUE PROBAR CON RED LENTA Y CACHÉ VACÍA.
 
-   ⚠️ Y PARA ENCONTRARLOS HAY QUE PROBAR CON RED LENTA Y CACHÉ VACÍA. En una
-   máquina rápida el archivo llega en 5 ms y el bug no aparece — pero está.
+   BUG 1 — EL SOBRE ROTO. Antes de cargar el video se veía OTRO sobre a
+   pantalla completa. Se arregló mal tres veces: se culpó a Safari (pasaba en
+   todos lados); se arregló en un `defer` que además apuntaba a una clase que
+   agrega el JS; y se escribió `#e-back` cuando son CLASES. Adentro de `#env`
+   conviven CUATRO sobres superpuestos: `.triflap`+`#tri-glow`+`#tri-seal`,
+   `#scene`, `.ct-wrap` y `#env-vid`. Y el principal: `#env-vid` nace en
+   `display:none`; apagar los otros tres sin encenderlo dejaba todo VACÍO.
 
-   BUG 1 — EL SOBRE ROTO
-   Antes de cargar el video se veía OTRO sobre a pantalla completa. Se arregló
-   mal tres veces:
-   1. Se lo trató como bug de Safari. No lo era: pasaba en todos lados.
-   2. Se arregló en el CSS de /sobres/catalogo.js, que es `defer` y encima
-      apunta a `#env.carta-video`, clase que agrega el JS. Llegaba tarde Y no
-      matcheaba nada.
-   3. Adentro de `#env` conviven CUATRO sobres superpuestos, no dos:
-        · `.triflap` + `#tri-glow` + `#tri-seal`   (el de cuatro solapas)
-        · `#scene` → `.envelope`, `.e-back`, `.e-pocket`, `.e-flap`, `.e-tint`,
-                     `.seal`, `#ephoto`, `#hint`   (el clásico)
-        · `.ct-wrap` → la tarjeta que se escribe sola
-        · `#env-vid` → el video
-      Se escribió `#e-back` con almohadilla y son CLASES: por eso seguía.
-   4. Y el principal: `#env-vid` nace en `display:none`. Apagar los otros tres
-      sin encender el video dejaba la pantalla VACÍA.
+   BUG 2 — LA PORTADA DE OTRA INVITACIÓN. `--cover` está escrita a mano en el
+   `:root`; el motor la pisa por JS, pero el primer pintado ya pasó.
 
-   BUG 2 — LA PORTADA DE OTRA INVITACIÓN
-   Al tocar el sello se veía la foto de OTRA pareja. `--cover` está escrita a
-   mano en el `:root`; el motor la pisa por JS, pero el primer pintado ya pasó.
+   BUG 3 — LA PORTADA SALÍA A LO ANCHO UN INSTANTE. El encuadre lo inyectaba un
+   módulo diferido. Ahora ese CSS va también acá, con EL MISMO `id`, así el
+   módulo lo encuentra puesto y no lo duplica.
 
-   BUG 3 — LA PORTADA SALÍA A LO ANCHO UN INSTANTE
-   El encuadre de la columna lo inyectaba `efectos/encuadre-monitor.js`,
-   diferido. Ahora ese CSS va también en el `<head>`, con EL MISMO `id` que usa
-   el módulo, así el módulo lo encuentra puesto y no lo duplica.
+   BUG 4 — DECÍA "INGRESÁ". El motor está en voseo y lo traducía un módulo
+   diferido. ⚠️ El arreglo falló la primera vez por algo invisible: la
+   condición era `preg_match('/m[eé]xico|mx/i',...)` y NUNCA daba verdadero —
+   en UTF-8 la `é` son DOS bytes y sin la marca `u` la clase `[eé]` es un
+   conjunto de BYTES. Fallaba en silencio. Ahora se busca `xico`, sin regex.
 
-   BUG 4 — DECÍA "INGRESÁ" Y "TOCÁ EL SELLO"
-   El motor está escrito en voseo y lo traducía un módulo diferido. Ahora los
-   textos se cambian ACÁ, antes de mandar el HTML.
+   BUG 5 — LA BODA DE OTRA GENTE ADENTRO. El motor trae una boda inventada y
+   sólo la PISA cuando hay dato: con el campo vacío se queda la de ejemplo.
+   Unos XV mostraban la ceremonia en la "Basílica de Santa María". Tabla en
+   `i/sin-demo.php`.
 
-   ⚠️⚠️ ESTE ARREGLO SALIÓ MAL LA PRIMERA VEZ POR ALGO QUE NO SE VE: la
-   condición era `preg_match('/m[eé]xico|mx/i', $idioma)` y NUNCA daba
-   verdadero. En UTF-8 la `é` son DOS bytes; sin la marca `u`, la clase `[eé]`
-   es un conjunto de BYTES: consume el primer byte y choca contra el segundo.
-   Fallaba en silencio. Ahora se busca `xico`, sin regex.
-
-   BUG 5 — LA BODA DE OTRA GENTE ADENTRO DE LA INVITACIÓN
-   El motor trae una boda entera inventada escrita a mano y sólo la PISA cuando
-   hay dato: si la clienta dejó el campo vacío, se queda la de ejemplo. Unos XV
-   mostraban la ceremonia en la "Basílica de Santa María" y un cumpleaños decía
-   "Fiesta — Basílica de Santa María". La tabla está en `i/sin-demo.php`.
-
-   BUG 6 — LAS INVITACIONES SE ENTREGABAN SIN LA MITAD DE LAS FUNCIONES
-   El más caro de todos, y el más silencioso. Las carpetas congeladas de `i/v/`
-   y el `i/index.html` de respaldo NO tienen la etiqueta que carga
-   `/sobres/catalogo.js`, que es el ÚNICO enganche de los 14 módulos de
-   `/efectos/`. Sólo la tiene `/prueba/`.
-
-   O sea que una invitación vendida se entregaba SIN raspadita, SIN calendario,
-   SIN el sector de música, SIN el arreglo de la foto del cierre y SIN los
-   textos plegados. Los elementos estaban en el HTML, pero no había nada que
-   los manejara. No se notaba porque las muestras se miraban en /prueba/, que
-   sí los tiene.
-
-   Se arregla abajo, inyectando la etiqueta desde el servidor: no hay que tocar
-   los HTML de 200 KB, y ninguna invitación —vieja o nueva— queda sin nada.
+   BUG 6 — LAS INVITACIONES SE ENTREGABAN SIN LA MITAD DE LAS FUNCIONES. Las
+   carpetas congeladas de `i/v/` no tienen la etiqueta que carga
+   `/sobres/catalogo.js`, que es el ÚNICO enganche de los módulos. Lo vendido
+   salía sin raspadita, sin calendario, sin música y sin los textos plegados.
+   No se notaba porque las muestras se miraban en /prueba/, que sí lo tiene.
    ============================================================================ */
 
 $preFirma = '';
@@ -255,27 +219,21 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
   $alto  = 'min(84vh,843px)';
   $ancho = 'calc(' . $alto . ' * 9 / 16)';
 
-  /* los otros tres sobres, apagados */
   $apagar = '#env .triflap,#env #tri-glow,#env #tri-seal,#env #scene';
   if (!$usaCarta) $apagar .= ',#env .ct-wrap';
 
   $preFirma .=
     $apagar . '{display:none!important}' .
-
-    /* la foto del sobre, pintada en el primer frame (el video tarda) */
     '#env::before{content:"";position:absolute;inset:0;z-index:1;' .
     '  background:#efe9e0 url("' . $poster . '") center/cover no-repeat;' .
     '  pointer-events:none}' .
-
     /* ⚠️ encender el video: nace en display:none. Sin esto queda todo vacío. */
     '#env-vid{display:block!important;position:absolute;inset:0;' .
     '  width:100%;height:100%;object-fit:cover;z-index:2}' .
-
     '@media (min-width:680px){' .
     '  #env{background:#cfc4b4}' .
     '  #env::before,#env-vid{' .
-    '    inset:auto!important;' .
-    '    left:50%!important;top:50%!important;' .
+    '    inset:auto!important;left:50%!important;top:50%!important;' .
     '    transform:translate(-50%,-50%)!important;' .
     '    height:' . $alto . '!important;width:' . $ancho . '!important;' .
     '    max-width:92vw!important;border-radius:30px;' .
@@ -289,8 +247,6 @@ $encuadreSobre = ($preFirma !== '')
 
 /* ===== EL ENCUADRE DE LA COLUMNA, DESDE EL PRIMER FRAME =======================
    ⚠️ Copia exacta del CSS de `efectos/encuadre-monitor.js`, con el MISMO id.
-   El módulo hace `if (document.getElementById('encuadre-monitor')) return;`
-   antes de inyectar el suyo, así que al encontrarlo ya puesto no lo duplica.
    SI SE CAMBIA ESE CSS EN EL MÓDULO, HAY QUE CAMBIARLO ACÁ TAMBIÉN.
    ============================================================================ */
 $encuadreColumna =
@@ -311,9 +267,6 @@ $encuadreColumna =
   '</style>';
 
 /* ===== APAGAR LA BODA DE EJEMPLO (BUG 5) =====================================
-   La tabla vive en `i/sin-demo.php` y ya se leyó arriba. Sumar uno nuevo cuesta
-   una línea allá y NADA acá.
-
    ⚠️ Sólo si Firestore contestó. Si no leímos el evento no sabemos qué cargó la
    clienta, y apagar a ciegas le borraría la invitación: ante la duda, se
    muestra de más y no de menos.
@@ -334,35 +287,63 @@ if ($leyoEvento && $DEMO_APAGAR) {
   }
 }
 
+/* ===== LA PALETA Y LOS TAMAÑOS ===============================================
+
+   Las dos formas de elegir color conviven:
+
+     · PALETA: la clienta elige una de las veinte de `i/paletas.php`. El
+       servidor escribe los cuatro colores acá, con `!important`, porque una
+       paleta elegida tiene que ganarle a todo — incluso al color suelto que
+       hubiera quedado guardado de antes.
+
+     · PERSONALIZADA: `paleta` vacío o "personalizada". No se escribe NADA de
+       color, y mandan los selectores sueltos del panel como siempre.
+
+   ⚠️⚠️ POR QUÉ ESTA DIFERENCIA IMPORTA. `!important` en una hoja le gana al
+   estilo en línea que escribe el panel. Ya pasó una vez: se le puso
+   `!important` a `--verde` para sacar el verde del motor, y eso APAGÓ el
+   selector de color principal — tres invitaciones con colores distintos se
+   veían las tres iguales, y no se notaba porque se miran de a una.
+
+   Regla: `!important` sólo cuando la clienta eligió explícitamente ESO.
+
+   Los TAMAÑOS son aparte y siempre se escriben como variables: si la clienta
+   no eligió ninguno, no se escribe nada y quedan los de la hoja.
+
+   Para probar sin guardar:  ?paleta=olivo   ?tam_titulo=40
+   ============================================================================ */
+$paletaCss = '';
+$reglas = array();
+
+if ($paleta !== '' && $paleta !== 'personalizada' && isset($PALETAS[$paleta])) {
+  $p = $PALETAS[$paleta];
+  $reglas[] = '--verde:'   . $p[1] . '!important';
+  $reglas[] = '--sage:'    . $p[2] . '!important';
+  $reglas[] = '--sage-cl:' . $p[3] . '!important';
+  $reglas[] = '--muted:'   . $p[4] . '!important';
+}
+foreach ($tamElegidos as $k => $n) {
+  $reglas[] = '--fs-' . $k . ':' . $n . 'px';
+}
+if ($reglas) {
+  $paletaCss = '<style id="paleta-servidor">:root{' . implode(';', $reglas) . '}</style>';
+}
+
 /* ===== QUE TODAS LAS INVITACIONES TENGAN TODO (BUG 6) =========================
+   `/sobres/catalogo.js` es el único enganche de los módulos. Se agrega acá para
+   TODAS, comprobando antes que el HTML no lo traiga ya.
 
-   `/sobres/catalogo.js` es el único enganche: carga `efectos/index.js` y con él
-   los 14 módulos. Las carpetas congeladas de `i/v/` no lo tienen, así que las
-   invitaciones vendidas salían sin raspadita, sin calendario, sin música, sin
-   el arreglo de la foto del cierre y sin los textos plegados.
-
-   Se agrega acá, para TODAS. Es `defer`, así que no frena nada, y cada módulo
-   ya está escrito para no hacer nada si no le toca.
-
-   ⚠️ SE COMPRUEBA ANTES DE PONERLO. Si el HTML ya lo trae —el motor de
-   /prueba/ sí— no se duplica.
-
-   ⚠️ QUÉ SIGNIFICA ESTO PARA EL CONGELADO. Antes, una invitación entregada
-   quedaba clavada para siempre. Ahora el HTML sigue clavado, pero los MÓDULOS
+   ⚠️ QUÉ SIGNIFICA PARA EL CONGELADO: el HTML sigue clavado, pero los MÓDULOS
    son los de hoy. Es a propósito: es la única forma de que un arreglo llegue a
-   quien ya compró. La contra es que un error nuevo en un módulo también llega:
-   por eso el banco de pruebas corre contra la invitación de verdad antes de
-   dar nada por bueno.
+   quien ya compró. La contra es que un error nuevo también llega — por eso el
+   banco corre contra la invitación de verdad antes de dar nada por bueno.
    ============================================================================ */
 $engancheModulos = (strpos($tpl, 'catalogo.js') === false)
   ? '<script src="/sobres/catalogo.js" defer></script>'
   : '';
 
 /* ===== LOS ARREGLOS DE ESTILO QUE VALEN PARA TODAS ============================
-   Van en `i/estilos-servidor.css`, un archivo chico y aparte. La idea es la
-   misma que con la lista de palabras mexicanas: retocar un estilo tiene que
-   costar editar ese archivo, no reescribir este entero.
-   Si el archivo no está, no pasa nada: simplemente no se inyecta.
+   Van en `i/estilos-servidor.css`. Si el archivo no está, no se inyecta nada.
    ============================================================================ */
 $hojaExtra = @file_get_contents(__DIR__ . '/estilos-servidor.css');
 $estilosServidor = ($hojaExtra !== false && trim($hojaExtra) !== '')
@@ -372,8 +353,10 @@ $estilosServidor = ($hojaExtra !== false && trim($hojaExtra) !== '')
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
 $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
 
+/* ⚠️ EL ORDEN IMPORTA: la hoja general primero y la paleta DESPUÉS, para que
+   lo que eligió la clienta sea lo último en escribirse. */
 $aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
-             $estilosServidor . $engancheModulos;
+             $estilosServidor . $paletaCss . $engancheModulos;
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
     $tpl = str_replace('</head>', $aInyectar . '</head>', $tpl);
@@ -384,14 +367,9 @@ if ($aInyectar !== '') {
 
 
 /* ===== ESPAÑOL DE MÉXICO, EN EL HTML, ANTES DE MANDARLO ======================
-
-   Ver la nota larga de BUG 4 arriba.
-
-   ⚠️ CÓMO SE DETECTA EL IDIOMA: NO con expresión regular. La `é` de "México"
-   son dos bytes en UTF-8 y sin la marca `u` la condición falla EN SILENCIO.
-   Se busca `xico`, que agarra "México" y "Mexico" sin depender del acento.
-
-   ⚠️ LA LISTA DE PALABRAS VIVE EN `i/textos-es-mx.php`, no acá.
+   ⚠️ El idioma NO se detecta con expresión regular: la `é` de "México" son dos
+   bytes en UTF-8 y sin la marca `u` la condición falla EN SILENCIO. Se busca
+   `xico`. La lista de palabras vive en `i/textos-es-mx.php`.
    ============================================================================ */
 $idiomaMin = function_exists('mb_strtolower')
   ? mb_strtolower($idioma, 'UTF-8')
@@ -423,15 +401,11 @@ function setMeta($tpl, $attr, $key, $val) {
 }
 
 if ($img !== '') {
-  // asegurar URL absoluta
-  if (strpos($img, 'http') !== 0) {
-    $img = $SITE . ($img[0] === '/' ? '' : '/i/') . $img;
-  }
+  if (strpos($img, 'http') !== 0) { $img = $SITE . ($img[0] === '/' ? '' : '/i/') . $img; }
   $tpl = setMeta($tpl, 'property', 'og:image', $img);
   $tpl = setMeta($tpl, 'name', 'twitter:image', $img);
 }
 if ($title !== '') {
-  // Suffix con el textito real del evento (ej: "Mis XV"). Si no hay, solo los nombres.
   $sfx = ($kick !== '' && empty($titleEsPropio)) ? ' — ' . $kick : '';
   $tpl = setMeta($tpl, 'property', 'og:title', $title . $sfx);
   $tpl = setMeta($tpl, 'name', 'twitter:title', $title . $sfx);
