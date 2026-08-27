@@ -135,12 +135,10 @@ if ($slug !== '') {
 }
 
 // ===== VERSIONADO =====
-// Cada invitación queda clavada a la versión con la que se publicó. Así, cuando
-// mejoramos la plataforma, las invitaciones ya entregadas NO cambian.
+// Cada invitación queda clavada a la versión con la que se publicó.
 // Se puede forzar una versión por URL (?ver=) para la vista previa del panel.
 if (isset($_GET['ver']) && $_GET['ver'] !== '') { $ver = $_GET['ver']; }
 // Las invitaciones publicadas ANTES del versionado no tienen 'ver' guardado.
-// Se las trata como la versión base: quedan congeladas tal como se entregaron.
 if ($ver === '') { $ver = $BASE_VER; }
 $ver = preg_replace('/[^a-zA-Z0-9._-]/', '', (string)$ver);
 
@@ -148,13 +146,8 @@ $tpl = false;
 
 /* ===== LA VERSIÓN "viva" ======================================================
 
-   Una invitación con `ver = viva` NO queda congelada: se sirve con el motor que
-   está hoy en /prueba/, que es el único que tiene el sobre en video y el que
-   carga /sobres/catalogo.js (y con él los módulos de /efectos/).
-
-   ⚠️ NO ES PARA CLIENTES QUE YA PAGARON: cambia cuando cambia /prueba/. Es para
-   las MUESTRAS. Ninguna invitación ya entregada se ve afectada: cada una
-   conserva su propio `ver` y sigue leyendo su carpeta de siempre.
+   Una invitación con `ver = viva` se sirve con el motor que está hoy en
+   /prueba/. Es para las MUESTRAS.
    ============================================================================ */
 if ($ver === 'viva') {
   $tpl = @file_get_contents(dirname(__DIR__) . '/prueba/index.html');
@@ -171,30 +164,27 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
 /* ===== LO QUE SE VE ANTES DE QUE CORRA UN SOLO SCRIPT =========================
 
-   ⚠️⚠️ ACÁ ESTÁN LOS CINCO BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
+   ⚠️⚠️ ACÁ ESTÁN LOS SEIS BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
 
-   EL PATRÓN, QUE ES EL MISMO EN LOS CINCO
+   EL PATRÓN, QUE ES EL MISMO EN CASI TODOS
    El `index.html` trae valores POR DEFECTO escritos a mano —fotos de banco de
    imágenes, textos en argentino, una boda entera inventada— y el encuadre de la
    pantalla grande lo pone un `<script defer>`. Todo eso llega DESPUÉS del primer
    pintado. En ese hueco de uno o dos segundos el invitado ve cosas que no son
-   suyas o mal armadas. Los scripts diferidos no llegan a tiempo: nunca van a
-   llegar.
+   suyas o mal armadas. Los scripts diferidos no llegan a tiempo.
 
    Por eso todo esto se resuelve ACÁ, en el servidor, que ya leyó el evento de
    Firestore y escribe los valores correctos antes de mandar el HTML.
 
-   ⚠️ LA REGLA, QUE YA VALE PARA CINCO BUGS SEGUIDOS: si algo se ve mal SÓLO EL
-   PRIMER SEGUNDO, y "se acomoda" al recargar o a la segunda vez, NO se arregla
-   en el módulo de /efectos/. Se arregla acá. Es siempre lo mismo: llega tarde.
+   ⚠️ LA REGLA: si algo se ve mal SÓLO EL PRIMER SEGUNDO, y "se acomoda" al
+   recargar, NO se arregla en el módulo de /efectos/. Se arregla acá.
 
    ⚠️ Y PARA ENCONTRARLOS HAY QUE PROBAR CON RED LENTA Y CACHÉ VACÍA. En una
    máquina rápida el archivo llega en 5 ms y el bug no aparece — pero está.
 
    BUG 1 — EL SOBRE ROTO
-   Antes de cargar el video se veía OTRO sobre a pantalla completa: una diagonal
-   blanca gigante, el monograma enorme y borroso, un panel de papel estirado.
-   Se arregló mal tres veces:
+   Antes de cargar el video se veía OTRO sobre a pantalla completa. Se arregló
+   mal tres veces:
    1. Se lo trató como bug de Safari. No lo era: pasaba en todos lados.
    2. Se arregló en el CSS de /sobres/catalogo.js, que es `defer` y encima
       apunta a `#env.carta-video`, clase que agrega el JS. Llegaba tarde Y no
@@ -214,45 +204,40 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
    mano en el `:root`; el motor la pisa por JS, pero el primer pintado ya pasó.
 
    BUG 3 — LA PORTADA SALÍA A LO ANCHO UN INSTANTE
-   El encuadre de la columna (`.frame{max-width:...}`) lo inyectaba
-   `efectos/encuadre-monitor.js`, diferido. Hasta que ese script corría, la
-   portada ocupaba todo el ancho y asomaba el fondo por los costados.
-   Ahora ese CSS va también en el `<head>`, con EL MISMO `id` que usa el módulo,
-   así el módulo lo encuentra puesto y no lo duplica.
+   El encuadre de la columna lo inyectaba `efectos/encuadre-monitor.js`,
+   diferido. Ahora ese CSS va también en el `<head>`, con EL MISMO `id` que usa
+   el módulo, así el módulo lo encuentra puesto y no lo duplica.
 
    BUG 4 — DECÍA "INGRESÁ" Y "TOCÁ EL SELLO"
-   El motor está escrito en voseo argentino y lo traduce `efectos/es-mx.js`, que
-   también es diferido. El primer segundo una novia mexicana leía "INGRESÁ" y
-   "TOCÁ EL SELLO PARA ABRIR" — justo el primer texto que ve.
-   Ahora los textos se cambian ACÁ, antes de mandar el HTML.
+   El motor está escrito en voseo y lo traducía un módulo diferido. Ahora los
+   textos se cambian ACÁ, antes de mandar el HTML.
 
-   ⚠️⚠️ Y ESTE ARREGLO TAMBIÉN SALIÓ MAL LA PRIMERA VEZ, POR ALGO QUE NO SE VE:
-   la condición era `preg_match('/m[eé]xico|mx/i', $idioma)` y NUNCA daba
-   verdadero. El idioma guardado es "Español (México)", y en UTF-8 la `é` son
-   DOS bytes. Sin la marca `u`, la clase `[eé]` es un conjunto de BYTES sueltos:
-   consume el primer byte de la `é` y después choca contra el segundo. La
-   condición fallaba en silencio y no se reemplazaba nada — todo lo demás
-   parecía bien escrito.
-   Por eso ahora NO se usa expresión regular: se busca `xico` en minúsculas, que
-   agarra "México" y "Mexico" sin depender del acento ni del encoding.
+   ⚠️⚠️ ESTE ARREGLO SALIÓ MAL LA PRIMERA VEZ POR ALGO QUE NO SE VE: la
+   condición era `preg_match('/m[eé]xico|mx/i', $idioma)` y NUNCA daba
+   verdadero. En UTF-8 la `é` son DOS bytes; sin la marca `u`, la clase `[eé]`
+   es un conjunto de BYTES: consume el primer byte y choca contra el segundo.
+   Fallaba en silencio. Ahora se busca `xico`, sin regex.
 
    BUG 5 — LA BODA DE OTRA GENTE ADENTRO DE LA INVITACIÓN
-   Este no dura un segundo: se queda para siempre. El motor trae una boda entera
-   inventada escrita a mano. El motor sólo la PISA cuando hay dato; si la
-   clienta dejó el campo vacío, se queda la de ejemplo. Unos XV años mostraban
-   la ceremonia en la "Basílica de Santa María", un cumpleaños mostraba
-   "Fiesta — Basílica de Santa María", y los dos pedían "reservar el blanco para
-   la novia" en el código de vestimenta. La tabla está en `i/sin-demo.php`.
+   El motor trae una boda entera inventada escrita a mano y sólo la PISA cuando
+   hay dato: si la clienta dejó el campo vacío, se queda la de ejemplo. Unos XV
+   mostraban la ceremonia en la "Basílica de Santa María" y un cumpleaños decía
+   "Fiesta — Basílica de Santa María". La tabla está en `i/sin-demo.php`.
 
-   POR QUÉ LA FOTO DEL SOBRE VA EN `#env::before`
-   Un `<video>` sin datos no pinta nada: ni su `poster`, ni el `background` que
-   le pongas por CSS. `#env::before` es un pseudo-elemento común: pinta la foto
-   en la misma caja desde el primer frame, y el video le pasa por encima cuando
-   está listo. El empalme no se nota porque son la misma imagen.
+   BUG 6 — LAS INVITACIONES SE ENTREGABAN SIN LA MITAD DE LAS FUNCIONES
+   El más caro de todos, y el más silencioso. Las carpetas congeladas de `i/v/`
+   y el `i/index.html` de respaldo NO tienen la etiqueta que carga
+   `/sobres/catalogo.js`, que es el ÚNICO enganche de los 14 módulos de
+   `/efectos/`. Sólo la tiene `/prueba/`.
 
-   ⚠️ NO USAR `aspect-ratio` PARA EL ANCHO DEL VIDEO: en Safari no se aplica
-   igual sobre elementos reemplazados y el video se va a pantalla completa.
-   El ancho va con `calc()`.
+   O sea que una invitación vendida se entregaba SIN raspadita, SIN calendario,
+   SIN el sector de música, SIN el arreglo de la foto del cierre y SIN los
+   textos plegados. Los elementos estaban en el HTML, pero no había nada que
+   los manejara. No se notaba porque las muestras se miraban en /prueba/, que
+   sí los tiene.
+
+   Se arregla abajo, inyectando la etiqueta desde el servidor: no hay que tocar
+   los HTML de 200 KB, y ninguna invitación —vieja o nueva— queda sin nada.
    ============================================================================ */
 
 $preFirma = '';
@@ -349,6 +334,30 @@ if ($leyoEvento && $DEMO_APAGAR) {
   }
 }
 
+/* ===== QUE TODAS LAS INVITACIONES TENGAN TODO (BUG 6) =========================
+
+   `/sobres/catalogo.js` es el único enganche: carga `efectos/index.js` y con él
+   los 14 módulos. Las carpetas congeladas de `i/v/` no lo tienen, así que las
+   invitaciones vendidas salían sin raspadita, sin calendario, sin música, sin
+   el arreglo de la foto del cierre y sin los textos plegados.
+
+   Se agrega acá, para TODAS. Es `defer`, así que no frena nada, y cada módulo
+   ya está escrito para no hacer nada si no le toca.
+
+   ⚠️ SE COMPRUEBA ANTES DE PONERLO. Si el HTML ya lo trae —el motor de
+   /prueba/ sí— no se duplica.
+
+   ⚠️ QUÉ SIGNIFICA ESTO PARA EL CONGELADO. Antes, una invitación entregada
+   quedaba clavada para siempre. Ahora el HTML sigue clavado, pero los MÓDULOS
+   son los de hoy. Es a propósito: es la única forma de que un arreglo llegue a
+   quien ya compró. La contra es que un error nuevo en un módulo también llega:
+   por eso el banco de pruebas corre contra la invitación de verdad antes de
+   dar nada por bueno.
+   ============================================================================ */
+$engancheModulos = (strpos($tpl, 'catalogo.js') === false)
+  ? '<script src="/sobres/catalogo.js" defer></script>'
+  : '';
+
 /* ===== LOS ARREGLOS DE ESTILO QUE VALEN PARA TODAS ============================
    Van en `i/estilos-servidor.css`, un archivo chico y aparte. La idea es la
    misma que con la lista de palabras mexicanas: retocar un estilo tiene que
@@ -363,7 +372,8 @@ $estilosServidor = ($hojaExtra !== false && trim($hojaExtra) !== '')
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
 $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
 
-$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo . $estilosServidor;
+$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
+             $estilosServidor . $engancheModulos;
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
     $tpl = str_replace('</head>', $aInyectar . '</head>', $tpl);
@@ -381,9 +391,7 @@ if ($aInyectar !== '') {
    son dos bytes en UTF-8 y sin la marca `u` la condición falla EN SILENCIO.
    Se busca `xico`, que agarra "México" y "Mexico" sin depender del acento.
 
-   ⚠️ LA LISTA DE PALABRAS VIVE EN `i/textos-es-mx.php`, no acá. Está separada
-   a propósito: sumar una palabra tiene que costar dos líneas, no reescribir
-   este archivo entero.
+   ⚠️ LA LISTA DE PALABRAS VIVE EN `i/textos-es-mx.php`, no acá.
    ============================================================================ */
 $idiomaMin = function_exists('mb_strtolower')
   ? mb_strtolower($idioma, 'UTF-8')
