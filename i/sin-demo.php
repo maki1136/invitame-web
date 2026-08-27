@@ -12,10 +12,12 @@
    campo vacío: el motor sólo los PISA cuando hay dato. Si no hay dato, se
    quedan. Y entonces un invitado ve los datos de OTRA pareja.
 
-   Pasó de verdad, en invitaciones cobradas:
+   Pasó de verdad:
      · unos XV años mostraban la ceremonia en la "Basílica de Santa María"
        el 28 de noviembre, que es la boda de ejemplo
      · un cumpleaños mostraba "Fiesta — Basílica de Santa María"
+     · unos XV y un cumpleaños mostraban, en código de vestimenta,
+       "Te pedimos reservar el blanco para la novia"
 
    CÓMO SE ARREGLA
 
@@ -37,12 +39,21 @@
    no sabemos qué cargó la clienta, y apagar a ciegas le borraría la
    invitación. Ante la duda, se muestra de más, no de menos.
 
+   ⚠️ NO HACE FALTA PONER TODO. Muchos sectores YA se apagan solos cuando no
+   hay dato: los hoteles, el itinerario, "Nuestros Padres" y los nombres de la
+   portada. Se comprobó abriendo una invitación casi vacía y mirando qué se
+   veía de verdad. Acá van SÓLO los que el motor no apaga.
+
    CÓMO SUMAR UNO NUEVO
 
    Una línea en la tabla: el selector del elemento, y la lista de campos del
-   panel que lo llenan. Para averiguar el id de un elemento, abrir la
-   invitación vacía (`/prueba/?e=zzz-no-existe-zzz`) y mirar qué elementos
-   muestran texto que no es de nadie.
+   panel que lo llenan.
+
+   Para encontrarlos, comparar dos renders: la invitación vacía
+   (`/prueba/?e=zzz-no-existe-zzz`) contra una invitación bien cargada, y
+   quedarse con los textos que aparecen SÓLO en la vacía y ADEMÁS se ven de
+   verdad (elemento hoja, sin `display:none`, con ancho > 0). Que un texto esté
+   en el HTML no quiere decir que se vea.
    ============================================================================ */
 
 /* selector CSS  =>  campos del panel que lo llenan */
@@ -55,5 +66,23 @@ $DEMO_APAGAR = array(
   /* --- Dónde & Cuándo: el segundo evento (fiesta / recepción) --- */
   '#ev2-s' => array('ev2sub'),
   '#ev2-a' => array('ev2fecha', 'ev2dir'),
+
+  /* --- Código de vestimenta ---
+     Sin este, un cumpleaños o unos XV muestran el texto de la boda de ejemplo:
+     "La fiesta se viste de color y alegría. Te pedimos reservar el blanco para
+     la novia." El título ("Dress Code") sí se deja: es una etiqueta genérica y
+     sirve igual para cualquier evento. */
+  '#dress-texto' => array('c_dresscode-texto'),
+
+  /* --- La frase larga ---
+     Si la clienta no carga ninguna, se ve la de la boda de ejemplo: "Hay un
+     instante en la vida en que se decide caminar juntos para siempre." En unos
+     XV o un bautismo no tiene ningún sentido. */
+  '.fraseSec' => array('frase'),
+
+  /* --- El mes de la raspadita ---
+     Sin fecha cargada mostraba "Noviembre 2026", que es la de la boda de
+     ejemplo. */
+  '#sc-mon' => array('fecha'),
 
 );
