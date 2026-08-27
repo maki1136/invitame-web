@@ -14,30 +14,88 @@
    Decisión de Maki: fuera. La invitación queda más limpia.
 
    Lo que hay que saber si alguna vez se lo quiere devolver:
-
    · Abría un índice con 13 accesos, uno de ellos "Confirmar asistencia".
    · La invitación mide 11–12 pantallas, así que sin el menú el invitado llega
-     a confirmar scrolleando. Si en algún momento se ve que confirma menos
-     gente, este botón es el primer sospechoso.
-   · Vivía abajo a la derecha, que en un celular alto es la zona del pulgar.
+     a confirmar scrolleando. Si en algún momento confirma menos gente, este
+     botón es el primer sospechoso.
 
-   PARA DEVOLVERLO: borrar la regla de acá abajo. Pero OJO — vuelve también el
-   bug de que se pisaba con el de WhatsApp, porque los dos están anclados a la
-   misma esquina con el mismo margen. En ese caso hay que reponer esto:
+   PARA DEVOLVERLO: borrar la regla. Pero OJO — vuelve el bug de que se pisaba
+   con el de WhatsApp. En ese caso hay que reponer también esto:
        .wafloat{ bottom:78px !important; width:46px !important; height:46px !important; }
-   que era lo que los separaba.                                              */
+   ============================================================================ */
 
 #navbtn{
   display: none !important;
 }
 
 
+/* --- EL VERDE, AFUERA -------------------------------------------------------
+
+   EL PROBLEMA ERA MÁS GRANDE QUE UN GUSTO
+
+   El motor tiene DIECISÉIS verdes escritos a mano, con variables `--verde`,
+   `--sage` y `--sage-cl`. No salen de ningún campo del panel: son el color de
+   acento de la plataforma. Por eso aparecían en TODA invitación y no había
+   forma de sacarlos desde el admin.
+
+   Y no era sólo estética. `--sage` pinta:
+       .kick          los títulos chiquitos en cursiva ("El gran día")
+       .evento .sub   EL NOMBRE DEL LUGAR de cada evento
+       .sc-mon        el mes del calendario
+   Todos esos medían 3.2 de contraste sobre el fondo marfil, cuando el mínimo
+   legible es 4.5. O sea: el verde era además el color que no se leía.
+
+   QUÉ SE PUSO EN SU LUGAR
+
+   Oro viejo, que es lo que pega con la paleta que ya tiene la invitación
+   —marfil, arena, chocolate— y con el lacre dorado del sobre.
+
+   ⚠️ SON DOS TONOS, NO UNO, Y NO ES CAPRICHO. `--sage` se usa sobre fondo
+   CLARO y `--sage-cl` sobre fondo OSCURO. Un solo color no puede tener buen
+   contraste contra los dos: para leerse sobre marfil tiene que ser oscuro, y
+   para leerse sobre chocolate tiene que ser claro. Por eso van separados.
+
+       #7d5f34  sobre marfil  → contraste 5.2  (mínimo 4.5) ✓
+       #d8b877  sobre chocolate → contraste 5.2  (mínimo 4.5) ✓
+
+   `--verde` (#2e433c) pintaba los títulos GRANDES y la frase larga. Era tan
+   oscuro que parecía negro, pero enfriaba todo. Va un marrón espresso: mismo
+   peso visual, temperatura cálida.
+   ============================================================================ */
+
+:root{
+  --verde:    #3b2f26 !important;   /* títulos grandes y frase — era verde botella */
+  --verde2:   #2f251e !important;
+  --sage:     #7d5f34 !important;   /* acento sobre fondo CLARO  — oro viejo oscuro */
+  --sage-cl:  #d8b877 !important;   /* acento sobre fondo OSCURO — oro viejo claro  */
+}
+
+
+/* --- "INGRESA" NO SE LEÍA ---------------------------------------------------
+
+   Es el PRIMER botón que toca el invitado, y medía **1.1 de contraste**: letra
+   blanca sobre el sobre color crema, casi el mismo tono. Se distinguía sólo
+   por el bordecito.
+
+   No se podía arreglar con el color de la letra: abajo hay un video de sobre y
+   no sabemos de qué color es cada cuadro. La solución que funciona con
+   cualquier sobre es darle al botón su propia base oscura translúcida.
+   ============================================================================ */
+
+#btn-ingresar{
+  background: rgba(59, 47, 38, .62) !important;
+  border-color: rgba(255, 255, 255, .78) !important;
+  color: #fff !important;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .45);
+}
+
+
 /* --- EL VERDE DE WHATSAPP NO SE TOCA ----------------------------------------
 
-   Se probó ponerlo del mismo marrón que el menú, para que pegara con la paleta
-   de la boda. Está MAL: el verde #25D366 es lo que hace que se entienda de un
+   Ese sí va en su verde original #25D366: es lo que hace que se entienda de un
    vistazo que ese botón abre WhatsApp. En un botón cuyo único trabajo es ese,
-   el reconocimiento vale más que la paleta. Va siempre en el verde original.
-
-   (No hace falta ninguna regla acá: el motor ya lo trae en su verde. Queda
-   escrito para que a nadie se le ocurra "mejorarlo" de nuevo.)               */
+   el reconocimiento vale más que la paleta. (No hace falta regla: el motor ya
+   lo trae bien. Queda escrito para que a nadie se le ocurra "mejorarlo".)
+   ============================================================================ */
