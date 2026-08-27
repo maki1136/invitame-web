@@ -6,6 +6,11 @@
 
    ⚠️ Sirve para arreglos que valen para TODAS las invitaciones. Lo que depende
    de los datos de cada evento va en `i/sin-demo.php`.
+
+   ⚠️ CÓMO SE COMPRUEBA QUE UN COLOR "SE LEE". No a ojo. Se mide el contraste
+   entre la letra y su fondo: tiene que dar 4.5 o más en texto normal, y 3 o
+   más en texto grande (24px, o 19px en negrita). Debajo de eso hay gente que
+   directamente no lo lee. El banco de pruebas trae el medidor.
    ============================================================================ */
 
 
@@ -34,29 +39,31 @@
    EL PROBLEMA ERA MÁS GRANDE QUE UN GUSTO
 
    El motor tiene DIECISÉIS verdes escritos a mano, con variables `--verde`,
-   `--sage` y `--sage-cl`. No salen de ningún campo del panel: son el color de
-   acento de la plataforma. Por eso aparecían en TODA invitación y no había
-   forma de sacarlos desde el admin.
+   `--sage`, `--sage-cl` y `--muted`. No salen de ningún campo del panel: son
+   el color de acento de la plataforma. Por eso aparecían en TODA invitación y
+   no había forma de sacarlos desde el admin.
 
-   Y no era sólo estética. `--sage` pinta:
-       .kick          los títulos chiquitos en cursiva ("El gran día")
-       .evento .sub   EL NOMBRE DEL LUGAR de cada evento
-       .sc-mon        el mes del calendario
-   Todos esos medían 3.2 de contraste sobre el fondo marfil, cuando el mínimo
-   legible es 4.5. O sea: el verde era además el color que no se leía.
+   Y no era sólo estética. Los verdes eran además los colores que NO SE LEÍAN:
+
+       --sage   → .kick (títulos chiquitos), .evento .sub (EL NOMBRE DEL
+                  LUGAR), .sc-mon (el mes del calendario)      → contraste 3.2
+       --muted  → .addr (la fecha y dirección de cada evento),
+                  .l (CLABE, Titular, Banco)                   → contraste 3.6
 
    QUÉ SE PUSO EN SU LUGAR
 
-   Oro viejo, que es lo que pega con la paleta que ya tiene la invitación
-   —marfil, arena, chocolate— y con el lacre dorado del sobre.
+   Oro viejo para los acentos y gris cálido para el texto secundario. Pega con
+   la paleta que ya tiene la invitación —marfil, arena, chocolate— y con el
+   lacre dorado del sobre.
 
-   ⚠️ SON DOS TONOS, NO UNO, Y NO ES CAPRICHO. `--sage` se usa sobre fondo
-   CLARO y `--sage-cl` sobre fondo OSCURO. Un solo color no puede tener buen
-   contraste contra los dos: para leerse sobre marfil tiene que ser oscuro, y
-   para leerse sobre chocolate tiene que ser claro. Por eso van separados.
+   ⚠️ EL ACENTO SON DOS TONOS, NO UNO, Y NO ES CAPRICHO. `--sage` se usa sobre
+   fondo CLARO y `--sage-cl` sobre fondo OSCURO. Un solo color no puede tener
+   buen contraste contra los dos: para leerse sobre marfil tiene que ser
+   oscuro, y para leerse sobre chocolate tiene que ser claro.
 
-       #7d5f34  sobre marfil  → contraste 5.2  (mínimo 4.5) ✓
-       #d8b877  sobre chocolate → contraste 5.2  (mínimo 4.5) ✓
+       #7d5f34  sobre marfil    → contraste 5.2 ✓
+       #d8b877  sobre chocolate → contraste 5.2 ✓
+       #6b6157  gris cálido     → contraste 5.3 ✓  (era 3.6)
 
    `--verde` (#2e433c) pintaba los títulos GRANDES y la frase larga. Era tan
    oscuro que parecía negro, pero enfriaba todo. Va un marrón espresso: mismo
@@ -68,7 +75,29 @@
   --verde2:   #2f251e !important;
   --sage:     #7d5f34 !important;   /* acento sobre fondo CLARO  — oro viejo oscuro */
   --sage-cl:  #d8b877 !important;   /* acento sobre fondo OSCURO — oro viejo claro  */
+  --muted:    #6b6157 !important;   /* texto secundario — era gris VERDOSO y no se leía */
 }
+
+/* el "Guarda la fecha" del calendario venía con su propio marrón claro (4.1) */
+.ivcal-kick{ color: #7d5f34 !important; }
+
+/* el "Copiar" de la CLABE era oro claro sobre blanco: 2.3, invisible */
+.copy{ color: #7d5f34 !important; }
+
+
+/* --- LETRA DEMASIADO CHICA --------------------------------------------------
+
+   Había texto de 10 y 11 px. En un celular eso es muy chico, y justo caía en
+   lo que la gente NECESITA poder leer y copiar: los datos para transferir el
+   regalo, y la dirección de cada evento.
+
+   Se suben apenas, lo justo para que se lean sin romper el diseño. No se toca
+   nada más: el resto de la tipografía está bien.
+   ============================================================================ */
+
+.evento .addr{ font-size: 13px !important; line-height: 1.5 !important; }
+.reg-datos .l, .l{ font-size: 12px !important; }
+.copy{ font-size: 12px !important; }
 
 
 /* --- "INGRESA" NO SE LEÍA ---------------------------------------------------
