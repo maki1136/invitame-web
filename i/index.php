@@ -32,6 +32,22 @@ $SOBRES_VIDEO = array(
   'carta-toscana' => array('poster' => '/sobres/carta-toscana-poster.jpg', 'carta' => true)
 );
 
+/* ===== LA TABLA DE LOS DATOS DE EJEMPLO =======================================
+   Se lee ACÁ ARRIBA, antes de hablar con Firestore, porque de la propia tabla
+   sale la lista de campos que hay que pedirle. Así, sumar un elemento nuevo se
+   hace en `i/sin-demo.php` y NO hay que tocar este archivo.
+   ============================================================================ */
+$DEMO_APAGAR = array();
+$DEMO_CAMPOS = array();
+$tablaDemo = __DIR__ . '/sin-demo.php';
+if (is_file($tablaDemo)) {
+  include $tablaDemo;
+  foreach ($DEMO_APAGAR as $claves) {
+    foreach ($claves as $k) { $DEMO_CAMPOS[$k] = true; }
+  }
+  $DEMO_CAMPOS = array_keys($DEMO_CAMPOS);
+}
+
 // slug seguro
 $slug = isset($_GET['e']) ? strtolower($_GET['e']) : '';
 $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
@@ -39,7 +55,7 @@ $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 $img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
 $coverReal = ''; $idioma = '';
 
-/* Los campos que alimentan los datos de ejemplo del motor (ver i/sin-demo.php).
+/* Los valores de esos campos para ESTE evento.
    `$leyoEvento` queda en false si Firestore no contestó: en ese caso NO se
    apaga nada, porque no sabemos qué cargó la clienta. */
 $campos = array(); $leyoEvento = false;
@@ -112,10 +128,8 @@ if ($slug !== '') {
       $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
     }
 
-    // 8) LOS CAMPOS QUE TAPAN LOS DATOS DE EJEMPLO DEL MOTOR (ver i/sin-demo.php)
-    foreach (array('ev1sub','ev1fecha','ev1dir','ev2sub','ev2fecha','ev2dir') as $k) {
-      $campos[$k] = $sv($k);
-    }
+    // 8) LOS CAMPOS QUE TAPAN LOS DATOS DE EJEMPLO. La lista sale de la tabla.
+    foreach ($DEMO_CAMPOS as $k) { $campos[$k] = $sv($k); }
     $leyoEvento = true;
   }
 }
@@ -224,11 +238,11 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
    BUG 5 — LA BODA DE OTRA GENTE ADENTRO DE LA INVITACIÓN
    Este no dura un segundo: se queda para siempre. El motor trae una boda entera
-   inventada escrita a mano (lugares, direcciones, horarios, itinerario, hoteles
-   con precios). El motor sólo la PISA cuando hay dato; si la clienta dejó el
-   campo vacío, se queda la de ejemplo. Unos XV años mostraban la ceremonia en
-   la "Basílica de Santa María" el 28 de noviembre, y un cumpleaños mostraba
-   "Fiesta — Basílica de Santa María". La tabla está en `i/sin-demo.php`.
+   inventada escrita a mano. El motor sólo la PISA cuando hay dato; si la
+   clienta dejó el campo vacío, se queda la de ejemplo. Unos XV años mostraban
+   la ceremonia en la "Basílica de Santa María", un cumpleaños mostraba
+   "Fiesta — Basílica de Santa María", y los dos pedían "reservar el blanco para
+   la novia" en el código de vestimenta. La tabla está en `i/sin-demo.php`.
 
    POR QUÉ LA FOTO DEL SOBRE VA EN `#env::before`
    Un `<video>` sin datos no pinta nada: ni su `poster`, ni el `background` que
@@ -312,30 +326,26 @@ $encuadreColumna =
   '</style>';
 
 /* ===== APAGAR LA BODA DE EJEMPLO (BUG 5) =====================================
-   La tabla vive en `i/sin-demo.php`. Sumar uno nuevo cuesta una línea allá.
+   La tabla vive en `i/sin-demo.php` y ya se leyó arriba. Sumar uno nuevo cuesta
+   una línea allá y NADA acá.
 
    ⚠️ Sólo si Firestore contestó. Si no leímos el evento no sabemos qué cargó la
    clienta, y apagar a ciegas le borraría la invitación: ante la duda, se
    muestra de más y no de menos.
    ============================================================================ */
 $sinDemo = '';
-if ($leyoEvento) {
-  $tabla = __DIR__ . '/sin-demo.php';
-  if (is_file($tabla)) {
-    $DEMO_APAGAR = array();
-    include $tabla;
-    $aApagar = array();
-    foreach ($DEMO_APAGAR as $sel => $claves) {
-      $tieneAlgo = false;
-      foreach ($claves as $k) {
-        if (isset($campos[$k]) && $campos[$k] !== '') { $tieneAlgo = true; break; }
-      }
-      if (!$tieneAlgo) $aApagar[] = $sel;
+if ($leyoEvento && $DEMO_APAGAR) {
+  $aApagar = array();
+  foreach ($DEMO_APAGAR as $sel => $claves) {
+    $tieneAlgo = false;
+    foreach ($claves as $k) {
+      if (isset($campos[$k]) && $campos[$k] !== '') { $tieneAlgo = true; break; }
     }
-    if ($aApagar) {
-      $sinDemo = '<style id="sin-demo-servidor">' .
-                 implode(',', $aApagar) . '{display:none!important}</style>';
-    }
+    if (!$tieneAlgo) $aApagar[] = $sel;
+  }
+  if ($aApagar) {
+    $sinDemo = '<style id="sin-demo-servidor">' .
+               implode(',', $aApagar) . '{display:none!important}</style>';
   }
 }
 
