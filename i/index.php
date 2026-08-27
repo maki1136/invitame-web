@@ -196,10 +196,19 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
    BUG 4 — DECÍA "INGRESÁ" Y "TOCÁ EL SELLO"
    El motor está escrito en voseo argentino y lo traduce `efectos/es-mx.js`, que
-   también es diferido. O sea que el primer segundo una novia mexicana leía
-   "INGRESÁ" y "TOCÁ EL SELLO PARA ABRIR" — justo el primer texto que ve.
-   Ahora los textos se cambian ACÁ, en el HTML, antes de mandarlo. El módulo
-   sigue existiendo para lo que el motor escriba después.
+   también es diferido. El primer segundo una novia mexicana leía "INGRESÁ" y
+   "TOCÁ EL SELLO PARA ABRIR" — justo el primer texto que ve.
+   Ahora los textos se cambian ACÁ, antes de mandar el HTML.
+
+   ⚠️⚠️ Y ESTE ARREGLO TAMBIÉN SALIÓ MAL LA PRIMERA VEZ, POR ALGO QUE NO SE VE:
+   la condición era `preg_match('/m[eé]xico|mx/i', $idioma)` y NUNCA daba
+   verdadero. El idioma guardado es "Español (México)", y en UTF-8 la `é` son
+   DOS bytes. Sin la marca `u`, la clase `[eé]` es un conjunto de BYTES sueltos:
+   consume el primer byte de la `é` y después choca contra el segundo. La
+   condición fallaba en silencio y no se reemplazaba nada — todo lo demás
+   parecía bien escrito.
+   Por eso ahora NO se usa expresión regular: se busca `xico` en minúsculas, que
+   agarra "México" y "Mexico" sin depender del acento ni del encoding.
 
    POR QUÉ LA FOTO DEL SOBRE VA EN `#env::before`
    Un `<video>` sin datos no pinta nada: ni su `poster`, ni el `background` que
@@ -301,9 +310,10 @@ if ($aInyectar !== '') {
    es diferido: el primer segundo el invitado igual leía "INGRESÁ" y "TOCÁ EL
    SELLO PARA ABRIR", que es literalmente el primer texto de la invitación.
 
-   Acá se cambian los textos en el HTML antes de que salga del servidor, así no
-   hay ningún instante en argentino. El módulo sigue existiendo para lo que el
-   motor escriba más tarde por JavaScript.
+   ⚠️ CÓMO SE DETECTA EL IDIOMA — leer la nota larga de arriba (BUG 4).
+   NO usar expresión regular con la `é`: sin la marca `u` se parte en dos bytes
+   y la condición falla en silencio. Se busca `xico`, que agarra "México" y
+   "Mexico" sin depender del acento.
 
    ⚠️ NO SON VOSEO Y NO SE TOCAN: "Mamá", "Papá", "está", "esté", "aquí",
    "asistiré", "podré". Terminan igual pero son correctas en todo el idioma.
@@ -312,7 +322,14 @@ if ($aInyectar !== '') {
    ⚠️ Las FRASES van primero: "Pasá la voz" no es "Pasa la voz", es "Corre la
    voz". Si se reemplazara la palabra suelta antes, se perdería.
    ============================================================================ */
-if ($idioma !== '' && preg_match('/m[eé]xico|mx/i', $idioma)) {
+$idiomaMin = function_exists('mb_strtolower')
+  ? mb_strtolower($idioma, 'UTF-8')
+  : strtolower($idioma);
+
+$esMexico = ($idioma !== '') &&
+            (strpos($idiomaMin, 'xico') !== false || strpos($idiomaMin, 'mx') !== false);
+
+if ($esMexico) {
 
   $frases = array(
     'Pasá el dedo para descubrir' => 'Desliza el dedo para descubrir',
@@ -322,7 +339,7 @@ if ($idioma !== '' && preg_match('/m[eé]xico|mx/i', $idioma)) {
     'dejamos nuestras mesas'      => 'aquí están nuestras mesas'
   );
 
-  /* las 18 que están de verdad en el motor, en sus dos capitalizaciones */
+  /* las que están de verdad en el motor, en sus dos capitalizaciones */
   $palabras = array(
     'Abrí'=>'Abre',          'abrí'=>'abre',
     'Compartí'=>'Comparte',  'compartí'=>'comparte',
