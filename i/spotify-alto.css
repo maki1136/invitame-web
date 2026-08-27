@@ -1,0 +1,44 @@
+/* ===== EL ALTO DEL BLOQUE DE SPOTIFY =========================================
+
+   Este archivo lo carga `i/estilos-servidor.css` con un @import, para que el
+   arreglo quede junto a su explicación y no se mezcle con el resto.
+
+   EL PROBLEMA
+
+   En el celular quedaba un cajón vacío enorme debajo del reproductor: unos
+   200 px de nada, adentro del marco redondeado.
+
+   LA CAUSA — Y LAS DOS VECES QUE LA ERRÉ
+
+   Primero pensé que lo había roto yo con un `border:1px`, porque el borde le
+   come dos píxeles de ancho al contenido y Spotify cambia de diseño según el
+   ancho. Saqué el borde y el cajón siguió igual. Teoría descartada.
+
+   Después dejé de teorizar y lo MEDÍ sobre la captura: el reproductor oscuro
+   ocupa unos 150 px de alto, y el marco mide 352. Esos 150 son exactamente el
+   tamaño "compacto" oficial de Spotify.
+
+   Entonces la explicación verdadera es más simple y más incómoda: en pantallas
+   angostas Spotify SIEMPRE usa su versión compacta, mida lo que mida el marco.
+   El cajón vacío no lo causé yo — estaba desde que existe el sector de música,
+   y no se veía porque las muestras se miraban en la compu, donde sí entra la
+   versión grande y el marco se llena.
+
+   ⚠️ LA LECCIÓN: "lo rompí yo con el último cambio" es la primera hipótesis,
+   no la conclusión. Cuando el arreglo no lo arregla, hay que medir en vez de
+   proponer otra teoría.
+
+   LA SOLUCIÓN
+
+   En celular el marco va a 152 px, que es lo que Spotify de verdad dibuja. En
+   pantallas grandes se queda en 352, donde entra la lista completa.
+
+   ⚠️ El corte va en 520 px de ancho, no en el 680 que usa el resto de la
+   invitación: Spotify decide por SU ancho, no por el de la página.
+   ============================================================================ */
+
+@media (max-width: 520px){
+  iframe[src*="spotify"]{
+    height: 152px !important;
+  }
+}
