@@ -1,0 +1,51 @@
+/* ===== ARREGLOS DE ESTILO QUE VAN EN TODAS LAS INVITACIONES ==================
+
+   Esta hoja la inyecta `i/index.php` en el <head>, siempre, antes del primer
+   pintado. Está separada del PHP a propósito: retocar un estilo tiene que
+   costar editar este archivo chico, no reescribir `index.php` entero.
+
+   ⚠️ Sirve para arreglos que valen para TODAS las invitaciones. Lo que depende
+   de los datos de cada evento va en `i/sin-demo.php`.
+   ============================================================================ */
+
+
+/* --- LOS DOS BOTONES FLOTANTES SE PISABAN -----------------------------------
+
+   Abajo a la derecha hay dos botones: el menú (`#navbtn`, marrón, 46x46) y el
+   de WhatsApp (`.wafloat`, 52x52). Los dos estaban anclados a la misma esquina,
+   con el mismo margen, así que quedaban uno ENCIMA del otro: 46 x 46 px de
+   superposición, o sea el menú tapando por completo al de WhatsApp.
+
+   Consecuencias, las dos feas:
+     · se veía una medialuna verde asomando por detrás del botón marrón, que
+       parecía un error de maqueta
+     · el botón de WhatsApp era INTOCABLE: el menú tiene z-index 70 y el de
+       WhatsApp 55, así que todos los toques se los comía el menú
+
+   No se veía en los chequeos porque ninguno miraba si dos cosas se pisan:
+   los dos botones existían, los dos estaban "visibles", y cada uno por
+   separado estaba bien. Apareció mirando la captura.                        */
+
+.wafloat{
+  bottom: 78px !important;   /* arriba del menú, no encima */
+  width: 46px !important;    /* del mismo tamaño que el menú, para que hagan juego */
+  height: 46px !important;
+}
+
+
+/* --- EL VERDE DE WHATSAPP ---------------------------------------------------
+
+   Venía con el verde de la marca WhatsApp (#25D366). Al lado de una paleta de
+   boda tradicional —marfil, arena, marrón— cantaba muchísimo, y encima era
+   justo el pedacito que asomaba por detrás del menú.
+
+   Ahora usa el mismo marrón que el botón del menú, así los dos parecen un
+   juego. El ícono de WhatsApp sigue siendo el mismo, en blanco, así que se
+   entiende igual qué es.
+
+   ⚠️ PARA VOLVER AL VERDE DE WHATSAPP: borrar este bloque de acá abajo.
+   Nada más. El resto sigue funcionando igual.                               */
+
+.wafloat{
+  background: #4a3f35 !important;
+}
