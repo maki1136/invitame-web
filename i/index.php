@@ -349,10 +349,21 @@ if ($leyoEvento && $DEMO_APAGAR) {
   }
 }
 
+/* ===== LOS ARREGLOS DE ESTILO QUE VALEN PARA TODAS ============================
+   Van en `i/estilos-servidor.css`, un archivo chico y aparte. La idea es la
+   misma que con la lista de palabras mexicanas: retocar un estilo tiene que
+   costar editar ese archivo, no reescribir este entero.
+   Si el archivo no está, no pasa nada: simplemente no se inyecta.
+   ============================================================================ */
+$hojaExtra = @file_get_contents(__DIR__ . '/estilos-servidor.css');
+$estilosServidor = ($hojaExtra !== false && trim($hojaExtra) !== '')
+  ? '<style id="estilos-servidor">' . $hojaExtra . '</style>'
+  : '';
+
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
 $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
 
-$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo;
+$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo . $estilosServidor;
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
     $tpl = str_replace('</head>', $aInyectar . '</head>', $tpl);
