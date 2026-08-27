@@ -1,5 +1,5 @@
 <?php
-/* ===== LA BODA DE EJEMPLO QUE TRAE EL MOTOR ==================================
+/* ===== LO QUE NO TIENE QUE APARECER CUANDO NO HAY DATO =======================
 
    QUÉ PROBLEMA RESUELVE ESTE ARCHIVO
 
@@ -18,6 +18,11 @@
      · un cumpleaños mostraba "Fiesta — Basílica de Santa María"
      · unos XV y un cumpleaños mostraban, en código de vestimenta,
        "Te pedimos reservar el blanco para la novia"
+
+   La misma tabla sirve para lo de al lado: BOTONES QUE NO TIENEN A DÓNDE IR.
+   El flotante de WhatsApp aparecía siempre, aunque la clienta no hubiera
+   cargado ningún número, y en ese caso su enlace era `https://wa.me/` a secas:
+   abría WhatsApp y no pasaba nada.
 
    CÓMO SE ARREGLA
 
@@ -84,5 +89,19 @@ $DEMO_APAGAR = array(
      Sin fecha cargada mostraba "Noviembre 2026", que es la de la boda de
      ejemplo. */
   '#sc-mon' => array('fecha'),
+
+  /* --- El botón flotante de WhatsApp ---
+     Aparecía SIEMPRE, aunque no hubiera número cargado, y entonces su enlace
+     era `https://wa.me/` pelado: abría WhatsApp sin destinatario y sin texto.
+     Un botón muerto en la esquina de todas las invitaciones.
+
+     Ahora sale sólo si se cargó "Número de WhatsApp" en el panel. O sea que
+     para las invitaciones que se venden es OPCIONAL —no se carga y no está—,
+     y para las muestras alcanza con poner el número de Invítame.
+
+     ⚠️ El de adentro del cuerpo ("💬 Escríbele a…", en el sector de contacto)
+     es OTRO botón, ese sí anda y sí lleva el número. Este flotante es el
+     atajo, no el único camino. */
+  '.wafloat' => array('c_numero-de-whatsapp'),
 
 );
