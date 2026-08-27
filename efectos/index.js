@@ -37,6 +37,7 @@
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
     '/efectos/musica.js',              /* la Platinum vende Música y el motor no la tenía */
+    '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
     '/efectos/es-mx.js'                /* español de México: el motor está en voseo */
   ];
