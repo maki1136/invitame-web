@@ -39,6 +39,11 @@ $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 $img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
 $coverReal = ''; $idioma = '';
 
+/* Los campos que alimentan los datos de ejemplo del motor (ver i/sin-demo.php).
+   `$leyoEvento` queda en false si Firestore no contestó: en ese caso NO se
+   apaga nada, porque no sabemos qué cargó la clienta. */
+$campos = array(); $leyoEvento = false;
+
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
          '/databases/(default)/documents/inv_eventos/' . rawurlencode($slug);
@@ -106,6 +111,12 @@ if ($slug !== '') {
     if (isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue'])) {
       $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
     }
+
+    // 8) LOS CAMPOS QUE TAPAN LOS DATOS DE EJEMPLO DEL MOTOR (ver i/sin-demo.php)
+    foreach (array('ev1sub','ev1fecha','ev1dir','ev2sub','ev2fecha','ev2dir') as $k) {
+      $campos[$k] = $sv($k);
+    }
+    $leyoEvento = true;
   }
 }
 
@@ -146,19 +157,20 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
 
 /* ===== LO QUE SE VE ANTES DE QUE CORRA UN SOLO SCRIPT =========================
 
-   ⚠️⚠️ ACÁ ESTÁN LOS CUATRO BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
+   ⚠️⚠️ ACÁ ESTÁN LOS CINCO BUGS MÁS FEOS QUE TUVO LA PLATAFORMA. LEER ANTES DE TOCAR.
 
-   EL PATRÓN, QUE ES EL MISMO EN LOS CUATRO
+   EL PATRÓN, QUE ES EL MISMO EN LOS CINCO
    El `index.html` trae valores POR DEFECTO escritos a mano —fotos de banco de
-   imágenes, textos en argentino— y el encuadre de la pantalla grande lo pone un
-   `<script defer>`. Todo eso llega DESPUÉS del primer pintado. En ese hueco de
-   uno o dos segundos el invitado ve cosas que no son suyas o mal armadas. Los
-   scripts diferidos no llegan a tiempo: nunca van a llegar.
+   imágenes, textos en argentino, una boda entera inventada— y el encuadre de la
+   pantalla grande lo pone un `<script defer>`. Todo eso llega DESPUÉS del primer
+   pintado. En ese hueco de uno o dos segundos el invitado ve cosas que no son
+   suyas o mal armadas. Los scripts diferidos no llegan a tiempo: nunca van a
+   llegar.
 
    Por eso todo esto se resuelve ACÁ, en el servidor, que ya leyó el evento de
    Firestore y escribe los valores correctos antes de mandar el HTML.
 
-   ⚠️ LA REGLA, QUE YA VALE PARA CUATRO BUGS SEGUIDOS: si algo se ve mal SÓLO EL
+   ⚠️ LA REGLA, QUE YA VALE PARA CINCO BUGS SEGUIDOS: si algo se ve mal SÓLO EL
    PRIMER SEGUNDO, y "se acomoda" al recargar o a la segunda vez, NO se arregla
    en el módulo de /efectos/. Se arregla acá. Es siempre lo mismo: llega tarde.
 
@@ -209,6 +221,14 @@ if ($tpl === false) { http_response_code(500); echo 'Error'; exit; }
    parecía bien escrito.
    Por eso ahora NO se usa expresión regular: se busca `xico` en minúsculas, que
    agarra "México" y "Mexico" sin depender del acento ni del encoding.
+
+   BUG 5 — LA BODA DE OTRA GENTE ADENTRO DE LA INVITACIÓN
+   Este no dura un segundo: se queda para siempre. El motor trae una boda entera
+   inventada escrita a mano (lugares, direcciones, horarios, itinerario, hoteles
+   con precios). El motor sólo la PISA cuando hay dato; si la clienta dejó el
+   campo vacío, se queda la de ejemplo. Unos XV años mostraban la ceremonia en
+   la "Basílica de Santa María" el 28 de noviembre, y un cumpleaños mostraba
+   "Fiesta — Basílica de Santa María". La tabla está en `i/sin-demo.php`.
 
    POR QUÉ LA FOTO DEL SOBRE VA EN `#env::before`
    Un `<video>` sin datos no pinta nada: ni su `poster`, ni el `background` que
@@ -291,10 +311,38 @@ $encuadreColumna =
   '}' .
   '</style>';
 
+/* ===== APAGAR LA BODA DE EJEMPLO (BUG 5) =====================================
+   La tabla vive en `i/sin-demo.php`. Sumar uno nuevo cuesta una línea allá.
+
+   ⚠️ Sólo si Firestore contestó. Si no leímos el evento no sabemos qué cargó la
+   clienta, y apagar a ciegas le borraría la invitación: ante la duda, se
+   muestra de más y no de menos.
+   ============================================================================ */
+$sinDemo = '';
+if ($leyoEvento) {
+  $tabla = __DIR__ . '/sin-demo.php';
+  if (is_file($tabla)) {
+    $DEMO_APAGAR = array();
+    include $tabla;
+    $aApagar = array();
+    foreach ($DEMO_APAGAR as $sel => $claves) {
+      $tieneAlgo = false;
+      foreach ($claves as $k) {
+        if (isset($campos[$k]) && $campos[$k] !== '') { $tieneAlgo = true; break; }
+      }
+      if (!$tieneAlgo) $aApagar[] = $sel;
+    }
+    if ($aApagar) {
+      $sinDemo = '<style id="sin-demo-servidor">' .
+                 implode(',', $aApagar) . '{display:none!important}</style>';
+    }
+  }
+}
+
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
 $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
 
-$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre;
+$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo;
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
     $tpl = str_replace('</head>', $aInyectar . '</head>', $tpl);
