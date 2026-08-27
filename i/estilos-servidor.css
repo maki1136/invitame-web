@@ -4,129 +4,132 @@
    pintado. Está separada del PHP a propósito: retocar un estilo tiene que
    costar editar este archivo chico, no reescribir `index.php` entero.
 
-   ⚠️ Sirve para arreglos que valen para TODAS las invitaciones. Lo que depende
-   de los datos de cada evento va en `i/sin-demo.php`.
-
    ⚠️ NO USAR @import ACÁ. Esto se inyecta adentro de un <style>, y `@import`
    sólo vale si es lo primero de la hoja: partir el archivo en dos rompe todo
-   en silencio. Todo va acá adentro.
+   en silencio.
 
-   ⚠️⚠️ LA REGLA MÁS IMPORTANTE DE ESTE ARCHIVO — CUÁNDO VA `!important`
+   ⚠️⚠️ LA REGLA MÁS IMPORTANTE — CUÁNDO VA `!important`
 
-   Lo que la clienta elige en el panel SIEMPRE tiene que ganarle a lo que trae
-   el motor. El panel escribe sus valores como estilo en línea sobre `:root`,
-   y un `!important` de una hoja como ésta le gana a un estilo en línea.
-   O sea: poner `!important` sobre una variable que viene del panel APAGA el
-   control del panel.
+   Lo que la clienta elige SIEMPRE tiene que ganarle a lo que trae el motor. El
+   panel escribe sus valores como estilo en línea sobre `:root`, y un
+   `!important` de una hoja le gana a un estilo en línea. O sea: poner
+   `!important` sobre una variable que viene del panel APAGA el control.
 
-   Y pasó de verdad. Al sacar el verde se le puso `!important` a `--verde`, que
-   SÍ viene del panel (campo "color"). Resultado: tres invitaciones que habían
-   elegido colores distintos —un marrón, un verde de playa y un oro— se veían
-   las tres del MISMO marrón. El selector de color principal quedó sin efecto y
-   no se notaba, porque cada invitación se mira de a una.
+   Pasó de verdad: se le puso `!important` a `--verde`, que SÍ viene del panel,
+   y tres invitaciones con colores distintos —un marrón, un verde de playa y un
+   oro— se veían las tres iguales. No se notaba porque se miran de a una.
 
-   REGLA:
-     · Variable que viene del panel  → SIN `!important` (es sólo un valor por
-       defecto mejor que el del motor; si la clienta elige, manda ella).
-     · Variable que sólo vive en el motor → puede llevar `!important`.
-     · Ante la duda, SIN `!important`, y se comprueba abriendo dos invitaciones
-       con colores distintos y mirando si se ven distintas.
+   REGLA: variable del panel → SIN `!important`. Variable sólo del motor →
+   puede llevarlo. Ante la duda, sin, y se comprueba abriendo dos invitaciones
+   con colores distintos.
 
-   ⚠️ CÓMO SE COMPRUEBA QUE UN COLOR "SE LEE". No a ojo. Se mide el contraste
-   entre la letra y su fondo: 4.5 o más en texto normal, 3 o más en texto
-   grande (24px, o 19px en negrita). El banco de pruebas trae el medidor.
+   ⚠️ OTRA TRAMPA, YA PISADA: UNA CLASE PUEDE USARSE EN DOS LADOS. `.l` es la
+   etiqueta de la CLABE… y también las flechitas ‹ › de la galería. Una regla
+   suelta `.l{font-size:12px}` agrandó los datos bancarios Y achicó las flechas.
+   Antes de escribir una regla por clase, hay que ver CUÁNTOS elementos agarra.
    ============================================================================ */
 
 
 /* --- EL BOTÓN DE MENÚ FLOTANTE, AFUERA --------------------------------------
-
-   Decisión de Maki: fuera. La invitación queda más limpia.
-
-   Lo que hay que saber si alguna vez se lo quiere devolver:
-   · Abría un índice con 13 accesos, uno de ellos "Confirmar asistencia".
-   · La invitación mide 11–12 pantallas, así que sin el menú el invitado llega
-     a confirmar scrolleando. Si en algún momento confirma menos gente, este
-     botón es el primer sospechoso.
-
-   PARA DEVOLVERLO: borrar la regla. Pero OJO — vuelve el bug de que se pisaba
-   con el de WhatsApp. En ese caso hay que reponer también esto:
+   Decisión de Maki: fuera. Abría un índice con 13 accesos, uno de ellos
+   "Confirmar asistencia", y la invitación mide 11–12 pantallas: si en algún
+   momento confirma menos gente, este botón es el primer sospechoso.
+   PARA DEVOLVERLO: borrar la regla, y reponer también esto, porque si no se
+   pisa con el de WhatsApp:
        .wafloat{ bottom:78px !important; width:46px !important; height:46px !important; }
    ============================================================================ */
 
-#navbtn{
-  display: none !important;
-}
+#navbtn{ display: none !important; }
 
 
 /* --- EL VERDE, AFUERA -------------------------------------------------------
 
-   El motor trae dieciséis verdes escritos a mano. Los de estas variables no
-   salían de ningún campo del panel, así que aparecían en TODA invitación sin
-   forma de sacarlos desde el admin.
+   El motor trae dieciséis verdes escritos a mano que no salían de ningún campo
+   del panel. Y no era sólo estética: eran los colores que NO SE LEÍAN.
 
-   Y no era sólo estética. Eran además los colores que NO SE LEÍAN:
+       --sage   → .kick, .evento .sub (EL NOMBRE DEL LUGAR), .sc-mon  → 3.2
+       --muted  → .addr, las etiquetas de la CLABE                    → 3.6
 
-       --sage   → .kick (títulos chiquitos), .evento .sub (EL NOMBRE DEL
-                  LUGAR), .sc-mon (el mes del calendario)      → contraste 3.2
-       --muted  → .addr (la fecha y dirección de cada evento),
-                  .l (CLABE, Titular, Banco)                   → contraste 3.6
+   ⚠️ EL ACENTO SON DOS TONOS. `--sage` va sobre fondo CLARO y `--sage-cl`
+   sobre fondo OSCURO. Un color no puede leerse bien contra los dos.
 
-   En su lugar: oro viejo para los acentos y gris cálido para el texto
-   secundario.
-
-   ⚠️ EL ACENTO SON DOS TONOS, NO UNO, Y NO ES CAPRICHO. `--sage` se usa sobre
-   fondo CLARO y `--sage-cl` sobre fondo OSCURO. Un solo color no puede tener
-   buen contraste contra los dos: para leerse sobre marfil tiene que ser
-   oscuro, y para leerse sobre chocolate tiene que ser claro.
-
-       #7d5f34  sobre marfil    → contraste 5.2 ✓
-       #d8b877  sobre chocolate → contraste 5.2 ✓
-       #6b6157  gris cálido     → contraste 5.3 ✓  (era 3.6)
+       #7d5f34 sobre marfil 5.2 ✓   #d8b877 sobre chocolate 5.2 ✓
+       #6b6157 gris cálido  5.3 ✓  (era 3.6)
    ============================================================================ */
 
 /* SÍ llevan !important: sólo viven en el motor, el panel no los toca. */
 :root{
-  --sage:     #7d5f34 !important;   /* acento sobre fondo CLARO  — oro viejo oscuro */
-  --sage-cl:  #d8b877 !important;   /* acento sobre fondo OSCURO — oro viejo claro  */
-  --muted:    #6b6157 !important;   /* texto secundario — era gris VERDOSO y no se leía */
+  --sage:     #7d5f34 !important;
+  --sage-cl:  #d8b877 !important;
+  --muted:    #6b6157 !important;
 }
 
-/* ⚠️ NO llevan !important: `--verde` es el campo "color" del panel, el color
-   principal que elige la clienta. Acá sólo se mejora el valor POR DEFECTO
-   —el motor traía un verde botella— para las invitaciones que no eligieron
-   ninguno. Si la clienta elige, gana ella. */
+/* ⚠️ SIN !important: `--verde` es el campo "color" del panel. Acá sólo se
+   mejora el valor POR DEFECTO —el motor traía verde botella— para quien no
+   eligió ninguno. Si la clienta elige, gana ella. */
 :root{
   --verde:  #3b2f26;
   --verde2: #2f251e;
 }
 
-/* el "Guarda la fecha" del calendario venía con su propio marrón claro (4.1) */
-.ivcal-kick{ color: #7d5f34 !important; }
-
-/* el "Copiar" de la CLABE era oro claro sobre blanco: 2.3, invisible */
-.copy{ color: #7d5f34 !important; }
+.ivcal-kick{ color: #7d5f34 !important; }   /* "Guarda la fecha": daba 4.1 */
+.banco .copy{ color: #7d5f34 !important; }  /* "Copiar" de la CLABE: daba 2.3 */
 
 
-/* --- LETRA DEMASIADO CHICA --------------------------------------------------
+/* ===== LOS TAMAÑOS DE TEXTO ==================================================
 
-   Había texto de 10 y 11 px. En un celular eso es muy chico, y justo caía en
-   lo que la gente NECESITA poder leer y copiar: los datos para transferir el
-   regalo, y la dirección de cada evento.
+   El motor NO tenía ni una variable de tamaño: cada número estaba escrito a
+   mano adentro del HTML de 200 KB, que sólo se puede subir arrastrándolo. Por
+   eso no se podía cambiar ni un tamaño sin tocar ese archivo.
+
+   Acá se arma el sistema. Cada renglón dice: "este texto usa la variable tal,
+   y si nadie la definió, este es su tamaño de siempre".
+
+       font-size: var(--fs-titulo, 30px)
+                      ↑ lo que elija el panel   ↑ el de siempre
+
+   El panel guarda `tam_titulo`, el servidor escribe `--fs-titulo` y listo. Si
+   no eligió nada, no se escribe la variable y queda el valor de acá: o sea que
+   esto NO cambia cómo se ve ninguna invitación de hoy.
+
+   ⚠️ LOS SELECTORES ESTÁN VERIFICADOS UNO POR UNO contra la invitación en
+   vivo, no adivinados. Los que parecían obvios y estaban mal:
+       · los nombres de la portada son `#pv-names`, no `.pv-names`
+       · `.kick` es el título GRANDE en cursiva (34px), no el chiquito;
+         el chiquito es `#pv-kick` (15px)
+       · las etiquetas de la CLABE son `.banco .l` — `.l` a secas agarra
+         también las flechas de la galería
+       · `.sec p` agarra la frase larga, por eso va con `:not(.frase)`
+
+   Una regla que apunta a un selector inexistente no falla: no hace nada. Y eso
+   es peor, porque parece que anda.
+
+   Los tres valores por defecto que NO son los originales son los que estaban
+   ilegibles en un celular: la dirección (12→13) y los datos bancarios (10 y
+   11 → 12).
    ============================================================================ */
 
-.evento .addr{ font-size: 13px !important; line-height: 1.5 !important; }
-.reg-datos .l, .l{ font-size: 12px !important; }
-.copy{ font-size: 12px !important; }
+#pv-names            { font-size: var(--fs-nombres, 54px)   !important; }
+#pv-kick             { font-size: var(--fs-kicker, 15px)    !important; }
+.num                 { font-size: var(--fs-contador, 40px)  !important; }
+.sec h2              { font-size: var(--fs-titulo, 30px)    !important; }
+.kick                { font-size: var(--fs-cursiva, 34px)   !important; }
+.frase               { font-size: var(--fs-frase, 26px)     !important; }
+.sec p:not(.frase)   { font-size: var(--fs-texto, 16px)     !important; }
+.evento .sub         { font-size: var(--fs-lugar, 13px)     !important; }
+.evento .addr        { font-size: var(--fs-direccion, 13px) !important;
+                       line-height: 1.5 !important; }
+.btn                 { font-size: var(--fs-boton, 12px)     !important; }
+.banco .l,
+.banco .val,
+.banco .copy         { font-size: var(--fs-datos, 12px)     !important; }
 
 
 /* --- "INGRESA" NO SE LEÍA ---------------------------------------------------
-
-   Es el PRIMER botón que toca el invitado, y medía **1.1 de contraste**: letra
-   blanca sobre el sobre color crema, casi el mismo tono.
-
-   No se podía arreglar con el color de la letra: abajo hay un video de sobre y
-   no sabemos de qué color es cada cuadro. La solución que funciona con
-   cualquier sobre es darle al botón su propia base oscura translúcida.
+   Es el PRIMER botón que toca el invitado y medía 1.1 de contraste: blanco
+   sobre el sobre color crema. No se puede arreglar con el color de la letra,
+   porque abajo hay un video y no sabemos de qué color es cada cuadro: se le da
+   su propia base oscura translúcida, que funciona con cualquier sobre.
    ============================================================================ */
 
 #btn-ingresar{
@@ -136,26 +139,26 @@
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   text-shadow: 0 1px 6px rgba(0, 0, 0, .45);
+  font-size: 14px !important;
 }
 
 
 /* --- UN VELO SOBRE LAS FOTOS QUE TIENEN TEXTO ENCIMA ------------------------
 
    Sobre una foto el contraste cambia píxel a píxel: la misma letra blanca se
-   lee perfecto sobre el saco negro del novio y desaparece sobre el vestido de
-   la novia. Por eso el chequeo de contraste SALTEA todo lo que va sobre foto
-   —cualquier número sería inventado— y esto se encuentra mirando.
+   lee sobre el saco del novio y desaparece sobre el vestido de la novia. El
+   medidor de contraste SALTEA lo que va sobre foto —cualquier número sería
+   inventado— así que esto se encuentra MIRANDO.
 
-   ⚠️ ESTO NO ES UN ARREGLO PARA UNA FOTO. Es una regla para TODAS: cualquier
-   foto que tenga texto encima lleva velo. Si mañana la clienta sube otra foto,
-   clara u oscura, el texto se lee igual. Por eso se eligió el velo en vez de
-   retocar colores: para que NO dependa de la foto.
+   ⚠️ NO ES UN ARREGLO PARA UNA FOTO. Es una regla para TODAS: cualquier foto
+   con texto encima lleva velo. Si mañana suben otra, clara u oscura, se lee
+   igual. Por eso se eligió el velo y no retocar colores: para que NO dependa
+   de la foto.
 
-   ⚠️ POR QUÉ ES SEGURO HACERLO ASÍ. `.capa` y `.pbg` son capas de foto VACÍAS
-   (cero hijos, cero texto) y posicionadas en absoluto. Ponerles un `::after`
-   oscurece la foto y NO PUEDE tapar ningún texto. Si en cambio se le pusiera
-   el velo a la sección entera, el pseudo-elemento se dibujaría ENCIMA del
-   texto y lo taparía.
+   ⚠️ POR QUÉ ES SEGURO. `.capa` y `.pbg` son capas de foto VACÍAS (cero hijos,
+   cero texto) y absolutas: un `::after` ahí oscurece la foto y no puede tapar
+   ningún texto. Si el velo fuera de la sección entera, se dibujaría ENCIMA del
+   texto.
    ============================================================================ */
 
 .capa::after,
@@ -171,8 +174,8 @@
               rgba(35, 26, 18, .52) 100%);
 }
 
-/* La raspadita tiene la foto en la sección misma, que SÍ contiene texto, así
-   que ahí no se puede usar un velo: se refuerza la sombra de la letra. */
+/* La raspadita tiene la foto en la sección misma, que SÍ contiene texto: ahí no
+   se puede usar velo, se refuerza la sombra de la letra. */
 .scratch-sec h2,
 .scratch-sec .kick,
 .scratch-sec .sc-hint{
@@ -182,28 +185,24 @@
 
 /* --- EL BLOQUE DE SPOTIFY ---------------------------------------------------
 
-   Era lo único negro puro de toda la invitación, con esquinas rectas. Adentro
-   no se puede tocar nada —es de otro dominio— pero sí se lo puede ENMARCAR.
+   Era lo único negro puro de la invitación, con esquinas rectas. Adentro no se
+   puede tocar —es de otro dominio— pero sí se lo puede ENMARCAR.
 
-   Y además tenía un cajón vacío de 200 px en el celular. Acá me equivoqué:
-   · 1ª teoría: lo rompí yo con un `border:1px`, porque el borde le come dos
-     píxeles de ancho y Spotify cambia de diseño según el ancho. Saqué el
-     borde y el cajón siguió. Descartada.
-   · Entonces lo MEDÍ: el reproductor ocupa 150 px y el marco 352. Esos 150
-     son el tamaño "compacto" oficial de Spotify.
+   Y tenía un cajón vacío de 200 px en el celular. Acá me equivoqué: pensé que
+   lo había roto yo con un `border:1px` (el borde le come dos píxeles de ancho
+   y Spotify cambia de diseño según el ancho). Saqué el borde y siguió igual.
+   Entonces lo MEDÍ: el reproductor ocupa 150 px y el marco 352. Esos 150 son
+   el tamaño "compacto" oficial de Spotify.
 
-   La explicación verdadera: en pantallas angostas Spotify SIEMPRE usa su
-   versión compacta, mida lo que mida el marco. El cajón no lo causé yo —
-   estaba desde que existe el sector de música, y no se veía porque las
-   muestras se miraban en la compu.
+   La causa verdadera: en pantallas angostas Spotify SIEMPRE usa el compacto,
+   mida lo que mida el marco. El cajón no lo causé yo — estaba desde que existe
+   el sector de música, y no se veía porque las muestras se miraban en la compu.
 
    ⚠️ LA LECCIÓN: "lo rompí yo con el último cambio" es la primera hipótesis,
    no la conclusión. Cuando el arreglo no arregla, hay que MEDIR.
 
-   ⚠️ EL CORTE VA EN 520 px, no en el 680 del resto: Spotify decide por SU
-   ancho, no por el de la página.
-
-   ⚠️ NO PONERLE BORDE, por lo de los dos píxeles.
+   ⚠️ El corte va en 520 px: Spotify decide por SU ancho, no por el de la
+   página. Y no ponerle borde, por lo de los dos píxeles.
    ============================================================================ */
 
 iframe[src*="spotify"]{
@@ -213,20 +212,14 @@ iframe[src*="spotify"]{
 }
 
 @media (max-width: 520px){
-  iframe[src*="spotify"]{
-    height: 152px !important;   /* lo que Spotify de verdad dibuja en celular */
-  }
+  iframe[src*="spotify"]{ height: 152px !important; }
 }
 
 
 /* --- EL BOTÓN "AGENDAR" CASI NO SE VEÍA -------------------------------------
-
-   Al lado del "VER MAPA", que es sólido, el de agendar era beige sobre marfil:
-   se perdía. Pasa a ser un botón de contorno — se ve, y sigue siendo el
-   secundario.
-
-   ⚠️ Usa `currentColor` a propósito, para que tome el color principal que haya
-   elegido la clienta en vez de clavarle un marrón.
+   Al lado del "VER MAPA", que es sólido, era beige sobre marfil y se perdía.
+   Pasa a ser de contorno. Usa el color principal de la invitación en vez de un
+   marrón clavado, para que acompañe la paleta que haya elegido la clienta.
    ============================================================================ */
 
 .evento .btn.sec2,
@@ -240,9 +233,8 @@ iframe[src*="spotify"]{
 
 
 /* --- EL VERDE DE WHATSAPP NO SE TOCA ----------------------------------------
-
-   Ese sí va en su verde original #25D366: es lo que hace que se entienda de un
-   vistazo que ese botón abre WhatsApp. En un botón cuyo único trabajo es ese,
-   el reconocimiento vale más que la paleta. (No hace falta regla: el motor ya
-   lo trae bien. Queda escrito para que a nadie se le ocurra "mejorarlo".)
+   Va en su verde original #25D366: es lo que hace que se entienda de un
+   vistazo qué abre ese botón. En un botón cuyo único trabajo es ese, el
+   reconocimiento vale más que la paleta. Queda escrito para que a nadie se le
+   ocurra "mejorarlo".
    ============================================================================ */
