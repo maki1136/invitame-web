@@ -17,7 +17,7 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
-   ⚠️ EL ORDEN IMPORTA en ocho casos:
+   ⚠️ EL ORDEN IMPORTA en nueve casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -32,6 +32,8 @@
    · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
      los momentos de verdad, después se los anima.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
+   · `panel-galeria.js` va DESPUÉS de `galeria.js`: los dos leen fx.galeria y
+     el del panel escribe lo que el otro después lee.
    · `es-mx.js` va ÚLTIMO: traduce lo que escribieron todos los anteriores.
    ============================================================================ */
 (function () {
@@ -55,6 +57,7 @@
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
+    '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
     '/efectos/es-mx.js'                /* español de México: el motor está en voseo */
   ];
 
