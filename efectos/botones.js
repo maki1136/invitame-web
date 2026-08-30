@@ -15,35 +15,31 @@
       distinto en cada invitación, y por eso cambiar la paleta repinta también
       los botones.
 
+   ⚠️ NINGÚN ESTILO PONE CAPAS ENCIMA DEL BOTÓN.  ← esto costó un bug
+      La primera versión hacía el canto del cristal y la tela del terciopelo con
+      un ::before que cubría el botón. Resultado: EL TEXTO DESAPARECÍA. No se
+      puede levantar por encima, porque el texto de un botón es un nodo suelto y
+      no un elemento — la regla `> *` no lo alcanza.
+      Todo se hace ahora con `box-shadow` (que se pinta por detrás) y con
+      `background-image` + `background-blend-mode` (que se queda en el fondo).
+      Si algún día hace falta un estilo nuevo: mismo criterio, nada encima.
+
    ⚠️ QUÉ TOCA Y QUÉ NO. Sólo pinta: fondo, borde, sombra y color de letra.
-      No toca tamaños, ni espaciados, ni posiciones. Si un estilo rompiera el
-      acomodo de la invitación, sería un bug — no una decisión de diseño.
+      No toca tamaños, ni espaciados, ni posiciones.
 
    ⚠️ EL SELECTOR ES [data-boton], NO html[data-boton].
-      Es a propósito: así el panel puede mostrar las once muestras juntas,
-      envolviendo cada una en su propio [data-boton]. La muestra queda pintada
-      con ESTE mismo CSS y no con una copia que algún día quede vieja.
+      Así el panel puede mostrar las once muestras juntas, envolviendo cada una
+      en su propio [data-boton]. La muestra queda pintada con ESTE mismo CSS.
 
    LA LISTA VIVE ACÁ Y EN NINGÚN OTRO LADO. El panel la lee de window.INVBOTONES.
    ============================================================================ */
 (function () {
   'use strict';
 
-  /* Dónde se aplica: los botones de verdad de la invitación.
-
-     `.inv-prev-btn` es la muestra del panel. Está acá a propósito: así la
-     tarjeta que ve la diseñadora se pinta con EXACTAMENTE el mismo CSS que el
-     botón de la invitación. */
+  /* Dónde se aplica. `.inv-prev-btn` es la muestra del panel: está acá para que
+     la tarjeta se pinte con el mismo CSS que el botón de verdad. */
   var DONDE = '.btn, #btn-ingresar, .wsp, .tv-btn, .inv-prev-btn';
 
-  /* ---------------------------------------------------------------------------
-     LOS ESTILOS
-
-     `css`   = lo que se le pone al botón
-     `extra` = reglas sueltas (capas de encima, estados). `__D__` se reemplaza
-               por la lista de selectores de arriba.
-     Cada uno recibe las variables de la paleta ya puestas por /efectos/paleta.js
-     --------------------------------------------------------------------------- */
   var ESTILOS = [
 
     { id:'lacre', nombre:'Lacre', pie:'Cera prensada, con la letra hundida',
@@ -78,22 +74,19 @@
           ' inset 0 0 0 1px rgba(255,255,255,.62), 0 8px 20px rgba(96,102,140,.20) !important;'
     },
 
+    /* El canto se hace con un ANILLO de sombra interna (el `inset 0 0 0 5px`).
+       Antes era una capa encima y tapaba el texto. */
     { id:'cristal-relieve', nombre:'Cristal con relieve', pie:'Un bloque de vidrio, con canto y espesor',
       css:
         'color:color-mix(in srgb,var(--verde) 88%,#000) !important;' +
-        'background:linear-gradient(152deg,#ffffff 0%,#e8ecf4 20%,#c4cbdc 40%,#f6f8fc 56%,#b9c1d4 76%,#eef1f7 100%) !important;' +
+        'background:linear-gradient(178deg,#ffffff,#eef1f7 62%,#f7f9fc) !important;' +
         'border:0 !important;' +
-        'box-shadow: inset 0 0 0 1px rgba(255,255,255,.95), 0 16px 26px rgba(78,86,124,.28),' +
-          ' 0 2px 2px rgba(78,86,124,.30) !important;' +
-        'text-shadow:0 1px 0 rgba(255,255,255,.95), 0 2.5px 1px rgba(120,128,162,.22) !important;',
-      /* la cara de arriba, metida para adentro: ése es el grosor */
-      extra:
-        '[data-boton="cristal-relieve"] :is(__D__){position:relative}' +
-        '[data-boton="cristal-relieve"] :is(__D__)::before{' +
-          'content:"";position:absolute;inset:5px;border-radius:inherit;pointer-events:none;' +
-          'background:linear-gradient(178deg, rgba(255,255,255,.99), rgba(236,240,248,.94));' +
-          'box-shadow:inset 0 2px 0 rgba(255,255,255,1), inset 0 -3px 7px rgba(112,120,155,.26);}' +
-        '[data-boton="cristal-relieve"] :is(__D__) > *{position:relative;z-index:2}'
+        'box-shadow: inset 0 0 0 1px rgba(255,255,255,.95),' +
+          ' inset 0 0 0 5px rgba(190,198,218,.50),' +          /* el canto biselado */
+          ' inset 0 9px 7px -7px rgba(255,255,255,1),' +       /* la cara, iluminada arriba */
+          ' inset 0 -9px 9px -7px rgba(112,120,155,.40),' +    /* y apagada abajo */
+          ' 0 16px 26px rgba(78,86,124,.26), 0 2px 2px rgba(78,86,124,.30) !important;' +
+        'text-shadow:0 1px 0 rgba(255,255,255,.95), 0 2.5px 1px rgba(120,128,162,.20) !important;'
     },
 
     { id:'nacar', nombre:'Nácar', pie:'Tornasol frío, como el interior de una caracola',
@@ -154,47 +147,37 @@
         'text-shadow:0 1px 0 rgba(255,255,255,.8) !important;'
     },
 
+    /* El resplandor va en box-shadow, que se pinta POR DETRÁS del botón: sale
+       por arriba limpio y por abajo más fuerte y teñido, sin tapar nada. */
     { id:'luz-detras', nombre:'Luz detrás', pie:'Una lámpara escondida atrás. Para UN solo botón',
       css:
         'color:color-mix(in srgb,var(--verde) 94%,#000) !important;' +
         'background:linear-gradient(184deg,#fbfbfc,#eceef2) !important;' +
         'border:0 !important;' +
-        'box-shadow: inset 0 1.2px 0 rgba(255,255,255,.95), inset 0 -1.4px 2px rgba(90,96,116,.14),' +
-          ' 18px 26px 30px rgba(78,86,110,.24), 5px 8px 10px rgba(78,86,110,.18) !important;',
-      extra:
-        '[data-boton="luz-detras"] :is(__D__){position:relative;isolation:isolate}' +
-        /* el resplandor de arriba sale limpio; el de abajo vuelve teñido */
-        '[data-boton="luz-detras"] :is(__D__)::before{' +
-          'content:"";position:absolute;left:16%;right:16%;top:-14px;height:38px;border-radius:50%;' +
-          'z-index:-1;pointer-events:none;filter:blur(11px);' +
-          'background:radial-gradient(closest-side, color-mix(in srgb,var(--oro) 30%,#fff),' +
-          ' color-mix(in srgb,var(--oro) 55%, transparent) 46%, transparent);}' +
-        '[data-boton="luz-detras"] :is(__D__)::after{' +
-          'content:"";position:absolute;left:24%;right:24%;bottom:-16px;height:40px;border-radius:50%;' +
-          'z-index:-1;pointer-events:none;filter:blur(13px);' +
-          'background:radial-gradient(closest-side, var(--oro),' +
-          ' color-mix(in srgb,var(--oro) 60%, transparent) 44%, transparent);}'
+        'box-shadow: 0 -9px 20px -5px color-mix(in srgb,var(--oro) 45%, transparent),' +
+          ' 0 13px 24px -5px color-mix(in srgb,var(--oro) 85%, transparent),' +
+          ' inset 0 1.2px 0 rgba(255,255,255,.95), inset 0 -1.4px 2px rgba(90,96,116,.14),' +
+          ' 14px 22px 28px rgba(78,86,110,.20) !important;'
     },
 
+    /* La tela va en background-image con background-blend-mode: se queda en el
+       fondo y no toca el texto. */
     { id:'terciopelo', nombre:'Terciopelo', pie:'Con textura de tela. Necesita el archivo en /efectos/',
       necesitaArchivo:'/efectos/terciopelo-fibra.jpg',
       css:
         'color:color-mix(in srgb,var(--verde) 86%,#000) !important;' +
         'background-color:var(--sage-cl) !important;' +
-        'background-image:radial-gradient(118% 150% at 32% 16%, rgba(255,255,255,.85), rgba(255,255,255,0) 62%),' +
+        'background-image:url("/efectos/terciopelo-fibra.jpg"),' +
+          ' radial-gradient(118% 150% at 32% 16%, rgba(255,255,255,.85), rgba(255,255,255,0) 62%),' +
           ' linear-gradient(166deg, color-mix(in srgb,var(--sage-cl) 58%,#fff), var(--sage-cl) 56%,' +
           ' color-mix(in srgb,var(--sage-cl) 62%,var(--sage))) !important;' +
+        'background-size:120px, auto, auto !important;' +
+        'background-blend-mode:overlay, normal, normal !important;' +
         'border:0 !important;' +
-        'box-shadow: inset 0 2px 6px rgba(255,255,255,.9), inset 0 -6px 13px color-mix(in srgb,var(--sage) 40%, transparent),' +
+        'box-shadow: inset 0 2px 6px rgba(255,255,255,.9),' +
+          ' inset 0 -6px 13px color-mix(in srgb,var(--sage) 40%, transparent),' +
           ' 0 4px 12px color-mix(in srgb,var(--sage) 32%, transparent) !important;' +
-        'text-shadow:0 1px 0 rgba(255,255,255,.72) !important;',
-      extra:
-        '[data-boton="terciopelo"] :is(__D__){position:relative;overflow:hidden}' +
-        '[data-boton="terciopelo"] :is(__D__)::after{' +
-          'content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;' +
-          'background-image:url("/efectos/terciopelo-fibra.jpg");background-size:120px;' +
-          'mix-blend-mode:overlay;opacity:.9;}' +
-        '[data-boton="terciopelo"] :is(__D__) > *{position:relative;z-index:2}'
+        'text-shadow:0 1px 0 rgba(255,255,255,.72) !important;'
     }
   ];
 
@@ -206,7 +189,6 @@
   function reglas(e) {
     var sel = '[data-boton="' + e.id + '"] :is(' + DONDE + ')';
     var css = sel + '{' + e.css + '}';
-    if (e.extra) css += e.extra.split('__D__').join(DONDE);
     /* al apretar, cualquier material se hunde un poco */
     css += '[data-boton="' + e.id + '"] :is(' + DONDE + '):active{transform:translateY(1.5px) scale(.99)}';
     return css;
