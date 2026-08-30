@@ -17,7 +17,7 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
-   ⚠️ EL ORDEN IMPORTA en diez casos:
+   ⚠️ EL ORDEN IMPORTA en once casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -31,6 +31,8 @@
      material deja de aplicar ahí.
    · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo del fondo se tiñe
      con el papel de la paleta, así el fondo se integra en vez de verse pegado.
+   · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`: escribe fx.fondo, que
+     es lo que el otro después lee.
    · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
      los momentos de verdad, después se los anima.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
@@ -46,6 +48,7 @@
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
     '/efectos/fondo-invitacion.js',    /* imagen o video detrás de TODA la invitación */
+    '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
     '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
