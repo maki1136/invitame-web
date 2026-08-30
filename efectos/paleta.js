@@ -1,19 +1,26 @@
 /* ===== LA PALETA DE LA INVITACIÓN ============================================
 
-   Hasta ahora los colores de la invitación eran NUEVE campos sueltos que se
-   cargaban de a uno (nombres, frase, fondo de galería, fondo de regalos, fondo
-   de confirmación, texto de Instagram, lacre, carta del sobre). Por eso no
-   había dos invitaciones que se vieran parejas.
-
-   Este módulo agrega UNA elección que pinta las doce variables del motor de
-   una sola vez.
+   Hasta ahora los colores de la invitación eran campos sueltos que se cargaban
+   de a uno. Por eso no había dos invitaciones que se vieran parejas. Este
+   módulo agrega UNA elección que pinta toda la invitación de una sola vez.
 
    Cómo se enciende:  INVEV.fx.paleta.id = 'terracota-arena'
-   Cómo se apaga:     INVEV.fx.paleta.id = ''   (vuelve a los colores sueltos)
+   Cómo se apaga:     INVEV.fx.paleta.id = ''
 
-   ⚠️ Si hay paleta elegida, la paleta MANDA sobre los campos de color sueltos.
-      Es a propósito: es lo que hace que la invitación se vea armada. Para
-      elegir colores a mano, poner la paleta en "Sin paleta".
+   ⚠️ EL COLOR CARGADO A MANO LE GANA A LA PALETA.
+      De las doce variables, sólo DOS se pueden elegir a mano en el panel:
+
+        · `color`               → --verde y --sec-col-v
+        · `fx.sobre.selloColor` → --seal-c
+
+      En esas dos la paleta SE CORRE si el campo tiene algo cargado. Las otras
+      diez no tienen campo: salen del tema o de la hoja de estilos, así que ahí
+      la paleta manda siempre sin pisarle una decisión a nadie.
+
+      Esto además hizo desaparecer un bug feo: el motor reescribía --verde y
+      --seal-c en línea un rato después de cargar, y había que estar
+      reponiéndolas con un observador. Ahora, si el motor las escribe, es
+      PORQUE hay un color a mano — y ese es justamente el que tiene que ganar.
 
    ⚠️ LA LISTA DE PALETAS VIVE ACÁ Y EN NINGÚN OTRO LADO. El panel la lee de
       window.INVPALETAS. Si se copia a otro archivo, tarde o temprano una copia
@@ -98,16 +105,16 @@
   /* el panel arma las tarjetas leyendo de acá */
   window.INVPALETAS = PALETAS;
 
-  /* Qué variables del motor recibe cada color de la paleta.
+  /* ---- LOS DOS GRUPOS ---------------------------------------------------- */
 
-     ⚠️ --sec-col y --sec-col-v NO son un lujo: son las que de verdad pintan el
-     fondo de las secciones. La regla del motor es
-         .sec.verde { background: var(--sec-col-v, var(--verde)) }
-     así que --sec-col-v le gana a --verde. Sin estas dos, la paleta se aplicaba
-     a medias: los nombres y el pase tomaban el color nuevo y las secciones
-     ("Dónde", "Para tu comodidad") se quedaban con el color viejo. */
-  var MAPA = {
-    verde : ['--verde', '--sec-col-v'],
+  /* 1) SIN CAMPO A MANO: la paleta manda siempre.
+        Estos colores no se pueden elegir en el panel (salen del tema o de la
+        hoja de estilos), así que forzarlos no le pisa una decisión a nadie.
+
+        --sec-col es el fondo de las secciones claras. NO es un lujo: la regla
+        del motor es .sec { background: var(--sec-col) }, y sale del TEMA. Sin
+        esto, la paleta se aplicaba a medias. */
+  var SIEMPRE = {
     verde2: ['--verde2'],
     sage  : ['--sage'],
     sageCl: ['--sage-cl'],
@@ -115,8 +122,24 @@
     lino  : ['--lino'],
     lino2 : ['--lino2'],
     cream : ['--cream', '--sec-col'],
-    muted : ['--muted'],
-    seal  : ['--seal-c']
+    muted : ['--muted']
+  };
+
+  /* 2) CON CAMPO A MANO: la paleta se corre si el campo tiene algo.
+        El motor hace `if(ev.color) r.setProperty('--verde', ev.color)`, así que
+        un campo vacío significa "no lo elegí": ahí sí pinta la paleta. */
+  var SI_NO_HAY_A_MANO = {
+    verde: {
+      vars: ['--verde', '--sec-col-v'],
+      aMano: function () { return (window.INVEV || {}).color || ''; }
+    },
+    seal: {
+      vars: ['--seal-c'],
+      aMano: function () {
+        var fx = (window.INVEV || {}).fx || {};
+        return (fx.sobre || {}).selloColor || '';
+      }
+    }
   };
 
   function buscar(id) {
@@ -148,19 +171,31 @@
     raiz.removeAttribute('data-paleta');
   }
 
+  /* qué variables corresponde poner ahora, mirando qué hay cargado a mano */
+  function loQueVa(pal) {
+    var plan = [];
+    if (!pal) return plan;
+    var k, i;
+    for (k in SIEMPRE) {
+      if (!Object.prototype.hasOwnProperty.call(SIEMPRE, k) || !pal[k]) continue;
+      for (i = 0; i < SIEMPRE[k].length; i++) plan.push([SIEMPRE[k][i], pal[k]]);
+    }
+    for (k in SI_NO_HAY_A_MANO) {
+      if (!Object.prototype.hasOwnProperty.call(SI_NO_HAY_A_MANO, k) || !pal[k]) continue;
+      var r = SI_NO_HAY_A_MANO[k];
+      if (r.aMano()) continue;                 /* hay color a mano: gana el de a mano */
+      for (i = 0; i < r.vars.length; i++) plan.push([r.vars[i], pal[k]]);
+    }
+    return plan;
+  }
+
   function pintar(pal) {
     limpiar();
     if (!pal) return;
-    for (var k in MAPA) {
-      if (!Object.prototype.hasOwnProperty.call(MAPA, k)) continue;
-      if (!pal[k]) continue;
-      /* 'important' porque el motor escribe --verde y --seal-c en línea después
-         de que carga esto: sin important, la paleta se perdía al segundo. */
-      var vs = MAPA[k];
-      for (var j = 0; j < vs.length; j++) {
-        raiz.style.setProperty(vs[j], pal[k], 'important');
-        puestas.push(vs[j]);
-      }
+    var plan = loQueVa(pal);
+    for (var i = 0; i < plan.length; i++) {
+      raiz.style.setProperty(plan[i][0], plan[i][1], 'important');
+      puestas.push(plan[i][0]);
     }
     raiz.setAttribute('data-paleta', pal.id);
   }
@@ -168,24 +203,13 @@
   var firmaAnterior = null;
   var pintando = false;
 
-  /* ⚠️ EL BUG QUE COSTÓ ENCONTRAR:
-     el motor escribe --verde y --seal-c EN LÍNEA sobre :root un rato después
-     de que carga esto, y `setProperty` sin prioridad pisa un !important puesto
-     antes. Con un chequeo que sólo mirara "¿cambió la paleta?", esas dos
-     variables se perdían para siempre y la invitación quedaba con ocho colores
-     de la paleta y dos del motor.
-     Por eso acá no se pregunta si cambió la elección: se verifica que los
-     colores SIGAN puestos. */
   function sigueAplicada(pal) {
     if (!pal) return puestas.length === 0;
-    for (var k in MAPA) {
-      if (!Object.prototype.hasOwnProperty.call(MAPA, k)) continue;
-      if (!pal[k]) continue;
-      var vs = MAPA[k];
-      for (var j = 0; j < vs.length; j++) {
-        var hay = raiz.style.getPropertyValue(vs[j]).trim().toLowerCase();
-        if (hay !== String(pal[k]).toLowerCase()) return false;
-      }
+    var plan = loQueVa(pal);
+    if (plan.length !== puestas.length) return false;
+    for (var i = 0; i < plan.length; i++) {
+      var hay = raiz.style.getPropertyValue(plan[i][0]).trim().toLowerCase();
+      if (hay !== String(plan[i][1]).toLowerCase()) return false;
     }
     return true;
   }
@@ -205,17 +229,11 @@
     document.addEventListener('DOMContentLoaded', sincronizar, { once: true });
   }
 
-  /* Si el motor pisa las variables, se reponen en el acto: sin esto había que
-     esperar al intervalo y se veía el salto de color. */
-  if (window.MutationObserver) {
-    new MutationObserver(function () { sincronizar(); })
-      .observe(raiz, { attributes: true, attributeFilter: ['style'] });
-  }
-
   /* El panel manda los datos en vivo por postMessage, no por la base. */
   window.addEventListener('message', function () { setTimeout(sincronizar, 0); }, false);
 
-  /* red de seguridad, por si cambia la elección sin tocar el style de :root */
+  /* Red de seguridad: el motor termina de escribir sus cosas un rato después
+     de que carga esto, y el panel cambia los datos sin avisar. */
   var esPrevia = /[?&]preview=1/.test(location.search);
   setInterval(sincronizar, esPrevia ? 400 : 1500);
 })();
