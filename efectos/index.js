@@ -46,7 +46,30 @@
          El nombre obvio es el equivocado — por eso está escrito acá, que es el
          archivo que se lee siempre. Detalle en /prueba/LEEME-muestra-oficial.md
 
-   ⚠️ EL ORDEN IMPORTA en once casos:
+   ★ EL VOSEO YA NO SE PARCHEA: SE ESCRIBE BIEN DE ENTRADA (30/8/2026)
+      Había un módulo, `es-mx.js`, que traducía el voseo DESPUÉS de dibujar la
+      pantalla, con un MutationObserver sobre todo el documento, en cada
+      invitación, para siempre. Ya no hace falta y se sacó de esta lista:
+
+        · el MOTOR lo traduce el servidor, antes de mandar el HTML
+          (`i/index.php` + `i/textos-es-mx.php`). Verificado: el HTML crudo de
+          una invitación real llega con cero voseo.
+        · los MÓDULOS ya escriben sus textos en español de México. Eran seis
+          textos, en calendario.js, galeria.js, raspadita.js y
+          rsvp-interruptor.js. Corregidos en el origen.
+
+      ⚠️ AL ESCRIBIR UN MÓDULO NUEVO: los textos van en español de México. Lo
+         que escribe un módulo NO pasa por el traductor del servidor. Si un
+         módulo dice "Tocá", el invitado mexicano lee "Tocá".
+
+      Para revisar que no se coló voseo nuevo, en la consola de la invitación:
+        [].concat(...await Promise.all(
+          ['calendario','galeria','raspadita','rsvp-interruptor','fecha','musica']
+          .map(async m => ((await (await fetch('/efectos/'+m+'.js')).text())
+            .match(/'[^'\n]{3,120}'/g)||[])
+            .filter(s=>/[a-zñáéíóú]{3,}(á|é|í)'/.test(s)))))
+
+   ⚠️ EL ORDEN IMPORTA en diez casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -67,7 +90,6 @@
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`: los dos leen fx.galeria y
      el del panel escribe lo que el otro después lee.
-   · `es-mx.js` va ÚLTIMO: traduce lo que escribieron todos los anteriores.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -92,8 +114,7 @@
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
-    '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
-    '/efectos/es-mx.js'                /* español de México: el motor está en voseo */
+    '/efectos/panel-galeria.js'        /* y sus campos en el panel (prender, código, QR) */
   ];
 
   MODULOS.forEach(function (src) {
