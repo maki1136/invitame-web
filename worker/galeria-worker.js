@@ -7,6 +7,11 @@
    Qué necesita configurado en Cloudflare (pestaña Settings):
      · Binding R2:  BUCKET   → el bucket "galeria-fotos"
      · Binding KV:  LIMITES  → un namespace KV cualquiera
+     · Variable normal (NO secreto), opcional:
+         TOPE_GB             → tope duro de subida acumulada, en GB.
+                               Si falta, son 8 GB. Al llegar, el sistema
+                               deja de aceptar fotos: la cuenta NUNCA se
+                               dispara aunque falle todo lo demás.
      · Variables (secretos):
          SIGHTENGINE_USER    → api_user de Sightengine
          SIGHTENGINE_SECRET  → api_secret de Sightengine
@@ -21,6 +26,7 @@
      POST /crear   → alta de un evento (header X-Clave: CLAVE_ALTA)
      GET  /f/<key> → sirve un archivo del bucket (con caché)
      GET  /qr?g=   → el QR del evento (redirección a un generador)
+     GET  /uso     → cuánto se lleva usado este mes contra el tope
    ============================================================ */
 
 const PROYECTO = 'invitame-9b51f';
@@ -40,6 +46,7 @@ export default {
       if (ruta === '/crear' && req.method === 'POST') return await crear(req, env);
       if (ruta.startsWith('/f/') && req.method === 'GET') return await servir(req, env, ctx, ruta.slice(3), url);
       if (ruta === '/qr' && req.method === 'GET') return qr(url);
+      if (ruta === '/uso' && req.method === 'GET') return await uso(env);
       return respuesta({ error: 'no existe' }, 404);
     } catch (e) {
       return respuesta({ error: 'error interno', detalle: String(e && e.message || e) }, 500);
@@ -98,6 +105,19 @@ async function subir(req, env, ctx) {
   if (nT >= total) return respuesta({ error: 'Llegaste al máximo de fotos de este evento 💛' }, 429);
   ctx.waitUntil(env.LIMITES.put(kR, String(nR + 1), { expirationTtl: 300 }));
   ctx.waitUntil(env.LIMITES.put(kT, String(nT + 1), { expirationTtl: 60 * 60 * 24 * 3 }));
+
+  // TOPE DURO DE LA CUENTA. Esto no depende de ninguna alerta ni de que
+  // alguien mire un mail: si lo acumulado del mes llega al tope, no se
+  // acepta una foto más. Es la red de seguridad de la tarjeta de Maki.
+  const topeBytes = (parseFloat(env.TOPE_GB || '8') || 8) * 1024 * 1024 * 1024;
+  const mes = new Date().toISOString().slice(0, 7);          // "2026-08"
+  const kMes = 'bytes:' + mes;
+  const usado = parseInt(await env.LIMITES.get(kMes) || '0', 10);
+  if (usado >= topeBytes) {
+    return respuesta({ error: 'La galería alcanzó su límite de este mes. Escribinos y lo ampliamos.' }, 507);
+  }
+  ctx.waitUntil(env.LIMITES.put(kMes, String(usado + foto.size + thumb.size),
+    { expirationTtl: 60 * 60 * 24 * 70 }));
 
   // A R2.
   const fid = cid();
@@ -184,6 +204,21 @@ async function servir(req, env, ctx, key, url) {
     r.headers.set('Content-Disposition', 'attachment; filename="foto.' + (key.endsWith('.jpg') ? 'jpg' : 'webp') + '"');
   }
   return r;
+}
+
+/* ---------------- /uso: cuánto se lleva usado este mes ---------------- */
+async function uso(env) {
+  const topeGB = parseFloat(env.TOPE_GB || '8') || 8;
+  const mes = new Date().toISOString().slice(0, 7);
+  const usado = parseInt(await env.LIMITES.get('bytes:' + mes) || '0', 10);
+  const usadoGB = usado / (1024 * 1024 * 1024);
+  return respuesta({
+    mes,
+    usadoGB: Math.round(usadoGB * 1000) / 1000,
+    topeGB,
+    porcentaje: Math.round((usadoGB / topeGB) * 100),
+    quedanFotos: Math.max(0, Math.floor((topeGB * 1024 * 1024 * 1024 - usado) / (350 * 1024)))
+  }, 200);
 }
 
 /* ---------------- /qr ---------------- */
