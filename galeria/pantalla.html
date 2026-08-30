@@ -221,9 +221,10 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
       se puede bajar la librería, la pantalla sigue funcionando con
       las fotos cacheadas en vez de quedar en blanco.
 
-   4) NADA que tenga que verse depende de requestAnimationFrame.
-      En una pestaña que no está adelante, Chrome NO lo ejecuta.
-      (Pasó en vivo: dos fotos cargadas, ninguna visible.)
+   4) NADA que tenga que verse depende de que la pestaña esté adelante.
+      En una pestaña oculta Chrome no ejecuta requestAnimationFrame y NO
+      resuelve img.decode(). Las dos cosas dejaban la pantalla negra.
+      (Pasó en vivo: la foto bajada entera y la capa sin mostrarse.)
    ============================================================ */
 
 const WORKER = 'https://galeria.littlemomentsok.workers.dev';
@@ -338,12 +339,20 @@ function preparar() {
     capa.appendChild(fondo); capa.appendChild(velo); capa.appendChild(img);
     $('escena').appendChild(capa);
 
-    try { await img.decode(); } catch (e) {}
-    /* OJO: acá había un requestAnimationFrame. En una pestaña que no está
-       adelante el navegador NO lo ejecuta, así que la capa se quedaba en
-       opacity:0 y la pantalla se veía negra para siempre. Forzar el cálculo
-       de estilo con offsetWidth hace lo mismo (arranca la transición desde
-       el estado inicial) y no depende de que la pestaña esté visible. */
+    /* decode() sirve para que la foto entre ya descomprimida y no parpadee.
+       PERO en una pestaña que no está adelante Chrome NO lo resuelve NUNCA:
+       la promesa queda colgada, el bucle se frena ahí y la pantalla queda
+       negra para siempre. (Pasó en vivo el 30/8: la foto cargada entera,
+       naturalWidth 1600, y la capa sin mostrarse.)
+       Por eso corre contra un reloj: si en 300 ms no contestó, seguimos.
+       La foto ya está bajada, así que no se ve peor. */
+    await Promise.race([
+      img.decode().catch(() => {}),
+      new Promise((r) => setTimeout(r, 300))
+    ]);
+    /* Y acá había un requestAnimationFrame, que en una pestaña oculta
+       tampoco corre. offsetWidth fuerza el cálculo de estilo igual y no
+       depende de que la pestaña esté visible. */
     void capa.offsetWidth;
     capa.classList.add('vista');
 
