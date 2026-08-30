@@ -48,17 +48,17 @@
 
   /* ---- la tela del terciopelo, a pedido -----------------------------------
 
-     Vive en /efectos/terciopelo.css (una foto en base64 adentro de un CSS, ver
-     ahí por qué). Son 10 KB y se bajan SÓLO si el estilo está elegido: el resto
-     de los materiales no cargan nada. El panel también la pide, para que la
-     muestra se vea con la tela. */
+     Vive en /efectos/terciopelo.js (la foto en base64, en líneas cortas y con
+     control de integridad — ver ahí por qué no es un .css). Son 6 KB y se bajan
+     SÓLO si el estilo está elegido: el resto de los materiales no cargan nada.
+     El panel también la pide, para que la muestra se vea con la tela. */
   function cargarTela() {
     if (document.getElementById('inv-tela-terciopelo')) return;
-    var l = document.createElement('link');
-    l.id = 'inv-tela-terciopelo';
-    l.rel = 'stylesheet';
-    l.href = '/efectos/terciopelo.css';
-    (document.head || document.documentElement).appendChild(l);
+    var s = document.createElement('script');
+    s.id = 'inv-tela-terciopelo';
+    s.src = '/efectos/terciopelo.js';
+    s.defer = true;
+    (document.head || document.documentElement).appendChild(s);
   }
   window.INVBOTONES_TELA = cargarTela;
 
@@ -183,7 +183,7 @@
     },
 
     /* La tela va en background-image con background-blend-mode: se queda en el
-       fondo y no toca el texto. La imagen la trae /efectos/terciopelo.css. */
+       fondo y no toca el texto. La imagen la trae /efectos/terciopelo.js. */
     { id:'terciopelo', nombre:'Terciopelo', pie:'Con textura de tela de verdad', tela:true,
       css:
         'color:color-mix(in srgb,var(--verde) 86%,#000) !important;' +
@@ -192,7 +192,7 @@
           ' radial-gradient(118% 150% at 32% 16%, rgba(255,255,255,.85), rgba(255,255,255,0) 62%),' +
           ' linear-gradient(166deg, color-mix(in srgb,var(--sage-cl) 58%,#fff), var(--sage-cl) 56%,' +
           ' color-mix(in srgb,var(--sage-cl) 62%,var(--sage))) !important;' +
-        'background-size:120px, auto, auto !important;' +
+        'background-size:112px, auto, auto !important;' +
         'background-blend-mode:overlay, normal, normal !important;' +
         'border:0 !important;' +
         'box-shadow: inset 0 2px 6px rgba(255,255,255,.9),' +
