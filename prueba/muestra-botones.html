@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invítame · los once materiales, en vivo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ⚠️ ESTO NO ES UNA MAQUETA.
+     Se cargan los archivos que están corriendo en la invitación de verdad.
+     Si mañana se corrige un material, esta página lo muestra corregido sola. -->
+<script src="/efectos/paleta.js"></script>
+<script src="/efectos/botones.js"></script>
+
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;padding:34px 22px 90px;font-family:Nunito,system-ui,sans-serif;
+       color:#3a3336;background:#e9e5e0}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:32px;margin:0 0 6px}
+  h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:22px;margin:44px 0 14px}
+  .bajada{max-width:840px;font-size:14px;line-height:1.62;opacity:.75;margin:0 0 22px}
+
+  .aviso{background:#fff;border-left:3px solid #b9a56a;padding:13px 17px;border-radius:0 9px 9px 0;
+    max-width:840px;font-size:12.5px;line-height:1.6;margin:0 0 26px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  .aviso b{font-weight:700}
+
+  .barra{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 26px;
+    background:#fff;padding:13px 16px;border-radius:14px;max-width:960px;
+    box-shadow:0 2px 12px rgba(0,0,0,.07)}
+  .barra span{font-size:12px;font-weight:700;margin-right:6px}
+  .pal{width:28px;height:28px;border-radius:50%;border:2px solid #fff;cursor:pointer;padding:0;
+    box-shadow:0 1px 4px rgba(0,0,0,.26)}
+  .pal.on{outline:2px solid #1c1a17;outline-offset:2px}
+
+  .grilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:16px;max-width:1180px}
+  .caja{border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 3px 14px rgba(0,0,0,.09)}
+  .escenario{padding:30px 14px;display:flex;align-items:center;justify-content:center;min-height:104px}
+  .pie{padding:9px 11px 11px;background:#fff}
+  .pie b{display:block;font-size:12px;font-weight:700;margin-bottom:2px}
+  .pie i{font-style:normal;font-size:10.5px;opacity:.62;line-height:1.35;display:block}
+
+  /* la forma del botón de la invitación: el MATERIAL se lo pone botones.js */
+  .inv-prev-btn{
+    display:inline-block;padding:13px 24px;border-radius:999px;border:0;cursor:pointer;
+    font:700 11.5px/1.1 Nunito,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;
+    background:#e9e9ee;color:#333;white-space:nowrap;
+  }
+
+  /* el teléfono, para verlos en contexto */
+  .tel{width:330px;border-radius:30px;overflow:hidden;border:8px solid #15120f;
+       box-shadow:0 16px 40px rgba(0,0,0,.22)}
+  .sec{padding:38px 26px;text-align:center}
+  .sec .k{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:25px;margin:0 0 2px}
+  .sec .t{font-family:'Cormorant Garamond',serif;font-size:30px;letter-spacing:.06em;margin:0 0 16px}
+  .sec .f{width:48px;height:1px;margin:0 auto 18px;opacity:.8}
+  .sec .l{font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin:0 0 4px}
+  .sec .d{font-size:12.5px;line-height:1.6;opacity:.85;margin:0 0 18px}
+  .dos{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .rot{font-size:11px;opacity:.65;font-weight:700;margin:10px 0 0;text-align:center}
+
+  .tela{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:#fff;padding:18px;
+        border-radius:14px;max-width:840px;box-shadow:0 3px 14px rgba(0,0,0,.08)}
+  .tela div{width:150px;height:150px;border-radius:10px;background-size:cover}
+  .tela p{font-size:12.5px;line-height:1.6;margin:0;flex:1;min-width:240px}
+  #cargando{font-size:14px;opacity:.7}
+</style>
+</head>
+<body>
+
+<h1>Los once materiales, en vivo</h1>
+<p class="bajada">
+  Elegí una paleta arriba y mirá cómo cambian los once. Es el mismo material
+  repintado, no once colores distintos.
+</p>
+
+<div class="aviso">
+  <b>Esto no es una maqueta.</b> La página carga
+  <code>botones.js</code>, <code>paleta.js</code> y la textura del terciopelo
+  <b>desde la invitación de verdad</b>. Lo que ves acá es exactamente lo que ve
+  un invitado — y si mañana se corrige un material, esta página lo muestra
+  corregido sola, sin tocarla.
+</div>
+
+<div class="barra" id="barra"><span>Paleta:</span></div>
+
+<div id="cargando">Cargando los archivos de la invitación…</div>
+<div class="grilla" id="grilla"></div>
+
+<h2>En contexto</h2>
+<p class="bajada">
+  <b>Tocá cualquier tarjeta de arriba</b> y ese material aparece acá abajo,
+  adentro de la invitación: en una sección clara y en una oscura.
+</p>
+<div class="dos" id="contexto"></div>
+
+<h2>La tela del terciopelo</h2>
+<div class="tela">
+  <div id="telaMuestra"></div>
+  <p>
+    Es <b>tu foto</b>, la que generaste con Flow. Está pasada a gris y centrada
+    en gris neutro: así aporta el <b>relieve</b> —el pelo, los mechones, los
+    remolinos— y nada de color, y el color se lo pone la paleta. Por eso una
+    sola textura sirve para las veinte.<br><br>
+    También está <b>sin costura</b>, mezclada con una copia corrida de sí misma,
+    para que se pueda repetir sin que se vea el corte. Ese paso mueve píxeles de
+    lugar: por eso no es idéntica pixel a pixel a la original, pero el pelo es
+    el de tu tela.
+  </p>
+</div>
+
+<script>
+var PALETAS_MUESTRA = ['', 'vino-rosa-seca','bosque-cobre','terracota-arena',
+                       'azul-noche-plata','negro-oro','blush-oro','salvia-marfil','lavanda-perla'];
+var actual = 'vino-rosa-seca';
+var material = null;          /* cuál se muestra abajo, en contexto */
+
+function paleta(id){
+  var L = window.INVPALETAS || [];
+  for (var i=0;i<L.length;i++) if (L[i].id===id) return L[i];
+  return {verde:'#2e433c',verde2:'#26372f',sage:'#7f9079',sageCl:'#a9b8a0',
+          oro:'#b9a56a',lino:'#f4efe6',lino2:'#faf7f1',cream:'#eef0e9',muted:'#7d857a',
+          nombre:'Como viene de fábrica'};
+}
+function vars(p){
+  return '--verde:'+p.verde+';--verde2:'+(p.verde2||p.verde)+
+         ';--sage:'+p.sage+';--sage-cl:'+(p.sageCl||p.sage)+
+         ';--oro:'+p.oro+';--lino:'+(p.lino||'#f4efe6')+
+         ';--lino2:'+(p.lino2||'#faf7f1')+';--cream:'+p.cream+
+         ';--muted:'+(p.muted||'#7d857a')+';';
+}
+
+function barra(){
+  var b = document.getElementById('barra');
+  PALETAS_MUESTRA.forEach(function(id){
+    var p = paleta(id);
+    var x = document.createElement('button');
+    x.className = 'pal' + (id===actual?' on':'');
+    x.style.background = p.verde;
+    x.title = p.nombre || 'Sin paleta';
+    x.onclick = function(){
+      actual = id;
+      [].forEach.call(document.querySelectorAll('.pal'), function(e){e.classList.remove('on')});
+      x.classList.add('on');
+      pintar();
+    };
+    b.appendChild(x);
+  });
+}
+
+function muestra(est, p){
+  var caja = document.createElement('div');
+  caja.className = 'escenario';
+  caja.setAttribute('data-boton', est.id);
+  caja.style.cssText += vars(p) + 'background:var(--cream)';
+  var s = document.createElement('span');
+  s.className = 'inv-prev-btn';
+  s.textContent = 'Confirmar';
+  caja.appendChild(s);
+  return caja;
+}
+
+function pintar(){
+  var p = paleta(actual);
+  var g = document.getElementById('grilla');
+  g.innerHTML = '';
+  if (!material) material = (window.INVBOTONES[0]||{}).id;
+
+  (window.INVBOTONES||[]).forEach(function(est){
+    var c = document.createElement('div'); c.className='caja';
+    c.style.cursor = 'pointer';
+    c.style.outline = (est.id===material) ? '2px solid #1c1a17' : 'none';
+    c.style.outlineOffset = '2px';
+    c.title = 'Ver "' + est.nombre + '" adentro de la invitación';
+    c.appendChild(muestra(est, p));
+    var pie = document.createElement('div'); pie.className='pie';
+    pie.innerHTML = '<b></b><i></i>';
+    pie.querySelector('b').textContent = est.nombre;
+    pie.querySelector('i').textContent = est.pie || '';
+    c.appendChild(pie);
+    c.onclick = function(){ material = est.id; pintar(); };
+    g.appendChild(c);
+  });
+
+  /* en contexto: el material elegido, en una sección clara y en una oscura */
+  var elegido = null;
+  (window.INVBOTONES||[]).forEach(function(e){ if (e.id===material) elegido = e; });
+  var ctx = document.getElementById('contexto');
+  ctx.innerHTML = '';
+  [['clara', p.cream, p.verde], ['oscura', p.verde, '#f7f1ee']].forEach(function(par){
+    var env = document.createElement('div');
+    var tel = document.createElement('div'); tel.className='tel';
+    var sec = document.createElement('div');
+    sec.className = 'sec';
+    sec.setAttribute('data-boton', material);
+    sec.style.cssText = vars(p) + 'background:'+par[1]+';color:'+par[2];
+    sec.innerHTML =
+      '<p class="k">Dónde</p><p class="t">LUGARES</p>'+
+      '<div class="f" style="background:'+p.oro+'"></div>'+
+      '<p class="l">Fiesta</p>'+
+      '<p class="d">Hacienda Santa Rosa<br>Km 12 Carretera Mérida–Progreso · 21:00 h</p>'+
+      '<span class="inv-prev-btn">Cómo llegar</span>';
+    tel.appendChild(sec); env.appendChild(tel);
+    var r = document.createElement('p'); r.className='rot';
+    r.textContent = 'Sección ' + par[0] + ' · ' + ((elegido||{}).nombre || '');
+    env.appendChild(r);
+    ctx.appendChild(env);
+  });
+}
+
+function arrancar(){
+  if (!window.INVBOTONES || !window.INVPALETAS) { setTimeout(arrancar, 200); return; }
+  document.getElementById('cargando').style.display='none';
+  if (window.INVBOTONES_TELA) window.INVBOTONES_TELA();   /* la tela, para el terciopelo */
+  barra(); pintar();
+  /* la textura, en crudo, para que se vea que es la foto */
+  setTimeout(function(){
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--inv-terciopelo').trim();
+    if (v) document.getElementById('telaMuestra').style.backgroundImage = v;
+  }, 700);
+}
+arrancar();
+</script>
+</body>
+</html>
