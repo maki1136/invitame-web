@@ -57,6 +57,12 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
 .capa{
   position:absolute;inset:0;opacity:0;
   transition:opacity 1.4s ease;
+  /* La foto se acomoda DENTRO de este margen. La franja de abajo es de la
+     firma y del cartelito del QR: reservándola acá, la foto no puede
+     quedar tapada por el QR en ninguna pantalla, sea 16:9, 4:3 o lo que
+     traiga el salón. (El fondo y el velo son absolutos: no los afecta.) */
+  display:flex;align-items:center;justify-content:center;
+  padding:4% 7% 17% 7%;
 }
 .capa.vista{opacity:1}
 .capa .fondo{
@@ -70,11 +76,8 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
   background:radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(12,3,8,.55) 100%);
 }
 .capa img{
-  /* Queda centrada, pero sin llegar al borde de abajo: esa franja es de la
-     firma y del cartelito del QR, y si la foto llega hasta ahí el QR le
-     queda encima a la cara de alguien. */
-  position:absolute;inset:0;margin:auto;
-  max-width:86%;max-height:72%;
+  position:static;
+  max-width:100%;max-height:100%;
   object-fit:contain;display:block;
   border-radius:10px;
   box-shadow:
