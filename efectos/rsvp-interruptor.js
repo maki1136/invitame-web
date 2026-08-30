@@ -39,8 +39,13 @@
       recibe el suyo, con su propio cerrojo.
 
    ⚠️ LOS BOTONES SE BUSCAN POR LO QUE HACEN, NO POR SU TEXTO.
-      El texto lo traduce es-mx.js y lo puede cambiar la diseñadora; el
-      `onclick="rsvp('si')"` no. Buscar por texto se rompería en silencio.
+      El texto lo puede cambiar la diseñadora; el `onclick="rsvp('si')"` no.
+      Buscar por texto se rompería en silencio.
+
+   ⚠️ LOS TEXTOS VAN EN ESPAÑOL DE MÉXICO, no en voseo.
+      El motor se traduce en el servidor (i/textos-es-mx.php), pero lo que
+      escribe un módulo NO pasa por ahí. Si acá dijera "Tocá tu respuesta", el
+      invitado mexicano lo lee así. Se escribe bien de entrada.
    ============================================================================ */
 (function () {
   'use strict';
@@ -161,7 +166,7 @@
 
     var pie = document.createElement('p');
     pie.className = 'rsvp-pie';
-    pie.textContent = 'Tocá tu respuesta';
+    pie.textContent = 'Toca tu respuesta';
     caja.appendChild(pie);
 
     function elegir(cual) {
@@ -177,7 +182,7 @@
         catch (e) {
           enviado = false;
           sw.removeAttribute('disabled');
-          pie.textContent = 'No se pudo enviar. Probá de nuevo.';
+          pie.textContent = 'No se pudo enviar. Prueba de nuevo.';
         }
       }, 340);                             /* que se vea moverse antes de irse */
     }
