@@ -38,23 +38,25 @@
         se probó en producción, NO está listo.
 
    ★★★ Y SE PRUEBA DESDE EL PANEL, COMO JAZMÍN ★★★
-      Segunda parte de la misma regla, y costó otra vuelta el mismo día:
-      el interruptor de la confirmación estaba hecho, andando y verificado…
-      pero la única forma de prenderlo era escribir `fx.rsvp.estilo` en la base
-      a mano desde la consola. Desde el panel no existía. Para quien usa el
-      panel, la función NO estaba.
+      El interruptor de la confirmación estaba hecho y verificado… pero la
+      única forma de prenderlo era escribir `fx.rsvp.estilo` en la base a mano.
+      Para quien usa el panel, la función NO estaba.
 
       Antes de decir que algo está listo:
-      1. ¿se ve en la invitación?           (mirar, no medir solamente)
+      1. ¿se ve en la invitación?  (mirar, no medir solamente)
       2. ¿se puede prender y apagar DESDE EL PANEL, sin tocar la base?
-      Si la respuesta a la 2 es "con la consola", no está listo.
+
+      ⚠️ Para operar el panel desde la consola: "Guardar y publicar" llama a
+         `publicar()`, que abre un `confirm()` nativo — y un cartel nativo
+         CONGELA la página. Hay que pisar `window.confirm` antes y llamar a
+         `publicar()` directo, no clickear. Detalle en la skill
+         `invitame-flujo-ingenieria`.
 
       Dónde es cada cosa:
-      · /admin.html  → el panel de edición. Es el único con `.mejoras`, que es
-        donde se montan estos bloques. Escribe con `INV.saveEvento`.
-      · /crear.html  → el formulario de alta ("Completá tu invitación"). NO
-        escribe `fx` ni llama a saveEvento: es una toma de datos.
-      · /mi-panel.html → el panel de los novios (entra con slug + clave).
+      · /admin.html  → el panel de edición. El único con `.mejoras`, que es
+        donde se montan estos bloques. Escribe con `INV.saveEvento` (con merge).
+      · /crear.html  → el formulario de alta. NO escribe `fx`.
+      · /mi-panel.html → el panel de los novios (slug + clave).
       · /panel.html  → el tablero de métricas.
 
    ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` ★★
@@ -63,50 +65,36 @@
       Es la más cargada de todas: 90 campos con contenido de verdad.
 
       ⚠️ El evento llamado `muestra` NO es la muestra. Está marcado "NO USAR".
-         El nombre obvio es el equivocado — por eso está escrito acá, que es el
-         archivo que se lee siempre. Detalle en /prueba/LEEME-muestra-oficial.md
 
    ★ EL VOSEO YA NO SE PARCHEA: SE ESCRIBE BIEN DE ENTRADA (30/8/2026)
-      Había un módulo, `es-mx.js`, que traducía el voseo DESPUÉS de dibujar la
-      pantalla, con un MutationObserver sobre todo el documento, en cada
-      invitación, para siempre. Ya no hace falta y se sacó de esta lista:
-
-        · el MOTOR lo traduce el servidor, antes de mandar el HTML
-          (`i/index.php` + `i/textos-es-mx.php`). Verificado: el HTML crudo de
-          una invitación real llega con cero voseo.
-        · los MÓDULOS ya escriben sus textos en español de México. Eran seis
-          textos, en calendario.js, galeria.js, raspadita.js y
-          rsvp-interruptor.js. Corregidos en el origen.
-        · los DATOS de 4 invitaciones tenían voseo escrito desde el panel
-          (`cfTitulo`, `c_texto-del-modal-de-inicio`). Corregidos.
+      Se borró `es-mx.js`, que traducía DESPUÉS de dibujar con un
+      MutationObserver sobre todo el documento. Ya no hace falta:
+        · el MOTOR lo traduce el servidor (`i/index.php` + `i/textos-es-mx.php`);
+        · los MÓDULOS ya escriben en español de México;
+        · los DATOS de 4 invitaciones se corrigieron.
 
       ⚠️ AL ESCRIBIR UN MÓDULO NUEVO: los textos van en español de México. Lo
-         que escribe un módulo NO pasa por el traductor del servidor. Si un
-         módulo dice "Tocá", el invitado mexicano lee "Tocá".
+         que escribe un módulo NO pasa por el traductor del servidor.
 
-   ⚠️ EL ORDEN IMPORTA en once casos:
+   ⚠️ EL ORDEN IMPORTA en doce casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
      leyendo la lista de window.INVPALETAS, que la publica paleta.js.
    · `botones.js` va DESPUÉS de `paleta.js`: cada material se pinta con las
-     variables de color de la paleta, no con colores escritos a mano.
-   · `panel-botones.js` va DESPUÉS de `botones.js`: las muestras del panel son
-     botones de verdad, pintados por la hoja que arma botones.js.
-   · `rsvp-interruptor.js` va DESPUÉS de `botones.js`: si los dos están
-     encendidos, el interruptor esconde los botones de la confirmación y el
-     material deja de aplicar ahí.
-   · `panel-rsvp.js` va DESPUÉS de `rsvp-interruptor.js`: escribe fx.rsvp.estilo,
-     que es lo que el otro después lee.
-   · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo del fondo se tiñe
-     con el papel de la paleta, así el fondo se integra en vez de verse pegado.
-   · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`: escribe fx.fondo, que
-     es lo que el otro después lee.
-   · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
-     los momentos de verdad, después se los anima.
+     variables de color de la paleta.
+   · `panel-botones.js` va DESPUÉS de `botones.js`.
+   · `rsvp-interruptor.js` va DESPUÉS de `botones.js`.
+   · `panel-rsvp.js` va DESPUÉS de `rsvp-interruptor.js`: escribe fx.rsvp.estilo.
+   · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo se tiñe con el
+     papel de la paleta.
+   · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`.
+   · `itinerario-momentos.js` va ANTES de `itinerario.js`.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
-   · `panel-galeria.js` va DESPUÉS de `galeria.js`: los dos leen fx.galeria y
-     el del panel escribe lo que el otro después lee.
+   · `panel-galeria.js` va DESPUÉS de `galeria.js`.
+   · `motivo.js` va ÚLTIMO de los que dibujan: cuelga las perlas del marco y de
+     los separadores, así que necesita que las secciones ya estén puestas. Y va
+     después de `paleta.js` porque las perlas se pintan con sus colores.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -132,7 +120,8 @@
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
-    '/efectos/panel-galeria.js'        /* y sus campos en el panel (prender, código, QR) */
+    '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
+    '/efectos/motivo.js'               /* el motivo que recorre todo: por ahora, las perlas */
   ];
 
   MODULOS.forEach(function (src) {
