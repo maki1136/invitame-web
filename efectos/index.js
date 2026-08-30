@@ -17,7 +17,7 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
-   ⚠️ EL ORDEN IMPORTA en siete casos:
+   ⚠️ EL ORDEN IMPORTA en ocho casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -26,6 +26,9 @@
      variables de color de la paleta, no con colores escritos a mano.
    · `panel-botones.js` va DESPUÉS de `botones.js`: las muestras del panel son
      botones de verdad, pintados por la hoja que arma botones.js.
+   · `rsvp-interruptor.js` va DESPUÉS de `botones.js`: si los dos están
+     encendidos, el interruptor esconde los botones de la confirmación y el
+     material deja de aplicar ahí.
    · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
      los momentos de verdad, después se los anima.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
@@ -37,6 +40,7 @@
     '/efectos/panel-paleta.js',        /* y el selector de las 20, en el panel */
     '/efectos/botones.js',             /* el material de los botones: lacre, cristal, nácar… */
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
+    '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
     '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
