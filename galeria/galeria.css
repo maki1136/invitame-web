@@ -15,15 +15,40 @@
   --suave:#8C7078;
   --papel:#FFFBF8;
   --linea:#EADCD5;
-  --sombra-baja:0 1px 2px rgba(109,18,51,.05), 0 6px 16px -10px rgba(109,18,51,.20);
-  --sombra-alta:0 2px 4px rgba(109,18,51,.06), 0 18px 40px -22px rgba(109,18,51,.38);
+  /* RELIEVE. Rampa de sombras en capas: así se ve la profundidad de
+     verdad, como en la referencia. Una sola sombra difusa no alcanza. */
+  --relieve-1:
+    0 1px 1px rgba(90,14,41,.09),
+    0 2px 3px rgba(90,14,41,.08),
+    0 5px 8px -2px rgba(90,14,41,.10);
+  --relieve-2:
+    0 1px 1px rgba(90,14,41,.10),
+    0 3px 5px rgba(90,14,41,.09),
+    0 8px 14px -3px rgba(90,14,41,.13),
+    0 18px 28px -12px rgba(90,14,41,.22);
+  --relieve-3:
+    0 1px 2px rgba(90,14,41,.12),
+    0 4px 7px rgba(90,14,41,.11),
+    0 10px 18px -4px rgba(90,14,41,.16),
+    0 22px 34px -10px rgba(90,14,41,.26),
+    0 40px 56px -24px rgba(90,14,41,.34);
+  /* la sombra que proyecta el disco del icono sobre la ficha */
+  --sombra-disco:
+    0 2px 3px rgba(40,6,20,.22),
+    7px 9px 15px -3px rgba(40,6,20,.42);
+  --luz-arriba:inset 0 1.5px 0 rgba(255,255,255,.45);
+  --sombra-baja:var(--relieve-1);
+  --sombra-alta:var(--relieve-3);
   --error:#A3242F;
   --ok:#2F7A56;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background:var(--caracol);
+  /* grano finísimo encima del color: le da tacto de papel/tela y hace
+     que lo que flota encima se lea como que flota. */
+  background-color:var(--caracol);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='.055'/%3E%3C/svg%3E");
   color:var(--tinta);
   font-family:"Nunito",system-ui,-apple-system,sans-serif;
   font-size:16px;line-height:1.55;
@@ -65,12 +90,16 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spac
 }
 #nom-input:focus{outline:none;border-color:var(--acento);box-shadow:0 0 0 3px rgba(245,103,112,.16)}
 .btn-lleno{
-  width:100%;padding:15px;border:none;border-radius:12px;
-  background:var(--acento);color:#fff;font-family:inherit;
-  font-size:1.04rem;font-weight:700;cursor:pointer;
-  box-shadow:0 6px 16px -8px rgba(109,18,51,.55);
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:radial-gradient(120% 100% at 30% 0%, #FF8992 0%, transparent 60%), var(--acento);
+  color:#fff;font-family:inherit;
+  font-size:1.05rem;font-weight:700;cursor:pointer;
+  box-shadow:var(--relieve-2),
+    inset 0 1.5px 0 rgba(255,255,255,.45),
+    inset 0 -2px 4px rgba(120,20,40,.28);
+  transition:transform .14s ease, box-shadow .14s ease;
 }
-.btn-lleno:active{transform:translateY(1px)}
+.btn-lleno:active{transform:translateY(3px);box-shadow:var(--relieve-1)}
 
 /* --- banner navegador embebido --- */
 .banner-inapp{
@@ -104,37 +133,74 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spac
 }
 .saludo{position:relative;color:var(--suave);margin:8px 0 0;font-size:.95rem}
 
-/* ============ LAS DOS FICHAS ============ */
-.botonera{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 18px}
+/* ============ LAS DOS FICHAS ============
+   Tienen que verse AGARRABLES: flotan sobre el papel, el disco del
+   icono proyecta su propia sombra encima de la ficha, y al tocarlas
+   se hunden. Ese es el efecto de la referencia. */
+.botonera{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 22px}
 .ficha{
-  position:relative;overflow:hidden;
-  display:flex;flex-direction:column;align-items:flex-start;gap:14px;
-  padding:18px 16px 16px;border-radius:18px;cursor:pointer;
-  box-shadow:var(--sombra-alta);
+  position:relative;
+  display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+  padding:20px 17px 18px;border-radius:22px;cursor:pointer;
+  box-shadow:var(--relieve-3), var(--luz-arriba);
   -webkit-tap-highlight-color:transparent;user-select:none;
-  transition:transform .12s ease, box-shadow .12s ease;
+  transition:transform .14s cubic-bezier(.2,.8,.3,1), box-shadow .14s ease;
+  isolation:isolate;
 }
-.ficha:active{transform:translateY(2px);box-shadow:var(--sombra-baja)}
+/* al tocar: se hunde de verdad, la sombra se achica */
+.ficha:active{
+  transform:translateY(4px) scale(.985);
+  box-shadow:var(--relieve-1), var(--luz-arriba);
+}
 /* la de cámara: uva profunda, es la acción principal */
-.ficha-camara{background:linear-gradient(150deg,#7E1A3D 0%,#5A0E29 100%);color:#fff}
-/* la de galería: papel cálido con el rosa como acento */
-.ficha-galeria{background:linear-gradient(150deg,#FFF3EF 0%,#F7E2DC 100%);color:var(--uva);border:1px solid var(--linea)}
-/* el disco del icono, con relieve, como los de la referencia */
+.ficha-camara{
+  background:
+    radial-gradient(120% 90% at 22% 0%, #8E2148 0%, transparent 62%),
+    linear-gradient(155deg,#7A1839 0%,#4E0C24 100%);
+  color:#fff;
+}
+/* la de galería: papel cálido, se lee como una pastilla de arcilla */
+.ficha-galeria{
+  background:
+    radial-gradient(120% 90% at 22% 0%, #FFFFFF 0%, transparent 58%),
+    linear-gradient(155deg,#FDEDE7 0%,#F3DCD5 100%);
+  color:var(--uva);
+}
+/* el borde de luz de arriba y la línea oscura de abajo:
+   es lo que hace que el ojo lea "volumen" y no "rectángulo pintado" */
+.ficha::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.5),
+    inset 0 -2px 3px rgba(58,10,28,.16),
+    inset 0 0 0 1px rgba(255,255,255,.10);
+}
+.ficha-galeria::before{
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.95),
+    inset 0 -2.5px 4px rgba(150,90,80,.16),
+    inset 0 0 0 1px rgba(255,255,255,.55);
+}
+/* EL DISCO: proyecta sombra sobre la ficha, como en la referencia */
 .ficha-ico{
-  width:46px;height:46px;border-radius:50%;
+  width:50px;height:50px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 10px -4px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.28);
+  box-shadow:var(--sombra-disco),
+    inset 0 2px 0 rgba(255,255,255,.40),
+    inset 0 -3px 6px rgba(0,0,0,.20);
+  transition:transform .14s ease;
 }
-.ficha-camara .ficha-ico{background:rgba(255,255,255,.14);color:#fff}
-.ficha-galeria .ficha-ico{background:var(--acento);color:#fff}
-.ficha-txt{font-size:1.02rem;font-weight:700;line-height:1.24;letter-spacing:.005em}
-/* brillo sutil arriba a la derecha, como el papel de la referencia */
-.ficha::after{
-  content:"";position:absolute;top:-55%;right:-30%;width:120%;height:110%;
-  background:radial-gradient(closest-side, rgba(255,255,255,.16), transparent 70%);
-  pointer-events:none;
+.ficha:active .ficha-ico{transform:translateY(-1px) scale(.97)}
+.ficha-camara .ficha-ico{
+  background:radial-gradient(70% 70% at 32% 26%, #A8365F, #6B1132 78%);
+  color:#fff;
 }
-.ficha-galeria::after{background:radial-gradient(closest-side, rgba(255,255,255,.6), transparent 70%)}
+.ficha-galeria .ficha-ico{
+  background:radial-gradient(70% 70% at 32% 26%, #FF8F96, var(--acento) 78%);
+  color:#fff;
+}
+.ficha-txt{font-size:1.04rem;font-weight:700;line-height:1.24;letter-spacing:.005em}
+.ficha-camara .ficha-txt{text-shadow:0 1px 2px rgba(30,4,15,.4)}
 
 .cerrada{
   text-align:center;background:var(--papel);border:1px dashed var(--linea);
@@ -171,12 +237,18 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spac
 .grilla{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media (min-width:520px){.grilla{grid-template-columns:repeat(4,1fr)}}
 .grilla .celda{
-  position:relative;aspect-ratio:1;overflow:hidden;border-radius:14px;
+  position:relative;aspect-ratio:1;overflow:hidden;border-radius:15px;
   background:var(--linea);cursor:pointer;border:none;padding:0;
-  box-shadow:var(--sombra-baja);
-  transition:transform .14s ease;
+  box-shadow:var(--relieve-2);
+  transition:transform .14s cubic-bezier(.2,.8,.3,1), box-shadow .14s ease;
 }
-.grilla .celda:active{transform:scale(.975)}
+.grilla .celda:active{transform:translateY(2px) scale(.97);box-shadow:var(--relieve-1)}
+/* filo de luz arriba: separa la foto del papel */
+.grilla .celda::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:2;
+  pointer-events:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(90,14,41,.08);
+}
 .grilla .celda img{width:100%;height:100%;object-fit:cover;display:block}
 .grilla .celda.mia::after{
   content:"tuya";position:absolute;left:6px;bottom:6px;
@@ -224,8 +296,12 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spac
 }
 .visor-dl{
   display:flex;align-items:center;gap:8px;
-  color:#fff;background:var(--acento);text-decoration:none;font-weight:700;
-  padding:11px 20px;border-radius:99px;font-size:.94rem;
+  color:#fff;text-decoration:none;font-weight:700;
+  background:radial-gradient(120% 100% at 30% 0%, #FF8992 0%, transparent 60%), var(--acento);
+  padding:12px 22px;border-radius:99px;font-size:.94rem;
+  box-shadow:0 6px 14px -4px rgba(0,0,0,.45),
+    inset 0 1.5px 0 rgba(255,255,255,.4),
+    inset 0 -2px 4px rgba(120,20,40,.3);
 }
 
 /* ============ TOAST ============ */
