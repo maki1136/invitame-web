@@ -13,6 +13,13 @@
    dibujado, y el botón tiene el mismo relieve que la galería
    (sombra en capas + filo de luz arriba). Tiene que verse
    agarrable, no un rectángulo pintado.
+
+   ⚠️ LOS TEXTOS VAN EN ESPAÑOL DE MÉXICO, no en voseo.
+   El mercado es México. El motor se traduce en el servidor
+   (i/textos-es-mx.php), pero lo que escribe un módulo NO pasa
+   por ahí: si acá dijera "Sacá tus fotos", el invitado lo lee
+   así. Se escribe bien de entrada y no hace falta traducir
+   nada después.
    ============================================================ */
 (function () {
   function arrancar() {
@@ -38,7 +45,7 @@
 
     /* Los textos se pueden cambiar desde el panel. */
     var titulo = String(cfg.titulo || 'Las fotos de la fiesta');
-    var bajada = String(cfg.bajada || 'Sacá tus fotos y mirá las de todos, en el momento.');
+    var bajada = String(cfg.bajada || 'Toma tus fotos y mira las de todos, en el momento.');
     var boton  = String(cfg.boton  || 'Entrar a la galería');
 
     /* El color lo pone la invitación; si no hay, el uva de la marca. */
