@@ -63,8 +63,19 @@
   }
 
   var CSS =
-    '.rsvp-sw{--alto:62px;--pad:7px;position:relative;width:calc(var(--alto)*2.45);height:var(--alto);' +
-      'margin:6px auto 10px;border:0;padding:0;background:transparent;border-radius:999px;cursor:pointer;' +
+    /* la caja manda el tamaño, y los rótulos toman su ancho: así "No podré"
+       queda sobre la mitad izquierda y "Sí, asistiré" sobre la derecha, que es
+       lo que le dice al invitado para dónde tocar. */
+    '.rsvp-caja{--alto:68px;--pad:8px;width:calc(var(--alto)*2.45 + 52px);' +
+      'margin:0 auto;text-align:center}' +
+    '.rsvp-rot{display:flex;justify-content:space-between;padding:0 2px;margin:0 0 6px;' +
+      'font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.62}' +
+    '.rsvp-rot span{transition:opacity .25s}' +
+    '.rsvp-caja[data-r="si"] .rsvp-rot .s{opacity:1;text-decoration:underline;text-underline-offset:4px}' +
+    '.rsvp-caja[data-r="no"] .rsvp-rot .n{opacity:1;text-decoration:underline;text-underline-offset:4px}' +
+
+    '.rsvp-sw{position:relative;width:calc(var(--alto)*2.45);height:var(--alto);' +
+      'margin:0 auto 10px;border:0;padding:0;background:transparent;border-radius:999px;cursor:pointer;' +
       'display:block;-webkit-tap-highlight-color:transparent;' +
       'filter:drop-shadow(-4px 6px 6px rgba(0,0,0,.18)) drop-shadow(-10px 15px 20px rgba(0,0,0,.16))}' +
     /* el aro: sobresale. la luz le viene de arriba a la derecha */
@@ -94,14 +105,10 @@
     '.rsvp-sw[data-r="si"] .per{left:calc(100% - var(--pad) - (var(--alto) - var(--pad)*2))}' +
     '.rsvp-sw[data-r="no"] .per{left:var(--pad)}' +
     '.rsvp-sw:active .per{transform:scale(.97)}' +
+    /* las dos mitades sensibles */
     '.rsvp-sw .mitad{position:absolute;top:0;bottom:0;width:50%;border:0;background:transparent;' +
       'cursor:pointer;padding:0;z-index:3}' +
     '.rsvp-sw .mitad.izq{left:0} .rsvp-sw .mitad.der{right:0}' +
-    '.rsvp-rot{display:flex;justify-content:center;gap:26px;font-size:11.5px;font-weight:700;' +
-      'letter-spacing:.1em;text-transform:uppercase;opacity:.62;margin:0 0 4px}' +
-    '.rsvp-rot span{transition:opacity .25s}' +
-    '.rsvp-caja[data-r="si"] .rsvp-rot .s{opacity:1;text-decoration:underline;text-underline-offset:4px}' +
-    '.rsvp-caja[data-r="no"] .rsvp-rot .n{opacity:1;text-decoration:underline;text-underline-offset:4px}' +
     '.rsvp-pie{text-align:center;font-size:12px;opacity:.72;min-height:17px;margin:2px 0 0}' +
     '.rsvp-sw[disabled]{opacity:.6;cursor:default}' +
     '@media (prefers-reduced-motion:reduce){.rsvp-sw .per{transition:none}}';
