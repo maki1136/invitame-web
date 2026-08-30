@@ -26,6 +26,11 @@
 
   var ID = 'paleta-selector';
 
+  /* Alto fijo del renglón del nombre: entran dos líneas. Sin esto, las tarjetas
+     de nombre corto quedaban más bajas que las de nombre largo y la grilla se
+     veía despareja. */
+  var ALTO_NOMBRE = 27;
+
   function borrador() {
     try { return (typeof D === 'object' && D) ? D : null; } catch (e) { return null; }
   }
@@ -45,6 +50,30 @@
     refrescar();
   }
 
+  function estiloTarjeta(marcada, borde) {
+    return [
+      'display:block', 'width:100%', 'cursor:pointer',
+      'background:#fff', 'text-align:left', 'overflow:hidden',
+      'border-radius:9px', 'font:inherit',
+      'border:' + (marcada ? '2px solid #1c1a17' : borde),
+      /* el marcado crece 1px de borde: se compensa para que no salte la grilla */
+      'padding:' + (marcada ? '0' : '1px'),
+      'box-shadow:' + (marcada ? '0 0 0 3px rgba(0,0,0,.09)' : 'none')
+    ].join(';');
+  }
+
+  function renglonNombre(texto, marcada) {
+    var pie = document.createElement('div');
+    pie.textContent = texto;
+    pie.style.cssText = [
+      'padding:5px 6px 6px', 'font-size:10.5px', 'line-height:1.25',
+      'color:#2b2b2b', 'background:#fff',
+      'min-height:' + ALTO_NOMBRE + 'px',
+      'font-weight:' + (marcada ? '700' : '500')
+    ].join(';');
+    return pie;
+  }
+
   /* ---- una tarjeta ------------------------------------------------------
 
      Cinco franjas: el principal (con el que se escriben los nombres), el
@@ -56,15 +85,7 @@
     b.type = 'button';
     b.setAttribute('aria-pressed', marcada ? 'true' : 'false');
     b.title = pal.nombre;
-    b.style.cssText = [
-      'display:block', 'width:100%', 'cursor:pointer',
-      'background:#fff', 'text-align:left', 'overflow:hidden',
-      'border-radius:9px', 'font:inherit',
-      'border:' + (marcada ? '2px solid #1c1a17' : '1px solid rgba(0,0,0,.16)'),
-      /* el marcado crece 1px de borde: se compensa para que no salte la grilla */
-      'padding:' + (marcada ? '0' : '1px'),
-      'box-shadow:' + (marcada ? '0 0 0 3px rgba(0,0,0,.09)' : 'none')
-    ].join(';');
+    b.style.cssText = estiloTarjeta(marcada, '1px solid rgba(0,0,0,.16)');
 
     var tiras = document.createElement('div');
     tiras.style.cssText = 'display:flex;height:34px';
@@ -74,15 +95,7 @@
       tiras.appendChild(t);
     });
     b.appendChild(tiras);
-
-    var pie = document.createElement('div');
-    pie.textContent = pal.nombre;
-    pie.style.cssText = [
-      'padding:5px 6px 6px', 'font-size:10.5px', 'line-height:1.25',
-      'color:#2b2b2b', 'background:#fff',
-      'font-weight:' + (marcada ? '700' : '500')
-    ].join(';');
-    b.appendChild(pie);
+    b.appendChild(renglonNombre(pal.nombre, marcada));
 
     b.onclick = function () {
       elegir(d, marcada ? '' : pal.id);   /* volver a tocarla la apaga */
@@ -95,24 +108,14 @@
     var b = document.createElement('button');
     b.type = 'button';
     b.setAttribute('aria-pressed', marcada ? 'true' : 'false');
-    b.style.cssText = [
-      'display:block', 'width:100%', 'cursor:pointer',
-      'background:#fff', 'text-align:left', 'overflow:hidden',
-      'border-radius:9px', 'font:inherit',
-      'border:' + (marcada ? '2px solid #1c1a17' : '1px dashed rgba(0,0,0,.3)'),
-      'padding:' + (marcada ? '0' : '1px'),
-      'box-shadow:' + (marcada ? '0 0 0 3px rgba(0,0,0,.09)' : 'none')
-    ].join(';');
+    b.title = 'Elegir cada color a mano';
+    b.style.cssText = estiloTarjeta(marcada, '1px dashed rgba(0,0,0,.3)');
 
     var cuerpo = document.createElement('div');
     cuerpo.textContent = '—';
     cuerpo.style.cssText = 'height:34px;display:flex;align-items:center;justify-content:center;color:#999;font-size:16px;background:repeating-linear-gradient(45deg,#fafafa,#fafafa 5px,#f0f0f0 5px,#f0f0f0 10px)';
     b.appendChild(cuerpo);
-
-    var pie = document.createElement('div');
-    pie.textContent = 'Colores a mano';
-    pie.style.cssText = 'padding:5px 6px 6px;font-size:10.5px;line-height:1.25;color:#2b2b2b;background:#fff;font-weight:' + (marcada ? '700' : '500');
-    b.appendChild(pie);
+    b.appendChild(renglonNombre('Colores a mano', marcada));
 
     b.onclick = function () { elegir(d, ''); pintarGrilla(d); };
     return b;
@@ -157,9 +160,12 @@
     ayuda.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(ayuda);
 
+    /* Sin tope de alto a propósito: se elige MIRANDO, y una grilla que corta la
+       última fila por la mitad obliga a descubrir que hay más abajo. Son cuatro
+       renglones, entran. */
     var grilla = document.createElement('div');
     grilla.setAttribute('data-grilla', '1');
-    grilla.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:7px;max-height:280px;overflow-y:auto;padding:2px';
+    grilla.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:7px;padding:2px';
     caja.appendChild(grilla);
 
     var pie = document.createElement('div');
