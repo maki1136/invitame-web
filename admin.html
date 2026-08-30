@@ -213,7 +213,7 @@
   D.trivia=[{q:'¿Dónde se conocieron?',o:['En un viaje','En la facultad','En el trabajo'],c:0},{q:'¿Primer viaje juntos?',o:['Brasil','Bariloche','Europa'],c:1},{q:'¿Quién dijo te amo primero?',o:['Ella','Él'],c:1}];
   // ==== EFECTOS (todo personalizable: on/off, color, texto, tipografía) ====
   const FXD={
-    sobre:{relieve:true,textura:'lino',color:'#efe6d2',sello:true,selloColor:'#3a5643',ini:'',emblema:'iniciales'},
+    sobre:{relieve:true,textura:'lino',color:'#efe6d2',sello:true,selloColor:'#3a5643',ini:'',emblema:'iniciales',tipo:'clasico',modelo:'',colorCarta:''},
     particulas:{on:true,tipo:'hoja',color:'auto',densidad:'suave'},
     carta:{on:true,sobreColor:'',kicker:'Con cariño',titulo:'Queridos amigos y familia',texto:'Hoy queremos compartir con ustedes uno de los días más felices de nuestras vidas. Gracias por acompañarnos en este camino de amor.',fuente:'Lora',colorTexto:'#5a5145'},
     ambiente:{on:true,tipo:'nubes',colorTop:'#cfe4f2',colorBot:'#eaf4fb',seccion:'itinerario'},
@@ -518,12 +518,26 @@
     input.value=''; renderPanel();
   }
   // ==== PANEL DE EFECTOS ====
+  // CATALOGO DE SOBRES (modo "carta"). Para sumar uno: subir la imagen del papel
+  // a /sobres/ del repo y agregar UNA linea aca. El mismo catalogo esta copiado en
+  // la invitacion (constante SOBRES en index.html): si agregas uno, agregalo en LOS DOS.
+  // El evento guarda solo el id, asi la imagen se puede cambiar despues sin tocar
+  // ninguna invitacion ya entregada.
+  // Hay dos clases de sobre. Los que tienen "video" se REPRODUCEN: el sobre se
+  // abre en la filmacion y despues entra la invitacion real. Los que tienen solo
+  // "img" se dibujan por CSS con esa foto de papel (el modo viejo). En los de
+  // video, "poster" es el primer cuadro y es lo que se muestra en la miniatura.
+  // El catalogo vive en /sobres/catalogo.js (compartido con el motor).
+  const SOBRES = window.SOBRES_INVITAME || {};
   const CFFONTS=[['Lora','Lora (clásica)'],['Great Vibes','Great Vibes ✒'],['Forum','Forum'],['Montserrat','Montserrat'],['Rouge Script','Rouge Script ✒']];
   function chk(grp,key,label){ensureFX();return '<label class="chk"><input type="checkbox" '+(D.fx[grp][key]?'checked':'')+' onchange="D.fx.'+grp+'.'+key+'=this.checked;postPreview()"> '+label+'</label>';}
   function col(grp,key){ensureFX();return '<input type="color" value="'+(D.fx[grp][key]||'#ffffff')+'" oninput="D.fx.'+grp+'.'+key+'=this.value;postPreview()">';}
   function txt(grp,key,ph){ensureFX();return '<input type="text" value="'+String(D.fx[grp][key]||'').replace(/"/g,'&quot;')+'" oninput="D.fx.'+grp+'.'+key+'=this.value;postPreview()" placeholder="'+(ph||'')+'">';}
   function area(grp,key){ensureFX();return '<textarea oninput="D.fx.'+grp+'.'+key+'=this.value;postPreview()">'+String(D.fx[grp][key]||'')+'</textarea>';}
   function sel(grp,key,opts){ensureFX();return '<select onchange="D.fx.'+grp+'.'+key+'=this.value;postPreview()">'+opts.map(o=>'<option value="'+o[0]+'" '+(D.fx[grp][key]===o[0]?'selected':'')+'>'+o[1]+'</option>').join('')+'</select>';}
+  // Igual que sel(), pero ademas vuelve a dibujar el panel. Lo usan los campos que
+  // hacen aparecer o desaparecer otros campos (ej: elegir "Carta" muestra el catalogo).
+  function selR(grp,key,opts){ensureFX();return '<select onchange="D.fx.'+grp+'.'+key+'=this.value;postPreview();renderPanel()">'+opts.map(o=>'<option value="'+o[0]+'" '+(D.fx[grp][key]===o[0]?'selected':'')+'>'+o[1]+'</option>').join('')+'</select>';}
   function setAdorno(id){ ensureFX(); D.fx.diseno.adorno=id; D.fx.diseno.adornoCustom=''; renderPanel(); }
   async function subirAdorno(input){ const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
@@ -533,8 +547,27 @@
     ensureFX();
     const secOpts=Object.keys(SECLABELS).map(k=>[k,SECLABELS[k]]);
     const pauto=(D.fx.particulas.color==='auto');
+    const _esCarta=(D.fx.sobre.tipo==='carta');
     return '<div class="mejoras"><div class="h">✨ Efectos — sobre de entrada</div>'+
         '<div class="hint" style="margin-bottom:10px">El sobre que se abre al inicio. Todo se puede prender/apagar y cambiar de color.</div>'+
+        '<div class="grp"><label>Cómo se abre</label>'+
+          selR('sobre','tipo',[['clasico','Clásico — el sobre se abre y aparece la invitación'],['carta','Carta — la tarjeta se desliza hacia arriba, sale y se convierte en la portada']])+
+          '<div class="hint">El modo <b>Carta</b> usa un sobre del catálogo de abajo. El resto de los controles de esta sección (lacre, relieve, iniciales) son del modo Clásico.</div>'+
+        '</div>'+
+        (_esCarta
+          ? '<div class="grp"><label>Sobre del catálogo</label>'+
+              selR('sobre','modelo',[['','— Elegí un sobre —']].concat(Object.keys(SOBRES).map(k=>[k,SOBRES[k].nombre])))+
+              '<div class="hint">Cada sobre trae su papel y su color sugerido. Si querés otro color, cambialo abajo.</div>'+
+              (D.fx.sobre.modelo&&SOBRES[D.fx.sobre.modelo]
+                ? '<img src="'+(SOBRES[D.fx.sobre.modelo].poster||SOBRES[D.fx.sobre.modelo].img||'')+'" alt="" style="max-height:90px;border-radius:8px;margin-top:8px">'+
+                  (SOBRES[D.fx.sobre.modelo].video?'<div class="hint">Este sobre es un video: se abre solo y despues entra la invitacion.</div>':'')
+                : '')+
+            '</div>'+
+            '<div class="grp"><label>Color de la carta (se multiplica sobre el papel, conserva el relieve)</label>'+
+              '<input type="color" value="'+(D.fx.sobre.colorCarta||(SOBRES[D.fx.sobre.modelo]||{}).color||'#d9a7ae')+'" oninput="D.fx.sobre.colorCarta=this.value;postPreview()">'+
+              '<div class="hint">⚠ El sobre de entrada NO se ve en esta vista previa (acá la invitación abre directo). Para verlo, usá el botón 👁 y abrí la invitación de verdad.</div>'+
+            '</div>'
+          : '')+
         '<div class="grp">'+chk('sobre','relieve','Relieve / volumen del papel')+'</div>'+
         '<div class="grp"><label>Textura del sobre</label>'+sel('sobre','textura',[['lino','Lino (tela suave)'],['liso','Liso / satinado'],['kraft','Kraft (papel rústico)'],['acuarela','Acuarela'],['marmol','Mármol'],['floral','Floral punteado'],['ninguno','Sin textura']])+'<div class="hint">El color de abajo se combina con la textura.</div></div>'+
         '<div class="two"><div class="grp"><label>Color del sobre</label>'+col('sobre','color')+'</div>'+
@@ -543,6 +576,56 @@
         '<div class="two"><div class="grp"><label>Emblema del sello</label>'+sel('sobre','emblema',[['iniciales','Iniciales'],['corazon','Corazón ❤'],['anillos','Anillos ⚭']])+'</div>'+
         '<div class="grp"><label>Iniciales (ej: M&D)</label>'+txt('sobre','ini','M&D')+'</div></div>'+
       '</div>'+
+        (function(){ D.fx=D.fx||{}; D.fx.calendario=D.fx.calendario||{}; return ''; })()+
+        '<div class="h">✨ Efectos — calendario de la fecha</div>'+
+        '<div class="hint" style="margin-bottom:10px">La grilla del mes se arma sola con la fecha del evento. Si la fecha cambia, el calendario se acomoda y el día nunca queda en la columna equivocada. No es una imagen.</div>'+
+        '<div class="grp">'+chk('calendario','encendido','Mostrar el calendario')+'</div>'+
+        '<div class="two"><div class="grp"><label>Tipo de número</label>'+sel('calendario','fuente',[['forum','Forum — serif clásica'],['marcellus','Marcellus — serif fina'],['prata','Prata — serif marcada'],['montserrat','Montserrat — sin serif']])+'</div>'+
+        '<div class="grp"><label>Marcador de la fecha</label>'+sel('calendario','marca',[['corazon','Corazón'],['circulo','Círculo'],['cuadrado','Cuadrado'],['relleno','Círculo relleno']])+'</div></div>'+
+        '<div class="two"><div class="grp"><label>Color de los números</label>'+col('calendario','num')+'</div>'+
+        '<div class="grp"><label>Color del marcador</label>'+col('calendario','mk')+'</div></div>'+
+        '<div class="two"><div class="grp"><label>Color de fondo</label>'+col('calendario','bg')+'</div>'+
+        '<div class="grp"><label>Tamaño</label>'+sel('calendario','tam',[['390','Grande — el máximo que entra en un celular'],['340','Mediano'],['290','Chico'],['240','Muy chico']])+'</div></div>'+
+        '<div class="grp"><label>Imagen de fondo (opcional)</label>'+txt('calendario','img','pegá acá el link de la imagen')+'<div class="hint">Si ponés una imagen manda sobre el color, y se le aplica un velo del color de fondo para que los números se lean siempre.</div></div>'+
+        '<div class="two"><div class="grp"><label>Texto de arriba</label>'+txt('calendario','kick','Guardá la fecha')+'</div>'+
+        '<div class="grp"><label>Texto de abajo</label>'+txt('calendario','pie','Nos casamos')+'</div></div>'+
+        '<div class="hint" style="margin-bottom:10px">El calendario aparece justo después del sector de la fecha. Miralo con el botón 👁: en la vista previa de arriba no se ve.</div>'+
+        (function(){ D.fx=D.fx||{};
+          D.fx.itinerario=D.fx.itinerario||{}; D.fx.fecha=D.fx.fecha||{}; D.fx.raspadita=D.fx.raspadita||{};
+          var R=D.fx.raspadita; if(R.polvillo===undefined)R.polvillo=true;
+          if(R.destello===undefined)R.destello=true; if(R.vibrar===undefined)R.vibrar=true;
+          return ''; })()+
+        '<div class="h">✨ Efectos — itinerario</div>'+
+        '<div class="hint" style="margin-bottom:10px">La línea se dibuja sola a medida que el invitado baja, y cada momento aparece cuando le toca. Sólo funciona si el itinerario está cargado como LISTA (con su hora, título y descripción); si subiste una imagen, no hay nada que animar.</div>'+
+        '<div class="grp"><label>Cómo se ve la línea</label>'+sel('itinerario','estilo',[['izquierda','A la izquierda — todo el texto a la derecha'],['centro','Al medio — los momentos alternando en zigzag']])+'</div>'+
+        '<div class="h">✨ Efectos — cómo se muestra la fecha</div>'+
+        '<div class="hint" style="margin-bottom:10px">Nueve maneras de mostrar la fecha. Se arma sola con la fecha del evento. Las de FOTOS necesitan tres imágenes.</div>'+
+        '<div class="grp"><label>Disposición</label>'+sel('fecha','disposicion',[['','Como siempre'],['fotos','Tres fotos — un número sobre cada una'],['circulos','Tres círculos con foto'],['barras','Barras — 28 | 11 | 26'],['apilada','Apilada — una debajo de la otra'],['filetes','Con filetes — NOV — 28 — 2026'],['semana','Con día de la semana y hora'],['monograma','Monograma arriba y la fecha abajo'],['grande','El día grande y el mes al costado'],['manuscrita','Manuscrita — Save the date en cursiva']])+'</div>'+
+        '<div class="two"><div class="grp"><label>Color del texto</label>'+col('fecha','color')+'</div>'+
+        '<div class="grp"><label>Color de los detalles</label>'+col('fecha','acento')+'</div></div>'+
+        '<div class="two"><div class="grp"><label>Texto de arriba</label>'+txt('fecha','kick','Save the date')+'</div>'+
+        '<div class="grp"><label>Texto de abajo</label>'+txt('fecha','pie','Nos casamos')+'</div></div>'+
+        '<div class="two"><div class="grp"><label>Hora — para "día de la semana"</label>'+txt('fecha','hora','20:30')+'</div>'+
+        '<div class="grp"><label>Iniciales — para "monograma"</label>'+txt('fecha','ini','J / D')+'</div></div>'+
+        '<div class="grp"><label>Foto 1 — va con el día</label>'+txt('fecha','foto1','pegá el link de la imagen')+'</div>'+
+        '<div class="two"><div class="grp"><label>Foto 2 — el mes</label>'+txt('fecha','foto2','link')+'</div>'+
+        '<div class="grp"><label>Foto 3 — el año</label>'+txt('fecha','foto3','link')+'</div></div>'+
+        '<div class="h">✨ Efectos — raspadita de la fecha</div>'+
+        '<div class="hint" style="margin-bottom:10px">Tapa la fecha con una capa que el invitado rasca con el dedo. Se monta sobre la disposición que hayas elegido arriba: si elegiste una de fotos, va apareciendo una foto por vez.</div>'+
+        '<div class="grp">'+chk('raspadita','encendido','Tapar la fecha para rascar')+'</div>'+
+        '<div class="two"><div class="grp"><label>Cómo se rasca</label>'+sel('raspadita','modo',[['simple','Todo junto'],['partes','Por partes — el día, el mes y el año']])+'</div>'+
+        '<div class="grp"><label>Forma de las fichas</label>'+sel('raspadita','forma',[['cuadrado','Cuadradas'],['redondo','Redondas'],['corazon','Corazones']])+'</div></div>'+
+        '<div class="two"><div class="grp"><label>El mes</label>'+sel('raspadita','mes',[['corto','Corto — NOV'],['completo','Completo — Noviembre']])+'</div>'+
+        '<div class="grp"><label>Se destapa sola al llegar a</label>'+sel('raspadita','auto',[['42','42% — lo recomendado'],['30','30% — enseguida'],['60','60% — más tarde'],['0','Nunca, hay que raspar todo']])+'</div></div>'+
+        '<div class="two"><div class="grp"><label>Color de la capa</label>'+col('raspadita','color')+'</div>'+
+        '<div class="grp"><label>Color de los números</label>'+col('raspadita','num')+'</div></div>'+
+        '<div class="two"><div class="grp"><label>Relleno de la ficha</label>'+col('raspadita','fondo')+'</div>'+
+        '<div class="grp"><label>Color del filete</label>'+col('raspadita','linea')+'</div></div>'+
+        '<div class="grp">'+chk('raspadita','polvillo','Polvillo mientras se rasca')+'</div>'+
+        '<div class="grp">'+chk('raspadita','destello','Destello al terminar')+'</div>'+
+        '<div class="grp">'+chk('raspadita','vibrar','Vibración al completar cada parte')+'</div>'+
+        '<div class="hint" style="margin-bottom:10px">La vibración sólo funciona en Android: iPhone no permite vibrar desde una página web. No es un error — en iPhone simplemente no pasa nada y todo lo demás anda igual.</div>'+
+                
       '<div class="mejoras"><div class="h">✨ Efectos — lluvia delicada</div>'+
         '<div class="hint" style="margin-bottom:10px">Partículas suaves cayendo. Elegí que combinen con tu paleta.</div>'+
         '<div class="grp">'+chk('particulas','on','Mostrar el efecto')+'</div>'+
@@ -1402,7 +1485,8 @@
   if(window.INV) cargarEvento(); else window.addEventListener('inv-ready',cargarEvento);
   {var _tb=new URLSearchParams(location.search).get('tab'); if(_tb&&ORDER.indexOf(_tb)>-1){go(_tb);}}
 </script>
-<script type="module" src="firebase-inv.js?v=23"></script>
+<script src="/sobres/catalogo.js"></script>
+<script type="module" src="/firebase-inv.js?v=23"></script>
 <script type="module">
   import { collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   function _ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }
