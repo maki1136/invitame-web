@@ -37,6 +37,26 @@
       · /prueba/ NO se usa para dar nada por verificado. Si algo anda ahí y no
         se probó en producción, NO está listo.
 
+   ★★★ Y SE PRUEBA DESDE EL PANEL, COMO JAZMÍN ★★★
+      Segunda parte de la misma regla, y costó otra vuelta el mismo día:
+      el interruptor de la confirmación estaba hecho, andando y verificado…
+      pero la única forma de prenderlo era escribir `fx.rsvp.estilo` en la base
+      a mano desde la consola. Desde el panel no existía. Para quien usa el
+      panel, la función NO estaba.
+
+      Antes de decir que algo está listo:
+      1. ¿se ve en la invitación?           (mirar, no medir solamente)
+      2. ¿se puede prender y apagar DESDE EL PANEL, sin tocar la base?
+      Si la respuesta a la 2 es "con la consola", no está listo.
+
+      Dónde es cada cosa:
+      · /admin.html  → el panel de edición. Es el único con `.mejoras`, que es
+        donde se montan estos bloques. Escribe con `INV.saveEvento`.
+      · /crear.html  → el formulario de alta ("Completá tu invitación"). NO
+        escribe `fx` ni llama a saveEvento: es una toma de datos.
+      · /mi-panel.html → el panel de los novios (entra con slug + clave).
+      · /panel.html  → el tablero de métricas.
+
    ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` ★★
       https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
       Todo lo nuevo se prueba y se mira AHÍ antes de mostrárselo a Maki.
@@ -57,19 +77,14 @@
         · los MÓDULOS ya escriben sus textos en español de México. Eran seis
           textos, en calendario.js, galeria.js, raspadita.js y
           rsvp-interruptor.js. Corregidos en el origen.
+        · los DATOS de 4 invitaciones tenían voseo escrito desde el panel
+          (`cfTitulo`, `c_texto-del-modal-de-inicio`). Corregidos.
 
       ⚠️ AL ESCRIBIR UN MÓDULO NUEVO: los textos van en español de México. Lo
          que escribe un módulo NO pasa por el traductor del servidor. Si un
          módulo dice "Tocá", el invitado mexicano lee "Tocá".
 
-      Para revisar que no se coló voseo nuevo, en la consola de la invitación:
-        [].concat(...await Promise.all(
-          ['calendario','galeria','raspadita','rsvp-interruptor','fecha','musica']
-          .map(async m => ((await (await fetch('/efectos/'+m+'.js')).text())
-            .match(/'[^'\n]{3,120}'/g)||[])
-            .filter(s=>/[a-zñáéíóú]{3,}(á|é|í)'/.test(s)))))
-
-   ⚠️ EL ORDEN IMPORTA en diez casos:
+   ⚠️ EL ORDEN IMPORTA en once casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -81,6 +96,8 @@
    · `rsvp-interruptor.js` va DESPUÉS de `botones.js`: si los dos están
      encendidos, el interruptor esconde los botones de la confirmación y el
      material deja de aplicar ahí.
+   · `panel-rsvp.js` va DESPUÉS de `rsvp-interruptor.js`: escribe fx.rsvp.estilo,
+     que es lo que el otro después lee.
    · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo del fondo se tiñe
      con el papel de la paleta, así el fondo se integra en vez de verse pegado.
    · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`: escribe fx.fondo, que
@@ -98,6 +115,7 @@
     '/efectos/botones.js',             /* el material de los botones: lacre, cristal, nácar… */
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
+    '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
