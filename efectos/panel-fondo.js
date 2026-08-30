@@ -1,7 +1,7 @@
 /* ===== EL FONDO DE LA INVITACIÓN, EN EL PANEL =================================
 
-   El bloque para elegir qué va detrás de TODA la invitación: nada, una imagen
-   o un video. Lo pinta /efectos/fondo-invitacion.js.
+   El bloque para elegir qué reemplaza el papel crudo de la invitación: nada,
+   una imagen o un video. Lo pinta /efectos/fondo-invitacion.js.
 
    POR QUÉ EXISTE ESTE BLOQUE
    Un archivo que está en la computadora de alguien no se puede subir sin que
@@ -10,18 +10,22 @@
    propia dirección. Después cualquiera puede apuntar cualquier invitación a esa
    dirección sin volver a pedir nada.
 
-   LAS DOS PERILLAS NO SON DECORACIÓN
+   LAS PERILLAS NO SON DECORACIÓN
 
      · VELO — cuánto se apaga el fondo. Un fondo con dibujo detrás de un texto
-       chico lo vuelve ilegible.
-     · PASO — cuánto lo dejan pasar las secciones. Si es 0, en el CELULAR NO SE
-       VE NADA: la invitación es una columna angosta y el fondo sólo asomaría a
-       los costados, que en el teléfono no existen.
+       chico lo vuelve ilegible. Está medido sobre una invitación real.
+     · SECCIONES CLARAS — cuánto dejan pasar el fondo. Es la perilla principal:
+       en 0 el papel sigue siendo crudo y no cambió nada.
+     · SECCIONES DE COLOR — aparte, y arranca en 0 a propósito. Las secciones
+       de color son las que le dan el ritmo a la invitación; si se abren todas,
+       se pierde el pulso y el texto claro sobre fondo pálido deja de leerse.
 
-   ⚠️ SI SE SUBE EL PASO, HAY QUE SUBIR EL VELO. Está medido sobre una
-      invitación real: con las secciones opacas el peor texto queda en 2,48 de
-      contraste; dejando pasar 12% baja a 1,95; con 30% queda en 1,0, ilegible.
-      Por eso el paso llega hasta 0,3 y no más, y arranca en 0,10.
+   ⚠️ DÓNDE SE VE: la columna, o toda la pantalla.
+      El fondo va SIEMPRE adentro de la columna — ése es el papel, y es lo
+      único que se ve en el teléfono. "Toda la pantalla" agrega, además, los
+      costados en la compu (desenfocados, para completar el 16:9 de un monitor
+      sin que se note que el archivo es vertical). En el celular las dos
+      opciones se ven igual, porque costados no hay.
 
    ⚠️ `D` (el borrador) NO cuelga de window: es un `const` del script principal.
       Ver la misma nota en panel-pieza.js.
@@ -122,6 +126,19 @@
     return fila(etiqueta, caja, ayuda);
   }
 
+  function elegir(d, clave, etiqueta, opciones, porDefecto, ayuda) {
+    var sel = document.createElement('select');
+    sel.style.cssText = 'width:100%';
+    opciones.forEach(function (o) {
+      var op = document.createElement('option');
+      op.value = o[0]; op.textContent = o[1];
+      sel.appendChild(op);
+    });
+    sel.value = fondo(d)[clave] || porDefecto;
+    sel.onchange = function () { fondo(d)[clave] = sel.value; refrescar(); pintar(d); };
+    return fila(etiqueta, sel, ayuda);
+  }
+
   function pintar(d) {
     var caja = document.getElementById(ID);
     if (!caja) return;
@@ -132,7 +149,7 @@
     var f = fondo(d);
 
     var sel = document.createElement('select');
-    [['', 'Sin fondo (como está hoy)'], ['imagen', 'Una imagen'], ['video', 'Un video']]
+    [['', 'Sin fondo (papel crudo, como está hoy)'], ['imagen', 'Una imagen'], ['video', 'Un video']]
       .forEach(function (o) {
         var op = document.createElement('option');
         op.value = o[0]; op.textContent = o[1];
@@ -141,7 +158,7 @@
     sel.value = f.tipo || '';
     sel.style.cssText = 'width:100%';
     sel.onchange = function () { fondo(d).tipo = sel.value; refrescar(); pintar(d); };
-    cuerpo.appendChild(fila('Qué va detrás de todo', sel));
+    cuerpo.appendChild(fila('Qué reemplaza el papel', sel));
 
     if (!f.tipo) {
       var nota = document.createElement('div');
@@ -155,19 +172,28 @@
       f.tipo === 'video' ? 'El video (.mp4)' : 'La imagen',
       f.tipo === 'video' ? 'video/mp4,video/*' : 'image/*',
       'url',
-      f.tipo === 'video' ? 'Corto y en loop. Con 100 KB alcanza: se estira a pantalla completa y va velado.'
-                         : 'Se estira a pantalla completa. Mejor algo plano y pálido que algo con dibujo.'));
+      f.tipo === 'video' ? 'Corto y en loop, vertical. Con 100 KB alcanza: va velado detrás del texto.'
+                         : 'Vertical, como el teléfono. Mejor algo suave que algo con mucho dibujo.'));
 
     if (f.tipo === 'video') {
       cuerpo.appendChild(subidor(d, 'Foto de respaldo', 'image/*', 'poster',
-        'Se muestra en los celulares que no reproducen video, o cuando la persona pidió menos movimiento. Sin esto, ahí no se ve nada.'));
+        'Se usa en los celulares que no reproducen video, cuando la persona pidió menos movimiento, y siempre para los costados de la compu. Sin esto, ahí no se ve nada.'));
     }
+
+    cuerpo.appendChild(elegir(d, 'donde', 'Dónde se ve',
+      [['marco', 'Sólo adentro de la invitación'],
+       ['pantalla', 'Adentro y también los costados (llena la pantalla)']],
+      'marco',
+      'En el celular las dos se ven igual. La segunda es para la compu: rellena los costados con la misma imagen desenfocada, así completa el monitor en vez de dejar franjas.'));
 
     cuerpo.appendChild(perilla(d, 'velo', 'Cuánto se apaga el fondo', 0, 0.85, 0.30,
       'Si el fondo tiene dibujo, subilo. Es lo que deja que el texto se lea encima.'));
 
-    cuerpo.appendChild(perilla(d, 'paso', 'Cuánto lo dejan pasar las secciones', 0, 0.30, 0.10,
-      'En 0 el fondo sólo se ve a los costados en la compu: en el celular no se ve. Pasando de 20% el texto empieza a costar.'));
+    cuerpo.appendChild(perilla(d, 'paso', 'Cuánto lo dejan pasar las secciones claras', 0, 1, 0.85,
+      'Es la perilla principal: en 0 el papel sigue crudo y no cambia nada. En 85% el fondo ES el papel.'));
+
+    cuerpo.appendChild(perilla(d, 'oscuras', 'Y las secciones de color', 0, 0.6, 0,
+      'Dejalas en 0 salvo que quieras perder el contraste entre secciones. Son las que le dan el ritmo a la invitación.'));
   }
 
   function construir(d) {
@@ -181,7 +207,7 @@
     caja.appendChild(t);
 
     var a = document.createElement('div');
-    a.textContent = 'Una imagen o un video detrás de TODO. El archivo se sube una vez y queda guardado.';
+    a.textContent = 'Una imagen o un video en lugar del papel crudo. El archivo se sube una vez y queda guardado.';
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(a);
 
