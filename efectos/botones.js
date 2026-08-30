@@ -24,6 +24,13 @@
       `background-image` + `background-blend-mode` (que se queda en el fondo).
       Si algún día hace falta un estilo nuevo: mismo criterio, nada encima.
 
+   ⚠️ LA HOJA SE PONE SIEMPRE, HAYA ESTILO ELEGIDO O NO.  ← esto costó otro bug
+      Antes se creaba sólo al elegir uno. En el panel, donde todavía no elegiste
+      nada, no existía: las once muestras salían grises e iguales. Un selector
+      donde todas las opciones se ven iguales no sirve para nada.
+      Ponerla siempre no cambia nada en la invitación: todas las reglas están
+      dentro de [data-boton="..."], y sin ese atributo no aplica ninguna.
+
    ⚠️ QUÉ TOCA Y QUÉ NO. Sólo pinta: fondo, borde, sombra y color de letra.
       No toca tamaños, ni espaciados, ni posiciones.
 
@@ -236,13 +243,18 @@
     if (id === anterior) return;
     anterior = id;
     if (!id || !existe(id)) { raiz.removeAttribute('data-boton'); return; }
-    asegurarHoja();
     raiz.setAttribute('data-boton', id);
   }
 
+  /* La hoja va SIEMPRE, elija o no elija: es lo que le da de comer a las
+     muestras del panel. Sin atributo no aplica ninguna regla. */
+  asegurarHoja();
+
   sincronizar();
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', sincronizar, { once: true });
+    document.addEventListener('DOMContentLoaded', function () {
+      asegurarHoja(); sincronizar();
+    }, { once: true });
   }
   /* el panel manda los datos en vivo por postMessage */
   window.addEventListener('message', function () { setTimeout(sincronizar, 0); }, false);
