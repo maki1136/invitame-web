@@ -17,6 +17,15 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
+   ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` ★★
+      https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
+      Todo lo nuevo se prueba y se mira AHÍ antes de mostrárselo a Maki.
+      Es la más cargada de todas: 90 campos con contenido de verdad.
+
+      ⚠️ El evento llamado `muestra` NO es la muestra. Está marcado "NO USAR".
+         El nombre obvio es el equivocado — por eso está escrito acá, que es el
+         archivo que se lee siempre. Detalle en /prueba/LEEME-muestra-oficial.md
+
    ⚠️ EL ORDEN IMPORTA en once casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
