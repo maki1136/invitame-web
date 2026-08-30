@@ -161,8 +161,11 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;letter-spac
     radial-gradient(50% 38% at 82% 18%, rgba(206,197,187,.34), transparent 62%);
   border-radius:0 0 60% 60%;
   pointer-events:none;
-  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 42%, transparent 62%);
-          mask-image:linear-gradient(to bottom, #000 0%, #000 42%, transparent 62%);
+  /* La máscara tiene que apagar la mancha por los CUATRO lados. Con una
+     lineal sólo se apagaba abajo, y en una pantalla ancha se veían dos
+     bordes verticales rectos: justo lo que la mancha viene a evitar. */
+  -webkit-mask-image:radial-gradient(58% 42% at 50% 26%, #000 0%, #000 34%, transparent 72%);
+          mask-image:radial-gradient(58% 42% at 50% 26%, #000 0%, #000 34%, transparent 72%);
 }
 #ev-logo{max-height:52px;max-width:190px;margin-bottom:10px;position:relative}
 #ev-nombre{
