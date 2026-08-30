@@ -1,7 +1,9 @@
 /* ===== EL INTERRUPTOR DE LA CONFIRMACIÓN ======================================
 
    Reemplaza los dos botones "Sí, asistiré" / "No podré" por un interruptor
-   físico: aro que sobresale, pozo hundido y perilla apoyada adentro.
+   físico chiquito, con los rótulos a los costados:
+
+        NO PODRÉ   (●    )   SÍ, ASISTIRÉ
 
    Cómo se enciende:  INVEV.fx.rsvp.estilo = 'interruptor'
    Cómo se apaga:     INVEV.fx.rsvp.estilo = ''   (vuelven los dos botones)
@@ -25,13 +27,16 @@
    ⚠️ MANDA UNA SOLA VEZ.
       `rsvp()` escribe en la base al instante y NO deshabilita el botón: dos
       toques seguidos mandan dos veces. Este módulo pone el cerrojo que falta.
+      Probado: tres toques seguidos → una sola confirmación.
 
-   ⚠️ HAY MÁS DE UN BLOQUE DE CONFIRMACIÓN.  ← esto costó un bug
-      Una invitación puede traer varios (por ejemplo un evento y otro). La
-      primera versión recorría TODOS los botones de la página y se quedaba con
-      el último par: ponía el interruptor en un bloque y dejaba los demás con
-      los botones viejos. Media invitación con una cosa y media con otra.
-      Ahora se recorre bloque por bloque y cada uno recibe el suyo.
+   ⚠️ ES CHICO A LA VISTA PERO GRANDE AL TACTO.
+      La pastilla mide 30px de alto. Las dos mitades sensibles se estiran 12px
+      para arriba y para abajo, así que el dedo tiene 54px. Achicar lo que se ve
+      está bien; achicar lo que se toca es un problema de uso.
+
+   ⚠️ HAY MÁS DE UN BLOQUE DE CONFIRMACIÓN.
+      Una invitación puede traer varios. Se recorre bloque por bloque y cada uno
+      recibe el suyo, con su propio cerrojo.
 
    ⚠️ LOS BOTONES SE BUSCAN POR LO QUE HACEN, NO POR SU TEXTO.
       El texto lo traduce es-mx.js y lo puede cambiar la diseñadora; el
@@ -63,32 +68,31 @@
   }
 
   var CSS =
-    /* la caja manda el tamaño, y los rótulos toman su ancho: así "No podré"
-       queda sobre la mitad izquierda y "Sí, asistiré" sobre la derecha, que es
-       lo que le dice al invitado para dónde tocar. */
-    '.rsvp-caja{--alto:68px;--pad:8px;width:calc(var(--alto)*2.45 + 52px);' +
-      'margin:0 auto;text-align:center}' +
-    '.rsvp-rot{display:flex;justify-content:space-between;padding:0 2px;margin:0 0 6px;' +
-      'font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.62}' +
-    '.rsvp-rot span{transition:opacity .25s}' +
-    '.rsvp-caja[data-r="si"] .rsvp-rot .s{opacity:1;text-decoration:underline;text-underline-offset:4px}' +
-    '.rsvp-caja[data-r="no"] .rsvp-rot .n{opacity:1;text-decoration:underline;text-underline-offset:4px}' +
+    '.rsvp-caja{margin:14px auto 4px;text-align:center}' +
+    '.rsvp-fila{display:flex;align-items:center;justify-content:center;gap:16px}' +
+    '.rsvp-fila .et{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;' +
+      'opacity:.45;white-space:nowrap;transition:opacity .25s}' +
+    '.rsvp-caja[data-r="si"] .et.s{opacity:1}' +
+    '.rsvp-caja[data-r="no"] .et.n{opacity:1}' +
+    '.rsvp-pie{font-size:10.5px;opacity:.5;letter-spacing:.04em;margin:8px 0 0;min-height:15px}' +
 
-    '.rsvp-sw{position:relative;width:calc(var(--alto)*2.45);height:var(--alto);' +
-      'margin:0 auto 10px;border:0;padding:0;background:transparent;border-radius:999px;cursor:pointer;' +
-      'display:block;-webkit-tap-highlight-color:transparent;' +
-      'filter:drop-shadow(-4px 6px 6px rgba(0,0,0,.18)) drop-shadow(-10px 15px 20px rgba(0,0,0,.16))}' +
+    /* chico y sobrio: las sombras a la mitad de lo que pedía el tamaño grande */
+    '.rsvp-sw{--alto:30px;--pad:4px;position:relative;flex:0 0 auto;' +
+      'width:calc(var(--alto)*2.55);height:var(--alto);border-radius:999px;' +
+      'border:0;padding:0;margin:0;background:transparent;cursor:pointer;' +
+      '-webkit-tap-highlight-color:transparent;' +
+      'filter:drop-shadow(-1px 2px 2px rgba(0,0,0,.16)) drop-shadow(-3px 5px 7px rgba(0,0,0,.12))}' +
     /* el aro: sobresale. la luz le viene de arriba a la derecha */
     '.rsvp-sw .aro{position:absolute;inset:0;border-radius:999px;' +
       'background:linear-gradient(215deg, color-mix(in srgb,var(--lino2,#faf7f1) 60%,#fff),' +
       ' var(--lino2,#faf7f1) 30%, color-mix(in srgb,var(--cream,#eeeeee) 70%,var(--muted,#888888)));' +
-      'box-shadow:inset -2px 2px 0 rgba(255,255,255,.95), inset 5px -6px 13px rgba(0,0,0,.16),' +
-      ' inset 0 0 0 1px rgba(255,255,255,.5)}' +
+      'box-shadow:inset -1px 1px 0 rgba(255,255,255,.9), inset 2px -2px 5px rgba(0,0,0,.13),' +
+      ' inset 0 0 0 1px rgba(255,255,255,.45)}' +
     /* el pozo: hundido. la luz va AL REVÉS que en el aro, si no se aplana */
     '.rsvp-sw .pozo{position:absolute;inset:var(--pad);border-radius:999px;overflow:hidden;' +
       'background:linear-gradient(215deg,#cfcfcb,#b9b9b4);transition:background .3s;' +
-      'box-shadow:inset -7px 9px 15px rgba(0,0,0,.34), inset 5px -6px 12px rgba(255,255,255,.20),' +
-      ' inset 0 0 0 1px rgba(0,0,0,.18)}' +
+      'box-shadow:inset -3px 4px 6px rgba(0,0,0,.28), inset 2px -2px 5px rgba(255,255,255,.18),' +
+      ' inset 0 0 0 1px rgba(0,0,0,.14)}' +
     '.rsvp-sw[data-r="si"] .pozo{background:linear-gradient(215deg,' +
       ' color-mix(in srgb,var(--sage,#5f9e4a) 75%,#fff), var(--sage,#5f9e4a))}' +
     '.rsvp-sw[data-r="no"] .pozo{background:linear-gradient(215deg,' +
@@ -99,18 +103,19 @@
       'left:calc(50% - (var(--alto) - var(--pad)*2)/2);' +
       'background:radial-gradient(58% 52% at 68% 24%, #fff, rgba(255,255,255,0) 70%),' +
       ' linear-gradient(215deg,#ffffff,#f2f0ec 48%,#d8d5cf);' +
-      'box-shadow:inset -2px 2px 0 rgba(255,255,255,.95), inset 4px -5px 11px rgba(0,0,0,.16),' +
-      ' -4px 6px 7px rgba(0,0,0,.30), -9px 13px 16px rgba(0,0,0,.18);' +
-      'transition:left .32s cubic-bezier(.34,1.3,.5,1)}' +
+      'box-shadow:inset -1px 1px 0 rgba(255,255,255,.95), inset 2px -2px 5px rgba(0,0,0,.14),' +
+      ' -2px 3px 4px rgba(0,0,0,.26), -4px 6px 8px rgba(0,0,0,.14);' +
+      'transition:left .3s cubic-bezier(.34,1.3,.5,1)}' +
     '.rsvp-sw[data-r="si"] .per{left:calc(100% - var(--pad) - (var(--alto) - var(--pad)*2))}' +
     '.rsvp-sw[data-r="no"] .per{left:var(--pad)}' +
-    '.rsvp-sw:active .per{transform:scale(.97)}' +
-    /* las dos mitades sensibles */
-    '.rsvp-sw .mitad{position:absolute;top:0;bottom:0;width:50%;border:0;background:transparent;' +
-      'cursor:pointer;padding:0;z-index:3}' +
+    '.rsvp-sw:active .per{transform:scale(.96)}' +
+    /* chico a la vista, grande al tacto: 30px de pastilla, 54px de dedo */
+    '.rsvp-sw .mitad{position:absolute;top:-12px;bottom:-12px;width:50%;border:0;' +
+      'background:transparent;cursor:pointer;padding:0;z-index:3}' +
     '.rsvp-sw .mitad.izq{left:0} .rsvp-sw .mitad.der{right:0}' +
-    '.rsvp-pie{text-align:center;font-size:12px;opacity:.72;min-height:17px;margin:2px 0 0}' +
     '.rsvp-sw[disabled]{opacity:.6;cursor:default}' +
+    /* en pantallas angostas, que no se rompa el renglón */
+    '@media (max-width:360px){.rsvp-fila{gap:10px}.rsvp-fila .et{font-size:9.5px;letter-spacing:.1em}}' +
     '@media (prefers-reduced-motion:reduce){.rsvp-sw .per{transition:none}}';
 
   function hoja() {
@@ -128,10 +133,11 @@
     var caja = document.createElement('div');
     caja.className = 'rsvp-caja';
 
-    var rot = document.createElement('div');
-    rot.className = 'rsvp-rot';
-    rot.innerHTML = '<span class="n">No podré</span><span class="s">Sí, asistiré</span>';
-    caja.appendChild(rot);
+    var fila = document.createElement('div');
+    fila.className = 'rsvp-fila';
+
+    var etNo = document.createElement('span');
+    etNo.className = 'et n'; etNo.textContent = 'No podré';
 
     var sw = document.createElement('div');
     sw.className = 'rsvp-sw';
@@ -146,11 +152,16 @@
     der.type = 'button'; der.className = 'mitad der';
     der.setAttribute('aria-label', 'Sí, asistiré');
     sw.appendChild(izq); sw.appendChild(der);
-    caja.appendChild(sw);
+
+    var etSi = document.createElement('span');
+    etSi.className = 'et s'; etSi.textContent = 'Sí, asistiré';
+
+    fila.appendChild(etNo); fila.appendChild(sw); fila.appendChild(etSi);
+    caja.appendChild(fila);
 
     var pie = document.createElement('p');
     pie.className = 'rsvp-pie';
-    pie.textContent = 'Tocá de un lado o del otro';
+    pie.textContent = 'Tocá tu respuesta';
     caja.appendChild(pie);
 
     function elegir(cual) {
@@ -168,7 +179,7 @@
           sw.removeAttribute('disabled');
           pie.textContent = 'No se pudo enviar. Probá de nuevo.';
         }
-      }, 360);                             /* que se vea moverse antes de irse */
+      }, 340);                             /* que se vea moverse antes de irse */
     }
 
     izq.onclick = function () { elegir('no'); };
