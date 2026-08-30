@@ -19,6 +19,11 @@
    borra el calendario y lo vuelve a dibujar. Si se apaga la casilla, el sector
    desaparece. Todo sin recargar.
 
+   ⚠️ LOS TEXTOS VAN EN ESPAÑOL DE MÉXICO, no en voseo.
+   El motor se traduce en el servidor (i/textos-es-mx.php), pero lo que escribe
+   un módulo NO pasa por ahí. Por eso la bajada por defecto dice "Guarda la
+   fecha" y no "Guardá la fecha".
+
    LAS OPCIONES
      encendido / cal     1 para encender
      fuente   / calFuente  forum · marcellus · prata · montserrat
@@ -29,7 +34,7 @@
      img      / calImg     imagen de fondo (manda sobre el color)
      velo     / calVelo    0 a 100, cuánto se aclara la imagen
      tam      / calTam     ANCHO del calendario, de 220 a 390 px
-     kick     / calKick    la bajada de arriba (por defecto "Guardá la fecha")
+     kick     / calKick    la bajada de arriba (por defecto "Guarda la fecha")
      pie      / calPie     el texto de abajo
      fecha    / calFecha   AAAA-MM-DD, sólo si hiciera falta forzarla
 
@@ -45,7 +50,7 @@
    hasta 220. Todo lo demás se achica en proporción.
 
    DE DÓNDE SACA LA FECHA
-   Del sector "Guardá la fecha" que la invitación ya muestra (#sc-day y #sc-mon).
+   Del sector de la fecha que la invitación ya muestra (#sc-day y #sc-mon).
    Si no la encuentra, no dibuja nada en vez de mostrar un mes equivocado.
    ============================================================================ */
 (function () {
@@ -159,7 +164,7 @@
     if (!MARCAS[nMarca]) nMarca = 'corazon';
     var nFuente = String(opt('fuente', 'calFuente') || 'forum').toLowerCase();
     if (!FUENTES[nFuente]) nFuente = 'forum';
-    var kick = opt('kick', 'calKick'); if (kick === null) kick = 'Guardá la fecha';
+    var kick = opt('kick', 'calKick'); if (kick === null) kick = 'Guarda la fecha';
     return {
       marca:  nMarca,
       fuente: nFuente,
