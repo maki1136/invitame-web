@@ -10,8 +10,9 @@
      · Variables (secretos):
          SIGHTENGINE_USER    → api_user de Sightengine
          SIGHTENGINE_SECRET  → api_secret de Sightengine
-         SA_EMAIL            → client_email del service account de Firebase
-         SA_KEY              → private_key del service account (el PEM entero)
+         SA_JSON             → el archivo JSON del service account de
+                               Firebase, pegado ENTERO tal cual se descarga
+                               (o, si se prefiere, SA_EMAIL y SA_KEY sueltos)
          CLAVE_ALTA          → una clave inventada para poder crear eventos
 
    Endpoints:
@@ -220,13 +221,19 @@ async function moderar(env, blob) {
 let tokenCache = { t: null, vence: 0 };
 async function tokenGoogle(env) {
   if (tokenCache.t && Date.now() < tokenCache.vence - 60000) return tokenCache.t;
+  let SA_EMAIL = env.SA_EMAIL, SA_KEY = env.SA_KEY;
+  if (env.SA_JSON) {
+    try { const sj = JSON.parse(env.SA_JSON); SA_EMAIL = sj.client_email; SA_KEY = sj.private_key; }
+    catch (e) { throw new Error('SA_JSON no es un JSON válido'); }
+  }
+  if (!SA_EMAIL || !SA_KEY) throw new Error('falta el service account (SA_JSON)');
   const ahora = Math.floor(Date.now() / 1000);
   const cab = b64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const cuerpo = b64url(JSON.stringify({
-    iss: env.SA_EMAIL, scope: 'https://www.googleapis.com/auth/datastore',
+    iss: SA_EMAIL, scope: 'https://www.googleapis.com/auth/datastore',
     aud: 'https://oauth2.googleapis.com/token', iat: ahora, exp: ahora + 3600
   }));
-  const clave = await importarClave(env.SA_KEY);
+  const clave = await importarClave(SA_KEY);
   const firma = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', clave,
     new TextEncoder().encode(cab + '.' + cuerpo));
   const jwt = cab + '.' + cuerpo + '.' + b64url(firma);
