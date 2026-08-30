@@ -2,8 +2,8 @@
 
    Suma un bloque «✨ Galería de fotos de los invitados» al final de la pestaña
    ✨ Efectos: prender/apagar, el código del evento, y —cuando el código es
-   válido— el link para los invitados, el QR imprimible, la pantalla del salón
-   y el acceso al panel para aprobar fotos.
+   válido— el link para los invitados, el cartel para imprimir, la pantalla del
+   salón y el acceso al panel para aprobar fotos.
 
    POR QUÉ ESTÁ ACÁ Y NO DENTRO DE admin.html
    admin.html pesa 160 KB y sólo se puede subir a mano. Todo lo que se pueda
@@ -87,7 +87,7 @@
     return i;
   }
 
-  /* ---- el link, el QR, la pantalla y el panel de moderar ----------------
+  /* ---- el cartel, el link, la pantalla y el panel de moderar ------------
 
      Sólo aparecen cuando el código tiene forma válida. Así nadie manda un
      link roto por WhatsApp sin enterarse. */
@@ -110,6 +110,7 @@
     var mod = BASE + '/galeria/moderar.html?g=' + encodeURIComponent(g);
     var qr  = WORKER + '/qr?g=' + encodeURIComponent(g);
     var pan = BASE + '/galeria/pantalla.html?g=' + encodeURIComponent(g);
+    var car = BASE + '/galeria/cartel.html?g=' + encodeURIComponent(g);
 
     var tarjeta = document.createElement('div');
     tarjeta.style.cssText = 'background:#fff;border:1px solid #eadcd5;border-radius:12px;' +
@@ -127,13 +128,14 @@
     var ay = document.createElement('div');
     ay.className = 'hint';
     ay.style.margin = '0 0 3px';
-    ay.textContent = 'Este QR se imprime y va en las mesas del salón.';
+    ay.textContent = 'El cartel ya viene armado y listo para imprimir.';
     col.appendChild(ay);
 
     col.appendChild(botonCopiar('Copiar el link para los invitados', inv));
     col.appendChild(enlace('Abrir el panel para aprobar fotos', mod));
     col.appendChild(enlace('Abrir la pantalla del salón', pan));
-    col.appendChild(enlace('Descargar el QR', qr));
+    col.appendChild(enlace('Imprimir el cartel de las mesas', car));
+    col.appendChild(enlace('Descargar el QR suelto', qr));
 
     tarjeta.appendChild(col);
     caja.appendChild(tarjeta);
