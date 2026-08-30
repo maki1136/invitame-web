@@ -33,6 +33,14 @@
       Afuera se usa SIEMPRE la foto fija (nunca un segundo video): la parte
       desenfocada no gana nada con moverse y sí cuesta batería.
 
+   ⚠️ UN VIDEO QUE NO ARRANCA NO AVISA.               ← esto costó otra vuelta
+      Se probó con un archivo sano y con un mp4 público conocido: cuando el
+      navegador no puede decodificar H.264, NO tira error ni rechaza play().
+      Se queda en readyState 0 para siempre, y la invitación queda en blanco
+      sin que nadie se entere. Por eso, además del error y del play() fallido,
+      hay un PLAZO: si en 3,5 s no llegó ni la medida del video, se cambia por
+      la foto fija. Es la única de las tres señales que funciona en ese caso.
+
    ⚠️ LAS SECCIONES CLARAS SE ABREN, LAS DE COLOR NO.
       El crudo es lo que hay que reemplazar. Las secciones de color son las que
       le dan el ritmo a la invitación — si se abren todas, se pierde el pulso y
@@ -53,6 +61,7 @@
 
   var ID    = 'inv-fondo';        /* la capa de adentro, nítida */
   var IDF   = 'inv-fondo-fuera';  /* la de afuera, desenfocada */
+  var PLAZO = 3500;               /* lo que se le da al video antes de rendirse */
 
   function conf() {
     var f = {};
@@ -142,20 +151,24 @@
     caja.appendChild(velo);
   }
 
+  function foto(caja, src) {
+    var im = document.createElement('img');
+    im.src = src; im.alt = '';
+    caja.insertBefore(im, caja.firstChild);
+  }
+
   function poner(f) {
     hoja();
     sacar();
 
     var a = (typeof f.velo === 'number') ? f.velo : 0.3;
+    var fija = f.poster || f.url;
 
     /* ---- la de AFUERA, sólo si se pidió que ocupe toda la pantalla ---- */
     if (f.donde === 'pantalla') {
       var fu = document.createElement('div');
       fu.id = IDF;
-      var imf = document.createElement('img');
-      imf.src = f.poster || f.url;   /* siempre fija: desenfocada, moverse no aporta */
-      imf.alt = '';
-      fu.appendChild(imf);
+      foto(fu, fija);                /* siempre fija: desenfocada, moverse no aporta */
       /* un poco más velada que la de adentro: lo de afuera acompaña, no compite */
       velar(fu, Math.min(1, a + 0.12));
       document.body.insertBefore(fu, document.body.firstChild);
@@ -176,19 +189,27 @@
       v.playsInline = true;
       v.preload = 'auto';
       caja.appendChild(v);
-      var p = v.play();
-      if (p && p.catch) p.catch(function () {
-        if (!f.poster) return;
+
+      /* se rinde una sola vez, venga por donde venga la mala noticia */
+      var rendido = false;
+      function rendirse() {
+        if (rendido) return;
+        rendido = true;
+        if (!v.parentNode) return;
+        v.removeAttribute('src'); v.load();   /* que suelte la descarga */
         v.remove();
-        var im = document.createElement('img');
-        im.src = f.poster; im.alt = '';
-        caja.insertBefore(im, caja.firstChild);
-      });
+        foto(caja, fija);
+      }
+      function anduvo() { rendido = true; }   /* ya arrancó: cancela el plazo */
+
+      v.addEventListener('loadeddata', anduvo, { once: true });
+      v.addEventListener('error', rendirse, { once: true });
+      setTimeout(function () { if (!v.videoWidth) rendirse(); }, PLAZO);
+
+      var p = v.play();
+      if (p && p.catch) p.catch(rendirse);
     } else {
-      var im2 = document.createElement('img');
-      im2.src = f.poster || f.url;
-      im2.alt = '';
-      caja.appendChild(im2);
+      foto(caja, fija);
     }
 
     velar(caja, a);
