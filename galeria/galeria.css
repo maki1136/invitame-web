@@ -113,7 +113,8 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spac
 .cabecera{
   position:relative;text-align:center;
   padding:38px 10px 26px;margin:0 -16px 4px;
-  overflow:hidden;
+  /* sin overflow:hidden: el recorte cuadrado le sacaba lo orgánico
+     a la mancha de fondo y dejaba un borde recto a la vista */
 }
 /* Capa orgánica de fondo: la forma de hoja de la referencia,
    dibujada con degradados, sin ninguna imagen que descargar. */
@@ -125,6 +126,9 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spac
     radial-gradient(70% 50% at 50% 96%, rgba(109,18,51,.06), transparent 70%);
   border-radius:0 0 60% 60%;
   pointer-events:none;
+  /* se desvanece sola hacia abajo, para que no pise las fichas */
+  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 42%, transparent 62%);
+          mask-image:linear-gradient(to bottom, #000 0%, #000 42%, transparent 62%);
 }
 #ev-logo{max-height:52px;max-width:190px;margin-bottom:10px;position:relative}
 #ev-nombre{
