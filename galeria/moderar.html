@@ -33,7 +33,7 @@ header{
   padding:14px 16px 0;
   box-shadow:0 6px 20px -12px rgba(58,16,32,.7);
 }
-.hd-fila{display:flex;align-items:center;gap:12px;padding-bottom:12px}
+.hd-fila{display:flex;align-items:center;gap:12px;padding-bottom:12px;flex-wrap:wrap}
 .hd-tit{flex:1;min-width:0}
 .hd-tit .ojal{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;opacity:.65;font-weight:700}
 .hd-tit h1{
@@ -41,8 +41,8 @@ header{
   font-size:1.32rem;margin:1px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .hd-uso{font-size:.7rem;opacity:.62;text-align:right;line-height:1.35;font-variant-numeric:tabular-nums}
-/* Se abre en la compu conectada al proyector. Va en la cabecera porque
-   el que modera es el mismo que prende la pantalla del salón. */
+/* Se abren en la compu del que está manejando la fiesta. Van en la cabecera
+   porque el que modera es el mismo que prende la pantalla e imprime el cartel. */
 .hd-pantalla{
   display:flex;align-items:center;gap:8px;flex:none;text-decoration:none;color:#fff;
   background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.20);
@@ -147,6 +147,7 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
   <g id="i-check"><path d="M5 12.5l4.5 4.5L19 7"/></g>
   <g id="i-x"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></g>
   <g id="i-reloj"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g>
+  <g id="i-cartel"><rect x="4.5" y="3" width="15" height="18" rx="2"/><path d="M8.5 8h7"/><path d="M8.5 12h7"/><path d="M8.5 16h4"/></g>
   <g id="i-pantalla"><rect x="2.6" y="4" width="18.8" height="12.6" rx="2"/><path d="M8.5 20.3h7"/><path d="M12 16.6v3.7"/></g>
   <g id="i-ojo"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g>
 </defs></svg>
@@ -158,6 +159,10 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
       <h1 id="ev-nombre">Galería</h1>
     </div>
     <div class="hd-uso" id="hd-uso"></div>
+    <a id="btn-cartel" class="hd-pantalla" target="_blank" rel="noopener" hidden>
+      <svg class="ico" viewBox="0 0 24 24"><use href="#i-cartel"/></svg>
+      <span>Cartel<br>para imprimir</span>
+    </a>
     <a id="btn-pantalla" class="hd-pantalla" target="_blank" rel="noopener" hidden>
       <svg class="ico" viewBox="0 0 24 24"><use href="#i-pantalla"/></svg>
       <span>Pantalla<br>del salón</span>
@@ -241,6 +246,9 @@ async function arrancar() {
   const bp = $('btn-pantalla');
   bp.href = 'pantalla.html?g=' + encodeURIComponent(GID);
   bp.hidden = false;
+  const bc = $('btn-cartel');
+  bc.href = 'cartel.html?g=' + encodeURIComponent(GID);
+  bc.hidden = false;
 
   try {
     const s = await getDoc(doc(db, 'gal_eventos', GID));
