@@ -5,7 +5,7 @@
    de confirmación, texto de Instagram, lacre, carta del sobre). Por eso no
    había dos invitaciones que se vieran parejas.
 
-   Este módulo agrega UNA elección que pinta las diez variables del motor de
+   Este módulo agrega UNA elección que pinta las doce variables del motor de
    una sola vez.
 
    Cómo se enciende:  INVEV.fx.paleta.id = 'terracota-arena'
@@ -98,11 +98,25 @@
   /* el panel arma las tarjetas leyendo de acá */
   window.INVPALETAS = PALETAS;
 
-  /* qué variable del motor recibe cada color de la paleta */
+  /* Qué variables del motor recibe cada color de la paleta.
+
+     ⚠️ --sec-col y --sec-col-v NO son un lujo: son las que de verdad pintan el
+     fondo de las secciones. La regla del motor es
+         .sec.verde { background: var(--sec-col-v, var(--verde)) }
+     así que --sec-col-v le gana a --verde. Sin estas dos, la paleta se aplicaba
+     a medias: los nombres y el pase tomaban el color nuevo y las secciones
+     ("Dónde", "Para tu comodidad") se quedaban con el color viejo. */
   var MAPA = {
-    verde:'--verde', verde2:'--verde2', sage:'--sage', sageCl:'--sage-cl',
-    oro:'--oro', lino:'--lino', lino2:'--lino2', cream:'--cream',
-    muted:'--muted', seal:'--seal-c'
+    verde : ['--verde', '--sec-col-v'],
+    verde2: ['--verde2'],
+    sage  : ['--sage'],
+    sageCl: ['--sage-cl'],
+    oro   : ['--oro'],
+    lino  : ['--lino'],
+    lino2 : ['--lino2'],
+    cream : ['--cream', '--sec-col'],
+    muted : ['--muted'],
+    seal  : ['--seal-c']
   };
 
   function buscar(id) {
@@ -140,8 +154,13 @@
     for (var k in MAPA) {
       if (!Object.prototype.hasOwnProperty.call(MAPA, k)) continue;
       if (!pal[k]) continue;
-      raiz.style.setProperty(MAPA[k], pal[k], 'important');
-      puestas.push(MAPA[k]);
+      /* 'important' porque el motor escribe --verde y --seal-c en línea después
+         de que carga esto: sin important, la paleta se perdía al segundo. */
+      var vs = MAPA[k];
+      for (var j = 0; j < vs.length; j++) {
+        raiz.style.setProperty(vs[j], pal[k], 'important');
+        puestas.push(vs[j]);
+      }
     }
     raiz.setAttribute('data-paleta', pal.id);
   }
@@ -162,8 +181,11 @@
     for (var k in MAPA) {
       if (!Object.prototype.hasOwnProperty.call(MAPA, k)) continue;
       if (!pal[k]) continue;
-      var hay = raiz.style.getPropertyValue(MAPA[k]).trim().toLowerCase();
-      if (hay !== String(pal[k]).toLowerCase()) return false;
+      var vs = MAPA[k];
+      for (var j = 0; j < vs.length; j++) {
+        var hay = raiz.style.getPropertyValue(vs[j]).trim().toLowerCase();
+        if (hay !== String(pal[k]).toLowerCase()) return false;
+      }
     }
     return true;
   }
