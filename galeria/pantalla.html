@@ -220,6 +220,10 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
    3) Firebase se carga con import() adentro de un try. Si ese día no
       se puede bajar la librería, la pantalla sigue funcionando con
       las fotos cacheadas en vez de quedar en blanco.
+
+   4) NADA que tenga que verse depende de requestAnimationFrame.
+      En una pestaña que no está adelante, Chrome NO lo ejecuta.
+      (Pasó en vivo: dos fotos cargadas, ninguna visible.)
    ============================================================ */
 
 const WORKER = 'https://galeria.littlemomentsok.workers.dev';
@@ -335,7 +339,13 @@ function preparar() {
     $('escena').appendChild(capa);
 
     try { await img.decode(); } catch (e) {}
-    requestAnimationFrame(() => capa.classList.add('vista'));
+    /* OJO: acá había un requestAnimationFrame. En una pestaña que no está
+       adelante el navegador NO lo ejecuta, así que la capa se quedaba en
+       opacity:0 y la pantalla se veía negra para siempre. Forzar el cálculo
+       de estilo con offsetWidth hace lo mismo (arranca la transición desde
+       el estado inicial) y no depende de que la pestaña esté visible. */
+    void capa.offsetWidth;
+    capa.classList.add('vista');
 
     const anterior = capaActual;
     capaActual = capa;
@@ -349,7 +359,8 @@ function preparar() {
       chico.textContent = 'Foto de';
       n.appendChild(chico);
       n.appendChild(document.createTextNode(f.nombre));
-      requestAnimationFrame(() => n.classList.add('vista'));
+      void n.offsetWidth;
+      n.classList.add('vista');
     } else {
       n.textContent = '';
     }
