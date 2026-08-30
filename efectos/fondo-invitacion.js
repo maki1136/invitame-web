@@ -11,7 +11,7 @@
        velo:   0.30,              // cuánto se apaga el fondo (0 a 1)
        paso:   0.85,              // cuánto lo dejan pasar las secciones CLARAS
        oscuras:0,                 // y cuánto las de color (0 = quedan opacas)
-       donde:  'marco'            // 'marco' (la columna) | 'pantalla' (detrás de todo)
+       donde:  'marco'            // 'marco' (sólo la columna) | 'pantalla' (todo)
      }
    Cómo se apaga: INVEV.fx.fondo = {} — vuelve todo como está hoy.
 
@@ -20,6 +20,18 @@
       los costados del marco; en el CELULAR no se veía nada, porque ahí la
       columna ocupa toda la pantalla y costados no hay.
       Ahora la capa se alinea con la columna: es el papel de la invitación.
+
+   ⚠️ EN 'pantalla' SON DOS CAPAS, NO UNA ESTIRADA.   ← esto costó otra vuelta
+      El archivo es vertical (9:16, hecho para el teléfono). Estirarlo a la
+      pantalla de una Mac (16:9) lo recorta al centro y lo agranda: queda
+      lavado y pixelado, y peor todavía, ADENTRO de la columna se ve el mismo
+      recorte feo. Por eso:
+        · AFUERA  → la misma foto, desenfocada y agrandada. Lee como
+                    profundidad, no como un archivo de baja calidad, y llena
+                    el 16:9 sin dejar franjas.
+        · ADENTRO → la foto nítida, alineada a la columna, como en 'marco'.
+      Afuera se usa SIEMPRE la foto fija (nunca un segundo video): la parte
+      desenfocada no gana nada con moverse y sí cuesta batería.
 
    ⚠️ LAS SECCIONES CLARAS SE ABREN, LAS DE COLOR NO.
       El crudo es lo que hay que reemplazar. Las secciones de color son las que
@@ -39,7 +51,8 @@
 (function () {
   'use strict';
 
-  var ID = 'inv-fondo';
+  var ID    = 'inv-fondo';        /* la capa de adentro, nítida */
+  var IDF   = 'inv-fondo-fuera';  /* la de afuera, desenfocada */
 
   function conf() {
     var f = {};
@@ -73,9 +86,15 @@
   }
 
   var CSS =
-    '#' + ID + '{position:fixed;top:0;bottom:0;z-index:0;overflow:hidden;pointer-events:none}' +
-    '#' + ID + ' > video, #' + ID + ' > img{width:100%;height:100%;object-fit:cover;display:block}' +
-    '#' + ID + ' > .velo{position:absolute;inset:0}' +
+    '#' + ID + ',#' + IDF + '{position:fixed;top:0;bottom:0;z-index:0;overflow:hidden;pointer-events:none}' +
+    '#' + IDF + '{left:0;right:0;z-index:0}' +
+    '#' + ID + '{z-index:0}' +
+    '#' + ID + ' > video, #' + ID + ' > img,' +
+    '#' + IDF + ' > video, #' + IDF + ' > img{width:100%;height:100%;object-fit:cover;display:block}' +
+    /* afuera: desenfocado y un poco agrandado, para que el desenfoque no deje
+       borde transparente contra los cantos de la pantalla */
+    '#' + IDF + ' > img{filter:blur(22px) saturate(.88);transform:scale(1.12)}' +
+    '#' + ID + ' > .velo, #' + IDF + ' > .velo{position:absolute;inset:0}' +
     'html[data-fondo] .frame{position:relative;z-index:1;background:transparent !important}' +
     /* las claras se abren para que se vea el fondo */
     'html[data-fondo] .sec{background-color:color-mix(in srgb, var(--sec-col,transparent)' +
@@ -96,28 +115,53 @@
   var firma = null;
 
   function sacar() {
-    var v = document.getElementById(ID);
-    if (v) v.remove();
+    [ID, IDF].forEach(function (i) {
+      var v = document.getElementById(i);
+      if (v) v.remove();
+    });
     raiz.removeAttribute('data-fondo');
     raiz.style.removeProperty('--inv-paso');
     raiz.style.removeProperty('--inv-oscuras');
   }
 
   /* la capa se alinea con la columna: ése es el papel de la invitación */
-  function alinear(caja, donde) {
-    if (donde === 'pantalla') { caja.style.left = '0'; caja.style.right = '0'; return; }
+  function alinear(caja) {
     var marco = document.querySelector('.frame');
-    if (!marco) { caja.style.left = '0'; caja.style.right = '0'; return; }
+    if (!marco) { caja.style.left = '0'; caja.style.right = '0'; caja.style.width = 'auto'; return; }
     var r = marco.getBoundingClientRect();
     caja.style.left  = Math.round(r.left) + 'px';
     caja.style.width = Math.round(r.width) + 'px';
     caja.style.right = 'auto';
   }
 
+  function velar(caja, a) {
+    var velo = document.createElement('div');
+    velo.className = 'velo';
+    velo.style.background = 'color-mix(in srgb, var(--lino,#f4efe6) ' +
+      Math.round(Math.max(0, Math.min(1, a)) * 100) + '%, transparent)';
+    caja.appendChild(velo);
+  }
+
   function poner(f) {
     hoja();
     sacar();
 
+    var a = (typeof f.velo === 'number') ? f.velo : 0.3;
+
+    /* ---- la de AFUERA, sólo si se pidió que ocupe toda la pantalla ---- */
+    if (f.donde === 'pantalla') {
+      var fu = document.createElement('div');
+      fu.id = IDF;
+      var imf = document.createElement('img');
+      imf.src = f.poster || f.url;   /* siempre fija: desenfocada, moverse no aporta */
+      imf.alt = '';
+      fu.appendChild(imf);
+      /* un poco más velada que la de adentro: lo de afuera acompaña, no compite */
+      velar(fu, Math.min(1, a + 0.12));
+      document.body.insertBefore(fu, document.body.firstChild);
+    }
+
+    /* ---- la de ADENTRO, siempre: es el papel de la invitación ---- */
     var caja = document.createElement('div');
     caja.id = ID;
 
@@ -147,12 +191,7 @@
       caja.appendChild(im2);
     }
 
-    var velo = document.createElement('div');
-    velo.className = 'velo';
-    var a = (typeof f.velo === 'number') ? f.velo : 0.3;
-    velo.style.background = 'color-mix(in srgb, var(--lino,#f4efe6) ' +
-      Math.round(Math.max(0, Math.min(1, a)) * 100) + '%, transparent)';
-    caja.appendChild(velo);
+    velar(caja, a);
 
     document.body.insertBefore(caja, document.body.firstChild);
     raiz.setAttribute('data-fondo', f.tipo === 'video' ? 'video' : 'imagen');
@@ -161,14 +200,7 @@
     raiz.style.setProperty('--inv-oscuras', String(
       Math.max(0, Math.min(0.6, (typeof f.oscuras === 'number') ? f.oscuras : 0))));
 
-    alinear(caja, f.donde || 'marco');
-    if (!window.__invFondoResize) {
-      window.__invFondoResize = true;
-      addEventListener('resize', function () {
-        var c = document.getElementById(ID);
-        if (c) alinear(c, (conf().donde) || 'marco');
-      }, { passive: true });
-    }
+    alinear(caja);
   }
 
   function sincronizar() {
@@ -191,10 +223,12 @@
   window.addEventListener('message', function () { setTimeout(sincronizar, 0); }, false);
 
   /* el marco puede cambiar de ancho cuando se abre el sobre o gira el teléfono */
-  setInterval(function () {
+  function reAlinear() {
     var c = document.getElementById(ID);
-    if (c) alinear(c, (conf().donde) || 'marco');
-  }, 1200);
+    if (c) alinear(c);
+  }
+  addEventListener('resize', reAlinear, { passive: true });
+  setInterval(reAlinear, 1200);
 
   var esPrevia = /[?&]preview=1/.test(location.search);
   setInterval(sincronizar, esPrevia ? 500 : 1600);
