@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Galería del evento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/galeria/galeria.css">
+</head>
+<body>
+
+<!-- Portada neutra: se ve solo si falta el gid o el evento no existe -->
+<div id="gal-neutra" hidden>
+  <div class="neutra-caja">
+    <h1>Galería de fotos</h1>
+    <p>Para entrar a la galería de un evento necesitás el link o el código QR de la fiesta.</p>
+  </div>
+</div>
+
+<!-- Pedir el nombre (solo puerta QR, una vez) -->
+<div id="gal-nombre" hidden>
+  <div class="nombre-caja">
+    <h2 id="nom-titulo">¡Bienvenido!</h2>
+    <p>Decinos tu nombre para que tus fotos lleven tu firma.</p>
+    <input id="nom-input" type="text" maxlength="40" placeholder="Tu nombre" autocomplete="name">
+    <button id="nom-ok" class="btn-grande">Entrar a la galería</button>
+  </div>
+</div>
+
+<!-- Aviso navegador de Instagram / Facebook -->
+<div id="gal-inapp" class="banner-inapp" hidden>
+  <p><strong>Para subir fotos, abrí esta página en tu navegador.</strong><br>
+  Tocá los tres puntitos <span aria-hidden="true">⋯</span> de arriba y elegí
+  <em>«Abrir en el navegador»</em>.</p>
+</div>
+
+<!-- La galería -->
+<main id="gal-main" hidden>
+  <header class="gal-cabecera">
+    <img id="ev-logo" alt="" hidden>
+    <h1 id="ev-nombre">&nbsp;</h1>
+    <p id="ev-saludo" class="saludo"></p>
+  </header>
+
+  <div class="botonera" id="botonera">
+    <label class="btn-grande btn-camara" id="btn-camara">
+      📷 Sacar una foto
+      <input id="in-camara" type="file" accept="image/*" capture="environment" hidden>
+    </label>
+    <label class="btn-grande btn-elegir" id="btn-elegir">
+      🖼 Elegir del celular
+      <input id="in-elegir" type="file" accept="image/*" multiple hidden>
+    </label>
+  </div>
+  <p id="gal-cerrada" class="cerrada" hidden></p>
+
+  <!-- Estado de la cola de subida -->
+  <div id="cola-estado" class="cola-estado" hidden>
+    <span class="cola-rueda" aria-hidden="true"></span>
+    <span id="cola-texto">Subiendo…</span>
+  </div>
+  <div id="cola-aviso" class="cola-aviso" hidden></div>
+
+  <section class="grilla" id="grilla" aria-label="Fotos del evento"></section>
+  <p id="gal-vacia" class="vacia" hidden>Todavía no hay fotos. ¡Subí la primera!</p>
+</main>
+
+<!-- Visor -->
+<div id="visor" class="visor" hidden>
+  <button id="visor-cerrar" class="visor-x" aria-label="Cerrar">✕</button>
+  <img id="visor-img" alt="Foto del evento">
+  <div class="visor-pie">
+    <span id="visor-autor"></span>
+    <a id="visor-descargar" class="visor-dl" download>Descargar</a>
+  </div>
+</div>
+
+<div id="gal-toast" class="toast" hidden></div>
+
+<script src="/galeria/galeria.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Moderar galería</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<style>
+:root{--acento:#b06a7e;--ok:#2f8f5b;--no:#8a8178;--rojo:#b03030;--fondo:#f4efe6;--tinta:#3a3026}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font-family:"Nunito",system-ui,sans-serif}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #e5dccd;
+  padding:12px 16px;display:flex;align-items:center;gap:10px}
+header h1{font-size:1.05rem;margin:0;flex:1}
+.tabs{display:flex;gap:6px}
+.tabs button{border:1.5px solid var(--acento);background:#fff;color:var(--acento);
+  border-radius:99px;padding:7px 14px;font-weight:800;font-size:.9rem;cursor:pointer}
+.tabs button.activa{background:var(--acento);color:#fff}
+#login,#estado{max-width:420px;margin:40px auto;padding:0 18px;text-align:center}
+#login input{width:100%;padding:12px;margin-bottom:10px;border:1.5px solid #e5dccd;border-radius:10px;font-size:1rem}
+#login button,.btn{width:100%;padding:14px;border:none;border-radius:10px;background:var(--acento);
+  color:#fff;font-weight:800;font-size:1.05rem;cursor:pointer;font-family:inherit}
+main{max-width:520px;margin:0 auto;padding:14px}
+.tarjeta{background:#fff;border:1px solid #e5dccd;border-radius:14px;overflow:hidden;margin-bottom:16px}
+.tarjeta img{width:100%;max-height:56vh;object-fit:contain;background:#111;display:block}
+.tarjeta .quien{padding:10px 14px;font-size:.95rem;color:#6e6155}
+.acciones{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e5dccd}
+.acciones button{border:none;padding:18px;font-size:1.15rem;font-weight:800;cursor:pointer;font-family:inherit}
+.b-ok{background:var(--ok);color:#fff}
+.b-no{background:#efe9df;color:var(--no)}
+.b-panico{width:100%;border:none;background:var(--rojo);color:#fff;padding:12px;
+  font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit}
+.vacio{text-align:center;color:#8a7d6e;padding:50px 20px}
+.grilla-vivo{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.grilla-vivo .celda{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;background:#e5dccd}
+.grilla-vivo img{width:100%;height:100%;object-fit:cover;display:block}
+.grilla-vivo .b-panico{position:absolute;left:0;right:0;bottom:0;padding:7px;font-size:.72rem;opacity:.94}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="titulo">Moderación</h1>
+  <div class="tabs" id="tabs" hidden>
+    <button id="tab-pend" class="activa">Pendientes <span id="n-pend">0</span></button>
+    <button id="tab-vivo">En vivo</button>
+  </div>
+</header>
+
+<div id="login" hidden>
+  <h2>Entrar</h2>
+  <p>La misma cuenta del panel de Invítame.</p>
+  <input id="lg-mail" type="email" placeholder="Email" autocomplete="username">
+  <input id="lg-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
+  <button id="lg-ok">Entrar</button>
+  <p id="lg-error" style="color:#b03030" hidden></p>
+</div>
+
+<div id="estado"><p>Cargando…</p></div>
+
+<main id="panel" hidden>
+  <section id="vista-pend"></section>
+  <section id="vista-vivo" class="grilla-vivo" hidden></section>
+  <p id="sin-nada" class="vacio" hidden></p>
+</main>
+
+<script type="module">
+/* El Worker que sirve las imágenes — la misma constante que en galeria.js. */
+const WORKER = 'https://galeria.CAMBIAR-CUANDO-EXISTA.workers.dev';
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const app = initializeApp({
+  apiKey: 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc',
+  authDomain: 'invitame-9b51f.firebaseapp.com',
+  projectId: 'invitame-9b51f'
+}, 'gal-mod');
+const db = getFirestore(app), auth = getAuth(app);
+
+const $ = (id) => document.getElementById(id);
+const GID = new URLSearchParams(location.search).get('g') || '';
+
+if (!GID) {
+  $('estado').innerHTML = '<p>Falta el evento. Abrí este panel desde el link con <code>?g=</code>.</p>';
+} else {
+  setPersistence(auth, browserLocalPersistence).catch(() => {});
+  onAuthStateChanged(auth, (u) => {
+    if (u) { $('login').hidden = true; $('estado').hidden = true; arrancar(); }
+    else { $('estado').hidden = true; $('login').hidden = false; }
+  });
+  $('lg-ok').onclick = async () => {
+    $('lg-error').hidden = true;
+    try {
+      await signInWithEmailAndPassword(auth, $('lg-mail').value.trim(), $('lg-pass').value);
+    } catch (e) {
+      $('lg-error').textContent = 'No se pudo entrar. Revisá el mail y la contraseña.';
+      $('lg-error').hidden = false;
+    }
+  };
+}
+
+let pendientes = [], aprobadas = [], vista = 'pend';
+function arrancar() {
+  $('tabs').hidden = false; $('panel').hidden = false;
+
+  const col = collection(db, 'gal_fotos', GID, 'items');
+  onSnapshot(query(col, where('estado', '==', 'pendiente')), (s) => {
+    pendientes = docsDe(s); pintar();
+  }, avisarError);
+  onSnapshot(query(col, where('estado', '==', 'aprobada')), (s) => {
+    aprobadas = docsDe(s); pintar();
+  }, avisarError);
+
+  $('tab-pend').onclick = () => { vista = 'pend'; pintar(); };
+  $('tab-vivo').onclick = () => { vista = 'vivo'; pintar(); };
+}
+function avisarError(e) {
+  $('estado').hidden = false;
+  $('estado').innerHTML = '<p>No se pudo leer la galería (' + (e && e.code || 'error') + ').</p>';
+}
+function docsDe(s) {
+  const a = [];
+  s.forEach((d) => a.push(Object.assign({ id: d.id }, d.data())));
+  a.sort((x, y) => (x.tsms || 0) - (y.tsms || 0));   // pendientes: primero la más vieja
+  return a;
+}
+
+async function cambiar(fid, estado) {
+  try { await updateDoc(doc(db, 'gal_fotos', GID, 'items', fid), { estado }); }
+  catch (e) { alert('No se pudo. Probá de nuevo.'); }
+}
+
+function pintar() {
+  $('n-pend').textContent = pendientes.length;
+  document.title = (pendientes.length ? '(' + pendientes.length + ') ' : '') + 'Moderar galería';
+  $('tab-pend').classList.toggle('activa', vista === 'pend');
+  $('tab-vivo').classList.toggle('activa', vista === 'vivo');
+  $('vista-pend').hidden = vista !== 'pend';
+  $('vista-vivo').hidden = vista !== 'vivo';
+
+  if (vista === 'pend') {
+    const f = pendientes[0];
+    if (!f) { $('vista-pend').innerHTML = ''; sinNada('No hay fotos esperando. 🎉'); return; }
+    sinNada(null);
+    $('vista-pend').innerHTML =
+      '<div class="tarjeta">' +
+        '<img src="' + WORKER + '/f/' + f.r2.key + '" alt="Foto pendiente">' +
+        '<p class="quien">' + esc(f.autor && f.autor.nombre || 'Invitado') +
+          (pendientes.length > 1 ? ' · quedan ' + pendientes.length : '') + '</p>' +
+        '<div class="acciones">' +
+          '<button class="b-no" id="b-no">Rechazar</button>' +
+          '<button class="b-ok" id="b-ok">APROBAR ✓</button>' +
+        '</div>' +
+      '</div>';
+    $('b-ok').onclick = () => cambiar(f.id, 'aprobada');
+    $('b-no').onclick = () => cambiar(f.id, 'rechazada');
+  } else {
+    const vivas = [...aprobadas].sort((x, y) => (y.tsms || 0) - (x.tsms || 0));
+    if (!vivas.length) { $('vista-vivo').innerHTML = ''; sinNada('Todavía no hay fotos aprobadas.'); return; }
+    sinNada(null);
+    $('vista-vivo').innerHTML = vivas.map((f) =>
+      '<div class="celda">' +
+        '<img loading="lazy" src="' + WORKER + '/f/' + f.r2.thumb + '" alt="">' +
+        '<button class="b-panico" data-fid="' + f.id + '">BAJAR</button>' +
+      '</div>').join('');
+    $('vista-vivo').querySelectorAll('.b-panico').forEach((b) => {
+      b.onclick = () => cambiar(b.dataset.fid, 'borrada');   // sin confirm: los diálogos nativos cuelgan
+    });
+  }
+}
+function sinNada(txt) {
+  $('sin-nada').hidden = !txt;
+  if (txt) $('sin-nada').textContent = txt;
+}
+function esc(s) {
+  return String(s || '').replace(/[<>&"]/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+}
+</script>
+</body>
+</html>

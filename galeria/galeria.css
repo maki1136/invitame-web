@@ -1,0 +1,141 @@
+/* ============================================================
+   GALERÍA DE INVITADOS · estilos
+   La marca del evento entra por variables: gal_eventos.marca
+   pinta --gal-acento y --gal-fondo desde galeria.js.
+   ============================================================ */
+:root{
+  --gal-acento:#b06a7e;          /* rosa uva de la casa; lo pisa la marca del evento */
+  --gal-fondo:#f4efe6;           /* lino */
+  --gal-tinta:#3a3026;
+  --gal-suave:#8a7d6e;
+  --gal-blanco:#fffdf9;
+  --gal-linea:#e5dccd;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--gal-fondo);
+  color:var(--gal-tinta);
+  font-family:"Nunito",system-ui,sans-serif;
+  font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100dvh;
+}
+h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.01em}
+
+/* --- portada neutra y pedido de nombre --- */
+#gal-neutra,#gal-nombre{
+  min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.neutra-caja,.nombre-caja{
+  background:var(--gal-blanco);border:1px solid var(--gal-linea);border-radius:16px;
+  padding:34px 26px;max-width:400px;text-align:center;
+  box-shadow:0 10px 30px -18px rgba(58,48,38,.35);
+}
+.neutra-caja h1,.nombre-caja h2{margin:0 0 10px;font-size:1.8rem}
+.nombre-caja p{color:var(--gal-suave);margin:0 0 18px}
+#nom-input{
+  width:100%;padding:13px 14px;font-size:1.05rem;border:1.5px solid var(--gal-linea);
+  border-radius:10px;background:#fff;color:var(--gal-tinta);text-align:center;
+  font-family:inherit;margin-bottom:14px;
+}
+#nom-input:focus{outline:2px solid var(--gal-acento);border-color:var(--gal-acento)}
+
+/* --- botones grandes --- */
+.btn-grande{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:16px 18px;border:none;border-radius:12px;
+  background:var(--gal-acento);color:#fff;font-family:"Nunito",sans-serif;
+  font-size:1.08rem;font-weight:700;cursor:pointer;text-align:center;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.btn-grande:active{transform:scale(.985)}
+.btn-elegir{background:var(--gal-blanco);color:var(--gal-acento);border:1.5px solid var(--gal-acento)}
+
+/* --- banner in-app --- */
+.banner-inapp{
+  position:sticky;top:0;z-index:50;background:#3a3026;color:#fff;
+  padding:14px 18px;font-size:.95rem;text-align:center;
+}
+.banner-inapp em{font-style:normal;text-decoration:underline}
+
+/* --- cabecera --- */
+#gal-main{max-width:560px;margin:0 auto;padding:22px 14px 90px}
+.gal-cabecera{text-align:center;margin-bottom:18px}
+#ev-logo{max-height:54px;max-width:200px;margin-bottom:8px}
+#ev-nombre{margin:0;font-size:2rem;line-height:1.12}
+.saludo{color:var(--gal-suave);margin:6px 0 0;font-size:.98rem}
+
+.botonera{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+@media (max-width:380px){.botonera{grid-template-columns:1fr}}
+.cerrada{
+  text-align:center;background:var(--gal-blanco);border:1px dashed var(--gal-linea);
+  border-radius:12px;padding:14px;color:var(--gal-suave);margin:0 0 14px;
+}
+
+/* --- estado de la cola --- */
+.cola-estado{
+  display:flex;align-items:center;gap:10px;justify-content:center;
+  background:var(--gal-blanco);border:1px solid var(--gal-linea);border-radius:10px;
+  padding:10px 14px;margin-bottom:12px;font-weight:600;font-size:.95rem;
+}
+.cola-rueda{
+  width:16px;height:16px;border-radius:50%;flex:none;
+  border:2.5px solid var(--gal-linea);border-top-color:var(--gal-acento);
+  animation:girar 0.9s linear infinite;
+}
+@keyframes girar{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.cola-rueda{animation:none}}
+.cola-aviso{
+  background:#fff4e8;border:1px solid #eccfa8;color:#7a5220;border-radius:10px;
+  padding:10px 14px;margin-bottom:12px;font-size:.92rem;text-align:center;
+}
+
+/* --- grilla --- */
+.grilla{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+@media (min-width:480px){.grilla{grid-template-columns:repeat(4,1fr)}}
+.grilla .celda{
+  position:relative;aspect-ratio:1;overflow:hidden;border-radius:6px;
+  background:var(--gal-linea);cursor:pointer;border:none;padding:0;
+}
+.grilla .celda img{width:100%;height:100%;object-fit:cover;display:block}
+.grilla .celda.mia::after{
+  content:"tuya";position:absolute;left:4px;bottom:4px;
+  background:rgba(58,48,38,.75);color:#fff;font-size:.62rem;font-weight:700;
+  padding:2px 6px;border-radius:99px;letter-spacing:.04em;
+}
+.grilla .celda.subiendo{opacity:.45}
+.grilla .celda.subiendo::before{
+  content:"";position:absolute;inset:0;margin:auto;width:22px;height:22px;
+  border-radius:50%;border:3px solid rgba(255,255,255,.5);border-top-color:#fff;
+  animation:girar .9s linear infinite;z-index:2;
+}
+.vacia{text-align:center;color:var(--gal-suave);padding:40px 10px}
+
+/* --- visor --- */
+.visor{
+  position:fixed;inset:0;z-index:100;background:rgba(20,15,10,.94);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.visor img{max-width:100vw;max-height:82dvh;object-fit:contain}
+.visor-x{
+  position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;
+  border:none;background:rgba(255,255,255,.15);color:#fff;font-size:1.15rem;cursor:pointer;
+}
+.visor-pie{
+  display:flex;align-items:center;gap:16px;color:#fff;margin-top:14px;
+  font-size:.95rem;padding:0 20px;text-align:center;
+}
+.visor-dl{
+  color:#fff;background:var(--gal-acento);text-decoration:none;font-weight:700;
+  padding:9px 18px;border-radius:99px;
+}
+
+/* --- toast --- */
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:200;
+  background:#3a3026;color:#fff;padding:11px 20px;border-radius:99px;
+  font-size:.95rem;font-weight:600;max-width:88vw;text-align:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+}
+[hidden]{display:none!important}
