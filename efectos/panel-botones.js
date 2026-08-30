@@ -13,8 +13,7 @@
       lacre y esmalte salían con la letra clara sobre fondo claro: ilegibles.
       Ahora la tarjeta las lleva puestas, tomadas de la paleta que esté elegida
       en el selector de arriba. Además de arreglar la legibilidad, hace que la
-      muestra sea de verdad lo que vas a ver — el mismo material se ve distinto
-      según la paleta.
+      muestra sea de verdad lo que vas a ver.
 
    ⚠️ LA LISTA NO SE ESCRIBE ACÁ. Se lee de window.INVBOTONES.
 
@@ -157,14 +156,9 @@
     var pie = caja.querySelector('[data-pie]');
     if (pie) {
       var e = buscar(sel);
-      if (!e) {
-        pie.textContent = 'Sin estilo: los botones quedan como están hoy.';
-      } else if (e.necesitaArchivo) {
-        pie.textContent = 'Elegido: ' + e.nombre + ' · ⚠ necesita el archivo ' +
-                          e.necesitaArchivo + ' subido al repo, si no se ve sin la tela.';
-      } else {
-        pie.textContent = 'Elegido: ' + e.nombre + ' · ' + (e.pie || '');
-      }
+      pie.textContent = e
+        ? 'Elegido: ' + e.nombre + ' · ' + (e.pie || '')
+        : 'Sin estilo: los botones quedan como están hoy.';
     }
   }
 
@@ -209,6 +203,10 @@
     var m = document.querySelector('.mejoras');
     if (!m) return;
     asegurarBase();
+    /* la tela del terciopelo, para que esa muestra se vea con el pelo y no
+       sólo con el degradado. En el panel se pide siempre; en la invitación,
+       sólo si el estilo está elegido. */
+    if (window.INVBOTONES_TELA) window.INVBOTONES_TELA();
 
     /* justo debajo del selector de paletas, que es la decisión anterior */
     var pal = document.getElementById('paleta-selector');
