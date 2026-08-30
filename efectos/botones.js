@@ -26,8 +26,7 @@
 
    ⚠️ LA HOJA SE PONE SIEMPRE, HAYA ESTILO ELEGIDO O NO.  ← esto costó otro bug
       Antes se creaba sólo al elegir uno. En el panel, donde todavía no elegiste
-      nada, no existía: las once muestras salían grises e iguales. Un selector
-      donde todas las opciones se ven iguales no sirve para nada.
+      nada, no existía: las once muestras salían grises e iguales.
       Ponerla siempre no cambia nada en la invitación: todas las reglas están
       dentro de [data-boton="..."], y sin ese atributo no aplica ninguna.
 
@@ -46,6 +45,22 @@
   /* Dónde se aplica. `.inv-prev-btn` es la muestra del panel: está acá para que
      la tarjeta se pinte con el mismo CSS que el botón de verdad. */
   var DONDE = '.btn, #btn-ingresar, .wsp, .tv-btn, .inv-prev-btn';
+
+  /* ---- la tela del terciopelo, a pedido -----------------------------------
+
+     Vive en /efectos/terciopelo.css (una foto en base64 adentro de un CSS, ver
+     ahí por qué). Son 10 KB y se bajan SÓLO si el estilo está elegido: el resto
+     de los materiales no cargan nada. El panel también la pide, para que la
+     muestra se vea con la tela. */
+  function cargarTela() {
+    if (document.getElementById('inv-tela-terciopelo')) return;
+    var l = document.createElement('link');
+    l.id = 'inv-tela-terciopelo';
+    l.rel = 'stylesheet';
+    l.href = '/efectos/terciopelo.css';
+    (document.head || document.documentElement).appendChild(l);
+  }
+  window.INVBOTONES_TELA = cargarTela;
 
   var ESTILOS = [
 
@@ -89,9 +104,9 @@
         'background:linear-gradient(178deg,#ffffff,#eef1f7 62%,#f7f9fc) !important;' +
         'border:0 !important;' +
         'box-shadow: inset 0 0 0 1px rgba(255,255,255,.95),' +
-          ' inset 0 0 0 5px rgba(190,198,218,.50),' +          /* el canto biselado */
-          ' inset 0 9px 7px -7px rgba(255,255,255,1),' +       /* la cara, iluminada arriba */
-          ' inset 0 -9px 9px -7px rgba(112,120,155,.40),' +    /* y apagada abajo */
+          ' inset 0 0 0 5px rgba(190,198,218,.50),' +
+          ' inset 0 9px 7px -7px rgba(255,255,255,1),' +
+          ' inset 0 -9px 9px -7px rgba(112,120,155,.40),' +
           ' 0 16px 26px rgba(78,86,124,.26), 0 2px 2px rgba(78,86,124,.30) !important;' +
         'text-shadow:0 1px 0 rgba(255,255,255,.95), 0 2.5px 1px rgba(120,128,162,.20) !important;'
     },
@@ -168,13 +183,12 @@
     },
 
     /* La tela va en background-image con background-blend-mode: se queda en el
-       fondo y no toca el texto. */
-    { id:'terciopelo', nombre:'Terciopelo', pie:'Con textura de tela. Necesita el archivo en /efectos/',
-      necesitaArchivo:'/efectos/terciopelo-fibra.jpg',
+       fondo y no toca el texto. La imagen la trae /efectos/terciopelo.css. */
+    { id:'terciopelo', nombre:'Terciopelo', pie:'Con textura de tela de verdad', tela:true,
       css:
         'color:color-mix(in srgb,var(--verde) 86%,#000) !important;' +
         'background-color:var(--sage-cl) !important;' +
-        'background-image:url("/efectos/terciopelo-fibra.jpg"),' +
+        'background-image:var(--inv-terciopelo, none),' +
           ' radial-gradient(118% 150% at 32% 16%, rgba(255,255,255,.85), rgba(255,255,255,0) 62%),' +
           ' linear-gradient(166deg, color-mix(in srgb,var(--sage-cl) 58%,#fff), var(--sage-cl) 56%,' +
           ' color-mix(in srgb,var(--sage-cl) 62%,var(--sage))) !important;' +
@@ -206,9 +220,6 @@
     if (HOJA && HOJA.isConnected) return HOJA;
     HOJA = document.createElement('style');
     HOJA.id = 'inv-botones';
-    /* Una sola hoja con TODOS los estilos: el atributo decide cuál manda. Así
-       cambiar de estilo no vuelve a escribir CSS ni parpadea, y el panel puede
-       mostrar los once a la vez. */
     var css = '';
     for (var i = 0; i < ESTILOS.length; i++) css += reglas(ESTILOS[i]);
     css += ':is(' + DONDE + '){transition:background .25s, box-shadow .25s, color .25s}';
@@ -217,9 +228,9 @@
     return HOJA;
   }
 
-  function existe(id) {
-    for (var i = 0; i < ESTILOS.length; i++) if (ESTILOS[i].id === id) return true;
-    return false;
+  function buscar(id) {
+    for (var i = 0; i < ESTILOS.length; i++) if (ESTILOS[i].id === id) return ESTILOS[i];
+    return null;
   }
 
   function leerId() {
@@ -242,7 +253,9 @@
     var id = leerId();
     if (id === anterior) return;
     anterior = id;
-    if (!id || !existe(id)) { raiz.removeAttribute('data-boton'); return; }
+    var e = buscar(id);
+    if (!e) { raiz.removeAttribute('data-boton'); return; }
+    if (e.tela) cargarTela();
     raiz.setAttribute('data-boton', id);
   }
 
