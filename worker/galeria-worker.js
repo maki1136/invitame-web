@@ -18,12 +18,17 @@
          SA_JSON             → el archivo JSON del service account de
                                Firebase, pegado ENTERO tal cual se descarga
                                (o, si se prefiere, SA_EMAIL y SA_KEY sueltos)
-         CLAVE_ALTA          → una clave inventada para poder crear eventos
+         CLAVE_ALTA          → una clave inventada para que Maki pueda crear
+                               eventos a mano. NO se le da a nadie: los
+                               clientes crean con su cuenta (ver abajo).
 
    Endpoints:
      POST /subir   → recibe foto+thumb, frena abuso, guarda en R2,
                      modera con Sightengine y escribe el doc en Firestore
-     POST /crear   → alta de un evento (header X-Clave: CLAVE_ALTA)
+     POST /crear   → alta de un evento. Dos maneras de pedirla:
+                       · Maki:     header  X-Clave: CLAVE_ALTA   (no gasta crédito)
+                       · Cliente:  header  Authorization: Bearer <ID token de Firebase>
+                                   (gasta 1 crédito, descontado ACÁ ADENTRO)
      GET  /f/<key> → sirve un archivo del bucket (con caché)
      GET  /qr?g=   → el QR del evento (redirección a un generador)
      GET  /uso     → cuánto se lleva usado este mes contra el tope
@@ -58,7 +63,7 @@ function respuesta(cuerpo, status, extra) {
   const h = Object.assign({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type,X-Clave'
+    'Access-Control-Allow-Headers': 'Content-Type,X-Clave,Authorization'
   }, extra || {});
   if (cuerpo !== null && !(cuerpo instanceof Response)) {
     h['Content-Type'] = 'application/json;charset=utf-8';
@@ -154,10 +159,35 @@ async function subir(req, env, ctx) {
 }
 
 /* ---------------- /crear ---------------- */
+/* ⚠️ LA REGLA QUE NO SE NEGOCIA
+   El crédito se descuenta ACÁ, en el servidor. Nunca en el navegador.
+   El saldo vive en gal_cuentas/{uid}, que el cliente puede LEER pero no
+   ESCRIBIR (ver las reglas de Firestore). Si el saldo se pudiera tocar
+   desde el navegador, cualquiera con la consola abierta se regala 500
+   eventos: este repo es público y las reglas se leen desde el sitio. */
 async function crear(req, env) {
-  if (req.headers.get('X-Clave') !== env.CLAVE_ALTA) return respuesta({ error: 'no' }, 403);
+  /* Dos maneras de pedir un alta, y ninguna manda el saldo:
+     · Maki, con la clave del Worker. No gasta crédito.
+     · Un cliente, con su sesión de Firebase. Ése sí gasta uno. */
+  const conClave = !!env.CLAVE_ALTA && req.headers.get('X-Clave') === env.CLAVE_ALTA;
+  let quien = null;
+  if (!conClave) {
+    quien = await verificarToken(req).catch(() => null);
+    if (!quien) return respuesta({ error: 'Entrá con tu cuenta para crear una fiesta.' }, 401);
+  }
+
   const b = await req.json().catch(() => ({}));
   const gid = cid() + cid().slice(0, 8);           // 24+ chars, no adivinable
+
+  /* El crédito PRIMERO. Si no hay saldo no se crea nada. Al revés (crear
+     y después cobrar) el que se quedó sin saldo igual se lleva la fiesta.
+     Si el alta falla después de cobrar, se devuelve. */
+  let cobro = null;
+  if (quien) {
+    cobro = await cobrarCredito(env, quien.uid);
+    if (!cobro.ok) return respuesta({ error: cobro.error, saldo: cobro.saldo || 0 }, cobro.status);
+  }
+
   const ev = {
     nombre: String(b.nombre || 'Nuestra fiesta').slice(0, 80),
     fecha: String(b.fecha || '').slice(0, 10),
@@ -174,11 +204,180 @@ async function crear(req, env) {
     limites: { porInvitado: 30, rafaga: 10 },
     invitacion: b.invitacion ? String(b.invitacion).slice(0, 60) : null,
     estado: 'activa',
-    creado: new Date().toISOString()
+    creado: new Date().toISOString(),
+    duenio: quien ? quien.uid : null
   };
-  await escribirEvento(env, gid, ev);
-  return respuesta({ ok: true, gid, url: 'https://invitame.littlemomentsok.com/galeria/?g=' + gid }, 200);
+
+  try {
+    await escribirEvento(env, gid, ev);
+  } catch (e) {
+    /* Se cobró y no se pudo crear: se devuelve el crédito. */
+    if (quien) await devolverCredito(env, quien.uid).catch(() => {});
+    throw e;
+  }
+
+  /* La lista de fiestas del cliente cuelga de su cuenta. Es a propósito:
+     así el panel la lee con una consulta simple y una regla simple, sin
+     tener que dejar consultar gal_eventos entero. Si esto falla, la
+     fiesta igual existe: se anota aparte y no se le cobra dos veces. */
+  if (quien) await anotarEnLaCuenta(env, quien.uid, gid, ev).catch(() => {});
+
+  return respuesta({
+    ok: true, gid,
+    url: 'https://invitame.littlemomentsok.com/galeria/?g=' + gid,
+    saldo: cobro ? cobro.saldo : null
+  }, 200);
 }
+
+/* ---------------- créditos ---------------- */
+/* Descuenta 1 crédito con bloqueo optimista: leo el saldo y su updateTime,
+   y descuento SÓLO si nadie tocó la cuenta en el medio. Si alguien la tocó,
+   vuelvo a leer y lo intento otra vez.
+
+   Por qué no alcanza con "increment -1" solo: increment nunca pierde una
+   escritura, pero tampoco mira el saldo. Sin la precondición, dos altas al
+   mismo tiempo con 1 crédito dejan la cuenta en -1 y crean dos fiestas.
+   Por qué no alcanza con la precondición sola: no suma. Van las dos. */
+async function cobrarCredito(env, uid) {
+  const t = await tokenGoogle(env);
+  for (let intento = 0; intento < 4; intento++) {
+    const r = await fetch(FS + '/gal_cuentas/' + uid, { headers: { Authorization: 'Bearer ' + t } });
+    if (r.status === 404) {
+      return { ok: false, status: 403, error: 'Tu cuenta todavía no está habilitada. Escribinos.' };
+    }
+    if (!r.ok) return { ok: false, status: 502, error: 'No se pudo leer tu cuenta. Probá de nuevo.' };
+    const j = await r.json();
+    const d = desdeFirestore(j.fields || {});
+    if (d.estado === 'baja') return { ok: false, status: 403, error: 'Tu cuenta está dada de baja.' };
+    const saldo = parseInt(d.creditos, 10) || 0;
+    if (saldo < 1) return { ok: false, status: 402, error: 'Te quedaste sin créditos.', saldo: 0 };
+
+    const c = await fetch(FS + ':commit', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        writes: [{
+          transform: {
+            document: DOCS + '/gal_cuentas/' + uid,
+            fieldTransforms: [
+              { fieldPath: 'creditos', increment: { integerValue: '-1' } },
+              { fieldPath: 'creados', increment: { integerValue: '1' } }
+            ]
+          },
+          currentDocument: { updateTime: j.updateTime }
+        }]
+      })
+    });
+    if (c.ok) return { ok: true, saldo: saldo - 1 };
+    /* 400/409 = alguien tocó la cuenta entre el leer y el descontar. */
+    if (c.status !== 400 && c.status !== 409) {
+      return { ok: false, status: 502, error: 'No se pudo descontar el crédito. Probá de nuevo.' };
+    }
+  }
+  return { ok: false, status: 503, error: 'Está muy ocupado. Probá de nuevo en un momento.' };
+}
+
+/* Devolver no lleva precondición: sumar siempre es seguro, y esto corre
+   cuando algo ya salió mal. Que no falle otra vez por una carrera. */
+async function devolverCredito(env, uid) {
+  const t = await tokenGoogle(env);
+  await fetch(FS + ':commit', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      writes: [{
+        transform: {
+          document: DOCS + '/gal_cuentas/' + uid,
+          fieldTransforms: [
+            { fieldPath: 'creditos', increment: { integerValue: '1' } },
+            { fieldPath: 'creados', increment: { integerValue: '-1' } }
+          ]
+        }
+      }]
+    })
+  });
+}
+
+async function anotarEnLaCuenta(env, uid, gid, ev) {
+  const t = await tokenGoogle(env);
+  await fetch(FS + '/gal_cuentas/' + uid + '/eventos/' + gid, {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fields: aFirestore({ gid, nombre: ev.nombre, fecha: ev.fecha, creado: ev.creado })
+    })
+  });
+}
+
+/* ---------------- quién está pidiendo ---------------- */
+/* Verifica un ID token de Firebase. Es lo que reemplaza a la clave
+   compartida: una clave que hay que meter en el navegador del cliente
+   deja de ser una clave. Acá el navegador manda el token de SU sesión,
+   que sólo sirve para él y se vence solo cada hora.
+
+   Se usan las claves públicas en formato JWK, no los certificados X.509:
+   crypto.subtle las importa tal cual y nos ahorramos parsear un
+   certificado a mano, que es justo donde se cometen los errores. */
+let clavesCache = { k: null, vence: 0 };
+const JWKS = 'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com';
+
+async function clavesGoogle() {
+  if (clavesCache.k && Date.now() < clavesCache.vence) return clavesCache.k;
+  const r = await fetch(JWKS);
+  if (!r.ok) throw new Error('no bajaron las claves de Google');
+  const j = await r.json();
+  const m = {};
+  for (const k of (j.keys || [])) if (k.kid) m[k.kid] = k;
+  if (!Object.keys(m).length) throw new Error('claves de Google vacías');
+  /* Google dice cuánto duran; le hacemos caso en vez de inventar un número. */
+  const cc = r.headers.get('cache-control') || '';
+  const mm = /max-age=(\d+)/.exec(cc);
+  clavesCache = { k: m, vence: Date.now() + (mm ? parseInt(mm[1], 10) : 3600) * 1000 };
+  return m;
+}
+
+async function verificarToken(req) {
+  const h = req.headers.get('Authorization') || '';
+  const tok = h.startsWith('Bearer ') ? h.slice(7).trim() : '';
+  if (!tok) return null;
+  const p = tok.split('.');
+  if (p.length !== 3) return null;
+
+  let cab, cuerpo;
+  try { cab = JSON.parse(textoB64url(p[0])); cuerpo = JSON.parse(textoB64url(p[1])); }
+  catch (e) { return null; }
+  if (cab.alg !== 'RS256' || !cab.kid) return null;
+
+  const jwk = (await clavesGoogle())[cab.kid];
+  if (!jwk) return null;
+
+  const clave = await crypto.subtle.importKey('jwk',
+    { kty: jwk.kty, n: jwk.n, e: jwk.e, alg: 'RS256', ext: true },
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+
+  const ok = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', clave,
+    bytesB64url(p[2]), new TextEncoder().encode(p[0] + '.' + p[1]));
+  if (!ok) return null;
+
+  /* La firma sola no alcanza: un token de OTRO proyecto de Firebase también
+     está bien firmado por Google. Hay que mirar para quién es. */
+  const ahora = Math.floor(Date.now() / 1000);
+  if (!(cuerpo.exp > ahora)) return null;
+  if (!(cuerpo.iat <= ahora + 300)) return null;
+  if (cuerpo.aud !== PROYECTO) return null;
+  if (cuerpo.iss !== 'https://securetoken.google.com/' + PROYECTO) return null;
+  if (typeof cuerpo.sub !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(cuerpo.sub)) return null;
+  return { uid: cuerpo.sub, email: String(cuerpo.email || '').slice(0, 120) };
+}
+
+function bytesB64url(s) {
+  const t = s.replace(/-/g, '+').replace(/_/g, '/');
+  const bin = atob(t + '='.repeat((4 - t.length % 4) % 4));
+  const a = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
+  return a;
+}
+function textoB64url(s) { return new TextDecoder().decode(bytesB64url(s)); }
 
 /* ---------------- /f/<key> ---------------- */
 async function servir(req, env, ctx, key, url) {
@@ -313,7 +512,10 @@ function b64url(x) {
   return s.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-const FS = 'https://firestore.googleapis.com/v1/projects/' + PROYECTO + '/databases/(default)/documents';
+/* Dos formas del mismo lugar: la API de transformaciones pide el nombre
+   del documento SIN el https adelante, y las otras llamadas piden la URL. */
+const DOCS = 'projects/' + PROYECTO + '/databases/(default)/documents';
+const FS = 'https://firestore.googleapis.com/v1/' + DOCS;
 
 async function leerEvento(env, gid) {
   const t = await tokenGoogle(env);
