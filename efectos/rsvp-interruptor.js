@@ -24,8 +24,14 @@
 
    ⚠️ MANDA UNA SOLA VEZ.
       `rsvp()` escribe en la base al instante y NO deshabilita el botón: dos
-      toques seguidos mandan dos veces. Este módulo pone el cerrojo que falta —
-      una vez enviado no vuelve a disparar, y mientras tanto muestra "enviando".
+      toques seguidos mandan dos veces. Este módulo pone el cerrojo que falta.
+
+   ⚠️ HAY MÁS DE UN BLOQUE DE CONFIRMACIÓN.  ← esto costó un bug
+      Una invitación puede traer varios (por ejemplo un evento y otro). La
+      primera versión recorría TODOS los botones de la página y se quedaba con
+      el último par: ponía el interruptor en un bloque y dejaba los demás con
+      los botones viejos. Media invitación con una cosa y media con otra.
+      Ahora se recorre bloque por bloque y cada uno recibe el suyo.
 
    ⚠️ LOS BOTONES SE BUSCAN POR LO QUE HACEN, NO POR SU TEXTO.
       El texto lo traduce es-mx.js y lo puede cambiar la diseñadora; el
@@ -34,7 +40,7 @@
 (function () {
   'use strict';
 
-  var ID = 'rsvp-interruptor';
+  var MARCA = 'data-rsvp-sw';   /* para no volver a vestir un bloque ya vestido */
 
   function activo() {
     try {
@@ -45,10 +51,10 @@
     catch (e) { return false; }
   }
 
-  function botones() {
-    var todos = [].slice.call(document.querySelectorAll('.rsvpform button'));
+  /* los dos botones DE ESTE bloque */
+  function parDe(form) {
     var si = null, no = null;
-    todos.forEach(function (b) {
+    [].slice.call(form.querySelectorAll('button')).forEach(function (b) {
       var o = (b.getAttribute('onclick') || '') + '';
       if (/rsvp\(\s*['"]si['"]/.test(o)) si = b;
       if (/rsvp\(\s*['"]no['"]/.test(o)) no = b;
@@ -76,7 +82,7 @@
       ' color-mix(in srgb,var(--sage,#5f9e4a) 75%,#fff), var(--sage,#5f9e4a))}' +
     '.rsvp-sw[data-r="no"] .pozo{background:linear-gradient(215deg,' +
       ' color-mix(in srgb,var(--muted,#8a7f78) 60%,#fff), var(--muted,#8a7f78))}' +
-    /* la perilla: apoyada ADENTRO del pozo, así que su sombra cae sobre el fondo */
+    /* la perilla: apoyada ADENTRO del pozo, su sombra cae sobre el fondo */
     '.rsvp-sw .per{position:absolute;top:var(--pad);bottom:var(--pad);' +
       'width:calc(var(--alto) - var(--pad)*2);border-radius:50%;' +
       'left:calc(50% - (var(--alto) - var(--pad)*2)/2);' +
@@ -88,11 +94,9 @@
     '.rsvp-sw[data-r="si"] .per{left:calc(100% - var(--pad) - (var(--alto) - var(--pad)*2))}' +
     '.rsvp-sw[data-r="no"] .per{left:var(--pad)}' +
     '.rsvp-sw:active .per{transform:scale(.97)}' +
-    /* las dos mitades sensibles */
     '.rsvp-sw .mitad{position:absolute;top:0;bottom:0;width:50%;border:0;background:transparent;' +
       'cursor:pointer;padding:0;z-index:3}' +
     '.rsvp-sw .mitad.izq{left:0} .rsvp-sw .mitad.der{right:0}' +
-    /* los rótulos, afuera */
     '.rsvp-rot{display:flex;justify-content:center;gap:26px;font-size:11.5px;font-weight:700;' +
       'letter-spacing:.1em;text-transform:uppercase;opacity:.62;margin:0 0 4px}' +
     '.rsvp-rot span{transition:opacity .25s}' +
@@ -110,11 +114,11 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
-  var enviado = false;
-
+  /* un interruptor por bloque, cada uno con SU cerrojo */
   function construir(bs) {
+    var enviado = false;
+
     var caja = document.createElement('div');
-    caja.id = ID;
     caja.className = 'rsvp-caja';
 
     var rot = document.createElement('div');
@@ -153,7 +157,6 @@
       setTimeout(function () {
         try { (cual === 'si' ? bs.si : bs.no).click(); }
         catch (e) {
-          /* si algo falla, devolver el control en vez de dejarlo trabado */
           enviado = false;
           sw.removeAttribute('disabled');
           pie.textContent = 'No se pudo enviar. Probá de nuevo.';
@@ -166,31 +169,38 @@
     return caja;
   }
 
-  function mostrarBotones(ver) {
-    var bs = botones();
+  function vestir(form) {
+    var bs = parDe(form);
     if (!bs) return;
-    /* se esconden, NO se borran: si este módulo se saca, vuelven */
-    bs.si.style.display = ver ? '' : 'none';
-    bs.no.style.display = ver ? '' : 'none';
-  }
-
-  function poner() {
-    if (!activo()) {
-      var v = document.getElementById(ID);
-      if (v) { v.remove(); mostrarBotones(true); }
-      return;
-    }
-    if (document.getElementById(ID)) return;
-    var bs = botones();
-    if (!bs) return;                        /* la confirmación todavía no está */
     hoja();
     bs.si.parentNode.insertBefore(construir(bs), bs.si);
-    mostrarBotones(false);
+    /* se esconden, NO se borran: si este módulo se saca, vuelven */
+    bs.si.style.display = 'none';
+    bs.no.style.display = 'none';
+    form.setAttribute(MARCA, '1');
+  }
+
+  function desvestir(form) {
+    var c = form.querySelector('.rsvp-caja');
+    if (c) c.remove();
+    var bs = parDe(form);
+    if (bs) { bs.si.style.display = ''; bs.no.style.display = ''; }
+    form.removeAttribute(MARCA);
+  }
+
+  function repasar() {
+    var formularios = [].slice.call(document.querySelectorAll('.rsvpform'));
+    var on = activo();
+    formularios.forEach(function (f) {
+      var vestido = f.hasAttribute(MARCA);
+      if (on && !vestido) vestir(f);
+      else if (!on && vestido) desvestir(f);
+    });
   }
 
   var n = 0;
   var t = setInterval(function () {
-    poner();
+    repasar();
     if (++n > 240) clearInterval(t);       /* dos minutos y listo */
   }, 500);
 })();
