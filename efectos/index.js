@@ -9,13 +9,33 @@
    Los archivos se cargan con `defer`, así que no frenan la carga de la
    invitación, y cada uno se ocupa de no hacer nada si no le toca.
 
-   Este archivo lo carga /sobres/catalogo.js, que es lo único que la invitación
-   tiene enganchado. Por eso sumar cosas nuevas nunca obliga a tocar los HTML
-   grandes (index.html y admin.html, de 200 KB, que sólo se pueden subir a mano).
+   Quién carga este archivo:
+     · la invitación (/i/) y /prueba/admin.html, vía `sobres/catalogo.js`;
+     · el admin de PRODUCCIÓN (/admin.html), vía `firebase-inv.js`.
+   Por eso sumar cosas nuevas nunca obliga a tocar los HTML grandes
+   (index.html y admin.html, de 144-200 KB, que sólo se suben a mano).
 
    ⚠️ Este archivo lo tocan varias manos. Antes de sobrescribirlo, LEERLO:
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
+
+   ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
+      Regla de Maki, dicha más de una vez y con razón:
+      «la zona de prueba es al pedo porque después pasa esto siempre; probá
+       directo en el original».
+
+      El caso que lo demostró (30/8/2026): los bloques del panel —paletas,
+      botones, el fondo— estaban hechos, probados y "andando"… en
+      /prueba/admin.html. En el admin de VERDAD no aparecían, y nadie se dio
+      cuenta durante semanas: /prueba/admin.html carga `sobres/catalogo.js` y
+      /admin.html no lo cargaba. Trabajo hecho dos veces por probar en el lugar
+      equivocado.
+
+      Entonces:
+      · el admin es  https://invitame.littlemomentsok.com/admin.html
+      · la muestra es `camila-y-tomas`
+      · /prueba/ NO se usa para dar nada por verificado. Si algo anda ahí y no
+        se probó en producción, NO está listo.
 
    ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` ★★
       https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
@@ -56,7 +76,7 @@
     '/efectos/botones.js',             /* el material de los botones: lacre, cristal, nácar… */
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
-    '/efectos/fondo-invitacion.js',    /* imagen o video detrás de TODA la invitación */
+    '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
