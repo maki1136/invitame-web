@@ -158,6 +158,18 @@ h1{
 #aviso{max-width:210mm;margin:0 auto;padding:14px 18px;color:#7A2A34;
   background:#FDEFF0;border:1px solid #F0CBCE;border-radius:12px;font-size:.95rem}
 
+/* ---------- en pantalla chica, la hoja se achica para verla entera ----------
+   Solo en pantalla: al imprimir sale siempre en A4 real. */
+@media screen and (max-width:900px){
+  .hoja,.tarjetas{ zoom:.62 }
+}
+@media screen and (max-width:620px){
+  .hoja,.tarjetas{ zoom:.44 }
+}
+@media screen and (max-width:430px){
+  .hoja,.tarjetas{ zoom:.34 }
+}
+
 /* ---------- imprimir ---------- */
 @page{ size:A4; margin:0 }
 @media print{
@@ -165,7 +177,7 @@ h1{
   .barra,#aviso{display:none!important}
   .hoja,.tarjetas{
     margin:0;box-shadow:none;width:210mm;height:297mm;min-height:0;
-    page-break-after:avoid;
+    page-break-after:avoid;zoom:1;
   }
   /* que el navegador imprima los fondos de color */
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
