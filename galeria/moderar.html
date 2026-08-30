@@ -2,60 +2,174 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#6D1233">
 <title>Moderar galería</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap">
 <style>
-:root{--acento:#b06a7e;--ok:#2f8f5b;--no:#8a8178;--rojo:#b03030;--fondo:#f4efe6;--tinta:#3a3026}
+:root{
+  --uva:#6D1233;--rosa:#F56770;--caracol:#F9F3EF;
+  --tinta:#3A2029;--suave:#8C7078;--papel:#FFFBF8;--linea:#EADCD5;
+  --ok:#2F7A56;--no:#9A8A8E;--rojo:#A3242F;
+  --sombra:0 1px 2px rgba(109,18,51,.05), 0 14px 34px -20px rgba(109,18,51,.42);
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--fondo);color:var(--tinta);font-family:"Nunito",system-ui,sans-serif}
-header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #e5dccd;
-  padding:12px 16px;display:flex;align-items:center;gap:10px}
-header h1{font-size:1.05rem;margin:0;flex:1}
-.tabs{display:flex;gap:6px}
-.tabs button{border:1.5px solid var(--acento);background:#fff;color:var(--acento);
-  border-radius:99px;padding:7px 14px;font-weight:800;font-size:.9rem;cursor:pointer}
-.tabs button.activa{background:var(--acento);color:#fff}
-#login,#estado{max-width:420px;margin:40px auto;padding:0 18px;text-align:center}
-#login input{width:100%;padding:12px;margin-bottom:10px;border:1.5px solid #e5dccd;border-radius:10px;font-size:1rem}
-#login button,.btn{width:100%;padding:14px;border:none;border-radius:10px;background:var(--acento);
-  color:#fff;font-weight:800;font-size:1.05rem;cursor:pointer;font-family:inherit}
-main{max-width:520px;margin:0 auto;padding:14px}
-.tarjeta{background:#fff;border:1px solid #e5dccd;border-radius:14px;overflow:hidden;margin-bottom:16px}
-.tarjeta img{width:100%;max-height:56vh;object-fit:contain;background:#111;display:block}
-.tarjeta .quien{padding:10px 14px;font-size:.95rem;color:#6e6155}
-.acciones{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e5dccd}
-.acciones button{border:none;padding:18px;font-size:1.15rem;font-weight:800;cursor:pointer;font-family:inherit}
+html,body{margin:0}
+body{
+  background:var(--caracol);color:var(--tinta);
+  font-family:"Nunito",system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;min-height:100dvh;
+}
+.ico{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;display:block}
+
+/* ---------- cabecera ---------- */
+header{
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(160deg,#7E1A3D,#5A0E29);color:#fff;
+  padding:14px 16px 0;
+  box-shadow:0 6px 20px -12px rgba(58,16,32,.7);
+}
+.hd-fila{display:flex;align-items:center;gap:12px;padding-bottom:12px}
+.hd-tit{flex:1;min-width:0}
+.hd-tit .ojal{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;opacity:.65;font-weight:700}
+.hd-tit h1{
+  font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;
+  font-size:1.32rem;margin:1px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.hd-uso{font-size:.7rem;opacity:.62;text-align:right;line-height:1.35;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:0;margin:0 -16px;padding:0 16px;border-top:1px solid rgba(255,255,255,.12)}
+.tabs button{
+  flex:1;border:none;background:none;color:rgba(255,255,255,.6);
+  padding:13px 6px;font-family:inherit;font-weight:700;font-size:.9rem;cursor:pointer;
+  border-bottom:2.5px solid transparent;display:flex;align-items:center;
+  justify-content:center;gap:7px;
+}
+.tabs button.activa{color:#fff;border-bottom-color:var(--rosa)}
+.pastilla{
+  background:var(--rosa);color:#fff;border-radius:99px;
+  padding:1px 8px;font-size:.72rem;font-variant-numeric:tabular-nums;min-width:22px;
+}
+.tabs button:not(.activa) .pastilla{background:rgba(255,255,255,.22)}
+
+/* ---------- login ---------- */
+#login,#estado{max-width:400px;margin:60px auto;padding:0 20px;text-align:center}
+#login .caja{
+  background:var(--papel);border:1px solid var(--linea);border-radius:20px;
+  padding:34px 26px;box-shadow:var(--sombra);
+}
+#login h2{font-family:"Cormorant Garamond",serif;font-size:1.8rem;margin:0 0 4px;color:var(--uva)}
+#login p{color:var(--suave);font-size:.94rem;margin:0 0 20px}
+#login input{
+  width:100%;padding:14px;margin-bottom:10px;border:1.5px solid var(--linea);
+  border-radius:12px;font-size:1rem;font-family:inherit;background:var(--caracol);color:var(--tinta);
+}
+#login input:focus{outline:none;border-color:var(--rosa);box-shadow:0 0 0 3px rgba(245,103,112,.16)}
+#login button{
+  width:100%;padding:15px;border:none;border-radius:12px;background:var(--uva);
+  color:#fff;font-weight:800;font-size:1.03rem;cursor:pointer;font-family:inherit;
+}
+
+main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+
+/* ---------- la tarjeta de la foto pendiente ---------- */
+.tarjeta{
+  background:var(--papel);border:1px solid var(--linea);border-radius:20px;
+  overflow:hidden;box-shadow:var(--sombra);
+}
+.marco{position:relative;background:#241016}
+.marco img{width:100%;max-height:58dvh;object-fit:contain;display:block}
+.sello{
+  position:absolute;top:12px;left:12px;display:flex;align-items:center;gap:7px;
+  background:rgba(36,16,22,.72);color:#fff;border-radius:99px;
+  padding:6px 13px;font-size:.78rem;font-weight:700;backdrop-filter:blur(4px);
+}
+.sello .pto{width:7px;height:7px;border-radius:50%;background:var(--rosa)}
+.quien{
+  padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;border-bottom:1px solid var(--linea);
+}
+.quien .nom{font-weight:700;font-size:1rem}
+.quien .meta{font-size:.76rem;color:var(--suave);margin-top:1px}
+.quien .filtro{
+  font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap;
+}
+.filtro.limpia{background:#E8F3ED;color:var(--ok)}
+.filtro.rota{background:#FDEFF0;color:var(--rojo)}
+.acciones{display:grid;grid-template-columns:1fr 1.4fr;gap:1px;background:var(--linea)}
+.acciones button{
+  border:none;padding:20px 10px;font-size:1.05rem;font-weight:800;cursor:pointer;
+  font-family:inherit;display:flex;align-items:center;justify-content:center;gap:9px;
+}
+.acciones button:active{filter:brightness(.94)}
 .b-ok{background:var(--ok);color:#fff}
-.b-no{background:#efe9df;color:var(--no)}
-.b-panico{width:100%;border:none;background:var(--rojo);color:#fff;padding:12px;
-  font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit}
-.vacio{text-align:center;color:#8a7d6e;padding:50px 20px}
-.grilla-vivo{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.grilla-vivo .celda{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;background:#e5dccd}
+.b-no{background:#F2EBE7;color:var(--no)}
+
+/* ---------- vista en vivo ---------- */
+.grilla-vivo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grilla-vivo .celda{
+  position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;
+  background:var(--linea);box-shadow:0 1px 2px rgba(109,18,51,.06);
+}
 .grilla-vivo img{width:100%;height:100%;object-fit:cover;display:block}
-.grilla-vivo .b-panico{position:absolute;left:0;right:0;bottom:0;padding:7px;font-size:.72rem;opacity:.94}
+.b-panico{
+  position:absolute;left:0;right:0;bottom:0;width:100%;border:none;
+  background:linear-gradient(to top, rgba(163,36,47,.94), rgba(163,36,47,.62));
+  color:#fff;padding:8px 4px;font-size:.68rem;font-weight:800;cursor:pointer;
+  font-family:inherit;letter-spacing:.06em;
+}
+
+/* ---------- vacíos ---------- */
+.vacio{
+  text-align:center;color:var(--suave);padding:52px 24px;
+  background:var(--papel);border:1px dashed var(--linea);border-radius:20px;
+}
+.vacio .grande{font-size:2.4rem;margin-bottom:10px;line-height:1}
+.vacio strong{display:block;color:var(--uva);font-size:1.05rem;margin-bottom:4px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 
-<header>
-  <h1 id="titulo">Moderación</h1>
-  <div class="tabs" id="tabs" hidden>
-    <button id="tab-pend" class="activa">Pendientes <span id="n-pend">0</span></button>
-    <button id="tab-vivo">En vivo</button>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="i-check"><path d="M5 12.5l4.5 4.5L19 7"/></g>
+  <g id="i-x"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></g>
+  <g id="i-reloj"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g>
+  <g id="i-ojo"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g>
+</defs></svg>
+
+<header id="cabecera" hidden>
+  <div class="hd-fila">
+    <div class="hd-tit">
+      <span class="ojal">Moderación</span>
+      <h1 id="ev-nombre">Galería</h1>
+    </div>
+    <div class="hd-uso" id="hd-uso"></div>
   </div>
+  <nav class="tabs">
+    <button id="tab-pend" class="activa" type="button">
+      <svg class="ico" viewBox="0 0 24 24"><use href="#i-reloj"/></svg>
+      Esperando <span class="pastilla" id="n-pend">0</span>
+    </button>
+    <button id="tab-vivo" type="button">
+      <svg class="ico" viewBox="0 0 24 24"><use href="#i-ojo"/></svg>
+      En pantalla <span class="pastilla" id="n-vivo">0</span>
+    </button>
+  </nav>
 </header>
 
 <div id="login" hidden>
-  <h2>Entrar</h2>
-  <p>La misma cuenta del panel de Invítame.</p>
-  <input id="lg-mail" type="email" placeholder="Email" autocomplete="username">
-  <input id="lg-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
-  <button id="lg-ok">Entrar</button>
-  <p id="lg-error" style="color:#b03030" hidden></p>
+  <div class="caja">
+    <h2>Moderación</h2>
+    <p>Entrá con la misma cuenta del panel de Invítame.</p>
+    <input id="lg-mail" type="email" placeholder="Email" autocomplete="username">
+    <input id="lg-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
+    <button id="lg-ok" type="button">Entrar</button>
+    <p id="lg-error" style="color:#A3242F;margin:14px 0 0" hidden></p>
+  </div>
 </div>
 
 <div id="estado"><p>Cargando…</p></div>
@@ -63,15 +177,14 @@ main{max-width:520px;margin:0 auto;padding:14px}
 <main id="panel" hidden>
   <section id="vista-pend"></section>
   <section id="vista-vivo" class="grilla-vivo" hidden></section>
-  <p id="sin-nada" class="vacio" hidden></p>
+  <div id="sin-nada" class="vacio" hidden></div>
 </main>
 
 <script type="module">
-/* El Worker que sirve las imágenes — la misma constante que en galeria.js. */
 const WORKER = 'https://galeria.littlemomentsok.workers.dev';
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc }
+import { getFirestore, collection, query, where, onSnapshot, doc, getDoc, updateDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -87,99 +200,150 @@ const $ = (id) => document.getElementById(id);
 const GID = new URLSearchParams(location.search).get('g') || '';
 
 if (!GID) {
-  $('estado').innerHTML = '<p>Falta el evento. Abrí este panel desde el link con <code>?g=</code>.</p>';
+  $('estado').innerHTML = '<p>Falta el evento. Abrí este panel desde el link que termina en <code>?g=…</code></p>';
 } else {
   setPersistence(auth, browserLocalPersistence).catch(() => {});
   onAuthStateChanged(auth, (u) => {
     if (u) { $('login').hidden = true; $('estado').hidden = true; arrancar(); }
     else { $('estado').hidden = true; $('login').hidden = false; }
   });
-  $('lg-ok').onclick = async () => {
+  const entrar = async () => {
     $('lg-error').hidden = true;
-    try {
-      await signInWithEmailAndPassword(auth, $('lg-mail').value.trim(), $('lg-pass').value);
-    } catch (e) {
+    try { await signInWithEmailAndPassword(auth, $('lg-mail').value.trim(), $('lg-pass').value); }
+    catch (e) {
       $('lg-error').textContent = 'No se pudo entrar. Revisá el mail y la contraseña.';
       $('lg-error').hidden = false;
     }
   };
+  $('lg-ok').onclick = entrar;
+  $('lg-pass').addEventListener('keydown', (e) => { if (e.key === 'Enter') entrar(); });
 }
 
 let pendientes = [], aprobadas = [], vista = 'pend';
-function arrancar() {
-  $('tabs').hidden = false; $('panel').hidden = false;
+
+async function arrancar() {
+  $('cabecera').hidden = false; $('panel').hidden = false;
+
+  try {
+    const s = await getDoc(doc(db, 'gal_eventos', GID));
+    if (s.exists()) {
+      const ev = s.data();
+      $('ev-nombre').textContent = ev.nombre || 'Galería';
+      if (ev.marca && ev.marca.color)
+        document.documentElement.style.setProperty('--rosa', ev.marca.color);
+    }
+  } catch (e) {}
+
+  fetch(WORKER + '/uso').then(r => r.json()).then(u => {
+    $('hd-uso').innerHTML = u.porcentaje + '% del espacio<br>' +
+      u.quedanFotos.toLocaleString('es-AR') + ' fotos libres';
+  }).catch(() => {});
 
   const col = collection(db, 'gal_fotos', GID, 'items');
   onSnapshot(query(col, where('estado', '==', 'pendiente')), (s) => {
-    pendientes = docsDe(s); pintar();
+    pendientes = docsDe(s, 1); pintar();
   }, avisarError);
   onSnapshot(query(col, where('estado', '==', 'aprobada')), (s) => {
-    aprobadas = docsDe(s); pintar();
+    aprobadas = docsDe(s, -1); pintar();
   }, avisarError);
 
   $('tab-pend').onclick = () => { vista = 'pend'; pintar(); };
   $('tab-vivo').onclick = () => { vista = 'vivo'; pintar(); };
 }
+
 function avisarError(e) {
   $('estado').hidden = false;
-  $('estado').innerHTML = '<p>No se pudo leer la galería (' + (e && e.code || 'error') + ').</p>';
+  $('estado').innerHTML = '<p>No se pudo leer la galería (' + ((e && e.code) || 'error') + ').</p>';
 }
-function docsDe(s) {
+function docsDe(s, orden) {
   const a = [];
   s.forEach((d) => a.push(Object.assign({ id: d.id }, d.data())));
-  a.sort((x, y) => (x.tsms || 0) - (y.tsms || 0));   // pendientes: primero la más vieja
+  a.sort((x, y) => ((x.tsms || 0) - (y.tsms || 0)) * orden);
   return a;
 }
-
 async function cambiar(fid, estado) {
   try { await updateDoc(doc(db, 'gal_fotos', GID, 'items', fid), { estado }); }
   catch (e) { alert('No se pudo. Probá de nuevo.'); }
 }
+function esc(s) {
+  return String(s || '').replace(/[<>&"]/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+}
+function haceRato(ts) {
+  const min = Math.round((Date.now() - (ts || 0)) / 60000);
+  if (min < 1) return 'recién';
+  if (min < 60) return 'hace ' + min + ' min';
+  return 'hace ' + Math.round(min / 60) + ' h';
+}
 
 function pintar() {
   $('n-pend').textContent = pendientes.length;
+  $('n-vivo').textContent = aprobadas.length;
   document.title = (pendientes.length ? '(' + pendientes.length + ') ' : '') + 'Moderar galería';
   $('tab-pend').classList.toggle('activa', vista === 'pend');
   $('tab-vivo').classList.toggle('activa', vista === 'vivo');
   $('vista-pend').hidden = vista !== 'pend';
   $('vista-vivo').hidden = vista !== 'vivo';
 
-  if (vista === 'pend') {
-    const f = pendientes[0];
-    if (!f) { $('vista-pend').innerHTML = ''; sinNada('No hay fotos esperando. 🎉'); return; }
-    sinNada(null);
-    $('vista-pend').innerHTML =
-      '<div class="tarjeta">' +
-        '<img src="' + WORKER + '/f/' + f.r2.key + '" alt="Foto pendiente">' +
-        '<p class="quien">' + esc(f.autor && f.autor.nombre || 'Invitado') +
-          (pendientes.length > 1 ? ' · quedan ' + pendientes.length : '') + '</p>' +
-        '<div class="acciones">' +
-          '<button class="b-no" id="b-no">Rechazar</button>' +
-          '<button class="b-ok" id="b-ok">APROBAR ✓</button>' +
-        '</div>' +
-      '</div>';
-    $('b-ok').onclick = () => cambiar(f.id, 'aprobada');
-    $('b-no').onclick = () => cambiar(f.id, 'rechazada');
-  } else {
-    const vivas = [...aprobadas].sort((x, y) => (y.tsms || 0) - (x.tsms || 0));
-    if (!vivas.length) { $('vista-vivo').innerHTML = ''; sinNada('Todavía no hay fotos aprobadas.'); return; }
-    sinNada(null);
-    $('vista-vivo').innerHTML = vivas.map((f) =>
-      '<div class="celda">' +
-        '<img loading="lazy" src="' + WORKER + '/f/' + f.r2.thumb + '" alt="">' +
-        '<button class="b-panico" data-fid="' + f.id + '">BAJAR</button>' +
-      '</div>').join('');
-    $('vista-vivo').querySelectorAll('.b-panico').forEach((b) => {
-      b.onclick = () => cambiar(b.dataset.fid, 'borrada');   // sin confirm: los diálogos nativos cuelgan
-    });
+  if (vista === 'pend') pintarPendiente(); else pintarVivo();
+}
+
+function pintarPendiente() {
+  const f = pendientes[0];
+  if (!f) {
+    $('vista-pend').innerHTML = '';
+    sinNada('<div class="grande">✓</div><strong>No hay nada esperando</strong>Todo lo que subieron ya pasó por acá.');
+    return;
   }
+  sinNada(null);
+  const filtro = f.mod && f.mod.falla
+    ? '<span class="filtro rota">filtro sin respuesta</span>'
+    : (f.mod && typeof f.mod.score === 'number'
+        ? '<span class="filtro limpia">filtro OK · ' + Math.round(f.mod.score * 100) + '%</span>'
+        : '');
+  $('vista-pend').innerHTML =
+    '<div class="tarjeta">' +
+      '<div class="marco">' +
+        '<img src="' + WORKER + '/f/' + f.r2.key + '" alt="Foto esperando aprobación">' +
+        '<span class="sello"><span class="pto"></span>' +
+          (pendientes.length > 1 ? pendientes.length + ' esperando' : 'esperando') + '</span>' +
+      '</div>' +
+      '<div class="quien">' +
+        '<div><div class="nom">' + esc((f.autor && f.autor.nombre) || 'Invitado') + '</div>' +
+        '<div class="meta">' + haceRato(f.tsms) + ' · ' +
+          ((f.autor && f.autor.origen === 'invitacion') ? 'desde la invitación' : 'desde el QR') +
+        '</div></div>' + filtro +
+      '</div>' +
+      '<div class="acciones">' +
+        '<button class="b-no" id="b-no" type="button">' +
+          '<svg class="ico" viewBox="0 0 24 24"><use href="#i-x"/></svg>No va</button>' +
+        '<button class="b-ok" id="b-ok" type="button">' +
+          '<svg class="ico" viewBox="0 0 24 24"><use href="#i-check"/></svg>A pantalla</button>' +
+      '</div>' +
+    '</div>';
+  $('b-ok').onclick = () => cambiar(f.id, 'aprobada');
+  $('b-no').onclick = () => cambiar(f.id, 'rechazada');
 }
-function sinNada(txt) {
-  $('sin-nada').hidden = !txt;
-  if (txt) $('sin-nada').textContent = txt;
+
+function pintarVivo() {
+  if (!aprobadas.length) {
+    $('vista-vivo').innerHTML = '';
+    sinNada('<div class="grande">◌</div><strong>Todavía no hay fotos en pantalla</strong>Las que apruebes aparecen acá.');
+    return;
+  }
+  sinNada(null);
+  $('vista-vivo').innerHTML = aprobadas.map((f) =>
+    '<div class="celda">' +
+      '<img loading="lazy" src="' + WORKER + '/f/' + f.r2.thumb + '" alt="">' +
+      '<button class="b-panico" data-fid="' + f.id + '" type="button">BAJAR</button>' +
+    '</div>').join('');
+  $('vista-vivo').querySelectorAll('.b-panico').forEach((b) => {
+    b.onclick = () => cambiar(b.dataset.fid, 'borrada');   // sin confirm: los diálogos nativos cuelgan
+  });
 }
-function esc(s) {
-  return String(s || '').replace(/[<>&"]/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+
+function sinNada(html) {
+  $('sin-nada').hidden = !html;
+  if (html) $('sin-nada').innerHTML = html;
 }
 </script>
 </body>
