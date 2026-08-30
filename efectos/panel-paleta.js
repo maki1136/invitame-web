@@ -5,6 +5,21 @@
    sección, el lacre, los filetes. Es UNA decisión en lugar de nueve campos de
    color sueltos.
 
+   CÓMO CONVIVE CON LOS COLORES A MANO
+   Elegir una paleta DEJA CARGADOS los dos campos que sí se editan a mano:
+
+       color                → el principal (nombres, fondos oscuros)
+       fx.sobre.selloColor  → el lacre
+
+   Los otros diez colores de la paleta no tienen campo en el panel, así que los
+   pinta /efectos/paleta.js y listo.
+
+   Hace falta que los deje cargados: si sólo se guardara el id, en una
+   invitación que YA tenía color cargado ese color le ganaría a la paleta
+   (ver la nota de precedencia en paleta.js) y se vería como si el selector
+   estuviera roto. Cargando el campo queda todo coherente: la paleta lo llena,
+   y si después tocás el color a mano, gana el tuyo.
+
    POR QUÉ ESTÁ ACÁ Y NO DENTRO DE admin.html
    admin.html pesa 150 KB y sólo se puede subir a mano, arrastrándolo. Todo lo
    que se pueda resolver desde /efectos/ se resuelve desde acá.
@@ -39,6 +54,12 @@
     if (typeof postPreview === 'function') { try { postPreview(); } catch (e) {} }
   }
 
+  function buscar(id) {
+    var L = window.INVPALETAS || [];
+    for (var i = 0; i < L.length; i++) if (L[i].id === id) return L[i];
+    return null;
+  }
+
   function elegida(d) {
     return (d.fx && d.fx.paleta && d.fx.paleta.id) || '';
   }
@@ -47,6 +68,17 @@
     if (!d.fx) d.fx = {};
     if (!d.fx.paleta) d.fx.paleta = {};
     d.fx.paleta.id = id || '';
+
+    /* Dejar cargados los dos campos que se editan a mano. Ver la explicación
+       de arriba: sin esto, una invitación con color ya cargado ignoraba la
+       paleta y parecía que el selector no andaba. */
+    var pal = id ? buscar(id) : null;
+    if (pal) {
+      d.color = pal.verde;
+      if (!d.fx.sobre) d.fx.sobre = {};
+      d.fx.sobre.selloColor = pal.seal;
+    }
+
     refrescar();
   }
 
@@ -138,9 +170,9 @@
 
     var pie = caja.querySelector('[data-elegida]');
     if (pie) {
-      var p = (window.INVPALETAS || []).filter(function (x) { return x.id === sel; })[0];
+      var p = buscar(sel);
       pie.textContent = p
-        ? 'Elegida: ' + p.nombre + ' · manda sobre los colores sueltos de abajo'
+        ? 'Elegida: ' + p.nombre + ' · si después cambiás un color a mano, gana el tuyo'
         : 'Sin paleta: cada color se elige a mano, uno por uno.';
     }
   }
@@ -156,7 +188,7 @@
     caja.appendChild(titulo);
 
     var ayuda = document.createElement('div');
-    ayuda.textContent = 'Elegí una y se pinta toda la invitación: los nombres, los fondos, el lacre. Si preferís elegir color por color, tocá “Colores a mano”.';
+    ayuda.textContent = 'Elegí una y se pinta toda la invitación: los nombres, los fondos, el lacre. Después podés retocar cualquier color a mano y va a ganar el tuyo.';
     ayuda.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(ayuda);
 
