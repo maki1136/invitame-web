@@ -2,8 +2,8 @@
 
    Suma un bloque «✨ Galería de fotos de los invitados» al final de la pestaña
    ✨ Efectos: prender/apagar, el código del evento, y —cuando el código es
-   válido— el link para los invitados, el QR imprimible y el acceso al panel
-   para aprobar fotos.
+   válido— el link para los invitados, el QR imprimible, la pantalla del salón
+   y el acceso al panel para aprobar fotos.
 
    POR QUÉ ESTÁ ACÁ Y NO DENTRO DE admin.html
    admin.html pesa 160 KB y sólo se puede subir a mano. Todo lo que se pueda
@@ -87,7 +87,7 @@
     return i;
   }
 
-  /* ---- el link, el QR y el panel de moderar -----------------------------
+  /* ---- el link, el QR, la pantalla y el panel de moderar ----------------
 
      Sólo aparecen cuando el código tiene forma válida. Así nadie manda un
      link roto por WhatsApp sin enterarse. */
@@ -109,6 +109,7 @@
     var inv = BASE + '/galeria/?g=' + encodeURIComponent(g);
     var mod = BASE + '/galeria/moderar.html?g=' + encodeURIComponent(g);
     var qr  = WORKER + '/qr?g=' + encodeURIComponent(g);
+    var pan = BASE + '/galeria/pantalla.html?g=' + encodeURIComponent(g);
 
     var tarjeta = document.createElement('div');
     tarjeta.style.cssText = 'background:#fff;border:1px solid #eadcd5;border-radius:12px;' +
@@ -131,6 +132,7 @@
 
     col.appendChild(botonCopiar('Copiar el link para los invitados', inv));
     col.appendChild(enlace('Abrir el panel para aprobar fotos', mod));
+    col.appendChild(enlace('Abrir la pantalla del salón', pan));
     col.appendChild(enlace('Descargar el QR', qr));
 
     tarjeta.appendChild(col);

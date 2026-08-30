@@ -41,6 +41,15 @@ header{
   font-size:1.32rem;margin:1px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .hd-uso{font-size:.7rem;opacity:.62;text-align:right;line-height:1.35;font-variant-numeric:tabular-nums}
+/* Se abre en la compu conectada al proyector. Va en la cabecera porque
+   el que modera es el mismo que prende la pantalla del salón. */
+.hd-pantalla{
+  display:flex;align-items:center;gap:8px;flex:none;text-decoration:none;color:#fff;
+  background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.20);
+  border-radius:12px;padding:8px 12px;font-size:.72rem;font-weight:700;line-height:1.2;
+}
+.hd-pantalla:active{background:rgba(255,255,255,.22)}
+.hd-pantalla .ico{width:20px;height:20px;flex:none}
 .tabs{display:flex;gap:0;margin:0 -16px;padding:0 16px;border-top:1px solid rgba(255,255,255,.12)}
 .tabs button{
   flex:1;border:none;background:none;color:rgba(255,255,255,.6);
@@ -138,6 +147,7 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
   <g id="i-check"><path d="M5 12.5l4.5 4.5L19 7"/></g>
   <g id="i-x"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></g>
   <g id="i-reloj"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g>
+  <g id="i-pantalla"><rect x="2.6" y="4" width="18.8" height="12.6" rx="2"/><path d="M8.5 20.3h7"/><path d="M12 16.6v3.7"/></g>
   <g id="i-ojo"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g>
 </defs></svg>
 
@@ -148,6 +158,10 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
       <h1 id="ev-nombre">Galería</h1>
     </div>
     <div class="hd-uso" id="hd-uso"></div>
+    <a id="btn-pantalla" class="hd-pantalla" target="_blank" rel="noopener" hidden>
+      <svg class="ico" viewBox="0 0 24 24"><use href="#i-pantalla"/></svg>
+      <span>Pantalla<br>del salón</span>
+    </a>
   </div>
   <nav class="tabs">
     <button id="tab-pend" class="activa" type="button">
@@ -223,6 +237,10 @@ let pendientes = [], aprobadas = [], vista = 'pend';
 
 async function arrancar() {
   $('cabecera').hidden = false; $('panel').hidden = false;
+
+  const bp = $('btn-pantalla');
+  bp.href = 'pantalla.html?g=' + encodeURIComponent(GID);
+  bp.hidden = false;
 
   try {
     const s = await getDoc(doc(db, 'gal_eventos', GID));
