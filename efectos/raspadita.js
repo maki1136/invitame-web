@@ -1,7 +1,7 @@
 /* ===== LA RASPADITA DE LA FECHA ===============================================
 
    QUÉ ES
-   El "pasá el dedo para descubrir" que tapa la fecha. Apagada por defecto.
+   El "desliza el dedo para descubrir" que tapa la fecha. Apagada por defecto.
 
    LO QUE HACE
    1. SE COMPLETA SOLA al llegar al porcentaje elegido (por defecto 42%).
@@ -12,6 +12,11 @@
    4. POLVILLO al raspar · 5. DESTELLO al terminar · 6. VIBRACIÓN cortita.
       ⚠️ La vibración sólo funciona en Android. iPhone no la permite.
    7. COLOR, FORMA y MES a elección.
+
+   ⚠️ LOS TEXTOS VAN EN ESPAÑOL DE MÉXICO, no en voseo.
+   El motor se traduce en el servidor (i/textos-es-mx.php), pero lo que escribe
+   un módulo NO pasa por ahí. Por eso el aviso dice "Empieza por el día" y no
+   "Empezá por el día".
 
    ⭐ SE MONTA SOBRE LA DISPOSICIÓN DE FECHA
    Si `efectos/fecha.js` dibujó una de sus nueve disposiciones, la raspadita NO
@@ -455,7 +460,7 @@
 
     /* ---------- A · hay una disposición de fecha con tres pedazos ---------- */
     if (partesFecha.length >= 2 && cfg.modo === 'partes') {
-      decir('✨ Empezá por el día');
+      decir('✨ Empieza por el día');
       var textos = ['Ahora el mes…', 'Y el año…', ''];
       var zonasA = partesFecha.map(function (el, i) {
         /* la tapa copia la forma de lo que tapa (círculo, rectángulo…) */
@@ -545,7 +550,7 @@
         { el: a3, forma: cfg.forma, sig: '' }
       ].filter(function (o) { return o.el; });
 
-      decir('✨ Empezá por el día');
+      decir('✨ Empieza por el día');
       encadenar(fichas.map(function (f, i) {
         var z = nuevaZona(cajaDe(f.el), f.forma);
         if (i > 0) z.classList.add('dormida');
