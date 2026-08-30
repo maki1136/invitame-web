@@ -237,13 +237,18 @@ function qr(url) {
    con el motivo si no. El motivo se guarda en el doc de la foto —
    así una moderación rota se ve en el panel en vez de esconderse.
    En cualquier caso de falla la foto queda PENDIENTE: el filtro
-   caído jamás aprueba solo. */
+   caído jamás aprueba solo.
+
+   OJO con el nombre de los modelos: 'nudity' lleva version ('nudity-2.1')
+   pero 'gore' NO. Escribir 'gore-2.1' hace que Sightengine conteste
+   "Unknown model" y NINGUNA foto se modere — sin ruido, sin error visible.
+   Ya nos pasó una vez; está contado en worker/PARCHE-modelo-gore.md. */
 async function moderar(env, blob) {
   if (!env.SIGHTENGINE_USER || !env.SIGHTENGINE_SECRET)
     return { falla: 'sin claves de Sightengine' };
   const fd = new FormData();
   fd.append('media', blob, 't.webp');
-  fd.append('models', 'nudity-2.1,gore-2.1');
+  fd.append('models', 'nudity-2.1,gore');   // 'gore' va sin version (verificado en su doc)
   fd.append('api_user', String(env.SIGHTENGINE_USER).trim());
   fd.append('api_secret', String(env.SIGHTENGINE_SECRET).trim());
   const ctl = new AbortController();
