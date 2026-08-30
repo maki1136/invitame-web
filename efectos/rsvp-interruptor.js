@@ -5,8 +5,15 @@
 
         NO PODRÉ   (●    )   SÍ, ASISTIRÉ
 
-   Cómo se enciende:  INVEV.fx.rsvp.estilo = 'interruptor'
-   Cómo se apaga:     INVEV.fx.rsvp.estilo = ''   (vuelven los dos botones)
+   ⚠️ VIENE ENCENDIDO POR DEFECTO (decisión de Maki, 30/8/2026).
+      · Para volver a los dos botones: en el panel, "Cómo se confirma la
+        asistencia" → "Los dos botones de siempre" (escribe fx.rsvp.estilo =
+        'botones').
+      · Para probar sin tocar nada: `?rsvp=botones` o `?rsvp=interruptor`.
+      Antes venía apagado y la única forma de prenderlo era escribir la base a
+      mano desde la consola. Una función que no se puede tocar desde el panel es
+      una función que no existe: por eso ahora hay un selector
+      (`efectos/panel-rsvp.js`) y el default es el interruptor.
 
    ⚠️ ESTO TOCA LA CONFIRMACIÓN, QUE ES POR DONDE ENTRA LA PLATA.
       Por eso está hecho como una PIEL y no como un reemplazo:
@@ -52,13 +59,18 @@
 
   var MARCA = 'data-rsvp-sw';   /* para no volver a vestir un bloque ya vestido */
 
+  /* ⚠️ Por defecto SÍ. Sólo se apaga si el panel eligió 'botones'. */
   function activo() {
     try {
-      var fx = (window.INVEV && window.INVEV.fx) || {};
-      if ((fx.rsvp || {}).estilo === 'interruptor') return true;
+      var forzado = new URLSearchParams(location.search).get('rsvp');
+      if (forzado === 'botones') return false;
+      if (forzado === 'interruptor') return true;
     } catch (e) {}
-    try { return new URLSearchParams(location.search).get('rsvp') === 'interruptor'; }
-    catch (e) { return false; }
+    try {
+      var fx = (window.INVEV && window.INVEV.fx) || {};
+      return (fx.rsvp || {}).estilo !== 'botones';
+    } catch (e) {}
+    return true;
   }
 
   /* los dos botones DE ESTE bloque */
