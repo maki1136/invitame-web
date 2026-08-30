@@ -120,7 +120,9 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
     drop-shadow(0 34px 60px rgba(0,0,0,.45));
 }
 /* Un movimiento lentísimo, apenas perceptible: la pantalla "respira"
-   en vez de quedar congelada entre foto y foto. */
+   en vez de quedar congelada entre foto y foto.
+   OJO: este 1.045 tiene un gemelo en el código, la constante ZOOM_MAX.
+   Si cambiás uno, cambiá el otro, o la foto vuelve a taparle el QR. */
 .capa.vista img{animation:respirar 9s ease-out forwards}
 @keyframes respirar{
   from{transform:scale(1)}
@@ -404,7 +406,7 @@ function preparar() {
     if (dImg < dPan) {
       capa.classList.add('alta');
       void capa.offsetWidth;
-      if (pisaElQR(img)) capa.classList.remove('alta');
+      if (pisaElQR(capa, img)) capa.classList.remove('alta');
     }
 
     /* Acá había un requestAnimationFrame, que en una pestaña oculta
@@ -434,18 +436,48 @@ function preparar() {
     return true;
   }
 
-  /* ¿la foto, tal como se ve, se superpone con el cartelito del QR?
-     OJO: la caja del <img> NO es la foto. Con object-fit:contain la caja
-     ocupa todo el hueco y adentro quedan franjas vacías a los costados.
-     Hay que calcular el rectángulo de la foto de verdad. */
-  function pisaElQR(img) {
+  /* Cuánto se agranda la foto mientras se muestra. Tiene que ser igual
+     al 'to' de @keyframes respirar, allá arriba en el CSS. */
+  const ZOOM_MAX = 1.045;
+
+  /* ¿la foto se superpone con el cartelito del QR?
+
+     Dos trampas, las dos vistas en vivo:
+
+     1) La caja del <img> NO es la foto. Con object-fit:contain la caja
+        ocupa todo el hueco y adentro quedan franjas vacías a los
+        costados. Hay que calcular el rectángulo de la foto de verdad.
+
+     2) La foto NO se queda quieta: al aparecer arranca 'respirar' y
+        crece hasta ZOOM_MAX. Si la medimos con el tamaño que tiene al
+        aparecer nos da que no toca el QR... y tres segundos después lo
+        tapa. (Pasó en vivo el 30/8 en una pantalla ancha: una foto 4:3
+        al 47% de la pantalla se le venía encima al cartelito por abajo
+        a la derecha.) Por eso medimos el tamaño MÁS GRANDE que va a
+        tener, no el que tiene ahora.
+
+     Por lo mismo NO usamos getBoundingClientRect() del <img>: esa caja
+     ya viene con la animación aplicada y da distinto según el momento
+     en que preguntes. Salimos del hueco de la capa, que no se mueve. */
+  function pisaElQR(capa, img) {
     const q = $('qr-chico');
     if (!q || q.hidden) return false;
-    const c = img.getBoundingClientRect();
     if (!img.naturalWidth || !img.naturalHeight) return false;
-    const esc = Math.min(c.width / img.naturalWidth, c.height / img.naturalHeight);
+
+    const r = capa.getBoundingClientRect();
+    const s = getComputedStyle(capa);
+    const arriba = parseFloat(s.paddingTop) || 0;
+    const der = parseFloat(s.paddingRight) || 0;
+    const abajo = parseFloat(s.paddingBottom) || 0;
+    const izqP = parseFloat(s.paddingLeft) || 0;
+    const hueW = r.width - izqP - der, hueH = r.height - arriba - abajo;
+    if (hueW <= 0 || hueH <= 0) return false;
+
+    const esc = Math.min(hueW / img.naturalWidth, hueH / img.naturalHeight) * ZOOM_MAX;
     const w = img.naturalWidth * esc, h = img.naturalHeight * esc;
-    const izq = c.left + (c.width - w) / 2, arr = c.top + (c.height - h) / 2;
+    const izq = r.left + izqP + (hueW - w) / 2;
+    const arr = r.top + arriba + (hueH - h) / 2;
+
     const b = q.getBoundingClientRect();
     return !(izq + w < b.left || izq > b.right || arr + h < b.top || arr > b.bottom);
   }
