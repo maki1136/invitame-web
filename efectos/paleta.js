@@ -13,14 +13,17 @@
         · `color`               → --verde y --sec-col-v
         · `fx.sobre.selloColor` → --seal-c
 
-      En esas dos la paleta SE CORRE si el campo tiene algo cargado. Las otras
-      diez no tienen campo: salen del tema o de la hoja de estilos, así que ahí
-      la paleta manda siempre sin pisarle una decisión a nadie.
+      En esas, si el campo tiene algo cargado se usa ESE color. Las otras diez
+      no tienen campo (salen del tema o de la hoja de estilos), así que ahí la
+      paleta manda siempre sin pisarle una decisión a nadie.
 
-      Esto además hizo desaparecer un bug feo: el motor reescribía --verde y
-      --seal-c en línea un rato después de cargar, y había que estar
-      reponiéndolas con un observador. Ahora, si el motor las escribe, es
-      PORQUE hay un color a mano — y ese es justamente el que tiene que ganar.
+   ⚠️ "GANA EL DE A MANO" SE ESCRIBE, NO SE OMITE.  ← esto costó un bug
+      La primera versión resolvía la precedencia NO poniendo la variable. Pero
+      repintar empieza por limpiar(), y limpiar() le borraba a esas variables el
+      valor que había escrito EL MOTOR: quedaban vacías y el color principal
+      salía cualquier cosa. Ahora las tres se escriben siempre —con el color a
+      mano si hay, con el de la paleta si no—, así que el resultado no depende
+      de en qué orden carguen el motor, los datos y este archivo.
 
    ⚠️ LA LISTA DE PALETAS VIVE ACÁ Y EN NINGÚN OTRO LADO. El panel la lee de
       window.INVPALETAS. Si se copia a otro archivo, tarde o temprano una copia
@@ -109,7 +112,7 @@
 
   /* 1) SIN CAMPO A MANO: la paleta manda siempre.
         Estos colores no se pueden elegir en el panel (salen del tema o de la
-        hoja de estilos), así que forzarlos no le pisa una decisión a nadie.
+        hoja de estilos), así que ponerlos no le pisa una decisión a nadie.
 
         --sec-col es el fondo de las secciones claras. NO es un lujo: la regla
         del motor es .sec { background: var(--sec-col) }, y sale del TEMA. Sin
@@ -125,10 +128,9 @@
     muted : ['--muted']
   };
 
-  /* 2) CON CAMPO A MANO: la paleta se corre si el campo tiene algo.
-        El motor hace `if(ev.color) r.setProperty('--verde', ev.color)`, así que
-        un campo vacío significa "no lo elegí": ahí sí pinta la paleta. */
-  var SI_NO_HAY_A_MANO = {
+  /* 2) CON CAMPO A MANO: gana el color cargado; si no hay, va el de la paleta.
+        Se escriben SIEMPRE (ver la nota de arriba: omitirlas las borraba). */
+  var CON_CAMPO = {
     verde: {
       vars: ['--verde', '--sec-col-v'],
       aMano: function () { return (window.INVEV || {}).color || ''; }
@@ -171,21 +173,23 @@
     raiz.removeAttribute('data-paleta');
   }
 
-  /* qué variables corresponde poner ahora, mirando qué hay cargado a mano */
+  /* qué variables van y con qué color, mirando qué hay cargado a mano */
   function loQueVa(pal) {
-    var plan = [];
+    var plan = [], k, i;
     if (!pal) return plan;
-    var k, i;
+
     for (k in SIEMPRE) {
       if (!Object.prototype.hasOwnProperty.call(SIEMPRE, k) || !pal[k]) continue;
       for (i = 0; i < SIEMPRE[k].length; i++) plan.push([SIEMPRE[k][i], pal[k]]);
     }
-    for (k in SI_NO_HAY_A_MANO) {
-      if (!Object.prototype.hasOwnProperty.call(SI_NO_HAY_A_MANO, k) || !pal[k]) continue;
-      var r = SI_NO_HAY_A_MANO[k];
-      if (r.aMano()) continue;                 /* hay color a mano: gana el de a mano */
-      for (i = 0; i < r.vars.length; i++) plan.push([r.vars[i], pal[k]]);
+
+    for (k in CON_CAMPO) {
+      if (!Object.prototype.hasOwnProperty.call(CON_CAMPO, k) || !pal[k]) continue;
+      var r = CON_CAMPO[k];
+      var valor = r.aMano() || pal[k];      /* ← acá gana el de a mano */
+      for (i = 0; i < r.vars.length; i++) plan.push([r.vars[i], valor]);
     }
+
     return plan;
   }
 
@@ -232,8 +236,8 @@
   /* El panel manda los datos en vivo por postMessage, no por la base. */
   window.addEventListener('message', function () { setTimeout(sincronizar, 0); }, false);
 
-  /* Red de seguridad: el motor termina de escribir sus cosas un rato después
-     de que carga esto, y el panel cambia los datos sin avisar. */
+  /* Red de seguridad: el motor termina de escribir sus cosas un rato después de
+     que carga esto, y los datos pueden llegar tarde. */
   var esPrevia = /[?&]preview=1/.test(location.search);
   setInterval(sincronizar, esPrevia ? 400 : 1500);
 })();
