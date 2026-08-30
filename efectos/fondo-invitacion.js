@@ -8,6 +8,7 @@
        tipo:  'video' | 'imagen',
        url:    'https://…',       // el archivo
        poster: 'https://…',       // foto fija, para cuando el video no corre
+       fuerza: 1,                 // cuánto se marca el dibujo (1 = tal cual)
        velo:   0.30,              // cuánto se apaga el fondo (0 a 1)
        paso:   0.85,              // cuánto lo dejan pasar las secciones CLARAS
        oscuras:0,                 // y cuánto las de color (0 = quedan opacas)
@@ -41,15 +42,20 @@
       hay un PLAZO: si en 3,5 s no llegó ni la medida del video, se cambia por
       la foto fija. Es la única de las tres señales que funciona en ese caso.
 
+   ⚠️ CON UNA FOTO PÁLIDA, EL VELO LA BORRA.          ← esto costó otra vuelta
+      Las plumas, la seda y el mármol claro son casi blancos de por sí. Si
+      encima se les pone velo, el resultado no es "suave": es blanco liso, y
+      parece que la invitación se rompió. Con fondos claros hay que BAJAR el
+      velo y subir la FUERZA (contraste), no al revés. El velo es para fondos
+      con dibujo fuerte o color, que sí tapan el texto.
+      Y ojo con la MEDIDA del archivo: una foto de 256 px estirada a la
+      pantalla de una Mac no tiene dibujo que mostrar, tenga el velo que tenga.
+
    ⚠️ LAS SECCIONES CLARAS SE ABREN, LAS DE COLOR NO.
       El crudo es lo que hay que reemplazar. Las secciones de color son las que
       le dan el ritmo a la invitación — si se abren todas, se pierde el pulso y
       encima el texto claro sobre fondo pálido deja de leerse. Por eso son dos
       perillas separadas y la de las oscuras arranca en 0.
-
-   ⚠️ EL VELO NO ES DECORACIÓN, ES LEGIBILIDAD.
-      Medido sobre una invitación real: un fondo con dibujo detrás de un texto
-      chico lo vuelve ilegible. El velo lo apaga antes de que se vea el texto.
 
    ⚠️ EN EL CELULAR, VIDEO SÓLO SI CONVIENE.
       Si la persona pidió menos movimiento, si el navegador avisa que está
@@ -73,6 +79,7 @@
           tipo: u.get('fondoTipo') || 'imagen',
           url:  u.get('fondo'),
           poster: u.get('fondoPoster') || '',
+          fuerza: parseFloat(u.get('fuerza') || '1'),
           velo: parseFloat(u.get('velo') || '0.3'),
           paso: parseFloat(u.get('paso') || '0.85'),
           oscuras: parseFloat(u.get('oscuras') || '0'),
@@ -100,9 +107,14 @@
     '#' + ID + '{z-index:0}' +
     '#' + ID + ' > video, #' + ID + ' > img,' +
     '#' + IDF + ' > video, #' + IDF + ' > img{width:100%;height:100%;object-fit:cover;display:block}' +
+    /* la fuerza se aplica igual al video y a la foto, así no se nota el cambio
+       cuando uno reemplaza al otro */
+    '#' + ID + ' > video, #' + ID + ' > img{filter:contrast(var(--inv-fuerza,1))' +
+      ' saturate(calc(1 + (var(--inv-fuerza,1) - 1) * .7))}' +
     /* afuera: desenfocado y un poco agrandado, para que el desenfoque no deje
        borde transparente contra los cantos de la pantalla */
-    '#' + IDF + ' > img{filter:blur(22px) saturate(.88);transform:scale(1.12)}' +
+    '#' + IDF + ' > img{filter:blur(22px) saturate(.88) contrast(var(--inv-fuerza,1));' +
+      'transform:scale(1.12)}' +
     '#' + ID + ' > .velo, #' + IDF + ' > .velo{position:absolute;inset:0}' +
     'html[data-fondo] .frame{position:relative;z-index:1;background:transparent !important}' +
     /* las claras se abren para que se vea el fondo */
@@ -113,8 +125,9 @@
       ' calc(100% - var(--inv-oscuras,0) * 100%), transparent) !important}';
 
   function hoja() {
-    if (document.getElementById('inv-fondo-css')) return;
-    var s = document.createElement('style');
+    var s = document.getElementById('inv-fondo-css');
+    if (s) { s.textContent = CSS; return; }
+    s = document.createElement('style');
     s.id = 'inv-fondo-css';
     s.textContent = CSS;
     (document.head || document.documentElement).appendChild(s);
@@ -131,6 +144,7 @@
     raiz.removeAttribute('data-fondo');
     raiz.style.removeProperty('--inv-paso');
     raiz.style.removeProperty('--inv-oscuras');
+    raiz.style.removeProperty('--inv-fuerza');
   }
 
   /* la capa se alinea con la columna: ése es el papel de la invitación */
@@ -144,10 +158,11 @@
   }
 
   function velar(caja, a) {
+    if (a <= 0) return;                       /* velo 0 = ni se crea la capa */
     var velo = document.createElement('div');
     velo.className = 'velo';
     velo.style.background = 'color-mix(in srgb, var(--lino,#f4efe6) ' +
-      Math.round(Math.max(0, Math.min(1, a)) * 100) + '%, transparent)';
+      Math.round(Math.min(1, a) * 100) + '%, transparent)';
     caja.appendChild(velo);
   }
 
@@ -164,13 +179,16 @@
     var a = (typeof f.velo === 'number') ? f.velo : 0.3;
     var fija = f.poster || f.url;
 
+    raiz.style.setProperty('--inv-fuerza', String(
+      Math.max(0.5, Math.min(2.2, (typeof f.fuerza === 'number' && f.fuerza) ? f.fuerza : 1))));
+
     /* ---- la de AFUERA, sólo si se pidió que ocupe toda la pantalla ---- */
     if (f.donde === 'pantalla') {
       var fu = document.createElement('div');
       fu.id = IDF;
       foto(fu, fija);                /* siempre fija: desenfocada, moverse no aporta */
       /* un poco más velada que la de adentro: lo de afuera acompaña, no compite */
-      velar(fu, Math.min(1, a + 0.12));
+      velar(fu, a > 0 ? Math.min(1, a + 0.12) : 0.06);
       document.body.insertBefore(fu, document.body.firstChild);
     }
 
@@ -226,7 +244,7 @@
 
   function sincronizar() {
     var f = conf();
-    var nueva = JSON.stringify([f.tipo, f.url, f.poster, f.velo, f.paso, f.oscuras, f.donde]);
+    var nueva = JSON.stringify([f.tipo, f.url, f.poster, f.fuerza, f.velo, f.paso, f.oscuras, f.donde]);
     if (nueva === firma) return;
     firma = nueva;
     if (!f || !f.tipo || !(f.url || f.poster)) { sacar(); return; }
