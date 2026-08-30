@@ -45,6 +45,7 @@
     '/efectos/musica.js',              /* la Platinum vende Música y el motor no la tenía */
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
+    '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
     '/efectos/es-mx.js'                /* español de México: el motor está en voseo */
   ];
 
