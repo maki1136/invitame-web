@@ -9,6 +9,8 @@
 
    ⚠️ APAGADO POR DEFECTO. Sin estilo elegido no toca absolutamente nada, así
       que las invitaciones ya entregadas siguen exactamente igual.
+      LA ÚNICA EXCEPCIÓN es el arreglo de las flechas de la galería, abajo del
+      todo: eso no es estilo, es un control que no se ve.
 
    ⚠️ TODO SALE DE LA PALETA. Ningún estilo tiene colores escritos a mano:
       usan --verde, --oro, --cream y compañía. Por eso el mismo material se ve
@@ -22,13 +24,10 @@
       no un elemento — la regla `> *` no lo alcanza.
       Todo se hace ahora con `box-shadow` (que se pinta por detrás) y con
       `background-image` + `background-blend-mode` (que se queda en el fondo).
-      Si algún día hace falta un estilo nuevo: mismo criterio, nada encima.
 
    ⚠️ LA HOJA SE PONE SIEMPRE, HAYA ESTILO ELEGIDO O NO.  ← esto costó otro bug
       Antes se creaba sólo al elegir uno. En el panel, donde todavía no elegiste
       nada, no existía: las once muestras salían grises e iguales.
-      Ponerla siempre no cambia nada en la invitación: todas las reglas están
-      dentro de [data-boton="..."], y sin ese atributo no aplica ninguna.
 
    ⚠️ QUÉ TOCA Y QUÉ NO. Sólo pinta: fondo, borde, sombra y color de letra.
       No toca tamaños, ni espaciados, ni posiciones.
@@ -96,8 +95,6 @@
           ' inset 0 0 0 1px rgba(255,255,255,.62), 0 8px 20px rgba(96,102,140,.20) !important;'
     },
 
-    /* El canto se hace con un ANILLO de sombra interna (el `inset 0 0 0 5px`).
-       Antes era una capa encima y tapaba el texto. */
     { id:'cristal-relieve', nombre:'Cristal con relieve', pie:'Un bloque de vidrio, con canto y espesor',
       css:
         'color:color-mix(in srgb,var(--verde) 88%,#000) !important;' +
@@ -169,8 +166,6 @@
         'text-shadow:0 1px 0 rgba(255,255,255,.8) !important;'
     },
 
-    /* El resplandor va en box-shadow, que se pinta POR DETRÁS del botón: sale
-       por arriba limpio y por abajo más fuerte y teñido, sin tapar nada. */
     { id:'luz-detras', nombre:'Luz detrás', pie:'Una lámpara escondida atrás. Para UN solo botón',
       css:
         'color:color-mix(in srgb,var(--verde) 94%,#000) !important;' +
@@ -182,8 +177,6 @@
           ' 14px 22px 28px rgba(78,86,110,.20) !important;'
     },
 
-    /* La tela va en background-image con background-blend-mode: se queda en el
-       fondo y no toca el texto. La imagen la trae /efectos/terciopelo.js. */
     { id:'terciopelo', nombre:'Terciopelo', pie:'Con textura de tela de verdad', tela:true,
       css:
         'color:color-mix(in srgb,var(--verde) 86%,#000) !important;' +
@@ -223,6 +216,16 @@
     var css = '';
     for (var i = 0; i < ESTILOS.length; i++) css += reglas(ESTILOS[i]);
     css += ':is(' + DONDE + '){transition:background .25s, box-shadow .25s, color .25s}';
+
+    /* ⚠️ ARREGLO DE LEGIBILIDAD, NO DE ESTILO — va SIEMPRE, haya material o no.
+       Las flechas de la galería son blancas sobre un velo negro al 35%. Medido:
+       contra una foto CLARA eso da 2,44 de contraste y el mínimo legible es 4,5.
+       O sea que sobre fotos claras el invitado no ve con qué pasar de foto.
+       A 58% dan 5,2. Es la única regla del archivo que no depende de elegir un
+       material, porque un control que no se ve no es una preferencia. */
+    css += '.ar{background:rgba(0,0,0,.58) !important;' +
+           'box-shadow:0 2px 8px rgba(0,0,0,.30) !important}';
+
     HOJA.textContent = css;
     (document.head || document.documentElement).appendChild(HOJA);
     return HOJA;
@@ -260,7 +263,7 @@
   }
 
   /* La hoja va SIEMPRE, elija o no elija: es lo que le da de comer a las
-     muestras del panel. Sin atributo no aplica ninguna regla. */
+     muestras del panel, y lleva el arreglo de las flechas. */
   asegurarHoja();
 
   sincronizar();
