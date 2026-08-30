@@ -211,6 +211,20 @@
 
   /* ---- engancharse al panel --------------------------------------------- */
 
+  /* ¿Estamos parados en la pestaña ✨ Efectos?
+
+     No alcanza con buscar un `.mejoras`: otras pestañas también tienen bloques
+     con esa clase (PRINCIPAL trae «✨ Empezá por acá») y el nuestro se colaba
+     ahí. La señal buena son los títulos que escribe efectosHtml(), que empiezan
+     todos con «✨ Efectos». Verificado en el panel real. */
+  function enEfectos() {
+    var hs = document.querySelectorAll('.mejoras .h');
+    for (var i = 0; i < hs.length; i++) {
+      if (/^\s*✨\s*Efectos/.test(hs[i].textContent || '')) return true;
+    }
+    return false;
+  }
+
   function anclaje() {
     /* Al final de todo el bloque de Efectos: es una sección propia, no un
        agregado a otra. */
@@ -220,10 +234,11 @@
 
   function revisar() {
     var d = borrador();
-    if (!d) return;
-    if (document.getElementById(ID)) return;   /* ya está puesto */
+    var ya = document.getElementById(ID);
+    if (!d || !enEfectos()) { if (ya) ya.remove(); return; }
+    if (ya) return;                            /* ya está puesto */
     var a = anclaje();
-    if (!a || !a.parentNode) return;           /* la pestaña de Efectos no está abierta */
+    if (!a || !a.parentNode) return;
     a.parentNode.insertBefore(construir(d), a.nextSibling);
   }
 
