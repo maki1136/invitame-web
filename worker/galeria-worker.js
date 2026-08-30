@@ -127,12 +127,14 @@ async function subir(req, env, ctx) {
   await env.BUCKET.put(key, foto.stream(), { httpMetadata: { contentType: tipo } });
   await env.BUCKET.put(tkey, thumb.stream(), { httpMetadata: { contentType: tipo } });
 
-  // Moderación sobre la MINIATURA. Si el filtro no contesta en 4 s,
+  // Moderación sobre la MINIATURA. Si el filtro no contesta a tiempo,
   // la foto queda PENDIENTE: la moderación caída nunca aprueba sola.
-  let estado = 'pendiente', score = null;
-  const veredicto = await moderar(env, thumb).catch(() => null);
-  if (veredicto) {
-    score = veredicto.score;
+  let estado = 'pendiente', mod = null;
+  const veredicto = await moderar(env, thumb).catch((e) => ({ falla: String(e && e.message || e).slice(0, 90) }));
+  if (veredicto && veredicto.falla) {
+    mod = { motor: 'sightengine', falla: veredicto.falla };   // queda visible en el panel
+  } else if (veredicto) {
+    mod = { motor: 'sightengine', score: veredicto.score };
     if (veredicto.malo) estado = 'rechazada';
     else estado = (ev.modo === 'auto') ? 'aprobada' : 'pendiente';
   }
@@ -143,7 +145,7 @@ async function subir(req, env, ctx) {
     r2: { key, thumb: tkey, bytes: foto.size,
           w: parseInt(fd.get('w') || '0', 10) || 0, h: parseInt(fd.get('h') || '0', 10) || 0 },
     estado,
-    mod: score === null ? null : { motor: 'sightengine', score },
+    mod,
     tsms: ahora
   });
 
@@ -230,22 +232,34 @@ function qr(url) {
     'https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=2&data=' + encodeURIComponent(destino), 302);
 }
 
-/* ---------------- moderación (Sightengine) ---------------- */
+/* ---------------- moderación (Sightengine) ----------------
+   Nunca tira: devuelve {malo, score} si pudo juzgar, o {falla:'...'}
+   con el motivo si no. El motivo se guarda en el doc de la foto —
+   así una moderación rota se ve en el panel en vez de esconderse.
+   En cualquier caso de falla la foto queda PENDIENTE: el filtro
+   caído jamás aprueba solo. */
 async function moderar(env, blob) {
-  if (!env.SIGHTENGINE_USER) return null;   // sin cuenta todavía: todo queda pendiente
+  if (!env.SIGHTENGINE_USER || !env.SIGHTENGINE_SECRET)
+    return { falla: 'sin claves de Sightengine' };
   const fd = new FormData();
   fd.append('media', blob, 't.webp');
   fd.append('models', 'nudity-2.1,gore-2.1');
-  fd.append('api_user', env.SIGHTENGINE_USER);
-  fd.append('api_secret', env.SIGHTENGINE_SECRET);
+  fd.append('api_user', String(env.SIGHTENGINE_USER).trim());
+  fd.append('api_secret', String(env.SIGHTENGINE_SECRET).trim());
   const ctl = new AbortController();
-  const timer = setTimeout(() => ctl.abort(), 4000);
-  const r = await fetch('https://api.sightengine.com/1.0/check.json', {
-    method: 'POST', body: fd, signal: ctl.signal
-  });
-  clearTimeout(timer);
-  const j = await r.json();
-  if (j.status !== 'success') return null;
+  const timer = setTimeout(() => ctl.abort(), 9000);   // 9 s: 4 era muy corto
+  let r;
+  try {
+    r = await fetch('https://api.sightengine.com/1.0/check.json', {
+      method: 'POST', body: fd, signal: ctl.signal
+    });
+  } catch (e) {
+    return { falla: 'no contestó a tiempo (' + String(e && e.name || e) + ')' };
+  } finally { clearTimeout(timer); }
+  let j;
+  try { j = await r.json(); } catch (e) { return { falla: 'respuesta ilegible ' + r.status }; }
+  if (j.status !== 'success')
+    return { falla: 'rechazó: ' + String((j.error && (j.error.message || j.error.type)) || j.status).slice(0, 90) };
   const n = j.nudity || {};
   const peor = Math.max(n.sexual_activity || 0, n.sexual_display || 0, n.erotica || 0,
                         (j.gore && j.gore.prob) || 0);
