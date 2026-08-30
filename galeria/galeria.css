@@ -1,141 +1,238 @@
 /* ============================================================
    GALERÍA DE INVITADOS · estilos
-   La marca del evento entra por variables: gal_eventos.marca
-   pinta --gal-acento y --gal-fondo desde galeria.js.
+   Manual de marca Invítame: Uva #6D1233, Rosa #F56770,
+   Caracol #F9F3EF. Cormorant Garamond + Nunito.
+   Fondo cremita (nunca blanco puro) y el rosa por delante
+   del bordó, como pidió Maki.
+   El color del evento entra por --acento desde galeria.js.
    ============================================================ */
 :root{
-  --gal-acento:#b06a7e;          /* rosa uva de la casa; lo pisa la marca del evento */
-  --gal-fondo:#f4efe6;           /* lino */
-  --gal-tinta:#3a3026;
-  --gal-suave:#8a7d6e;
-  --gal-blanco:#fffdf9;
-  --gal-linea:#e5dccd;
+  --uva:#6D1233;
+  --rosa:#F56770;
+  --caracol:#F9F3EF;
+  --acento:#F56770;          /* lo pisa la marca del evento */
+  --tinta:#3A2029;
+  --suave:#8C7078;
+  --papel:#FFFBF8;
+  --linea:#EADCD5;
+  --sombra-baja:0 1px 2px rgba(109,18,51,.05), 0 6px 16px -10px rgba(109,18,51,.20);
+  --sombra-alta:0 2px 4px rgba(109,18,51,.06), 0 18px 40px -22px rgba(109,18,51,.38);
+  --error:#A3242F;
+  --ok:#2F7A56;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background:var(--gal-fondo);
-  color:var(--gal-tinta);
-  font-family:"Nunito",system-ui,sans-serif;
-  font-size:16px;line-height:1.5;
+  background:var(--caracol);
+  color:var(--tinta);
+  font-family:"Nunito",system-ui,-apple-system,sans-serif;
+  font-size:16px;line-height:1.55;
   -webkit-font-smoothing:antialiased;
   min-height:100dvh;
+  overflow-x:hidden;
 }
-h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.01em}
+h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.005em;margin:0}
 
-/* --- portada neutra y pedido de nombre --- */
+/* --- iconos de línea --- */
+.ico{
+  width:24px;height:24px;display:block;
+  fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.ico-grande{width:44px;height:44px;stroke-width:1.1;margin:0 auto 14px;color:var(--acento);opacity:.8}
+
+/* --- rótulo chiquito --- */
+.ojal{
+  font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;color:var(--suave);display:block;
+}
+
+/* --- tarjetas centradas (portada neutra y pedir nombre) --- */
 #gal-neutra,#gal-nombre{
   min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;
 }
-.neutra-caja,.nombre-caja{
-  background:var(--gal-blanco);border:1px solid var(--gal-linea);border-radius:16px;
-  padding:34px 26px;max-width:400px;text-align:center;
-  box-shadow:0 10px 30px -18px rgba(58,48,38,.35);
+.tarjeta-centro{
+  background:var(--papel);border:1px solid var(--linea);border-radius:20px;
+  padding:38px 28px;max-width:400px;width:100%;text-align:center;
+  box-shadow:var(--sombra-alta);
 }
-.neutra-caja h1,.nombre-caja h2{margin:0 0 10px;font-size:1.8rem}
-.nombre-caja p{color:var(--gal-suave);margin:0 0 18px}
+.tarjeta-centro h1,.tarjeta-centro h2{font-size:1.95rem;line-height:1.15;margin:6px 0 10px;color:var(--uva)}
+.tarjeta-centro p{color:var(--suave);margin:0 0 20px;font-size:.97rem}
 #nom-input{
-  width:100%;padding:13px 14px;font-size:1.05rem;border:1.5px solid var(--gal-linea);
-  border-radius:10px;background:#fff;color:var(--gal-tinta);text-align:center;
-  font-family:inherit;margin-bottom:14px;
+  width:100%;padding:14px;font-size:1.05rem;border:1.5px solid var(--linea);
+  border-radius:12px;background:var(--caracol);color:var(--tinta);text-align:center;
+  font-family:inherit;margin-bottom:12px;
 }
-#nom-input:focus{outline:2px solid var(--gal-acento);border-color:var(--gal-acento)}
-
-/* --- botones grandes --- */
-.btn-grande{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:16px 18px;border:none;border-radius:12px;
-  background:var(--gal-acento);color:#fff;font-family:"Nunito",sans-serif;
-  font-size:1.08rem;font-weight:700;cursor:pointer;text-align:center;
-  -webkit-tap-highlight-color:transparent;user-select:none;
+#nom-input:focus{outline:none;border-color:var(--acento);box-shadow:0 0 0 3px rgba(245,103,112,.16)}
+.btn-lleno{
+  width:100%;padding:15px;border:none;border-radius:12px;
+  background:var(--acento);color:#fff;font-family:inherit;
+  font-size:1.04rem;font-weight:700;cursor:pointer;
+  box-shadow:0 6px 16px -8px rgba(109,18,51,.55);
 }
-.btn-grande:active{transform:scale(.985)}
-.btn-elegir{background:var(--gal-blanco);color:var(--gal-acento);border:1.5px solid var(--gal-acento)}
+.btn-lleno:active{transform:translateY(1px)}
 
-/* --- banner in-app --- */
+/* --- banner navegador embebido --- */
 .banner-inapp{
-  position:sticky;top:0;z-index:50;background:#3a3026;color:#fff;
-  padding:14px 18px;font-size:.95rem;text-align:center;
+  position:sticky;top:0;z-index:60;background:var(--uva);color:#fff;
+  padding:13px 18px;font-size:.92rem;text-align:center;
 }
 .banner-inapp em{font-style:normal;text-decoration:underline}
 
-/* --- cabecera --- */
-#gal-main{max-width:560px;margin:0 auto;padding:22px 14px 90px}
-.gal-cabecera{text-align:center;margin-bottom:18px}
-#ev-logo{max-height:54px;max-width:200px;margin-bottom:8px}
-#ev-nombre{margin:0;font-size:2rem;line-height:1.12}
-.saludo{color:var(--gal-suave);margin:6px 0 0;font-size:.98rem}
+/* ============ CABECERA ============ */
+#gal-main{max-width:600px;margin:0 auto;padding:0 16px 90px}
+.cabecera{
+  position:relative;text-align:center;
+  padding:38px 10px 26px;margin:0 -16px 4px;
+  overflow:hidden;
+}
+/* Capa orgánica de fondo: la forma de hoja de la referencia,
+   dibujada con degradados, sin ninguna imagen que descargar. */
+.hoja-fondo{
+  position:absolute;inset:-40% -30% auto -30%;height:200%;
+  background:
+    radial-gradient(60% 46% at 22% 30%, rgba(245,103,112,.16), transparent 62%),
+    radial-gradient(52% 40% at 82% 18%, rgba(109,18,51,.13), transparent 60%),
+    radial-gradient(70% 50% at 50% 96%, rgba(109,18,51,.06), transparent 70%);
+  border-radius:0 0 60% 60%;
+  pointer-events:none;
+}
+#ev-logo{max-height:52px;max-width:190px;margin-bottom:10px;position:relative}
+#ev-nombre{
+  position:relative;font-size:clamp(1.9rem,7.5vw,2.6rem);line-height:1.1;
+  color:var(--uva);text-wrap:balance;
+}
+.saludo{position:relative;color:var(--suave);margin:8px 0 0;font-size:.95rem}
 
-.botonera{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-@media (max-width:380px){.botonera{grid-template-columns:1fr}}
+/* ============ LAS DOS FICHAS ============ */
+.botonera{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 18px}
+.ficha{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+  padding:18px 16px 16px;border-radius:18px;cursor:pointer;
+  box-shadow:var(--sombra-alta);
+  -webkit-tap-highlight-color:transparent;user-select:none;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.ficha:active{transform:translateY(2px);box-shadow:var(--sombra-baja)}
+/* la de cámara: uva profunda, es la acción principal */
+.ficha-camara{background:linear-gradient(150deg,#7E1A3D 0%,#5A0E29 100%);color:#fff}
+/* la de galería: papel cálido con el rosa como acento */
+.ficha-galeria{background:linear-gradient(150deg,#FFF3EF 0%,#F7E2DC 100%);color:var(--uva);border:1px solid var(--linea)}
+/* el disco del icono, con relieve, como los de la referencia */
+.ficha-ico{
+  width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 10px -4px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.28);
+}
+.ficha-camara .ficha-ico{background:rgba(255,255,255,.14);color:#fff}
+.ficha-galeria .ficha-ico{background:var(--acento);color:#fff}
+.ficha-txt{font-size:1.02rem;font-weight:700;line-height:1.24;letter-spacing:.005em}
+/* brillo sutil arriba a la derecha, como el papel de la referencia */
+.ficha::after{
+  content:"";position:absolute;top:-55%;right:-30%;width:120%;height:110%;
+  background:radial-gradient(closest-side, rgba(255,255,255,.16), transparent 70%);
+  pointer-events:none;
+}
+.ficha-galeria::after{background:radial-gradient(closest-side, rgba(255,255,255,.6), transparent 70%)}
+
 .cerrada{
-  text-align:center;background:var(--gal-blanco);border:1px dashed var(--gal-linea);
-  border-radius:12px;padding:14px;color:var(--gal-suave);margin:0 0 14px;
+  text-align:center;background:var(--papel);border:1px dashed var(--linea);
+  border-radius:14px;padding:16px;color:var(--suave);margin:0 0 16px;font-size:.94rem;
 }
 
-/* --- estado de la cola --- */
+/* ============ ESTADO DE LA COLA ============ */
 .cola-estado{
-  display:flex;align-items:center;gap:10px;justify-content:center;
-  background:var(--gal-blanco);border:1px solid var(--gal-linea);border-radius:10px;
-  padding:10px 14px;margin-bottom:12px;font-weight:600;font-size:.95rem;
+  display:flex;align-items:center;gap:11px;justify-content:center;
+  background:var(--papel);border:1px solid var(--linea);border-radius:12px;
+  padding:12px 16px;margin-bottom:12px;font-weight:700;font-size:.94rem;
+  box-shadow:var(--sombra-baja);
 }
-.cola-rueda{
-  width:16px;height:16px;border-radius:50%;flex:none;
-  border:2.5px solid var(--gal-linea);border-top-color:var(--gal-acento);
-  animation:girar 0.9s linear infinite;
+.rueda{
+  width:17px;height:17px;border-radius:50%;flex:none;
+  border:2.5px solid var(--linea);border-top-color:var(--acento);
+  animation:girar .9s linear infinite;
 }
 @keyframes girar{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.cola-rueda{animation:none}}
+@media (prefers-reduced-motion:reduce){.rueda{animation:none}}
 .cola-aviso{
-  background:#fff4e8;border:1px solid #eccfa8;color:#7a5220;border-radius:10px;
-  padding:10px 14px;margin-bottom:12px;font-size:.92rem;text-align:center;
+  background:#FFF6EC;border:1px solid #EBD4B4;color:#7A5320;
+  border-radius:12px;padding:12px 15px;margin:0 0 12px;
+  font-size:.92rem;text-align:center;line-height:1.45;
 }
+.cola-aviso.es-error{background:#FDEFF0;border-color:#F0CBCE;color:var(--error)}
 
-/* --- grilla --- */
-.grilla{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-@media (min-width:480px){.grilla{grid-template-columns:repeat(4,1fr)}}
-.grilla .celda{
-  position:relative;aspect-ratio:1;overflow:hidden;border-radius:6px;
-  background:var(--gal-linea);cursor:pointer;border:none;padding:0;
+/* ============ GRILLA ============ */
+.fila-titulo{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:10px;margin:22px 2px 10px;
 }
+.cuenta{font-size:.8rem;color:var(--suave);font-weight:600;font-variant-numeric:tabular-nums}
+.grilla{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (min-width:520px){.grilla{grid-template-columns:repeat(4,1fr)}}
+.grilla .celda{
+  position:relative;aspect-ratio:1;overflow:hidden;border-radius:14px;
+  background:var(--linea);cursor:pointer;border:none;padding:0;
+  box-shadow:var(--sombra-baja);
+  transition:transform .14s ease;
+}
+.grilla .celda:active{transform:scale(.975)}
 .grilla .celda img{width:100%;height:100%;object-fit:cover;display:block}
 .grilla .celda.mia::after{
-  content:"tuya";position:absolute;left:4px;bottom:4px;
-  background:rgba(58,48,38,.75);color:#fff;font-size:.62rem;font-weight:700;
-  padding:2px 6px;border-radius:99px;letter-spacing:.04em;
+  content:"tuya";position:absolute;left:6px;bottom:6px;
+  background:rgba(109,18,51,.82);color:#fff;font-size:.6rem;font-weight:700;
+  padding:3px 8px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase;
+  backdrop-filter:blur(2px);
 }
-.grilla .celda.subiendo{opacity:.45}
-.grilla .celda.subiendo::before{
-  content:"";position:absolute;inset:0;margin:auto;width:22px;height:22px;
-  border-radius:50%;border:3px solid rgba(255,255,255,.5);border-top-color:#fff;
-  animation:girar .9s linear infinite;z-index:2;
+/* estados de una foto propia mientras sube */
+.estado-celda{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
+.celda.subiendo .estado-celda{display:flex;background:rgba(58,32,41,.42)}
+.celda.subiendo .estado-celda::before{
+  content:"";width:22px;height:22px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.45);border-top-color:#fff;
+  animation:girar .9s linear infinite;
 }
-.vacia{text-align:center;color:var(--gal-suave);padding:40px 10px}
+.celda.error .estado-celda{display:flex;background:rgba(163,36,47,.72);color:#fff;font-size:1.5rem}
+.celda.error .estado-celda::before{content:"!";font-weight:800}
+.celda.espera .estado-celda{display:flex;background:rgba(122,83,32,.6);color:#fff;font-size:1.1rem}
+.celda.espera .estado-celda::before{content:"⏳"}
+.celda.ok{animation:aparecer .4s ease}
+@keyframes aparecer{from{opacity:.4;transform:scale(.94)}to{opacity:1;transform:none}}
 
-/* --- visor --- */
-.visor{
-  position:fixed;inset:0;z-index:100;background:rgba(20,15,10,.94);
-  display:flex;align-items:center;justify-content:center;flex-direction:column;
+.vacia{
+  text-align:center;color:var(--suave);padding:46px 20px;
+  background:var(--papel);border:1px dashed var(--linea);border-radius:18px;
 }
-.visor img{max-width:100vw;max-height:82dvh;object-fit:contain}
+.vacia p{margin:0;line-height:1.6}
+.vacia strong{color:var(--uva)}
+
+/* ============ VISOR ============ */
+.visor{
+  position:fixed;inset:0;z-index:100;background:rgba(32,14,20,.96);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  padding:16px;
+}
+.visor img{max-width:100%;max-height:78dvh;object-fit:contain;border-radius:10px}
 .visor-x{
-  position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;
-  border:none;background:rgba(255,255,255,.15);color:#fff;font-size:1.15rem;cursor:pointer;
+  position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;
+  border:none;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
 }
 .visor-pie{
-  display:flex;align-items:center;gap:16px;color:#fff;margin-top:14px;
-  font-size:.95rem;padding:0 20px;text-align:center;
+  display:flex;align-items:center;gap:18px;color:#fff;margin-top:18px;
+  font-size:.94rem;flex-wrap:wrap;justify-content:center;
 }
 .visor-dl{
-  color:#fff;background:var(--gal-acento);text-decoration:none;font-weight:700;
-  padding:9px 18px;border-radius:99px;
+  display:flex;align-items:center;gap:8px;
+  color:#fff;background:var(--acento);text-decoration:none;font-weight:700;
+  padding:11px 20px;border-radius:99px;font-size:.94rem;
 }
 
-/* --- toast --- */
+/* ============ TOAST ============ */
 .toast{
-  position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:200;
-  background:#3a3026;color:#fff;padding:11px 20px;border-radius:99px;
-  font-size:.95rem;font-weight:600;max-width:88vw;text-align:center;
-  box-shadow:0 8px 24px rgba(0,0,0,.3);
+  position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:200;
+  background:var(--uva);color:#fff;padding:13px 22px;border-radius:99px;
+  font-size:.94rem;font-weight:600;max-width:90vw;text-align:center;
+  box-shadow:0 10px 28px rgba(58,16,32,.4);
 }
 [hidden]{display:none!important}
