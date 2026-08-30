@@ -6,9 +6,8 @@
    en Firestore: el único que escribe fotos es el Worker.
    ============================================================ */
 
-/* La URL del Worker de Cloudflare. Cuando Maki cree el Worker,
-   se reemplaza esta constante (una línea) y nada más. */
-const WORKER = 'https://galeria.CAMBIAR-CUANDO-EXISTA.workers.dev';
+/* La URL del Worker de Cloudflare. */
+const WORKER = 'https://galeria.littlemomentsok.workers.dev';
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import {
