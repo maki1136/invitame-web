@@ -318,3 +318,33 @@ if (!location.pathname.startsWith('/i/')) {
 
 window.INV = INV;
 window.dispatchEvent(new CustomEvent("inv-ready", { detail: { ok: INV.ok, error: initError } }));
+
+/* ---- LOS MÓDULOS DE /efectos/, TAMBIÉN EN EL ADMIN --------------------------
+   Por qué está acá y no en el HTML del admin:
+
+   La invitación (/i/) y el admin de la ZONA DE PRUEBA (/prueba/admin.html)
+   cargan `sobres/catalogo.js`, que a su vez carga `efectos/index.js`. El admin
+   de PRODUCCIÓN (/admin.html) no lo carga — y por eso los bloques del panel
+   (paletas, botones, el fondo) existían en el repo, andaban en la zona de
+   prueba, y en el panel de verdad no aparecían. Se descubrió mirando qué
+   scripts tiene cada página: producción tenía dos, la de prueba tres.
+
+   Agregar una línea al HTML sería lo natural, pero admin.html pesa 144 KB y
+   sólo se sube a mano. Este archivo, en cambio, lo cargan las dos versiones del
+   admin. Enganchándolo acá, los dos paneles quedan iguales y las mejoras
+   nuevas siguen sin obligar a tocar los HTML grandes.
+
+   ⚠️ SÓLO donde hay formulario de edición. Este archivo también lo cargan el
+      panel de control (/panel.html) y el escáner de la puerta, y ahí los
+      módulos no pintan nada: se pide `.mejoras`, que es el bloque de edición y
+      existe únicamente en los dos admin. Y nunca en /i/, que ya los carga por
+      su cuenta: cargarlos dos veces duplicaría los bloques.
+   -------------------------------------------------------------------------- */
+if (!location.pathname.startsWith('/i/')
+    && document.querySelector('.mejoras')
+    && !document.querySelector('script[src*="efectos/index.js"], script[src*="catalogo.js"]')) {
+  const s = document.createElement('script');
+  s.src = '/efectos/index.js';
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+}
