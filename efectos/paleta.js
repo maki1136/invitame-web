@@ -140,8 +140,6 @@
     for (var k in MAPA) {
       if (!Object.prototype.hasOwnProperty.call(MAPA, k)) continue;
       if (!pal[k]) continue;
-      /* 'important' porque el motor escribe --verde y --seal-c en línea después
-         de que carga esto: sin important, la paleta se perdía al segundo. */
       raiz.style.setProperty(MAPA[k], pal[k], 'important');
       puestas.push(MAPA[k]);
     }
@@ -149,12 +147,35 @@
   }
 
   var firmaAnterior = null;
+  var pintando = false;
+
+  /* ⚠️ EL BUG QUE COSTÓ ENCONTRAR:
+     el motor escribe --verde y --seal-c EN LÍNEA sobre :root un rato después
+     de que carga esto, y `setProperty` sin prioridad pisa un !important puesto
+     antes. Con un chequeo que sólo mirara "¿cambió la paleta?", esas dos
+     variables se perdían para siempre y la invitación quedaba con ocho colores
+     de la paleta y dos del motor.
+     Por eso acá no se pregunta si cambió la elección: se verifica que los
+     colores SIGAN puestos. */
+  function sigueAplicada(pal) {
+    if (!pal) return puestas.length === 0;
+    for (var k in MAPA) {
+      if (!Object.prototype.hasOwnProperty.call(MAPA, k)) continue;
+      if (!pal[k]) continue;
+      var hay = raiz.style.getPropertyValue(MAPA[k]).trim().toLowerCase();
+      if (hay !== String(pal[k]).toLowerCase()) return false;
+    }
+    return true;
+  }
 
   function sincronizar() {
-    var id = leerId();
-    if (id === firmaAnterior) return;
+    if (pintando) return;
+    var id  = leerId();
+    var pal = buscar(id);
+    if (id === firmaAnterior && sigueAplicada(pal)) return;
     firmaAnterior = id;
-    pintar(buscar(id));
+    pintando = true;
+    try { pintar(pal); } finally { pintando = false; }
   }
 
   sincronizar();
@@ -162,11 +183,17 @@
     document.addEventListener('DOMContentLoaded', sincronizar, { once: true });
   }
 
-  /* El panel manda los datos en vivo por postMessage, no por la base. Y el
-     motor puede reescribir --verde en línea un rato después de cargar: por eso
-     esto se re-sincroniza siempre, no sólo los primeros segundos. */
+  /* Si el motor pisa las variables, se reponen en el acto: sin esto había que
+     esperar al intervalo y se veía el salto de color. */
+  if (window.MutationObserver) {
+    new MutationObserver(function () { sincronizar(); })
+      .observe(raiz, { attributes: true, attributeFilter: ['style'] });
+  }
+
+  /* El panel manda los datos en vivo por postMessage, no por la base. */
   window.addEventListener('message', function () { setTimeout(sincronizar, 0); }, false);
 
+  /* red de seguridad, por si cambia la elección sin tocar el style de :root */
   var esPrevia = /[?&]preview=1/.test(location.search);
   setInterval(sincronizar, esPrevia ? 400 : 1500);
 })();
