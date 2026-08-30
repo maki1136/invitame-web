@@ -17,7 +17,9 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
-   ⚠️ EL ORDEN IMPORTA en cuatro casos:
+   ⚠️ EL ORDEN IMPORTA en cinco casos:
+   · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
+     nada, así no se ve el salto desde los colores por defecto.
    · `itinerario-momentos.js` va ANTES de `itinerario.js`: primero se escriben
      los momentos de verdad, después se los anima.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
@@ -26,6 +28,7 @@
    ============================================================================ */
 (function () {
   var MODULOS = [
+    '/efectos/paleta.js',              /* la paleta: pinta las 10 variables de color de una */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
     '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
