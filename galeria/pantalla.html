@@ -29,6 +29,8 @@
      · Cada tanto muestra el QR grande para que los invitados que
        recién llegan sepan cómo subir las suyas.
      · Le pide al navegador que no apague la pantalla (Wake Lock).
+     · Anda igual en 16:9 y en 9:16: la pantalla del salón puede ser
+       un proyector acostado o una pantalla parada.
 
      Se abre así:  /galeria/pantalla.html?g=<código del evento>
      ============================================================ -->
@@ -58,11 +60,31 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
   position:absolute;inset:0;opacity:0;
   transition:opacity 1.4s ease;
   /* La foto se acomoda DENTRO de este margen. La franja de abajo es de la
-     firma y del cartelito del QR: reservándola acá, la foto no puede
-     quedar tapada por el QR en ninguna pantalla, sea 16:9, 4:3 o lo que
-     traiga el salón. (El fondo y el velo son absolutos: no los afecta.) */
+     firma y del cartelito del QR. (El fondo y el velo son absolutos: no
+     los afecta.)
+
+     Hay DOS casos y no se resuelven igual. Lo puso Maki: la pantalla del
+     salón puede ser 16:9 o 9:16.
+
+     · Foto ANCHA para la pantalla (una horizontal en el proyector, o
+       cualquiera en una pantalla vertical): llega hasta los costados, así
+       que sí o sí hay que reservarle la franja de abajo.
+     · Foto ALTA para la pantalla (la vertical del celular en un proyector
+       16:9, que es EL caso más común en una fiesta): queda angosta y
+       centrada, no llega ni al QR ni a la firma. Reservarle la franja de
+       abajo era regalarle un tercio del alto sin motivo.
+       Medido: pasaba del 13% al 23% de la pantalla.
+
+     El código de abajo le pone la clase mirando la foto y la pantalla. */
   display:flex;align-items:center;justify-content:center;
   padding:4% 7% 17% 7%;
+}
+/* La franja se achica SÓLO en pantallas bien anchas (16:9 para arriba),
+   que es donde la foto vertical queda angosta y lejos del QR. En una TV
+   4:3 la misma foto sale más ancha en proporción y llega a rozarlo:
+   medido, se tocaban por 2 px. Ahí se queda la franja entera. */
+@media (min-aspect-ratio: 3/2){
+  .capa.alta{ padding:3% 6% 6% 6% }
 }
 .capa.vista{opacity:1}
 .capa .fondo{
@@ -76,14 +98,26 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
   background:radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(12,3,8,.55) 100%);
 }
 .capa img{
+  /* OJO con esto, que no es obvio:
+     antes era max-width/max-height, y eso sólo ACHICA. Una foto que
+     llega más chica que el hueco (el compresor del celular puede bajarla
+     hasta 800 px cuando la señal está mal) se quedaba en su tamaño real
+     y en un proyector se veía chiquita en el medio de la pantalla.
+     Medido: ocupaba el 11% del proyector.
+
+     Con width/height al 100% + object-fit:contain, la foto SIEMPRE
+     llena el hueco, se agrande o se achique, y nunca se deforma.
+
+     Y la sombra pasa a ser drop-shadow en vez de box-shadow: box-shadow
+     dibuja el rectángulo del hueco (incluidas las franjas vacías de los
+     costados), drop-shadow sigue el contorno de la foto de verdad. */
   position:static;
-  max-width:100%;max-height:100%;
+  width:100%;height:100%;
   object-fit:contain;display:block;
-  border-radius:10px;
-  box-shadow:
-    0 2px 6px rgba(0,0,0,.35),
-    0 12px 30px -6px rgba(0,0,0,.45),
-    0 40px 80px -20px rgba(0,0,0,.65);
+  filter:
+    drop-shadow(0 2px 6px rgba(0,0,0,.35))
+    drop-shadow(0 12px 26px rgba(0,0,0,.35))
+    drop-shadow(0 34px 60px rgba(0,0,0,.45));
 }
 /* Un movimiento lentísimo, apenas perceptible: la pantalla "respira"
    en vez de quedar congelada entre foto y foto. */
@@ -356,7 +390,24 @@ function preparar() {
       img.decode().catch(() => {}),
       new Promise((r) => setTimeout(r, 300))
     ]);
-    /* Y acá había un requestAnimationFrame, que en una pestaña oculta
+
+    /* ¿la foto es alta o ancha PARA ESTA PANTALLA? De eso depende cuánto
+       lugar hay que reservarle abajo (ver el CSS de .capa).
+
+       No alcanza con comparar proporciones: una foto casi cuadrada es
+       "más alta" que un proyector 16:9 y sin embargo sale bien ancha y
+       llega al QR. Así que probamos y MEDIMOS: si con el hueco grande la
+       foto le queda encima al cartelito, le devolvemos la franja.
+       Sin números mágicos y funciona en cualquier pantalla. */
+    const dImg = (img.naturalWidth || 1) / (img.naturalHeight || 1);
+    const dPan = (window.innerWidth || 1) / (window.innerHeight || 1);
+    if (dImg < dPan) {
+      capa.classList.add('alta');
+      void capa.offsetWidth;
+      if (pisaElQR(img)) capa.classList.remove('alta');
+    }
+
+    /* Acá había un requestAnimationFrame, que en una pestaña oculta
        tampoco corre. offsetWidth fuerza el cálculo de estilo igual y no
        depende de que la pestaña esté visible. */
     void capa.offsetWidth;
@@ -381,6 +432,22 @@ function preparar() {
     }
     enPantalla = f.id;
     return true;
+  }
+
+  /* ¿la foto, tal como se ve, se superpone con el cartelito del QR?
+     OJO: la caja del <img> NO es la foto. Con object-fit:contain la caja
+     ocupa todo el hueco y adentro quedan franjas vacías a los costados.
+     Hay que calcular el rectángulo de la foto de verdad. */
+  function pisaElQR(img) {
+    const q = $('qr-chico');
+    if (!q || q.hidden) return false;
+    const c = img.getBoundingClientRect();
+    if (!img.naturalWidth || !img.naturalHeight) return false;
+    const esc = Math.min(c.width / img.naturalWidth, c.height / img.naturalHeight);
+    const w = img.naturalWidth * esc, h = img.naturalHeight * esc;
+    const izq = c.left + (c.width - w) / 2, arr = c.top + (c.height - h) / 2;
+    const b = q.getBoundingClientRect();
+    return !(izq + w < b.left || izq > b.right || arr + h < b.top || arr > b.bottom);
   }
 
   /* ---------- el bucle ---------- */
