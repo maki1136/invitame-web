@@ -76,9 +76,22 @@
 
    ★ LA LÍNEA DE TIEMPO PASA A SER UN HILO DE PERLAS (fase 4)
       En la referencia el collar ES la línea del programa: baja y los horarios
-      cuelgan de él. Acá se reemplaza la línea de 2 px de `.tl::before` por una
-      hilera de perlas repetida, y el puntito de cada momento (`.it::before`)
-      por una perla más grande.
+      cuelgan de él. Acá:
+        · `.tl::before` es la guía de la línea. El motor la deja al 22 % de
+          opacidad porque es sólo el riel; se sube a 1 y se le pone la foto de
+          la perla repetida hacia abajo, de 11 px. La línea original mide 2 px
+          y arranca a 6 px de la izquierda (centro en x=7), así que la hilera va
+          de 1.5 px a 12.5 px: mismo centro.
+        · `.it::before` (el puntito de cada momento, 12 px a -26 px del `.it`)
+          pasa a ser una perla más grande, corrida para quedar centrada.
+        · `.tl-prog` es la línea VERDE que se dibuja con el scroll, un `<i>`
+          que el motor anima con `transform: scaleY()`. Se esconde.
+
+      ⚠️ POR QUÉ SE ESCONDE `.tl-prog` Y NO SE LE PONEN PERLAS:
+         se anima con `scaleY`, y escalar en vertical un fondo repetido
+         ESTIRA las perlas y las deja ovaladas. Con una línea de color plano no
+         se nota, con perlas sí. Se elige la hilera fija y se pierde el relleno
+         por scroll en esta sección. La referencia tampoco lo tiene.
 
       ⚠️ SE APARTA DE LA REFERENCIA A PROPÓSITO: hilera RECTA, no en S, y los
          horarios quedan todos del mismo lado.
@@ -88,10 +101,10 @@
          quedan ilegibles. Se copia la idea (el hilo es de perlas) y se adapta
          la forma. Maki está avisada.
 
-      ⚠️ EN LA MUESTRA `camila-y-tomas` ESTO NO SE VE: esa invitación usa el
-         otro estilo de itinerario y tiene `.tl` en `display:none`. Se verificó
-         forzando el estilo a mano. En una invitación con el itinerario clásico
-         se ve solo.
+      ⚠️ EN LA MUESTRA `camila-y-tomas` ESTO NO SE VE SOLO: esa invitación usa
+         el otro estilo de itinerario y tiene `.tl` en `display:none`. Se
+         verificó forzando el estilo a mano. En una invitación con el
+         itinerario clásico se ve sin hacer nada.
 
    LO QUE HAY HECHO
      FASE 2 · tipografía y aire · FASE 3 · arcos, blanco y negro, fotos como
@@ -198,17 +211,14 @@
       'border-radius:3px;box-shadow:0 1px 2px rgba(60,50,40,.10),0 8px 22px rgba(60,50,40,.10)}',
 
     /* ── LA LÍNEA DE TIEMPO, HECHA DE PERLAS (fase 4) ──────────────────────
-       La línea del motor son 2 px de ancho en `.tl::before`, a 6 px de la
-       izquierda (centro en x=7). Se reemplaza por la foto de la perla repetida
-       hacia abajo, de 11 px, así que va de 1.5 px a 12.5 px: mismo centro.
-       El puntito de cada momento (`.it::before`, 12 px a -26 px del `.it`)
-       pasa a ser una perla un poco más grande, corrida para quedar centrada.
-       ⚠️ Recta y con los horarios de un solo lado, a propósito. Ver la nota
-          grande de arriba. */
+       Ver la nota grande de arriba: por qué se sube la opacidad, por qué la
+       hilera va de 1.5 px a 12.5 px, y por qué `.tl-prog` se esconde en vez de
+       llevar perlas. */
     'h[p] .tl::before{' +
-      'width:11px!important;left:1.5px!important;' +
+      'width:11px!important;left:1.5px!important;opacity:1!important;' +
       'background:var(--col-perla) repeat-y center top/11px 11px!important;' +
       'filter:drop-shadow(0 1px 1px rgba(60,50,40,.16))}',
+    'h[p] .tl .tl-prog{display:none!important}',
     'h[p] .tl .it::before{' +
       'width:17px!important;height:17px!important;left:-28.5px!important;' +
       'background:var(--col-perla) no-repeat center/contain!important;' +
@@ -273,13 +283,6 @@
       var m = ev.fx.motivo;
       if (m && m.juego) return;                    /* ya eligió: no se toca */
       ev.fx.motivo = { juego: 'perlas', densidad: 1, donde: 'todo' };
-    } catch (e) {}
-  }
-
-  function olvidarMotivo() {
-    try {
-      var m = ((window.INVEV || {}).fx || {}).motivo;
-      if (m && m.juego === 'perlas' && m.sug) window.INVEV.fx.motivo = {};
     } catch (e) {}
   }
 
