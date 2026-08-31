@@ -179,7 +179,10 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 
 /* ---------- el mensaje escrito, para leerlo ENTERO antes de decidir ---------- */
 .marco-msg{
-  padding:26px 22px;background:linear-gradient(158deg,#FFFDFB,#F7F2ED);
+  /* 56 arriba y no 26: el sello de "N esperando" flota ahi con position:absolute
+     y sobre una FOTO no molesta, pero sobre un texto le pisaba el primer
+     renglon. Medido en vivo el 31/8: se comia 15 px de la primera linea. */
+  padding:56px 22px 26px;background:linear-gradient(158deg,#FFFDFB,#F7F2ED);
   max-height:58dvh;overflow:auto;
 }
 .msg{
@@ -190,7 +193,8 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
   vertical-align:-.35em;margin-right:4px}
 
 /* ---------- el saludo de voz ---------- */
-.marco-audio{padding:26px 22px 22px;background:linear-gradient(158deg,#FFFDFB,#F7F2ED);text-align:center}
+/* Lo mismo que .marco-msg: el sello no puede pisar el microfono. */
+.marco-audio{padding:56px 22px 22px;background:linear-gradient(158deg,#FFFDFB,#F7F2ED);text-align:center}
 .marco-audio .micro-redondo{
   width:64px;height:64px;margin:0 auto 14px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;color:#7A4034;
