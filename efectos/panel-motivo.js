@@ -9,6 +9,11 @@
    Una función que no se puede tocar desde el panel es una función que NO
    EXISTE para Jazmín ni para el cliente. El motivo nace con su bloque.
 
+   ⚠️ CADA COSA NUEVA QUE DIBUJE `motivo.js` TIENE QUE APARECER ACÁ.
+      Los corazones del cierre se agregaron después y hubo que sumar la opción
+      en "Dónde va". Si se dibuja algo nuevo y no se suma al selector, para
+      Jazmín no existe: le aparece en la invitación y no puede sacarlo.
+
    ⚠️ VIENE APAGADO. El valor vacío es "sin motivo": una invitación no se llena
       de perlas porque sí. Se prende cuando la boda lo pide.
 
@@ -87,7 +92,8 @@
 
     var a = document.createElement('div');
     a.textContent = 'Un hilo de perlas de verdad que cuelga de la portada, ' +
-                    'reemplaza los adornos entre secciones y le da unidad a todo.';
+                    'reemplaza los adornos entre secciones y cierra con dos ' +
+                    'corazones en la mesa de regalos.';
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(a);
 
@@ -111,10 +117,11 @@
     var fDonde = elegir('Dónde va',
       [['todo',        'En toda la invitación'],
        ['guirnalda',   'Sólo colgando de la portada'],
-       ['separadores', 'Sólo entre las secciones']],
+       ['separadores', 'Sólo entre las secciones'],
+       ['corazones',   'Sólo los corazones del final']],
       function (v) {
         var m = datos(); if (!m) return;
-        tocado(); m.donde = v; refrescar();
+        tocado(); m.donde = v; pintar(); refrescar();
       });
     caja.appendChild(fDonde);
 
@@ -132,6 +139,14 @@
     ayuda.style.cssText = 'font-size:11px;opacity:.6;line-height:1.35';
     caja.appendChild(ayuda);
 
+    var DONDE = {
+      'todo':        'Cuelga de la portada, separa las secciones, siembra perlas ' +
+                     'sueltas y cierra con los dos corazones.',
+      'guirnalda':   'Sólo el collar que cuelga del borde de arriba de la portada.',
+      'separadores': 'Sólo el hilo que reemplaza los adornos entre una sección y otra.',
+      'corazones':   'Sólo los dos corazones de perlas, al final de la mesa de regalos.'
+    };
+
     /* dibuja los selectores según lo que dice HOY el borrador */
     function pintar() {
       var m = datos() || {};
@@ -142,7 +157,8 @@
       fDonde.style.display = prendido ? '' : 'none';
       fDens.style.display  = prendido ? '' : 'none';
       ayuda.textContent = prendido
-        ? 'Perlas fotografiadas, no dibujadas. Se adaptan al ancho de cada pantalla.'
+        ? (DONDE[m.donde || 'todo'] || DONDE.todo) +
+          ' Son perlas fotografiadas, no dibujadas, y se adaptan al ancho de cada pantalla.'
         : 'La invitación queda como está, con los adornos de siempre.';
     }
 
