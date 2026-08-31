@@ -171,6 +171,51 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 }
 .filtro.limpia{background:#E9F1EC;color:var(--ok)}
 .filtro.rota{background:#FDF0F0;color:var(--rojo)}
+/* Un audio no pasa por ningun filtro automatico: nadie lo escucho todavia.
+   Decir "filtro sin respuesta" en rojo seria alarmar por algo normal, y decir
+   "filtro OK" seria mentir. Chip neutro, con la instruccion adentro. */
+.filtro.aviso{background:#F4EFE9;color:var(--suave)}
+.filtro.marcada{background:#FDF0F0;color:var(--rojo)}
+
+/* ---------- el mensaje escrito, para leerlo ENTERO antes de decidir ---------- */
+.marco-msg{
+  padding:26px 22px;background:linear-gradient(158deg,#FFFDFB,#F7F2ED);
+  max-height:58dvh;overflow:auto;
+}
+.msg{
+  font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;line-height:1.45;
+  color:var(--tinta);margin:0;white-space:pre-wrap;overflow-wrap:anywhere;
+}
+.msg::before{content:"\201C";color:var(--blush-hondo);font-size:2.2rem;line-height:0;
+  vertical-align:-.35em;margin-right:4px}
+
+/* ---------- el saludo de voz ---------- */
+.marco-audio{padding:26px 22px 22px;background:linear-gradient(158deg,#FFFDFB,#F7F2ED);text-align:center}
+.marco-audio .micro-redondo{
+  width:64px;height:64px;margin:0 auto 14px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:#7A4034;
+  background:radial-gradient(120% 100% at 30% 12%, var(--blush-luz) 0%, transparent 62%), var(--rosa);
+  box-shadow:var(--sombra-esfera), inset 0 1.5px 0 rgba(255,255,255,.8);
+}
+.marco-audio .micro-redondo .ico{width:30px;height:30px}
+.marco-audio audio{width:100%;max-width:340px}
+.marco-audio .dura{font-size:.78rem;color:var(--suave);margin:0 0 12px;font-variant-numeric:tabular-nums}
+.marco-audio .pedido{font-size:.84rem;color:var(--uva);font-weight:700;margin:12px 0 0}
+
+/* ---------- en pantalla: las firmas van a lo ancho, arriba de las fotos ---------- */
+#vivo-firmas{display:grid;gap:10px;margin-bottom:12px}
+.firma-viva{
+  position:relative;background:var(--papel);border:1px solid rgba(255,255,255,.9);
+  border-radius:18px;padding:14px 92px 14px 16px;box-shadow:var(--relieve-2), var(--luz-arriba);
+}
+.firma-viva .de{font-size:.72rem;color:var(--suave);font-weight:700;margin-bottom:3px}
+.firma-viva .qué{
+  font-family:"Cormorant Garamond",Georgia,serif;font-size:1.05rem;line-height:1.35;
+  color:var(--tinta);overflow-wrap:anywhere;
+}
+.firma-viva .b-panico{
+  position:absolute;right:0;top:0;bottom:0;left:auto;width:78px;border-radius:0 18px 18px 0;
+}
 
 /* LOS DOS BOTONES DE DECIDIR. Tienen que verse DISTINTOS. */
 .acciones{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;padding:12px;background:transparent}
@@ -236,6 +281,7 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
   <g id="i-reloj"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g>
   <g id="i-cartel"><rect x="4.5" y="3" width="15" height="18" rx="2"/><path d="M8.5 8h7"/><path d="M8.5 12h7"/><path d="M8.5 16h4"/></g>
   <g id="i-pantalla"><rect x="2.6" y="4" width="18.8" height="12.6" rx="2"/><path d="M8.5 20.3h7"/><path d="M12 16.6v3.7"/></g>
+  <g id="i-micro"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"/><path d="M12 18v3"/></g>
   <g id="i-ojo"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g>
 </defs></svg>
 
@@ -282,7 +328,11 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 
 <main id="panel" hidden>
   <section id="vista-pend"></section>
-  <section id="vista-vivo" class="grilla-vivo" hidden></section>
+  <section id="vista-vivo" hidden>
+    <div id="vivo-firmas"></div>
+    <div id="vivo-fotos" class="grilla-vivo"></div>
+  </section>
+  <p id="aviso-firmas" class="vacio" hidden style="padding:16px;font-size:.86rem"></p>
   <div id="sin-nada" class="vacio" hidden></div>
 </main>
 
@@ -325,7 +375,16 @@ if (!GID) {
   $('lg-pass').addEventListener('keydown', (e) => { if (e.key === 'Enter') entrar(); });
 }
 
-let pendientes = [], aprobadas = [], vista = 'pend';
+/* La cola es UNA sola: fotos y libro de firmas mezclados por hora de llegada.
+   Se guardan en listas separadas porque son cuatro consultas distintas, y se
+   mezclan recien al pintar. Cada item lleva de que coleccion salio. */
+let fotosPend = [], fotosVivo = [], firmasPend = [], firmasVivo = [];
+let vista = 'pend';
+const pend = () => mezclar(fotosPend, firmasPend, 1);
+const vivo = () => mezclar(fotosVivo, firmasVivo, -1);
+function mezclar(a, b, orden) {
+  return a.concat(b).sort((x, y) => ((x.tsms || 0) - (y.tsms || 0)) * orden);
+}
 
 /* Los uid que pueden moderar CUALQUIER fiesta (Maki). No es un secreto:
    un uid solo no sirve para nada sin la sesión de esa persona. Hace falta
@@ -384,11 +443,22 @@ async function arrancar() {
 
   const col = collection(db, 'gal_fotos', GID, 'items');
   onSnapshot(query(col, where('estado', '==', 'pendiente')), (s) => {
-    pendientes = docsDe(s, 1); pintar();
+    fotosPend = docsDe(s, 'gal_fotos'); pintar();
   }, avisarError);
   onSnapshot(query(col, where('estado', '==', 'aprobada')), (s) => {
-    aprobadas = docsDe(s, -1); pintar();
+    fotosVivo = docsDe(s, 'gal_fotos'); pintar();
   }, avisarError);
+
+  /* El libro de firmas. Si estas consultas fallan (regla sin publicar, por
+     ejemplo) NO se tumba el panel: las fotos se siguen moderando y aparece un
+     aviso chico. Voltear todo por esto seria dejar la fiesta sin moderacion. */
+  const colF = collection(db, 'gal_firmas', GID, 'items');
+  onSnapshot(query(colF, where('estado', '==', 'pendiente')), (s) => {
+    firmasPend = docsDe(s, 'gal_firmas'); avisoFirmas(null); pintar();
+  }, (e) => avisoFirmas(e));
+  onSnapshot(query(colF, where('estado', '==', 'aprobada')), (s) => {
+    firmasVivo = docsDe(s, 'gal_firmas'); pintar();
+  }, (e) => avisoFirmas(e));
 
   $('tab-pend').onclick = () => { vista = 'pend'; pintar(); };
   $('tab-vivo').onclick = () => { vista = 'vivo'; pintar(); };
@@ -398,14 +468,21 @@ function avisarError(e) {
   $('estado').hidden = false;
   $('estado').innerHTML = '<p>No se pudo leer la galería (' + ((e && e.code) || 'error') + ').</p>';
 }
-function docsDe(s, orden) {
+function docsDe(s, col) {
   const a = [];
-  s.forEach((d) => a.push(Object.assign({ id: d.id }, d.data())));
-  a.sort((x, y) => ((x.tsms || 0) - (y.tsms || 0)) * orden);
+  s.forEach((d) => a.push(Object.assign({ id: d.id, col: col }, d.data())));
   return a;
 }
-async function cambiar(fid, estado) {
-  try { await updateDoc(doc(db, 'gal_fotos', GID, 'items', fid), { estado }); }
+function avisoFirmas(e) {
+  const el = $('aviso-firmas');
+  if (!e) { el.hidden = true; return; }
+  el.hidden = false;
+  el.textContent = /permission/i.test((e && e.code) || '')
+    ? 'Los mensajes y los saludos de voz todavía no se pueden leer (falta publicar el permiso en Firebase). Las fotos se moderan igual.'
+    : 'No se pudo leer el libro de firmas (' + ((e && e.code) || 'error') + '). Las fotos se moderan igual.';
+}
+async function cambiar(col, fid, estado) {
+  try { await updateDoc(doc(db, col, GID, 'items', fid), { estado }); }
   catch (e) {
     /* Nada de alert(): un cartel del navegador congela la página.
        Si el motivo es de permisos, decirlo con todas las letras. */
@@ -426,43 +503,81 @@ function haceRato(ts) {
 }
 
 function pintar() {
-  $('n-pend').textContent = pendientes.length;
-  $('n-vivo').textContent = aprobadas.length;
-  document.title = (pendientes.length ? '(' + pendientes.length + ') ' : '') + 'Moderar galería';
+  const p = pend(), v = vivo();
+  $('n-pend').textContent = p.length;
+  $('n-vivo').textContent = v.length;
+  document.title = (p.length ? '(' + p.length + ') ' : '') + 'Moderar galería';
   $('tab-pend').classList.toggle('activa', vista === 'pend');
   $('tab-vivo').classList.toggle('activa', vista === 'vivo');
   $('vista-pend').hidden = vista !== 'pend';
   $('vista-vivo').hidden = vista !== 'vivo';
 
-  if (vista === 'pend') pintarPendiente(); else pintarVivo();
+  if (vista === 'pend') pintarPendiente(p); else pintarVivo(v);
 }
 
-function pintarPendiente() {
-  const f = pendientes[0];
+function minSeg(s) {
+  const n = Math.max(0, Math.round(s || 0));
+  return Math.floor(n / 60) + ':' + String(n % 60).padStart(2, '0');
+}
+/* El chip de filtro dice la verdad de cada cosa:
+   - foto o texto revisado y limpio  -> verde con el puntaje
+   - texto que la lista negra marco  -> rojo, y CON la palabra: el que modera
+                                        tiene que poder juzgar el contexto
+   - audio                           -> neutro: no lo filtro nadie todavia
+   - foto cuyo filtro no contesto    -> rojo, como antes */
+function chipFiltro(f) {
+  const m = f.mod || {};
+  if (f.tipo === 'audio') return '<span class="filtro aviso">escuchalo entero</span>';
+  if (m.palabra) return '<span class="filtro marcada">palabra marcada: ' + esc(m.palabra) + '</span>';
+  if (m.falla) return '<span class="filtro rota">filtro sin respuesta</span>';
+  if (typeof m.score === 'number')
+    return '<span class="filtro limpia">filtro OK' +
+      (f.tipo === 'texto' ? '' : ' · ' + Math.round(m.score * 100) + '%') + '</span>';
+  return '';
+}
+function deQuien(f) {
+  return '<div class="quien">' +
+      '<div><div class="nom">' + esc((f.autor && f.autor.nombre) || 'Invitado') + '</div>' +
+      '<div class="meta">' + haceRato(f.tsms) + ' · ' +
+        ((f.autor && f.autor.origen === 'invitacion') ? 'desde la invitación' : 'desde el QR') +
+      '</div></div>' + chipFiltro(f) +
+    '</div>';
+}
+
+function pintarPendiente(cola) {
+  const f = cola[0];
   if (!f) {
     $('vista-pend').innerHTML = '';
-    sinNada('<div class="grande">✓</div><strong>No hay nada esperando</strong>Todo lo que subieron ya pasó por acá.');
+    sinNada('<div class="grande">✓</div><strong>No hay nada esperando</strong>Todo lo que dejaron ya pasó por acá.');
     return;
   }
   sinNada(null);
-  const filtro = f.mod && f.mod.falla
-    ? '<span class="filtro rota">filtro sin respuesta</span>'
-    : (f.mod && typeof f.mod.score === 'number'
-        ? '<span class="filtro limpia">filtro OK · ' + Math.round(f.mod.score * 100) + '%</span>'
-        : '');
+  const sello = '<span class="sello"><span class="pto"></span>' +
+    (cola.length > 1 ? cola.length + ' esperando' : 'esperando') + '</span>';
+
+  let marco;
+  if (f.tipo === 'texto') {
+    /* El mensaje entero, sin recortar: no se aprueba lo que no se leyo. */
+    marco = '<div class="marco">' +
+        '<div class="marco-msg"><p class="msg">' + esc(f.texto) + '</p></div>' + sello +
+      '</div>';
+  } else if (f.tipo === 'audio') {
+    marco = '<div class="marco">' +
+        '<div class="marco-audio">' +
+          '<div class="micro-redondo"><svg class="ico" viewBox="0 0 24 24"><use href="#i-micro"/></svg></div>' +
+          '<p class="dura">Saludo de voz · ' + minSeg(f.r2 && f.r2.segundos) + '</p>' +
+          '<audio controls preload="none" src="' + WORKER + '/f/' + esc(f.r2 && f.r2.key) + '"></audio>' +
+          '<p class="pedido">Escuchalo entero antes de decidir.</p>' +
+        '</div>' + sello +
+      '</div>';
+  } else {
+    marco = '<div class="marco">' +
+        '<img src="' + WORKER + '/f/' + f.r2.key + '" alt="Foto esperando aprobación">' + sello +
+      '</div>';
+  }
+
   $('vista-pend').innerHTML =
-    '<div class="tarjeta">' +
-      '<div class="marco">' +
-        '<img src="' + WORKER + '/f/' + f.r2.key + '" alt="Foto esperando aprobación">' +
-        '<span class="sello"><span class="pto"></span>' +
-          (pendientes.length > 1 ? pendientes.length + ' esperando' : 'esperando') + '</span>' +
-      '</div>' +
-      '<div class="quien">' +
-        '<div><div class="nom">' + esc((f.autor && f.autor.nombre) || 'Invitado') + '</div>' +
-        '<div class="meta">' + haceRato(f.tsms) + ' · ' +
-          ((f.autor && f.autor.origen === 'invitacion') ? 'desde la invitación' : 'desde el QR') +
-        '</div></div>' + filtro +
-      '</div>' +
+    '<div class="tarjeta">' + marco + deQuien(f) +
       '<div class="acciones">' +
         '<button class="b-no" id="b-no" type="button">' +
           '<svg class="ico" viewBox="0 0 24 24"><use href="#i-x"/></svg>No va</button>' +
@@ -470,24 +585,39 @@ function pintarPendiente() {
           '<svg class="ico" viewBox="0 0 24 24"><use href="#i-check"/></svg>A pantalla</button>' +
       '</div>' +
     '</div>';
-  $('b-ok').onclick = () => cambiar(f.id, 'aprobada');
-  $('b-no').onclick = () => cambiar(f.id, 'rechazada');
+  $('b-ok').onclick = () => cambiar(f.col, f.id, 'aprobada');
+  $('b-no').onclick = () => cambiar(f.col, f.id, 'rechazada');
 }
 
-function pintarVivo() {
-  if (!aprobadas.length) {
-    $('vista-vivo').innerHTML = '';
-    sinNada('<div class="grande">◌</div><strong>Todavía no hay fotos en pantalla</strong>Las que apruebes aparecen acá.');
+function pintarVivo(lista) {
+  if (!lista.length) {
+    $('vivo-firmas').innerHTML = ''; $('vivo-fotos').innerHTML = '';
+    sinNada('<div class="grande">◌</div><strong>Todavía no hay nada en pantalla</strong>Lo que apruebes aparece acá.');
     return;
   }
   sinNada(null);
-  $('vista-vivo').innerHTML = aprobadas.map((f) =>
+  /* Un mensaje no se lee en un cuadradito de un tercio de pantalla: las firmas
+     van a lo ancho arriba, y las fotos abajo en la grilla de siempre. */
+  const firmas = lista.filter((f) => f.col === 'gal_firmas');
+  const fotos = lista.filter((f) => f.col === 'gal_fotos');
+
+  $('vivo-firmas').innerHTML = firmas.map((f) =>
+    '<div class="firma-viva">' +
+      '<div class="de">' + esc((f.autor && f.autor.nombre) || 'Invitado') + '</div>' +
+      '<div class="qué">' + (f.tipo === 'audio'
+        ? 'Saludo de voz · ' + minSeg(f.r2 && f.r2.segundos)
+        : esc(f.texto)) + '</div>' +
+      '<button class="b-panico" data-col="gal_firmas" data-fid="' + f.id + '" type="button">BAJAR</button>' +
+    '</div>').join('');
+
+  $('vivo-fotos').innerHTML = fotos.map((f) =>
     '<div class="celda">' +
       '<img loading="lazy" src="' + WORKER + '/f/' + f.r2.thumb + '" alt="">' +
-      '<button class="b-panico" data-fid="' + f.id + '" type="button">BAJAR</button>' +
+      '<button class="b-panico" data-col="gal_fotos" data-fid="' + f.id + '" type="button">BAJAR</button>' +
     '</div>').join('');
+
   $('vista-vivo').querySelectorAll('.b-panico').forEach((b) => {
-    b.onclick = () => cambiar(b.dataset.fid, 'borrada');   // sin confirm: los diálogos nativos cuelgan
+    b.onclick = () => cambiar(b.dataset.col, b.dataset.fid, 'borrada');   // sin confirm: los diálogos nativos cuelgan
   });
 }
 
