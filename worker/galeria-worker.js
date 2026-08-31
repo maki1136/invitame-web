@@ -21,6 +21,10 @@
          CLAVE_ALTA          → una clave inventada para que Maki pueda crear
                                eventos a mano. NO se le da a nadie: los
                                clientes crean con su cuenta (ver abajo).
+     · Variable normal (NO secreto):
+         ADMIN_UIDS          → los uid de Firebase que pueden cargar créditos,
+                               separados por coma. No es un secreto: un uid no
+                               sirve para nada sin la sesión de esa persona.
 
    Endpoints:
      POST /subir   → recibe foto+thumb, frena abuso, guarda en R2,
@@ -31,6 +35,8 @@
                                    (gasta 1 crédito, descontado ACÁ ADENTRO)
      GET  /f/<key> → sirve un archivo del bucket (con caché)
      GET  /qr?g=   → el QR del evento (redirección a un generador)
+     POST /cuenta  → alta o recarga de una cuenta de cliente.
+                     Sólo para los uid de ADMIN_UIDS, con su sesión de Firebase.
      GET  /uso     → cuánto se lleva usado este mes contra el tope
    ============================================================ */
 
@@ -49,6 +55,7 @@ export default {
     try {
       if (ruta === '/subir' && req.method === 'POST') return await subir(req, env, ctx);
       if (ruta === '/crear' && req.method === 'POST') return await crear(req, env);
+      if (ruta === '/cuenta' && req.method === 'POST') return await ponerCuenta(req, env);
       if (ruta.startsWith('/f/') && req.method === 'GET') return await servir(req, env, ctx, ruta.slice(3), url);
       if (ruta === '/qr' && req.method === 'GET') return qr(url);
       if (ruta === '/uso' && req.method === 'GET') return await uso(env);
@@ -227,6 +234,51 @@ async function crear(req, env) {
     url: 'https://invitame.littlemomentsok.com/galeria/?g=' + gid,
     saldo: cobro ? cobro.saldo : null
   }, 200);
+}
+
+/* ---------------- /cuenta: cargar créditos ---------------- */
+/* Existe para que Maki no tenga que entrar a la consola de Firebase, donde el
+   formulario obliga a elegir el tipo de cada campo a mano. Si 'creditos'
+   quedara como texto, el descuento (increment -1) no resta: PISA el campo con
+   -1 y deja la cuenta rota. Acá el tipo lo pone el servidor y no se puede
+   equivocar.
+
+   Lo puede llamar sólo quien esté en ADMIN_UIDS, con su sesión de Firebase.
+   El navegador no lleva ninguna clave: lleva el token de esa sesión. */
+async function ponerCuenta(req, env) {
+  const quien = await verificarToken(req).catch(() => null);
+  if (!quien) return respuesta({ error: 'Entrá con tu cuenta.' }, 401);
+
+  const admins = String(env.ADMIN_UIDS || '').split(',').map((x) => x.trim()).filter(Boolean);
+  if (!admins.length) return respuesta({ error: 'Falta configurar ADMIN_UIDS en el Worker.' }, 500);
+  if (admins.indexOf(quien.uid) < 0) return respuesta({ error: 'Esta pantalla no es para vos.' }, 403);
+
+  const b = await req.json().catch(() => ({}));
+  const uid = String(b.uid || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(uid)) return respuesta({ error: 'Ese código de usuario no tiene forma de UID.' }, 400);
+
+  const n = Number(b.creditos);
+  if (!Number.isInteger(n) || n < 0 || n > 100000) {
+    return respuesta({ error: 'Los créditos tienen que ser un número entero, de 0 en adelante.' }, 400);
+  }
+
+  /* Merge a propósito: NO se toca 'creados' ni nada que ya tenga la cuenta.
+     Sólo se escribe lo que vino, y 'creditos' SIEMPRE como entero. */
+  const campos = { creditos: n, estado: b.estado === 'baja' ? 'baja' : 'activa' };
+  if (b.nombre !== undefined) campos.nombre = String(b.nombre || '').slice(0, 80);
+  if (b.email !== undefined) campos.email = String(b.email || '').slice(0, 120);
+
+  const t = await tokenGoogle(env);
+  const mascara = Object.keys(campos).map((k) => 'updateMask.fieldPaths=' + k).join('&');
+  const r = await fetch(FS + '/gal_cuentas/' + uid + '?' + mascara, {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: aFirestore(campos) })
+  });
+  if (!r.ok) return respuesta({ error: 'No se pudo guardar la cuenta (' + r.status + ')' }, 502);
+
+  const d = desdeFirestore((await r.json()).fields || {});
+  return respuesta({ ok: true, uid, cuenta: d }, 200);
 }
 
 /* ---------------- créditos ---------------- */
