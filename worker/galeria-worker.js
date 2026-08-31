@@ -301,7 +301,15 @@ const CONTROLES = new RegExp('[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F]', '
 const TILDES = new RegExp('[\\u0300-\\u036f]', 'g');
 
 const MAX_TEXTO = 500;
-const MAX_AUDIO = 600 * 1024;      /* ~60 s en Opus entran de sobra */
+/* 2 MB y no 600 KB. El 600 salía de suponer que un minuto en Opus entra de
+   sobra — y era una suposición, no una medición. Medido el 31/8 con un audio
+   de verdad: 6 s pesaron 165 KB (~225 kbps), o sea que el minuto que la
+   pantalla le promete al invitado daba ~1,7 MB y se rechazaba DESPUÉS de que
+   la persona hablara. El iPhone graba AAC y también puede pasarse de 600 KB.
+   La galeria ahora graba a 48 kbps (~370 KB el minuto), pero eso es una
+   sugerencia que algunos navegadores ignoran: este tope es la red de abajo,
+   no el caso normal. */
+const MAX_AUDIO = 2 * 1024 * 1024;
 const MAX_SEGUNDOS = 62;           /* 60 + margen: el celular redondea */
 
 async function firmar(req, env, ctx) {
