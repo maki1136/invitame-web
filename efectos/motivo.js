@@ -15,7 +15,7 @@
      INVEV.fx.motivo = {
        juego:   'perlas',   // por ahora el único
        densidad: 1,         // 0.6 discreto · 1 normal · 1.4 cargado
-       donde:   'todo'      // 'todo' | 'guirnalda' | 'separadores'
+       donde:   'todo'      // 'todo' | 'guirnalda' | 'separadores' | 'corazones'
      }
    Para probar sin tocar la base: `?motivo=perlas&densidad=1`
 
@@ -44,8 +44,8 @@
    cualquier curva y cualquier pantalla, sin pixelarse.
 
    ⚠️ LA SOMBRA VA POR CSS, NO EN EL ARCHIVO. `filter: drop-shadow()` sobre el
-   contenedor —una sola pasada para toda la guirnalda, no una por perla—, así
-   la sombra se adapta al fondo de cada sección y no viene quemada en blanco.
+   contenedor —una sola pasada para todo el grupo, no una por perla—, así la
+   sombra se adapta al fondo de cada sección y no viene quemada en blanco.
 
    ⚠️ NO TINTAR CON `background-blend-mode`. Se probó para recolorear la perla
    con la paleta y NO sirve: el color de fondo llena toda la caja, así que las
@@ -66,9 +66,19 @@
        collar cuelga, no flota.
      · El hilo horizontal reemplaza `.adorno` (los aros ⚭ que ya separan las
        secciones; hay 17, de 112×40).
+     · Los corazones van al FINAL de la sección de regalos, enganchados a
+       `.reg-btns`. Es el único elemento confiable para encontrar esa sección:
+       los títulos los escribe el cliente y cambian.
      · ⚠️ NO TOCAR `.sep`: NO es un separador de secciones, son los dos puntos
        ENTRE LOS NÚMEROS de la cuenta regresiva. La v1 les colgó hilos encima y
        quedó un desastre sobre el contador.
+
+   ⚠️ LOS CORAZONES VAN EN EL FLUJO, NO FLOTANDO.
+      Todo lo demás de este archivo es `position:absolute` encima de algo. Los
+      corazones no: son el remate de la invitación y tienen que EMPUJAR, ocupar
+      su lugar y dejar aire abajo. Por eso `.mtv-corazones` pisa el
+      `position:absolute` de `.mtv` y va en `relative`, con su alto propio.
+      Si se dejan absolutos quedan encimados sobre los botones de regalos.
 
    ⚠️ NO TAPA NI ROBA CLICS: todo `pointer-events:none` y por debajo del texto.
 
@@ -149,6 +159,10 @@
     'html[data-motivo="perlas"] .adorno{position:relative}' +
 
     '.mtv-suelta{opacity:.85}' +
+
+    /* ⚠️ los corazones van EN EL FLUJO: pisan el absolute de `.mtv`.
+       Ver la nota de arriba. */
+    '.mtv-corazones{position:relative;margin:36px auto 4px;display:block}' +
 
     '@media (max-width:420px){.mtv-guirnalda{height:130px}}';
 
@@ -246,6 +260,61 @@
     return caja;
   }
 
+  /* ---- LOS DOS CORAZONES DEL CIERRE ---------------------------------------
+     La curva del corazón es la clásica paramétrica:
+        x = 16·sen³t
+        y = 13·cos t − 5·cos2t − 2·cos3t − cos4t
+     Va de −16 a 16 en x, así que el ancho es 32 unidades: la escala sale de
+     dividir el ancho que se quiere por 32. En pantalla la y va para abajo, por
+     eso se resta.
+
+     ⚠️ LAS PERLAS SE REPARTEN POR LARGO DE ARCO, NO POR `t`.
+        Con `t` parejo se amontonan en la punta de abajo y se separan en los
+        lóbulos: se nota enseguida que está mal dibujado. Se recorre la curva
+        con muchos pasos chicos, se acumula la distancia y se pone una perla
+        cada tanto de LARGO. Misma idea que `enhebrar`, pero sin Bézier. */
+  function ptoCorazon(t, esc, cx, cy) {
+    var s = Math.sin(t), c = Math.cos(t);
+    return {
+      x: cx + (16 * s * s * s) * esc,
+      y: cy - (13 * c - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * esc
+    };
+  }
+
+  function unCorazon(caja, cx, cy, ancho, d, densidad) {
+    var esc = ancho / 32;
+    var PASOS = 720;
+    var paso = (d * 0.94) / Math.max(0.5, densidad);
+    var acum = 0, ant = ptoCorazon(0, esc, cx, cy), i, q;
+    poner1(caja, ant.x, ant.y, d);
+    for (i = 1; i <= PASOS; i++) {
+      q = ptoCorazon((i / PASOS) * Math.PI * 2, esc, cx, cy);
+      acum += Math.hypot(q.x - ant.x, q.y - ant.y);
+      if (acum >= paso) { poner1(caja, q.x, q.y, d); acum = 0; }
+      ant = q;
+    }
+  }
+
+  function corazones(anchoSec, densidad) {
+    var caja = vestir(document.createElement('div'));
+    caja.className = 'mtv mtv-corazones';
+
+    var chico = anchoSec < 380;
+    var w = chico ? 74 : 88;            /* ancho de cada corazón */
+    var d = chico ? 6 : 7;              /* tamaño de perla */
+    var solape = w * 0.34;              /* cuánto se cruzan, como en la referencia */
+    var alto = w * 0.92;
+
+    var total = w * 2 - solape;
+    caja.style.width  = Math.round(total) + 'px';
+    caja.style.height = Math.round(alto) + 'px';
+
+    var cy = alto * 0.47;
+    unCorazon(caja, w / 2,                  cy, w, d, densidad);
+    unCorazon(caja, total - w / 2,          cy, w, d, densidad);
+    return caja;
+  }
+
   /* pocas, contra los bordes de la sección, nunca sobre el texto */
   function sueltas(densidad) {
     var caja = vestir(document.createElement('div'));
@@ -303,6 +372,15 @@
       });
     }
 
+    /* los corazones, al final de la sección de regalos */
+    if (donde === 'todo' || donde === 'corazones') {
+      var btns = document.querySelector('.reg-btns');
+      var secReg = btns && btns.closest ? btns.closest('.sec') : null;
+      if (secReg && !secReg.querySelector('.mtv-corazones')) {
+        secReg.appendChild(corazones(ancho, densidad));
+      }
+    }
+
     if (donde === 'todo') {
       /* sólo en las claras: sobre las de color no se leen */
       [].forEach.call(document.querySelectorAll('.sec:not(.verde)'), function (s, i) {
@@ -323,7 +401,8 @@
     var p = document.querySelector('.portada');
     var w = p ? Math.round(p.getBoundingClientRect().width) : 0;
     var nueva = JSON.stringify([m.juego, m.densidad, m.donde, w, !!foto(),
-                                document.querySelectorAll('.adorno').length]);
+                                document.querySelectorAll('.adorno').length,
+                                !!document.querySelector('.reg-btns')]);
     if (!activo(m)) { if (puesto) sacar(); firma = nueva; return; }
     if (nueva === firma && puesto) return;
     firma = nueva;
