@@ -27,12 +27,22 @@
          · si `nfont` está vacía, la colección los pone en serif fina y
            mayúsculas, como la referencia;
          · si `nfont` tiene algo elegido, la colección NO toca los nombres.
-         Acá se le ofrece a Jazmín vaciar el campo con un clic, para que la
-         colección tome la posta. Y si después quiere volver a la manuscrita,
-         elige la fuente de siempre y la colección se hace a un lado.
+         Acá se le ofrece a Jazmín vaciar el campo con un clic. Y si después
+         quiere volver a la manuscrita, elige la fuente y la colección se hace
+         a un lado.
 
          ⚠️ El tratamiento de los nombres va TODO junto o no va: poner en
             mayúsculas una letra manuscrita queda horrible.
+
+   ★★ `fx.paleta` ES UN OBJETO `{id:"..."}`, NO UN TEXTO ★★  ← bug real
+      La primera versión escribía `fx.paleta = 'cafe-caramelo'` y comparaba
+      `fx.paleta === c.paleta`. Las dos cosas están mal:
+        · la comparación NUNCA daba verdadero, así que a una invitación que ya
+          tenía la paleta correcta igual le salía el cartel de conflicto;
+        · y al escribir un texto donde el resto del sistema espera un objeto,
+          el selector de paletas se quedaba sin poder leer el `id`.
+      → Se lee siempre `fx.paleta.id` (aceptando texto por si alguna invitación
+        vieja lo tiene así) y se escribe siempre `{ id: '...' }`.
 
    ⚠️ NO GUARDARSE `D.fx` AL CONSTRUIR.  ← bug real, ya pasó con panel-motivo
       El bloque se arma a los ~500 ms, ANTES de que cargue el evento. Cuando el
@@ -40,8 +50,7 @@
       cualquier referencia guardada antes queda apuntando a un objeto huérfano:
       los selectores se mueven, la vista previa se refresca… y no guarda nada.
       Parece andar y no anda. Por eso `datos()` se llama de nuevo adentro de
-      cada `onchange`, y los selectores se re-sincronizan desde `D` mientras el
-      usuario no los haya tocado.
+      cada `onchange`.
 
    ⚠️ PARA APAGAR SE GUARDA `''`, NO SE BORRA LA CLAVE.
       `INV.saveEvento` guarda con merge: borrar la clave del borrador NO la
@@ -87,6 +96,12 @@
   function deId(id) {
     for (var i = 0; i < COLECCIONES.length; i++) if (COLECCIONES[i].id === id) return COLECCIONES[i];
     return COLECCIONES[0];
+  }
+  /* ⚠️ `fx.paleta` es `{id:"..."}`. Ver la nota grande de arriba. */
+  function idDePaleta(fx) {
+    var p = (fx || {}).paleta;
+    if (!p) return '';
+    return (typeof p === 'string') ? p : (p.id || '');
   }
 
   function construir() {
@@ -155,15 +170,16 @@
 
       if (c.id) {
         /* ---- 1. la paleta ---- */
-        if (!fx.paleta || fx.paleta === c.paleta) {
-          fx.paleta = c.paleta;            /* no había ninguna: se pone la suya */
+        var actual = idDePaleta(fx);
+        if (!actual || actual === c.paleta) {
+          fx.paleta = { id: c.paleta };    /* ⚠️ objeto, no texto */
         } else {
           avPaleta.textContent = 'Esta colección está diseñada para la paleta ' +
             c.paletaNombre + ', y esta invitación tiene otra. Podés dejarla así, ' +
             'pero puede no verse como la muestra.';
           enlace(avPaleta, 'Usar la paleta de la colección', function () {
             var f2 = datos(); if (!f2) return;
-            f2.paleta = c.paleta;
+            f2.paleta = { id: c.paleta };
             avPaleta.style.display = 'none';
             refrescar();
           });
