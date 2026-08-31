@@ -12,6 +12,18 @@
    ⚠️ VIENE APAGADO. El valor vacío es "sin motivo": una invitación no se llena
       de perlas porque sí. Se prende cuando la boda lo pide.
 
+   ⚠️ NO GUARDARSE `D.fx.motivo` EN UNA VARIABLE AL CONSTRUIR.  ← bug real
+      El bloque se arma a los ~500 ms, ANTES de que termine de cargar el
+      evento. Cuando el evento llega, el panel REEMPLAZA `D.fx` por el objeto
+      que viene de Firestore, y cualquier referencia guardada antes queda
+      apuntando a un objeto huérfano: los selectores se movían, la vista previa
+      se refrescaba… y en `D.fx.motivo` no quedaba nada. Se veía andar y no
+      guardaba.
+      Por eso `datos(D)` se llama DE NUEVO adentro de cada `onchange`, igual
+      que en panel-rsvp.js. Y por eso los selectores se re-sincronizan desde
+      `D` mientras el usuario no los haya tocado: si la invitación ya tenía el
+      motivo prendido, el panel tiene que mostrarlo prendido.
+
    ⚠️ SÓLO ES DECORACIÓN. No toca textos, ni la confirmación, ni los datos del
       evento. Todo va con `pointer-events:none` y por debajo del texto, así que
       no tapa ni roba clics.
@@ -19,7 +31,7 @@
    ⚠️ PARA APAGARLO SE GUARDA `''`, NO SE BORRA LA CLAVE.
       `INV.saveEvento` guarda con merge: borrar la clave del borrador NO la
       borra en Firestore, queda la anterior y el motivo "no se apaga". Hay que
-      escribir el vacío. Esto ya nos costó una vuelta con otros bloques.
+      escribir el vacío.
 
    ⚠️ `D` (el borrador) NO cuelga de window: es un `const` del script principal.
       Ver la misma nota en panel-fondo.js, panel-pieza.js y panel-rsvp.js.
@@ -34,13 +46,16 @@
   function refrescar() {
     if (typeof postPreview === 'function') { try { postPreview(); } catch (e) {} }
   }
-  function datos(d) {
+  /* ⚠️ SIEMPRE fresco: nunca guardar lo que devuelve. Ver la nota de arriba. */
+  function datos() {
+    var d = borrador();
+    if (!d) return null;
     if (!d.fx) d.fx = {};
     if (!d.fx.motivo) d.fx.motivo = {};
     return d.fx.motivo;
   }
 
-  function elegir(etiqueta, opciones, valor, alCambiar) {
+  function elegir(etiqueta, opciones, alCambiar) {
     var fila = document.createElement('div');
     fila.style.cssText = 'margin:0 0 8px';
     var lab = document.createElement('label');
@@ -53,7 +68,6 @@
       op.value = o[0]; op.textContent = o[1];
       sel.appendChild(op);
     });
-    sel.value = valor;
     sel.onchange = function () { alCambiar(sel.value); };
     fila.appendChild(lab);
     fila.appendChild(sel);
@@ -61,9 +75,7 @@
     return fila;
   }
 
-  function construir(d) {
-    var m = datos(d);
-
+  function construir() {
     var caja = document.createElement('div');
     caja.id = ID;
     caja.style.cssText = 'margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(0,0,0,.10)';
@@ -79,68 +91,85 @@
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(a);
 
-    var fDonde, fDens;
-
-    function mostrarExtras(v) {
-      var ver = v ? '' : 'none';
-      fDonde.style.display = ver;
-      fDens.style.display  = ver;
-      ayuda.textContent = v
-        ? 'Perlas fotografiadas, no dibujadas. Se adaptan al ancho de cada pantalla.'
-        : 'La invitación queda como está, con los adornos de siempre.';
-    }
+    function tocado() { caja.dataset.tocado = '1'; }
 
     var fJuego = elegir('El motivo',
       [['',       'Sin motivo'],
        ['perlas', 'Un hilo de perlas']],
-      (m.juego === 'perlas') ? 'perlas' : '',
       function (v) {
+        var m = datos(); if (!m) return;
+        tocado();
         /* ⚠️ vacío, NO borrar la clave: el guardado es con merge */
         m.juego = v;
         if (v && typeof m.densidad !== 'number') m.densidad = 1;
         if (v && !m.donde) m.donde = 'todo';
-        mostrarExtras(v);
+        pintar();
         refrescar();
       });
     caja.appendChild(fJuego);
 
-    fDonde = elegir('Dónde va',
-      [['todo',         'En toda la invitación'],
-       ['guirnalda',    'Sólo colgando de la portada'],
-       ['separadores',  'Sólo entre las secciones']],
-      m.donde || 'todo',
-      function (v) { m.donde = v; refrescar(); });
+    var fDonde = elegir('Dónde va',
+      [['todo',        'En toda la invitación'],
+       ['guirnalda',   'Sólo colgando de la portada'],
+       ['separadores', 'Sólo entre las secciones']],
+      function (v) {
+        var m = datos(); if (!m) return;
+        tocado(); m.donde = v; refrescar();
+      });
     caja.appendChild(fDonde);
 
-    fDens = elegir('Cuánto',
+    var fDens = elegir('Cuánto',
       [['0.6', 'Discreto'],
        ['1',   'Normal'],
        ['1.4', 'Cargado']],
-      String(typeof m.densidad === 'number' ? m.densidad : 1),
-      function (v) { m.densidad = parseFloat(v); refrescar(); });
+      function (v) {
+        var m = datos(); if (!m) return;
+        tocado(); m.densidad = parseFloat(v); refrescar();
+      });
     caja.appendChild(fDens);
 
     var ayuda = document.createElement('div');
     ayuda.style.cssText = 'font-size:11px;opacity:.6;line-height:1.35';
     caja.appendChild(ayuda);
 
-    mostrarExtras(m.juego === 'perlas' ? 'perlas' : '');
+    /* dibuja los selectores según lo que dice HOY el borrador */
+    function pintar() {
+      var m = datos() || {};
+      var prendido = (m.juego === 'perlas');
+      fJuego.sel.value = prendido ? 'perlas' : '';
+      fDonde.sel.value = m.donde || 'todo';
+      fDens.sel.value  = String(typeof m.densidad === 'number' ? m.densidad : 1);
+      fDonde.style.display = prendido ? '' : 'none';
+      fDens.style.display  = prendido ? '' : 'none';
+      ayuda.textContent = prendido
+        ? 'Perlas fotografiadas, no dibujadas. Se adaptan al ancho de cada pantalla.'
+        : 'La invitación queda como está, con los adornos de siempre.';
+    }
+
+    caja.pintar = pintar;
+    pintar();
     return caja;
   }
 
   function revisar() {
     var d = borrador();
     if (!d) return;
-    if (document.getElementById(ID)) return;
     var m = document.querySelector('.mejoras');
     if (!m) return;
+
+    var caja = document.getElementById(ID);
+    if (caja) {
+      /* mientras nadie lo tocó, seguir lo que diga el evento que se cargó */
+      if (!caja.dataset.tocado && caja.pintar) caja.pintar();
+      return;
+    }
 
     /* último de la fila de decisiones visuales */
     var ancla = document.getElementById('rsvp-selector') ||
                 document.getElementById('fondo-selector') ||
                 document.getElementById('boton-selector') ||
                 document.getElementById('paleta-selector');
-    var caja = construir(d);
+    caja = construir();
     if (ancla && ancla.parentNode === m) m.insertBefore(caja, ancla.nextSibling);
     else m.insertBefore(caja, m.firstChild);
   }
