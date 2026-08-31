@@ -1,0 +1,20 @@
+/* colecciones/pieza-mono.js — sobre cerrado con el moño de perlas.
+ * 360x268, WebP, 2.298 B. Para la sección de contacto.
+ *
+ * ⚠️ NO SE RECORTA: va sobre papel marfil y se coloca entera, con el alfa
+ *    apagándose en el 12% exterior para que se funda con la sección.
+ *    Recortar lo que flota, difuminar lo que se apoya.
+ *
+ * ⚠️ Es el ÚNICO objeto de perlas que viene fotografiado entero. Todo lo demás
+ *    —la guirnalda, la línea del programa, las perlas sembradas, los dos
+ *    corazones— se arma repitiendo por código la perla suelta de perla.js.
+ *    Un moño no se puede armar así: tiene cruces, lazos y perlas de canto.
+ *
+ * suma de control (s = s*31 + byte, 32 bits) = 642294610 · 2298 bytes
+ */
+(function () {
+  'use strict';
+  window.INVPIEZAS = window.INVPIEZAS || {};
+  window.INVPIEZAS.mono = 'data:image/webp;base64,' +
+'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';
+})();
