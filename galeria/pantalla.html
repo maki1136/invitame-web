@@ -192,6 +192,51 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
 #placa .pie{font-size:clamp(.8rem,1.3vw,1.05rem);letter-spacing:.2em;
   text-transform:uppercase;font-weight:700;opacity:.55}
 
+/* ---------- el libro de firmas en grande ----------
+   Cada tantas fotos entra un mensaje. Ocupa toda la pantalla igual que la
+   placa del QR: es lo mismo que ya hace esta pantalla, no una mecanica nueva.
+   ⚠️ El audio NO suena. Hay musica y gente hablando; un saludo saliendo por
+   los parlantes del salon sin que nadie lo pida es una sorpresa desagradable.
+   Se anuncia quien lo dejo, y se escucha en el album. */
+#mensaje{
+  position:fixed;inset:0;z-index:18;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:26px;text-align:center;padding:6vh 8vw;
+  background:
+    radial-gradient(66% 52% at 24% 22%, rgba(245,103,112,.18), transparent 62%),
+    radial-gradient(58% 48% at 80% 78%, rgba(109,18,51,.34), transparent 64%),
+    var(--fondo);
+  opacity:0;pointer-events:none;transition:opacity 1s ease;
+}
+#mensaje.vista{opacity:1}
+#msg-texto{
+  font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;
+  font-size:clamp(1.7rem,5.2vw,4.4rem);line-height:1.22;
+  max-width:20ch;text-wrap:balance;
+  text-shadow:0 2px 18px rgba(0,0,0,.45);
+}
+/* Un mensaje de 500 letras en cuerpo de titular no entra en la pantalla.
+   El codigo le pone la clase segun cuanto escribio el invitado. */
+#msg-texto.largo{font-size:clamp(1.2rem,3vw,2.4rem);max-width:34ch;line-height:1.3}
+#msg-texto.medio{font-size:clamp(1.4rem,4vw,3.2rem);max-width:26ch}
+#msg-texto::before{content:"\201C";opacity:.5;margin-right:.08em}
+#msg-texto::after{content:"\201D";opacity:.5;margin-left:.06em}
+#msg-quien{
+  font-family:"Nunito",sans-serif;font-weight:700;
+  font-size:clamp(.78rem,1.3vw,1.05rem);letter-spacing:.2em;text-transform:uppercase;
+  opacity:.62;
+}
+#msg-micro{
+  width:clamp(78px,11vh,128px);height:clamp(78px,11vh,128px);border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+  background:radial-gradient(120% 100% at 30% 8%, rgba(255,255,255,.28) 0%, transparent 60%), var(--acento);
+  box-shadow:0 3px 8px rgba(0,0,0,.4), 0 22px 46px -12px rgba(0,0,0,.6);
+}
+#mensaje.es-audio #msg-micro{display:flex}
+#msg-micro svg{width:52%;height:52%;fill:none;stroke:#fff;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round}
+#msg-pie{margin:0;font-size:clamp(.9rem,1.6vw,1.25rem);opacity:.66;max-width:30ch}
+
 /* ---------- avisos ---------- */
 #aviso{
   position:fixed;top:26px;left:50%;transform:translateX(-50%);z-index:40;
@@ -237,6 +282,13 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
   <div class="pie" id="placa-pie"></div>
 </div>
 
+<div id="mensaje">
+  <div id="msg-micro"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"/><path d="M12 18v3"/></svg></div>
+  <div id="msg-texto"></div>
+  <div id="msg-quien"></div>
+  <p id="msg-pie"></p>
+</div>
+
 <div id="aviso"></div>
 
 <div id="arranque">
@@ -278,6 +330,9 @@ const GID = (params.get('g') || '').trim();
    Se pueden cambiar desde la URL para probar: ?seg=4&cada=3 */
 const SEG = Math.max(2, parseInt(params.get('seg') || '7', 10) || 7) * 1000;
 const CADA = Math.max(3, parseInt(params.get('cada') || '9', 10) || 9);
+/* Y cada cuantas fotos entra un mensaje del libro de firmas. Mas seguido que
+   el QR: el mensaje es lo que la gente vino a ver, el QR es una instruccion. */
+const MENS = Math.max(2, parseInt(params.get('mens') || '4', 10) || 4);
 
 const $ = (id) => document.getElementById(id);
 
@@ -311,6 +366,22 @@ function preparar() {
   let vivas = {};
   fotos.forEach((f) => { vivas[f.id] = true; });
 
+  /* El libro de firmas se guarda igual que las fotos: si el wifi del salon
+     se cae, los mensajes que ya llegaron se siguen pasando. Son texto: pesan
+     nada al lado de una foto. */
+  const LLAVE_F = 'pantalla-firmas:' + GID;
+  let firmas = [];
+  try { firmas = JSON.parse(localStorage.getItem(LLAVE_F) || '[]'); } catch (e) { firmas = []; }
+  let jf = -1;
+  /* Cuantas FOTOS se pintaron desde el ultimo mensaje. Cuenta fotos, no
+     vueltas: si contara vueltas, el propio mensaje gastaria una y las tandas
+     saldrian de tres fotos en vez de cuatro. */
+  let desdeMensaje = 0;
+  /* El id del mensaje que se está viendo AHORA, o null si lo que se ve es una
+     foto. No alcanza con jf: jf recuerda el último mostrado aunque ya haya
+     vuelto una foto, y por eso bajaría una foto a la mitad sin motivo. */
+  let msgEnPantalla = null;
+
   let i = -1;
   let enPantalla = null;
   let vueltas = 0;
@@ -328,6 +399,36 @@ function preparar() {
     avisar._t = setTimeout(() => a.classList.remove('vista'), 3200);
   }
   function mostrarPlaca(si) { $('placa').classList.toggle('vista', si); }
+
+  /* ---------- un mensaje del libro de firmas, a pantalla completa ---------- */
+  function ocultarMensaje() { msgEnPantalla = null; $('mensaje').classList.remove('vista'); }
+  /* Devuelve cuantos milisegundos conviene dejarlo: un mensaje largo se lee
+     mas despacio que "Felicidades". Sale de contar letras, no de adivinar. */
+  function mostrarMensaje(f) {
+    const caja = $('mensaje');
+    const t = $('msg-texto');
+    const esAudio = f.tipo === 'audio';
+    caja.classList.toggle('es-audio', esAudio);
+
+    /* textContent, NUNCA innerHTML: esto lo escribio un invitado. */
+    t.textContent = esAudio ? '' : (f.texto || '');
+    t.hidden = esAudio;
+    const n = (f.texto || '').length;
+    t.classList.toggle('largo', n > 190);
+    t.classList.toggle('medio', n > 90 && n <= 190);
+
+    $('msg-quien').textContent = f.nombre || 'Un invitado';
+    $('msg-pie').textContent = esAudio
+      ? (f.nombre || 'Un invitado') + ' dejó un saludo de voz. Se escucha en el álbum.'
+      : '';
+    $('msg-pie').hidden = !esAudio;
+
+    msgEnPantalla = f.id;
+    caja.classList.add('vista');
+    /* 3,2 s de piso + el tiempo de leerlo (unas 13 letras por segundo),
+       con techo de 14 s para que no se coma la fiesta. */
+    return esAudio ? 5200 : Math.min(14000, 3200 + n * 77);
+  }
 
   /* ---------- la caché de fotos ----------
      Cada foto se guarda entera la primera vez que se muestra. Después
@@ -487,10 +588,11 @@ function preparar() {
   async function siguiente() {
     clearTimeout(reloj);
 
-    if (!fotos.length) {
+    if (!fotos.length && !firmas.length) {
       enPantalla = null;
       $('qr-chico').hidden = true;
       $('firma-nombre').classList.remove('vista');
+      ocultarMensaje();
       mostrarPlaca(true);
       reloj = setTimeout(siguiente, 4000);
       return;
@@ -502,11 +604,27 @@ function preparar() {
        tienen que enterarse de que pueden subir las suyas. */
     if (vueltas > 0 && vueltas % CADA === 0) {
       vueltas++;
+      ocultarMensaje();
       mostrarPlaca(true);
       reloj = setTimeout(siguiente, 6500);
       return;
     }
     mostrarPlaca(false);
+
+    /* Y cada MENS, un mensaje del libro de firmas. Va DESPUÉS del QR a
+       propósito: si los dos caen en la misma vuelta, gana el QR y el
+       mensaje entra en la siguiente. Dos pantallas seguidas sin foto
+       hacen que parezca que se colgó. */
+    const tocaMensaje = firmas.length && (!fotos.length || desdeMensaje >= MENS);
+    if (tocaMensaje) {
+      desdeMensaje = 0;
+      jf = (jf + 1) % firmas.length;
+      $('firma-nombre').classList.remove('vista');
+      const cuanto = mostrarMensaje(firmas[jf]);
+      reloj = setTimeout(siguiente, cuanto);
+      return;
+    }
+    ocultarMensaje();
 
     /* La próxima que siga aprobada y se pueda pintar. */
     let intentos = 0;
@@ -525,12 +643,14 @@ function preparar() {
 
     if (!listo) {
       /* Ninguna se pudo pintar: sin red y sin caché todavía. */
+      ocultarMensaje();
       mostrarPlaca(true);
       reloj = setTimeout(siguiente, 5000);
       return;
     }
 
     vueltas++;
+    desdeMensaje++;
     adelantar();
     reloj = setTimeout(siguiente, SEG);
   }
@@ -636,6 +756,56 @@ function preparar() {
         }
       },
       () => { /* sin señal: seguimos con lo que ya tenemos */ }
+    );
+
+    /* El libro de firmas aprobado. Mismo criterio que las fotos: lo que el
+       panel baja con el botón de pánico desaparece de acá en el acto.
+       Si esta consulta falla (la regla todavía sin publicar, por ejemplo) NO
+       pasa nada: la pantalla sigue pasando fotos. Nunca se cae por esto. */
+    onSnapshot(
+      query(collection(db, 'gal_firmas', GID, 'items'), where('estado', '==', 'aprobada')),
+      (snap) => {
+        const nuevas = [];
+        snap.forEach((d) => {
+          const f = d.data();
+          if (f.tipo !== 'audio' && !String(f.texto || '').trim()) return;
+          nuevas.push({
+            id: d.id,
+            tipo: f.tipo === 'audio' ? 'audio' : 'texto',
+            texto: String(f.texto || '').slice(0, 500),
+            nombre: (f.autor && f.autor.nombre) || '',
+            tsms: f.tsms || 0
+          });
+        });
+        nuevas.sort((a, b) => (a.tsms || 0) - (b.tsms || 0));
+
+        const antes = firmas.length;
+        const eran = {};
+        firmas.forEach((f) => { eran[f.id] = true; });
+        const puesto = (jf >= 0 && firmas[jf]) ? firmas[jf].id : null;
+        firmas = nuevas;
+        try { localStorage.setItem(LLAVE_F, JSON.stringify(firmas.slice(0, 300))); } catch (e) {}
+
+        const sigue = puesto && nuevas.some((f) => f.id === puesto);
+        /* El índice apuntaba a una posición de la lista vieja. */
+        jf = sigue ? nuevas.findIndex((f) => f.id === puesto) : -1;
+
+        /* Si el mensaje que se está VIENDO dejó de estar aprobado, se va YA,
+           igual que una foto. Es el botón de pánico. */
+        if (msgEnPantalla && !nuevas.some((f) => f.id === msgEnPantalla)) {
+          ocultarMensaje(); siguiente(); return;
+        }
+
+        /* Sin ninguna foto todavía, un mensaje aprobado es lo único que hay
+           para mostrar: que entre sin esperar. */
+        if (antes === 0 && firmas.length > 0 && !fotos.length) { siguiente(); return; }
+
+        const sumadas = nuevas.filter((f) => !eran[f.id]).length;
+        if (antes > 0 && sumadas > 0) {
+          avisar(sumadas === 1 ? 'Llegó un mensaje nuevo' : 'Llegaron ' + sumadas + ' mensajes nuevos');
+        }
+      },
+      () => { /* sin permiso o sin señal: la pantalla sigue con las fotos */ }
     );
   }
 }
