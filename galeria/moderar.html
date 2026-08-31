@@ -270,7 +270,7 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 <div id="login" hidden>
   <div class="caja">
     <h2>Moderación</h2>
-    <p>Entrá con la misma cuenta del panel de Invítame.</p>
+    <p>Entrá con tu cuenta, la misma con la que creaste la galería.</p>
     <input id="lg-mail" type="email" placeholder="Email" autocomplete="username">
     <input id="lg-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
     <button id="lg-ok" type="button">Entrar</button>
@@ -292,7 +292,7 @@ const WORKER = 'https://galeria.littlemomentsok.workers.dev';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, query, where, onSnapshot, doc, getDoc, updateDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence }
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const app = initializeApp({
@@ -327,8 +327,48 @@ if (!GID) {
 
 let pendientes = [], aprobadas = [], vista = 'pend';
 
+/* Los uid que pueden moderar CUALQUIER fiesta (Maki). No es un secreto:
+   un uid solo no sirve para nada sin la sesión de esa persona. Hace falta
+   porque las fiestas que crea ella con la clave del Worker quedan sin dueño. */
+const ADMINS = ['gokxWGUaw3e3NBWjeCpYUXaZdY03'];
+
+function noPasa(txt) {
+  $('cabecera').hidden = true;
+  $('panel').hidden = true;
+  $('estado').hidden = false;
+  $('estado').innerHTML = '<p>' + esc(txt) + '</p>' +
+    '<p><button id="salir-mod" type="button">Salir y entrar con otra cuenta</button></p>';
+  const b = $('salir-mod');
+  if (b) b.onclick = () => signOut(auth).then(() => location.reload());
+}
+
 async function arrancar() {
+  /* ⚠️ ¿Esta fiesta es de quien entró?
+     El gid viaja en el link que el cliente le pasa a TODOS los invitados.
+     Sin esta pregunta, cualquiera con cuenta abre moderar.html?g=<gid> y
+     aprueba, rechaza o borra las fotos de la fiesta de otro. */
+  let ev = null;
+  try {
+    const s = await getDoc(doc(db, 'gal_eventos', GID));
+    if (s.exists()) ev = s.data();
+  } catch (e) {
+    return noPasa('No pudimos comprobar de quién es esta fiesta. Probá de nuevo en un momento.');
+  }
+  if (!ev) return noPasa('Esta galería no existe, o el link está incompleto.');
+
+  const yo = (auth.currentUser && auth.currentUser.uid) || '';
+  const esDuenio = !!ev.duenio && ev.duenio === yo;
+  const esAdmin = ADMINS.indexOf(yo) >= 0;
+  if (!esDuenio && !esAdmin) {
+    return noPasa('Esta galería no es de tu cuenta. Entrá con la cuenta con la que la creaste.');
+  }
+
   $('cabecera').hidden = false; $('panel').hidden = false;
+  $('estado').hidden = true;
+
+  $('ev-nombre').textContent = ev.nombre || 'Galería';
+  if (ev.marca && ev.marca.color)
+    document.documentElement.style.setProperty('--rosa', ev.marca.color);
 
   const bp = $('btn-pantalla');
   bp.href = 'pantalla.html?g=' + encodeURIComponent(GID);
@@ -336,16 +376,6 @@ async function arrancar() {
   const bc = $('btn-cartel');
   bc.href = 'cartel.html?g=' + encodeURIComponent(GID);
   bc.hidden = false;
-
-  try {
-    const s = await getDoc(doc(db, 'gal_eventos', GID));
-    if (s.exists()) {
-      const ev = s.data();
-      $('ev-nombre').textContent = ev.nombre || 'Galería';
-      if (ev.marca && ev.marca.color)
-        document.documentElement.style.setProperty('--rosa', ev.marca.color);
-    }
-  } catch (e) {}
 
   fetch(WORKER + '/uso').then(r => r.json()).then(u => {
     $('hd-uso').innerHTML = u.porcentaje + '% del espacio<br>' +
@@ -376,7 +406,14 @@ function docsDe(s, orden) {
 }
 async function cambiar(fid, estado) {
   try { await updateDoc(doc(db, 'gal_fotos', GID, 'items', fid), { estado }); }
-  catch (e) { alert('No se pudo. Probá de nuevo.'); }
+  catch (e) {
+    /* Nada de alert(): un cartel del navegador congela la página.
+       Si el motivo es de permisos, decirlo con todas las letras. */
+    const c = (e && e.code) || '';
+    avisarError(/permission/i.test(c)
+      ? { code: 'no es tu galería' }
+      : { code: c || 'error' });
+  }
 }
 function esc(s) {
   return String(s || '').replace(/[<>&"]/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
