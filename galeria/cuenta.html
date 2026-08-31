@@ -259,6 +259,13 @@ async function arrancar() {
     const f = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     sdk = { ...a, ...f };
 
+    /* ⚠️ El 'cuenta' del final es el nombre de la app de Firebase, y lo
+       comparten cuenta.html, moderar.html y creditos.html A PROPÓSITO. Es el
+       cajón donde el navegador guarda la sesión: con el mismo nombre, el
+       cliente entra UNA vez y ya está adentro de las tres. Con nombres
+       distintos le pedía la contraseña en cada una (pasó, y frenó una prueba
+       en vivo el 31/8). Si lo cambiás, cambialo en las tres — y todos van a
+       tener que entrar una vez más. Hay un chequeo en banco-moderar.mjs. */
     const app = initializeApp({
       apiKey: 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc',
       authDomain: 'invitame-9b51f.firebaseapp.com',
