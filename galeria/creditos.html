@@ -118,6 +118,12 @@ input:focus{outline:none;border-color:var(--blush-hondo);
     <div class="aviso mal" id="error-entrar" hidden></div>
   </form>
 
+  <div id="ajeno" hidden>
+    <p>Esta pantalla es sólo para la administración de la galería.
+      Tu cuenta no la usa.</p>
+    <p><a href="cuenta.html">Ir a mi cuenta</a></p>
+  </div>
+
   <div id="adentro" hidden>
     <div class="nota">
       El <b>código de usuario</b> se copia de
@@ -164,6 +170,9 @@ const esc = (s) => String(s == null ? '' : s)
 function mostrar(caja, txt){ const e=$(caja); e.textContent = txt; e.hidden = !txt; }
 
 let auth=null, sdk=null, yo=null;
+/* El uid de Maki. No es un secreto: un uid solo no sirve para nada sin la
+   sesión de esa persona, y el Worker lo vuelve a comprobar con ADMIN_UIDS. */
+const ADMINS = ['gokxWGUaw3e3NBWjeCpYUXaZdY03'];
 arrancar();
 
 async function arrancar(){
@@ -171,19 +180,33 @@ async function arrancar(){
     const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
     const a = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
     sdk = a;
+    /* El 'cuenta' del final es el nombre de la app de Firebase, y lo comparten
+       cuenta.html, moderar.html y esta pantalla A PROPÓSITO: es el cajón donde
+       el navegador guarda la sesión, así se entra UNA sola vez.
+       OJO: por eso mismo, un cliente logueado en su cuenta llega hasta acá de
+       una. El candado de verdad lo pone el Worker (ADMIN_UIDS), pero mostrarle
+       el formulario de cargar créditos sería confuso, así que abajo hay una
+       pregunta que lo frena antes de que llene nada. */
     const app = initializeApp({
       apiKey:'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc',
       authDomain:'invitame-9b51f.firebaseapp.com',
       projectId:'invitame-9b51f'
-    }, 'creditos');
+    }, 'cuenta');
     auth = a.getAuth(app);
     await a.setPersistence(auth, a.browserLocalPersistence).catch(()=>{});
     a.onAuthStateChanged(auth, (u) => {
       yo = u;
       $('cargando').hidden = true;
+      /* Quién puede cargar créditos. NO es el candado: el candado es
+         ADMIN_UIDS en el Worker, que es el único que decide de verdad. Esto
+         es para que un cliente que entró a su cuenta no se encuentre con un
+         formulario de administración que igual le va a dar error. */
+      const esAdmin = !!u && ADMINS.indexOf(u.uid) >= 0;
       $('entrar').hidden = !!u;
-      $('adentro').hidden = !u;
-      $('bajada').textContent = u ? 'Sólo vos podés usar esta pantalla.' : 'Entrá con tu cuenta.';
+      $('adentro').hidden = !esAdmin;
+      $('ajeno').hidden = !u || esAdmin;
+      $('bajada').textContent = !u ? 'Entrá con tu cuenta.'
+        : (esAdmin ? 'Sólo vos podés usar esta pantalla.' : '');
       if (u) $('quien').textContent = u.email || '';
     });
   }catch(e){
