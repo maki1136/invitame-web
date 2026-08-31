@@ -12,13 +12,27 @@
    ⚠️ VIENE APAGADA. Vacío = "Sin colección" = la invitación de siempre.
       Ninguna invitación ya entregada se entera.
 
-   ⚠️ LA COLECCIÓN PROPONE SU PALETA, NO LA TRABA.  ← decisión de Maki
-      La referencia ES crema y topo; con otra paleta deja de parecerse. Al
-      elegir la colección se cambia la paleta sola a la que le corresponde,
-      pero Jazmín puede cambiarla después: el selector de paletas sigue
-      andando. Sólo se le avisa que puede romper el diseño.
-      ⚠️ NO se pisa una paleta ya elegida sin avisar: si la invitación ya
-         tenía una, se pregunta antes de cambiarla.
+   ★★ LA COLECCIÓN PROPONE, JAZMÍN DISPONE ★★  ← decisión de Maki
+      «sí, que Jaz pueda cambiar».
+      La colección NUNCA pisa algo que Jazmín ya eligió. Cuando hay conflicto,
+      avisa y ofrece el cambio con un clic. Hoy son dos cosas:
+
+      1. LA PALETA. La referencia ES crema y topo; con otra paleta deja de
+         parecerse. Si la invitación no tenía paleta, se pone la de la
+         colección. Si ya tenía otra, se avisa y se ofrece cambiarla.
+
+      2. LA TIPOGRAFÍA DE LOS NOMBRES. El motor le escribe a los nombres la
+         familia y el tamaño EN LÍNEA, desde los campos `nfont` y `nsize`, y un
+         estilo en línea le gana a cualquier hoja. Entonces:
+         · si `nfont` está vacía, la colección los pone en serif fina y
+           mayúsculas, como la referencia;
+         · si `nfont` tiene algo elegido, la colección NO toca los nombres.
+         Acá se le ofrece a Jazmín vaciar el campo con un clic, para que la
+         colección tome la posta. Y si después quiere volver a la manuscrita,
+         elige la fuente de siempre y la colección se hace a un lado.
+
+         ⚠️ El tratamiento de los nombres va TODO junto o no va: poner en
+            mayúsculas una letra manuscrita queda horrible.
 
    ⚠️ NO GUARDARSE `D.fx` AL CONSTRUIR.  ← bug real, ya pasó con panel-motivo
       El bloque se arma a los ~500 ms, ANTES de que cargue el evento. Cuando el
@@ -31,7 +45,12 @@
 
    ⚠️ PARA APAGAR SE GUARDA `''`, NO SE BORRA LA CLAVE.
       `INV.saveEvento` guarda con merge: borrar la clave del borrador NO la
-      borra en Firestore y la colección "no se apaga".
+      borra en Firestore y la colección "no se apaga". Lo mismo vale para
+      `nfont`: para devolverle la tipografía a la colección hay que guardar
+      `''`, no borrar el campo.
+
+   ⚠️ `nfont` y `nsize` NO viven en `fx`: son campos del evento, al lado de los
+      nombres. Por eso se escriben en `D` directo, no en `D.fx`.
 
    ⚠️ `D` (el borrador) NO cuelga de window: es un `const` del script principal.
       Misma nota en panel-fondo.js, panel-pieza.js, panel-rsvp.js, panel-motivo.js.
@@ -42,13 +61,14 @@
 
   /* El catálogo. Cada entrada nueva de /colecciones/ se suma acá. */
   var COLECCIONES = [
-    { id: '',       nombre: 'Sin colección',
-      paleta: null,
+    { id: '', nombre: 'Sin colección',
+      paleta: null, paletaNombre: null,
       ayuda: 'La invitación queda como está, con la tipografía de siempre.' },
     { id: 'perlas', nombre: 'Perlas',
-      paleta: 'cafe-caramelo',
+      paleta: 'cafe-caramelo', paletaNombre: 'Café y caramelo',
       ayuda: 'Serif fina en mayúsculas con la cursiva debajo, mucho aire, ' +
-             'bandas crema y topo, y un hilo de perlas de verdad que recorre todo.' }
+             'arcos, la foto en blanco y negro y un hilo de perlas de verdad ' +
+             'que recorre todo.' }
   ];
 
   function borrador() {
@@ -102,38 +122,71 @@
     ayuda.style.cssText = 'font-size:11px;opacity:.6;line-height:1.4';
     caja.appendChild(ayuda);
 
-    var aviso = document.createElement('div');
-    aviso.style.cssText = 'font-size:11px;line-height:1.4;margin-top:7px;padding:7px 9px;' +
-      'border-radius:7px;background:rgba(190,150,60,.12);display:none';
-    caja.appendChild(aviso);
+    /* los dos avisos: la paleta y la tipografía */
+    function hacerAviso() {
+      var e = document.createElement('div');
+      e.style.cssText = 'font-size:11px;line-height:1.45;margin-top:7px;padding:8px 10px;' +
+        'border-radius:7px;background:rgba(190,150,60,.13);display:none';
+      caja.appendChild(e);
+      return e;
+    }
+    var avPaleta = hacerAviso();
+    var avTipo   = hacerAviso();
+
+    function enlace(e, texto, alTocar) {
+      var u = document.createElement('u');
+      u.textContent = texto;
+      u.style.cssText = 'cursor:pointer;white-space:nowrap';
+      u.onclick = alTocar;
+      e.appendChild(document.createTextNode(' '));
+      e.appendChild(u);
+    }
 
     sel.onchange = function () {
+      var d = borrador(); if (!d) return;
       var fx = datos(); if (!fx) return;
       caja.dataset.tocado = '1';
 
       var c = deId(sel.value);
       fx.coleccion = c.id;                 /* ⚠️ vacío, NO borrar la clave */
 
-      aviso.style.display = 'none';
-      if (c.paleta) {
+      avPaleta.style.display = 'none';
+      avTipo.style.display = 'none';
+
+      if (c.id) {
+        /* ---- 1. la paleta ---- */
         if (!fx.paleta || fx.paleta === c.paleta) {
           fx.paleta = c.paleta;            /* no había ninguna: se pone la suya */
         } else {
-          /* ya tenía una elegida: NO se pisa sin avisar */
-          aviso.innerHTML = 'Esta colección está diseñada para la paleta ' +
-            '<b>Café y caramelo</b>, y esta invitación tiene otra. ' +
-            'Podés dejarla así, pero puede no verse como la muestra. ' +
-            '<u style="cursor:pointer" id="col-usar-paleta">Usar la paleta de la colección</u>';
-          aviso.style.display = 'block';
-          var u = aviso.querySelector('#col-usar-paleta');
-          if (u) u.onclick = function () {
+          avPaleta.textContent = 'Esta colección está diseñada para la paleta ' +
+            c.paletaNombre + ', y esta invitación tiene otra. Podés dejarla así, ' +
+            'pero puede no verse como la muestra.';
+          enlace(avPaleta, 'Usar la paleta de la colección', function () {
             var f2 = datos(); if (!f2) return;
             f2.paleta = c.paleta;
-            aviso.style.display = 'none';
+            avPaleta.style.display = 'none';
             refrescar();
-          };
+          });
+          avPaleta.style.display = 'block';
+        }
+
+        /* ---- 2. la tipografía de los nombres ----
+           No se pisa. Se ofrece. Ver la nota grande de arriba. */
+        if (d.nfont && String(d.nfont).trim()) {
+          avTipo.textContent = 'Los nombres tienen una tipografía elegida a mano, ' +
+            'así que la colección no los toca. En la muestra van en serif fina y ' +
+            'mayúsculas.';
+          enlace(avTipo, 'Usar la tipografía de la colección', function () {
+            var d2 = borrador(); if (!d2) return;
+            d2.nfont = '';                 /* ⚠️ vacío, NO borrar: se guarda con merge */
+            d2.nsize = '';
+            avTipo.style.display = 'none';
+            refrescar();
+          });
+          avTipo.style.display = 'block';
         }
       }
+
       pintar(true);
       refrescar();
     };
