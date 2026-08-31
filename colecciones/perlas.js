@@ -29,6 +29,17 @@
       → Lo que se agregue a una sección desconocida va `position:absolute`, o
         primero se comprueba que la sección no sea flex ni grid.
 
+   ★★★ UNA FOTO RECTANGULAR SOBRE PAPEL SE VE COMO UN PARCHE ★★★
+      Aunque el archivo traiga los bordes difuminados, el tono del papel de la
+      foto nunca es EXACTAMENTE el de la sección, y el ojo ve un cuadrado más
+      claro. La primera versión del sobre en la frase se leía como una calcomanía.
+      → Se disuelve con `mask-image: radial-gradient(...)` en el CSS. La máscara
+        se aplica al RENDER, así que se puede afinar sin regenerar el archivo, y
+        deja sólo el objeto con su sombra, sin caja.
+      ⚠️ `mix-blend-mode: multiply` acá SÍ sirve, porque la máscara ya recortó
+         lo que sobraba. Sobre un PNG con alfa sin máscara NO sirve: el color de
+         fondo llena la caja y las partes transparentes se vuelven un cuadrado.
+
    ★★★ CÓMO SE CAMBIAN LOS TAMAÑOS: SE SETEAN LAS VARIABLES DEL MOTOR ★★★
       El motor aplica su escala con `!important`, así que una regla propia de
       `font-size` PIERDE siempre:
@@ -37,31 +48,26 @@
       --fs-contador --fs-texto --fs-datos --fs-direccion --fs-lugar --fs-frase
       --fs-boton. Y --pad, --sec-col/-v, --sec-tex/-v, --lino, --lino2,
       --cream, --muted, --oro, --verde, --sage.
-      → TAMAÑO: la variable. FAMILIA, espaciado y mayúsculas: reglas normales.
 
    ★★★ LOS NOMBRES DE LA PORTADA LOS MANDA JAZMÍN ★★★
       El motor les escribe familia, tamaño y color EN LÍNEA desde `nfont`,
       `nsize`, `ncolor`. Con `nfont` elegida la colección NO los toca (ni las
       mayúsculas: en una manuscrita quedan horribles, va todo junto o nada).
-      Con `nfont` vacía, serif fina y mayúsculas. El panel se lo ofrece.
 
    ★★★ NUNCA GUARDAR UNA COPIA DEL HTML PARA "DESHACER" ★★★
       Guardar `h1.innerHTML` para restaurarlo hacía aparecer "María & Diego",
       los nombres de la BODA DE EJEMPLO: el motor dibuja el ejemplo primero.
-      → Deshacer se hace mirando el DOM de AHORA.
 
    ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★
-      Al bajar el `.kick` los aros ⚭ se fueron con él y quedaron entre el
-      título y la cursiva. El motor los reinserta en cada pasada, así que
-      `acomodar()` corre en el bucle de 400 ms.
+      Al bajar el `.kick` los aros ⚭ se fueron con él. El motor los reinserta en
+      cada pasada, así que `acomodar()` corre en el bucle de 400 ms.
 
    ★ EL MOTIVO: SE SUGIERE `discreto`, NO `todo`
       Maki: «las perlas de la portada se nota que están dibujadas» y «hay
       perlas desparramadas que pisan los textos».
       Repetir una misma foto muchas veces y GRANDE se lee como dibujo, aunque
       cada unidad sea fotográfica: el ojo ve el patrón, no la perla.
-      → `discreto` = hilo entre secciones + corazones del final. Sin guirnalda
-        de portada y sin perlas sueltas. Detalle en motivo.js.
+      → `discreto` = hilo entre secciones + corazones del final.
 
    ★ LA LÍNEA DE TIEMPO ES UN HILO DE PERLAS
       `.tl::before` (la guía, al 22 % de opacidad) sube a 1 y lleva la perla
@@ -71,40 +77,31 @@
 
    ★★★ LAS PIEZAS FOTOGRAFIADAS: QUÉ QUEDÓ Y QUÉ SE SACÓ ★★★
       Las cinco están en `window.INVPIEZAS` y las cinco siguen disponibles.
-      Lo que se COLOCA hoy es sólo lo que tiene un lugar bueno:
-
-        · broche → SÍ. Al final del hilo del programa (`.tl`). Es lo que hace
-          la referencia y ahí tiene sentido.
-        · sobre  → SÍ, pero chico y ABSOLUTO en la esquina de la frase, para no
-          romper el flex. Maki: «dejá el sobre pero que sea delicado».
-        · dije   → NO. Colgaba de la cuenta regresiva y Maki fue clara: «no es
-          de calidad, eso menos de diseño, está puesto así por poner».
-        · bandeja→ NO. Su sección (el lugar) es oscura en esta paleta, y la
-          alternativa que eligió el código fue "El clima nos acompaña", que
-          además está OCULTA (alto 0): la pieza no se veía y encima no tenía
-          nada que ver. Vuelve cuando tenga un lugar pensado.
-        · moño   → NO. Terminó debajo de la galería. Maki: «no le encontré el
-          sentido». Tenía razón.
+      Se COLOCA sólo lo que tiene un lugar bueno:
+        · broche → SÍ. Al final del hilo del programa (`.tl`).
+        · sobre  → SÍ, chico, ABSOLUTO y con máscara, en la esquina de la frase.
+        · dije   → NO. Maki: «no es de calidad, está puesto así por poner».
+        · bandeja→ NO. Su sección es oscura y la alternativa que eligió el
+          código estaba OCULTA (alto 0). Vuelve con un lugar pensado.
+        · moño   → NO. Terminaba debajo de la galería: «no le encontré sentido».
 
       ⚠️ NO ALCANZA CON QUE LA SECCIÓN SEA CLARA: hay que mirar que exista, que
          se vea y que la pieza tenga que ver con lo que dice esa sección.
 
    ★ LA SECCIÓN DE LA FRASE SE LIMPIA
       Maki: «los cosos esos rojos que se ven de fondo con la imagen que quedó,
-      sacalo». Son `.frasefx.fx-bokeh` (bolas de bokeh rojizas del motor) y la
-      foto de fondo. Con la colección puesta la frase va sobre papel limpio y
-      el texto más chico, que es lo que pidió: «algo delicado, no tan grande».
+      sacalo». Son `.frasefx.fx-bokeh` y la foto de fondo. Con la colección la
+      frase va sobre papel limpio y el texto más chico.
 
    ★ `.padres` ES UNA GRILLA DE 2 COLUMNAS
-      Con 3 personas la tercera queda sola abajo y descolocada. Maki: «si ponés
-      3 pueden ir las 3 juntas, si son 4, 2 y 2 un poco más grandes».
+      Con 3 personas la tercera queda sola abajo. Maki: «si ponés 3 pueden ir
+      las 3 juntas, si son 4, 2 y 2».
       → Se marca `data-col-n` con la cantidad y el CSS arma la grilla.
 
-   ⚠️ LOS TÍTULOS EN ESPAÑOL DE MÉXICO SON MÁS LARGOS QUE EN INGLÉS: los
-      tamaños van con `clamp()`. NUNCA acortar el texto del cliente.
+   ⚠️ LOS TÍTULOS EN ESPAÑOL DE MÉXICO SON MÁS LARGOS: los tamaños van con
+      `clamp()`. NUNCA acortar el texto del cliente.
 
-   ⚠️ LA INCLINACIÓN DE LAS FOTOS NO VA EN FOTOS CON `.reveal`: el motor las
-      anima con `transform` y un `rotate` propio le pisa la animación.
+   ⚠️ LA INCLINACIÓN DE LAS FOTOS NO VA EN FOTOS CON `.reveal`.
    ============================================================================ */
 (function () {
   'use strict';
@@ -134,6 +131,8 @@
   function laPerla() { try { return window.INVPERLA || ''; } catch (e) { return ''; } }
   function laPieza(k) { try { return (window.INVPIEZAS || {})[k] || ''; } catch (e) { return ''; } }
 
+  var MASCARA = 'radial-gradient(ellipse 58% 58% at 50% 50%,#000 40%,transparent 76%)';
+
   var CSS = [
 
     /* ── LOS TAMAÑOS: por las variables del motor ──────────────────────── */
@@ -142,7 +141,6 @@
       '--fs-cursiva:clamp(18px,4.8vw,24px);' +
       '--fs-kicker:clamp(9px,2.6vw,11px);' +
       '--fs-contador:clamp(29px,8.6vw,44px);' +
-      /* la frase, más chica y delicada — pedido de Maki */
       '--fs-frase:clamp(17px,4.4vw,22px)}',
 
     /* ── EL PAR QUE SE REPITE EN TODAS LAS SECCIONES ───────────────────── */
@@ -190,17 +188,14 @@
     'h[c] .sec .evento{' +
       'border-radius:3px;box-shadow:0 1px 2px rgba(60,50,40,.10),0 8px 22px rgba(60,50,40,.10)}',
 
-    /* ── LA SECCIÓN DE LA FRASE, LIMPIA ────────────────────────────────────
-       Maki: «los cosos esos rojos que se ven de fondo con la imagen que quedó,
-       sacalo». Papel limpio y texto delicado. */
+    /* ── LA SECCIÓN DE LA FRASE, LIMPIA ───────────────────────────────── */
     'h[c] .fraseSec{position:relative;background:var(--lino,#f4f3ec)}',
     'h[c] .fraseSec .frasefx,h[c] .fraseSec .bg,h[c] .fraseSec .capa{display:none!important}',
     'h[c] .fraseSec .frase{' +
       'font-family:"Cormorant Garamond",serif;font-weight:300;line-height:1.9;' +
       'max-width:19em;margin-left:auto;margin-right:auto;color:var(--verde,#44513f)}',
 
-    /* ── `.padres`: la grilla según cuántos sean ───────────────────────────
-       Con 3 la tercera quedaba sola y descolocada. */
+    /* ── `.padres`: la grilla según cuántos sean ──────────────────────── */
     'h[c] .padres[data-col-n="3"]{grid-template-columns:repeat(3,1fr)!important;gap:12px!important}',
     'h[c] .padres[data-col-n="1"]{grid-template-columns:minmax(0,220px)!important;justify-content:center!important}',
     '@media (max-width:360px){h[c] .padres[data-col-n="3"]{gap:8px!important}}',
@@ -220,16 +215,17 @@
     /* ── LAS PIEZAS FOTOGRAFIADAS ─────────────────────────────────────── */
     'h[c] .col-pza{pointer-events:none;display:block}',
 
-    /* el broche, cerrando el hilo del programa: su centro cae en x=7 */
     'h[c] .tl .col-broche{' +
       'position:absolute;width:22px;height:auto;left:-4px;bottom:-11px;' +
       'filter:drop-shadow(0 1px 2px rgba(60,50,40,.24))}',
 
-    /* el sobre: chico, en la esquina, y ABSOLUTO para no romper el flex */
+    /* el sobre: chico, absoluto y DISUELTO con máscara. Ver la nota de arriba:
+       sin la máscara se ve el cuadrado del papel de la foto. */
     'h[c] .fraseSec .col-sobre{' +
-      'position:absolute;right:10px;bottom:8px;width:96px;height:auto;' +
-      'opacity:.9;z-index:1}',
-    '@media (max-width:360px){h[c] .fraseSec .col-sobre{width:78px}}',
+      'position:absolute;right:2px;bottom:0;width:118px;height:auto;z-index:1;' +
+      'opacity:.95;mix-blend-mode:multiply;' +
+      '-webkit-mask-image:' + MASCARA + ';mask-image:' + MASCARA + '}',
+    '@media (max-width:360px){h[c] .fraseSec .col-sobre{width:96px}}',
 
     /* ── LA PORTADA ───────────────────────────────────────────────────── */
     'h[c] .portada .kicker{' +
@@ -277,14 +273,14 @@
     if (s.textContent !== CSS) s.textContent = CSS;
   }
 
-  /* ---- el motivo: se sugiere DISCRETO. Ver la nota de arriba. ------------- */
+  /* ---- el motivo: se sugiere DISCRETO ------------------------------------ */
   function sugerirMotivo() {
     try {
       var ev = window.INVEV;
       if (!ev) return;
       if (!ev.fx) ev.fx = {};
       var m = ev.fx.motivo;
-      if (m && m.juego) return;                    /* ya eligió: no se toca */
+      if (m && m.juego) return;
       ev.fx.motivo = { juego: 'perlas', densidad: 1, donde: 'discreto' };
     } catch (e) {}
   }
@@ -296,29 +292,26 @@
     var i = document.createElement('img');
     i.className = 'col-pza ' + clase;
     i.alt = '';
-    i.src = src;                                   /* sin lazy: son chicas */
+    i.src = src;
     return i;
   }
 
   function colocarPiezas() {
-    /* el broche, al final del hilo del programa */
     var tl = document.querySelector('.tl');
     if (tl && !tl.querySelector('.col-broche')) {
       var b = unaImagen('broche', 'col-broche');
       if (b) tl.appendChild(b);
     }
 
-    /* el sobre, chico y absoluto en la esquina de la frase.
-       ⚠️ ABSOLUTO A PROPÓSITO: `.fraseSec` es flex en fila y un hijo normal le
-          roba el ancho al texto. Ver la nota grande de arriba. */
+    /* ⚠️ ABSOLUTO A PROPÓSITO: `.fraseSec` es flex en fila y un hijo normal le
+       roba el ancho al texto. Ver la nota grande de arriba. */
     var fs = document.querySelector('.fraseSec');
     if (fs && !fs.querySelector('.col-sobre')) {
       var s = unaImagen('sobre', 'col-sobre');
       if (s) fs.appendChild(s);
     }
 
-    /* dije, bandeja y moño NO se colocan: no tienen un lugar bueno todavía.
-       Ver la nota "QUÉ QUEDÓ Y QUÉ SE SACÓ" arriba. */
+    /* dije, bandeja y moño NO se colocan: sin lugar bueno todavía. */
   }
 
   function sacarPiezas() {
@@ -369,7 +362,6 @@
       var k = s.querySelector(':scope > .kick');
       var h = s.querySelector(':scope > h2.reveal');
       var a = s.querySelector(':scope > .adorno');
-
       if (k && h && (k.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_FOLLOWING)) {
         s.insertBefore(k, h.nextSibling);
       }
