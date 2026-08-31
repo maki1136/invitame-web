@@ -2,91 +2,80 @@
 
    QUÉ RESUELVE
    Las invitaciones se veían genéricas al lado de las buenas. Maki mandó tres
-   referencias y la diferencia no era la tipografía ni el color —eso ya lo
-   tenemos con las 20 paletas—: era que las buenas tienen UN MOTIVO QUE
-   ATRAVIESA TODA LA INVITACIÓN. En la referencia es un hilo de perlas que baja
-   del encabezado, arma el recorrido del programa, cierra con un broche y
-   termina en dos corazones. No es un adorno por sección: es una sola cosa que
-   recorre todo y le da unidad.
+   referencias y la diferencia no era la tipografía ni el color: era que las
+   buenas tienen UN MOTIVO QUE ATRAVIESA TODA LA INVITACIÓN.
 
    ⚠️ VIENE APAGADO. Sin `INVEV.fx.motivo.juego` no hace absolutamente nada.
 
    Cómo se enciende:
      INVEV.fx.motivo = {
-       juego:   'perlas',   // por ahora el único
-       densidad: 1,         // 0.6 discreto · 1 normal · 1.4 cargado
-       donde:   'todo'      // 'todo' | 'guirnalda' | 'separadores' | 'corazones'
+       juego:   'perlas',    // por ahora el único
+       densidad: 1,          // 0.6 discreto · 1 normal · 1.4 cargado
+       donde:   'discreto'   // 'todo' | 'discreto' | 'guirnalda'
+                             // | 'separadores' | 'corazones'
      }
    Para probar sin tocar la base: `?motivo=perlas&densidad=1`
 
-   ⚠️ LA PERLA ES UNA FOTO DE VERDAD.  ← cambió, y es importante
-   La v1 dibujaba la perla con gradientes. Maki lo vio y la respuesta fue
-   "jajaja de verdad me presentás eso?". Tenía razón: el CSS no imita un objeto
-   fotografiado, le falta el microrrelieve, el nácar y la sombra real.
-   Ahora la perla sale de `efectos/perla.js`: una foto recortada con alfa,
-   128×128, WebP, 3.3 KB, incrustada como data URI. No hay que subir nada a
-   Cloudinary y no hay pedido de red extra.
+   ★★★ POR QUÉ EXISTE EL MODO "DISCRETO", Y POR QUÉ ES EL RECOMENDADO ★★★
+      Maki miró la primera versión con el motivo completo y dijo dos cosas que
+      son la misma lección:
+
+      1. «las perlas de la portada se nota que están dibujadas, no son reales
+         como las que te pasé». Y tenía razón, aunque CADA perla ES su foto:
+         ★ REPETIR UNA MISMA FOTO MUCHAS VECES Y GRANDE SE LEE COMO DIBUJO.
+           El ojo no ve una perla, ve el PATRÓN: todas idénticas, mismo brillo,
+           misma orientación, mismo tamaño. Un collar de verdad tiene perlas
+           que difieren. La repetición delata la síntesis aunque la unidad sea
+           fotográfica.
+           → Sirve en chico y sutil (el hilo entre secciones, la línea del
+             programa, los corazones). NO sirve como pieza protagonista.
+
+      2. «hay perlas desparramadas que pisan los textos». Las sueltas se
+         posicionaban por porcentaje sin saber dónde caía el texto.
+
+      Por eso `discreto` = separadores + corazones. Sin guirnalda de portada y
+      sin perlas sueltas. Es lo que la Colección Perlas sugiere hoy.
+      `todo` sigue existiendo, pero hay que mirarlo antes de usarlo.
+
+   ⚠️ LA PERLA ES UNA FOTO DE VERDAD. La v1 la dibujaba con gradientes y Maki
+   lo dijo sin vueltas. Sale de `efectos/perla.js`: foto recortada con alfa,
+   128×128, WebP, 3.3 KB, como data URI. Sin pedido de red extra.
 
    ⚠️ LA FOTO SE LEE DE `window.INVPERLA`, NO DE `INVEV`.
    `window.INVEV` es el OBJETO DE DATOS DEL EVENTO y el motor lo REEMPLAZA
-   entero cuando llega la invitación desde Firestore: cualquier cosa colgada
-   ahí antes desaparece sin error. Pasó en la primera vuelta —la guirnalda
-   salía con los gradientes de respaldo y no se entendía por qué—. De `INVEV`
-   sólo se lee `fx`, que sí es parte del evento.
+   entero cuando llega la invitación desde Firestore: lo que se le cuelgue
+   desaparece sin error. De `INVEV` sólo se lee `fx`.
 
    ⚠️ POR QUÉ UNA PERLA SUELTA Y NO LA GUIRNALDA ENTERA COMO IMAGEN
-   Recortar la hilera completa es imposible de forma limpia: el interior de la
-   perla tiene EXACTAMENTE el color del papel (247 contra 247), así que no hay
-   señal tonal para separarla; lo único que se ve es el relieve del borde y la
-   sombra de contacto. Los intentos daban 25–160 KB y arrastraban la sombra
-   como una mancha blanca opaca. Una perla suelta, en cambio, es un disco: la
-   máscara circular es exacta y repetida por código sirve para cualquier ancho,
-   cualquier curva y cualquier pantalla, sin pixelarse.
+   El interior de la perla tiene EXACTAMENTE el color del papel (247 contra
+   247): no hay señal tonal para recortar la hilera completa. Una perla suelta
+   es un disco y la máscara circular es exacta.
 
    ⚠️ LA SOMBRA VA POR CSS, NO EN EL ARCHIVO. `filter: drop-shadow()` sobre el
-   contenedor —una sola pasada para todo el grupo, no una por perla—, así la
-   sombra se adapta al fondo de cada sección y no viene quemada en blanco.
+   contenedor —una pasada para todo el grupo— así se adapta a cada fondo.
 
-   ⚠️ NO TINTAR CON `background-blend-mode`. Se probó para recolorear la perla
-   con la paleta y NO sirve: el color de fondo llena toda la caja, así que las
-   partes transparentes del PNG se vuelven un cuadrado opaco. Si algún día hay
-   que tintar, va por `filter: hue-rotate()/sepia()`, que sí respeta el alfa.
-   Hoy no hace falta: la perla es marfil y las 20 paletas son de papel claro.
+   ⚠️ NO TINTAR CON `background-blend-mode`: el color de fondo llena la caja y
+   las partes transparentes se vuelven un cuadrado opaco.
 
    ⚠️ SI NO ESTÁ `efectos/perla.js` NO SE ROMPE: cae en las perlas de gradiente
    de la v1, que siguen acá abajo como respaldo.
 
-   ⚠️ EL BROCHE sí sigue siendo CSS encima de la foto: la perla real con un aro
-   de `--oro` por `box-shadow: inset`. Es otro material, no otra perla.
-
-   ⚠️ DÓNDE VA CADA COSA — esto costó una vuelta, mirar antes de tocar:
-     · La guirnalda cuelga DENTRO de `.portada`, nunca del `.frame`. Colgada
-       del frame se salía 36 px por arriba y el broche quedaba cortado contra
-       el borde de la pantalla. Y todas las alturas van de 0 para abajo: un
-       collar cuelga, no flota.
-     · El hilo horizontal reemplaza `.adorno` (los aros ⚭ que ya separan las
-       secciones; hay 17, de 112×40).
+   ⚠️ DÓNDE VA CADA COSA — esto costó una vuelta:
+     · La guirnalda cuelga DENTRO de `.portada`, nunca del `.frame`, y todas
+       las alturas van de 0 para abajo: un collar cuelga, no flota.
+     · El hilo horizontal reemplaza `.adorno` (los aros ⚭ entre secciones).
      · Los corazones van al FINAL de la sección de regalos, enganchados a
-       `.reg-btns`. Es el único elemento confiable para encontrar esa sección:
-       los títulos los escribe el cliente y cambian.
+       `.reg-btns`: es el único elemento confiable para encontrarla, porque los
+       títulos los escribe el cliente y cambian.
      · ⚠️ NO TOCAR `.sep`: NO es un separador de secciones, son los dos puntos
-       ENTRE LOS NÚMEROS de la cuenta regresiva. La v1 les colgó hilos encima y
-       quedó un desastre sobre el contador.
+       ENTRE LOS NÚMEROS de la cuenta regresiva.
 
-   ⚠️ LOS CORAZONES VAN EN EL FLUJO, NO FLOTANDO.
-      Todo lo demás de este archivo es `position:absolute` encima de algo. Los
-      corazones no: son el remate de la invitación y tienen que EMPUJAR, ocupar
-      su lugar y dejar aire abajo. Por eso `.mtv-corazones` pisa el
-      `position:absolute` de `.mtv` y va en `relative`, con su alto propio.
-      Si se dejan absolutos quedan encimados sobre los botones de regalos.
+   ⚠️ LOS CORAZONES VAN EN EL FLUJO, NO FLOTANDO. Todo lo demás es
+   `position:absolute`; ellos son el remate y tienen que empujar y dejar aire.
 
-   ⚠️ NO TAPA NI ROBA CLICS: todo `pointer-events:none` y por debajo del texto.
+   ⚠️ NO TAPA NI ROBA CLICS: todo `pointer-events:none` y debajo del texto.
 
-   ⚠️ ES UNA PIEL, COMO EL INTERRUPTOR. El SVG de los aros no se borra: se
-   esconde. Si este archivo se saca de la lista, vuelve todo como estaba.
-
-   ⚠️ EN PANTALLAS ANGOSTAS la guirnalda se achica: en un teléfono una
-   guirnalda grande tapa la foto en vez de enmarcarla.
+   ⚠️ ES UNA PIEL. El SVG de los aros no se borra: se esconde.
    ============================================================================ */
 (function () {
   'use strict';
@@ -107,7 +96,7 @@
       if (u.get('motivo')) {
         m = { juego: u.get('motivo'),
               densidad: parseFloat(u.get('densidad') || '1'),
-              donde: u.get('motivoDonde') || 'todo' };
+              donde: u.get('motivoDonde') || 'discreto' };
       }
     } catch (e) {}
     return m;
@@ -115,9 +104,6 @@
 
   function activo(m) { return m && m.juego === 'perlas'; }
 
-  /* ---------------------------------------------------------------- la perla
-     Camino bueno: `.mtv[data-foto] .p` = la foto recortada.
-     Respaldo (sin perla.js): las cuatro capas de gradiente de la v1. */
   var CSS =
     '.mtv{position:absolute;pointer-events:none;z-index:2}' +
 
@@ -146,22 +132,18 @@
       'background:var(--inv-perla) center/100% 100% no-repeat;box-shadow:none}' +
     '.mtv[data-foto] .broche{' +
       'box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--oro,#b9a56a) 82%,#fff)}' +
-    /* una sola pasada de sombra para todo el grupo, no una por perla */
     '.mtv[data-foto]{filter:drop-shadow(0 1px 1px rgba(60,50,40,.18))' +
       ' drop-shadow(0 3px 4px rgba(60,50,40,.13))}' +
 
-    /* la guirnalda: pegada al borde de arriba de la PORTADA, cae hacia adentro */
     '.mtv-guirnalda{top:0;left:0;right:0;height:200px;overflow:hidden}' +
 
-    /* el hilo horizontal, en lugar de los aros */
     '.mtv-hilo{position:absolute;inset:0}' +
     'html[data-motivo="perlas"] .adorno > svg{display:none}' +
     'html[data-motivo="perlas"] .adorno{position:relative}' +
 
     '.mtv-suelta{opacity:.85}' +
 
-    /* ⚠️ los corazones van EN EL FLUJO: pisan el absolute de `.mtv`.
-       Ver la nota de arriba. */
+    /* ⚠️ los corazones van EN EL FLUJO: pisan el absolute de `.mtv`. */
     '.mtv-corazones{position:relative;margin:36px auto 4px;display:block}' +
 
     '@media (max-width:420px){.mtv-guirnalda{height:130px}}';
@@ -175,7 +157,6 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
-  /* marca el contenedor con la foto; si no hay, queda el respaldo */
   function vestir(caja) {
     var f = foto();
     if (!f) return caja;
@@ -200,9 +181,8 @@
     return e;
   }
 
-  /* ---- LA CURVA ---------------------------------------------------------
-     Un hilo cuelga por su peso: es una catenaria, y una Bézier cuadrática con
-     el control POR DEBAJO la imita bien. Se calcula a mano, sin SVG. */
+  /* ---- LA CURVA: una catenaria se imita con una Bézier cuadrática con el
+     control POR DEBAJO. Se calcula a mano, sin SVG. */
   function bez(t, p0, p1, p2) {
     var u = 1 - t;
     return { x: u * u * p0.x + 2 * u * t * p1.x + t * t * p2.x,
@@ -216,30 +196,24 @@
   }
 
   function enhebrar(caja, c, dBase, densidad, hueco) {
-    /* 0.94 y no 0.92: la foto llega hasta el borde del disco, así que las
-       perlas se tocan un poco menos que las de gradiente */
     var n = Math.max(6, Math.round((largoDe(c) / (dBase * 0.94)) * densidad));
     for (var i = 0; i <= n; i++) {
       var t = i / n;
       if (hueco && Math.abs(t - hueco.t) < hueco.r) continue;
       var q = bez(t, c.p0, c.p1, c.p2);
-      /* las del medio se ven un pelín más grandes: da profundidad */
       poner1(caja, q.x, q.y, dBase * (0.86 + 0.18 * Math.sin(Math.PI * t)));
     }
   }
 
-  /* ⚠️ TODAS las alturas van de 0 para ABAJO. Con valores negativos el collar
-     se sale por arriba de la portada y el broche queda cortado. */
+  /* ⚠️ TODAS las alturas van de 0 para ABAJO. */
   function guirnalda(ancho, densidad) {
     var caja = vestir(document.createElement('div'));
     caja.className = 'mtv mtv-guirnalda';
     var chico = ancho < 380;
-    var hondo = chico ? 0.20 : 0.27;          /* cuánto cae, en proporción al ancho */
+    var hondo = chico ? 0.20 : 0.27;
     var d = chico ? 7 : 9;
     var xBroche = ancho * 0.58, yBroche = 16;
 
-    /* caída larga a la izquierda, corta a la derecha: si son iguales parece
-       hecho a máquina */
     enhebrar(caja, { p0: { x: 2, y: 3 }, p1: { x: ancho * 0.30, y: ancho * hondo },
                      p2: { x: xBroche, y: yBroche } }, d, densidad);
     enhebrar(caja, { p0: { x: xBroche, y: yBroche }, p1: { x: ancho * 0.80, y: ancho * hondo * 0.55 },
@@ -261,18 +235,12 @@
   }
 
   /* ---- LOS DOS CORAZONES DEL CIERRE ---------------------------------------
-     La curva del corazón es la clásica paramétrica:
-        x = 16·sen³t
-        y = 13·cos t − 5·cos2t − 2·cos3t − cos4t
-     Va de −16 a 16 en x, así que el ancho es 32 unidades: la escala sale de
-     dividir el ancho que se quiere por 32. En pantalla la y va para abajo, por
-     eso se resta.
+     Curva paramétrica clásica:
+        x = 16·sen³t   ·   y = 13·cos t − 5·cos2t − 2·cos3t − cos4t
+     Va de −16 a 16 en x: la escala sale de dividir el ancho por 32.
 
-     ⚠️ LAS PERLAS SE REPARTEN POR LARGO DE ARCO, NO POR `t`.
-        Con `t` parejo se amontonan en la punta de abajo y se separan en los
-        lóbulos: se nota enseguida que está mal dibujado. Se recorre la curva
-        con muchos pasos chicos, se acumula la distancia y se pone una perla
-        cada tanto de LARGO. Misma idea que `enhebrar`, pero sin Bézier. */
+     ⚠️ LAS PERLAS SE REPARTEN POR LARGO DE ARCO, NO POR `t`. Con `t` parejo se
+        amontonan en la punta y se abren en los lóbulos, y se nota. */
   function ptoCorazon(t, esc, cx, cy) {
     var s = Math.sin(t), c = Math.cos(t);
     return {
@@ -300,9 +268,9 @@
     caja.className = 'mtv mtv-corazones';
 
     var chico = anchoSec < 380;
-    var w = chico ? 74 : 88;            /* ancho de cada corazón */
-    var d = chico ? 6 : 7;              /* tamaño de perla */
-    var solape = w * 0.34;              /* cuánto se cruzan, como en la referencia */
+    var w = chico ? 74 : 88;
+    var d = chico ? 6 : 7;
+    var solape = w * 0.34;
     var alto = w * 0.92;
 
     var total = w * 2 - solape;
@@ -310,12 +278,14 @@
     caja.style.height = Math.round(alto) + 'px';
 
     var cy = alto * 0.47;
-    unCorazon(caja, w / 2,                  cy, w, d, densidad);
-    unCorazon(caja, total - w / 2,          cy, w, d, densidad);
+    unCorazon(caja, w / 2,         cy, w, d, densidad);
+    unCorazon(caja, total - w / 2, cy, w, d, densidad);
     return caja;
   }
 
-  /* pocas, contra los bordes de la sección, nunca sobre el texto */
+  /* ⚠️ LAS SUELTAS PISAN EL TEXTO. Se posicionan por porcentaje sin saber
+     dónde cae el texto, y Maki las vio encima de las palabras. Sólo salen en
+     `donde:'todo'`, que NO es lo que sugiere la colección. */
   function sueltas(densidad) {
     var caja = vestir(document.createElement('div'));
     caja.className = 'mtv';
@@ -352,18 +322,19 @@
     sacar();
 
     var densidad = Math.max(0.5, Math.min(1.6, (typeof m.densidad === 'number') ? m.densidad : 1));
-    var donde = m.donde || 'todo';
+    var donde = m.donde || 'discreto';
     var ancho = Math.round(portada.getBoundingClientRect().width);
     if (!ancho) return;
 
     document.documentElement.setAttribute(MARCA, 'perlas');
 
+    /* ⚠️ la guirnalda NO entra en `discreto`: repetida y grande se lee dibujada */
     if (donde === 'todo' || donde === 'guirnalda') {
       relativo(portada);
       portada.appendChild(guirnalda(ancho, densidad));
     }
 
-    if (donde === 'todo' || donde === 'separadores') {
+    if (donde === 'todo' || donde === 'discreto' || donde === 'separadores') {
       [].forEach.call(document.querySelectorAll('.adorno'), function (a) {
         if (a.querySelector('.mtv-hilo')) return;
         var r = a.getBoundingClientRect();
@@ -372,8 +343,7 @@
       });
     }
 
-    /* los corazones, al final de la sección de regalos */
-    if (donde === 'todo' || donde === 'corazones') {
+    if (donde === 'todo' || donde === 'discreto' || donde === 'corazones') {
       var btns = document.querySelector('.reg-btns');
       var secReg = btns && btns.closest ? btns.closest('.sec') : null;
       if (secReg && !secReg.querySelector('.mtv-corazones')) {
@@ -381,10 +351,10 @@
       }
     }
 
+    /* ⚠️ sólo en `todo`: pisan los textos. Ver la nota de `sueltas()`. */
     if (donde === 'todo') {
-      /* sólo en las claras: sobre las de color no se leen */
       [].forEach.call(document.querySelectorAll('.sec:not(.verde)'), function (s, i) {
-        if (i % 2) return;                                  /* una sí, una no */
+        if (i % 2) return;
         if (s.querySelector('.mtv-suelta')) return;
         relativo(s);
         s.appendChild(sueltas(densidad));
@@ -418,7 +388,6 @@
       clearTimeout(espera); espera = setTimeout(sincronizar, 260);
     }, { passive: true });
 
-    /* el motor y los otros módulos siguen escribiendo secciones un rato */
     var n = 0, t = setInterval(function () {
       sincronizar();
       if (++n > 40) clearInterval(t);
