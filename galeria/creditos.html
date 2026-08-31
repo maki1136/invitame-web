@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FAF6F2">
+<title>Cargar créditos · Galería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap">
+
+<!-- ============================================================
+     CARGAR CRÉDITOS · la pantalla de Maki
+
+     Existe para no volver a entrar a la consola de Firebase. Ese
+     formulario obliga a elegir el TIPO de cada campo a mano, y si
+     'creditos' queda como texto el descuento del Worker no resta:
+     pisa el campo con -1 y deja la cuenta rota. Acá el tipo lo pone
+     el servidor y no hay forma de equivocarse.
+
+     ⚠️ Esta página NO escribe la base. No puede: las reglas de
+     Firestore no dejan tocar gal_cuentas desde ningún navegador,
+     ni el de Maki. Le pide al Worker, mandando el token de SU
+     sesión de Firebase; el Worker mira si ese uid está en
+     ADMIN_UIDS y recién ahí escribe. Ninguna clave viaja acá.
+     ============================================================ -->
+<style>
+:root{
+  --uva:#6D1233; --tinta:#4A3038; --suave:#9B8880;
+  --crema:#FAF6F2; --papel:#FFFDFB; --greige:#CEC5BB; --linea:#EADFD7;
+  --blush:#EDC0B2; --blush-luz:#FBDFD5; --blush-hondo:#DDA292;
+  --error:#A3242F; --ok:#2F7A56;
+  --relieve-1: 0 1px 1px rgba(74,48,56,.07), 0 2px 4px rgba(74,48,56,.06);
+  --relieve-2: 0 1px 1px rgba(74,48,56,.08), 0 3px 6px rgba(74,48,56,.07), 0 10px 18px -6px rgba(74,48,56,.10);
+  --relieve-3: 0 1px 1px rgba(74,48,56,.10), 0 4px 8px rgba(74,48,56,.09),
+               0 14px 26px -8px rgba(74,48,56,.14), 0 30px 50px -22px rgba(74,48,56,.18);
+  --luz-arriba: inset 0 1px 0 rgba(255,255,255,.92);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Nunito",system-ui,-apple-system,sans-serif;color:var(--tinta);
+  background:
+    radial-gradient(80% 50% at 15% 0%, rgba(255,255,255,.55), transparent 60%),
+    linear-gradient(170deg, var(--greige) 0%, #BDB2A7 100%);
+  background-attachment:fixed;min-height:100vh;
+  -webkit-font-smoothing:antialiased;padding:22px 16px 60px;
+}
+h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--uva)}
+.hoja{
+  max-width:620px;margin:0 auto;background:var(--crema);border-radius:26px;
+  box-shadow:var(--relieve-3);padding:30px 26px 34px;position:relative;overflow:hidden;
+}
+.hoja::after{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.29 0 0 0 0 0.19 0 0 0 0 0.22 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+.hoja > *{position:relative;z-index:1}
+.tit{text-align:center;margin-bottom:4px}
+.tit h1{font-size:clamp(1.6rem,5.5vw,2.1rem);line-height:1.1}
+.bajada{text-align:center;color:var(--suave);font-size:.94rem;margin:6px 0 22px}
+label{display:block;font-size:.8rem;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--suave);margin:14px 0 6px}
+input{
+  width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--linea);
+  background:var(--papel);font-family:inherit;font-size:1rem;color:var(--tinta);
+  box-shadow:var(--luz-arriba), inset 0 -1px 0 rgba(74,48,56,.05);
+}
+input:focus{outline:none;border-color:var(--blush-hondo);
+  box-shadow:var(--luz-arriba), 0 0 0 3px rgba(237,192,178,.35)}
+/* 16px pelado: con menos, el iPhone hace zoom solo al tocar el casillero */
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:16px;letter-spacing:0}
+.btn{
+  width:100%;margin-top:20px;padding:16px 22px;border-radius:99px;
+  border:1px solid rgba(221,162,146,.5);
+  background:linear-gradient(180deg, var(--blush-luz) 0%, var(--blush) 100%);
+  color:var(--uva);font-family:inherit;font-size:1.02rem;font-weight:800;cursor:pointer;
+  box-shadow:var(--relieve-2), var(--luz-arriba);
+  transition:box-shadow .12s ease, transform .12s ease;
+}
+.btn:active{box-shadow:var(--relieve-1), inset 0 2px 4px rgba(74,48,56,.14);transform:translateY(1px)}
+.btn[disabled]{opacity:.55;cursor:default}
+.chk{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:.95rem;
+  text-transform:none;letter-spacing:0;font-weight:400;color:var(--tinta);cursor:pointer}
+.chk input{width:20px;height:20px;flex:none}
+.aviso{border-radius:14px;padding:13px 16px;font-size:.92rem;line-height:1.45;
+  margin-top:16px;box-shadow:var(--relieve-1)}
+.aviso.mal{background:#FBEDEE;border:1px solid #EBCBCE;color:var(--error)}
+.aviso.bien{background:#EAF5EF;border:1px solid #C8E4D5;color:var(--ok)}
+.nota{background:var(--papel);border:1px solid var(--linea);border-radius:16px;
+  padding:14px 16px;font-size:.88rem;line-height:1.5;color:var(--suave);
+  margin-bottom:20px;box-shadow:var(--relieve-1), var(--luz-arriba)}
+.nota a{color:var(--uva);font-weight:700}
+.nota b{color:var(--tinta)}
+.pie{text-align:center;margin-top:26px;font-size:.82rem;color:var(--suave)}
+.pie button{background:none;border:none;color:var(--suave);font-family:inherit;
+  font-size:.82rem;text-decoration:underline;cursor:pointer;padding:4px}
+.ayuda{font-size:.85rem;color:var(--suave);margin:6px 0 0;line-height:1.4;text-transform:none;letter-spacing:0}
+.cargando{text-align:center;color:var(--suave);padding:30px;font-size:.94rem}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <div class="tit"><h1>Cargar créditos</h1></div>
+  <p class="bajada" id="bajada">Entrá con tu cuenta.</p>
+
+  <div id="cargando" class="cargando">Un momento…</div>
+
+  <form id="entrar" hidden autocomplete="on">
+    <label for="mail">Tu mail</label>
+    <input id="mail" type="email" autocomplete="username" required>
+    <label for="pass">Tu contraseña</label>
+    <input id="pass" type="password" autocomplete="current-password" required>
+    <button class="btn" type="submit" id="btn-entrar">Entrar</button>
+    <div class="aviso mal" id="error-entrar" hidden></div>
+  </form>
+
+  <div id="adentro" hidden>
+    <div class="nota">
+      El <b>código de usuario</b> se copia de
+      <a href="https://console.firebase.google.com/u/0/project/invitame-9b51f/authentication/users"
+         target="_blank" rel="noopener">Firebase → Authentication</a>:
+      es la columna <b>UID</b>, con un botón para copiarlo.
+      Primero creás ahí el usuario con su mail y una contraseña, y después
+      le cargás los créditos acá.
+    </div>
+
+    <form id="cargar">
+      <label for="uid">Código de usuario (UID)</label>
+      <input id="uid" class="mono" type="text" required placeholder="pegá acá el UID">
+
+      <label for="nombre">Nombre del estudio o del cliente</label>
+      <input id="nombre" type="text" maxlength="80" placeholder="Estudio Ana">
+
+      <label for="email">Su mail</label>
+      <input id="email" type="email" placeholder="ana@estudioana.com">
+
+      <label for="creditos">Créditos</label>
+      <input id="creditos" type="number" min="0" step="1" required placeholder="10">
+      <p class="ayuda">La cuenta queda en este número. No se suma a lo que tenía.</p>
+
+      <label class="chk"><input id="baja" type="checkbox"> Dar de baja esta cuenta</label>
+
+      <button class="btn" type="submit" id="btn-cargar">Guardar</button>
+      <div class="aviso mal" id="error-cargar" hidden></div>
+      <div class="aviso bien" id="listo-cargar" hidden></div>
+    </form>
+
+    <div class="pie">
+      <span id="quien"></span> · <button type="button" id="salir">Salir</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+const WORKER = 'https://galeria.littlemomentsok.workers.dev';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+function mostrar(caja, txt){ const e=$(caja); e.textContent = txt; e.hidden = !txt; }
+
+let auth=null, sdk=null, yo=null;
+arrancar();
+
+async function arrancar(){
+  try{
+    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const a = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    sdk = a;
+    const app = initializeApp({
+      apiKey:'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc',
+      authDomain:'invitame-9b51f.firebaseapp.com',
+      projectId:'invitame-9b51f'
+    }, 'creditos');
+    auth = a.getAuth(app);
+    await a.setPersistence(auth, a.browserLocalPersistence).catch(()=>{});
+    a.onAuthStateChanged(auth, (u) => {
+      yo = u;
+      $('cargando').hidden = true;
+      $('entrar').hidden = !!u;
+      $('adentro').hidden = !u;
+      $('bajada').textContent = u ? 'Sólo vos podés usar esta pantalla.' : 'Entrá con tu cuenta.';
+      if (u) $('quien').textContent = u.email || '';
+    });
+  }catch(e){
+    $('cargando').innerHTML = 'No se pudo cargar. Fijate la conexión.<br><small>'+esc(e.message)+'</small>';
+  }
+}
+
+$('entrar').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  mostrar('error-entrar','');
+  $('btn-entrar').disabled = true; $('btn-entrar').textContent = 'Entrando…';
+  try{
+    await sdk.signInWithEmailAndPassword(auth, $('mail').value.trim(), $('pass').value);
+    $('pass').value = '';
+  }catch(e){
+    const c=(e&&e.code)||'';
+    mostrar('error-entrar',
+      /invalid-credential|wrong-password|user-not-found/.test(c) ? 'El mail o la contraseña no coinciden.'
+      : /too-many-requests/.test(c) ? 'Demasiados intentos. Esperá unos minutos.'
+      : 'No se pudo entrar. ' + ((e&&e.message)||''));
+  }
+  $('btn-entrar').disabled = false; $('btn-entrar').textContent = 'Entrar';
+});
+
+$('salir').addEventListener('click', () => sdk.signOut(auth));
+
+/* Apenas toca cualquier casillero, se va el cartel verde de la cuenta
+   anterior: si no, queda un "Listo" viejo arriba de datos nuevos sin
+   guardar y parece que ya se guardaron. */
+$('cargar').addEventListener('input', () => { mostrar('listo-cargar',''); mostrar('error-cargar',''); });
+
+$('cargar').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  mostrar('error-cargar',''); mostrar('listo-cargar','');
+  $('btn-cargar').disabled = true; $('btn-cargar').textContent = 'Guardando…';
+  try{
+    const crudo = $('creditos').value.trim();
+    if (!/^\d+$/.test(crudo)) throw new Error('Poné un número entero de créditos, de 0 en adelante.');
+    const n = parseInt(crudo, 10);
+    if (!Number.isSafeInteger(n)) throw new Error('Poné un número entero de créditos, de 0 en adelante.');
+    /* fresco: si la pestaña estuvo abierta toda la tarde, el viejo ya venció */
+    const tok = await yo.getIdToken(true);
+    const r = await fetch(WORKER + '/cuenta', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', Authorization:'Bearer '+tok },
+      body: JSON.stringify({
+        uid: $('uid').value.trim(),
+        nombre: $('nombre').value.trim(),
+        email: $('email').value.trim(),
+        creditos: n,
+        estado: $('baja').checked ? 'baja' : 'activa'
+      })
+    });
+    const j = await r.json().catch(()=>({}));
+    if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo guardar (' + r.status + ')'));
+    const c = j.cuenta || {};
+    mostrar('listo-cargar',
+      'Listo. ' + (c.nombre || 'La cuenta') + ' queda con ' +
+      (parseInt(c.creditos,10) || 0) + ' crédito' + ((parseInt(c.creditos,10)||0)===1?'':'s') +
+      (c.estado === 'baja' ? ', dada de baja.' : '.'));
+  }catch(e){
+    mostrar('error-cargar', e.message || 'No se pudo guardar.');
+  }
+  $('btn-cargar').textContent = 'Guardar'; $('btn-cargar').disabled = false;
+});
+</script>
+</body>
+</html>
