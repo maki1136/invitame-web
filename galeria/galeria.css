@@ -152,6 +152,11 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;letter-spac
 .cabecera{
   position:relative;text-align:center;
   padding:38px 10px 26px;margin:0 -16px 4px;
+  /* La mancha de abajo se sale 30% a cada lado a propósito, pero sin esto
+     se sale también del VIEWPORT: en un celular de 430px la página se corría
+     129px para el costado. Recortarla acá no cambia cómo se ve la mancha
+     (está desvanecida en los bordes), y saca el desplazamiento lateral. */
+  overflow:hidden;
 }
 /* la mancha orgánica: se siente antes de verse */
 .hoja-fondo{
@@ -364,3 +369,131 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;letter-spac
   box-shadow:var(--relieve-3), var(--luz-arriba);
 }
 [hidden]{display:none!important}
+
+/* ============================================================
+   EL LIBRO DE FIRMAS
+   Las dos fichas nuevas van DEBAJO de las de foto y un escalón
+   más abajo en relieve: sacar una foto sigue siendo lo principal.
+   Son <button>, no <label>, así que hay que resetear la tipografía.
+   ============================================================ */
+.ficha-escribir, .ficha-grabar{
+  font-family:inherit;text-align:left;
+  background:
+    radial-gradient(130% 90% at 22% 0%, #FFFFFF 0%, transparent 58%),
+    linear-gradient(158deg, #FFFDFB 0%, #F4EFEA 100%);
+  color:var(--tinta);
+  box-shadow:var(--relieve-2), var(--luz-arriba);
+}
+.ficha-escribir .ficha-ico, .ficha-grabar .ficha-ico{
+  background:radial-gradient(66% 62% at 33% 27%, #FFFFFF 0%, #F1E9E3 52%, #DDD0C7 100%);
+  color:#8A7268;
+  box-shadow:
+    0 1px 2px rgba(120,95,85,.12),
+    4px 6px 10px -2px rgba(120,95,85,.20),
+    inset 0 2px 0 rgba(255,255,255,.9),
+    inset 0 -3px 6px rgba(150,125,112,.16);
+}
+
+/* ---------- la hoja que sube desde abajo ---------- */
+.hoja{
+  position:fixed;inset:0;z-index:60;
+  background:rgba(74,48,56,.42);
+  backdrop-filter:blur(3px);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0;
+}
+@media (min-width:560px){ .hoja{align-items:center;padding:20px} }
+.hoja-caja{
+  position:relative;width:100%;max-width:520px;
+  background:var(--crema);
+  border-radius:26px 26px 0 0;
+  padding:26px 22px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:0 -8px 40px -10px rgba(74,48,56,.4);
+  text-align:center;
+  animation:hoja-sube .22s cubic-bezier(.2,.8,.3,1);
+}
+@media (min-width:560px){ .hoja-caja{border-radius:26px;padding-bottom:24px} }
+@keyframes hoja-sube{from{transform:translateY(14px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){ .hoja-caja{animation:none} }
+.hoja-caja h2{
+  font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;
+  font-size:1.7rem;line-height:1.15;margin:4px 0 14px;color:var(--uva);
+}
+.hoja-ayuda{color:var(--suave);font-size:.92rem;margin:0 0 18px;line-height:1.45}
+.hoja-x{
+  position:absolute;top:12px;right:12px;width:38px;height:38px;
+  border:none;background:none;color:var(--suave);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:50%;
+}
+.hoja-x:active{background:rgba(74,48,56,.07)}
+.hoja-caja textarea{
+  width:100%;border:1px solid var(--linea);border-radius:16px;
+  background:var(--papel);color:var(--tinta);
+  font-family:inherit;font-size:16px;line-height:1.5;      /* 16px: si no, el iPhone hace zoom */
+  padding:14px 15px;resize:none;
+  box-shadow:var(--luz-arriba), inset 0 -1px 0 rgba(74,48,56,.05);
+}
+.hoja-caja textarea:focus{
+  outline:none;border-color:var(--blush-hondo);
+  box-shadow:var(--luz-arriba), 0 0 0 3px rgba(237,192,178,.35);
+}
+.hoja-pie{display:flex;align-items:center;gap:12px;margin-top:16px}
+.hoja-pie .btn-lleno{flex:1;margin:0}
+.contador{color:var(--suave);font-size:.82rem;font-variant-numeric:tabular-nums;flex:none;min-width:34px;text-align:left}
+.contador.poco{color:var(--error, #A3242F);font-weight:700}
+.hoja-error{
+  background:#FBEDEE;border:1px solid #EBCBCE;color:#A3242F;
+  border-radius:14px;padding:12px 14px;font-size:.9rem;margin:14px 0 0;line-height:1.45;
+}
+.btn-suave{
+  font-family:inherit;font-size:.92rem;font-weight:700;color:var(--suave);
+  background:var(--papel);border:1px solid var(--linea);border-radius:99px;
+  padding:13px 18px;cursor:pointer;flex:none;
+  box-shadow:var(--relieve-1), var(--luz-arriba);
+}
+.btn-suave:active{box-shadow:none;transform:translateY(1px)}
+
+/* ---------- el botón de grabar ---------- */
+.micro{
+  width:104px;height:104px;border-radius:50%;border:none;cursor:pointer;margin:6px auto 0;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(66% 62% at 33% 27%, var(--blush-luz) 0%, var(--acento) 52%, var(--blush-hondo) 100%);
+  color:#7A4034;
+  box-shadow:var(--sombra-esfera), inset 0 3px 0 rgba(255,255,255,.7), inset 0 -4px 8px rgba(170,110,95,.26);
+  transition:transform .14s ease;
+}
+.micro .ico{width:40px;height:40px;stroke-width:1.5}
+.micro:active{transform:scale(.96)}
+/* grabando: late, y el icono pasa a ser un cuadrado de "parar" */
+.micro.grabando{
+  background:radial-gradient(66% 62% at 33% 27%, #E88E86 0%, #C0453F 55%, #8E2B27 100%);
+  color:#fff;
+  animation:latir 1.5s ease-in-out infinite;
+}
+@keyframes latir{
+  0%,100%{box-shadow:var(--sombra-esfera), 0 0 0 0 rgba(192,69,63,.45)}
+  50%{box-shadow:var(--sombra-esfera), 0 0 0 16px rgba(192,69,63,0)}
+}
+@media (prefers-reduced-motion:reduce){ .micro.grabando{animation:none} }
+.reloj{
+  font-variant-numeric:tabular-nums;font-weight:700;font-size:1.25rem;
+  color:var(--uva);margin-top:12px;letter-spacing:.02em;
+}
+.hoja-caja audio{width:100%;margin-top:16px}
+
+/* ---------- lo que quedó firmado ---------- */
+.firmas{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.firma{
+  background:var(--papel);border:1px solid rgba(255,255,255,.9);
+  border-radius:20px;padding:16px 18px;text-align:left;
+  box-shadow:var(--relieve-2), var(--luz-arriba);
+}
+.firma .quien{
+  font-size:.76rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--suave);margin-bottom:7px;
+}
+.firma .dice{
+  font-family:"Cormorant Garamond",Georgia,serif;font-size:1.24rem;line-height:1.4;
+  color:var(--tinta);white-space:pre-wrap;overflow-wrap:anywhere;
+}
+.firma audio{width:100%;margin-top:4px}
