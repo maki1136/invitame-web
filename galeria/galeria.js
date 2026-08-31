@@ -519,12 +519,31 @@ function prepararAudio() {
       return;
     }
     const tipo = tipoDeAudio();
+    /* ⚠️ 48 kbps A PROPÓSITO, no el que elija el navegador.
+       Un saludo de 6 s grabado con el ritmo por defecto de Chrome pesó 165 KB
+       (~225 kbps): a ese ritmo el minuto que la pantalla PROMETE pesaría 1,7 MB
+       y el Worker lo rechazaba. El invitado hablaba un minuto entero y recién
+       ahí le saltaba el error. Encontrado el 31/8 con un audio de verdad.
+       48 kbps en Opus es de sobra para una voz, y hace que el minuto entre
+       en ~370 KB: sube más rápido con el wifi de un salón, que nunca es bueno.
+       Es una SUGERENCIA: hay navegadores que la ignoran (Safari, entre otros),
+       por eso el tope de bytes del Worker también se subió. */
+    const opciones = { audioBitsPerSecond: 48000 };
+    if (tipo) opciones.mimeType = tipo;
     try {
-      mediaGrabador = tipo ? new MediaRecorder(mediaStream, { mimeType: tipo }) : new MediaRecorder(mediaStream);
+      mediaGrabador = new MediaRecorder(mediaStream, opciones);
     } catch (e) {
-      apagarMicro();
-      mostrarError('aud-error', 'Este navegador no puede grabar audio.');
-      return;
+      /* Si a este navegador no le gusta la combinación, se prueba sin la
+         sugerencia de ritmo antes de rendirse: quedarse sin grabar por querer
+         ahorrar bytes sería el peor negocio posible. */
+      try {
+        mediaGrabador = tipo ? new MediaRecorder(mediaStream, { mimeType: tipo })
+                             : new MediaRecorder(mediaStream);
+      } catch (e2) {
+        apagarMicro();
+        mostrarError('aud-error', 'Este navegador no puede grabar audio.');
+        return;
+      }
     }
     pedazos = [];
     mediaGrabador.ondataavailable = (e) => { if (e.data && e.data.size) pedazos.push(e.data); };
