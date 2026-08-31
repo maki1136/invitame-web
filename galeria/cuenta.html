@@ -198,10 +198,10 @@ input:focus{outline:none;border-color:var(--blush-hondo);
   <div id="adentro" hidden>
 
     <div class="saldo">
-      <div class="esfera" id="nro">0</div>
+      <div class="esfera" id="nro">·</div>
       <div class="q">
-        <b id="saldo-txt">Sin créditos</b>
-        <span id="saldo-pie">Cada fiesta que creás usa un crédito.</span>
+        <b id="saldo-txt">Buscando tu saldo…</b>
+        <span id="saldo-pie">Un segundo.</span>
       </div>
     </div>
 
@@ -211,7 +211,7 @@ input:focus{outline:none;border-color:var(--blush-hondo);
       <input id="nombre" type="text" maxlength="80" placeholder="Boda de Ana y Martín" required>
       <label for="fecha">¿Qué día es?</label>
       <input id="fecha" type="date">
-      <button class="btn" type="submit" id="btn-crear">Crear la fiesta</button>
+      <button class="btn" type="submit" id="btn-crear" disabled>Crear la fiesta</button>
       <div class="aviso mal" id="error-crear" hidden></div>
       <div class="aviso bien" id="listo-crear" hidden></div>
     </form>
@@ -337,7 +337,10 @@ async function mirarCuenta() {
     }
     $('btn-crear').disabled = n < 1;
   } catch (e) {
-    $('saldo-pie').textContent = 'No se pudo leer tu saldo ahora.';
+    $('nro').textContent = '·';
+    $('saldo-txt').textContent = 'No pudimos leer tu saldo';
+    $('saldo-pie').textContent = 'Probá recargar la página en un momento.';
+    $('btn-crear').disabled = true;   /* sin saldo leído no se crea nada */
   }
   mirarFiestas();
 }
@@ -424,9 +427,12 @@ $('crear').addEventListener('submit', async (ev) => {
     await mirarCuenta();
   } catch (e) {
     mostrar('error-crear', e.message || 'No se pudo crear la fiesta.');
+    $('btn-crear').disabled = false;    /* falló: que pueda reintentar */
   }
+  /* Si salió bien, quien decide si el botón sigue vivo es mirarCuenta(),
+     que ya releyó el saldo. Encenderlo acá a lo bruto dejaba el botón
+     prendido después de gastar el ÚLTIMO crédito. */
   $('btn-crear').textContent = 'Crear la fiesta';
-  $('btn-crear').disabled = false;
 });
 </script>
 </body>
