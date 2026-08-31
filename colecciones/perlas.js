@@ -9,7 +9,7 @@
       Palabras de Maki: «la idea es no romper nada, que puedas seguir con las
       plantillas como venimos, pero disfrazarlas».
       No se toca `index.html`, no se toca ninguna sección, no se pierde ninguna
-      función. Es una hoja de estilos y tres movimientos de nodos, todo
+      función. Es una hoja de estilos y unos pocos nodos agregados, todo
       reversible. Si se saca este archivo de la lista, vuelve todo como estaba.
 
    ⚠️ VIENE APAGADA. Sin `INVEV.fx.coleccion === 'perlas'` no hace nada.
@@ -52,78 +52,79 @@
       La primera versión guardaba `h1.innerHTML` para restaurarlo. Resultado: la
       invitación mostraba **"María & Diego"**, los nombres de la BODA DE EJEMPLO.
       El motor dibuja primero el ejemplo y recién después pone los datos del
-      cliente; la copia se tomaba con el ejemplo adentro y "deshacer" lo pegaba
-      encima de los nombres buenos.
-      → Deshacer se hace SIEMPRE mirando el DOM de AHORA, nunca con una foto
-        vieja. Vale para cualquier módulo que toque algo que el motor redibuja.
+      cliente; la copia se tomaba con el ejemplo adentro.
+      → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★  ← otro que costó una vuelta
+   ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★
       Al bajar el `.kick` debajo del `h2`, los aros ⚭ se fueron con él y
       quedaron METIDOS ENTRE el título y la cursiva, que en la referencia van
-      pegados. Y no alcanza con moverlo una vez: el motor lo reinserta pegado al
-      `.kick` en cada pasada. Por eso `acomodar()` corre en el bucle de 400 ms.
-      Arriba además es donde corresponde: separa secciones, y de ahí cuelga el
-      hilo de perlas.
+      pegados. Y el motor lo reinserta en cada pasada, así que `acomodar()`
+      corre en el bucle de 400 ms y lo devuelve arriba de todo.
 
    ★ LA COLECCIÓN SUGIERE EL MOTIVO, NO LO IMPONE (fase 4)
       El hilo de perlas lo dibuja `/efectos/motivo.js`, que lee
       `INVEV.fx.motivo`. La colección lo prende escribiendo esa sugerencia EN
-      MEMORIA, y sólo si no hay nada elegido. Si Jazmín eligió algo, se respeta.
-      ⚠️ Esto NO se guarda en la base: `INVEV` es la copia que se dibuja, no el
-         borrador. El admin guarda `D`, no `INVEV`. Escribir acá no persiste
-         nada. (Y si algún día algo llegara a guardar `INVEV`, esta línea habría
-         que sacarla: está marcada para encontrarla rápido.)
+      MEMORIA, y sólo si no hay nada elegido.
+      ⚠️ No se guarda en la base: `INVEV` es la copia que se dibuja, no el
+         borrador. El admin guarda `D`.
 
-   ★ LA LÍNEA DE TIEMPO PASA A SER UN HILO DE PERLAS (fase 4)
-      En la referencia el collar ES la línea del programa: baja y los horarios
-      cuelgan de él. Acá:
-        · `.tl::before` es la guía de la línea. El motor la deja al 22 % de
-          opacidad porque es sólo el riel; se sube a 1 y se le pone la foto de
-          la perla repetida hacia abajo, de 11 px. La línea original mide 2 px
-          y arranca a 6 px de la izquierda (centro en x=7), así que la hilera va
-          de 1.5 px a 12.5 px: mismo centro.
-        · `.it::before` (el puntito de cada momento, 12 px a -26 px del `.it`)
-          pasa a ser una perla más grande, corrida para quedar centrada.
-        · `.tl-prog` es la línea VERDE que se dibuja con el scroll, un `<i>`
-          que el motor anima con `transform: scaleY()`. Se esconde.
+   ★ LA LÍNEA DE TIEMPO ES UN HILO DE PERLAS (fase 4)
+        · `.tl::before` es la guía, que el motor deja al 22 % de opacidad. Se
+          sube a 1 y se le pone la perla repetida, de 11 px. La línea original
+          mide 2 px a 6 px de la izquierda (centro x=7): la hilera va de 1.5 a
+          12.5, mismo centro.
+        · `.it::before` (el puntito de cada momento) pasa a ser una perla mayor.
+        · `.tl-prog`, la línea que se dibuja con el scroll, se ESCONDE: el motor
+          la anima con `scaleY` y escalar en vertical un fondo repetido deja las
+          perlas ovaladas.
+      ⚠️ Hilera RECTA y horarios de un solo lado, a propósito: en la referencia
+         hace una S con los horarios alternados, pero ahí cada momento son dos
+         palabras y los nuestros tienen título Y descripción.
 
-      ⚠️ POR QUÉ SE ESCONDE `.tl-prog` Y NO SE LE PONEN PERLAS:
-         se anima con `scaleY`, y escalar en vertical un fondo repetido
-         ESTIRA las perlas y las deja ovaladas. Con una línea de color plano no
-         se nota, con perlas sí. Se elige la hilera fija y se pierde el relleno
-         por scroll en esta sección. La referencia tampoco lo tiene.
+   ★★★ LAS CINCO PIEZAS FOTOGRAFIADAS (fase 5) ★★★
+      Generadas en Flow por Maki y recortadas acá. Viven en
+      `window.INVPIEZAS`, cada una en su archivo `/colecciones/pieza-*.js`.
 
-      ⚠️ SE APARTA DE LA REFERENCIA A PROPÓSITO: hilera RECTA, no en S, y los
-         horarios quedan todos del mismo lado.
-         En la referencia el collar hace una S y los horarios alternan
-         izquierda y derecha, pero ahí cada momento son dos palabras. Los
-         nuestros tienen título Y descripción: alternados a 375 px de ancho
-         quedan ilegibles. Se copia la idea (el hilo es de perlas) y se adapta
-         la forma. Maki está avisada.
+      DOS TRATAMIENTOS, SEGÚN SI FLOTAN O SE APOYAN:
+        · broche y dije → pedidos sobre GRIS y recortados con alfa, porque
+          tienen que flotar sobre cualquier fondo. La sombra se la pone el CSS.
+        · bandeja, sobre y moño → pedidos sobre PAPEL MARFIL y NO recortados:
+          se colocan enteros, con el alfa apagándose en los bordes para que se
+          fundan con la sección.
+        Recortar lo que flota, difuminar lo que se apoya.
 
-      ⚠️ EN LA MUESTRA `camila-y-tomas` ESTO NO SE VE SOLO: esa invitación usa
-         el otro estilo de itinerario y tiene `.tl` en `display:none`. Se
-         verificó forzando el estilo a mano. En una invitación con el
-         itinerario clásico se ve sin hacer nada.
+      DÓNDE VA CADA UNA, y por qué se engancha ahí:
+        · broche  → al final del hilo del programa (`.tl`). Es lo que hace la
+          referencia: el collar baja y cierra con un broche.
+        · dije    → colgando de la cuenta regresiva, con la cadena dibujada por
+          CSS. ⚠️ La cadena NO está en la foto a propósito: es metal neutro y la
+          misma clave que salva las perlas la borra; y una línea la dibuja mejor
+          el CSS que una foto de 2 px.
+        · bandeja → sección del lugar, enganchada a `.evento`.
+        · sobre   → sección de la frase, enganchada a `.frase`.
+        · moño    → sección de las personas, enganchada a `.padres`.
+      Se enganchan a ESAS CLASES y no a los títulos: los títulos los escribe el
+      cliente y cambian; las clases no.
 
-   LO QUE HAY HECHO
-     FASE 2 · tipografía y aire · FASE 3 · arcos, blanco y negro, fotos como
-     objetos · FASE 4 · el motivo prendido y la línea de tiempo de perlas.
+      ⚠️ LAS DE PAPEL SE ESCONDEN EN LAS SECCIONES OSCURAS. Sobre una banda de
+         color el rectángulo marfil se nota igual, por más difuminado que esté.
 
-   FALTA (fases 5 y 6): el dress code en círculos de color, los corazones del
-   final, y las 5 fotos que va a mandar Maki (broche, dije, sobre con tarjeta,
-   bandeja de plata, sobre con moño).
+      ⚠️ SI UNA PIEZA NO ESTÁ, NO SE COLOCA Y NO SE ROMPE NADA. Cada
+         `/colecciones/pieza-*.js` es opcional.
+
+   ★ CÓMO SE PASAN LAS PIEZAS AL REPO  ← esto costó una vuelta
+      Base64 en bloques de 4.000 caracteres y VERIFICANDO CON SUMA DE CONTROL.
+      Llegó un archivo con caracteres cambiados en el medio que decodificaba a
+      los bytes exactos y con cabecera RIFF válida: **el tamaño y la cabecera NO
+      alcanzan** para dar por buena una transferencia. Sólo la suma lo delata.
 
    ⚠️ LOS TÍTULOS EN ESPAÑOL DE MÉXICO SON MÁS LARGOS QUE EN INGLÉS.
-      `PROGRAM` mide la mitad que `CÓMO VA A SER EL DÍA`. Por eso los tamaños
-      van con `clamp()` y los títulos tienen `max-width` en em. NUNCA acortar
-      el texto del cliente para que entre.
+      Los tamaños van con `clamp()`. NUNCA acortar el texto del cliente.
 
    ⚠️ LA INCLINACIÓN DE LAS FOTOS NO VA EN FOTOS CON `.reveal`: el motor las
       anima con `transform` y un `rotate` propio le pisaría la animación.
 
-   ⚠️ LAS FUENTES YA ESTÁN CARGADAS por el motor. NO agregar un pedido nuevo:
-      es una invitación, se abre en el celular con datos.
+   ⚠️ LAS FUENTES YA ESTÁN CARGADAS por el motor. NO agregar un pedido nuevo.
    ============================================================================ */
 (function () {
   'use strict';
@@ -143,7 +144,6 @@
     catch (e) { return false; }
   }
 
-  /* ¿la invitación tiene fuente propia elegida para los nombres? */
   function tieneFuentePropia() {
     try {
       var f = (window.INVEV || {}).nfont;
@@ -153,6 +153,9 @@
 
   function laPerla() {
     try { return window.INVPERLA || ''; } catch (e) { return ''; }
+  }
+  function laPieza(k) {
+    try { return (window.INVPIEZAS || {})[k] || ''; } catch (e) { return ''; }
   }
 
   /* `h[c]` = colección · `h[t]` = además tipografía nuestra · `h[p]` = hay perla */
@@ -199,7 +202,7 @@
     'h[c] .portada .pbg,h[c] .portada .cover-vid{' +
       'filter:grayscale(1) contrast(1.06) brightness(.98)}',
 
-    /* ── LAS FOTOS, COMO OBJETOS APOYADOS EN EL PAPEL ─────────────────── */
+    /* ── LAS FOTOS DEL CLIENTE, COMO OBJETOS APOYADOS ─────────────────── */
     'h[c] .sec > img{' +
       'background:#fff;padding:9px;border-radius:2px;' +
       'box-shadow:0 1px 2px rgba(60,50,40,.14),0 10px 24px rgba(60,50,40,.13);' +
@@ -210,10 +213,7 @@
     'h[c] .sec .evento{' +
       'border-radius:3px;box-shadow:0 1px 2px rgba(60,50,40,.10),0 8px 22px rgba(60,50,40,.10)}',
 
-    /* ── LA LÍNEA DE TIEMPO, HECHA DE PERLAS (fase 4) ──────────────────────
-       Ver la nota grande de arriba: por qué se sube la opacidad, por qué la
-       hilera va de 1.5 px a 12.5 px, y por qué `.tl-prog` se esconde en vez de
-       llevar perlas. */
+    /* ── LA LÍNEA DE TIEMPO, HECHA DE PERLAS (fase 4) ──────────────────── */
     'h[p] .tl::before{' +
       'width:11px!important;left:1.5px!important;opacity:1!important;' +
       'background:var(--col-perla) repeat-y center top/11px 11px!important;' +
@@ -224,6 +224,31 @@
       'background:var(--col-perla) no-repeat center/contain!important;' +
       'box-shadow:none!important;border:0!important;' +
       'filter:drop-shadow(0 1px 2px rgba(60,50,40,.2))}',
+
+    /* ── LAS CINCO PIEZAS FOTOGRAFIADAS (fase 5) ──────────────────────────
+       ⚠️ Ninguna roba clics ni tapa texto. */
+    'h[c] .col-pza{pointer-events:none;display:block}',
+
+    /* el broche, cerrando el hilo del programa. 22 px de ancho: su centro cae
+       en x=7, que es donde pasa la hilera de perlas. */
+    'h[c] .tl .col-broche{' +
+      'position:absolute;width:22px;height:auto;left:-4px;bottom:-11px;' +
+      'filter:drop-shadow(0 1px 2px rgba(60,50,40,.24))}',
+
+    /* el dije, colgando de la cuenta regresiva.
+       ⚠️ LA CADENA ES CSS, no foto: ver la nota grande de arriba. */
+    'h[c] .col-dije-caja{' +
+      'display:flex;flex-direction:column;align-items:center;' +
+      'margin:14px auto 0;pointer-events:none}',
+    'h[c] .col-dije-caja::before{' +
+      'content:"";width:1px;height:24px;background:currentColor;opacity:.45}',
+    'h[c] .col-dije{width:24px;height:auto;margin-top:-2px;' +
+      'filter:drop-shadow(0 2px 3px rgba(0,0,0,.30))}',
+
+    /* las de papel: apoyadas, anchas y con aire */
+    'h[c] .col-papel{width:min(86%,330px);height:auto;margin:34px auto 0}',
+    /* ⚠️ sobre una banda de color el rectángulo marfil se nota igual */
+    'h[c] .sec.verde .col-papel{display:none}',
 
     /* ── LA PORTADA ───────────────────────────────────────────────────── */
     'h[c] .portada .kicker{' +
@@ -271,10 +296,7 @@
     if (s.textContent !== CSS) s.textContent = CSS;
   }
 
-  /* ---- el motivo: la colección lo SUGIERE, no lo impone --------------------
-     ⚠️ EN MEMORIA. `INVEV` es la copia que se dibuja, no el borrador que se
-        guarda (el admin guarda `D`). Esto no persiste nada.
-        Y sólo se escribe si Jazmín no eligió nada. */
+  /* ---- el motivo: la colección lo SUGIERE, no lo impone ------------------- */
   function sugerirMotivo() {
     try {
       var ev = window.INVEV;
@@ -286,8 +308,62 @@
     } catch (e) {}
   }
 
-  /* ---- la cursiva pegada DEBAJO del título, el adorno arriba de todo ------
-     ⚠️ Corre en cada pasada: el motor reinserta el adorno pegado al `.kick`. */
+  /* ---- LAS CINCO PIEZAS -------------------------------------------------- */
+  function unaImagen(clave, clase) {
+    var src = laPieza(clave);
+    if (!src) return null;                        /* si falta, no pasa nada */
+    var i = document.createElement('img');
+    i.className = 'col-pza ' + clase;
+    i.alt = '';
+    i.loading = 'lazy';
+    i.src = src;
+    return i;
+  }
+
+  /* engancha a una CLASE, nunca a un título: los títulos los escribe el cliente */
+  function seccionDe(sel) {
+    var e = document.querySelector(sel);
+    return (e && e.closest) ? e.closest('.sec') : null;
+  }
+
+  function ponerPapel(clave, sel, clase) {
+    var s = seccionDe(sel);
+    if (!s || s.classList.contains('verde')) return;
+    if (s.querySelector('.' + clase)) return;
+    var i = unaImagen(clave, 'col-papel ' + clase);
+    if (i) s.appendChild(i);
+  }
+
+  function colocarPiezas() {
+    /* el broche, al final del hilo del programa */
+    var tl = document.querySelector('.tl');
+    if (tl && !tl.querySelector('.col-broche')) {
+      var b = unaImagen('broche', 'col-broche');
+      if (b) tl.appendChild(b);
+    }
+
+    /* el dije, colgando de la cuenta regresiva, con la cadena por CSS */
+    var count = document.querySelector('.portada .count');
+    if (count && count.parentNode && !count.parentNode.querySelector('.col-dije-caja')) {
+      var d = unaImagen('dije', 'col-dije');
+      if (d) {
+        var caja = document.createElement('div');
+        caja.className = 'col-pza col-dije-caja';
+        caja.appendChild(d);
+        count.parentNode.insertBefore(caja, count.nextSibling);
+      }
+    }
+
+    ponerPapel('bandeja', '.evento', 'col-bandeja');
+    ponerPapel('sobre',   '.frase',  'col-sobre');
+    ponerPapel('mono',    '.padres', 'col-mono');
+  }
+
+  function sacarPiezas() {
+    [].forEach.call(document.querySelectorAll('.col-pza'), function (e) { e.remove(); });
+  }
+
+  /* ---- la cursiva pegada DEBAJO del título, el adorno arriba de todo ------ */
   function acomodar() {
     [].forEach.call(document.querySelectorAll('.sec'), function (s) {
       var k = s.querySelector(':scope > .kick');
@@ -315,8 +391,7 @@
     });
   }
 
-  /* ---- el conector de los nombres, solo y en cursiva ----------------------
-     ⚠️ SIN COPIAS DEL HTML. Ver la nota grande de arriba. */
+  /* ---- el conector de los nombres, solo y en cursiva ---------------------- */
   function partirNombres() {
     var h1 = document.querySelector('.portada h1.names');
     if (!h1 || h1.querySelector('.col-y')) return;
@@ -359,7 +434,6 @@
     var raiz = document.documentElement;
     raiz.setAttribute(MARCA, NOMBRE);
 
-    /* la foto de la perla, para la línea de tiempo */
     var p = laPerla();
     if (p) {
       raiz.style.setProperty('--col-perla', 'url("' + p + '")');
@@ -368,7 +442,6 @@
 
     sugerirMotivo();
 
-    /* ¿la tipografía de los nombres la manda la colección o Jazmín? */
     if (tieneFuentePropia()) {
       raiz.removeAttribute(MARCA_T);
       juntarNombres();
@@ -378,6 +451,7 @@
     }
 
     acomodar();
+    colocarPiezas();
     puesta = true;
   }
 
@@ -388,6 +462,7 @@
     raiz.removeAttribute(MARCA_T);
     raiz.removeAttribute(MARCA_P);
     raiz.style.removeProperty('--col-perla');
+    sacarPiezas();
     desacomodar();
     juntarNombres();
     puesta = false;
