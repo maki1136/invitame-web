@@ -30,18 +30,7 @@
     if (!cfg.gid || !/^[A-Za-z0-9_-]{16,64}$/.test(String(cfg.gid))) return;
     if (document.getElementById('gal-seccion')) return;
 
-    /* El nombre y el token del invitado: los mismos que ya usa la
-       invitación. El token viene en ?g= de la URL de la invitación. */
-    var params = new URLSearchParams(location.search);
-    var token = params.get('g') || '';
-    var nombre = '';
-    try {
-      if (window.INVITADO && window.INVITADO.nombre) nombre = window.INVITADO.nombre;
-    } catch (e) {}
-
-    var url = '/galeria/?g=' + encodeURIComponent(cfg.gid);
-    if (nombre) url += '&n=' + encodeURIComponent(nombre);
-    if (token) url += '&t=' + encodeURIComponent(token);
+    var url = armarUrl(cfg.gid);
 
     /* Los textos se pueden cambiar desde el panel. */
     var titulo = String(cfg.titulo || 'Las fotos de la fiesta');
@@ -53,7 +42,13 @@
 
     var sec = document.createElement('section');
     sec.id = 'gal-seccion';
-    sec.style.cssText = 'text-align:center;padding:52px 22px;';
+    /* La clase de la casa: hereda el aire de las demás secciones y la
+       colección que esté puesta. El padding propio queda sólo de respaldo,
+       para una invitación que no tenga `.sec`. */
+    sec.className = 'sec';
+    sec.style.cssText = document.querySelector('.sec')
+      ? 'text-align:center;'
+      : 'text-align:center;padding:52px 22px;';
     sec.innerHTML =
       '<div style="display:inline-flex;align-items:center;justify-content:center;' +
         'width:62px;height:62px;border-radius:50%;margin-bottom:16px;' +
@@ -90,16 +85,74 @@
           'inset 0 1.5px 0 rgba(255,255,255,.42), inset 0 -2px 5px rgba(0,0,0,.20)';
       };
       var soltar = function () { a.style.transform = ''; a.style.boxShadow = ''; };
+      /* El motor puede llamar a `aplicarInvitado` DESPUÉS de que esta sección
+         se montó: si el href se calcula una sola vez, la foto sale sin firmar
+         justo cuando el invitado tarda en cargar. Se rearma al tocarlo. */
+      var refrescar = function () { a.setAttribute('href', armarUrl(cfg.gid)); };
+      a.addEventListener('pointerdown', refrescar);
+      a.addEventListener('focus', refrescar);
+      a.addEventListener('click', refrescar);
       a.addEventListener('pointerdown', hundir);
       a.addEventListener('pointerup', soltar);
       a.addEventListener('pointercancel', soltar);
       a.addEventListener('pointerleave', soltar);
     }
 
-    /* Va al final de la invitación, antes del cierre. */
-    var cierre = document.querySelector('.cierre, #cierre, footer');
-    if (cierre && cierre.parentNode) cierre.parentNode.insertBefore(sec, cierre);
-    else document.body.appendChild(sec);
+    colgar(sec);
+  }
+
+  /* ⚠️ DE DÓNDE SALE EL NOMBRE DEL INVITADO (31/8/2026)
+     Antes esto leía `window.INVITADO`, que NO EXISTE en el motor: nunca lo
+     publicó nadie. O sea que el invitado entraba desde su invitación, que ya
+     sabe cómo se llama, y la galería igual le volvía a pedir el nombre — y las
+     fotos salían sin firmar. No se notaba porque el banco fabricaba ese objeto.
+
+     Lo que el motor SÍ hace (ver `aplicarInvitado` en i/index.html) es escribir
+     el nombre en el DOM: `#pv-gname` (el pase) y `#rname` (la confirmación).
+     De ahí se lee, que es donde está de verdad. */
+  function nombreInvitado() {
+    var e = document.getElementById('pv-gname');
+    var n = e ? String(e.textContent || '').trim() : '';
+    if (!n) {
+      var r = document.getElementById('rname');
+      n = r ? String(r.value || '').trim() : '';
+    }
+    return n.slice(0, 40);
+  }
+
+  /* El token del pase. `INVDATA` lo deja parseado el motor; si no está, se
+     mira la URL, que es de donde salió. */
+  function tokenInvitado() {
+    try {
+      if (window.INVDATA && window.INVDATA.token) return String(window.INVDATA.token);
+    } catch (e) {}
+    return new URLSearchParams(location.search).get('g') || '';
+  }
+
+  function armarUrl(gid) {
+    var u = '/galeria/?g=' + encodeURIComponent(gid);
+    var n = nombreInvitado();
+    var t = tokenInvitado();
+    if (n) u += '&n=' + encodeURIComponent(n);
+    if (t) u += '&t=' + encodeURIComponent(t);
+    return u;
+  }
+
+  /* ⚠️ DÓNDE SE CUELGA LA SECCIÓN (31/8/2026)
+     Antes buscaba `.cierre, #cierre, footer` y, si no encontraba, la pegaba al
+     final del <body>. En la invitación de verdad NO HAY ninguno de los tres:
+     todas las secciones viven dentro de `.frame`, y colgarla del body la
+     dejaba FUERA de la caja de la invitación. El banco no lo veía porque su
+     página de mentira tenía un `<footer class="cierre">` que no existe.
+     Se cuelga entre las secciones reales, con la misma clase `sec` que usan
+     ellas, así hereda el aire y la colección que esté puesta. */
+  function colgar(sec) {
+    var marco = document.querySelector('.frame') || document.body;
+    var antes = document.getElementById('contacto-sec')
+             || document.getElementById('share-sec')
+             || document.querySelector('.cierre, #cierre, footer');
+    if (antes && antes.parentNode) { antes.parentNode.insertBefore(sec, antes); return; }
+    marco.appendChild(sec);
   }
 
   function esc(s) {
