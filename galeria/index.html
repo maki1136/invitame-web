@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="/galeria/galeria.css?v=4">
+<link rel="stylesheet" href="/galeria/galeria.css?v=5">
 </head>
 <body>
 
@@ -34,6 +34,16 @@
       <path d="M12 4v11"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M4.5 19h15"/>
     </g>
     <g id="ico-cerrar"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></g>
+    <g id="ico-lapiz">
+      <path d="M4 20h4.2l9.4-9.4a2.1 2.1 0 0 0 0-3l-1.2-1.2a2.1 2.1 0 0 0-3 0L4 15.8z"/>
+      <path d="M14.2 6.6l3.2 3.2"/>
+    </g>
+    <g id="ico-micro">
+      <rect x="9.2" y="3" width="5.6" height="10.6" rx="2.8"/>
+      <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"/>
+      <path d="M12 18v3"/>
+    </g>
+    <g id="ico-parar"><rect x="7" y="7" width="10" height="10" rx="2"/></g>
   </defs>
 </svg>
 
@@ -85,6 +95,16 @@
       <span class="ficha-txt">Elegir<br>del celular</span>
       <input id="in-elegir" type="file" accept="image/*" multiple hidden>
     </label>
+    <!-- El libro de firmas: dos cosas sueltas, no un pie de foto.
+         Alguien que no saca ninguna foto igual quiere dejar algo escrito. -->
+    <button class="ficha ficha-escribir" id="btn-escribir" type="button">
+      <span class="ficha-ico"><svg class="ico" viewBox="0 0 24 24"><use href="#ico-lapiz"/></svg></span>
+      <span class="ficha-txt">Escribir<br>un mensaje</span>
+    </button>
+    <button class="ficha ficha-grabar" id="btn-grabar" type="button">
+      <span class="ficha-ico"><svg class="ico" viewBox="0 0 24 24"><use href="#ico-micro"/></svg></span>
+      <span class="ficha-txt">Grabar<br>un saludo</span>
+    </button>
   </div>
 
   <p id="gal-cerrada" class="cerrada" hidden></p>
@@ -106,7 +126,56 @@
     <svg class="ico ico-grande" viewBox="0 0 24 24"><use href="#ico-hoja"/></svg>
     <p>Todavía no hay fotos.<br><strong>Subí la primera.</strong></p>
   </div>
+
+  <!-- ============ EL LIBRO DE FIRMAS ============ -->
+  <div class="fila-titulo" id="firmas-titulo" hidden>
+    <span class="ojal">El libro de firmas</span>
+    <span id="firmas-cuenta" class="cuenta"></span>
+  </div>
+  <section class="firmas" id="firmas" aria-label="Mensajes y saludos de los invitados"></section>
 </main>
+
+<!-- ============ ESCRIBIR UN MENSAJE ============ -->
+<div id="hoja-mensaje" class="hoja" hidden>
+  <div class="hoja-caja" role="dialog" aria-modal="true" aria-labelledby="msj-titulo">
+    <button class="hoja-x" id="msj-cerrar" type="button" aria-label="Cerrar">
+      <svg class="ico" viewBox="0 0 24 24"><use href="#ico-cerrar"/></svg>
+    </button>
+    <span class="ojal">El libro de firmas</span>
+    <h2 id="msj-titulo">Dejales unas palabras</h2>
+    <textarea id="msj-texto" maxlength="500" rows="5"
+      placeholder="Lo que quieras decirles…" enterkeyhint="done"></textarea>
+    <div class="hoja-pie">
+      <span id="msj-cuenta" class="contador">500</span>
+      <button id="msj-enviar" class="btn-lleno" type="button">Dejar el mensaje</button>
+    </div>
+    <p id="msj-error" class="hoja-error" hidden></p>
+  </div>
+</div>
+
+<!-- ============ GRABAR UN SALUDO ============ -->
+<div id="hoja-audio" class="hoja" hidden>
+  <div class="hoja-caja" role="dialog" aria-modal="true" aria-labelledby="aud-titulo">
+    <button class="hoja-x" id="aud-cerrar" type="button" aria-label="Cerrar">
+      <svg class="ico" viewBox="0 0 24 24"><use href="#ico-cerrar"/></svg>
+    </button>
+    <span class="ojal">El libro de firmas</span>
+    <h2 id="aud-titulo">Mandales un saludo</h2>
+    <p id="aud-ayuda" class="hoja-ayuda">Hasta un minuto. Tocá el micrófono y hablá.</p>
+
+    <button id="aud-boton" class="micro" type="button" aria-label="Grabar">
+      <svg class="ico" viewBox="0 0 24 24"><use href="#ico-micro"/></svg>
+    </button>
+    <div id="aud-reloj" class="reloj" hidden>0:00</div>
+
+    <audio id="aud-escuchar" controls hidden></audio>
+    <div class="hoja-pie" id="aud-pie" hidden>
+      <button id="aud-otra" class="btn-suave" type="button">Grabar de nuevo</button>
+      <button id="aud-enviar" class="btn-lleno" type="button">Mandar el saludo</button>
+    </div>
+    <p id="aud-error" class="hoja-error" hidden></p>
+  </div>
+</div>
 
 <!-- Visor -->
 <div id="visor" class="visor" hidden>
@@ -124,6 +193,6 @@
 
 <div id="gal-toast" class="toast" hidden></div>
 
-<script src="/galeria/galeria.js?v=2" type="module"></script>
+<script src="/galeria/galeria.js?v=3" type="module"></script>
 </body>
 </html>
