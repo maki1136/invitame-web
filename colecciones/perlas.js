@@ -9,8 +9,8 @@
       Palabras de Maki: «la idea es no romper nada, que puedas seguir con las
       plantillas como venimos, pero disfrazarlas».
       No se toca `index.html`, no se toca ninguna sección, no se pierde ninguna
-      función. Esto es una hoja de estilos y tres movimientos de nodos, y todo
-      se puede deshacer. Si se saca este archivo de la lista, vuelve todo como
+      función. Esto es una hoja de estilos y dos movimientos de nodos, y todo se
+      puede deshacer. Si se saca este archivo de la lista, vuelve todo como
       estaba.
 
    ⚠️ VIENE APAGADA. Sin `INVEV.fx.coleccion === 'perlas'` no hace nada.
@@ -24,6 +24,37 @@
    ⚠️ EL 70% DE LA DIFERENCIA NO SON LAS PERLAS: ES LA TIPOGRAFÍA Y EL AIRE.
       Ya me equivoqué una vez de prioridad. Las perlas son la fase 4; esto —la
       fase 2— es lo que más cambia la invitación y no necesita ni una foto.
+
+   ★★★ CÓMO SE CAMBIAN LOS TAMAÑOS: SE SETEAN LAS VARIABLES DEL MOTOR ★★★
+      Esto costó una vuelta y es la clave para cualquier colección futura.
+      El motor NO usa tamaños sueltos: tiene una escala completa en variables,
+      y las aplica con `!important`. Por ejemplo:
+          .sec h2 { font-size: var(--fs-titulo, 30px) !important }
+          .kick   { font-size: var(--fs-cursiva, 34px) !important }
+      Así que una regla propia de `font-size`, por más específica que sea,
+      PIERDE siempre. La primera versión de este archivo cambiaba la familia y
+      el espaciado bien, pero los tamaños quedaban intactos y no se entendía
+      por qué.
+
+      La escala completa que expone el motor:
+        --fs-nombres  --fs-kicker   --fs-titulo    --fs-cursiva
+        --fs-contador --fs-texto    --fs-datos     --fs-direccion
+        --fs-lugar    --fs-frase    --fs-boton
+      Y además: --pad (relleno), --sec-col / --sec-col-v (color de sección),
+      --sec-tex / --sec-tex-v (textura), --lino, --lino2, --cream, --muted,
+      --oro, --verde, --sage.
+
+      → Para el TAMAÑO se setea la variable. Para la FAMILIA, el espaciado
+        entre letras y las mayúsculas, sí van reglas normales: eso el motor no
+        lo pisa.
+
+   ⚠️ LA ÚNICA EXCEPCIÓN SON LOS NOMBRES DE LA PORTADA.
+      El motor les escribe la familia y el tamaño EN LÍNEA (`style=`), porque
+      son campos que elige el cliente (`nfont`, `nsize`). Un estilo en línea le
+      gana a cualquier hoja, así que ahí sí hace falta `!important`.
+      Es a propósito: la colección MANDA sobre la tipografía. Mientras esté
+      prendida, los campos de fuente y tamaño de los nombres no tienen efecto.
+      Se apaga la colección y vuelven a andar.
 
    LO QUE HACE ESTA FASE (2 de 6)
      1. Los títulos pasan a serif fina en MAYÚSCULAS con mucho espaciado entre
@@ -43,14 +74,13 @@
    programa, el dress code en círculos, y las 5 fotos que va a mandar Maki.
 
    ⚠️ LOS TÍTULOS EN ESPAÑOL DE MÉXICO SON MÁS LARGOS QUE EN INGLÉS.
-      `PROGRAM` mide la mitad que `CÓMO VA A SER EL DÍA`. Por eso el tamaño va
-      con `clamp()` y los títulos tienen `max-width` en em: si no entran, bajan
-      de tamaño solos. NUNCA acortar el texto del cliente para que entre.
+      `PROGRAM` mide la mitad que `CÓMO VA A SER EL DÍA`. Por eso los tamaños
+      van con `clamp()` y los títulos tienen `max-width` en em: si no entran,
+      bajan de tamaño solos. NUNCA acortar el texto del cliente para que entre.
 
    ⚠️ TODO LO QUE MUEVE NODOS GUARDA EL ORIGINAL Y SE PUEDE DESHACER.
       `h1.names` guarda su HTML en `data-col-orig`. El `.kick` se vuelve a poner
-      antes del `h2`. Apagar la colección deja la invitación exactamente como
-      estaba.
+      antes del `h2`. Apagar la colección deja la invitación como estaba.
 
    ⚠️ LAS FUENTES YA ESTÁN CARGADAS por el motor: Cormorant Garamond, Forum,
       Great Vibes, Rouge Script, Montserrat, Lora. NO agregar un pedido de
@@ -72,9 +102,16 @@
     catch (e) { return false; }
   }
 
-  /* `h[c]` se reemplaza abajo por el selector con la marca. Se escribe corto
-     para que la hoja se lea. */
+  /* `h[c]` se reemplaza abajo por el selector con la marca. */
   var CSS = [
+
+    /* ── LOS TAMAÑOS: por las variables del motor ────────────────────────
+       (ver la nota de arriba: las reglas propias de font-size pierden) */
+    'h[c]{' +
+      '--fs-titulo:clamp(20px,5.6vw,31px);' +
+      '--fs-cursiva:clamp(18px,4.8vw,24px);' +
+      '--fs-kicker:clamp(9px,2.6vw,11px);' +
+      '--fs-contador:clamp(29px,8.6vw,44px)}',
 
     /* ── EL PAR QUE SE REPITE EN TODAS LAS SECCIONES ─────────────────────
        Serif fina en mayúsculas, muy espaciada, y la cursiva chiquita DEBAJO.
@@ -82,13 +119,11 @@
     'h[c] .sec h2.reveal{' +
       'font-family:"Cormorant Garamond",Forum,serif;font-weight:300;' +
       'text-transform:uppercase;letter-spacing:.2em;line-height:1.2;' +
-      'font-size:clamp(20px,5.6vw,31px);' +
       'max-width:13em;margin:0 auto 6px;padding-left:.2em}',   /* .2em compensa el tracking del final */
 
     'h[c] .sec .kick{' +
       'font-family:"Great Vibes",cursive;font-weight:400;' +
-      'font-size:clamp(19px,5vw,25px);line-height:1.35;letter-spacing:0;' +
-      'text-transform:none;opacity:.72;' +
+      'line-height:1.35;letter-spacing:0;text-transform:none;opacity:.72;' +
       'max-width:16em;margin:0 auto 30px}',
 
     /* ── AIRE ────────────────────────────────────────────────────────────
@@ -99,21 +134,22 @@
     '@media (max-width:420px){h[c] .sec{padding:60px 24px}}',
 
     /* ── LA PORTADA ──────────────────────────────────────────────────────
-       El copete en versalitas muy separadas, los nombres enormes y finos. */
+       El copete en versalitas muy separadas, los nombres enormes y finos.
+       ⚠️ Los nombres llevan `!important` porque el motor les pone el estilo
+          en línea (campos `nfont` y `nsize` del cliente). Ver la nota de arriba. */
     'h[c] .portada .kicker{' +
       'font-family:Montserrat,sans-serif;font-weight:400;text-transform:uppercase;' +
-      'font-size:clamp(9px,2.6vw,11px);letter-spacing:.34em;' +
-      'opacity:.85;margin-bottom:20px;padding-left:.34em}',
+      'letter-spacing:.34em;opacity:.85;margin-bottom:20px;padding-left:.34em}',
 
     'h[c] .portada h1.names{' +
-      'font-family:"Cormorant Garamond",serif;font-weight:300;' +
+      'font-family:"Cormorant Garamond",serif!important;font-weight:300!important;' +
       'text-transform:uppercase;letter-spacing:.11em;' +
-      'font-size:clamp(33px,11.5vw,66px);line-height:1.06;padding-left:.11em}',
+      'font-size:clamp(33px,11.5vw,66px)!important;line-height:1.06;padding-left:.11em}',
 
     /* el conector solo, en el medio, en cursiva: `CAMILA` / & / `TOMÁS` */
     'h[c] .portada h1.names .col-y{' +
-      'display:block;font-family:"Great Vibes",cursive;font-weight:400;' +
-      'text-transform:none;letter-spacing:0;font-size:.44em;' +
+      'display:block;font-family:"Great Vibes",cursive!important;font-weight:400!important;' +
+      'text-transform:none;letter-spacing:0;font-size:.44em!important;' +
       'opacity:.8;margin:.04em 0;padding:0}',
 
     'h[c] .portada .fecha{' +
@@ -127,13 +163,12 @@
           secciones. Acá sólo se le cambia el color y el tamaño. */
     'h[c] .count .num{' +
       'font-family:"Cormorant Garamond",serif;font-weight:300;' +
-      'font-size:clamp(29px,8.6vw,44px);line-height:1;letter-spacing:.02em}',
+      'line-height:1;letter-spacing:.02em}',
     'h[c] .count .lab{' +
       'font-family:Montserrat,sans-serif;text-transform:uppercase;' +
       'font-size:9px;letter-spacing:.2em;opacity:.72;margin-top:7px;padding-left:.2em}',
     'h[c] .count .sep{' +
-      'font-family:"Cormorant Garamond",serif;font-weight:300;' +
-      'font-size:clamp(19px,5.6vw,28px);opacity:.32}'
+      'font-family:"Cormorant Garamond",serif;font-weight:300;opacity:.32}'
 
   ].join('').replace(/h\[c\]/g, 'html[' + MARCA + '="' + NOMBRE + '"]');
 
