@@ -76,7 +76,15 @@
       ⚠️ AL ESCRIBIR UN MÓDULO NUEVO: los textos van en español de México. Lo
          que escribe un módulo NO pasa por el traductor del servidor.
 
-   ⚠️ EL ORDEN IMPORTA en doce casos:
+   ★ LAS COSAS DIBUJADAS CON CSS NO REEMPLAZAN A UNA FOTO (31/8/2026)
+      Las perlas del motivo estaban hechas con gradientes. Se veían "de
+      dibujito" y Maki lo dijo sin vueltas. Un objeto fotografiado —una perla,
+      un lacre, un moño— tiene microrrelieve y nácar que el CSS no imita.
+      Ahora la perla es una foto recortada con alfa, de 3.3 KB, incrustada como
+      data URI en `perla.js`. El CSS sigue siendo la herramienta correcta para
+      superficies (papel, terciopelo, el velo del fondo), no para objetos.
+
+   ⚠️ EL ORDEN IMPORTA en trece casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -92,9 +100,12 @@
    · `itinerario-momentos.js` va ANTES de `itinerario.js`.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`.
+   · `perla.js` va ANTES de `motivo.js`: le deja puesta la foto en INVEV.PERLA.
+     No dibuja nada; es sólo el material. Si falta, motivo.js cae en las perlas
+     de gradiente y no se rompe.
    · `motivo.js` va ÚLTIMO de los que dibujan: cuelga las perlas del marco y de
      los separadores, así que necesita que las secciones ya estén puestas. Y va
-     después de `paleta.js` porque las perlas se pintan con sus colores.
+     después de `paleta.js` porque el broche se pinta con sus colores.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -121,6 +132,7 @@
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
     '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
+    '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */
     '/efectos/motivo.js'               /* el motivo que recorre todo: por ahora, las perlas */
   ];
 
