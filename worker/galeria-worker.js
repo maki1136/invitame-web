@@ -37,6 +37,8 @@
      GET  /qr?g=   → el QR del evento (redirección a un generador)
      POST /cuenta  → alta o recarga de una cuenta de cliente.
                      Sólo para los uid de ADMIN_UIDS, con su sesión de Firebase.
+     POST /firmar  → el libro de firmas: un mensaje escrito o un audio.
+                     Mismo circuito que /subir: topes, moderación y estado.
      GET  /uso     → cuánto se lleva usado este mes contra el tope
    ============================================================ */
 
@@ -56,6 +58,7 @@ export default {
       if (ruta === '/subir' && req.method === 'POST') return await subir(req, env, ctx);
       if (ruta === '/crear' && req.method === 'POST') return await crear(req, env);
       if (ruta === '/cuenta' && req.method === 'POST') return await ponerCuenta(req, env);
+      if (ruta === '/firmar' && req.method === 'POST') return await firmar(req, env, ctx);
       if (ruta.startsWith('/f/') && req.method === 'GET') return await servir(req, env, ctx, ruta.slice(3), url);
       if (ruta === '/qr' && req.method === 'GET') return qr(url);
       if (ruta === '/uso' && req.method === 'GET') return await uso(env);
@@ -281,6 +284,150 @@ async function ponerCuenta(req, env) {
   return respuesta({ ok: true, uid, cuenta: d }, 200);
 }
 
+/* ---------------- /firmar: el libro de firmas ----------------
+   Selpix cuenta tres cosas por separado (15 fotos, 20 mensajes, 5 audios),
+   así que acá el mensaje y el audio NO son un pie de foto: son cosas sueltas
+   que alguien deja aunque no suba ninguna foto. Y llevan su propio tope:
+   quien escribió 20 mensajes puede seguir subiendo fotos.
+
+   Van a gal_firmas, no a gal_fotos: la galería, la pantalla y la moderación
+   ya consultan gal_fotos por estado. Mezclarlos haría que cada consulta que
+   hoy anda empiece a traer cosas que no espera. */
+const MAX_TEXTO = 500;
+const MAX_AUDIO = 600 * 1024;      /* ~60 s en Opus entran de sobra */
+const MAX_SEGUNDOS = 62;           /* 60 + margen: el celular redondea */
+
+async function firmar(req, env, ctx) {
+  const tipoContenido = req.headers.get('Content-Type') || '';
+  const esAudio = tipoContenido.includes('multipart/form-data');
+
+  let gid = '', autor = {}, texto = '', audio = null, segundos = 0;
+  if (esAudio) {
+    const fd = await req.formData();
+    gid = String(fd.get('gid') || '').trim();
+    try { autor = JSON.parse(String(fd.get('autor') || '{}')); } catch (e) {}
+    audio = fd.get('audio');
+    segundos = Math.round(parseFloat(fd.get('segundos') || '0') || 0);
+  } else {
+    const b = await req.json().catch(() => ({}));
+    gid = String(b.gid || '').trim();
+    autor = b.autor || {};
+    texto = String(b.texto || '');
+  }
+  if (!/^[A-Za-z0-9_-]{16,64}$/.test(gid)) return respuesta({ error: 'evento inválido' }, 400);
+
+  const nombre = String(autor.nombre || 'Invitado').slice(0, 40);
+  const origen = autor.origen === 'invitacion' ? 'invitacion' : 'qr';
+
+  /* qué mandó, y que tenga sentido */
+  if (esAudio) {
+    if (!audio || typeof audio === 'string') return respuesta({ error: 'faltó el audio' }, 400);
+    if (audio.size > MAX_AUDIO) return respuesta({ error: 'El saludo quedó muy largo. Probá uno más corto 💛' }, 400);
+    if (audio.size < 800) return respuesta({ error: 'El saludo salió vacío. Probá de nuevo.' }, 400);
+    if (segundos > MAX_SEGUNDOS) return respuesta({ error: 'El saludo puede durar hasta un minuto 💛' }, 400);
+  } else {
+    /* nada de caracteres de control: rompen la pantalla del salón */
+    texto = texto.replace(/[ --]/g, '').trim();
+    if (!texto) return respuesta({ error: 'Escribí algo primero 💛' }, 400);
+    if (texto.length > MAX_TEXTO) return respuesta({ error: 'El mensaje puede tener hasta 500 letras.' }, 400);
+  }
+
+  /* el evento tiene que existir, estar activo y dentro de la ventana */
+  const ev = await leerEvento(env, gid);
+  if (!ev) return respuesta({ error: 'evento inválido' }, 400);
+  if (ev.estado === 'cerrada') return respuesta({ error: 'el libro de firmas ya cerró' }, 403);
+  const ahora = Date.now();
+  const desde = ev.ventana && ev.ventana.desde ? Date.parse(ev.ventana.desde) : 0;
+  const hasta = ev.ventana && ev.ventana.hasta ? Date.parse(ev.ventana.hasta) : Infinity;
+  if (ahora < desde || ahora > hasta) return respuesta({ error: 'el libro de firmas está cerrado ahora' }, 403);
+
+  /* Tope propio, separado del de las fotos: el que escribió mucho puede
+     seguir sacando fotos, y al revés. */
+  const quien = await hash(gid + '|' + nombre + '|' + (autor.token || ''));
+  const clase = esAudio ? 'a' : 'm';
+  const tope = esAudio
+    ? ((ev.limites && ev.limites.audios) || 5)
+    : ((ev.limites && ev.limites.mensajes) || 20);
+  const kT = clase + ':' + quien;
+  const n = parseInt(await env.LIMITES.get(kT) || '0', 10);
+  if (n >= tope) {
+    return respuesta({ error: esAudio
+      ? 'Ya dejaste todos tus saludos de voz 💛'
+      : 'Ya dejaste todos tus mensajes 💛' }, 429);
+  }
+  ctx.waitUntil(env.LIMITES.put(kT, String(n + 1), { expirationTtl: 60 * 60 * 24 * 3 }));
+
+  /* El tope duro de la cuenta vale igual: un audio pesa como una foto. */
+  const bytes = esAudio ? audio.size : new TextEncoder().encode(texto).length;
+  const topeBytes = (parseFloat(env.TOPE_GB || '8') || 8) * 1024 * 1024 * 1024;
+  const mes = new Date().toISOString().slice(0, 7);
+  const kMes = 'bytes:' + mes;
+  const usado = parseInt(await env.LIMITES.get(kMes) || '0', 10);
+  if (usado >= topeBytes) {
+    return respuesta({ error: 'La galería alcanzó su límite de este mes. Escribinos y lo ampliamos.' }, 507);
+  }
+  ctx.waitUntil(env.LIMITES.put(kMes, String(usado + bytes), { expirationTtl: 60 * 60 * 24 * 70 }));
+
+  const fid = cid();
+  const doc = {
+    tipo: esAudio ? 'audio' : 'texto',
+    autor: { nombre, origen, token: autor.token ? String(autor.token).slice(0, 24) : null },
+    estado: 'pendiente',
+    tsms: ahora
+  };
+
+  if (esAudio) {
+    /* El iPhone graba audio/mp4 y Android webm. Se acepta lo que venga y se
+       guarda con la extensión que corresponde: dar por hecho 'webm' deja los
+       audios de iPhone sin poder reproducirse. */
+    const ext = /mp4|m4a|aac/.test(audio.type || '') ? 'm4a' : 'webm';
+    const key = 'g/' + gid + '/f/' + fid + '.' + ext;
+    await env.BUCKET.put(key, audio.stream(), {
+      httpMetadata: { contentType: audio.type || 'audio/webm' }
+    });
+    doc.r2 = { key, bytes: audio.size, segundos };
+    /* Un audio no se puede filtrar solo: lo escucha una persona. Queda dicho
+       en el doc para que el panel no muestre un "filtro OK" que es mentira. */
+    doc.mod = { motor: 'ninguno', falla: 'los audios no pasan por filtro automático' };
+    doc.estado = 'pendiente';
+  } else {
+    doc.texto = texto;
+    const sucio = palabrota(texto);
+    doc.mod = sucio
+      ? { motor: 'lista', score: 1, palabra: sucio }
+      : { motor: 'lista', score: 0 };
+    /* Con el evento en automático, un texto limpio sale solo; uno marcado
+       espera SIEMPRE. La lista negra no aprueba: sólo frena. */
+    doc.estado = (ev.modo === 'auto' && !sucio) ? 'aprobada' : 'pendiente';
+  }
+
+  await escribirFirma(env, gid, fid, doc);
+  return respuesta({ ok: true, estado: doc.estado }, 200);
+}
+
+/* Lista corta y honesta: el filtro de verdad es la persona que modera.
+   Sirve para que lo obvio no llegue nunca a la pantalla del salón. */
+const FEAS = ['puta','puto','conchud','forr','pelotud','boluda de mierda','mierda','carajo',
+  'verga','pendej','cul0','concha de','hijo de puta','hdp','trol@','sorete'];
+function palabrota(t) {
+  const limpio = String(t).toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')   /* saca tildes */
+    .replace(/[0@$]/g, (c) => ({ '0': 'o', '@': 'a', '$': 's' }[c]))
+    .replace(/(.)\1{2,}/g, '$1$1');                     /* "putaaaa" -> "putaa" */
+  for (const p of FEAS) if (limpio.includes(p.replace(/[0@$]/g, (c) => ({ '0':'o','@':'a','$':'s' }[c])))) return p;
+  return null;
+}
+
+async function escribirFirma(env, gid, fid, doc) {
+  const t = await tokenGoogle(env);
+  const r = await fetch(FS + '/gal_firmas/' + gid + '/items/' + fid, {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: aFirestore(doc) })
+  });
+  if (!r.ok) throw new Error('firestore firma ' + r.status);
+}
+
 /* ---------------- créditos ---------------- */
 /* Descuenta 1 crédito con bloqueo optimista: leo el saldo y su updateTime,
    y descuento SÓLO si nadie tocó la cuenta en el medio. Si alguien la tocó,
@@ -433,8 +580,14 @@ function textoB64url(s) { return new TextDecoder().decode(bytesB64url(s)); }
 
 /* ---------------- /f/<key> ---------------- */
 async function servir(req, env, ctx, key, url) {
-  if (!/^g\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+(_t)?\.(webp|jpg)$/.test(key))
-    return respuesta({ error: 'no' }, 400);
+  /* Dos formas válidas y ninguna más:
+       fotos   g/<gid>/<fid>.webp|jpg      (y su miniatura _t)
+       audios  g/<gid>/f/<fid>.webm|m4a    (el libro de firmas)
+     Si esto no acepta el audio, el saludo se guarda y NO se puede escuchar:
+     el /f/ nuevo del medio y las extensiones nuevas hay que sumarlos acá. */
+  const esFoto = /^g\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+(_t)?\.(webp|jpg)$/.test(key);
+  const esAudio = /^g\/[A-Za-z0-9_-]+\/f\/[A-Za-z0-9_-]+\.(webm|m4a)$/.test(key);
+  if (!esFoto && !esAudio) return respuesta({ error: 'no' }, 400);
 
   // Caché del borde: la misma foto no baja dos veces de R2.
   const cache = caches.default;
@@ -445,7 +598,8 @@ async function servir(req, env, ctx, key, url) {
     if (!obj) return respuesta({ error: 'no está' }, 404);
     r = new Response(obj.body, {
       headers: {
-        'Content-Type': obj.httpMetadata && obj.httpMetadata.contentType || 'image/webp',
+        'Content-Type': obj.httpMetadata && obj.httpMetadata.contentType
+          || (esAudio ? (key.endsWith('.m4a') ? 'audio/mp4' : 'audio/webm') : 'image/webp'),
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Access-Control-Allow-Origin': '*'
       }
@@ -454,7 +608,10 @@ async function servir(req, env, ctx, key, url) {
   }
   if (url.searchParams.get('dl')) {
     r = new Response(r.body, r);
-    r.headers.set('Content-Disposition', 'attachment; filename="foto.' + (key.endsWith('.jpg') ? 'jpg' : 'webp') + '"');
+    const nombreArchivo = esAudio
+      ? 'saludo.' + (key.endsWith('.m4a') ? 'm4a' : 'webm')
+      : 'foto.' + (key.endsWith('.jpg') ? 'jpg' : 'webp');
+    r.headers.set('Content-Disposition', 'attachment; filename="' + nombreArchivo + '"');
   }
   return r;
 }
