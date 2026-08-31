@@ -19,6 +19,29 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
+   ★★★ LAS COLECCIONES ★★★  (31/8/2026)
+      `/colecciones/*.js` es otra cosa que `/efectos/*.js`, aunque se carguen
+      desde la misma lista.
+      · Un EFECTO es una perilla suelta: la paleta, el material de los botones,
+        el fondo, la galería. Jazmín las combina.
+      · Una COLECCIÓN es UNA decisión que trae TODO junto —tipografía, aire,
+        bandas de color, paleta, motivo— copiada de una referencia que mandó
+        Maki. Jazmín elige "Perlas" y no arma nada más.
+      Cada referencia nueva = un archivo nuevo en /colecciones/. No se pisan.
+
+      ⚠️ UNA COLECCIÓN DISFRAZA EL MOTOR. NO DIBUJA UNA INVITACIÓN NUEVA.
+         Palabras de Maki: «la idea es no romper nada, que puedas seguir con
+         las plantillas como venimos, pero disfrazarlas».
+         Es una hoja de estilos y unos pocos movimientos de nodos, todo
+         reversible. No se toca index.html, no se pierde ninguna función, y las
+         invitaciones ya entregadas no se enteran.
+         Lo que NO puede hacer una colección: partir una sección en dos o
+         inventar una que el motor no tenga. Si hace falta eso → avisarle a
+         Maki, NO improvisar.
+
+      Ficha de lectura de las referencias, prompts de las fotos y las trampas:
+      skill `invitame-plantillas`.
+
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
       Regla de Maki, dicha más de una vez y con razón:
       «la zona de prueba es al pedo porque después pasa esto siempre; probá
@@ -75,6 +98,9 @@
 
       ⚠️ AL ESCRIBIR UN MÓDULO NUEVO: los textos van en español de México. Lo
          que escribe un módulo NO pasa por el traductor del servidor.
+      ⚠️ Y LOS TÍTULOS EN ESPAÑOL SON MÁS LARGOS: `PROGRAM` mide la mitad que
+         `CÓMO VA A SER EL DÍA`. Los tamaños van con `clamp()`. Nunca acortar
+         el texto del cliente para que entre.
 
    ★ LAS COSAS DIBUJADAS CON CSS NO REEMPLAZAN A UNA FOTO (31/8/2026)
       Las perlas del motivo estaban hechas con gradientes. Se veían "de
@@ -92,7 +118,15 @@
       Los materiales van en su propio global —`window.INVPALETAS`,
       `window.INVPERLA`—. De `INVEV` sólo se LEE `fx`.
 
-   ⚠️ EL ORDEN IMPORTA en catorce casos:
+   ★ EN LOS BLOQUES DEL PANEL, NO GUARDARSE `D.fx` AL CONSTRUIR (31/8/2026)
+      El bloque se arma a los ~500 ms, ANTES de que cargue el evento. Cuando el
+      evento llega, el panel REEMPLAZA `D.fx` por el objeto de Firestore y la
+      referencia guardada antes queda huérfana: los selectores se mueven, la
+      vista previa se refresca… y no guarda nada. Parece andar y no anda.
+      → `datos()` se llama de nuevo adentro de cada `onchange`, y los
+        selectores se re-sincronizan desde `D` mientras nadie los haya tocado.
+
+   ⚠️ EL ORDEN IMPORTA en dieciséis casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -114,7 +148,14 @@
    · `motivo.js` va ÚLTIMO de los que dibujan: cuelga las perlas del marco y de
      los separadores, así que necesita que las secciones ya estén puestas. Y va
      después de `paleta.js` porque el broche se pinta con sus colores.
-   · `panel-motivo.js` va DESPUÉS de `motivo.js`: escribe fx.motivo.
+   · `panel-motivo.js` va DESPUÉS de `panel-motivo.js`: escribe fx.motivo.
+   · `colecciones/perlas.js` va AL FINAL DE TODO: manda sobre los demás. Cambia
+     la tipografía y el aire de secciones que escriben los otros módulos, así
+     que necesita que ya estén puestas. Igual se vuelve a pasar sola cada
+     400 ms por si aparece algo nuevo.
+   · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
+     propone la paleta que le corresponde, y para eso el selector de paletas
+     tiene que existir.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -143,7 +184,11 @@
     '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
     '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */
     '/efectos/motivo.js',              /* el motivo que recorre todo: por ahora, las perlas */
-    '/efectos/panel-motivo.js'         /* y su bloque en el panel, para prenderlo y graduarlo */
+    '/efectos/panel-motivo.js',        /* y su bloque en el panel, para prenderlo y graduarlo */
+
+    /* ---- LAS COLECCIONES: una decisión que trae todo junto ---- */
+    '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
+    '/efectos/panel-coleccion.js'      /* y el selector con el que Jazmín la elige */
   ];
 
   MODULOS.forEach(function (src) {
