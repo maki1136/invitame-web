@@ -126,7 +126,14 @@
       → `datos()` se llama de nuevo adentro de cada `onchange`, y los
         selectores se re-sincronizan desde `D` mientras nadie los haya tocado.
 
-   ⚠️ EL ORDEN IMPORTA en dieciséis casos:
+   ★ NUNCA GUARDAR UNA COPIA DEL HTML PARA "DESHACER" (31/8/2026)
+      La colección guardaba `h1.innerHTML` antes de tocarlo, para restaurarlo.
+      Resultado: la invitación mostraba "María & Diego", los nombres de la BODA
+      DE EJEMPLO. El motor dibuja primero el ejemplo y recién después pone los
+      datos del cliente; la copia se tomaba con el ejemplo adentro.
+      → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
+
+   ⚠️ EL ORDEN IMPORTA en dieciocho casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -148,11 +155,17 @@
    · `motivo.js` va ÚLTIMO de los que dibujan: cuelga las perlas del marco y de
      los separadores, así que necesita que las secciones ya estén puestas. Y va
      después de `paleta.js` porque el broche se pinta con sus colores.
-   · `panel-motivo.js` va DESPUÉS de `panel-motivo.js`: escribe fx.motivo.
-   · `colecciones/perlas.js` va AL FINAL DE TODO: manda sobre los demás. Cambia
-     la tipografía y el aire de secciones que escriben los otros módulos, así
-     que necesita que ya estén puestas. Igual se vuelve a pasar sola cada
-     400 ms por si aparece algo nuevo.
+   · `panel-motivo.js` va DESPUÉS de `motivo.js`: escribe fx.motivo.
+   · `dresscode-colores.js` va DESPUÉS de `paleta.js`: cuando los colores son
+     automáticos los lee de las variables de la paleta, en vivo. Y DESPUÉS de
+     `colecciones/perlas.js`, porque uno de los dos disparadores es que haya
+     una colección puesta (la marca `data-coleccion` en el html).
+   · `panel-dresscode.js` va DESPUÉS de `panel-coleccion.js`: se monta justo
+     debajo de ese bloque.
+   · `colecciones/perlas.js` va AL FINAL DE LOS QUE DIBUJAN: manda sobre los
+     demás. Cambia la tipografía y el aire de secciones que escriben los otros
+     módulos, así que necesita que ya estén puestas. Igual se vuelve a pasar
+     sola cada 400 ms por si aparece algo nuevo.
    · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
      propone la paleta que le corresponde, y para eso el selector de paletas
      tiene que existir.
@@ -188,7 +201,10 @@
 
     /* ---- LAS COLECCIONES: una decisión que trae todo junto ---- */
     '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
-    '/efectos/panel-coleccion.js'      /* y el selector con el que Jazmín la elige */
+    '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
+
+    '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
+    '/efectos/panel-dresscode.js'      /* y el editor para elegirlos a mano */
   ];
 
   MODULOS.forEach(function (src) {
