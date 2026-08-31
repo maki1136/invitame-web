@@ -27,6 +27,13 @@
    128×128, WebP, 3.3 KB, incrustada como data URI. No hay que subir nada a
    Cloudinary y no hay pedido de red extra.
 
+   ⚠️ LA FOTO SE LEE DE `window.INVPERLA`, NO DE `INVEV`.
+   `window.INVEV` es el OBJETO DE DATOS DEL EVENTO y el motor lo REEMPLAZA
+   entero cuando llega la invitación desde Firestore: cualquier cosa colgada
+   ahí antes desaparece sin error. Pasó en la primera vuelta —la guirnalda
+   salía con los gradientes de respaldo y no se entendía por qué—. De `INVEV`
+   sólo se lee `fx`, que sí es parte del evento.
+
    ⚠️ POR QUÉ UNA PERLA SUELTA Y NO LA GUIRNALDA ENTERA COMO IMAGEN
    Recortar la hilera completa es imposible de forma limpia: el interior de la
    perla tiene EXACTAMENTE el color del papel (247 contra 247), así que no hay
@@ -77,8 +84,9 @@
   var ID_CSS = 'inv-motivo-css';
   var MARCA  = 'data-motivo';
 
+  /* ⚠️ INVPERLA, no INVEV.PERLA: ver la nota de arriba. */
   function foto() {
-    try { return (window.INVEV || {}).PERLA || ''; } catch (e) { return ''; }
+    try { return window.INVPERLA || ''; } catch (e) { return ''; }
   }
 
   function conf() {
