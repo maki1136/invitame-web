@@ -1,7 +1,8 @@
 /* ===== LOS COLORES DE LA BODA, EN EL PANEL ===================================
 
    Para que Jazmín arme a mano la paleta de círculos que se muestra en la
-   sección de Vestimenta. Lo obedece /efectos/dresscode-colores.js.
+   sección de Vestimenta, y le escriba el título. Lo obedece
+   /efectos/dresscode-colores.js.
 
    CÓMO FUNCIONA, EN UNA LÍNEA
    Vacío = automáticos (salen de la paleta de la invitación, y sólo se ven si
@@ -28,6 +29,14 @@
       → En el panel los colores se leen de `window.INVPALETAS`, que es la fuente
         de verdad y sí está disponible acá. La publica `paleta.js`.
 
+   ⚠️ EL TÍTULO TIENE TRES ESTADOS, y hay que respetarlos:
+      · sin definir → sale "Los colores de la boda" (el de fábrica)
+      · con texto   → sale ese texto
+      · vacío ('')  → NO sale título, sólo los círculos
+      Por eso el campo arranca con el texto de fábrica ya escrito: si arrancara
+      en blanco, Jazmín no podría distinguir "todavía no lo toqué" de "lo quiero
+      sin título".
+
    ⚠️ NO SE BORRA LA CLAVE PARA VOLVER A AUTOMÁTICO: SE GUARDA UNA LISTA VACÍA.
       `INV.saveEvento` guarda con merge. Borrar `colores` del borrador NO lo
       borra en Firestore: queda la lista anterior y los círculos "no se apagan".
@@ -42,19 +51,16 @@
 
    ⚠️ LOS `input type="color"` DEVUELVEN SIEMPRE `#rrggbb`. Al pasar los colores
       de la paleta al selector se normalizan a hex, y eso está bien: a partir de
-      ahí son colores propios de esta invitación y ya no siguen a la paleta. Es
-      exactamente lo que Jazmín quiere cuando los toca.
+      ahí son colores propios de esta invitación y ya no siguen a la paleta.
 
    ⚠️ `D` (el borrador) NO cuelga de window: es un `const` del script principal.
-      Misma nota en panel-fondo.js, panel-rsvp.js, panel-motivo.js,
-      panel-coleccion.js.
    ============================================================================ */
 (function () {
 
   var ID = 'dresscode-selector';
   var MAX = 8;
-  /* las cinco claves de una paleta que se usan para vestir: tres de color, una
-     neutra y una clara */
+  var TITULO_POR_DEFECTO = 'Los colores de la boda';
+  /* las cinco claves de una paleta que se usan para vestir */
   var CLAVES = ['verde', 'sage', 'oro', 'muted', 'cream'];
   var POR_DEFECTO = ['#44513f', '#7d8a72', '#b9a56a', '#6e6058', '#e9e8dd'];
 
@@ -100,7 +106,7 @@
       var p = null, i;
       for (i = 0; i < todas.length; i++) if (todas[i].id === id) { p = todas[i]; break; }
       /* ⚠️ si no se encuentra NO se agarra la primera: daría los colores de otra
-         boda. Mejor los neutros por defecto. */
+         boda. Mejor los neutros de fábrica. */
       if (p) {
         var out = [];
         CLAVES.forEach(function (k) {
@@ -111,7 +117,7 @@
       }
     } catch (e) {}
 
-    /* por si algún día esto corre en un documento donde SÍ están las variables */
+    /* por si algún día esto corre donde SÍ están las variables */
     try {
       var cs = getComputedStyle(document.documentElement);
       var o2 = [];
@@ -141,6 +147,34 @@
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(a);
 
+    /* ---- el título ---- */
+    var labT = document.createElement('label');
+    labT.textContent = 'El texto de arriba';
+    labT.style.cssText = 'display:block;font-size:12px;font-weight:600;margin:0 0 3px';
+    caja.appendChild(labT);
+
+    var inpT = document.createElement('input');
+    inpT.type = 'text';
+    inpT.placeholder = TITULO_POR_DEFECTO;
+    inpT.style.cssText = 'width:100%;margin-bottom:4px';
+    inpT.oninput = function () {
+      var dc = datos(); if (!dc) return;
+      dc.titulo = inpT.value;   /* '' = sin título, y es un valor válido */
+      refrescar();
+    };
+    caja.appendChild(inpT);
+
+    var ayudaT = document.createElement('div');
+    ayudaT.textContent = 'Dejalo en blanco si querés sólo los círculos, sin texto.';
+    ayudaT.style.cssText = 'font-size:11px;opacity:.55;line-height:1.4;margin-bottom:12px';
+    caja.appendChild(ayudaT);
+
+    /* ---- los colores ---- */
+    var labC = document.createElement('label');
+    labC.textContent = 'Los colores';
+    labC.style.cssText = 'display:block;font-size:12px;font-weight:600;margin:0 0 6px';
+    caja.appendChild(labC);
+
     var fila = document.createElement('div');
     fila.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px';
     caja.appendChild(fila);
@@ -164,9 +198,15 @@
     }
 
     function pintar() {
+      var dc = datos() || {};
       var arr = lista();
-      fila.textContent = '';
 
+      /* el campo del título arranca con el de fábrica ya escrito: ver la nota */
+      if (document.activeElement !== inpT) {
+        inpT.value = (typeof dc.titulo === 'string') ? dc.titulo : TITULO_POR_DEFECTO;
+      }
+
+      fila.textContent = '';
       arr.forEach(function (c, i) {
         var env = document.createElement('span');
         env.style.cssText = 'position:relative;display:inline-block;line-height:0';
