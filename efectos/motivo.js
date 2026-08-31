@@ -17,30 +17,36 @@
        densidad: 1,         // 0.6 discreto · 1 normal · 1.4 cargado
        donde:   'todo'      // 'todo' | 'guirnalda' | 'separadores'
      }
+   Para probar sin tocar la base: `?motivo=perlas&densidad=1`
 
    ⚠️ LAS PERLAS SE DIBUJAN, NO SON UNA FOTO.  ← y es a propósito
    Una perla es una esfera: brillo especular chico y desplazado, rebote suave
    abajo del lado opuesto, canto apenas más oscuro, y sombra propia proyectada.
-   Eso se hace con gradientes y sale mejor que una imagen: se recolorea con la
+   Se hace con gradientes y sale mejor que una imagen: se recolorea con la
    paleta, no se pixela en ninguna pantalla, pesa cero y no hay que subir nada.
-   Es el mismo criterio que se usó para el material de los botones.
+   Mismo criterio que el material de los botones.
 
-   ⚠️ EL COLOR LO PONE LA PALETA, no está escrito a mano.
-   El cuerpo sale de `--lino2`, la luz de blanco y el metal del broche de
-   `--oro`. Por eso el mismo motivo sirve para las 20 paletas.
+   ⚠️ EL COLOR LO PONE LA PALETA. Cuerpo de `--lino2`, luz blanca, el aro del
+   broche de `--oro`. Por eso el mismo motivo sirve para las 20 paletas.
 
-   ⚠️ NO TAPA NI ROBA CLICS.
-   Todo va con `pointer-events:none` y por debajo del texto. La guirnalda vive
-   arriba de todo el marco, donde está la foto de portada; las perlas sueltas
-   viven contra los bordes.
+   ⚠️ DÓNDE VA CADA COSA — esto costó una vuelta, mirar antes de tocar:
+     · La guirnalda cuelga DENTRO de `.portada`, nunca del `.frame`. Colgada
+       del frame se salía 36 px por arriba y el broche quedaba cortado contra
+       el borde de la pantalla. Y todas las alturas van de 0 para abajo: un
+       collar cuelga, no flota.
+     · El hilo horizontal reemplaza `.adorno` (los aros ⚭ que ya separan las
+       secciones; hay 17, de 112×40).
+     · ⚠️ NO TOCAR `.sep`: NO es un separador de secciones, son los dos puntos
+       ENTRE LOS NÚMEROS de la cuenta regresiva. La v1 les colgó hilos encima y
+       quedó un desastre sobre el contador.
 
-   ⚠️ ES UNA PIEL, COMO EL INTERRUPTOR.
-   El separador original no se borra: se esconde y se le pone el de perlas
-   encima. Si este archivo se saca de la lista, vuelve todo como estaba.
+   ⚠️ NO TAPA NI ROBA CLICS: todo `pointer-events:none` y por debajo del texto.
 
-   ⚠️ SI LA PERSONA PIDIÓ MENOS MOVIMIENTO, no hay parallax. Y en pantallas
-   angostas la guirnalda se achica: en un teléfono una guirnalda grande tapa
-   la foto en vez de enmarcarla.
+   ⚠️ ES UNA PIEL, COMO EL INTERRUPTOR. El SVG de los aros no se borra: se
+   esconde. Si este archivo se saca de la lista, vuelve todo como estaba.
+
+   ⚠️ EN PANTALLAS ANGOSTAS la guirnalda se achica: en un teléfono una
+   guirnalda grande tapa la foto en vez de enmarcarla.
    ============================================================================ */
 (function () {
   'use strict';
@@ -64,11 +70,6 @@
 
   function activo(m) { return m && m.juego === 'perlas'; }
 
-  function menosMovimiento() {
-    try { return window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; }
-    catch (e) { return false; }
-  }
-
   /* ---------------------------------------------------------------- la perla
      Cuatro capas, y las cuatro hacen falta para que parezca una esfera:
        1. el brillo especular, chico y DESPLAZADO del centro
@@ -77,11 +78,11 @@
        4. la sombra propia, que es lo que la despega del papel
      Si se saca cualquiera, parece un círculo pintado. */
   var CSS =
-    '.mtv{position:absolute;pointer-events:none;z-index:1}' +
+    '.mtv{position:absolute;pointer-events:none;z-index:2}' +
     '.mtv .p{position:absolute;border-radius:50%;' +
       'background:' +
         'radial-gradient(42% 38% at 33% 27%, rgba(255,255,255,.95), rgba(255,255,255,0) 62%),' +
-        'radial-gradient(38% 34% at 70% 78%, color-mix(in srgb,var(--lino2,#faf7f1) 88%,#fff) , rgba(255,255,255,0) 68%),' +
+        'radial-gradient(38% 34% at 70% 78%, color-mix(in srgb,var(--lino2,#faf7f1) 88%,#fff), rgba(255,255,255,0) 68%),' +
         'radial-gradient(120% 120% at 30% 24%, color-mix(in srgb,var(--lino2,#faf7f1) 96%,#fff),' +
           ' color-mix(in srgb,var(--lino2,#faf7f1) 82%,var(--muted,#8a7f78)) 78%,' +
           ' color-mix(in srgb,var(--lino2,#faf7f1) 62%,var(--muted,#8a7f78)));' +
@@ -98,27 +99,27 @@
           ' color-mix(in srgb,var(--lino2,#faf7f1) 80%,var(--oro,#b9a56a)) 82%,' +
           ' color-mix(in srgb,var(--lino2,#faf7f1) 55%,var(--muted,#8a7f78)))}' +
 
-    /* la guirnalda cuelga del borde de arriba del marco */
-    '.mtv-guirnalda{top:0;left:0;right:0;height:180px;overflow:visible}' +
+    /* la guirnalda: pegada al borde de arriba de la PORTADA, cae hacia adentro */
+    '.mtv-guirnalda{top:0;left:0;right:0;height:200px;overflow:hidden}' +
 
-    /* el separador de perlas, centrado donde estaba el de siempre */
-    '.mtv-sep{position:relative;height:26px;margin:0 auto;pointer-events:none}' +
-    'html[data-motivo] .sep > *:not(.mtv-sep){display:none}' +
+    /* el hilo horizontal, en lugar de los aros */
+    '.mtv-hilo{position:absolute;inset:0}' +
+    'html[data-motivo="perlas"] .adorno > svg{display:none}' +
+    'html[data-motivo="perlas"] .adorno{position:relative}' +
 
-    /* las sueltas, contra los bordes y bien tenues */
-    '.mtv-suelta{position:absolute;opacity:.85}' +
+    '.mtv-suelta{opacity:.8}' +
 
-    '@media (max-width:420px){.mtv-guirnalda{height:120px}}';
+    '@media (max-width:420px){.mtv-guirnalda{height:130px}}';
 
   function hoja() {
-    if (document.getElementById(ID_CSS)) return;
-    var s = document.createElement('style');
+    var s = document.getElementById(ID_CSS);
+    if (s) { s.textContent = CSS; return; }
+    s = document.createElement('style');
     s.id = ID_CSS;
     s.textContent = CSS;
     (document.head || document.documentElement).appendChild(s);
   }
 
-  /* una perla suelta, del tamaño que se pida */
   function perla(d, clase) {
     var e = document.createElement('span');
     e.className = clase || 'p';
@@ -127,92 +128,74 @@
     return e;
   }
 
-  /* ---- LA CURVA ---------------------------------------------------------
-     Un hilo de perlas cuelga por su peso: la curva es una catenaria, y una
-     Bézier cuadrática con el control POR DEBAJO del medio la imita bien.
-     Se calcula a mano (no hace falta SVG ni getPointAtLength). */
-  function puntoBezier(t, p0, p1, p2) {
-    var u = 1 - t;
-    return {
-      x: u * u * p0.x + 2 * u * t * p1.x + t * t * p2.x,
-      y: u * u * p0.y + 2 * u * t * p1.y + t * t * p2.y
-    };
+  function poner1(caja, x, y, d, clase) {
+    var e = perla(d, clase);
+    e.style.left = (x - d / 2) + 'px';
+    e.style.top  = (y - d / 2) + 'px';
+    caja.appendChild(e);
+    return e;
   }
 
+  /* ---- LA CURVA ---------------------------------------------------------
+     Un hilo cuelga por su peso: es una catenaria, y una Bézier cuadrática con
+     el control POR DEBAJO la imita bien. Se calcula a mano, sin SVG. */
+  function bez(t, p0, p1, p2) {
+    var u = 1 - t;
+    return { x: u * u * p0.x + 2 * u * t * p1.x + t * t * p2.x,
+             y: u * u * p0.y + 2 * u * t * p1.y + t * t * p2.y };
+  }
+
+  function largoDe(c) {
+    var l = 0, ant = c.p0, i, pt;
+    for (i = 1; i <= 24; i++) { pt = bez(i / 24, c.p0, c.p1, c.p2); l += Math.hypot(pt.x - ant.x, pt.y - ant.y); ant = pt; }
+    return l;
+  }
+
+  function enhebrar(caja, c, dBase, densidad, hueco) {
+    var n = Math.max(6, Math.round((largoDe(c) / (dBase * 0.92)) * densidad));
+    for (var i = 0; i <= n; i++) {
+      var t = i / n;
+      if (hueco && Math.abs(t - hueco.t) < hueco.r) continue;
+      var q = bez(t, c.p0, c.p1, c.p2);
+      /* las del medio se ven un pelín más grandes: da profundidad */
+      poner1(caja, q.x, q.y, dBase * (0.86 + 0.18 * Math.sin(Math.PI * t)));
+    }
+  }
+
+  /* ⚠️ TODAS las alturas van de 0 para ABAJO. Con valores negativos el collar
+     se sale por arriba de la portada y el broche queda cortado. */
   function guirnalda(ancho, densidad) {
     var caja = document.createElement('div');
     caja.className = 'mtv mtv-guirnalda';
+    var chico = ancho < 380;
+    var hondo = chico ? 0.20 : 0.27;          /* cuánto cae, en proporción al ancho */
+    var d = chico ? 6.5 : 8.5;
+    var xBroche = ancho * 0.58, yBroche = 16;
 
-    /* dos caídas: una larga a la izquierda y una corta a la derecha, para que
-       no quede simétrico como un dibujo hecho a máquina */
-    var caidas = [
-      { p0: { x: -6,  y: -8 }, p1: { x: ancho * 0.30, y: ancho * 0.30 }, p2: { x: ancho * 0.58, y: 6 }, d: 8.5 },
-      { p0: { x: ancho * 0.58, y: 6 }, p1: { x: ancho * 0.80, y: ancho * 0.17 }, p2: { x: ancho + 6, y: -10 }, d: 7 }
-    ];
+    /* caída larga a la izquierda, corta a la derecha: si son iguales parece
+       hecho a máquina */
+    enhebrar(caja, { p0: { x: 2, y: 3 }, p1: { x: ancho * 0.30, y: ancho * hondo },
+                     p2: { x: xBroche, y: yBroche } }, d, densidad);
+    enhebrar(caja, { p0: { x: xBroche, y: yBroche }, p1: { x: ancho * 0.80, y: ancho * hondo * 0.55 },
+                     p2: { x: ancho - 2, y: 3 } }, d * 0.85, densidad);
 
-    caidas.forEach(function (c) {
-      /* el largo aproximado de la curva decide cuántas perlas entran, así no
-         quedan apretadas en una caída y separadas en la otra */
-      var largo = 0, ant = c.p0, i, pt;
-      for (i = 1; i <= 24; i++) {
-        pt = puntoBezier(i / 24, c.p0, c.p1, c.p2);
-        largo += Math.hypot(pt.x - ant.x, pt.y - ant.y);
-        ant = pt;
-      }
-      var paso = c.d * 0.92;                       /* casi pegadas, como un collar */
-      var n = Math.max(6, Math.round((largo / paso) * densidad));
-
-      for (i = 0; i <= n; i++) {
-        var t = i / n;
-        var q = puntoBezier(t, c.p0, c.p1, c.p2);
-        /* las del medio de la caída se ven un pelín más grandes: da profundidad */
-        var d = c.d * (0.86 + 0.18 * Math.sin(Math.PI * t));
-        var e = perla(d);
-        e.style.left = (q.x - d / 2) + 'px';
-        e.style.top  = (q.y - d / 2) + 'px';
-        caja.appendChild(e);
-      }
-    });
-
-    /* el broche, donde se juntan las dos caídas */
-    var b = perla(14, 'broche');
-    b.style.left = (ancho * 0.58 - 7) + 'px';
-    b.style.top  = '-1px';
-    caja.appendChild(b);
-
+    poner1(caja, xBroche, yBroche + 2, d * 1.7, 'broche');
     return caja;
   }
 
-  /* ---- EL SEPARADOR -----------------------------------------------------
-     Un hilo corto y horizontal con un broche al medio, en lugar de los aros. */
-  function separador(densidad) {
+  /* el hilo que reemplaza los aros: leve comba y broche al medio */
+  function hilo(w, h, densidad) {
     var caja = document.createElement('div');
-    caja.className = 'mtv mtv-sep';
-    var ancho = 132, d = 6;
-    var n = Math.round((ancho / (d * 0.95)) * densidad);
-    for (var i = 0; i <= n; i++) {
-      var t = i / n;
-      /* una comba muy leve: un hilo apoyado nunca queda recto */
-      var y = 13 + Math.sin(Math.PI * t) * 2.2;
-      var dd = d * (0.88 + 0.16 * Math.sin(Math.PI * t));
-      /* se abre un hueco al medio para el broche */
-      if (Math.abs(t - 0.5) < 0.055) continue;
-      var e = perla(dd);
-      e.style.left = (ancho * t - dd / 2) + 'px';
-      e.style.top  = (y - dd / 2) + 'px';
-      caja.appendChild(e);
-    }
-    var b = perla(11, 'broche');
-    b.style.left = (ancho / 2 - 5.5) + 'px';
-    b.style.top  = '9.5px';
-    caja.appendChild(b);
-    caja.style.width = ancho + 'px';
+    caja.className = 'mtv mtv-hilo';
+    var d = 5.5, y = h / 2;
+    enhebrar(caja, { p0: { x: 4, y: y - 3 }, p1: { x: w / 2, y: y + 5 }, p2: { x: w - 4, y: y - 3 } },
+             d, densidad, { t: 0.5, r: 0.075 });
+    poner1(caja, w / 2, y + 1, 10, 'broche');
     return caja;
   }
 
-  /* ---- LAS SUELTAS ------------------------------------------------------
-     Pocas, contra los bordes, nunca sobre el texto. */
-  function sueltas(sec, densidad) {
+  /* pocas, contra los bordes de la sección, nunca sobre el texto */
+  function sueltas(densidad) {
     var caja = document.createElement('div');
     caja.className = 'mtv';
     caja.style.cssText += 'inset:0;overflow:hidden';
@@ -220,10 +203,9 @@
     for (var i = 0; i < cuantas; i++) {
       var d = 5 + (i % 3) * 2.5;
       var e = perla(d, 'p mtv-suelta');
-      var izq = (i % 2 === 0);
-      e.style.left = izq ? (3 + (i * 7) % 22) + 'px' : '';
-      e.style.right = izq ? '' : (3 + (i * 11) % 26) + 'px';
-      e.style.top = (12 + (i * 137) % 76) + '%';
+      if (i % 2 === 0) e.style.left = (6 + (i * 7) % 20) + 'px';
+      else e.style.right = (6 + (i * 11) % 24) + 'px';
+      e.style.top = (12 + (i * 137) % 74) + '%';
       caja.appendChild(e);
     }
     return caja;
@@ -238,38 +220,44 @@
     puesto = false;
   }
 
+  function relativo(e) {
+    if (e && getComputedStyle(e).position === 'static') e.style.position = 'relative';
+  }
+
   function poner(m) {
-    var marco = document.querySelector('.frame');
-    if (!marco) return;
+    var portada = document.querySelector('.portada');
+    if (!portada) return;
     hoja();
     sacar();
 
     var densidad = Math.max(0.5, Math.min(1.6, (typeof m.densidad === 'number') ? m.densidad : 1));
     var donde = m.donde || 'todo';
-    var ancho = Math.round(marco.getBoundingClientRect().width);
+    var ancho = Math.round(portada.getBoundingClientRect().width);
     if (!ancho) return;
 
     document.documentElement.setAttribute(MARCA, 'perlas');
 
     if (donde === 'todo' || donde === 'guirnalda') {
-      if (getComputedStyle(marco).position === 'static') marco.style.position = 'relative';
-      marco.appendChild(guirnalda(ancho, densidad));
+      relativo(portada);
+      portada.appendChild(guirnalda(ancho, densidad));
     }
 
     if (donde === 'todo' || donde === 'separadores') {
-      [].forEach.call(document.querySelectorAll('.sep'), function (s) {
-        if (s.querySelector('.mtv-sep')) return;
-        s.appendChild(separador(densidad));
+      [].forEach.call(document.querySelectorAll('.adorno'), function (a) {
+        if (a.querySelector('.mtv-hilo')) return;
+        var r = a.getBoundingClientRect();
+        if (!r.width) return;
+        a.appendChild(hilo(Math.round(r.width), Math.round(r.height) || 40, densidad));
       });
     }
 
     if (donde === 'todo') {
-      /* sólo en las secciones claras: sobre las de color no se leen */
+      /* sólo en las claras: sobre las de color no se leen */
       [].forEach.call(document.querySelectorAll('.sec:not(.verde)'), function (s, i) {
         if (i % 2) return;                                  /* una sí, una no */
         if (s.querySelector('.mtv-suelta')) return;
-        if (getComputedStyle(s).position === 'static') s.style.position = 'relative';
-        s.appendChild(sueltas(s, densidad));
+        relativo(s);
+        s.appendChild(sueltas(densidad));
       });
     }
 
@@ -280,9 +268,10 @@
 
   function sincronizar() {
     var m = conf();
-    var nueva = JSON.stringify([m.juego, m.densidad, m.donde,
-      Math.round((document.querySelector('.frame') || { getBoundingClientRect: function () { return { width: 0 }; } })
-        .getBoundingClientRect().width)]);
+    var p = document.querySelector('.portada');
+    var w = p ? Math.round(p.getBoundingClientRect().width) : 0;
+    var nueva = JSON.stringify([m.juego, m.densidad, m.donde, w,
+                                document.querySelectorAll('.adorno').length]);
     if (!activo(m)) { if (puesto) sacar(); firma = nueva; return; }
     if (nueva === firma && puesto) return;
     firma = nueva;
