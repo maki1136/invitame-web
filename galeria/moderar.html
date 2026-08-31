@@ -345,11 +345,15 @@ import { getFirestore, collection, query, where, onSnapshot, doc, getDoc, update
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
+/* El 'cuenta' del final es el nombre de la app de Firebase, y es el mismo que
+   en cuenta.html y creditos.html a propósito: es el cajón donde el navegador
+   guarda la sesión, así el cliente entra UNA sola vez y no le vuelven a pedir
+   la contraseña acá. Ver el comentario largo en cuenta.html. */
 const app = initializeApp({
   apiKey: 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc',
   authDomain: 'invitame-9b51f.firebaseapp.com',
   projectId: 'invitame-9b51f'
-}, 'gal-mod');
+}, 'cuenta');
 const db = getFirestore(app), auth = getAuth(app);
 
 const $ = (id) => document.getElementById(id);
