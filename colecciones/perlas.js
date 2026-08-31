@@ -26,8 +26,8 @@
 
       EL IDIOMA DE LA MUESTRA, QUE ES LO QUE NO HABÍA VISTO:
       **cada objeto es el SOPORTE de un texto, no un adorno al lado.**
-        · la bandeja de plata      → sostiene la tarjeta del LUGAR
-        · el sobre con el moño     → sostiene la tarjeta del CANAL
+        · la bandeja de plata        → sostiene la tarjeta del LUGAR
+        · el sobre con el moño       → sostiene la tarjeta del CANAL
         · el sobre abierto y el clip → sostienen la CARTA
       Se fotografía el objeto y el texto va ENCIMA, como elemento del DOM.
       La foto no necesita traer el texto: la tarjeta la dibujo yo.
@@ -63,6 +63,20 @@
          de verdad, grande, apoyado sobre el papel crema, con relieve y sombra.
          Hace falta la foto. Sin ella esto no se parece a la muestra.
 
+   ★★★ !important NO ALCANZA: LA COLECCIÓN CARGA ANTES QUE CASI TODO ★★★
+      `inv-fondo-css` trae
+          html[data-fondo] .sec.verde{background-color:…!important}
+      que tiene la MISMA especificidad que
+          html[data-coleccion="perlas"] .sec[data-col-lugar]
+      (las dos 0,3,1). Con importancia y especificidad iguales, desempata el
+      ORDEN — y la hoja de la colección se inserta antes que los módulos.
+      Resultado: la sección seguía verde oscura aunque la regla estuviera bien
+      escrita, y desde el código se veía perfecta.
+      → Cuando haya que ganarle a un módulo del motor: REPETIR EL ATRIBUTO,
+        `[data-col-lugar][data-col-lugar]`, que sube a (0,4,1) sin depender de
+        ninguna clase del motor. Repetir la clase (`.sec.sec`) hace lo mismo.
+      → Y la única forma de darse cuenta es MIRAR LA PÁGINA.
+
    ★★★ ANTES DE AGREGAR UN NODO A UNA SECCIÓN, MIRAR SU `display` ★★★
       `.fraseSec` es `display:flex; flex-direction:row`. Al agregarle la foto
       del sobre como hijo normal, la imagen se convirtió en UNA COLUMNA MÁS y
@@ -76,6 +90,11 @@
       ojo ve un cuadrado más claro.
       → Se disuelve con `mask-image: radial-gradient(...)`. La máscara se
         aplica al RENDER: se afina sin regenerar el archivo.
+      ⚠️ POR ESO LAS PIEZAS VAN COMO <img>, NUNCA COMO `background-image` DE
+         UNA CAJA QUE TENGA HIJOS. La máscara de un fondo no se puede separar
+         del contenido: al enmascarar la caja se enmascara también la tarjeta.
+         La bandeja empezó siendo un background y se veía el rectángulo del
+         papel; ahora es un <img> absoluto detrás, con su máscara propia.
       ⚠️ Y SÓLO FUNCIONA EN SECCIÓN CLARA. Sobre `.sec.verde` el papel marfil
          de la foto entra como un rectángulo claro, con máscara y todo. Por eso
          "Dónde y cuándo" pasa a crema — que además es lo que hace la muestra.
@@ -130,9 +149,6 @@
    ★ `.padres` ES UNA GRILLA DE 2 COLUMNAS
       Con 3 personas la tercera queda sola abajo. «si ponés 3 pueden ir las 3
       juntas, si son 4, 2 y 2». → `data-col-n` y el CSS arma la grilla.
-
-   ⚠️ LOS TÍTULOS EN ESPAÑOL DE MÉXICO SON MÁS LARGOS: los tamaños van con
-      `clamp()`. NUNCA acortar el texto del cliente.
    ============================================================================ */
 (function () {
   'use strict';
@@ -164,6 +180,11 @@
 
   var MASCARA  = 'radial-gradient(ellipse 58% 58% at 50% 50%,#000 40%,transparent 76%)';
   var MASCARA2 = 'radial-gradient(ellipse 76% 84% at 50% 48%,#000 58%,transparent 92%)';
+  var MASCARA3 = 'radial-gradient(ellipse 66% 62% at 50% 50%,#000 62%,transparent 96%)';
+
+  /* `LUG` = la sección del lugar, con el atributo REPETIDO a propósito para
+     ganarle a `inv-fondo-css`. Ver la nota de especificidad del encabezado. */
+  var LUG = ' .sec[data-col-lugar][data-col-lugar]';
 
   var CSS = [
 
@@ -298,20 +319,24 @@
        La bandeja es el MARCO de la tarjeta del lugar, y los eventos van
        juntos en UNA tarjeta con una línea en el medio, como CEREMONY y
        BANQUET en la muestra.
-       ⚠️ La sección pasa a crema a propósito: ver la nota de la máscara. */
-    'h[c] .sec[data-col-lugar]{' +
+       ⚠️ El atributo va REPETIDO: si no, gana `inv-fondo-css`. Ver arriba.
+       ⚠️ La sección pasa a crema a propósito: sobre verde la foto entra como
+          un rectángulo claro, con máscara y todo. */
+    'h[c]' + LUG + '{' +
       'background:var(--lino,#f4f3ec)!important;color:var(--verde,#44513f)!important}',
-    'h[c] .sec[data-col-lugar] h2,h[c] .sec[data-col-lugar] .kick,' +
-    'h[c] .sec[data-col-lugar] h3,h[c] .sec[data-col-lugar] .sub,' +
-    'h[c] .sec[data-col-lugar] .addr,h[c] .sec[data-col-lugar] p{' +
-      'color:var(--verde,#44513f)!important}',
+    ['h2', '.kick', 'h3', '.sub', '.addr', 'p'].map(function (q) {
+      return 'h[c]' + LUG + ' ' + q;
+    }).join(',') + '{color:var(--verde,#44513f)!important}',
 
     'h[c] .col-lugar{' +
       'position:relative;max-width:344px;margin:4px auto 0;box-sizing:border-box;' +
-      'padding:52px 40px;' +
-      'background:var(--col-bandeja) no-repeat center/100% 100%}',
-    'h[c] .col-lugar .col-bandeja{display:none}',
-    'h[c] .col-lugar .col-tarjeta{padding:2px 12px}',
+      'padding:52px 40px}',
+    /* la bandeja va de <img> ABSOLUTO, no de background: así lleva su propia
+       máscara sin llevarse puesta la tarjeta. Ver la nota de arriba. */
+    'h[c] .col-lugar .col-bandeja{' +
+      'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:0;' +
+      '-webkit-mask-image:' + MASCARA3 + ';mask-image:' + MASCARA3 + '}',
+    'h[c] .col-lugar .col-tarjeta{position:relative;z-index:1;padding:2px 12px}',
     'h[c] .col-lugar .evento{' +
       'background:none!important;border:0!important;box-shadow:none!important;' +
       'margin:0!important;padding:14px 0!important;max-width:none!important}',
@@ -599,8 +624,6 @@
       raiz.style.setProperty('--col-perla', 'url("' + p + '")');
       raiz.setAttribute(MARCA_P, '');
     }
-    var b = laPieza('bandeja');
-    if (b) raiz.style.setProperty('--col-bandeja', 'url("' + b + '")');
 
     sugerirMotivo();
 
@@ -626,7 +649,6 @@
     raiz.removeAttribute(MARCA_T);
     raiz.removeAttribute(MARCA_P);
     raiz.style.removeProperty('--col-perla');
-    raiz.style.removeProperty('--col-bandeja');
     sacarPiezas();
     desmarcarPadres();
     soltarContraste();
