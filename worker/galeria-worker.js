@@ -293,6 +293,13 @@ async function ponerCuenta(req, env) {
    Van a gal_firmas, no a gal_fotos: la galería, la pantalla y la moderación
    ya consultan gal_fotos por estado. Mezclarlos haría que cada consulta que
    hoy anda empiece a traer cosas que no espera. */
+/* Estos dos se arman con new RegExp a propósito, y no como /.../ literal:
+   escritos como literal el archivo termina con caracteres de control y
+   combinantes INVISIBLES adentro, que cualquier copiar-y-pegar o editor
+   puede comerse sin que se note. Acá el archivo queda ASCII puro. */
+const CONTROLES = new RegExp('[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F]', 'g');
+const TILDES = new RegExp('[\\u0300-\\u036f]', 'g');
+
 const MAX_TEXTO = 500;
 const MAX_AUDIO = 600 * 1024;      /* ~60 s en Opus entran de sobra */
 const MAX_SEGUNDOS = 62;           /* 60 + margen: el celular redondea */
@@ -327,7 +334,7 @@ async function firmar(req, env, ctx) {
     if (segundos > MAX_SEGUNDOS) return respuesta({ error: 'El saludo puede durar hasta un minuto 💛' }, 400);
   } else {
     /* nada de caracteres de control: rompen la pantalla del salón */
-    texto = texto.replace(/[ --]/g, '').trim();
+    texto = texto.replace(CONTROLES, '').trim();
     if (!texto) return respuesta({ error: 'Escribí algo primero 💛' }, 400);
     if (texto.length > MAX_TEXTO) return respuesta({ error: 'El mensaje puede tener hasta 500 letras.' }, 400);
   }
@@ -411,7 +418,7 @@ const FEAS = ['puta','puto','conchud','forr','pelotud','boluda de mierda','mierd
   'verga','pendej','cul0','concha de','hijo de puta','hdp','trol@','sorete'];
 function palabrota(t) {
   const limpio = String(t).toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')   /* saca tildes */
+    .normalize('NFD').replace(TILDES, '')                /* saca tildes */
     .replace(/[0@$]/g, (c) => ({ '0': 'o', '@': 'a', '$': 's' }[c]))
     .replace(/(.)\1{2,}/g, '$1$1');                     /* "putaaaa" -> "putaa" */
   for (const p of FEAS) if (limpio.includes(p.replace(/[0@$]/g, (c) => ({ '0':'o','@':'a','$':'s' }[c])))) return p;
