@@ -376,6 +376,249 @@ $('visor-cerrar').onclick = cerrarVisor;
 $('visor').onclick = (e) => { if (e.target === $('visor')) cerrarVisor(); };
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('visor').hidden) cerrarVisor(); });
 
+
+/* ============================================================
+   EL LIBRO DE FIRMAS
+   Mensajes escritos y saludos de voz. Son cosas SUELTAS, no un pie
+   de foto: alguien que no saca ninguna foto igual quiere firmar.
+   Van por POST /firmar; el crédito, los topes y la moderación los
+   decide el Worker. Acá no se decide nada de eso.
+   ============================================================ */
+
+/* ---------- escribir ---------- */
+function abrirHoja(id) {
+  $(id).hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function cerrarHoja(id) {
+  $(id).hidden = true;
+  document.body.style.overflow = '';
+}
+
+function prepararMensaje() {
+  const caja = $('msj-texto'), cuenta = $('msj-cuenta'), boton = $('msj-enviar');
+
+  $('btn-escribir').addEventListener('click', () => {
+    mostrarError('msj-error', '');
+    abrirHoja('hoja-mensaje');
+    /* el foco después de que la hoja terminó de subir: si no, en iPhone
+       el teclado aparece antes que la caja y la tapa */
+    setTimeout(() => caja.focus(), 260);
+  });
+  $('msj-cerrar').addEventListener('click', () => cerrarHoja('hoja-mensaje'));
+  $('hoja-mensaje').addEventListener('click', (e) => {
+    if (e.target === $('hoja-mensaje')) cerrarHoja('hoja-mensaje');
+  });
+
+  function contar() {
+    const quedan = 500 - caja.value.length;
+    cuenta.textContent = quedan;
+    cuenta.classList.toggle('poco', quedan <= 50);
+  }
+  caja.addEventListener('input', () => { contar(); mostrarError('msj-error', ''); });
+  contar();
+
+  boton.addEventListener('click', async () => {
+    const texto = caja.value.trim();
+    if (!texto) { mostrarError('msj-error', 'Escribí algo primero 💛'); return; }
+    boton.disabled = true; boton.textContent = 'Mandando…';
+    try {
+      const r = await fetch(WORKER + '/firmar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gid: GID, autor: AUTOR, texto })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo mandar (' + r.status + ')'));
+      caja.value = ''; contar();
+      cerrarHoja('hoja-mensaje');
+      toast(j.estado === 'aprobada'
+        ? '¡Listo! Ya quedó en el libro de firmas 💛'
+        : '¡Listo! Aparece apenas lo aprueben 💛', 3600);
+    } catch (e) {
+      mostrarError('msj-error', e.message || 'No se pudo mandar.');
+    }
+    boton.disabled = false; boton.textContent = 'Dejar el mensaje';
+  });
+}
+
+function mostrarError(id, txt) {
+  const e = $(id);
+  e.textContent = txt;
+  e.hidden = !txt;
+}
+
+/* ---------- grabar ---------- */
+/* Trampas resueltas acá:
+   · getUserMedia se pide DENTRO del toque del usuario (Safari lo exige).
+   · El iPhone graba audio/mp4 y Android webm: se pregunta cuál soporta
+     en vez de asumir, y el tipo viaja al Worker para elegir la extensión.
+   · Al cerrar la hoja se apaga el micrófono; si no, el celular queda con
+     la lucecita prendida y la gente se asusta (con razón). */
+const TOPE_SEG = 60;
+let mediaGrabador = null, mediaStream = null, pedazos = [], grabado = null;
+let relojInt = null, arrancoEn = 0;
+
+function tipoDeAudio() {
+  const opciones = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/aac'];
+  if (typeof MediaRecorder === 'undefined') return null;
+  for (const t of opciones) {
+    try { if (MediaRecorder.isTypeSupported(t)) return t; } catch (e) {}
+  }
+  return '';   /* que elija el navegador */
+}
+
+function pintarReloj() {
+  const seg = Math.floor((Date.now() - arrancoEn) / 1000);
+  $('aud-reloj').textContent = '0:' + String(Math.min(seg, TOPE_SEG)).padStart(2, '0');
+  if (seg >= TOPE_SEG) pararGrabacion();
+}
+
+function apagarMicro() {
+  if (mediaStream) { mediaStream.getTracks().forEach((t) => t.stop()); mediaStream = null; }
+  clearInterval(relojInt); relojInt = null;
+}
+
+function pararGrabacion() {
+  if (mediaGrabador && mediaGrabador.state === 'recording') mediaGrabador.stop();
+  clearInterval(relojInt); relojInt = null;
+}
+
+function prepararAudio() {
+  const boton = $('aud-boton');
+
+  $('btn-grabar').addEventListener('click', () => {
+    resetAudio();
+    mostrarError('aud-error', '');
+    if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices) {
+      abrirHoja('hoja-audio');
+      boton.disabled = true;
+      mostrarError('aud-error', 'Este navegador no puede grabar audio. Probá con Chrome o Safari.');
+      return;
+    }
+    abrirHoja('hoja-audio');
+  });
+  $('aud-cerrar').addEventListener('click', () => { pararGrabacion(); apagarMicro(); cerrarHoja('hoja-audio'); });
+  $('hoja-audio').addEventListener('click', (e) => {
+    if (e.target === $('hoja-audio')) { pararGrabacion(); apagarMicro(); cerrarHoja('hoja-audio'); }
+  });
+
+  boton.addEventListener('click', async () => {
+    if (mediaGrabador && mediaGrabador.state === 'recording') { pararGrabacion(); return; }
+    mostrarError('aud-error', '');
+    try {
+      /* ⚠️ dentro del toque: Safari no da el micrófono si esto se demora */
+      mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (e) {
+      const c = (e && e.name) || '';
+      mostrarError('aud-error', /NotAllowed|Permission/i.test(c)
+        ? 'No nos diste permiso para el micrófono. Podés habilitarlo desde los ajustes del navegador.'
+        : /NotFound/i.test(c)
+          ? 'No encontramos ningún micrófono en este dispositivo.'
+          : 'No se pudo abrir el micrófono.');
+      return;
+    }
+    const tipo = tipoDeAudio();
+    try {
+      mediaGrabador = tipo ? new MediaRecorder(mediaStream, { mimeType: tipo }) : new MediaRecorder(mediaStream);
+    } catch (e) {
+      apagarMicro();
+      mostrarError('aud-error', 'Este navegador no puede grabar audio.');
+      return;
+    }
+    pedazos = [];
+    mediaGrabador.ondataavailable = (e) => { if (e.data && e.data.size) pedazos.push(e.data); };
+    mediaGrabador.onstop = () => {
+      apagarMicro();
+      boton.classList.remove('grabando');
+      boton.querySelector('use').setAttribute('href', '#ico-micro');
+      const segundos = Math.min(Math.round((Date.now() - arrancoEn) / 1000), TOPE_SEG);
+      grabado = { blob: new Blob(pedazos, { type: mediaGrabador.mimeType || 'audio/webm' }), segundos };
+      if (grabado.blob.size < 800) {
+        mostrarError('aud-error', 'El saludo salió vacío. Probá de nuevo.');
+        grabado = null; return;
+      }
+      const a = $('aud-escuchar');
+      a.src = URL.createObjectURL(grabado.blob);
+      a.hidden = false;
+      $('aud-pie').hidden = false;
+      $('aud-ayuda').textContent = 'Escuchalo antes de mandarlo.';
+    };
+    mediaGrabador.start();
+    arrancoEn = Date.now();
+    boton.classList.add('grabando');
+    boton.querySelector('use').setAttribute('href', '#ico-parar');
+    boton.setAttribute('aria-label', 'Parar');
+    $('aud-reloj').hidden = false;
+    $('aud-reloj').textContent = '0:00';
+    $('aud-ayuda').textContent = 'Estás grabando. Tocá para parar.';
+    relojInt = setInterval(pintarReloj, 250);
+  });
+
+  $('aud-otra').addEventListener('click', () => { resetAudio(); });
+
+  $('aud-enviar').addEventListener('click', async () => {
+    if (!grabado) return;
+    const b = $('aud-enviar');
+    b.disabled = true; b.textContent = 'Mandando…';
+    try {
+      const fd = new FormData();
+      fd.append('gid', GID);
+      fd.append('autor', JSON.stringify(AUTOR));
+      fd.append('segundos', String(grabado.segundos));
+      fd.append('audio', grabado.blob, 'saludo');
+      const r = await fetch(WORKER + '/firmar', { method: 'POST', body: fd });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo mandar (' + r.status + ')'));
+      resetAudio();
+      cerrarHoja('hoja-audio');
+      toast('¡Listo! Tu saludo aparece apenas lo aprueben 💛', 3600);
+    } catch (e) {
+      mostrarError('aud-error', e.message || 'No se pudo mandar.');
+    }
+    b.disabled = false; b.textContent = 'Mandar el saludo';
+  });
+}
+
+function resetAudio() {
+  pararGrabacion(); apagarMicro();
+  grabado = null; pedazos = [];
+  const a = $('aud-escuchar');
+  if (a.src) { try { URL.revokeObjectURL(a.src); } catch (e) {} }
+  a.removeAttribute('src'); a.hidden = true;
+  $('aud-pie').hidden = true;
+  $('aud-reloj').hidden = true;
+  $('aud-boton').disabled = false;
+  $('aud-boton').classList.remove('grabando');
+  const u = $('aud-boton').querySelector('use');
+  if (u) u.setAttribute('href', '#ico-micro');
+  $('aud-ayuda').textContent = 'Hasta un minuto. Tocá el micrófono y hablá.';
+  mostrarError('aud-error', '');
+}
+
+/* ---------- lo que ya quedó firmado ---------- */
+function escucharFirmas() {
+  const q = query(collection(db, 'gal_firmas', GID, 'items'), where('estado', '==', 'aprobada'));
+  onSnapshot(q, (snap) => {
+    const filas = [];
+    snap.forEach((d) => filas.push(Object.assign({ id: d.id }, d.data())));
+    filas.sort((a, b) => (b.tsms || 0) - (a.tsms || 0));
+    $('firmas-titulo').hidden = !filas.length;
+    $('firmas-cuenta').textContent = filas.length
+      ? (filas.length === 1 ? '1 mensaje' : filas.length + ' mensajes') : '';
+    $('firmas').innerHTML = filas.map((f) => {
+      const quien = esc((f.autor && f.autor.nombre) || 'Un invitado');
+      if (f.tipo === 'audio' && f.r2 && f.r2.key) {
+        return '<div class="firma"><div class="quien">' + quien + '</div>' +
+          '<audio controls preload="none" src="' + esc(WORKER + '/f/' + f.r2.key) + '"></audio></div>';
+      }
+      /* el texto va como texto: nunca se ejecuta lo que escribió un invitado */
+      return '<div class="firma"><div class="quien">' + quien + '</div>' +
+        '<div class="dice">' + esc(f.texto || '') + '</div></div>';
+    }).join('');
+  }, () => {});
+}
+
 /* ---------- ventana horaria ---------- */
 function ventanaAbierta(ev) {
   const ahora = Date.now();
@@ -427,6 +670,10 @@ function pintarVentana(ev) {
 
     $('in-camara').addEventListener('change', (e) => { entraron(e.target.files); e.target.value = ''; });
     $('in-elegir').addEventListener('change', (e) => { entraron(e.target.files); e.target.value = ''; });
+
+    prepararMensaje();
+    prepararAudio();
+    escucharFirmas();
 
     procesarCola(autor);
     window.addEventListener('online', () => procesarCola(autor));
