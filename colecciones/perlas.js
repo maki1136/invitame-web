@@ -9,100 +9,112 @@
       Palabras de Maki: «la idea es no romper nada, que puedas seguir con las
       plantillas como venimos, pero disfrazarlas».
       No se toca `index.html`, no se toca ninguna sección, no se pierde ninguna
-      función. Esto es una hoja de estilos y tres movimientos de nodos, y todo
-      se puede deshacer. Si se saca este archivo de la lista, vuelve todo como
-      estaba.
+      función. Es una hoja de estilos y tres movimientos de nodos, todo
+      reversible. Si se saca este archivo de la lista, vuelve todo como estaba.
 
    ⚠️ VIENE APAGADA. Sin `INVEV.fx.coleccion === 'perlas'` no hace nada.
       Para probar sin tocar la base: `?coleccion=perlas`
 
    LA REFERENCIA
    Las tres capturas que mandó Maki (Pavel & Lada · Nazar & Anita ·
-   Elizabeth & William). Ficha completa de lectura en la skill
-   `invitame-plantillas`.
+   Elizabeth & William). Ficha completa en la skill `invitame-plantillas`.
 
    ⚠️ EL 70% DE LA DIFERENCIA NO SON LAS PERLAS: ES LA TIPOGRAFÍA Y EL AIRE.
-      Ya me equivoqué una vez de prioridad. Las perlas son la fase 4; esto —la
-      fase 2— es lo que más cambia la invitación y no necesita ni una foto.
+      Ya me equivoqué una vez de prioridad. Las perlas son la fase 4.
 
    ★★★ CÓMO SE CAMBIAN LOS TAMAÑOS: SE SETEAN LAS VARIABLES DEL MOTOR ★★★
-      Esto costó una vuelta y es la clave para cualquier colección futura.
-      El motor NO usa tamaños sueltos: tiene una escala completa en variables,
-      y las aplica con `!important`. Por ejemplo:
+      El motor NO usa tamaños sueltos: tiene una escala completa en variables y
+      las aplica con `!important`:
           .sec h2 { font-size: var(--fs-titulo, 30px) !important }
           .kick   { font-size: var(--fs-cursiva, 34px) !important }
-      Así que una regla propia de `font-size`, por más específica que sea,
-      PIERDE siempre. La primera versión de este archivo cambiaba la familia y
-      el espaciado bien, pero los tamaños quedaban intactos y no se entendía
-      por qué.
+      Una regla propia de `font-size`, por más específica que sea, PIERDE. La
+      primera versión de este archivo cambiaba familia y espaciado bien, pero
+      los tamaños quedaban intactos y no se entendía por qué.
 
-      La escala completa que expone el motor:
+      La escala completa:
         --fs-nombres  --fs-kicker   --fs-titulo    --fs-cursiva
         --fs-contador --fs-texto    --fs-datos     --fs-direccion
         --fs-lugar    --fs-frase    --fs-boton
-      Y además: --pad (relleno), --sec-col / --sec-col-v (color de sección),
+      Y además: --pad, --sec-col / --sec-col-v (color de sección),
       --sec-tex / --sec-tex-v (textura), --lino, --lino2, --cream, --muted,
       --oro, --verde, --sage.
 
-      → Para el TAMAÑO se setea la variable. Para la FAMILIA, el espaciado
-        entre letras y las mayúsculas, sí van reglas normales: eso el motor no
-        lo pisa.
+      → TAMAÑO: se setea la variable. FAMILIA, espaciado y mayúsculas: reglas
+        normales, que eso el motor no lo pisa.
 
-   ⚠️ LA ÚNICA EXCEPCIÓN SON LOS NOMBRES DE LA PORTADA.
-      El motor les escribe la familia y el tamaño EN LÍNEA (`style=`), porque
-      son campos que elige el cliente (`nfont`, `nsize`). Un estilo en línea le
-      gana a cualquier hoja, así que ahí sí hace falta `!important`.
-      Es a propósito: la colección MANDA sobre la tipografía. Mientras esté
-      prendida, los campos de fuente y tamaño de los nombres no tienen efecto.
-      Se apaga la colección y vuelven a andar.
+   ★★★ LOS NOMBRES DE LA PORTADA LOS MANDA JAZMÍN, NO LA COLECCIÓN ★★★
+      Decisión de Maki (31/8/2026): «sí, que Jaz pueda cambiar».
+      El motor le escribe a `h1.names` la familia, el tamaño y el color EN
+      LÍNEA, desde los campos `nfont`, `nsize` y `ncolor` que elige el cliente.
+      Un estilo en línea le gana a cualquier hoja.
+
+      Entonces la regla es:
+      · Si la invitación TIENE `nfont` elegida → la colección NO toca los
+        nombres. Ni la familia, ni el tamaño, ni las mayúsculas.
+        (Poner en mayúsculas una letra manuscrita queda horrible, así que el
+         tratamiento entero va junto o no va.)
+      · Si `nfont` está VACÍA → la colección toma la posta y los pone en serif
+        fina, mayúsculas y enormes, como la referencia.
+
+      Para que una invitación use la tipografía de la colección, Jazmín vacía
+      el campo de fuente desde el panel. El bloque "Colección de diseño" se lo
+      ofrece con un clic, igual que hace con la paleta.
 
    ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★  ← bug real, costó una vuelta
       Al bajar el `.kick` debajo del `h2`, el adorno (los aros ⚭) se fue con él
       y quedó METIDO ENTRE el título y la cursiva. En la referencia ese par va
-      pegado, sin nada en el medio: es lo que le da el aire de invitación cara.
-      No alcanza con moverlo una vez: el motor lo vuelve a insertar en cada
-      pasada, siempre pegado al `.kick`. Por eso `acomodar()` corre en el mismo
-      bucle de 400 ms y lo devuelve arriba de todo cada vez.
-      Arriba de todo además es donde corresponde: así separa una sección de la
-      otra, como en la referencia. Y en la fase 4 el hilo de perlas se cuelga
-      justo de ahí (motivo.js dibuja adentro del `.adorno`).
+      pegado, sin nada en el medio. Y no alcanza con moverlo una vez: el motor
+      lo vuelve a insertar pegado al `.kick` en cada pasada. Por eso
+      `acomodar()` corre en el bucle de 400 ms y lo devuelve arriba de todo.
+      Arriba además es donde corresponde: separa una sección de la otra, y en
+      la fase 4 el hilo de perlas se cuelga justo de ahí.
 
-   LO QUE HACE ESTA FASE (2 de 6)
-     1. Los títulos pasan a serif fina en MAYÚSCULAS con mucho espaciado entre
-        letras. Antes eran Forum en negrita, en minúsculas.
-     2. La cursiva (`.kick`) baja DEBAJO del título, pegada. Ese par —TÍTULO
-        grande + cursiva chiquita abajo— se repite en todas las secciones y es
-        la marca registrada de la referencia. Antes iba arriba.
-     3. El adorno sube arriba de todo, a separar secciones.
-     4. Los nombres pasan de letra manuscrita a serif fina en mayúsculas,
-        enormes, y el "&" queda solo en el medio, en cursiva.
-     5. El copete y la fecha pasan a versalitas chiquitas muy espaciadas.
-     6. La cuenta regresiva: numerales grandes y finos, etiquetas en versalitas.
-     7. Aire: el relleno de cada sección pasa de 48 px a 76 px, y los textos se
-        limitan en ancho para que respiren.
+   LO QUE HAY HECHO
+     FASE 2 · tipografía y aire
+       · Títulos en serif fina, MAYÚSCULAS, muy espaciados.
+       · La cursiva pegada DEBAJO del título (antes iba arriba). Ese par es la
+         marca registrada de la referencia.
+       · El adorno arriba de todo, separando secciones.
+       · Copete y fecha en versalitas chiquitas muy espaciadas.
+       · Cuenta regresiva: numerales finos, etiquetas en versalitas.
+       · Relleno de sección de 48 px a 76 px, y textos limitados en ancho.
+     FASE 3 · estructura
+       · Arcos: las bandas oscuras arrancan con el borde superior redondeado.
+       · La foto de portada en blanco y negro, para que no pelee con la paleta.
+       · Las fotos sueltas quedan como objetos APOYADOS en el papel: marco
+         blanco, sombra propia y una inclinación mínima.
+       · Las tarjetas de evento se aplanan: menos radio y menos sombra, más
+         editorial y menos "app".
+       · Los subtítulos (`h3`) acompañan al título, más chicos y espaciados.
 
-   FALTA (fases 3 a 6): bandas de color alternadas, arcos, la foto en blanco y
-   negro, las fotos como objetos apoyados, el collar como línea de tiempo del
-   programa, el dress code en círculos, y las 5 fotos que va a mandar Maki.
+   FALTA (fases 4 a 6): el collar como línea de tiempo del programa, las perlas
+   sembradas, el dress code en círculos, los corazones del final y las 5 fotos
+   que va a mandar Maki.
 
    ⚠️ LOS TÍTULOS EN ESPAÑOL DE MÉXICO SON MÁS LARGOS QUE EN INGLÉS.
       `PROGRAM` mide la mitad que `CÓMO VA A SER EL DÍA`. Por eso los tamaños
-      van con `clamp()` y los títulos tienen `max-width` en em: si no entran,
-      bajan de tamaño solos. NUNCA acortar el texto del cliente para que entre.
+      van con `clamp()` y los títulos tienen `max-width` en em. NUNCA acortar
+      el texto del cliente para que entre.
+
+   ⚠️ LA INCLINACIÓN DE LAS FOTOS VA EN UN CONTENEDOR, NO EN LA FOTO.
+      El motor anima las fotos con `transform` al aparecer (`.reveal`). Si la
+      colección le pone `rotate` a la misma foto, le pisa la animación y la
+      foto aparece de golpe. Por eso la inclinación va en el `<img>` sólo
+      cuando NO es `.reveal`, y si no, se deja derecha.
 
    ⚠️ TODO LO QUE MUEVE NODOS GUARDA EL ORIGINAL Y SE PUEDE DESHACER.
-      `h1.names` guarda su HTML en `data-col-orig`. El `.kick` y el `.adorno`
-      vuelven a su lugar. Apagar la colección deja la invitación como estaba.
+      Apagar la colección deja la invitación exactamente como estaba.
 
    ⚠️ LAS FUENTES YA ESTÁN CARGADAS por el motor: Cormorant Garamond, Forum,
-      Great Vibes, Rouge Script, Montserrat, Lora. NO agregar un pedido de
-      fuentes nuevo: es una invitación, se abre en el celular con datos.
+      Great Vibes, Rouge Script, Montserrat, Lora. NO agregar un pedido nuevo:
+      es una invitación, se abre en el celular con datos.
    ============================================================================ */
 (function () {
   'use strict';
 
   var NOMBRE = 'perlas';
   var MARCA  = 'data-coleccion';
+  var MARCA_T = 'data-col-tipo';        /* la colección manda sobre los nombres */
   var ID_CSS = 'inv-coleccion-perlas';
 
   function activa() {
@@ -114,66 +126,108 @@
     catch (e) { return false; }
   }
 
-  /* `h[c]` se reemplaza abajo por el selector con la marca. */
+  /* ¿la invitación tiene fuente propia elegida para los nombres? */
+  function tieneFuentePropia() {
+    try {
+      var f = (window.INVEV || {}).nfont;
+      return !!(f && String(f).trim());
+    } catch (e) { return false; }
+  }
+
+  /* `h[c]` = la marca de la colección · `h[t]` = además, tipografía nuestra */
   var CSS = [
 
-    /* ── LOS TAMAÑOS: por las variables del motor ────────────────────────
-       (ver la nota de arriba: las reglas propias de font-size pierden) */
+    /* ── LOS TAMAÑOS: por las variables del motor ──────────────────────── */
     'h[c]{' +
       '--fs-titulo:clamp(20px,5.6vw,31px);' +
       '--fs-cursiva:clamp(18px,4.8vw,24px);' +
       '--fs-kicker:clamp(9px,2.6vw,11px);' +
       '--fs-contador:clamp(29px,8.6vw,44px)}',
 
-    /* ── EL PAR QUE SE REPITE EN TODAS LAS SECCIONES ─────────────────────
-       Serif fina en mayúsculas, muy espaciada, y la cursiva chiquita DEBAJO,
-       pegada. Es lo que más se nota de la referencia. */
+    /* ── EL PAR QUE SE REPITE EN TODAS LAS SECCIONES ───────────────────── */
     'h[c] .sec h2.reveal{' +
       'font-family:"Cormorant Garamond",Forum,serif;font-weight:300;' +
       'text-transform:uppercase;letter-spacing:.2em;line-height:1.2;' +
-      'max-width:13em;margin:0 auto 4px;padding-left:.2em}',   /* .2em compensa el tracking del final */
+      'max-width:13em;margin:0 auto 4px;padding-left:.2em}',
 
     'h[c] .sec .kick{' +
       'font-family:"Great Vibes",cursive;font-weight:400;' +
       'line-height:1.35;letter-spacing:0;text-transform:none;opacity:.72;' +
       'max-width:16em;margin:0 auto 34px}',
 
-    /* el adorno queda arriba de todo, separando secciones */
-    'h[c] .sec > .adorno{margin:0 auto 34px;opacity:.6}',
+    /* el subtítulo acompaña al título: más chico y más espaciado */
+    'h[c] .sec h3{' +
+      'font-family:"Cormorant Garamond",serif;font-weight:400;' +
+      'text-transform:uppercase;letter-spacing:.14em;padding-left:.14em}',
 
-    /* ── AIRE ────────────────────────────────────────────────────────────
-       En la referencia el texto ocupa ~60% del ancho y sobra papel arriba y
-       abajo. Sin esto, aunque la tipografía esté bien, se sigue viendo barato. */
+    /* el adorno arriba de todo, separando secciones */
+    'h[c] .sec > .adorno{margin:0 auto 34px;opacity:.55}',
+
+    /* ── AIRE ─────────────────────────────────────────────────────────── */
     'h[c] .sec{padding:76px 30px}',
     'h[c] .sec > p,h[c] .sec p.reveal{max-width:23em;margin-left:auto;margin-right:auto;line-height:1.75}',
     '@media (max-width:420px){h[c] .sec{padding:60px 24px}}',
 
-    /* ── LA PORTADA ──────────────────────────────────────────────────────
-       El copete en versalitas muy separadas, los nombres enormes y finos.
-       ⚠️ Los nombres llevan `!important` porque el motor les pone el estilo
-          en línea (campos `nfont` y `nsize` del cliente). Ver la nota de arriba. */
+    /* ── ARCOS (fase 3) ───────────────────────────────────────────────────
+       En la referencia las bandas oscuras no arrancan con un borde recto:
+       arrancan con un arco. Es un detalle chico que cambia mucho.
+       El radio va en dos ejes para que sea un arco ancho y bajo, no un
+       semicírculo. */
+    'h[c] .sec.verde{' +
+      'border-top-left-radius:50% 90px;border-top-right-radius:50% 90px;' +
+      'padding-top:104px}',
+    '@media (max-width:420px){h[c] .sec.verde{' +
+      'border-top-left-radius:50% 58px;border-top-right-radius:50% 58px;' +
+      'padding-top:82px}}',
+
+    /* ── LA FOTO DE PORTADA, EN BLANCO Y NEGRO (fase 3) ───────────────────
+       Es lo que hace que la portada no pelee con la paleta. En la referencia
+       la foto de los novios está desaturada a propósito. */
+    'h[c] .portada .pbg,h[c] .portada .cover-vid{' +
+      'filter:grayscale(1) contrast(1.06) brightness(.98)}',
+
+    /* ── LAS FOTOS, COMO OBJETOS APOYADOS EN EL PAPEL (fase 3) ────────────
+       Marco blanco, sombra propia y una inclinación mínima. En la referencia
+       las fotos no van a sangre: están apoyadas sobre el papel.
+       ⚠️ La inclinación NO va en fotos con `.reveal`: les pisaría la animación
+          de aparición del motor. Ver la nota de arriba. */
+    'h[c] .sec > img{' +
+      'background:#fff;padding:9px;border-radius:2px;' +
+      'box-shadow:0 1px 2px rgba(60,50,40,.14),0 10px 24px rgba(60,50,40,.13);' +
+      'max-width:min(100%,340px);height:auto;display:block;margin:26px auto}',
+    'h[c] .sec > img:not(.reveal):nth-of-type(odd){transform:rotate(-1.4deg)}',
+    'h[c] .sec > img:not(.reveal):nth-of-type(even){transform:rotate(1.1deg)}',
+
+    /* las tarjetas de evento, más planas: menos radio y menos sombra */
+    'h[c] .sec .evento{' +
+      'border-radius:3px;box-shadow:0 1px 2px rgba(60,50,40,.10),0 8px 22px rgba(60,50,40,.10)}',
+
+    /* ── LA PORTADA ───────────────────────────────────────────────────────
+       ⚠️ Los nombres sólo se tocan si la invitación NO tiene fuente propia:
+          por eso van bajo `h[t]`. Ver la nota grande de arriba. */
     'h[c] .portada .kicker{' +
       'font-family:Montserrat,sans-serif;font-weight:400;text-transform:uppercase;' +
       'letter-spacing:.34em;opacity:.85;margin-bottom:20px;padding-left:.34em}',
 
-    'h[c] .portada h1.names{' +
+    'h[t] .portada h1.names{' +
       'font-family:"Cormorant Garamond",serif!important;font-weight:300!important;' +
       'text-transform:uppercase;letter-spacing:.11em;' +
       'font-size:clamp(33px,11.5vw,66px)!important;line-height:1.06;padding-left:.11em}',
 
     /* el conector solo, en el medio, en cursiva: `CAMILA` / & / `TOMÁS` */
-    'h[c] .portada h1.names .col-y{' +
+    'h[t] .portada h1.names .col-y{' +
       'display:block;font-family:"Great Vibes",cursive!important;font-weight:400!important;' +
       'text-transform:none;letter-spacing:0;font-size:.44em!important;' +
       'opacity:.8;margin:.04em 0;padding:0}',
+    /* si los nombres los manda Jazmín, el conector queda como estaba */
+    'h[c]:not([' + MARCA_T + ']) .portada h1.names .col-y{display:inline}',
 
     'h[c] .portada .fecha{' +
       'font-family:Montserrat,sans-serif;text-transform:uppercase;' +
       'font-size:clamp(10px,2.8vw,12px);letter-spacing:.26em;' +
       'opacity:.9;margin-top:22px;padding-left:.26em}',
 
-    /* ── LA CUENTA REGRESIVA ─────────────────────────────────────────────
-       Numerales grandes y finos, etiquetas en versalitas chiquitas.
+    /* ── LA CUENTA REGRESIVA ──────────────────────────────────────────────
        ⚠️ `.sep` son los DOS PUNTOS entre los números, no un separador de
           secciones. Acá sólo se le cambia el color y el tamaño. */
     'h[c] .count .num{' +
@@ -185,7 +239,9 @@
     'h[c] .count .sep{' +
       'font-family:"Cormorant Garamond",serif;font-weight:300;opacity:.32}'
 
-  ].join('').replace(/h\[c\]/g, 'html[' + MARCA + '="' + NOMBRE + '"]');
+  ].join('')
+   .replace(/h\[c\]/g, 'html[' + MARCA + '="' + NOMBRE + '"]')
+   .replace(/h\[t\]/g, 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA_T + ']');
 
   function hoja() {
     var s = document.getElementById(ID_CSS);
@@ -200,8 +256,8 @@
   /* ---- 1. la cursiva pegada DEBAJO del título, el adorno arriba de todo ----
      Mover nodos es más seguro que volver la sección un flex: un flex le
      cambiaría el ancho a todo lo que tiene adentro.
-     ⚠️ Corre en cada pasada del bucle, no una sola vez: el motor vuelve a
-        insertar el adorno pegado al `.kick` cada vez que redibuja. */
+     ⚠️ Corre en cada pasada, no una sola vez: el motor vuelve a insertar el
+        adorno pegado al `.kick` cada vez que redibuja. */
   function acomodar() {
     [].forEach.call(document.querySelectorAll('.sec'), function (s) {
       var k = s.querySelector(':scope > .kick');
@@ -232,7 +288,7 @@
   /* ---- 2. el conector de los nombres, solo y en cursiva -------------------
      El motor escribe: <span>Camila</span><br><span>& Tomás</span>
      La referencia quiere:  CAMILA / & / TOMÁS
-     Se guarda el HTML original para poder deshacerlo entero. */
+     Sólo se hace si la colección manda sobre la tipografía. */
   function partirNombres() {
     var h1 = document.querySelector('.portada h1.names');
     if (!h1 || h1.querySelector('.col-y')) return;
@@ -271,15 +327,25 @@
 
   function poner() {
     hoja();
-    document.documentElement.setAttribute(MARCA, NOMBRE);
+    var raiz = document.documentElement;
+    raiz.setAttribute(MARCA, NOMBRE);
+
+    /* ¿la tipografía de los nombres la manda la colección o Jazmín? */
+    if (tieneFuentePropia()) {
+      if (raiz.hasAttribute(MARCA_T)) { raiz.removeAttribute(MARCA_T); juntarNombres(); }
+    } else {
+      raiz.setAttribute(MARCA_T, '');
+      partirNombres();
+    }
+
     acomodar();
-    partirNombres();
     puesta = true;
   }
 
   function sacar() {
     if (!puesta) return;
     document.documentElement.removeAttribute(MARCA);
+    document.documentElement.removeAttribute(MARCA_T);
     desacomodar();
     juntarNombres();
     puesta = false;
@@ -293,8 +359,7 @@
   function arrancar() {
     if (!document.body) { setTimeout(arrancar, 60); return; }
     sincronizar();
-    /* el motor y los otros módulos siguen escribiendo secciones un rato largo:
-       hay que volver a pasar por las nuevas */
+    /* el motor y los otros módulos siguen escribiendo secciones un rato largo */
     addEventListener('message', function () { setTimeout(sincronizar, 80); });
     var n = 0, t = setInterval(function () {
       sincronizar();
