@@ -42,6 +42,25 @@
       Ficha de lectura de las referencias, prompts de las fotos y las trampas:
       skill `invitame-plantillas`.
 
+   ★★★ LAS PIEZAS FOTOGRAFIADAS ★★★  (31/8/2026)
+      `/colecciones/pieza-*.js` y `/efectos/perla.js` no dibujan nada: son
+      MATERIAL. Cada uno deja una foto recortada como data URI en un global
+      (`window.INVPERLA`, `window.INVPIEZAS.*`) y las colecciones las usan.
+      Son cinco, generadas en Flow por Maki: broche, dije, bandeja, sobre y moño.
+
+      ⚠️ DOS TRATAMIENTOS DISTINTOS, SEGÚN SI FLOTAN O SE APOYAN:
+        · Lo que tiene que flotar sobre cualquier fondo (broche, dije, perla)
+          se pidió sobre GRIS y se recortó con alfa.
+        · Lo que vive adentro de una sección clara (bandeja, sobre, moño) se
+          pidió sobre PAPEL MARFIL y NO se recorta: se coloca entero con el
+          alfa apagándose en los bordes.
+        Recortar lo que flota, difuminar lo que se apoya.
+
+      ⚠️ AL AGREGAR UNA PIEZA NUEVA: base64 en bloques de 4.000 y VERIFICAR con
+         suma de control. Llegó un archivo con caracteres cambiados en el medio
+         que decodificaba al tamaño exacto y con cabecera RIFF válida: el
+         tamaño y la cabecera NO alcanzan.
+
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
       Regla de Maki, dicha más de una vez y con razón:
       «la zona de prueba es al pedo porque después pasa esto siempre; probá
@@ -106,9 +125,9 @@
       Las perlas del motivo estaban hechas con gradientes. Se veían "de
       dibujito" y Maki lo dijo sin vueltas. Un objeto fotografiado —una perla,
       un lacre, un moño— tiene microrrelieve y nácar que el CSS no imita.
-      Ahora la perla es una foto recortada con alfa, de 3.3 KB, incrustada como
-      data URI en `perla.js`. El CSS sigue siendo la herramienta correcta para
-      superficies (papel, terciopelo, el velo del fondo), no para objetos.
+      El CSS sigue siendo la herramienta correcta para superficies (papel,
+      terciopelo, el velo del fondo) y para LÍNEAS (la cadena del dije), no
+      para objetos.
 
    ★ NO COLGAR NADA DE `window.INVEV` (31/8/2026)
       `INVEV` es el OBJETO DE DATOS DEL EVENTO: el motor lo REEMPLAZA entero
@@ -116,7 +135,7 @@
       agregado, sin error ni aviso. La perla se perdió así en la primera vuelta
       y la guirnalda salía con los gradientes de respaldo.
       Los materiales van en su propio global —`window.INVPALETAS`,
-      `window.INVPERLA`—. De `INVEV` sólo se LEE `fx`.
+      `window.INVPERLA`, `window.INVPIEZAS`—. De `INVEV` sólo se LEE `fx`.
 
    ★ EN LOS BLOQUES DEL PANEL, NO GUARDARSE `D.fx` AL CONSTRUIR (31/8/2026)
       El bloque se arma a los ~500 ms, ANTES de que cargue el evento. Cuando el
@@ -133,7 +152,7 @@
       datos del cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en dieciocho casos:
+   ⚠️ EL ORDEN IMPORTA en diecinueve casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -156,6 +175,9 @@
      los separadores, así que necesita que las secciones ya estén puestas. Y va
      después de `paleta.js` porque el broche se pinta con sus colores.
    · `panel-motivo.js` va DESPUÉS de `motivo.js`: escribe fx.motivo.
+   · `colecciones/pieza-*.js` van ANTES de `colecciones/perlas.js`: son el
+     material que la colección coloca. Si falta alguno, la colección no lo
+     coloca y no se rompe nada.
    · `dresscode-colores.js` va DESPUÉS de `paleta.js`: cuando los colores son
      automáticos los lee de las variables de la paleta, en vivo. Y DESPUÉS de
      `colecciones/perlas.js`, porque uno de los dos disparadores es que haya
@@ -198,6 +220,13 @@
     '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */
     '/efectos/motivo.js',              /* el motivo que recorre todo: por ahora, las perlas */
     '/efectos/panel-motivo.js',        /* y su bloque en el panel, para prenderlo y graduarlo */
+
+    /* ---- EL MATERIAL: cinco fotos generadas en Flow y recortadas ---- */
+    '/colecciones/pieza-broche.js',    /* recortado sobre gris · cierra el hilo del programa */
+    '/colecciones/pieza-dije.js',      /* recortado sobre gris · cuelga de la cuenta regresiva */
+    '/colecciones/pieza-bandeja.js',   /* sobre papel · el lugar */
+    '/colecciones/pieza-sobre.js',     /* sobre papel · la carta */
+    '/colecciones/pieza-mono.js',      /* sobre papel · nuestras personas */
 
     /* ---- LAS COLECCIONES: una decisión que trae todo junto ---- */
     '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
