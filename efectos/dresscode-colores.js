@@ -16,8 +16,20 @@
    ⚠️ CUANDO SON AUTOMÁTICOS SE LEEN DE LA PALETA EN VIVO, no de una lista fija.
       Se toman `--verde`, `--sage`, `--oro`, `--muted` y `--cream` del CSS, así
       que si Jazmín cambia la paleta, los círculos cambian solos y siempre
-      combinan. Una lista de colores escrita a mano acá se desincronizaría de
-      las 20 paletas en cuanto alguien tocara algo.
+      combinan. Una lista escrita a mano acá se desincronizaría de las 20
+      paletas en cuanto alguien tocara algo.
+
+      ⚠️ Esto anda porque acá estamos DENTRO de la invitación, donde la paleta
+         está aplicada al documento. En el ADMIN no se puede: la invitación se
+         dibuja en un iframe, así que `panel-dresscode.js` los saca de
+         `window.INVPALETAS`. Son dos caminos distintos a propósito.
+
+   ⚠️ EL TÍTULO TAMBIÉN LO DECIDE JAZMÍN  →  `fx.dresscode.titulo`
+      · sin definir  → "Los colores de la boda"
+      · con texto    → ese texto
+      · vacío ('')   → sin título, sólo los círculos
+      Estaba fijo en el código y era justamente lo que no hay que hacer: si no
+      se puede tocar desde el panel, para Jazmín no existe.
 
    ⚠️ DÓNDE VA: enganchado a `.dc-mono`, que es el dibujo del traje de la
       sección de Vestimenta. Es el único elemento confiable para encontrar esa
@@ -38,9 +50,10 @@
 
   var ID_CSS = 'inv-dc-colores-css';
   var CLASE  = 'col-dc';
+  var TITULO_POR_DEFECTO = 'Los colores de la boda';
 
-  /* las variables de la paleta que se usan cuando los colores son automáticos.
-     Son cinco: tres de color, una neutra y una clara. */
+  /* las variables de la paleta que se usan cuando los colores son automáticos:
+     tres de color, una neutra y una clara */
   var DE_LA_PALETA = ['--verde', '--sage', '--oro', '--muted', '--cream'];
 
   function fx() {
@@ -51,7 +64,14 @@
     return !!document.documentElement.getAttribute('data-coleccion');
   }
 
-  /* devuelve la lista de colores a mostrar, o null si no hay que mostrar nada */
+  /* ⚠️ vacío ('') significa "sin título", que NO es lo mismo que sin definir */
+  function titulo() {
+    var d = fx().dresscode || {};
+    if (typeof d.titulo === 'string') return d.titulo;
+    return TITULO_POR_DEFECTO;
+  }
+
+  /* la lista de colores a mostrar, o null si no hay que mostrar nada */
   function colores() {
     var d = fx().dresscode || {};
     var c = d.colores;
@@ -59,7 +79,7 @@
       c = c.filter(function (x) { return x && String(x).trim(); });
       if (c.length) return c;                       /* los de Jazmín, tal cual */
     }
-    if (!coleccionPuesta()) return null;            /* no hay colores ni colección */
+    if (!coleccionPuesta()) return null;            /* ni colores ni colección */
 
     /* automáticos: se leen de la paleta que esté puesta AHORA */
     var cs = getComputedStyle(document.documentElement);
@@ -100,12 +120,12 @@
     [].forEach.call(document.querySelectorAll('.' + CLASE), function (e) { e.remove(); });
   }
 
-  function poner(lista) {
+  function poner(lista, tit) {
     var ancla = document.querySelector('.dc-mono');
     if (!ancla) return;
 
-    /* si ya está puesto con los mismos colores, no se toca nada */
-    var firma = lista.join('|');
+    /* si ya está puesto igual, no se toca nada */
+    var firma = tit + '§' + lista.join('|');
     var ya = ancla.parentNode.querySelector('.' + CLASE);
     if (ya && ya.dataset.firma === firma) return;
     if (ya) ya.remove();
@@ -114,10 +134,12 @@
     caja.className = CLASE;
     caja.dataset.firma = firma;
 
-    var t = document.createElement('div');
-    t.className = 'col-dc-tit';
-    t.textContent = 'Los colores de la boda';   /* español de México */
-    caja.appendChild(t);
+    if (tit) {                                  /* vacío = sin título */
+      var t = document.createElement('div');
+      t.className = 'col-dc-tit';
+      t.textContent = tit;
+      caja.appendChild(t);
+    }
 
     var fila = document.createElement('div');
     fila.className = 'col-dc-fila';
@@ -136,7 +158,7 @@
     var lista = colores();
     if (!lista) { sacar(); return; }
     hoja();
-    poner(lista);
+    poner(lista, titulo());
   }
 
   function arrancar() {
