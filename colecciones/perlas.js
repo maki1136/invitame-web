@@ -9,8 +9,8 @@
       Palabras de Maki: «la idea es no romper nada, que puedas seguir con las
       plantillas como venimos, pero disfrazarlas».
       No se toca `index.html`, no se toca ninguna sección, no se pierde ninguna
-      función. Esto es una hoja de estilos y dos movimientos de nodos, y todo se
-      puede deshacer. Si se saca este archivo de la lista, vuelve todo como
+      función. Esto es una hoja de estilos y tres movimientos de nodos, y todo
+      se puede deshacer. Si se saca este archivo de la lista, vuelve todo como
       estaba.
 
    ⚠️ VIENE APAGADA. Sin `INVEV.fx.coleccion === 'perlas'` no hace nada.
@@ -56,17 +56,29 @@
       prendida, los campos de fuente y tamaño de los nombres no tienen efecto.
       Se apaga la colección y vuelven a andar.
 
+   ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★  ← bug real, costó una vuelta
+      Al bajar el `.kick` debajo del `h2`, el adorno (los aros ⚭) se fue con él
+      y quedó METIDO ENTRE el título y la cursiva. En la referencia ese par va
+      pegado, sin nada en el medio: es lo que le da el aire de invitación cara.
+      No alcanza con moverlo una vez: el motor lo vuelve a insertar en cada
+      pasada, siempre pegado al `.kick`. Por eso `acomodar()` corre en el mismo
+      bucle de 400 ms y lo devuelve arriba de todo cada vez.
+      Arriba de todo además es donde corresponde: así separa una sección de la
+      otra, como en la referencia. Y en la fase 4 el hilo de perlas se cuelga
+      justo de ahí (motivo.js dibuja adentro del `.adorno`).
+
    LO QUE HACE ESTA FASE (2 de 6)
      1. Los títulos pasan a serif fina en MAYÚSCULAS con mucho espaciado entre
         letras. Antes eran Forum en negrita, en minúsculas.
-     2. La cursiva (`.kick`) baja DEBAJO del título. Ese par —TÍTULO grande +
-        cursiva chiquita abajo— se repite en todas las secciones y es la marca
-        registrada de la referencia. Antes iba arriba.
-     3. Los nombres pasan de letra manuscrita a serif fina en mayúsculas,
+     2. La cursiva (`.kick`) baja DEBAJO del título, pegada. Ese par —TÍTULO
+        grande + cursiva chiquita abajo— se repite en todas las secciones y es
+        la marca registrada de la referencia. Antes iba arriba.
+     3. El adorno sube arriba de todo, a separar secciones.
+     4. Los nombres pasan de letra manuscrita a serif fina en mayúsculas,
         enormes, y el "&" queda solo en el medio, en cursiva.
-     4. El copete y la fecha pasan a versalitas chiquitas muy espaciadas.
-     5. La cuenta regresiva: numerales grandes y finos, etiquetas en versalitas.
-     6. Aire: el relleno de cada sección pasa de 48 px a 76 px, y los textos se
+     5. El copete y la fecha pasan a versalitas chiquitas muy espaciadas.
+     6. La cuenta regresiva: numerales grandes y finos, etiquetas en versalitas.
+     7. Aire: el relleno de cada sección pasa de 48 px a 76 px, y los textos se
         limitan en ancho para que respiren.
 
    FALTA (fases 3 a 6): bandas de color alternadas, arcos, la foto en blanco y
@@ -79,8 +91,8 @@
       bajan de tamaño solos. NUNCA acortar el texto del cliente para que entre.
 
    ⚠️ TODO LO QUE MUEVE NODOS GUARDA EL ORIGINAL Y SE PUEDE DESHACER.
-      `h1.names` guarda su HTML en `data-col-orig`. El `.kick` se vuelve a poner
-      antes del `h2`. Apagar la colección deja la invitación como estaba.
+      `h1.names` guarda su HTML en `data-col-orig`. El `.kick` y el `.adorno`
+      vuelven a su lugar. Apagar la colección deja la invitación como estaba.
 
    ⚠️ LAS FUENTES YA ESTÁN CARGADAS por el motor: Cormorant Garamond, Forum,
       Great Vibes, Rouge Script, Montserrat, Lora. NO agregar un pedido de
@@ -114,17 +126,20 @@
       '--fs-contador:clamp(29px,8.6vw,44px)}',
 
     /* ── EL PAR QUE SE REPITE EN TODAS LAS SECCIONES ─────────────────────
-       Serif fina en mayúsculas, muy espaciada, y la cursiva chiquita DEBAJO.
-       Es lo que más se nota de la referencia. */
+       Serif fina en mayúsculas, muy espaciada, y la cursiva chiquita DEBAJO,
+       pegada. Es lo que más se nota de la referencia. */
     'h[c] .sec h2.reveal{' +
       'font-family:"Cormorant Garamond",Forum,serif;font-weight:300;' +
       'text-transform:uppercase;letter-spacing:.2em;line-height:1.2;' +
-      'max-width:13em;margin:0 auto 6px;padding-left:.2em}',   /* .2em compensa el tracking del final */
+      'max-width:13em;margin:0 auto 4px;padding-left:.2em}',   /* .2em compensa el tracking del final */
 
     'h[c] .sec .kick{' +
       'font-family:"Great Vibes",cursive;font-weight:400;' +
       'line-height:1.35;letter-spacing:0;text-transform:none;opacity:.72;' +
-      'max-width:16em;margin:0 auto 30px}',
+      'max-width:16em;margin:0 auto 34px}',
+
+    /* el adorno queda arriba de todo, separando secciones */
+    'h[c] .sec > .adorno{margin:0 auto 34px;opacity:.6}',
 
     /* ── AIRE ────────────────────────────────────────────────────────────
        En la referencia el texto ocupa ~60% del ancho y sobra papel arriba y
@@ -182,29 +197,35 @@
     if (s.textContent !== CSS) s.textContent = CSS;
   }
 
-  /* ---- 1. la cursiva baja DEBAJO del título -------------------------------
-     El motor la escribe arriba. En la referencia va abajo. Mover el nodo es
-     más seguro que volver la sección un flex: un flex le cambiaría el ancho a
-     todo lo que tiene adentro. */
-  function bajarCursiva() {
+  /* ---- 1. la cursiva pegada DEBAJO del título, el adorno arriba de todo ----
+     Mover nodos es más seguro que volver la sección un flex: un flex le
+     cambiaría el ancho a todo lo que tiene adentro.
+     ⚠️ Corre en cada pasada del bucle, no una sola vez: el motor vuelve a
+        insertar el adorno pegado al `.kick` cada vez que redibuja. */
+  function acomodar() {
     [].forEach.call(document.querySelectorAll('.sec'), function (s) {
       var k = s.querySelector(':scope > .kick');
       var h = s.querySelector(':scope > h2.reveal');
-      if (!k || !h) return;
-      if (k.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_FOLLOWING) {
-        h.parentNode.insertBefore(k, h.nextSibling);   /* kick queda después del h2 */
+      var a = s.querySelector(':scope > .adorno');
+
+      if (k && h && (k.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+        s.insertBefore(k, h.nextSibling);          /* la cursiva, justo después del título */
+      }
+      if (a && s.firstElementChild !== a) {
+        s.insertBefore(a, s.firstElementChild);    /* el adorno, arriba de todo */
       }
     });
   }
 
-  function subirCursiva() {
+  function desacomodar() {
     [].forEach.call(document.querySelectorAll('.sec'), function (s) {
       var k = s.querySelector(':scope > .kick');
       var h = s.querySelector(':scope > h2.reveal');
-      if (!k || !h) return;
-      if (h.compareDocumentPosition(k) & Node.DOCUMENT_POSITION_FOLLOWING) {
-        h.parentNode.insertBefore(k, h);               /* vuelve a quedar antes */
+      var a = s.querySelector(':scope > .adorno');
+      if (k && h && (h.compareDocumentPosition(k) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+        s.insertBefore(k, h);                      /* la cursiva vuelve arriba del título */
       }
+      if (a && k) s.insertBefore(a, k);            /* y el adorno vuelve pegado a ella */
     });
   }
 
@@ -251,7 +272,7 @@
   function poner() {
     hoja();
     document.documentElement.setAttribute(MARCA, NOMBRE);
-    bajarCursiva();
+    acomodar();
     partirNombres();
     puesta = true;
   }
@@ -259,7 +280,7 @@
   function sacar() {
     if (!puesta) return;
     document.documentElement.removeAttribute(MARCA);
-    subirCursiva();
+    desacomodar();
     juntarNombres();
     puesta = false;
   }
