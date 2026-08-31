@@ -8,17 +8,25 @@
    está puesta una colección). Con colores cargados = manda esta lista, siempre,
    con colección o sin colección.
 
-   ★★ EN EL ADMIN NO SE PUEDEN LEER LAS VARIABLES DE COLOR ★★  ← bug real
+   ★★ `fx.paleta` ES UN OBJETO `{id:"..."}`, NO UN TEXTO ★★  ← bug real
+      Comparar `fx.paleta === 'salvia-marfil'` NUNCA da verdadero. La primera
+      versión hacía eso, no encontraba la paleta, caía en la primera de la lista
+      y traía los colores de **Terracota y arena** cuando la invitación tenía
+      **Salvia y marfil**. Salía una fila de círculos prolija… del color
+      equivocado, que es peor que un error visible.
+      → Siempre leer `fx.paleta.id`, y aceptar también el caso texto por si
+        alguna invitación vieja lo tiene guardado así.
+
+   ★★ EN EL ADMIN NO SE PUEDEN LEER LAS VARIABLES DE COLOR ★★  ← otro bug real
       La primera versión sacaba los colores de `getComputedStyle` sobre el
       `<html>`, como hace el módulo que dibuja los círculos en la invitación.
       En la INVITACIÓN eso anda: la paleta está aplicada al documento.
       En el ADMIN no: la invitación se dibuja adentro de un iframe de vista
       previa, así que en el documento del panel las variables no existen. El
-      botón "Usar los de la paleta" traía UN solo color (`--muted`, que era la
-      única que resolvía) en vez de cinco.
-      → En el panel los colores se leen de `window.INVPALETAS` buscando la
-        paleta elegida en `fx.paleta`, que es la fuente de verdad y sí está
-        disponible acá. Lo publica `paleta.js`, igual que usa `panel-paleta.js`.
+      botón "Usar los de la paleta" traía UN solo color (`--muted`, la única que
+      resolvía) en vez de cinco.
+      → En el panel los colores se leen de `window.INVPALETAS`, que es la fuente
+        de verdad y sí está disponible acá. La publica `paleta.js`.
 
    ⚠️ NO SE BORRA LA CLAVE PARA VOLVER A AUTOMÁTICO: SE GUARDA UNA LISTA VACÍA.
       `INV.saveEvento` guarda con merge. Borrar `colores` del borrador NO lo
@@ -75,17 +83,24 @@
     refrescar();
   }
 
-  /* Los colores de la paleta elegida.
-     ⚠️ Primero de `INVPALETAS`, que es la fuente de verdad y la única que
-        funciona acá adentro. Ver la nota grande de arriba. */
+  /* ⚠️ `fx.paleta` es `{id:"..."}`. Ver la nota grande de arriba. */
+  function idDePaleta() {
+    try {
+      var p = ((borrador() || {}).fx || {}).paleta;
+      if (!p) return '';
+      return (typeof p === 'string') ? p : (p.id || '');
+    } catch (e) { return ''; }
+  }
+
+  /* Los colores de la paleta elegida, desde INVPALETAS */
   function deLaPaleta() {
     try {
-      var d = borrador() || {};
-      var id = ((d.fx || {}).paleta) || '';
+      var id = idDePaleta();
       var todas = window.INVPALETAS || [];
       var p = null, i;
       for (i = 0; i < todas.length; i++) if (todas[i].id === id) { p = todas[i]; break; }
-      if (!p && todas.length) p = todas[0];
+      /* ⚠️ si no se encuentra NO se agarra la primera: daría los colores de otra
+         boda. Mejor los neutros por defecto. */
       if (p) {
         var out = [];
         CLAVES.forEach(function (k) {
