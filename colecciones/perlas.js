@@ -106,8 +106,16 @@
       Se enganchan a ESAS CLASES y no a los títulos: los títulos los escribe el
       cliente y cambian; las clases no.
 
-      ⚠️ LAS DE PAPEL SE ESCONDEN EN LAS SECCIONES OSCURAS. Sobre una banda de
-         color el rectángulo marfil se nota igual, por más difuminado que esté.
+      ★★ SI LA SECCIÓN QUE LE TOCA ES OSCURA, LA PIEZA SE VA A LA CLARA MÁS
+         CERCANA ★★  ← esto se descubrió mirando, no midiendo
+         Sobre una banda de color el rectángulo marfil se nota igual, por más
+         difuminado que esté. La primera versión simplemente NO la colocaba, y
+         el resultado fue que en `camila-y-tomas` la bandeja y el moño caían las
+         dos en secciones verdes y no aparecían nunca. Dos de cinco piezas
+         invisibles, sin ningún aviso.
+         Ahora se busca la siguiente sección clara, y si no hay, la anterior.
+         Contexto aproximado es mejor que pieza invisible: la bandeja termina
+         cerca del lugar aunque no adentro.
 
       ⚠️ SI UNA PIEZA NO ESTÁ, NO SE COLOCA Y NO SE ROMPE NADA. Cada
          `/colecciones/pieza-*.js` es opcional.
@@ -247,7 +255,8 @@
 
     /* las de papel: apoyadas, anchas y con aire */
     'h[c] .col-papel{width:min(86%,330px);height:auto;margin:34px auto 0}',
-    /* ⚠️ sobre una banda de color el rectángulo marfil se nota igual */
+    /* red de seguridad: si alguna igual termina en una banda de color, no se ve.
+       El JS ya se ocupa de llevarla a una sección clara. */
     'h[c] .sec.verde .col-papel{display:none}',
 
     /* ── LA PORTADA ───────────────────────────────────────────────────── */
@@ -326,10 +335,25 @@
     return (e && e.closest) ? e.closest('.sec') : null;
   }
 
+  /* ⚠️ La sección que le toca puede ser oscura, y ahí el rectángulo marfil se
+     nota. Se busca la siguiente clara, y si no hay, la anterior.
+     Se recorre la LISTA de `.sec` y no los hermanos: las secciones no siempre
+     son hermanas directas. Ver la nota grande de arriba. */
+  function claraCercaDe(s) {
+    if (!s) return null;
+    if (!s.classList.contains('verde')) return s;
+    var todas = [].slice.call(document.querySelectorAll('.sec'));
+    var i = todas.indexOf(s), j;
+    if (i < 0) return null;
+    for (j = i + 1; j < todas.length; j++) if (!todas[j].classList.contains('verde')) return todas[j];
+    for (j = i - 1; j >= 0; j--) if (!todas[j].classList.contains('verde')) return todas[j];
+    return null;
+  }
+
   function ponerPapel(clave, sel, clase) {
-    var s = seccionDe(sel);
-    if (!s || s.classList.contains('verde')) return;
-    if (s.querySelector('.' + clase)) return;
+    var s = claraCercaDe(seccionDe(sel));
+    if (!s) return;
+    if (document.querySelector('.' + clase)) return;   /* una sola por invitación */
     var i = unaImagen(clave, 'col-papel ' + clase);
     if (i) s.appendChild(i);
   }
