@@ -8,6 +8,18 @@
    está puesta una colección). Con colores cargados = manda esta lista, siempre,
    con colección o sin colección.
 
+   ★★ EN EL ADMIN NO SE PUEDEN LEER LAS VARIABLES DE COLOR ★★  ← bug real
+      La primera versión sacaba los colores de `getComputedStyle` sobre el
+      `<html>`, como hace el módulo que dibuja los círculos en la invitación.
+      En la INVITACIÓN eso anda: la paleta está aplicada al documento.
+      En el ADMIN no: la invitación se dibuja adentro de un iframe de vista
+      previa, así que en el documento del panel las variables no existen. El
+      botón "Usar los de la paleta" traía UN solo color (`--muted`, que era la
+      única que resolvía) en vez de cinco.
+      → En el panel los colores se leen de `window.INVPALETAS` buscando la
+        paleta elegida en `fx.paleta`, que es la fuente de verdad y sí está
+        disponible acá. Lo publica `paleta.js`, igual que usa `panel-paleta.js`.
+
    ⚠️ NO SE BORRA LA CLAVE PARA VOLVER A AUTOMÁTICO: SE GUARDA UNA LISTA VACÍA.
       `INV.saveEvento` guarda con merge. Borrar `colores` del borrador NO lo
       borra en Firestore: queda la lista anterior y los círculos "no se apagan".
@@ -20,11 +32,10 @@
       vista previa se refresca… y no guarda nada. Parece andar y no anda.
       Por eso `datos()` se llama de nuevo adentro de cada handler.
 
-   ⚠️ LOS `input type="color"` DEVUELVEN SIEMPRE `#rrggbb`. La paleta de la
-      invitación puede tener colores en otros formatos; al pasarlos al selector
-      se normalizan a hex, y eso está bien: a partir de ahí son colores propios
-      de esta invitación y ya no siguen a la paleta. Es exactamente lo que
-      Jazmín quiere cuando los toca.
+   ⚠️ LOS `input type="color"` DEVUELVEN SIEMPRE `#rrggbb`. Al pasar los colores
+      de la paleta al selector se normalizan a hex, y eso está bien: a partir de
+      ahí son colores propios de esta invitación y ya no siguen a la paleta. Es
+      exactamente lo que Jazmín quiere cuando los toca.
 
    ⚠️ `D` (el borrador) NO cuelga de window: es un `const` del script principal.
       Misma nota en panel-fondo.js, panel-rsvp.js, panel-motivo.js,
@@ -34,6 +45,9 @@
 
   var ID = 'dresscode-selector';
   var MAX = 8;
+  /* las cinco claves de una paleta que se usan para vestir: tres de color, una
+     neutra y una clara */
+  var CLAVES = ['verde', 'sage', 'oro', 'muted', 'cream'];
   var POR_DEFECTO = ['#44513f', '#7d8a72', '#b9a56a', '#6e6058', '#e9e8dd'];
 
   function borrador() {
@@ -61,17 +75,39 @@
     refrescar();
   }
 
-  /* de la paleta que está puesta ahora en el panel, si se puede leer */
+  /* Los colores de la paleta elegida.
+     ⚠️ Primero de `INVPALETAS`, que es la fuente de verdad y la única que
+        funciona acá adentro. Ver la nota grande de arriba. */
   function deLaPaleta() {
     try {
+      var d = borrador() || {};
+      var id = ((d.fx || {}).paleta) || '';
+      var todas = window.INVPALETAS || [];
+      var p = null, i;
+      for (i = 0; i < todas.length; i++) if (todas[i].id === id) { p = todas[i]; break; }
+      if (!p && todas.length) p = todas[0];
+      if (p) {
+        var out = [];
+        CLAVES.forEach(function (k) {
+          var x = (p[k] || '').trim();
+          if (x && out.indexOf(x) < 0) out.push(x);
+        });
+        if (out.length) return out;
+      }
+    } catch (e) {}
+
+    /* por si algún día esto corre en un documento donde SÍ están las variables */
+    try {
       var cs = getComputedStyle(document.documentElement);
-      var out = [];
+      var o2 = [];
       ['--verde', '--sage', '--oro', '--muted', '--cream'].forEach(function (v) {
         var x = (cs.getPropertyValue(v) || '').trim();
-        if (x && x.charAt(0) === '#' && out.indexOf(x) < 0) out.push(x);
+        if (x && x.charAt(0) === '#' && o2.indexOf(x) < 0) o2.push(x);
       });
-      return out.length ? out : POR_DEFECTO.slice();
-    } catch (e) { return POR_DEFECTO.slice(); }
+      if (o2.length >= 3) return o2;
+    } catch (e) {}
+
+    return POR_DEFECTO.slice();
   }
 
   function construir() {
@@ -91,7 +127,7 @@
     caja.appendChild(a);
 
     var fila = document.createElement('div');
-    fila.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:9px';
+    fila.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px';
     caja.appendChild(fila);
 
     var pie = document.createElement('div');
@@ -117,8 +153,8 @@
       fila.textContent = '';
 
       arr.forEach(function (c, i) {
-        var envoltorio = document.createElement('span');
-        envoltorio.style.cssText = 'position:relative;display:inline-block;line-height:0';
+        var env = document.createElement('span');
+        env.style.cssText = 'position:relative;display:inline-block;line-height:0';
 
         var inp = document.createElement('input');
         inp.type = 'color';
@@ -142,9 +178,9 @@
           var l = lista(); l.splice(i, 1); guardar(l); pintar();
         };
 
-        envoltorio.appendChild(inp);
-        envoltorio.appendChild(x);
-        fila.appendChild(envoltorio);
+        env.appendChild(inp);
+        env.appendChild(x);
+        fila.appendChild(env);
       });
 
       pie.textContent = '';
@@ -193,7 +229,7 @@
     var ancla = document.getElementById('coleccion-selector') ||
                 document.getElementById('paleta-selector');
     caja = construir();
-    /* una vez que Jazmín toca algo, se deja de repintar solo para no
+    /* una vez que Jazmín toca algo se deja de repintar solo, para no
        interrumpirla mientras elige */
     caja.addEventListener('input', function () { caja.dataset.tocado = '1'; });
     caja.addEventListener('click', function () { caja.dataset.tocado = '1'; });
