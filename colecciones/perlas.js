@@ -12,33 +12,82 @@
    ⚠️ VIENE APAGADA. Sin `INVEV.fx.coleccion === 'perlas'` no hace nada.
       Para probar sin tocar la base: `?coleccion=perlas`
 
-   ★★★★ LA LECCIÓN MÁS CARA DE ESTE ARCHIVO ★★★★
-      Maki revisó la primera versión completa y la mayoría de lo que estaba mal
-      no eran bugs: era que yo colocaba las piezas POR REGLA Y NO POR CRITERIO.
-      Textual: «está puesto así por poner».
-      Un adorno en un lugar que no le corresponde no es neutro: ensucia.
-      → Antes de colocar algo: mirar la sección, entender qué hay, y si no hay
-        un lugar bueno, NO PONERLO. Que falte es mejor que que sobre.
+   ★★★★★ LA LECCIÓN MÁS CARA DE TODAS ★★★★★
+      Maki, textual: «tu problema es que no ves la muestra. Tendrías que ver la
+      muestra, pensar cómo adaptar todo a la nuestra, y cuando lo adaptás,
+      VOLVER a la muestra a ver si tiene algo que ver. Porque si ves que la
+      bandeja de plata tiene una frase arriba, adiviná dónde tendría que estar
+      en nuestra invi».
+
+      Yo miré la referencia UNA vez, saqué reglas abstractas (tipografía, aire,
+      bandas de color) y después coloqué las piezas por regla, sin volver a
+      mirar dónde estaba cada objeto ni qué sostenía. Por eso salió «está
+      puesto así por poner».
+
+      EL IDIOMA DE LA MUESTRA, QUE ES LO QUE NO HABÍA VISTO:
+      **cada objeto es el SOPORTE de un texto, no un adorno al lado.**
+        · la bandeja de plata      → sostiene la tarjeta del LUGAR
+        · el sobre con el moño     → sostiene la tarjeta del CANAL
+        · el sobre abierto y el clip → sostienen la CARTA
+      Se fotografía el objeto y el texto va ENCIMA, como elemento del DOM.
+      La foto no necesita traer el texto: la tarjeta la dibujo yo.
+
+      → EL MÉTODO, DE ACÁ EN ADELANTE. Antes de colocar cualquier pieza:
+        1. buscarla en la muestra y ver QUÉ SOSTIENE;
+        2. buscar en la nuestra la sección que dice eso mismo;
+        3. colocarla ahí, o no colocarla;
+        4. mirarla en el navegador ANTES de subirla.
+        Si no hay una sección que diga lo mismo, no se pone. Que falte es
+        mejor que que sobre.
+
+   ★★★ MAPA MUESTRA → NUESTRA INVITACIÓN (Pavel & Lada) ★★★
+      | En la muestra              | Objeto              | Nuestra sección     |
+      |----------------------------|---------------------|---------------------|
+      | DEAR FRIENDS! You're inv.  | sobre abierto+clip  | #carta-sec ⚠ ver ↓  |
+      | VENUE / Save the place!    | bandeja de plata    | "Dónde y cuándo" ✅  |
+      | PROGRAM / of the day       | hilo + broche       | itinerario `.tl` ✅  |
+      | DRESS CODE / colors        | círculos de color   | Vestimenta ✅        |
+      | OUR CHANNEL / Telegram     | sobre con moño      | #contacto-sec ✅     |
+      | WISHES                     | dos corazones       | Mesa de regalos ✅    |
+      | portada                    | collar grande       | ❌ FALTA LA FOTO     |
+
+      ⚠️ #carta-sec ("Confirma tu lugar") YA TIENE el sobre con la carta que
+         sale: `.cartafx` con `.cf-back` / `.cf-letter` / `.cf-front`, y las
+         imágenes salen del catálogo de sobres. Maki: «nosotros ya tenemos esa
+         sección armada, sólo hay que cambiar el sobre». O sea: NO hay que
+         construir nada acá, hay que sumar un modelo de sobre con perlas al
+         catálogo. Es la tarea #47 y necesita fotos nuevas.
+
+      ❌ EL COLLAR DE LA PORTADA no se puede hacer repitiendo la perla suelta:
+         «se nota que están dibujadas». En la muestra es UNA FOTO de un collar
+         de verdad, grande, apoyado sobre el papel crema, con relieve y sombra.
+         Hace falta la foto. Sin ella esto no se parece a la muestra.
 
    ★★★ ANTES DE AGREGAR UN NODO A UNA SECCIÓN, MIRAR SU `display` ★★★
-      La sección de la frase (`.fraseSec`) es `display:flex; flex-direction:row`.
-      Al agregarle la foto del sobre como hijo normal, la imagen se convirtió en
-      UNA COLUMNA MÁS y le robó el ancho al texto: el párrafo pasó de 375 px a
-      177 px y se salió a `left:-62`. Eso es el «texto que sobresale» que vio
-      Maki, y lo causé yo.
+      `.fraseSec` es `display:flex; flex-direction:row`. Al agregarle la foto
+      del sobre como hijo normal, la imagen se convirtió en UNA COLUMNA MÁS y
+      le robó el ancho al texto: el párrafo pasó de 375 px a 177 px y se salió
+      a `left:-62`. Eso es el «texto que sobresale» que vio Maki.
       → Lo que se agregue a una sección desconocida va `position:absolute`, o
         primero se comprueba que la sección no sea flex ni grid.
 
    ★★★ UNA FOTO RECTANGULAR SOBRE PAPEL SE VE COMO UN PARCHE ★★★
-      Aunque el archivo traiga los bordes difuminados, el tono del papel de la
-      foto nunca es EXACTAMENTE el de la sección, y el ojo ve un cuadrado más
-      claro. La primera versión del sobre en la frase se leía como una calcomanía.
-      → Se disuelve con `mask-image: radial-gradient(...)` en el CSS. La máscara
-        se aplica al RENDER, así que se puede afinar sin regenerar el archivo, y
-        deja sólo el objeto con su sombra, sin caja.
-      ⚠️ `mix-blend-mode: multiply` acá SÍ sirve, porque la máscara ya recortó
-         lo que sobraba. Sobre un PNG con alfa sin máscara NO sirve: el color de
-         fondo llena la caja y las partes transparentes se vuelven un cuadrado.
+      El tono del papel de la foto nunca es EXACTAMENTE el de la sección, y el
+      ojo ve un cuadrado más claro.
+      → Se disuelve con `mask-image: radial-gradient(...)`. La máscara se
+        aplica al RENDER: se afina sin regenerar el archivo.
+      ⚠️ Y SÓLO FUNCIONA EN SECCIÓN CLARA. Sobre `.sec.verde` el papel marfil
+         de la foto entra como un rectángulo claro, con máscara y todo. Por eso
+         "Dónde y cuándo" pasa a crema — que además es lo que hace la muestra.
+
+   ★★★ LOS "PÉTALOS" ERAN LO QUE MAKI VEÍA COMO PERLAS DIBUJADAS ★★★
+      `.fxlayer .fxp.petalo` son pétalos ROSAS que caen, un efecto de ambiente
+      del panel. Sobre la foto de portada en blanco y negro se leen como
+      manchas grises planas, sin relieve. Eso era «las perlas de la portada se
+      nota que están dibujadas», y yo estaba buscando el bug en el motivo, que
+      ya estaba en `discreto`.
+      → En esta colección el pétalo pasa a ser LA PERLA fotográfica, chica.
+        Sigue siendo el interruptor de Jazmín: si lo apaga, no cae nada.
 
    ★★★ CÓMO SE CAMBIAN LOS TAMAÑOS: SE SETEAN LAS VARIABLES DEL MOTOR ★★★
       El motor aplica su escala con `!important`, así que una regla propia de
@@ -51,20 +100,19 @@
 
    ★★★ LOS NOMBRES DE LA PORTADA LOS MANDA JAZMÍN ★★★
       El motor les escribe familia, tamaño y color EN LÍNEA desde `nfont`,
-      `nsize`, `ncolor`. Con `nfont` elegida la colección NO los toca (ni las
-      mayúsculas: en una manuscrita quedan horribles, va todo junto o nada).
+      `nsize`, `ncolor`. Con `nfont` elegida la colección NO los toca.
 
    ★★★ NUNCA GUARDAR UNA COPIA DEL HTML PARA "DESHACER" ★★★
       Guardar `h1.innerHTML` para restaurarlo hacía aparecer "María & Diego",
       los nombres de la BODA DE EJEMPLO: el motor dibuja el ejemplo primero.
+      → Deshacer SIEMPRE estructuralmente, desde el DOM vivo.
 
    ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★
       Al bajar el `.kick` los aros ⚭ se fueron con él. El motor los reinserta en
-      cada pasada, así que `acomodar()` corre en el bucle de 400 ms.
+      cada pasada, así que `acomodar()` corre en el bucle de 400 ms. Lo mismo
+      vale para las piezas: TODO lo que mueve nodos se vuelve a correr.
 
    ★ EL MOTIVO: SE SUGIERE `discreto`, NO `todo`
-      Maki: «las perlas de la portada se nota que están dibujadas» y «hay
-      perlas desparramadas que pisan los textos».
       Repetir una misma foto muchas veces y GRANDE se lee como dibujo, aunque
       cada unidad sea fotográfica: el ojo ve el patrón, no la perla.
       → `discreto` = hilo entre secciones + corazones del final.
@@ -75,33 +123,16 @@
       `.tl-prog` se ESCONDE: el motor la anima con `scaleY` y escalar un fondo
       repetido deja las perlas ovaladas.
 
-   ★★★ LAS PIEZAS FOTOGRAFIADAS: QUÉ QUEDÓ Y QUÉ SE SACÓ ★★★
-      Las cinco están en `window.INVPIEZAS` y las cinco siguen disponibles.
-      Se COLOCA sólo lo que tiene un lugar bueno:
-        · broche → SÍ. Al final del hilo del programa (`.tl`).
-        · sobre  → SÍ, chico, ABSOLUTO y con máscara, en la esquina de la frase.
-        · dije   → NO. Maki: «no es de calidad, está puesto así por poner».
-        · bandeja→ NO. Su sección es oscura y la alternativa que eligió el
-          código estaba OCULTA (alto 0). Vuelve con un lugar pensado.
-        · moño   → NO. Terminaba debajo de la galería: «no le encontré sentido».
-
-      ⚠️ NO ALCANZA CON QUE LA SECCIÓN SEA CLARA: hay que mirar que exista, que
-         se vea y que la pieza tenga que ver con lo que dice esa sección.
-
    ★ LA SECCIÓN DE LA FRASE SE LIMPIA
-      Maki: «los cosos esos rojos que se ven de fondo con la imagen que quedó,
-      sacalo». Son `.frasefx.fx-bokeh` y la foto de fondo. Con la colección la
-      frase va sobre papel limpio y el texto más chico.
+      «los cosos esos rojos que se ven de fondo con la imagen, sacalo». Son
+      `.frasefx.fx-bokeh` y la foto de fondo.
 
    ★ `.padres` ES UNA GRILLA DE 2 COLUMNAS
-      Con 3 personas la tercera queda sola abajo. Maki: «si ponés 3 pueden ir
-      las 3 juntas, si son 4, 2 y 2».
-      → Se marca `data-col-n` con la cantidad y el CSS arma la grilla.
+      Con 3 personas la tercera queda sola abajo. «si ponés 3 pueden ir las 3
+      juntas, si son 4, 2 y 2». → `data-col-n` y el CSS arma la grilla.
 
    ⚠️ LOS TÍTULOS EN ESPAÑOL DE MÉXICO SON MÁS LARGOS: los tamaños van con
       `clamp()`. NUNCA acortar el texto del cliente.
-
-   ⚠️ LA INCLINACIÓN DE LAS FOTOS NO VA EN FOTOS CON `.reveal`.
    ============================================================================ */
 (function () {
   'use strict';
@@ -131,7 +162,8 @@
   function laPerla() { try { return window.INVPERLA || ''; } catch (e) { return ''; } }
   function laPieza(k) { try { return (window.INVPIEZAS || {})[k] || ''; } catch (e) { return ''; } }
 
-  var MASCARA = 'radial-gradient(ellipse 58% 58% at 50% 50%,#000 40%,transparent 76%)';
+  var MASCARA  = 'radial-gradient(ellipse 58% 58% at 50% 50%,#000 40%,transparent 76%)';
+  var MASCARA2 = 'radial-gradient(ellipse 76% 84% at 50% 48%,#000 58%,transparent 92%)';
 
   var CSS = [
 
@@ -177,6 +209,15 @@
     'h[c] .portada .pbg,h[c] .portada .cover-vid{' +
       'filter:grayscale(1) contrast(1.06) brightness(.98)}',
 
+    /* ── LO QUE CAE: LA PERLA, NO UN PÉTALO ROSA ──────────────────────────
+       Ver la nota grande de arriba: los pétalos rosas sobre la portada en
+       blanco y negro son las «perlas dibujadas» que vio Maki. */
+    'h[p] .fxlayer .fxp{' +
+      'background:var(--col-perla) no-repeat center/contain!important;' +
+      'border-radius:0!important;width:9px!important;height:9px!important;' +
+      'opacity:.5!important;' +
+      'filter:drop-shadow(0 1px 1px rgba(60,50,40,.25))!important}',
+
     /* ── LAS FOTOS DEL CLIENTE, COMO OBJETOS APOYADOS ─────────────────── */
     'h[c] .sec > img{' +
       'background:#fff;padding:9px;border-radius:2px;' +
@@ -219,13 +260,67 @@
       'position:absolute;width:22px;height:auto;left:-4px;bottom:-11px;' +
       'filter:drop-shadow(0 1px 2px rgba(60,50,40,.24))}',
 
-    /* el sobre: chico, absoluto y DISUELTO con máscara. Ver la nota de arriba:
-       sin la máscara se ve el cuadrado del papel de la foto. */
+    /* el sobre: chico, ABSOLUTO y disuelto. Ver la nota del flex de arriba. */
     'h[c] .fraseSec .col-sobre{' +
       'position:absolute;right:2px;bottom:0;width:118px;height:auto;z-index:1;' +
       'opacity:.95;mix-blend-mode:multiply;' +
       '-webkit-mask-image:' + MASCARA + ';mask-image:' + MASCARA + '}',
     '@media (max-width:360px){h[c] .fraseSec .col-sobre{width:96px}}',
+
+    /* ── LA TARJETA APOYADA: el patrón de toda la muestra ─────────────── */
+    'h[c] .col-tarjeta{' +
+      'position:relative;background:#fdfcf8;border:1px solid rgba(120,105,85,.14);' +
+      'border-radius:1px;text-align:center;' +
+      'box-shadow:0 1px 2px rgba(60,50,40,.09),0 12px 30px rgba(60,50,40,.14)}',
+
+    /* ── "¿ALGUNA DUDA?" = OUR CHANNEL ────────────────────────────────────
+       Misma estructura que la muestra: título + cursiva + el sobre con el
+       moño de soporte + la tarjeta con el texto y los botones encima.
+       Y se apaga la foto de stock, que dejaba el título ilegible. */
+    'h[c] #contacto-sec{' +
+      'background-image:none!important;background-color:var(--lino,#f4f3ec)!important;' +
+      'padding-bottom:56px!important}',
+    'h[c] .col-canal{position:relative;max-width:322px;margin:0 auto}',
+    'h[c] .col-canal .col-mono{' +
+      'width:100%;height:auto;display:block;' +
+      '-webkit-mask-image:' + MASCARA2 + ';mask-image:' + MASCARA2 + '}',
+    'h[c] .col-canal .col-tarjeta{width:72%;margin:-20% auto 0;padding:18px 14px 16px}',
+    'h[c] .col-canal .col-tarjeta > p{margin:0 0 14px!important;max-width:none!important;' +
+      'font-size:13px!important;line-height:1.7!important}',
+    'h[c] .col-canal .col-tarjeta .wsp{' +
+      'display:block!important;margin:7px auto 0!important;' +
+      'width:100%!important;max-width:100%!important;box-sizing:border-box!important;' +
+      'padding:8px 6px!important;font-size:9px!important;letter-spacing:.14em!important;' +
+      'text-transform:uppercase!important;font-family:Montserrat,sans-serif!important;' +
+      'box-shadow:0 1px 2px rgba(60,50,40,.18)!important;border-radius:999px!important}',
+
+    /* ── "DÓNDE Y CUÁNDO" = VENUE ─────────────────────────────────────────
+       La bandeja es el MARCO de la tarjeta del lugar, y los eventos van
+       juntos en UNA tarjeta con una línea en el medio, como CEREMONY y
+       BANQUET en la muestra.
+       ⚠️ La sección pasa a crema a propósito: ver la nota de la máscara. */
+    'h[c] .sec[data-col-lugar]{' +
+      'background:var(--lino,#f4f3ec)!important;color:var(--verde,#44513f)!important}',
+    'h[c] .sec[data-col-lugar] h2,h[c] .sec[data-col-lugar] .kick,' +
+    'h[c] .sec[data-col-lugar] h3,h[c] .sec[data-col-lugar] .sub,' +
+    'h[c] .sec[data-col-lugar] .addr,h[c] .sec[data-col-lugar] p{' +
+      'color:var(--verde,#44513f)!important}',
+
+    'h[c] .col-lugar{' +
+      'position:relative;max-width:344px;margin:4px auto 0;box-sizing:border-box;' +
+      'padding:52px 40px;' +
+      'background:var(--col-bandeja) no-repeat center/100% 100%}',
+    'h[c] .col-lugar .col-bandeja{display:none}',
+    'h[c] .col-lugar .col-tarjeta{padding:2px 12px}',
+    'h[c] .col-lugar .evento{' +
+      'background:none!important;border:0!important;box-shadow:none!important;' +
+      'margin:0!important;padding:14px 0!important;max-width:none!important}',
+    'h[c] .col-lugar .evento + .evento{border-top:1px solid rgba(120,105,85,.18)!important}',
+    'h[c] .col-lugar .ph{display:none!important}',
+    'h[c] .col-lugar .bd{padding:0!important}',
+    'h[c] .col-lugar .btn{' +
+      'font-size:8.5px!important;letter-spacing:.12em!important;padding:6px 9px!important}',
+    '@media (max-width:360px){h[c] .col-lugar{padding:44px 30px}}',
 
     /* ── LA PORTADA ───────────────────────────────────────────────────── */
     'h[c] .portada .kicker{' +
@@ -285,7 +380,13 @@
     } catch (e) {}
   }
 
-  /* ---- LAS PIEZAS: sólo las que tienen un lugar bueno --------------------- */
+  /* =====================================================================
+     LAS PIEZAS
+     Cada una va donde la muestra la tiene, SOSTENIENDO el texto de esa
+     sección. Ver el mapa del encabezado. Todo esto se vuelve a correr en el
+     bucle de 400 ms porque el motor reinserta nodos en cada pasada.
+     ===================================================================== */
+
   function unaImagen(clave, clase) {
     var src = laPieza(clave);
     if (!src) return null;
@@ -296,25 +397,99 @@
     return i;
   }
 
-  function colocarPiezas() {
+  /* arma el par «foto de soporte + tarjeta encima», que es el patrón de toda
+     la referencia. Devuelve la tarjeta, o null si falta la foto. */
+  function soporte(seccion, clavePieza, claseImg, claseCaja) {
+    var w = seccion.querySelector('.' + claseCaja);
+    if (!w) {
+      var img = unaImagen(clavePieza, claseImg);
+      if (!img) return null;
+      w = document.createElement('div');
+      w.className = claseCaja;
+      var t = document.createElement('div');
+      t.className = 'col-tarjeta';
+      w.appendChild(img);
+      w.appendChild(t);
+      seccion.appendChild(w);
+    }
+    if (seccion.lastElementChild !== w) seccion.appendChild(w);
+    return w.querySelector('.col-tarjeta');
+  }
+
+  /* ---- el broche cierra el hilo del programa ----------------------------- */
+  function armarBroche() {
     var tl = document.querySelector('.tl');
     if (tl && !tl.querySelector('.col-broche')) {
       var b = unaImagen('broche', 'col-broche');
       if (b) tl.appendChild(b);
     }
+  }
 
-    /* ⚠️ ABSOLUTO A PROPÓSITO: `.fraseSec` es flex en fila y un hijo normal le
-       roba el ancho al texto. Ver la nota grande de arriba. */
+  /* ---- el sobre chico, en la esquina de la frase ------------------------- */
+  function armarFrase() {
     var fs = document.querySelector('.fraseSec');
     if (fs && !fs.querySelector('.col-sobre')) {
       var s = unaImagen('sobre', 'col-sobre');
       if (s) fs.appendChild(s);
     }
-
-    /* dije, bandeja y moño NO se colocan: sin lugar bueno todavía. */
   }
 
+  /* ---- "¿Alguna duda?" = OUR CHANNEL ------------------------------------- */
+  function armarCanal() {
+    var s = document.getElementById('contacto-sec');
+    if (!s) return;
+    var t = soporte(s, 'mono', 'col-mono', 'col-canal');
+    if (!t) return;
+    /* el párrafo primero y después los botones, como en la muestra */
+    var p = s.querySelector('#contacto-frase');
+    if (p && p.parentElement !== t) t.appendChild(p);
+    [].forEach.call(s.querySelectorAll('.wsp'), function (a) {
+      if (a.parentElement !== t) t.appendChild(a);
+    });
+  }
+
+  /* ---- "Dónde y cuándo" = VENUE ------------------------------------------
+     Se busca por el id de un evento, NO por el texto del título: el título lo
+     escribe el cliente y puede decir cualquier cosa. */
+  function laSeccionDelLugar() {
+    var e = document.getElementById('ev1-t');
+    return e ? e.closest('.sec') : null;
+  }
+
+  function armarLugar() {
+    var s = laSeccionDelLugar();
+    if (!s) return;
+    var t = soporte(s, 'bandeja', 'col-bandeja', 'col-lugar');
+    if (!t) return;
+    if (!s.hasAttribute('data-col-lugar')) s.setAttribute('data-col-lugar', '');
+    /* los eventos con datos van a la tarjeta; los vacíos se quedan afuera */
+    [].forEach.call(s.querySelectorAll(':scope > .evento'), function (e) {
+      var h = e.querySelector('h3');
+      if (h && (h.textContent || '').trim()) t.appendChild(e);
+    });
+  }
+
+  function colocarPiezas() {
+    armarBroche();
+    armarFrase();
+    armarCanal();
+    armarLugar();
+  }
+
+  /* ---- deshacer: los nodos VUELVEN a su sección, y recién ahí se borra la
+     caja. Nunca se borra una caja con contenido del motor adentro. -------- */
   function sacarPiezas() {
+    [].forEach.call(document.querySelectorAll('.col-canal,.col-lugar'), function (w) {
+      var s = w.parentElement;
+      var t = w.querySelector('.col-tarjeta');
+      if (s && t) {
+        while (t.firstChild) s.insertBefore(t.firstChild, w);
+      }
+      w.remove();
+    });
+    [].forEach.call(document.querySelectorAll('[data-col-lugar]'), function (s) {
+      s.removeAttribute('data-col-lugar');
+    });
     [].forEach.call(document.querySelectorAll('.col-pza'), function (e) { e.remove(); });
   }
 
@@ -330,10 +505,7 @@
     if (p) delete p.dataset.colN;
   }
 
-  /* ---- títulos blancos sobre fondo claro ---------------------------------
-     "Confirma tu lugar" salía en blanco sobre papel blanco. Se mira el color
-     REAL y sólo se corrige si está casi blanco en una sección que no es de
-     color. Se guarda la marca para poder deshacerlo. */
+  /* ---- títulos blancos sobre fondo claro --------------------------------- */
   function claridad(c) {
     var m = (c || '').match(/[\d.]+/g);
     if (!m || m.length < 3) return null;
@@ -427,6 +599,8 @@
       raiz.style.setProperty('--col-perla', 'url("' + p + '")');
       raiz.setAttribute(MARCA_P, '');
     }
+    var b = laPieza('bandeja');
+    if (b) raiz.style.setProperty('--col-bandeja', 'url("' + b + '")');
 
     sugerirMotivo();
 
@@ -452,6 +626,7 @@
     raiz.removeAttribute(MARCA_T);
     raiz.removeAttribute(MARCA_P);
     raiz.style.removeProperty('--col-perla');
+    raiz.style.removeProperty('--col-bandeja');
     sacarPiezas();
     desmarcarPadres();
     soltarContraste();
