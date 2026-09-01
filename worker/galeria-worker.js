@@ -39,6 +39,9 @@
                      Sólo para los uid de ADMIN_UIDS, con su sesión de Firebase.
      POST /marca   → la marca del fotógrafo (nombre, logo y color), con la
                      sesión de Firebase del propio cliente.
+     POST /ajustes → cambiar la moderación de una fiesta EN EL MOMENTO:
+                     'modo' (auto/previa, manda sobre fotos y mensajes) y
+                     'audios' (si acepta saludos de voz). Sólo el dueño.
      POST /firmar  → el libro de firmas: un mensaje escrito o un audio.
                      Mismo circuito que /subir: topes, moderación y estado.
      GET  /uso     → cuánto se lleva usado este mes contra el tope
@@ -61,6 +64,7 @@ export default {
       if (ruta === '/crear' && req.method === 'POST') return await crear(req, env);
       if (ruta === '/cuenta' && req.method === 'POST') return await ponerCuenta(req, env);
       if (ruta === '/marca' && req.method === 'POST') return await ponerMarca(req, env, ctx);
+      if (ruta === '/ajustes' && req.method === 'POST') return await ponerAjustes(req, env);
       if (ruta === '/firmar' && req.method === 'POST') return await firmar(req, env, ctx);
       if (ruta.startsWith('/f/') && req.method === 'GET') return await servir(req, env, ctx, ruta.slice(3), url);
       if (ruta === '/qr' && req.method === 'GET') return qr(url);
@@ -216,6 +220,11 @@ async function crear(req, env) {
       hasta: b.hasta || new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString()
     },
     modo: b.modo === 'auto' ? 'auto' : 'previa',
+    /* Los saludos de voz vienen APAGADOS de fábrica. Decisión de Maki (1/9):
+       es lo único que ninguna máquina puede filtrar, así que nadie se lo
+       encuentra prendido sin haberlo pedido. Y cuando se prenden, igual
+       esperan aprobación siempre — ver más abajo, en /firmar. */
+    audios: b.audios === true || b.audios === 'true',
     marca: {
       logo: b.logo || dela.logo || null,
       color: /^#[0-9a-fA-F]{6}$/.test(b.color || '') ? b.color
@@ -401,6 +410,65 @@ async function ponerMarca(req, env, ctx) {
   return respuesta({ ok: true, marca: d.marca || marca }, 200);
 }
 
+/* ---------------- /ajustes: cambiar la moderación en el momento ----------
+   Decisión de Maki (1/9/2026): «no va a haber una persona moderando 1000
+   fiestas un sábado». Hasta hoy TODAS las fiestas se creaban con aprobación
+   manual, porque nadie mandaba nunca el campo `modo` — existía en el Worker y
+   no había forma de tocarlo desde ninguna pantalla.
+
+   Dos cosas, y son distintas a propósito:
+
+   · `modo` manda sobre las FOTOS y los MENSAJES. En 'auto' salen solos, pero
+     igual pasan por el filtro: Sightengine para las fotos, la lista de
+     palabras para los mensajes. Automático quiere decir SIN PERSONA, no sin
+     filtro.
+
+   · `audios` es un interruptor aparte y viene APAGADO. Un saludo de voz no lo
+     puede juzgar ninguna máquina y suena fuerte en un salón lleno, así que
+     nadie se lo encuentra prendido sin haberlo pedido — y cuando lo prende,
+     esos audios esperan aprobación siempre, esté en automático o no.
+
+   Esto se puede cambiar EN EL MOMENTO, a mitad de la fiesta: si a las dos de
+   la mañana se descontrola, se prende la aprobación y listo.
+
+   ⚠️ Sólo el dueño de la fiesta, o Maki. Sin esto, cualquiera con una cuenta
+   le pondría la fiesta de otro en automático desde la consola del navegador. */
+async function ponerAjustes(req, env) {
+  const quien = await verificarToken(req).catch(() => null);
+  if (!quien) return respuesta({ error: 'Entrá con tu cuenta.' }, 401);
+
+  const b = await req.json().catch(() => ({}));
+  const gid = String(b.gid || '').trim();
+  if (!/^[A-Za-z0-9_-]{16,64}$/.test(gid)) return respuesta({ error: 'evento inválido' }, 400);
+
+  const ev = await leerEvento(env, gid);
+  if (!ev) return respuesta({ error: 'Esa fiesta no existe.' }, 404);
+
+  const admins = String(env.ADMIN_UIDS || '').split(',').map((x) => x.trim()).filter(Boolean);
+  const esDuenio = ev.duenio && ev.duenio === quien.uid;
+  const esAdmin = admins.indexOf(quien.uid) >= 0;
+  if (!esDuenio && !esAdmin) return respuesta({ error: 'Esta fiesta no es tuya.' }, 403);
+
+  /* Sólo se escribe lo que vino. Mandar el modo no tiene por qué apagarle los
+     audios a nadie, ni al revés. */
+  const campos = {};
+  if (b.modo !== undefined) campos.modo = b.modo === 'auto' ? 'auto' : 'previa';
+  if (b.audios !== undefined) campos.audios = b.audios === true || b.audios === 'true';
+  if (!Object.keys(campos).length) return respuesta({ error: 'No vino nada para cambiar.' }, 400);
+
+  const t = await tokenGoogle(env);
+  const mascara = Object.keys(campos).map((k) => 'updateMask.fieldPaths=' + k).join('&');
+  const r = await fetch(FS + '/gal_eventos/' + gid + '?' + mascara, {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: aFirestore(campos) })
+  });
+  if (!r.ok) return respuesta({ error: 'No se pudo guardar (' + r.status + ')' }, 502);
+
+  const d = desdeFirestore((await r.json()).fields || {});
+  return respuesta({ ok: true, modo: d.modo, audios: d.audios === true }, 200);
+}
+
 /* ---------------- /firmar: el libro de firmas ----------------
    Selpix cuenta tres cosas por separado (15 fotos, 20 mensajes, 5 audios),
    así que acá el mensaje y el audio NO son un pie de foto: son cosas sueltas
@@ -468,6 +536,14 @@ async function firmar(req, env, ctx) {
   const ev = await leerEvento(env, gid);
   if (!ev) return respuesta({ error: 'evento inválido' }, 400);
   if (ev.estado === 'cerrada') return respuesta({ error: 'el libro de firmas ya cerró' }, 403);
+
+  /* ⚠️ Los saludos de voz sólo si esta fiesta los aceptó. La galería tampoco
+     muestra el botón de grabar, pero eso es la pantalla: el que decide es el
+     servidor. Un evento viejo, sin el campo, NO acepta audios. */
+  if (esAudio && ev.audios !== true) {
+    return respuesta({ error: 'Esta fiesta no tiene saludos de voz 💛' }, 403);
+  }
+
   const ahora = Date.now();
   const desde = ev.ventana && ev.ventana.desde ? Date.parse(ev.ventana.desde) : 0;
   const hasta = ev.ventana && ev.ventana.hasta ? Date.parse(ev.ventana.hasta) : Infinity;
@@ -521,6 +597,13 @@ async function firmar(req, env, ctx) {
     /* Un audio no se puede filtrar solo: lo escucha una persona. Queda dicho
        en el doc para que el panel no muestre un "filtro OK" que es mentira. */
     doc.mod = { motor: 'ninguno', falla: 'los audios no pasan por filtro automático' };
+    /* ⚠️ SIEMPRE pendiente, aunque la fiesta esté en automático. No es un olvido:
+       es la decisión de Maki del 1/9. El automático manda sobre las fotos (que
+       pasan por Sightengine) y los mensajes (que pasan por la lista de
+       palabras). El audio no pasa por ningún filtro, y suena fuerte en un salón
+       con 200 personas: por eso lo escucha alguien antes, siempre. Y por eso
+       mismo los audios vienen apagados de fábrica: quien los prende sabe que
+       va a tener que aprobarlos. */
     doc.estado = 'pendiente';
   } else {
     doc.texto = texto;
