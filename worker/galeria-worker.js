@@ -22,9 +22,13 @@
                                eventos a mano. NO se le da a nadie: los
                                clientes crean con su cuenta (ver abajo).
      · Variable normal (NO secreto):
-         ADMIN_UIDS          → los uid de Firebase que pueden cargar créditos,
+         ADMIN_UIDS          → los uid de Firebase que pueden CARGAR CRÉDITOS,
                                separados por coma. No es un secreto: un uid no
                                sirve para nada sin la sesión de esa persona.
+                               ⚠️ No confundir con MODERAN (más abajo en este
+                               archivo), que es quién puede MODERAR cualquier
+                               fiesta. Moderar y manejar la plata son dos
+                               permisos distintos, a propósito.
 
    Endpoints:
      POST /subir   → recibe foto+thumb, frena abuso, guarda en R2,
@@ -41,7 +45,8 @@
                      sesión de Firebase del propio cliente.
      POST /ajustes → cambiar la moderación de una fiesta EN EL MOMENTO:
                      'modo' (auto/previa, manda sobre fotos y mensajes) y
-                     'audios' (si acepta saludos de voz). Sólo el dueño.
+                     'audios' (si acepta saludos de voz). Sólo el dueño de la
+                     fiesta, o quien esté en MODERAN (Maki y Jazmín).
      POST /firmar  → el libro de firmas: un mensaje escrito o un audio.
                      Mismo circuito que /subir: topes, moderación y estado.
      GET  /uso     → cuánto se lleva usado este mes contra el tope
@@ -123,7 +128,7 @@ async function subir(req, env, ctx) {
   const kR = 'r:' + quien, kT = 't:' + quien;
   const nR = parseInt(await env.LIMITES.get(kR) || '0', 10);
   const nT = parseInt(await env.LIMITES.get(kT) || '0', 10);
-  if (nR >= rafaga) return respuesta({ error: 'Ya subiste muchas seguidas, esperá un ratito 😉' }, 429);
+  if (nR >= rafaga) return respuesta({ error: 'Ya subiste muchas seguidas, espera un momento 😉' }, 429);
   if (nT >= total) return respuesta({ error: 'Llegaste al máximo de fotos de este evento 💛' }, 429);
   ctx.waitUntil(env.LIMITES.put(kR, String(nR + 1), { expirationTtl: 300 }));
   ctx.waitUntil(env.LIMITES.put(kT, String(nT + 1), { expirationTtl: 60 * 60 * 24 * 3 }));
@@ -136,7 +141,7 @@ async function subir(req, env, ctx) {
   const kMes = 'bytes:' + mes;
   const usado = parseInt(await env.LIMITES.get(kMes) || '0', 10);
   if (usado >= topeBytes) {
-    return respuesta({ error: 'La galería alcanzó su límite de este mes. Escribinos y lo ampliamos.' }, 507);
+    return respuesta({ error: 'La galería alcanzó su límite de este mes. Escríbenos y lo ampliamos.' }, 507);
   }
   ctx.waitUntil(env.LIMITES.put(kMes, String(usado + foto.size + thumb.size),
     { expirationTtl: 60 * 60 * 24 * 70 }));
@@ -190,7 +195,7 @@ async function crear(req, env) {
   let quien = null;
   if (!conClave) {
     quien = await verificarToken(req).catch(() => null);
-    if (!quien) return respuesta({ error: 'Entrá con tu cuenta para crear una fiesta.' }, 401);
+    if (!quien) return respuesta({ error: 'Entra con tu cuenta para crear una fiesta.' }, 401);
   }
 
   const b = await req.json().catch(() => ({}));
@@ -219,7 +224,13 @@ async function crear(req, env) {
       desde: b.desde || new Date().toISOString(),
       hasta: b.hasta || new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString()
     },
-    modo: b.modo === 'auto' ? 'auto' : 'previa',
+    /* AUTOMÁTICO de fábrica. Orden de Maki (1/9): «nunca va a moderar nada, será
+       todo en automático». Antes, si nadie mandaba el campo, la fiesta quedaba en
+       'previa' esperando a un moderador que no iba a venir nunca, y las fotos no
+       aparecían jamás. Sólo se pone en 'previa' si alguien lo pide expresamente.
+       Ojo: automático NO es sin filtro — las fotos siguen pasando por Sightengine
+       y los mensajes por la lista de palabrotas. Lo que no hace falta es UNA PERSONA. */
+    modo: b.modo === 'previa' ? 'previa' : 'auto',
     /* Los saludos de voz vienen APAGADOS de fábrica. Decisión de Maki (1/9):
        es lo único que ninguna máquina puede filtrar, así que nadie se lo
        encuentra prendido sin haberlo pedido. Y cuando se prenden, igual
@@ -270,11 +281,11 @@ async function crear(req, env) {
    El navegador no lleva ninguna clave: lleva el token de esa sesión. */
 async function ponerCuenta(req, env) {
   const quien = await verificarToken(req).catch(() => null);
-  if (!quien) return respuesta({ error: 'Entrá con tu cuenta.' }, 401);
+  if (!quien) return respuesta({ error: 'Entra con tu cuenta.' }, 401);
 
   const admins = String(env.ADMIN_UIDS || '').split(',').map((x) => x.trim()).filter(Boolean);
   if (!admins.length) return respuesta({ error: 'Falta configurar ADMIN_UIDS en el Worker.' }, 500);
-  if (admins.indexOf(quien.uid) < 0) return respuesta({ error: 'Esta pantalla no es para vos.' }, 403);
+  if (admins.indexOf(quien.uid) < 0) return respuesta({ error: 'Esta pantalla no es para ti.' }, 403);
 
   const b = await req.json().catch(() => ({}));
   const uid = String(b.uid || '').trim();
@@ -336,14 +347,14 @@ const MAX_LOGO = 200 * 1024;
 
 async function ponerMarca(req, env, ctx) {
   const quien = await verificarToken(req).catch(() => null);
-  if (!quien) return respuesta({ error: 'Entrá con tu cuenta.' }, 401);
+  if (!quien) return respuesta({ error: 'Entra con tu cuenta.' }, 401);
 
   /* La cuenta tiene que existir. Si no, no hay dónde guardar la marca — y
      además evita que cualquiera con una sesión nos escriba documentos. */
   const t = await tokenGoogle(env);
   const rc = await fetch(FS + '/gal_cuentas/' + quien.uid, { headers: { Authorization: 'Bearer ' + t } });
-  if (rc.status === 404) return respuesta({ error: 'Tu cuenta todavía no está habilitada. Escribinos.' }, 403);
-  if (!rc.ok) return respuesta({ error: 'No se pudo leer tu cuenta. Probá de nuevo.' }, 502);
+  if (rc.status === 404) return respuesta({ error: 'Tu cuenta todavía no está habilitada. Escríbenos.' }, 403);
+  if (!rc.ok) return respuesta({ error: 'No se pudo leer tu cuenta. Inténtalo de nuevo.' }, 502);
   const cuenta = desdeFirestore((await rc.json()).fields || {});
   if (cuenta.estado === 'baja') return respuesta({ error: 'Tu cuenta está dada de baja.' }, 403);
 
@@ -380,7 +391,7 @@ async function ponerMarca(req, env, ctx) {
       const kMes = 'bytes:' + mes;
       const usado = parseInt(await env.LIMITES.get(kMes) || '0', 10);
       if (usado >= topeBytes) {
-        return respuesta({ error: 'La galería alcanzó su límite de este mes. Escribinos y lo ampliamos.' }, 507);
+        return respuesta({ error: 'La galería alcanzó su límite de este mes. Escríbenos y lo ampliamos.' }, 507);
       }
       ctx.waitUntil(env.LIMITES.put(kMes, String(usado + f.size), { expirationTtl: 60 * 60 * 24 * 70 }));
 
@@ -431,11 +442,29 @@ async function ponerMarca(req, env, ctx) {
    Esto se puede cambiar EN EL MOMENTO, a mitad de la fiesta: si a las dos de
    la mañana se descontrola, se prende la aprobación y listo.
 
-   ⚠️ Sólo el dueño de la fiesta, o Maki. Sin esto, cualquiera con una cuenta
+   ⚠️ Sólo el dueño de la fiesta, o quien esté en MODERAN. Sin esto, cualquiera con una cuenta
    le pondría la fiesta de otro en automático desde la consola del navegador. */
+/* ---------- QUIÉN PUEDE MODERAR CUALQUIER FIESTA ----------
+
+   Va en el código y no en una variable de Cloudflare a propósito: un uid NO es un
+   secreto (solo no sirve para nada sin la sesión de esa persona), y ya está así en
+   moderar.html. Las dos listas tienen que decir lo mismo.
+
+   ⚠️ ESTA LISTA NO ES `ADMIN_UIDS`, Y ES A PROPÓSITO.
+   `ADMIN_UIDS` es quién puede CARGAR CRÉDITOS — o sea, la plata. Moderar es otra
+   cosa. Jazmín modera las fiestas; no tiene por qué poder regalarle créditos a
+   ninguna cuenta. Si se metiera su uid en `ADMIN_UIDS` para que pudiera moderar,
+   de paso le estaríamos dando la caja. Por eso son dos listas.
+
+   gokx… = Maki · NYR6… = Jazmín (jazmin@invitame.local, alta el 27/8/2026) */
+const MODERAN = [
+  'gokxWGUaw3e3NBWjeCpYUXaZdY03',
+  'NYR66cd13ofVY1T2xjT5HHzRXYq2'
+];
+
 async function ponerAjustes(req, env) {
   const quien = await verificarToken(req).catch(() => null);
-  if (!quien) return respuesta({ error: 'Entrá con tu cuenta.' }, 401);
+  if (!quien) return respuesta({ error: 'Entra con tu cuenta.' }, 401);
 
   const b = await req.json().catch(() => ({}));
   const gid = String(b.gid || '').trim();
@@ -446,7 +475,7 @@ async function ponerAjustes(req, env) {
 
   const admins = String(env.ADMIN_UIDS || '').split(',').map((x) => x.trim()).filter(Boolean);
   const esDuenio = ev.duenio && ev.duenio === quien.uid;
-  const esAdmin = admins.indexOf(quien.uid) >= 0;
+  const esAdmin = admins.indexOf(quien.uid) >= 0 || MODERAN.indexOf(quien.uid) >= 0;
   if (!esDuenio && !esAdmin) return respuesta({ error: 'Esta fiesta no es tuya.' }, 403);
 
   /* Sólo se escribe lo que vino. Mandar el modo no tiene por qué apagarle los
@@ -522,13 +551,13 @@ async function firmar(req, env, ctx) {
   /* qué mandó, y que tenga sentido */
   if (esAudio) {
     if (!audio || typeof audio === 'string') return respuesta({ error: 'faltó el audio' }, 400);
-    if (audio.size > MAX_AUDIO) return respuesta({ error: 'El saludo quedó muy largo. Probá uno más corto 💛' }, 400);
-    if (audio.size < 800) return respuesta({ error: 'El saludo salió vacío. Probá de nuevo.' }, 400);
+    if (audio.size > MAX_AUDIO) return respuesta({ error: 'El saludo quedó muy largo. Intenta uno más corto 💛' }, 400);
+    if (audio.size < 800) return respuesta({ error: 'El saludo salió vacío. Inténtalo de nuevo.' }, 400);
     if (segundos > MAX_SEGUNDOS) return respuesta({ error: 'El saludo puede durar hasta un minuto 💛' }, 400);
   } else {
     /* nada de caracteres de control: rompen la pantalla del salón */
     texto = texto.replace(CONTROLES, '').trim();
-    if (!texto) return respuesta({ error: 'Escribí algo primero 💛' }, 400);
+    if (!texto) return respuesta({ error: 'Escribe algo primero 💛' }, 400);
     if (texto.length > MAX_TEXTO) return respuesta({ error: 'El mensaje puede tener hasta 500 letras.' }, 400);
   }
 
@@ -572,7 +601,7 @@ async function firmar(req, env, ctx) {
   const kMes = 'bytes:' + mes;
   const usado = parseInt(await env.LIMITES.get(kMes) || '0', 10);
   if (usado >= topeBytes) {
-    return respuesta({ error: 'La galería alcanzó su límite de este mes. Escribinos y lo ampliamos.' }, 507);
+    return respuesta({ error: 'La galería alcanzó su límite de este mes. Escríbenos y lo ampliamos.' }, 507);
   }
   ctx.waitUntil(env.LIMITES.put(kMes, String(usado + bytes), { expirationTtl: 60 * 60 * 24 * 70 }));
 
@@ -691,9 +720,9 @@ async function cobrarCredito(env, uid) {
   for (let intento = 0; intento < 4; intento++) {
     const r = await fetch(FS + '/gal_cuentas/' + uid, { headers: { Authorization: 'Bearer ' + t } });
     if (r.status === 404) {
-      return { ok: false, status: 403, error: 'Tu cuenta todavía no está habilitada. Escribinos.' };
+      return { ok: false, status: 403, error: 'Tu cuenta todavía no está habilitada. Escríbenos.' };
     }
-    if (!r.ok) return { ok: false, status: 502, error: 'No se pudo leer tu cuenta. Probá de nuevo.' };
+    if (!r.ok) return { ok: false, status: 502, error: 'No se pudo leer tu cuenta. Inténtalo de nuevo.' };
     const j = await r.json();
     const d = desdeFirestore(j.fields || {});
     if (d.estado === 'baja') return { ok: false, status: 403, error: 'Tu cuenta está dada de baja.' };
@@ -706,7 +735,7 @@ async function cobrarCredito(env, uid) {
     if (vence && vence < hoyGeneroso()) {
       return {
         ok: false, status: 402, vencido: true, saldo,
-        error: 'Tus créditos vencieron el ' + fechaLinda(vence) + '. Escribinos para renovarlos.'
+        error: 'Tus créditos vencieron el ' + fechaLinda(vence) + '. Escríbenos para renovarlos.'
       };
     }
 
@@ -731,10 +760,10 @@ async function cobrarCredito(env, uid) {
     if (c.ok) return { ok: true, saldo: saldo - 1, marca: d.marca || null };
     /* 400/409 = alguien tocó la cuenta entre el leer y el descontar. */
     if (c.status !== 400 && c.status !== 409) {
-      return { ok: false, status: 502, error: 'No se pudo descontar el crédito. Probá de nuevo.' };
+      return { ok: false, status: 502, error: 'No se pudo descontar el crédito. Inténtalo de nuevo.' };
     }
   }
-  return { ok: false, status: 503, error: 'Está muy ocupado. Probá de nuevo en un momento.' };
+  return { ok: false, status: 503, error: 'Está muy ocupado. Inténtalo de nuevo en un momento.' };
 }
 
 /* Devolver no lleva precondición: sumar siempre es seguro, y esto corre
