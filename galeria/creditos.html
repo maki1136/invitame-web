@@ -148,6 +148,10 @@ input:focus{outline:none;border-color:var(--blush-hondo);
       <input id="creditos" type="number" min="0" step="1" required placeholder="10">
       <p class="ayuda">La cuenta queda en este número. No se suma a lo que tenía.</p>
 
+      <label for="vence">Vencen el</label>
+      <input id="vence" type="date">
+      <p class="ayuda">Viene puesto a un año. Si lo dejás vacío, no vencen nunca.</p>
+
       <label class="chk"><input id="baja" type="checkbox"> Dar de baja esta cuenta</label>
 
       <button class="btn" type="submit" id="btn-cargar">Guardar</button>
@@ -168,6 +172,18 @@ const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
   .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 function mostrar(caja, txt){ const e=$(caja); e.textContent = txt; e.hidden = !txt; }
+const linda = (v) => { const p = String(v).split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : String(v); };
+
+/* Un año desde hoy, para dejar el casillero ya puesto.
+   ⚠️ Se arma con la fecha LOCAL, no con toISOString(): en México toISOString()
+   devuelve el día de mañana después de las 6 de la tarde, y Maki vería una
+   fecha corrida sin entender por qué. */
+function enUnAnio(){
+  const d = new Date();
+  d.setFullYear(d.getFullYear() + 1);
+  const dos = (x) => String(x).padStart(2,'0');
+  return d.getFullYear() + '-' + dos(d.getMonth()+1) + '-' + dos(d.getDate());
+}
 
 let auth=null, sdk=null, yo=null;
 /* El uid de Maki. No es un secreto: un uid solo no sirve para nada sin la
@@ -208,6 +224,10 @@ async function arrancar(){
       $('bajada').textContent = !u ? 'Entrá con tu cuenta.'
         : (esAdmin ? 'Sólo vos podés usar esta pantalla.' : '');
       if (u) $('quien').textContent = u.email || '';
+      /* El vencimiento viene puesto a un año, pero sólo si el casillero está
+         vacío: si Maki ya escribió una fecha y la sesión se refresca sola,
+         no se la pisamos. */
+      if (esAdmin && !$('vence').value) $('vence').value = enUnAnio();
     });
   }catch(e){
     $('cargando').innerHTML = 'No se pudo cargar. Fijate la conexión.<br><small>'+esc(e.message)+'</small>';
@@ -257,16 +277,21 @@ $('cargar').addEventListener('submit', async (ev) => {
         nombre: $('nombre').value.trim(),
         email: $('email').value.trim(),
         creditos: n,
+        vence: $('vence').value,
         estado: $('baja').checked ? 'baja' : 'activa'
       })
     });
     const j = await r.json().catch(()=>({}));
     if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo guardar (' + r.status + ')'));
     const c = j.cuenta || {};
+    /* Se lee de lo que devolvió el servidor, no del casillero: así el cartel
+       dice lo que quedó guardado de verdad y no lo que uno tipeó. */
+    const v = String(c.vence || '').trim();
     mostrar('listo-cargar',
       'Listo. ' + (c.nombre || 'La cuenta') + ' queda con ' +
       (parseInt(c.creditos,10) || 0) + ' crédito' + ((parseInt(c.creditos,10)||0)===1?'':'s') +
-      (c.estado === 'baja' ? ', dada de baja.' : '.'));
+      (v ? ', que vencen el ' + linda(v) : ', sin vencimiento') +
+      (c.estado === 'baja' ? '. Dada de baja.' : '.'));
   }catch(e){
     mostrar('error-cargar', e.message || 'No se pudo guardar.');
   }
