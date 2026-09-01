@@ -201,8 +201,14 @@
     caja.appendChild(links);
     pintarLinks(d, links);
 
+    /* ⚠️ Estos tres placeholders TIENEN que decir exactamente lo mismo que los
+       valores por defecto de /efectos/galeria.js: son lo que va a salir si el
+       campo queda vacío. Y van en español de México (el mercado), no en voseo.
+       Estaba mal: decía «Sacá tus fotos y mirá las de todos» y la invitación
+       escribía «Toma tus fotos y mira las de todos». El cartelito mentía sobre
+       lo que iba a salir, e invitaba a escribir en voseo. */
     caja.appendChild(grupo('Título de la sección', texto(d, 'titulo', 'Las fotos de la fiesta')));
-    caja.appendChild(grupo('Frase de abajo', texto(d, 'bajada', 'Sacá tus fotos y mirá las de todos, en el momento.')));
+    caja.appendChild(grupo('Frase de abajo', texto(d, 'bajada', 'Toma tus fotos y mira las de todos, en el momento.')));
     caja.appendChild(grupo('Texto del botón', texto(d, 'boton', 'Entrar a la galería')));
 
     var pie = document.createElement('div');
