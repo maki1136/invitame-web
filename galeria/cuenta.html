@@ -139,6 +139,26 @@ input:focus{outline:none;border-color:var(--blush-hondo);
 .saldo .q b{display:block;font-size:1.02rem;font-weight:800;margin-bottom:2px}
 .saldo .q span{color:var(--suave);font-size:.9rem;line-height:1.35;display:block}
 
+/* ---------- la marca del fotógrafo ---------- */
+.marca-fila{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  background:var(--papel);border-radius:16px;padding:12px 16px;margin-bottom:20px;
+  box-shadow:var(--relieve-1), var(--luz-arriba);
+}
+.marca-fila img{max-height:34px;max-width:110px;border-radius:6px}
+.marca-fila .quien{flex:1;min-width:120px;font-size:.92rem;font-weight:700}
+.marca-fila .quien small{display:block;font-weight:400;color:var(--suave);font-size:.82rem}
+.punto{width:20px;height:20px;border-radius:50%;flex:none;
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.6), 0 1px 2px rgba(74,48,56,.2)}
+.lnk-chico{background:none;border:none;color:var(--uva);font-family:inherit;
+  font-size:.86rem;font-weight:700;text-decoration:underline;cursor:pointer;padding:4px}
+#marca-form input[type=color]{width:64px;height:44px;padding:4px;cursor:pointer}
+#marca-form input[type=file]{padding:10px 12px;font-size:.9rem}
+.ayuda-m{font-size:.85rem;color:var(--suave);margin:6px 0 0;line-height:1.4;text-transform:none;letter-spacing:0}
+.chk{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:.95rem;
+  text-transform:none;letter-spacing:0;font-weight:400;color:var(--tinta);cursor:pointer}
+.chk input{width:20px;height:20px;flex:none}
+
 /* ---------- las fiestas ---------- */
 .seccion{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
   color:var(--suave);margin:26px 0 12px;display:flex;align-items:center;gap:10px}
@@ -204,6 +224,38 @@ input:focus{outline:none;border-color:var(--blush-hondo);
         <span id="saldo-pie">Un segundo.</span>
       </div>
     </div>
+
+    <!-- La marca del estudio. Se carga UNA vez y todas las fiestas que se
+         creen después la heredan. Va plegada: es algo que se hace el primer
+         día, no cada vez que se entra. -->
+    <div class="marca-fila">
+      <img id="marca-logo" alt="" hidden>
+      <span class="punto" id="marca-punto"></span>
+      <div class="quien">
+        <span id="marca-txt">Tu marca</span>
+        <small id="marca-pie">Poné tu nombre y tu logo: van en la galería y en el cartel.</small>
+      </div>
+      <button type="button" class="lnk-chico" id="marca-abrir">Cambiar</button>
+    </div>
+
+    <form id="marca-form" hidden>
+      <label for="marca-nombre">Nombre de tu estudio</label>
+      <input id="marca-nombre" type="text" maxlength="40" placeholder="Estudio Ana">
+
+      <label for="marca-color">Tu color</label>
+      <input id="marca-color" type="color" value="#b06a7e">
+
+      <label for="marca-archivo">Tu logo</label>
+      <input id="marca-archivo" type="file" accept="image/png,image/jpeg,image/webp">
+      <p class="ayuda-m">PNG, JPG o WebP. Si pesa mucho lo achicamos solos.</p>
+      <label class="chk" id="marca-quitar-caja" hidden>
+        <input id="marca-quitar" type="checkbox"> Sacar el logo que tengo puesto
+      </label>
+
+      <button class="btn" type="submit" id="btn-marca">Guardar mi marca</button>
+      <div class="aviso mal" id="error-marca" hidden></div>
+      <div class="aviso bien" id="listo-marca" hidden></div>
+    </form>
 
     <div class="seccion">Crear una fiesta</div>
     <form id="crear">
@@ -370,6 +422,7 @@ async function mirarCuenta() {
       $('bajada').textContent = d.nombre;
       $('bajada').hidden = false;
     }
+    pintarMarca((d && d.marca) || null);
     $('btn-crear').disabled = n < 1 || vencido;
   } catch (e) {
     $('nro').textContent = '·';
@@ -436,6 +489,103 @@ function fila(f) {
     '</div>' +
   '</div>';
 }
+
+/* ---------- la marca del estudio ----------
+
+   Se guarda en la CUENTA, no en cada fiesta: se carga una vez y todas las
+   fiestas que se creen después la heredan (el Worker la copia al evento
+   cuando cobra el crédito, sin una lectura de más).
+
+   ⚠️ Esta página NO escribe la marca: las reglas de Firestore no dejan tocar
+   gal_cuentas desde ningún navegador. Le pide al Worker con el token de esta
+   sesión, igual que para crear una fiesta.
+
+   ⚠️ Los tres campos se mandan SIEMPRE juntos, aunque se cambie uno solo. El
+   Worker reemplaza el mapa 'marca' entero: si se mandara sólo el color, el
+   nombre y el logo se irían sin que nadie lo pidiera. */
+
+const TOPE_LOGO = 200 * 1024;
+
+function pintarMarca(m) {
+  m = m || {};
+  const img = $('marca-logo');
+  /* Si el logo no carga (lo borraron, no hay internet), se esconde. Un ícono
+     de imagen rota en el panel del cliente es peor que no mostrar nada. */
+  if (m.logo) {
+    img.onerror = () => { img.hidden = true; };
+    img.onload = () => { img.hidden = false; };
+    img.src = m.logo;
+  } else { img.hidden = true; img.removeAttribute('src'); }
+  $('marca-punto').style.background = m.color || '#b06a7e';
+  $('marca-txt').textContent = m.texto || 'Tu marca';
+  $('marca-pie').textContent = m.texto
+    ? 'Va en la galería y en el cartel de tus fiestas.'
+    : 'Poné tu nombre y tu logo: van en la galería y en el cartel.';
+  /* El formulario arranca con lo que ya hay puesto, no vacío: si arrancara
+     vacío, guardar el color borraría el nombre sin querer. */
+  $('marca-nombre').value = m.texto || '';
+  $('marca-color').value = /^#[0-9a-fA-F]{6}$/.test(m.color || '') ? m.color : '#b06a7e';
+  $('marca-quitar-caja').hidden = !m.logo;
+  $('marca-quitar').checked = false;
+}
+
+$('marca-abrir').addEventListener('click', () => {
+  const f = $('marca-form');
+  f.hidden = !f.hidden;
+  $('marca-abrir').textContent = f.hidden ? 'Cambiar' : 'Cerrar';
+});
+
+/* Un logo sacado del celular puede pesar 3 MB y el Worker acepta 200 KB. En vez
+   de mandarlo y que rebote DESPUÉS de que la persona lo eligió, se achica acá.
+   Va a WebP y no a JPG a propósito: el JPG no tiene transparencia y casi todos
+   los logos son PNG con fondo transparente. */
+async function achicarLogo(file) {
+  if (file.size <= TOPE_LOGO) return file;
+  const bmp = await createImageBitmap(file);
+  const escala = Math.min(1, 600 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(bmp.width * escala));
+  c.height = Math.max(1, Math.round(bmp.height * escala));
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  for (const q of [0.9, 0.75, 0.6, 0.45]) {
+    const b = await new Promise((res) => c.toBlob(res, 'image/webp', q));
+    if (b && b.size <= TOPE_LOGO) return new File([b], 'logo.webp', { type: 'image/webp' });
+  }
+  throw new Error('No pudimos achicar ese logo. Probá con uno más simple.');
+}
+
+$('marca-form').addEventListener('input', () => { mostrar('listo-marca', ''); mostrar('error-marca', ''); });
+
+$('marca-form').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  mostrar('error-marca', ''); mostrar('listo-marca', '');
+  $('btn-marca').disabled = true; $('btn-marca').textContent = 'Guardando…';
+  try {
+    const fd = new FormData();
+    fd.append('texto', $('marca-nombre').value.trim());
+    fd.append('color', $('marca-color').value);
+    if ($('marca-quitar').checked) {
+      fd.append('quitarLogo', '1');
+    } else {
+      const f = $('marca-archivo').files[0];
+      if (f) fd.append('logo', await achicarLogo(f));
+    }
+    const tok = await yo.getIdToken(true);
+    const r = await fetch(WORKER + '/marca', {
+      method: 'POST', headers: { Authorization: 'Bearer ' + tok }, body: fd
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo guardar (' + r.status + ')'));
+    /* Se pinta con lo que devolvió el SERVIDOR, no con lo del formulario: así
+       lo que se ve es lo que quedó guardado. */
+    pintarMarca(j.marca);
+    $('marca-archivo').value = '';
+    mostrar('listo-marca', 'Listo. Las fiestas que crees de ahora en adelante van a llevar tu marca.');
+  } catch (e) {
+    mostrar('error-marca', e.message || 'No se pudo guardar tu marca.');
+  }
+  $('btn-marca').textContent = 'Guardar mi marca'; $('btn-marca').disabled = false;
+});
 
 /* ---------- crear una fiesta ---------- */
 $('crear').addEventListener('submit', async (ev) => {
