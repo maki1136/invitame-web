@@ -60,7 +60,7 @@
       `.fraseSec` es flex en fila: una imagen hija normal se vuelve UNA COLUMNA
       y le roba el ancho al texto (pasó de 375 a 177 px).
       → `position:absolute` para algo chico; `flex-wrap` + `flex:0 0 100%` para
-        algo a todo el ancho; nada si la sección no es flex ni grid.
+        algo a todo el ancho (el collar); nada si la sección no es flex ni grid.
 
    ★★★ TRES MANERAS DE APOYAR UNA FOTO SOBRE EL PAPEL ★★★
       1. RECORTADA con alfa — lo que flota sobre cualquier fondo (broche).
@@ -75,23 +75,38 @@
    ★★★ EL CSS NO REEMPLAZA LA FOTO DE UN OBJETO, PERO SÍ DIBUJA BIEN ★★★
       Vale para OBJETOS: una perla, un lacre, un moño tienen nácar que el
       código no imita. NO vale para LETRAS ni para SILUETAS ni para SÍMBOLOS.
-      El traje, el vestido y el triángulo de play son dibujo de línea: hechos
-      con código escalan sin pixelarse y toman el color de cada paleta.
+      El traje, el vestido y el triángulo de play son dibujo de línea.
       ★ Lo que separa un icono de la papelería fina es EL TRAZO Y LA PROPORCIÓN.
         Los del motor no estaban mal dibujados: estaban gruesos (1.7) y anchos.
-        Con trazo 1.15, hombros angostos y silueta larga, el mismo objeto pasa
-        de icono de app a papelería.
       ⚠️ El traje tuvo una versión con un escalón a la altura del codo y se leía
          como una CAPA. La silueta va continua, de hombro a ruedo.
+
+   ★★★ DESATURAR NO ES HACER BLANCO Y NEGRO ★★★
+      Maki: «si la ponés en blanco y negro que no sea tan apagada».
+      `grayscale(1)` sólo deja la foto PLANA: al sacar el color se pierde el
+      contraste que el color aportaba, y encima el desaturado la apaga. Yo
+      había puesto contraste 1.06 y brillo 0.98 — casi nada, y más oscura.
+      → Un blanco y negro que se vea bien necesita que le devuelvas ese
+        contraste a mano, y en general un toque de brillo. Acá: 1.24 y 1.07.
 
    ★★★ ANTES DE PROGRAMAR ALGO NUEVO, FIJARSE SI EL MOTOR YA LO TIENE ★★★
       Los tres círculos de la fecha ya existían: `fecha.js` trae NUEVE
       disposiciones (fotos, circulos, barras, apilada, filetes, semana,
-      monograma, grande, manuscrita) y se eligen con
-      `fx.fecha.disposicion`. No hubo que escribir una línea: sólo elegirla y
-      después vestirla.
+      monograma, grande, manuscrita) y se eligen con `fx.fecha.disposicion`.
       Lo mismo con `#dc-mono` en Vestimenta, que ya traía las dos siluetas.
       → Primero mirar qué hay. Programar es la última opción, no la primera.
+
+   ⚠️⚠️ LA RASPADITA Y LAS DISPOSICIONES DE FECHA NO TIENEN PANEL ⚠️⚠️
+      `fecha.js` y `raspadita.js` sólo se configuran escribiendo `fx.fecha` y
+      `fx.raspadita` a mano en la base: no hay `panel-fecha.js`. Jazmín no puede
+      tocarlos.
+      Y hay una trampa que se ve como un bug: `fecha.js`, cuando hay una
+      disposición elegida, ESCONDE la tapa del motor (`#scratch-cv`) esperando
+      que el módulo `raspadita.js` ponga la suya. Si la raspadita está apagada
+      —y viene apagada por defecto— no la pone nadie y **la fecha aparece ya
+      revelada**. Maki: «la raspada viene ya raspada».
+      → Si se elige una disposición, la raspadita TIENE que estar encendida:
+        `fx.raspadita.encendido = true`.
 
    ★★★ LOS "PÉTALOS" ERAN LO QUE MAKI VEÍA COMO PERLAS DIBUJADAS ★★★
       `.fxlayer .fxp.petalo` son pétalos ROSAS que caen. Sobre la portada en
@@ -110,8 +125,12 @@
 
    ⚠️ LA BODA DE EJEMPLO ASOMA UN INSTANTE. Al abrir la raspadita se ve
       "28 / 11 / 26" antes de "06 / 03 / 27": el motor dibuja el ejemplo y
-      después lo reemplaza con los datos de verdad. Se corrige solo. Si alguna
-      vez hay que atacarlo, es en el motor, no acá.
+      después lo reemplaza. Se corrige solo.
+
+   ⚠️ LAS ANIMACIONES ATADAS AL SCROLL DAN FALSOS POSITIVOS. La carta de
+      "Confirma tu lugar" sale del sobre a medida que se scrollea. Si se salta
+      de golpe a la sección, se captura un cuadro a mitad de camino y parece
+      que el texto está lavado. Para revisar: scrollear de a poco, no saltar.
 
    ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA · `acomodar()` en el bucle
    ★ EL MOTIVO: SE SUGIERE `discreto`, NO `todo`
@@ -152,16 +171,12 @@
   var MASCARA  = 'radial-gradient(ellipse 58% 58% at 50% 50%,#000 40%,transparent 76%)';
   var MASCARA2 = 'radial-gradient(ellipse 76% 84% at 50% 48%,#000 58%,transparent 92%)';
 
-  /* el papel: fibra cruzada en dos direcciones. Con una sola dirección se ve
-     rayado, no papel. Lo usan la carta del contacto y la tapa del video. */
   var PAPEL =
     'linear-gradient(179.4deg,rgba(255,255,255,.55),rgba(244,238,224,.6) 48%,rgba(252,250,244,.5)),' +
     'repeating-linear-gradient(90deg,rgba(150,132,104,.045) 0 1px,transparent 1px 3px),' +
     'repeating-linear-gradient(0deg,rgba(150,132,104,.035) 0 1px,transparent 1px 4px),' +
     '#fbf7ee';
 
-  /* la perla apoyada arriba de un aro, como el broche de un collar. Se repite
-     en el video y en la raspadita, así que va en una sola cadena. */
   var PERLITA =
     'content:"";position:absolute;top:-6px;left:50%;transform:translateX(-50%);' +
     'width:12px;height:12px;background:var(--col-perla) no-repeat center/contain;' +
@@ -230,8 +245,10 @@
       'border-top-left-radius:50% 58px;border-top-right-radius:50% 58px;' +
       'padding-top:82px}}',
 
+    /* ── LA PORTADA EN BLANCO Y NEGRO ─────────────────────────────────────
+       Desaturar sin devolver contraste deja la foto PLANA. Ver la nota. */
     'h[c] .portada .pbg,h[c] .portada .cover-vid{' +
-      'filter:grayscale(1) contrast(1.06) brightness(.98)}',
+      'filter:grayscale(1) contrast(1.24) brightness(1.07)}',
 
     'h[p] .fxlayer .fxp{' +
       'background:var(--col-perla) no-repeat center/contain!important;' +
@@ -282,10 +299,7 @@
     '@media (max-width:360px){h[c] .col-vest svg{width:64px}' +
       'h[c] .col-vest .col-amp{font-size:26px;margin-bottom:32px}}',
 
-    /* ── LA RASPADITA: LOS TRES CÍRCULOS, EN ANILLO FINO ──────────────────
-       La disposición `circulos` es del motor (`fx.fecha.disposicion`). Acá
-       sólo se viste: de círculos rellenos topo a anillos finos con el número
-       en Cormorant, y la perla apoyada arriba del aro del medio. */
+    /* ── LA RASPADITA: LOS TRES CÍRCULOS, EN ANILLO FINO ──────────────── */
     'h[c] .ivf-circ{gap:16px!important}',
     'h[c] .ivf-circ .c{' +
       'background:transparent!important;' +
@@ -297,9 +311,7 @@
       'font-size:27px!important;letter-spacing:.02em!important}',
     'h[p] .ivf-circ .c:nth-child(2)::before{' + PERLITA + '}',
 
-    /* ── "NUESTRO VIDEO": LA TAPA DE PAPEL ────────────────────────────────
-       Antes se veía la miniatura de YouTube con su botón rojo. Ahora va papel
-       con un aro fino, el play dibujado y la perla. Al tocarla arranca. */
+    /* ── "NUESTRO VIDEO": LA TAPA DE PAPEL ───────────────────────────── */
     'h[c] #video-embed{' +
       'position:relative;border-radius:2px;overflow:hidden;' +
       'box-shadow:0 1px 2px rgba(60,50,40,.10),0 12px 30px rgba(60,50,40,.16)}',
