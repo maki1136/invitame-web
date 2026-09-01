@@ -19,6 +19,19 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
+   ★★★★★ TODA FUNCIÓN TIENE QUE ESTAR EN EL PANEL ★★★★★  (1/9/2026)
+      Maki, dicho tres veces ya: «recordate que todos tienen que estar en el
+      panel para que Jazmín lo pueda modificar y pueda verlo y funcionando
+      todo, ¿no? Obvio».
+      Una función que sólo se prende escribiendo `fx` en la base a mano es, para
+      quien usa el panel, UNA FUNCIÓN QUE NO EXISTE. Pasó con el interruptor de
+      la confirmación (semanas), y volvió a pasar con la raspadita y las
+      disposiciones de fecha (Maki las reportó como bugs: «la raspada viene ya
+      raspada», «iban solamente los círculos»).
+      → Un módulo nuevo no está terminado hasta que tiene su `panel-*.js`.
+      → Y el bloque del panel tiene que AVISAR de las combinaciones que rompen,
+        no dejar que el que edita las descubra en la invitación.
+
    ★★★ LO QUE SE CARGA ADENTRO DE UNA CAJA DE 0 PX SE DIBUJA EN 0×0 ★★★ (1/9/2026)
       Los tres "Ver mapa" y "Ver inspiración" abrían y adentro había un
       rectángulo blanco vacío. La dirección estaba cargada y el iframe tenía su
@@ -34,6 +47,17 @@
       ⚠️ Y la pista falsa: `getComputedStyle` devolvía `max-height: 0px`
          incluso con la clase `.open` puesta, mientras una copia del mismo nodo
          pegada en otro lado medía 560px. Parecía un problema de CSS y no lo era.
+
+   ★★★ LA VIDRIERA: LO QUE SE ESCONDE SIN LINK DE INVITADO ★★★  (1/9/2026)
+      Si la invitación se abre SIN `INVDATA.token`, el motor entra en modo
+      vidriera y esconde el formulario de confirmación y el pase con QR, y
+      reemplaza la frase de la sección por «Esta es una muestra…».
+      Para una invitación entregada está bien. Para LA MUESTRA que se le manda
+      a alguien que todavía no compró, no: ahí la confirmación es justo lo que
+      hay que mostrar. Maki: «no me pongas un cartelito».
+      → Lo resuelve `/efectos/rsvp-muestra.js`, con su interruptor en el panel.
+      → Sólo actúa en vidriera: con link de invitado real no toca nada, así que
+        dejarlo prendido en una invitación entregada no rompe nada.
 
    ★★★ LAS COLECCIONES ★★★  (31/8/2026)
       `/colecciones/*.js` es otra cosa que `/efectos/*.js`, aunque se carguen
@@ -148,11 +172,14 @@
       · /mi-panel.html → el panel de los novios (slug + clave).
       · /panel.html  → el tablero de métricas.
 
-   ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` ★★
+   ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` — Y ES MEXICANA ★★
       https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
       Todo lo nuevo se prueba y se mira AHÍ antes de mostrárselo a Maki.
       Es la más cargada de todas: 90 campos con contenido de verdad.
-
+      ⚠️ Es la PRIMERA muestra real del sistema nuevo: se la va a ver gente que
+         todavía no compró. Todo tiene que estar en español de México y con
+         lugares de México — la boda es en Playa del Carmen. Quedaron
+         direcciones de Uruguay dando vueltas durante semanas y nadie las vio.
       ⚠️ El evento llamado `muestra` NO es la muestra. Está marcado "NO USAR".
 
    ★ EL VOSEO YA NO SE PARCHEA: SE ESCRIBE BIEN DE ENTRADA (30/8/2026)
@@ -209,7 +236,7 @@
       datos del cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en diecinueve casos:
+   ⚠️ EL ORDEN IMPORTA en veintidós casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -219,6 +246,11 @@
    · `panel-botones.js` va DESPUÉS de `botones.js`.
    · `rsvp-interruptor.js` va DESPUÉS de `botones.js`.
    · `panel-rsvp.js` va DESPUÉS de `rsvp-interruptor.js`: escribe fx.rsvp.estilo.
+   · `rsvp-muestra.js` NO tiene orden: sólo actúa si no hay link de invitado y
+     se vuelve a pasar solo cada 400 ms.
+   · `panel-muestra.js` va DESPUÉS de `panel-rsvp.js`: se monta justo debajo de
+     ese bloque, porque habla de lo mismo.
+   · `panel-fecha.js` va DESPUÉS de `panel-muestra.js`, por la misma razón.
    · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo se tiñe con el
      papel de la paleta.
    · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`.
@@ -258,6 +290,8 @@
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
+    '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
+    '/efectos/panel-muestra.js',       /* y su interruptor, con el invitado de ejemplo */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
@@ -265,6 +299,7 @@
     '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
     '/efectos/fecha.js',               /* las nueve maneras de mostrar la fecha */
     '/efectos/raspadita.js',           /* la raspadita: se monta sobre la fecha */
+    '/efectos/panel-fecha.js',         /* y las dos, por fin, en el panel */
     '/efectos/encuadre-monitor.js',    /* en compu: todo en una columna */
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
