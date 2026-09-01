@@ -19,6 +19,22 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
+   ★★★ LO QUE SE CARGA ADENTRO DE UNA CAJA DE 0 PX SE DIBUJA EN 0×0 ★★★ (1/9/2026)
+      Los tres "Ver mapa" y "Ver inspiración" abrían y adentro había un
+      rectángulo blanco vacío. La dirección estaba cargada y el iframe tenía su
+      `src` bien puesto: mirando los datos y mirando el HTML no se veía nada.
+      El acordeón arranca en `max-height:0` — CERO PÍXELES DE ALTO —, el
+      navegador igual carga el iframe, Google Maps se dibuja en 0×0, y cuando
+      el panel se abre adentro del iframe no hay nadie que se entere de que
+      ahora hay lugar.
+      → Lo arregla `/efectos/acordeon.js`: al abrir, le vuelve a poner el `src`.
+      → La regla general: si algo se carga adentro de una caja de 0 px (un
+        acordeón, un tab escondido, un carrusel), hay que RECARGARLO cuando se
+        muestra. No alcanza con darle tamaño después.
+      ⚠️ Y la pista falsa: `getComputedStyle` devolvía `max-height: 0px`
+         incluso con la clase `.open` puesta, mientras una copia del mismo nodo
+         pegada en otro lado medía 560px. Parecía un problema de CSS y no lo era.
+
    ★★★ LAS COLECCIONES ★★★  (31/8/2026)
       `/colecciones/*.js` es otra cosa que `/efectos/*.js`, aunque se carguen
       desde la misma lista.
@@ -232,6 +248,7 @@
    · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
      propone la paleta que le corresponde, y para eso el selector de paletas
      tiene que existir.
+   · `acordeon.js` NO tiene orden: se cuelga del click y no depende de nadie.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -256,6 +273,7 @@
     '/efectos/musica.js',              /* la Platinum vende Música y el motor no la tenía */
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
+    '/efectos/acordeon.js',            /* los "Ver mapa" abrían en blanco: recarga los iframes */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
     '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
     '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */
