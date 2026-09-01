@@ -37,6 +37,8 @@
      GET  /qr?g=   → el QR del evento (redirección a un generador)
      POST /cuenta  → alta o recarga de una cuenta de cliente.
                      Sólo para los uid de ADMIN_UIDS, con su sesión de Firebase.
+     POST /marca   → la marca del fotógrafo (nombre, logo y color), con la
+                     sesión de Firebase del propio cliente.
      POST /firmar  → el libro de firmas: un mensaje escrito o un audio.
                      Mismo circuito que /subir: topes, moderación y estado.
      GET  /uso     → cuánto se lleva usado este mes contra el tope
@@ -58,6 +60,7 @@ export default {
       if (ruta === '/subir' && req.method === 'POST') return await subir(req, env, ctx);
       if (ruta === '/crear' && req.method === 'POST') return await crear(req, env);
       if (ruta === '/cuenta' && req.method === 'POST') return await ponerCuenta(req, env);
+      if (ruta === '/marca' && req.method === 'POST') return await ponerMarca(req, env, ctx);
       if (ruta === '/firmar' && req.method === 'POST') return await firmar(req, env, ctx);
       if (ruta.startsWith('/f/') && req.method === 'GET') return await servir(req, env, ctx, ruta.slice(3), url);
       if (ruta === '/qr' && req.method === 'GET') return qr(url);
@@ -198,6 +201,13 @@ async function crear(req, env) {
     if (!cobro.ok) return respuesta({ error: cobro.error, saldo: cobro.saldo || 0 }, cobro.status);
   }
 
+  /* La marca la pone el fotógrafo UNA vez en su cuenta y se copia acá, a la
+     fiesta. Copiarla (en vez de que la galería lea la cuenta) es a propósito:
+     el invitado lee un solo documento, y si el fotógrafo cambia su logo el mes
+     que viene, las fiestas que ya pasaron siguen mostrando la marca que tenían
+     ese día. La marca viene de cobrarCredito(), que ya leyó la cuenta: no hay
+     una lectura de más. */
+  const dela = (cobro && cobro.marca) || {};
   const ev = {
     nombre: String(b.nombre || 'Nuestra fiesta').slice(0, 80),
     fecha: String(b.fecha || '').slice(0, 10),
@@ -207,9 +217,10 @@ async function crear(req, env) {
     },
     modo: b.modo === 'auto' ? 'auto' : 'previa',
     marca: {
-      logo: b.logo || null,
-      color: /^#[0-9a-fA-F]{6}$/.test(b.color || '') ? b.color : '#b06a7e',
-      texto: String(b.texto || 'Invítame').slice(0, 40)
+      logo: b.logo || dela.logo || null,
+      color: /^#[0-9a-fA-F]{6}$/.test(b.color || '') ? b.color
+           : (/^#[0-9a-fA-F]{6}$/.test(dela.color || '') ? dela.color : '#b06a7e'),
+      texto: String(b.texto || dela.texto || 'Invítame').slice(0, 40)
     },
     limites: { porInvitado: 30, rafaga: 10 },
     invitacion: b.invitacion ? String(b.invitacion).slice(0, 60) : null,
@@ -293,6 +304,101 @@ async function ponerCuenta(req, env) {
 
   const d = desdeFirestore((await r.json()).fields || {});
   return respuesta({ ok: true, uid, cuenta: d }, 200);
+}
+
+/* ---------------- /marca: la marca del fotógrafo ----------------
+   Decisión de Maki (1/9/2026): el cliente puede poner su marca.
+
+   Vive en la CUENTA, no en cada fiesta: el fotógrafo la carga una vez y todas
+   las fiestas que cree después la heredan (ver /crear). Un salón que hace tres
+   fiestas por fin de semana no va a cargar el logo tres veces.
+
+   ⚠️ El logo se SUBE, no se pega una URL. Con una URL ajena pasan dos cosas
+   malas: el día de la fiesta el otro servidor puede estar caído y el logo no
+   aparece, y además cualquiera podría poner cualquier imagen de cualquier lado
+   adentro de la página. Acá el archivo vive en nuestro R2.
+
+   El nombre del archivo lleva un id al azar y NO se pisa el anterior. Es a
+   propósito: /f/ sirve con caché de un año («immutable»), así que si se pisara
+   el archivo el fotógrafo cambiaría el logo y seguiría viendo el viejo durante
+   meses. Los logos viejos quedan en R2 sin que nadie los mire; pesan 200 KB
+   como mucho y borrarlos es más riesgoso que dejarlos. */
+const MAX_LOGO = 200 * 1024;
+
+async function ponerMarca(req, env, ctx) {
+  const quien = await verificarToken(req).catch(() => null);
+  if (!quien) return respuesta({ error: 'Entrá con tu cuenta.' }, 401);
+
+  /* La cuenta tiene que existir. Si no, no hay dónde guardar la marca — y
+     además evita que cualquiera con una sesión nos escriba documentos. */
+  const t = await tokenGoogle(env);
+  const rc = await fetch(FS + '/gal_cuentas/' + quien.uid, { headers: { Authorization: 'Bearer ' + t } });
+  if (rc.status === 404) return respuesta({ error: 'Tu cuenta todavía no está habilitada. Escribinos.' }, 403);
+  if (!rc.ok) return respuesta({ error: 'No se pudo leer tu cuenta. Probá de nuevo.' }, 502);
+  const cuenta = desdeFirestore((await rc.json()).fields || {});
+  if (cuenta.estado === 'baja') return respuesta({ error: 'Tu cuenta está dada de baja.' }, 403);
+
+  const fd = await req.formData().catch(() => null);
+  if (!fd) return respuesta({ error: 'No llegó el formulario.' }, 400);
+
+  const anterior = cuenta.marca || {};
+  const texto = String(fd.get('texto') || '').trim().slice(0, 40);
+  const colorCrudo = String(fd.get('color') || '').trim();
+  if (colorCrudo && !/^#[0-9a-fA-F]{6}$/.test(colorCrudo)) {
+    return respuesta({ error: 'Ese color no tiene forma de color. Va como #7A4B8C.' }, 400);
+  }
+
+  /* Tres caminos para el logo, y hay que distinguirlos: subir uno nuevo,
+     sacarlo, o no tocarlo. Sin el tercero, guardar sólo el color borraría el
+     logo sin que nadie lo haya pedido. */
+  let logo = anterior.logo || null;
+  if (String(fd.get('quitarLogo') || '') === '1') {
+    logo = null;
+  } else {
+    const f = fd.get('logo');
+    if (f && typeof f !== 'string') {
+      if (f.size > MAX_LOGO) return respuesta({ error: 'El logo pesa demasiado. Tiene que ser de 200 KB para abajo.' }, 400);
+      if (f.size < 100) return respuesta({ error: 'Ese archivo salió vacío.' }, 400);
+      const tipo = String(f.type || '');
+      const ext = tipo === 'image/png' ? 'png' : tipo === 'image/jpeg' ? 'jpg' : tipo === 'image/webp' ? 'webp' : null;
+      if (!ext) return respuesta({ error: 'El logo tiene que ser PNG, JPG o WebP.' }, 400);
+
+      /* El tope duro del mes vale también acá: un logo ocupa lugar como
+         cualquier otra cosa, y la cuenta de Maki no se dispara por una vía
+         que nadie contó. */
+      const topeBytes = (parseFloat(env.TOPE_GB || '8') || 8) * 1024 * 1024 * 1024;
+      const mes = new Date().toISOString().slice(0, 7);
+      const kMes = 'bytes:' + mes;
+      const usado = parseInt(await env.LIMITES.get(kMes) || '0', 10);
+      if (usado >= topeBytes) {
+        return respuesta({ error: 'La galería alcanzó su límite de este mes. Escribinos y lo ampliamos.' }, 507);
+      }
+      ctx.waitUntil(env.LIMITES.put(kMes, String(usado + f.size), { expirationTtl: 60 * 60 * 24 * 70 }));
+
+      const key = 'm/' + quien.uid + '/' + cid() + '.' + ext;
+      await env.BUCKET.put(key, f.stream(), { httpMetadata: { contentType: tipo } });
+      logo = 'https://galeria.littlemomentsok.workers.dev/f/' + key;
+    }
+  }
+
+  const marca = {
+    texto,
+    color: colorCrudo || anterior.color || '#b06a7e',
+    logo
+  };
+
+  /* updateMask sobre 'marca' reemplaza el mapa ENTERO, que es justo lo que
+     queremos: los tres campos se mandan siempre juntos. Y no toca ni el saldo,
+     ni el vencimiento, ni el nombre de la cuenta. */
+  const r = await fetch(FS + '/gal_cuentas/' + quien.uid + '?updateMask.fieldPaths=marca', {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: aFirestore({ marca }) })
+  });
+  if (!r.ok) return respuesta({ error: 'No se pudo guardar tu marca (' + r.status + ')' }, 502);
+
+  const d = desdeFirestore((await r.json()).fields || {});
+  return respuesta({ ok: true, marca: d.marca || marca }, 200);
 }
 
 /* ---------------- /firmar: el libro de firmas ----------------
@@ -539,7 +645,7 @@ async function cobrarCredito(env, uid) {
         }]
       })
     });
-    if (c.ok) return { ok: true, saldo: saldo - 1 };
+    if (c.ok) return { ok: true, saldo: saldo - 1, marca: d.marca || null };
     /* 400/409 = alguien tocó la cuenta entre el leer y el descontar. */
     if (c.status !== 400 && c.status !== 409) {
       return { ok: false, status: 502, error: 'No se pudo descontar el crédito. Probá de nuevo.' };
@@ -652,14 +758,16 @@ function textoB64url(s) { return new TextDecoder().decode(bytesB64url(s)); }
 
 /* ---------------- /f/<key> ---------------- */
 async function servir(req, env, ctx, key, url) {
-  /* Dos formas válidas y ninguna más:
+  /* Tres formas válidas y ninguna más:
        fotos   g/<gid>/<fid>.webp|jpg      (y su miniatura _t)
        audios  g/<gid>/f/<fid>.webm|m4a    (el libro de firmas)
-     Si esto no acepta el audio, el saludo se guarda y NO se puede escuchar:
-     el /f/ nuevo del medio y las extensiones nuevas hay que sumarlos acá. */
+       logos   m/<uid>/<fid>.webp|jpg|png  (la marca del fotógrafo)
+     Si esto no acepta una de las tres, el archivo se guarda y NO se puede
+     ver: cada carpeta y cada extensión nueva hay que sumarlas acá. */
   const esFoto = /^g\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+(_t)?\.(webp|jpg)$/.test(key);
   const esAudio = /^g\/[A-Za-z0-9_-]+\/f\/[A-Za-z0-9_-]+\.(webm|m4a)$/.test(key);
-  if (!esFoto && !esAudio) return respuesta({ error: 'no' }, 400);
+  const esLogo = /^m\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+\.(webp|jpg|png)$/.test(key);
+  if (!esFoto && !esAudio && !esLogo) return respuesta({ error: 'no' }, 400);
 
   // Caché del borde: la misma foto no baja dos veces de R2.
   const cache = caches.default;
@@ -671,7 +779,9 @@ async function servir(req, env, ctx, key, url) {
     r = new Response(obj.body, {
       headers: {
         'Content-Type': obj.httpMetadata && obj.httpMetadata.contentType
-          || (esAudio ? (key.endsWith('.m4a') ? 'audio/mp4' : 'audio/webm') : 'image/webp'),
+          || (esAudio ? (key.endsWith('.m4a') ? 'audio/mp4' : 'audio/webm')
+                      : (key.endsWith('.png') ? 'image/png'
+                      : (key.endsWith('.jpg') ? 'image/jpeg' : 'image/webp'))),
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Access-Control-Allow-Origin': '*'
       }
