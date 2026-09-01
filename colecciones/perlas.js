@@ -84,7 +84,20 @@
       → Para tapar o sostener algo dentro de una sección que YA tiene su papel:
         fondo TRANSPARENTE, sin sombra y sin esquinas redondeadas. Si hay que
         tapar, se esconde lo de abajo (`visibility:hidden`), no se pinta encima.
-      → Vale para cualquier "tapa" o "ficha" futura (galería, mapa, música).
+      → Y sobre banda OSCURA vale lo mismo al revés: nada de cajas de vidrio.
+        Un filete fino de 1px y listo (ver el pase, más abajo).
+
+   ★★★ LA COLECCIÓN TAMBIÉN VISTE LO QUE NO ES UNA `.sec` ★★★  (1/9/2026)
+      El pase con el QR (`.pase`) no es una sección: es un bloque suelto del
+      motor, con su propia tipografía (Rouge Script, Lora, Forum — tres que la
+      colección no usa) y una caja de vidrio encima de una foto de stock.
+      Maki: «te quedó mal el fondo donde está el QR, tenés que seguir con la
+      temática».
+      → Al revisar una colección hay que recorrer TODO lo que se ve, no sólo
+        las `.sec`. Lo que quedó sin vestir se nota más que lo que falta.
+      ⚠️ La foto de fondo sale de un DATO (`img_c_imagen-fondo-qr`). La
+         colección NO la pisa: si Jazmín carga una, se ve. Vestir no es
+         quitarle opciones a quien edita.
 
    ★★★ EL CSS NO REEMPLAZA LA FOTO DE UN OBJETO, PERO SÍ DIBUJA BIEN ★★★
       Vale para OBJETOS: una perla, un lacre, un moño tienen nácar que el
@@ -110,10 +123,9 @@
       Lo mismo con `#dc-mono` en Vestimenta, que ya traía las dos siluetas.
       → Primero mirar qué hay. Programar es la última opción, no la primera.
 
-   ⚠️⚠️ LA RASPADITA Y LAS DISPOSICIONES DE FECHA NO TIENEN PANEL ⚠️⚠️
-      `fecha.js` y `raspadita.js` sólo se configuran escribiendo `fx.fecha` y
-      `fx.raspadita` a mano en la base: no hay `panel-fecha.js`. Jazmín no puede
-      tocarlos. TRES cosas que hay que dejar puestas JUNTAS:
+   ⚠️⚠️ LA RASPADITA Y LAS DISPOSICIONES DE FECHA: TRES COSAS JUNTAS ⚠️⚠️
+      Desde el 1/9/2026 se configuran desde el panel (`panel-fecha.js`), pero
+      las tres tienen que quedar puestas juntas:
         · `fx.fecha.disposicion` = la forma (acá: `circulos`)
         · `fx.raspadita.encendido` = true
         · `fx.raspadita.modo` = 'partes'
@@ -122,9 +134,8 @@
       tapa del motor esperando que la ponga `raspadita.js`, y si está apagada
       no la pone nadie. Maki: «la raspada viene ya raspada».
       Si falta la TERCERA, `raspadita.js` cae en su rama "simple" y tapa la
-      tarjeta ENTERA con un rectángulo plateado: se raspa el rectángulo y
-      recién ahí aparecen los círculos. Maki: «iban solamente los círculos y
-      cada círculo se raspaba».
+      tarjeta ENTERA con un rectángulo plateado. Maki: «iban solamente los
+      círculos y cada círculo se raspaba».
 
    ★★★ LOS "PÉTALOS" ERAN LO QUE MAKI VEÍA COMO PERLAS DIBUJADAS ★★★
       `.fxlayer .fxp.petalo` son pétalos ROSAS que caen. Sobre la portada en
@@ -139,7 +150,8 @@
 
    ★★★ NUNCA GUARDAR UNA COPIA DEL HTML PARA "DESHACER" ★★★
       Guardar `h1.innerHTML` hacía aparecer "María & Diego". Deshacer SIEMPRE
-      desde el DOM vivo.
+      desde el DOM vivo. Lo mismo vale para los nodos que se mueven (el pase):
+      se devuelven mirando dónde están AHORA, no una posición guardada.
 
    ⚠️ LA BODA DE EJEMPLO ASOMA UN INSTANTE. Al abrir la raspadita se ve
       "28 / 11 / 26" antes de "06 / 03 / 27": el motor dibuja el ejemplo y
@@ -332,6 +344,46 @@
       'font-family:"Cormorant Garamond",serif!important;font-weight:300!important;' +
       'font-size:27px!important;letter-spacing:.02em!important}',
     'h[p] .ivf-circ .c:nth-child(2)::before{' + PERLITA + '}',
+
+    /* ── EL PASE CON EL QR ──────────────────────────────────────────────
+       Va abajo de la raspadita (ver `moverPase`): primero descubrís la
+       fecha, y ahí mismo te dan tu pase.
+       Se viste como una banda más de la colección: arco arriba, la cursiva
+       de Perlas, la tarjeta sin caja de vidrio —sólo un filete de 1px— y
+       los rótulos en versalitas. El QR va sobre papel marfil, no blanco.
+       ⚠️ La foto de fondo la pone un DATO (img_c_imagen-fondo-qr) en línea:
+          NO se pisa. Si Jazmín carga una, se ve. */
+    'h[c] .pase{padding:88px 30px 84px;' +
+      'border-top-left-radius:50% 90px;border-top-right-radius:50% 90px}',
+    '@media (max-width:420px){h[c] .pase{padding:72px 24px 68px;' +
+      'border-top-left-radius:50% 58px;border-top-right-radius:50% 58px}}',
+    'h[c] .pase .t{' +
+      'font-family:"Great Vibes",cursive!important;font-weight:400!important;' +
+      'font-size:var(--fs-cursiva,22px)!important;line-height:1.35!important;' +
+      'opacity:.82;margin:0 auto 30px!important}',
+    'h[c] .pase .pasecard{' +
+      'background:transparent!important;background-image:none!important;' +
+      'box-shadow:none!important;backdrop-filter:none!important;' +
+      'border:1px solid rgba(255,255,255,.28)!important;border-radius:2px!important;' +
+      'max-width:330px!important;margin:0 auto!important;padding:20px 18px!important}',
+    'h[c] .pase .pasecard .k{' +
+      'font-family:Montserrat,sans-serif!important;font-size:9px!important;' +
+      'font-weight:500!important;letter-spacing:.2em!important;' +
+      'text-transform:uppercase!important;opacity:.55!important;' +
+      'padding-left:.2em;margin-bottom:3px!important}',
+    'h[c] .pase .pasecard .v{' +
+      'font-family:"Cormorant Garamond",serif!important;font-weight:300!important;' +
+      'font-size:21px!important;letter-spacing:.02em!important;line-height:1.2!important}',
+    'h[c] .pase #qr{' +
+      'background:#fdfcf8!important;border-radius:2px!important;padding:9px!important;' +
+      'box-shadow:0 1px 2px rgba(20,24,18,.22),0 10px 24px rgba(20,24,18,.28)!important}',
+    'h[c] .pase .estado{' +
+      'font-family:Montserrat,sans-serif!important;font-size:8.5px!important;' +
+      'font-weight:500!important;letter-spacing:.2em!important;' +
+      'text-transform:uppercase!important;' +
+      'background:transparent!important;background-image:none!important;' +
+      'border:1px solid rgba(255,255,255,.32)!important;border-radius:999px!important;' +
+      'padding:4px 11px 4px calc(11px + .2em)!important;box-shadow:none!important}',
 
     /* ── "NUESTRO VIDEO": SIN RECTÁNGULO BLANCO ───────────────────────────
        No se tapa un papel con otro papel: se esconde el video y se deja pasar
@@ -590,6 +642,30 @@
     sec.insertBefore(d, (k && k.parentElement === sec) ? k.nextSibling : sec.firstElementChild);
   }
 
+  /* ---- El pase con el QR, abajo de la raspadita --------------------------
+     Maki: «ese segmento abajo de la raspada va a quedar mejor». El motor lo
+     pone SEGUNDO, entre la portada y la raspadita: entrás y lo primero que te
+     dan es el pase, antes de saber la fecha.
+     ⚠️ Es un movimiento de nodo y nada más: se deshace mirando el DOM de
+        ahora, devolviéndolo detrás de la portada. */
+  function moverPase() {
+    var pase = document.querySelector('.pase');
+    var rasp = document.querySelector('.sec.scratch-sec');
+    if (!pase || !rasp) return;
+    if (rasp.parentElement !== pase.parentElement) return;   /* no son hermanos */
+    if (pase.previousElementSibling === rasp) return;        /* ya está puesto */
+    rasp.parentNode.insertBefore(pase, rasp.nextSibling);
+  }
+
+  function devolverPase() {
+    var pase = document.querySelector('.pase');
+    var port = document.querySelector('.portada');
+    if (!pase || !port) return;
+    if (port.parentElement !== pase.parentElement) return;
+    if (pase.previousElementSibling === port) return;
+    port.parentNode.insertBefore(pase, port.nextSibling);
+  }
+
   /* ---- "Nuestro video": la tapa, sin rectángulo blanco -------------------
      ⚠️ Una vez abierto queda abierto. Sin la marca, el bucle de 400 ms le
         vuelve a poner la tapa encima del video ya andando.
@@ -634,6 +710,7 @@
     armarCanal();
     armarVestimenta();
     armarVideo();
+    moverPase();
   }
 
   function sacarPiezas() {
@@ -652,6 +729,7 @@
     var emb = document.getElementById('video-embed');
     if (emb) delete emb.dataset.colVideo;
     [].forEach.call(document.querySelectorAll('.col-pza'), function (e) { e.remove(); });
+    devolverPase();
   }
 
   function marcarPadres() {
