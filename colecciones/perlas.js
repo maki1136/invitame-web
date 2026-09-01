@@ -72,6 +72,18 @@
       ⚠️ CUIDADO CON LA REGLA POLAROID: `h[c] .sec > img` le pone marco blanco,
          padding y sombra a TODA imagen hija directa de una sección.
 
+   ★★★★★ NO SE TAPA UN PAPEL CON OTRO PAPEL ★★★★★  (1/9/2026)
+      Maki: «en nuestro video está el rectángulo blanco y después el logotipo
+      del play. Ese coso blanco está de más».
+      Yo había tapado el video con una hoja de papel marfil. Sobre el lino de
+      la sección eso NO se lee como papel: se lee como un rectángulo blanco
+      pegado encima, con un aro adentro. Dos claros distintos, uno arriba del
+      otro, y el borde entre los dos canta.
+      → Para tapar algo dentro de una sección que YA tiene su papel: se
+        ESCONDE lo de abajo y se deja pasar el papel de la sección. La tapa va
+        transparente, sin fondo, sin sombra y sin bordes redondeados.
+      → Lo mismo vale para cualquier "tapa" futura (galería, mapa, música).
+
    ★★★ EL CSS NO REEMPLAZA LA FOTO DE UN OBJETO, PERO SÍ DIBUJA BIEN ★★★
       Vale para OBJETOS: una perla, un lacre, un moño tienen nácar que el
       código no imita. NO vale para LETRAS ni para SILUETAS ni para SÍMBOLOS.
@@ -99,14 +111,17 @@
    ⚠️⚠️ LA RASPADITA Y LAS DISPOSICIONES DE FECHA NO TIENEN PANEL ⚠️⚠️
       `fecha.js` y `raspadita.js` sólo se configuran escribiendo `fx.fecha` y
       `fx.raspadita` a mano en la base: no hay `panel-fecha.js`. Jazmín no puede
-      tocarlos.
-      Y hay una trampa que se ve como un bug: `fecha.js`, cuando hay una
-      disposición elegida, ESCONDE la tapa del motor (`#scratch-cv`) esperando
-      que el módulo `raspadita.js` ponga la suya. Si la raspadita está apagada
-      —y viene apagada por defecto— no la pone nadie y **la fecha aparece ya
-      revelada**. Maki: «la raspada viene ya raspada».
-      → Si se elige una disposición, la raspadita TIENE que estar encendida:
-        `fx.raspadita.encendido = true`.
+      tocarlos. Tres cosas que hay que dejar puestas juntas:
+        · `fx.fecha.disposicion` = la forma (acá: `circulos`)
+        · `fx.raspadita.encendido` = true
+        · `fx.raspadita.modo` = 'partes'
+      Si falta la primera, no hay círculos. Si falta la segunda, la fecha
+      aparece YA REVELADA (`fecha.js` esconde la tapa del motor esperando que
+      la ponga `raspadita.js`) — Maki: «la raspada viene ya raspada».
+      Y si falta la TERCERA, `raspadita.js` cae en su rama "simple" y tapa la
+      tarjeta ENTERA con un rectángulo plateado: se raspa el rectángulo y
+      recién ahí aparecen los círculos. Maki: «iban solamente los círculos y
+      cada círculo se raspaba».
 
    ★★★ LOS "PÉTALOS" ERAN LO QUE MAKI VEÍA COMO PERLAS DIBUJADAS ★★★
       `.fxlayer .fxp.petalo` son pétalos ROSAS que caen. Sobre la portada en
@@ -311,14 +326,19 @@
       'font-size:27px!important;letter-spacing:.02em!important}',
     'h[p] .ivf-circ .c:nth-child(2)::before{' + PERLITA + '}',
 
-    /* ── "NUESTRO VIDEO": LA TAPA DE PAPEL ───────────────────────────── */
+    /* ── "NUESTRO VIDEO": SIN RECTÁNGULO BLANCO ───────────────────────────
+       No se tapa un papel con otro papel: se esconde el video y se deja pasar
+       el papel de la sección. La tapa va transparente. Ver la nota de arriba. */
     'h[c] #video-embed{' +
-      'position:relative;border-radius:2px;overflow:hidden;' +
-      'box-shadow:0 1px 2px rgba(60,50,40,.10),0 12px 30px rgba(60,50,40,.16)}',
+      'position:relative;background:transparent!important;' +
+      'box-shadow:none!important;border-radius:0!important;overflow:visible}',
+    'h[c] #video-embed[data-col-video="tapado"] iframe,' +
+    'h[c] #video-embed[data-col-video="tapado"] video,' +
+    'h[c] #video-embed[data-col-video="tapado"] img{visibility:hidden!important}',
     'h[c] .col-vtapa{' +
       'position:absolute;inset:0;z-index:2;cursor:pointer;' +
       'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;' +
-      'background:' + PAPEL + ';color:var(--verde,#44513f)}',
+      'background:transparent;color:var(--verde,#44513f)}',
     'h[c] .col-vtapa .aro{' +
       'position:relative;width:62px;height:62px;border-radius:50%;' +
       'border:1px solid rgba(120,105,85,.5);' +
@@ -563,14 +583,16 @@
     sec.insertBefore(d, (k && k.parentElement === sec) ? k.nextSibling : sec.firstElementChild);
   }
 
-  /* ---- "Nuestro video": la tapa de papel ---------------------------------
+  /* ---- "Nuestro video": la tapa, sin rectángulo blanco -------------------
      ⚠️ Una vez abierto queda abierto. Sin la marca, el bucle de 400 ms le
-        vuelve a poner la tapa encima del video ya andando. */
+        vuelve a poner la tapa encima del video ya andando.
+     ⚠️ La marca `tapado` es la que esconde el video de abajo: no hay fondo
+        propio, se ve el papel de la sección. */
   function armarVideo() {
     var emb = document.getElementById('video-embed');
     if (!emb) return;
     if (emb.dataset.colVideo === 'abierto') return;
-    if (emb.querySelector('.col-vtapa')) return;
+    if (emb.querySelector('.col-vtapa')) { emb.dataset.colVideo = 'tapado'; return; }
 
     var t = document.createElement('div');
     t.className = 'col-vtapa';
@@ -596,6 +618,7 @@
     });
 
     emb.appendChild(t);
+    emb.dataset.colVideo = 'tapado';
   }
 
   function colocarPiezas() {
