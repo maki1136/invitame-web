@@ -105,12 +105,12 @@ input:focus{outline:none;border-color:var(--blush-hondo);
 <div class="hoja">
 
   <div class="tit"><h1>Cargar créditos</h1></div>
-  <p class="bajada" id="bajada">Entrá con tu cuenta.</p>
+  <p class="bajada" id="bajada">Entra con tu cuenta.</p>
 
   <div id="cargando" class="cargando">Un momento…</div>
 
   <form id="entrar" hidden autocomplete="on">
-    <label for="mail">Tu mail</label>
+    <label for="mail">Tu correo</label>
     <input id="mail" type="email" autocomplete="username" required>
     <label for="pass">Tu contraseña</label>
     <input id="pass" type="password" autocomplete="current-password" required>
@@ -130,18 +130,18 @@ input:focus{outline:none;border-color:var(--blush-hondo);
       <a href="https://console.firebase.google.com/u/0/project/invitame-9b51f/authentication/users"
          target="_blank" rel="noopener">Firebase → Authentication</a>:
       es la columna <b>UID</b>, con un botón para copiarlo.
-      Primero creás ahí el usuario con su mail y una contraseña, y después
-      le cargás los créditos acá.
+      Primero creas ahí el usuario con su correo y una contraseña, y después
+      le cargas los créditos aquí.
     </div>
 
     <form id="cargar">
       <label for="uid">Código de usuario (UID)</label>
-      <input id="uid" class="mono" type="text" required placeholder="pegá acá el UID">
+      <input id="uid" class="mono" type="text" required placeholder="pega aquí el UID">
 
       <label for="nombre">Nombre del estudio o del cliente</label>
       <input id="nombre" type="text" maxlength="80" placeholder="Estudio Ana">
 
-      <label for="email">Su mail</label>
+      <label for="email">Su correo</label>
       <input id="email" type="email" placeholder="ana@estudioana.com">
 
       <label for="creditos">Créditos</label>
@@ -150,7 +150,7 @@ input:focus{outline:none;border-color:var(--blush-hondo);
 
       <label for="vence">Vencen el</label>
       <input id="vence" type="date">
-      <p class="ayuda">Viene puesto a un año. Si lo dejás vacío, no vencen nunca.</p>
+      <p class="ayuda">Viene puesto a un año. Si lo dejas vacío, no vencen nunca.</p>
 
       <label class="chk"><input id="baja" type="checkbox"> Dar de baja esta cuenta</label>
 
@@ -221,8 +221,8 @@ async function arrancar(){
       $('entrar').hidden = !!u;
       $('adentro').hidden = !esAdmin;
       $('ajeno').hidden = !u || esAdmin;
-      $('bajada').textContent = !u ? 'Entrá con tu cuenta.'
-        : (esAdmin ? 'Sólo vos podés usar esta pantalla.' : '');
+      $('bajada').textContent = !u ? 'Entra con tu cuenta.'
+        : (esAdmin ? 'Sólo tú puedes usar esta pantalla.' : '');
       if (u) $('quien').textContent = u.email || '';
       /* El vencimiento viene puesto a un año, pero sólo si el casillero está
          vacío: si Maki ya escribió una fecha y la sesión se refresca sola,
@@ -230,7 +230,7 @@ async function arrancar(){
       if (esAdmin && !$('vence').value) $('vence').value = enUnAnio();
     });
   }catch(e){
-    $('cargando').innerHTML = 'No se pudo cargar. Fijate la conexión.<br><small>'+esc(e.message)+'</small>';
+    $('cargando').innerHTML = 'No se pudo cargar. Revisa tu conexión.<br><small>'+esc(e.message)+'</small>';
   }
 }
 
@@ -244,8 +244,8 @@ $('entrar').addEventListener('submit', async (ev) => {
   }catch(e){
     const c=(e&&e.code)||'';
     mostrar('error-entrar',
-      /invalid-credential|wrong-password|user-not-found/.test(c) ? 'El mail o la contraseña no coinciden.'
-      : /too-many-requests/.test(c) ? 'Demasiados intentos. Esperá unos minutos.'
+      /invalid-credential|wrong-password|user-not-found/.test(c) ? 'El correo o la contraseña no coinciden.'
+      : /too-many-requests/.test(c) ? 'Demasiados intentos. Espera unos minutos.'
       : 'No se pudo entrar. ' + ((e&&e.message)||''));
   }
   $('btn-entrar').disabled = false; $('btn-entrar').textContent = 'Entrar';
@@ -264,9 +264,9 @@ $('cargar').addEventListener('submit', async (ev) => {
   $('btn-cargar').disabled = true; $('btn-cargar').textContent = 'Guardando…';
   try{
     const crudo = $('creditos').value.trim();
-    if (!/^\d+$/.test(crudo)) throw new Error('Poné un número entero de créditos, de 0 en adelante.');
+    if (!/^\d+$/.test(crudo)) throw new Error('Pon un número entero de créditos, de 0 en adelante.');
     const n = parseInt(crudo, 10);
-    if (!Number.isSafeInteger(n)) throw new Error('Poné un número entero de créditos, de 0 en adelante.');
+    if (!Number.isSafeInteger(n)) throw new Error('Pon un número entero de créditos, de 0 en adelante.');
     /* fresco: si la pestaña estuvo abierta toda la tarde, el viejo ya venció */
     const tok = await yo.getIdToken(true);
     const r = await fetch(WORKER + '/cuenta', {
