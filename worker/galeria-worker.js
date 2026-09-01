@@ -271,6 +271,17 @@ async function ponerCuenta(req, env) {
   if (b.nombre !== undefined) campos.nombre = String(b.nombre || '').slice(0, 80);
   if (b.email !== undefined) campos.email = String(b.email || '').slice(0, 120);
 
+  /* El vencimiento. Vacío a propósito = no vence nunca (la cuenta de Maki, por
+     ejemplo). Si viene algo, tiene que ser una fecha de verdad: guardar
+     '2027-13-45' dejaría la cuenta comparándose contra un disparate. */
+  if (b.vence !== undefined) {
+    const v = String(b.vence || '').trim();
+    if (v && !fechaValida(v)) {
+      return respuesta({ error: 'Esa fecha de vencimiento no existe. Va como año-mes-día.' }, 400);
+    }
+    campos.vence = v;
+  }
+
   const t = await tokenGoogle(env);
   const mascara = Object.keys(campos).map((k) => 'updateMask.fieldPaths=' + k).join('&');
   const r = await fetch(FS + '/gal_cuentas/' + uid + '?' + mascara, {
@@ -443,6 +454,40 @@ async function escribirFirma(env, gid, fid, doc) {
   if (!r.ok) throw new Error('firestore firma ' + r.status);
 }
 
+/* ---------------- el vencimiento de los créditos ----------------
+   Decisión de Maki (1/9/2026): los créditos vencen al año, y el vencimiento
+   es UNO POR CUENTA, no uno por crédito. Cuando ella carga créditos, pone (o
+   corre) la fecha. Es como vende Selpix sus packs y es lo único que un
+   fotógrafo entiende de un vistazo.
+
+   Se guarda como texto 'YYYY-MM-DD' a propósito, no como timestamp: así se
+   compara con < entre textos (que en ese formato ordena bien), se lee de un
+   vistazo en la consola de Firebase, y no hay que pelear con tipos.
+
+   Cuenta SIN 'vence' (o vacío) = no vence nunca. Las cuentas viejas siguen
+   andando igual: agregar el campo no rompe a nadie. */
+
+/* Hoy, corrido 12 horas para atrás. El Worker piensa en UTC y los clientes
+   están en UTC-3 (Argentina) y UTC-6/-7 (México): sin el margen, a un
+   mexicano se le vencerían los créditos a las 6 de la tarde del último día.
+   Ante la duda, errar por generoso: nadie se enoja porque le duren de más. */
+function hoyGeneroso() {
+  return new Date(Date.now() - 12 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
+/* 'YYYY-MM-DD' de verdad. La expresión regular sola deja pasar 2027-13-45:
+   por eso además se arma la fecha y se comprueba que vuelva igual. */
+function fechaValida(v) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
+  const d = new Date(v + 'T00:00:00Z');
+  return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
+}
+
+function fechaLinda(v) {
+  const p = String(v).split('-');
+  return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : String(v);
+}
+
 /* ---------------- créditos ---------------- */
 /* Descuenta 1 crédito con bloqueo optimista: leo el saldo y su updateTime,
    y descuento SÓLO si nadie tocó la cuenta en el medio. Si alguien la tocó,
@@ -464,6 +509,18 @@ async function cobrarCredito(env, uid) {
     const d = desdeFirestore(j.fields || {});
     if (d.estado === 'baja') return { ok: false, status: 403, error: 'Tu cuenta está dada de baja.' };
     const saldo = parseInt(d.creditos, 10) || 0;
+
+    /* El vencimiento va ANTES del saldo: 'tenés 38 créditos pero vencieron'
+       es lo que la persona necesita escuchar, y si además está en cero el
+       mensaje sigue sirviendo (igual tiene que renovar). */
+    const vence = String(d.vence || '').trim();
+    if (vence && vence < hoyGeneroso()) {
+      return {
+        ok: false, status: 402, vencido: true, saldo,
+        error: 'Tus créditos vencieron el ' + fechaLinda(vence) + '. Escribinos para renovarlos.'
+      };
+    }
+
     if (saldo < 1) return { ok: false, status: 402, error: 'Te quedaste sin créditos.', saldo: 0 };
 
     const c = await fetch(FS + ':commit', {
