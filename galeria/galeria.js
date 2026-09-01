@@ -197,7 +197,7 @@ async function procesarCola(autor) {
         await idbPoner(t);
         if (t.intentos >= 5) {
           marcarCelda(t.id, 'espera');
-          avisar('No hay señal para subir. Lo reintento solo cuando vuelva 📶', false);
+          avisar('No hay señal para subir. Lo intento de nuevo solo cuando regrese 📶', false);
           break;
         }
         await new Promise((x) => setTimeout(x, ESPERAS[Math.min(t.intentos - 1, 3)]));
@@ -244,7 +244,7 @@ async function subirUno(t, autor) {
 
     /* 429 = "pará un poco": vale la pena reintentar más tarde. */
     if (r.status === 429) {
-      avisar(j.error || 'Subiste muchas seguidas, esperá un ratito 😉', false);
+      avisar(j.error || 'Subiste muchas seguidas, espera un momento 😉', false);
       return { ok: false, permanente: false };
     }
     /* 4xx = la foto o el evento tienen un problema: reintentar no sirve. */
@@ -265,7 +265,7 @@ let EV = null, AUTOR = null;
 async function entraron(files) {
   if (!files || !files.length) return;
   let lista = [...files];
-  if (lista.length > 15) { toast('De a 15 como mucho 😉'); lista = lista.slice(0, 15); }
+  if (lista.length > 15) { toast('Máximo 15 a la vez 😉'); lista = lista.slice(0, 15); }
 
   for (const f of lista) {
     let listo;
@@ -273,7 +273,7 @@ async function entraron(files) {
       listo = await comprimir(f);
     } catch (e) {
       /* HEIC del iPhone que este navegador no puede abrir, o archivo raro. */
-      avisar('Esa foto no se pudo leer en este teléfono. Probá con «Sacar una foto» 📷', true);
+      avisar('Esa foto no se pudo leer en este teléfono. Intenta con «Tomar una foto» 📷', true);
       continue;
     }
     const id = Date.now() + '-' + Math.random().toString(36).slice(2, 8);
@@ -311,7 +311,7 @@ function marcarCelda(id, comoQuedo) {
   b.classList.remove('subiendo');
   if (comoQuedo === 'lista') {
     b.classList.add('ok');
-    if (EV && EV.modo === 'previa') toast('¡Listo! Aparece apenas la aprueben 💛', 3600);
+    if (EV && EV.modo === 'previa') toast('¡Listo! Aparece en cuanto la aprueben 💛', 3600);
   } else if (comoQuedo === 'falló') {
     b.classList.add('error');
   } else {
@@ -420,8 +420,8 @@ function prepararMensaje() {
 
   boton.addEventListener('click', async () => {
     const texto = caja.value.trim();
-    if (!texto) { mostrarError('msj-error', 'Escribí algo primero 💛'); return; }
-    boton.disabled = true; boton.textContent = 'Mandando…';
+    if (!texto) { mostrarError('msj-error', 'Escribe algo primero 💛'); return; }
+    boton.disabled = true; boton.textContent = 'Enviando…';
     try {
       const r = await fetch(WORKER + '/firmar', {
         method: 'POST',
@@ -429,14 +429,14 @@ function prepararMensaje() {
         body: JSON.stringify({ gid: GID, autor: AUTOR, texto })
       });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo mandar (' + r.status + ')'));
+      if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo enviar (' + r.status + ')'));
       caja.value = ''; contar();
       cerrarHoja('hoja-mensaje');
       toast(j.estado === 'aprobada'
         ? '¡Listo! Ya quedó en el libro de firmas 💛'
-        : '¡Listo! Aparece apenas lo aprueben 💛', 3600);
+        : '¡Listo! Aparece en cuanto lo aprueben 💛', 3600);
     } catch (e) {
-      mostrarError('msj-error', e.message || 'No se pudo mandar.');
+      mostrarError('msj-error', e.message || 'No se pudo enviar.');
     }
     boton.disabled = false; boton.textContent = 'Dejar el mensaje';
   });
@@ -493,7 +493,7 @@ function prepararAudio() {
     if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices) {
       abrirHoja('hoja-audio');
       boton.disabled = true;
-      mostrarError('aud-error', 'Este navegador no puede grabar audio. Probá con Chrome o Safari.');
+      mostrarError('aud-error', 'Este navegador no puede grabar audio. Intenta con Chrome o Safari.');
       return;
     }
     abrirHoja('hoja-audio');
@@ -512,7 +512,7 @@ function prepararAudio() {
     } catch (e) {
       const c = (e && e.name) || '';
       mostrarError('aud-error', /NotAllowed|Permission/i.test(c)
-        ? 'No nos diste permiso para el micrófono. Podés habilitarlo desde los ajustes del navegador.'
+        ? 'No nos diste permiso para el micrófono. Puedes habilitarlo desde la configuración del navegador.'
         : /NotFound/i.test(c)
           ? 'No encontramos ningún micrófono en este dispositivo.'
           : 'No se pudo abrir el micrófono.');
@@ -554,14 +554,14 @@ function prepararAudio() {
       const segundos = Math.min(Math.round((Date.now() - arrancoEn) / 1000), TOPE_SEG);
       grabado = { blob: new Blob(pedazos, { type: mediaGrabador.mimeType || 'audio/webm' }), segundos };
       if (grabado.blob.size < 800) {
-        mostrarError('aud-error', 'El saludo salió vacío. Probá de nuevo.');
+        mostrarError('aud-error', 'El saludo salió vacío. Inténtalo de nuevo.');
         grabado = null; return;
       }
       const a = $('aud-escuchar');
       a.src = URL.createObjectURL(grabado.blob);
       a.hidden = false;
       $('aud-pie').hidden = false;
-      $('aud-ayuda').textContent = 'Escuchalo antes de mandarlo.';
+      $('aud-ayuda').textContent = 'Escúchalo antes de enviarlo.';
     };
     mediaGrabador.start();
     arrancoEn = Date.now();
@@ -570,7 +570,7 @@ function prepararAudio() {
     boton.setAttribute('aria-label', 'Parar');
     $('aud-reloj').hidden = false;
     $('aud-reloj').textContent = '0:00';
-    $('aud-ayuda').textContent = 'Estás grabando. Tocá para parar.';
+    $('aud-ayuda').textContent = 'Estás grabando. Toca para detener.';
     relojInt = setInterval(pintarReloj, 250);
   });
 
@@ -579,7 +579,7 @@ function prepararAudio() {
   $('aud-enviar').addEventListener('click', async () => {
     if (!grabado) return;
     const b = $('aud-enviar');
-    b.disabled = true; b.textContent = 'Mandando…';
+    b.disabled = true; b.textContent = 'Enviando…';
     try {
       const fd = new FormData();
       fd.append('gid', GID);
@@ -588,14 +588,14 @@ function prepararAudio() {
       fd.append('audio', grabado.blob, 'saludo');
       const r = await fetch(WORKER + '/firmar', { method: 'POST', body: fd });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo mandar (' + r.status + ')'));
+      if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo enviar (' + r.status + ')'));
       resetAudio();
       cerrarHoja('hoja-audio');
-      toast('¡Listo! Tu saludo aparece apenas lo aprueben 💛', 3600);
+      toast('¡Listo! Tu saludo aparece en cuanto lo aprueben 💛', 3600);
     } catch (e) {
-      mostrarError('aud-error', e.message || 'No se pudo mandar.');
+      mostrarError('aud-error', e.message || 'No se pudo enviar.');
     }
-    b.disabled = false; b.textContent = 'Mandar el saludo';
+    b.disabled = false; b.textContent = 'Enviar el saludo';
   });
 }
 
@@ -611,7 +611,7 @@ function resetAudio() {
   $('aud-boton').classList.remove('grabando');
   const u = $('aud-boton').querySelector('use');
   if (u) u.setAttribute('href', '#ico-micro');
-  $('aud-ayuda').textContent = 'Hasta un minuto. Tocá el micrófono y hablá.';
+  $('aud-ayuda').textContent = 'Hasta un minuto. Toca el micrófono y habla.';
   mostrarError('aud-error', '');
 }
 
@@ -652,7 +652,7 @@ function pintarVentana(ev) {
   if (!abierta) {
     c.textContent = ev.estado === 'cerrada'
       ? 'La subida de fotos ya cerró. ¡Gracias por ser parte!'
-      : 'La subida abre el día del evento. Mientras tanto podés mirar la galería.';
+      : 'La subida abre el día del evento. Mientras tanto puedes ver la galería.';
     c.hidden = false;
   } else { c.hidden = true; }
 }
