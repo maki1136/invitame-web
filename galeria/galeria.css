@@ -393,6 +393,9 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;letter-spac
     inset 0 2px 0 rgba(255,255,255,.9),
     inset 0 -3px 6px rgba(150,125,112,.16);
 }
+/* Si la fiesta no acepta saludos de voz, la ficha de escribir queda sola:
+   que ocupe todo el ancho en vez de dejar un hueco al lado. */
+.botonera.sin-audio .ficha-escribir{grid-column:1 / -1}
 
 /* ---------- la hoja que sube desde abajo ---------- */
 .hoja{
