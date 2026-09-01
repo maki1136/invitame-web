@@ -152,6 +152,14 @@ input:focus{outline:none;border-color:var(--blush-hondo);
   box-shadow:inset 0 1px 2px rgba(255,255,255,.6), 0 1px 2px rgba(74,48,56,.2)}
 .lnk-chico{background:none;border:none;color:var(--uva);font-family:inherit;
   font-size:.86rem;font-weight:700;text-decoration:underline;cursor:pointer;padding:4px}
+select{
+  width:100%;padding:14px 16px;border-radius:14px;
+  border:1px solid var(--linea);background:var(--papel);
+  font-family:inherit;font-size:1rem;color:var(--tinta);
+  box-shadow:var(--luz-arriba), inset 0 -1px 0 rgba(74,48,56,.05);
+}
+select:focus{outline:none;border-color:var(--blush-hondo);
+  box-shadow:var(--luz-arriba), 0 0 0 3px rgba(237,192,178,.35)}
 #marca-form input[type=color]{width:64px;height:44px;padding:4px;cursor:pointer}
 #marca-form input[type=file]{padding:10px 12px;font-size:.9rem}
 .ayuda-m{font-size:.85rem;color:var(--suave);margin:6px 0 0;line-height:1.4;text-transform:none;letter-spacing:0}
@@ -263,6 +271,24 @@ input:focus{outline:none;border-color:var(--blush-hondo);
       <input id="nombre" type="text" maxlength="80" placeholder="Boda de Ana y Martín" required>
       <label for="fecha">¿Qué día es?</label>
       <input id="fecha" type="date">
+
+      <!-- La moderación. Se elige acá y se puede cambiar después desde
+           «moderar», en el momento. -->
+      <label for="modo">Las fotos y los mensajes</label>
+      <select id="modo">
+        <option value="auto">Se ven al instante, sin que apruebes nada</option>
+        <option value="previa">Los aprobás vos antes de que se vean</option>
+      </select>
+      <p class="ayuda-m" id="ayuda-modo"></p>
+
+      <label class="chk">
+        <input id="audios" type="checkbox">
+        Aceptar saludos de voz
+      </label>
+      <p class="ayuda-m">Un audio no lo puede revisar ninguna máquina, así que
+        <b>los saludos de voz siempre los aprobás vos</b>, aunque el resto salga solo.
+        Si no vas a estar mirando el celular durante la fiesta, dejalo apagado.</p>
+
       <button class="btn" type="submit" id="btn-crear" disabled>Crear la fiesta</button>
       <div class="aviso mal" id="error-crear" hidden></div>
       <div class="aviso bien" id="listo-crear" hidden></div>
@@ -587,6 +613,19 @@ $('marca-form').addEventListener('submit', async (ev) => {
   $('btn-marca').textContent = 'Guardar mi marca'; $('btn-marca').disabled = false;
 });
 
+/* La explicación cambia con la opción elegida, en vez de un párrafo que
+   describa las dos: así el cliente lee sólo lo que le va a pasar. */
+function ayudaDelModo() {
+  $('ayuda-modo').innerHTML = $('modo').value === 'auto'
+    ? 'Nadie tiene que estar aprobando nada durante la fiesta. Las fotos igual pasan '
+      + 'por un filtro automático y los mensajes con palabrotas quedan esperando: '
+      + '<b>automático quiere decir sin persona, no sin filtro</b>.'
+    : 'Nada se ve hasta que lo aprobás desde «Moderar». Es lo más prolijo, pero '
+      + 'alguien tiene que estar mirando el celular durante la fiesta.';
+}
+$('modo').addEventListener('change', ayudaDelModo);
+ayudaDelModo();
+
 /* ---------- crear una fiesta ---------- */
 $('crear').addEventListener('submit', async (ev) => {
   ev.preventDefault();
@@ -602,7 +641,9 @@ $('crear').addEventListener('submit', async (ev) => {
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
       body: JSON.stringify({
         nombre: $('nombre').value.trim(),
-        fecha: $('fecha').value || ''
+        fecha: $('fecha').value || '',
+        modo: $('modo').value === 'auto' ? 'auto' : 'previa',
+        audios: $('audios').checked
       })
     });
     const j = await r.json().catch(() => ({}));
