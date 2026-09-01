@@ -35,13 +35,11 @@
         no se sacrifica para que una pieza entre.
 
    ★★★★★ …PERO UNA FOTO QUE NO DICE NADA TAMPOCO ES CONTENIDO ★★★★★
-      La otra cara, y la aprendí en la misma sección. En Vestimenta había una
-      foto de los novios abrazados. Maki: «¿y la foto de los novios qué tiene
-      que ver con vestimenta?». Nada. Era una foto linda que no respondía la
-      pregunta de la sección.
+      En Vestimenta había una foto de los novios abrazados. Maki: «¿y la foto de
+      los novios qué tiene que ver con vestimenta?». Nada. Era una foto linda
+      que no respondía la pregunta de la sección.
       → No alcanza con que una imagen sea del casamiento: tiene que contestar
-        lo que la sección pregunta. Si no contesta nada, se saca, aunque sea
-        contenido cargado por la clienta.
+        lo que la sección pregunta.
 
    ★★★ MAPA MUESTRA → NUESTRA INVITACIÓN (Pavel & Lada) ★★★
       | En la muestra              | Objeto              | Nuestra sección     |
@@ -49,7 +47,7 @@
       | portada · DEAR FRIENDS     | collar que cruza    | `.fraseSec` ✅       |
       | DEAR FRIENDS! You're inv.  | sobre abierto+clip  | #carta-sec ⚠ ver ↓  |
       | PROGRAM / of the day       | hilo + broche       | itinerario `.tl` ✅  |
-      | DRESS CODE / colors        | círculos de color   | Vestimenta ✅        |
+      | DRESS CODE / colors        | círculos + siluetas | Vestimenta ✅        |
       | OUR CHANNEL / Telegram     | sobre con moño      | #contacto-sec ✅     |
       | WISHES                     | dos corazones       | Mesa de regalos ✅    |
       | VENUE / Save the place!    | bandeja de plata    | ⛔ GUARDADA, ver ↓   |
@@ -70,8 +68,7 @@
          → Repetir el atributo o la clase: `[data-x][data-x]`.
       2. `:is()` TOMA LA ESPECIFICIDAD DE SU ARGUMENTO MÁS FUERTE.
          `botones.js` trae `:is(.btn, #btn-ingresar, .wsp, …)`. Ese
-         `#btn-ingresar` de adentro le da a TODA la regla peso de ID (1,1,0),
-         aunque el botón que estoy pintando no tenga ningún id.
+         `#btn-ingresar` de adentro le da a TODA la regla peso de ID (1,1,0).
          → Hay que nombrar un id de verdad en el selector (`#wa-p1`, `#wa-p2`).
       → Y la única forma de darse cuenta de las dos es MIRAR LA PÁGINA.
 
@@ -79,46 +76,48 @@
       `.fraseSec` es `display:flex; flex-direction:row`. Al agregarle la foto
       del sobre como hijo normal, la imagen se convirtió en UNA COLUMNA MÁS y
       le robó el ancho al texto: el párrafo pasó de 375 px a 177 px.
-      → Tres salidas, según la pieza:
-        · `position:absolute` — algo chico en una esquina (el sobre).
-        · `flex-wrap` en el padre + `flex:0 0 100%` — algo a todo el ancho
-          (el collar). Se lleva una fila entera.
-        · nada — si la sección no es flex ni grid, comprobado.
+      → Tres salidas: `position:absolute` para algo chico en una esquina;
+        `flex-wrap` + `flex:0 0 100%` para algo a todo el ancho (el collar);
+        nada, si la sección no es flex ni grid.
 
    ★★★ TRES MANERAS DE APOYAR UNA FOTO SOBRE EL PAPEL ★★★
       1. RECORTADA con alfa — lo que flota sobre cualquier fondo (broche).
-      2. DIFUMINADA con `mask-image` — lo que vive en una sección clara
-         (bandeja, sobre, moño).
+      2. DIFUMINADA con `mask-image` — lo que vive en una sección clara.
       3. MULTIPLICADA (`mix-blend-mode:multiply`) — el collar. Su papel fue
          llevado a blanco puro. Sirve en las 20 paletas sin regenerar.
 
       ⚠️ LAS PIEZAS VAN COMO <img>, NUNCA COMO `background-image` DE UNA CAJA
          CON HIJOS: la máscara de un fondo no se separa del contenido.
-      ⚠️ SÓLO FUNCIONAN EN SECCIÓN CLARA. Sobre `.sec.verde` el papel marfil
-         entra como un rectángulo claro, con máscara y todo.
+      ⚠️ SÓLO FUNCIONAN EN SECCIÓN CLARA.
       ⚠️ CUIDADO CON LA REGLA POLAROID: `h[c] .sec > img` le pone marco blanco,
          padding y sombra a TODA imagen hija directa de una sección.
 
-   ★★★ EL CSS NO REEMPLAZA UNA FOTO DE UN OBJETO, PERO SÍ DIBUJA LETRAS ★★★
-      La regla vieja decía «las cosas dibujadas con CSS no reemplazan a una
-      foto», y es cierta para OBJETOS: una perla, un lacre, un moño tienen
-      nácar y microrrelieve que el CSS no imita.
-      NO vale para LETRAS. El monograma de Vestimenta es tipografía: dibujarlo
-      con código sale mejor que cualquier foto, escala sin pixelarse y toma el
-      color de cada paleta.
+   ★★★ EL CSS NO REEMPLAZA LA FOTO DE UN OBJETO, PERO SÍ DIBUJA BIEN ★★★
+      La regla vieja —«las cosas dibujadas con CSS no reemplazan a una foto»—
+      es cierta para OBJETOS: una perla, un lacre, un moño tienen nácar y
+      microrrelieve que el código no imita.
+      NO vale para LETRAS ni para SILUETAS. El traje y el vestido de Vestimenta
+      son dibujo de línea: hechos con código escalan sin pixelarse y toman el
+      color de cada paleta. Una foto ahí sería peor.
+
+      ★ Y LO QUE SEPARA UN ICONO DE LA PAPELERÍA FINA ES EL TRAZO Y LA PROPORCIÓN
+        Los iconos que traía el motor (`#dc-mono`) no estaban mal dibujados:
+        estaban GRUESOS (trazo 1.7) y ANCHOS. Al bajar el trazo a 1.15, angostar
+        los hombros y alargar la silueta, el mismo objeto pasa de icono de app a
+        papelería. Las dos figuras van en el MISMO viewBox (56x120) para que
+        midan igual y apoyen en la misma línea.
+      ⚠️ El traje tuvo una primera versión con un escalón a la altura del codo
+         (de dibujar las mangas cortadas) y se leía como una CAPA. La silueta va
+         continua, de hombro a ruedo, sin escalones.
 
    ★★★ LOS "PÉTALOS" ERAN LO QUE MAKI VEÍA COMO PERLAS DIBUJADAS ★★★
       `.fxlayer .fxp.petalo` son pétalos ROSAS que caen, un efecto de ambiente
-      del panel. Sobre la portada en blanco y negro se leen como manchas grises
-      planas. Yo buscaba el bug en el motivo, que ya estaba en `discreto`.
-      → Acá el pétalo pasa a ser LA PERLA fotográfica, chica. Sigue siendo el
-        interruptor de Jazmín: si lo apaga, no cae nada.
+      del panel. Sobre la portada en blanco y negro se leen como manchas grises.
+      → Acá el pétalo pasa a ser LA PERLA fotográfica, chica.
 
    ★★★ CÓMO SE CAMBIAN LOS TAMAÑOS: SE SETEAN LAS VARIABLES DEL MOTOR ★★★
       El motor aplica su escala con `!important`:
           .sec h2 { font-size: var(--fs-titulo, 30px) !important }
-      Escala: --fs-nombres --fs-kicker --fs-titulo --fs-cursiva --fs-contador
-      --fs-texto --fs-datos --fs-direccion --fs-lugar --fs-frase --fs-boton.
 
    ★★★ LOS NOMBRES DE LA PORTADA LOS MANDA JAZMÍN ★★★
       El motor les escribe familia, tamaño y color EN LÍNEA desde `nfont`,
@@ -126,25 +125,20 @@
 
    ★★★ NUNCA GUARDAR UNA COPIA DEL HTML PARA "DESHACER" ★★★
       Guardar `h1.innerHTML` hacía aparecer "María & Diego", los nombres de la
-      BODA DE EJEMPLO: el motor dibuja el ejemplo primero.
-      → Deshacer SIEMPRE estructuralmente, desde el DOM vivo.
+      BODA DE EJEMPLO. Deshacer SIEMPRE desde el DOM vivo.
 
    ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★
-      El motor lo reinserta en cada pasada, así que `acomodar()` corre en el
-      bucle de 400 ms. Lo mismo vale para las piezas.
+      Lo reinserta en cada pasada: `acomodar()` corre en el bucle de 400 ms.
 
    ★ EL MOTIVO: SE SUGIERE `discreto`, NO `todo`
-      Repetir una misma foto muchas veces y GRANDE se lee como dibujo.
+   ★ LA LÍNEA DE TIEMPO ES UN HILO DE PERLAS · `.tl-prog` se ESCONDE
+   ★ LA FRASE PIERDE SU ALTURA FIJA, si no el texto queda cortado bajo el collar
+   ★ `.padres` ES UNA GRILLA DE 2 COLUMNAS → `data-col-n`
 
-   ★ LA LÍNEA DE TIEMPO ES UN HILO DE PERLAS
-      `.tl-prog` se ESCONDE: el motor la anima con `scaleY` y escalar un fondo
-      repetido deja las perlas ovaladas.
-
-   ★ LA SECCIÓN DE LA FRASE SE LIMPIA Y PIERDE SU ALTURA FIJA
-      Con la altura fija el texto quedaba cortado abajo del collar.
-
-   ★ `.padres` ES UNA GRILLA DE 2 COLUMNAS
-      Con 3 personas la tercera queda sola abajo. → `data-col-n`.
+   ★ LAS INICIALES (C & T) — IDEA GUARDADA, NO ESTÁ PUESTA
+     Se probó un aro con las iniciales en Vestimenta y quedaba lindo, pero no
+     era lo que Maki pedía ahí. Si alguna vez se quiere, va mejor en la portada
+     o en el sobre. Se arma con `INVEV.n1` / `n2` y `fx.sobre.ini` de respaldo.
    ============================================================================ */
 (function () {
   'use strict';
@@ -177,17 +171,49 @@
   var MASCARA  = 'radial-gradient(ellipse 58% 58% at 50% 50%,#000 40%,transparent 76%)';
   var MASCARA2 = 'radial-gradient(ellipse 76% 84% at 50% 48%,#000 58%,transparent 92%)';
 
-  /* la fibra del papel de una carta: dos tramas finas cruzadas, casi
-     transparentes. Con una sola dirección se ve rayado, no papel. */
   var PAPEL =
     'linear-gradient(179.4deg,rgba(255,255,255,.55),rgba(244,238,224,.6) 48%,rgba(252,250,244,.5)),' +
     'repeating-linear-gradient(90deg,rgba(150,132,104,.045) 0 1px,transparent 1px 3px),' +
     'repeating-linear-gradient(0deg,rgba(150,132,104,.035) 0 1px,transparent 1px 4px),' +
     '#fbf7ee';
 
+  /* ---- el traje y el vestido, dibujados finos --------------------------
+     Los dos en el MISMO viewBox para que midan igual y apoyen en la misma
+     línea. Trazo 1.15: a 74 px de ancho da una línea de ~1,5 px. */
+  var TRAZO = 'stroke="currentColor" fill="none" stroke-width="1.15" ' +
+              'stroke-linejoin="round" stroke-linecap="round"';
+
+  var TRAJE =
+    '<svg viewBox="0 0 56 120" ' + TRAZO + ' aria-label="Traje">' +
+      /* silueta continua: hombro angosto → se afina → ruedo. SIN escalón. */
+      '<path d="M22 13 L14 18 C11 20 9.6 23 9.2 27 L10.4 62 L12 112 L44 112 ' +
+              'L45.6 62 L46.8 27 C46.4 23 45 20 42 18 L34 13"/>' +
+      /* la solapa en V, larga */
+      '<path d="M22 13 C21 26 22.5 41 28 53 C33.5 41 35 26 34 13"/>' +
+      '<path d="M28 53 L28 112"/>' +
+      /* las costuras de las mangas, apenas insinuadas */
+      '<path d="M14.6 21 C16.5 30 17 44 16.6 60" opacity=".4"/>' +
+      '<path d="M41.4 21 C39.5 30 39 44 39.4 60" opacity=".4"/>' +
+      /* el moño */
+      '<path d="M24.2 14.4 L28 17.6 L24.2 20.8 Z"/>' +
+      '<path d="M31.8 14.4 L28 17.6 L31.8 20.8 Z"/>' +
+      '<circle cx="28" cy="70" r="1.5"/><circle cx="28" cy="84" r="1.5"/>' +
+    '</svg>';
+
+  var VESTIDO =
+    '<svg viewBox="0 0 56 120" ' + TRAZO + ' aria-label="Vestido">' +
+      '<path d="M20 12.5 L21.5 30"/><path d="M36 12.5 L34.5 30"/>' +
+      /* escote en V, cintura, y la falda que se abre con curva (no trapecio) */
+      '<path d="M21.5 30 C24.5 34.5 28 36.5 28 36.5 C28 36.5 31.5 34.5 34.5 30 ' +
+              'L36.5 58 C44 74 49 94 51 110 C40 114.5 16 114.5 5 110 ' +
+              'C7 94 12 74 19.5 58 Z"/>' +
+      '<path d="M19.5 58 L36.5 58"/>' +
+      '<path d="M25.5 62 C23.5 80 22 96 20.5 108" opacity=".45"/>' +
+      '<path d="M30.5 62 C32.5 80 34 96 35.5 108" opacity=".45"/>' +
+    '</svg>';
+
   var CSS = [
 
-    /* ── LOS TAMAÑOS: por las variables del motor ──────────────────────── */
     'h[c]{' +
       '--fs-titulo:clamp(20px,5.6vw,31px);' +
       '--fs-cursiva:clamp(18px,4.8vw,24px);' +
@@ -195,7 +221,6 @@
       '--fs-contador:clamp(29px,8.6vw,44px);' +
       '--fs-frase:clamp(17px,4.4vw,22px)}',
 
-    /* ── EL PAR QUE SE REPITE EN TODAS LAS SECCIONES ───────────────────── */
     'h[c] .sec h2.reveal{' +
       'font-family:"Cormorant Garamond",Forum,serif;font-weight:300;' +
       'text-transform:uppercase;letter-spacing:.2em;line-height:1.2;' +
@@ -212,12 +237,10 @@
 
     'h[c] .sec > .adorno{margin:0 auto 34px;opacity:.55}',
 
-    /* ── AIRE ─────────────────────────────────────────────────────────── */
     'h[c] .sec{padding:76px 30px}',
     'h[c] .sec > p,h[c] .sec p.reveal{max-width:23em;margin-left:auto;margin-right:auto;line-height:1.75}',
     '@media (max-width:420px){h[c] .sec{padding:60px 24px}}',
 
-    /* ── ARCOS ────────────────────────────────────────────────────────── */
     'h[c] .sec.verde{' +
       'border-top-left-radius:50% 90px;border-top-right-radius:50% 90px;' +
       'padding-top:104px}',
@@ -225,18 +248,15 @@
       'border-top-left-radius:50% 58px;border-top-right-radius:50% 58px;' +
       'padding-top:82px}}',
 
-    /* ── LA FOTO DE PORTADA, EN BLANCO Y NEGRO ────────────────────────── */
     'h[c] .portada .pbg,h[c] .portada .cover-vid{' +
       'filter:grayscale(1) contrast(1.06) brightness(.98)}',
 
-    /* ── LO QUE CAE: LA PERLA, NO UN PÉTALO ROSA ─────────────────────── */
     'h[p] .fxlayer .fxp{' +
       'background:var(--col-perla) no-repeat center/contain!important;' +
       'border-radius:0!important;width:9px!important;height:9px!important;' +
       'opacity:.5!important;' +
       'filter:drop-shadow(0 1px 1px rgba(60,50,40,.25))!important}',
 
-    /* ── LAS FOTOS DEL CLIENTE, COMO OBJETOS APOYADOS ─────────────────── */
     'h[c] .sec > img{' +
       'background:#fff;padding:9px;border-radius:2px;' +
       'box-shadow:0 1px 2px rgba(60,50,40,.14),0 10px 24px rgba(60,50,40,.13);' +
@@ -244,10 +264,7 @@
     'h[c] .sec > img:not(.reveal):nth-of-type(odd){transform:rotate(-1.4deg)}',
     'h[c] .sec > img:not(.reveal):nth-of-type(even){transform:rotate(1.1deg)}',
 
-    /* ── "DÓNDE Y CUÁNDO": LA FOTO DEL LUGAR, CON RECUADRO ────────────────
-       «prefiero que estén las imágenes de dónde es la ceremonia y dónde es la
-       fiesta, me gustaba más así, con algún recuadro». El recuadro es el mismo
-       arco que usan las secciones, montura de papel crema, filete y sombra. */
+    /* ── "DÓNDE Y CUÁNDO": LA FOTO DEL LUGAR, CON RECUADRO ─────────────── */
     'h[c] .sec .evento{' +
       'background:#fdfcf8!important;border:0!important;' +
       'box-shadow:0 1px 2px rgba(20,24,18,.16),0 14px 34px rgba(20,24,18,.24)!important;' +
@@ -270,32 +287,20 @@
     'h[c] .sec .evento .btn{' +
       'font-size:9px!important;letter-spacing:.14em!important;padding:9px 14px!important}',
 
-    /* ── VESTIMENTA: EL MONOGRAMA ────────────────────────────────────────
-       «donde dice vestimenta tiene que ir un monograma elegante. ¿Y la foto de
-       los novios qué tiene que ver con vestimenta?».
-       Las iniciales en un aro finito, con la PERLA DE VERDAD apoyada arriba,
-       como el broche de un collar. La foto de los novios se apaga.
-       ⚠️ `#dc-mono` es OTRA COSA: dos iconos del motor (un traje y un vestido)
-          que vienen apagados. No confundir. */
+    /* ── VESTIMENTA: EL TRAJE Y EL VESTIDO ───────────────────────────────
+       «que sean como dibujados, que tengan estilo elegante». Los del motor
+       (`#dc-mono`) se apagan: son los mismos objetos pero gruesos y anchos. */
+    'h[c] #dc-mono{display:none!important}',
     'h[c] #dress-img{display:none!important}',
-    'h[c] .col-mono{' +
-      'position:relative;width:132px;height:132px;margin:6px auto 34px;' +
-      'border:1px solid rgba(120,105,85,.45);border-radius:50%;' +
-      'display:flex;align-items:center;justify-content:center;' +
-      'color:var(--verde,#44513f)}',
-    'h[c] .col-mono .col-ini{' +
-      'font-family:"Cormorant Garamond",serif;font-weight:300;' +
-      'font-size:44px;line-height:1;letter-spacing:.04em}',
-    'h[c] .col-mono .col-amp{' +
-      'font-family:"Great Vibes",cursive;font-size:26px;line-height:1;' +
-      'opacity:.7;margin:0 5px;transform:translateY(3px)}',
-    'h[p] .col-mono .col-perlita{' +
-      'position:absolute;top:-7px;left:50%;transform:translateX(-50%);' +
-      'width:14px;height:14px;' +
-      'background:var(--col-perla) no-repeat center/contain;' +
-      'filter:drop-shadow(0 1px 2px rgba(60,50,40,.25))}',
-    '@media (max-width:360px){h[c] .col-mono{width:116px;height:116px}' +
-      'h[c] .col-mono .col-ini{font-size:38px}}',
+    'h[c] .col-vest{' +
+      'display:flex;align-items:flex-end;justify-content:center;gap:8px;' +
+      'margin:10px auto 34px;color:var(--verde,#44513f)}',
+    'h[c] .col-vest svg{width:74px;height:auto;display:block}',
+    'h[c] .col-vest .col-amp{' +
+      'font-family:"Great Vibes",cursive;font-size:30px;line-height:1;' +
+      'opacity:.65;margin-bottom:38px}',
+    '@media (max-width:360px){h[c] .col-vest svg{width:64px}' +
+      'h[c] .col-vest .col-amp{font-size:26px;margin-bottom:32px}}',
 
     /* ── LA SECCIÓN DE LA FRASE ──────────────────────────────────────── */
     'h[c] .fraseSec{' +
@@ -308,12 +313,10 @@
       'font-family:"Cormorant Garamond",serif;font-weight:300;line-height:1.9;' +
       'max-width:19em;margin-left:auto;margin-right:auto;color:var(--verde,#44513f)}',
 
-    /* ── `.padres`: la grilla según cuántos sean ──────────────────────── */
     'h[c] .padres[data-col-n="3"]{grid-template-columns:repeat(3,1fr)!important;gap:12px!important}',
     'h[c] .padres[data-col-n="1"]{grid-template-columns:minmax(0,220px)!important;justify-content:center!important}',
     '@media (max-width:360px){h[c] .padres[data-col-n="3"]{gap:8px!important}}',
 
-    /* ── LA LÍNEA DE TIEMPO, HECHA DE PERLAS ──────────────────────────── */
     'h[p] .tl::before{' +
       'width:11px!important;left:1.5px!important;opacity:1!important;' +
       'background:var(--col-perla) repeat-y center top/11px 11px!important;' +
@@ -325,18 +328,14 @@
       'box-shadow:none!important;border:0!important;' +
       'filter:drop-shadow(0 1px 2px rgba(60,50,40,.2))}',
 
-    /* ── LAS PIEZAS FOTOGRAFIADAS ─────────────────────────────────────── */
     'h[c] .col-pza{pointer-events:none;display:block}',
 
     'h[c] .tl .col-broche{' +
       'position:absolute;width:22px;height:auto;left:-4px;bottom:-11px;' +
       'filter:drop-shadow(0 1px 2px rgba(60,50,40,.24))}',
 
-    /* ── EL COLLAR: CRUZA LA INVITACIÓN, A SANGRE ─────────────────────────
-       «las perlas son mucho más grandes, pasan por la invitación y son reales
-       fotográficas arriba del fondo blanco, se nota en el relieve, las
-       sombras». Los márgenes negativos tienen que ser IGUALES al padding
-       lateral de la sección para llegar al borde. */
+    /* ── EL COLLAR: CRUZA LA INVITACIÓN, A SANGRE ───────────────────────
+       Los márgenes negativos tienen que ser IGUALES al padding lateral. */
     'h[c] .fraseSec .col-collar{' +
       'flex:0 0 100%!important;order:-1!important;position:static!important;' +
       'width:calc(100% + 60px)!important;max-width:none!important;' +
@@ -348,7 +347,6 @@
     '@media (max-width:420px){h[c] .fraseSec .col-collar{' +
       'width:calc(100% + 48px)!important;margin:0 -24px 22px!important;height:118px!important}}',
 
-    /* el sobre chico, en la esquina: «dejá el sobre pero que sea delicado» */
     'h[c] .fraseSec .col-sobre{' +
       'position:absolute!important;right:6px;bottom:6px;width:96px;height:auto;z-index:1;' +
       'background:none!important;padding:0!important;box-shadow:none!important;' +
@@ -357,12 +355,7 @@
       '-webkit-mask-image:' + MASCARA + ';mask-image:' + MASCARA + '}',
     '@media (max-width:360px){h[c] .fraseSec .col-sobre{width:80px}}',
 
-    /* ── "¿ALGUNA DUDA?" = OUR CHANNEL, Y LA TARJETA ES UNA CARTA ─────────
-       «ese cuadrado blanco con ese sobre queda mal. Tendría que ser como una
-       carta, con un papel, tiene que tener esa delicadeza».
-       Lo que la vuelve papel: la fibra cruzada, el doblez, el grado de
-       inclinación y la sombra cálida. Los botones pasan a ser renglones
-       subrayados, como la firma. */
+    /* ── "¿ALGUNA DUDA?" = OUR CHANNEL, Y LA TARJETA ES UNA CARTA ─────── */
     'h[c] #contacto-sec{' +
       'background-image:none!important;background-color:var(--lino,#f4f3ec)!important;' +
       'padding-bottom:56px!important}',
@@ -397,7 +390,7 @@
       'font-family:Montserrat,sans-serif!important;font-size:9px!important;' +
       'letter-spacing:.2em!important;text-transform:uppercase!important;font-weight:500!important}',
 
-    /* ── EL MARCO DE LA BANDEJA — GUARDADO, NO SE USA TODAVÍA ───────────── */
+    /* ── EL MARCO DE LA BANDEJA — GUARDADO, NO SE USA TODAVÍA ─────────── */
     'h[c] .col-lugar{' +
       'position:relative;max-width:344px;margin:4px auto 0;box-sizing:border-box;' +
       'padding:52px 40px}',
@@ -429,8 +422,7 @@
       'font-size:clamp(10px,2.8vw,12px);letter-spacing:.26em;' +
       'opacity:.9;margin-top:22px;padding-left:.26em}',
 
-    /* ── LA CUENTA REGRESIVA ──────────────────────────────────────────────
-       ⚠️ `.sep` son los DOS PUNTOS entre los números, no un separador. */
+    /* ⚠️ `.sep` son los DOS PUNTOS entre los números, no un separador. */
     'h[c] .count .num{' +
       'font-family:"Cormorant Garamond",serif;font-weight:300;' +
       'line-height:1;letter-spacing:.02em}',
@@ -455,7 +447,6 @@
     if (s.textContent !== CSS) s.textContent = CSS;
   }
 
-  /* ---- el motivo: se sugiere DISCRETO ------------------------------------ */
   function sugerirMotivo() {
     try {
       var ev = window.INVEV;
@@ -468,8 +459,7 @@
   }
 
   /* =====================================================================
-     LAS PIEZAS
-     Todo esto se vuelve a correr en el bucle de 400 ms porque el motor
+     LAS PIEZAS — se vuelven a correr en el bucle de 400 ms porque el motor
      reinserta nodos en cada pasada.
      ===================================================================== */
 
@@ -533,43 +523,23 @@
     });
   }
 
-  /* ---- Vestimenta: el monograma de las iniciales -------------------------
-     Las letras salen de los nombres del evento, con `fx.sobre.ini` de
-     respaldo. Con un solo nombre va una sola letra y sin ampersand. */
-  function iniciales() {
-    var ev = window.INVEV || {};
-    function letra(s) { s = String(s || '').trim(); return s ? s.charAt(0).toUpperCase() : ''; }
-    var a = letra(ev.n1), b = letra(ev.n2);
-    if (!a && !b) {
-      var ini = String(((ev.fx || {}).sobre || {}).ini || '').trim().split(/\s+/);
-      a = letra(ini[0]); b = letra(ini[1]);
-    }
-    return [a, b];
-  }
-
-  function armarMonograma() {
+  /* ---- Vestimenta: el traje y el vestido, con el & en el medio ---------- */
+  function armarVestimenta() {
     var h = document.getElementById('dress-h2');
     var sec = h && h.closest ? h.closest('.sec') : null;
-    if (!sec || sec.querySelector('.col-mono')) return;
-    var i = iniciales();
-    if (!i[0] && !i[1]) return;
-    var m = document.createElement('div');
-    m.className = 'col-mono';
-    var html = '<span class="col-perlita"></span><span class="col-ini">' + i[0] + '</span>';
-    if (i[1]) html += '<span class="col-amp">&amp;</span><span class="col-ini">' + i[1] + '</span>';
-    m.innerHTML = html;
+    if (!sec || sec.querySelector('.col-vest')) return;
+    var d = document.createElement('div');
+    d.className = 'col-vest';
+    d.innerHTML = TRAJE + '<span class="col-amp">&amp;</span>' + VESTIDO;
     var k = document.getElementById('dress-kick');
-    sec.insertBefore(m, (k && k.parentElement === sec) ? k.nextSibling : sec.firstElementChild);
+    sec.insertBefore(d, (k && k.parentElement === sec) ? k.nextSibling : sec.firstElementChild);
   }
-
-  /* ⛔ LA BANDEJA NO SE COLOCA. Maki la quiere «para otro lado» y todavía no
-     dijo dónde. El material y el CSS están listos; falta el lugar. */
 
   function colocarPiezas() {
     armarBroche();
     armarFrase();
     armarCanal();
-    armarMonograma();
+    armarVestimenta();
   }
 
   function sacarPiezas() {
@@ -584,7 +554,7 @@
     [].forEach.call(document.querySelectorAll('[data-col-lugar]'), function (s) {
       s.removeAttribute('data-col-lugar');
     });
-    [].forEach.call(document.querySelectorAll('.col-mono'), function (e) { e.remove(); });
+    [].forEach.call(document.querySelectorAll('.col-vest'), function (e) { e.remove(); });
     [].forEach.call(document.querySelectorAll('.col-pza'), function (e) { e.remove(); });
   }
 
