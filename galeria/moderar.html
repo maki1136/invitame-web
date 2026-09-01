@@ -337,7 +337,7 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
     <label class="aj">
       <input id="aj-audios" type="checkbox">
       <span><b>Aceptar saludos de voz</b>
-        <small>Los audios siempre los aprobás vos, esté como esté lo de arriba.</small></span>
+        <small>Los audios siempre los apruebas tú, esté como esté lo de arriba.</small></span>
     </label>
     <div class="aj-aviso" id="aj-aviso" hidden></div>
   </div>
@@ -357,8 +357,8 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 <div id="login" hidden>
   <div class="caja">
     <h2>Moderación</h2>
-    <p>Entrá con tu cuenta, la misma con la que creaste la galería.</p>
-    <input id="lg-mail" type="email" placeholder="Email" autocomplete="username">
+    <p>Entra con tu cuenta, la misma con la que creaste la galería.</p>
+    <input id="lg-mail" type="email" placeholder="Correo" autocomplete="username">
     <input id="lg-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
     <button id="lg-ok" type="button">Entrar</button>
     <p id="lg-error" style="color:#A3242F;margin:14px 0 0" hidden></p>
@@ -402,7 +402,7 @@ function prepararAjustes(ev) {
     cModo.checked = modo !== 'auto';
     cAud.checked = audios === true;
     $('aj-modo-pie').textContent = cModo.checked
-      ? 'Nada se ve hasta que lo aprobás acá.'
+      ? 'Nada se ve hasta que lo apruebas aquí.'
       : 'Las fotos y los mensajes se ven al instante. El filtro automático sigue andando.';
   }
   pintar(ev.modo, ev.audios);
@@ -470,7 +470,7 @@ const $ = (id) => document.getElementById(id);
 const GID = new URLSearchParams(location.search).get('g') || '';
 
 if (!GID) {
-  $('estado').innerHTML = '<p>Falta el evento. Abrí este panel desde el link que termina en <code>?g=…</code></p>';
+  $('estado').innerHTML = '<p>Falta el evento. Abre este panel desde el link que termina en <code>?g=…</code></p>';
 } else {
   setPersistence(auth, browserLocalPersistence).catch(() => {});
   onAuthStateChanged(auth, (u) => {
@@ -481,7 +481,7 @@ if (!GID) {
     $('lg-error').hidden = true;
     try { await signInWithEmailAndPassword(auth, $('lg-mail').value.trim(), $('lg-pass').value); }
     catch (e) {
-      $('lg-error').textContent = 'No se pudo entrar. Revisá el mail y la contraseña.';
+      $('lg-error').textContent = 'No se pudo entrar. Revisa el correo y la contraseña.';
       $('lg-error').hidden = false;
     }
   };
@@ -500,10 +500,19 @@ function mezclar(a, b, orden) {
   return a.concat(b).sort((x, y) => ((x.tsms || 0) - (y.tsms || 0)) * orden);
 }
 
-/* Los uid que pueden moderar CUALQUIER fiesta (Maki). No es un secreto:
-   un uid solo no sirve para nada sin la sesión de esa persona. Hace falta
-   porque las fiestas que crea ella con la clave del Worker quedan sin dueño. */
-const ADMINS = ['gokxWGUaw3e3NBWjeCpYUXaZdY03'];
+/* Los uid que pueden moderar CUALQUIER fiesta. No es un secreto: un uid solo no
+   sirve para nada sin la sesión de esa persona. Hace falta porque las fiestas que
+   crea Maki con la clave del Worker quedan sin dueño.
+
+   ⚠️ Esta lista tiene que decir lo mismo que MODERAN en el Worker.
+   ⚠️ Y NO es la de cargar créditos (ADMIN_UIDS, en Cloudflare): moderar y manejar
+      la plata son dos permisos distintos, a propósito.
+
+   gokx… = Maki · NYR6… = Jazmín */
+const ADMINS = [
+  'gokxWGUaw3e3NBWjeCpYUXaZdY03',
+  'NYR66cd13ofVY1T2xjT5HHzRXYq2'
+];
 
 function noPasa(txt) {
   $('cabecera').hidden = true;
@@ -525,7 +534,7 @@ async function arrancar() {
     const s = await getDoc(doc(db, 'gal_eventos', GID));
     if (s.exists()) ev = s.data();
   } catch (e) {
-    return noPasa('No pudimos comprobar de quién es esta fiesta. Probá de nuevo en un momento.');
+    return noPasa('No pudimos comprobar de quién es esta fiesta. Inténtalo de nuevo en un momento.');
   }
   if (!ev) return noPasa('Esta galería no existe, o el link está incompleto.');
 
@@ -533,7 +542,7 @@ async function arrancar() {
   const esDuenio = !!ev.duenio && ev.duenio === yo;
   const esAdmin = ADMINS.indexOf(yo) >= 0;
   if (!esDuenio && !esAdmin) {
-    return noPasa('Esta galería no es de tu cuenta. Entrá con la cuenta con la que la creaste.');
+    return noPasa('Esta galería no es de tu cuenta. Entra con la cuenta con la que la creaste.');
   }
 
   $('cabecera').hidden = false; $('panel').hidden = false;
@@ -643,7 +652,7 @@ function minSeg(s) {
    - foto cuyo filtro no contesto    -> rojo, como antes */
 function chipFiltro(f) {
   const m = f.mod || {};
-  if (f.tipo === 'audio') return '<span class="filtro aviso">escuchalo entero</span>';
+  if (f.tipo === 'audio') return '<span class="filtro aviso">escúchalo completo</span>';
   if (m.palabra) return '<span class="filtro marcada">palabra marcada: ' + esc(m.palabra) + '</span>';
   if (m.falla) return '<span class="filtro rota">filtro sin respuesta</span>';
   if (typeof m.score === 'number')
@@ -683,7 +692,7 @@ function pintarPendiente(cola) {
           '<div class="micro-redondo"><svg class="ico" viewBox="0 0 24 24"><use href="#i-micro"/></svg></div>' +
           '<p class="dura">Saludo de voz · ' + minSeg(f.r2 && f.r2.segundos) + '</p>' +
           '<audio controls preload="none" src="' + WORKER + '/f/' + esc(f.r2 && f.r2.key) + '"></audio>' +
-          '<p class="pedido">Escuchalo entero antes de decidir.</p>' +
+          '<p class="pedido">Escúchalo completo antes de decidir.</p>' +
         '</div>' + sello +
       '</div>';
   } else {
