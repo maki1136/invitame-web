@@ -671,7 +671,16 @@ function pintarVentana(ev) {
 
   if (ev.marca) {
     if (ev.marca.color) document.documentElement.style.setProperty('--acento', ev.marca.color);
-    if (ev.marca.logo) { $('ev-logo').src = ev.marca.logo; $('ev-logo').hidden = false; }
+    /* El logo del fotógrafo. Con onerror antes del src a propósito: si el
+       archivo no está, el invitado tiene que ver la galería sin logo, no un
+       cuadradito roto arriba de todo. Esta es la pantalla que ven 200
+       personas en la fiesta. */
+    if (ev.marca.logo) {
+      const lg = $('ev-logo');
+      lg.onerror = () => { lg.hidden = true; };
+      lg.onload = () => { lg.hidden = false; };
+      lg.src = ev.marca.logo;
+    }
   }
   document.title = (ev.nombre || 'Galería') + ' · Fotos';
   $('ev-nombre').textContent = ev.nombre || 'Nuestra fiesta';
