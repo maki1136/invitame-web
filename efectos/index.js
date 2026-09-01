@@ -32,6 +32,24 @@
       → Y el bloque del panel tiene que AVISAR de las combinaciones que rompen,
         no dejar que el que edita las descubra en la invitación.
 
+   ★★★★ LA MUESTRA NO ES UNA DEMO: ES UN VENDEDOR ★★★★  (1/9/2026)
+      Maki: «tenemos que tener en cuenta que estas muestras van a estar
+      colgadas en la web y se las enviamos a los clientes como muestras así que
+      están por todos lados para vender».
+      Una invitación de muestra tiene que hacer DOS cosas que una entregada no
+      hace, y cada una tiene su interruptor en el «Sector de muestras» del
+      panel:
+        · MOSTRARSE ENTERA — la confirmación y el pase con QR funcionando, con
+          un invitado inventado (`/efectos/rsvp-muestra.js`).
+        · VENDER — los botones de contacto y el WhatsApp verde flotante van al
+          número de ventas de Invítame, y abajo de todo aparece «¿Quieres la
+          tuya?» con el mensaje ya escrito (`/efectos/muestra-venta.js`).
+      → Los dos se plantan si hay link de invitado. Una invitación de un
+        cliente real JAMÁS muestra el número de Invítame ni el llamado.
+      → El teléfono de ventas es el mismo que atiende invitameok.com. Si algún
+        día se separa el número de ventas del de planners, se cambia en el
+        panel, no en el código.
+
    ★★★ LO QUE SE CARGA ADENTRO DE UNA CAJA DE 0 PX SE DIBUJA EN 0×0 ★★★ (1/9/2026)
       Los tres "Ver mapa" y "Ver inspiración" abrían y adentro había un
       rectángulo blanco vacío. La dirección estaba cargada y el iframe tenía su
@@ -203,6 +221,13 @@
       terciopelo, el velo del fondo) y para LÍNEAS (la cadena del dije), no
       para objetos.
 
+   ★ NO SE TAPA UN PAPEL CON OTRO PAPEL (1/9/2026)
+      Para cubrir algo que ya está adentro de una sección con su propio papel
+      —la tapa del video, la raspadita, la tarjeta del pase— la tapa va
+      TRANSPARENTE y lo de abajo se apaga con `visibility:hidden`. Dos luces
+      distintas apiladas siempre se leen como un parche. Sobre las bandas
+      oscuras, un filete de 1 px y nada de cajas de vidrio.
+
    ★ !important NO ALCANZA PARA GANARLE A UN MÓDULO (1/9/2026)
       La colección se inserta ANTES que casi todos los módulos. Si su regla
       tiene la MISMA especificidad que la del módulo y las dos son !important,
@@ -236,7 +261,7 @@
       datos del cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en veintidós casos:
+   ⚠️ EL ORDEN IMPORTA en veintitrés casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -249,8 +274,13 @@
    · `rsvp-muestra.js` NO tiene orden: sólo actúa si no hay link de invitado y
      se vuelve a pasar solo cada 400 ms.
    · `panel-muestra.js` va DESPUÉS de `panel-rsvp.js`: se monta justo debajo de
-     ese bloque, porque habla de lo mismo.
+     ese bloque, porque habla de lo mismo. Es el «Sector de muestras» y maneja
+     los dos módulos de muestra: `rsvp-muestra.js` y `muestra-venta.js`.
    · `panel-fecha.js` va DESPUÉS de `panel-muestra.js`, por la misma razón.
+   · `muestra-venta.js` va DESPUÉS de `wa-flotante.js`: le pisa el número al
+     flotante. Ese módulo escribe el href UNA sola vez (no tiene setInterval),
+     así que alcanza con pasar después; igual `muestra-venta.js` lo revisa cada
+     500 ms por si algún día cambia.
    · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo se tiñe con el
      papel de la paleta.
    · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`.
@@ -291,7 +321,7 @@
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
-    '/efectos/panel-muestra.js',       /* y su interruptor, con el invitado de ejemplo */
+    '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
@@ -307,6 +337,7 @@
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
     '/efectos/musica.js',              /* la Platinum vende Música y el motor no la tenía */
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
+    '/efectos/muestra-venta.js',       /* la muestra vende: teléfonos de Invítame y el llamado */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
     '/efectos/acordeon.js',            /* los "Ver mapa" abrían en blanco: recarga los iframes */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
