@@ -202,6 +202,9 @@ h1{
   font-weight:700;color:var(--suave);
 }
 .pie b{color:var(--uva);font-weight:800}
+#pie-marca{color:var(--uva);font-size:3.8mm;letter-spacing:.18em;margin-bottom:1.5mm}
+#pie-logo{max-height:12mm;max-width:60mm;display:block;margin:0 auto 2mm}
+.pie.chiquito{font-size:2.6mm;letter-spacing:.18em;opacity:.75}
 
 /* ---------- las seis tarjetitas ---------- */
 .tarjetas{
@@ -308,7 +311,12 @@ h1{
     <div class="paso"><div class="n">3</div><p>Sacá fotos toda la noche y mirá las de todos</p></div>
   </div>
 
-  <div class="pie">Hecho con <b>Invítame</b></div>
+  <!-- La marca del estudio arriba, protagonista; la nuestra abajo en chico.
+       Si el fotógrafo no puso ninguna, queda sólo «Hecho con Invítame» y el
+       cartel se ve exactamente como antes. -->
+  <img id="pie-logo" alt="" hidden>
+  <div class="pie" id="pie-marca" hidden></div>
+  <div class="pie chiquito">Hecho con <b>Invítame</b></div>
 </div>
 
 <!-- ====== las seis tarjetitas ====== -->
@@ -382,11 +390,42 @@ async function cargarNombre() {
   }, 'cartel');
   const s = await getDoc(doc(getFirestore(app), 'gal_eventos', GID));
   if (!s.exists()) return;
-  const nombre = (s.data() || {}).nombre || '';
+  const ev = s.data() || {};
+
+  /* La marca del estudio. Va aparte del nombre a propósito: si la fiesta no
+     tiene nombre, el cartel igual tiene que salir con la marca, y al revés. */
+  pintarMarca(ev.marca || {});
+
+  const nombre = ev.nombre || '';
   if (!nombre) return;
   $('ev-nombre').textContent = nombre;
   document.title = 'Cartel · ' + nombre;
   document.querySelectorAll('#tarjetas .ev').forEach((e) => { e.textContent = nombre; });
+}
+
+/* 'Invítame' es el valor de fábrica del Worker, no una marca que el fotógrafo
+   haya elegido: si viene ése, no se muestra nada arriba y queda sólo el
+   «Hecho con Invítame» de abajo. Si se mostrara, el cartel diría Invítame dos
+   veces. */
+function pintarMarca(m) {
+  const txt = String(m.texto || '').trim();
+  if (txt && txt !== 'Invítame') {
+    $('pie-marca').textContent = txt;
+    $('pie-marca').hidden = false;
+    document.querySelectorAll('#tarjetas .mk').forEach((e) => { e.textContent = txt; });
+  }
+  if (m.logo) {
+    const img = $('pie-logo');
+    /* Si el logo no carga (borrado, sin internet en la imprenta), se esconde y
+       el cartel sale igual. Un cuadrado roto impreso en 20 mesas es peor que
+       no tener logo. */
+    img.onerror = () => { img.hidden = true; };
+    img.onload = () => { img.hidden = false; };
+    img.src = m.logo;
+  }
+  if (/^#[0-9a-fA-F]{6}$/.test(String(m.color || ''))) {
+    document.documentElement.style.setProperty('--uva', m.color);
+  }
 }
 
 function armarTarjetas(nombre) {
