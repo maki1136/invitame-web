@@ -36,6 +36,18 @@
       toques seguidos mandan dos veces. Este módulo pone el cerrojo que falta.
       Probado: tres toques seguidos → una sola confirmación.
 
+   ⚠️⚠️ Y EL "Enviando…" QUEDABA PARA SIEMPRE  (1/9/2026)
+      Se tocaba la respuesta, aparecía «¡Genial! Te esperamos con alegría 🌿»…
+      y justo arriba quedaba un «Enviando…» que ya no se iba nunca. Parece
+      colgado, y le pasaba a TODOS los invitados, no sólo a la muestra.
+      La causa: `rsvp()` NO AVISA CUANDO TERMINÓ. Escribe la respuesta en
+      `#rmsg` y listo; nadie vuelve a tocar el pie del interruptor.
+      → Se mira `#rmsg`: en cuanto tiene texto, se limpia el pie. Y si nunca
+        aparece, se limpia igual a los 2,5 segundos.
+      → Regla general: si se pone un estado "cargando" sobre una función ajena
+        que no devuelve promesa ni avisa, hay que definir CÓMO SE SALE de ese
+        estado. Un "Enviando…" sin salida es un bug esperando.
+
    ⚠️ ES CHICO A LA VISTA PERO GRANDE AL TACTO.
       La pastilla mide 30px de alto. Las dos mitades sensibles se estiran 12px
       para arriba y para abajo, así que el dedo tiene 54px. Achicar lo que se ve
@@ -181,6 +193,22 @@
     pie.textContent = 'Toca tu respuesta';
     caja.appendChild(pie);
 
+    /* ⚠️ CÓMO SE SALE DEL "Enviando…".
+       `rsvp()` no devuelve nada ni avisa: escribe la respuesta en `#rmsg`.
+       Se mira ese cartel; cuando aparece, se limpia el pie. Y si nunca
+       aparece, se limpia igual a los 2,5 s. Un "cargando" sin salida
+       definida siempre termina colgado. */
+    function limpiarPie() {
+      var listo = false;
+      function cerrar() { if (listo) return; listo = true; pie.textContent = ''; }
+      var v = 0;
+      var tv = setInterval(function () {
+        var m = document.getElementById('rmsg');
+        if (m && (m.textContent || '').trim()) { cerrar(); clearInterval(tv); return; }
+        if (++v > 25) { cerrar(); clearInterval(tv); }
+      }, 100);
+    }
+
     function elegir(cual) {
       if (enviado) return;                 /* el cerrojo que le falta a rsvp() */
       enviado = true;
@@ -190,7 +218,10 @@
       pie.textContent = 'Enviando…';
       /* se dispara el botón ORIGINAL: mismo camino de siempre */
       setTimeout(function () {
-        try { (cual === 'si' ? bs.si : bs.no).click(); }
+        try {
+          (cual === 'si' ? bs.si : bs.no).click();
+          limpiarPie();
+        }
         catch (e) {
           enviado = false;
           sw.removeAttribute('disabled');
