@@ -29,6 +29,14 @@
       (no tiene setInterval), así que alcanza con reescribirlo después. Igual
       lo revisamos en cada vuelta, por si algún día cambia.
 
+   ⚠️ LA LETRA NO SE ELIGE: SE COPIA DE AL LADO. La primera versión dejaba
+      `font-family:inherit` y el llamado salía con la tipografía por defecto
+      del navegador, al lado de un «¡Gracias!» en Cormorant: se veía pegado.
+      El módulo no sabe qué colección está puesta, así que le pregunta al DOM:
+      le copia la familia y el color al «¡Gracias!» (#fin-frase) que ya está
+      ahí arriba. Así queda bien con cualquier colección, incluidas las que
+      todavía no existen.
+
    Se maneja desde el panel: /efectos/panel-muestra.js, «Sector de muestras».
    El compañero de este módulo es /efectos/rsvp-muestra.js, que destapa la
    confirmación y el pase.
@@ -119,18 +127,32 @@
     s.textContent = [
       /* Sin caja, sin papel: una línea fina y letras. Así queda bien sobre
          cualquier fondo, que en el cierre es una foto y cambia en cada boda. */
-      '.col-mvta{margin:26px auto 0;max-width:340px;text-align:center;',
-        'display:flex;flex-direction:column;align-items:center;gap:11px}',
-      '.col-mvta-t{font-family:inherit;font-size:15px;letter-spacing:.02em;',
-        'opacity:.9;line-height:1.3}',
+      '.col-mvta{margin:22px auto 0;max-width:340px;text-align:center;',
+        'display:flex;flex-direction:column;align-items:center;gap:13px}',
+      '.col-mvta-t{font-size:21px;font-weight:300;letter-spacing:.005em;',
+        'opacity:.94;line-height:1.25}',
       '.col-mvta-b{display:inline-block;text-decoration:none;color:inherit;',
-        'font-size:10.5px;font-weight:500;letter-spacing:.19em;text-transform:uppercase;',
-        'padding:9px 20px 9px calc(20px + .19em);border:1px solid currentColor;',
-        'border-radius:999px;opacity:.78;transition:opacity .25s ease}',
+        'font-family:Montserrat,"Helvetica Neue",Arial,sans-serif;',
+        'font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;',
+        'padding:9px 20px 9px calc(20px + .2em);border:1px solid currentColor;',
+        'border-radius:999px;opacity:.72;transition:opacity .25s ease}',
       '.col-mvta-b:hover,.col-mvta-b:focus{opacity:1}',
-      '@media (max-width:420px){.col-mvta{margin-top:22px}.col-mvta-t{font-size:14px}}'
+      '@media (max-width:420px){.col-mvta{margin-top:20px}.col-mvta-t{font-size:19px}}'
     ].join('');
     document.head.appendChild(s);
+  }
+
+  /* le copia la letra al «¡Gracias!» que ya está ahí arriba */
+  function heredarLetra(tt) {
+    var g = document.getElementById('fin-frase') ||
+            document.querySelector('.footer .n');
+    if (!g || !tt) return;
+    var c = getComputedStyle(g);
+    if (!c || !c.fontFamily) return;
+    if (tt.dataset.letra === c.fontFamily) return;
+    tt.dataset.letra = c.fontFamily;
+    tt.style.fontFamily = c.fontFamily;
+    tt.style.fontStyle = c.fontStyle;
   }
 
   function ponerLlamado() {
@@ -164,6 +186,7 @@
     var url = enlace();
     if (tt && tt.textContent !== txt) tt.textContent = txt;
     if (aa && aa.getAttribute('href') !== url) aa.setAttribute('href', url);
+    heredarLetra(tt);
   }
 
   function sacarLlamado() {
