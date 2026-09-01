@@ -29,6 +29,7 @@
         · la bandeja de plata        → sostiene la tarjeta del LUGAR
         · el sobre con el moño       → sostiene la tarjeta del CANAL
         · el sobre abierto y el clip → sostienen la CARTA
+        · el collar                  → cruza el papel arriba de un texto
       Se fotografía el objeto y el texto va ENCIMA, como elemento del DOM.
       La foto no necesita traer el texto: la tarjeta la dibujo yo.
 
@@ -43,25 +44,26 @@
    ★★★ MAPA MUESTRA → NUESTRA INVITACIÓN (Pavel & Lada) ★★★
       | En la muestra              | Objeto              | Nuestra sección     |
       |----------------------------|---------------------|---------------------|
+      | portada · DEAR FRIENDS     | collar que cruza    | `.fraseSec` ✅       |
       | DEAR FRIENDS! You're inv.  | sobre abierto+clip  | #carta-sec ⚠ ver ↓  |
       | VENUE / Save the place!    | bandeja de plata    | "Dónde y cuándo" ✅  |
       | PROGRAM / of the day       | hilo + broche       | itinerario `.tl` ✅  |
       | DRESS CODE / colors        | círculos de color   | Vestimenta ✅        |
       | OUR CHANNEL / Telegram     | sobre con moño      | #contacto-sec ✅     |
       | WISHES                     | dos corazones       | Mesa de regalos ✅    |
-      | portada                    | collar grande       | ❌ FALTA LA FOTO     |
+
+      ⚠️ EL COLLAR VA UNA SOLA VEZ. En la muestra aparece dos veces y siempre
+         igual: una franja horizontal ARRIBA de un área de papel crema, con el
+         texto debajo. `.fraseSec` es exactamente eso (la colección ya le apaga
+         el bokeh y la foto de fondo). Ponerlo en cada sección sería volver al
+         patrón que Maki rechazó.
 
       ⚠️ #carta-sec ("Confirma tu lugar") YA TIENE el sobre con la carta que
          sale: `.cartafx` con `.cf-back` / `.cf-letter` / `.cf-front`, y las
          imágenes salen del catálogo de sobres. Maki: «nosotros ya tenemos esa
          sección armada, sólo hay que cambiar el sobre». O sea: NO hay que
          construir nada acá, hay que sumar un modelo de sobre con perlas al
-         catálogo. Es la tarea #47 y necesita fotos nuevas.
-
-      ❌ EL COLLAR DE LA PORTADA no se puede hacer repitiendo la perla suelta:
-         «se nota que están dibujadas». En la muestra es UNA FOTO de un collar
-         de verdad, grande, apoyado sobre el papel crema, con relieve y sombra.
-         Hace falta la foto. Sin ella esto no se parece a la muestra.
+         catálogo. Es la tarea #47.
 
    ★★★ !important NO ALCANZA: LA COLECCIÓN CARGA ANTES QUE CASI TODO ★★★
       `inv-fondo-css` trae
@@ -82,29 +84,39 @@
       del sobre como hijo normal, la imagen se convirtió en UNA COLUMNA MÁS y
       le robó el ancho al texto: el párrafo pasó de 375 px a 177 px y se salió
       a `left:-62`. Eso es el «texto que sobresale» que vio Maki.
-      → Lo que se agregue a una sección desconocida va `position:absolute`, o
-        primero se comprueba que la sección no sea flex ni grid.
+      → Hay tres salidas, y la elección depende de la pieza:
+        · `position:absolute` — para algo chico en una esquina (el sobre).
+        · `flex-wrap` en el padre + `flex:0 0 100%` en la pieza — para algo que
+          tiene que ocupar TODO el ancho (el collar). Se lleva una fila entera
+          y el texto conserva su ancho.
+        · no tocar nada — si la sección no es flex ni grid, comprobado.
 
-   ★★★ UNA FOTO RECTANGULAR SOBRE PAPEL SE VE COMO UN PARCHE ★★★
-      El tono del papel de la foto nunca es EXACTAMENTE el de la sección, y el
-      ojo ve un cuadrado más claro.
-      → Se disuelve con `mask-image: radial-gradient(...)`. La máscara se
-        aplica al RENDER: se afina sin regenerar el archivo.
+   ★★★ TRES MANERAS DE APOYAR UNA FOTO SOBRE EL PAPEL ★★★
+      1. RECORTADA con alfa — lo que flota sobre cualquier fondo (broche).
+      2. DIFUMINADA con `mask-image` — lo que vive en una sección clara
+         (bandeja, sobre, moño). El tono del papel de la foto nunca es
+         EXACTAMENTE el de la sección y el ojo ve el cuadrado; la máscara lo
+         disuelve. Se aplica al RENDER: se afina sin regenerar el archivo.
+      3. MULTIPLICADA (`mix-blend-mode:multiply`) — el collar. El archivo no
+         tiene alfa: su papel fue llevado a blanco puro, y el blanco no pinta
+         nada. Sirve en las 20 paletas sin regenerar. Ver `pieza-collar.js`.
+
       ⚠️ POR ESO LAS PIEZAS VAN COMO <img>, NUNCA COMO `background-image` DE
-         UNA CAJA QUE TENGA HIJOS. La máscara de un fondo no se puede separar
-         del contenido: al enmascarar la caja se enmascara también la tarjeta.
-         La bandeja empezó siendo un background y se veía el rectángulo del
-         papel; ahora es un <img> absoluto detrás, con su máscara propia.
+         UNA CAJA CON HIJOS: la máscara de un fondo no se puede separar del
+         contenido. La bandeja empezó siendo background y se veía el rectángulo.
       ⚠️ Y SÓLO FUNCIONA EN SECCIÓN CLARA. Sobre `.sec.verde` el papel marfil
-         de la foto entra como un rectángulo claro, con máscara y todo. Por eso
-         "Dónde y cuándo" pasa a crema — que además es lo que hace la muestra.
+         entra como un rectángulo claro, con máscara y todo. Por eso "Dónde y
+         cuándo" pasa a crema — que además es lo que hace la muestra.
+      ⚠️ CUIDADO CON LA REGLA POLAROID: `h[c] .sec > img` le pone marco blanco,
+         padding y sombra a TODA imagen hija directa de una sección. Las piezas
+         tienen que apagarlo con `!important` una por una.
 
    ★★★ LOS "PÉTALOS" ERAN LO QUE MAKI VEÍA COMO PERLAS DIBUJADAS ★★★
       `.fxlayer .fxp.petalo` son pétalos ROSAS que caen, un efecto de ambiente
       del panel. Sobre la foto de portada en blanco y negro se leen como
       manchas grises planas, sin relieve. Eso era «las perlas de la portada se
-      nota que están dibujadas», y yo estaba buscando el bug en el motivo, que
-      ya estaba en `discreto`.
+      nota que están dibujadas», y yo buscaba el bug en el motivo, que ya
+      estaba en `discreto`.
       → En esta colección el pétalo pasa a ser LA PERLA fotográfica, chica.
         Sigue siendo el interruptor de Jazmín: si lo apaga, no cae nada.
 
@@ -142,9 +154,10 @@
       `.tl-prog` se ESCONDE: el motor la anima con `scaleY` y escalar un fondo
       repetido deja las perlas ovaladas.
 
-   ★ LA SECCIÓN DE LA FRASE SE LIMPIA
+   ★ LA SECCIÓN DE LA FRASE SE LIMPIA Y PIERDE SU ALTURA FIJA
       «los cosos esos rojos que se ven de fondo con la imagen, sacalo». Son
-      `.frasefx.fx-bokeh` y la foto de fondo.
+      `.frasefx.fx-bokeh` y la foto de fondo. Y como ahora entra el collar,
+      `height:auto`: con la altura fija el texto quedaba cortado abajo.
 
    ★ `.padres` ES UNA GRILLA DE 2 COLUMNAS
       Con 3 personas la tercera queda sola abajo. «si ponés 3 pueden ir las 3
@@ -230,16 +243,16 @@
     'h[c] .portada .pbg,h[c] .portada .cover-vid{' +
       'filter:grayscale(1) contrast(1.06) brightness(.98)}',
 
-    /* ── LO QUE CAE: LA PERLA, NO UN PÉTALO ROSA ──────────────────────────
-       Ver la nota grande de arriba: los pétalos rosas sobre la portada en
-       blanco y negro son las «perlas dibujadas» que vio Maki. */
+    /* ── LO QUE CAE: LA PERLA, NO UN PÉTALO ROSA ─────────────────────── */
     'h[p] .fxlayer .fxp{' +
       'background:var(--col-perla) no-repeat center/contain!important;' +
       'border-radius:0!important;width:9px!important;height:9px!important;' +
       'opacity:.5!important;' +
       'filter:drop-shadow(0 1px 1px rgba(60,50,40,.25))!important}',
 
-    /* ── LAS FOTOS DEL CLIENTE, COMO OBJETOS APOYADOS ─────────────────── */
+    /* ── LAS FOTOS DEL CLIENTE, COMO OBJETOS APOYADOS ─────────────────────
+       ⚠️ Esta regla agarra CUALQUIER <img> hija directa de una sección, así
+          que cada pieza tiene que apagarla con `!important`. */
     'h[c] .sec > img{' +
       'background:#fff;padding:9px;border-radius:2px;' +
       'box-shadow:0 1px 2px rgba(60,50,40,.14),0 10px 24px rgba(60,50,40,.13);' +
@@ -250,8 +263,14 @@
     'h[c] .sec .evento{' +
       'border-radius:3px;box-shadow:0 1px 2px rgba(60,50,40,.10),0 8px 22px rgba(60,50,40,.10)}',
 
-    /* ── LA SECCIÓN DE LA FRASE, LIMPIA ───────────────────────────────── */
-    'h[c] .fraseSec{position:relative;background:var(--lino,#f4f3ec)}',
+    /* ── LA SECCIÓN DE LA FRASE ───────────────────────────────────────────
+       Papel limpio, sin altura fija (si no el texto queda cortado abajo del
+       collar), y en dos filas: el collar arriba y la frase abajo. */
+    'h[c] .fraseSec{' +
+      'position:relative;background:var(--lino,#f4f3ec);' +
+      'flex-wrap:wrap!important;align-items:center!important;' +
+      'height:auto!important;min-height:0!important;overflow:visible!important;' +
+      'padding-top:0!important;padding-bottom:56px!important}',
     'h[c] .fraseSec .frasefx,h[c] .fraseSec .bg,h[c] .fraseSec .capa{display:none!important}',
     'h[c] .fraseSec .frase{' +
       'font-family:"Cormorant Garamond",serif;font-weight:300;line-height:1.9;' +
@@ -281,12 +300,33 @@
       'position:absolute;width:22px;height:auto;left:-4px;bottom:-11px;' +
       'filter:drop-shadow(0 1px 2px rgba(60,50,40,.24))}',
 
-    /* el sobre: chico, ABSOLUTO y disuelto. Ver la nota del flex de arriba. */
+    /* ── EL COLLAR: CRUZA LA INVITACIÓN, A SANGRE ─────────────────────────
+       «las perlas son mucho más grandes, pasan por la invitación y son reales
+       fotográficas arriba del fondo blanco, se nota en el relieve, las
+       sombras». Multiplicado (ver pieza-collar.js).
+       `flex:0 0 100%` + el `flex-wrap` de la sección = se lleva una fila
+       entera y NO le roba el ancho al texto. Los márgenes negativos tienen
+       que ser IGUALES al padding lateral de la sección para llegar al borde. */
+    'h[c] .fraseSec .col-collar{' +
+      'flex:0 0 100%!important;order:-1!important;position:static!important;' +
+      'width:calc(100% + 60px)!important;max-width:none!important;' +
+      'height:132px!important;object-fit:cover!important;object-position:center 46%!important;' +
+      'margin:0 -30px 26px!important;' +
+      'background:none!important;padding:0!important;box-shadow:none!important;' +
+      'border-radius:0!important;transform:none!important;' +
+      'mix-blend-mode:multiply}',
+    '@media (max-width:420px){h[c] .fraseSec .col-collar{' +
+      'width:calc(100% + 48px)!important;margin:0 -24px 22px!important;height:118px!important}}',
+
+    /* el sobre: chico, ABSOLUTO y disuelto, en la esquina. «dejá el sobre
+       pero que sea delicado». Absoluto porque la sección es flex. */
     'h[c] .fraseSec .col-sobre{' +
-      'position:absolute;right:2px;bottom:0;width:118px;height:auto;z-index:1;' +
+      'position:absolute!important;right:6px;bottom:6px;width:96px;height:auto;z-index:1;' +
+      'background:none!important;padding:0!important;box-shadow:none!important;' +
+      'transform:none!important;margin:0!important;' +
       'opacity:.95;mix-blend-mode:multiply;' +
       '-webkit-mask-image:' + MASCARA + ';mask-image:' + MASCARA + '}',
-    '@media (max-width:360px){h[c] .fraseSec .col-sobre{width:96px}}',
+    '@media (max-width:360px){h[c] .fraseSec .col-sobre{width:80px}}',
 
     /* ── LA TARJETA APOYADA: el patrón de toda la muestra ─────────────── */
     'h[c] .col-tarjeta{' +
@@ -294,16 +334,15 @@
       'border-radius:1px;text-align:center;' +
       'box-shadow:0 1px 2px rgba(60,50,40,.09),0 12px 30px rgba(60,50,40,.14)}',
 
-    /* ── "¿ALGUNA DUDA?" = OUR CHANNEL ────────────────────────────────────
-       Misma estructura que la muestra: título + cursiva + el sobre con el
-       moño de soporte + la tarjeta con el texto y los botones encima.
-       Y se apaga la foto de stock, que dejaba el título ilegible. */
+    /* ── "¿ALGUNA DUDA?" = OUR CHANNEL ────────────────────────────────── */
     'h[c] #contacto-sec{' +
       'background-image:none!important;background-color:var(--lino,#f4f3ec)!important;' +
       'padding-bottom:56px!important}',
     'h[c] .col-canal{position:relative;max-width:322px;margin:0 auto}',
     'h[c] .col-canal .col-mono{' +
       'width:100%;height:auto;display:block;' +
+      'background:none!important;padding:0!important;box-shadow:none!important;' +
+      'transform:none!important;margin:0!important;max-width:none!important;' +
       '-webkit-mask-image:' + MASCARA2 + ';mask-image:' + MASCARA2 + '}',
     'h[c] .col-canal .col-tarjeta{width:72%;margin:-20% auto 0;padding:18px 14px 16px}',
     'h[c] .col-canal .col-tarjeta > p{margin:0 0 14px!important;max-width:none!important;' +
@@ -316,12 +355,7 @@
       'box-shadow:0 1px 2px rgba(60,50,40,.18)!important;border-radius:999px!important}',
 
     /* ── "DÓNDE Y CUÁNDO" = VENUE ─────────────────────────────────────────
-       La bandeja es el MARCO de la tarjeta del lugar, y los eventos van
-       juntos en UNA tarjeta con una línea en el medio, como CEREMONY y
-       BANQUET en la muestra.
-       ⚠️ El atributo va REPETIDO: si no, gana `inv-fondo-css`. Ver arriba.
-       ⚠️ La sección pasa a crema a propósito: sobre verde la foto entra como
-          un rectángulo claro, con máscara y todo. */
+       ⚠️ El atributo va REPETIDO: si no, gana `inv-fondo-css`. Ver arriba. */
     'h[c]' + LUG + '{' +
       'background:var(--lino,#f4f3ec)!important;color:var(--verde,#44513f)!important}',
     ['h2', '.kick', 'h3', '.sub', '.addr', 'p'].map(function (q) {
@@ -331,10 +365,10 @@
     'h[c] .col-lugar{' +
       'position:relative;max-width:344px;margin:4px auto 0;box-sizing:border-box;' +
       'padding:52px 40px}',
-    /* la bandeja va de <img> ABSOLUTO, no de background: así lleva su propia
-       máscara sin llevarse puesta la tarjeta. Ver la nota de arriba. */
     'h[c] .col-lugar .col-bandeja{' +
       'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:0;' +
+      'background:none!important;padding:0!important;box-shadow:none!important;' +
+      'transform:none!important;margin:0!important;max-width:none!important;' +
       '-webkit-mask-image:' + MASCARA3 + ';mask-image:' + MASCARA3 + '}',
     'h[c] .col-lugar .col-tarjeta{position:relative;z-index:1;padding:2px 12px}',
     'h[c] .col-lugar .evento{' +
@@ -407,9 +441,9 @@
 
   /* =====================================================================
      LAS PIEZAS
-     Cada una va donde la muestra la tiene, SOSTENIENDO el texto de esa
-     sección. Ver el mapa del encabezado. Todo esto se vuelve a correr en el
-     bucle de 400 ms porque el motor reinserta nodos en cada pasada.
+     Cada una va donde la muestra la tiene. Ver el mapa del encabezado. Todo
+     esto se vuelve a correr en el bucle de 400 ms porque el motor reinserta
+     nodos en cada pasada.
      ===================================================================== */
 
   function unaImagen(clave, clase) {
@@ -450,10 +484,15 @@
     }
   }
 
-  /* ---- el sobre chico, en la esquina de la frase ------------------------- */
+  /* ---- el collar cruza la frase, y el sobre chico en la esquina ---------- */
   function armarFrase() {
     var fs = document.querySelector('.fraseSec');
-    if (fs && !fs.querySelector('.col-sobre')) {
+    if (!fs) return;
+    if (!fs.querySelector('.col-collar')) {
+      var c = unaImagen('collar', 'col-collar');
+      if (c) fs.insertBefore(c, fs.firstChild);
+    }
+    if (!fs.querySelector('.col-sobre')) {
       var s = unaImagen('sobre', 'col-sobre');
       if (s) fs.appendChild(s);
     }
