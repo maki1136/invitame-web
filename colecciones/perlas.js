@@ -19,149 +19,138 @@
       bandeja de plata tiene una frase arriba, adiviná dónde tendría que estar
       en nuestra invi».
 
-      Yo miré la referencia UNA vez, saqué reglas abstractas (tipografía, aire,
-      bandas de color) y después coloqué las piezas por regla, sin volver a
-      mirar dónde estaba cada objeto ni qué sostenía. Por eso salió «está
-      puesto así por poner».
+      Yo miré la referencia UNA vez, saqué reglas abstractas y coloqué las
+      piezas por regla, sin volver a mirar qué sostenía cada objeto. Salió
+      «está puesto así por poner».
 
-      EL IDIOMA DE LA MUESTRA, QUE ES LO QUE NO HABÍA VISTO:
-      **cada objeto es el SOPORTE de un texto, no un adorno al lado.**
-        · la bandeja de plata        → sostiene la tarjeta del LUGAR
-        · el sobre con el moño       → sostiene la tarjeta del CANAL
-        · el sobre abierto y el clip → sostienen la CARTA
-        · el collar                  → cruza el papel arriba de un texto
+      EL IDIOMA DE LA MUESTRA: **cada objeto es el SOPORTE de un texto.**
       Se fotografía el objeto y el texto va ENCIMA, como elemento del DOM.
-      La foto no necesita traer el texto: la tarjeta la dibujo yo.
 
-      → EL MÉTODO, DE ACÁ EN ADELANTE. Antes de colocar cualquier pieza:
-        1. buscarla en la muestra y ver QUÉ SOSTIENE;
-        2. buscar en la nuestra la sección que dice eso mismo;
-        3. colocarla ahí, o no colocarla;
-        4. mirarla en el navegador ANTES de subirla.
-        Si no hay una sección que diga lo mismo, no se pone. Que falte es
-        mejor que que sobre.
+      → EL MÉTODO: antes de colocar una pieza, buscarla en la muestra, ver qué
+        sostiene, buscar la sección nuestra que dice lo mismo, y MIRARLA en el
+        navegador antes de subirla. Si no hay sección que diga lo mismo, no se
+        pone. Que falte es mejor que que sobre.
+
+   ★★★★★ Y LA MUESTRA NO MANDA SOBRE LO QUE LA INVITACIÓN TIENE QUE MOSTRAR ★★★★★
+      Esto lo aprendí con la bandeja, y es la segunda mitad de la lección.
+      La bandeja estaba en la sección que le corresponde según la muestra
+      (VENUE), bien recortada, bien enmarcada… y estaba mal igual, porque para
+      poner la tarjeta sobre la bandeja yo había ESCONDIDO LAS FOTOS del lugar.
+      Maki: «prefiero que estén las imágenes de dónde es la ceremonia y dónde
+      es la fiesta. Lo de la fuente sí lo quiero, pero para otro lado».
+      → La referencia manda sobre el ESTILO. El contenido que la clienta vende
+        —las fotos del salón, los botones, las funciones— no se sacrifica para
+        que una pieza entre. Si una pieza pide esconder contenido: no va.
 
    ★★★ MAPA MUESTRA → NUESTRA INVITACIÓN (Pavel & Lada) ★★★
       | En la muestra              | Objeto              | Nuestra sección     |
       |----------------------------|---------------------|---------------------|
       | portada · DEAR FRIENDS     | collar que cruza    | `.fraseSec` ✅       |
       | DEAR FRIENDS! You're inv.  | sobre abierto+clip  | #carta-sec ⚠ ver ↓  |
-      | VENUE / Save the place!    | bandeja de plata    | "Dónde y cuándo" ✅  |
       | PROGRAM / of the day       | hilo + broche       | itinerario `.tl` ✅  |
       | DRESS CODE / colors        | círculos de color   | Vestimenta ✅        |
       | OUR CHANNEL / Telegram     | sobre con moño      | #contacto-sec ✅     |
       | WISHES                     | dos corazones       | Mesa de regalos ✅    |
+      | VENUE / Save the place!    | bandeja de plata    | ⛔ GUARDADA, ver ↓   |
 
-      ⚠️ EL COLLAR VA UNA SOLA VEZ. En la muestra aparece dos veces y siempre
-         igual: una franja horizontal ARRIBA de un área de papel crema, con el
-         texto debajo. `.fraseSec` es exactamente eso (la colección ya le apaga
-         el bokeh y la foto de fondo). Ponerlo en cada sección sería volver al
-         patrón que Maki rechazó.
+      ⛔ LA BANDEJA NO SE COLOCA EN NINGÚN LADO. Está lista en
+         `INVPIEZAS.bandeja` y el CSS del marco quedó escrito más abajo, listo
+         para reusar. Falta que Maki diga dónde. NO improvisar un lugar: eso
+         es exactamente lo que salió mal las dos veces anteriores.
 
       ⚠️ #carta-sec ("Confirma tu lugar") YA TIENE el sobre con la carta que
          sale: `.cartafx` con `.cf-back` / `.cf-letter` / `.cf-front`, y las
-         imágenes salen del catálogo de sobres. Maki: «nosotros ya tenemos esa
-         sección armada, sólo hay que cambiar el sobre». O sea: NO hay que
-         construir nada acá, hay que sumar un modelo de sobre con perlas al
-         catálogo. Es la tarea #47.
+         imágenes salen del catálogo de sobres. Maki: «ya tenemos esa sección
+         armada, sólo hay que cambiar el sobre». O sea: NO hay que construir
+         nada acá, hay que sumar un modelo de sobre con perlas al catálogo.
 
-   ★★★ !important NO ALCANZA: LA COLECCIÓN CARGA ANTES QUE CASI TODO ★★★
-      `inv-fondo-css` trae
-          html[data-fondo] .sec.verde{background-color:…!important}
-      que tiene la MISMA especificidad que
-          html[data-coleccion="perlas"] .sec[data-col-lugar]
-      (las dos 0,3,1). Con importancia y especificidad iguales, desempata el
-      ORDEN — y la hoja de la colección se inserta antes que los módulos.
-      Resultado: la sección seguía verde oscura aunque la regla estuviera bien
-      escrita, y desde el código se veía perfecta.
-      → Cuando haya que ganarle a un módulo del motor: REPETIR EL ATRIBUTO,
-        `[data-col-lugar][data-col-lugar]`, que sube a (0,4,1) sin depender de
-        ninguna clase del motor. Repetir la clase (`.sec.sec`) hace lo mismo.
-      → Y la única forma de darse cuenta es MIRAR LA PÁGINA.
+   ★★★ CÓMO GANARLE A UN MÓDULO DEL MOTOR (dos trampas, las dos caras) ★★★
+      1. `!important` NO ALCANZA. La colección se inserta ANTES que casi todos
+         los módulos. Con especificidad e importancia iguales desempata el
+         ORDEN, y gana el módulo. Pasó con `inv-fondo-css`
+         (`html[data-fondo] .sec.verde`, misma especificidad 0,3,1).
+         → Repetir el atributo o la clase: `[data-x][data-x]` sube el peso sin
+           depender de nada del motor.
+      2. `:is()` TOMA LA ESPECIFICIDAD DE SU ARGUMENTO MÁS FUERTE.
+         `botones.js` trae `:is(.btn, #btn-ingresar, .wsp, .tv-btn, …)`. Ese
+         `#btn-ingresar` de adentro le da a TODA la regla peso de ID (1,1,0),
+         aunque el botón que estoy pintando no tenga ningún id. Ninguna
+         cantidad de clases ni atributos le gana a un ID.
+         → Hay que nombrar un id de verdad en el selector (`#wa-p1`, `#wa-p2`)
+           o escribir el estilo en línea con `setProperty(..., 'important')`.
+      → Y la única forma de darse cuenta de las dos es MIRAR LA PÁGINA.
 
    ★★★ ANTES DE AGREGAR UN NODO A UNA SECCIÓN, MIRAR SU `display` ★★★
       `.fraseSec` es `display:flex; flex-direction:row`. Al agregarle la foto
       del sobre como hijo normal, la imagen se convirtió en UNA COLUMNA MÁS y
-      le robó el ancho al texto: el párrafo pasó de 375 px a 177 px y se salió
-      a `left:-62`. Eso es el «texto que sobresale» que vio Maki.
-      → Hay tres salidas, y la elección depende de la pieza:
-        · `position:absolute` — para algo chico en una esquina (el sobre).
-        · `flex-wrap` en el padre + `flex:0 0 100%` en la pieza — para algo que
-          tiene que ocupar TODO el ancho (el collar). Se lleva una fila entera
-          y el texto conserva su ancho.
-        · no tocar nada — si la sección no es flex ni grid, comprobado.
+      le robó el ancho al texto: el párrafo pasó de 375 px a 177 px. Eso es el
+      «texto que sobresale» que vio Maki.
+      → Tres salidas, según la pieza:
+        · `position:absolute` — algo chico en una esquina (el sobre).
+        · `flex-wrap` en el padre + `flex:0 0 100%` en la pieza — algo que
+          ocupa TODO el ancho (el collar). Se lleva una fila entera.
+        · nada — si la sección no es flex ni grid, comprobado.
 
    ★★★ TRES MANERAS DE APOYAR UNA FOTO SOBRE EL PAPEL ★★★
       1. RECORTADA con alfa — lo que flota sobre cualquier fondo (broche).
       2. DIFUMINADA con `mask-image` — lo que vive en una sección clara
          (bandeja, sobre, moño). El tono del papel de la foto nunca es
-         EXACTAMENTE el de la sección y el ojo ve el cuadrado; la máscara lo
-         disuelve. Se aplica al RENDER: se afina sin regenerar el archivo.
+         EXACTAMENTE el de la sección y el ojo ve el cuadrado.
       3. MULTIPLICADA (`mix-blend-mode:multiply`) — el collar. El archivo no
-         tiene alfa: su papel fue llevado a blanco puro, y el blanco no pinta
-         nada. Sirve en las 20 paletas sin regenerar. Ver `pieza-collar.js`.
+         tiene alfa: su papel fue llevado a blanco puro. Sirve en las 20
+         paletas sin regenerar. Ver `pieza-collar.js`.
 
-      ⚠️ POR ESO LAS PIEZAS VAN COMO <img>, NUNCA COMO `background-image` DE
-         UNA CAJA CON HIJOS: la máscara de un fondo no se puede separar del
-         contenido. La bandeja empezó siendo background y se veía el rectángulo.
-      ⚠️ Y SÓLO FUNCIONA EN SECCIÓN CLARA. Sobre `.sec.verde` el papel marfil
-         entra como un rectángulo claro, con máscara y todo. Por eso "Dónde y
-         cuándo" pasa a crema — que además es lo que hace la muestra.
+      ⚠️ LAS PIEZAS VAN COMO <img>, NUNCA COMO `background-image` DE UNA CAJA
+         CON HIJOS: la máscara de un fondo no se puede separar del contenido.
+      ⚠️ SÓLO FUNCIONAN EN SECCIÓN CLARA. Sobre `.sec.verde` el papel marfil
+         entra como un rectángulo claro, con máscara y todo.
       ⚠️ CUIDADO CON LA REGLA POLAROID: `h[c] .sec > img` le pone marco blanco,
-         padding y sombra a TODA imagen hija directa de una sección. Las piezas
-         tienen que apagarlo con `!important` una por una.
+         padding y sombra a TODA imagen hija directa de una sección. Cada pieza
+         tiene que apagarlo con `!important`.
 
    ★★★ LOS "PÉTALOS" ERAN LO QUE MAKI VEÍA COMO PERLAS DIBUJADAS ★★★
       `.fxlayer .fxp.petalo` son pétalos ROSAS que caen, un efecto de ambiente
-      del panel. Sobre la foto de portada en blanco y negro se leen como
-      manchas grises planas, sin relieve. Eso era «las perlas de la portada se
-      nota que están dibujadas», y yo buscaba el bug en el motivo, que ya
-      estaba en `discreto`.
-      → En esta colección el pétalo pasa a ser LA PERLA fotográfica, chica.
-        Sigue siendo el interruptor de Jazmín: si lo apaga, no cae nada.
+      del panel. Sobre la portada en blanco y negro se leen como manchas grises
+      planas. Yo buscaba el bug en el motivo, que ya estaba en `discreto`.
+      → Acá el pétalo pasa a ser LA PERLA fotográfica, chica. Sigue siendo el
+        interruptor de Jazmín: si lo apaga, no cae nada.
 
    ★★★ CÓMO SE CAMBIAN LOS TAMAÑOS: SE SETEAN LAS VARIABLES DEL MOTOR ★★★
-      El motor aplica su escala con `!important`, así que una regla propia de
-      `font-size` PIERDE siempre:
+      El motor aplica su escala con `!important`:
           .sec h2 { font-size: var(--fs-titulo, 30px) !important }
-      Escala completa: --fs-nombres --fs-kicker --fs-titulo --fs-cursiva
-      --fs-contador --fs-texto --fs-datos --fs-direccion --fs-lugar --fs-frase
-      --fs-boton. Y --pad, --sec-col/-v, --sec-tex/-v, --lino, --lino2,
-      --cream, --muted, --oro, --verde, --sage.
+      Escala: --fs-nombres --fs-kicker --fs-titulo --fs-cursiva --fs-contador
+      --fs-texto --fs-datos --fs-direccion --fs-lugar --fs-frase --fs-boton.
+      Y --pad, --sec-col/-v, --sec-tex/-v, --lino, --lino2, --cream, --muted,
+      --oro, --verde, --sage.
 
    ★★★ LOS NOMBRES DE LA PORTADA LOS MANDA JAZMÍN ★★★
       El motor les escribe familia, tamaño y color EN LÍNEA desde `nfont`,
       `nsize`, `ncolor`. Con `nfont` elegida la colección NO los toca.
 
    ★★★ NUNCA GUARDAR UNA COPIA DEL HTML PARA "DESHACER" ★★★
-      Guardar `h1.innerHTML` para restaurarlo hacía aparecer "María & Diego",
-      los nombres de la BODA DE EJEMPLO: el motor dibuja el ejemplo primero.
+      Guardar `h1.innerHTML` hacía aparecer "María & Diego", los nombres de la
+      BODA DE EJEMPLO: el motor dibuja el ejemplo primero.
       → Deshacer SIEMPRE estructuralmente, desde el DOM vivo.
 
    ★★ EL MOTOR ANCLA EL `.adorno` A LA CURSIVA ★★
-      Al bajar el `.kick` los aros ⚭ se fueron con él. El motor los reinserta en
-      cada pasada, así que `acomodar()` corre en el bucle de 400 ms. Lo mismo
-      vale para las piezas: TODO lo que mueve nodos se vuelve a correr.
+      El motor lo reinserta en cada pasada, así que `acomodar()` corre en el
+      bucle de 400 ms. Lo mismo vale para las piezas.
 
    ★ EL MOTIVO: SE SUGIERE `discreto`, NO `todo`
-      Repetir una misma foto muchas veces y GRANDE se lee como dibujo, aunque
-      cada unidad sea fotográfica: el ojo ve el patrón, no la perla.
-      → `discreto` = hilo entre secciones + corazones del final.
+      Repetir una misma foto muchas veces y GRANDE se lee como dibujo: el ojo
+      ve el patrón, no la perla. `discreto` = hilo + corazones del final.
 
    ★ LA LÍNEA DE TIEMPO ES UN HILO DE PERLAS
-      `.tl::before` (la guía, al 22 % de opacidad) sube a 1 y lleva la perla
-      repetida de 11 px, centrada en x=7 como la línea original.
+      `.tl::before` sube a opacidad 1 y lleva la perla repetida de 11 px.
       `.tl-prog` se ESCONDE: el motor la anima con `scaleY` y escalar un fondo
       repetido deja las perlas ovaladas.
 
    ★ LA SECCIÓN DE LA FRASE SE LIMPIA Y PIERDE SU ALTURA FIJA
-      «los cosos esos rojos que se ven de fondo con la imagen, sacalo». Son
-      `.frasefx.fx-bokeh` y la foto de fondo. Y como ahora entra el collar,
-      `height:auto`: con la altura fija el texto quedaba cortado abajo.
+      Se apagan `.frasefx.fx-bokeh` y la foto de fondo. Y como entra el collar,
+      `height:auto`: con la altura fija el texto quedaba cortado.
 
    ★ `.padres` ES UNA GRILLA DE 2 COLUMNAS
-      Con 3 personas la tercera queda sola abajo. «si ponés 3 pueden ir las 3
-      juntas, si son 4, 2 y 2». → `data-col-n` y el CSS arma la grilla.
+      Con 3 personas la tercera queda sola abajo. → `data-col-n`.
    ============================================================================ */
 (function () {
   'use strict';
@@ -193,11 +182,14 @@
 
   var MASCARA  = 'radial-gradient(ellipse 58% 58% at 50% 50%,#000 40%,transparent 76%)';
   var MASCARA2 = 'radial-gradient(ellipse 76% 84% at 50% 48%,#000 58%,transparent 92%)';
-  var MASCARA3 = 'radial-gradient(ellipse 66% 62% at 50% 50%,#000 62%,transparent 96%)';
 
-  /* `LUG` = la sección del lugar, con el atributo REPETIDO a propósito para
-     ganarle a `inv-fondo-css`. Ver la nota de especificidad del encabezado. */
-  var LUG = ' .sec[data-col-lugar][data-col-lugar]';
+  /* la fibra del papel de una carta: dos tramas finas cruzadas, casi
+     transparentes. Con una sola dirección se ve rayado, no papel. */
+  var PAPEL =
+    'linear-gradient(179.4deg,rgba(255,255,255,.55),rgba(244,238,224,.6) 48%,rgba(252,250,244,.5)),' +
+    'repeating-linear-gradient(90deg,rgba(150,132,104,.045) 0 1px,transparent 1px 3px),' +
+    'repeating-linear-gradient(0deg,rgba(150,132,104,.035) 0 1px,transparent 1px 4px),' +
+    '#fbf7ee';
 
   var CSS = [
 
@@ -251,8 +243,8 @@
       'filter:drop-shadow(0 1px 1px rgba(60,50,40,.25))!important}',
 
     /* ── LAS FOTOS DEL CLIENTE, COMO OBJETOS APOYADOS ─────────────────────
-       ⚠️ Esta regla agarra CUALQUIER <img> hija directa de una sección, así
-          que cada pieza tiene que apagarla con `!important`. */
+       ⚠️ Agarra CUALQUIER <img> hija directa de una sección: cada pieza tiene
+          que apagarla con `!important`. */
     'h[c] .sec > img{' +
       'background:#fff;padding:9px;border-radius:2px;' +
       'box-shadow:0 1px 2px rgba(60,50,40,.14),0 10px 24px rgba(60,50,40,.13);' +
@@ -260,12 +252,36 @@
     'h[c] .sec > img:not(.reveal):nth-of-type(odd){transform:rotate(-1.4deg)}',
     'h[c] .sec > img:not(.reveal):nth-of-type(even){transform:rotate(1.1deg)}',
 
+    /* ── "DÓNDE Y CUÁNDO": LA FOTO DEL LUGAR, CON RECUADRO ────────────────
+       Maki: «prefiero que estén las imágenes de dónde es la ceremonia y dónde
+       es la fiesta, me gustaba más así, con algún recuadro».
+       El recuadro es el mismo arco que usan las secciones de la colección,
+       montura de papel crema, filete fino y sombra. La foto NO se esconde
+       nunca: es contenido que la clienta vende. */
     'h[c] .sec .evento{' +
-      'border-radius:3px;box-shadow:0 1px 2px rgba(60,50,40,.10),0 8px 22px rgba(60,50,40,.10)}',
+      'background:#fdfcf8!important;border:0!important;' +
+      'box-shadow:0 1px 2px rgba(20,24,18,.16),0 14px 34px rgba(20,24,18,.24)!important;' +
+      'max-width:318px!important;margin:0 auto 38px!important;' +
+      'padding:10px 10px 0!important;overflow:hidden!important;' +
+      'border-top-left-radius:50% 34px;border-top-right-radius:50% 34px}',
+    'h[c] .sec .evento .ph{' +
+      'display:block!important;height:186px!important;' +
+      'border-top-left-radius:50% 40px;border-top-right-radius:50% 40px;' +
+      'background-size:cover!important;background-position:center!important;' +
+      'box-shadow:inset 0 0 0 1px rgba(120,105,85,.25)}',
+    'h[c] .sec .evento .bd{' +
+      'background:transparent!important;box-shadow:none!important;' +
+      'padding:18px 12px 20px!important}',
+    /* el filete: una rayita centrada arriba del título, como en la papelería */
+    'h[c] .sec .evento .bd::before{' +
+      'content:"";display:block;height:1px;width:34px;margin:0 auto 14px;' +
+      'background:rgba(120,105,85,.5)}',
+    'h[c] .sec .evento h3,h[c] .sec .evento .sub,h[c] .sec .evento .addr{' +
+      'color:var(--verde,#44513f)!important}',
+    'h[c] .sec .evento .btn{' +
+      'font-size:9px!important;letter-spacing:.14em!important;padding:9px 14px!important}',
 
-    /* ── LA SECCIÓN DE LA FRASE ───────────────────────────────────────────
-       Papel limpio, sin altura fija (si no el texto queda cortado abajo del
-       collar), y en dos filas: el collar arriba y la frase abajo. */
+    /* ── LA SECCIÓN DE LA FRASE ──────────────────────────────────────── */
     'h[c] .fraseSec{' +
       'position:relative;background:var(--lino,#f4f3ec);' +
       'flex-wrap:wrap!important;align-items:center!important;' +
@@ -304,9 +320,8 @@
        «las perlas son mucho más grandes, pasan por la invitación y son reales
        fotográficas arriba del fondo blanco, se nota en el relieve, las
        sombras». Multiplicado (ver pieza-collar.js).
-       `flex:0 0 100%` + el `flex-wrap` de la sección = se lleva una fila
-       entera y NO le roba el ancho al texto. Los márgenes negativos tienen
-       que ser IGUALES al padding lateral de la sección para llegar al borde. */
+       Los márgenes negativos tienen que ser IGUALES al padding lateral de la
+       sección para llegar al borde. */
     'h[c] .fraseSec .col-collar{' +
       'flex:0 0 100%!important;order:-1!important;position:static!important;' +
       'width:calc(100% + 60px)!important;max-width:none!important;' +
@@ -318,8 +333,7 @@
     '@media (max-width:420px){h[c] .fraseSec .col-collar{' +
       'width:calc(100% + 48px)!important;margin:0 -24px 22px!important;height:118px!important}}',
 
-    /* el sobre: chico, ABSOLUTO y disuelto, en la esquina. «dejá el sobre
-       pero que sea delicado». Absoluto porque la sección es flex. */
+    /* el sobre chico, en la esquina: «dejá el sobre pero que sea delicado» */
     'h[c] .fraseSec .col-sobre{' +
       'position:absolute!important;right:6px;bottom:6px;width:96px;height:auto;z-index:1;' +
       'background:none!important;padding:0!important;box-shadow:none!important;' +
@@ -328,40 +342,56 @@
       '-webkit-mask-image:' + MASCARA + ';mask-image:' + MASCARA + '}',
     '@media (max-width:360px){h[c] .fraseSec .col-sobre{width:80px}}',
 
-    /* ── LA TARJETA APOYADA: el patrón de toda la muestra ─────────────── */
-    'h[c] .col-tarjeta{' +
-      'position:relative;background:#fdfcf8;border:1px solid rgba(120,105,85,.14);' +
-      'border-radius:1px;text-align:center;' +
-      'box-shadow:0 1px 2px rgba(60,50,40,.09),0 12px 30px rgba(60,50,40,.14)}',
-
-    /* ── "¿ALGUNA DUDA?" = OUR CHANNEL ────────────────────────────────── */
+    /* ── "¿ALGUNA DUDA?" = OUR CHANNEL, Y LA TARJETA ES UNA CARTA ─────────
+       Maki: «ese cuadrado blanco con ese sobre queda mal. Tendría que ser
+       como una carta, con un papel, tiene que tener esa delicadeza».
+       Lo que la vuelve papel y no una caja: la fibra cruzada, el doblez, el
+       grado de inclinación y la sombra cálida. Y los botones pasan a ser
+       renglones subrayados, como la firma. */
     'h[c] #contacto-sec{' +
       'background-image:none!important;background-color:var(--lino,#f4f3ec)!important;' +
       'padding-bottom:56px!important}',
-    'h[c] .col-canal{position:relative;max-width:322px;margin:0 auto}',
+    'h[c] .col-canal{position:relative;max-width:300px;margin:0 auto}',
     'h[c] .col-canal .col-mono{' +
       'width:100%;height:auto;display:block;' +
       'background:none!important;padding:0!important;box-shadow:none!important;' +
       'transform:none!important;margin:0!important;max-width:none!important;' +
       '-webkit-mask-image:' + MASCARA2 + ';mask-image:' + MASCARA2 + '}',
-    'h[c] .col-canal .col-tarjeta{width:72%;margin:-20% auto 0;padding:18px 14px 16px}',
-    'h[c] .col-canal .col-tarjeta > p{margin:0 0 14px!important;max-width:none!important;' +
-      'font-size:13px!important;line-height:1.7!important}',
-    'h[c] .col-canal .col-tarjeta .wsp{' +
-      'display:block!important;margin:7px auto 0!important;' +
-      'width:100%!important;max-width:100%!important;box-sizing:border-box!important;' +
-      'padding:8px 6px!important;font-size:9px!important;letter-spacing:.14em!important;' +
-      'text-transform:uppercase!important;font-family:Montserrat,sans-serif!important;' +
-      'box-shadow:0 1px 2px rgba(60,50,40,.18)!important;border-radius:999px!important}',
+    'h[c] .col-canal .col-tarjeta{' +
+      'position:relative;overflow:hidden;width:70%;margin:-20% auto 0;' +
+      'padding:26px 22px 22px;transform:rotate(-.8deg);' +
+      'background:' + PAPEL + ';border:0;border-radius:1px;' +
+      'box-shadow:0 1px 1px rgba(90,76,54,.10),0 16px 38px rgba(90,76,54,.22),' +
+        'inset 0 0 0 1px rgba(150,132,104,.12)}',
+    /* el doblez de la hoja */
+    'h[c] .col-canal .col-tarjeta::before{' +
+      'content:"";position:absolute;left:0;right:0;top:41%;height:7px;z-index:2;' +
+      'pointer-events:none;' +
+      'background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(150,132,104,.13) 55%,rgba(255,255,255,.3))}',
+    'h[c] .col-canal .col-tarjeta > p{' +
+      'font-family:"Cormorant Garamond",serif!important;font-style:italic;' +
+      'font-size:15px!important;line-height:1.9!important;' +
+      'color:var(--verde,#44513f)!important;margin:0 0 20px!important;max-width:none!important}',
 
-    /* ── "DÓNDE Y CUÁNDO" = VENUE ─────────────────────────────────────────
-       ⚠️ El atributo va REPETIDO: si no, gana `inv-fondo-css`. Ver arriba. */
-    'h[c]' + LUG + '{' +
-      'background:var(--lino,#f4f3ec)!important;color:var(--verde,#44513f)!important}',
-    ['h2', '.kick', 'h3', '.sub', '.addr', 'p'].map(function (q) {
-      return 'h[c]' + LUG + ' ' + q;
-    }).join(',') + '{color:var(--verde,#44513f)!important}',
+    /* ⚠️ ACÁ HAY QUE NOMBRAR LOS IDS. `botones.js` pinta
+         `:is(.btn, #btn-ingresar, .wsp, …)` y ese id de adentro le da a toda
+         la regla peso de ID: ninguna clase le gana. Ver la nota de arriba. */
+    'h[c] .col-tarjeta #wa-p1,h[c] .col-tarjeta #wa-p2{' +
+      'background:none!important;background-image:none!important;box-shadow:none!important;' +
+      'border:0!important;border-bottom:1px solid rgba(120,105,85,.38)!important;' +
+      'border-radius:0!important;color:var(--verde,#44513f)!important;text-shadow:none!important;' +
+      'display:block!important;width:auto!important;max-width:none!important;' +
+      'margin:0 auto 10px!important;padding:6px 2px!important;' +
+      'font-family:Montserrat,sans-serif!important;font-size:9px!important;' +
+      'letter-spacing:.2em!important;text-transform:uppercase!important;font-weight:500!important}',
 
+    /* ── EL MARCO DE LA BANDEJA — GUARDADO, NO SE USA TODAVÍA ─────────────
+       Maki quiere la bandeja «para otro lado» y todavía no dijo dónde. El CSS
+       queda escrito para cuando aparezca el lugar: se le pone la clase
+       `col-lugar` a una caja con la <img class="col-bandeja"> adentro y una
+       `.col-tarjeta` encima.
+       ⚠️ Sólo funciona en sección CLARA: sobre verde el papel de la foto entra
+          como un rectángulo. */
     'h[c] .col-lugar{' +
       'position:relative;max-width:344px;margin:4px auto 0;box-sizing:border-box;' +
       'padding:52px 40px}',
@@ -369,17 +399,9 @@
       'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:0;' +
       'background:none!important;padding:0!important;box-shadow:none!important;' +
       'transform:none!important;margin:0!important;max-width:none!important;' +
-      '-webkit-mask-image:' + MASCARA3 + ';mask-image:' + MASCARA3 + '}',
+      '-webkit-mask-image:radial-gradient(ellipse 66% 62% at 50% 50%,#000 62%,transparent 96%);' +
+      'mask-image:radial-gradient(ellipse 66% 62% at 50% 50%,#000 62%,transparent 96%)}',
     'h[c] .col-lugar .col-tarjeta{position:relative;z-index:1;padding:2px 12px}',
-    'h[c] .col-lugar .evento{' +
-      'background:none!important;border:0!important;box-shadow:none!important;' +
-      'margin:0!important;padding:14px 0!important;max-width:none!important}',
-    'h[c] .col-lugar .evento + .evento{border-top:1px solid rgba(120,105,85,.18)!important}',
-    'h[c] .col-lugar .ph{display:none!important}',
-    'h[c] .col-lugar .bd{padding:0!important}',
-    'h[c] .col-lugar .btn{' +
-      'font-size:8.5px!important;letter-spacing:.12em!important;padding:6px 9px!important}',
-    '@media (max-width:360px){h[c] .col-lugar{padding:44px 30px}}',
 
     /* ── LA PORTADA ───────────────────────────────────────────────────── */
     'h[c] .portada .kicker{' +
@@ -441,9 +463,8 @@
 
   /* =====================================================================
      LAS PIEZAS
-     Cada una va donde la muestra la tiene. Ver el mapa del encabezado. Todo
-     esto se vuelve a correr en el bucle de 400 ms porque el motor reinserta
-     nodos en cada pasada.
+     Todo esto se vuelve a correr en el bucle de 400 ms porque el motor
+     reinserta nodos en cada pasada.
      ===================================================================== */
 
   function unaImagen(clave, clase) {
@@ -512,32 +533,17 @@
     });
   }
 
-  /* ---- "Dónde y cuándo" = VENUE ------------------------------------------
-     Se busca por el id de un evento, NO por el texto del título: el título lo
-     escribe el cliente y puede decir cualquier cosa. */
-  function laSeccionDelLugar() {
-    var e = document.getElementById('ev1-t');
-    return e ? e.closest('.sec') : null;
-  }
-
-  function armarLugar() {
-    var s = laSeccionDelLugar();
-    if (!s) return;
-    var t = soporte(s, 'bandeja', 'col-bandeja', 'col-lugar');
-    if (!t) return;
-    if (!s.hasAttribute('data-col-lugar')) s.setAttribute('data-col-lugar', '');
-    /* los eventos con datos van a la tarjeta; los vacíos se quedan afuera */
-    [].forEach.call(s.querySelectorAll(':scope > .evento'), function (e) {
-      var h = e.querySelector('h3');
-      if (h && (h.textContent || '').trim()) t.appendChild(e);
-    });
-  }
+  /* ⛔ LA BANDEJA NO SE COLOCA. Maki la quiere «para otro lado» y todavía no
+     dijo dónde. El material y el CSS están listos; falta el lugar. NO
+     inventarle uno: es exactamente lo que salió mal las dos veces anteriores.
+     Cuando aparezca, alcanza con:
+         var t = soporte(seccion, 'bandeja', 'col-bandeja', 'col-lugar');
+     y meterle adentro lo que la bandeja tenga que sostener. */
 
   function colocarPiezas() {
     armarBroche();
     armarFrase();
     armarCanal();
-    armarLugar();
   }
 
   /* ---- deshacer: los nodos VUELVEN a su sección, y recién ahí se borra la
