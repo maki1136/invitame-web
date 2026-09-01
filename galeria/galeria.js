@@ -700,7 +700,15 @@ function pintarVentana(ev) {
     $('in-elegir').addEventListener('change', (e) => { entraron(e.target.files); e.target.value = ''; });
 
     prepararMensaje();
-    prepararAudio();
+    /* Los saludos de voz son opcionales y vienen apagados: si esta fiesta no
+       los pidió, el botón no existe. El servidor también los rechaza — esto es
+       para que el invitado no vea algo que no va a funcionar. */
+    if (ev.audios === true) {
+      prepararAudio();
+    } else {
+      $('btn-grabar').remove();
+      $('botonera').classList.add('sin-audio');
+    }
     escucharFirmas();
 
     procesarCola(autor);
