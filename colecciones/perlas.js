@@ -73,16 +73,18 @@
          padding y sombra a TODA imagen hija directa de una sección.
 
    ★★★★★ NO SE TAPA UN PAPEL CON OTRO PAPEL ★★★★★  (1/9/2026)
-      Maki: «en nuestro video está el rectángulo blanco y después el logotipo
+      Maki, sobre el video: «está el rectángulo blanco y después el logotipo
       del play. Ese coso blanco está de más».
-      Yo había tapado el video con una hoja de papel marfil. Sobre el lino de
-      la sección eso NO se lee como papel: se lee como un rectángulo blanco
-      pegado encima, con un aro adentro. Dos claros distintos, uno arriba del
-      otro, y el borde entre los dos canta.
-      → Para tapar algo dentro de una sección que YA tiene su papel: se
-        ESCONDE lo de abajo y se deja pasar el papel de la sección. La tapa va
-        transparente, sin fondo, sin sombra y sin bordes redondeados.
-      → Lo mismo vale para cualquier "tapa" futura (galería, mapa, música).
+      Maki, sobre la raspadita: «el rectángulo blanco ese lo tenés que sacar,
+      tiene que dar solamente los círculos».
+      Las dos veces era lo mismo: una tarjeta clara (papel marfil, o el fondo
+      blanco de `#scratchcard`) apoyada sobre el lino de la sección. Dos claros
+      distintos, uno arriba del otro, y el borde entre los dos canta. No se lee
+      como papel: se lee como un parche.
+      → Para tapar o sostener algo dentro de una sección que YA tiene su papel:
+        fondo TRANSPARENTE, sin sombra y sin esquinas redondeadas. Si hay que
+        tapar, se esconde lo de abajo (`visibility:hidden`), no se pinta encima.
+      → Vale para cualquier "tapa" o "ficha" futura (galería, mapa, música).
 
    ★★★ EL CSS NO REEMPLAZA LA FOTO DE UN OBJETO, PERO SÍ DIBUJA BIEN ★★★
       Vale para OBJETOS: una perla, un lacre, un moño tienen nácar que el
@@ -111,14 +113,15 @@
    ⚠️⚠️ LA RASPADITA Y LAS DISPOSICIONES DE FECHA NO TIENEN PANEL ⚠️⚠️
       `fecha.js` y `raspadita.js` sólo se configuran escribiendo `fx.fecha` y
       `fx.raspadita` a mano en la base: no hay `panel-fecha.js`. Jazmín no puede
-      tocarlos. Tres cosas que hay que dejar puestas juntas:
+      tocarlos. TRES cosas que hay que dejar puestas JUNTAS:
         · `fx.fecha.disposicion` = la forma (acá: `circulos`)
         · `fx.raspadita.encendido` = true
         · `fx.raspadita.modo` = 'partes'
-      Si falta la primera, no hay círculos. Si falta la segunda, la fecha
-      aparece YA REVELADA (`fecha.js` esconde la tapa del motor esperando que
-      la ponga `raspadita.js`) — Maki: «la raspada viene ya raspada».
-      Y si falta la TERCERA, `raspadita.js` cae en su rama "simple" y tapa la
+      Si falta la PRIMERA, no hay círculos.
+      Si falta la SEGUNDA, la fecha aparece YA REVELADA: `fecha.js` esconde la
+      tapa del motor esperando que la ponga `raspadita.js`, y si está apagada
+      no la pone nadie. Maki: «la raspada viene ya raspada».
+      Si falta la TERCERA, `raspadita.js` cae en su rama "simple" y tapa la
       tarjeta ENTERA con un rectángulo plateado: se raspa el rectángulo y
       recién ahí aparecen los círculos. Maki: «iban solamente los círculos y
       cada círculo se raspaba».
@@ -314,7 +317,11 @@
     '@media (max-width:360px){h[c] .col-vest svg{width:64px}' +
       'h[c] .col-vest .col-amp{font-size:26px;margin-bottom:32px}}',
 
-    /* ── LA RASPADITA: LOS TRES CÍRCULOS, EN ANILLO FINO ──────────────── */
+    /* ── LA RASPADITA: LOS TRES CÍRCULOS, SOBRE EL PAPEL ────────────────
+       Sin la tarjeta blanca de abajo: no se tapa un papel con otro papel. */
+    'h[c] #scratchcard{' +
+      'background:transparent!important;box-shadow:none!important;' +
+      'border-radius:0!important}',
     'h[c] .ivf-circ{gap:16px!important}',
     'h[c] .ivf-circ .c{' +
       'background:transparent!important;' +
