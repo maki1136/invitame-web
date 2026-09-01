@@ -327,22 +327,50 @@ function textoDeError(e) {
 }
 
 /* ---------- el saldo y las fiestas ---------- */
+
+/* El vencimiento se guarda como texto 'YYYY-MM-DD', que en ese formato se
+   ordena bien comparándolo con <. Las dos funciones son gemelas de las del
+   Worker (hoyGeneroso / fechaLinda): si allá cambia el criterio, acá también.
+
+   Las 12 horas para atrás son a propósito: el navegador arma la fecha en UTC
+   y los clientes están en UTC-3 y UTC-6/-7. Sin el margen, a un mexicano la
+   pantalla le diría "vencidos" a las 6 de la tarde del último día, cuando el
+   Worker todavía se los va a aceptar. Que la pantalla no sea más dura que el
+   servidor. */
+function hoyGeneroso() {
+  return new Date(Date.now() - 12 * 3600 * 1000).toISOString().slice(0, 10);
+}
+const linda = (v) => { const p = String(v).split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : String(v); };
+
 async function mirarCuenta() {
   try {
     const s = await sdk.getDoc(sdk.doc(db, 'gal_cuentas', yo.uid));
     const d = s.exists() ? s.data() : null;
     const n = d ? (parseInt(d.creditos, 10) || 0) : 0;
+
+    /* El vencimiento. Sin fecha = no vencen nunca (las cuentas de antes de que
+       esto existiera siguen andando igual).
+
+       ⚠️ Esta pantalla NO es el candado: quien decide de verdad es el Worker,
+       que vuelve a mirar la fecha del lado del servidor antes de descontar.
+       Acá se muestra para que nadie se entere recién al apretar el botón. */
+    const vence = d ? String(d.vence || '').trim() : '';
+    const vencido = !!vence && vence < hoyGeneroso();
+
     $('nro').textContent = n;
-    $('saldo-txt').textContent =
-      n === 0 ? 'Sin créditos' : (n === 1 ? 'Te queda 1 crédito' : 'Te quedan ' + n + ' créditos');
-    $('saldo-pie').textContent = d
-      ? 'Cada fiesta que creás usa un crédito.'
-      : 'Tu cuenta todavía no está habilitada. Escribinos y la activamos.';
+    $('saldo-txt').textContent = vencido
+      ? 'Tus créditos vencieron'
+      : (n === 0 ? 'Sin créditos' : (n === 1 ? 'Te queda 1 crédito' : 'Te quedan ' + n + ' créditos'));
+    $('saldo-pie').textContent = !d
+      ? 'Tu cuenta todavía no está habilitada. Escribinos y la activamos.'
+      : (vencido ? 'Vencieron el ' + linda(vence) + '. Escribinos y los renovamos.'
+                 : (vence ? 'Cada fiesta que creás usa un crédito. Vencen el ' + linda(vence) + '.'
+                          : 'Cada fiesta que creás usa un crédito.'));
     if (d && d.nombre) {
       $('bajada').textContent = d.nombre;
       $('bajada').hidden = false;
     }
-    $('btn-crear').disabled = n < 1;
+    $('btn-crear').disabled = n < 1 || vencido;
   } catch (e) {
     $('nro').textContent = '·';
     $('saldo-txt').textContent = 'No pudimos leer tu saldo';
