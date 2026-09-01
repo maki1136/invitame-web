@@ -63,6 +63,27 @@ body{
 .ico{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;
   stroke-linecap:round;stroke-linejoin:round;display:block}
 
+/* ---------- los ajustes de la fiesta ---------- */
+.ajustes{
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding:12px 4px 2px;border-top:1px solid var(--linea);margin-top:12px;
+}
+.ajustes .aj{
+  flex:1;min-width:220px;display:flex;gap:11px;align-items:flex-start;
+  cursor:pointer;padding:4px 2px;
+}
+.ajustes .aj input{
+  flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--rosa);cursor:pointer;
+}
+.ajustes .aj b{display:block;font-size:.9rem;font-weight:800}
+.ajustes .aj small{display:block;font-size:.8rem;color:var(--suave);line-height:1.35;margin-top:1px}
+.ajustes .aj input:disabled{opacity:.5}
+.aj-aviso{
+  flex-basis:100%;font-size:.85rem;border-radius:10px;padding:8px 12px;
+  background:#FBEDEE;border:1px solid #EBCBCE;color:var(--rojo);
+}
+.aj-aviso.bien{background:#EAF5EF;border-color:#C8E4D5;color:#2F7A56}
+
 /* ---------- cabecera: una tarjeta que flota, no una barra de color ---------- */
 header{
   position:sticky;top:0;z-index:20;
@@ -305,6 +326,22 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
       <span>Pantalla<br>del salón</span>
     </a>
   </div>
+  <!-- Los ajustes de la fiesta, cambiables EN EL MOMENTO. Si a las dos de la
+       mañana se descontrola, se prende la aprobación y listo. -->
+  <div class="ajustes" id="ajustes" hidden>
+    <label class="aj">
+      <input id="aj-modo" type="checkbox">
+      <span><b>Aprobar antes de mostrar</b>
+        <small id="aj-modo-pie">Las fotos y los mensajes se ven al instante.</small></span>
+    </label>
+    <label class="aj">
+      <input id="aj-audios" type="checkbox">
+      <span><b>Aceptar saludos de voz</b>
+        <small>Los audios siempre los aprobás vos, esté como esté lo de arriba.</small></span>
+    </label>
+    <div class="aj-aviso" id="aj-aviso" hidden></div>
+  </div>
+
   <nav class="tabs">
     <button id="tab-pend" class="activa" type="button">
       <svg class="ico" viewBox="0 0 24 24"><use href="#i-reloj"/></svg>
@@ -342,6 +379,75 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 
 <script type="module">
 const WORKER = 'https://galeria.littlemomentsok.workers.dev';
+
+/* ---------- los ajustes de la fiesta, en el momento ----------
+
+   Decisión de Maki (1/9/2026): «no va a haber una persona moderando 1000
+   fiestas un sábado». Hasta hoy todas las fiestas salían con aprobación manual
+   porque nadie mandaba nunca el campo.
+
+   ⚠️ Esta pantalla NO escribe el evento: las reglas de Firestore no dejan tocar
+   gal_eventos desde ningún navegador (fue un agujero real y se cerró). Le pide
+   al Worker con el token de esta sesión, y el Worker vuelve a comprobar que la
+   fiesta sea de quien la pide.
+
+   Los dos interruptores son independientes a propósito: prender los saludos de
+   voz no cambia cómo salen las fotos, y pasar a automático no prende los
+   audios. El audio no lo puede filtrar ninguna máquina, así que se aprueba
+   siempre. */
+function prepararAjustes(ev) {
+  const cModo = $('aj-modo'), cAud = $('aj-audios');
+
+  function pintar(modo, audios) {
+    cModo.checked = modo !== 'auto';
+    cAud.checked = audios === true;
+    $('aj-modo-pie').textContent = cModo.checked
+      ? 'Nada se ve hasta que lo aprobás acá.'
+      : 'Las fotos y los mensajes se ven al instante. El filtro automático sigue andando.';
+  }
+  pintar(ev.modo, ev.audios);
+  $('ajustes').hidden = false;
+
+  function aviso(txt, bien) {
+    const a = $('aj-aviso');
+    a.textContent = txt;
+    a.classList.toggle('bien', !!bien);
+    a.hidden = !txt;
+    if (txt && bien) setTimeout(() => { a.hidden = true; }, 2600);
+  }
+
+  async function guardar(cambio, volverAtras) {
+    cModo.disabled = true; cAud.disabled = true;
+    aviso('');
+    try {
+      const tok = await auth.currentUser.getIdToken(true);
+      const r = await fetch(WORKER + '/ajustes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+        body: JSON.stringify(Object.assign({ gid: GID }, cambio))
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo guardar (' + r.status + ')'));
+      /* Se pinta con lo que contestó el SERVIDOR: si no, el interruptor podría
+         quedar mostrando algo que no se guardó. */
+      pintar(j.modo, j.audios);
+      aviso('Listo, ya está andando.', true);
+    } catch (e) {
+      volverAtras();
+      aviso(e.message || 'No se pudo guardar.');
+    }
+    cModo.disabled = false; cAud.disabled = false;
+  }
+
+  cModo.addEventListener('change', () => {
+    const antes = !cModo.checked;
+    guardar({ modo: cModo.checked ? 'previa' : 'auto' }, () => { cModo.checked = antes; });
+  });
+  cAud.addEventListener('change', () => {
+    const antes = !cAud.checked;
+    guardar({ audios: cAud.checked }, () => { cAud.checked = antes; });
+  });
+}
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, query, where, onSnapshot, doc, getDoc, updateDoc }
@@ -436,6 +542,8 @@ async function arrancar() {
   $('ev-nombre').textContent = ev.nombre || 'Galería';
   if (ev.marca && ev.marca.color)
     document.documentElement.style.setProperty('--rosa', ev.marca.color);
+
+  prepararAjustes(ev);
 
   const bp = $('btn-pantalla');
   bp.href = 'pantalla.html?g=' + encodeURIComponent(GID);
