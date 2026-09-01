@@ -208,13 +208,13 @@ select:focus{outline:none;border-color:var(--blush-hondo);
 <div class="hoja">
 
   <div class="tit"><h1>Galería de invitados</h1></div>
-  <p class="bajada" id="bajada">Entrá para crear una fiesta y llevarte el QR.</p>
+  <p class="bajada" id="bajada">Entra para crear una fiesta y llevarte el QR.</p>
 
   <div id="cargando" class="cargando">Un momento…</div>
 
   <!-- ---------- entrar ---------- -->
   <form id="entrar" hidden autocomplete="on">
-    <label for="mail">Tu mail</label>
+    <label for="mail">Tu correo</label>
     <input id="mail" type="email" autocomplete="username" required>
     <label for="pass">Tu contraseña</label>
     <input id="pass" type="password" autocomplete="current-password" required>
@@ -241,7 +241,7 @@ select:focus{outline:none;border-color:var(--blush-hondo);
       <span class="punto" id="marca-punto"></span>
       <div class="quien">
         <span id="marca-txt">Tu marca</span>
-        <small id="marca-pie">Poné tu nombre y tu logo: van en la galería y en el cartel.</small>
+        <small id="marca-pie">Pon tu nombre y tu logo: van en la galería y en el cartel.</small>
       </div>
       <button type="button" class="lnk-chico" id="marca-abrir">Cambiar</button>
     </div>
@@ -277,7 +277,7 @@ select:focus{outline:none;border-color:var(--blush-hondo);
       <label for="modo">Las fotos y los mensajes</label>
       <select id="modo">
         <option value="auto">Se ven al instante, sin que apruebes nada</option>
-        <option value="previa">Los aprobás vos antes de que se vean</option>
+        <option value="previa">Los apruebas tú antes de que se vean</option>
       </select>
       <p class="ayuda-m" id="ayuda-modo"></p>
 
@@ -286,8 +286,8 @@ select:focus{outline:none;border-color:var(--blush-hondo);
         Aceptar saludos de voz
       </label>
       <p class="ayuda-m">Un audio no lo puede revisar ninguna máquina, así que
-        <b>los saludos de voz siempre los aprobás vos</b>, aunque el resto salga solo.
-        Si no vas a estar mirando el celular durante la fiesta, dejalo apagado.</p>
+        <b>los saludos de voz siempre los apruebas tú</b>, aunque el resto salga solo.
+        Si no vas a estar viendo el celular durante la fiesta, déjalo apagado.</p>
 
       <button class="btn" type="submit" id="btn-crear" disabled>Crear la fiesta</button>
       <div class="aviso mal" id="error-crear" hidden></div>
@@ -362,7 +362,7 @@ async function arrancar() {
       /* Adentro la bajada no repite lo que ya dice la ficha del saldo:
          ahí va el nombre de quien entró, si lo tenemos. */
       $('bajada').hidden = !!u;
-      if (!u) $('bajada').textContent = 'Entrá para crear una fiesta y llevarte el QR.';
+      if (!u) $('bajada').textContent = 'Entra para crear una fiesta y llevarte el QR.';
       if (u) {
         $('quien').textContent = u.email || '';
         mirarCuenta();
@@ -372,7 +372,7 @@ async function arrancar() {
     /* Sin librería no hay sesión. Que se vea el motivo, no una pantalla
        en blanco: un error mudo es lo que nos costó horas en la subida. */
     $('cargando').innerHTML =
-      'No se pudo cargar. Fijate la conexión y volvé a entrar.<br><small>' + esc(e.message) + '</small>';
+      'No se pudo cargar. Revisa tu conexión y vuelve a entrar.<br><small>' + esc(e.message) + '</small>';
   }
 }
 
@@ -397,10 +397,10 @@ $('salir').addEventListener('click', () => sdk.signOut(auth));
 function textoDeError(e) {
   const c = (e && e.code) || '';
   if (c.includes('invalid-credential') || c.includes('wrong-password') || c.includes('user-not-found'))
-    return 'El mail o la contraseña no coinciden.';
-  if (c.includes('too-many-requests')) return 'Demasiados intentos. Esperá unos minutos.';
+    return 'El correo o la contraseña no coinciden.';
+  if (c.includes('too-many-requests')) return 'Demasiados intentos. Espera unos minutos.';
   if (c.includes('network')) return 'No hay conexión.';
-  if (c.includes('invalid-email')) return 'Ese mail no está bien escrito.';
+  if (c.includes('invalid-email')) return 'Ese correo no está bien escrito.';
   return 'No se pudo entrar. ' + ((e && e.message) || '');
 }
 
@@ -440,10 +440,10 @@ async function mirarCuenta() {
       ? 'Tus créditos vencieron'
       : (n === 0 ? 'Sin créditos' : (n === 1 ? 'Te queda 1 crédito' : 'Te quedan ' + n + ' créditos'));
     $('saldo-pie').textContent = !d
-      ? 'Tu cuenta todavía no está habilitada. Escribinos y la activamos.'
-      : (vencido ? 'Vencieron el ' + linda(vence) + '. Escribinos y los renovamos.'
-                 : (vence ? 'Cada fiesta que creás usa un crédito. Vencen el ' + linda(vence) + '.'
-                          : 'Cada fiesta que creás usa un crédito.'));
+      ? 'Tu cuenta todavía no está habilitada. Escríbenos y la activamos.'
+      : (vencido ? 'Vencieron el ' + linda(vence) + '. Escríbenos y los renovamos.'
+                 : (vence ? 'Cada fiesta que creas usa un crédito. Vencen el ' + linda(vence) + '.'
+                          : 'Cada fiesta que creas usa un crédito.'));
     if (d && d.nombre) {
       $('bajada').textContent = d.nombre;
       $('bajada').hidden = false;
@@ -453,7 +453,7 @@ async function mirarCuenta() {
   } catch (e) {
     $('nro').textContent = '·';
     $('saldo-txt').textContent = 'No pudimos leer tu saldo';
-    $('saldo-pie').textContent = 'Probá recargar la página en un momento.';
+    $('saldo-pie').textContent = 'Intenta recargar la página en un momento.';
     $('btn-crear').disabled = true;   /* sin saldo leído no se crea nada */
   }
   mirarFiestas();
@@ -480,7 +480,7 @@ async function mirarFiestas() {
           await navigator.clipboard.writeText(b.getAttribute('data-copiar'));
           const antes = b.textContent; b.textContent = '¡Copiado!';
           setTimeout(() => { b.textContent = antes; }, 1600);
-        } catch (e) { window.prompt('Copiá el link:', b.getAttribute('data-copiar')); }
+        } catch (e) { window.prompt('Copia el link:', b.getAttribute('data-copiar')); }
       });
     });
   } catch (e) {
@@ -546,7 +546,7 @@ function pintarMarca(m) {
   $('marca-txt').textContent = m.texto || 'Tu marca';
   $('marca-pie').textContent = m.texto
     ? 'Va en la galería y en el cartel de tus fiestas.'
-    : 'Poné tu nombre y tu logo: van en la galería y en el cartel.';
+    : 'Pon tu nombre y tu logo: van en la galería y en el cartel.';
   /* El formulario arranca con lo que ya hay puesto, no vacío: si arrancara
      vacío, guardar el color borraría el nombre sin querer. */
   $('marca-nombre').value = m.texto || '';
@@ -577,7 +577,7 @@ async function achicarLogo(file) {
     const b = await new Promise((res) => c.toBlob(res, 'image/webp', q));
     if (b && b.size <= TOPE_LOGO) return new File([b], 'logo.webp', { type: 'image/webp' });
   }
-  throw new Error('No pudimos achicar ese logo. Probá con uno más simple.');
+  throw new Error('No pudimos reducir ese logo. Intenta con uno más simple.');
 }
 
 $('marca-form').addEventListener('input', () => { mostrar('listo-marca', ''); mostrar('error-marca', ''); });
@@ -620,8 +620,8 @@ function ayudaDelModo() {
     ? 'Nadie tiene que estar aprobando nada durante la fiesta. Las fotos igual pasan '
       + 'por un filtro automático y los mensajes con palabrotas quedan esperando: '
       + '<b>automático quiere decir sin persona, no sin filtro</b>.'
-    : 'Nada se ve hasta que lo aprobás desde «Moderar». Es lo más prolijo, pero '
-      + 'alguien tiene que estar mirando el celular durante la fiesta.';
+    : 'Nada se ve hasta que lo apruebas desde «Moderar». Es lo más ordenado, pero '
+      + 'alguien tiene que estar viendo el celular durante la fiesta.';
 }
 $('modo').addEventListener('change', ayudaDelModo);
 ayudaDelModo();
@@ -648,7 +648,7 @@ $('crear').addEventListener('submit', async (ev) => {
     });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.gid) throw new Error(j.error || ('No se pudo crear (' + r.status + ')'));
-    mostrar('listo-crear', '¡Lista! Ya la tenés abajo, con el cartel para imprimir.');
+    mostrar('listo-crear', '¡Lista! Ya la tienes abajo, con el cartel para imprimir.');
     $('nombre').value = ''; $('fecha').value = '';
     await mirarCuenta();
   } catch (e) {
