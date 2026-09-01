@@ -39,27 +39,58 @@
          inventar una que el motor no tenga. Si hace falta eso → avisarle a
          Maki, NO improvisar.
 
+      ★★★ Y SE COPIA MIRANDO LA MUESTRA, OBJETO POR OBJETO ★★★  (1/9/2026)
+         Maki: «tu problema es que no ves la muestra. Tendrías que ver la
+         muestra, pensar cómo adaptar todo a la nuestra, y cuando lo adaptás,
+         VOLVER a la muestra a ver si tiene algo que ver. Porque si ves que la
+         bandeja de plata tiene una frase arriba, adiviná dónde tendría que
+         estar en nuestra invi».
+         Lo que se había hecho mal: mirar la referencia UNA vez, sacar reglas
+         abstractas (tipografía, aire, bandas) y después colocar las piezas por
+         regla, sin volver. Resultado, textual: «está puesto así por poner».
+         El idioma de esa referencia era: **cada objeto SOSTIENE un texto**.
+         → Antes de colocar una pieza: buscarla en la muestra, ver qué
+           sostiene, buscar la sección nuestra que dice lo mismo, y MIRARLO en
+           el navegador antes de subirlo. Si no hay sección que diga lo mismo,
+           no se pone.
+
       Ficha de lectura de las referencias, prompts de las fotos y las trampas:
       skill `invitame-plantillas`.
 
-   ★★★ LAS PIEZAS FOTOGRAFIADAS ★★★  (31/8/2026)
+   ★★★ LAS PIEZAS FOTOGRAFIADAS ★★★  (31/8/2026, ampliado 1/9/2026)
       `/colecciones/pieza-*.js` y `/efectos/perla.js` no dibujan nada: son
-      MATERIAL. Cada uno deja una foto recortada como data URI en un global
+      MATERIAL. Cada uno deja una foto como data URI en un global
       (`window.INVPERLA`, `window.INVPIEZAS.*`) y las colecciones las usan.
-      Son cinco, generadas en Flow por Maki: broche, dije, bandeja, sobre y moño.
+      Generadas en Flow por Maki.
 
-      ⚠️ DOS TRATAMIENTOS DISTINTOS, SEGÚN SI FLOTAN O SE APOYAN:
-        · Lo que tiene que flotar sobre cualquier fondo (broche, dije, perla)
-          se pidió sobre GRIS y se recortó con alfa.
-        · Lo que vive adentro de una sección clara (bandeja, sobre, moño) se
-          pidió sobre PAPEL MARFIL y NO se recorta: se coloca entero con el
-          alfa apagándose en los bordes.
-        Recortar lo que flota, difuminar lo que se apoya.
+      ⚠️ TRES TRATAMIENTOS DISTINTOS, SEGÚN CÓMO SE APOYA LA PIEZA:
+        1. RECORTAR con alfa — lo que tiene que flotar sobre CUALQUIER fondo
+           (broche, dije, perla). Se pide sobre GRIS para poder recortarlo.
+        2. DIFUMINAR — lo que vive adentro de una sección clara (bandeja,
+           sobre, moño). Se pide sobre PAPEL MARFIL, no se recorta, y se
+           disuelve con `mask-image` en el borde.
+        3. MULTIPLICAR — lo que se apoya sobre papel de COLOR y tiene que
+           andar en las 20 paletas (collar). El archivo no lleva alfa: se
+           divide el papel por su propio color hasta dejarlo blanco puro, y en
+           el navegador va con `mix-blend-mode: multiply`. El blanco no pinta
+           nada y quedan sólo el objeto y su sombra, tomando el tono de la
+           sección. Es el más robusto de los tres.
+           ⚠️ Con multiply, `opacity` baja NO hace la pieza más sutil: la hace
+              GRIS. Para que sea más discreta, achicarla.
+           ⚠️ Y multiply no puede ACLARAR: un brillo más claro que la sección
+              se recorta. Se acepta a cambio de conservar la sombra.
 
       ⚠️ AL AGREGAR UNA PIEZA NUEVA: base64 en bloques de 4.000 y VERIFICAR con
          suma de control. Llegó un archivo con caracteres cambiados en el medio
          que decodificaba al tamaño exacto y con cabecera RIFF válida: el
          tamaño y la cabecera NO alcanzan.
+
+      ⚠️ UNA FOTO CHICA REPETIDA MUCHAS VECES SE LEE COMO DIBUJO. La guirnalda
+         hecha repitiendo UNA perla recortada la vio Maki enseguida: «se nota
+         que están dibujadas». El ojo ve el patrón —todas idénticas, mismo
+         brillo, misma orientación— y no la perla. La perla repetida sirve en
+         CHICO (el hilo entre secciones, la línea del programa, los corazones);
+         para una pieza protagonista hace falta la foto del objeto entero.
 
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
       Regla de Maki, dicha más de una vez y con razón:
@@ -128,6 +159,16 @@
       El CSS sigue siendo la herramienta correcta para superficies (papel,
       terciopelo, el velo del fondo) y para LÍNEAS (la cadena del dije), no
       para objetos.
+
+   ★ !important NO ALCANZA PARA GANARLE A UN MÓDULO (1/9/2026)
+      La colección se inserta ANTES que casi todos los módulos. Si su regla
+      tiene la MISMA especificidad que la del módulo y las dos son !important,
+      desempata el orden y gana el módulo. Pasó con `inv-fondo-css`, que pinta
+      `html[data-fondo] .sec.verde` y dejaba la sección verde aunque la regla
+      de la colección estuviera bien escrita.
+      → Repetir el atributo o la clase: `[data-col-lugar][data-col-lugar]`
+        sube la especificidad sin depender de nada del motor.
+      → Y la única forma de darse cuenta es MIRAR LA PÁGINA, no el código.
 
    ★ NO COLGAR NADA DE `window.INVEV` (31/8/2026)
       `INVEV` es el OBJETO DE DATOS DEL EVENTO: el motor lo REEMPLAZA entero
@@ -221,12 +262,13 @@
     '/efectos/motivo.js',              /* el motivo que recorre todo: por ahora, las perlas */
     '/efectos/panel-motivo.js',        /* y su bloque en el panel, para prenderlo y graduarlo */
 
-    /* ---- EL MATERIAL: cinco fotos generadas en Flow y recortadas ---- */
-    '/colecciones/pieza-broche.js',    /* recortado sobre gris · cierra el hilo del programa */
-    '/colecciones/pieza-dije.js',      /* recortado sobre gris · cuelga de la cuenta regresiva */
-    '/colecciones/pieza-bandeja.js',   /* sobre papel · el lugar */
-    '/colecciones/pieza-sobre.js',     /* sobre papel · la carta */
-    '/colecciones/pieza-mono.js',      /* sobre papel · nuestras personas */
+    /* ---- EL MATERIAL: fotos generadas en Flow ---- */
+    '/colecciones/pieza-broche.js',    /* RECORTADO sobre gris · cierra el hilo del programa */
+    '/colecciones/pieza-dije.js',      /* RECORTADO sobre gris · cuelga de la cuenta regresiva */
+    '/colecciones/pieza-bandeja.js',   /* DIFUMINADO · el marco de la tarjeta del lugar */
+    '/colecciones/pieza-sobre.js',     /* DIFUMINADO · la carta */
+    '/colecciones/pieza-mono.js',      /* DIFUMINADO · el soporte de la tarjeta de contacto */
+    '/colecciones/pieza-collar.js',    /* MULTIPLICADO · el collar que cruza la invitación */
 
     /* ---- LAS COLECCIONES: una decisión que trae todo junto ---- */
     '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
