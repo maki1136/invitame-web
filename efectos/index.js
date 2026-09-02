@@ -32,6 +32,25 @@
       → Y el bloque del panel tiene que AVISAR de las combinaciones que rompen,
         no dejar que el que edita las descubra en la invitación.
 
+   ★★★★★ Y HAY QUE SEGUIR EL HILO HASTA LA PANTALLA ★★★★★  (2/9/2026)
+      El sobre de entrada tenía TODO puesto —seis videos en el repo, el
+      catálogo, el selector en el panel— y no se veía ninguno. Dos cortes
+      distintos en el mismo hilo:
+
+        1. El selector del panel estaba VACÍO (ver la nota de la lista vacía).
+        2. El motor ni miraba el dato: `i/index.html` tiene
+           `if (CONFIG.sobreTriangulos) initEnvTri(); else initEnvVideo();`
+           con `sobreTriangulos: true` **escrito a mano adentro del motor**.
+           Siempre abría con el sobre de triángulos.
+
+      Ninguno de los dos daba error. Simplemente no pasaba nada, y «no pasa
+      nada» se confunde con «todavía no lo configuraron».
+
+      → Una función no está lista cuando el código existe: está lista cuando se
+        sigue el camino ENTERO —dato guardado → panel que lo muestra → motor
+        que lo lee → pantalla— y se mira el resultado.
+      → Lo reconecta `/efectos/sobre-catalogo.js`, sin tocar el motor.
+
    ★★★★ UNA LISTA VACÍA EN EL PANEL ES UN BUG, NO UN VACÍO ★★★★  (2/9/2026)
       El selector «Sobre del catálogo» de ✨ Efectos tenía UNA sola opción:
       «— Elegí un sobre —». O sea que desde el panel **no se podía elegir
@@ -211,6 +230,7 @@
       2. ¿se puede prender y apagar DESDE EL PANEL, sin tocar la base?
       3. ¿las listas del panel tienen TODAS sus opciones? (ver la nota de la
          lista vacía, más arriba)
+      4. ¿el MOTOR lee ese dato? (ver la nota del hilo hasta la pantalla)
 
       ⚠️ Para operar el panel desde la consola: "Guardar y publicar" llama a
          `publicar()`, que abre un `confirm()` nativo — y un cartel nativo
@@ -303,7 +323,7 @@
       datos del cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en veinticuatro casos:
+   ⚠️ EL ORDEN IMPORTA en veinticinco casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -322,6 +342,9 @@
    · `panel-sobre.js` NO tiene orden: busca el select por su `onchange` y lee
      el catálogo en el momento, así que no depende de quién cargó primero.
      Justamente existe porque el admin SÍ dependía del orden.
+   · `sobre-catalogo.js` va TEMPRANO y ANTES de que el invitado toque nada: es
+     lo primero que se ve. Igual espera solo a que estén `INVEV.fx.sobre` y el
+     catálogo, y no hace nada si el sobre elegido no tiene video.
    · `muestra-venta.js` va DESPUÉS de `wa-flotante.js`: le pisa el número al
      flotante. Ese módulo escribe el href UNA sola vez (no tiene setInterval),
      así que alcanza con pasar después; igual `muestra-venta.js` lo revisa cada
@@ -359,6 +382,7 @@
    ============================================================================ */
 (function () {
   var MODULOS = [
+    '/efectos/sobre-catalogo.js',      /* el sobre de entrada: el motor lo ignoraba */
     '/efectos/paleta.js',              /* la paleta: pinta las 12 variables de color de una */
     '/efectos/panel-paleta.js',        /* y el selector de las 20, en el panel */
     '/efectos/botones.js',             /* el material de los botones: lacre, cristal, nácar… */
