@@ -23,9 +23,19 @@
      Primero se horneó el fundido dentro del mp4 con ffmpeg. Mal: obligaba a
      recomprimir todo el video, y sobre un fondo gris parejo la compresión se
      nota enseguida. Maki, textual: «la calidad quedó muy mal del sobre».
-     Ahora el archivo es el ORIGINAL sin recomprimir (sólo se le saca el audio,
-     que es un remux y no toca un píxel) y el fundido lo hace un velo por CSS,
-     del color EXACTO con el que arranca la invitación.
+     El fundido lo hace un velo por CSS, del color EXACTO con el que arranca la
+     invitación, así el empalme es perfecto por definición y no por medición.
+
+   ★ LA RESOLUCIÓN DEL SOBRE: 1080×1920, NO 720  (2/9/2026)
+     Flow entrega 720×1280. En un iPhone eso se estira a más de 1100 px de
+     ancho y se ve blando. Maki: «en el iphone la calidad se ve horrible».
+     El archivo del catálogo se agranda a 1080×1920 con lanczos y un unsharp
+     suave ANTES de subirlo: el navegador después casi no tiene que escalar y
+     se ve nítido. Pesa ~1,1 MB, más que los otros sobres, y está bien: es la
+     primera pantalla y se carga una sola vez.
+     ⚠️ Y el PÓSTER se saca del video YA agrandado y en máxima calidad. El
+        póster es lo que se ve ANTES de tocar: si sale comprimido, el sobre
+        parece feo aunque el video esté perfecto. Ese fue medio problema.
 
    ★★ LOS VIDEOS GENERADOS RESPIRAN: SE ABREN Y SE VUELVEN A CERRAR (2/9/2026)
      El sobre de Perlas llega a su punto más abierto cerca de los 2,6 s y en el
@@ -40,6 +50,15 @@
      sin que nadie tocara nada. Se le saca el atributo y se lo deja en pausa.
      Y el velo sólo puede arrancar si el invitado ya tocó.
 
+   ★★★ Y SAFARI LE PONE SUS PROPIOS CONTROLES (2/9/2026)
+     En la Mac apareció la barra de reproducción de Safari encima del sobre:
+     play, línea de tiempo, volumen, pantalla completa. Pasa cuando Safari
+     bloquea el autoplay y decide «esto lo maneja el usuario». No alcanza con
+     `controls = false`: hay que apagar los pseudo-elementos
+     `::-webkit-media-controls*`, y hay que hacerlo para el video ESTÉ DONDE
+     ESTÉ, no sólo dentro de `#env.carta-video`, porque los controles aparecen
+     antes de que se ponga esa clase.
+
    ★★★★ EL PRIMER SEGUNDO TAMBIÉN ES LA INVITACIÓN  (2/9/2026)
      Maki, sobre una captura de su teléfono: «no quiero ver más la primera
      imagen esa», «apenas abrís, 1 segundo o más».
@@ -48,16 +67,12 @@
 
        1. La tapa anti-destello escondía una LISTA de elementos del sobre viejo
           — y por esa lista se colaban el monograma y el botón INGRESA. Ahora
-          esconde **todos los hijos de `#env`**, sin lista. Lo que el motor
-          agregue mañana también queda tapado.
+          esconde **todos los hijos de `#env`**, sin lista.
 
        2. La espera. El módulo no puede decidir hasta que llega `INVEV` desde
           Firestore, y eso tarda cerca de un segundo. Por eso ahora se GUARDA
           el sobre elegido en `localStorage` por invitación: en la segunda
-          visita, y en todas las siguientes, el sobre aparece al instante sin
-          esperar la base. La primera visita sigue esperando, pero muestra
-          papel liso y nada más — que se lee como «está cargando», no como una
-          imagen equivocada.
+          visita y en todas las siguientes el sobre aparece al instante.
 
      → Regla: mientras se espera un dato, no se muestra una versión provisoria
        de la pantalla. Se muestra NADA, y lo que aparece después aparece con un
@@ -67,13 +82,10 @@
       sirve: el motor ya tenía SU listener ahí (`initEnvTri()`) y, como se
       registró primero, entraba de una sin dejar correr el video. Una tapa
       transparente encima tampoco fue confiable. Lo que funciona es
-      `document.addEventListener('click', …, true)`: la fase de captura corre
-      siempre antes que cualquier listener del elemento.
+      `document.addEventListener('click', …, true)`.
 
    ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Reloj de seguridad: unos
-      segundos después de TOCAR se llama a `abrir()` pase lo que pase. Cubre el
-      caso real de una pestaña que no está adelante, donde el navegador pausa
-      el video solo, sin error y sin que nadie lo pida.
+      segundos después de TOCAR se llama a `abrir()` pase lo que pase.
 
    ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO. Las invitaciones con el
       sobre de triángulos siguen exactamente igual.
@@ -108,7 +120,6 @@
     catch (e) { return null; }
   }
 
-  /* ¿este sobre es uno del catálogo, con video? */
   function delCatalogo(modelo) {
     var cat = catalogo();
     if (!cat || !modelo) return null;
@@ -121,7 +132,7 @@
     return delCatalogo(s.modelo);
   }
 
-  /* ---- 1. TAPA ANTI-DESTELLO: esconde TODO, sin lista ---- */
+  /* ---- 1. TAPA ANTI-DESTELLO + CONTROLES DE SAFARI, antes de saber nada ---- */
   var tapa = document.createElement('style');
   tapa.id = 'col-sobre-tapa';
   tapa.textContent =
@@ -129,13 +140,40 @@
     '#env{background:#efeae2!important}';
   (document.head || document.documentElement).appendChild(tapa);
 
+  /* ⚠️ los controles nativos se apagan SIEMPRE, no sólo en carta-video:
+     Safari los dibuja apenas carga, antes de que pongamos la clase */
+  var sinControles = document.createElement('style');
+  sinControles.id = 'col-sobre-sin-controles';
+  sinControles.textContent = [
+    '#env-vid::-webkit-media-controls,',
+    '#env-vid::-webkit-media-controls-enclosure,',
+    '#env-vid::-webkit-media-controls-panel,',
+    '#env-vid::-webkit-media-controls-panel-container,',
+    '#env-vid::-webkit-media-controls-overlay-play-button,',
+    '#env-vid::-webkit-media-controls-start-playback-button,',
+    '#env-vid::-webkit-media-controls-play-button,',
+    '#env-vid::-webkit-media-controls-timeline,',
+    '#env-vid::-webkit-media-controls-current-time-display,',
+    '#env-vid::-webkit-media-controls-time-remaining-display,',
+    '#env-vid::-webkit-media-controls-mute-button,',
+    '#env-vid::-webkit-media-controls-volume-slider,',
+    '#env-vid::-webkit-media-controls-fullscreen-button,',
+    '#env-vid::-webkit-media-controls-toggle-closed-captions-button{',
+    '  display:none!important;-webkit-appearance:none!important;',
+    '  opacity:0!important;pointer-events:none!important}',
+    '#env-vid::-internal-media-controls-overlay-cast-button{display:none!important}'
+  ].join('\n');
+  (document.head || document.documentElement).appendChild(sinControles);
+
   /* ⚠️ el autoplay del motor se corta YA, antes de que el video empiece */
   (function frenarAutoplay() {
     var v = document.getElementById('env-vid');
     if (!v) { setTimeout(frenarAutoplay, 20); return; }
     try {
       v.removeAttribute('autoplay');
+      v.removeAttribute('controls');
       v.autoplay = false;
+      v.controls = false;
       v.pause();
       v.currentTime = 0;
     } catch (e) {}
@@ -165,7 +203,7 @@
       '#env.carta-video #env-vid{display:block!important;',
       '  position:fixed;inset:0;width:100%;height:100%;',
       '  object-fit:cover;background:' + color + ';',
-      '  opacity:0;transition:opacity .45s ease}',
+      '  opacity:0;transition:opacity .45s ease;pointer-events:none}',
       '#env.carta-video.puesto #env-vid{opacity:1}',
 
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
@@ -202,13 +240,16 @@
     });
 
     vid.removeAttribute('autoplay');
+    vid.removeAttribute('controls');
     vid.autoplay = false;
+    vid.controls = false;
     vid.setAttribute('poster', m.poster || '');
     vid.setAttribute('playsinline', '');
     vid.setAttribute('webkit-playsinline', '');
+    vid.setAttribute('disablepictureinpicture', '');
+    vid.setAttribute('controlslist', 'nodownload noplaybackrate nofullscreen noremoteplayback');
     vid.muted = true;
     vid.loop = false;
-    vid.controls = false;
     vid.preload = 'auto';
     if (vid.getAttribute('src') !== m.video) vid.setAttribute('src', m.video);
     try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
@@ -229,7 +270,6 @@
     hint.textContent = 'Toca para abrir';
 
     sacarTapa();
-    /* aparece con un fundido, no de golpe */
     setTimeout(function () { env.classList.add('puesto'); }, 30);
 
     var abierto = false;
@@ -245,7 +285,6 @@
     var fundiendo = false;
     function fundir() {
       if (fundiendo) return;
-      /* ⚠️ sólo si el invitado tocó: nunca entrar solo */
       if (!env.classList.contains('abriendo')) return;
       fundiendo = true;
       env.classList.add('fundiendo');
@@ -295,7 +334,6 @@
 
   function revisar() {
     if (listo) {
-      /* igual anotamos lo que dice la base, por si cambió el sobre */
       var s0 = sobre();
       if (s0 && s0.modelo !== undefined) {
         recordar(String(s0.tipo || '') === 'carta' ? s0.modelo : '');
