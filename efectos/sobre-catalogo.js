@@ -14,89 +14,68 @@
    del propio CONFIG (`sobreVideo`, el marfil viejo con el sello encimado), no
    el del catálogo.
 
-   O sea que había SEIS sobres en video cargados, un catálogo, un selector en
-   el panel… y nada de eso llegaba a la pantalla.
-
    POR QUÉ SE ARREGLA DESDE ACÁ
    `i/index.html` pesa 185 KB y se sube a mano. El motor deja `abrir()` como
    función global, así que un módulo puede armar la apertura con el video del
-   catálogo y después llamar a la MISMA `abrir()` de siempre. No se toca el
-   motor y no se duplica nada.
+   catálogo y después llamar a la MISMA `abrir()` de siempre.
 
    ★ EL FUNDIDO A BLANCO SE HACE ACÁ, NO EN EL ARCHIVO  (2/9/2026)
      Primero se horneó el fundido dentro del mp4 con ffmpeg. Mal: obligaba a
      recomprimir todo el video, y sobre un fondo gris parejo la compresión se
      nota enseguida. Maki, textual: «la calidad quedó muy mal del sobre».
-
-     Ahora el archivo del sobre es el ORIGINAL, sin recomprimir (sólo se le
-     saca el audio, que es un remux y no toca un solo píxel). El fundido lo
-     hace un velo por CSS encima del video.
-
-     Y sale mejor por tres razones, no sólo por el peso:
-       · el blanco del velo es EXACTAMENTE el color que declara el catálogo, o
-         sea el mismo con el que arranca la invitación: el empalme es perfecto
-         por definición, no por medición;
-       · se puede ajustar el tiempo sin volver a generar ni recomprimir nada;
-       · sirve para cualquier sobre, incluso los que no terminan en blanco.
+     Ahora el archivo es el ORIGINAL sin recomprimir (sólo se le saca el audio,
+     que es un remux y no toca un píxel) y el fundido lo hace un velo por CSS,
+     del color EXACTO con el que arranca la invitación.
 
    ★★ LOS VIDEOS GENERADOS RESPIRAN: SE ABREN Y SE VUELVEN A CERRAR (2/9/2026)
-     Mirando el sobre de Perlas cuadro por cuadro apareció esto: llega a su
-     punto más abierto cerca de los 2,6 s y en el segundo final **se cierra de
-     nuevo**. Es un tic de los modelos de video: vuelven hacia el primer cuadro.
-
-     Por eso el velo NO arranca al terminar el video: arranca en el momento más
-     abierto (`duration - ANTES`) y termina de tapar ANTES de que el sobre se
-     cierre.
-
+     El sobre de Perlas llega a su punto más abierto cerca de los 2,6 s y en el
+     segundo final se cierra de nuevo. Por eso el velo arranca en el momento
+     más abierto (`duration - ANTES`), no al terminar.
      → Al sumar un sobre nuevo: sacarle cuadros con ffmpeg y BUSCAR el momento
-       más abierto. No dar por hecho que el mejor cuadro es el último.
+       más abierto. El mejor cuadro casi nunca es el último.
 
    ★★★ EL `<video>` DEL MOTOR VIENE CON `autoplay` (2/9/2026)
-     `#env-vid` tiene el atributo `autoplay` escrito en el HTML del motor. Con
-     el sobre de triángulos no se notaba porque el video estaba escondido; acá
-     sí: **la invitación se abría sola, sin que nadie tocara nada**. Cargabas la
-     página, y a los 4 segundos ya estabas adentro.
-     → Hay que sacarle el atributo Y ponerlo en pausa en cero al armarlo.
-     → Y el velo sólo puede arrancar si el invitado ya tocó (`abriendo`): si
-       algo llegara a hacerlo correr solo otra vez, no entra igual.
-     → Regla general: un elemento que viene del motor puede traer atributos que
-       no se ven en la pantalla. Al reutilizarlo, revisar cuáles trae.
+     `#env-vid` trae `autoplay` escrito en el HTML. Con el sobre de triángulos
+     no se notaba porque estaba escondido; acá la invitación **se abría sola**,
+     sin que nadie tocara nada. Se le saca el atributo y se lo deja en pausa.
+     Y el velo sólo puede arrancar si el invitado ya tocó.
 
-   CÓMO FUNCIONA
-   1. Espera a que estén los datos (`INVEV.fx.sobre`) y el catálogo.
-   2. Si el sobre elegido es del tipo «carta» y tiene video, apaga el sobre de
-      triángulos y arma el de video, en pausa.
-   3. Al tocar: reproduce. En el momento más abierto sube el velo blanco, y
-      encima de ese blanco se llama a `abrir()`.
+   ★★★★ EL PRIMER SEGUNDO TAMBIÉN ES LA INVITACIÓN  (2/9/2026)
+     Maki, sobre una captura de su teléfono: «no quiero ver más la primera
+     imagen esa», «apenas abrís, 1 segundo o más».
 
-   ⚠️ NADA DE DESTELLOS AL CARGAR. El motor dibuja el sobre de triángulos
-      apenas arranca, así que se veía un fogonazo del sobre viejo (verde) antes
-      de que este módulo pusiera el bueno. Maki: «no quiero ver más la primera
-      imagen esa». Por eso lo primero que hace el archivo, ANTES de saber nada,
-      es tapar el sobre de triángulos con papel liso. Si resulta que esta
-      invitación sí usa el de triángulos, se saca esa tapa enseguida y aparece
-      normal.
+     Eran DOS cosas encimadas:
 
-   ⚠️ EL TOQUE VA EN CAPTURA SOBRE EL DOCUMENTO. Dos intentos fallaron antes:
-        · escuchar el click en `#env` → el motor ya tenía SU listener ahí
-          (puesto por `initEnvTri()`) y, como se registró primero, entraba de
-          una a la invitación sin dejar correr el video;
-        · una tapa transparente encima → quedaba bien arriba en el apilado,
-          pero el toque igual no llegaba de forma confiable.
-      Lo que sí funciona: `document.addEventListener('click', …, true)`. La
-      fase de captura corre SIEMPRE antes que cualquier listener del elemento,
-      no importa quién se registró primero.
-      Y el botón INGRESA del motor se esconde en este modo, porque llama a
-      `abrir()` directo y también se saltearía el video.
+       1. La tapa anti-destello escondía una LISTA de elementos del sobre viejo
+          — y por esa lista se colaban el monograma y el botón INGRESA. Ahora
+          esconde **todos los hijos de `#env`**, sin lista. Lo que el motor
+          agregue mañana también queda tapado.
 
-   ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Hay un reloj de seguridad:
-      pase lo que pase, unos segundos después de TOCAR se llama a `abrir()`.
-      Un sobre roto no puede dejar a nadie afuera de su propia invitación.
-      Esto además cubre un caso real: en una pestaña que no está adelante, el
-      navegador pausa el video solo (sin error y sin que nadie lo pida). En el
-      celular del invitado, que siempre está adelante, corre normal.
+       2. La espera. El módulo no puede decidir hasta que llega `INVEV` desde
+          Firestore, y eso tarda cerca de un segundo. Por eso ahora se GUARDA
+          el sobre elegido en `localStorage` por invitación: en la segunda
+          visita, y en todas las siguientes, el sobre aparece al instante sin
+          esperar la base. La primera visita sigue esperando, pero muestra
+          papel liso y nada más — que se lee como «está cargando», no como una
+          imagen equivocada.
 
-   ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO. Las invitaciones que usan el
+     → Regla: mientras se espera un dato, no se muestra una versión provisoria
+       de la pantalla. Se muestra NADA, y lo que aparece después aparece con un
+       fundido, no de golpe.
+
+   ⚠️ EL TOQUE VA EN CAPTURA SOBRE EL DOCUMENTO. Escuchar el click en `#env` no
+      sirve: el motor ya tenía SU listener ahí (`initEnvTri()`) y, como se
+      registró primero, entraba de una sin dejar correr el video. Una tapa
+      transparente encima tampoco fue confiable. Lo que funciona es
+      `document.addEventListener('click', …, true)`: la fase de captura corre
+      siempre antes que cualquier listener del elemento.
+
+   ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Reloj de seguridad: unos
+      segundos después de TOCAR se llama a `abrir()` pase lo que pase. Cubre el
+      caso real de una pestaña que no está adelante, donde el navegador pausa
+      el video solo, sin error y sin que nadie lo pida.
+
+   ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO. Las invitaciones con el
       sobre de triángulos siguen exactamente igual.
    ============================================================================ */
 (function () {
@@ -112,26 +91,42 @@
     return (c && typeof c === 'object') ? c : null;
   }
 
+  /* ---- de qué invitación estamos hablando, sin esperar la base ---- */
+  function slug() {
+    try {
+      var d = window.INVDATA || {};
+      if (d.slug) return String(d.slug);
+      var m = location.search.match(/[?&]e=([^&]+)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    } catch (e) { return ''; }
+  }
+  function recordar(modelo) {
+    try { if (slug()) localStorage.setItem('inv_sobre_' + slug(), modelo || ''); } catch (e) {}
+  }
+  function recordado() {
+    try { return slug() ? (localStorage.getItem('inv_sobre_' + slug()) || null) : null; }
+    catch (e) { return null; }
+  }
+
   /* ¿este sobre es uno del catálogo, con video? */
+  function delCatalogo(modelo) {
+    var cat = catalogo();
+    if (!cat || !modelo) return null;
+    var m = cat[modelo];
+    return (m && m.video) ? m : null;
+  }
   function elegido() {
     var s = sobre();
     if (String(s.tipo || '') !== 'carta') return null;
-    var cat = catalogo();
-    if (!cat) return null;
-    var m = cat[s.modelo];
-    if (!m || !m.video) return null;
-    return m;
+    return delCatalogo(s.modelo);
   }
 
-  /* ---- 1. TAPA ANTI-DESTELLO, antes de saber nada ---- */
+  /* ---- 1. TAPA ANTI-DESTELLO: esconde TODO, sin lista ---- */
   var tapa = document.createElement('style');
   tapa.id = 'col-sobre-tapa';
-  tapa.textContent = [
-    '#env .triflap,#env #tri-seal,#env #env-bloom,#env #env-vseal,',
-    '#env .scene,#env #btn-ingresar,#env .hint,#env .vhint,',
-    '#env #e-back,#env #e-pocket,#env #e-flap{visibility:hidden!important}',
-    '#env{background:#efeae2!important}'
-  ].join('\n');
+  tapa.textContent =
+    '#env > *{visibility:hidden!important}\n' +
+    '#env{background:#efeae2!important}';
   (document.head || document.documentElement).appendChild(tapa);
 
   /* ⚠️ el autoplay del motor se corta YA, antes de que el video empiece */
@@ -159,36 +154,32 @@
       document.head.appendChild(st);
     }
     st.textContent = [
-      '#env.carta-video .triflap,',
-      '#env.carta-video #tri-seal,',
-      '#env.carta-video #env-vseal,',
-      '#env.carta-video #env-bloom,',
-      '#env.carta-video .scene,',
-      '#env.carta-video #btn-ingresar,',
-      '#env.carta-video .hint,',
-      '#env.carta-video #e-back,',
-      '#env.carta-video #e-pocket,',
-      '#env.carta-video #e-flap{display:none!important}',
+      '#env.carta-video > *{visibility:hidden}',
+      '#env.carta-video #env-vid,',
+      '#env.carta-video #col-sobre-velo,',
+      '#env.carta-video .vhint{visibility:visible!important}',
 
       '#env.carta-video{background:' + color + '!important;cursor:pointer;',
       '  transition:opacity .6s ease,visibility .6s ease}',
 
-      '#env.carta-video #env-vid{display:block!important;visibility:visible!important;',
+      '#env.carta-video #env-vid{display:block!important;',
       '  position:fixed;inset:0;width:100%;height:100%;',
-      '  object-fit:cover;background:' + color + '}',
+      '  object-fit:cover;background:' + color + ';',
+      '  opacity:0;transition:opacity .45s ease}',
+      '#env.carta-video.puesto #env-vid{opacity:1}',
 
-      /* el velo que hace el fundido, del color exacto de la invitación */
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
       '  background:' + color + ';opacity:0;',
       '  transition:opacity ' + FUNDIDO + 's ease-in}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
-      '#env.carta-video .vhint{display:block!important;visibility:visible!important;',
+      '#env.carta-video .vhint{display:block!important;',
       '  position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:10;',
       '  font-family:Montserrat,sans-serif;font-size:10px;font-weight:500;',
       '  letter-spacing:.22em;text-transform:uppercase;',
       '  color:rgba(60,52,44,.62);text-align:center;pointer-events:none;',
-      '  transition:opacity .4s ease}',
+      '  opacity:0;transition:opacity .45s ease}',
+      '#env.carta-video.puesto .vhint{opacity:1}',
       '#env.carta-video.abriendo .vhint{opacity:0}'
     ].join('\n');
   }
@@ -238,6 +229,8 @@
     hint.textContent = 'Toca para abrir';
 
     sacarTapa();
+    /* aparece con un fundido, no de golpe */
+    setTimeout(function () { env.classList.add('puesto'); }, 30);
 
     var abierto = false;
     function entrar() {
@@ -259,8 +252,6 @@
       setTimeout(entrar, FUNDIDO * 1000);
     }
 
-    /* ⚠️ el velo arranca en el momento MÁS ABIERTO, no al final: el video
-       se vuelve a cerrar en el último segundo y eso no se tiene que ver */
     vid.addEventListener('timeupdate', function () {
       if (!vid.duration || !isFinite(vid.duration)) return;
       if (vid.currentTime >= vid.duration - ANTES) fundir();
@@ -271,14 +262,12 @@
       if (env.classList.contains('abriendo')) return;
       env.classList.add('abriendo');
       var dur = (vid.duration && isFinite(vid.duration)) ? vid.duration : 5;
-      /* ⚠️ el reloj de seguridad: si el video no corre, se entra igual */
       setTimeout(fundir, (dur + 1.5) * 1000);
       var p = null;
       try { vid.currentTime = 0; p = vid.play(); } catch (err) {}
       if (p && p.catch) p.catch(function () { fundir(); });
     }
 
-    /* ⚠️ CAPTURA en el documento: corre antes que el listener del motor */
     function alTocar(e) {
       if (abierto) return;
       if (!env.contains(e.target) && e.target !== env) return;
@@ -296,20 +285,34 @@
     return true;
   }
 
+  /* ---- 2. ATAJO: si ya vino antes, se pone el sobre sin esperar la base ---- */
+  (function atajo() {
+    if (listo) return;
+    var m = delCatalogo(recordado());
+    if (!m) { if (!catalogo()) setTimeout(atajo, 40); return; }
+    if (armar(m)) listo = true;
+  })();
+
   function revisar() {
-    if (listo) return true;
+    if (listo) {
+      /* igual anotamos lo que dice la base, por si cambió el sobre */
+      var s0 = sobre();
+      if (s0 && s0.modelo !== undefined) {
+        recordar(String(s0.tipo || '') === 'carta' ? s0.modelo : '');
+      }
+      return true;
+    }
     var s = sobre();
     var cat = catalogo();
-    /* todavía no llegaron los datos: seguimos esperando con la tapa puesta */
     if (!cat || !s || !Object.keys(s).length) return false;
 
     var m = elegido();
-    if (!m) { sacarTapa(); listo = true; return true; }   /* sobre de triángulos: normal */
+    recordar(m ? s.modelo : '');
+    if (!m) { sacarTapa(); listo = true; return true; }
     if (armar(m)) { listo = true; return true; }
     return false;
   }
 
-  /* rápido al principio, para que la tapa dure lo menos posible */
   var n = 0;
   var t = setInterval(function () {
     if (revisar() || ++n > 120) { clearInterval(t); sacarTapa(); }
