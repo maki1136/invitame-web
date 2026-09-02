@@ -19,23 +19,37 @@
    función global, así que un módulo puede armar la apertura con el video del
    catálogo y después llamar a la MISMA `abrir()` de siempre.
 
+   ★★ LA NITIDEZ SE PIERDE EN EL ENCUADRE, NO EN EL ARCHIVO  (2/9/2026)
+     Maki: «en el iphone la calidad se ve horrible». La causa no era la
+     compresión: era `object-fit: cover`.
+
+     Las cuentas, en un iPhone de 1179 × 2556 píxeles reales y un video de
+     1080 × 1920:
+       · con `cover` hay que tapar toda la pantalla, y como el teléfono es más
+         alargado que el video, se agranda **1,33×** y se recorta casi un 20%
+         de los costados;
+       · con `contain` entra entero y se agranda **1,09×**.
+
+     Se ve mucho mejor Y se ve el sobre completo, que para un objeto
+     fotografiado es lo correcto: recortarlo nunca estuvo bien. Arriba y abajo
+     quedan dos franjas del color del papel, y eso se lee como el sobre apoyado
+     sobre una superficie.
+
+     → Regla: un objeto fotografiado va CONTENIDO, no recortado. `cover` es
+       para fondos, no para piezas.
+     → Y el techo real es el archivo: Flow entrega 720 y todo lo que se hace
+       después es agrandar. Acá se sube a 1080 con lanczos antes de publicarlo.
+
    ★ EL FUNDIDO A BLANCO SE HACE ACÁ, NO EN EL ARCHIVO  (2/9/2026)
      Primero se horneó el fundido dentro del mp4 con ffmpeg. Mal: obligaba a
      recomprimir todo el video, y sobre un fondo gris parejo la compresión se
-     nota enseguida. Maki, textual: «la calidad quedó muy mal del sobre».
-     El fundido lo hace un velo por CSS, del color EXACTO con el que arranca la
-     invitación, así el empalme es perfecto por definición y no por medición.
+     nota enseguida. El fundido lo hace un velo por CSS, del color EXACTO con
+     el que arranca la invitación, así el empalme es perfecto por definición.
 
-   ★ LA RESOLUCIÓN DEL SOBRE: 1080×1920, NO 720  (2/9/2026)
-     Flow entrega 720×1280. En un iPhone eso se estira a más de 1100 px de
-     ancho y se ve blando. Maki: «en el iphone la calidad se ve horrible».
-     El archivo del catálogo se agranda a 1080×1920 con lanczos y un unsharp
-     suave ANTES de subirlo: el navegador después casi no tiene que escalar y
-     se ve nítido. Pesa ~1,1 MB, más que los otros sobres, y está bien: es la
-     primera pantalla y se carga una sola vez.
-     ⚠️ Y el PÓSTER se saca del video YA agrandado y en máxima calidad. El
-        póster es lo que se ve ANTES de tocar: si sale comprimido, el sobre
-        parece feo aunque el video esté perfecto. Ese fue medio problema.
+   ★ Y EL PÓSTER ES MEDIA CALIDAD DEL SOBRE
+     El póster es lo que se ve ANTES de tocar. Si sale comprimido, el sobre
+     parece feo aunque el video esté perfecto. Se saca del video ya agrandado
+     y en máxima calidad.
 
    ★★ LOS VIDEOS GENERADOS RESPIRAN: SE ABREN Y SE VUELVEN A CERRAR (2/9/2026)
      El sobre de Perlas llega a su punto más abierto cerca de los 2,6 s y en el
@@ -46,49 +60,33 @@
 
    ★★★ EL `<video>` DEL MOTOR VIENE CON `autoplay` (2/9/2026)
      `#env-vid` trae `autoplay` escrito en el HTML. Con el sobre de triángulos
-     no se notaba porque estaba escondido; acá la invitación **se abría sola**,
-     sin que nadie tocara nada. Se le saca el atributo y se lo deja en pausa.
-     Y el velo sólo puede arrancar si el invitado ya tocó.
+     no se notaba porque estaba escondido; acá la invitación **se abría sola**.
+     Se le saca el atributo y se lo deja en pausa. Y el velo sólo puede arrancar
+     si el invitado ya tocó.
 
    ★★★ Y SAFARI LE PONE SUS PROPIOS CONTROLES (2/9/2026)
-     En la Mac apareció la barra de reproducción de Safari encima del sobre:
-     play, línea de tiempo, volumen, pantalla completa. Pasa cuando Safari
-     bloquea el autoplay y decide «esto lo maneja el usuario». No alcanza con
-     `controls = false`: hay que apagar los pseudo-elementos
-     `::-webkit-media-controls*`, y hay que hacerlo para el video ESTÉ DONDE
-     ESTÉ, no sólo dentro de `#env.carta-video`, porque los controles aparecen
-     antes de que se ponga esa clase.
+     En la Mac apareció la barra de reproducción encima del sobre. Pasa cuando
+     Safari bloquea el autoplay. No alcanza con `controls = false`: hay que
+     apagar los pseudo-elementos `::-webkit-media-controls*`, y para el video
+     ESTÉ DONDE ESTÉ, porque aparecen antes de que se ponga la clase.
 
    ★★★★ EL PRIMER SEGUNDO TAMBIÉN ES LA INVITACIÓN  (2/9/2026)
-     Maki, sobre una captura de su teléfono: «no quiero ver más la primera
-     imagen esa», «apenas abrís, 1 segundo o más».
-
-     Eran DOS cosas encimadas:
-
-       1. La tapa anti-destello escondía una LISTA de elementos del sobre viejo
-          — y por esa lista se colaban el monograma y el botón INGRESA. Ahora
-          esconde **todos los hijos de `#env`**, sin lista.
-
-       2. La espera. El módulo no puede decidir hasta que llega `INVEV` desde
-          Firestore, y eso tarda cerca de un segundo. Por eso ahora se GUARDA
-          el sobre elegido en `localStorage` por invitación: en la segunda
-          visita y en todas las siguientes el sobre aparece al instante.
-
-     → Regla: mientras se espera un dato, no se muestra una versión provisoria
-       de la pantalla. Se muestra NADA, y lo que aparece después aparece con un
-       fundido, no de golpe.
+     Maki: «no quiero ver más la primera imagen esa», «apenas abrís, 1 segundo
+     o más». Eran dos cosas: la tapa escondía una LISTA y por ahí se colaban el
+     monograma y el botón INGRESA (ahora esconde todos los hijos de `#env`), y
+     la espera del dato (ahora el sobre elegido se guarda en `localStorage`, así
+     que desde la segunda visita aparece al instante).
+     → Regla: mientras se espera un dato no se muestra una versión provisoria.
+       Se muestra NADA, y lo que aparece después aparece con un fundido.
 
    ⚠️ EL TOQUE VA EN CAPTURA SOBRE EL DOCUMENTO. Escuchar el click en `#env` no
-      sirve: el motor ya tenía SU listener ahí (`initEnvTri()`) y, como se
-      registró primero, entraba de una sin dejar correr el video. Una tapa
-      transparente encima tampoco fue confiable. Lo que funciona es
-      `document.addEventListener('click', …, true)`.
+      sirve: el motor ya tenía SU listener ahí y entraba de una sin dejar correr
+      el video. Lo que funciona es `document.addEventListener('click', …, true)`.
 
    ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Reloj de seguridad: unos
       segundos después de TOCAR se llama a `abrir()` pase lo que pase.
 
-   ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO. Las invitaciones con el
-      sobre de triángulos siguen exactamente igual.
+   ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO.
    ============================================================================ */
 (function () {
 
@@ -103,7 +101,6 @@
     return (c && typeof c === 'object') ? c : null;
   }
 
-  /* ---- de qué invitación estamos hablando, sin esperar la base ---- */
   function slug() {
     try {
       var d = window.INVDATA || {};
@@ -140,8 +137,6 @@
     '#env{background:#efeae2!important}';
   (document.head || document.documentElement).appendChild(tapa);
 
-  /* ⚠️ los controles nativos se apagan SIEMPRE, no sólo en carta-video:
-     Safari los dibuja apenas carga, antes de que pongamos la clase */
   var sinControles = document.createElement('style');
   sinControles.id = 'col-sobre-sin-controles';
   sinControles.textContent = [
@@ -165,7 +160,6 @@
   ].join('\n');
   (document.head || document.documentElement).appendChild(sinControles);
 
-  /* ⚠️ el autoplay del motor se corta YA, antes de que el video empiece */
   (function frenarAutoplay() {
     var v = document.getElementById('env-vid');
     if (!v) { setTimeout(frenarAutoplay, 20); return; }
@@ -200,9 +194,11 @@
       '#env.carta-video{background:' + color + '!important;cursor:pointer;',
       '  transition:opacity .6s ease,visibility .6s ease}',
 
+      /* ⚠️ CONTAIN, no cover: el sobre entra entero y casi no se agranda.
+         Con cover se estiraba 1,33× y se comía los costados. */
       '#env.carta-video #env-vid{display:block!important;',
       '  position:fixed;inset:0;width:100%;height:100%;',
-      '  object-fit:cover;background:' + color + ';',
+      '  object-fit:contain;background:' + color + ';',
       '  opacity:0;transition:opacity .45s ease;pointer-events:none}',
       '#env.carta-video.puesto #env-vid{opacity:1}',
 
