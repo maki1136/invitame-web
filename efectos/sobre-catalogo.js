@@ -7,10 +7,10 @@
 
    Y `CONFIG.sobreTriangulos` está **fijo en true** dentro del propio motor. No
    sale de los datos, no sale del panel: está escrito ahí. Resultado: TODAS las
-   invitaciones abren con el sobre de triángulos, y el sobre que Jazmín elige
-   en «✨ Efectos → Sobre del catálogo» no se usa nunca.
+   invitaciones abrían con el sobre de triángulos, y el sobre que Jazmín elige
+   en «✨ Efectos → Sobre del catálogo» no se usaba nunca.
 
-   Encima, `initEnvVideo()` —el otro camino— tampoco sirve: usa un video fijo
+   Encima, `initEnvVideo()` —el otro camino— tampoco servía: usa un video fijo
    del propio CONFIG (`sobreVideo`, el marfil viejo con el sello encimado), no
    el del catálogo.
 
@@ -29,15 +29,18 @@
       triángulos y arma el de video.
    3. Al tocar: reproduce. Cuando el video termina, llama a `abrir()`.
 
-   ⚠️ HAY QUE TAPAR EL TOQUE DEL MOTOR, NO SÓLO ESCUCHARLO.
-      Primer intento: escuchar el click en `#env`. No sirvió — el motor ya
-      tenía SU listener puesto ahí por `initEnvTri()`, y como se registró
-      antes, entraba de una a la invitación sin dejar correr el video. Sacar
-      los nodos del sobre viejo no saca los listeners.
-      → Solución: una tapa transparente a pantalla completa, por encima del
-        video, que se queda con el toque y lo corta con `stopPropagation()`.
-        Y el botón INGRESA del motor se esconde en este modo, porque llama a
-        `abrir()` directo y también se saltearía el video.
+   ⚠️ EL TOQUE VA EN CAPTURA SOBRE EL DOCUMENTO. Dos intentos fallaron antes:
+        · escuchar el click en `#env` → el motor ya tenía SU listener ahí
+          (puesto por `initEnvTri()`) y, como se registró primero, entraba de
+          una a la invitación sin dejar correr el video;
+        · una tapa transparente encima → quedaba bien arriba en el apilado,
+          pero el toque igual no llegaba de forma confiable.
+      Lo que sí funciona: `document.addEventListener('click', …, true)`. La
+      fase de captura corre SIEMPRE antes que cualquier listener del elemento,
+      no importa quién se registró primero. Ahí se corta con
+      `stopPropagation()` y el motor no se entera.
+      Y el botón INGRESA del motor se esconde en este modo, porque llama a
+      `abrir()` directo y también se saltearía el video.
 
    ⚠️ EL VIDEO TERMINA EN BLANCO Y POR ESO NO SE VE EL CORTE. Los sobres
       `lazo`, `toscana` y `perlas` están hechos así: el último cuadro es un
@@ -45,9 +48,12 @@
       es ese blanco MEDIDO, y se usa acá para pintar el fondo de `#env`, así
       no hay ni un parpadeo entre el fin del video y la portada.
 
-   ⚠️ SI EL VIDEO NO CARGA, EL INVITADO ENTRA IGUAL. Hay un reloj de seguridad:
+   ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Hay un reloj de seguridad:
       pase lo que pase, unos segundos después de tocar se llama a `abrir()`.
       Un sobre roto no puede dejar a nadie afuera de su propia invitación.
+      Esto además cubre un caso real: en una pestaña que no está adelante, el
+      navegador pausa el video solo (sin error y sin que nadie lo pida). En el
+      celular del invitado, que siempre está adelante, corre normal.
 
    ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO. Las invitaciones que usan el
       sobre de triángulos siguen exactamente igual: el módulo se planta y no
@@ -100,16 +106,12 @@
       '#env.carta-video #e-flap{display:none!important}',
 
       /* el fondo es el blanco con el que termina el video: sin parpadeo */
-      '#env.carta-video{background:' + color + '!important;',
+      '#env.carta-video{background:' + color + '!important;cursor:pointer;',
       '  transition:opacity .7s ease,visibility .7s ease}',
 
       '#env.carta-video #env-vid{display:block!important;',
       '  position:fixed;inset:0;width:100%;height:100%;',
       '  object-fit:cover;background:' + color + '}',
-
-      /* la tapa que se queda con el toque */
-      '#col-sobre-tap{position:fixed;inset:0;z-index:9;cursor:pointer;',
-      '  background:transparent}',
 
       '#env.carta-video .vhint{display:block!important;position:fixed;',
       '  left:50%;bottom:34px;transform:translateX(-50%);z-index:10;',
@@ -137,6 +139,8 @@
     [].forEach.call(env.querySelectorAll('.triflap'), function (n) {
       if (n.parentNode) n.parentNode.removeChild(n);
     });
+    var tapaVieja = document.getElementById('col-sobre-tap');
+    if (tapaVieja && tapaVieja.parentNode) tapaVieja.parentNode.removeChild(tapaVieja);
 
     vid.setAttribute('poster', m.poster || '');
     vid.setAttribute('playsinline', '');
@@ -167,29 +171,28 @@
       env.style.visibility = 'hidden';
     }
 
-    /* ⚠️ la tapa: se queda con el toque para que el motor no entre antes */
-    var tapa = document.getElementById('col-sobre-tap');
-    if (!tapa) {
-      tapa = document.createElement('div');
-      tapa.id = 'col-sobre-tap';
-      env.appendChild(tapa);
-    }
-
-    function tocar(e) {
-      if (e) { e.stopPropagation(); e.preventDefault(); }
+    function tocar() {
       if (env.classList.contains('abriendo')) return;
       env.classList.add('abriendo');
-      if (tapa && tapa.parentNode) tapa.style.pointerEvents = 'none';
       var dur = (vid.duration && isFinite(vid.duration)) ? vid.duration : 6;
-      /* ⚠️ el reloj de seguridad: si el video no arranca, se entra igual */
+      /* ⚠️ el reloj de seguridad: si el video no corre, se entra igual */
       setTimeout(entrar, (dur + 1.2) * 1000);
       var p = null;
       try { p = vid.play(); } catch (err) {}
       if (p && p.catch) p.catch(function () { entrar(); });
     }
 
-    tapa.addEventListener('click', tocar);
-    tapa.addEventListener('touchstart', tocar, { passive: false });
+    /* ⚠️ CAPTURA en el documento: corre antes que el listener del motor */
+    function alTocar(e) {
+      if (abierto) return;
+      if (!env.contains(e.target) && e.target !== env) return;
+      e.stopPropagation();
+      if (e.preventDefault) e.preventDefault();
+      tocar();
+    }
+    document.addEventListener('click', alTocar, true);
+    document.addEventListener('touchend', alTocar, true);
+
     vid.addEventListener('ended', entrar);
     vid.addEventListener('error', function () {
       if (env.classList.contains('abriendo')) entrar();
