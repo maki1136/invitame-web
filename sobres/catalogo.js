@@ -38,10 +38,15 @@
    El evento guarda SOLO el id (fx.sobre.modelo), nunca la URL. Así se puede
    cambiar el video de un sobre después sin tocar ninguna invitación entregada.
 
-   ⚠️ Los sobres `lazo` y `toscana` TERMINAN EN BLANCO, no en la tarjeta. La
-   invitación entra desde ese blanco, así que el empalme es un fundido y no se
-   ve ningún corte. Por eso su `color` es casi blanco: es el color con el que
-   arranca la pantalla justo cuando el video se apaga.
+   ⚠️ Los sobres `lazo`, `toscana` y `perlas` TERMINAN EN BLANCO, no en la
+   tarjeta. La invitación entra desde ese blanco, así que el empalme es un
+   fundido y no se ve ningún corte. Por eso su `color` es casi blanco: es el
+   color con el que arranca la pantalla justo cuando el video se apaga.
+
+   ★ CÓMO SE ELIGE ESE `color`, BIEN: se MIDE, no se estima. Se saca el último
+     cuadro del video y se lee el píxel del centro. En `perlas` el fundido se
+     hizo a 0xF3F3F5 y el archivo terminó en #f2f2f4 (el paso a yuv420p corre
+     un nivel). Va el valor MEDIDO, no el pedido.
    ============================================================================ */
 window.SOBRES_INVITAME = {
 
@@ -71,6 +76,28 @@ window.SOBRES_INVITAME = {
     video:  "/sobres/sobre-toscana.mp4",
     poster: "/sobres/sobre-toscana-poster.jpg",
     color:  "#f7f2e8"
+  },
+
+  /* ---- EL SOBRE DE LA COLECCIÓN PERLAS ----------------------------------
+     Sobre marfil de borde deckled con DOS HOJAS que se abren al medio
+     (gatefold), atado con una hilera de perlas de agua dulce. Se desata el
+     moño, las perlas caen, las hojas se abren como puertas y la pantalla se
+     va a blanco.
+
+     ⚠️ NO es un sobre de solapa. Si algún día se regenera, el movimiento es
+        "las dos hojas se abren desde la costura del centro", no "se levanta
+        la solapa de arriba".
+
+     El fundido a blanco NO venía en el video generado: el original terminaba
+     mostrando el sobre abierto, y así se veía el corte al entrar la
+     invitación. Se agregó después (sostener el último cuadro 1,5 s y fundir
+     a blanco durante 1 s, dejando 0,3 s de blanco limpio al final).
+     ---------------------------------------------------------------------- */
+  perlas: {
+    nombre: "Perlas · moño de perlas, se abre al medio (video)",
+    video:  "/sobres/sobre-perlas.mp4",
+    poster: "/sobres/sobre-perlas-poster.jpg",
+    color:  "#f2f2f4"
   },
 
   'carta-toscana': {
