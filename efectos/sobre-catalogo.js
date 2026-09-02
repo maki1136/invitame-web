@@ -29,6 +29,16 @@
       triángulos y arma el de video.
    3. Al tocar: reproduce. Cuando el video termina, llama a `abrir()`.
 
+   ⚠️ HAY QUE TAPAR EL TOQUE DEL MOTOR, NO SÓLO ESCUCHARLO.
+      Primer intento: escuchar el click en `#env`. No sirvió — el motor ya
+      tenía SU listener puesto ahí por `initEnvTri()`, y como se registró
+      antes, entraba de una a la invitación sin dejar correr el video. Sacar
+      los nodos del sobre viejo no saca los listeners.
+      → Solución: una tapa transparente a pantalla completa, por encima del
+        video, que se queda con el toque y lo corta con `stopPropagation()`.
+        Y el botón INGRESA del motor se esconde en este modo, porque llama a
+        `abrir()` directo y también se saltearía el video.
+
    ⚠️ EL VIDEO TERMINA EN BLANCO Y POR ESO NO SE VE EL CORTE. Los sobres
       `lazo`, `toscana` y `perlas` están hechos así: el último cuadro es un
       blanco parejo, y la invitación entra desde ahí. El `color` del catálogo
@@ -83,6 +93,8 @@
       '#env.carta-video #env-vseal,',
       '#env.carta-video #env-bloom,',
       '#env.carta-video .scene,',
+      '#env.carta-video #btn-ingresar,',
+      '#env.carta-video .hint,',
       '#env.carta-video #e-back,',
       '#env.carta-video #e-pocket,',
       '#env.carta-video #e-flap{display:none!important}',
@@ -95,8 +107,12 @@
       '  position:fixed;inset:0;width:100%;height:100%;',
       '  object-fit:cover;background:' + color + '}',
 
+      /* la tapa que se queda con el toque */
+      '#col-sobre-tap{position:fixed;inset:0;z-index:9;cursor:pointer;',
+      '  background:transparent}',
+
       '#env.carta-video .vhint{display:block!important;position:fixed;',
-      '  left:50%;bottom:34px;transform:translateX(-50%);z-index:5;',
+      '  left:50%;bottom:34px;transform:translateX(-50%);z-index:10;',
       '  font-family:Montserrat,sans-serif;font-size:10px;font-weight:500;',
       '  letter-spacing:.22em;text-transform:uppercase;',
       '  color:rgba(60,52,44,.62);text-align:center;pointer-events:none;',
@@ -151,20 +167,33 @@
       env.style.visibility = 'hidden';
     }
 
-    function tocar() {
+    /* ⚠️ la tapa: se queda con el toque para que el motor no entre antes */
+    var tapa = document.getElementById('col-sobre-tap');
+    if (!tapa) {
+      tapa = document.createElement('div');
+      tapa.id = 'col-sobre-tap';
+      env.appendChild(tapa);
+    }
+
+    function tocar(e) {
+      if (e) { e.stopPropagation(); e.preventDefault(); }
       if (env.classList.contains('abriendo')) return;
       env.classList.add('abriendo');
+      if (tapa && tapa.parentNode) tapa.style.pointerEvents = 'none';
       var dur = (vid.duration && isFinite(vid.duration)) ? vid.duration : 6;
       /* ⚠️ el reloj de seguridad: si el video no arranca, se entra igual */
       setTimeout(entrar, (dur + 1.2) * 1000);
       var p = null;
-      try { p = vid.play(); } catch (e) {}
+      try { p = vid.play(); } catch (err) {}
       if (p && p.catch) p.catch(function () { entrar(); });
     }
 
-    env.addEventListener('click', tocar);
+    tapa.addEventListener('click', tocar);
+    tapa.addEventListener('touchstart', tocar, { passive: false });
     vid.addEventListener('ended', entrar);
-    vid.addEventListener('error', function () { if (env.classList.contains('abriendo')) entrar(); });
+    vid.addEventListener('error', function () {
+      if (env.classList.contains('abriendo')) entrar();
+    });
 
     return true;
   }
