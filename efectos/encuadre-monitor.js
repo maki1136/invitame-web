@@ -17,6 +17,33 @@
    celular, y el resto de la pantalla se llena con la propia foto de portada muy
    desenfocada más un viñeteado.
 
+   ★★ Y LOS COSTADOS TIENEN QUE MERECER LA PANTALLA  (2/9/2026)
+     Maki: «¿cómo hacemos para que en Mac la invitación se vea prolija a los
+     costados?». El efecto YA existía —esto mismo— pero el resultado era un
+     beige plano, y por eso parecía que no había nada hecho.
+
+     Tres cosas lo aplanaban, y las tres estaban acá:
+
+       1. `blur(70px)` borra toda la estructura. A 36 px sobrevive algo de la
+          foto y se lee como una superficie, no como una pared.
+       2. `saturate(.65)` le sacaba el poco color que quedaba. Y encima la
+          colección Perlas pone la portada en BLANCO Y NEGRO: desaturar un
+          blanco y negro da gris, siempre.
+       3. La columna no tenía peso: sin sombra fuerte ni filete parecía un
+          agujero recortado en el fondo, no una tarjeta apoyada.
+
+     Lo que hace ahora:
+       · desenfoca menos y no desatura;
+       · **tiñe el fondo con el color de la paleta de la boda** (`--verde`), muy
+         suave. Así los costados toman el color del evento aunque la portada sea
+         en blanco y negro, y funciona solo en las 20 paletas sin tocar nada;
+       · viñeta más marcada, para que el centro se sienta iluminado;
+       · la columna con sombra de tarjeta y un filete finísimo.
+
+     ⚠️ Es GENÉRICO A PROPÓSITO. Sirve para cualquier invitación y cualquier
+        paleta, no para una colección. Pedido de Maki: «pensá que este cambio es
+        para todas las invitaciones».
+
    ⚠️⚠️ LA COLUMNA SE COMÍA A SÍ MISMA. ESTO SE VIO EN SAFARI Y ERA GRAVE.
 
    Qué pasaba: se medía el ancho de `.portada` y con ese número se le ponía un
@@ -78,17 +105,32 @@
     var s = document.createElement('style');
     s.id = 'encuadre-monitor';
     s.textContent = [
-      '#inv-lienzo,#inv-vinieta{display:none}',
+      '#inv-lienzo,#inv-tinte,#inv-vinieta{display:none}',
       '@media (min-width:' + MIN_VENTANA + 'px){',
-      '  #inv-lienzo{display:block;position:fixed;inset:0;z-index:-2;',
+
+      /* la foto de portada, desenfocada pero todavía reconocible */
+      '  #inv-lienzo{display:block;position:fixed;inset:0;z-index:-3;',
       '    background-size:cover;background-position:center;',
-      '    filter:blur(70px) saturate(.65) brightness(.92);transform:scale(1.3)}',
+      '    filter:blur(36px) saturate(1.05) brightness(.80);transform:scale(1.14)}',
+
+      /* ⚠️ el color de la boda encima: hace que los costados sean del evento
+         aunque la portada esté en blanco y negro */
+      '  #inv-tinte{display:block;position:fixed;inset:0;z-index:-2;',
+      '    pointer-events:none;background:var(--verde,#4a4436);opacity:.22}',
+
       '  #inv-vinieta{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none;',
-      '    background:radial-gradient(120% 85% at 50% 45%,rgba(0,0,0,0) 36%,',
-      '    rgba(0,0,0,.18) 76%, rgba(0,0,0,.34) 100%)}',
-      '  html{background:#cfc4b4}',
+      '    background:radial-gradient(115% 78% at 50% 42%,rgba(0,0,0,0) 26%,',
+      '    rgba(0,0,0,.26) 70%, rgba(0,0,0,.50) 100%)}',
+
+      '  html{background:var(--muted,#cfc4b4)}',
+
+      /* la columna como una tarjeta apoyada, no como un agujero */
       '  .frame{max-width:var(--inv-col,474px);margin-left:auto;margin-right:auto;',
-      '    overflow:hidden;box-shadow:0 32px 74px rgba(40,28,12,.34)}',
+      '    overflow:hidden;',
+      '    box-shadow:0 2px 6px rgba(20,14,6,.10),',
+      '               0 18px 40px rgba(20,14,6,.24),',
+      '               0 54px 110px rgba(20,14,6,.34);',
+      '    outline:1px solid rgba(255,255,255,.20);outline-offset:-1px}',
       '  .frame img{max-width:100%;height:auto}',
       '}'
     ].join('\n');
@@ -141,8 +183,10 @@
     var l = document.getElementById('inv-lienzo');
     if (!l) {
       l = document.createElement('div'); l.id = 'inv-lienzo';
+      var ti = document.createElement('div'); ti.id = 'inv-tinte';
       var v = document.createElement('div'); v.id = 'inv-vinieta';
       document.body.appendChild(l);
+      document.body.appendChild(ti);
       document.body.appendChild(v);
     }
     var css = 'url("' + url.replace(/"/g, '%22') + '")';
