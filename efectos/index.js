@@ -32,6 +32,26 @@
       → Y el bloque del panel tiene que AVISAR de las combinaciones que rompen,
         no dejar que el que edita las descubra en la invitación.
 
+   ★★★★ UNA LISTA VACÍA EN EL PANEL ES UN BUG, NO UN VACÍO ★★★★  (2/9/2026)
+      El selector «Sobre del catálogo» de ✨ Efectos tenía UNA sola opción:
+      «— Elegí un sobre —». O sea que desde el panel **no se podía elegir
+      ningún sobre de entrada**, y nadie lo notó porque una lista vacía no
+      parece un error: parece que no hay nada cargado.
+
+      La causa: el admin hace, arriba de todo y una sola vez,
+          const SOBRES = window.SOBRES_INVITAME || {};
+      Eso corre cuando el navegador lee el script del HTML, y `catalogo.js`
+      llega DESPUÉS. `SOBRES` queda congelado en `{}` — es una copia, no una
+      referencia — y ningún `renderPanel()` posterior la vuelve a mirar.
+
+      → `const X = window.Y || {}` al principio de un archivo CONGELA el valor.
+        Si `Y` lo publica otro script que llega después, X queda vacío para
+        siempre y no hay ningún error en la consola.
+      → Lo arregla `/efectos/panel-sobre.js`, que llena el select leyendo el
+        catálogo en el momento.
+      → Y la regla de revisión: **cada lista del panel se abre y se cuenta.**
+        Si tiene menos opciones de las que debería, es un bug.
+
    ★★★★ LA MUESTRA NO ES UNA DEMO: ES UN VENDEDOR ★★★★  (1/9/2026)
       Maki: «tenemos que tener en cuenta que estas muestras van a estar
       colgadas en la web y se las enviamos a los clientes como muestras así que
@@ -150,6 +170,19 @@
          CHICO (el hilo entre secciones, la línea del programa, los corazones);
          para una pieza protagonista hace falta la foto del objeto entero.
 
+   ★★★ LOS ARCHIVOS PESADOS NO LOS PUEDO SUBIR YO ★★★  (2/9/2026)
+      Los videos de sobre y las fotos van a `/sobres/` y `/colecciones/` como
+      archivos de verdad. Un asistente que trabaja por la API de GitHub NO
+      puede subirlos: esa API escribe TEXTO, y el puente del navegador corta
+      los envíos largos sin avisar (medido: 44.000 caracteres entraron como
+      6.610). Un binario mandado así llega corrupto y no se nota hasta que el
+      video no reproduce.
+      → Los binarios los sube Maki, arrastrándolos a GitHub. Que sea UNA sola
+        vez, con los archivos ya listos en una carpeta y la página abierta.
+      → Todo lo demás —el catálogo, los módulos, los datos— sí se hace solo.
+      → Detalle completo y los caminos que sí funcionan: skill
+        `no-pasarle-trabajo-manual-a-maki`.
+
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
       Regla de Maki, dicha más de una vez y con razón:
       «la zona de prueba es al pedo porque después pasa esto siempre; probá
@@ -176,6 +209,8 @@
       Antes de decir que algo está listo:
       1. ¿se ve en la invitación?  (mirar, no medir solamente)
       2. ¿se puede prender y apagar DESDE EL PANEL, sin tocar la base?
+      3. ¿las listas del panel tienen TODAS sus opciones? (ver la nota de la
+         lista vacía, más arriba)
 
       ⚠️ Para operar el panel desde la consola: "Guardar y publicar" llama a
          `publicar()`, que abre un `confirm()` nativo — y un cartel nativo
@@ -228,6 +263,13 @@
       distintas apiladas siempre se leen como un parche. Sobre las bandas
       oscuras, un filete de 1 px y nada de cajas de vidrio.
 
+   ★ EL EMPALME DEL SOBRE CON LA INVITACIÓN SE MIDE (2/9/2026)
+      Un video de sobre tiene que TERMINAR EN BLANCO, no mostrando el sobre
+      abierto: la invitación entra desde ese blanco y el corte no se ve. Y el
+      `color` que se declara en el catálogo se saca leyendo el píxel del último
+      cuadro, no a ojo: en `perlas` el fundido se pidió a 0xF3F3F5 y el archivo
+      terminó en #f2f2f4, porque el paso a yuv420p corre un nivel.
+
    ★ !important NO ALCANZA PARA GANARLE A UN MÓDULO (1/9/2026)
       La colección se inserta ANTES que casi todos los módulos. Si su regla
       tiene la MISMA especificidad que la del módulo y las dos son !important,
@@ -261,7 +303,7 @@
       datos del cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en veintitrés casos:
+   ⚠️ EL ORDEN IMPORTA en veinticuatro casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -277,6 +319,9 @@
      ese bloque, porque habla de lo mismo. Es el «Sector de muestras» y maneja
      los dos módulos de muestra: `rsvp-muestra.js` y `muestra-venta.js`.
    · `panel-fecha.js` va DESPUÉS de `panel-muestra.js`, por la misma razón.
+   · `panel-sobre.js` NO tiene orden: busca el select por su `onchange` y lee
+     el catálogo en el momento, así que no depende de quién cargó primero.
+     Justamente existe porque el admin SÍ dependía del orden.
    · `muestra-venta.js` va DESPUÉS de `wa-flotante.js`: le pisa el número al
      flotante. Ese módulo escribe el href UNA sola vez (no tiene setInterval),
      así que alcanza con pasar después; igual `muestra-venta.js` lo revisa cada
@@ -322,6 +367,7 @@
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
+    '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
