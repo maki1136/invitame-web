@@ -46,16 +46,26 @@
 
      Por eso el velo NO arranca al terminar el video: arranca en el momento más
      abierto (`duration - ANTES`) y termina de tapar ANTES de que el sobre se
-     cierre. Así el invitado ve la apertura y se va a blanco en el mejor
-     momento, y el cierre nunca se ve.
+     cierre.
 
      → Al sumar un sobre nuevo: sacarle cuadros con ffmpeg y BUSCAR el momento
        más abierto. No dar por hecho que el mejor cuadro es el último.
 
+   ★★★ EL `<video>` DEL MOTOR VIENE CON `autoplay` (2/9/2026)
+     `#env-vid` tiene el atributo `autoplay` escrito en el HTML del motor. Con
+     el sobre de triángulos no se notaba porque el video estaba escondido; acá
+     sí: **la invitación se abría sola, sin que nadie tocara nada**. Cargabas la
+     página, y a los 4 segundos ya estabas adentro.
+     → Hay que sacarle el atributo Y ponerlo en pausa en cero al armarlo.
+     → Y el velo sólo puede arrancar si el invitado ya tocó (`abriendo`): si
+       algo llegara a hacerlo correr solo otra vez, no entra igual.
+     → Regla general: un elemento que viene del motor puede traer atributos que
+       no se ven en la pantalla. Al reutilizarlo, revisar cuáles trae.
+
    CÓMO FUNCIONA
    1. Espera a que estén los datos (`INVEV.fx.sobre`) y el catálogo.
    2. Si el sobre elegido es del tipo «carta» y tiene video, apaga el sobre de
-      triángulos y arma el de video.
+      triángulos y arma el de video, en pausa.
    3. Al tocar: reproduce. En el momento más abierto sube el velo blanco, y
       encima de ese blanco se llama a `abrir()`.
 
@@ -80,7 +90,7 @@
       `abrir()` directo y también se saltearía el video.
 
    ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Hay un reloj de seguridad:
-      pase lo que pase, unos segundos después de tocar se llama a `abrir()`.
+      pase lo que pase, unos segundos después de TOCAR se llama a `abrir()`.
       Un sobre roto no puede dejar a nadie afuera de su propia invitación.
       Esto además cubre un caso real: en una pestaña que no está adelante, el
       navegador pausa el video solo (sin error y sin que nadie lo pida). En el
@@ -123,6 +133,18 @@
     '#env{background:#efeae2!important}'
   ].join('\n');
   (document.head || document.documentElement).appendChild(tapa);
+
+  /* ⚠️ el autoplay del motor se corta YA, antes de que el video empiece */
+  (function frenarAutoplay() {
+    var v = document.getElementById('env-vid');
+    if (!v) { setTimeout(frenarAutoplay, 20); return; }
+    try {
+      v.removeAttribute('autoplay');
+      v.autoplay = false;
+      v.pause();
+      v.currentTime = 0;
+    } catch (e) {}
+  })();
 
   function sacarTapa() {
     if (tapa && tapa.parentNode) tapa.parentNode.removeChild(tapa);
@@ -188,6 +210,8 @@
       if (n.parentNode) n.parentNode.removeChild(n);
     });
 
+    vid.removeAttribute('autoplay');
+    vid.autoplay = false;
     vid.setAttribute('poster', m.poster || '');
     vid.setAttribute('playsinline', '');
     vid.setAttribute('webkit-playsinline', '');
@@ -196,7 +220,7 @@
     vid.controls = false;
     vid.preload = 'auto';
     if (vid.getAttribute('src') !== m.video) vid.setAttribute('src', m.video);
-    try { vid.load(); } catch (e) {}
+    try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
 
     var velo = document.getElementById('col-sobre-velo');
     if (!velo) {
@@ -228,6 +252,8 @@
     var fundiendo = false;
     function fundir() {
       if (fundiendo) return;
+      /* ⚠️ sólo si el invitado tocó: nunca entrar solo */
+      if (!env.classList.contains('abriendo')) return;
       fundiendo = true;
       env.classList.add('fundiendo');
       setTimeout(entrar, FUNDIDO * 1000);
@@ -248,7 +274,7 @@
       /* ⚠️ el reloj de seguridad: si el video no corre, se entra igual */
       setTimeout(fundir, (dur + 1.5) * 1000);
       var p = null;
-      try { p = vid.play(); } catch (err) {}
+      try { vid.currentTime = 0; p = vid.play(); } catch (err) {}
       if (p && p.catch) p.catch(function () { fundir(); });
     }
 
