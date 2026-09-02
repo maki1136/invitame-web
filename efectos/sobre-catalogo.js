@@ -39,12 +39,25 @@
        · se puede ajustar el tiempo sin volver a generar ni recomprimir nada;
        · sirve para cualquier sobre, incluso los que no terminan en blanco.
 
+   ★★ LOS VIDEOS GENERADOS RESPIRAN: SE ABREN Y SE VUELVEN A CERRAR (2/9/2026)
+     Mirando el sobre de Perlas cuadro por cuadro apareció esto: llega a su
+     punto más abierto cerca de los 2,6 s y en el segundo final **se cierra de
+     nuevo**. Es un tic de los modelos de video: vuelven hacia el primer cuadro.
+
+     Por eso el velo NO arranca al terminar el video: arranca en el momento más
+     abierto (`duration - ANTES`) y termina de tapar ANTES de que el sobre se
+     cierre. Así el invitado ve la apertura y se va a blanco en el mejor
+     momento, y el cierre nunca se ve.
+
+     → Al sumar un sobre nuevo: sacarle cuadros con ffmpeg y BUSCAR el momento
+       más abierto. No dar por hecho que el mejor cuadro es el último.
+
    CÓMO FUNCIONA
    1. Espera a que estén los datos (`INVEV.fx.sobre`) y el catálogo.
    2. Si el sobre elegido es del tipo «carta» y tiene video, apaga el sobre de
       triángulos y arma el de video.
-   3. Al tocar: reproduce. Al final del video, el velo blanco sube y encima de
-      ese blanco se llama a `abrir()`.
+   3. Al tocar: reproduce. En el momento más abierto sube el velo blanco, y
+      encima de ese blanco se llama a `abrir()`.
 
    ⚠️ NADA DE DESTELLOS AL CARGAR. El motor dibuja el sobre de triángulos
       apenas arranca, así que se veía un fogonazo del sobre viejo (verde) antes
@@ -78,7 +91,8 @@
    ============================================================================ */
 (function () {
 
-  var FUNDIDO = 1.1;   /* segundos que dura el velo blanco al final */
+  var FUNDIDO = 1.0;   /* cuánto dura el velo blanco */
+  var ANTES   = 1.4;   /* cuánto antes del final arranca: el sobre se cierra */
   var listo = false;
 
   function ev()  { return (window.INVEV || {}); }
@@ -219,10 +233,11 @@
       setTimeout(entrar, FUNDIDO * 1000);
     }
 
-    /* el velo arranca justo antes de que termine el video */
+    /* ⚠️ el velo arranca en el momento MÁS ABIERTO, no al final: el video
+       se vuelve a cerrar en el último segundo y eso no se tiene que ver */
     vid.addEventListener('timeupdate', function () {
       if (!vid.duration || !isFinite(vid.duration)) return;
-      if (vid.currentTime >= vid.duration - FUNDIDO) fundir();
+      if (vid.currentTime >= vid.duration - ANTES) fundir();
     });
     vid.addEventListener('ended', fundir);
 
