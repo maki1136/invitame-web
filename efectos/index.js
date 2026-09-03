@@ -55,6 +55,17 @@
       → Y el bloque del panel tiene que AVISAR de las combinaciones que rompen,
         no dejar que el que edita las descubra en la invitación.
 
+      ★ EL CASO MÁS CARO DE TODOS: EL ITINERARIO  (3/9/2026)
+        `itinerario-momentos.js` sabía escribir los momentos de verdad desde
+        `fx.itinerario.momentos` desde hacía rato… pero NO HABÍA DÓNDE
+        CARGARLOS. Había que escribir el array en la base a mano.
+        Consecuencia: las invitaciones terminaban subiendo el itinerario como
+        una IMAGEN. Una foto no se anima, no se lee en pantalla chica, no la
+        traduce el servidor y hay que rehacerla si se corre un horario.
+        O sea que la falta de un bloque en el panel no dejó una función
+        apagada: empujó a todo el mundo a la peor solución posible.
+        → Lo arregla `/efectos/panel-itinerario.js`.
+
    ★★★★★ Y HAY QUE SEGUIR EL HILO HASTA LA PANTALLA ★★★★★  (2/9/2026)
       El sobre de entrada tenía TODO puesto —seis videos en el repo, el
       catálogo, el selector en el panel— y no se veía ninguno. Dos cortes
@@ -313,6 +324,17 @@
       cuadro, no a ojo: en `perlas` el fundido se pidió a 0xF3F3F5 y el archivo
       terminó en #f2f2f4, porque el paso a yuv420p corre un nivel.
 
+   ★ NO DEFORMAR UNA PIEZA PARA ANIMARLA (3/9/2026)
+      La línea de progreso del itinerario avanza con `transform:scaleY(p)`.
+      Sobre una raya de color está perfecto. Sobre la HEBRA DE PERLAS de la
+      colección, no: `scaleY` estira la imagen de fondo y las perlas quedan
+      aplastadas como lentejas mientras se scrollea, y redondas otra vez al
+      llegar al final.
+      → Para que avance un objeto sin deformarlo: `clip-path: inset(...)`.
+        Corta, no estira. La última perla queda cortada al medio, que además
+        es justo lo que uno quiere ver en un collar a medio enhebrar.
+      → Lo hace `/efectos/itinerario-perlas.js`.
+
    ★ !important NO ALCANZA PARA GANARLE A UN MÓDULO (1/9/2026)
       La colección se inserta ANTES que casi todos los módulos. Si su regla
       tiene la MISMA especificidad que la del módulo y las dos son !important,
@@ -346,7 +368,7 @@
       datos del cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en veintiséis casos:
+   ⚠️ EL ORDEN IMPORTA en veintiocho casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -362,6 +384,9 @@
      ese bloque, porque habla de lo mismo. Es el «Sector de muestras» y maneja
      los dos módulos de muestra: `rsvp-muestra.js` y `muestra-venta.js`.
    · `panel-fecha.js` va DESPUÉS de `panel-muestra.js`, por la misma razón.
+   · `panel-itinerario.js` va DESPUÉS de `panel-fecha.js`: se monta debajo de
+     ese bloque. Escribe `fx.itinerario.momentos` y `fx.itinerario.estilo`, que
+     leen `itinerario-momentos.js` y `itinerario.js`.
    · `panel-sobre.js` NO tiene orden: busca el select por su `onchange` y lee
      el catálogo en el momento, así que no depende de quién cargó primero.
      Justamente existe porque el admin SÍ dependía del orden.
@@ -401,6 +426,11 @@
    · `carta-perlas.js` va DESPUÉS de `colecciones/perlas.js`: mueve la carta
      abajo del collar y de la frase, y para eso las dos secciones ya tienen que
      estar puestas y disfrazadas. Sólo actúa si la colección es Perlas.
+   · `itinerario-perlas.js` va DESPUÉS de `colecciones/perlas.js`: copia la
+     hebra de perlas que la colección le puso a `.tl::before` para usarla como
+     línea de progreso. Si corriera antes no encontraría ninguna foto — igual
+     se reintenta solo 10 segundos, así que no se rompe, pero el orden correcto
+     evita el parpadeo.
    · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
      propone la paleta que le corresponde, y para eso el selector de paletas
      tiene que existir.
@@ -426,6 +456,7 @@
     '/efectos/fecha.js',               /* las nueve maneras de mostrar la fecha */
     '/efectos/raspadita.js',           /* la raspadita: se monta sobre la fecha */
     '/efectos/panel-fecha.js',         /* y las dos, por fin, en el panel */
+    '/efectos/panel-itinerario.js',    /* los momentos del itinerario, por fin cargables */
     '/efectos/encuadre-monitor.js',    /* en compu: todo en una columna */
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
@@ -453,6 +484,7 @@
     /* ---- LAS COLECCIONES: una decisión que trae todo junto ---- */
     '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
     '/efectos/carta-perlas.js',        /* y la carta va abajo del collar, no colgada del RSVP */
+    '/efectos/itinerario-perlas.js',   /* y el collar se va enhebrando con el scroll */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
 
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
