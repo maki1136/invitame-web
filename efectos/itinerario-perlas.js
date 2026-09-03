@@ -20,15 +20,18 @@
 
    Entonces, ¿qué faltaba? Esto:
 
-     ⚠️ LA LÍNEA DE PROGRESO SEGUÍA SIENDO LA RAYITA VERDE.
-        `.tl-prog` es una barra de 2 px pintada con `var(--verde)`. O sea que
-        arriba del collar de perlas avanzaba una rayita de color, corrida un
-        pelo. Se leía como un error de maquetado, no como un adorno.
+     ⚠️ LA LÍNEA DE PROGRESO NO EXISTÍA EN PERLAS.
+        `.tl-prog` es la barra de 2 px pintada con `var(--verde)` que marca
+        hasta dónde llegaste. Al lado de un collar de perlas quedaba como una
+        rayita de color mal puesta, así que **la colección la había apagado con
+        `display:none`**. Solución razonable en su momento, pero el resultado
+        era que en Perlas el itinerario no marcaba ningún avance: la hebra
+        estaba siempre igual, entera y quieta.
 
    QUÉ HACE ESTE MÓDULO
 
-   La que avanza con el scroll pasa a ser **la misma hebra de perlas**, pero
-   encendida: las perlas ya recorridas se ven nítidas y con su brillo, y las que
+   Vuelve a encender esa línea, pero convertida en **la misma hebra de perlas**,
+   iluminada: las perlas ya recorridas se ven nítidas y con su brillo, y las que
    faltan quedan apagadas atrás. El collar se va enhebrando mientras se baja.
 
    ⚠️⚠️ POR QUÉ NO SE USA `scaleY`, QUE ERA LO OBVIO
@@ -46,19 +49,41 @@
    → Por eso el módulo también apaga el `transform` que le pone el otro:
      `transform:none`. Si alguien lo saca, vuelven las lentejas.
 
-   ⚠️ EL AVANCE SE CALCULA CON LA MISMA FÓRMULA QUE `itinerario.js`
-      Está copiada a propósito, no importada: son dos módulos sueltos y no
-      quiero que uno dependa del otro para arrancar. Si allá se cambia la
-      fórmula, hay que cambiarla acá también, o la hebra encendida y los
-      momentos que aparecen dejan de ir al mismo ritmo.
-      Es el único pedazo duplicado de todo esto; está marcado abajo.
+   ⚠️⚠️ Y LAS DOS TRAMPAS DE ESPECIFICIDAD, QUE COSTARON UNA VUELTA ENTERA
+
+   La primera versión de esto se subió, se vio en la pantalla… y no pasaba nada.
+   Ni la hebra encendida ni la de atrás atenuada. Medido en la consola:
+
+     1. `.tl-prog` estaba en **`display:none`** (lo apaga la colección, ver
+        arriba). Se le puede pintar el fondo que uno quiera: sigue escondida.
+        → Hay que volver a mostrarla expresamente.
+     2. `.tl::before` seguía en `opacity:1`. La regla de la colección le gana a
+        `.tl.tl-perlas::before` porque **la colección se inserta antes pero con
+        más especificidad**, y ni siquiera `.tl.tl-anim::before{opacity:.22}`
+        del módulo genérico estaba llegando.
+        → Se usa la clase REPETIDA —`.tl-perlas.tl-perlas`— que sube la
+          especificidad sin depender del orden. Es el mismo truco que ya está
+          anotado en `efectos/index.js` para `[data-col-lugar][data-col-lugar]`.
+
+   → La lección de fondo, otra vez la misma: **mirar la página, no el código.**
+     El CSS estaba bien escrito. No se veía por dos reglas ajenas.
 
    DE DÓNDE SACA LA FOTO DE LA PERLA
    Del propio `.tl::before` que ya puso la colección, leyendo su
    `background-image`. Así no depende de qué archivo use la colección hoy: si
    mañana Perlas cambia la perla, la hebra encendida cambia sola.
    Si no encuentra ninguna, usa `window.INVPERLA`. Y si tampoco, no hace nada:
-   queda el itinerario de siempre, con su rayita, sin romperse.
+   queda el itinerario de siempre, sin romperse.
+
+   ⚠️ El `background-size` es `11px 11px` EXACTO, igual que el de la hebra de
+      atrás. Con `11px auto` las dos hileras quedan con perlas de distinto alto
+      y no coinciden: se ve doble.
+
+   ⚠️ EL AVANCE SE CALCULA CON LA MISMA FÓRMULA QUE `itinerario.js`
+      Está copiada a propósito, no importada: son dos módulos sueltos y no
+      quiero que uno dependa del otro para arrancar. Si allá se cambia la
+      fórmula, hay que cambiarla acá también, o la hebra encendida y los
+      momentos que aparecen dejan de ir al mismo ritmo.
 
    CUÁNDO ACTÚA
    Sólo si la colección es **perlas**. En cualquier otra invitación no toca
@@ -69,6 +94,7 @@
       **el itinerario se esconde (`display:none`) si el evento lo tiene cargado
       como IMAGEN.** Con una foto puesta no se ve nada de esto, y no es un bug
       del módulo. Para probarlo sin tocar los datos: `?itinerario=lista`.
+      Los momentos se cargan desde el bloque «El itinerario» del panel.
 
    ACCESIBILIDAD
    Con «reducir movimiento» la hebra se muestra entera y quieta.
@@ -114,30 +140,32 @@
     s.id = ID;
     s.dataset.url = url;
     s.textContent = [
-      /* la hebra apagada, atrás: un poco más tenue que la de serie, para que
-         se note la diferencia con la encendida */
-      '.tl.tl-perlas::before{opacity:.16}',
+      /* ⚠️ clase REPETIDA para ganarle a la colección. Ver el encabezado. */
+      /* la hebra apagada, atrás */
+      '.tl.tl-perlas.tl-perlas::before{opacity:.20!important}',
 
-      /* ⚠️ la hebra ENCENDIDA. Nada de scaleY: recorta, no deforma. */
-      '.tl.tl-perlas .tl-prog{',
+      /* ⚠️ la hebra ENCENDIDA. La colección la había apagado: se vuelve a
+         mostrar. Y nada de scaleY: recorta, no deforma. */
+      '.tl.tl-perlas.tl-perlas .tl-prog{',
+      '  display:block!important;',
       '  transform:none!important;',
-      '  top:6px;bottom:6px;',
+      '  position:absolute;top:6px;bottom:6px;',
       '  width:11px;border-radius:0;',
-      '  background:transparent url("' + url + '") repeat-y center top;',
-      '  background-size:11px auto;',
+      '  background:transparent url("' + url + '") repeat-y center top!important;',
+      '  background-size:11px 11px!important;',
       '  filter:drop-shadow(0 1px 1px rgba(0,0,0,.12));',
       '  clip-path:inset(0 0 calc((1 - var(--tl-p,0)) * 100%) 0);',
       '  transition:none}',
 
       /* la hebra al costado (estilo «izquierda»): concéntrica con la de atrás */
-      '.tl.tl-perlas:not(.tl-centro) .tl-prog{left:1.5px;margin-left:0}',
+      '.tl.tl-perlas.tl-perlas:not(.tl-centro) .tl-prog{left:1.5px;margin-left:0}',
 
       /* y en el estilo «centro», centrada sobre la línea del medio */
-      '.tl.tl-perlas.tl-centro .tl-prog{left:50%;margin-left:-5.5px}',
+      '.tl.tl-perlas.tl-perlas.tl-centro .tl-prog{left:50%;margin-left:-5.5px}',
 
       /* si pidió menos movimiento: el collar entero, quieto */
       '@media(prefers-reduced-motion:reduce){',
-      '  .tl.tl-perlas .tl-prog{clip-path:none}',
+      '  .tl.tl-perlas.tl-perlas .tl-prog{clip-path:none}',
       '}'
     ].join('\n');
     (document.head || document.documentElement).appendChild(s);
@@ -145,6 +173,17 @@
 
   function listas() {
     return [].slice.call(document.querySelectorAll('.tl'));
+  }
+
+  /* La línea de progreso la crea `itinerario.js`. Si por lo que sea no está
+     todavía, se pone una: sin ella no hay nada que iluminar. */
+  function asegurarProg(tl) {
+    var p = tl.querySelector('.tl-prog');
+    if (p) return p;
+    p = document.createElement('i');
+    p.className = 'tl-prog';
+    tl.appendChild(p);
+    return p;
   }
 
   function marcar() {
@@ -155,6 +194,7 @@
       if (!url) return;              /* sin perla no se inventa nada */
       ponerEstilos(url);
       tl.classList.add('tl-perlas');
+      asegurarProg(tl);
       hubo = true;
     });
     return hubo;
