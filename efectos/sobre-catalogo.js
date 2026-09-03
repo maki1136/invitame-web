@@ -10,139 +10,143 @@
    invitaciones abrían con el sobre de triángulos, y el sobre que Jazmín elige
    en «✨ Efectos → Sobre del catálogo» no se usaba nunca.
 
-   Encima, `initEnvVideo()` —el otro camino— tampoco servía: usa un video fijo
-   del propio CONFIG (`sobreVideo`, el marfil viejo con el sello encimado), no
-   el del catálogo.
-
    POR QUÉ SE ARREGLA DESDE ACÁ
    `i/index.html` pesa 185 KB y se sube a mano. El motor deja `abrir()` como
-   función global, así que un módulo puede armar la apertura con el video del
+   función global, así que un módulo puede armar la apertura con el material del
    catálogo y después llamar a la MISMA `abrir()` de siempre.
+
+   ★★★★★ DOS MANERAS DE ABRIR: `video` Y `solapas`  (3/9/2026)
+
+     Maki, después de ver el sobre de anillos andando:
+     «cambiemos el sobre, me confundí y te pasé uno que estaba mal, **se abre
+     descontrolado** este. Creo que lo habías armado vos con una imagen».
+
+     Y tenía razón. Un video generado con IA **hace lo que quiere**: en el de
+     anillos el relieve del papel cambia solo en el camino (arranca con volutas
+     y termina con rosas) y el lacre no se parte, se desvanece. Eso no se
+     arregla con código: viene así en el archivo.
+
+     La alternativa es no usar video: **una foto fija y el movimiento hecho por
+     nosotros**. Ahí el tiempo, el ángulo y el final los manejamos al
+     milisegundo, sale igual siempre, y no se puede descontrolar.
+
+     Y no hace falta subir nada nuevo: **el póster que ya está en el repo es el
+     primer cuadro del video**, o sea el sobre cerrado, en 1080. Es exactamente
+     la foto que hace falta.
+
+     CÓMO SE ANIMA
+       La foto se parte en CUATRO TRIÁNGULOS que salen del centro, que es donde
+       está el lacre. Las dos solapas de adelante —la izquierda y la de abajo—
+       giran hacia afuera sobre su borde exterior, con perspectiva. Las otras
+       dos se quedan quietas: son el fondo del sobre.
+
+       ⚠️ El lacre queda partido por el medio a propósito: al girar las solapas
+          se abre en dos, que es lo que hace un lacre de verdad. Era el defecto
+          más feo del video —el sello se esfumaba— y acá sale gratis.
+
+       Después de que las solapas se abren, el sobre entero se desvanece encima
+       de la portada real (ver `empalme:'foto'` más abajo). O sea: se abre, y
+       abajo está la foto de los novios.
+
+     ⚠️ EL EJE ES REGULABLE. `EJE` dice dónde se cruzan las solapas, en
+        fracciones de la foto. Está en 0,50 / 0,50 porque en la foto de anillos
+        el lacre está centrado. Si un sobre nuevo lo tiene más arriba, se cambia
+        ese número y listo — no se toca ninguna otra cosa.
+
+     ⚠️ Y LAS SOLAPAS SE RECORTAN SOBRE LA CAJA DE LA FOTO, no sobre la
+        pantalla. Por eso el contenedor tiene el tamaño exacto de la imagen,
+        calculado con `min()` y aritmética. Si se lo dejara a pantalla completa,
+        los porcentajes del `clip-path` apuntarían a otro lado y las diagonales
+        no coincidirían con los dobleces del papel.
 
    ★★★★★ EL SOBRE SE ABRE SOBRE LA PORTADA REAL  (3/9/2026)
 
      Maki: «¿te acordás que habíamos quedado en que el sobre se abría y aparecía
      abajo la foto de la invitación directo, y ahí recién aparecían los datos?».
-     Y mandó el MAESTRO que había armado: el sobre se abre y adentro está la
-     portada — pero con una foto de muestra PEGADA DENTRO DEL VIDEO, que
-     obviamente no es la de cada invitación.
 
-     No hace falta componer nada, y esta es la clave: **la invitación ya está
-     dibujada abajo**. `#env` es una tapa `position:fixed; z-index:100` encima
-     de la página entera; debajo, la portada real ya está ahí, con su foto, sus
-     nombres y su cuenta regresiva.
+     No hace falta componer nada: **la invitación ya está dibujada abajo**.
+     `#env` es una tapa `position:fixed; z-index:100`; debajo está la portada
+     real, con su foto, sus nombres y su cuenta regresiva.
 
      Entonces el empalme correcto no es «fundir a blanco y después mostrar»:
-     es **apagar el sobre** y dejar ver lo que ya estaba. Sale gratis, es la
-     foto de verdad de cada pareja, y funciona igual en las 20 paletas y en
-     todas las colecciones.
+     es **apagar el sobre** y dejar ver lo que ya estaba. Es la foto de verdad
+     de cada pareja y funciona igual en las 20 paletas.
 
-     Y el detalle que ella pidió, que es el que hace que se sienta bien:
-     **primero la foto sola, y los datos medio segundo después.** Si aparece
-     todo junto se lee como un cambio de pantalla; escalonado se lee como que
-     la invitación estaba adentro del sobre.
+     Y el detalle que ella pidió: **primero la foto sola, y los datos medio
+     segundo después.** Junto se lee como un cambio de pantalla; escalonado se
+     lee como que la invitación estaba adentro del sobre.
 
-     CÓMO SE ELIGE: campo `empalme` del catálogo.
-       · `'blanco'` (por defecto) — para los videos que YA terminan en blanco
-         (lazo, toscana, perlas). Se mantiene tal cual estaba: velo del color
-         del papel y entrada limpia. No se toca nada de lo ya aprobado.
-       · `'foto'` — para los que terminan mostrando el sobre abierto, como
-         `anillos`. El sobre se desvanece encima de la portada.
+     `empalme`: `'blanco'` (por defecto, para los videos que terminan en blanco)
+     o `'foto'`.
 
-     ⚠️ Los textos se retienen agregándole una clase al `<html>`, no tocando
-        los nodos: el motor los repinta y cualquier `style` inline se pierde.
-     ⚠️ Y SIEMPRE se destraban, aunque algo falle: hay un plazo máximo. Dejar
-        la portada sin nombres sería mucho peor que el efecto que se gana.
+     ⚠️ Los textos se retienen con una CLASE en el `<html>`, no tocando los
+        nodos: el motor los repinta y cualquier `style` inline se pierde.
+     ⚠️ Y SIEMPRE se destraban, aunque algo falle: hay un plazo máximo.
 
    ★★★★★ EL ATAJO SE QUEDABA PEGADO CON EL SOBRE VIEJO  (3/9/2026)
 
-     Se cambió el sobre de la muestra al nuevo (`anillos`), se verificó que
-     estaba subido y publicado… y Maki lo abrió y vio el de antes:
-     «dejaste el otro sobre, no lo subiste».
+     Se cambió el sobre de la muestra y Maki abrió y vio el de antes:
+     «dejaste el otro sobre, no lo subiste». Estaba subido.
 
-     Estaba subido. El problema era ESTE archivo:
+     `atajo()` mira `localStorage` y arma el sobre de la última visita para que
+     aparezca al instante. Pero además ponía `listo = true`, y `revisar()`
+     entonces sólo GUARDABA el modelo nuevo sin cambiar lo que había en
+     pantalla. Encima devolvía `true` y el `setInterval` se cortaba antes de que
+     llegara el dato.
 
-       1. `atajo()` mira `localStorage` y arma el sobre de la ÚLTIMA visita,
-          para que aparezca al instante sin esperar a Firestore. Bien.
-       2. Pero además ponía `listo = true`.
-       3. Y `revisar()` arrancaba con `if (listo) { …recordar…; return true; }`
-          — o sea que cuando por fin llegaba el dato de verdad, lo único que
-          hacía era GUARDAR el modelo nuevo. **Nunca cambiaba lo que ya estaba
-          puesto en pantalla.**
-       4. Encima, como devolvía `true`, el `setInterval` se cortaba en el
-          primer tic, antes de que llegara el dato.
+     ⚠️ Afectaba a TODAS: cada vez que Jazmín le cambia el sobre a una
+        invitación entregada, los invitados que ya la habían abierto seguían
+        viendo el viejo. Y no había ningún error en la consola.
 
-     Resultado: cualquiera que ya hubiera abierto esa invitación una vez seguía
-     viendo el sobre anterior PARA SIEMPRE, aunque en la base estuviera el
-     nuevo. Y no había ningún error en la consola.
-
-     ⚠️ ESTO NO ERA UN PROBLEMA DE LA MUESTRA: afectaba a TODAS. Cada vez que
-        Jazmín le cambia el sobre a una invitación ya entregada, los invitados
-        que la abrieron antes seguían viendo el viejo.
-
-     CÓMO SE ARREGLA
-       · El ciclo NO se corta hasta que llegó el dato real.
-       · Se guarda QUÉ sobre está puesto (`armadoModelo`). Si el dato real no
-         coincide, se corrige con `actualizar()`, que cambia sólo el video, el
-         póster y el color. ⚠️ NO se vuelve a llamar a `armar()`: engancharía
-         una segunda tanda de listeners y `abrir()` se llamaría dos veces.
-       · Y si el invitado YA tocó, no se cambia nada abajo del dedo.
+     → El ciclo no se corta hasta que llega el dato real; se guarda qué sobre
+       está puesto (`armadoModelo`) y si no coincide se corrige con
+       `actualizar()`. ⚠️ NO se vuelve a llamar a `armar()`: engancharía una
+       segunda tanda de listeners y `abrir()` se llamaría dos veces.
 
      → La regla general: **un atajo de caché tiene que saber corregirse.**
 
    ★★ LA NITIDEZ SE PIERDE EN EL ENCUADRE, NO EN EL ARCHIVO  (2/9/2026)
-     Maki: «en el iphone la calidad se ve horrible». La causa no era la
-     compresión: era `object-fit: cover`.
-
-     En un iPhone de 1179 × 2556 y un video de 1080 × 1920:
-       · con `cover` se agranda **1,33×** y se recorta casi un 20% de los lados;
-       · con `contain` entra entero y se agranda **1,09×**.
-
-     → Regla: un objeto fotografiado va CONTENIDO, no recortado.
-
-   ★ EL FUNDIDO SE HACE ACÁ, NO EN EL ARCHIVO  (2/9/2026)
-     Hornearlo con ffmpeg obligaba a recomprimir todo el video y sobre un fondo
-     gris parejo la compresión se nota. Va por CSS.
-
-   ★ Y EL PÓSTER ES MEDIA CALIDAD DEL SOBRE
-     Es lo que se ve ANTES de tocar. Se saca del video ya agrandado, en máxima
-     calidad.
+     `object-fit: cover` en un iPhone de 1179 × 2556 con un video de 1080 × 1920
+     agranda 1,33× y recorta el 20% de los lados. Con `contain` entra entero y
+     se agranda 1,09×.
+     → Un objeto fotografiado va CONTENIDO, no recortado.
 
    ★★ LOS VIDEOS GENERADOS RESPIRAN: SE ABREN Y SE VUELVEN A CERRAR (2/9/2026)
      El sobre de Perlas llega a su punto más abierto cerca de los 2,6 s y en el
-     segundo final se cierra de nuevo. Por eso el velo arranca en el momento más
-     abierto (`duration - ANTES`), no al terminar.
-     → Al sumar un sobre nuevo: sacarle cuadros y BUSCAR el momento más abierto.
+     segundo final se cierra. Por eso el velo arranca en `duration - ANTES`.
+     → Otra razón para preferir `solapas` cuando se pueda.
 
    ★★★ EL `<video>` DEL MOTOR VIENE CON `autoplay` (2/9/2026)
-     Con el sobre de triángulos no se notaba porque estaba escondido; acá la
-     invitación **se abría sola**. Se le saca el atributo y se lo deja en pausa.
+     La invitación **se abría sola**. Se le saca el atributo y se lo deja en
+     pausa.
 
    ★★★ Y SAFARI LE PONE SUS PROPIOS CONTROLES (2/9/2026)
-     Hay que apagar los pseudo-elementos `::-webkit-media-controls*`, y para el
-     video ESTÉ DONDE ESTÉ, porque aparecen antes de que se ponga la clase.
+     Hay que apagar los `::-webkit-media-controls*`, y para el video ESTÉ DONDE
+     ESTÉ, porque aparecen antes de que se ponga la clase.
 
    ★★★★ EL PRIMER SEGUNDO TAMBIÉN ES LA INVITACIÓN  (2/9/2026)
      La tapa esconde TODOS los hijos de `#env`, y el sobre elegido se guarda en
      `localStorage` para que desde la segunda visita aparezca al instante.
-     → Regla: mientras se espera un dato no se muestra una versión provisoria.
 
    ⚠️ EL TOQUE VA EN CAPTURA SOBRE EL DOCUMENTO. El motor ya tenía SU listener
-      en `#env` y entraba de una sin dejar correr el video.
+      en `#env` y entraba de una sin dejar correr nada.
 
-   ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Reloj de seguridad.
+   ⚠️ SI ALGO FALLA, EL INVITADO ENTRA IGUAL. Reloj de seguridad.
 
    ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO.
    ============================================================================ */
 (function () {
 
-  var FUNDIDO = 1.0;   /* cuánto dura el velo blanco */
-  var ANTES   = 1.4;   /* cuánto antes del final arranca: el sobre se cierra */
-  var DATOS   = 550;   /* cuánto esperan los textos de la portada, en ms */
-  var TOPE    = 3500;  /* plazo máximo para destrabarlos, pase lo que pase */
-  var listo = false;
+  var FUNDIDO  = 1.0;   /* cuánto dura el desvanecido final */
+  var ANTES    = 1.4;   /* en modo video: cuánto antes del final arranca */
+  var SOLAPAS  = 1.15;  /* en modo solapas: cuánto tarda en abrirse */
+  var DATOS    = 550;   /* cuánto esperan los textos de la portada, en ms */
+  var TOPE     = 3500;  /* plazo máximo para destrabarlos, pase lo que pase */
 
-  /* ⚠️ QUÉ SOBRE ESTÁ PUESTO EN PANTALLA AHORA MISMO. */
+  /* dónde se cruzan las solapas, en fracciones de la foto. Ver la nota. */
+  var EJE = { x: 50, y: 50 };
+
+  var listo = false;
   var armadoModelo = null;
 
   function ev()  { return (window.INVEV || {}); }
@@ -172,7 +176,11 @@
     var cat = catalogo();
     if (!cat || !modelo) return null;
     var m = cat[modelo];
-    return (m && m.video) ? m : null;
+    if (!m) return null;
+    /* sirve si tiene video, o si tiene una foto para abrir por solapas */
+    if (m.video) return m;
+    if (m.apertura === 'solapas' && m.poster) return m;
+    return null;
   }
   function elegido() {
     var s = sobre();
@@ -211,9 +219,7 @@
   ].join('\n');
   (document.head || document.documentElement).appendChild(sinControles);
 
-  /* ---- LOS TEXTOS DE LA PORTADA, RETENIDOS ---------------------------------
-     Se retienen con una CLASE en el <html>, no tocando los nodos: el motor
-     repinta la portada y cualquier estilo puesto a mano se pierde. */
+  /* ---- LOS TEXTOS DE LA PORTADA, RETENIDOS ---- */
   (function cssDatos() {
     var s = document.createElement('style');
     s.id = 'col-sobre-datos';
@@ -221,7 +227,6 @@
       'html.inv-datos-esperan .portada .c,',
       'html.inv-datos-esperan .portada .scrollcue{opacity:0!important}',
       '.portada .c,.portada .scrollcue{transition:opacity .75s ease}',
-      /* la foto se asienta apenas, como si saliera del sobre */
       'html.inv-datos-esperan .portada .pbg{transform:scale(1.045)}',
       '.portada .pbg{transition:transform 1.1s cubic-bezier(.22,.72,.28,1)}'
     ].join('\n');
@@ -232,7 +237,6 @@
   function retenerDatos() {
     if (destrabado) return;
     document.documentElement.classList.add('inv-datos-esperan');
-    /* ⚠️ red de seguridad: nunca dejar la portada sin nombres */
     setTimeout(soltarDatos, TOPE);
   }
   function soltarDatos() {
@@ -265,9 +269,18 @@
       st.id = 'col-sobrecat-css';
       document.head.appendChild(st);
     }
+
+    /* la caja con el tamaño EXACTO de la foto: pura aritmética, sin
+       aspect-ratio (ver la nota de Safari en sobres/catalogo.js) */
+    var cajaAlto  = 'min(100vh, calc(100vw * 16 / 9))';
+    var cajaAncho = 'min(100vw, calc(100vh * 9 / 16))';
+    var dAlto     = 'min(84vh, 843px)';
+    var dAncho    = 'calc(' + dAlto + ' * 9 / 16)';
+
     st.textContent = [
       '#env.carta-video > *{visibility:hidden}',
       '#env.carta-video #env-vid,',
+      '#env.carta-video #col-sobre-foto,',
       '#env.carta-video #col-sobre-velo,',
       '#env.carta-video .vhint{visibility:visible!important}',
 
@@ -281,12 +294,51 @@
       '  opacity:0;transition:opacity .45s ease;pointer-events:none}',
       '#env.carta-video.puesto #env-vid{opacity:1}',
 
+      /* ---------- APERTURA POR SOLAPAS ---------- */
+      '#col-sobre-foto{position:fixed;left:50%;top:50%;',
+      '  transform:translate(-50%,-50%);',
+      '  height:' + cajaAlto + ';width:' + cajaAncho + ';',
+      '  perspective:1400px;pointer-events:none;',
+      '  opacity:0;transition:opacity .45s ease}',
+      '#env.carta-video.puesto #col-sobre-foto{opacity:1}',
+
+      '#col-sobre-foto .hoja{position:absolute;inset:0;',
+      '  background-position:center;background-size:100% 100%;',
+      '  background-repeat:no-repeat;backface-visibility:hidden;',
+      '  transition:transform ' + SOLAPAS + 's cubic-bezier(.36,.02,.2,1),',
+      '             filter ' + SOLAPAS + 's ease}',
+
+      /* las dos que se quedan: el fondo del sobre */
+      '#col-sobre-foto .h-arriba{clip-path:polygon(0 0,100% 0,' +
+        EJE.x + '% ' + EJE.y + '%)}',
+      '#col-sobre-foto .h-derecha{clip-path:polygon(100% 0,100% 100%,' +
+        EJE.x + '% ' + EJE.y + '%)}',
+
+      /* las dos que se abren */
+      '#col-sobre-foto .h-izq{clip-path:polygon(0 0,' +
+        EJE.x + '% ' + EJE.y + '%,0 100%);',
+      '  transform-origin:left center}',
+      '#col-sobre-foto .h-abajo{clip-path:polygon(0 100%,' +
+        EJE.x + '% ' + EJE.y + '%,100% 100%);',
+      '  transform-origin:center bottom}',
+
+      '#env.carta-video.abriendo #col-sobre-foto .h-izq{',
+      '  transform:rotateY(-118deg);filter:brightness(.86)}',
+      '#env.carta-video.abriendo #col-sobre-foto .h-abajo{',
+      '  transform:rotateX(-112deg);filter:brightness(.82)}',
+
+      '@media (min-width:680px){',
+      '  #col-sobre-foto{height:' + dAlto + ';width:' + dAncho + ';',
+      '    border-radius:30px;overflow:hidden;',
+      '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
+      '}',
+
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
       '  background:' + color + ';opacity:0;',
       '  transition:opacity ' + FUNDIDO + 's ease-in}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
-      /* ---- empalme 'foto': el sobre se apaga y deja ver la portada ---- */
+      /* empalme 'foto': el sobre se apaga y deja ver la portada */
       '#env.carta-video.revelando{opacity:0!important;',
       '  transition:opacity ' + FUNDIDO + 's ease-in!important}',
       '#env.carta-video.revelando #col-sobre-velo{opacity:0!important}',
@@ -302,7 +354,24 @@
     ].join('\n');
   }
 
-  /* ⚠️ LA CORRECCIÓN DEL ATAJO: sólo video, póster y color. */
+  function montarSolapas(env, url) {
+    var caja = document.getElementById('col-sobre-foto');
+    if (!caja) {
+      caja = document.createElement('div');
+      caja.id = 'col-sobre-foto';
+      ['h-arriba', 'h-derecha', 'h-izq', 'h-abajo'].forEach(function (c) {
+        var h = document.createElement('div');
+        h.className = 'hoja ' + c;
+        caja.appendChild(h);
+      });
+      env.appendChild(caja);
+    }
+    var css = 'url("' + String(url).replace(/"/g, '%22') + '")';
+    [].forEach.call(caja.querySelectorAll('.hoja'), function (h) {
+      if (h.style.backgroundImage !== css) h.style.backgroundImage = css;
+    });
+  }
+
   function actualizar(m, id) {
     var env = document.getElementById('env');
     var vid = document.getElementById('env-vid');
@@ -310,12 +379,20 @@
     if (env.classList.contains('abriendo')) return false;
 
     estilo(m.color || '#f4f2ee');
-    vid.setAttribute('poster', m.poster || '');
-    if (vid.getAttribute('src') !== m.video) {
-      vid.setAttribute('src', m.video);
-      try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
-    }
     env.dataset.empalme = (m.empalme === 'foto') ? 'foto' : 'blanco';
+    env.dataset.apertura = (m.apertura === 'solapas') ? 'solapas' : 'video';
+
+    if (env.dataset.apertura === 'solapas') {
+      vid.style.display = 'none';
+      montarSolapas(env, m.poster || '');
+    } else {
+      vid.style.display = '';
+      vid.setAttribute('poster', m.poster || '');
+      if (vid.getAttribute('src') !== m.video) {
+        vid.setAttribute('src', m.video);
+        try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
+      }
+    }
     armadoModelo = id;
     return true;
   }
@@ -330,6 +407,7 @@
 
     env.className = 'carta-video';
     env.dataset.empalme = (m.empalme === 'foto') ? 'foto' : 'blanco';
+    env.dataset.apertura = (m.apertura === 'solapas') ? 'solapas' : 'video';
 
     ['tri-seal', 'e-back', 'e-pocket', 'e-flap'].forEach(function (id2) {
       var n = document.getElementById(id2);
@@ -339,20 +417,31 @@
       if (n.parentNode) n.parentNode.removeChild(n);
     });
 
+    var porSolapas = env.dataset.apertura === 'solapas';
+
     vid.removeAttribute('autoplay');
     vid.removeAttribute('controls');
     vid.autoplay = false;
     vid.controls = false;
-    vid.setAttribute('poster', m.poster || '');
-    vid.setAttribute('playsinline', '');
-    vid.setAttribute('webkit-playsinline', '');
-    vid.setAttribute('disablepictureinpicture', '');
-    vid.setAttribute('controlslist', 'nodownload noplaybackrate nofullscreen noremoteplayback');
-    vid.muted = true;
-    vid.loop = false;
-    vid.preload = 'auto';
-    if (vid.getAttribute('src') !== m.video) vid.setAttribute('src', m.video);
-    try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
+
+    if (porSolapas) {
+      /* nada de video: la apertura la manejamos nosotros */
+      try { vid.pause(); vid.removeAttribute('src'); vid.load(); } catch (e) {}
+      vid.style.display = 'none';
+      montarSolapas(env, m.poster || '');
+    } else {
+      vid.style.display = '';
+      vid.setAttribute('poster', m.poster || '');
+      vid.setAttribute('playsinline', '');
+      vid.setAttribute('webkit-playsinline', '');
+      vid.setAttribute('disablepictureinpicture', '');
+      vid.setAttribute('controlslist', 'nodownload noplaybackrate nofullscreen noremoteplayback');
+      vid.muted = true;
+      vid.loop = false;
+      vid.preload = 'auto';
+      if (vid.getAttribute('src') !== m.video) vid.setAttribute('src', m.video);
+      try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
+    }
 
     var velo = document.getElementById('col-sobre-velo');
     if (!velo) {
@@ -372,7 +461,8 @@
     sacarTapa();
     setTimeout(function () { env.classList.add('puesto'); }, 30);
 
-    function esFoto() { return env.dataset.empalme === 'foto'; }
+    function esFoto()  { return env.dataset.empalme  === 'foto'; }
+    function esSolapas() { return env.dataset.apertura === 'solapas'; }
 
     var abierto = false;
     function entrar() {
@@ -382,7 +472,6 @@
       env.classList.add('gone');
       env.style.opacity = '0';
       env.style.visibility = 'hidden';
-      /* los datos entran un poco después que la foto */
       setTimeout(soltarDatos, esFoto() ? DATOS : 0);
     }
 
@@ -392,7 +481,6 @@
       if (!env.classList.contains('abriendo')) return;
       fundiendo = true;
       if (esFoto()) {
-        /* el sobre se apaga ENCIMA de la portada, que ya está dibujada */
         retenerDatos();
         env.classList.add('revelando');
       } else {
@@ -402,14 +490,22 @@
     }
 
     vid.addEventListener('timeupdate', function () {
+      if (esSolapas()) return;
       if (!vid.duration || !isFinite(vid.duration)) return;
       if (vid.currentTime >= vid.duration - ANTES) fundir();
     });
-    vid.addEventListener('ended', fundir);
+    vid.addEventListener('ended', function () { if (!esSolapas()) fundir(); });
 
     function tocar() {
       if (env.classList.contains('abriendo')) return;
       env.classList.add('abriendo');
+
+      if (esSolapas()) {
+        /* el CSS abre las solapas; cuando terminan, se revela la portada */
+        setTimeout(fundir, SOLAPAS * 1000);
+        return;
+      }
+
       var dur = (vid.duration && isFinite(vid.duration)) ? vid.duration : 5;
       setTimeout(fundir, (dur + 1.5) * 1000);
       var p = null;
@@ -428,7 +524,7 @@
     document.addEventListener('touchend', alTocar, true);
 
     vid.addEventListener('error', function () {
-      if (env.classList.contains('abriendo')) fundir();
+      if (!esSolapas() && env.classList.contains('abriendo')) fundir();
     });
 
     armadoModelo = id;
