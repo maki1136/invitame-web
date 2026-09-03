@@ -47,6 +47,15 @@
      cuadro del video y se lee el píxel del centro. En `perlas` el fundido se
      hizo a 0xF3F3F5 y el archivo terminó en #f2f2f4 (el paso a yuv420p corre
      un nivel). Va el valor MEDIDO, no el pedido.
+
+   ★★ Y OJO CON QUÉ PARTE SE MIDE  (3/9/2026)
+     En los sobres que NO se funden a blanco solos —como `anillos`, donde el
+     velo blanco lo pone el módulo por CSS— el último cuadro es el sobre YA
+     ABIERTO, con sombra: medirlo da un gris sucio (#c9c2b5) que no sirve.
+     Ahí lo que hay que medir es EL PAPEL, en una esquina del PRIMER cuadro,
+     porque ese `color` es el que rellena las barras cuando el video va
+     contenido en la pantalla. Si se pone el promedio, se ven dos franjas
+     oscuras arriba y abajo del sobre.
    ============================================================================ */
 window.SOBRES_INVITAME = {
 
@@ -98,6 +107,41 @@ window.SOBRES_INVITAME = {
     video:  "/sobres/sobre-perlas.mp4",
     poster: "/sobres/sobre-perlas-poster.jpg",
     color:  "#f2f2f4"
+  },
+
+  /* ---- EL SOBRE DE ANILLOS  (3/9/2026) ----------------------------------
+     Sobre marfil de solapa clásica, papel con damasco EN RELIEVE (grabado
+     seco, no impreso) y un lacre color hueso con DOS ANILLOS ENTRELAZADOS.
+     La solapa se levanta despacio y el sobre queda abierto.
+
+     Pedido de Maki: «vamos a cambiar de sobre, poné el blanco nuevo que
+     armamos así lo animamos». Salió de Flow como
+     `Envelope_flap_lifts_upward_202609020508.mp4`.
+
+     QUÉ SE LE HIZO AL ARCHIVO, Y POR QUÉ:
+       · Duraba 8 SEGUNDOS. Es demasiado: el invitado está parado en la puerta
+         de la invitación esperando entrar. Se recortó a los primeros 7 s y se
+         aceleró 1,75×, así queda en 4,0 s — el mismo orden que `perlas`.
+       · Venía en 720×1280. Se subió a 1080×1920 con lanczos y un toque suave
+         de nitidez: en un iPhone la pantalla es más ancha que 720 y sin esto
+         se ve blando.
+       · Recodificado en **Constrained Baseline**, no High.
+
+     ⚠️ ESTE VIDEO NO SE FUNDE A BLANCO SOLO. Termina mostrando el sobre
+        abierto. El velo blanco lo pone `/efectos/sobre-catalogo.js` por CSS,
+        arrancando 1,4 s antes del final. Si algún día se cambia la duración,
+        hay que mirar que a esa altura el sobre ya se haya abierto.
+
+     ⚠️ LA IA SE LE FUE EL RELIEVE EN EL CAMINO: arranca con damasco de
+        volutas y termina con ramitas de rosas. En movimiento no se nota
+        porque el velo tapa el final, pero si algún día se regenera, conviene
+        pedirle que el relieve no cambie.
+     ---------------------------------------------------------------------- */
+  anillos: {
+    nombre: "Anillos · marfil en relieve, lacre de dos anillos (video)",
+    video:  "/sobres/sobre-anillos.mp4",
+    poster: "/sobres/sobre-anillos-poster.jpg",
+    color:  "#f4f2ec"
   },
 
   'carta-toscana': {
