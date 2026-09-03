@@ -31,8 +31,7 @@
      milisegundo, sale igual siempre, y no se puede descontrolar.
 
      Y no hace falta subir nada nuevo: **el póster que ya está en el repo es el
-     primer cuadro del video**, o sea el sobre cerrado, en 1080. Es exactamente
-     la foto que hace falta.
+     primer cuadro del video**, o sea el sobre cerrado, en 1080.
 
      CÓMO SE ANIMA
        La foto se parte en CUATRO TRIÁNGULOS que salen del centro, que es donde
@@ -44,20 +43,47 @@
           se abre en dos, que es lo que hace un lacre de verdad. Era el defecto
           más feo del video —el sello se esfumaba— y acá sale gratis.
 
-       Después de que las solapas se abren, el sobre entero se desvanece encima
-       de la portada real (ver `empalme:'foto'` más abajo). O sea: se abre, y
-       abajo está la foto de los novios.
+       Después el sobre entero se desvanece encima de la portada real.
 
      ⚠️ EL EJE ES REGULABLE. `EJE` dice dónde se cruzan las solapas, en
         fracciones de la foto. Está en 0,50 / 0,50 porque en la foto de anillos
         el lacre está centrado. Si un sobre nuevo lo tiene más arriba, se cambia
-        ese número y listo — no se toca ninguna otra cosa.
+        ese número y listo.
 
-     ⚠️ Y LAS SOLAPAS SE RECORTAN SOBRE LA CAJA DE LA FOTO, no sobre la
-        pantalla. Por eso el contenedor tiene el tamaño exacto de la imagen,
-        calculado con `min()` y aritmética. Si se lo dejara a pantalla completa,
-        los porcentajes del `clip-path` apuntarían a otro lado y las diagonales
-        no coincidirían con los dobleces del papel.
+     ⚠️ LAS SOLAPAS SE RECORTAN SOBRE LA CAJA DE LA FOTO, no sobre la pantalla.
+        Por eso el contenedor tiene el tamaño exacto de la imagen, calculado con
+        `min()` y aritmética.
+
+   ★★★★★★ Y EL BUG QUE COSTÓ MÁS CARO DE TODOS  (3/9/2026)
+
+     La apertura por solapas se subió… y en pantalla aparecía **una tarjeta
+     crema vacía**. Nada más. Todo lo que se midió daba bien:
+
+       · las cuatro hojas existían y estaban en el DOM;
+       · la foto cargaba (`new Image()` devolvía 1080 × 1920);
+       · el contenedor medía 333 × 591, el tamaño correcto;
+       · `visibility: visible`, `opacity: 1`, `display: block`, `inset: 0`;
+       · hasta poniéndole `background: red` a mano no se veía el rojo.
+
+     Un elemento con todo eso NO PUEDE no pintarse. Así que no era que no se
+     pintara: **algo lo estaba tapando**.
+
+     Era el `<video>` del motor. En modo solapas se le sacaba el `src` para que
+     no cargara nada… pero se quedaba en `display: block`, y la regla de
+     escritorio de `sobres/catalogo.js` le da `z-index: 2`, `border-radius: 30px`
+     y una sombra de tarjeta. O sea que **la tarjeta crema que estábamos
+     mirando ERA el video vacío**, con su forma de sobre, tapando las solapas
+     —que tenían `z-index: auto`— por un punto de diferencia.
+
+     → Lo que lo destrabó fue preguntar `elementFromPoint` en vez de seguir
+       leyendo estilos: los estilos del elemento nunca te dicen quién está
+       ARRIBA.
+     → Y el arreglo va por CSS, no por JS: un `vid.style.display='none'` se
+       puede perder si otro camino vuelve a tocar el elemento. La regla
+       `[data-apertura="solapas"] #env-vid{display:none!important}` no.
+     → Regla general para este sistema: **cuando algo "no se ve" y todas las
+       medidas dan bien, la pregunta no es qué le pasa a ese elemento: es qué
+       hay encima.**
 
    ★★★★★ EL SOBRE SE ABRE SOBRE LA PORTADA REAL  (3/9/2026)
 
@@ -69,15 +95,12 @@
      real, con su foto, sus nombres y su cuenta regresiva.
 
      Entonces el empalme correcto no es «fundir a blanco y después mostrar»:
-     es **apagar el sobre** y dejar ver lo que ya estaba. Es la foto de verdad
-     de cada pareja y funciona igual en las 20 paletas.
+     es **apagar el sobre** y dejar ver lo que ya estaba.
 
      Y el detalle que ella pidió: **primero la foto sola, y los datos medio
-     segundo después.** Junto se lee como un cambio de pantalla; escalonado se
-     lee como que la invitación estaba adentro del sobre.
+     segundo después.**
 
-     `empalme`: `'blanco'` (por defecto, para los videos que terminan en blanco)
-     o `'foto'`.
+     `empalme`: `'blanco'` (por defecto) o `'foto'`.
 
      ⚠️ Los textos se retienen con una CLASE en el `<html>`, no tocando los
         nodos: el motor los repinta y cualquier `style` inline se pierde.
@@ -85,13 +108,10 @@
 
    ★★★★★ EL ATAJO SE QUEDABA PEGADO CON EL SOBRE VIEJO  (3/9/2026)
 
-     Se cambió el sobre de la muestra y Maki abrió y vio el de antes:
-     «dejaste el otro sobre, no lo subiste». Estaba subido.
-
      `atajo()` mira `localStorage` y arma el sobre de la última visita para que
      aparezca al instante. Pero además ponía `listo = true`, y `revisar()`
      entonces sólo GUARDABA el modelo nuevo sin cambiar lo que había en
-     pantalla. Encima devolvía `true` y el `setInterval` se cortaba antes de que
+     pantalla. Encima devolvía `true` y el ciclo se cortaba antes de que
      llegara el dato.
 
      ⚠️ Afectaba a TODAS: cada vez que Jazmín le cambia el sobre a una
@@ -177,9 +197,8 @@
     if (!cat || !modelo) return null;
     var m = cat[modelo];
     if (!m) return null;
-    /* sirve si tiene video, o si tiene una foto para abrir por solapas */
-    if (m.video) return m;
     if (m.apertura === 'solapas' && m.poster) return m;
+    if (m.video) return m;
     return null;
   }
   function elegido() {
@@ -270,8 +289,6 @@
       document.head.appendChild(st);
     }
 
-    /* la caja con el tamaño EXACTO de la foto: pura aritmética, sin
-       aspect-ratio (ver la nota de Safari en sobres/catalogo.js) */
     var cajaAlto  = 'min(100vh, calc(100vw * 16 / 9))';
     var cajaAncho = 'min(100vw, calc(100vh * 9 / 16))';
     var dAlto     = 'min(84vh, 843px)';
@@ -294,17 +311,23 @@
       '  opacity:0;transition:opacity .45s ease;pointer-events:none}',
       '#env.carta-video.puesto #env-vid{opacity:1}',
 
+      /* ⚠️⚠️ EN MODO SOLAPAS EL VIDEO SE APAGA POR CSS.
+         Sin esto queda un <video> VACÍO con z-index 2, borde redondeado y
+         sombra —o sea, con forma de sobre— tapando las solapas. Fue el bug
+         que costó más caro: ver la nota del encabezado. */
+      '#env.carta-video[data-apertura="solapas"] #env-vid{display:none!important}',
+
       /* ---------- APERTURA POR SOLAPAS ---------- */
       '#col-sobre-foto{position:fixed;left:50%;top:50%;',
       '  transform:translate(-50%,-50%);',
       '  height:' + cajaAlto + ';width:' + cajaAncho + ';',
-      '  perspective:1400px;pointer-events:none;',
+      '  perspective:1400px;pointer-events:none;z-index:6;',
       '  opacity:0;transition:opacity .45s ease}',
       '#env.carta-video.puesto #col-sobre-foto{opacity:1}',
 
       '#col-sobre-foto .hoja{position:absolute;inset:0;',
       '  background-position:center;background-size:100% 100%;',
-      '  background-repeat:no-repeat;backface-visibility:hidden;',
+      '  background-repeat:no-repeat;',
       '  transition:transform ' + SOLAPAS + 's cubic-bezier(.36,.02,.2,1),',
       '             filter ' + SOLAPAS + 's ease}',
 
@@ -338,7 +361,6 @@
       '  transition:opacity ' + FUNDIDO + 's ease-in}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
-      /* empalme 'foto': el sobre se apaga y deja ver la portada */
       '#env.carta-video.revelando{opacity:0!important;',
       '  transition:opacity ' + FUNDIDO + 's ease-in!important}',
       '#env.carta-video.revelando #col-sobre-velo{opacity:0!important}',
@@ -383,10 +405,8 @@
     env.dataset.apertura = (m.apertura === 'solapas') ? 'solapas' : 'video';
 
     if (env.dataset.apertura === 'solapas') {
-      vid.style.display = 'none';
       montarSolapas(env, m.poster || '');
     } else {
-      vid.style.display = '';
       vid.setAttribute('poster', m.poster || '');
       if (vid.getAttribute('src') !== m.video) {
         vid.setAttribute('src', m.video);
@@ -425,9 +445,8 @@
     vid.controls = false;
 
     if (porSolapas) {
-      /* nada de video: la apertura la manejamos nosotros */
+      /* el video se apaga por CSS; acá sólo se lo deja sin cargar nada */
       try { vid.pause(); vid.removeAttribute('src'); vid.load(); } catch (e) {}
-      vid.style.display = 'none';
       montarSolapas(env, m.poster || '');
     } else {
       vid.style.display = '';
@@ -461,7 +480,7 @@
     sacarTapa();
     setTimeout(function () { env.classList.add('puesto'); }, 30);
 
-    function esFoto()  { return env.dataset.empalme  === 'foto'; }
+    function esFoto()    { return env.dataset.empalme  === 'foto'; }
     function esSolapas() { return env.dataset.apertura === 'solapas'; }
 
     var abierto = false;
@@ -501,7 +520,6 @@
       env.classList.add('abriendo');
 
       if (esSolapas()) {
-        /* el CSS abre las solapas; cuando terminan, se revela la portada */
         setTimeout(fundir, SOLAPAS * 1000);
         return;
       }
