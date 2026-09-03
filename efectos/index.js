@@ -19,6 +19,29 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
+   ★★★★★ ANTES DE ESCRIBIR CÓDIGO, MIRAR SI ES UN DATO ★★★★★  (3/9/2026)
+      Maki señaló la sección de la carta en la muestra: «el sobre que quedó
+      verde, no entiendo por qué está ahí con esa frase "confirma con alegría"
+      sin ningún botón». Parecían tres bugs. Medido en la invitación en vivo,
+      eran tres CAMPOS mal cargados y un solo problema de código:
+
+        · «no tiene botón» → no faltaba nada: esa sección es la CARTA
+          (`#carta-sec`), no la confirmación. El RSVP existe y anda, más abajo.
+        · el título equivocado → el dato `cfTitulo`, cargado con "Confirma tu
+          lugar", que es el texto del RSVP.
+        · el sobre verde → el dato `fx.carta.sobreColor` = `#a8bda4`. El
+          recoloreo ya existía; estaba puesto el verde de la colección Oliva.
+        · lo único de código → el ORDEN: la carta iba después del pase con QR
+          en vez de abajo del collar. Eso sí es un módulo
+          (`/efectos/carta-perlas.js`).
+
+      → Cuando algo "se ve roto", lo primero es leer los campos que lo pintan.
+        Un rato en la consola mirando `INVEV` evita escribir un módulo entero
+        para arreglar algo que se corrige tipeando en el panel.
+      → Y al revés: un campo que sólo se puede corregir a mano en la base es,
+        para Jazmín, un campo roto. Todo lo que se cargue mal tiene que poder
+        corregirse desde el panel.
+
    ★★★★★ TODA FUNCIÓN TIENE QUE ESTAR EN EL PANEL ★★★★★  (1/9/2026)
       Maki, dicho tres veces ya: «recordate que todos tienen que estar en el
       panel para que Jazmín lo pueda modificar y pueda verlo y funcionando
@@ -323,7 +346,7 @@
       datos del cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en veinticinco casos:
+   ⚠️ EL ORDEN IMPORTA en veintiséis casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -375,6 +398,9 @@
      demás. Cambia la tipografía y el aire de secciones que escriben los otros
      módulos, así que necesita que ya estén puestas. Igual se vuelve a pasar
      sola cada 400 ms por si aparece algo nuevo.
+   · `carta-perlas.js` va DESPUÉS de `colecciones/perlas.js`: mueve la carta
+     abajo del collar y de la frase, y para eso las dos secciones ya tienen que
+     estar puestas y disfrazadas. Sólo actúa si la colección es Perlas.
    · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
      propone la paleta que le corresponde, y para eso el selector de paletas
      tiene que existir.
@@ -426,6 +452,7 @@
 
     /* ---- LAS COLECCIONES: una decisión que trae todo junto ---- */
     '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
+    '/efectos/carta-perlas.js',        /* y la carta va abajo del collar, no colgada del RSVP */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
 
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
