@@ -44,7 +44,7 @@
         paleta, no para una colección. Pedido de Maki: «pensá que este cambio es
         para todas las invitaciones».
 
-   ★★★ UN POCO MÁS ANCHA, PERO ATADA AL ALTO  (3/9/2026)
+   ★★★ UN POCO MÁS ANCHA — Y EL ANCHO SALE DE LA VENTANA  (3/9/2026)
 
      Maki: «¿se puede llevar un poco más ancho sin romper lo que se ve en el
      iPhone, que está bien? La de Invítame de ahora es sólo un poco más ancha».
@@ -60,12 +60,20 @@
           estirada — que es exactamente el defecto del sistema viejo de
           invitameok.com, con su contenedor de 1170 px.
 
-     Por eso el ancho ahora es `clamp(natural, 62vh, 600px)`:
-       · nunca más angosta que antes (el piso es el ancho natural, 474);
-       · en una ventana alta se acerca a 600 y se siente holgada;
-       · en una ventana baja se queda chica sola, que es lo correcto: si no hay
-         alto, una columna ancha queda como un cartel;
-       · el techo de 600 es a propósito. No subirlo sin agrandar la tipografía.
+     Entonces el ancho de hoy es EL MENOR DE TRES, y nunca menos que el natural:
+
+       · `POR_ALTO` (72% del alto)  — una invitación es un objeto vertical. Si
+         la ventana es baja, una columna ancha se lee como un cartel apaisado y
+         la portada pierde la proporción de tarjeta.
+       · `POR_ANCHO` (52% del ancho) — para que siempre quede aire a los lados.
+         Sin esto, en una ventana ALTA Y ANGOSTA la columna llegaba al techo y
+         quedaban 20 px de margen: peor que no hacer nada.
+       · `TECHO` (580) — el límite tipográfico de arriba.
+
+     Medido de verdad, no estimado:
+       · 1441 × 705  ->  508 px   (antes daba 474: no cambiaba nada)
+       · 1440 × 900  ->  580 px   (Mac maximizada)
+       ·  700 × 1200 ->  474 px   (ventana angosta: se queda como estaba)
 
      ⚠️ Y LA PORTADA NO SEGUÍA AL MARCO. Se le agrandaba el `.frame` y todos
         los `.sec` obedecían, pero la portada se quedaba en 474 porque el motor
@@ -113,9 +121,10 @@
   var MIN_VENTANA = 680;   /* de acá para arriba se encuadra */
   var MIN_COLUMNA = 320;   /* menos que esto no es una columna, es una tira */
 
-  /* ★ el ensanche. Ver el bloque de arriba antes de tocar estos dos números. */
-  var TECHO      = 600;    /* más ancho que esto y el texto queda nadando */
-  var PROPORCION = 0.62;   /* del alto de la ventana */
+  /* ★ el ensanche. Ver el bloque de arriba antes de tocar estos tres números. */
+  var TECHO      = 580;    /* más ancho que esto y el texto queda nadando */
+  var POR_ALTO   = 0.72;   /* del alto de la ventana: la invitación es vertical */
+  var POR_ANCHO  = 0.52;   /* del ancho: para que siempre quede aire a los lados */
 
   function laPortada() {
     return document.querySelector('.portada');
@@ -211,13 +220,15 @@
     return w;
   }
 
-  /* A partir del natural y del alto de la ventana, cuánto tiene que medir hoy.
-     Nunca más angosta que el natural, nunca más ancha que el techo, y nunca
-     tan ancha que no entre en la ventana. */
+  /* Cuánto tiene que medir HOY: el menor de los tres límites, y nunca menos
+     que el ancho natural. */
   function objetivo() {
-    var porAlto = Math.round(window.innerHeight * PROPORCION);
-    var w = Math.max(anchoNatural, Math.min(porAlto, TECHO));
-    return Math.min(w, window.innerWidth - 40);
+    var tope = Math.min(
+      Math.round(window.innerHeight * POR_ALTO),
+      Math.round(window.innerWidth * POR_ANCHO),
+      TECHO
+    );
+    return Math.max(anchoNatural, tope);
   }
 
   function aplicar() {
