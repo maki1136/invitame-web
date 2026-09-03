@@ -26,57 +26,69 @@
      video  : la apertura del sobre, sin nombres ni fechas. Genérico y reusable.
      poster : el primer cuadro, para que el sobre cerrado se vea al instante
               mientras el video todavía carga. TAMBIÉN se usa como fondo
-              desenfocado en la compu (ver parte 2).
+              desenfocado en la compu, y como LA FOTO en apertura 'solapas'.
      img    : sin video, el sobre se dibuja por CSS con esta imagen de papel
               (el modo viejo; queda como respaldo).
      lacre  : imagen del sello para el modo sin video.
      color  : color sugerido para la carta, si la diseñadora no elige uno.
-     empalme: CÓMO ENTRA LA INVITACIÓN cuando el sobre termina (ver abajo).
+     apertura: 'video' (por defecto) o 'solapas'  → ver abajo
+     empalme: 'blanco' (por defecto) o 'foto'     → ver abajo
      texto  : sólo en las piezas que SE ESCRIBEN SOLAS (ver más abajo).
 
    El evento guarda SOLO el id (fx.sobre.modelo), nunca la URL. Así se puede
    cambiar el video de un sobre después sin tocar ninguna invitación entregada.
+
+   ★★★ EL CAMPO `apertura`  (3/9/2026)
+
+     Maki, después de ver el sobre de anillos en video:
+     «cambiemos el sobre, se abre descontrolado este. Creo que lo habías armado
+     vos con una imagen».
+
+     Un video generado con IA **hace lo que quiere**: en anillos el relieve del
+     papel cambia solo en el camino, y el lacre no se parte, se esfuma. Eso no
+     se arregla con código: viene así en el archivo.
+
+       'video'    — reproduce el mp4. Sirve cuando la generación salió limpia
+                    (lazo, toscana, perlas).
+       'solapas'  — NO usa video. Toma la FOTO del sobre cerrado (el `poster`,
+                    que ya está en el repo) y la abre por CSS: se parte en
+                    cuatro triángulos desde el centro y las dos solapas de
+                    adelante giran hacia afuera. El lacre queda partido al
+                    medio, que es lo que hace un lacre de verdad.
+                    El movimiento lo manejamos nosotros: mismo tiempo, mismo
+                    ángulo, todas las veces.
+
+     ⚠️ 'solapas' NO necesita ningún archivo nuevo. Usa el póster.
+     ⚠️ Y asume que el lacre está en el CENTRO de la foto. Si un sobre nuevo lo
+        tiene más arriba, se corre `EJE` en /efectos/sobre-catalogo.js.
 
    ★★★ EL CAMPO `empalme`  (3/9/2026)
 
      Maki: «¿te acordás que habíamos quedado en que el sobre se abría y aparecía
      abajo la foto de la invitación directo, y ahí recién aparecían los datos?».
 
-     Hay dos maneras de empalmar, y depende de CÓMO TERMINA EL VIDEO:
+       'blanco'  (por defecto) — para los videos que YA terminan en blanco
+                  (lazo, toscana, perlas). Velo del color del papel. No se toca.
+       'foto'    — el sobre se desvanece encima de la portada real, que ya está
+                  dibujada debajo, y los textos de la portada entran medio
+                  segundo después que la foto.
 
-       'blanco'  (por defecto)
-         Para los videos que ya terminan en blanco: `lazo`, `toscana`, `perlas`.
-         Un velo del color del papel tapa el final y la invitación entra desde
-         ese blanco. Es lo que había y funciona; no se toca.
+     ⚠️ En un video no es una preferencia: es una propiedad del archivo. Si
+        termina en blanco y se pone 'foto', se ve un blanco de más; si termina
+        abierto y se pone 'blanco', se ve el corte.
+        En apertura 'solapas' va SIEMPRE 'foto': el sobre queda abierto.
 
-       'foto'
-         Para los que terminan MOSTRANDO EL SOBRE ABIERTO, como `anillos`.
-         El sobre se desvanece encima de la portada real —que ya está dibujada
-         debajo, porque `#env` es una tapa fija— y los textos de la portada
-         entran medio segundo después que la foto.
-         Es exactamente lo del MAESTRO que armó Maki, pero con la foto de CADA
-         pareja en vez de una pegada dentro del video.
-
-     ⚠️ No es una preferencia de diseño: es una propiedad del archivo. Si un
-        video termina en blanco y se pone en 'foto', se ve un blanco de más;
-        si termina abierto y se pone en 'blanco', se ve el corte.
-
-   ⚠️ Los sobres `lazo`, `toscana` y `perlas` TERMINAN EN BLANCO. Por eso su
-   `color` es casi blanco: es el color con el que arranca la pantalla justo
-   cuando el video se apaga.
-
-   ★ CÓMO SE ELIGE ESE `color`, BIEN: se MIDE, no se estima. Se saca el último
+   ★ CÓMO SE ELIGE EL `color`, BIEN: se MIDE, no se estima. Se saca el último
      cuadro del video y se lee el píxel del centro. En `perlas` el fundido se
      hizo a 0xF3F3F5 y el archivo terminó en #f2f2f4 (el paso a yuv420p corre
      un nivel). Va el valor MEDIDO, no el pedido.
 
    ★★ Y OJO CON QUÉ PARTE SE MIDE  (3/9/2026)
-     En los sobres que NO se funden a blanco solos —como `anillos`— el último
-     cuadro es el sobre YA ABIERTO, con sombra: medirlo da un gris sucio
-     (#c9c2b5) que no sirve. Ahí lo que hay que medir es EL PAPEL, en una
-     esquina del PRIMER cuadro, porque ese `color` es el que rellena las barras
-     cuando el video va contenido en la pantalla. Si se pone el promedio, se
-     ven dos franjas oscuras arriba y abajo del sobre.
+     En los sobres que no se funden a blanco solos, el último cuadro es el sobre
+     YA ABIERTO, con sombra: medirlo da un gris sucio (#c9c2b5) que no sirve.
+     Ahí hay que medir EL PAPEL, en una esquina del PRIMER cuadro, porque ese
+     `color` es el que rellena las barras cuando la foto va contenida. Si se
+     pone el promedio, quedan dos franjas oscuras arriba y abajo.
    ============================================================================ */
 window.SOBRES_INVITAME = {
 
@@ -110,18 +122,11 @@ window.SOBRES_INVITAME = {
 
   /* ---- EL SOBRE DE LA COLECCIÓN PERLAS ----------------------------------
      Sobre marfil de borde deckled con DOS HOJAS que se abren al medio
-     (gatefold), atado con una hilera de perlas de agua dulce. Se desata el
-     moño, las perlas caen, las hojas se abren como puertas y la pantalla se
-     va a blanco.
+     (gatefold), atado con una hilera de perlas de agua dulce.
 
-     ⚠️ NO es un sobre de solapa. Si algún día se regenera, el movimiento es
-        "las dos hojas se abren desde la costura del centro", no "se levanta
-        la solapa de arriba".
-
-     El fundido a blanco NO venía en el video generado: el original terminaba
-     mostrando el sobre abierto, y así se veía el corte al entrar la
-     invitación. Se agregó después (sostener el último cuadro 1,5 s y fundir
-     a blanco durante 1 s, dejando 0,3 s de blanco limpio al final).
+     ⚠️ NO es un sobre de solapa: el movimiento es "las dos hojas se abren
+        desde la costura del centro". Por eso tampoco sirve para 'solapas',
+        que asume solapas triangulares.
      ---------------------------------------------------------------------- */
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
@@ -133,36 +138,24 @@ window.SOBRES_INVITAME = {
   /* ---- EL SOBRE DE ANILLOS  (3/9/2026) ----------------------------------
      Sobre marfil de solapa clásica, papel con damasco EN RELIEVE (grabado
      seco, no impreso) y un lacre color hueso con DOS ANILLOS ENTRELAZADOS.
-     La solapa se levanta despacio y el sobre queda abierto.
 
-     Pedido de Maki: «vamos a cambiar de sobre, poné el blanco nuevo que
-     armamos así lo animamos». Salió de Flow como
-     `Envelope_flap_lifts_upward_202609020508.mp4`.
+     ⚠️ SE ABRE POR SOLAPAS, NO POR VIDEO. El video de Flow existe y quedó
+        declarado como respaldo, pero se abría descontrolado: el relieve
+        cambiaba solo (arranca con volutas, termina con rosas) y el lacre se
+        desvanecía en vez de partirse. Con la foto y CSS el movimiento sale
+        igual siempre, y el lacre se parte al medio como corresponde.
 
-     QUÉ SE LE HIZO AL ARCHIVO, Y POR QUÉ:
-       · Duraba 8 SEGUNDOS. Es demasiado: el invitado está parado en la puerta
-         de la invitación esperando entrar. Se recortó a los primeros 7 s y se
-         aceleró 1,75×, así queda en 4,0 s — el mismo orden que `perlas`.
-       · Venía en 720×1280. Se subió a 1080×1920 con lanczos y un toque suave
-         de nitidez: en un iPhone la pantalla es más ancha que 720 y sin esto
-         se ve blando.
-       · Recodificado en **Constrained Baseline**, no High.
-
-     ⚠️ ESTE VIDEO NO SE FUNDE A BLANCO SOLO: termina mostrando el sobre
-        abierto. Por eso va con `empalme:"foto"` — el sobre se desvanece
-        encima de la portada real. Ver la nota del campo `empalme` arriba.
-
-     ⚠️ LA IA SE LE FUE EL RELIEVE EN EL CAMINO: arranca con damasco de
-        volutas y termina con ramitas de rosas. En movimiento no se nota
-        porque para entonces ya se está desvaneciendo, pero si algún día se
-        regenera, conviene pedirle que el relieve no cambie.
+     El archivo de video, por si alguna vez se vuelve: recortado a 7 s,
+     acelerado 1,75× (queda en 4,0 s), subido a 1080 con lanczos y
+     recodificado en Constrained Baseline.
      ---------------------------------------------------------------------- */
   anillos: {
-    nombre:  "Anillos · marfil en relieve, lacre de dos anillos (video)",
-    video:   "/sobres/sobre-anillos.mp4",
-    poster:  "/sobres/sobre-anillos-poster.jpg",
-    color:   "#f4f2ec",
-    empalme: "foto"
+    nombre:   "Anillos · marfil en relieve, lacre de dos anillos",
+    video:    "/sobres/sobre-anillos.mp4",
+    poster:   "/sobres/sobre-anillos-poster.jpg",
+    color:    "#f4f2ec",
+    apertura: "solapas",
+    empalme:  "foto"
   },
 
   'carta-toscana': {
@@ -183,15 +176,12 @@ window.SOBRES_INVITAME = {
          · la cara útil va de y=330 (bajo la corona) a y=775 (sobre el paisaje)
          · a la altura de las mayúsculas la cara mide 390 px de ancho. Con 330
                       de tope, los dos renglones entran en cuerpo 12 y quedan
-                      36 px de aire de cada lado. Con 300 caían a 11 y se veían
-                      chicos; con 373 (sin tope) rozaban el borde.
+                      36 px de aire de cada lado.
          · la tinta está muestreada del propio grabado del paisaje
          · desde 3.45  el video dura 6,9 s: 3,3 de acercamiento y 3,6 de imagen
-                      quieta. La escritura pasa entera en la parte quieta, así
-                      no hay nada que seguir y el texto no se puede correr.
+                      quieta. La escritura pasa entera en la parte quieta.
 
-       `lineas` son LÍNEAS DE BASE, no bordes de caja: es lo único que se
-       mantiene en su lugar si algún día cambia la tipografía.
+       `lineas` son LÍNEAS DE BASE, no bordes de caja.
        -------------------------------------------------------------------- */
     texto: {
       base:    [720, 1280],
@@ -227,13 +217,11 @@ window.SOBRES_INVITAME = {
 /* ===== 2. LA PUESTA EN PANTALLA DEL SOBRE =====================================
 
    EL PROBLEMA
-   Los videos de sobre son verticales (9:16), pensados para el celular. En el
-   celular se ven perfectos. Pero en una compu la ventana es apaisada, y el
-   video se estiraba a toda la pantalla con "cover": entraba solamente el centro
-   del sobre, ampliadísimo, y quedaban afuera las cuatro esquinas, el lacre
-   entero y las flores secas.
+   Los videos de sobre son verticales (9:16), pensados para el celular. En una
+   compu la ventana es apaisada, y el video se estiraba a toda la pantalla con
+   "cover": entraba sólo el centro del sobre, ampliadísimo.
 
-   LA SOLUCIÓN — un solo encuadre que sirve para los dos
+   LA SOLUCIÓN
    En la compu el sobre se muestra en el centro, del mismo tamaño con el que se
    ve en un celular, y el resto de la pantalla se llena con EL MISMO PAPEL del
    sobre, muy desenfocado, más un viñeteado suave.
@@ -244,36 +232,24 @@ window.SOBRES_INVITAME = {
    MISMO ancho que `.portada`.
 
    ⚠️⚠️ NO USAR `aspect-ratio` ACÁ. ESTO SE ROMPIÓ EN PRODUCCIÓN.
-   La primera versión decía `height:min(84vh,843px); aspect-ratio:9/16;
-   width:auto`. En Chrome anda. En **Safari NO**: `aspect-ratio` sobre un
-   elemento reemplazado (`<video>`, `<img>`) no se aplica igual, el ancho se
-   resolvía solo, el video volvía a ocupar la pantalla entera con
-   `object-fit:cover` y en la Mac de Maki se veía un pedazo gigante del sobre:
-   una diagonal blanca enorme y el monograma flotando. Un desastre.
-   Ahora el ancho se calcula a mano con `calc()`, que es aritmética y anda
-   igual en todos lados. **Si alguien vuelve a poner `aspect-ratio` acá, se
-   rompe otra vez en Safari.**
+   `aspect-ratio` sobre un elemento reemplazado (`<video>`, `<img>`) no se
+   aplica igual en Safari: el ancho se resolvía solo, el video volvía a ocupar
+   la pantalla entera con `object-fit:cover` y en la Mac de Maki se veía un
+   pedazo gigante del sobre. Ahora el ancho se calcula con `calc()`, que es
+   aritmética y anda igual en todos lados.
 
    Los tamaños van con `!important` a propósito: el motor arma el sobre después
-   de que carga este archivo y mete sus propios estilos. Sin `!important` gana
-   el suyo y el sobre queda a pantalla completa.
-
-   TAMPOCO se dejan a la vista las solapas del sobre viejo (`.triflap`) cuando
-   el modo es video: si el video tardaba o fallaba, asomaban abajo a tamaño de
-   pantalla completa y se veía roto. Con el video siempre está el `poster`, así
-   que nunca queda vacío.
+   de que carga este archivo y mete sus propios estilos.
 
    LOS CONTROLES DE SAFARI
-   El `<video>` NO tiene el atributo `controls`. Pero Safari en Mac, cuando la
-   preferencia de reproducción automática está en "Detener contenido
-   multimedia", bloquea el autoplay y mete SUS PROPIOS controles encima. Se
-   apagan con los pseudo-elementos ::-webkit-media-controls.
+   El `<video>` NO tiene `controls`. Pero Safari en Mac, cuando bloquea el
+   autoplay, mete SUS PROPIOS controles encima. Se apagan con los
+   pseudo-elementos ::-webkit-media-controls.
 
    EN EL CELULAR NO CAMBIA NADA: vive dentro de un @media de 680px para arriba.
    ============================================================================ */
 (function () {
 
-  /* el alto del sobre en la compu, y el ancho que sale de la proporción 9:16 */
   var ALTO  = 'min(84vh, 843px)';
   var ANCHO = 'calc(' + ALTO + ' * 9 / 16)';
 
@@ -297,7 +273,7 @@ window.SOBRES_INVITAME = {
     '    pointer-events:none;background:radial-gradient(120% 85% at 50% 50%,',
     '    rgba(0,0,0,0) 38%, rgba(0,0,0,.16) 78%, rgba(0,0,0,.30) 100%)}',
 
-    /* ⚠️ ancho por calc(), NUNCA aspect-ratio: ver la nota de arriba */
+    /* ⚠️ ancho por calc(), NUNCA aspect-ratio */
     '  #env.carta-video #env-vid{',
     '    position:absolute!important;',
     '    inset:auto!important;',
@@ -310,7 +286,6 @@ window.SOBRES_INVITAME = {
     '    object-fit:cover;border-radius:30px;',
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
 
-    /* que no asome el sobre viejo por debajo del video */
     '  #env.carta-video .triflap,',
     '  #env.carta-video #tri-seal,',
     '  #env.carta-video #e-back,',
@@ -328,13 +303,9 @@ window.SOBRES_INVITAME = {
     var s = document.createElement('style');
     s.id = 'sobre-encuadre';
     s.textContent = css;
-    /* al final del head, y además con !important, porque el motor mete sus
-       propios estilos DESPUÉS de que este archivo corrió */
     (document.head || document.documentElement).appendChild(s);
   }
 
-  /* El motor decide el poster recién cuando arma el sobre, así que esto se
-     vuelve a llamar cada vez que cambia la clase de #env o el poster. */
   function pintarFondo() {
     var env = document.getElementById('env');
     var vid = document.getElementById('env-vid');
@@ -343,6 +314,15 @@ window.SOBRES_INVITAME = {
     var esCartaVideo = env.classList.contains('carta-video');
     var poster = vid.getAttribute('poster') || '';
     var fondo = document.getElementById('sobre-fondo');
+
+    /* en apertura por solapas el <video> no tiene poster: se toma del catálogo */
+    if (!poster && env.dataset && env.dataset.apertura === 'solapas') {
+      try {
+        var s = (window.INVEV || {}).fx.sobre || {};
+        var m = (window.SOBRES_INVITAME || {})[s.modelo] || {};
+        poster = m.poster || '';
+      } catch (e) {}
+    }
 
     if (!esCartaVideo || !poster) { if (fondo) fondo.style.backgroundImage = ''; return; }
 
@@ -358,17 +338,15 @@ window.SOBRES_INVITAME = {
     if (fondo.style.backgroundImage !== url) fondo.style.backgroundImage = url;
   }
 
-  /* ⚠️ RED DE SEGURIDAD
-     Si por lo que sea el video quedara a pantalla completa (una regla nueva del
-     motor, un navegador raro), esto lo vuelve a poner en su caja. Se mide y se
-     corrige en vivo en vez de confiar sólo en la hoja de estilo. */
+  /* ⚠️ RED DE SEGURIDAD: si el video quedara a pantalla completa, se corrige. */
   function vigilarTamano() {
     var env = document.getElementById('env');
     var vid = document.getElementById('env-vid');
     if (!env || !vid || innerWidth < 680) return;
     if (!env.classList.contains('carta-video')) return;
+    if (env.dataset && env.dataset.apertura === 'solapas') return;
     var b = vid.getBoundingClientRect();
-    if (b.width <= innerWidth * 0.75) return;      /* está bien encuadrado */
+    if (b.width <= innerWidth * 0.75) return;
     var alto = Math.min(innerHeight * 0.84, 843);
     vid.style.setProperty('position', 'absolute', 'important');
     vid.style.setProperty('inset', 'auto', 'important');
@@ -388,7 +366,7 @@ window.SOBRES_INVITAME = {
     var vid = document.getElementById('env-vid');
     if (window.MutationObserver && env) {
       new MutationObserver(function () { pintarFondo(); vigilarTamano(); })
-        .observe(env, { attributes: true, attributeFilter: ['class'] });
+        .observe(env, { attributes: true, attributeFilter: ['class', 'data-apertura'] });
       if (vid) new MutationObserver(function () { pintarFondo(); vigilarTamano(); })
         .observe(vid, { attributes: true, attributeFilter: ['poster', 'style'] });
     }
@@ -406,8 +384,7 @@ window.SOBRES_INVITAME = {
 
 /* ===== 3. EL ENGANCHE =========================================================
    La lista de módulos del front vive en /efectos/index.js. Se carga desde acá y
-   nada más. Así, agregar o sacar una mejora es editar ese archivo de 5 líneas,
-   y este nunca se vuelve a tocar.
+   nada más.
    ============================================================================ */
 (function () {
   var src = '/efectos/index.js';
