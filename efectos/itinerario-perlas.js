@@ -49,24 +49,33 @@
    → Por eso el módulo también apaga el `transform` que le pone el otro:
      `transform:none`. Si alguien lo saca, vuelven las lentejas.
 
-   ⚠️⚠️ Y LAS DOS TRAMPAS DE ESPECIFICIDAD, QUE COSTARON UNA VUELTA ENTERA
+   ⚠️⚠️⚠️ LA PELEA DE ESPECIFICIDAD, QUE COSTÓ DOS VUELTAS ENTERAS
 
-   La primera versión de esto se subió, se vio en la pantalla… y no pasaba nada.
-   Ni la hebra encendida ni la de atrás atenuada. Medido en la consola:
+   Este módulo se subió, se miró la pantalla y NO PASABA NADA. Dos veces. El CSS
+   estaba bien escrito las dos veces. Lo que faltaba era ir a buscar, en la
+   consola, **qué regla estaba ganando**. Recorriendo `document.styleSheets`
+   aparecieron las dos culpables, las dos de la colección:
 
-     1. `.tl-prog` estaba en **`display:none`** (lo apaga la colección, ver
-        arriba). Se le puede pintar el fondo que uno quiera: sigue escondida.
-        → Hay que volver a mostrarla expresamente.
-     2. `.tl::before` seguía en `opacity:1`. La regla de la colección le gana a
-        `.tl.tl-perlas::before` porque **la colección se inserta antes pero con
-        más especificidad**, y ni siquiera `.tl.tl-anim::before{opacity:.22}`
-        del módulo genérico estaba llegando.
-        → Se usa la clase REPETIDA —`.tl-perlas.tl-perlas`— que sube la
-          especificidad sin depender del orden. Es el mismo truco que ya está
-          anotado en `efectos/index.js` para `[data-col-lugar][data-col-lugar]`.
+       html[data-coleccion="perlas"][data-col-perla] .tl .tl-prog
+           { display:none !important }
+       html[data-coleccion="perlas"][data-col-perla] .tl::before
+           { opacity:1 !important }
 
-   → La lección de fondo, otra vez la misma: **mirar la página, no el código.**
-     El CSS estaba bien escrito. No se veía por dos reglas ajenas.
+   O sea: **dos atributos en el `html` más dos clases**. Contra eso no alcanza
+   repetir la clase (`.tl-perlas.tl-perlas`), que es el truco que sirve para
+   empatar contra otro módulo pero no contra un prefijo con atributos.
+
+   → La solución es escribir cada regla DOS VECES: una suelta (por si la
+     colección se aplicó sin esos atributos, o si mañana cambian) y otra con el
+     MISMO prefijo que usa la colección más nuestra clase, que así queda
+     estrictamente por encima.
+   → Y el `display` se fuerza además **inline con prioridad** desde JS
+     (`setProperty('display','block','important')`), que le gana a cualquier
+     hoja de estilos sin depender de contar puntos.
+
+   → La lección de fondo, que ya está anotada en `efectos/index.js` y se volvió
+     a pagar acá: **cuando el CSS "no hace nada", no hay que releerlo. Hay que
+     preguntarle al navegador qué regla ganó.**
 
    DE DÓNDE SACA LA FOTO DE LA PERLA
    Del propio `.tl::before` que ya puso la colección, leyendo su
@@ -102,6 +111,9 @@
 (function () {
   'use strict';
 
+  /* el mismo prefijo que usa la colección para sus reglas !important */
+  var PRE = 'html[data-coleccion="perlas"][data-col-perla] ';
+
   var ES_PREVIEW = (function () {
     try { return /[?&]preview/.test(location.search) || window.parent !== window; }
     catch (e) { return true; }
@@ -131,41 +143,49 @@
 
   var ID = 'tl-perlas-css';
 
+  /* cada regla, dos veces: suelta y con el prefijo de la colección */
+  function dosVeces(sel, cuerpo) {
+    return sel.replace(/(^|,\s*)/g, '$1') + '{' + cuerpo + '}\n' +
+           PRE + sel + '{' + cuerpo + '}';
+  }
+
   function ponerEstilos(url) {
     var viejo = document.getElementById(ID);
     if (viejo && viejo.dataset.url === url) return;
     if (viejo) viejo.remove();
 
+    var hebra =
+      'display:block!important;' +
+      'transform:none!important;' +                 /* nada de scaleY: deforma */
+      'position:absolute!important;top:6px!important;bottom:6px!important;' +
+      'width:11px!important;border-radius:0!important;' +
+      'background:transparent url("' + url + '") repeat-y center top!important;' +
+      'background-size:11px 11px!important;' +
+      'filter:drop-shadow(0 1px 1px rgba(0,0,0,.12))!important;' +
+      'clip-path:inset(0 0 calc((1 - var(--tl-p,0)) * 100%) 0)!important;' +
+      'transition:none!important';
+
     var s = document.createElement('style');
     s.id = ID;
     s.dataset.url = url;
     s.textContent = [
-      /* ⚠️ clase REPETIDA para ganarle a la colección. Ver el encabezado. */
       /* la hebra apagada, atrás */
-      '.tl.tl-perlas.tl-perlas::before{opacity:.20!important}',
+      dosVeces('.tl.tl-perlas::before', 'opacity:.20!important'),
 
-      /* ⚠️ la hebra ENCENDIDA. La colección la había apagado: se vuelve a
-         mostrar. Y nada de scaleY: recorta, no deforma. */
-      '.tl.tl-perlas.tl-perlas .tl-prog{',
-      '  display:block!important;',
-      '  transform:none!important;',
-      '  position:absolute;top:6px;bottom:6px;',
-      '  width:11px;border-radius:0;',
-      '  background:transparent url("' + url + '") repeat-y center top!important;',
-      '  background-size:11px 11px!important;',
-      '  filter:drop-shadow(0 1px 1px rgba(0,0,0,.12));',
-      '  clip-path:inset(0 0 calc((1 - var(--tl-p,0)) * 100%) 0);',
-      '  transition:none}',
+      /* la hebra ENCENDIDA */
+      dosVeces('.tl.tl-perlas .tl-prog', hebra),
 
-      /* la hebra al costado (estilo «izquierda»): concéntrica con la de atrás */
-      '.tl.tl-perlas.tl-perlas:not(.tl-centro) .tl-prog{left:1.5px;margin-left:0}',
+      /* al costado (estilo «izquierda»): concéntrica con la de atrás */
+      dosVeces('.tl.tl-perlas:not(.tl-centro) .tl-prog',
+               'left:1.5px!important;margin-left:0!important'),
 
-      /* y en el estilo «centro», centrada sobre la línea del medio */
-      '.tl.tl-perlas.tl-perlas.tl-centro .tl-prog{left:50%;margin-left:-5.5px}',
+      /* y en el estilo «centro», sobre la línea del medio */
+      dosVeces('.tl.tl-perlas.tl-centro .tl-prog',
+               'left:50%!important;margin-left:-5.5px!important'),
 
       /* si pidió menos movimiento: el collar entero, quieto */
       '@media(prefers-reduced-motion:reduce){',
-      '  .tl.tl-perlas.tl-perlas .tl-prog{clip-path:none}',
+      dosVeces('.tl.tl-perlas .tl-prog', 'clip-path:none!important'),
       '}'
     ].join('\n');
     (document.head || document.documentElement).appendChild(s);
@@ -175,14 +195,19 @@
     return [].slice.call(document.querySelectorAll('.tl'));
   }
 
-  /* La línea de progreso la crea `itinerario.js`. Si por lo que sea no está
-     todavía, se pone una: sin ella no hay nada que iluminar. */
+  /* La línea de progreso la crea `itinerario.js`. Si no está, se pone una.
+     ⚠️ El display se fuerza inline CON PRIORIDAD: es lo único que le gana con
+        seguridad al `display:none !important` de la colección. */
   function asegurarProg(tl) {
     var p = tl.querySelector('.tl-prog');
-    if (p) return p;
-    p = document.createElement('i');
-    p.className = 'tl-prog';
-    tl.appendChild(p);
+    if (!p) {
+      p = document.createElement('i');
+      p.className = 'tl-prog';
+      tl.appendChild(p);
+    }
+    if (p.style.getPropertyPriority('display') !== 'important') {
+      p.style.setProperty('display', 'block', 'important');
+    }
     return p;
   }
 
