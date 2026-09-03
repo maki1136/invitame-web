@@ -19,6 +19,41 @@
    función global, así que un módulo puede armar la apertura con el video del
    catálogo y después llamar a la MISMA `abrir()` de siempre.
 
+   ★★★★★ EL SOBRE SE ABRE SOBRE LA PORTADA REAL  (3/9/2026)
+
+     Maki: «¿te acordás que habíamos quedado en que el sobre se abría y aparecía
+     abajo la foto de la invitación directo, y ahí recién aparecían los datos?».
+     Y mandó el MAESTRO que había armado: el sobre se abre y adentro está la
+     portada — pero con una foto de muestra PEGADA DENTRO DEL VIDEO, que
+     obviamente no es la de cada invitación.
+
+     No hace falta componer nada, y esta es la clave: **la invitación ya está
+     dibujada abajo**. `#env` es una tapa `position:fixed; z-index:100` encima
+     de la página entera; debajo, la portada real ya está ahí, con su foto, sus
+     nombres y su cuenta regresiva.
+
+     Entonces el empalme correcto no es «fundir a blanco y después mostrar»:
+     es **apagar el sobre** y dejar ver lo que ya estaba. Sale gratis, es la
+     foto de verdad de cada pareja, y funciona igual en las 20 paletas y en
+     todas las colecciones.
+
+     Y el detalle que ella pidió, que es el que hace que se sienta bien:
+     **primero la foto sola, y los datos medio segundo después.** Si aparece
+     todo junto se lee como un cambio de pantalla; escalonado se lee como que
+     la invitación estaba adentro del sobre.
+
+     CÓMO SE ELIGE: campo `empalme` del catálogo.
+       · `'blanco'` (por defecto) — para los videos que YA terminan en blanco
+         (lazo, toscana, perlas). Se mantiene tal cual estaba: velo del color
+         del papel y entrada limpia. No se toca nada de lo ya aprobado.
+       · `'foto'` — para los que terminan mostrando el sobre abierto, como
+         `anillos`. El sobre se desvanece encima de la portada.
+
+     ⚠️ Los textos se retienen agregándole una clase al `<html>`, no tocando
+        los nodos: el motor los repinta y cualquier `style` inline se pierde.
+     ⚠️ Y SIEMPRE se destraban, aunque algo falle: hay un plazo máximo. Dejar
+        la portada sin nombres sería mucho peor que el efecto que se gana.
+
    ★★★★★ EL ATAJO SE QUEDABA PEGADO CON EL SOBRE VIEJO  (3/9/2026)
 
      Se cambió el sobre de la muestra al nuevo (`anillos`), se verificó que
@@ -46,88 +81,56 @@
         que la abrieron antes seguían viendo el viejo.
 
      CÓMO SE ARREGLA
-       · El ciclo NO se corta hasta que llegó el dato real (`revisar()` devuelve
-         `false` mientras `INVEV.fx.sobre` esté vacío, aunque el atajo ya haya
-         puesto algo en pantalla).
+       · El ciclo NO se corta hasta que llegó el dato real.
        · Se guarda QUÉ sobre está puesto (`armadoModelo`). Si el dato real no
-         coincide, se corrige.
-       · La corrección la hace `actualizar()`, que cambia **solamente** el
-         video, el póster y el color. ⚠️ NO se vuelve a llamar a `armar()`:
-         eso engancharía una segunda tanda de listeners sobre el mismo
-         documento y `abrir()` terminaría llamándose dos veces.
-       · Y si el invitado YA tocó (`.abriendo`), no se cambia nada: no se le
-         mueve el sobre abajo del dedo mientras se está abriendo.
+         coincide, se corrige con `actualizar()`, que cambia sólo el video, el
+         póster y el color. ⚠️ NO se vuelve a llamar a `armar()`: engancharía
+         una segunda tanda de listeners y `abrir()` se llamaría dos veces.
+       · Y si el invitado YA tocó, no se cambia nada abajo del dedo.
 
-     → La regla general, que ya apareció con las paletas y con el itinerario:
-       **un atajo de caché tiene que saber cómo corregirse.** Mostrar algo
-       viejo al instante está bien; quedarse con lo viejo, no.
+     → La regla general: **un atajo de caché tiene que saber corregirse.**
 
    ★★ LA NITIDEZ SE PIERDE EN EL ENCUADRE, NO EN EL ARCHIVO  (2/9/2026)
      Maki: «en el iphone la calidad se ve horrible». La causa no era la
      compresión: era `object-fit: cover`.
 
-     Las cuentas, en un iPhone de 1179 × 2556 píxeles reales y un video de
-     1080 × 1920:
-       · con `cover` hay que tapar toda la pantalla, y como el teléfono es más
-         alargado que el video, se agranda **1,33×** y se recorta casi un 20%
-         de los costados;
+     En un iPhone de 1179 × 2556 y un video de 1080 × 1920:
+       · con `cover` se agranda **1,33×** y se recorta casi un 20% de los lados;
        · con `contain` entra entero y se agranda **1,09×**.
 
-     Se ve mucho mejor Y se ve el sobre completo, que para un objeto
-     fotografiado es lo correcto: recortarlo nunca estuvo bien. Arriba y abajo
-     quedan dos franjas del color del papel, y eso se lee como el sobre apoyado
-     sobre una superficie.
+     → Regla: un objeto fotografiado va CONTENIDO, no recortado.
 
-     → Regla: un objeto fotografiado va CONTENIDO, no recortado. `cover` es
-       para fondos, no para piezas.
-     → Y el techo real es el archivo: Flow entrega 720 y todo lo que se hace
-       después es agrandar. Acá se sube a 1080 con lanczos antes de publicarlo.
-
-   ★ EL FUNDIDO A BLANCO SE HACE ACÁ, NO EN EL ARCHIVO  (2/9/2026)
-     Primero se horneó el fundido dentro del mp4 con ffmpeg. Mal: obligaba a
-     recomprimir todo el video, y sobre un fondo gris parejo la compresión se
-     nota enseguida. El fundido lo hace un velo por CSS, del color EXACTO con
-     el que arranca la invitación, así el empalme es perfecto por definición.
+   ★ EL FUNDIDO SE HACE ACÁ, NO EN EL ARCHIVO  (2/9/2026)
+     Hornearlo con ffmpeg obligaba a recomprimir todo el video y sobre un fondo
+     gris parejo la compresión se nota. Va por CSS.
 
    ★ Y EL PÓSTER ES MEDIA CALIDAD DEL SOBRE
-     El póster es lo que se ve ANTES de tocar. Si sale comprimido, el sobre
-     parece feo aunque el video esté perfecto. Se saca del video ya agrandado
-     y en máxima calidad.
+     Es lo que se ve ANTES de tocar. Se saca del video ya agrandado, en máxima
+     calidad.
 
    ★★ LOS VIDEOS GENERADOS RESPIRAN: SE ABREN Y SE VUELVEN A CERRAR (2/9/2026)
      El sobre de Perlas llega a su punto más abierto cerca de los 2,6 s y en el
-     segundo final se cierra de nuevo. Por eso el velo arranca en el momento
-     más abierto (`duration - ANTES`), no al terminar.
-     → Al sumar un sobre nuevo: sacarle cuadros con ffmpeg y BUSCAR el momento
-       más abierto. El mejor cuadro casi nunca es el último.
+     segundo final se cierra de nuevo. Por eso el velo arranca en el momento más
+     abierto (`duration - ANTES`), no al terminar.
+     → Al sumar un sobre nuevo: sacarle cuadros y BUSCAR el momento más abierto.
 
    ★★★ EL `<video>` DEL MOTOR VIENE CON `autoplay` (2/9/2026)
-     `#env-vid` trae `autoplay` escrito en el HTML. Con el sobre de triángulos
-     no se notaba porque estaba escondido; acá la invitación **se abría sola**.
-     Se le saca el atributo y se lo deja en pausa. Y el velo sólo puede arrancar
-     si el invitado ya tocó.
+     Con el sobre de triángulos no se notaba porque estaba escondido; acá la
+     invitación **se abría sola**. Se le saca el atributo y se lo deja en pausa.
 
    ★★★ Y SAFARI LE PONE SUS PROPIOS CONTROLES (2/9/2026)
-     En la Mac apareció la barra de reproducción encima del sobre. Pasa cuando
-     Safari bloquea el autoplay. No alcanza con `controls = false`: hay que
-     apagar los pseudo-elementos `::-webkit-media-controls*`, y para el video
-     ESTÉ DONDE ESTÉ, porque aparecen antes de que se ponga la clase.
+     Hay que apagar los pseudo-elementos `::-webkit-media-controls*`, y para el
+     video ESTÉ DONDE ESTÉ, porque aparecen antes de que se ponga la clase.
 
    ★★★★ EL PRIMER SEGUNDO TAMBIÉN ES LA INVITACIÓN  (2/9/2026)
-     Maki: «no quiero ver más la primera imagen esa», «apenas abrís, 1 segundo
-     o más». Eran dos cosas: la tapa escondía una LISTA y por ahí se colaban el
-     monograma y el botón INGRESA (ahora esconde todos los hijos de `#env`), y
-     la espera del dato (ahora el sobre elegido se guarda en `localStorage`, así
-     que desde la segunda visita aparece al instante).
+     La tapa esconde TODOS los hijos de `#env`, y el sobre elegido se guarda en
+     `localStorage` para que desde la segunda visita aparezca al instante.
      → Regla: mientras se espera un dato no se muestra una versión provisoria.
-       Se muestra NADA, y lo que aparece después aparece con un fundido.
 
-   ⚠️ EL TOQUE VA EN CAPTURA SOBRE EL DOCUMENTO. Escuchar el click en `#env` no
-      sirve: el motor ya tenía SU listener ahí y entraba de una sin dejar correr
-      el video. Lo que funciona es `document.addEventListener('click', …, true)`.
+   ⚠️ EL TOQUE VA EN CAPTURA SOBRE EL DOCUMENTO. El motor ya tenía SU listener
+      en `#env` y entraba de una sin dejar correr el video.
 
-   ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Reloj de seguridad: unos
-      segundos después de TOCAR se llama a `abrir()` pase lo que pase.
+   ⚠️ SI EL VIDEO NO CORRE, EL INVITADO ENTRA IGUAL. Reloj de seguridad.
 
    ⚠️ NO TOCA NADA SI EL SOBRE NO ES DEL CATÁLOGO.
    ============================================================================ */
@@ -135,10 +138,11 @@
 
   var FUNDIDO = 1.0;   /* cuánto dura el velo blanco */
   var ANTES   = 1.4;   /* cuánto antes del final arranca: el sobre se cierra */
+  var DATOS   = 550;   /* cuánto esperan los textos de la portada, en ms */
+  var TOPE    = 3500;  /* plazo máximo para destrabarlos, pase lo que pase */
   var listo = false;
 
-  /* ⚠️ QUÉ SOBRE ESTÁ PUESTO EN PANTALLA AHORA MISMO. Sin esto no hay forma de
-     saber que el atajo puso uno viejo. Ver la nota del encabezado. */
+  /* ⚠️ QUÉ SOBRE ESTÁ PUESTO EN PANTALLA AHORA MISMO. */
   var armadoModelo = null;
 
   function ev()  { return (window.INVEV || {}); }
@@ -207,6 +211,35 @@
   ].join('\n');
   (document.head || document.documentElement).appendChild(sinControles);
 
+  /* ---- LOS TEXTOS DE LA PORTADA, RETENIDOS ---------------------------------
+     Se retienen con una CLASE en el <html>, no tocando los nodos: el motor
+     repinta la portada y cualquier estilo puesto a mano se pierde. */
+  (function cssDatos() {
+    var s = document.createElement('style');
+    s.id = 'col-sobre-datos';
+    s.textContent = [
+      'html.inv-datos-esperan .portada .c,',
+      'html.inv-datos-esperan .portada .scrollcue{opacity:0!important}',
+      '.portada .c,.portada .scrollcue{transition:opacity .75s ease}',
+      /* la foto se asienta apenas, como si saliera del sobre */
+      'html.inv-datos-esperan .portada .pbg{transform:scale(1.045)}',
+      '.portada .pbg{transition:transform 1.1s cubic-bezier(.22,.72,.28,1)}'
+    ].join('\n');
+    (document.head || document.documentElement).appendChild(s);
+  })();
+
+  var destrabado = false;
+  function retenerDatos() {
+    if (destrabado) return;
+    document.documentElement.classList.add('inv-datos-esperan');
+    /* ⚠️ red de seguridad: nunca dejar la portada sin nombres */
+    setTimeout(soltarDatos, TOPE);
+  }
+  function soltarDatos() {
+    destrabado = true;
+    document.documentElement.classList.remove('inv-datos-esperan');
+  }
+
   (function frenarAutoplay() {
     var v = document.getElementById('env-vid');
     if (!v) { setTimeout(frenarAutoplay, 20); return; }
@@ -241,8 +274,7 @@
       '#env.carta-video{background:' + color + '!important;cursor:pointer;',
       '  transition:opacity .6s ease,visibility .6s ease}',
 
-      /* ⚠️ CONTAIN, no cover: el sobre entra entero y casi no se agranda.
-         Con cover se estiraba 1,33× y se comía los costados. */
+      /* ⚠️ CONTAIN, no cover */
       '#env.carta-video #env-vid{display:block!important;',
       '  position:fixed;inset:0;width:100%;height:100%;',
       '  object-fit:contain;background:' + color + ';',
@@ -253,6 +285,11 @@
       '  background:' + color + ';opacity:0;',
       '  transition:opacity ' + FUNDIDO + 's ease-in}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
+
+      /* ---- empalme 'foto': el sobre se apaga y deja ver la portada ---- */
+      '#env.carta-video.revelando{opacity:0!important;',
+      '  transition:opacity ' + FUNDIDO + 's ease-in!important}',
+      '#env.carta-video.revelando #col-sobre-velo{opacity:0!important}',
 
       '#env.carta-video .vhint{display:block!important;',
       '  position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:10;',
@@ -265,16 +302,11 @@
     ].join('\n');
   }
 
-  /* ⚠️ LA CORRECCIÓN DEL ATAJO.
-     Cambia SÓLO el video, el póster y el color. No vuelve a enganchar los
-     listeners: si se llamara otra vez a `armar()` quedarían dos tandas sobre
-     el mismo documento y `abrir()` se llamaría dos veces. */
+  /* ⚠️ LA CORRECCIÓN DEL ATAJO: sólo video, póster y color. */
   function actualizar(m, id) {
     var env = document.getElementById('env');
     var vid = document.getElementById('env-vid');
     if (!env || !vid) return false;
-
-    /* si ya lo tocó, no se le cambia el sobre abajo del dedo */
     if (env.classList.contains('abriendo')) return false;
 
     estilo(m.color || '#f4f2ee');
@@ -283,6 +315,7 @@
       vid.setAttribute('src', m.video);
       try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
     }
+    env.dataset.empalme = (m.empalme === 'foto') ? 'foto' : 'blanco';
     armadoModelo = id;
     return true;
   }
@@ -296,6 +329,8 @@
     estilo(color);
 
     env.className = 'carta-video';
+    env.dataset.empalme = (m.empalme === 'foto') ? 'foto' : 'blanco';
+
     ['tri-seal', 'e-back', 'e-pocket', 'e-flap'].forEach(function (id2) {
       var n = document.getElementById(id2);
       if (n && n.parentNode) n.parentNode.removeChild(n);
@@ -337,6 +372,8 @@
     sacarTapa();
     setTimeout(function () { env.classList.add('puesto'); }, 30);
 
+    function esFoto() { return env.dataset.empalme === 'foto'; }
+
     var abierto = false;
     function entrar() {
       if (abierto) return;
@@ -345,6 +382,8 @@
       env.classList.add('gone');
       env.style.opacity = '0';
       env.style.visibility = 'hidden';
+      /* los datos entran un poco después que la foto */
+      setTimeout(soltarDatos, esFoto() ? DATOS : 0);
     }
 
     var fundiendo = false;
@@ -352,7 +391,13 @@
       if (fundiendo) return;
       if (!env.classList.contains('abriendo')) return;
       fundiendo = true;
-      env.classList.add('fundiendo');
+      if (esFoto()) {
+        /* el sobre se apaga ENCIMA de la portada, que ya está dibujada */
+        retenerDatos();
+        env.classList.add('revelando');
+      } else {
+        env.classList.add('fundiendo');
+      }
       setTimeout(entrar, FUNDIDO * 1000);
     }
 
@@ -390,9 +435,7 @@
     return true;
   }
 
-  /* ---- 2. ATAJO: si ya vino antes, se pone el sobre sin esperar la base ----
-     ⚠️ Pone algo en pantalla, pero NO da el tema por cerrado: la corrección la
-     hace `revisar()` cuando llega el dato de verdad. */
+  /* ---- 2. ATAJO: pone algo al instante, pero NO cierra el tema ---- */
   (function atajo() {
     if (listo) return;
     var id = recordado();
@@ -407,13 +450,9 @@
     var hayDato = !!(cat && s && Object.keys(s).length);
 
     if (listo) {
-      /* ⚠️ mientras no llegue el dato real seguimos mirando: si el atajo puso
-         un sobre viejo, esta es la única oportunidad de corregirlo */
       if (!hayDato) return false;
-
       var esCarta = String(s.tipo || '') === 'carta';
       recordar(esCarta ? s.modelo : '');
-
       var real = esCarta ? delCatalogo(s.modelo) : null;
       if (real && s.modelo !== armadoModelo) actualizar(real, s.modelo);
       return true;
