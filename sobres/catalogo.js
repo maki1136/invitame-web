@@ -24,8 +24,6 @@
    Qué significa cada cosa:
      nombre : lo que ve la diseñadora en la lista del panel
      video  : la apertura del sobre, sin nombres ni fechas. Genérico y reusable.
-              Termina cuando la tarjeta llena la pantalla: ahí toma el relevo la
-              invitación real, que es la que tiene la foto y los datos.
      poster : el primer cuadro, para que el sobre cerrado se vea al instante
               mientras el video todavía carga. TAMBIÉN se usa como fondo
               desenfocado en la compu (ver parte 2).
@@ -33,15 +31,39 @@
               (el modo viejo; queda como respaldo).
      lacre  : imagen del sello para el modo sin video.
      color  : color sugerido para la carta, si la diseñadora no elige uno.
+     empalme: CÓMO ENTRA LA INVITACIÓN cuando el sobre termina (ver abajo).
      texto  : sólo en las piezas que SE ESCRIBEN SOLAS (ver más abajo).
 
    El evento guarda SOLO el id (fx.sobre.modelo), nunca la URL. Así se puede
    cambiar el video de un sobre después sin tocar ninguna invitación entregada.
 
-   ⚠️ Los sobres `lazo`, `toscana` y `perlas` TERMINAN EN BLANCO, no en la
-   tarjeta. La invitación entra desde ese blanco, así que el empalme es un
-   fundido y no se ve ningún corte. Por eso su `color` es casi blanco: es el
-   color con el que arranca la pantalla justo cuando el video se apaga.
+   ★★★ EL CAMPO `empalme`  (3/9/2026)
+
+     Maki: «¿te acordás que habíamos quedado en que el sobre se abría y aparecía
+     abajo la foto de la invitación directo, y ahí recién aparecían los datos?».
+
+     Hay dos maneras de empalmar, y depende de CÓMO TERMINA EL VIDEO:
+
+       'blanco'  (por defecto)
+         Para los videos que ya terminan en blanco: `lazo`, `toscana`, `perlas`.
+         Un velo del color del papel tapa el final y la invitación entra desde
+         ese blanco. Es lo que había y funciona; no se toca.
+
+       'foto'
+         Para los que terminan MOSTRANDO EL SOBRE ABIERTO, como `anillos`.
+         El sobre se desvanece encima de la portada real —que ya está dibujada
+         debajo, porque `#env` es una tapa fija— y los textos de la portada
+         entran medio segundo después que la foto.
+         Es exactamente lo del MAESTRO que armó Maki, pero con la foto de CADA
+         pareja en vez de una pegada dentro del video.
+
+     ⚠️ No es una preferencia de diseño: es una propiedad del archivo. Si un
+        video termina en blanco y se pone en 'foto', se ve un blanco de más;
+        si termina abierto y se pone en 'blanco', se ve el corte.
+
+   ⚠️ Los sobres `lazo`, `toscana` y `perlas` TERMINAN EN BLANCO. Por eso su
+   `color` es casi blanco: es el color con el que arranca la pantalla justo
+   cuando el video se apaga.
 
    ★ CÓMO SE ELIGE ESE `color`, BIEN: se MIDE, no se estima. Se saca el último
      cuadro del video y se lee el píxel del centro. En `perlas` el fundido se
@@ -49,13 +71,12 @@
      un nivel). Va el valor MEDIDO, no el pedido.
 
    ★★ Y OJO CON QUÉ PARTE SE MIDE  (3/9/2026)
-     En los sobres que NO se funden a blanco solos —como `anillos`, donde el
-     velo blanco lo pone el módulo por CSS— el último cuadro es el sobre YA
-     ABIERTO, con sombra: medirlo da un gris sucio (#c9c2b5) que no sirve.
-     Ahí lo que hay que medir es EL PAPEL, en una esquina del PRIMER cuadro,
-     porque ese `color` es el que rellena las barras cuando el video va
-     contenido en la pantalla. Si se pone el promedio, se ven dos franjas
-     oscuras arriba y abajo del sobre.
+     En los sobres que NO se funden a blanco solos —como `anillos`— el último
+     cuadro es el sobre YA ABIERTO, con sombra: medirlo da un gris sucio
+     (#c9c2b5) que no sirve. Ahí lo que hay que medir es EL PAPEL, en una
+     esquina del PRIMER cuadro, porque ese `color` es el que rellena las barras
+     cuando el video va contenido en la pantalla. Si se pone el promedio, se
+     ven dos franjas oscuras arriba y abajo del sobre.
    ============================================================================ */
 window.SOBRES_INVITAME = {
 
@@ -127,21 +148,21 @@ window.SOBRES_INVITAME = {
          se ve blando.
        · Recodificado en **Constrained Baseline**, no High.
 
-     ⚠️ ESTE VIDEO NO SE FUNDE A BLANCO SOLO. Termina mostrando el sobre
-        abierto. El velo blanco lo pone `/efectos/sobre-catalogo.js` por CSS,
-        arrancando 1,4 s antes del final. Si algún día se cambia la duración,
-        hay que mirar que a esa altura el sobre ya se haya abierto.
+     ⚠️ ESTE VIDEO NO SE FUNDE A BLANCO SOLO: termina mostrando el sobre
+        abierto. Por eso va con `empalme:"foto"` — el sobre se desvanece
+        encima de la portada real. Ver la nota del campo `empalme` arriba.
 
      ⚠️ LA IA SE LE FUE EL RELIEVE EN EL CAMINO: arranca con damasco de
         volutas y termina con ramitas de rosas. En movimiento no se nota
-        porque el velo tapa el final, pero si algún día se regenera, conviene
-        pedirle que el relieve no cambie.
+        porque para entonces ya se está desvaneciendo, pero si algún día se
+        regenera, conviene pedirle que el relieve no cambie.
      ---------------------------------------------------------------------- */
   anillos: {
-    nombre: "Anillos · marfil en relieve, lacre de dos anillos (video)",
-    video:  "/sobres/sobre-anillos.mp4",
-    poster: "/sobres/sobre-anillos-poster.jpg",
-    color:  "#f4f2ec"
+    nombre:  "Anillos · marfil en relieve, lacre de dos anillos (video)",
+    video:   "/sobres/sobre-anillos.mp4",
+    poster:  "/sobres/sobre-anillos-poster.jpg",
+    color:   "#f4f2ec",
+    empalme: "foto"
   },
 
   'carta-toscana': {
