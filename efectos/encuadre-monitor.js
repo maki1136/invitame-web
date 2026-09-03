@@ -44,6 +44,35 @@
         paleta, no para una colección. Pedido de Maki: «pensá que este cambio es
         para todas las invitaciones».
 
+   ★★★ UN POCO MÁS ANCHA, PERO ATADA AL ALTO  (3/9/2026)
+
+     Maki: «¿se puede llevar un poco más ancho sin romper lo que se ve en el
+     iPhone, que está bien? La de Invítame de ahora es sólo un poco más ancha».
+
+     Se puede, y no puede romper el celular: TODO ESTO VIVE DENTRO DE UN
+     @media (min-width:680px) y un iPhone no pasa de 430 px. Nunca lo lee.
+
+     Pero el límite no es técnico, es tipográfico:
+
+       ⚠️ LA RAÍZ DEL DOCUMENTO ESTÁ EN 16 px FIJOS. Al ensanchar la caja, la
+          foto crece pero **las letras no**. Pasados los ~600 px el texto queda
+          nadando en el medio y la pieza empieza a leerse como una página web
+          estirada — que es exactamente el defecto del sistema viejo de
+          invitameok.com, con su contenedor de 1170 px.
+
+     Por eso el ancho ahora es `clamp(natural, 62vh, 600px)`:
+       · nunca más angosta que antes (el piso es el ancho natural, 474);
+       · en una ventana alta se acerca a 600 y se siente holgada;
+       · en una ventana baja se queda chica sola, que es lo correcto: si no hay
+         alto, una columna ancha queda como un cartel;
+       · el techo de 600 es a propósito. No subirlo sin agrandar la tipografía.
+
+     ⚠️ Y LA PORTADA NO SEGUÍA AL MARCO. Se le agrandaba el `.frame` y todos
+        los `.sec` obedecían, pero la portada se quedaba en 474 porque el motor
+        se lo declara ella misma. Ahora se la ata a la misma variable — pero
+        SÓLO DESPUÉS de haber medido el ancho natural (ver abajo), o volvemos
+        al pozo de la realimentación.
+
    ⚠️⚠️ LA COLUMNA SE COMÍA A SÍ MISMA. ESTO SE VIO EN SAFARI Y ERA GRAVE.
 
    Qué pasaba: se medía el ancho de `.portada` y con ese número se le ponía un
@@ -63,12 +92,16 @@
       puede realimentar.
    2. Si el motor no lo declara en píxeles, se mide — pero SACANDO primero la
       restricción del marco, para medir la portada libre y no la ya apretada.
-   3. Y se FIJA UNA SOLA VEZ. Una vez que hay un número bueno, no se vuelve a
-      medir salvo que cambie el tamaño de la ventana, y ahí se repite el
-      procedimiento completo (soltar, medir, fijar).
+   3. Y SE MIDE UNA SOLA VEZ EN TODA LA VIDA DE LA PÁGINA. Ni siquiera al
+      cambiar el tamaño de la ventana: el ancho natural es una propiedad del
+      diseño, no de la ventana. Al hacer resize se recalcula el OBJETIVO a
+      partir del natural guardado, nunca se vuelve a medir la pantalla.
 
    ⚠️ SI ALGUIEN VUELVE A PONER UN `medirColumna()` QUE LEA
    `getBoundingClientRect()` SIN SOLTAR EL MARCO, VUELVE A PASAR.
+   ⚠️ Y SI ALGUIEN MIDE LA PORTADA DESPUÉS DE ATARLA A `--inv-col`, TAMBIÉN:
+   estaría leyendo su propio número. Por eso la regla de la portada se inyecta
+   recién cuando ya hay un natural guardado.
 
    Además hay un piso de 320 px: por debajo de eso ya no es una invitación, es
    una tira, y conviene que no se aplique nada antes que aplicar algo roto.
@@ -79,6 +112,10 @@
 
   var MIN_VENTANA = 680;   /* de acá para arriba se encuadra */
   var MIN_COLUMNA = 320;   /* menos que esto no es una columna, es una tira */
+
+  /* ★ el ensanche. Ver el bloque de arriba antes de tocar estos dos números. */
+  var TECHO      = 600;    /* más ancho que esto y el texto queda nadando */
+  var PROPORCION = 0.62;   /* del alto de la ventana */
 
   function laPortada() {
     return document.querySelector('.portada');
@@ -138,8 +175,23 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
-  /* ⚠️ una vez que hay un ancho bueno, se congela: no se vuelve a medir */
-  var anchoFijado = 0;
+  /* ⚠️ ESTA REGLA SE INYECTA APARTE, Y RECIÉN CUANDO YA MEDIMOS EL NATURAL.
+     Si estuviera desde el arranque, `anchoDeclarado()` leería nuestro propio
+     número en vez del del motor, y volvería la realimentación. */
+  function atarLaPortada() {
+    if (document.getElementById('encuadre-portada')) return;
+    var s = document.createElement('style');
+    s.id = 'encuadre-portada';
+    s.textContent =
+      '@media (min-width:' + MIN_VENTANA + 'px){\n' +
+      '  .portada{max-width:var(--inv-col,474px)}\n' +
+      '}';
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  /* El ancho natural se mide UNA vez y no se vuelve a medir nunca más. */
+  var anchoNatural = 0;
+  var anchoAplicado = 0;
 
   /* El ancho que el motor le declara a la portada. Es el dato bueno porque no
      depende de nada que hagamos nosotros. */
@@ -159,16 +211,35 @@
     return w;
   }
 
+  /* A partir del natural y del alto de la ventana, cuánto tiene que medir hoy.
+     Nunca más angosta que el natural, nunca más ancha que el techo, y nunca
+     tan ancha que no entre en la ventana. */
+  function objetivo() {
+    var porAlto = Math.round(window.innerHeight * PROPORCION);
+    var w = Math.max(anchoNatural, Math.min(porAlto, TECHO));
+    return Math.min(w, window.innerWidth - 40);
+  }
+
+  function aplicar() {
+    if (!anchoNatural) return;
+    var w = objetivo();
+    if (w === anchoAplicado) return;
+    anchoAplicado = w;
+    document.documentElement.style.setProperty('--inv-col', w + 'px');
+  }
+
   function medirColumna() {
-    if (anchoFijado) return true;
+    if (anchoNatural) { aplicar(); return true; }
+
     var p = laPortada();
     if (!p) return false;
 
     var w = anchoDeclarado(p) || anchoMedidoLibre(p);
 
     if (w >= MIN_COLUMNA && w < window.innerWidth - 40) {
-      anchoFijado = w;
-      document.documentElement.style.setProperty('--inv-col', w + 'px');
+      anchoNatural = w;
+      aplicar();
+      atarLaPortada();   /* ⚠️ recién ahora, nunca antes de medir */
       return true;
     }
     return false;   /* todavía no se puede confiar: se reintenta */
@@ -207,16 +278,13 @@
     }, 250);
     setTimeout(function () { clearInterval(t); }, 12000);
 
-    /* Al cambiar el tamaño de la ventana se vuelve a empezar: se descongela,
-       se suelta el marco y se mide de nuevo. Nunca se mide encima de lo ya
-       apretado. */
+    /* Al cambiar el tamaño de la ventana se recalcula el objetivo a partir del
+       natural guardado. ⚠️ NO se vuelve a medir la portada: ya está atada a
+       `--inv-col` y mediría su propio número. */
     var espera = null;
     window.addEventListener('resize', function () {
       clearTimeout(espera);
-      espera = setTimeout(function () {
-        anchoFijado = 0;
-        medirColumna();
-      }, 200);
+      espera = setTimeout(aplicar, 200);
     });
   }
 
