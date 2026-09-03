@@ -19,6 +19,49 @@
    función global, así que un módulo puede armar la apertura con el video del
    catálogo y después llamar a la MISMA `abrir()` de siempre.
 
+   ★★★★★ EL ATAJO SE QUEDABA PEGADO CON EL SOBRE VIEJO  (3/9/2026)
+
+     Se cambió el sobre de la muestra al nuevo (`anillos`), se verificó que
+     estaba subido y publicado… y Maki lo abrió y vio el de antes:
+     «dejaste el otro sobre, no lo subiste».
+
+     Estaba subido. El problema era ESTE archivo:
+
+       1. `atajo()` mira `localStorage` y arma el sobre de la ÚLTIMA visita,
+          para que aparezca al instante sin esperar a Firestore. Bien.
+       2. Pero además ponía `listo = true`.
+       3. Y `revisar()` arrancaba con `if (listo) { …recordar…; return true; }`
+          — o sea que cuando por fin llegaba el dato de verdad, lo único que
+          hacía era GUARDAR el modelo nuevo. **Nunca cambiaba lo que ya estaba
+          puesto en pantalla.**
+       4. Encima, como devolvía `true`, el `setInterval` se cortaba en el
+          primer tic, antes de que llegara el dato.
+
+     Resultado: cualquiera que ya hubiera abierto esa invitación una vez seguía
+     viendo el sobre anterior PARA SIEMPRE, aunque en la base estuviera el
+     nuevo. Y no había ningún error en la consola.
+
+     ⚠️ ESTO NO ERA UN PROBLEMA DE LA MUESTRA: afectaba a TODAS. Cada vez que
+        Jazmín le cambia el sobre a una invitación ya entregada, los invitados
+        que la abrieron antes seguían viendo el viejo.
+
+     CÓMO SE ARREGLA
+       · El ciclo NO se corta hasta que llegó el dato real (`revisar()` devuelve
+         `false` mientras `INVEV.fx.sobre` esté vacío, aunque el atajo ya haya
+         puesto algo en pantalla).
+       · Se guarda QUÉ sobre está puesto (`armadoModelo`). Si el dato real no
+         coincide, se corrige.
+       · La corrección la hace `actualizar()`, que cambia **solamente** el
+         video, el póster y el color. ⚠️ NO se vuelve a llamar a `armar()`:
+         eso engancharía una segunda tanda de listeners sobre el mismo
+         documento y `abrir()` terminaría llamándose dos veces.
+       · Y si el invitado YA tocó (`.abriendo`), no se cambia nada: no se le
+         mueve el sobre abajo del dedo mientras se está abriendo.
+
+     → La regla general, que ya apareció con las paletas y con el itinerario:
+       **un atajo de caché tiene que saber cómo corregirse.** Mostrar algo
+       viejo al instante está bien; quedarse con lo viejo, no.
+
    ★★ LA NITIDEZ SE PIERDE EN EL ENCUADRE, NO EN EL ARCHIVO  (2/9/2026)
      Maki: «en el iphone la calidad se ve horrible». La causa no era la
      compresión: era `object-fit: cover`.
@@ -93,6 +136,10 @@
   var FUNDIDO = 1.0;   /* cuánto dura el velo blanco */
   var ANTES   = 1.4;   /* cuánto antes del final arranca: el sobre se cierra */
   var listo = false;
+
+  /* ⚠️ QUÉ SOBRE ESTÁ PUESTO EN PANTALLA AHORA MISMO. Sin esto no hay forma de
+     saber que el atajo puso uno viejo. Ver la nota del encabezado. */
+  var armadoModelo = null;
 
   function ev()  { return (window.INVEV || {}); }
   function sobre() { return ((ev().fx || {}).sobre) || {}; }
@@ -218,7 +265,29 @@
     ].join('\n');
   }
 
-  function armar(m) {
+  /* ⚠️ LA CORRECCIÓN DEL ATAJO.
+     Cambia SÓLO el video, el póster y el color. No vuelve a enganchar los
+     listeners: si se llamara otra vez a `armar()` quedarían dos tandas sobre
+     el mismo documento y `abrir()` se llamaría dos veces. */
+  function actualizar(m, id) {
+    var env = document.getElementById('env');
+    var vid = document.getElementById('env-vid');
+    if (!env || !vid) return false;
+
+    /* si ya lo tocó, no se le cambia el sobre abajo del dedo */
+    if (env.classList.contains('abriendo')) return false;
+
+    estilo(m.color || '#f4f2ee');
+    vid.setAttribute('poster', m.poster || '');
+    if (vid.getAttribute('src') !== m.video) {
+      vid.setAttribute('src', m.video);
+      try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
+    }
+    armadoModelo = id;
+    return true;
+  }
+
+  function armar(m, id) {
     var env = document.getElementById('env');
     var vid = document.getElementById('env-vid');
     if (!env || !vid) return false;
@@ -227,8 +296,8 @@
     estilo(color);
 
     env.className = 'carta-video';
-    ['tri-seal', 'e-back', 'e-pocket', 'e-flap'].forEach(function (id) {
-      var n = document.getElementById(id);
+    ['tri-seal', 'e-back', 'e-pocket', 'e-flap'].forEach(function (id2) {
+      var n = document.getElementById(id2);
       if (n && n.parentNode) n.parentNode.removeChild(n);
     });
     [].forEach.call(env.querySelectorAll('.triflap'), function (n) {
@@ -317,33 +386,45 @@
       if (env.classList.contains('abriendo')) fundir();
     });
 
+    armadoModelo = id;
     return true;
   }
 
-  /* ---- 2. ATAJO: si ya vino antes, se pone el sobre sin esperar la base ---- */
+  /* ---- 2. ATAJO: si ya vino antes, se pone el sobre sin esperar la base ----
+     ⚠️ Pone algo en pantalla, pero NO da el tema por cerrado: la corrección la
+     hace `revisar()` cuando llega el dato de verdad. */
   (function atajo() {
     if (listo) return;
-    var m = delCatalogo(recordado());
+    var id = recordado();
+    var m = delCatalogo(id);
     if (!m) { if (!catalogo()) setTimeout(atajo, 40); return; }
-    if (armar(m)) listo = true;
+    if (armar(m, id)) listo = true;
   })();
 
   function revisar() {
-    if (listo) {
-      var s0 = sobre();
-      if (s0 && s0.modelo !== undefined) {
-        recordar(String(s0.tipo || '') === 'carta' ? s0.modelo : '');
-      }
-      return true;
-    }
     var s = sobre();
     var cat = catalogo();
-    if (!cat || !s || !Object.keys(s).length) return false;
+    var hayDato = !!(cat && s && Object.keys(s).length);
+
+    if (listo) {
+      /* ⚠️ mientras no llegue el dato real seguimos mirando: si el atajo puso
+         un sobre viejo, esta es la única oportunidad de corregirlo */
+      if (!hayDato) return false;
+
+      var esCarta = String(s.tipo || '') === 'carta';
+      recordar(esCarta ? s.modelo : '');
+
+      var real = esCarta ? delCatalogo(s.modelo) : null;
+      if (real && s.modelo !== armadoModelo) actualizar(real, s.modelo);
+      return true;
+    }
+
+    if (!hayDato) return false;
 
     var m = elegido();
     recordar(m ? s.modelo : '');
     if (!m) { sacarTapa(); listo = true; return true; }
-    if (armar(m)) { listo = true; return true; }
+    if (armar(m, s.modelo)) { listo = true; return true; }
     return false;
   }
 
