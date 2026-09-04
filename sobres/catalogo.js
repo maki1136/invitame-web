@@ -27,6 +27,10 @@
      poster : el primer cuadro, para que el sobre cerrado se vea al instante
               mientras el video todavía carga. TAMBIÉN se usa como fondo
               desenfocado en la compu, y como LA FOTO en apertura 'solapas'.
+     solapa : SOLO en apertura 'solapas'. Segunda imagen, con transparencia,
+              que trae la solapa de arriba MÁS EL LACRE. Ver abajo.
+     eje    : SOLO en apertura 'solapas'. Dónde cae la punta de la solapa, en
+              % de la foto. Por defecto 50/50.
      img    : sin video, el sobre se dibuja por CSS con esta imagen de papel
               (el modo viejo; queda como respaldo).
      lacre  : imagen del sello para el modo sin video.
@@ -60,7 +64,8 @@
 
      ⚠️ 'solapas' NO necesita ningún archivo nuevo. Usa el póster.
      ⚠️ Y asume que el lacre está en el CENTRO de la foto. Si un sobre nuevo lo
-        tiene más arriba, se corre `EJE` en /efectos/sobre-catalogo.js.
+        tiene más arriba, se corre `EJE` en /efectos/sobre-catalogo.js, o se
+        pone `eje` en la ficha del sobre (ver `maestro`).
 
    ★★★ EL CAMPO `empalme`  (3/9/2026)
 
@@ -156,6 +161,40 @@ window.SOBRES_INVITAME = {
     color:    "#f4f2ec",
     apertura: "solapas",
     empalme:  "foto"
+  },
+
+  /* ---- ★ EL SOBRE MAESTRO  (4/9/2026) -----------------------------------
+     El que copia la muestra que mandó Maki (@inviteness). Medida contra
+     medida, la diferencia con los nuestros no era el movimiento: era LA FORMA.
+
+       · el de ellos tiene UNA sola solapa triangular arriba y, debajo del
+         lacre, PAPEL LISO;
+       · los nuestros tenían la X de cuatro solapas cruzándose en el centro.
+         Al levantar la de arriba quedaba un rombo oscuro con dos cuñas
+         filosas: una figura geométrica, no un sobre abierto.
+
+     Es el primero con `solapa`: una SEGUNDA imagen, recortada con
+     transparencia, que trae el triángulo de arriba MÁS EL LACRE. Por eso acá
+     el lacre viaja pegado a la solapa en vez de partirse al medio, que es lo
+     que pasa cuando las cuatro hojas salen de la misma foto.
+
+     ⚠️ PARA GENERAR UNO NUEVO EN FLOW: costó tres tiradas acertar. Si se le
+        pide "sobre visto desde atrás" devuelve SIEMPRE la X de cuatro puntas.
+        Lo que funciona es decirlo en positivo: «todo lo que está debajo de ese
+        punto es una hoja de papel continua, sin ningún doblez». El prompt
+        entero está en el proyecto, en SOBRE-MAESTRO-spec-json.md.
+
+     `eje` es dónde cae la punta de la solapa, en % de la foto. MEDIDO sobre la
+     imagen: (50,5 % · 52,3 %). El lacre la tapa entera.
+     ---------------------------------------------------------------------- */
+  maestro: {
+    nombre:   "Maestro · marfil botánico, lacre liso (foto)",
+    poster:   "/sobres/sobre-maestro.jpg",
+    solapa:   "/sobres/sobre-maestro-solapa.webp",
+    color:    "#e8e2d8",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.5, y: 52.3 }
   },
 
   'carta-toscana': {
