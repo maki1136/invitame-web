@@ -504,6 +504,9 @@
      lugares e invitados son del cliente.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`.
+   · `pase-voz.js` no tiene orden fuerte: se cuelga de `.frame` y se mete ANTES
+     de los contactos. `panel-pase-voz.js` va DESPUÉS: es su bloque del panel, y
+     el único que sabe medir la onda del audio.
    · `perla.js` va ANTES de `motivo.js`: le deja la foto en `window.INVPERLA`.
    · `motivo.js` va ÚLTIMO de los que dibujan: cuelga las perlas del marco y de
      los separadores, así que necesita que las secciones ya estén puestas.
@@ -571,6 +574,8 @@
     '/efectos/acordeon.js',            /* los "Ver mapa" abrían en blanco: recarga los iframes */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
     '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
+    '/efectos/pase-voz.js',            /* el ticket con el mensaje de voz de los anfitriones */
+    '/efectos/panel-pase-voz.js',      /* y sus veinte campos en el panel, con la onda medible */
     '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */
     '/efectos/motivo.js',              /* el motivo que recorre todo: por ahora, las perlas */
     '/efectos/panel-motivo.js',        /* y su bloque en el panel, para prenderlo y graduarlo */
