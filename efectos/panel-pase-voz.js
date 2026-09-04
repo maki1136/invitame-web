@@ -260,7 +260,14 @@
     var estadoSub = ayudita('Sirve mp3, m4a, wav o el audio de WhatsApp. Se sube y se mide solo.');
     fSub.appendChild(estadoSub);
     fSub.appendChild(oir);
-    cuerpo.appendChild(fSub);
+    /* ⚠️ VA EN `caja`, NO EN `cuerpo`, Y ESTO NO ES UN DETALLE. `cuerpo` se apaga
+       con `pointer-events:none` cuando el pase esta apagado — que es el estado
+       de fabrica. Con el subidor adentro, el boton para elegir el audio nacia
+       MUERTO: se veia, no se podia tocar, y como sin audio el pase no se puede
+       prender, no habia forma de salir de ahi. Maki se comio ese pozo el 4/9.
+       ⚠️ Y `pointer-events:''` en el hijo NO alcanza para revivirlo: hay que
+          sacarlo del padre apagado o poner 'auto' explicito. */
+    caja.insertBefore(fSub, cuerpo);
 
     /* ---- el link, por si ya esta subido en otro lado ---- */
     var iAudio = campo('Link del audio', 'audio', 'https://…/mensaje.m4a',
@@ -372,10 +379,11 @@
       cuerpo.style.opacity = prendido ? '1' : '.42';
       cuerpo.style.pointerEvents = prendido ? '' : 'none';
       aviso.style.display = (prendido && !(dd.audio || '').trim()) ? 'block' : 'none';
-      /* ⚠️ el subidor NUNCA se apaga: si el pase esta apagado justamente porque
-         falta el audio, tiene que poder subirse igual. */
+      /* el subidor vive FUERA de `cuerpo` (ver la nota de arriba), asi que no lo
+         alcanza el apagado. Se deja explicito igual: si alguien lo vuelve a
+         meter adentro, que al menos siga clickeable. */
       fSub.style.opacity = '1';
-      fSub.style.pointerEvents = '';
+      fSub.style.pointerEvents = 'auto';
     }
     acomodar();
 
