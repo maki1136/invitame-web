@@ -17,6 +17,49 @@
    celular, y el resto de la pantalla se llena con la propia foto de portada muy
    desenfocada más un viñeteado.
 
+   ★★★★★ UN iPAD NO ES UNA MAC CHICA ★★★★★  (4/9/2026)
+
+     Maki, abriendo la muestra en el iPad: «no solo es fina, o sea no ocupa toda
+     la pantalla, sino que se traba mal».
+
+     Las dos cosas salían de acá, y las dos por el mismo motivo: **este archivo
+     decidía por ANCHO DE VENTANA y nada más**. Un iPad vertical mide 768 px, o
+     sea que pasaba el `min-width:680px` y se llevaba el tratamiento de
+     escritorio entero.
+
+     Medido a 768 × 1024:
+
+       1. QUEDABA FINA. La columna se fija en 474 px. En una pantalla de 768 eso
+          es **el 62%**, con dos franjas borrosas a los costados. En una Mac
+          apaisada de 1440 esa misma columna se lee como una tarjeta apoyada y
+          está bien; en un iPad vertical se lee como que la invitación no cargó.
+
+       2. SE TRABABA. `#inv-lienzo` queda en `position:fixed`, midiendo
+          998 × 1331 px, con un `filter: blur()` encima. Una capa fija de ese
+          tamaño con desenfoque EN VIVO se recompone en cada cuadro del scroll.
+          Una Mac lo absorbe; Safari de iPad no. No es el peso de la página: es
+          esa sola capa.
+
+     LA REGLA NUEVA: se separa por CÓMO SE TOCA, no por cuánto mide.
+     `any-pointer: coarse` es verdadero en cualquier aparato con pantalla táctil
+     —iPad con o sin teclado— y falso en una Mac. Es el corte que buscábamos.
+
+     En una tablet, entonces:
+       · la invitación va A TODO EL ANCHO, como en el celular pero más grande;
+       · la portada y el pie vuelven a ser a sangre (sin la tarjeta de 474 px);
+       · NO se crea el lienzo desenfocado. Ni escondido: no se crea. Una capa
+         que existe con `display:none` igual se sigue armando en cada cambio.
+
+     ⚠️ NO SE ARREGLA SUBIENDO EL `min-width`. Un iPad Pro apaisado mide 1366:
+        cualquier número que deje afuera al iPad deja afuera media pantalla de
+        escritorio también.
+     ⚠️ EL TEXTO NO CRECE. La raíz del documento está en 16 px fijos (ver la
+        nota de más abajo), así que a todo el ancho las letras quedan algo
+        chicas para un iPad. Es a propósito por ahora: entre una invitación
+        angosta que se traba y una a todo el ancho con la tipografía del
+        celular, Maki pidió la segunda. Si algún día se quiere agrandar, hay que
+        nombrar cada rol tipográfico a mano — subir la raíz NO alcanza.
+
    ★★ Y LOS COSTADOS TIENEN QUE MERECER LA PANTALLA  (2/9/2026)
      Maki: «¿cómo hacemos para que en Mac la invitación se vea prolija a los
      costados?». El efecto YA existía —esto mismo— pero el resultado era un
@@ -115,6 +158,7 @@
    una tira, y conviene que no se aplique nada antes que aplicar algo roto.
 
    EN EL CELULAR NO HACE NADA: vive dentro de un @media de 680px para arriba.
+   EN UNA TABLET TAMPOCO: se planta solo (ver la nota del iPad, arriba de todo).
    ============================================================================ */
 (function () {
 
@@ -125,6 +169,17 @@
   var TECHO      = 580;    /* más ancho que esto y el texto queda nadando */
   var POR_ALTO   = 0.72;   /* del alto de la ventana: la invitación es vertical */
   var POR_ANCHO  = 0.52;   /* del ancho: para que siempre quede aire a los lados */
+
+  /* ⚠️ EL CORTE ENTRE TABLET Y ESCRITORIO. NO es por ancho: ver la nota del
+     iPad. `any-pointer:coarse` da verdadero en cualquier aparato con pantalla
+     táctil, aunque tenga teclado y trackpad enchufados, y falso en una Mac.
+     Si el navegador es viejo y no conoce la consulta, se porta como escritorio
+     (que es como venía funcionando). */
+  function esTactil() {
+    try {
+      return !!(window.matchMedia && matchMedia('(any-pointer: coarse)').matches);
+    } catch (e) { return false; }
+  }
 
   function laPortada() {
     return document.querySelector('.portada');
@@ -178,6 +233,24 @@
       '               0 54px 110px rgba(20,14,6,.34);',
       '    outline:1px solid rgba(255,255,255,.20);outline-offset:-1px}',
       '  .frame img{max-width:100%;height:auto}',
+      '}',
+
+      /* ---- LA TABLET ---------------------------------------------------------
+         Va DESPUÉS del bloque de escritorio a propósito: con la misma
+         especificidad, gana el que viene último. Así deshace de una lo que le
+         puso el escritorio Y lo que le pone el @media de 680 de i/index.html,
+         sin tener que pelear con !important ni tocar ese archivo (185 KB, no
+         entra en una subida).                                                */
+      '@media (min-width:' + MIN_VENTANA + 'px) and (any-pointer: coarse){',
+      '  #inv-lienzo,#inv-tinte,#inv-vinieta{display:none}',
+      '  html{background:var(--lino,#f6f2ea)}',
+      '  .frame{max-width:none;width:100%;margin:0;',
+      '    box-shadow:none;outline:0;border-radius:0}',
+      /* la portada y el pie, a sangre otra vez: como en el celular */
+      '  .portada{max-width:none;min-height:100vh;height:auto;margin:0;',
+      '    border-radius:0;box-shadow:none}',
+      '  .footer{max-width:none;min-height:70vh;height:auto;margin:0;',
+      '    border-radius:0;box-shadow:none}',
       '}'
     ].join('\n');
     /* al final del head: gana sobre lo que ya trae la página, sin !important */
@@ -278,6 +351,14 @@
   function arrancar() {
     if (!elMarco()) return;   /* no es una invitación */
     ponerEstilos();
+
+    /* ⚠️ EN TABLET SE PLANTA ACÁ, Y ES EL PUNTO DEL ARREGLO.
+       Los estilos ya se pusieron (adentro llevan el bloque de tablet, que deja
+       la invitación a todo el ancho). Lo que NO se hace es medir la columna ni
+       crear el lienzo desenfocado: esa capa fija de pantalla completa era la
+       que trababa el scroll en el iPad. No alcanza con esconderla — no se
+       crea. */
+    if (esTactil()) return;
 
     /* El motor arma la portada y elige la foto después de que corre esto, así
        que se reintenta un rato hasta que las dos cosas estén listas. */
