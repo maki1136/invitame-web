@@ -21,7 +21,7 @@
      «se abrió un triángulo medio raro… se nota que está cortado, no se nota
      fluido». Y después: «viste la muestra exacta que te mostré?».
 
-     DOS COSAS ESTABAN MAL, y las dos se descubrieron MIDIENDO el video de la
+     TRES COSAS ESTABAN MAL, y todas se descubrieron MIDIENDO el video de la
      referencia, no mirándolo:
 
      1. EL LACRE SE PARTÍA AL MEDIO. Con `clip-path` la solapa es un recorte
@@ -43,6 +43,14 @@
         → `CAIDA` y `ESPERA` manejan esa salida, y el fundido ahora espera a
           que termine (antes cortaba a los `SOLAPAS` segundos y se comía la
           caída).
+
+     3. Y POR LA MUESCA TENÍA QUE VERSE LA FOTO, no papel crema. `#env` es
+        una tapa OPACA: la portada real está abajo, pero tapada. Así que la
+        foto va DENTRO del sobre, como una capa más (`.h-fondo`), copiada de
+        `.portada .pbg`: oscurecida y un poco más chica cuando está cerrado,
+        y se ilumina y crece mientras la solapa se levanta. Cuando el sobre
+        termina de caerse, esa capa quedó idéntica a la portada de abajo, y
+        por eso el empalme no se ve.
 
      ⚠️ `GIRO` es NEGATIVO a propósito: la solapa tiene que venir HACIA la
         cámara, no irse para atrás. Con la solapa recortada se le ve el dorso,
@@ -424,8 +432,43 @@
       '  transition:opacity .45s ease,',
       '             transform ' + CAIDA + 's cubic-bezier(.55,0,.85,.25) ' + ESPERA + 's}',
       '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto{',
-      '  transform:translate(-50%,-50%) translateY(126%) scale(1.14)}'
+      '  transform:translate(-50%,-50%) translateY(126%) scale(1.14)}',
+
+      /* ★ LA FOTO QUE SE VE POR LA MUESCA. Es la portada real de la
+         invitación, oscurecida como si estuviera adentro del sobre, y se
+         va iluminando a medida que la solapa se levanta. Cuando el sobre
+         termina de caer queda igual a la portada de abajo, así que el
+         empalme no se nota. */
+      '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-fondo{',
+      '  position:absolute;inset:0;background-size:cover;',
+      '  background-position:center;background-repeat:no-repeat;',
+      '  transform:scale(.90);filter:brightness(.42);',
+      '  transition:filter ' + SOLAPAS + 's ease,',
+      '             transform ' + (ESPERA + CAIDA) + 's cubic-bezier(.22,.72,.28,1)}',
+      '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto .h-fondo{',
+      '  transform:scale(1);filter:brightness(1)}'
     ].join('\n');
+  }
+
+  /* la foto de la portada, tal como la pintó el motor. Puede tardar en
+     estar: se reintenta hasta que aparece. */
+  function fotoPortada() {
+    try {
+      var p = document.querySelector('.portada .pbg');
+      if (!p) return '';
+      var b = getComputedStyle(p).backgroundImage || '';
+      return (b && b !== 'none') ? b : '';
+    } catch (e) { return ''; }
+  }
+  function ponerFondo(caja) {
+    var f = caja.querySelector('.h-fondo');
+    if (!f) return;
+    var n = 0;
+    (function buscar() {
+      var b = fotoPortada();
+      if (b) { f.style.backgroundImage = b; return; }
+      if (++n < 90) setTimeout(buscar, 100);
+    })();
   }
 
   function montarSolapas(env, url, solapaUrl) {
@@ -454,6 +497,12 @@
     if (solapaUrl && arriba) {
       var cs = 'url("' + String(solapaUrl).replace(/"/g, '%22') + '")';
       if (arriba.style.backgroundImage !== cs) arriba.style.backgroundImage = cs;
+      if (!caja.querySelector('.h-fondo')) {
+        var f = document.createElement('div');
+        f.className = 'h-fondo';
+        caja.insertBefore(f, caja.firstChild);   /* va ATRÁS de todo */
+      }
+      ponerFondo(caja);
       env.dataset.solapa = '1';
     } else {
       if (env.dataset.solapa) env.removeAttribute('data-solapa');
