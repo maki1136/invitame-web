@@ -18,19 +18,22 @@
 
    QUÉ TIENE ESTE BLOQUE
 
+     · CÓMO SE MUESTRA: escrito (con los efectos) o una imagen. Antes no había
+       dónde elegirlo y la imagen ganaba sola. Lo aplica itinerario-modo.js.
      · Los MOMENTOS: hora, qué pasa y un detalle opcional. Se agregan, se
        borran y se mueven.
      · El ESTILO de la línea: al costado o al medio en zigzag.
      · Un botón que ARMA LOS MOMENTOS LEYENDO EL TEXTO que ya está escrito en la
        sección («17:00 · Llegada…»), para no volver a tipear lo mismo.
+     · Un botón que TRAE LO QUE CARGARON LOS NOVIOS en su propio panel.
 
    ⚠️ LA COMBINACIÓN QUE ROMPE, Y POR ESO ESTÁ AVISADA ACÁ ARRIBA
       Si el evento tiene una IMAGEN de itinerario cargada, el motor esconde la
       lista (`display:none`) y no se ve NADA de esto: ni los momentos, ni la
       animación, ni las perlas. No es un error del panel.
-      → El bloque lo dice en pantalla cuando detecta que hay imagen puesta.
-      → Para mirarlo sin borrar la imagen: agregar `?itinerario=lista` a la
-        dirección de la invitación.
+      → Desde que existe «Cómo se muestra», eso se arregla eligiendo «Escrito».
+      → El aviso amarillo sólo aparece en modo «Automático», que es el único
+        donde la imagen sigue ganando sola.
 
    ⚠️ `D` (el borrador) NO cuelga de window: es un `const` del script principal.
       Y NO hay que guardarse `D.fx`: el panel lo REEMPLAZA cuando llega el
@@ -115,6 +118,118 @@
     aviso.textContent = 'Ojo: este itinerario tiene una IMAGEN cargada. Mientras esté puesta, ' +
       'la lista no se ve en la invitación. Borrá la imagen del sector para que se vean los momentos.';
     caja.appendChild(aviso);
+
+    /* ---- COMO SE MUESTRA: imagen o texto ---------------------------------
+       Antes no habia donde elegir: si quedaba una imagen cargada (aunque fuera
+       de una prueba vieja) el motor la mostraba y la lista no se dibujaba
+       nunca, asi que los efectos de la coleccion no aparecian. Ahora se dice
+       explicitamente. Lo aplica /efectos/itinerario-modo.js. ------------- */
+    var filaModo = chico(document.createElement('div'), 'margin:0 0 12px');
+    var labModo = chico(document.createElement('label'),
+      'display:block;font-size:12px;font-weight:600;margin:0 0 3px');
+    labModo.textContent = 'Como se muestra';
+    filaModo.appendChild(labModo);
+
+    var selModo = chico(document.createElement('select'), 'width:100%');
+    [['',       'Automatico (si hay imagen cargada, gana la imagen)'],
+     ['texto',  'Escrito — con los momentos y los efectos'],
+     ['imagen', 'Una imagen que subo yo']].forEach(function (o) {
+      var op = document.createElement('option');
+      op.value = o[0]; op.textContent = o[1];
+      selModo.appendChild(op);
+    });
+    selModo.value = String(datos(d).modo || '');
+    filaModo.appendChild(selModo);
+
+    var ayudaModo = chico(document.createElement('div'),
+      'font-size:11.5px;opacity:.62;margin:4px 0 0;line-height:1.35');
+    filaModo.appendChild(ayudaModo);
+    caja.appendChild(filaModo);
+
+    /* ---- la imagen del itinerario ---- */
+    var CLAVE_IMG = 'img_c_itinerario-imagen';
+    var cajaImg = chico(document.createElement('div'), 'display:none;margin:0 0 12px');
+
+    var subir = chico(document.createElement('button'), 'cursor:pointer;padding:6px 10px');
+    subir.type = 'button'; subir.textContent = '⬆ Subir imagen del itinerario';
+    var file = document.createElement('input');
+    file.type = 'file'; file.accept = 'image/*'; file.style.display = 'none';
+    subir.onclick = function () { file.click(); };
+
+    var prev = chico(document.createElement('div'), 'margin-top:6px');
+
+    var quitar = chico(document.createElement('button'), 'cursor:pointer;padding:6px 10px;margin-left:6px');
+    quitar.type = 'button'; quitar.textContent = 'Quitar imagen';
+    quitar.onclick = function () {
+      var dd = borrador(); if (!dd) return;
+      /* se borran TODAS las variantes viejas: si queda una, el motor la usa */
+      for (var k in dd) { if (/^img_.*itinerario/i.test(k)) dd[k] = ''; }
+      pintarImg(); refrescar();
+    };
+
+    file.onchange = function () {
+      var f = file.files && file.files[0]; if (!f) return;
+      if (!window.INV || !window.INV.uploadImage) {
+        alert('Todavia no cargo la base. Espera 2 segundos.'); return;
+      }
+      var antes = subir.textContent;
+      subir.textContent = 'Subiendo…';
+      window.INV.uploadImage(f).then(function (url) {
+        var dd = borrador(); if (dd) dd[CLAVE_IMG] = url;
+        subir.textContent = antes;
+        file.value = '';
+        pintarImg(); refrescar();
+      })['catch'](function () {
+        subir.textContent = antes;
+        alert('No pude subir la imagen. Proba de nuevo.');
+      });
+    };
+
+    cajaImg.appendChild(subir);
+    cajaImg.appendChild(quitar);
+    cajaImg.appendChild(file);
+    cajaImg.appendChild(prev);
+    caja.appendChild(cajaImg);
+
+    function urlImg(dd) {
+      if (!dd) return '';
+      if (dd[CLAVE_IMG]) return dd[CLAVE_IMG];
+      for (var k in dd) { if (/^img_.*itinerario/i.test(k) && dd[k]) return dd[k]; }
+      return '';
+    }
+    function pintarImg() {
+      var dd = borrador(); var u = urlImg(dd);
+      prev.innerHTML = u
+        ? '<img src="' + String(u).replace(/"/g, '&quot;') +
+          '" style="max-height:80px;border-radius:8px;display:block">'
+        : '<span style="font-size:11.5px;opacity:.6">Todavia no hay imagen cargada.</span>';
+      quitar.style.display = u ? '' : 'none';
+    }
+    pintarImg();
+
+    function acomodarModo() {
+      var dd = borrador() || d;
+      var m = String(datos(dd).modo || '');
+      cajaImg.style.display = (m === 'imagen') ? '' : 'none';
+      var u = urlImg(dd);
+      if (m === 'texto') {
+        ayudaModo.textContent = 'Se ven los momentos escritos, con los efectos de la coleccion. ' +
+          (u ? 'La imagen cargada queda guardada pero NO se muestra.' : '');
+      } else if (m === 'imagen') {
+        ayudaModo.textContent = u
+          ? 'Se ve la imagen. Los momentos escritos quedan guardados pero no se muestran.'
+          : 'Falta subir la imagen: mientras no la subas, la seccion no se muestra.';
+      } else {
+        ayudaModo.textContent = u
+          ? 'Hay una imagen cargada, asi que HOY se ve la imagen. Si queres los momentos con perlas, elegi "Escrito".'
+          : 'Sin imagen cargada se ven los momentos escritos.';
+      }
+    }
+    selModo.onchange = function () {
+      datos(borrador() || d).modo = selModo.value;
+      acomodarModo(); refrescar();
+    };
+    acomodarModo();
 
     /* ---- el estilo de la línea ---- */
     var fila = chico(document.createElement('div'), 'margin:0 0 12px');
@@ -208,12 +323,62 @@
     };
     botones.appendChild(traer);
 
+    /* ---- lo que cargaron los novios en SU panel ---------------------------
+       Las reglas de Firestore NO dejan que los novios escriban en `inv_eventos`
+       (y está bien: cualquiera con el link del panel podría romper la
+       invitación). Lo que ellos eligen queda en `inv_paneles/<slug>__<clave>`,
+       y de acá se trae con un botón. Es el mismo camino que ya usan las mesas.
+       ⚠️ Traer NO publica: después hay que tocar "Guardar y publicar". */
+    var novios = chico(document.createElement('button'), 'cursor:pointer;padding:6px 10px');
+    novios.type = 'button'; novios.textContent = 'Traer lo de los novios';
+    novios.title = 'Trae los momentos y la elección (escrito o imagen) que cargaron en su panel';
+    novios.onclick = function () {
+      var dd = borrador(); if (!dd) return;
+      var slug  = String(dd.slug || '').trim();
+      var clave = String(dd['c_clave-del-panel-de-los-novios'] || '').trim();
+      if (!slug || !clave) { avisar('Este evento no tiene panel de novios'); return; }
+      if (!window.INV || !window.INV.db) { avisar('Todavía no cargó la base'); return; }
+      var antes = novios.textContent; novios.textContent = 'Buscando…';
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
+        .then(function (m) {
+          return m.getDoc(m.doc(window.INV.db, 'inv_paneles', slug + '__' + clave));
+        })
+        .then(function (snap) {
+          novios.textContent = antes;
+          var p = snap && snap.exists() ? snap.data() : null;
+          var it = p && p.itinerario;
+          if (!it) { avisar('No cargaron nada todavía'); return; }
+          var d2 = borrador(); if (!d2) return;
+          var c = datos(d2);
+          if (it.modo === 'texto' || it.modo === 'imagen') c.modo = it.modo;
+          if (Object.prototype.toString.call(it.momentos) === '[object Array]' &&
+              it.momentos.length) c.momentos = it.momentos;
+          if (it.imagen) d2['img_c_itinerario-imagen'] = it.imagen;
+          if (selModo.value !== String(c.modo || '')) selModo.value = String(c.modo || '');
+          acomodarModo(); pintarImg(); dibujar(); refrescar();
+          avisar('Listo — tocá "Guardar y publicar"');
+        })['catch'](function () {
+          novios.textContent = antes;
+          avisar('No pude leer su panel');
+        });
+    };
+    function avisar(txt) {
+      var v = novios.textContent;
+      novios.textContent = txt;
+      setTimeout(function () { novios.textContent = 'Traer lo de los novios'; }, 2400);
+    }
+    botones.appendChild(novios);
+
     caja.appendChild(botones);
 
     /* se re-sincroniza en vivo: el evento llega DESPUÉS de que se arma esto */
     caja.__sync = function () {
       var dd = borrador(); if (!dd) return;
-      aviso.style.display = hayImagen(dd) ? 'block' : 'none';
+      var _m = String(datos(dd).modo || '');
+      /* el aviso viejo solo tiene sentido en automatico: en 'texto' ya no aplica */
+      aviso.style.display = (hayImagen(dd) && _m === '') ? 'block' : 'none';
+      if (selModo.value !== _m) { selModo.value = _m; }
+      acomodarModo(); pintarImg();
       var c = datos(dd);
       if (document.activeElement && caja.contains(document.activeElement)) return;
       var quiero = (c.estilo === 'centro') ? 'centro' : 'izquierda';
