@@ -2,14 +2,11 @@
 
    QUÉ PIDIÓ MAKI  (4/9/2026)
 
-     «En la mesa de regalos, donde piden la plata… se puede hacer, como hiciste
-      con los corazones de perlas, algo así pero para la mesa de regalos.»
-
-   Y cuando propuse la bandeja de plata que estaba sin usar:
-
-     «Yo no decía de poner esa bandeja, esa bandeja no me gusta, ya está. Yo lo
-      que decía es poner algo con perlas, tipo un regalo con perlas, DIBUJADO,
-      así como hiciste con los corazones de perlas.»
+     «En la mesa de regalos… se puede hacer, como hiciste con los corazones de
+      perlas, algo así pero para la mesa de regalos.»
+     «Yo no decía de poner esa bandeja, esa bandeja no me gusta. Lo que decía
+      es poner algo con perlas, tipo un regalo con perlas, DIBUJADO, así como
+      hiciste con los corazones de perlas.»
 
    O sea: no una foto de un objeto. **Un dibujo hecho con perlas.**
 
@@ -23,56 +20,55 @@
        84 hijos `.p`          7 × 7 px, border-radius 50%,
                               la foto de la perla como fondo, background-size 100%
 
-   Este módulo hace exactamente lo mismo. Lo único que cambia es EL RECORRIDO:
-   en vez de dos corazones, una caja de regalo con su cinta y su moño.
+   Acá es lo mismo. Lo único que cambia es EL RECORRIDO: en vez de dos
+   corazones, una caja de regalo con su cinta y su moño.
 
-   ⚠️ POR QUÉ ESTO SÍ SE PUEDE DIBUJAR CON LA PERLA REPETIDA, y la guirnalda no.
-      La regla anotada en `efectos/index.js` dice: «una foto chica repetida
-      muchas veces se lee como dibujo». Para una pieza PROTAGONISTA eso es un
-      defecto —Maki lo vio enseguida en la guirnalda de la portada—, pero acá
-      es justamente lo que se busca: un dibujito hecho de perlas, chico, como
-      los corazones. La perla repetida sirve en CHICO.
+   ⚠️ POR QUÉ ESTO SÍ SE DIBUJA CON LA PERLA REPETIDA, y la guirnalda no.
+      «Una foto chica repetida muchas veces se lee como dibujo» es un DEFECTO
+      para una pieza protagonista —Maki lo vio en la guirnalda de la portada—
+      pero acá es exactamente lo que se busca. La perla repetida sirve en CHICO.
 
    ============================================================================
    EL RECORRIDO
 
-   Todo en una caja de 146 × 116, que es el tamaño en el que la perla de 7 px
-   se lee como cuenta y no como punto.
+   Todo en una caja de 146 × 116.
 
        la caja       rectángulo cerrado, de (18,56) a (128,106)
        la cinta      línea vertical por el medio, de (73,56) a (73,106)
-       el moño       dos lazos elípticos apoyados sobre la tapa, inclinados
-                     hacia afuera, que se juntan en el nudo (73,54)
+       el moño       dos lazos elípticos sobre la tapa, inclinados hacia afuera
 
-   Cada tramo se recorre POR SEPARADO y se le van poniendo perlas cada `PASO`
-   píxeles. Por separado a propósito: si se concatenaran todos en una sola
-   tira, entre la caja y el moño quedaría un salto con perlas mal espaciadas.
+   Cada tramo se recorre POR SEPARADO: si se concatenaran en una sola tira,
+   entre la caja y el moño quedaría un salto con perlas mal espaciadas.
 
    ⚠️ El nudo lleva dos perlas encimadas a mano: es el único lugar donde el
       espaciado parejo deja un hueco, porque ahí se cruzan tres recorridos.
 
    ============================================================================
-   ⚠️⚠️ EL BUG DEL ARRANQUE, QUE VALE PARA TODOS LOS MÓDULOS  (4/9/2026)
+   ⚠️⚠️ POR QUÉ ESTE MÓDULO ES TAN INSISTENTE  (4/9/2026)
 
-   Inyectado a mano en la consola andaba perfecto. Cargado desde la lista de
-   módulos, no dibujaba nada. La causa estaba en dos palabras:
+   Costó hacerlo aparecer, y las dos vueltas que costó valen anotarlas:
 
-       function revisar() {
-         if (!esPerlas()) return true;      // ← ACÁ
-         …
-       }
+   1) `revisar()` empezaba con `if (!esPerlas()) return true;`
+      Ese `true` quiere decir «listo, no hay nada que hacer». Pero en el primer
+      tic `INVEV` está vacío y el `<html>` todavía no tiene la marca de la
+      colección: `esPerlas()` daba falso **porque todavía no se sabía**. El
+      ciclo se cortaba antes de que llegaran los datos.
+      → Es el mismo error del atajo del sobre en `sobre-catalogo.js`:
+        **un "no" temprano no es un "no".**
 
-   Ese `return true` quiere decir «listo, no hay nada que hacer». Pero en el
-   PRIMER tic, `INVEV` todavía está vacío y el `<html>` todavía no tiene la
-   marca de la colección, así que `esPerlas()` da falso **porque todavía no se
-   sabe**, no porque no sea Perlas. El ciclo se cortaba ahí y nunca volvía a
-   mirar.
+   2) Aun arreglado eso, evaluado a mano en la consola dibujaba perfecto y
+      cargado como `<script>` desde la lista no aparecía. Y el archivo servido
+      era el correcto — medido con `performance.getEntriesByType('resource')`,
+      mismo `encodedBodySize`. O sea: no era el código ni la caché. Era CUÁNDO
+      corre, y quién le borra el nodo después.
+      ⚠️ `colecciones/perlas.js` **se vuelve a pasar sola cada 400 ms** y puede
+         llevarse puesto lo que otro módulo agregó a una sección.
 
-   → Es exactamente el mismo error que tenía el atajo del sobre en
-     `sobre-catalogo.js`: **un "no" temprano no es un "no".**
-   → Ahora `revisar()` sólo devuelve `true` cuando DIBUJÓ de verdad. Si la
-     colección es otra, el ciclo simplemente da vueltas 20 segundos sin hacer
-     nada y se apaga solo. No molesta a nadie.
+   → Por eso ahora:
+       · el ciclo NO se apaga a los 20 segundos;
+       · un `MutationObserver` vuelve a poner el regalo si alguien lo borra;
+       · y queda `window.__INVREGALO` con lo que fue pasando, para poder
+         PREGUNTARLE al navegador en vez de adivinar la próxima vez.
 
    ============================================================================
    DÓNDE VA, Y UN HALLAZGO
@@ -81,18 +77,21 @@
 
    ⚠️ HALLAZGO: **los corazones ya estaban ahí.** `.mtv-corazones` es el último
       hijo de esa misma sección, no del cierre de la invitación como decía la
-      nota vieja. Con el regalo puesto quedaban dos motivos de perlas en la
-      misma sección, y eso se lee como que sobra uno.
-      → En ESA sección los corazones se apagan. **No se borran**: el nodo queda,
-        así que si algún día se los quiere llevar al cierre de verdad, están.
+      nota vieja. Dos motivos de perlas en la misma sección se leen como que
+      sobra uno.
+      → En ESA sección los corazones se apagan. **No se borran**: el nodo queda.
       → Si Maki prefiere los dos, se saca la línea que los esconde.
    ============================================================================ */
 (function () {
 
-  var ANCHO = 146;   /* el mismo que los corazones */
+  var ANCHO = 146;
   var ALTO  = 116;
-  var PERLA = 7;     /* medido en los corazones */
-  var PASO  = 7.6;   /* cada cuánto se pone una perla, a lo largo del recorrido */
+  var PERLA = 7;
+  var PASO  = 7.6;
+
+  /* rastro, para poder diagnosticar sin adivinar */
+  var log = { corrio: true, dibujado: 0, borrado: 0, ultimo: '' };
+  try { window.__INVREGALO = log; } catch (e) {}
 
   function esPerlas() {
     try {
@@ -104,8 +103,6 @@
     return String(m || '').toLowerCase() === 'perlas';
   }
 
-  /* La foto de la perla: se lee de una perla que ya esté puesta, así siempre
-     es la misma que usa el resto de la colección. */
   function fotoPerla() {
     var p = document.querySelector('.mtv .p');
     if (p) {
@@ -117,24 +114,20 @@
     return '';
   }
 
-  /* ---- los recorridos ---- */
-
   function rect(x1, y1, x2, y2) {
     return [[x1, y1], [x2, y1], [x2, y2], [x1, y2], [x1, y1]];
   }
 
-  /* una elipse inclinada, para cada lazo del moño */
   function elipse(cx, cy, rx, ry, giro, n) {
-    var pts = [], i, a, co = Math.cos(giro), si = Math.sin(giro);
+    var pts = [], i, co = Math.cos(giro), si = Math.sin(giro);
     for (i = 0; i <= n; i++) {
-      a = (i / n) * Math.PI * 2;
+      var a = (i / n) * Math.PI * 2;
       var x = Math.cos(a) * rx, y = Math.sin(a) * ry;
       pts.push([cx + x * co - y * si, cy + x * si + y * co]);
     }
     return pts;
   }
 
-  /* recorre una polilínea y devuelve puntos cada `paso` píxeles */
   function sembrar(pts, paso) {
     var out = [], resto = 0, i;
     for (i = 0; i < pts.length - 1; i++) {
@@ -154,19 +147,26 @@
   }
 
   function puntos() {
-    var todos = [];
-    todos = todos.concat(sembrar(rect(18, 56, 128, 106), PASO));         /* la caja */
-    todos = todos.concat(sembrar([[73, 56], [73, 106]], PASO));          /* la cinta */
-    todos = todos.concat(sembrar(elipse(50, 38, 23, 15, -0.38, 40), PASO)); /* lazo izq */
-    todos = todos.concat(sembrar(elipse(96, 38, 23, 15, 0.38, 40), PASO));  /* lazo der */
-    todos.push([73, 53]);                                               /* el nudo */
-    todos.push([73, 47]);
-    return todos;
+    var t = [];
+    t = t.concat(sembrar(rect(18, 56, 128, 106), PASO));
+    t = t.concat(sembrar([[73, 56], [73, 106]], PASO));
+    t = t.concat(sembrar(elipse(50, 38, 23, 15, -0.38, 40), PASO));
+    t = t.concat(sembrar(elipse(96, 38, 23, 15, 0.38, 40), PASO));
+    t.push([73, 53]);
+    t.push([73, 47]);
+    return t;
+  }
+
+  function laSeccion() {
+    var secs = document.querySelectorAll('section');
+    for (var i = 0; i < secs.length; i++) {
+      var h = secs[i].querySelector('h2, h3');
+      if (h && /mesa de regalos|regalos/i.test(h.textContent || '')) return secs[i];
+    }
+    return null;
   }
 
   function dibujar(sec, url) {
-    if (sec.querySelector('.mtv-regalo')) return true;
-
     var caja = document.createElement('div');
     caja.className = 'mtv mtv-regalo';
     caja.setAttribute('aria-hidden', 'true');
@@ -186,46 +186,50 @@
       caja.appendChild(b);
     });
 
-    var h = sec.querySelector('h2, h3');
     var kick = sec.querySelector('.kick');
-    var ancla = kick || h;
-    if (ancla && ancla.parentNode === sec) sec.insertBefore(caja, ancla.nextSibling);
+    var h = sec.querySelector('h2, h3');
+    var ancla = (kick && kick.parentNode === sec) ? kick
+              : ((h && h.parentNode === sec) ? h : null);
+    if (ancla) sec.insertBefore(caja, ancla.nextSibling);
     else sec.insertBefore(caja, sec.firstChild);
 
-    /* ⚠️ los corazones ya estaban en esta misma sección: se apagan acá, no se
-       borran. Ver la nota del encabezado. */
     [].forEach.call(sec.querySelectorAll('.mtv-corazones'), function (c) {
       c.style.display = 'none';
     });
 
+    log.dibujado++;
+    log.ultimo = 'dibujado';
     return true;
   }
 
-  function laSeccion() {
-    var secs = document.querySelectorAll('section');
-    for (var i = 0; i < secs.length; i++) {
-      var h = secs[i].querySelector('h2, h3');
-      if (h && /mesa de regalos|regalos/i.test(h.textContent || '')) return secs[i];
-    }
-    return null;
-  }
+  /* Pone el regalo si falta. Devuelve true sólo si está puesto. */
+  function asegurar() {
+    if (!esPerlas()) { log.ultimo = 'no es perlas todavia'; return false; }
 
-  /* ⚠️ devuelve true SÓLO cuando dibujó. Ver la nota del bug del arranque. */
-  function revisar() {
-    if (!esPerlas()) return false;
     var sec = laSeccion();
-    if (!sec) return false;
+    if (!sec) { log.ultimo = 'sin seccion'; return false; }
+
+    var ya = sec.querySelector('.mtv-regalo');
+    if (ya && ya.isConnected) return true;
+    if (log.dibujado > 0) log.borrado++;   /* estaba y no está: alguien lo borró */
+
     var url = fotoPerla();
-    if (!url) return false;
+    if (!url) { log.ultimo = 'sin perla'; return false; }
+
     return dibujar(sec, url);
   }
 
   function arrancar() {
-    var n = 0;
-    var t = setInterval(function () {
-      if (revisar() || ++n > 80) clearInterval(t);
-    }, 250);
-    revisar();
+    asegurar();
+
+    /* ⚠️ NO se apaga: la colección repinta cada 400 ms y puede borrarlo. */
+    setInterval(asegurar, 700);
+
+    if (window.MutationObserver) {
+      new MutationObserver(function () { asegurar(); })
+        .observe(document.body, { childList: true, subtree: true });
+    }
+    addEventListener('message', function () { setTimeout(asegurar, 120); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
