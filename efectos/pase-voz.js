@@ -1,12 +1,14 @@
 /* ===== PASE CON VOZ =========================================================
    El boleto arranca ENTERO. La columna del mensaje —la que tiene la onda y el
-   play— SE ARRANCA por la perforación, gira 90° y cae abajo del boleto.
+   play— SE ARRANCA CUANDO EL INVITADO LA TOCA: gira 90° y cae abajo del boleto.
 
    Cómo se enciende:  INVEV.fx.pasevoz.encendido = true
 
    ⚠️ EL AUDIO NO SE DESCARGA HASTA QUE ALGUIEN TOCA. `preload="none"`, y la onda
       se dibuja con los 26 números de `fx.pasevoz.onda`, medidos al grabar. El
-      invitado que no toca el pase baja CERO bytes.
+      invitado que no toca el pase baja CERO bytes. Con mil invitaciones vivas
+      esto no es un detalle: es la diferencia entre pagar el ancho de banda de
+      todos los invitados o el de los que de verdad escuchan.
 
    ⚠️ NUNCA autoplay. iOS lo bloquea igual, y la invitación tiene música propia:
       al tocar se pausa lo que esté sonando y se devuelve al terminar.
@@ -19,11 +21,10 @@
    boleto con optical flow (LK ida y vuelta, error < 1 px) y se le restó ese
    movimiento a la posición del play.
 
-   LO QUE PASA, CON NÚMEROS:
-
      · el boleto arranca ENTERO, con la columna pegada a la derecha por una
        perforación de agujeros redondos;
-     · la columna se separa en el segundo 1,70;
+     · EL DEDO BAJA Y LA TOCA: el pulgar la alcanza en 1,699 s y la rotura
+       arranca en 1,700. NO se rompe sola;
      · GIRA 90° EN SENTIDO HORARIO — el ▲ del play queda ▶, y la onda pasa de
        vertical a horizontal;
      · se traslada dx −233 px, dy +221 px = −45% / +42% del ancho del boleto;
@@ -43,8 +44,7 @@
    ⚠️ LA PIEZA ES UN SOLO ELEMENTO QUE GIRA, no dos dibujos distintos. Por eso
       la onda y el play se dibujan UNA vez, horizontales, y el estado "pegada"
       es ese mismo elemento con `rotate(-90deg)`. El giro hace todo el trabajo:
-      la onda se para sola y el ▶ apunta para arriba. Dibujar dos versiones
-      sería el doble de código y no calzarían nunca.
+      la onda se para sola y el ▶ apunta para arriba.
 
    ⚠️ SE ANIMAN `translate` Y `rotate` POR SEPARADO, no un `transform` solo.
       Están medidos con duraciones distintas (0,20 y 0,25 s) y en un único
@@ -53,11 +53,7 @@
       que es un final correcto igual.
 
    ⚠️ EL PIVOTE ES EL PLAY, no el centro de la tira. Todo el recorrido se midió
-      siguiendo el botón de play, así que `transform-origin` va sobre él. Con el
-      origen en el centro, los mismos números dan un recorrido distinto.
-
-   ⚠️ ENTRE PONER EL ESTADO INICIAL Y SACARLO TIENE QUE PASAR UN FRAME. Sin el
-      doble `requestAnimationFrame` no hay transición: aparece ya caída.
+      siguiendo el botón de play, así que `transform-origin` va sobre él.
    ========================================================================== */
 (function () {
   'use strict';
@@ -144,9 +140,7 @@
       '#pv-sec .pv-nota dd{font-family:var(--pv-cur);margin:2px 0 0;font-size:13px;',
       '  line-height:1.25;color:var(--pv-tinta)}',
 
-      /* ---- LA PIEZA QUE SE ARRANCA ----
-         Se dibuja UNA vez, horizontal. El estado "pegada" es este mismo
-         elemento girado -90°: ahí la onda se para y el ▶ mira para arriba. */
+      /* ---- LA PIEZA QUE SE ARRANCA ---- */
       '#pv-sec .pv-msg{position:relative;z-index:2;display:flex;align-items:center;gap:10px;',
       /* ⚠️ va a la DERECHA, no centrada: el recorrido medido (+45% en X) tiene que
          dejar la columna pegada al borde derecho del boleto, que es donde esta
@@ -186,7 +180,14 @@
       '  transition:background-color .16s linear}',
       '#pv-sec .pv-onda i.pv-ya{background:var(--pv-acento)}',
 
+      /* ⚠️ HACE FALTA UNA SEÑA. En el video hay un dedo que muestra donde tocar;
+         en una invitacion no hay nadie mostrando nada. Una respiracion muy
+         suave alcanza para que se lea como "tocame", sin cartelito. */
+      '@keyframes pv-late{0%,100%{filter:drop-shadow(0 9px 15px rgba(40,32,20,.32))}',
+      '  50%{filter:drop-shadow(0 9px 19px rgba(40,32,20,.46))}}',
+      '#pv-sec .pv-msg.pv-late{animation:pv-late 2.4s ease-in-out infinite}',
       '@media (prefers-reduced-motion:reduce){',
+      '  #pv-sec .pv-msg.pv-late{animation:none}',
       '  #pv-sec .pv-msg{transition:none}',
       '  #pv-sec .pv-msg.pv-pegada{translate:0 0;rotate:-2.6deg}}'
     ].join('\n');
@@ -230,7 +231,7 @@
             (nota ? '<dl class="pv-nota"><dt></dt><dd></dd></dl>' : '') +
           '</div>' +
         '</div>' +
-        '<button class="pv-msg pv-pegada" type="button" aria-label="Escuchar el mensaje de voz">' +
+        '<button class="pv-msg pv-pegada pv-late" type="button" aria-label="Arrancar el pase y escuchar el mensaje de voz">' +
           '<span class="pv-play" aria-hidden="true">' +
             '<svg viewBox="0 0 10 10" fill="currentColor">' +
               '<polygon class="pv-ply" points="1.5,0.8 9,5 1.5,9.2"></polygon>' +
@@ -272,7 +273,19 @@
     else marco.appendChild(sec);
 
     audio(sec, barras, f);
-    romperAlVerse(sec);
+  }
+
+  /* ---- LA ROTURA -----------------------------------------------------------
+     LA DISPARA EL DEDO, NO EL SCROLL. Ver la nota del click, más abajo.
+     ⚠️ DOS requestAnimationFrame: con uno solo el navegador junta el estado
+        inicial y el final en el mismo frame, no hay transición y salta al final.
+        Esto ya pasó con el sobre. */
+  function romper(msg) {
+    if (msg.__roto) return; msg.__roto = true;
+    msg.classList.remove('pv-late');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { msg.classList.remove('pv-pegada'); });
+    });
   }
 
   /* ---- el sonido ---- */
@@ -316,8 +329,11 @@
     }
 
     msg.addEventListener('click', function () {
-      /* mientras está pegada todavía no se puede tocar: es parte del boleto */
-      if (msg.classList.contains('pv-pegada')) return;
+      /* ⚠️ EL PRIMER TOQUE ROMPE, NO REPRODUCE. En la muestra el dedo baja sobre
+         la columna y ES EL TOQUE el que la arranca (medido: el pulgar la alcanza
+         en 1,699 s y la rotura arranca en 1,700). La primera version la rompia
+         sola al aparecer en pantalla: el invitado se perdia el momento. */
+      if (msg.classList.contains('pv-pegada')) { romper(msg); return; }
       if (au.paused) {
         pausarLaMusica();
         msg.classList.add('pv-son');
@@ -330,33 +346,15 @@
     au.addEventListener('error', parar);
   }
 
-  /* ---- LA ROTURA: se dispara cuando la sección entra en pantalla ---- */
-  function romperAlVerse(sec) {
-    var msg = sec.querySelector('.pv-msg'), hecho = false;
-    function romper() {
-      if (hecho) return; hecho = true;
-      /* ⚠️ DOS requestAnimationFrame. Con uno solo el navegador junta el estado
-         inicial y el final en el mismo frame: no hay transición, salta al
-         final. Esto ya pasó con el sobre. */
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () { msg.classList.remove('pv-pegada'); });
-      });
-    }
-    if (!window.IntersectionObserver) { romper(); return; }
-    var io = new IntersectionObserver(function (e) {
-      if (e[0] && e[0].isIntersecting) { romper(); io.disconnect(); }
-    }, { threshold: 0.45 });
-    io.observe(sec.querySelector('.pv-escena'));
-  }
-
   /* ---- CUANDO SE MONTA -----------------------------------------------------
      /!\ El modulo esperaba un evento 'inv-listo' que NO DISPARA NADIE: lo habia
      inventado yo, y por eso el ticket no aparecia nunca. Ahora se vuelve a pasar
      solo cada 400 ms, como motivo.js, galeria.js y rsvp-muestra.js.
 
      /!\ Y NO SE REDIBUJA PORQUE SI: `montar()` borra y rehace la seccion. Si se
-         llamara en cada vuelta cortaria el audio y volveria a disparar la
-         rotura. Por eso se compara una HUELLA y solo se rehace si algo cambio.
+         llamara en cada vuelta cortaria el audio y volveria a pegar la columna
+         que el invitado ya arranco. Por eso se compara una HUELLA y solo se
+         rehace si algo cambio.
      -------------------------------------------------------------------------- */
   function huella() {
     var f = fx();
