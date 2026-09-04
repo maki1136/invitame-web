@@ -188,13 +188,16 @@ window.SOBRES_INVITAME = {
      imagen: (50,5 % · 52,3 %). El lacre la tapa entera.
      ---------------------------------------------------------------------- */
   maestro: {
-    nombre:   "Maestro · marfil botánico, lacre liso (foto)",
+    nombre:   "Maestro · marfil botánico, cuatro solapas, lacre liso (foto)",
     poster:   "/sobres/sobre-maestro.jpg",
     solapa:   "/sobres/sobre-maestro-solapa.webp",
     color:    "#e8e2d8",
     apertura: "solapas",
     empalme:  "foto",
-    eje:      { x: 50.5, y: 52.3 }
+    /* dónde se cruzan las cuatro solapas (y dónde está el lacre), medido
+       sobre la foto: 381/768 y 687/1376. Se abre SÓLO la de arriba; las
+       otras tres se quedan y enmarcan la abertura. */
+    eje:      { x: 49.6, y: 49.9 }
   },
 
   'carta-toscana': {
