@@ -88,6 +88,17 @@
           (que descarga la tipografía elegida, porque el motor la aplica pero
           nunca la pide: sin eso, elegir una fuente no se notaba).
 
+      ★ Y TODAVÍA FALTABAN TRES MÁS  (4/9/2026, revisando la muestra entera)
+        · EL LACRE: `sello`, `emblema`, `ini` y `selloColor`, sin ningún campo.
+          La muestra salió publicada con el lacre VACÍO —lo primero que ve
+          cualquiera— y no había cómo arreglarlo desde el panel.
+          → Va adentro de `/efectos/panel-sobre.js`: el sobre es UNA cosa y
+            tiene UN bloque.
+        · LAS TIENDAS DE LA MESA DE REGALOS: ninguna. La muestra mexicana salió
+          con un Mercado Libre ARGENTINO.
+        · LA BAJADA DE «NUESTRAS PERSONAS»: ninguna, así que decía "Nosotros".
+          → Las dos últimas, en `/efectos/panel-faltantes.js`.
+
       ★ LA EXCEPCIÓN: LOS RETOQUES DE UNA COLECCIÓN  (3/9/2026)
         `/efectos/perlas-ajustes.js` y `/efectos/regalo-perlas.js` no tienen
         bloque en el panel, y está bien: no son perillas, son DISEÑO de la
@@ -333,6 +344,16 @@
          CONGELA la página. Hay que pisar `window.confirm` antes y llamar a
          `publicar()` directo, no clickear.
 
+      ⚠️ Y MIRANDO DE VERDAD, NO APURADO (4/9/2026). Tres veces seguidas di por
+         roto algo que estaba bien:
+           · secciones "vacías" → era la animación `.reveal`, de 1 segundo, que
+             todavía no se había disparado. Hay que esperar después de scrollear.
+           · el sobre "no abría" → un clic por coordenadas necesita una captura
+             fresca antes; sin eso el clic va a cualquier lado.
+           · el sobre "no recibía el toque" → `pointer-events:none` que YO había
+             dejado puesto en una prueba anterior de esa misma pestaña.
+         → Antes de reportar un bug: recargar limpio y repetir.
+
       Dónde es cada cosa:
       · /admin.html  → el panel de edición. El único con `.mejoras`, que es
         donde se montan estos bloques. Escribe con `INV.saveEvento` (con merge).
@@ -347,6 +368,16 @@
       ⚠️ Es la PRIMERA muestra real del sistema nuevo: se la va a ver gente que
          todavía no compró. Todo en español de México y con lugares de México.
       ⚠️ El evento llamado `muestra` NO es la muestra. Está marcado "NO USAR".
+
+   ★ NADA DE EMOJIS EN LA INVITACIÓN  (4/9/2026)
+      Maki: «donde veas un emoji sacalo». Al lado de una serif fina y el papel
+      de lino, un emoji se lee como un cartel de sistema operativo.
+      → Los del motor se sacan en `i/textos-es-mx.php`, que cambia el texto en
+        el servidor antes de mandarlo.
+      → Los que escribe un módulo en vivo NO pasan por ahí: se sacan en el
+        módulo (pasó con el aviso de la raspadita).
+      ⚠️ DOS NO SON ADORNO Y NO SE TOCAN: `❤` y `⚭` son los emblemas del lacre
+         (una opción del panel), y los íconos del clima son el pronóstico.
 
    ★ EL VOSEO YA NO SE PARCHEA: SE ESCRIBE BIEN DE ENTRADA (30/8/2026)
       Se borró `es-mx.js`. Ahora: el MOTOR lo traduce el servidor, los MÓDULOS
@@ -395,6 +426,12 @@
       motor, vacío pero en `display:block` y con `z-index: 2`.
       → `elementFromPoint` lo resolvió en un minuto. Los estilos de un elemento
         nunca te dicen quién está ARRIBA.
+      ★ Y LA VARIANTE SIN z-index (4/9/2026): las perlas del itinerario se
+        veían amontonadas aunque los ejes medían 0 px de desfase. Con
+        `z-index:auto` en los dos, gana el ORDEN DEL DOM — y `.tl-prog` es el
+        último hijo, así que el hilo encendido tapaba cada perla.
+        → Estar en el mismo eje no alcanza: hay que mirar quién se dibuja
+          encima. Lo arregla `/efectos/itinerario-perlas.js`.
 
    ★ !important NO ALCANZA PARA GANARLE A UN MÓDULO (1/9/2026)
       Si dos reglas !important tienen la misma especificidad, desempata el
@@ -436,7 +473,7 @@
      ese bloque. Escribe `fx.itinerario.momentos`, `fx.itinerario.estilo` y
      `fx.itinerario.modo`.
    · `panel-sobre.js` NO tiene orden: busca el select por su `onchange` y lee
-     el catálogo en el momento.
+     el catálogo en el momento. Adentro lleva también el bloque del LACRE.
    · `sobre-catalogo.js` va TEMPRANO y ANTES de que el invitado toque nada: es
      lo primero que se ve.
    · `muestra-venta.js` va DESPUÉS de `wa-flotante.js`: le pisa el número al
@@ -454,6 +491,10 @@
      pero nunca pide.
    · `panel-novios-guardar.js` NO tiene orden: envuelve `window.publicar` en
      cuanto aparece, y sólo actúa si el evento tiene clave de panel de novios.
+   · `panel-faltantes.js` NO tiene orden: se cuelga de campos que ya existen
+     (el título de Regalos y el de Personas importantes) y agrega al lado los
+     que faltaban. Cuando se toque `admin.html` a mano, van a su lista y este
+     módulo se borra.
    · `muestras/catalogo.js` va ANTES de `panel-solicitud-muestra.js`: es la lista
      de muestras con nombre, y el otro la lee para saber qué invitación clonar.
      ⚠️ No confundirlo con `sobres/catalogo.js`, que es el de los sobres.
@@ -501,7 +542,7 @@
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
-    '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena */
+    '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
@@ -515,6 +556,7 @@
     '/efectos/carta-fuente.js',        /* la tipografía de la carta se aplicaba pero no se descargaba */
     '/efectos/panel-carta.js',         /* la carta tenía SIETE campos y ningún control en el panel */
     '/efectos/panel-novios-guardar.js',/* publicar le borraba a los novios las mesas y el itinerario */
+    '/efectos/panel-faltantes.js',     /* las tiendas de la mesa de regalos y la bajada de Personas */
     '/muestras/catalogo.js',           /* las muestras con nombre: Perlas y las que vengan */
     '/efectos/panel-solicitud-muestra.js', /* al traer una solicitud, le pone el vestido de esa muestra */
     '/efectos/encuadre-monitor.js',    /* en compu: todo en una columna */
