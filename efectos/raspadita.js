@@ -18,6 +18,12 @@
    un módulo NO pasa por ahí. Por eso el aviso dice "Empieza por el día" y no
    "Empezá por el día".
 
+   ⚠️ Y VA SIN EMOJI. Tenía un ✨ adelante. Maki, 4/9/2026: «donde veas un
+   emoji sacalo». En una invitación de bodas rompe el tono: al lado de una
+   serif fina y el papel de lino, un emoji se lee como un cartel de sistema.
+   El resto de los emojis del motor se sacan en `i/textos-es-mx.php`; este no
+   pasa por ahí porque lo escribe este módulo en vivo.
+
    ⭐ SE MONTA SOBRE LA DISPOSICIÓN DE FECHA
    Si `efectos/fecha.js` dibujó una de sus nueve disposiciones, la raspadita NO
    arma sus propias fichas: tapa lo que la fecha haya puesto. Las disposiciones
@@ -460,7 +466,7 @@
 
     /* ---------- A · hay una disposición de fecha con tres pedazos ---------- */
     if (partesFecha.length >= 2 && cfg.modo === 'partes') {
-      decir('✨ Empieza por el día');
+      decir('Empieza por el día');
       var textos = ['Ahora el mes…', 'Y el año…', ''];
       var zonasA = partesFecha.map(function (el, i) {
         /* la tapa copia la forma de lo que tapa (círculo, rectángulo…) */
@@ -550,7 +556,7 @@
         { el: a3, forma: cfg.forma, sig: '' }
       ].filter(function (o) { return o.el; });
 
-      decir('✨ Empieza por el día');
+      decir('Empieza por el día');
       encadenar(fichas.map(function (f, i) {
         var z = nuevaZona(cajaDe(f.el), f.forma);
         if (i > 0) z.classList.add('dormida');
