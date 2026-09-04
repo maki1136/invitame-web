@@ -412,7 +412,7 @@
       '  transform:rotateX(148deg);filter:brightness(.88)}',
 
       '@media (min-width:680px){',
-      '  #col-sobre-foto,#col-sobre-carta{height:' + dAlto + ';width:' + dAncho + ';',
+      '  #col-sobre-foto{height:' + dAlto + ';width:' + dAncho + ';',
       '    border-radius:30px;overflow:hidden;',
       '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
       '}',
@@ -493,7 +493,18 @@
       '  transition:filter ' + SOLAPAS + 's ease,',
       '             transform ' + (ESPERA + CAIDA) + 's cubic-bezier(.22,.72,.28,1)}',
       '#env.carta-video.abriendo #col-sobre-carta .h-fondo{',
-      '  transform:scale(1);filter:brightness(1)}'
+      '  transform:scale(1);filter:brightness(1)}',
+
+      /* ⚠️ ESTE MEDIA QUERY VA AL FINAL, DESPUÉS de las reglas de arriba.
+         Estaba metido en el media query del sobre, que en el archivo viene
+         ANTES: misma especificidad, gana el último, así que la tarjeta se
+         quedaba a tamaño de pantalla y asomaba por arriba y por abajo del
+         sobre. En CSS, con igual especificidad manda el ORDEN. */
+      '@media (min-width:680px){',
+      '  #col-sobre-carta{height:' + dAlto + ';width:' + dAncho + ';',
+      '    border-radius:30px;overflow:hidden;',
+      '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
+      '}'
     ].join('\n');
   }
 
