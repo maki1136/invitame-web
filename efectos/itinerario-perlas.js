@@ -9,110 +9,92 @@
 
    QUÉ HABÍA YA — importante, porque casi lo hago dos veces
 
-   Antes de escribir una línea, lo medido en la invitación en vivo:
-
      · `/efectos/itinerario.js` YA hace que los momentos entren de a uno con el
-       scroll y que la línea se dibuje de arriba hacia abajo. La parte de «va
-       apareciendo» estaba hecha.
+       scroll y que la línea se dibuje de arriba hacia abajo.
      · La colección Perlas YA había reemplazado la línea del itinerario
-       (`.tl::before`) por una HEBRA DE PERLAS: 11 px de ancho, la foto de la
-       perla repetida hacia abajo.
+       (`.tl::before`) por una HEBRA DE PERLAS.
 
-   Entonces, ¿qué faltaba? Esto:
+   Lo que faltaba: **la línea de progreso no existía en Perlas.** `.tl-prog` es
+   la barra de 2 px pintada con `var(--verde)`; al lado de un collar quedaba
+   como una rayita de color mal puesta, así que la colección la había apagado
+   con `display:none`. Resultado: en Perlas el itinerario no marcaba avance.
 
-     ⚠️ LA LÍNEA DE PROGRESO NO EXISTÍA EN PERLAS.
-        `.tl-prog` es la barra de 2 px pintada con `var(--verde)` que marca
-        hasta dónde llegaste. Al lado de un collar de perlas quedaba como una
-        rayita de color mal puesta, así que **la colección la había apagado con
-        `display:none`**. Solución razonable en su momento, pero el resultado
-        era que en Perlas el itinerario no marcaba ningún avance: la hebra
-        estaba siempre igual, entera y quieta.
+   Este módulo la vuelve a encender convertida en **la misma hebra, iluminada**.
 
-   QUÉ HACE ESTE MÓDULO
+   ★★★ Y DESPUÉS HUBO QUE AFINARLA  (4/9/2026)
 
-   Vuelve a encender esa línea, pero convertida en **la misma hebra de perlas**,
-   iluminada: las perlas ya recorridas se ven nítidas y con su brillo, y las que
-   faltan quedan apagadas atrás. El collar se va enhebrando mientras se baja.
+     Maki: «se corrió, las perlas del itinerario se superponen».
+
+     MEDIDO, y eran dos cosas a la vez:
+
+       la hebra          perlas de 11 px, centrada en x = 7
+       la perla de cada
+       momento (.it::before)  17 px, centrada en x = 6
+
+     O sea: **casi el mismo tamaño** —se veían amontonadas, no como un collar
+     con su cuenta— y encima **con los ejes corridos un píxel**, que es lo que
+     ella vio como "se corrió".
+
+     → Ahora la hebra va con perlas de **7 px** y centrada en el **mismo eje**
+       que la perla del momento. Queda hilo fino con una cuenta más grande en
+       cada hora, que es como se lee un collar de verdad.
+     → Los dos números están arriba, en `HILO` y `EJE_X`. Si algún día cambia
+       el tamaño de la perla del momento, hay que mover `EJE_X` con ella:
+       el eje se calcula como  (left de .it::before) + (su ancho / 2).
 
    ⚠️⚠️ POR QUÉ NO SE USA `scaleY`, QUE ERA LO OBVIO
 
    El módulo genérico dibuja el avance con `transform:scaleY(p)`. Sobre una
-   línea de color eso está perfecto. Sobre una hebra de perlas NO: `scaleY`
-   estira el elemento y, con él, la imagen de fondo. Al 30% de avance las perlas
-   quedarían aplastadas como lentejas, y al 100% otra vez redondas. Se ve
-   malísimo y encima cambia solo.
+   línea de color está perfecto. Sobre una hebra de perlas NO: `scaleY` estira
+   la imagen de fondo y las perlas quedan aplastadas como lentejas al 30% de
+   avance, y redondas otra vez al 100%.
 
    Acá el avance se recorta con `clip-path: inset(...)`, que **corta** en vez de
-   deformar: las perlas conservan su tamaño y su forma en todo el recorrido, y
-   la última queda cortada al medio, como una cuenta que todavía no terminó de
-   entrar en el hilo.
-   → Por eso el módulo también apaga el `transform` que le pone el otro:
-     `transform:none`. Si alguien lo saca, vuelven las lentejas.
+   deformar: las perlas conservan su forma en todo el recorrido y la última
+   queda cortada al medio, como una cuenta que todavía no terminó de entrar.
+   → Por eso el módulo también apaga el `transform` del otro: `transform:none`.
 
-   ⚠️⚠️⚠️ LA PELEA DE ESPECIFICIDAD, QUE COSTÓ DOS VUELTAS ENTERAS
+   ⚠️⚠️ LAS DOS TRAMPAS DE ESPECIFICIDAD
 
-   Este módulo se subió, se miró la pantalla y NO PASABA NADA. Dos veces. El CSS
-   estaba bien escrito las dos veces. Lo que faltaba era ir a buscar, en la
-   consola, **qué regla estaba ganando**. Recorriendo `document.styleSheets`
-   aparecieron las dos culpables, las dos de la colección:
+   La primera versión se subió y no pasaba nada, aunque el CSS estaba bien.
+   Preguntando en la consola qué regla ganaba aparecieron las dos culpables:
 
        html[data-coleccion="perlas"][data-col-perla] .tl .tl-prog
            { display:none !important }
        html[data-coleccion="perlas"][data-col-perla] .tl::before
            { opacity:1 !important }
 
-   O sea: **dos atributos en el `html` más dos clases**. Contra eso no alcanza
-   repetir la clase (`.tl-perlas.tl-perlas`), que es el truco que sirve para
-   empatar contra otro módulo pero no contra un prefijo con atributos.
+   Dos atributos en el `html` más dos clases. Contra eso no alcanza repetir la
+   clase. → Cada regla se escribe DOS VECES: suelta y con el MISMO prefijo que
+   usa la colección más nuestra clase, que así queda por encima.
 
-   → La solución es escribir cada regla DOS VECES: una suelta (por si la
-     colección se aplicó sin esos atributos, o si mañana cambian) y otra con el
-     MISMO prefijo que usa la colección más nuestra clase, que así queda
-     estrictamente por encima.
-   → Y el `display` se fuerza además **inline con prioridad** desde JS
-     (`setProperty('display','block','important')`), que le gana a cualquier
-     hoja de estilos sin depender de contar puntos.
-
-   → La lección de fondo, que ya está anotada en `efectos/index.js` y se volvió
-     a pagar acá: **cuando el CSS "no hace nada", no hay que releerlo. Hay que
-     preguntarle al navegador qué regla ganó.**
+   → Y la lección de fondo: **cuando el CSS "no hace nada", no hay que releerlo.
+     Hay que preguntarle al navegador qué regla ganó.**
 
    DE DÓNDE SACA LA FOTO DE LA PERLA
-   Del propio `.tl::before` que ya puso la colección, leyendo su
-   `background-image`. Así no depende de qué archivo use la colección hoy: si
-   mañana Perlas cambia la perla, la hebra encendida cambia sola.
-   Si no encuentra ninguna, usa `window.INVPERLA`. Y si tampoco, no hace nada:
-   queda el itinerario de siempre, sin romperse.
-
-   ⚠️ El `background-size` es `11px 11px` EXACTO, igual que el de la hebra de
-      atrás. Con `11px auto` las dos hileras quedan con perlas de distinto alto
-      y no coinciden: se ve doble.
+   Del propio `.tl::before` que ya puso la colección. Si no encuentra ninguna,
+   usa `window.INVPERLA`. Y si tampoco, no hace nada.
 
    ⚠️ EL AVANCE SE CALCULA CON LA MISMA FÓRMULA QUE `itinerario.js`
-      Está copiada a propósito, no importada: son dos módulos sueltos y no
-      quiero que uno dependa del otro para arrancar. Si allá se cambia la
-      fórmula, hay que cambiarla acá también, o la hebra encendida y los
-      momentos que aparecen dejan de ir al mismo ritmo.
+      Está copiada a propósito, no importada. Si allá cambia, acá también.
 
    CUÁNDO ACTÚA
-   Sólo si la colección es **perlas**. En cualquier otra invitación no toca
-   nada. No hace falta un interruptor nuevo en el panel: es parte del disfraz de
-   la colección, igual que la hebra que ya estaba.
+   Sólo si la colección es **perlas**.
 
-   ⚠️ Y SIGUE VALIENDO LA TRAMPA DE SIEMPRE:
-      **el itinerario se esconde (`display:none`) si el evento lo tiene cargado
-      como IMAGEN.** Con una foto puesta no se ve nada de esto, y no es un bug
-      del módulo. Para probarlo sin tocar los datos: `?itinerario=lista`.
+   ⚠️ Y SIGUE VALIENDO LA TRAMPA DE SIEMPRE: el itinerario se esconde si el
+      evento lo tiene cargado como IMAGEN. Para probarlo: `?itinerario=lista`.
       Los momentos se cargan desde el bloque «El itinerario» del panel.
-
-   ACCESIBILIDAD
-   Con «reducir movimiento» la hebra se muestra entera y quieta.
    ============================================================================ */
 (function () {
   'use strict';
 
   /* el mismo prefijo que usa la colección para sus reglas !important */
   var PRE = 'html[data-coleccion="perlas"][data-col-perla] ';
+
+  /* ★ el hilo. Ver la nota «y después hubo que afinarla». */
+  var HILO  = 7;     /* diámetro de las perlas del hilo, en px */
+  var EJE_X = 2.5;   /* left del hilo, para que su centro caiga en x = 6,
+                        que es donde está el centro de la perla del momento */
 
   var ES_PREVIEW = (function () {
     try { return /[?&]preview/.test(location.search) || window.parent !== window; }
@@ -125,12 +107,10 @@
       var c = (D.fx && D.fx.coleccion) || D.coleccion || '';
       if (String(c).toLowerCase() === 'perlas') return true;
     } catch (e) {}
-    /* la colección deja su marca en el html; sirve de respaldo */
     var m = document.documentElement.getAttribute('data-coleccion');
     return String(m || '').toLowerCase() === 'perlas';
   }
 
-  /* La foto de la perla: la que ya está usando la hebra de fondo. */
   function fotoPerla(tl) {
     try {
       var bg = getComputedStyle(tl, '::before').backgroundImage || '';
@@ -145,8 +125,7 @@
 
   /* cada regla, dos veces: suelta y con el prefijo de la colección */
   function dosVeces(sel, cuerpo) {
-    return sel.replace(/(^|,\s*)/g, '$1') + '{' + cuerpo + '}\n' +
-           PRE + sel + '{' + cuerpo + '}';
+    return sel + '{' + cuerpo + '}\n' + PRE + sel + '{' + cuerpo + '}';
   }
 
   function ponerEstilos(url) {
@@ -154,13 +133,20 @@
     if (viejo && viejo.dataset.url === url) return;
     if (viejo) viejo.remove();
 
+    /* la hebra fina, común a la apagada y a la encendida */
+    var fino =
+      'width:' + HILO + 'px!important;' +
+      'left:' + EJE_X + 'px!important;' +
+      'margin-left:0!important;' +
+      'background-size:' + HILO + 'px ' + HILO + 'px!important;';
+
     var hebra =
       'display:block!important;' +
       'transform:none!important;' +                 /* nada de scaleY: deforma */
       'position:absolute!important;top:6px!important;bottom:6px!important;' +
-      'width:11px!important;border-radius:0!important;' +
+      'border-radius:0!important;' +
       'background:transparent url("' + url + '") repeat-y center top!important;' +
-      'background-size:11px 11px!important;' +
+      fino +
       'filter:drop-shadow(0 1px 1px rgba(0,0,0,.12))!important;' +
       'clip-path:inset(0 0 calc((1 - var(--tl-p,0)) * 100%) 0)!important;' +
       'transition:none!important';
@@ -169,19 +155,17 @@
     s.id = ID;
     s.dataset.url = url;
     s.textContent = [
-      /* la hebra apagada, atrás */
-      dosVeces('.tl.tl-perlas::before', 'opacity:.20!important'),
+      /* la hebra apagada, atrás: fina y en el mismo eje */
+      dosVeces('.tl.tl-perlas::before', 'opacity:.20!important;' + fino),
 
       /* la hebra ENCENDIDA */
       dosVeces('.tl.tl-perlas .tl-prog', hebra),
 
-      /* al costado (estilo «izquierda»): concéntrica con la de atrás */
-      dosVeces('.tl.tl-perlas:not(.tl-centro) .tl-prog',
-               'left:1.5px!important;margin-left:0!important'),
-
-      /* y en el estilo «centro», sobre la línea del medio */
+      /* en el estilo «centro» el hilo va sobre la línea del medio */
       dosVeces('.tl.tl-perlas.tl-centro .tl-prog',
-               'left:50%!important;margin-left:-5.5px!important'),
+               'left:50%!important;margin-left:-' + (HILO / 2) + 'px!important'),
+      dosVeces('.tl.tl-perlas.tl-centro::before',
+               'left:50%!important;margin-left:-' + (HILO / 2) + 'px!important'),
 
       /* si pidió menos movimiento: el collar entero, quieto */
       '@media(prefers-reduced-motion:reduce){',
@@ -216,7 +200,7 @@
     var hubo = false;
     listas().forEach(function (tl) {
       var url = fotoPerla(tl);
-      if (!url) return;              /* sin perla no se inventa nada */
+      if (!url) return;
       ponerEstilos(url);
       tl.classList.add('tl-perlas');
       asegurarProg(tl);
@@ -225,8 +209,7 @@
     return hubo;
   }
 
-  /* ⚠️ COPIA DELIBERADA de la fórmula de /efectos/itinerario.js.
-     Si allá cambia, acá también. Ver la nota del encabezado. */
+  /* ⚠️ COPIA DELIBERADA de la fórmula de /efectos/itinerario.js. */
   function avance(tl) {
     var h = window.innerHeight || 800;
     var r = tl.getBoundingClientRect();
@@ -260,7 +243,6 @@
     addEventListener('resize', alScroll);
     addEventListener('message', function () { setTimeout(revisar, 80); });
 
-    /* el motor y el panel repintan el sector: hay que volver a marcarlo */
     if (window.MutationObserver) {
       new MutationObserver(function () { setTimeout(revisar, 60); })
         .observe(document.body, { childList: true, subtree: true });
