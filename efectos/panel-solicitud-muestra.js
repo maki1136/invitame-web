@@ -25,7 +25,7 @@
    galeria, personas, lugares, invitados, trivia, mesa de regalos ni los datos
    de contacto. Si se copiara, el cliente recibiria la boda de otro.
 
-   /!\ LAS CUATRO COSAS QUE SE LIMPIAN AL VUELO -- CADA UNA POR UN MOTIVO MEDIDO
+   /!\ LAS CINCO COSAS QUE SE LIMPIAN AL VUELO -- CADA UNA POR UN MOTIVO MEDIDO
    Probando el clonado de verdad (con una solicitud inventada, en memoria)
    aparecieron cuatro fugas. Estan tapadas, y anotadas para que no vuelvan:
 
@@ -42,6 +42,12 @@
      4. `fx.itinerario.momentos` — son los horarios de otra fiesta. El itinerario
         que escribio el cliente viene en su solicitud; Jazmin tiene el boton
         "Traer los del texto" en el bloque del itinerario.
+     5. `fx.pasevoz` (el audio, la onda y el interruptor) — LA PEOR DE LAS CINCO,
+        y aparecio recien (4/9/2026) al sumar el pase con voz. Es la VOZ de los
+        anfitriones de la muestra. Clonarla habria puesto a Camila y Tomas
+        hablandole a los invitados de otra boda, y encima sonando: no es una
+        foto que se ve rara, es alguien diciendo su nombre. Los colores y las
+        tipografias del boleto SI se copian; el audio y la onda se vacian.
 
    /!\ Y NO SE COPIA NINGUNA IMAGEN. NI LAS DE FONDO.
    La primera version copiaba `img_c_fondo-*` pensando que eran texturas. No lo
@@ -49,6 +55,17 @@
    LA PAREJA. Copiarla habria puesto la cara de Camila y Tomas en la invitacion
    de un cliente. Regla nueva y sin excepciones: **una imagen es contenido**.
    El vestido se arma con `fx` y los colores, que no tienen cara de nadie.
+   La voz de la limpieza 5 es el mismo caso, en sonido.
+
+   /!\ LO UNICO QUE ESTE MODULO TRAE DE LA SOLICITUD  (4/9/2026)
+   Todo lo demas del formulario lo carga `cargarSolicitudIdx`, que vive en
+   admin.html. Pero el pase con voz nacio despues que ese codigo, y admin.html
+   pesa 159 KB y no entra en una subida. Asi que el audio que grabo el cliente
+   (`pasevozAudio` + `pasevozOnda`, que escribe /crear.js) lo pasa este modulo,
+   justo despues de limpiar el de la muestra. Cuando algun dia se toque
+   admin.html a mano, esto se muda a su lista y estas lineas se borran.
+   ⚠️ El pase se prende SOLO si el cliente grabo algo. Sin audio, el motor no lo
+      dibuja igual, pero dejarlo prendido en falso le mentiria a Jazmin en el panel.
 
    POR QUE ES UN MODULO Y NO ESTA EN admin.html
    admin.html pesa 159 KB y no entra en una subida (techo medido: ~45 KB).
@@ -84,7 +101,7 @@
     try { return JSON.parse(JSON.stringify(v)); } catch (e) { return v; }
   }
 
-  function vestir(d, muestra) {
+  function vestir(d, muestra, solicitud) {
     var puestos = [];
     Object.keys(muestra).forEach(function (k) {
       if (!esDeDiseno(k)) return;
@@ -93,7 +110,7 @@
       puestos.push(k);
     });
 
-    /* las cuatro limpiezas. Ver la nota grande de arriba: cada una tapa una
+    /* las cinco limpiezas. Ver la nota grande de arriba: cada una tapa una
        fuga que se vio de verdad al probar el clonado. */
     if (d.fx) {
       if (d.fx.muestra) delete d.fx.muestra;
@@ -104,6 +121,28 @@
         d.fx.carta.kicker = '';
       }
       if (d.fx.itinerario) d.fx.itinerario.momentos = [];
+      /* la voz de los anfitriones de la muestra NO viaja. Se quedan el papel,
+         la tinta, el acento y las tipografias del boleto: eso es vestido. */
+      if (d.fx.pasevoz) {
+        d.fx.pasevoz.audio = '';
+        d.fx.pasevoz.onda  = '';
+        d.fx.pasevoz.encendido = false;
+        d.fx.pasevoz.departe = '';
+        d.fx.pasevoz.nota    = '';
+        d.fx.pasevoz.titulo  = '';
+      }
+    }
+
+    /* y recien ahora, la que grabo ESTE cliente en /crear.js */
+    var s = solicitud || {};
+    var audio = String(s.pasevozAudio || '').trim();
+    if (audio) {
+      if (!d.fx) d.fx = {};
+      if (!d.fx.pasevoz) d.fx.pasevoz = {};
+      d.fx.pasevoz.audio = audio;
+      d.fx.pasevoz.onda  = String(s.pasevozOnda || '');
+      d.fx.pasevoz.encendido = true;
+      puestos.push('pase con voz del cliente');
     }
     return puestos;
   }
@@ -132,16 +171,22 @@
                            'bajarla (' + m.muestra + '). Los datos del cliente ' +
                            'estan cargados igual.'); return; }
           var d = borrador(); if (!d) return;
-          var puestos = vestir(d, ev);
+          var puestos = vestir(d, ev, s);
+          var conVoz = !!(s && String(s.pasevozAudio || '').trim());
           if (typeof window.renderPanel === 'function') { try { window.renderPanel(); } catch (e) {} }
           if (typeof window.render === 'function')      { try { window.render(); }      catch (e) {} }
           alert('Le puse el vestido de la muestra "' + m.nombre + '".\n\n' +
                 'Se copiaron ' + puestos.length + ' cosas de diseno: la coleccion, ' +
                 'el sobre, la paleta, las tipografias y los colores de cada seccion.\n\n' +
                 'NO se copio NADA de contenido: ni fotos, ni nombres, ni fecha, ni ' +
-                'lugares, ni personas, ni invitados. El texto de la carta y los ' +
-                'horarios del itinerario quedaron VACIOS a proposito, para que no ' +
-                'salga la historia de otra pareja.\n\n' +
+                'lugares, ni personas, ni invitados, NI LA VOZ de la muestra. El ' +
+                'texto de la carta y los horarios del itinerario quedaron VACIOS a ' +
+                'proposito, para que no salga la historia de otra pareja.\n\n' +
+                (conVoz
+                  ? 'El cliente SI grabo su pase con voz: quedo cargado y prendido. ' +
+                    'Escuchalo antes de publicar.\n\n'
+                  : 'El cliente no grabo ningun mensaje de voz, asi que el pase con ' +
+                    'voz quedo apagado.\n\n') +
                 'Falta: escribir la carta y cargar el itinerario (el boton "Traer ' +
                 'los del texto" arma los momentos con lo que mando el cliente).\n\n' +
                 'Cuando este, toca "Guardar y publicar".');
