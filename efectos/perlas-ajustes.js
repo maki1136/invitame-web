@@ -10,15 +10,13 @@
    ⚠️ TODO CON EL PREFIJO DE LA COLECCIÓN. La colección escribe sus reglas como
       `html[data-coleccion="perlas"][data-col-perla] …`, o sea dos atributos en
       el `html`. Para ganarle no alcanza con repetir la clase: hay que usar el
-      MISMO prefijo y sumar algo. Está aprendido a los golpes en
-      `efectos/itinerario-perlas.js`.
+      MISMO prefijo y sumar algo.
 
    ============================================================================
    1 · LA BANDA DE LA FRASE PERDÍA EL PAPEL          (3/9/2026)
 
    Jazmín marcó con un círculo verde el collar de perlas de la frase: quedaba
-   sobre una **franja blanca**, y el collar se veía "colgado", separado del
-   resto de la invitación.
+   sobre una **franja blanca**, y el collar se veía "colgado".
 
    MEDIDO EN VIVO, y la causa no era el collar:
 
@@ -26,15 +24,10 @@
          background-color: rgba(…, .2)   +   background-image: url(/i/tex-lino.jpg)
      · `.fraseSec` tenía el MISMO color… y `background-image: none`.
 
-   ¿Por qué? La colección escribe:
+   Porque la colección escribe `background: var(--lino)`, y **`background` es
+   un atajo: al escribirlo, borra `background-image`.**
 
-       html[data-coleccion="perlas"] .fraseSec { background: var(--lino) }
-
-   **`background` es un atajo: al escribirlo, borra `background-image`.**
-
-   → Se le devuelve la textura. No se toca el collar ni el color.
-   → Regla general: **el atajo `background:` pisa las cinco propiedades.** Si
-     sólo se quiere el color, se escribe `background-color`.
+   → Se le devuelve la textura. Si sólo se quiere el color: `background-color`.
 
    ============================================================================
    1b · Y DESPUÉS QUEDÓ UNA LÍNEA MARCADA            (4/9/2026)
@@ -49,52 +42,78 @@
        y va con `object-fit: cover`
 
    O sea que para llenar esa caja el navegador **recorta casi la mitad del alto
-   de la foto**. El borde de abajo no es un adorno: es un CORTE A CUCHILLO por
-   el medio de la imagen. Y como la pieza va en `multiply`, el papel de la foto
-   tiñe apenas su rectángulo, así que ese filo se lee como una línea.
+   de la foto**. El borde de abajo es un CORTE A CUCHILLO por el medio de la
+   imagen, y como la pieza va en `multiply`, el papel de la foto tiñe apenas su
+   rectángulo: ese filo se lee como una línea.
 
-   → Se difumina con `mask-image`: la pieza se disuelve arriba y abajo en vez
-     de terminar de golpe. Es exactamente el tratamiento «DIFUMINAR» que ya
-     estaba anotado en `efectos/index.js` para las piezas que viven adentro de
-     una sección clara — sólo que a esta se le había aplicado el de recortar.
+   → Se difumina con `mask-image`. Es el tratamiento «DIFUMINAR» que ya estaba
+     anotado en `efectos/index.js` para las piezas que viven adentro de una
+     sección clara — a ésta le habían aplicado el de recortar.
    → Va `-webkit-mask-image` además de `mask-image`: Safari todavía lo pide.
 
    ⚠️ NO se arregla bajando la opacidad: con `multiply`, menos opacidad no hace
-      la pieza más sutil, la hace GRIS. Eso ya está anotado y sigue valiendo.
+      la pieza más sutil, la hace GRIS.
+
+   ★ Y LA VENTANA DEL DIFUMINADO SE AJUSTÓ MIRANDO  (4/9/2026)
+     Primera versión: sólido del 26% al 58%. Maki: «está bastante difuso en la
+     parte del medio del collar». Tenía razón — con el recorte centrado, la
+     panza del collar cae justo en la zona que se estaba borrando.
+     Ahora va del **16% al 80%**: las perlas quedan enteras y sólo se disuelve
+     el filo. Si alguna vez se quiere más o menos velo, son esos dos números.
+
+   ============================================================================
+   1c · EL SOBRECITO DE LA FRASE NO SE VEÍA          (4/9/2026)
+
+   Maki: «abajo de la frase hay otro sobrecito blanco que pasa desapercibido.
+   Estaría bueno que le des un colorcito un poquito más fuerte, como el del
+   sobre de abajo, el de Nuestra carta, para que se note que está».
+
+   MEDIDO: la pieza estaba en `mix-blend-mode: multiply`, 96 px, opacidad .95,
+   con una máscara radial al 58%.
+
+   Por qué desaparecía: **multiply sólo puede OSCURECER.** Es un sobre marfil
+   sobre papel marfil: no tiene con qué oscurecer, así que casi no pinta. Es el
+   límite que ya estaba anotado —«multiply no puede ACLARAR»— sólo que acá se
+   notaba al revés: la pieza no tenía presencia.
+
+   → Pasa a **mezcla normal**: es un objeto que se apoya, no una mancha que
+     tiñe. Igual que el sobre de Nuestra carta, que nunca fue multiply.
+   → 96 → 118 px, sombra suave para que se despegue del papel, y el borde
+     disuelto con la máscara radial para que NO quede la placa rectangular del
+     papel sobre el que se fotografió.
+
+   ⚠️ Al sacarle el multiply, la pieza ya no toma el tono de la sección: se ve
+      con su propio marfil. Eso es lo que Maki pidió («un colorcito más
+      fuerte»), pero si algún día una paleta oscura la deja fuera de tono, la
+      salida es recolorearla con `filter`, no volver a multiply.
 
    ============================================================================
    2 · LAS FOTOS DE «NUESTRAS PERSONAS» ERAN CHIQUITAS   (3/9/2026)
 
-   Jazmín: «en el sector de personas se ven chiquititas las fotos, y para ellos
-   son súper importantes». Medido: los círculos median **74 × 74**.
-   Pasan a `clamp(88px, 25vw, 104px)`. Con tres por fila entran igual en un
-   teléfono de 360 px de ancho.
+   Jazmín: «se ven chiquititas las fotos, y para ellos son súper importantes».
+   Medido: **74 × 74**. Pasan a `clamp(88px, 25vw, 104px)`. Con tres por fila
+   entran igual en un teléfono de 360 px de ancho.
 
    ============================================================================
    3 · LA TIPOGRAFÍA, UN POCO MÁS GRANDE                (3/9/2026)
 
-   Jazmín: «agrandaría un poquito más la tipografía de toda la invitación».
    No se sube todo a ciegas: se midió primero dónde estaba realmente chica.
 
        título de sección   31 px      → 33
-       bajada (kick)       24 px      → queda igual, está bien
-       párrafos            22 px      → quedan igual, están bien
+       bajada (kick)       24 px      → queda igual
+       párrafos            22 px      → quedan igual
        itinerario · hora   17 px      → 19
        itinerario · detalle 13 px     → 15   ⟵ el más chico de toda la pieza
 
-   ⚠️ Los tamaños del motor están en PÍXELES, no en `rem`. Por eso no sirve
-      agrandar la raíz del documento: no lo hereda nadie. Hay que nombrar cada
-      rol. Si Maki quiere otro escalón, se tocan estos números y nada más.
+   ⚠️ Los tamaños del motor están en PÍXELES, no en `rem`: agrandar la raíz no
+      lo hereda nadie. Hay que nombrar cada rol.
 
    ============================================================================
    4 · LA FRASE, CON MÁS FUERZA                          (3/9/2026)
 
-   Maki: «la frase, ya que estás, dale un poquito más de fuerza». Estaba en
-   22 px con la tinta a media asta. Pasa a `clamp(24px, 6vw, 27px)`, con más
-   interlínea y la tinta más firme.
+   Estaba en 22 px con la tinta a media asta. Pasa a `clamp(24px, 6vw, 27px)`.
 
-   ⚠️ La frase la escribe la clienta y puede ser larga. Por eso el tamaño va con
-      `clamp()` y no fijo: en una frase de seis renglones no se desborda.
+   ⚠️ La frase la escribe la clienta y puede ser larga: por eso `clamp()`.
    ============================================================================ */
 (function () {
 
@@ -104,9 +123,13 @@
   /* el mismo papel que usan las demás secciones claras */
   var PAPEL = '/i/tex-lino.jpg';
 
-  /* cómo se disuelve el collar arriba y abajo. Ver la nota 1b. */
+  /* cómo se disuelve el collar. Los dos números del medio son la ventana
+     donde la foto se ve entera. Ver la nota 1b. */
   var VELO = 'linear-gradient(to bottom,' +
-             'transparent 0%,#000 26%,#000 58%,transparent 100%)';
+             'transparent 0%,#000 16%,#000 80%,transparent 100%)';
+
+  /* y cómo se disuelve el borde del sobrecito, para que no quede la placa */
+  var VELO_SOBRE = 'radial-gradient(66% 66%,#000 46%,transparent 100%)';
 
   function esPerlas() {
     try {
@@ -137,12 +160,22 @@
           'background-position:center!important;' +
           'background-repeat:no-repeat!important'),
 
-      /* 1b · y el collar se disuelve en vez de cortarse a cuchillo ------- */
+      /* 1b · el collar se disuelve en vez de cortarse a cuchillo --------- */
       dos('.fraseSec .col-collar',
           'background:none!important;' +
           'mix-blend-mode:multiply!important;' +
           '-webkit-mask-image:' + VELO + '!important;' +
           'mask-image:' + VELO + '!important'),
+
+      /* 1c · el sobrecito, como objeto y no como mancha ------------------ */
+      dos('.fraseSec .col-sobre',
+          'background:none!important;' +
+          'mix-blend-mode:normal!important;' +
+          'opacity:.96!important;' +
+          'width:118px!important;height:auto!important;' +
+          '-webkit-mask-image:' + VELO_SOBRE + '!important;' +
+          'mask-image:' + VELO_SOBRE + '!important;' +
+          'filter:drop-shadow(0 6px 12px rgba(60,48,40,.14)) saturate(1.06)!important'),
 
       /* 2 · las personas, más grandes ----------------------------------- */
       dos('.av',
