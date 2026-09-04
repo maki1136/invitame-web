@@ -231,6 +231,10 @@
 </div>
 <div class="guardando" id="toast">Guardado</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="module" src="/mi-panel.js?v=1"></script>
+<!-- El grabador de mensajes de voz por invitado. Va ANTES del panel para que la
+     lista ya lo encuentre cargado y dibuje la columna "Voz". Vive aparte de
+     mi-panel.js porque ese archivo esta cerca del techo de subida (~45 KB). -->
+<script defer src="/efectos/panel-audio-invitado.js"></script>
+<script type="module" src="/mi-panel.js?v=2"></script>
 </body>
 </html>
