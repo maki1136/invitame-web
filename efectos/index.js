@@ -66,6 +66,28 @@
         apagada: empujó a todo el mundo a la peor solución posible.
         → Lo arregla `/efectos/panel-itinerario.js`.
 
+        ★ Y TENÍA UNA SEGUNDA MITAD, PEOR  (4/9/2026)
+          Aunque los momentos ya se pudieran cargar, el MOTOR igual le daba la
+          victoria a la imagen: si el evento tenía CUALQUIER `img_*itinerario*`
+          cargada —aunque fuera de una prueba vieja— mostraba la foto, escondía
+          la lista y se iba con un `return`. O sea que las perlas del hilo, el
+          zigzag y la aparición con el scroll no se veían NUNCA, y no había
+          dónde decir «no, quiero el texto».
+          → Ahora se elige a mano: `fx.itinerario.modo` = 'texto' | 'imagen'.
+            Lo aplica `/efectos/itinerario-modo.js` y se elige en el bloque del
+            panel (y también en el panel de los novios).
+          → Vacío = como siempre, para que ninguna invitación ya entregada
+            cambie de aspecto sola.
+
+      ★ LA CARTA ESTABA ENTERA FUERA DEL PANEL  (4/9/2026)
+        `fx.carta` tiene SIETE campos que el motor lee —on, kicker, titulo,
+        texto, fuente, sobreColor, colorTexto— y NINGUNO tenía control. Por eso
+        la muestra salió con el título del RSVP y el sobre verde de Oliva: no
+        había forma de arreglarlo sin entrar a la base.
+        → `/efectos/panel-carta.js` (el bloque) y `/efectos/carta-fuente.js`
+          (que descarga la tipografía elegida, porque el motor la aplica pero
+          nunca la pide: sin eso, elegir una fuente no se notaba).
+
       ★ LA EXCEPCIÓN: LOS RETOQUES DE UNA COLECCIÓN  (3/9/2026)
         `/efectos/perlas-ajustes.js` y `/efectos/regalo-perlas.js` no tienen
         bloque en el panel, y está bien: no son perillas, son DISEÑO de la
@@ -73,6 +95,18 @@
         frase, el papel de una banda, el motivo de la mesa de regalos—.
         Igual que `carta-perlas.js` y `itinerario-perlas.js`. Lo que Jazmín
         elige es la colección; lo de adentro es diseño, no configuración.
+
+   ★★★★★ LO QUE ESCRIBEN LOS NOVIOS NO SE PISA ★★★★★  (4/9/2026)
+      `admin.html` guardaba el documento del panel de los novios con `setDoc`
+      SIN `{merge:true}`. Cada "Guardar y publicar" REEMPLAZABA el documento
+      entero y les borraba las mesas, a quién sentaron en cada una, la
+      capacidad, el mensaje para compartir y el itinerario. En silencio: ese
+      documento no se ve en ninguna pantalla del admin.
+      → Lo repara `/efectos/panel-novios-guardar.js`, que envuelve `publicar()`.
+      → Y la regla: los novios escriben SÓLO en `inv_paneles/<slug>__<clave>`,
+        nunca en `inv_eventos` (las reglas de Firestore lo impiden, y está
+        bien). Lo que eligen viaja a la invitación con el botón «Traer lo de
+        los novios» del bloque del itinerario, y recién ahí se publica.
 
    ★★★★★ Y HAY QUE SEGUIR EL HILO HASTA LA PANTALLA ★★★★★  (2/9/2026)
       El sobre de entrada tenía TODO puesto —seis videos en el repo, el
@@ -264,6 +298,12 @@
         regalo de la mesa se dibuja con la perla que ya estaba.
       → Detalle completo: skill `no-pasarle-trabajo-manual-a-maki`.
 
+      ⚠️ Y ESE MISMO TECHO VALE PARA LOS HTML GRANDES (4/9/2026)
+         `admin.html` pesa 159 KB y `i/index.html` 185 KB: no entran en una
+         llamada. Por eso los arreglos que "deberían" ir en admin.html se
+         escriben como módulo (ver `panel-novios-guardar.js`). Si algún día hay
+         que tocar admin.html de verdad, lo sube Maki.
+
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
       Regla de Maki: «la zona de prueba es al pedo porque después pasa esto
       siempre; probá directo en el original».
@@ -389,7 +429,8 @@
      ese bloque, porque habla de lo mismo.
    · `panel-fecha.js` va DESPUÉS de `panel-muestra.js`, por la misma razón.
    · `panel-itinerario.js` va DESPUÉS de `panel-fecha.js`: se monta debajo de
-     ese bloque. Escribe `fx.itinerario.momentos` y `fx.itinerario.estilo`.
+     ese bloque. Escribe `fx.itinerario.momentos`, `fx.itinerario.estilo` y
+     `fx.itinerario.modo`.
    · `panel-sobre.js` NO tiene orden: busca el select por su `onchange` y lee
      el catálogo en el momento.
    · `sobre-catalogo.js` va TEMPRANO y ANTES de que el invitado toque nada: es
@@ -400,6 +441,15 @@
      papel de la paleta.
    · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`.
    · `itinerario-momentos.js` va ANTES de `itinerario.js`.
+   · `itinerario-modo.js` va DESPUÉS de `itinerario.js`: pisa la decisión del
+     motor (que le da la victoria a la imagen si existe) con `fx.itinerario.modo`.
+     Si el campo está vacío NO toca nada, así ninguna invitación entregada cambia.
+   · `panel-carta.js` no tiene orden fuerte: se cuelga de `.mejoras` y se ancla
+     debajo del bloque del itinerario. `carta-fuente.js` sí corre en la
+     INVITACIÓN: descarga la familia de `fx.carta.fuente`, que el motor aplica
+     pero nunca pide.
+   · `panel-novios-guardar.js` NO tiene orden: envuelve `window.publicar` en
+     cuanto aparece, y sólo actúa si el evento tiene clave de panel de novios.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`.
    · `perla.js` va ANTES de `motivo.js`: le deja la foto en `window.INVPERLA`.
@@ -445,11 +495,15 @@
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
+    '/efectos/itinerario-modo.js',     /* imagen o texto, elegido a mano (no que gane la imagen sola) */
     '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
     '/efectos/fecha.js',               /* las nueve maneras de mostrar la fecha */
     '/efectos/raspadita.js',           /* la raspadita: se monta sobre la fecha */
     '/efectos/panel-fecha.js',         /* y las dos, por fin, en el panel */
     '/efectos/panel-itinerario.js',    /* los momentos del itinerario, por fin cargables */
+    '/efectos/carta-fuente.js',        /* la tipografía de la carta se aplicaba pero no se descargaba */
+    '/efectos/panel-carta.js',         /* la carta tenía SIETE campos y ningún control en el panel */
+    '/efectos/panel-novios-guardar.js',/* publicar le borraba a los novios las mesas y el itinerario */
     '/efectos/encuadre-monitor.js',    /* en compu: todo en una columna */
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
