@@ -20,10 +20,40 @@
 
    ⚠️ LAS FRASES VAN PRIMERO. "Pasá la voz" no es "Pasa la voz", es "Corre la
    voz". Si se reemplazara la palabra suelta antes, se perdería la frase.
+
+   ★★★ Y TAMBIÉN SE SACAN LOS EMOJIS  (4/9/2026)
+
+   Maki: «donde veas un emoji sacalo». En una invitación de bodas un emoji
+   rompe el tono: la tipografía es una serif fina, el papel es lino y al lado
+   aparece un globito de chat de sistema operativo.
+
+   Se sacan ACÁ y no en el motor por la misma razón que el voseo: `i/index.html`
+   pesa 185 KB, lo comparten todas las invitaciones —incluidas las versiones
+   congeladas de /i/v/— y este archivo cambia el texto antes de mandarlo, sin
+   parpadeo y sin tocar el motor.
+
+   ⚠️ DOS QUE NO SON DECORACIÓN Y NO SE SACAN NUNCA:
+      · `❤` y `⚭` son los EMBLEMAS DEL LACRE. Son una opción del panel
+        («Qué lleva: un corazón / dos anillos»). Sacarlos apaga una función.
+      · Los íconos del CLIMA (☀️ 🌤️ ☁️ 🌫️ 🌦️ 🌧️ 🌨️) son el pronóstico. Ahí un
+        símbolo es información, no adorno. Además viven en un array del motor:
+        vaciarlos dejaría la sección muda.
+
+   ⚠️ Y UNO QUE ESTE ARCHIVO NO PUEDE ALCANZAR: lo que escribe un MÓDULO en
+      vivo (por ejemplo el aviso de la raspadita) no pasa por acá, porque acá
+      se toca el HTML antes de mandarlo. Eso se corrige en el módulo.
    ============================================================================ */
 
 /* Frases completas: se cambian antes que las palabras sueltas. */
 $ES_MX_FRASES = array(
+  /* --- los emojis, primero: si no, la frase ya cambió y no coincide --- */
+  '✦ rascá aquí ✦'                       => 'rascá aquí',
+  '¡Genial! Te esperamos con alegría 🌿'  => '¡Genial! Te esperamos con alegría',
+  'Gracias por avisarnos 💛'              => 'Gracias por avisarnos',
+  '💬 '                                   => '',
+  '💚'                                    => '',
+
+  /* --- el voseo --- */
   'Pasá el dedo para descubrir'   => 'Desliza el dedo para descubrir',
   'Pasá la voz'                   => 'Corre la voz',
   'si querés tener un detalle'    => 'si quieres tener un detalle',
