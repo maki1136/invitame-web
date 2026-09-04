@@ -20,6 +20,32 @@
    ⚠️ `departe` y `nota` vienen VACÍOS a propósito. Es lo que mantiene el
       ticket rectangular (2,56:1). Con los dos llenos se va a 1,64:1 y deja
       de parecer un boleto. Medir la proporción después de cada cambio.
+
+   ───────────────────────────────────────────────────────────────────────────
+   LO QUE APARECIÓ AL MIRARLO EN LA INVITACIÓN DE VERDAD  (4/9/2026)
+
+   Los tres se veían de una y ninguno daba error. Medido en camila-y-tomas:
+
+     1. EL PLAY APUNTABA PARA ARRIBA. El `<polygon>` ya está dibujado mirando a
+        la derecha, y encima tenía `transform:rotate(-90deg)`: en pantalla salía
+        un ▲. La regla `.pv-son svg{transform:none}` era el intento de arreglarlo
+        del otro lado, o sea que ANDANDO se enderezaba y EN PAUSA no. Al revés de
+        lo que hace falta. Se sacaron las dos: el triángulo va como viene.
+
+     2. LA ONDA ESTABA APLASTADA CONTRA SU MÍNIMO. La columna mide 90 px de alto.
+        26 rayitas con 2 px de separación = 50 px de aire, o sea 1,5 px por
+        rayita: todas clavadas en `min-height` y ninguna con altura propia. Se
+        leía como una huella digital, no como un mensaje de voz. Con la
+        separación en 1 px quedan ~2,5 px cada una y vuelve a leerse.
+        ⚠️ Lo que codifica el volumen es el ANCHO de cada rayita, no el alto.
+           Por eso el piso subió de 0,10 a 0,16: abajo de eso las partes calladas
+           desaparecían del todo y quedaban huecos.
+
+     3. EL PAPEL SALÍA LAVANDA FUERTE. `var(--sage-cl)` en la paleta de Perlas
+        resuelve a #c5bad2, contra el #f4f2f6 de las secciones vecinas. El
+        boleto gritaba. Ahora el papel se aclara hacia el blanco: sigue saliendo
+        de la paleta —así acompaña a las 20— pero apoyado, no encima.
+        ⚠️ Si Jazmín escribe un color a mano en el panel, ese va tal cual.
    ========================================================================== */
 (function () {
   'use strict';
@@ -97,19 +123,22 @@
       '#pv-sec .pv-agujeros{position:absolute;left:-8px;top:0;bottom:0;width:16px;pointer-events:none;',
       '  background-image:radial-gradient(circle 3.6px at center,var(--sec-col,#fff) 96%,transparent 100%);',
       '  background-size:100% 15px;background-repeat:repeat-y}',
+      /* gap 1px y no 2: con 2 las 26 rayitas no entran en los 90 px de alto y
+         quedan todas clavadas en min-height. Ver la nota 2 de arriba. */
       '#pv-sec .pv-onda{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;',
-      '  justify-content:center;gap:2px;overflow:hidden}',
-      '#pv-sec .pv-onda i{display:block;border-radius:1px;flex:1 1 0;min-height:1.5px;max-height:3px;',
-      '  width:calc(max(0.10,var(--h)) * 82%);',
+      '  justify-content:center;gap:1px;overflow:hidden}',
+      '#pv-sec .pv-onda i{display:block;border-radius:1px;flex:1 1 0;min-height:2px;max-height:3.4px;',
+      '  width:calc(max(0.16,var(--h)) * 88%);',
       '  background:color-mix(in srgb,var(--pv-tinta) 72%,transparent);',
       '  transition:background-color .16s linear}',
       '#pv-sec .pv-onda i.pv-ya{background:var(--pv-acento)}',
       '#pv-sec .pv-play{width:26px;height:26px;flex:none;border-radius:50%;display:flex;',
       '  align-items:center;justify-content:center;',
       '  border:1px solid color-mix(in srgb,var(--pv-tinta) 45%,transparent)}',
-      '#pv-sec .pv-play svg{width:9px;height:9px;color:var(--pv-tinta);transform:rotate(-90deg)}',
+      /* SIN rotate: el triángulo ya viene mirando a la derecha. Ver la nota 1. */
+      '#pv-sec .pv-play svg{width:9px;height:9px;color:var(--pv-tinta)}',
       '#pv-sec .pv-play .pv-pausa{display:none}',
-      '#pv-sec .pv-tk.pv-son .pv-play svg{color:var(--pv-acento);transform:none}',
+      '#pv-sec .pv-tk.pv-son .pv-play svg{color:var(--pv-acento)}',
       '#pv-sec .pv-tk.pv-son .pv-play .pv-ply{display:none}',
       '#pv-sec .pv-tk.pv-son .pv-play .pv-pausa{display:block}',
       '#pv-sec .pv-tk.pv-son .pv-play{border-color:var(--pv-acento)}',
@@ -151,9 +180,11 @@
     sec.id = 'pv-sec';
     sec.className = 'sec';
 
-    /* los colores salen de la paleta de la invitación; fx sólo pisa si trae algo */
+    /* los colores salen de la paleta de la invitación; fx sólo pisa si trae algo.
+       El papel va ACLARADO hacia el blanco: crudo salía lavanda fuerte contra las
+       secciones vecinas (ver la nota 3 de arriba). */
     var st = sec.style;
-    st.setProperty('--pv-papel',  txt(f.papel,  'var(--sage-cl)'));
+    st.setProperty('--pv-papel',  txt(f.papel,  'color-mix(in srgb,var(--sage-cl) 34%,#fff)'));
     st.setProperty('--pv-tinta',  txt(f.tinta,  'var(--verde)'));
     st.setProperty('--pv-acento', txt(f.acento, f.metalico ? 'var(--oro)' : 'var(--sage)'));
     st.setProperty('--pv-tit', txt(f.letraTitulo, '"Cormorant Garamond",Georgia,serif'));
