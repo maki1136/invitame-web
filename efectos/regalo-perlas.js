@@ -1,6 +1,21 @@
 /* ===== EL REGALO DE PERLAS  ==================================================
 
-   QUÉ PIDIÓ MAKI  (4/9/2026)
+   ⚠️⚠️ ESTE MÓDULO ESTÁ APAGADO A PROPÓSITO  (4/9/2026)
+
+     Maki, después de verlo: «quedaron los corazones, no el regalo, pero ya
+     está, dejalo así».
+
+     Se apaga con el interruptor `ENCENDIDO` de acá abajo en vez de sacarlo de
+     `efectos/index.js`, por dos razones:
+       · el dibujo ya está hecho y probado; si algún día lo quiere, se prende
+         cambiando una palabra;
+       · y porque apagarlo AHORA evita que aparezca solo cuando termine de
+         desplegarse y le cambie sin aviso lo que ella acaba de aprobar.
+
+     ⚠️ Si se enciende: esconde los corazones de esa sección. Ver el final.
+
+   ============================================================================
+   QUÉ PIDIÓ MAKI
 
      «En la mesa de regalos… se puede hacer, como hiciste con los corazones de
       perlas, algo así pero para la mesa de regalos.»
@@ -31,8 +46,6 @@
    ============================================================================
    EL RECORRIDO
 
-   Todo en una caja de 146 × 116.
-
        la caja       rectángulo cerrado, de (18,56) a (128,106)
        la cinta      línea vertical por el medio, de (73,56) a (73,106)
        el moño       dos lazos elípticos sobre la tapa, inclinados hacia afuera
@@ -40,56 +53,45 @@
    Cada tramo se recorre POR SEPARADO: si se concatenaran en una sola tira,
    entre la caja y el moño quedaría un salto con perlas mal espaciadas.
 
-   ⚠️ El nudo lleva dos perlas encimadas a mano: es el único lugar donde el
-      espaciado parejo deja un hueco, porque ahí se cruzan tres recorridos.
-
    ============================================================================
-   ⚠️⚠️ POR QUÉ ESTE MÓDULO ES TAN INSISTENTE  (4/9/2026)
-
-   Costó hacerlo aparecer, y las dos vueltas que costó valen anotarlas:
+   ⚠️⚠️ LO QUE COSTÓ HACERLO APARECER, que vale para cualquier módulo
 
    1) `revisar()` empezaba con `if (!esPerlas()) return true;`
       Ese `true` quiere decir «listo, no hay nada que hacer». Pero en el primer
       tic `INVEV` está vacío y el `<html>` todavía no tiene la marca de la
-      colección: `esPerlas()` daba falso **porque todavía no se sabía**. El
-      ciclo se cortaba antes de que llegaran los datos.
-      → Es el mismo error del atajo del sobre en `sobre-catalogo.js`:
-        **un "no" temprano no es un "no".**
+      colección: `esPerlas()` daba falso **porque todavía no se sabía**.
+      → Mismo error que el atajo del sobre: **un "no" temprano no es un "no".**
 
-   2) Aun arreglado eso, evaluado a mano en la consola dibujaba perfecto y
-      cargado como `<script>` desde la lista no aparecía. Y el archivo servido
-      era el correcto — medido con `performance.getEntriesByType('resource')`,
-      mismo `encodedBodySize`. O sea: no era el código ni la caché. Era CUÁNDO
-      corre, y quién le borra el nodo después.
-      ⚠️ `colecciones/perlas.js` **se vuelve a pasar sola cada 400 ms** y puede
-         llevarse puesto lo que otro módulo agregó a una sección.
+   2) Aun arreglado eso, evaluado a mano en la consola dibujaba y cargado como
+      `<script>` no. Y el archivo servido era el correcto (medido con
+      `performance.getEntriesByType('resource')`, mismo `encodedBodySize`).
+      ⚠️ Y encima el deploy tardó MUCHO más que los 60-110 s de siempre: tres
+         minutos después el servidor seguía entregando la versión anterior. O
+         sea que varias de las pruebas que di por malas eran, en realidad,
+         pruebas del archivo viejo.
+      → Lección: antes de dar por roto un módulo recién subido, CONFIRMAR que
+        el servidor ya está entregando la versión nueva (buscar una marca del
+        archivo, no confiar en el reloj).
 
-   → Por eso ahora:
-       · el ciclo NO se apaga a los 20 segundos;
-       · un `MutationObserver` vuelve a poner el regalo si alguien lo borra;
-       · y queda `window.__INVREGALO` con lo que fue pasando, para poder
-         PREGUNTARLE al navegador en vez de adivinar la próxima vez.
-
-   ============================================================================
-   DÓNDE VA, Y UN HALLAZGO
-
-   Va en la sección «Mesa de regalos», centrado, arriba de los botones.
-
-   ⚠️ HALLAZGO: **los corazones ya estaban ahí.** `.mtv-corazones` es el último
-      hijo de esa misma sección, no del cierre de la invitación como decía la
-      nota vieja. Dos motivos de perlas en la misma sección se leen como que
-      sobra uno.
-      → En ESA sección los corazones se apagan. **No se borran**: el nodo queda.
-      → Si Maki prefiere los dos, se saca la línea que los esconde.
+   → Por eso quedó tan insistente: no se apaga a los 20 segundos, un
+     `MutationObserver` lo vuelve a poner si alguien lo borra, y deja
+     `window.__INVREGALO` para poder preguntarle al navegador qué pasó.
    ============================================================================ */
 (function () {
+
+  /* ⚠️ EL INTERRUPTOR. Ver la nota de arriba. */
+  var ENCENDIDO = false;
+
+  if (!ENCENDIDO) {
+    try { window.__INVREGALO = { corrio: true, apagado: true }; } catch (e) {}
+    return;
+  }
 
   var ANCHO = 146;
   var ALTO  = 116;
   var PERLA = 7;
   var PASO  = 7.6;
 
-  /* rastro, para poder diagnosticar sin adivinar */
   var log = { corrio: true, dibujado: 0, borrado: 0, ultimo: '' };
   try { window.__INVREGALO = log; } catch (e) {}
 
@@ -193,6 +195,8 @@
     if (ancla) sec.insertBefore(caja, ancla.nextSibling);
     else sec.insertBefore(caja, sec.firstChild);
 
+    /* ⚠️ los corazones ya estaban en esta misma sección. Se apagan, no se
+       borran. Maki eligió quedarse con ELLOS, por eso el módulo está apagado. */
     [].forEach.call(sec.querySelectorAll('.mtv-corazones'), function (c) {
       c.style.display = 'none';
     });
@@ -202,29 +206,21 @@
     return true;
   }
 
-  /* Pone el regalo si falta. Devuelve true sólo si está puesto. */
   function asegurar() {
     if (!esPerlas()) { log.ultimo = 'no es perlas todavia'; return false; }
-
     var sec = laSeccion();
     if (!sec) { log.ultimo = 'sin seccion'; return false; }
-
     var ya = sec.querySelector('.mtv-regalo');
     if (ya && ya.isConnected) return true;
-    if (log.dibujado > 0) log.borrado++;   /* estaba y no está: alguien lo borró */
-
+    if (log.dibujado > 0) log.borrado++;
     var url = fotoPerla();
     if (!url) { log.ultimo = 'sin perla'; return false; }
-
     return dibujar(sec, url);
   }
 
   function arrancar() {
     asegurar();
-
-    /* ⚠️ NO se apaga: la colección repinta cada 400 ms y puede borrarlo. */
     setInterval(asegurar, 700);
-
     if (window.MutationObserver) {
       new MutationObserver(function () { asegurar(); })
         .observe(document.body, { childList: true, subtree: true });
