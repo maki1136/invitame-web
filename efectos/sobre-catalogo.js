@@ -21,8 +21,8 @@
      «se abrió un triángulo medio raro… se nota que está cortado, no se nota
      fluido». Y después: «viste la muestra exacta que te mostré?».
 
-     TRES COSAS ESTABAN MAL, y todas se descubrieron MIDIENDO el video de la
-     referencia, no mirándolo:
+     CINCO COSAS ESTABAN MAL, y todas se descubrieron MIDIENDO —la referencia,
+     o nuestro propio render— no mirando de reojo:
 
      1. EL LACRE SE PARTÍA AL MEDIO. Con `clip-path` la solapa es un recorte
         de la MISMA foto, así que el lacre queda cortado por la línea del
@@ -33,7 +33,7 @@
           recortada con transparencia (`solapa`, un WebP con alfa, 15 KB). La
           solapa no se recorta con `clip-path`: su propio alfa le da la forma,
           el lacre viene adentro, y viaja con ella. El cuerpo tiene la MUESCA
-          del triángulo, y por esa muesca se ve la portada real de abajo.
+          del triángulo, y por esa muesca se ve la tarjeta.
 
      2. LA TARJETA NO SUBE: EL SOBRE SE CAE. Yo daba por hecho que la tarjeta
         salía del sobre hacia arriba. Seguí el moño de la referencia entre el
@@ -46,11 +46,40 @@
 
      3. Y POR LA MUESCA TENÍA QUE VERSE LA FOTO, no papel crema. `#env` es
         una tapa OPACA: la portada real está abajo, pero tapada. Así que la
-        foto va DENTRO del sobre, como una capa más (`.h-fondo`), copiada de
-        `.portada .pbg`: oscurecida y un poco más chica cuando está cerrado,
-        y se ilumina y crece mientras la solapa se levanta. Cuando el sobre
-        termina de caerse, esa capa quedó idéntica a la portada de abajo, y
-        por eso el empalme no se ve.
+        foto se dibuja como una capa nuestra (`.h-fondo`), copiada en vivo
+        de `.portada .pbg`: oscurecida y un poco más chica cuando el sobre
+        está cerrado, y se ilumina y crece mientras la solapa se levanta.
+        Cuando el sobre terminó de caerse, esa capa quedó idéntica a la
+        portada de abajo, y por eso el empalme no se ve.
+
+     4. ESA CAPA NO PUEDE COLGAR DEL SOBRE. Primero la puse adentro de
+        `#col-sobre-foto` y Maki lo cazó al toque: «la foto de ellos se va
+        para abajo con el sobre y desaparece, y la otra no desaparece».
+        Obvio: heredaba el `translateY` de la caída. Va en su propia capa
+        fija, `#col-sobre-carta`, misma geometría y z-index más bajo.
+        **El sobre se va; la tarjeta se queda.**
+
+     5. EL SOBRE PARECÍA DOS FOTOS PEGADAS. Maki: «me parece que la parte de
+        abajo y la parte de arriba son dos cosas diferentes… se nota el que
+        está arriba». Tenía razón, y era medible:
+
+        a) La solapa venía recortada a 768x810 y se dibujaba con
+           `background-size:100% auto`, o sea conservando su proporción. El
+           cuerpo, en cambio, se estira a la caja (`100% 100%`). La caja es
+           9:16 (0,5625) y el master es 768/1376 (0,5581): **0,8% de
+           diferencia**. En la punta de la solapa eso son **3 px de desfase**
+           — suficiente para ver el doblez DOBLE.
+           → Ahora la solapa va al **lienzo completo** (768x1376, todo lo de
+             abajo transparente) y se dibuja con la MISMA regla que el
+             cuerpo. Calza al píxel.
+
+        b) Además yo le había pintado al cuerpo una sombra de doblez que la
+           foto original YA TENÍA. Dos sombras superpuestas y corridas =
+           una banda ancha en vez de una línea. Medido contra el master:
+           con la sombra pintada la diferencia máxima era 118; sacándola,
+           8. → El cuerpo ahora es el master con el lacre borrado y NADA más.
+
+        → Regla: **si la foto original ya lo tiene, no lo pintes encima.**
 
      ⚠️ `GIRO` es NEGATIVO a propósito: la solapa tiene que venir HACIA la
         cámara, no irse para atrás. Con la solapa recortada se le ve el dorso,
@@ -86,10 +115,8 @@
 
      CÓMO QUEDÓ
        Se mueve UNA sola solapa: la de arriba, con la bisagra en el borde
-       superior (`transform-origin: center top`), girando hacia atrás. Las
-       otras tres son el cuerpo del sobre y no se tocan. Queda la V abierta
-       arriba, el lacre se parte al levantarse la solapa, y por ahí aparece la
-       portada real.
+       superior (`transform-origin: center top`). Las otras tres son el cuerpo
+       del sobre y no se tocan.
 
      ⚠️ Si alguna vez hace falta el otro movimiento (gatefold, como el sobre de
         Perlas, que SÍ se abre al medio), no se cambia esto: es otro sobre y va
@@ -108,12 +135,8 @@
      nosotros**. El tiempo, el ángulo y el final los manejamos al milisegundo y
      sale igual siempre.
 
-     Y no hace falta subir nada: **el póster que ya está en el repo es el primer
-     cuadro del video**, o sea el sobre cerrado, en 1080.
-
      ⚠️ EL EJE ES REGULABLE. `EJE` dice dónde está la punta de la solapa, en
-        fracciones de la foto. Está en 0,50 / 0,50 porque en la foto de anillos
-        el lacre está centrado.
+        fracciones de la foto.
 
      ⚠️ LAS SOLAPAS SE RECORTAN SOBRE LA CAJA DE LA FOTO, no sobre la pantalla.
         Por eso el contenedor tiene el tamaño exacto de la imagen, calculado con
@@ -340,6 +363,7 @@
     st.textContent = [
       '#env.carta-video > *{visibility:hidden}',
       '#env.carta-video #env-vid,',
+      '#env.carta-video #col-sobre-carta,',
       '#env.carta-video #col-sobre-foto,',
       '#env.carta-video #col-sobre-velo,',
       '#env.carta-video .vhint{visibility:visible!important}',
@@ -388,7 +412,7 @@
       '  transform:rotateX(148deg);filter:brightness(.88)}',
 
       '@media (min-width:680px){',
-      '  #col-sobre-foto{height:' + dAlto + ';width:' + dAncho + ';',
+      '  #col-sobre-foto,#col-sobre-carta{height:' + dAlto + ';width:' + dAncho + ';',
       '    border-radius:30px;overflow:hidden;',
       '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
       '}',
@@ -415,7 +439,7 @@
          La solapa es una imagen aparte con transparencia, así que NO se recorta
          con clip-path: su propio alfa le da la forma, y el lacre viaja con ella.
          El cuerpo es UNA sola hoja con la MUESCA del triángulo, y por esa
-         muesca se ve la portada real que ya está dibujada abajo.
+         muesca se ve la tarjeta.
          Y al final el sobre BAJA y se va por abajo del cuadro, que es lo que
          hace la referencia: la tarjeta no sube, el sobre se cae. */
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-izq,',
@@ -423,9 +447,19 @@
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-abajo{',
       '  clip-path:polygon(0 0,0 100%,100% 100%,100% 0,' +
         EJE.x + '% ' + EJE.y + '%,0 0)}',
+
+      /* ⚠️ LA SOLAPA SE DIBUJA CON LA MISMA REGLA QUE EL CUERPO
+         (`100% 100%`, que hereda de `.hoja`). Estuvo un rato con
+         `background-size:100% auto` y el archivo recortado a 768x810: como
+         el cuerpo se estira a la caja y la solapa conservaba su proporción,
+         la solapa quedaba **3 px más abajo en la punta**. Eso alcanzaba
+         para que el doblez se viera DOBLE y el sobre pareciera dos fotos
+         pegadas una arriba de la otra. Maki lo vio: «se nota el que está
+         arriba». Por eso el archivo de la solapa va al lienzo COMPLETO
+         (768x1376, con todo lo de abajo transparente). */
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-arriba{',
-      '  clip-path:none;background-size:100% auto;background-position:top center;',
-      '  transform-origin:center top;backface-visibility:hidden}',
+      '  clip-path:none;transform-origin:center top;',
+      '  backface-visibility:hidden}',
       '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto .h-arriba{',
       '  transform:rotateX(' + GIRO + 'deg);filter:brightness(.80)}',
       '#env.carta-video[data-solapa="1"] #col-sobre-foto{',
@@ -434,18 +468,31 @@
       '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto{',
       '  transform:translate(-50%,-50%) translateY(126%) scale(1.14)}',
 
-      /* ★ LA FOTO QUE SE VE POR LA MUESCA. Es la portada real de la
-         invitación, oscurecida como si estuviera adentro del sobre, y se
-         va iluminando a medida que la solapa se levanta. Cuando el sobre
-         termina de caer queda igual a la portada de abajo, así que el
-         empalme no se nota. */
-      '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-fondo{',
-      '  position:absolute;inset:0;background-size:cover;',
-      '  background-position:center;background-repeat:no-repeat;',
+      /* ★★ LA TARJETA — Y POR QUÉ VA AFUERA DEL SOBRE  (4/9/2026)
+         Es la portada real de la invitación, oscurecida como si estuviera
+         adentro del sobre, y se va iluminando a medida que la solapa se
+         levanta. Por la muesca del cuerpo se la ve.
+
+         ⚠️ NO ES HIJA DE `#col-sobre-foto`. Al principio sí lo era, y Maki
+            lo cazó enseguida: «la foto de ellos se va para abajo con el
+            sobre y desaparece, y la otra no desaparece». Claro: si cuelga
+            del sobre, hereda su `translateY` y se cae con él. En la
+            referencia pasa exactamente al revés — **el sobre se va y la
+            tarjeta se queda**. Por eso vive en su propia capa fija, con la
+            misma geometría y un z-index más bajo. */
+      '#col-sobre-carta{position:fixed;left:50%;top:50%;',
+      '  transform:translate(-50%,-50%);',
+      '  height:' + cajaAlto + ';width:' + cajaAncho + ';',
+      '  pointer-events:none;z-index:5;overflow:hidden;',
+      '  opacity:0;transition:opacity .45s ease}',
+      '#env.carta-video.puesto #col-sobre-carta{opacity:1}',
+      '#col-sobre-carta .h-fondo{position:absolute;inset:0;',
+      '  background-size:cover;background-position:center;',
+      '  background-repeat:no-repeat;',
       '  transform:scale(.90);filter:brightness(.42);',
       '  transition:filter ' + SOLAPAS + 's ease,',
       '             transform ' + (ESPERA + CAIDA) + 's cubic-bezier(.22,.72,.28,1)}',
-      '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto .h-fondo{',
+      '#env.carta-video.abriendo #col-sobre-carta .h-fondo{',
       '  transform:scale(1);filter:brightness(1)}'
     ].join('\n');
   }
@@ -464,8 +511,8 @@
      foto provisoria y después la cambia por la de verdad. Si nos quedamos
      con la primera, adentro del sobre se ve una foto que no es. Así que se
      sigue mirando hasta que el invitado abre, o unos segundos. */
-  function ponerFondo(caja) {
-    var f = caja.querySelector('.h-fondo');
+  function ponerFondo() {
+    var f = document.querySelector('#col-sobre-carta .h-fondo');
     if (!f || f.getAttribute('data-mirando') === '1') return;
     f.setAttribute('data-mirando', '1');
     var n = 0;
@@ -505,15 +552,22 @@
     if (solapaUrl && arriba) {
       var cs = 'url("' + String(solapaUrl).replace(/"/g, '%22') + '")';
       if (arriba.style.backgroundImage !== cs) arriba.style.backgroundImage = cs;
-      if (!caja.querySelector('.h-fondo')) {
+      /* la tarjeta va en SU PROPIA capa, hermana del sobre y por debajo:
+         así el sobre se cae y ella se queda. Ver la nota del CSS. */
+      if (!document.getElementById('col-sobre-carta')) {
+        var carta = document.createElement('div');
+        carta.id = 'col-sobre-carta';
         var f = document.createElement('div');
         f.className = 'h-fondo';
-        caja.insertBefore(f, caja.firstChild);   /* va ATRÁS de todo */
+        carta.appendChild(f);
+        env.insertBefore(carta, caja);
       }
-      ponerFondo(caja);
+      ponerFondo();
       env.dataset.solapa = '1';
     } else {
       if (env.dataset.solapa) env.removeAttribute('data-solapa');
+      var vieja = document.getElementById('col-sobre-carta');
+      if (vieja && vieja.parentNode) vieja.parentNode.removeChild(vieja);
     }
   }
 
