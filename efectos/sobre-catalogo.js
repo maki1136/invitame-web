@@ -539,6 +539,11 @@
            fitLine(DIST_HUBER) + cruce de las dos rectas), no a ojo. */
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-abajo{',
       '  clip-path:' + agujero() + '}',
+      /* …salvo que el cuerpo traiga su propio alfa: ahí el agujero ya está
+         adentro del archivo, con borde blando. ⚠️ Esta regla tiene la MISMA
+         especificidad que la de arriba, así que va DESPUÉS a propósito. */
+      '#env.carta-video[data-cuerpo="1"] #col-sobre-foto .h-abajo{',
+      '  clip-path:none}',
 
       /* ★★★ LA SOLAPA SE VA PARA ARRIBA. EL CUERPO SE VA PARA ABAJO.
          Maki: «la parte que queda para arriba se va para arriba y la parte
@@ -670,7 +675,16 @@
     })();
   }
 
-  function montarSolapas(env, url, solapaUrl) {
+  /* ★★★ `cuerpoPropio` = el cuerpo viene en su PROPIO archivo, un WebP con
+   alfa: el agujero ya está adentro de la imagen, con el borde blando y la
+   sombra de contacto pintados. Entonces NO se le pone `clip-path`.
+   Por qué: el `clip-path` corta con borde duro y sin antialias, y contra una
+   foto clara las dos cuñas que se abren salen como dos rayitas blancas
+   escalonadas — parece que la imagen se rajó, no que se abre. Con el alfa de
+   la imagen el borde tiene 34 px de degradé y lo que asoma entra en penumbra.
+   `poster` sigue siendo la foto del sobre CERRADO (opaca) porque se usa como
+   miniatura en el admin y como `poster` del <video>. */
+  function montarSolapas(env, url, solapaUrl, cuerpoPropio) {
     var caja = document.getElementById('col-sobre-foto');
     if (!caja) {
       caja = document.createElement('div');
@@ -717,8 +731,11 @@
       }
       ponerFondo();
       env.dataset.solapa = '1';
+      if (cuerpoPropio) { env.dataset.cuerpo = '1'; }
+      else if (env.dataset.cuerpo) { env.removeAttribute('data-cuerpo'); }
     } else {
       if (env.dataset.solapa) env.removeAttribute('data-solapa');
+      if (env.dataset.cuerpo) env.removeAttribute('data-cuerpo');
       var vieja = document.getElementById('col-sobre-carta');
       if (vieja && vieja.parentNode) vieja.parentNode.removeChild(vieja);
       var vsol = document.getElementById('col-sobre-solapa');
@@ -742,7 +759,7 @@
     env.dataset.apertura = (m.apertura === 'solapas') ? 'solapas' : 'video';
 
     if (env.dataset.apertura === 'solapas') {
-      montarSolapas(env, m.poster || '', m.solapa || '');
+      montarSolapas(env, m.cuerpo || m.poster || '', m.solapa || '', !!m.cuerpo);
     } else {
       vid.setAttribute('poster', m.poster || '');
       if (vid.getAttribute('src') !== m.video) {
@@ -784,7 +801,7 @@
 
     if (porSolapas) {
       try { vid.pause(); vid.removeAttribute('src'); vid.load(); } catch (e) {}
-      montarSolapas(env, m.poster || '', m.solapa || '');
+      montarSolapas(env, m.cuerpo || m.poster || '', m.solapa || '', !!m.cuerpo);
     } else {
       vid.style.display = '';
       vid.setAttribute('poster', m.poster || '');
