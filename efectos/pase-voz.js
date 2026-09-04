@@ -68,9 +68,25 @@
   var DX      = 45;     /* % del ancho del boleto que sube a la derecha */
   var DY      = 42;     /* % del ancho del boleto que baja */
 
+  /* ---- DE QUIEN ES EL AUDIO ---------------------------------------------
+     Por defecto suena el del evento: uno solo para todos, cargado en el panel.
+     Pero si los novios le grabaron un audio a ESTA persona, ese gana. Ese audio
+     no vive en el evento sino en la ficha del invitado (inv_invitados), y llega
+     en window.INVGUEST cuando la invitacion pide la ficha por el token del link.
+     La onda: si el audio personal no trae la suya medida, se presta la del
+     evento antes que dibujar 26 rayitas planas (es decoracion, no es dato).
+     Como huella() se arma con lo que devuelve esta funcion, cambiar de audio
+     ya dispara el re-montado solo: no hay que avisarle a nadie.               */
   function fx() {
     var e = window.INVEV || {};
-    return (e.fx && e.fx.pasevoz) || {};
+    var f = (e.fx && e.fx.pasevoz) || {};
+    var g = window.INVGUEST;
+    if (!g || !g.pasevozAudio) return f;
+    var c = {}, k;
+    for (k in f) if (Object.prototype.hasOwnProperty.call(f, k)) c[k] = f[k];
+    c.audio = g.pasevozAudio;
+    c.onda  = g.pasevozOnda || f.onda || '';
+    return c;
   }
   function txt(v, x) { return (v == null || v === '') ? (x || '') : String(v); }
 
