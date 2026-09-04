@@ -253,12 +253,14 @@
   var LEJOS   = 16000;  /* perspective de la capa de la solapa, en px.
        Medido en la referencia: el lacre casi no cambia de tamaño (0,96 a
        1,06). Con 1400 se agrandaba un 30%; con 16000 crece 8%. */
-  var RECORTE = 0.68;   /* el agujero del cuerpo es el triángulo de la solapa
+  var RECORTE = 0.76;   /* el agujero del cuerpo es el triángulo de la solapa
        encogido a este factor respecto de su centro. Ver la nota del CSS.
-       Probado 1,00 / 0,80 / 0,68 / 0,56 cuadro por cuadro: con 0,80 la
-       tarjeta asoma en cuñas finitas por los dobleces; con 0,56 aparece
-       tarde y chica; con 0,68 aparece como una V limpia colgando de la
-       punta de la solapa, igual que en la muestra. */
+       Con el sobre de CUATRO solapas se puede agrandar (antes 0,68): ahora
+       lo que rodea al agujero son los filos biselados de las solapas
+       laterales y de la de abajo, así que lo que se ve leyendo como
+       "abertura" tiene borde y volumen de verdad. Probado 0,80 / 0,76 /
+       0,72 / 0,68 cuadro por cuadro: con 0,80 aparece una rayita en el
+       doblez a los 0,45 s; 0,76 es lo más abierto que no la muestra. */
   var SOL_DUR = 1.50;   /* lo que tarda la solapa en irse por arriba */
   var ESPERA  = 1.25;   /* cuánto tarda el cuerpo en arrancar */
   var CAIDA   = 2.30;   /* lo que tarda el cuerpo en irse por abajo */
