@@ -227,10 +227,52 @@
   /* dónde está la punta de la solapa, en fracciones de la foto. */
   var EJE = { x: 50, y: 50 };
 
-  /* ---- sobre maestro: giro de la solapa y caída del sobre ---- */
-  var GIRO   = -96;    /* grados: negativo = la solapa viene HACIA la cámara */
-  var CAIDA  = 1.9;    /* cuánto tarda el sobre en irse por abajo */
-  var ESPERA = 1.15;   /* y cuánto espera después de abrirse la solapa */
+  /* ---- SOBRE MAESTRO: los números salieron de MEDIR la referencia -------
+     (inviteness, 60 fps, pantalla rectificada a 540x1160 — ver el encabezado)
+
+       la solapa arranca en          t = 11,35 s
+       el lacre sube 458 px y sale   t = 12,85 s   -> dura 1,50 s
+       el cuerpo arranca en          t = 12,60 s   -> 1,25 s DESPUÉS
+       el cuerpo termina de salir    t = 14,90 s   -> dura 2,30 s
+
+     Las curvas se ajustaron por mínimos cuadrados contra los puntos medidos
+     (rms 0,009 y 0,023 sobre progreso normalizado). LAS DOS ACELERAN: no es
+     un ease-out, las dos partes se van cada vez más rápido. */
+  var GIRO    = 50;     /* grados, POSITIVO = la solapa viene HACIA la cámara.
+       Es lo que hace un sobre de verdad cuando lo abrís por atrás, y es lo
+       que hace la referencia. Con el signo negativo se iba para atrás, se
+       achataba y quedaba una tirita. */
+  var BISAGRA = 115;    /* % de la caja que la solapa sobresale POR ARRIBA.
+       ★ ESTE ES EL DATO QUE FALTABA. En la referencia la solapa sigue
+         tapando casi hasta el final; en la nuestra desaparecía enseguida.
+         El motivo: allá la solapa es MÁS LARGA QUE EL CUADRO — la bisagra
+         está fuera de pantalla. Si la bisagra es el borde de la caja, al
+         girar la solapa se encoge hacia arriba y deja ver la muesca entera
+         de una. Poniéndola un 115% más arriba, la solapa recorre el cuadro
+         de verdad y la V se abre de a poco, como en la muestra. */
+  var LEJOS   = 16000;  /* perspective de la capa de la solapa, en px.
+       Medido en la referencia: el lacre casi no cambia de tamaño (0,96 a
+       1,06). Con 1400 se agrandaba un 30%; con 16000 crece 8%. */
+  var RECORTE = 0.68;   /* el agujero del cuerpo es el triángulo de la solapa
+       encogido a este factor respecto de su centro. Ver la nota del CSS.
+       Probado 1,00 / 0,80 / 0,68 / 0,56 cuadro por cuadro: con 0,80 la
+       tarjeta asoma en cuñas finitas por los dobleces; con 0,56 aparece
+       tarde y chica; con 0,68 aparece como una V limpia colgando de la
+       punta de la solapa, igual que en la muestra. */
+  var SOL_DUR = 1.50;   /* lo que tarda la solapa en irse por arriba */
+  var ESPERA  = 1.25;   /* cuánto tarda el cuerpo en arrancar */
+  var CAIDA   = 2.30;   /* lo que tarda el cuerpo en irse por abajo */
+  var BAJA    = 110;    /* % de la caja que baja el cuerpo */
+  /* La curva medida en la referencia (el recorrido del lacre) es
+     cubic-bezier(.05,.03,.73,.16). Pero nosotros no movemos el lacre
+     directamente: lo mueve la GEOMETRÍA (el giro sobre una bisagra que está
+     fuera del cuadro, más la perspectiva). Así que este easing es el que hay
+     que meterle al GIRO para que el LACRE salga con aquella curva. Se obtuvo
+     invirtiendo la proyección: queda en rms 0,007 contra lo medido.
+     ⚠️ GIRO, BISAGRA, LEJOS y EASE_SOL son UN SOLO NÚMERO REPARTIDO EN
+        CUATRO. Cambiar uno solo desarma el calce. */
+  var EASE_SOL = 'cubic-bezier(0,.26,.52,.40)';
+  var EASE_CUE = 'cubic-bezier(0,.04,1,.6)';
 
   var listo = false;
   var armadoModelo = null;
@@ -347,6 +389,21 @@
     tapa = null;
   }
 
+  /* el agujero del cuerpo: el triángulo de la solapa encogido hacia su
+     CENTRO (no hacia la punta: encogerlo hacia la punta deja los lados
+     pegados a los dobleces y no sirve de nada). Los tres vértices se
+     acercan al baricentro, así queda un marco de papel de ancho parejo
+     por los tres lados. */
+  function agujero() {
+    var gx = (100 + EJE.x) / 3, gy = EJE.y / 3, k = RECORTE;
+    function v(x, y) {
+      return (gx + k * (x - gx)).toFixed(2) + '% ' + (gy + k * (y - gy)).toFixed(2) + '%';
+    }
+    var A = v(0, 0), B = v(100, 0), C = v(EJE.x, EJE.y);
+    return 'polygon(0 0,0 100%,100% 100%,100% 0,0 0,' +
+           A + ',' + B + ',' + C + ',' + A + ',0 0)';
+  }
+
   function estilo(color) {
     var st = document.getElementById('col-sobrecat-css');
     if (!st) {
@@ -365,6 +422,7 @@
       '#env.carta-video #env-vid,',
       '#env.carta-video #col-sobre-carta,',
       '#env.carta-video #col-sobre-foto,',
+      '#env.carta-video #col-sobre-solapa,',
       '#env.carta-video #col-sobre-velo,',
       '#env.carta-video .vhint{visibility:visible!important}',
 
@@ -444,9 +502,44 @@
          hace la referencia: la tarjeta no sube, el sobre se cae. */
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-izq,',
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-derecha{display:none}',
+      /* ★★★ LA MUESCA NO ES EL TRIÁNGULO ENTERO — ES MÁS CHICA.
+         Al principio le hacía al cuerpo un agujero con la forma exacta de
+         la solapa cerrada. Parece lo correcto y es un error: al girar, la
+         solapa se acorta en vertical pero NO en horizontal, así que su
+         silueta se vuelve más angosta que el agujero y la tarjeta asoma en
+         DOS CUÑAS FINITAS pegadas a los dobleces. Se ve roto.
+         En la referencia la tarjeta aparece SIEMPRE colgando de la punta de
+         la solapa, nunca por los costados: el agujero es MÁS CHICO que la
+         solapa, con un marco de papel alrededor. Ese marco es el interior
+         del sobre, y se va para abajo junto con el cuerpo. */
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-abajo{',
-      '  clip-path:polygon(0 0,0 100%,100% 100%,100% 0,' +
-        EJE.x + '% ' + EJE.y + '%,0 0)}',
+      '  clip-path:' + agujero() + '}',
+
+      /* ★★★ LA SOLAPA SE VA PARA ARRIBA. EL CUERPO SE VA PARA ABAJO.
+         Maki: «la parte que queda para arriba se va para arriba y la parte
+         que queda abajo se va para abajo». Medido cuadro por cuadro en la
+         referencia: es exactamente eso, y **se separan**. Por eso la solapa
+         NO puede seguir colgando de `#col-sobre-foto` (heredaría la caída
+         del cuerpo): vive en su propia capa fija, por encima. */
+      '#col-sobre-solapa{position:fixed;left:50%;top:50%;',
+      '  transform:translate(-50%,-50%);',
+      '  height:' + cajaAlto + ';width:' + cajaAncho + ';',
+      '  perspective:' + LEJOS + 'px;pointer-events:none;z-index:7;',
+      '  overflow:hidden;',   /* lo que sobresale por arriba no se ve */
+      '  opacity:0;transition:opacity .45s ease}',
+      '#env.carta-video.puesto #col-sobre-solapa{opacity:1}',
+      /* la solapa es MÁS ALTA que la caja y cuelga por arriba: la bisagra
+         queda fuera del cuadro. El dibujo se apoya abajo para que caiga
+         exactamente encima del cuerpo. */
+      '#col-sobre-solapa .h-arriba{position:absolute;left:0;right:0;',
+      '  top:-' + BISAGRA + '%;height:' + (100 + BISAGRA) + '%;',
+      '  background-size:100% ' + (10000 / (100 + BISAGRA)).toFixed(2) + '%;',
+      '  background-position:center bottom;background-repeat:no-repeat;',
+      '  clip-path:none;transform-origin:center top;',
+      '  transition:transform ' + SOL_DUR + 's ' + EASE_SOL + ',',
+      '             filter ' + SOL_DUR + 's ease}',
+      '#env.carta-video.abriendo #col-sobre-solapa .h-arriba{',
+      '  transform:rotateX(' + GIRO + 'deg);filter:brightness(1.05)}',
 
       /* ⚠️ LA SOLAPA SE DIBUJA CON LA MISMA REGLA QUE EL CUERPO
          (`100% 100%`, que hereda de `.hoja`). Estuvo un rato con
@@ -464,9 +557,11 @@
       '  transform:rotateX(' + GIRO + 'deg);filter:brightness(.80)}',
       '#env.carta-video[data-solapa="1"] #col-sobre-foto{',
       '  transition:opacity .45s ease,',
-      '             transform ' + CAIDA + 's cubic-bezier(.55,0,.85,.25) ' + ESPERA + 's}',
+      '             transform ' + CAIDA + 's ' + EASE_CUE + ' ' + ESPERA + 's}',
+      /* ⚠️ SIN `scale`. Medí los puntos de las solapas laterales entre 11,0 y
+         12,7 y la escala se queda en 1,00: el sobre NO se acerca, sólo baja. */
       '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto{',
-      '  transform:translate(-50%,-50%) translateY(126%) scale(1.14)}',
+      '  transform:translate(-50%,-50%) translateY(' + BAJA + '%)}',
 
       /* ★★ LA TARJETA — Y POR QUÉ VA AFUERA DEL SOBRE  (4/9/2026)
          Es la portada real de la invitación, oscurecida como si estuviera
@@ -490,7 +585,7 @@
       '  background-size:cover;background-position:center;',
       '  background-repeat:no-repeat;',
       '  transform:scale(.90);filter:brightness(.42);',
-      '  transition:filter ' + SOLAPAS + 's ease,',
+      '  transition:filter ' + SOL_DUR + 's ease,',
       '             transform ' + (ESPERA + CAIDA) + 's cubic-bezier(.22,.72,.28,1)}',
       '#env.carta-video.abriendo #col-sobre-carta .h-fondo{',
       '  transform:scale(1);filter:brightness(1)}',
@@ -504,6 +599,8 @@
       '  #col-sobre-carta{height:' + dAlto + ';width:' + dAncho + ';',
       '    border-radius:30px;overflow:hidden;',
       '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
+      '  #col-sobre-solapa{height:' + dAlto + ';width:' + dAncho + ';',
+      '    border-radius:30px}',
       '}'
     ].join('\n');
   }
@@ -563,6 +660,15 @@
     if (solapaUrl && arriba) {
       var cs = 'url("' + String(solapaUrl).replace(/"/g, '%22') + '")';
       if (arriba.style.backgroundImage !== cs) arriba.style.backgroundImage = cs;
+      /* la solapa se muda a SU capa, por encima del cuerpo: se va para
+         arriba mientras el cuerpo se va para abajo. */
+      var capaSol = document.getElementById('col-sobre-solapa');
+      if (!capaSol) {
+        capaSol = document.createElement('div');
+        capaSol.id = 'col-sobre-solapa';
+        env.appendChild(capaSol);
+      }
+      if (arriba.parentNode !== capaSol) capaSol.appendChild(arriba);
       /* la tarjeta va en SU PROPIA capa, hermana del sobre y por debajo:
          así el sobre se cae y ella se queda. Ver la nota del CSS. */
       if (!document.getElementById('col-sobre-carta')) {
@@ -579,6 +685,12 @@
       if (env.dataset.solapa) env.removeAttribute('data-solapa');
       var vieja = document.getElementById('col-sobre-carta');
       if (vieja && vieja.parentNode) vieja.parentNode.removeChild(vieja);
+      var vsol = document.getElementById('col-sobre-solapa');
+      if (vsol) {
+        var a2 = vsol.querySelector('.h-arriba');
+        if (a2) caja.appendChild(a2);           /* vuelve con las otras hojas */
+        if (vsol.parentNode) vsol.parentNode.removeChild(vsol);
+      }
     }
   }
 
@@ -710,7 +822,7 @@
 
       if (esSolapas()) {
         var esperaFin = (env.dataset.solapa === '1')
-          ? (ESPERA + CAIDA + 0.15) : SOLAPAS;
+          ? (ESPERA + CAIDA + 0.10) : SOLAPAS;
         setTimeout(fundir, esperaFin * 1000);
         return;
       }
