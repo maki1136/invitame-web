@@ -253,14 +253,17 @@
   var LEJOS   = 16000;  /* perspective de la capa de la solapa, en px.
        Medido en la referencia: el lacre casi no cambia de tamaño (0,96 a
        1,06). Con 1400 se agrandaba un 30%; con 16000 crece 8%. */
-  var RECORTE = 0.76;   /* el agujero del cuerpo es el triángulo de la solapa
-       encogido a este factor respecto de su centro. Ver la nota del CSS.
-       Con el sobre de CUATRO solapas se puede agrandar (antes 0,68): ahora
-       lo que rodea al agujero son los filos biselados de las solapas
-       laterales y de la de abajo, así que lo que se ve leyendo como
-       "abertura" tiene borde y volumen de verdad. Probado 0,80 / 0,76 /
-       0,72 / 0,68 cuadro por cuadro: con 0,80 aparece una rayita en el
-       doblez a los 0,45 s; 0,76 es lo más abierto que no la muestra. */
+  var RECORTE = 1.00;   /* el agujero del cuerpo, como fracción del triángulo
+       de la solapa medido desde su baricentro.
+       ⚠️ VA EN 1,00 Y NO SE TOCA. Estuvo en 0,68 y en 0,76 para tapar dos
+       cuñitas de tarjeta que asoman pegadas a los dobleces mientras la
+       solapa gira. Ese remiendo dejaba un MARCO de papel alrededor del
+       agujero: dos triángulos, uno adentro del otro, y el marco bajando
+       con el cuerpo. Maki lo vio enseguida.
+       Después fui a la muestra y miré los cuadros 0048 a 0132 de a uno:
+       en @inviteness la tarjeta aparece justamente en esas dos cuñas, que
+       arrancan en las esquinas de arriba y crecen hasta llenar el
+       triángulo. Las cuñas SON la muestra. El marco no. */
   var SOL_DUR = 1.50;   /* lo que tarda la solapa en irse por arriba */
   var ESPERA  = 1.25;   /* cuánto tarda el cuerpo en arrancar */
   var CAIDA   = 2.30;   /* lo que tarda el cuerpo en irse por abajo */
@@ -273,7 +276,17 @@
      invirtiendo la proyección: queda en rms 0,007 contra lo medido.
      ⚠️ GIRO, BISAGRA, LEJOS y EASE_SOL son UN SOLO NÚMERO REPARTIDO EN
         CUATRO. Cambiar uno solo desarma el calce. */
-  var EASE_SOL = 'cubic-bezier(0,.26,.52,.40)';
+  /* MEDIDO otra vez el 4/9/2026, ahora con un seguimiento que sí funciona:
+     plantilla del lacre tomada del cuadro 60 (sin el dedo encima) y buscada
+     hacia adelante y hacia atrás con prior temporal. El lacre baja de y=618
+     a y=176 entre los cuadros 33 y 123 = 439 px en 1,50 s, con la x quieta
+     en 284 (o sea: sube derecho, no se va de costado).
+     Invertida la proyección (giro sobre una bisagra fuera del cuadro + la
+     perspectiva de LEJOS), el giro que reproduce ese recorrido es:
+     ⚠️ El primer cuarto NO se puede medir con el lacre: cerca de 0° el
+        recorrido va con sen(θ), así que 15° mueven el lacre 4 px. El ajuste
+        se hizo con u>=0,28, que es donde el dato discrimina. */
+  var EASE_SOL = 'cubic-bezier(.18,.25,.18,.39)';
   var EASE_CUE = 'cubic-bezier(0,.04,1,.6)';
 
   var listo = false;
@@ -504,16 +517,26 @@
          hace la referencia: la tarjeta no sube, el sobre se cae. */
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-izq,',
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-derecha{display:none}',
-      /* ★★★ LA MUESCA NO ES EL TRIÁNGULO ENTERO — ES MÁS CHICA.
-         Al principio le hacía al cuerpo un agujero con la forma exacta de
-         la solapa cerrada. Parece lo correcto y es un error: al girar, la
-         solapa se acorta en vertical pero NO en horizontal, así que su
-         silueta se vuelve más angosta que el agujero y la tarjeta asoma en
-         DOS CUÑAS FINITAS pegadas a los dobleces. Se ve roto.
-         En la referencia la tarjeta aparece SIEMPRE colgando de la punta de
-         la solapa, nunca por los costados: el agujero es MÁS CHICO que la
-         solapa, con un marco de papel alrededor. Ese marco es el interior
-         del sobre, y se va para abajo junto con el cuerpo. */
+      /* ★★★ EL AGUJERO ES EL TRIÁNGULO ENTERO. NI MÁS CHICO NI MÁS GRANDE.
+         (4/9/2026, después de «lo vas con ese triángulo en el medio,
+         desastroso» y «¿ese triángulo que se formó que baja está en la
+         muestra original?»).
+
+         Yo lo había achicado a 0,76 para tapar dos cuñitas de tarjeta que
+         asoman pegadas a los dobleces cuando la solapa gira. Ese remiendo
+         era el problema: dejaba un MARCO de papel alrededor del agujero, y
+         entonces se veían DOS triángulos, uno adentro del otro, y el marco
+         se iba para abajo con el cuerpo. Eso es lo que Maki vio.
+
+         Fui a la muestra (@inviteness, 60 fps, pantalla rectificada) y
+         miré los cuadros 0048 → 0132 uno por uno: la tarjeta aparece
+         EXACTAMENTE así, en dos cuñas que arrancan en las esquinas de
+         arriba, pegadas a los dobleces, y van creciendo hasta llenar el
+         triángulo. No hay ningún marco de papel. Las cuñas no son un
+         defecto: son la muestra.
+
+         → RECORTE = 1,00 y `eje` medido sobre la foto (Canny + Hough +
+           fitLine(DIST_HUBER) + cruce de las dos rectas), no a ojo. */
       '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-abajo{',
       '  clip-path:' + agujero() + '}',
 
@@ -537,6 +560,12 @@
       '  top:-' + BISAGRA + '%;height:' + (100 + BISAGRA) + '%;',
       '  background-size:100% ' + (10000 / (100 + BISAGRA)).toFixed(2) + '%;',
       '  background-position:center bottom;background-repeat:no-repeat;',
+      /* ⚠️ NADA DE `drop-shadow` ACÁ. Se probó y delata el recorte: el
+         drop-shadow dibuja la sombra de la SILUETA del alfa, así que
+         aparecía un aro perfecto alrededor del lacre y dos rayas sobre los
+         dobleces — justo los bordes que no se tienen que ver. Se midió
+         contra la foto original: 0 de diferencia sin el filtro, 69 con él.
+         La sombra de contacto ya viene pintada adentro de la foto. */
       '  clip-path:none;transform-origin:center top;',
       '  transition:transform ' + SOL_DUR + 's ' + EASE_SOL + ',',
       '             filter ' + SOL_DUR + 's ease}',
@@ -586,7 +615,12 @@
       '#col-sobre-carta .h-fondo{position:absolute;inset:0;',
       '  background-size:cover;background-position:center;',
       '  background-repeat:no-repeat;',
-      '  transform:scale(.90);filter:brightness(.42);',
+      /* ⚠️ NO TAN OSCURA. Con brightness(.42) lo que asoma por la abertura
+         es casi negro y el agujero se lee como un RECORTE. En la muestra
+         lo que aparece detrás de la solapa está a luz casi plena desde el
+         primer cuadro. Medido contra @inviteness: .60 es lo más oscuro que
+         sigue leyendo como "tarjeta adentro del sobre" y no como agujero. */
+      '  transform:scale(.94);filter:brightness(.60);',
       '  transition:filter ' + SOL_DUR + 's ease,',
       '             transform ' + (ESPERA + CAIDA) + 's cubic-bezier(.22,.72,.28,1)}',
       '#env.carta-video.abriendo #col-sobre-carta .h-fondo{',
