@@ -460,14 +460,22 @@
       return (b && b !== 'none') ? b : '';
     } catch (e) { return ''; }
   }
+  /* ⚠️ NO ALCANZA CON AGARRAR LA PRIMERA QUE APAREZCA: el motor pinta una
+     foto provisoria y después la cambia por la de verdad. Si nos quedamos
+     con la primera, adentro del sobre se ve una foto que no es. Así que se
+     sigue mirando hasta que el invitado abre, o unos segundos. */
   function ponerFondo(caja) {
     var f = caja.querySelector('.h-fondo');
-    if (!f) return;
+    if (!f || f.getAttribute('data-mirando') === '1') return;
+    f.setAttribute('data-mirando', '1');
     var n = 0;
-    (function buscar() {
+    (function mirar() {
       var b = fotoPortada();
-      if (b) { f.style.backgroundImage = b; return; }
-      if (++n < 90) setTimeout(buscar, 100);
+      if (b && f.style.backgroundImage !== b) f.style.backgroundImage = b;
+      var env = document.getElementById('env');
+      var abriendo = env && env.classList.contains('abriendo');
+      if (++n < 60 && !abriendo) setTimeout(mirar, 150);
+      else f.removeAttribute('data-mirando');
     })();
   }
 
