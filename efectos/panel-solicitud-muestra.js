@@ -18,26 +18,37 @@
    6. Jazmin revisa y publica.
 
    /!\ QUE SE COPIA Y QUE NO -- LA LISTA ES A PROPOSITO
-   Se copia el VESTIDO: `fx` entero (coleccion, sobre, paleta, botones, fondo,
-   fecha, raspadita, carta, itinerario...), las tipografias, los colores de cada
-   seccion, el orden de las secciones y los fondos decorativos.
-   NO se copia NADA de la muestra que sea CONTENIDO: nombres, fecha, slug, foto
-   de portada, galeria, personas, lugares, invitados, trivia, mesa de regalos ni
-   los datos de contacto. Si se copiara, el cliente recibiria la boda de otro.
+   Se copia el VESTIDO: `fx` (coleccion, sobre, paleta, botones, fondo, fecha,
+   raspadita, particulas, diseno...), las tipografias, los colores de cada
+   seccion y el orden de las secciones.
+   NO se copia NADA que sea CONTENIDO: nombres, fecha, slug, foto de portada,
+   galeria, personas, lugares, invitados, trivia, mesa de regalos ni los datos
+   de contacto. Si se copiara, el cliente recibiria la boda de otro.
 
-   /!\ `fx.muestra` NO SE COPIA
-   Son los dos interruptores de VENTA (mostrar los telefonos de Invitame y el
-   llamado "Quieres la tuya"). En la invitacion de un cliente real eso no va
-   nunca. Copiarlo seria publicar el telefono de Invitame en la boda de alguien.
+   /!\ LAS CUATRO COSAS QUE SE LIMPIAN AL VUELO -- CADA UNA POR UN MOTIVO MEDIDO
+   Probando el clonado de verdad (con una solicitud inventada, en memoria)
+   aparecieron cuatro fugas. Estan tapadas, y anotadas para que no vuelvan:
 
-   /!\ `fx.galeria.gid` TAMPOCO
-   Es el codigo de la galeria de fotos de ESA fiesta. Dos eventos con el mismo
-   gid comparten las fotos de los invitados.
+     1. `fx.muestra` — son los dos interruptores de VENTA (mostrar los telefonos
+        de Invitame y el llamado "Quieres la tuya"). En la invitacion de un
+        cliente real eso no va NUNCA: seria publicar el telefono de Invitame en
+        la boda de alguien.
+     2. `fx.galeria.gid` — es el codigo de la galeria de fotos de ESA fiesta.
+        Dos eventos con el mismo gid comparten las fotos de los invitados.
+     3. `fx.carta` (titulo, texto y bajada) — la hoja de la muestra cuenta la
+        historia de OTRA pareja ("nos conocimos en la playa..."). Se copian los
+        colores y la tipografia de la carta, pero las palabras se vacian: sin
+        texto propio, el motor muestra su frase generica, que no es de nadie.
+     4. `fx.itinerario.momentos` — son los horarios de otra fiesta. El itinerario
+        que escribio el cliente viene en su solicitud; Jazmin tiene el boton
+        "Traer los del texto" en el bloque del itinerario.
 
-   /!\ EL TEXTO DE LA CARTA SI VIENE DE LA MUESTRA
-   `fx.carta` trae titulo y texto: son parte del diseno (la hoja tiene que tener
-   algo escrito), pero hablan de otra pareja. Por eso el aviso final se lo
-   recuerda a Jazmin en pantalla, con todas las letras.
+   /!\ Y NO SE COPIA NINGUNA IMAGEN. NI LAS DE FONDO.
+   La primera version copiaba `img_c_fondo-*` pensando que eran texturas. No lo
+   son: en `camila-y-tomas`, el fondo de la seccion de la frase es una FOTO DE
+   LA PAREJA. Copiarla habria puesto la cara de Camila y Tomas en la invitacion
+   de un cliente. Regla nueva y sin excepciones: **una imagen es contenido**.
+   El vestido se arma con `fx` y los colores, que no tienen cara de nadie.
 
    POR QUE ES UN MODULO Y NO ESTA EN admin.html
    admin.html pesa 159 KB y no entra en una subida (techo medido: ~45 KB).
@@ -56,14 +67,12 @@
     'secOrden'
   ];
 
-  /* y ademas todas las claves que son puro color o fondo decorativo */
+  /* ademas, todo lo que es puro color. NINGUNA imagen: ver la nota de arriba. */
   function esDeDiseno(k) {
+    if (k.indexOf('img_') === 0) return false;      /* una imagen es contenido */
     if (DISENO.indexOf(k) >= 0) return true;
     if (/^c_color-/.test(k)) return true;
     if (/^c_fondo-color-/.test(k)) return true;
-    if (/^img_c_fondo-/.test(k)) return true;
-    if (/^img_c_imagen-fondo-/.test(k)) return true;
-    if (/^img_c_imagen-de-fondo-/.test(k)) return true;
     return false;
   }
 
@@ -84,10 +93,17 @@
       puestos.push(k);
     });
 
-    /* los dos que NUNCA viajan */
+    /* las cuatro limpiezas. Ver la nota grande de arriba: cada una tapa una
+       fuga que se vio de verdad al probar el clonado. */
     if (d.fx) {
       if (d.fx.muestra) delete d.fx.muestra;
       if (d.fx.galeria && d.fx.galeria.gid) d.fx.galeria.gid = '';
+      if (d.fx.carta) {
+        d.fx.carta.titulo = '';
+        d.fx.carta.texto  = '';
+        d.fx.carta.kicker = '';
+      }
+      if (d.fx.itinerario) d.fx.itinerario.momentos = [];
     }
     return puestos;
   }
@@ -122,10 +138,13 @@
           alert('Le puse el vestido de la muestra "' + m.nombre + '".\n\n' +
                 'Se copiaron ' + puestos.length + ' cosas de diseno: la coleccion, ' +
                 'el sobre, la paleta, las tipografias y los colores de cada seccion.\n\n' +
-                'NO se copio nada de la muestra que sea contenido: nombres, fecha, ' +
-                'fotos, lugares, personas ni invitados. Eso es del cliente.\n\n' +
-                'REVISA EL TEXTO DE LA CARTA: viene escrito de la muestra y habla ' +
-                'de otra pareja.\n\nCuando este, toca "Guardar y publicar".');
+                'NO se copio NADA de contenido: ni fotos, ni nombres, ni fecha, ni ' +
+                'lugares, ni personas, ni invitados. El texto de la carta y los ' +
+                'horarios del itinerario quedaron VACIOS a proposito, para que no ' +
+                'salga la historia de otra pareja.\n\n' +
+                'Falta: escribir la carta y cargar el itinerario (el boton "Traer ' +
+                'los del texto" arma los momentos con lo que mando el cliente).\n\n' +
+                'Cuando este, toca "Guardar y publicar".');
         })['catch'](function (e) {
           alert('No pude bajar la muestra "' + m.nombre + '": ' + (e && e.message || e) +
                 '\n\nLos datos del cliente estan cargados igual.');
