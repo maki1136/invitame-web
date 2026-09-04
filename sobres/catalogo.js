@@ -188,16 +188,25 @@ window.SOBRES_INVITAME = {
      imagen: (50,5 % · 52,3 %). El lacre la tapa entera.
      ---------------------------------------------------------------------- */
   maestro: {
-    nombre:   "Maestro · marfil botánico, cuatro solapas, lacre liso (foto)",
+    nombre:   "Maestro · papel de algodón, cuatro solapas, lacre champagne (foto)",
     poster:   "/sobres/sobre-maestro.jpg",
     solapa:   "/sobres/sobre-maestro-solapa.webp",
-    color:    "#e8e2d8",
+    color:    "#e6dcc8",
     apertura: "solapas",
     empalme:  "foto",
-    /* dónde se cruzan las cuatro solapas (y dónde está el lacre), medido
-       sobre la foto: 381/768 y 687/1376. Se abre SÓLO la de arriba; las
-       otras tres se quedan y enmarcan la abertura. */
-    eje:      { x: 49.6, y: 49.9 }
+    /* La punta de la solapa de arriba, MEDIDA sobre la foto y no a ojo:
+       Canny + Hough sobre los dos dobleces de arriba, ajuste con
+       fitLine(DIST_HUBER) y cruce de las dos rectas → 748,7 / 1221,3 de
+       1536x2752 = 48,75% y 44,38%. El lacre (HoughCircles) está en
+       779,2 / 1367,2 con radio 216,8 px: queda POR DEBAJO de la punta,
+       así que el archivo de la solapa lleva el lacre entero adentro de su
+       alfa aunque se salga del triángulo.
+       El cuerpo lleva el lacre BORRADO (continuación radial centrada en
+       el cruce, que es de donde salen los cuatro dobleces) porque el lacre
+       viaja pegado a la solapa. Y el agujero del cuerpo es el triángulo
+       ENTERO: así la tarjeta aparece en dos cuñas desde las esquinas de
+       arriba, igual que en la muestra. */
+    eje:      { x: 48.74, y: 44.38 }
   },
 
   'carta-toscana': {
