@@ -321,13 +321,61 @@
     io.observe(tk);
   }
 
-  /* el motor puede montar las secciones después que este archivo: se reintenta */
+  /* ---- CUANDO SE MONTA -----------------------------------------------------
+     /!\ ACA ESTUVO EL BUG QUE HIZO QUE EL TICKET NO APARECIERA NUNCA (4/9/2026).
+
+     La primera version se colgaba de `window.addEventListener('inv-listo', ...)`.
+     Ese evento NO EXISTE: lo invente yo. Buscado en todo el repo, la unica
+     linea que lo nombraba era la que lo escuchaba. Asi que el modulo probaba UNA
+     vez, en DOMContentLoaded --cuando `INVEV.fx` todavia esta vacio porque los
+     datos llegan de Firestore un rato despues--, se iba por el `return` de
+     "sin audio no hay pase", y no volvia a intentar jamas.
+
+     Medido en la invitacion publicada: el dato estaba (audio, onda, encendido),
+     el modulo estaba cargado, y `#pv-sec` no existia. Llamando `PV_montar()` a
+     mano aparecia al instante.
+
+     -> Ahora se hace como TODOS los demas modulos del repo (motivo.js,
+        galeria.js, rsvp-muestra.js): se vuelve a pasar solo cada 400 ms.
+
+     /!\ PERO NO SE REDIBUJA PORQUE SI. `montar()` borra y rehace la seccion: si
+         se llamara en cada vuelta, cortaria el audio que esta sonando y
+         redispararia la animacion del troquel cada 400 ms. Por eso primero se
+         compara una HUELLA de los campos y solo se rehace si algo cambio, si
+         falta la seccion debiendo estar, o si sobra debiendo no estar.
+     -------------------------------------------------------------------------- */
   function arrancar() {
     try { montar(); } catch (e) {}
   }
+
+  function huella() {
+    var f = fx();
+    return [
+      f.encendido ? 1 : 0, f.audio || '', f.onda || '',
+      f.talon || '', f.over || '', f.titulo || '',
+      f.departe || '', f.nota || '', f.fecha || '', f.hora || '',
+      f.rotuloFecha || '', f.rotuloHora || '',
+      f.papel || '', f.tinta || '', f.acento || '', f.metalico ? 1 : 0,
+      f.letraTitulo || '', f.letraDatos || '', f.letraMano || ''
+    ].join('|');
+  }
+
+  var ultima = null;
+  function revisar() {
+    var h = huella();
+    var f = fx();
+    var deberiaEstar = !!(f.encendido && f.audio);
+    var esta = !!document.getElementById('pv-sec');
+    if (h !== ultima || (deberiaEstar && !esta) || (!deberiaEstar && esta)) {
+      ultima = h;
+      arrancar();
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', arrancar);
-  } else { arrancar(); }
-  window.addEventListener('inv-listo', arrancar);
+    document.addEventListener('DOMContentLoaded', revisar);
+  } else { revisar(); }
+  setInterval(revisar, 400);
+
   window.PV_montar = montar;                    /* el panel lo llama al previsualizar */
 })();
