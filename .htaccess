@@ -9,8 +9,27 @@
   # 7 dias: si arreglamos un bug del motor o volvemos atras, el invitado que ya entro
   # sigue viendo la version rota hasta una semana. Con "no-cache" el navegador igual
   # los guarda, pero pregunta si cambiaron (responde 304, no vuelve a bajar el archivo).
+  #
+  # ⚠️ EL `Expires` HAY QUE APAGARLO A MANO, Y FALTABA. (4/9/2026)
+  #    El bloque de los .html de arriba apaga las TRES cosas; el de los .js sólo
+  #    ponía Cache-Control y se olvidaba del Expires. El servidor de Hostinger
+  #    igual mandaba `Expires: +7 días`, así que cada .js salía con dos órdenes
+  #    contradictorias: "revalidá siempre" y "esto vale hasta la semana que viene".
+  #
+  #    Medido en producción el 4/9/2026, en la misma página y al mismo tiempo:
+  #      · un `fetch()` del módulo  -> traía el archivo NUEVO
+  #      · el `<script src>` de la página -> ejecutaba el archivo VIEJO
+  #    O sea: los arreglos se subían, se publicaban, y no le llegaban a nadie que
+  #    ya hubiera abierto la invitación. Explica los "lo arreglé y sigue igual".
+  #    Se vio con encuadre-monitor.js: el servidor tenía blur(36px) y el
+  #    navegador seguía corriendo blur(70px).
+  #
+  #    Con `Expires "0"` las dos órdenes dicen lo mismo y el navegador pregunta.
+  #    No agrega descargas: si el archivo no cambió, el servidor responde 304.
   <FilesMatch "\.(js|css)$">
     Header set Cache-Control "no-cache, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
   </FilesMatch>
 </IfModule>
 <IfModule Litespeed>
