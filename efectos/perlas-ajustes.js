@@ -17,37 +17,56 @@
    1 · LA BANDA DE LA FRASE PERDÍA EL PAPEL          (3/9/2026)
 
    Jazmín marcó con un círculo verde el collar de perlas de la frase: quedaba
-   sobre una **franja blanca**, con una línea marcada, y el collar se veía
-   "colgado", separado del resto de la invitación. Maki: «no se puede sacar ese
-   fondo blanco y dejar solamente las perlas, y que quede el fondo de las plumas
-   que está de fondo en toda la invitación».
+   sobre una **franja blanca**, y el collar se veía "colgado", separado del
+   resto de la invitación.
 
    MEDIDO EN VIVO, y la causa no era el collar:
 
      · Las demás secciones claras tienen
          background-color: rgba(…, .2)   +   background-image: url(/i/tex-lino.jpg)
-       o sea el papel con un velo de color encima.
      · `.fraseSec` tenía el MISMO color… y `background-image: none`.
 
    ¿Por qué? La colección escribe:
 
        html[data-coleccion="perlas"] .fraseSec { background: var(--lino) }
 
-   **`background` es un atajo: al escribirlo, borra `background-image`.** Ese
-   `none` es lo que dejaba la franja plana. El collar estaba bien: va con
-   `mix-blend-mode: multiply`, así que sobre el papel se integra solo.
+   **`background` es un atajo: al escribirlo, borra `background-image`.**
 
    → Se le devuelve la textura. No se toca el collar ni el color.
-   → Regla general, que ya mordió otras veces en este sistema: **el atajo
-     `background:` pisa las cinco propiedades.** Si sólo se quiere el color,
-     se escribe `background-color`.
+   → Regla general: **el atajo `background:` pisa las cinco propiedades.** Si
+     sólo se quiere el color, se escribe `background-color`.
+
+   ============================================================================
+   1b · Y DESPUÉS QUEDÓ UNA LÍNEA MARCADA            (4/9/2026)
+
+   Con el papel devuelto, Maki: «hay una línea que separa las perlas de la
+   frase, y es como muy marcada, queda muy mal».
+
+   MEDIDO, y no era un borde ni una sombra — no había ninguno:
+
+       la foto del collar es de   680 × 341   (proporción 1,99)
+       se muestra en              507 × 132   (proporción 3,84)
+       y va con `object-fit: cover`
+
+   O sea que para llenar esa caja el navegador **recorta casi la mitad del alto
+   de la foto**. El borde de abajo no es un adorno: es un CORTE A CUCHILLO por
+   el medio de la imagen. Y como la pieza va en `multiply`, el papel de la foto
+   tiñe apenas su rectángulo, así que ese filo se lee como una línea.
+
+   → Se difumina con `mask-image`: la pieza se disuelve arriba y abajo en vez
+     de terminar de golpe. Es exactamente el tratamiento «DIFUMINAR» que ya
+     estaba anotado en `efectos/index.js` para las piezas que viven adentro de
+     una sección clara — sólo que a esta se le había aplicado el de recortar.
+   → Va `-webkit-mask-image` además de `mask-image`: Safari todavía lo pide.
+
+   ⚠️ NO se arregla bajando la opacidad: con `multiply`, menos opacidad no hace
+      la pieza más sutil, la hace GRIS. Eso ya está anotado y sigue valiendo.
 
    ============================================================================
    2 · LAS FOTOS DE «NUESTRAS PERSONAS» ERAN CHIQUITAS   (3/9/2026)
 
    Jazmín: «en el sector de personas se ven chiquititas las fotos, y para ellos
    son súper importantes». Medido: los círculos median **74 × 74**.
-
    Pasan a `clamp(88px, 25vw, 104px)`. Con tres por fila entran igual en un
    teléfono de 360 px de ancho.
 
@@ -55,7 +74,6 @@
    3 · LA TIPOGRAFÍA, UN POCO MÁS GRANDE                (3/9/2026)
 
    Jazmín: «agrandaría un poquito más la tipografía de toda la invitación».
-
    No se sube todo a ciegas: se midió primero dónde estaba realmente chica.
 
        título de sección   31 px      → 33
@@ -86,6 +104,10 @@
   /* el mismo papel que usan las demás secciones claras */
   var PAPEL = '/i/tex-lino.jpg';
 
+  /* cómo se disuelve el collar arriba y abajo. Ver la nota 1b. */
+  var VELO = 'linear-gradient(to bottom,' +
+             'transparent 0%,#000 26%,#000 58%,transparent 100%)';
+
   function esPerlas() {
     try {
       var D = window.INVEV || {};
@@ -115,10 +137,12 @@
           'background-position:center!important;' +
           'background-repeat:no-repeat!important'),
 
-      /* el collar ya viene en multiply: sobre el papel se integra solo.
-         Se le saca cualquier fondo propio por las dudas. */
+      /* 1b · y el collar se disuelve en vez de cortarse a cuchillo ------- */
       dos('.fraseSec .col-collar',
-          'background:none!important;mix-blend-mode:multiply!important'),
+          'background:none!important;' +
+          'mix-blend-mode:multiply!important;' +
+          '-webkit-mask-image:' + VELO + '!important;' +
+          'mask-image:' + VELO + '!important'),
 
       /* 2 · las personas, más grandes ----------------------------------- */
       dos('.av',
