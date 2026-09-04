@@ -303,6 +303,9 @@
          llamada. Por eso los arreglos que "deberían" ir en admin.html se
          escriben como módulo (ver `panel-novios-guardar.js`). Si algún día hay
          que tocar admin.html de verdad, lo sube Maki.
+         → Y cuando un archivo mediano hay que tocarlo seguido, conviene
+           PARTIRLO: `mi-panel.html` pasó de 51 KB a 13 KB sacándole el script
+           a `/mi-panel.js`, y ahora los dos entran cómodos.
 
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
       Regla de Maki: «la zona de prueba es al pedo porque después pasa esto
@@ -333,6 +336,7 @@
       Dónde es cada cosa:
       · /admin.html  → el panel de edición. El único con `.mejoras`, que es
         donde se montan estos bloques. Escribe con `INV.saveEvento` (con merge).
+      · /catalogo.html → el cliente elige la MUESTRA por su nombre.
       · /crear.html  → el formulario de alta. NO escribe `fx`.
       · /mi-panel.html → el panel de los novios (slug + clave).
       · /panel.html  → el tablero de métricas.
@@ -450,6 +454,13 @@
      pero nunca pide.
    · `panel-novios-guardar.js` NO tiene orden: envuelve `window.publicar` en
      cuanto aparece, y sólo actúa si el evento tiene clave de panel de novios.
+   · `muestras/catalogo.js` va ANTES de `panel-solicitud-muestra.js`: es la lista
+     de muestras con nombre, y el otro la lee para saber qué invitación clonar.
+     ⚠️ No confundirlo con `sobres/catalogo.js`, que es el de los sobres.
+   · `panel-solicitud-muestra.js` envuelve `window.cargarSolicitudIdx`: cuando
+     Jazmín trae una solicitud, le copia el DISEÑO de la muestra que el cliente
+     eligió en /catalogo.html. Nunca copia contenido: nombres, fecha, fotos,
+     lugares e invitados son del cliente.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`.
    · `perla.js` va ANTES de `motivo.js`: le deja la foto en `window.INVPERLA`.
@@ -504,6 +515,8 @@
     '/efectos/carta-fuente.js',        /* la tipografía de la carta se aplicaba pero no se descargaba */
     '/efectos/panel-carta.js',         /* la carta tenía SIETE campos y ningún control en el panel */
     '/efectos/panel-novios-guardar.js',/* publicar le borraba a los novios las mesas y el itinerario */
+    '/muestras/catalogo.js',           /* las muestras con nombre: Perlas y las que vengan */
+    '/efectos/panel-solicitud-muestra.js', /* al traer una solicitud, le pone el vestido de esa muestra */
     '/efectos/encuadre-monitor.js',    /* en compu: todo en una columna */
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
