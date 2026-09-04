@@ -188,32 +188,23 @@ window.SOBRES_INVITAME = {
      imagen: (50,5 % · 52,3 %). El lacre la tapa entera.
      ---------------------------------------------------------------------- */
   maestro: {
-    nombre:   "Maestro · papel de algodón, cuatro solapas, lacre champagne (foto)",
-    /* `poster` = la foto del sobre CERRADO, opaca: miniatura del admin y
-       poster del <video>. `cuerpo` = el mismo sobre con el AGUJERO ya
-       recortado adentro del archivo (WebP con alfa, borde de 34 px con
-       sombra de contacto) y el lacre y su sombra borrados, porque los lleva
-       la solapa. */
+    nombre:   "Maestro · marfil botánico, cuatro solapas, lacre liso (foto)",
     poster:   "/sobres/sobre-maestro.jpg",
-    cuerpo:   "/sobres/sobre-maestro-cuerpo.webp",
     solapa:   "/sobres/sobre-maestro-solapa.webp",
-    color:    "#e6dcc8",
+    color:    "#e8e2d8",
     apertura: "solapas",
     empalme:  "foto",
-    /* La punta de la solapa de arriba, MEDIDA sobre la foto y no a ojo:
-       Canny + Hough sobre los dos dobleces de arriba, ajuste con
-       fitLine(DIST_HUBER) y cruce de las dos rectas → 748,7 / 1221,3 de
-       1536x2752 = 48,75% y 44,38%. El lacre (HoughCircles) está en
-       779,2 / 1367,2 con radio 216,8 px: queda POR DEBAJO de la punta,
-       así que el archivo de la solapa lleva el lacre entero adentro de su
-       alfa aunque se salga del triángulo.
-       El cuerpo lleva el lacre BORRADO (continuación radial centrada en
-       el cruce, que es de donde salen los cuatro dobleces) porque el lacre
-       viaja pegado a la solapa. Y el agujero del cuerpo es el triángulo
-       ENTERO: así la tarjeta aparece en dos cuñas desde las esquinas de
-       arriba, igual que en la muestra. */
-    eje:      { x: 48.74, y: 44.38 }
+    /* ⚠️ VOLVIÓ EL BLANCO (4/9/2026). Se probó una versión en papel tostado
+       con luz rasante y Maki la bajó: «te quedó como el orto, antes había
+       quedado bien el blanco, volvé a ese». Este es el sobre que estaba
+       andando: marfil con relieve botánico y lacre liso.
+       Los archivos del tostado quedaron en el repo pero NO se usan.
+
+       `eje` = dónde se cruzan las cuatro solapas, medido sobre la foto:
+       381/768 y 687/1376. Se abre SÓLO la de arriba. */
+    eje:      { x: 49.6, y: 49.9 }
   },
+
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
