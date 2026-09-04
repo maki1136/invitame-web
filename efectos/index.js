@@ -66,6 +66,13 @@
         apagada: empujó a todo el mundo a la peor solución posible.
         → Lo arregla `/efectos/panel-itinerario.js`.
 
+      ★ LA EXCEPCIÓN: LOS RETOQUES DE UNA COLECCIÓN  (3/9/2026)
+        `/efectos/perlas-ajustes.js` no tiene bloque en el panel, y está bien:
+        no son perillas, son CORRECCIONES de la colección Perlas —el tamaño de
+        las fotos de personas, el cuerpo de la frase, el papel de una banda—.
+        Igual que `carta-perlas.js` y `itinerario-perlas.js`. Lo que Jazmín
+        elige es la colección; lo de adentro es diseño, no configuración.
+
    ★★★★★ Y HAY QUE SEGUIR EL HILO HASTA LA PANTALLA ★★★★★  (2/9/2026)
       El sobre de entrada tenía TODO puesto —seis videos en el repo, el
       catálogo, el selector en el panel— y no se veía ninguno. Dos cortes
@@ -170,20 +177,32 @@
          inventar una que el motor no tenga. Si hace falta eso → avisarle a
          Maki, NO improvisar.
 
+      ⚠️ EL ATAJO `background:` BORRA LA TEXTURA  (3/9/2026)
+         La colección escribía `html[data-coleccion="perlas"] .fraseSec
+         { background: var(--lino) }`. `background` es un ATAJO: al escribirlo
+         pone `background-image: none`. Resultado: esa sección perdía el papel
+         de lino que sí tienen las demás claras, y quedaba una **franja blanca
+         plana** con el collar de perlas colgado, separado del resto. Jazmín lo
+         marcó con un círculo verde en el WhatsApp.
+         → Si sólo se quiere el color, se escribe `background-color`.
+         → Lo corrige `/efectos/perlas-ajustes.js` devolviéndole la textura.
+
       ★★★ Y SE COPIA MIRANDO LA MUESTRA, OBJETO POR OBJETO ★★★  (1/9/2026)
          Maki: «tu problema es que no ves la muestra. Tendrías que ver la
          muestra, pensar cómo adaptar todo a la nuestra, y cuando lo adaptás,
-         VOLVER a la muestra a ver si tiene algo que ver. Porque si ves que la
-         bandeja de plata tiene una frase arriba, adiviná dónde tendría que
-         estar en nuestra invi».
+         VOLVER a la muestra a ver si tiene algo que ver».
          Lo que se había hecho mal: mirar la referencia UNA vez, sacar reglas
-         abstractas (tipografía, aire, bandas) y después colocar las piezas por
-         regla, sin volver. Resultado, textual: «está puesto así por poner».
+         abstractas y después colocar las piezas por regla, sin volver.
+         Resultado, textual: «está puesto así por poner».
          El idioma de esa referencia era: **cada objeto SOSTIENE un texto**.
-         → Antes de colocar una pieza: buscarla en la muestra, ver qué
-           sostiene, buscar la sección nuestra que dice lo mismo, y MIRARLO en
-           el navegador antes de subirlo. Si no hay sección que diga lo mismo,
-           no se pone.
+
+         ★ Y VOLVIÓ A PASAR CON EL SOBRE  (3/9/2026). Maki mandó un video del
+           sobre abriéndose POR ARRIBA; se diseñó la apertura mirando la FOTO
+           FIJA —que tiene los dobleces en X— y salió abriéndose de costado.
+           Textual: «¿qué criterio estás usando para eso?».
+           → La foto sirve para sacar el MATERIAL. El MOVIMIENTO sale del
+             video. Y antes de mostrar algo que tiene referencia, se abre la
+             referencia al lado y se comparan.
 
       Ficha de lectura de las referencias, prompts de las fotos y las trampas:
       skill `invitame-plantillas`.
@@ -218,10 +237,9 @@
 
       ⚠️ UNA FOTO CHICA REPETIDA MUCHAS VECES SE LEE COMO DIBUJO. La guirnalda
          hecha repitiendo UNA perla recortada la vio Maki enseguida: «se nota
-         que están dibujadas». El ojo ve el patrón —todas idénticas, mismo
-         brillo, misma orientación— y no la perla. La perla repetida sirve en
-         CHICO (el hilo entre secciones, la línea del programa, los corazones);
-         para una pieza protagonista hace falta la foto del objeto entero.
+         que están dibujadas». La perla repetida sirve en CHICO (el hilo entre
+         secciones, la línea del programa); para una pieza protagonista hace
+         falta la foto del objeto entero.
 
    ★★★ LOS ARCHIVOS PESADOS NO LOS PUEDO SUBIR YO ★★★  (2/9/2026)
       Los videos de sobre y las fotos van a `/sobres/` y `/colecciones/` como
@@ -233,44 +251,35 @@
       → Los binarios los sube Maki, arrastrándolos a GitHub. Que sea UNA sola
         vez, con los archivos ya listos en una carpeta y la página abierta.
       → Todo lo demás —el catálogo, los módulos, los datos— sí se hace solo.
-      → Detalle completo y los caminos que sí funcionan: skill
-        `no-pasarle-trabajo-manual-a-maki`.
+      → Y antes de pedirle que suba algo: mirar si el material YA ESTÁ. El
+        sobre de anillos se abre con el `poster` que ya estaba en el repo.
+      → Detalle completo: skill `no-pasarle-trabajo-manual-a-maki`.
 
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
-      Regla de Maki, dicha más de una vez y con razón:
-      «la zona de prueba es al pedo porque después pasa esto siempre; probá
-       directo en el original».
+      Regla de Maki: «la zona de prueba es al pedo porque después pasa esto
+      siempre; probá directo en el original».
 
-      El caso que lo demostró (30/8/2026): los bloques del panel —paletas,
-      botones, el fondo— estaban hechos, probados y "andando"… en
-      /prueba/admin.html. En el admin de VERDAD no aparecían, y nadie se dio
-      cuenta durante semanas: /prueba/admin.html carga `sobres/catalogo.js` y
-      /admin.html no lo cargaba. Trabajo hecho dos veces por probar en el lugar
-      equivocado.
+      El caso que lo demostró (30/8/2026): los bloques del panel estaban
+      hechos, probados y "andando"… en /prueba/admin.html. En el admin de
+      VERDAD no aparecían: /prueba/admin.html carga `sobres/catalogo.js` y
+      /admin.html no lo cargaba. Trabajo hecho dos veces.
 
       Entonces:
       · el admin es  https://invitame.littlemomentsok.com/admin.html
       · la muestra es `camila-y-tomas`
-      · /prueba/ NO se usa para dar nada por verificado. Si algo anda ahí y no
-        se probó en producción, NO está listo.
+      · /prueba/ NO se usa para dar nada por verificado.
 
    ★★★ Y SE PRUEBA DESDE EL PANEL, COMO JAZMÍN ★★★
-      El interruptor de la confirmación estaba hecho y verificado… pero la
-      única forma de prenderlo era escribir `fx.rsvp.estilo` en la base a mano.
-      Para quien usa el panel, la función NO estaba.
-
       Antes de decir que algo está listo:
       1. ¿se ve en la invitación?  (mirar, no medir solamente)
       2. ¿se puede prender y apagar DESDE EL PANEL, sin tocar la base?
-      3. ¿las listas del panel tienen TODAS sus opciones? (ver la nota de la
-         lista vacía, más arriba)
-      4. ¿el MOTOR lee ese dato? (ver la nota del hilo hasta la pantalla)
+      3. ¿las listas del panel tienen TODAS sus opciones?
+      4. ¿el MOTOR lee ese dato?
 
       ⚠️ Para operar el panel desde la consola: "Guardar y publicar" llama a
          `publicar()`, que abre un `confirm()` nativo — y un cartel nativo
          CONGELA la página. Hay que pisar `window.confirm` antes y llamar a
-         `publicar()` directo, no clickear. Detalle en la skill
-         `invitame-flujo-ingenieria`.
+         `publicar()` directo, no clickear.
 
       Dónde es cada cosa:
       · /admin.html  → el panel de edición. El único con `.mejoras`, que es
@@ -282,93 +291,75 @@
    ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` — Y ES MEXICANA ★★
       https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
       Todo lo nuevo se prueba y se mira AHÍ antes de mostrárselo a Maki.
-      Es la más cargada de todas: 90 campos con contenido de verdad.
       ⚠️ Es la PRIMERA muestra real del sistema nuevo: se la va a ver gente que
-         todavía no compró. Todo tiene que estar en español de México y con
-         lugares de México — la boda es en Playa del Carmen. Quedaron
-         direcciones de Uruguay dando vueltas durante semanas y nadie las vio.
+         todavía no compró. Todo en español de México y con lugares de México.
       ⚠️ El evento llamado `muestra` NO es la muestra. Está marcado "NO USAR".
 
    ★ EL VOSEO YA NO SE PARCHEA: SE ESCRIBE BIEN DE ENTRADA (30/8/2026)
-      Se borró `es-mx.js`, que traducía DESPUÉS de dibujar con un
-      MutationObserver sobre todo el documento. Ya no hace falta:
-        · el MOTOR lo traduce el servidor (`i/index.php` + `i/textos-es-mx.php`);
-        · los MÓDULOS ya escriben en español de México;
-        · los DATOS de 4 invitaciones se corrigieron.
-
-      ⚠️ AL ESCRIBIR UN MÓDULO NUEVO: los textos van en español de México. Lo
-         que escribe un módulo NO pasa por el traductor del servidor.
+      Se borró `es-mx.js`. Ahora: el MOTOR lo traduce el servidor, los MÓDULOS
+      escriben en español de México y los DATOS se corrigieron.
+      ⚠️ Lo que escribe un módulo NO pasa por el traductor del servidor.
       ⚠️ Y LOS TÍTULOS EN ESPAÑOL SON MÁS LARGOS: `PROGRAM` mide la mitad que
-         `CÓMO VA A SER EL DÍA`. Los tamaños van con `clamp()`. Nunca acortar
-         el texto del cliente para que entre.
+         `CÓMO VA A SER EL DÍA`. Los tamaños van con `clamp()`.
+
+   ★ LOS TAMAÑOS DEL MOTOR ESTÁN EN PÍXELES  (3/9/2026)
+      Jazmín pidió «agrandar un poquito la tipografía de toda la invitación».
+      No sirve subir la raíz del documento: casi nada está en `rem`, así que
+      no lo hereda nadie. Hay que nombrar cada rol y medir primero cuál está
+      realmente chico. Medido: el detalle del itinerario estaba en 13 px y su
+      hora en 17, mientras los párrafos ya estaban en 22.
+      → Lo hace `/efectos/perlas-ajustes.js`, con los números a la vista.
 
    ★ LAS COSAS DIBUJADAS CON CSS NO REEMPLAZAN A UNA FOTO (31/8/2026)
-      Las perlas del motivo estaban hechas con gradientes. Se veían "de
-      dibujito" y Maki lo dijo sin vueltas. Un objeto fotografiado —una perla,
-      un lacre, un moño— tiene microrrelieve y nácar que el CSS no imita.
-      El CSS sigue siendo la herramienta correcta para superficies (papel,
-      terciopelo, el velo del fondo) y para LÍNEAS (la cadena del dije), no
-      para objetos.
+      Un objeto fotografiado —una perla, un lacre, un moño— tiene microrrelieve
+      y nácar que el CSS no imita. El CSS sirve para SUPERFICIES (papel,
+      terciopelo, el velo) y para LÍNEAS, no para objetos.
 
    ★ NO SE TAPA UN PAPEL CON OTRO PAPEL (1/9/2026)
-      Para cubrir algo que ya está adentro de una sección con su propio papel
-      —la tapa del video, la raspadita, la tarjeta del pase— la tapa va
-      TRANSPARENTE y lo de abajo se apaga con `visibility:hidden`. Dos luces
-      distintas apiladas siempre se leen como un parche. Sobre las bandas
-      oscuras, un filete de 1 px y nada de cajas de vidrio.
+      Para cubrir algo que ya está adentro de una sección con su propio papel,
+      la tapa va TRANSPARENTE y lo de abajo se apaga con `visibility:hidden`.
 
    ★ EL EMPALME DEL SOBRE CON LA INVITACIÓN SE MIDE (2/9/2026)
-      Un video de sobre tiene que TERMINAR EN BLANCO, no mostrando el sobre
-      abierto: la invitación entra desde ese blanco y el corte no se ve. Y el
-      `color` que se declara en el catálogo se saca leyendo el píxel del último
-      cuadro, no a ojo: en `perlas` el fundido se pidió a 0xF3F3F5 y el archivo
-      terminó en #f2f2f4, porque el paso a yuv420p corre un nivel.
+      Un video de sobre tiene que TERMINAR EN BLANCO, o el corte se ve. Y el
+      `color` del catálogo se saca leyendo el píxel del último cuadro.
+      ⚠️ Salvo en los que se abren por SOLAPAS: ahí el color se mide en el
+         papel de una esquina del primer cuadro. Ver `sobres/catalogo.js`.
 
    ★ NO DEFORMAR UNA PIEZA PARA ANIMARLA (3/9/2026)
-      La línea de progreso del itinerario avanza con `transform:scaleY(p)`.
-      Sobre una raya de color está perfecto. Sobre la HEBRA DE PERLAS de la
-      colección, no: `scaleY` estira la imagen de fondo y las perlas quedan
-      aplastadas como lentejas mientras se scrollea, y redondas otra vez al
-      llegar al final.
-      → Para que avance un objeto sin deformarlo: `clip-path: inset(...)`.
-        Corta, no estira. La última perla queda cortada al medio, que además
-        es justo lo que uno quiere ver en un collar a medio enhebrar.
-      → Lo hace `/efectos/itinerario-perlas.js`.
+      `scaleY` sobre la hebra de perlas del itinerario dejaba las perlas
+      aplastadas como lentejas. Para que avance un objeto sin deformarlo:
+      `clip-path: inset(...)`. Corta, no estira.
+
+   ★ CUANDO ALGO NO SE VE Y TODO MIDE BIEN, MIRAR QUÉ HAY ENCIMA (3/9/2026)
+      La apertura por solapas mostraba una tarjeta crema vacía. Las hojas
+      existían, la foto cargaba, el tamaño era correcto, `visibility: visible`,
+      `opacity: 1`, y ni con `background: red` se veía. Era el `<video>` del
+      motor, vacío pero en `display:block` y con `z-index: 2`.
+      → `elementFromPoint` lo resolvió en un minuto. Los estilos de un elemento
+        nunca te dicen quién está ARRIBA.
 
    ★ !important NO ALCANZA PARA GANARLE A UN MÓDULO (1/9/2026)
-      La colección se inserta ANTES que casi todos los módulos. Si su regla
-      tiene la MISMA especificidad que la del módulo y las dos son !important,
-      desempata el orden y gana el módulo. Pasó con `inv-fondo-css`, que pinta
-      `html[data-fondo] .sec.verde` y dejaba la sección verde aunque la regla
-      de la colección estuviera bien escrita.
-      → Repetir el atributo o la clase: `[data-col-lugar][data-col-lugar]`
-        sube la especificidad sin depender de nada del motor.
-      → Y la única forma de darse cuenta es MIRAR LA PÁGINA, no el código.
+      Si dos reglas !important tienen la misma especificidad, desempata el
+      orden. Repetir la clase sube la especificidad sin depender del orden.
+      ⚠️ Pero contra la COLECCIÓN no alcanza: sus reglas van con
+         `html[data-coleccion="perlas"][data-col-perla]`, o sea dos atributos.
+         Para ganarle hay que usar el MISMO prefijo y sumar algo.
 
    ★ NO COLGAR NADA DE `window.INVEV` (31/8/2026)
-      `INVEV` es el OBJETO DE DATOS DEL EVENTO: el motor lo REEMPLAZA entero
-      cuando llega la invitación desde Firestore, y se lleva puesto cualquier
-      agregado, sin error ni aviso. La perla se perdió así en la primera vuelta
-      y la guirnalda salía con los gradientes de respaldo.
-      Los materiales van en su propio global —`window.INVPALETAS`,
-      `window.INVPERLA`, `window.INVPIEZAS`—. De `INVEV` sólo se LEE `fx`.
+      El motor lo REEMPLAZA entero cuando llega la invitación desde Firestore.
+      Los materiales van en su propio global. De `INVEV` sólo se LEE `fx`.
 
    ★ EN LOS BLOQUES DEL PANEL, NO GUARDARSE `D.fx` AL CONSTRUIR (31/8/2026)
-      El bloque se arma a los ~500 ms, ANTES de que cargue el evento. Cuando el
-      evento llega, el panel REEMPLAZA `D.fx` por el objeto de Firestore y la
-      referencia guardada antes queda huérfana: los selectores se mueven, la
-      vista previa se refresca… y no guarda nada. Parece andar y no anda.
-      → `datos()` se llama de nuevo adentro de cada `onchange`, y los
-        selectores se re-sincronizan desde `D` mientras nadie los haya tocado.
+      El panel REEMPLAZA `D.fx` cuando llega el evento y la referencia vieja
+      queda huérfana: parece que guarda y no guarda.
+      → `datos()` se llama de nuevo adentro de cada `onchange`.
 
    ★ NUNCA GUARDAR UNA COPIA DEL HTML PARA "DESHACER" (31/8/2026)
-      La colección guardaba `h1.innerHTML` antes de tocarlo, para restaurarlo.
-      Resultado: la invitación mostraba "María & Diego", los nombres de la BODA
-      DE EJEMPLO. El motor dibuja primero el ejemplo y recién después pone los
-      datos del cliente; la copia se tomaba con el ejemplo adentro.
+      El motor dibuja primero el ejemplo y recién después pone los datos del
+      cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en veintiocho casos:
+   ⚠️ EL ORDEN IMPORTA en veintinueve casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -381,22 +372,16 @@
    · `rsvp-muestra.js` NO tiene orden: sólo actúa si no hay link de invitado y
      se vuelve a pasar solo cada 400 ms.
    · `panel-muestra.js` va DESPUÉS de `panel-rsvp.js`: se monta justo debajo de
-     ese bloque, porque habla de lo mismo. Es el «Sector de muestras» y maneja
-     los dos módulos de muestra: `rsvp-muestra.js` y `muestra-venta.js`.
+     ese bloque, porque habla de lo mismo.
    · `panel-fecha.js` va DESPUÉS de `panel-muestra.js`, por la misma razón.
    · `panel-itinerario.js` va DESPUÉS de `panel-fecha.js`: se monta debajo de
-     ese bloque. Escribe `fx.itinerario.momentos` y `fx.itinerario.estilo`, que
-     leen `itinerario-momentos.js` y `itinerario.js`.
+     ese bloque. Escribe `fx.itinerario.momentos` y `fx.itinerario.estilo`.
    · `panel-sobre.js` NO tiene orden: busca el select por su `onchange` y lee
-     el catálogo en el momento, así que no depende de quién cargó primero.
-     Justamente existe porque el admin SÍ dependía del orden.
+     el catálogo en el momento.
    · `sobre-catalogo.js` va TEMPRANO y ANTES de que el invitado toque nada: es
-     lo primero que se ve. Igual espera solo a que estén `INVEV.fx.sobre` y el
-     catálogo, y no hace nada si el sobre elegido no tiene video.
+     lo primero que se ve.
    · `muestra-venta.js` va DESPUÉS de `wa-flotante.js`: le pisa el número al
-     flotante. Ese módulo escribe el href UNA sola vez (no tiene setInterval),
-     así que alcanza con pasar después; igual `muestra-venta.js` lo revisa cada
-     500 ms por si algún día cambia.
+     flotante.
    · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo se tiñe con el
      papel de la paleta.
    · `panel-fondo.js` va DESPUÉS de `fondo-invitacion.js`.
@@ -404,36 +389,27 @@
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`.
    · `perla.js` va ANTES de `motivo.js`: le deja la foto en `window.INVPERLA`.
-     No dibuja nada; es sólo el material. Si falta, motivo.js cae en las perlas
-     de gradiente y no se rompe.
    · `motivo.js` va ÚLTIMO de los que dibujan: cuelga las perlas del marco y de
-     los separadores, así que necesita que las secciones ya estén puestas. Y va
-     después de `paleta.js` porque el broche se pinta con sus colores.
+     los separadores, así que necesita que las secciones ya estén puestas.
    · `panel-motivo.js` va DESPUÉS de `motivo.js`: escribe fx.motivo.
    · `colecciones/pieza-*.js` van ANTES de `colecciones/perlas.js`: son el
-     material que la colección coloca. Si falta alguno, la colección no lo
-     coloca y no se rompe nada.
-   · `dresscode-colores.js` va DESPUÉS de `paleta.js`: cuando los colores son
-     automáticos los lee de las variables de la paleta, en vivo. Y DESPUÉS de
-     `colecciones/perlas.js`, porque uno de los dos disparadores es que haya
-     una colección puesta (la marca `data-coleccion` en el html).
-   · `panel-dresscode.js` va DESPUÉS de `panel-coleccion.js`: se monta justo
-     debajo de ese bloque.
+     material que la colección coloca.
+   · `dresscode-colores.js` va DESPUÉS de `paleta.js` y de
+     `colecciones/perlas.js`, porque uno de sus disparadores es la marca
+     `data-coleccion` en el html.
+   · `panel-dresscode.js` va DESPUÉS de `panel-coleccion.js`.
    · `colecciones/perlas.js` va AL FINAL DE LOS QUE DIBUJAN: manda sobre los
-     demás. Cambia la tipografía y el aire de secciones que escriben los otros
-     módulos, así que necesita que ya estén puestas. Igual se vuelve a pasar
-     sola cada 400 ms por si aparece algo nuevo.
+     demás. Igual se vuelve a pasar sola cada 400 ms.
    · `carta-perlas.js` va DESPUÉS de `colecciones/perlas.js`: mueve la carta
-     abajo del collar y de la frase, y para eso las dos secciones ya tienen que
-     estar puestas y disfrazadas. Sólo actúa si la colección es Perlas.
+     abajo del collar y de la frase.
    · `itinerario-perlas.js` va DESPUÉS de `colecciones/perlas.js`: copia la
-     hebra de perlas que la colección le puso a `.tl::before` para usarla como
-     línea de progreso. Si corriera antes no encontraría ninguna foto — igual
-     se reintenta solo 10 segundos, así que no se rompe, pero el orden correcto
-     evita el parpadeo.
+     hebra de perlas que la colección le puso a `.tl::before`.
+   · `perlas-ajustes.js` va AL FINAL DE LOS DE PERLAS: corrige cosas que la
+     colección deja puestas (el papel de la banda de la frase, el tamaño de las
+     fotos de personas, el cuerpo de la frase). Si corriera antes, la colección
+     le pisaría todo.
    · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
-     propone la paleta que le corresponde, y para eso el selector de paletas
-     tiene que existir.
+     propone la paleta que le corresponde.
    · `acordeon.js` NO tiene orden: se cuelga del click y no depende de nadie.
    ============================================================================ */
 (function () {
@@ -485,6 +461,7 @@
     '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
     '/efectos/carta-perlas.js',        /* y la carta va abajo del collar, no colgada del RSVP */
     '/efectos/itinerario-perlas.js',   /* y el collar se va enhebrando con el scroll */
+    '/efectos/perlas-ajustes.js',      /* los retoques de Jazmín: el papel, las caras, la frase */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
 
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
