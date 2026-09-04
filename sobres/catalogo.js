@@ -189,7 +189,13 @@ window.SOBRES_INVITAME = {
      ---------------------------------------------------------------------- */
   maestro: {
     nombre:   "Maestro · papel de algodón, cuatro solapas, lacre champagne (foto)",
+    /* `poster` = la foto del sobre CERRADO, opaca: miniatura del admin y
+       poster del <video>. `cuerpo` = el mismo sobre con el AGUJERO ya
+       recortado adentro del archivo (WebP con alfa, borde de 34 px con
+       sombra de contacto) y el lacre y su sombra borrados, porque los lleva
+       la solapa. */
     poster:   "/sobres/sobre-maestro.jpg",
+    cuerpo:   "/sobres/sobre-maestro-cuerpo.webp",
     solapa:   "/sobres/sobre-maestro-solapa.webp",
     color:    "#e6dcc8",
     apertura: "solapas",
