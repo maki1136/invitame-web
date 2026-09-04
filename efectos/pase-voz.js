@@ -42,6 +42,11 @@
    ⚠️ EL BORDE TIENE QUE SER PAPEL ROTO, NO UN CORTE DE TIJERA. Un borde recto
       —o un serrucho parejo— se lee como recortado. Por eso `DIENTES` tiene
       alturas IRREGULARES, con alguno más profundo que el resto.
+   ⚠️ Y NO ALCANZA CON QUE EXISTAN: TIENEN QUE VERSE. La primera versión los
+      hacía de 17% sobre una tira muy montada bajo el boleto, y el boleto los
+      tapaba enteros (medido: pisaba 26 px, los dientes median 11). En pantalla
+      quedaba un rectángulo perfecto — justo lo que no queremos. Ahora la tira
+      apenas se monta 3 px y los dientes van al 26%.
    ⚠️ Y LOS DIENTES SON FIJOS, NO AL AZAR. Si se sortearan, la tira cambiaría
       de forma en cada recarga y en cada redibujado. Un papel roto se rompe una
       sola vez.
@@ -96,13 +101,13 @@
     s.id = 'pv-css';
     s.textContent = [
       '#pv-sec .pv-escena{display:flex;flex-direction:column;align-items:stretch;',
-      '  max-width:420px;margin:0 auto;padding:8px 0 4px}',
+      '  max-width:352px;margin:0 auto;padding:8px 0 4px}',
 
       /* ---- EL BOLETO: talon + cuerpo. La perforacion va entre los dos. ---- */
       '#pv-sec .pv-tk{--perf:52px;--notch:9px;position:relative;',
       '  display:grid;grid-template-columns:52px 1fr;color:var(--pv-tinta);',
       '  transform:rotate(-1.6deg);border-radius:7px;overflow:hidden;background:transparent;',
-      '  filter:drop-shadow(0 13px 24px rgba(40,32,20,.24));',
+      '  filter:drop-shadow(0 14px 22px rgba(40,32,20,.34));',
       '  -webkit-mask:radial-gradient(circle var(--notch) at var(--perf) 0,transparent 98%,#000 100%),',
       '    radial-gradient(circle var(--notch) at var(--perf) 100%,transparent 98%,#000 100%);',
       '  -webkit-mask-composite:source-in;',
@@ -144,11 +149,11 @@
 
       /* ---- LA TIRA ARRANCADA: cuelga abajo, girada al reves y montada ---- */
       '#pv-sec .pv-tira{position:relative;z-index:2;display:flex;align-items:center;gap:11px;',
-      '  width:76%;max-width:318px;margin:-13px 26px 0 auto;',
+      '  width:80%;max-width:272px;margin:-3px 18px 0 auto;',
       '  padding:15px 15px 11px;border:0;font:inherit;color:var(--pv-tinta);',
       '  cursor:pointer;text-align:left;background:var(--pv-papel);',
       '  transform:rotate(2.6deg);',
-      '  filter:drop-shadow(0 9px 18px rgba(40,32,20,.26))}',
+      '  filter:drop-shadow(0 10px 16px rgba(40,32,20,.34))}',
       '#pv-sec .pv-tira::after{content:"";position:absolute;left:9px;right:9px;bottom:6px;',
       '  height:1px;background:color-mix(in srgb,var(--pv-tinta) 16%,transparent)}',
 
@@ -251,8 +256,11 @@
 
     /* el borde roto: se calcula acá y va inline, porque depende del alto */
     var tira = sec.querySelector('.pv-tira');
-    tira.style.clipPath = recorteDeRotura(17);
-    tira.style.webkitClipPath = recorteDeRotura(17);
+    /* 26% y no 17%: con dientes chicos y la tira muy montada, el borde roto
+       quedaba TAPADO por el boleto y se leia como un corte de tijera. Medido:
+       el boleto pisaba 26 px y los dientes median 11. */
+    tira.style.clipPath = recorteDeRotura(26);
+    tira.style.webkitClipPath = recorteDeRotura(26);
 
     /* textContent y no innerHTML: lo que carga el cliente es texto, no HTML */
     sec.querySelector('.pv-talon span').textContent = txt(f.talon, 'Admite dos');
