@@ -271,6 +271,10 @@
   }
   function vInvitados(){
     const lista=filtrada();
+    // La columna de la voz solo aparece si el modulo del grabador esta cargado
+    // (/efectos/panel-audio-invitado.js). Si fallo su descarga no queda un boton
+    // muerto en la tabla: directamente no hay columna.
+    const conVoz = !!window.PVGRABAR;
     $('vista').innerHTML = bloqueNumeros()+
       '<div class="barrita">'+
         '<div class="buscador"><input type="text" id="buscar" placeholder="Buscar por nombre o mesa…" value="'+esc(BUSCA)+'"></div>'+
@@ -284,7 +288,8 @@
       '<div class="tablaWrap">'+
         (lista.length ? '<table><thead><tr>'+
           '<th>Invitado</th><th>Personas</th><th>Mesa</th><th class="ocultar-chico">Usos</th>'+
-          '<th>Estado</th><th class="ocultar-chico">Mensaje</th><th>Compartir</th>'+
+          '<th>Estado</th><th class="ocultar-chico">Mensaje</th>'+
+          (conVoz?'<th>Voz</th>':'')+'<th>Compartir</th>'+
         '</tr></thead><tbody>'+ lista.map((g,i)=>{
           const e=estadoDe(g);
           return '<tr class="'+(i%2?'par':'')+'">'+
@@ -295,6 +300,10 @@
             '<td><span class="chip '+e+'">'+(e==='si'?'Confirmó ✓':(e==='no'?'No puede':'Sin responder'))+'</span></td>'+
             '<td class="ocultar-chico" style="max-width:210px;color:#6b6058;font-size:12.5px">'+
               (g.rsvpMensaje?'<span title="'+esc(g.rsvpMensaje)+'">'+esc(String(g.rsvpMensaje).slice(0,48))+(String(g.rsvpMensaje).length>48?'…':'')+'</span>':'')+'</td>'+
+            (conVoz
+              ? '<td><button class="pv-mic'+(g.pasevozAudio?' tiene':'')+'" data-pvgrab="'+esc(g.token)+'" '+
+                'title="'+(g.pasevozAudio?'Ya tiene un mensaje de voz':'Grabarle un mensaje de voz')+'"></button></td>'
+              : '')+
             '<td><div class="comp">'+
               '<button data-wa="'+esc(g.token)+'" title="Enviar por WhatsApp">&#128241;</button>'+
               '<button data-tg="'+esc(g.token)+'" title="Enviar por Telegram">&#9992;</button>'+
@@ -738,6 +747,26 @@
     await cargar();
     return true;
   }
+  /* ---- LO QUE ESTE PANEL LE PRESTA A /efectos/panel-audio-invitado.js -------
+     Ese modulo dibuja el cartel para grabarle un mensaje de voz a cada invitado.
+     Vive aparte porque este archivo ya pesa 39 KB y el techo de una subida al
+     repo es ~45 KB: si estuviera adentro, cualquier retoque del grabador
+     obligaria a reescribir el panel entero.
+
+     Se le pasa lo que este panel YA tiene cargado —el slug, la clave y las
+     fichas— para que no vuelva a pedirle nada a la base. Con getters, no con
+     copias: al entrar o recargar, SLUG/CLAVE/GENTE cambian y el modulo tiene
+     que ver lo nuevo, no una foto vieja.
+     -------------------------------------------------------------------------- */
+  window.MIPANEL = {
+    get slug(){ return SLUG; },
+    get clave(){ return CLAVE; },
+    get gente(){ return GENTE; },
+    invitado(tok){ return GENTE.filter(g=>g.token===tok)[0] || null; },
+    recargar(){ return cargar(); },
+    toast
+  };
+
   $('btnEntrar').addEventListener('click', async ()=>{
     const slug=limpiarSlug($('slug').value), clave=$('clave').value.trim();
     const err=$('errLogin');
