@@ -1,58 +1,60 @@
 /* ===== PASE CON VOZ =========================================================
-   El boleto con el mensaje de voz de los anfitriones. Son DOS piezas: el
-   ticket, y una TIRA ARRANCADA que queda apoyada abajo con el mensaje.
+   El boleto arranca ENTERO. La columna del mensaje —la que tiene la onda y el
+   play— SE ARRANCA por la perforación, gira 90° y cae abajo del boleto.
 
    Cómo se enciende:  INVEV.fx.pasevoz.encendido = true
-   Cómo se apaga:     INVEV.fx.pasevoz.encendido = false
 
-   ⚠️ EL AUDIO NO SE DESCARGA HASTA QUE ALGUIEN TOCA. El <audio> va con
-      preload="none" y la onda se dibuja con los 26 números que vienen en
-      `fx.pasevoz.onda`, medidos al grabar. El invitado que no toca el pase
-      baja CERO bytes. Es el ahorro más grande de toda la función: más que
-      cualquier elección de códec.
+   ⚠️ EL AUDIO NO SE DESCARGA HASTA QUE ALGUIEN TOCA. `preload="none"`, y la onda
+      se dibuja con los 26 números de `fx.pasevoz.onda`, medidos al grabar. El
+      invitado que no toca el pase baja CERO bytes.
 
-   ⚠️ NUNCA autoplay. iOS lo bloquea igual, y la invitación tiene música
-      propia: al tocar se pausa lo que esté sonando y se devuelve al terminar.
-
-   ⚠️ Los agujeros del troquel se pintan con var(--sec-col), que es el fondo
-      de la sección. Si se usa otro color, el troquel deja de leerse como un
-      recorte y pasa a ser un círculo pintado encima.
-
-   ⚠️ `departe` y `nota` ENGORDAN EL TICKET. Vienen vacíos a propósito.
+   ⚠️ NUNCA autoplay. iOS lo bloquea igual, y la invitación tiene música propia:
+      al tocar se pausa lo que esté sonando y se devuelve al terminar.
 
    ───────────────────────────────────────────────────────────────────────────
-   POR QUÉ SON DOS PIEZAS Y NO UNA  (4/9/2026)
+   LA ROTURA, MEDIDA DEL VIDEO DE MAKI  (4/9/2026)
 
-   Maki mandó una referencia (admit-two.replit.app) y preguntó: «¿viste que el
-   ticket se rompe y se acomoda ahí abajo?». Medida cuadro por cuadro en el
-   video: el boleto arriba con su talón vertical, y DEBAJO —girada al revés y
-   un poco montada— una tira arrancada que lleva la onda y el play.
+   Referencia: admit-two.replit.app, grabación de pantalla a 59,95 fps. La mano
+   mueve el teléfono, así que TODO se midió relativo al boleto: se siguió el
+   boleto con optical flow (LK ida y vuelta, error < 1 px) y se le restó ese
+   movimiento a la posición del play.
 
-   No es sólo estética: ARREGLA EL PEOR DEFECTO QUE TENÍA ESTO.
+   LO QUE PASA, CON NÚMEROS:
 
-   La primera versión metía la onda en una columna VERTICAL de 60 px. Ahí no
-   entra: 26 rayitas en 90 px de alto quedaban de 1,5 px cada una, todas
-   clavadas en su mínimo, y se leía como una huella digital. Ya lo habíamos
-   parcheado bajando la separación a 1 px, y seguía siendo lo más flojo.
+     · el boleto arranca ENTERO, con la columna pegada a la derecha por una
+       perforación de agujeros redondos;
+     · la columna se separa en el segundo 1,70;
+     · GIRA 90° EN SENTIDO HORARIO — el ▲ del play queda ▶, y la onda pasa de
+       vertical a horizontal;
+     · se traslada dx −233 px, dy +221 px = −45% / +42% del ancho del boleto;
+     · la traslación dura 0,200 s; el giro sigue hasta 1,95 s (0,25 s);
+     · la curva FRENA al final: cubic-bezier(.155,.144,.429,.933), rms 0,005.
+       Medido p = x^0,874. NO acelera.
+     · queda pegada abajo del boleto (0-5 px), centrada, casi paralela (1-2°
+       más caída), midiendo 58% del ancho del boleto.
 
-   En una tira HORIZONTAL la onda tiene todo el ancho, las rayitas van paradas
-   y la ALTURA codifica el volumen — que es exactamente como se ve un audio de
-   WhatsApp. Se entiende sin que nadie lo explique.
+   ⚠️⚠️ EL BOLETO NO SE MUEVE. Se queda en −11,3° de principio a fin. La primera
+      versión le puso un "tirón" hacia arriba que no existe en la muestra. Es el
+      mismo error que ya se había cometido con el sobre: mover lo que se queda.
 
-   ⚠️ EL BORDE TIENE QUE SER PAPEL ROTO, NO UN CORTE DE TIJERA. Un borde recto
-      —o un serrucho parejo— se lee como recortado. Por eso `DIENTES` tiene
-      alturas IRREGULARES, con alguno más profundo que el resto.
-   ⚠️ Y NO ALCANZA CON QUE EXISTAN: TIENEN QUE VERSE. La primera versión los
-      hacía de 17% sobre una tira muy montada bajo el boleto, y el boleto los
-      tapaba enteros (medido: pisaba 26 px, los dientes median 11). En pantalla
-      quedaba un rectángulo perfecto — justo lo que no queremos. Ahora la tira
-      apenas se monta 3 px y los dientes van al 26%.
-   ⚠️ Y LOS DIENTES SON FIJOS, NO AL AZAR. Si se sortearan, la tira cambiaría
-      de forma en cada recarga y en cada redibujado. Un papel roto se rompe una
-      sola vez.
-   ⚠️ `clip-path` + `filter:drop-shadow` en el mismo elemento es a propósito: la
-      sombra sigue el borde roto. Con `box-shadow` saldría un rectángulo y se
-      arruina todo el efecto.
+   ⚠️ LA PIEZA ES UN SOLO ELEMENTO QUE GIRA, no dos dibujos distintos. Por eso
+      la onda y el play se dibujan UNA vez, horizontales, y el estado "pegada"
+      es ese mismo elemento con `rotate(-90deg)`. El giro hace todo el trabajo:
+      la onda se para sola y el ▶ apunta para arriba. Dibujar dos versiones
+      sería el doble de código y no calzarían nunca.
+
+   ⚠️ SE ANIMAN `translate` Y `rotate` POR SEPARADO, no un `transform` solo.
+      Están medidos con duraciones distintas (0,20 y 0,25 s) y en un único
+      `transform` compartirían la curva. Son propiedades independientes desde
+      Safari 14.1; si el navegador es más viejo no anima y aparece ya caída,
+      que es un final correcto igual.
+
+   ⚠️ EL PIVOTE ES EL PLAY, no el centro de la tira. Todo el recorrido se midió
+      siguiendo el botón de play, así que `transform-origin` va sobre él. Con el
+      origen en el centro, los mismos números dan un recorrido distinto.
+
+   ⚠️ ENTRE PONER EL ESTADO INICIAL Y SACARLO TIENE QUE PASAR UN FRAME. Sin el
+      doble `requestAnimationFrame` no hay transición: aparece ya caída.
    ========================================================================== */
 (function () {
   'use strict';
@@ -60,24 +62,12 @@
   var N = 26;                                   /* rayitas de la onda */
   var ABC = '0123456789abcdefghijklmnopqrstuvwxyz';
 
-  /* ---- el borde arrancado --------------------------------------------------
-     Una tijera deja un corte recto y se nota. El papel roto tiene dientes
-     IRREGULARES: distinta altura, distinto ancho, y alguno mas profundo.
-     Los numeros son fijos (ver la nota de arriba). */
-  var DIENTES = [
-    0.00, 0.62, 0.18, 0.85, 0.35, 1.00, 0.28, 0.72, 0.10, 0.55,
-    0.30, 0.92, 0.42, 0.68, 0.15, 0.80, 0.25, 0.58, 0.05, 0.75,
-    0.38, 0.95, 0.20, 0.65, 0.12, 0.88, 0.32, 0.70, 0.08, 0.50
-  ];
-  function recorteDeRotura(alturaPct) {
-    var n = DIENTES.length, p = [], i, x;
-    for (i = 0; i < n; i++) {
-      x = (i / (n - 1)) * 100;
-      p.push(x.toFixed(2) + '% ' + (DIENTES[i] * alturaPct).toFixed(2) + '%');
-    }
-    p.push('100% 100%', '0% 100%');
-    return 'polygon(' + p.join(',') + ')';
-  }
+  /* medidos del video */
+  var CURVA   = 'cubic-bezier(.155,.144,.429,.933)';
+  var T_CAE   = 200;    /* ms que dura la traslación */
+  var T_GIRA  = 250;    /* ms que dura el giro: sigue un poco más */
+  var DX      = 45;     /* % del ancho del boleto que sube a la derecha */
+  var DY      = 42;     /* % del ancho del boleto que baja */
 
   function fx() {
     var e = window.INVEV || {};
@@ -100,46 +90,47 @@
     var s = document.createElement('style');
     s.id = 'pv-css';
     s.textContent = [
-      '#pv-sec .pv-escena{display:flex;flex-direction:column;align-items:stretch;',
-      '  max-width:352px;margin:0 auto;padding:8px 0 4px}',
+      '#pv-sec .pv-escena{position:relative;max-width:352px;margin:0 auto;padding:10px 0 6px}',
 
-      /* ---- EL BOLETO: talon + cuerpo. La perforacion va entre los dos. ---- */
-      '#pv-sec .pv-tk{--perf:52px;--notch:9px;position:relative;',
-      '  display:grid;grid-template-columns:52px 1fr;color:var(--pv-tinta);',
-      '  transform:rotate(-1.6deg);border-radius:7px;overflow:hidden;background:transparent;',
-      '  filter:drop-shadow(0 14px 22px rgba(40,32,20,.34));',
-      '  -webkit-mask:radial-gradient(circle var(--notch) at var(--perf) 0,transparent 98%,#000 100%),',
-      '    radial-gradient(circle var(--notch) at var(--perf) 100%,transparent 98%,#000 100%);',
-      '  -webkit-mask-composite:source-in;',
-      '  mask:radial-gradient(circle var(--notch) at var(--perf) 0,transparent 98%,#000 100%),',
-      '    radial-gradient(circle var(--notch) at var(--perf) 100%,transparent 98%,#000 100%);',
-      '  mask-composite:intersect}',
+      /* ---- EL BOLETO. No se mueve nunca: ver la nota de arriba. ---- */
+      '#pv-sec .pv-tk{position:relative;display:grid;grid-template-columns:52px 1fr;',
+      '  color:var(--pv-tinta);transform:rotate(-1.4deg);',
+      '  filter:drop-shadow(0 14px 22px rgba(40,32,20,.34))}',
+      /* el borde derecho queda MORDIDO: es por donde se arrancó la columna */
+      '#pv-sec .pv-tk{-webkit-mask:radial-gradient(circle 5px at 100% 50%,transparent 95%,#000 100%);',
+      '  -webkit-mask-size:100% 15px;-webkit-mask-repeat:repeat-y;',
+      '  mask:radial-gradient(circle 5px at 100% 50%,transparent 95%,#000 100%);',
+      '  mask-size:100% 15px;mask-repeat:repeat-y}',
       '#pv-sec .pv-talon,#pv-sec .pv-cuerpo{background:var(--pv-papel);position:relative}',
       '#pv-sec .pv-talon::before,#pv-sec .pv-cuerpo::before{content:"";',
-      '  position:absolute;inset:7px;pointer-events:none;',
+      '  position:absolute;inset:8px;pointer-events:none;',
       '  border:1px solid color-mix(in srgb,var(--pv-tinta) 20%,transparent)}',
-      '#pv-sec .pv-talon::before{inset:7px 0 7px 12px;border-right:0}',
-      '#pv-sec .pv-cuerpo::before{inset:7px 12px 7px 0;border-left:0}',
-      '#pv-sec .pv-talon{display:flex;align-items:center;justify-content:center;padding:14px 0;',
+      '#pv-sec .pv-talon::before{inset:8px 0 8px 12px;border-right:0}',
+      '#pv-sec .pv-cuerpo::before{inset:8px 14px 8px 0;border-left:0}',
+      '#pv-sec .pv-talon{display:flex;align-items:center;justify-content:center;padding:18px 0;',
       '  border-right:1px dashed color-mix(in srgb,var(--pv-tinta) 34%,transparent)}',
       '#pv-sec .pv-talon span{writing-mode:vertical-rl;transform:rotate(180deg);',
       '  font-family:var(--pv-tit);font-size:15px;letter-spacing:.09em;text-transform:uppercase;',
       '  color:var(--pv-tinta);white-space:nowrap;overflow:hidden;line-height:1}',
-      '#pv-sec .pv-cuerpo{padding:14px 16px 13px;display:flex;flex-direction:column;min-width:0}',
+      /* min-height: el boleto de la muestra es 1,44:1 porque lleva seis renglones.
+         Con "De parte de" y "Nota" vacíos el nuestro queda chato, así que se le
+         pone un piso para que la columna arrancada no le sobresalga. */
+      '#pv-sec .pv-cuerpo{padding:20px 18px 18px;display:flex;flex-direction:column;',
+      '  justify-content:center;min-height:168px;min-width:0}',
       '#pv-sec .pv-over{font-family:var(--pv-dat);font-size:8px;letter-spacing:.16em;',
       '  text-transform:uppercase;font-weight:600;color:var(--pv-acento);margin:0;line-height:1.35}',
-      '#pv-sec .pv-titulo{font-family:var(--pv-tit);font-weight:600;line-height:1.08;margin:4px 0 0;',
+      '#pv-sec .pv-titulo{font-family:var(--pv-tit);font-weight:600;line-height:1.08;margin:5px 0 0;',
       '  font-size:clamp(18px,5.2vw,23px);letter-spacing:-.005em}',
-      '#pv-sec .pv-departe{font-family:var(--pv-cur);font-size:14px;margin:4px 0 0;',
+      '#pv-sec .pv-departe{font-family:var(--pv-cur);font-size:14px;margin:5px 0 0;',
       '  color:var(--pv-acento);line-height:1.2}',
-      '#pv-sec .pv-datos{display:grid;grid-template-columns:1.45fr 1fr;gap:0 10px;margin-top:9px}',
+      '#pv-sec .pv-datos{display:grid;grid-template-columns:1.45fr 1fr;gap:0 10px;margin-top:11px}',
       '#pv-sec .pv-datos dt{font-family:var(--pv-dat);font-size:7.5px;letter-spacing:.16em;',
       '  text-transform:uppercase;font-weight:600;margin:0;',
       '  color:color-mix(in srgb,var(--pv-tinta) 58%,transparent)}',
       '#pv-sec .pv-datos dd{font-family:var(--pv-tit);margin:1px 0 0;font-size:13.5px;',
       '  font-variant-numeric:tabular-nums;line-height:1.2;white-space:nowrap;',
       '  overflow:hidden;text-overflow:ellipsis}',
-      '#pv-sec .pv-nota{margin-top:9px;padding-top:7px;',
+      '#pv-sec .pv-nota{margin-top:11px;padding-top:8px;',
       '  border-top:1px solid color-mix(in srgb,var(--pv-tinta) 22%,transparent)}',
       '#pv-sec .pv-nota dt{font-family:var(--pv-dat);font-size:7.5px;letter-spacing:.16em;',
       '  text-transform:uppercase;font-weight:600;margin:0;',
@@ -147,30 +138,37 @@
       '#pv-sec .pv-nota dd{font-family:var(--pv-cur);margin:2px 0 0;font-size:13px;',
       '  line-height:1.25;color:var(--pv-tinta)}',
 
-      /* ---- LA TIRA ARRANCADA: cuelga abajo, girada al reves y montada ---- */
-      '#pv-sec .pv-tira{position:relative;z-index:2;display:flex;align-items:center;gap:11px;',
-      '  width:80%;max-width:272px;margin:-3px 18px 0 auto;',
-      '  padding:15px 15px 11px;border:0;font:inherit;color:var(--pv-tinta);',
-      '  cursor:pointer;text-align:left;background:var(--pv-papel);',
-      '  transform:rotate(2.6deg);',
-      '  filter:drop-shadow(0 10px 16px rgba(40,32,20,.34))}',
-      '#pv-sec .pv-tira::after{content:"";position:absolute;left:9px;right:9px;bottom:6px;',
-      '  height:1px;background:color-mix(in srgb,var(--pv-tinta) 16%,transparent)}',
+      /* ---- LA PIEZA QUE SE ARRANCA ----
+         Se dibuja UNA vez, horizontal. El estado "pegada" es este mismo
+         elemento girado -90°: ahí la onda se para y el ▶ mira para arriba. */
+      '#pv-sec .pv-msg{position:relative;z-index:2;display:flex;align-items:center;gap:10px;',
+      '  width:58%;margin:2px auto 0;padding:13px 14px 11px;',
+      '  border:0;font:inherit;color:var(--pv-tinta);cursor:pointer;text-align:left;',
+      '  background:var(--pv-papel);',
+      '  transform-origin:27px 50%;',              /* ⚠️ el pivote es el PLAY */
+      '  translate:0 0;rotate:-2.6deg;',
+      '  filter:drop-shadow(0 9px 15px rgba(40,32,20,.32));',
+      '  transition:translate ' + T_CAE + 'ms ' + CURVA + ',',
+      '             rotate ' + T_GIRA + 'ms ' + CURVA + '}',
+      /* el borde de arriba, mordido igual que el del boleto: es el mismo corte */
+      '#pv-sec .pv-msg{-webkit-mask:radial-gradient(circle 5px at 50% 0,transparent 95%,#000 100%);',
+      '  -webkit-mask-size:15px 100%;-webkit-mask-repeat:repeat-x;',
+      '  mask:radial-gradient(circle 5px at 50% 0,transparent 95%,#000 100%);',
+      '  mask-size:15px 100%;mask-repeat:repeat-x}',
+      /* ⚠️ ESTE es el estado inicial: pegada al boleto y vertical */
+      '#pv-sec .pv-msg.pv-pegada{translate:' + DX + '% -' + DY + '%;rotate:-90deg}',
 
-      /* el play */
-      '#pv-sec .pv-play{width:27px;height:27px;flex:none;border-radius:50%;display:flex;',
+      '#pv-sec .pv-play{width:26px;height:26px;flex:none;border-radius:50%;display:flex;',
       '  align-items:center;justify-content:center;',
       '  border:1px solid color-mix(in srgb,var(--pv-tinta) 45%,transparent)}',
       '#pv-sec .pv-play svg{width:9px;height:9px;color:var(--pv-tinta)}',
       '#pv-sec .pv-play .pv-pausa{display:none}',
-      '#pv-sec .pv-tira.pv-son .pv-play svg{color:var(--pv-acento)}',
-      '#pv-sec .pv-tira.pv-son .pv-play .pv-ply{display:none}',
-      '#pv-sec .pv-tira.pv-son .pv-play .pv-pausa{display:block}',
-      '#pv-sec .pv-tira.pv-son .pv-play{border-color:var(--pv-acento)}',
+      '#pv-sec .pv-msg.pv-son .pv-play svg{color:var(--pv-acento)}',
+      '#pv-sec .pv-msg.pv-son .pv-play .pv-ply{display:none}',
+      '#pv-sec .pv-msg.pv-son .pv-play .pv-pausa{display:block}',
+      '#pv-sec .pv-msg.pv-son .pv-play{border-color:var(--pv-acento)}',
 
-      /* ⚠️ LA ONDA VA HORIZONTAL Y LA ALTURA ES EL VOLUMEN. Vertical no entraba
-         (ver la nota grande de arriba). */
-      '#pv-sec .pv-onda{flex:1;height:23px;min-width:0;display:flex;align-items:center;',
+      '#pv-sec .pv-onda{flex:1;height:22px;min-width:0;display:flex;align-items:center;',
       '  gap:2px;overflow:hidden}',
       '#pv-sec .pv-onda i{display:block;flex:1 1 0;min-width:1.5px;border-radius:2px;',
       '  height:calc(max(0.14,var(--h)) * 100%);',
@@ -178,26 +176,9 @@
       '  transition:background-color .16s linear}',
       '#pv-sec .pv-onda i.pv-ya{background:var(--pv-acento)}',
 
-      /* ---- SE ROMPE Y SE ACOMODA ----
-         El boleto pega el tiron hacia arriba; la tira nace PEGADA a el (misma
-         rotacion, corrida hacia adentro), se despega, cae y se asienta. */
-      '@keyframes pv-tk-rompe{0%{transform:rotate(-1.6deg) translateY(7px)}',
-      '  22%{transform:rotate(-1.6deg) translateY(7px)}',
-      '  52%{transform:rotate(-3.6deg) translateY(-4px)}',
-      '  100%{transform:rotate(-1.6deg) translateY(0)}}',
-      '@keyframes pv-tira-cae{0%{transform:rotate(-1.6deg) translate(-22px,-19px);opacity:0}',
-      '  22%{transform:rotate(-1.6deg) translate(-22px,-19px);opacity:0}',
-      '  38%{opacity:1}',
-      '  62%{transform:rotate(5.2deg) translate(6px,5px)}',
-      '  100%{transform:rotate(2.6deg) translate(0,0);opacity:1}}',
-      '#pv-sec .pv-escena.pv-troq .pv-tk{',
-      '  animation:pv-tk-rompe 1.25s cubic-bezier(.22,.9,.25,1) both}',
-      '#pv-sec .pv-escena.pv-troq .pv-tira{',
-      '  animation:pv-tira-cae 1.25s cubic-bezier(.22,.9,.25,1) both}',
-
       '@media (prefers-reduced-motion:reduce){',
-      '  #pv-sec .pv-escena.pv-troq .pv-tk,#pv-sec .pv-escena.pv-troq .pv-tira{animation:none}',
-      '  #pv-sec .pv-tk{transform:none}#pv-sec .pv-tira{transform:none;margin-right:0}}'
+      '  #pv-sec .pv-msg{transition:none}',
+      '  #pv-sec .pv-msg.pv-pegada{translate:0 0;rotate:-2.6deg}}'
     ].join('\n');
     document.head.appendChild(s);
   }
@@ -214,9 +195,6 @@
     sec.id = 'pv-sec';
     sec.className = 'sec';
 
-    /* los colores salen de la paleta de la invitación; fx sólo pisa si trae algo.
-       El papel va ACLARADO hacia el blanco: crudo salía lavanda fuerte contra las
-       secciones vecinas. */
     var st = sec.style;
     st.setProperty('--pv-papel',  txt(f.papel,  'color-mix(in srgb,var(--sage-cl) 34%,#fff)'));
     st.setProperty('--pv-tinta',  txt(f.tinta,  'var(--verde)'));
@@ -242,7 +220,7 @@
             (nota ? '<dl class="pv-nota"><dt></dt><dd></dd></dl>' : '') +
           '</div>' +
         '</div>' +
-        '<button class="pv-tira" type="button" aria-label="Escuchar el mensaje de voz">' +
+        '<button class="pv-msg pv-pegada" type="button" aria-label="Escuchar el mensaje de voz">' +
           '<span class="pv-play" aria-hidden="true">' +
             '<svg viewBox="0 0 10 10" fill="currentColor">' +
               '<polygon class="pv-ply" points="1.5,0.8 9,5 1.5,9.2"></polygon>' +
@@ -254,15 +232,6 @@
         '</button>' +
       '</div>';
 
-    /* el borde roto: se calcula acá y va inline, porque depende del alto */
-    var tira = sec.querySelector('.pv-tira');
-    /* 26% y no 17%: con dientes chicos y la tira muy montada, el borde roto
-       quedaba TAPADO por el boleto y se leia como un corte de tijera. Medido:
-       el boleto pisaba 26 px y los dientes median 11. */
-    tira.style.clipPath = recorteDeRotura(26);
-    tira.style.webkitClipPath = recorteDeRotura(26);
-
-    /* textContent y no innerHTML: lo que carga el cliente es texto, no HTML */
     sec.querySelector('.pv-talon span').textContent = txt(f.talon, 'Admite dos');
     sec.querySelector('.pv-over').textContent       = txt(f.over);
     sec.querySelector('.pv-titulo').textContent     = txt(f.titulo);
@@ -285,7 +254,7 @@
       onda.appendChild(b); barras.push(b);
     }
 
-    /* dónde va: SIEMPRE dentro de .frame. Colgarla del body ya fue un bug. */
+    /* dónde va: SIEMPRE dentro de .frame */
     var marco = document.querySelector('.frame');
     if (!marco) return;
     var antes = document.getElementById('contacto-sec') || document.getElementById('share-sec');
@@ -298,9 +267,9 @@
 
   /* ---- el sonido ---- */
   function audio(sec, barras, f) {
-    var tira = sec.querySelector('.pv-tira');
+    var msg = sec.querySelector('.pv-msg');
     var au = document.createElement('audio');
-    au.preload = 'none';                        /* el que no toca, no descarga */
+    au.preload = 'none';
     au.src = f.audio;
     sec.appendChild(au);
 
@@ -331,15 +300,17 @@
     }
     function parar() {
       cancelAnimationFrame(raf); raf = 0;
-      tira.classList.remove('pv-son');
+      msg.classList.remove('pv-son');
       for (var k = 0; k < N; k++) barras[k].classList.remove('pv-ya');
       devolverLaMusica();
     }
 
-    tira.addEventListener('click', function () {
+    msg.addEventListener('click', function () {
+      /* mientras está pegada todavía no se puede tocar: es parte del boleto */
+      if (msg.classList.contains('pv-pegada')) return;
       if (au.paused) {
         pausarLaMusica();
-        tira.classList.add('pv-son');
+        msg.classList.add('pv-son');
         var p = au.play();
         if (p && p.then) p.then(function () { if (!raf) seguir(); }).catch(parar);
         else if (!raf) seguir();
@@ -349,44 +320,34 @@
     au.addEventListener('error', parar);
   }
 
-  /* ---- la rotura: se dispara cuando la sección entra en pantalla ---- */
+  /* ---- LA ROTURA: se dispara cuando la sección entra en pantalla ---- */
   function romperAlVerse(sec) {
-    var escena = sec.querySelector('.pv-escena'), hecho = false;
-    function correr() {
+    var msg = sec.querySelector('.pv-msg'), hecho = false;
+    function romper() {
       if (hecho) return; hecho = true;
-      escena.classList.add('pv-troq');
-      setTimeout(function () { escena.classList.remove('pv-troq'); }, 1350);
+      /* ⚠️ DOS requestAnimationFrame. Con uno solo el navegador junta el estado
+         inicial y el final en el mismo frame: no hay transición, salta al
+         final. Esto ya pasó con el sobre. */
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { msg.classList.remove('pv-pegada'); });
+      });
     }
-    if (!window.IntersectionObserver) { correr(); return; }
+    if (!window.IntersectionObserver) { romper(); return; }
     var io = new IntersectionObserver(function (e) {
-      if (e[0] && e[0].isIntersecting) { correr(); io.disconnect(); }
-    }, { threshold: 0.4 });
-    io.observe(escena);
+      if (e[0] && e[0].isIntersecting) { romper(); io.disconnect(); }
+    }, { threshold: 0.45 });
+    io.observe(sec.querySelector('.pv-escena'));
   }
 
   /* ---- CUANDO SE MONTA -----------------------------------------------------
-     /!\ ACA ESTUVO EL BUG QUE HIZO QUE EL TICKET NO APARECIERA NUNCA (4/9/2026).
+     /!\ El modulo esperaba un evento 'inv-listo' que NO DISPARA NADIE: lo habia
+     inventado yo, y por eso el ticket no aparecia nunca. Ahora se vuelve a pasar
+     solo cada 400 ms, como motivo.js, galeria.js y rsvp-muestra.js.
 
-     La primera version se colgaba de `window.addEventListener('inv-listo', ...)`.
-     Ese evento NO EXISTE: lo invente yo. Buscado en todo el repo, la unica
-     linea que lo nombraba era la que lo escuchaba. Asi que el modulo probaba UNA
-     vez, en DOMContentLoaded --cuando `INVEV.fx` todavia esta vacio porque los
-     datos llegan de Firestore un rato despues--, se iba por el `return` de
-     "sin audio no hay pase", y no volvia a intentar jamas.
-
-     -> Ahora se hace como TODOS los demas modulos del repo (motivo.js,
-        galeria.js, rsvp-muestra.js): se vuelve a pasar solo cada 400 ms.
-
-     /!\ PERO NO SE REDIBUJA PORQUE SI. `montar()` borra y rehace la seccion: si
-         se llamara en cada vuelta, cortaria el audio que esta sonando y
-         redispararia la rotura cada 400 ms. Por eso primero se compara una
-         HUELLA de los campos y solo se rehace si algo cambio, si falta la
-         seccion debiendo estar, o si sobra debiendo no estar.
+     /!\ Y NO SE REDIBUJA PORQUE SI: `montar()` borra y rehace la seccion. Si se
+         llamara en cada vuelta cortaria el audio y volveria a disparar la
+         rotura. Por eso se compara una HUELLA y solo se rehace si algo cambio.
      -------------------------------------------------------------------------- */
-  function arrancar() {
-    try { montar(); } catch (e) {}
-  }
-
   function huella() {
     var f = fx();
     return [
@@ -407,7 +368,7 @@
     var esta = !!document.getElementById('pv-sec');
     if (h !== ultima || (deberiaEstar && !esta) || (!deberiaEstar && esta)) {
       ultima = h;
-      arrancar();
+      try { montar(); } catch (e) {}
     }
   }
 
