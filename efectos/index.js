@@ -67,9 +67,10 @@
         → Lo arregla `/efectos/panel-itinerario.js`.
 
       ★ LA EXCEPCIÓN: LOS RETOQUES DE UNA COLECCIÓN  (3/9/2026)
-        `/efectos/perlas-ajustes.js` no tiene bloque en el panel, y está bien:
-        no son perillas, son CORRECCIONES de la colección Perlas —el tamaño de
-        las fotos de personas, el cuerpo de la frase, el papel de una banda—.
+        `/efectos/perlas-ajustes.js` y `/efectos/regalo-perlas.js` no tienen
+        bloque en el panel, y está bien: no son perillas, son DISEÑO de la
+        colección Perlas —el tamaño de las fotos de personas, el cuerpo de la
+        frase, el papel de una banda, el motivo de la mesa de regalos—.
         Igual que `carta-perlas.js` y `itinerario-perlas.js`. Lo que Jazmín
         elige es la colección; lo de adentro es diseño, no configuración.
 
@@ -228,7 +229,9 @@
            ⚠️ Con multiply, `opacity` baja NO hace la pieza más sutil: la hace
               GRIS. Para que sea más discreta, achicarla.
            ⚠️ Y multiply no puede ACLARAR: un brillo más claro que la sección
-              se recorta. Se acepta a cambio de conservar la sombra.
+              se recorta. Por eso el sobrecito marfil de la frase, que estaba
+              en multiply sobre papel marfil, directamente no se veía: no
+              tenía con qué oscurecer. Se pasó a mezcla normal.
 
       ⚠️ AL AGREGAR UNA PIEZA NUEVA: base64 en bloques de 4.000 y VERIFICAR con
          suma de control. Llegó un archivo con caracteres cambiados en el medio
@@ -240,6 +243,11 @@
          que están dibujadas». La perla repetida sirve en CHICO (el hilo entre
          secciones, la línea del programa); para una pieza protagonista hace
          falta la foto del objeto entero.
+         ★ Y ESE MISMO DEFECTO, EN CHICO, ES UNA HERRAMIENTA (4/9/2026). Maki:
+           «poné algo con perlas, tipo un regalo con perlas, DIBUJADO, como
+           hiciste con los corazones». Los corazones y el regalo son eso: la
+           perla repetida sobre un recorrido, chica, leyéndose como dibujo a
+           propósito. → `/efectos/regalo-perlas.js`.
 
    ★★★ LOS ARCHIVOS PESADOS NO LOS PUEDO SUBIR YO ★★★  (2/9/2026)
       Los videos de sobre y las fotos van a `/sobres/` y `/colecciones/` como
@@ -252,7 +260,8 @@
         vez, con los archivos ya listos en una carpeta y la página abierta.
       → Todo lo demás —el catálogo, los módulos, los datos— sí se hace solo.
       → Y antes de pedirle que suba algo: mirar si el material YA ESTÁ. El
-        sobre de anillos se abre con el `poster` que ya estaba en el repo.
+        sobre de anillos se abre con el `poster` que ya estaba en el repo, y el
+        regalo de la mesa se dibuja con la perla que ya estaba.
       → Detalle completo: skill `no-pasarle-trabajo-manual-a-maki`.
 
    ★★★ SE TRABAJA EN PRODUCCIÓN, NO EN LA ZONA DE PRUEBA ★★★
@@ -330,6 +339,11 @@
       aplastadas como lentejas. Para que avance un objeto sin deformarlo:
       `clip-path: inset(...)`. Corta, no estira.
 
+   ★ Y OJO CON `object-fit: cover` EN UNA PIEZA (4/9/2026)
+      El collar de la frase es una foto de 680×341 metida en una caja de
+      507×132: con `cover` se recorta casi la mitad del alto, y ese borde es un
+      corte a cuchillo que se lee como una línea. Se disuelve con `mask-image`.
+
    ★ CUANDO ALGO NO SE VE Y TODO MIDE BIEN, MIRAR QUÉ HAY ENCIMA (3/9/2026)
       La apertura por solapas mostraba una tarjeta crema vacía. Las hojas
       existían, la foto cargaba, el tamaño era correcto, `visibility: visible`,
@@ -359,7 +373,7 @@
       cliente; la copia se tomaba con el ejemplo adentro.
       → Deshacer se hace SIEMPRE mirando el DOM de AHORA.
 
-   ⚠️ EL ORDEN IMPORTA en veintinueve casos:
+   ⚠️ EL ORDEN IMPORTA en treinta casos:
    · `paleta.js` va PRIMERO: deja puestos los colores antes de que se pinte
      nada, así no se ve el salto desde los colores por defecto.
    · `panel-paleta.js` va DESPUÉS de `paleta.js`: el selector arma las tarjetas
@@ -408,6 +422,9 @@
      colección deja puestas (el papel de la banda de la frase, el tamaño de las
      fotos de personas, el cuerpo de la frase). Si corriera antes, la colección
      le pisaría todo.
+   · `regalo-perlas.js` va DESPUÉS de `perlas-ajustes.js`: le copia la foto de
+     la perla a una perla que ya esté puesta, y apaga los corazones que estaban
+     en esa misma sección. Si corriera antes no tendría de dónde copiar.
    · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
      propone la paleta que le corresponde.
    · `acordeon.js` NO tiene orden: se cuelga del click y no depende de nadie.
@@ -462,6 +479,7 @@
     '/efectos/carta-perlas.js',        /* y la carta va abajo del collar, no colgada del RSVP */
     '/efectos/itinerario-perlas.js',   /* y el collar se va enhebrando con el scroll */
     '/efectos/perlas-ajustes.js',      /* los retoques de Jazmín: el papel, las caras, la frase */
+    '/efectos/regalo-perlas.js',       /* un regalo dibujado con perlas, en Mesa de regalos */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
 
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
