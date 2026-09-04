@@ -15,6 +15,43 @@
    función global, así que un módulo puede armar la apertura con el material del
    catálogo y después llamar a la MISMA `abrir()` de siempre.
 
+   ★★★★★★★ EL SOBRE MAESTRO: LA SOLAPA ES UNA IMAGEN APARTE  (4/9/2026)
+
+     Maki, mirando el sobre de la competencia (inviteness) cuadro por cuadro:
+     «se abrió un triángulo medio raro… se nota que está cortado, no se nota
+     fluido». Y después: «viste la muestra exacta que te mostré?».
+
+     DOS COSAS ESTABAN MAL, y las dos se descubrieron MIDIENDO el video de la
+     referencia, no mirándolo:
+
+     1. EL LACRE SE PARTÍA AL MEDIO. Con `clip-path` la solapa es un recorte
+        de la MISMA foto, así que el lacre queda cortado por la línea del
+        doblez: media luna se va con la solapa y media luna se queda. En un
+        sobre de verdad el lacre se levanta ENTERO, pegado a la solapa.
+
+        → El sobre maestro trae DOS archivos: el cuerpo (`poster`) y la solapa
+          recortada con transparencia (`solapa`, un WebP con alfa, 15 KB). La
+          solapa no se recorta con `clip-path`: su propio alfa le da la forma,
+          el lacre viene adentro, y viaja con ella. El cuerpo tiene la MUESCA
+          del triángulo, y por esa muesca se ve la portada real de abajo.
+
+     2. LA TARJETA NO SUBE: EL SOBRE SE CAE. Yo daba por hecho que la tarjeta
+        salía del sobre hacia arriba. Seguí el moño de la referencia entre el
+        segundo 12,9 y el 15,3: **se queda a la misma altura todo el tiempo**.
+        Lo que se mueve es el sobre, que baja y se va por abajo del cuadro.
+
+        → `CAIDA` y `ESPERA` manejan esa salida, y el fundido ahora espera a
+          que termine (antes cortaba a los `SOLAPAS` segundos y se comía la
+          caída).
+
+     ⚠️ `GIRO` es NEGATIVO a propósito: la solapa tiene que venir HACIA la
+        cámara, no irse para atrás. Con la solapa recortada se le ve el dorso,
+        así que el sentido del giro ahora SÍ importa.
+     ⚠️ `eje` sale del catálogo (`{x, y}` en porcentajes) porque cada sobre
+        tiene la punta de la solapa en su lugar. Si no viene, queda 50/50.
+     ⚠️ SIN `solapa` EN EL CATÁLOGO NO CAMBIA NADA: todo esto vive detrás de
+        `data-solapa="1"`. Los sobres viejos siguen abriéndose igual.
+
    ★★★★★★★ SE ABRE POR ARRIBA. Y CÓMO ME EQUIVOQUÉ.  (3/9/2026)
 
      Maki, después de ver la primera versión de la apertura por solapas:
@@ -158,6 +195,11 @@
 
   /* dónde está la punta de la solapa, en fracciones de la foto. */
   var EJE = { x: 50, y: 50 };
+
+  /* ---- sobre maestro: giro de la solapa y caída del sobre ---- */
+  var GIRO   = -96;    /* grados: negativo = la solapa viene HACIA la cámara */
+  var CAIDA  = 1.9;    /* cuánto tarda el sobre en irse por abajo */
+  var ESPERA = 1.15;   /* y cuánto espera después de abrirse la solapa */
 
   var listo = false;
   var armadoModelo = null;
@@ -359,11 +401,34 @@
       '  color:rgba(60,52,44,.62);text-align:center;pointer-events:none;',
       '  opacity:0;transition:opacity .45s ease}',
       '#env.carta-video.puesto .vhint{opacity:1}',
-      '#env.carta-video.abriendo .vhint{opacity:0}'
+      '#env.carta-video.abriendo .vhint{opacity:0}',
+
+      /* ★★ SOBRE MAESTRO (data-solapa="1") ------------------------------------
+         La solapa es una imagen aparte con transparencia, así que NO se recorta
+         con clip-path: su propio alfa le da la forma, y el lacre viaja con ella.
+         El cuerpo es UNA sola hoja con la MUESCA del triángulo, y por esa
+         muesca se ve la portada real que ya está dibujada abajo.
+         Y al final el sobre BAJA y se va por abajo del cuadro, que es lo que
+         hace la referencia: la tarjeta no sube, el sobre se cae. */
+      '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-izq,',
+      '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-derecha{display:none}',
+      '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-abajo{',
+      '  clip-path:polygon(0 0,0 100%,100% 100%,100% 0,' +
+        EJE.x + '% ' + EJE.y + '%,0 0)}',
+      '#env.carta-video[data-solapa="1"] #col-sobre-foto .h-arriba{',
+      '  clip-path:none;background-size:100% auto;background-position:top center;',
+      '  transform-origin:center top;backface-visibility:hidden}',
+      '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto .h-arriba{',
+      '  transform:rotateX(' + GIRO + 'deg);filter:brightness(.80)}',
+      '#env.carta-video[data-solapa="1"] #col-sobre-foto{',
+      '  transition:opacity .45s ease,',
+      '             transform ' + CAIDA + 's cubic-bezier(.55,0,.85,.25) ' + ESPERA + 's}',
+      '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto{',
+      '  transform:translate(-50%,-50%) translateY(126%) scale(1.14)}'
     ].join('\n');
   }
 
-  function montarSolapas(env, url) {
+  function montarSolapas(env, url, solapaUrl) {
     var caja = document.getElementById('col-sobre-foto');
     if (!caja) {
       caja = document.createElement('div');
@@ -381,6 +446,18 @@
     [].forEach.call(caja.querySelectorAll('.hoja'), function (h) {
       if (h.style.backgroundImage !== css) h.style.backgroundImage = css;
     });
+
+    /* ★ SOBRE MAESTRO: la solapa es SU PROPIA imagen, con transparencia.
+       Así el lacre viaja pegado a la solapa en vez de partirse al medio.
+       Sin `solapaUrl` todo sigue exactamente como estaba. */
+    var arriba = caja.querySelector('.h-arriba');
+    if (solapaUrl && arriba) {
+      var cs = 'url("' + String(solapaUrl).replace(/"/g, '%22') + '")';
+      if (arriba.style.backgroundImage !== cs) arriba.style.backgroundImage = cs;
+      env.dataset.solapa = '1';
+    } else {
+      if (env.dataset.solapa) env.removeAttribute('data-solapa');
+    }
   }
 
   function actualizar(m, id) {
@@ -389,12 +466,13 @@
     if (!env || !vid) return false;
     if (env.classList.contains('abriendo')) return false;
 
+    if (m.eje && typeof m.eje.x === 'number') { EJE = { x: m.eje.x, y: m.eje.y }; }
     estilo(m.color || '#f4f2ee');
     env.dataset.empalme = (m.empalme === 'foto') ? 'foto' : 'blanco';
     env.dataset.apertura = (m.apertura === 'solapas') ? 'solapas' : 'video';
 
     if (env.dataset.apertura === 'solapas') {
-      montarSolapas(env, m.poster || '');
+      montarSolapas(env, m.poster || '', m.solapa || '');
     } else {
       vid.setAttribute('poster', m.poster || '');
       if (vid.getAttribute('src') !== m.video) {
@@ -412,6 +490,7 @@
     if (!env || !vid) return false;
 
     var color = m.color || '#f4f2ee';
+    if (m.eje && typeof m.eje.x === 'number') { EJE = { x: m.eje.x, y: m.eje.y }; }
     estilo(color);
 
     env.className = 'carta-video';
@@ -435,7 +514,7 @@
 
     if (porSolapas) {
       try { vid.pause(); vid.removeAttribute('src'); vid.load(); } catch (e) {}
-      montarSolapas(env, m.poster || '');
+      montarSolapas(env, m.poster || '', m.solapa || '');
     } else {
       vid.style.display = '';
       vid.setAttribute('poster', m.poster || '');
@@ -508,7 +587,9 @@
       env.classList.add('abriendo');
 
       if (esSolapas()) {
-        setTimeout(fundir, SOLAPAS * 1000);
+        var esperaFin = (env.dataset.solapa === '1')
+          ? (ESPERA + CAIDA + 0.15) : SOLAPAS;
+        setTimeout(fundir, esperaFin * 1000);
         return;
       }
 
