@@ -42,6 +42,18 @@
        el tamaño de la perla del momento, hay que mover `EJE_X` con ella:
        el eje se calcula como  (left de .it::before) + (su ancho / 2).
 
+   ★★★ Y TODAVÍA FALTABA LA MITAD  (4/9/2026, más tarde)
+
+     Maki, otra vez: «las perlas del itinerario volvieron a estar mal».
+
+     Los ejes estaban perfectos —medido, 0 px de desfase—, así que el problema
+     era otro: **el ORDEN EN QUE SE DIBUJAN**. Ver la nota grande abajo, en la
+     regla del `z-index`.
+
+     → La lección, que ya está escrita más abajo pero conviene tenerla acá:
+       que dos cosas estén en el mismo eje no quiere decir que se vean bien.
+       Hay que mirar cuál se dibuja encima de cuál.
+
    ⚠️⚠️ POR QUÉ NO SE USA `scaleY`, QUE ERA LO OBVIO
 
    El módulo genérico dibuja el avance con `transform:scaleY(p)`. Sobre una
@@ -160,6 +172,18 @@
 
       /* la hebra ENCENDIDA */
       dosVeces('.tl.tl-perlas .tl-prog', hebra),
+
+      /* ⚠️ LA PERLA DE CADA MOMENTO VA ARRIBA DEL HILO  (4/9/2026)
+         `.tl-prog` es el ÚLTIMO hijo de `.tl`, y los dos —los momentos y la
+         hebra— están posicionados con `z-index:auto`. Con z-index automático
+         gana el ORDEN DEL DOM, así que la hebra encendida se dibujaba ENCIMA
+         de las perlas grandes: se veían las cuentas chicas pasando por dentro
+         de cada perla y quedaba un montoncito en vez de una perla ensartada.
+         Maki: «las perlas del itinerario se superponen».
+         No alcanza con moverlo en el DOM (el motor lo vuelve a crear): hay que
+         decir el orden a mano. */
+      dosVeces('.tl.tl-perlas > .it', 'z-index:2!important'),
+      dosVeces('.tl.tl-perlas .tl-prog', 'z-index:1!important'),
 
       /* en el estilo «centro» el hilo va sobre la línea del medio */
       dosVeces('.tl.tl-perlas.tl-centro .tl-prog',
