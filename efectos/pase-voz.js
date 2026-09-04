@@ -30,8 +30,11 @@
      · la traslación dura 0,200 s; el giro sigue hasta 1,95 s (0,25 s);
      · la curva FRENA al final: cubic-bezier(.155,.144,.429,.933), rms 0,005.
        Medido p = x^0,874. NO acelera.
-     · queda pegada abajo del boleto (0-5 px), centrada, casi paralela (1-2°
-       más caída), midiendo 58% del ancho del boleto.
+     · el play arranca al 93% del ancho del boleto —pegado al borde derecho— y
+       termina al 45%.
+
+   Verificado contra la muestra con nuestro propio render: rms 0,007, desvío
+   máximo 6 px sobre un recorrido de 322.
 
    ⚠️⚠️ EL BOLETO NO SE MUEVE. Se queda en −11,3° de principio a fin. La primera
       versión le puso un "tirón" hacia arriba que no existe en la muestra. Es el
@@ -115,7 +118,10 @@
       /* min-height: el boleto de la muestra es 1,44:1 porque lleva seis renglones.
          Con "De parte de" y "Nota" vacíos el nuestro queda chato, así que se le
          pone un piso para que la columna arrancada no le sobresalga. */
-      '#pv-sec .pv-cuerpo{padding:20px 18px 18px;display:flex;flex-direction:column;',
+      /* ⚠️ padding-right 60: le RESERVA el lugar a la columna del mensaje. Sin eso
+         el titulo corre por debajo y, mientras la columna esta pegada, se lee
+         "PASE DE INVITA...O". El boleto tiene que verse ENTERO y limpio. */
+      '#pv-sec .pv-cuerpo{padding:20px 60px 18px 18px;display:flex;flex-direction:column;',
       '  justify-content:center;min-height:168px;min-width:0}',
       '#pv-sec .pv-over{font-family:var(--pv-dat);font-size:8px;letter-spacing:.16em;',
       '  text-transform:uppercase;font-weight:600;color:var(--pv-acento);margin:0;line-height:1.35}',
@@ -142,7 +148,11 @@
          Se dibuja UNA vez, horizontal. El estado "pegada" es este mismo
          elemento girado -90°: ahí la onda se para y el ▶ mira para arriba. */
       '#pv-sec .pv-msg{position:relative;z-index:2;display:flex;align-items:center;gap:10px;',
-      '  width:58%;margin:2px auto 0;padding:13px 14px 11px;',
+      /* ⚠️ va a la DERECHA, no centrada: el recorrido medido (+45% en X) tiene que
+         dejar la columna pegada al borde derecho del boleto, que es donde esta
+         en la muestra (medido: el play arranca al 93% del ancho). Centrada, la
+         columna caia ENCIMA del titulo. */
+      '  width:58%;margin:2px 8px 0 auto;padding:13px 14px 11px;',
       '  border:0;font:inherit;color:var(--pv-tinta);cursor:pointer;text-align:left;',
       '  background:var(--pv-papel);',
       '  transform-origin:27px 50%;',              /* ⚠️ el pivote es el PLAY */
