@@ -5,7 +5,7 @@
      «En la mesa de regalos, donde piden la plata… se puede hacer, como hiciste
       con los corazones de perlas, algo así pero para la mesa de regalos.»
 
-   Y después, cuando propuse la bandeja de plata que estaba sin usar:
+   Y cuando propuse la bandeja de plata que estaba sin usar:
 
      «Yo no decía de poner esa bandeja, esa bandeja no me gusta, ya está. Yo lo
       que decía es poner algo con perlas, tipo un regalo con perlas, DIBUJADO,
@@ -44,13 +44,35 @@
        el moño       dos lazos elípticos apoyados sobre la tapa, inclinados
                      hacia afuera, que se juntan en el nudo (73,54)
 
-   Cada tramo se recorre por separado y se le van poniendo perlas cada `PASO`
-   píxeles. Se recorre POR SEPARADO a propósito: si se concatenaran todos los
-   tramos en una sola tira, entre la caja y el moño quedaría un salto con
-   perlas espaciadas raro.
+   Cada tramo se recorre POR SEPARADO y se le van poniendo perlas cada `PASO`
+   píxeles. Por separado a propósito: si se concatenaran todos en una sola
+   tira, entre la caja y el moño quedaría un salto con perlas mal espaciadas.
 
    ⚠️ El nudo lleva dos perlas encimadas a mano: es el único lugar donde el
       espaciado parejo deja un hueco, porque ahí se cruzan tres recorridos.
+
+   ============================================================================
+   ⚠️⚠️ EL BUG DEL ARRANQUE, QUE VALE PARA TODOS LOS MÓDULOS  (4/9/2026)
+
+   Inyectado a mano en la consola andaba perfecto. Cargado desde la lista de
+   módulos, no dibujaba nada. La causa estaba en dos palabras:
+
+       function revisar() {
+         if (!esPerlas()) return true;      // ← ACÁ
+         …
+       }
+
+   Ese `return true` quiere decir «listo, no hay nada que hacer». Pero en el
+   PRIMER tic, `INVEV` todavía está vacío y el `<html>` todavía no tiene la
+   marca de la colección, así que `esPerlas()` da falso **porque todavía no se
+   sabe**, no porque no sea Perlas. El ciclo se cortaba ahí y nunca volvía a
+   mirar.
+
+   → Es exactamente el mismo error que tenía el atajo del sobre en
+     `sobre-catalogo.js`: **un "no" temprano no es un "no".**
+   → Ahora `revisar()` sólo devuelve `true` cuando DIBUJÓ de verdad. Si la
+     colección es otra, el ciclo simplemente da vueltas 20 segundos sin hacer
+     nada y se apaga solo. No molesta a nadie.
 
    ============================================================================
    DÓNDE VA, Y UN HALLAZGO
@@ -64,9 +86,6 @@
       → En ESA sección los corazones se apagan. **No se borran**: el nodo queda,
         así que si algún día se los quiere llevar al cierre de verdad, están.
       → Si Maki prefiere los dos, se saca la línea que los esconde.
-
-   ⚠️ SÓLO ACTÚA EN LA COLECCIÓN PERLAS. En otra colección no hay perla que
-      repetir y no tendría sentido.
    ============================================================================ */
 (function () {
 
@@ -86,8 +105,7 @@
   }
 
   /* La foto de la perla: se lee de una perla que ya esté puesta, así siempre
-     es la misma que usa el resto de la colección. Si no hay ninguna todavía,
-     se usa el material directo. */
+     es la misma que usa el resto de la colección. */
   function fotoPerla() {
     var p = document.querySelector('.mtv .p');
     if (p) {
@@ -137,21 +155,12 @@
 
   function puntos() {
     var todos = [];
-
-    /* la caja */
-    todos = todos.concat(sembrar(rect(18, 56, 128, 106), PASO));
-
-    /* la cinta por el medio */
-    todos = todos.concat(sembrar([[73, 56], [73, 106]], PASO));
-
-    /* los dos lazos del moño, inclinados hacia afuera */
-    todos = todos.concat(sembrar(elipse(50, 38, 23, 15, -0.38, 40), PASO));
-    todos = todos.concat(sembrar(elipse(96, 38, 23, 15, 0.38, 40), PASO));
-
-    /* el nudo: ahí se cruzan tres recorridos y queda un hueco */
-    todos.push([73, 53]);
+    todos = todos.concat(sembrar(rect(18, 56, 128, 106), PASO));         /* la caja */
+    todos = todos.concat(sembrar([[73, 56], [73, 106]], PASO));          /* la cinta */
+    todos = todos.concat(sembrar(elipse(50, 38, 23, 15, -0.38, 40), PASO)); /* lazo izq */
+    todos = todos.concat(sembrar(elipse(96, 38, 23, 15, 0.38, 40), PASO));  /* lazo der */
+    todos.push([73, 53]);                                               /* el nudo */
     todos.push([73, 47]);
-
     return todos;
   }
 
@@ -177,7 +186,6 @@
       caja.appendChild(b);
     });
 
-    /* arriba de todo de la sección, después del título si lo hay */
     var h = sec.querySelector('h2, h3');
     var kick = sec.querySelector('.kick');
     var ancla = kick || h;
@@ -202,8 +210,9 @@
     return null;
   }
 
+  /* ⚠️ devuelve true SÓLO cuando dibujó. Ver la nota del bug del arranque. */
   function revisar() {
-    if (!esPerlas()) return true;          /* no es asunto nuestro */
+    if (!esPerlas()) return false;
     var sec = laSeccion();
     if (!sec) return false;
     var url = fotoPerla();
@@ -212,11 +221,11 @@
   }
 
   function arrancar() {
-    if (revisar()) return;
     var n = 0;
     var t = setInterval(function () {
       if (revisar() || ++n > 80) clearInterval(t);
     }, 250);
+    revisar();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
