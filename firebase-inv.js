@@ -340,11 +340,43 @@ window.dispatchEvent(new CustomEvent("inv-ready", { detail: { ok: INV.ok, error:
       existe únicamente en los dos admin. Y nunca en /i/, que ya los carga por
       su cuenta: cargarlos dos veces duplicaría los bloques.
    -------------------------------------------------------------------------- */
+// ⚠️ EL SELECTOR VA CON LA CARPETA ADELANTE. Decía `script[src*="catalogo.js"]`
+//    a secas, pensando en `sobres/catalogo.js`. Pero desde que existe
+//    `/muestras/catalogo.js` (la lista de muestras con nombre), ese comodín lo
+//    agarraba también: si el catálogo de muestras entraba primero, los módulos
+//    del panel NO se cargaban nunca y no había ningún error en la consola.
 if (!location.pathname.startsWith('/i/')
     && document.querySelector('.mejoras')
-    && !document.querySelector('script[src*="efectos/index.js"], script[src*="catalogo.js"]')) {
+    && !document.querySelector('script[src*="efectos/index.js"], script[src*="sobres/catalogo.js"]')) {
   const s = document.createElement('script');
   s.src = '/efectos/index.js';
   s.defer = true;
   (document.head || document.documentElement).appendChild(s);
+}
+
+/* ---- EL FORMULARIO DEL CLIENTE (/crear.html) --------------------------------
+   crear.html NO tiene `.mejoras`, así que no entra por el enganche de arriba: es
+   un formulario, no un panel de edición. Pero necesita dos cosas para que las
+   MUESTRAS CON NOMBRE funcionen:
+
+     · `/muestras/catalogo.js`      — la lista de muestras (id, nombre, colores).
+     · `/efectos/crear-muestra.js`  — escribe el cartel "Modelo elegido" con el
+                                       nombre de verdad. Antes salía de una tabla
+                                       de cinco temas escrita adentro de
+                                       crear.html: cualquier modelo que no
+                                       estuviera ahí decía "Boho", así que quien
+                                       elegía "Perlas" leía "Boho".
+
+   ⚠️ Por qué se cargan desde acá y no desde crear.html: ese archivo pesa 50 KB y
+      no entra en una sola subida al repo (techo medido: ~45 KB). Este archivo lo
+      carga crear.html y pesa 16 KB. Mismo criterio que el enganche de arriba.
+   -------------------------------------------------------------------------- */
+if (/\/crear(\.html)?$/.test(location.pathname)) {
+  ['/muestras/catalogo.js', '/efectos/crear-muestra.js'].forEach((src) => {
+    if (document.querySelector('script[src="' + src + '"]')) return;
+    const s = document.createElement('script');
+    s.src = src;
+    s.defer = true;
+    (document.head || document.documentElement).appendChild(s);
+  });
 }
