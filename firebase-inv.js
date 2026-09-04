@@ -183,7 +183,19 @@ const INV = {
   },
   async getInvitado(slug, token) {
     const s = await getDoc(doc(db, GU, gid(slug, token)));
-    return s.exists() ? s.data() : null;
+    const g = s.exists() ? s.data() : null;
+    // La ficha queda a mano en window.INVGUEST para los modulos que necesitan
+    // algo de ESTA persona y no del evento (hoy: el audio personalizado del
+    // pase con voz, que los novios graban desde su panel).
+    // Se guarda SOLO si es el invitado que abrio la invitacion: el admin pide
+    // fichas ajenas para armar la lista y no tiene que pisar esto.
+    try {
+      if (typeof window !== "undefined" && window.INVDATA &&
+          window.INVDATA.slug === slug && window.INVDATA.token === token) {
+        window.INVGUEST = g;
+      }
+    } catch (e) {}
+    return g;
   },
   async listInvitados(slug) {
     const q = query(collection(db, GU), where("slug", "==", slug));
