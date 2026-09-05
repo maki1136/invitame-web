@@ -240,44 +240,71 @@ iframe[src*="spotify"]{
    ============================================================================ */
 
 
-/* --- LA GALERÍA NO RECORTA MÁS ----------------------------------------------
+/* --- LA GALERÍA: EL MARCO TOMA LA FORMA DE LA FOTO --------------------------
 
    El problema, medido el 5/9/2026 con fotos verticales de 768×1376: el marco
-   del carrusel es fijo (420 × 300, o sea 1,40 de ancho) y las fotos entraban
-   con `object-fit:cover`. Resultado: **se veía el 40% de cada foto** y les
-   cortaba la cabeza a los novios. Maki lo vio de una: "están todas cortadas".
+   del carrusel era fijo (420 × 300, o sea 1,40 de ancho) y las fotos entraban
+   con `object-fit:cover`. Se veía **el 40% de cada foto** y les cortaba la
+   cabeza. Maki: "están todas cortadas".
 
    ⚠️ EL MOTOR NO TIENE LA CULPA. `index.html` ya las pide con `c_limit`
    (Cloudinary escala para que entren, nunca recorta): manda la foto ENTERA.
    El recorte lo hacía únicamente este CSS.
 
-   LA SOLUCIÓN ES LA QUE YA USAMOS EN `/galeria/`, la de los invitados, donde
-   la gente sube fotos de cualquier medida:
-       · la miniatura de la grilla se recorta cuadrada, para que la grilla
-         quede prolija        (`aspect-ratio:1` + `cover`)
-       · el visor la muestra ENTERA, venga como venga  (`object-fit:contain`)
-   O sea: se recorta la vista chica, NUNCA la grande. Acá no hay vista chica —
-   el carrusel ES la vista grande— así que va `contain` y no se recorta nada.
+   PRIMER INTENTO, DESCARTADO: `object-fit:contain` en un marco fijo. No
+   recortaba, pero la foto quedaba flotando con bandas a los lados y el marco
+   redondeado desaparecía. Maki: "te quedó feo, me gustaba el diseño medio
+   redondeado, están muy básicas".
 
-   La foto queda apoyada sobre el papel de la sección, con su sombra, como una
-   foto puesta sobre la hoja. Sirve para vertical, horizontal y cuadrada sin
-   tocar nada más: es lo que hay que hacer cuando no se sabe qué medida va a
-   subir la clienta.
+   LO QUE QUEDÓ: el marco TOMA LA FORMA DE LA FOTO. La foto activa va en el
+   flujo (`position:relative`) y es la que le da el alto al marco; las demás
+   siguen absolutas y sólo se desvanecen. Entonces:
 
-   Se sube de 300 a 360 px de alto porque casi todas las fotos de boda que
-   suben son verticales, y en 300 quedaban muy chiquitas.
+       vertical   → marco alto y angosto
+       horizontal → marco ancho y bajo
+       cuadrada   → marco cuadrado
 
-   ⚠️ `:not(.mosaico)` NO ES DECORATIVO. `.carousel.mosaico` es la otra vista
-   de la galería, la de grilla de dos columnas, y ahí el recorte cuadrado SÍ va
-   —es una miniatura, el caso de `/galeria/`—. Sin ese `:not` se rompía.
+   La foto llena el marco de borde a borde, con sus esquinas redondeadas y su
+   sombra, y NO SE RECORTA NUNCA — ni arriba, ni abajo, ni a los costados. Es
+   lo que hay que hacer cuando no se sabe qué medida va a subir la clienta:
+   "si la gente mete una foto con gente a los costados, se corta" — ya no.
+
+   Verificado midiendo las dos orientaciones en la invitación en vivo: la
+   proporción del marco da IGUAL a la de la foto (0,56 y 1,78), o sea recorte
+   cero.
+
+   ⚠️ `:not(.mosaico)` NO ES DECORATIVO. `.carousel.mosaico` es la otra vista,
+   la de grilla de dos columnas, y ahí el recorte cuadrado SÍ va —es una
+   miniatura, el mismo criterio que la grilla de `/galeria/`—. Sin ese `:not`
+   se rompía. Probado prendiendo y apagando la clase.
+
+   ⚠️ NO PONERLE `width:fit-content` AL MARCO. Con `max-width:100%` en la foto
+   arma una dependencia circular y el navegador la resuelve achicando todo: la
+   foto salía a 271 px en vez de a 420.
    ============================================================================ */
 
 .frame .carousel:not(.mosaico){
-  height: 360px;
+  height: auto !important;
+  max-width: 420px;
+  margin: 8px auto 0;
   background: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(40, 32, 20, .12),
+              0 14px 30px -8px rgba(40, 32, 20, .34);
 }
 .frame .carousel:not(.mosaico) img{
-  object-fit: contain;
-  border-radius: 10px;
-  filter: drop-shadow(0 5px 14px rgba(40, 32, 20, .26));
+  object-fit: cover;
+  border-radius: 0;
+  filter: none;
+}
+/* La foto que se está viendo es la que manda: va en el flujo y le da el alto
+   al marco. Las otras quedan absolutas encima, invisibles, listas para el
+   próximo pase. */
+.frame .carousel:not(.mosaico) img.on{
+  position: relative;
+  inset: auto;
+  display: block;
+  width: 100%;
+  height: auto;
 }
