@@ -238,3 +238,46 @@ iframe[src*="spotify"]{
    reconocimiento vale más que la paleta. Queda escrito para que a nadie se le
    ocurra "mejorarlo".
    ============================================================================ */
+
+
+/* --- LA GALERÍA NO RECORTA MÁS ----------------------------------------------
+
+   El problema, medido el 5/9/2026 con fotos verticales de 768×1376: el marco
+   del carrusel es fijo (420 × 300, o sea 1,40 de ancho) y las fotos entraban
+   con `object-fit:cover`. Resultado: **se veía el 40% de cada foto** y les
+   cortaba la cabeza a los novios. Maki lo vio de una: "están todas cortadas".
+
+   ⚠️ EL MOTOR NO TIENE LA CULPA. `index.html` ya las pide con `c_limit`
+   (Cloudinary escala para que entren, nunca recorta): manda la foto ENTERA.
+   El recorte lo hacía únicamente este CSS.
+
+   LA SOLUCIÓN ES LA QUE YA USAMOS EN `/galeria/`, la de los invitados, donde
+   la gente sube fotos de cualquier medida:
+       · la miniatura de la grilla se recorta cuadrada, para que la grilla
+         quede prolija        (`aspect-ratio:1` + `cover`)
+       · el visor la muestra ENTERA, venga como venga  (`object-fit:contain`)
+   O sea: se recorta la vista chica, NUNCA la grande. Acá no hay vista chica —
+   el carrusel ES la vista grande— así que va `contain` y no se recorta nada.
+
+   La foto queda apoyada sobre el papel de la sección, con su sombra, como una
+   foto puesta sobre la hoja. Sirve para vertical, horizontal y cuadrada sin
+   tocar nada más: es lo que hay que hacer cuando no se sabe qué medida va a
+   subir la clienta.
+
+   Se sube de 300 a 360 px de alto porque casi todas las fotos de boda que
+   suben son verticales, y en 300 quedaban muy chiquitas.
+
+   ⚠️ `:not(.mosaico)` NO ES DECORATIVO. `.carousel.mosaico` es la otra vista
+   de la galería, la de grilla de dos columnas, y ahí el recorte cuadrado SÍ va
+   —es una miniatura, el caso de `/galeria/`—. Sin ese `:not` se rompía.
+   ============================================================================ */
+
+.frame .carousel:not(.mosaico){
+  height: 360px;
+  background: transparent;
+}
+.frame .carousel:not(.mosaico) img{
+  object-fit: contain;
+  border-radius: 10px;
+  filter: drop-shadow(0 5px 14px rgba(40, 32, 20, .26));
+}
