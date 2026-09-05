@@ -52,4 +52,19 @@ DirectoryIndex index.php index.html
   # 174 y 177): se usa cuando la coleccion no define --tex. Va al papel liso.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^textura\.jpg$      https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574616/invitame/jfyn8cn9kpb7znufq3k9.jpg [R=302,L]
+
+  # --- Las otras tres que faltaban ---
+  # `nube.png` son las DOS nubes de adelante que se abren al scrollear
+  # (buildAmbiente, linea 940). Estaba prendido en camila-y-tomas —tipo 'nubes'
+  # sobre el itinerario— y el efecto era invisible porque el archivo no existia.
+  # `cielo.jpg` es el fondo de ese mismo efecto; sin el, el CSS caia en un
+  # degradado celeste plano.
+  # `sello-marfil.png` es la cera del lacre del sobre que se abre en tres
+  # (#tri-seal, linea 147): salia un anillo vacio, sin cera atras.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^nube\.png$         https://res.cloudinary.com/oc8cgqt4/image/upload/v1788575006/invitame/atx4qqjpj7updy8ajef4.png [R=302,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^cielo\.jpg$        https://res.cloudinary.com/oc8cgqt4/image/upload/v1788575007/invitame/rip8ks6ikk4krp7o6ke0.jpg [R=302,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^sello-marfil\.png$ https://res.cloudinary.com/oc8cgqt4/image/upload/v1788575008/invitame/r3v04rzv5gq9gfqaznom.png [R=302,L]
 </IfModule>
