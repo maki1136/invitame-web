@@ -27,10 +27,22 @@
     if (!ev || !ev.fx || !ev.fx.galeria) return;
     var cfg = ev.fx.galeria;
     if (!cfg.encendido && cfg.encendido !== 'on' && cfg.encendido !== true) return;
-    if (!cfg.gid || !/^[A-Za-z0-9_-]{16,64}$/.test(String(cfg.gid))) return;
     if (document.getElementById('gal-seccion')) return;
 
-    var url = armarUrl(cfg.gid);
+    /* ---- MODO VIDRIERA ---------------------------------------------------
+       En una MUESTRA no hay galeria de verdad: crearla gasta saldo de la
+       cuenta de galerias. Antes se resolvia pegando el gid de otra boda, y el
+       4/9/2026 se midio lo que eso provoca: en camila-y-tomas el boton
+       "Entrar a la galeria" abria la galeria de Hugo y Lucia. Un invitado
+       terminaba viendo las fotos de gente que no conoce.
+       Con `vidriera` la seccion SE VE —el cliente entiende que la funcion
+       existe— pero el boton no lleva a ningun lado. Y sin gid no hay a donde
+       llevar, asi que la fuga es imposible por construccion.                */
+    var vidriera = (cfg.vidriera === true || cfg.vidriera === 'on');
+    var gidOk = !!cfg.gid && /^[A-Za-z0-9_-]{16,64}$/.test(String(cfg.gid));
+    if (!vidriera && !gidOk) return;
+
+    var url = gidOk ? armarUrl(cfg.gid) : '';
 
     /* Los textos se pueden cambiar desde el panel. */
     var titulo = String(cfg.titulo || 'Las fotos de la fiesta');
@@ -67,17 +79,28 @@
         'font-size:2rem;line-height:1.15;margin:0 0 10px;">' + esc(titulo) + '</h2>' +
       '<p style="margin:0 auto 24px;max-width:34ch;opacity:.75;font-size:1rem;">' +
         esc(bajada) + '</p>' +
-      '<a id="gal-entrar" href="' + url + '" style="display:inline-block;padding:17px 38px;' +
+      /* En vidriera es un <span>: mismo boton a la vista, pero SIN href.
+         No es un <a> sin destino —eso el lector de pantalla lo canta igual
+         como enlace— ni un <a href="#"> que saltaria al principio. */
+      '<' + (vidriera ? 'span' : 'a') + ' id="gal-entrar"' +
+        (vidriera ? ' aria-disabled="true"' : ' href="' + url + '"') +
+        ' style="display:inline-block;padding:17px 38px;' +
         'border-radius:99px;background:' + acento + ';color:#fff;text-decoration:none;' +
         'font-weight:700;font-size:1.06rem;letter-spacing:.01em;' +
+        (vidriera ? 'cursor:default;' : '') +
         'box-shadow:0 1px 2px rgba(60,10,30,.16), 0 4px 7px rgba(60,10,30,.14),' +
         '0 12px 20px -5px rgba(60,10,30,.22), 0 26px 38px -14px rgba(60,10,30,.34),' +
         'inset 0 1.5px 0 rgba(255,255,255,.42), inset 0 -2px 5px rgba(0,0,0,.20);' +
         'transition:transform .14s cubic-bezier(.2,.8,.3,1), box-shadow .14s ease;">' +
-        esc(boton) + '</a>';
+        esc(boton) + '</' + (vidriera ? 'span' : 'a') + '>' +
+      (vidriera
+        ? '<p style="margin:16px auto 0;max-width:34ch;opacity:.6;font-size:.86rem;">' +
+            esc(cfg.notaVidriera || 'En tu invitación, este botón abre la galería de tu fiesta.') +
+          '</p>'
+        : '');
 
     /* Se hunde al tocarlo, como las fichas de la galería. */
-    var a = sec.querySelector('#gal-entrar');
+    var a = vidriera ? null : sec.querySelector('#gal-entrar');
     if (a) {
       var hundir = function () {
         a.style.transform = 'translateY(4px) scale(.985)';
