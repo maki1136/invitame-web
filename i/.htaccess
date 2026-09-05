@@ -14,3 +14,42 @@ DirectoryIndex index.php index.html
   RewriteEngine On
   RewriteRule .*\.html$ - [E=Cache-Control:no-cache]
 </IfModule>
+
+# ===== LAS TEXTURAS DE PAPEL VIVEN EN CLOUDINARY =============================
+# El problema: index.html pide las texturas por nombre relativo
+# (`--sec-tex: url('tex-lino.jpg')`, linea 1284), o sea /i/tex-lino.jpg. Pero
+# en esta carpeta NO hay ni una imagen, y nunca la hubo: los binarios no entran
+# al repo por el camino con el que se sube el codigo. Resultado medido el
+# 4/9/2026: las cinco texturas daban 404, el selector de textura del panel de
+# Jazmin ofrecia cinco opciones y ninguna existia, y TODA invitacion se veia en
+# color plano en vez de papel. Eran 29 pedidos fallidos por carga.
+#
+# La solucion sin tocar index.html (185 KB, no se puede reescribir entero):
+# que esas direcciones RESUELVAN. Las texturas se dibujaron con canvas
+# (fibra, trama, vetas y diente, casi blancas porque se multiplican sobre el
+# color de cada seccion) y se subieron a nuestro Cloudinary.
+#
+# /!\ La condicion !-f es lo que deja la puerta abierta: el dia que alguien
+#     suba de verdad /i/tex-lino.jpg, ese archivo GANA y esto ni se ejecuta.
+# /!\ Va 302 y no 301 a proposito. Un 301 se le queda pegado al navegador para
+#     siempre y ya no volveria a preguntarle al servidor: si mañana se cambia
+#     una textura, media Mexico seguiria viendo la vieja.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /i/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^tex-papel\.jpg$    https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574616/invitame/jfyn8cn9kpb7znufq3k9.jpg [R=302,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^tex-lino\.jpg$     https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574616/invitame/npxvsup6bsq4u2kg8ajp.jpg [R=302,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^tex-kraft\.jpg$    https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574617/invitame/zqnxomgyktcreaytwckr.jpg [R=302,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^tex-marmol\.jpg$   https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574618/invitame/y4tyqoqjiqcjcia3nbep.jpg [R=302,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^tex-acuarela\.jpg$ https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574618/invitame/j7qd6s85tgsg7md467nv.jpg [R=302,L]
+
+  # `textura.jpg` es el respaldo de `var(--tex, url('textura.jpg'))` (lineas 167,
+  # 174 y 177): se usa cuando la coleccion no define --tex. Va al papel liso.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^textura\.jpg$      https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574616/invitame/jfyn8cn9kpb7znufq3k9.jpg [R=302,L]
+</IfModule>
