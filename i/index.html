@@ -1819,9 +1819,12 @@
       var _bandPropia=IMGV('img_c_fondo-seccion-frase-larga','img_c_fondo-secci-n-frase-larga','img_f-fondo-secci-n-frase-larga');
       if(!_bandPropia){ var _bb2=el('bandbg'); if(_bb2) _bb2.style.backgroundImage=_degrade; }
 
-      /* La foto del cierre vive en una variable de CSS, así que no la agarra el
-         barrido de arriba. Sin foto propia va un degradé de la paleta del
-         evento: siempre combina y no es la boda de nadie. */
+      /* La portada y la foto del cierre viven en variables de CSS, así que no las
+         alcanza lo de arriba. Sin foto propia va un degradé de la paleta: la
+         portada de ejemplo es una pareja que no son ellos, y es lo PRIMERO que
+         ve el invitado. */
+      if(!ev.cover && !IMGV('img_c_foto-principal-jpg-2000x1200','img_f-foto-principal-jpg-2000x1200-','img_c_foto-principal-jpg-2000x1200-'))
+        rt.setProperty('--cover','linear-gradient(200deg,var(--verde),var(--sage))');
       var _finPropia=IMGV('img_c_foto-para-el-fin-de-pagina','img_f-foto-para-el-fin-de-p-gina','img_c_foto-para-el-fin-de-p-gina');
       if(!_finPropia) rt.setProperty('--final','linear-gradient(160deg,var(--verde),var(--verde2))');
     })();
