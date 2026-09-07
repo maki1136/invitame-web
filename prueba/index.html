@@ -1883,6 +1883,52 @@
         _im.src=cldOpt(_fb,'w_1400,c_limit');
       })();
     }
+    /* ===== NADA DE LA BODA DE EJEMPLO PUEDE QUEDAR A LA VISTA ==================
+       Este archivo trae textos y fotos de una boda inventada (Basílica de Santa
+       María, "- Elegante -", fotos de Unsplash). Están para poder abrir el HTML
+       suelto y para la vista previa del admin.
+
+       ⚠️ EL PROBLEMA, que costó caro: el motor sólo pisa esos valores CUANDO HAY
+       DATO. Si el campo del panel quedó vacío, el ejemplo se queda puesto y la
+       invitada termina leyendo la boda de otra pareja. En la muestra de la playa
+       la tarjeta de la Ceremonia mostraba un lago con montañas nevadas, y el
+       dress code decía "- Elegante -" arriba y "Formal playero" abajo.
+
+       ★ LA REGLA: si no hay dato, no hay nada. Un renglón vacío nunca es un
+         problema; un dato inventado sí. Los títulos genéricos ("Dress Code",
+         "Nuestra Galería") sí se quedan: no son de nadie.
+
+       ⚠️ Corre AL FINAL, después de que todos los bloques de arriba escribieron
+         lo suyo. Si se agrega contenido de ejemplo nuevo al HTML, se anota acá
+         el mismo día, con el dato del que depende. */
+    (function(){
+      var vaciar=function(id){ var e=el(id); if(e) e.textContent=''; };
+      var hay=function(v){ return String(v==null?'':v).trim()!==''; };
+
+      /* Los tres lugares. La tarjeta ya se esconde sola si está TODA vacía, pero
+         alcanza con que carguen el título para que aparezcan el salón y la
+         dirección de ejemplo. */
+      [1,2,3].forEach(function(n){
+        if(!hay(ev['ev'+n+'sub'])) vaciar('ev'+n+'-s');
+        if(!hay(ev['ev'+n+'fecha']) && !hay(ev['c_ceremonia-'+n+'-fecha']) && !hay(ev['ev'+n+'dir'])) vaciar('ev'+n+'-a');
+      });
+
+      if(!hay(ev.dressKicker))             vaciar('dress-kick');
+      if(!hay(ev['c_dresscode-texto']))    vaciar('dress-texto');
+      /* Hospedaje: la sección puede seguir viva por la imagen aunque no haya texto. */
+      if(!hay(ev['c_descripcion-hotel']))  vaciar('hosp-texto');
+
+      /* Las fotos: acá ya corrieron [data-imgbg], la galería, las personas y el
+         fondo de la banda. Lo que TODAVÍA apunte a Unsplash es del ejemplo. */
+      document.querySelectorAll('[style*="images.unsplash.com"], img[src*="images.unsplash.com"]')
+        .forEach(function(n){ n.style.display='none'; });
+
+      /* La foto del cierre vive en una variable de CSS, así que no la agarra el
+         barrido de arriba. Sin foto propia va un degradé de la paleta del
+         evento: siempre combina y no es la boda de nadie. */
+      var _finPropia=IMGV('img_c_foto-para-el-fin-de-pagina','img_f-foto-para-el-fin-de-p-gina','img_c_foto-para-el-fin-de-p-gina');
+      if(!_finPropia) rt.setProperty('--final','linear-gradient(160deg,var(--verde),var(--verde2))');
+    })();
     // ---- Contacto: lee los campos reales del panel (Número de whatsapp 1/2, textos, toggle) ----
     (function(){
       var digits=function(s){return String(s||'').replace(/[^\d]/g,'');};
