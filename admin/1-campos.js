@@ -140,6 +140,23 @@
   }
   // Ayudas cortas para las chicas — se muestran debajo del campo
   const HINTS={
+    /* ---- TRIVIA: los 14 campos que hasta el 7/9/2026 no hacían nada ------
+       Ahora cada uno cambia UN texto de la trivia. Se leen en i/index.html,
+       en el bloque "los 14 textos y colores de la pestaña TRIVIA". */
+    "Texto sobre título:":"El textito chico que va ARRIBA del título Trivia (ej: ¡Juega con nosotros!).",
+    "Texto 'Puntos':":"Cómo se escribe la palabra de los puntos (ej: pts, puntos). Aparece en el marcador, en el resultado y en la tabla.",
+    "Texto 'Pregunta':":"La palabra que va antes del número: «Pregunta 1 de 5». Sirve para traducirla.",
+    "Texto del campo para ingresar el nombre:":"El texto gris que se ve DENTRO del casillero donde el invitado escribe su nombre (ej: Escribe tu nombre).",
+    "Texto tabla de resultados:":"El rótulo que va arriba del puntaje al terminar (ej: Tu puntaje).",
+    "Texto botón \"Iniciar Sesión\":":"Lo que dice el botón para entrar a jugar.",
+    "Texto \"Hola\" antes del nombre:":"El saludo que aparece antes del nombre del invitado (ej: ¡Hola). El nombre lo agrega la invitación.",
+    "Texto botón \"Comenzar trivia\":":"Lo que dice el botón que arranca las preguntas.",
+    "Texto botón \"Cerrar sesion\":":"Lo que dice el link para salir y que juegue otra persona en el mismo celular.",
+    "Texto \"No sos\" para cerrar sesión:":"La frase al lado de ese link (ej: ¿No eres tú?).",
+    "Texto columna \"Nombre\" en tabla de resultados:":"El encabezado de la columna de nombres en la tabla.",
+    "Texto \"tabla de posiciones\":":"El rótulo que va arriba de la tabla al terminar (ej: Tabla de posiciones).",
+    "Color 1 titulo trivia:":"El color del título Trivia.",
+    "Color 2 titulo trivia:":"El color del textito de arriba del título.",
     "IDIOMA de la invitación:":"El idioma con el que SIEMPRE abre la invitación. Por defecto Español (México). Es lo que ve el invitado si no activás nada más.",
     "Detectar el del celular del invitado:":"Si lo activás, la invitación se abre sola en el idioma del celular del invitado (si lo tenemos traducido). Si está apagado, siempre abre en el idioma de arriba.",
     "Mostrar botón para que el invitado elija:":"Si lo activás, aparece un botón 🌐 arriba a la izquierda para que el invitado cambie el idioma a mano.",
