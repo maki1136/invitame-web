@@ -1796,6 +1796,13 @@
         if(!hay(ev['ev'+n+'fecha']) && !hay(ev['c_ceremonia-'+n+'-fecha']) && !hay(ev['ev'+n+'dir'])) vaciar('ev'+n+'-a');
       });
 
+      /* La carta viene PRENDIDA por defecto. Si no escribieron ninguna, la
+         sección entera se va: mostrar la carta de ejemplo —"Hoy queremos
+         compartir con ustedes uno de los…"— es peor que no tener sección. */
+      if(!hay((FX.carta||{}).texto) && !hay((FX.carta||{}).titulo)){
+        var _cs=el('carta-sec'); if(_cs) _cs.style.display='none';
+      }
+
       if(!hay(ev.dressKicker))             vaciar('dress-kick');
       if(!hay(ev['c_dresscode-texto']))    vaciar('dress-texto');
       /* Hospedaje: la sección puede seguir viva por la imagen aunque no haya texto. */
