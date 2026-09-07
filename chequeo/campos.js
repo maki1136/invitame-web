@@ -148,7 +148,93 @@ if (suyos.length) {
   if (inutiles.length) avisos.push(['LO GUARDAN LOS NOVIOS Y NO LO USA NADIE', inutiles]);
 }
 
-/* ---- 7. el informe ------------------------------------------------------ */
+/* ---- 7. la boda de ejemplo, ¿queda a la vista? -------------------------
+   `i/index.html` trae textos y fotos de una boda inventada para poder abrirlo
+   suelto y para la vista previa del admin. Si el campo del panel queda VACÍO,
+   el motor no los pisa y la invitada termina leyendo la boda de otra pareja.
+
+   El motor tiene un bloque al final —"NADA DE LA BODA DE EJEMPLO"— que borra
+   eso cuando no hay dato. Esta regla vigila que el bloque siga ahí, que la zona
+   de prueba tenga el mismo, y que NADIE agregue contenido de ejemplo nuevo sin
+   cubrirlo.
+
+   ⚠️ Si esta regla salta porque agregaste una foto o un texto de ejemplo: no se
+   silencia agregándolo a la lista de abajo sin más. Primero se decide QUIÉN lo
+   tapa cuando no hay dato, y recién ahí se anota acá con esa explicación. */
+const MARCA_BARRIDO = 'NADA DE LA BODA DE EJEMPLO';
+const motor  = leer('i/index.html');
+const motorP = leer('prueba/index.html');
+
+/* Cada foto de ejemplo del HTML, y quién la tapa cuando la pareja no cargó la
+   suya. Si aparece una que no está acá, el chequeo corta la entrega. */
+const FOTOS_EJEMPLO = {
+  'photo-1519741497674': 'portada (--cover) → degradé de la paleta si no hay foto propia',
+  'photo-1583939003579': 'cierre (--final) → degradé de la paleta si no hay foto propia',
+  'photo-1519225421980': 'banda de la frase (#bandbg) → degradé si no hay foto propia',
+  'photo-1519167758481': 'tarjeta Ceremonia (.ph[data-imgbg]) → degradé si no hay foto propia',
+  'photo-1464366400600': 'tarjeta Fiesta (.ph[data-imgbg]) → degradé si no hay foto propia',
+  'photo-1566174053879': 'inspiración dress code → el bloque esconde el botón y la grilla',
+  'photo-1595777457583': 'inspiración dress code → idem',
+  'photo-1490481651871': 'inspiración dress code → idem',
+  'photo-1544005313':    'avatar de Personas → la sección se esconde si no cargan gente',
+  'photo-1560250097':    'avatar de Personas → idem',
+  'photo-1573496359142': 'avatar de Personas → idem',
+  'photo-1519085360753': 'avatar de Personas → idem',
+  'photo-1522673607200': 'galería → la sección se esconde si no hay fotos',
+  'photo-1511285560929': 'galería → idem',
+  'photo-1465495976277': 'galería → idem'
+};
+
+/* Textos escritos a mano en el HTML que NO son de nadie: títulos y rótulos de
+   sección. Estos sí pueden quedarse cuando el campo está vacío. */
+const TEXTOS_GENERICOS = new Set([
+  'cf-kick','cf-h2','cf-kick2','dq-kick','dq-h2','it-h2','it-nota','hosp-h2',
+  'dress-h2','padres-kick','padres-h2','gal-kick','gal-h2','video-kick','video-h2',
+  'video-frase','video-link','reg-kick','reg-h2','hashtag-big','hashtag-link',
+  'ev1-t','ev2-t','ev3-t','ev1-cal','ev2-cal','ev3-cal',
+  'clima-ico','clima-temp','clima-desc','clima-nota','rb-l1','rb-cbu','rb-tit','rb-banco'
+]);
+
+if (!motor.includes(MARCA_BARRIDO))
+  avisos.push(['EL MOTOR PERDIÓ EL BARRIDO DE LA BODA DE EJEMPLO', ['i/index.html']]);
+if (!motorP.includes(MARCA_BARRIDO))
+  avisos.push(['EL MOTOR PERDIÓ EL BARRIDO DE LA BODA DE EJEMPLO', ['prueba/index.html']]);
+
+if (motor.includes(MARCA_BARRIDO) && motorP.includes(MARCA_BARRIDO)) {
+  const trozo = t => t.slice(t.indexOf(MARCA_BARRIDO), t.indexOf('    // ---- Contacto:'));
+  if (trozo(motor) !== trozo(motorP))
+    avisos.push(['EL BARRIDO ES DISTINTO EN LA ZONA DE PRUEBA (tienen que ser iguales)',
+      ['i/index.html vs prueba/index.html']]);
+
+  /* fotos de ejemplo nuevas, sin nadie que las tape */
+  const nuevas = [...new Set([...motor.matchAll(/photo-[0-9a-f]+/g)].map(m => m[0]))]
+    .filter(p => !FOTOS_EJEMPLO[p]);
+  if (nuevas.length) avisos.push(['FOTOS DE EJEMPLO NUEVAS EN EL HTML, SIN DECIDIR QUIÉN LAS TAPA',
+    nuevas.map(p => `${p}  ->  decidir quién la borra cuando no hay dato, y anotarlo en chequeo/campos.js`)]);
+
+  /* textos de ejemplo: todo id con texto escrito a mano adentro de una sección
+     tiene que ser genérico, o estar nombrado en el barrido */
+  const barrido = trozo(motor);
+  const sinCubrir = [];
+  for (const sec of motor.matchAll(/<section data-sec="([^"]+)"[^>]*>([\s\S]*?)<\/section>/g)) {
+    for (const n of sec[2].matchAll(/<(h1|h2|h3|p|div|span|a|button)([^>]*\bid="([^"]+)"[^>]*)>([^<]{1,200})<\/\1>/g)) {
+      const id = n[3], txt = n[4].trim();
+      if (!txt) continue;
+      if (TEXTOS_GENERICOS.has(id)) continue;
+      if (barrido.includes("'" + id + "'")) continue;
+      /* ⚠️ el barrido arma algunos ids por pedazos ('ev'+n+'-s'), así que no
+         aparecen escritos enteros. Mismo tropiezo que con las claves del panel:
+         antes de cantar un faltante hay que probar el molde. */
+      if (/^ev[123]-s$/.test(id) && barrido.includes("'ev'+n+'-s'")) continue;
+      if (/^ev[123]-a$/.test(id) && barrido.includes("'ev'+n+'-a'")) continue;
+      if (id === 'cf-texto' && barrido.includes("carta-sec")) continue;
+      sinCubrir.push(`${sec[1].padEnd(14)} #${id.padEnd(14)} ${txt.slice(0, 46)}`);
+    }
+  }
+  if (sinCubrir.length) avisos.push(['TEXTO DE EJEMPLO QUE NADIE BORRA CUANDO EL CAMPO ESTÁ VACÍO', sinCubrir]);
+}
+
+/* ---- 8. el informe ------------------------------------------------------ */
 console.log(`campos del panel: ${campos.length}   ·   con clave fija: ${campos.filter(c => BIND[c.rotulo]).length}   ·   derivada del rótulo: ${campos.filter(c => !BIND[c.rotulo]).length}`);
 console.log('');
 if (!avisos.length) { console.log('SIN AVISOS — todo campo tiene lector y todo lector tiene campo.'); process.exit(0); }
