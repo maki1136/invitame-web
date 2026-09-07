@@ -354,6 +354,12 @@
              dejado puesto en una prueba anterior de esa misma pestaña.
          → Antes de reportar un bug: recargar limpio y repetir.
 
+      ⚠️ Y LO QUE ANDA INYECTADO A MANO PUEDE FALLAR EN LA CARGA REAL (7/9/2026)
+         `musica.js` funcionaba perfecto cuando se lo pegaba en la consola —con
+         los datos del evento ya cargados— y no hacía nada al cargar la página
+         de verdad: contestaba «terminé» ANTES de que `INVEV` existiera y se
+         apagaba solo. Probarlo inyectado no alcanza: hay que recargar limpio.
+
       Dónde es cada cosa:
       · /admin.html  → el panel de edición. El único con `.mejoras`, que es
         donde se montan estos bloques. Escribe con `INV.saveEvento` (con merge).
@@ -504,6 +510,10 @@
      lugares e invitados son del cliente.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`.
+   · `musica.js` NO tiene orden: se cuelga de la sección `#spotify-sec` que ya
+     trae el motor y le agrega el texto de los novios y el botón de sugerir.
+     `panel-musica.js` va DESPUÉS: es su bloque del panel, y lleva los dos
+     campos de música a la pestaña MUSIC_PASES, que es donde se los busca.
    · `pase-voz.js` no tiene orden fuerte: se cuelga de `.frame` y se mete ANTES
      de los contactos. `panel-pase-voz.js` va DESPUÉS: es su bloque del panel, y
      el único que sabe medir la onda del audio.
@@ -567,7 +577,8 @@
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
-    '/efectos/musica.js',              /* la Platinum vende Música y el motor no la tenía */
+    '/efectos/musica.js',              /* completa la sección «Playlist del evento» del motor */
+    '/efectos/panel-musica.js',        /* y lleva sus dos campos a la pestaña MUSIC_PASES */
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/muestra-venta.js',       /* la muestra vende: teléfonos de Invítame y el llamado */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */
