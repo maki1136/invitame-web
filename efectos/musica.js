@@ -143,14 +143,14 @@
 
     if (document.getElementById(MARCA)) return true;
 
-    /* ⚠️⚠️ EL ORDEN DE ESTAS DOS LÍNEAS ES TODO. Devolver `true` significa
-       «terminé, no me llames más». Si se contesta `true` cuando `INVEV`
-       todavía no llegó, el módulo se apaga antes de que existan los datos y
-       la sección no aparece nunca. Pasó: andaba probándolo a mano (con los
-       datos ya cargados) y fallaba en la carga real. Primero se pregunta si
-       los datos llegaron; recién después, si hay playlist. */
-    if (!window.INVEV) return false;       /* los datos todavía no llegaron */
-    if (!playlist()) return true;          /* ya llegaron y no hay playlist */
+    /* ⚠️⚠️ ACÁ SÓLO SE DEVUELVE `true` CUANDO EL TRABAJO YA ESTÁ HECHO.
+       `true` significa «listo, no me llames más» y apaga el reintento. La
+       primera versión contestaba `true` también cuando no encontraba
+       playlist, y así se apagaba ANTES de que llegaran los datos del evento:
+       probándolo a mano andaba (los datos ya estaban) y en la carga real no
+       aparecía nunca. Mientras falte algo se devuelve `false` y se sigue
+       mirando, igual que hacía la versión vieja de este módulo. */
+    if (!playlist()) return false;         /* todavía no hay datos, o no hay lista */
 
     var s = seccion();
     if (!s) return false;                  /* motor viejo, sin la sección */
@@ -167,7 +167,10 @@
   }
 
   function arrancar() {
-    if (poner()) return;
+    /* El reintento y el oyente se arman SIEMPRE, pase lo que pase en el
+       primer intento: los datos del evento llegan después, y en el panel la
+       vista previa se redibuja con `message`. 50 vueltas de 320 ms = 16 s. */
+    poner();
     var n = 0, t = setInterval(function () {
       if (poner() || ++n > 50) clearInterval(t);
     }, 320);
