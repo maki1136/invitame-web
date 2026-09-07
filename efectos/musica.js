@@ -142,7 +142,15 @@
     if (v && v.parentNode) v.parentNode.removeChild(v);
 
     if (document.getElementById(MARCA)) return true;
-    if (!playlist()) return true;          /* sin playlist no hay sección: listo */
+
+    /* ⚠️⚠️ EL ORDEN DE ESTAS DOS LÍNEAS ES TODO. Devolver `true` significa
+       «terminé, no me llames más». Si se contesta `true` cuando `INVEV`
+       todavía no llegó, el módulo se apaga antes de que existan los datos y
+       la sección no aparece nunca. Pasó: andaba probándolo a mano (con los
+       datos ya cargados) y fallaba en la carga real. Primero se pregunta si
+       los datos llegaron; recién después, si hay playlist. */
+    if (!window.INVEV) return false;       /* los datos todavía no llegaron */
+    if (!playlist()) return true;          /* ya llegaron y no hay playlist */
 
     var s = seccion();
     if (!s) return false;                  /* motor viejo, sin la sección */
