@@ -198,7 +198,6 @@
           selR('sobre','tipo',[['clasico','Clásico — el sobre se abre y aparece la invitación'],['carta','Carta — la tarjeta se desliza hacia arriba, sale y se convierte en la portada']])+
           '<div class="hint">El modo <b>Carta</b> usa un sobre del catálogo de abajo. El resto de los controles de esta sección (lacre, relieve, iniciales) son del modo Clásico.</div>'+
         '</div>'+
-        '</div>'+
         (_esCarta
           ? '<div class="grp"><label>Sobre del catálogo</label>'+
               selR('sobre','modelo',[['','— Elegí un sobre —']].concat(Object.keys(SOBRES).map(k=>[k,SOBRES[k].nombre])))+
