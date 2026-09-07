@@ -151,17 +151,15 @@
 </script>
   <div class="top">
   <div class="brandlogo">
-    <!-- ⚠️ EL LOGO DEL ADMIN · 7/9/2026
-         Antes estaba acá adentro como base64 (9 KB de imagen escritos dentro
-         del HTML). Al partir admin.html no se pudo transcribir ese base64 con
-         garantía de que llegara idéntico —son 12.400 caracteres al azar y un
-         solo carácter cambiado deja la imagen rota—, así que provisoriamente
-         apunta al favicon, que ya está en el repo.
-         ★ PARA DEJARLO COMO ESTABA: subir `invitame-logo-admin.png` (342x387,
-           está en la carpeta de Maki) a la raíz del repo y cambiar el src de
-           abajo por "/invitame-logo-admin.png". Es lo único que quedó distinto
-           al partir el archivo. -->
-    <img class="blogo" alt="Invítame" src="/favicon-in.png">
+    <!-- EL LOGO DEL ADMIN · 7/9/2026
+         Antes vivía acá adentro como base64: 9 KB de imagen escritos dentro del
+         HTML. Ahora es un archivo de verdad, que además se cachea en vez de
+         viajar en cada carga del panel.
+         ⚠️ NO volver a meterlo como base64. Una imagen adentro del HTML no se
+            puede copiar de un archivo a otro con garantía de que llegue
+            idéntica (son 12.364 caracteres al azar), y un solo carácter
+            cambiado la deja rota sin que se note. -->
+    <img class="blogo" alt="Invítame" src="/invitame-logo-admin.png">
     <span class="wm">invítame!</span>
     <span class="adm">ADMIN</span>
   </div>
