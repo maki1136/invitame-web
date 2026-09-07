@@ -194,7 +194,12 @@
     "Clave del panel de los novios:": "c_clave-del-panel-de-los-novios",
     "ES DEMO ?:": "c_es-demo",
     "NOMBRE DE LA DEMO:": "c_nombre-de-la-demo",
-    "Tipo de evento:": "c_tipo-de-evento",
+    /* ⚠️ ÚNICA clave que se cambió a mano (7/9/2026). El campo escribía en
+       `c_tipo-de-evento`, un casillero que NO lee nadie, mientras la invitación,
+       el panel de números y el formulario del cliente leen y escriben
+       `tipoEvento`. Eran dos controles para lo mismo, y el del panel no hacía
+       nada. Se pudo cambiar porque ese casillero estaba vacío en todas partes. */
+    "Tipo de evento:": "tipoEvento",
     "Imagen del logo - 150px ancho / 50px alto": "c_imagen-del-logo-150px-ancho-50px-alto",
     "Bloquear control de accesos QR y mesas:": "c_bloquear-control-de-accesos-qr-y-mesas",
     "Habilitar trivia:": "c_habilitar-trivia",
