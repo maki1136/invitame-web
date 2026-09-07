@@ -192,7 +192,11 @@ const TEXTOS_GENERICOS = new Set([
   'dress-h2','padres-kick','padres-h2','gal-kick','gal-h2','video-kick','video-h2',
   'video-frase','video-link','reg-kick','reg-h2','hashtag-big','hashtag-link',
   'ev1-t','ev2-t','ev3-t','ev1-cal','ev2-cal','ev3-cal',
-  'clima-ico','clima-temp','clima-desc','clima-nota','rb-l1','rb-cbu','rb-tit','rb-banco'
+  'clima-ico','clima-temp','clima-desc','clima-nota','rb-l1','rb-cbu','rb-tit','rb-banco',
+  /* la trivia: son rótulos de la mecánica del juego, no de la boda de nadie.
+     Los 14 campos de la pestaña TRIVIA los pisan si Jazmín escribe algo. */
+  'tv-kick','tv-h2','tv-bajada','tv-btn-login','tv-btn-start','tv-nosos',
+  'tv-btn-salir','tv-lbl-puntaje','tv-lbl-tabla'
 ]);
 
 if (!motor.includes(MARCA_BARRIDO))
