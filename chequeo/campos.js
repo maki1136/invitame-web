@@ -14,6 +14,13 @@
    CÓMO SE USA        node chequeo/campos.js        (desde la raíz del repo)
    Sale con código 1 si encuentra algo. Sirve para correrlo antes de entregar.
 
+   TAMBIÉN MIRA LOS OTROS DOS CAMINOS (7/9/2026)
+     3. Lo que llena el CLIENTE en /crear.html tiene que llegar al panel. Si un
+        campo del formulario no lo levanta `cargarSolicitudIdx`, el cliente lo
+        escribe y se evapora: Jazmín recibe la invitación a medio armar.
+     4. Lo que tocan los NOVIOS en /mi-panel.html tiene que servir para algo:
+        o lo usa su propio panel, o viaja a la invitación.
+
    ⚠️ LAS TRES EXCEPCIONES QUE HAY QUE CONOCER — sin esto da falsos positivos:
      · Hay claves que se arman concatenando: 'c_ceremonia-'+(i+1)+'-fecha'.
        Por eso las claves con un número adentro se comparan con el molde.
@@ -23,6 +30,9 @@
        hace falta). No están muertos.
      · Parte de los datos los lee el servidor: i/index.php (las etiquetas para
        compartir), aviso-rsvp.php (el mail) y scan.html (el control de acceso).
+     · Los siete `reg_*` de la mesa de regalos NO se copian uno por uno: van en
+       un bucle `['reg_liverpool',…].forEach(k => D[k] = s[k])`. Buscar
+       `s.reg_amazon` como texto no los encuentra.
    ========================================================================== */
 'use strict';
 const fs = require('fs'), path = require('path');
@@ -95,7 +105,39 @@ try {
 } catch (e) {}
 if (sueltos.length) avisos.push(['ARCHIVOS DE /efectos/ QUE NADIE CARGA', sueltos]);
 
-/* ---- 5. el informe ------------------------------------------------------ */
+/* ---- 5. lo que llena el cliente, ¿llega al panel? ---------------------- */
+const crear = leer('crear.js');
+const iData = crear.indexOf('const data={');
+if (iData > 0) {
+  const bloque = crear.slice(iData, crear.indexOf('origen:', iData) + 40);
+  const delCliente = new Set();
+  for (const m of bloque.matchAll(/(?:^|[{,\s])([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g)) delCliente.add(m[1]);
+  ['n1', 'fecha', 'invitados', 'pasevozOnda', 'tpl'].forEach(k => delCliente.add(k));
+  /* estos son del pedido, no de la invitación: no tienen que viajar */
+  const INTERNOS = ['estado', 'creado', 'origen', 'tplNombre', 'id',
+                    'contactoNombre', 'contactoWsp', 'contactoEmail'];
+  const carga = admin + leer('efectos/panel-solicitud-muestra.js');
+  const perdidos = [...delCliente].filter(k =>
+    !INTERNOS.includes(k) &&
+    !carga.includes('s.' + k) && !carga.includes("s['" + k + "']") &&
+    !carga.includes("'" + k + "'"));      /* el bucle de los reg_* */
+  if (perdidos.length) avisos.push(['LO LLENA EL CLIENTE Y NO LLEGA AL PANEL', perdidos]);
+}
+
+/* ---- 6. lo que tocan los novios, ¿sirve para algo? --------------------- */
+const novios = leer('mi-panel.js');
+const suyos = [...novios.matchAll(/guardarPanel\(\{\s*([a-zA-Z0-9_]+)/g)].map(m => m[1]);
+if (suyos.length) {
+  const usan = novios + admin + leer('scan.html') + leer('efectos/panel-itinerario.js');
+  const inutiles = [...new Set(suyos)].filter(k => {
+    /* se cuenta cuántas veces aparece: una sola es el propio guardarPanel */
+    const veces = (usan.match(new RegExp('\\b' + k + '\\b', 'g')) || []).length;
+    return veces <= 1;
+  });
+  if (inutiles.length) avisos.push(['LO GUARDAN LOS NOVIOS Y NO LO USA NADIE', inutiles]);
+}
+
+/* ---- 7. el informe ------------------------------------------------------ */
 console.log(`campos del panel: ${campos.length}   ·   con clave fija: ${campos.filter(c => BIND[c.rotulo]).length}   ·   derivada del rótulo: ${campos.filter(c => !BIND[c.rotulo]).length}`);
 console.log('');
 if (!avisos.length) { console.log('SIN AVISOS — todo campo tiene lector y todo lector tiene campo.'); process.exit(0); }
