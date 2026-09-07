@@ -1571,7 +1571,7 @@
     })();
     // ---- Hospedaje: descripción, imagen y lista de hoteles editable ----
     (function(){
-      var tx=String(ev['c_descripcion-hotel']||ev['c_descripci-n-hotel']||'').trim();
+      var tx=String(ev['c_descripcion-hotel']||'').trim();
       if(tx){ var p=el('hosp-texto'); if(p)p.textContent=tx; }
       var im=ev['img_c_imagen-hoteles']||ev['img_f-imagen-hoteles'];
       if(im){ var i1=el('hosp-img'); if(i1){ i1.src=cldOpt(im,'w_1000,c_limit'); i1.style.display='block'; } }
@@ -1604,7 +1604,7 @@
       for(var i=0;i<ks.length;i++){ if(ev[ks[i]]){iu=ev[ks[i]];break;} }
       if(iu&&im){ verSeccion('itinerario', true); im.src=cldOpt(iu,'w_1000,c_limit'); im.style.display=''; if(lista)lista.style.display='none'; if(nota)nota.style.display='none'; return; }
       // texto propio: una línea por ítem, formato "12:00 · Ceremonia | descripción"
-      var txt=(ev['c_itinerario-descripcion']||ev['c_itinerario-descripci-n']||ev.itDescrip||'').trim();
+      var txt=(ev['c_itinerario-descripcion']||ev.itDescrip||'').trim();
       var filas=txt?txt.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean):[];
       // Sin itinerario cargado: ocultar la sección entera. Antes quedaban las 4 filas
       // de ejemplo (12:00 Ceremonia...) y la nota interna "También puede cargarse como imagen".
@@ -1778,7 +1778,7 @@
       if(b1){ if(tel1){ b1.textContent='💬 '+(txt1||('Escribir a '+(ev.n1||''))); b1.href='https://wa.me/'+tel1; b1.style.display=''; } else b1.style.display='none'; }
       if(b2){ if(tel2){ b2.textContent='💬 '+(txt2||('Escribir a '+(ev.n2||''))); b2.href='https://wa.me/'+tel2; b2.style.display=''; } else b2.style.display='none'; }
       var h2=el('contacto-h2'); if(h2&&ev['c_titulo-contacto'])h2.textContent=ev['c_titulo-contacto'];
-      var fr=el('contacto-frase'); if(fr){ var fv=ev['c_frase-para-seccion-contacto']||ev['c_frase-para-secci-n-de-contacto']||''; if(fv){fr.textContent=fv;fr.style.display='';} }
+      var fr=el('contacto-frase'); if(fr){ var fv=ev['c_frase-para-seccion-contacto']||''; if(fv){fr.textContent=fv;fr.style.display='';} }
       var hay=!!(tel1||tel2);
       if(sec) sec.style.display=(hay && mostrar!==false)?'':'none';   // sin números o toggle apagado => oculta
       var sh=el('wa-share');
@@ -1907,7 +1907,7 @@
       else if(vi) html='<iframe style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px" src="https://player.vimeo.com/video/'+vi[1]+'" allowfullscreen loading="lazy"></iframe>';
       else if(/\.(mp4|webm|mov)(\?|$)/i.test(u)) html='<video src="'+u+'" controls playsinline style="width:100%;border-radius:12px"></video>';
       if(emb) emb.innerHTML=html;
-      if(lk){ lk.href=u; var bt=(ev['c_texto-boton-ver-video']||ev['c_texto-bot-n-ver-v-deo']||'').trim(); if(bt)lk.textContent=bt; lk.style.display=html?'none':''; }
+      if(lk){ lk.href=u; var bt=(ev['c_texto-boton-ver-video']||'').trim(); if(bt)lk.textContent=bt; lk.style.display=html?'none':''; }
       var _t=(ev['c_titulo-seccion-video']||'').trim(); if(_t){var h=el('video-h2'); if(h)h.textContent=_t;}
       var _f=(ev['c_frase-seccion-video']||'').trim(); if(_f){var p=el('video-frase'); if(p)p.textContent=_f;}
       vs.style.display='';
