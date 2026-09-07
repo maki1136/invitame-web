@@ -21,7 +21,7 @@
      4. Lo que tocan los NOVIOS en /mi-panel.html tiene que servir para algo:
         o lo usa su propio panel, o viaja a la invitación.
 
-   ⚠️ LAS TRES EXCEPCIONES QUE HAY QUE CONOCER — sin esto da falsos positivos:
+   ⚠️ LAS EXCEPCIONES QUE HAY QUE CONOCER — sin esto da falsos positivos:
      · Hay claves que se arman concatenando: 'c_ceremonia-'+(i+1)+'-fecha'.
        Por eso las claves con un número adentro se comparan con el molde.
      · Tres módulos de /efectos/ NO se cargan desde efectos/index.js:
@@ -30,6 +30,9 @@
        hace falta). No están muertos.
      · Parte de los datos los lee el servidor: i/index.php (las etiquetas para
        compartir), aviso-rsvp.php (el mail) y scan.html (el control de acceso).
+     · El código del admin ya NO está en admin.html: vive en /admin/1..4.js.
+       Acá se leen los cuatro y se pegan, así el chequeo no depende de dónde
+       esté cada función.
      · Los siete `reg_*` de la mesa de regalos NO se copian uno por uno: van en
        un bucle `['reg_liverpool',…].forEach(k => D[k] = s[k])`. Buscar
        `s.reg_amazon` como texto no los encuentra.
@@ -43,7 +46,12 @@ const slug = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
   .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
 
 /* ---- 1. los campos del panel ------------------------------------------- */
-const admin = leer('admin.html'), lineas = admin.split('\n');
+/* ⚠️ 7/9/2026: el cerebro del admin dejó de estar adentro de admin.html y pasó
+   a /admin/1..4. `admin` de acá abajo es LOS CUATRO pegados: así este chequeo
+   sigue viendo lo mismo que antes, sin importar en qué archivo esté cada cosa. */
+const PARTES = ['admin/1-campos.js','admin/2-panel.js','admin/3-evento.js','admin/4-solicitudes.js'];
+const admin = PARTES.map(leer).join('\n') + '\n' + leer('admin.html');
+const lineas = admin.split('\n');
 const lnBind = lineas.findIndex(l => /const BIND\s*=/.test(l));
 const BIND = {};
 for (const m of lineas[lnBind].matchAll(/"((?:[^"\\]|\\.)*)"\s*:\s*"([^"]*)"/g)) BIND[m[1].replace(/\\"/g, '"')] = m[2];
