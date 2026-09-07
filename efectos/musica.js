@@ -1,66 +1,76 @@
 /* ===== LA MÚSICA DE LA FIESTA ================================================
 
-   POR QUÉ EXISTE ESTE ARCHIVO
-   La página de planes de Invítame vende "Música" como una de las funciones de
-   la Platinum. El motor NO la tiene. Hay un `#music` en el index.html, pero
-   son cuatro `<i>` vacíos: es un adorno animado, no una sección. El motor lee
-   `ev.musicaUrl` y `ev.musica` y no los muestra en ningún lado.
+   QUÉ HACE HOY
+   Le agrega a la sección «Playlist del evento» —la que ya trae el motor— las
+   dos cosas que le faltan: el texto que escriben los novios (`ev.musica`) y un
+   botón para sugerir una canción por WhatsApp.
 
-   Resultado: una novia que paga la Platinum no recibe algo que le vendimos.
-   Esto lo arregla.
+   ⚠️⚠️ POR QUÉ YA NO ARMA SU PROPIA SECCIÓN  (6/9/2026)
+   Antes este módulo insertaba una sección entera «La música» leyendo
+   `ev.musicaUrl`. El motor ya tiene la suya (`#spotify-sec`, línea 716 de
+   i/index.html) leyendo `ev.spotifyUrl`. Eran DOS secciones de playlist, y si
+   alguien llenaba los dos campos aparecían las dos, una arriba de la otra.
+   Hoy no pasa en ninguna invitación —los campos nunca se llenaron juntos—
+   pero era cuestión de tiempo: los dos campos están en el panel, uno al lado
+   del otro. Ahora hay UNA sola sección y este módulo la completa.
 
-   QUÉ MUESTRA
-   · El texto que escriban los novios (`musica`).
-   · La lista de Spotify embebida, para escucharla ahí mismo (`musicaUrl`).
-   · Un botón para sugerir una canción por WhatsApp, si hay número cargado.
+   ⚠️ LOS DOS CAMPOS NO SON LO MISMO — ES EL ERROR QUE MÁS CONFUNDIÓ:
+     · `musicaUrl`  = la música de FONDO. Tiene que ser un archivo de audio
+       (.mp3/.m4a/.aac/.ogg/.wav). El motor descarta cualquier otra cosa EN
+       SILENCIO y esconde el botón de la bocina: se carga un link de Spotify
+       ahí y no suena nada, sin ningún aviso.
+     · `spotifyUrl` = la PLAYLIST que se muestra para escuchar y sugerir.
+   Acá se usa `spotifyUrl`. `musicaUrl` sólo se mira como salvavidas, y sólo
+   si NO es un archivo de audio (ver `rescate()`): es para las invitaciones
+   viejas que tienen el link de Spotify guardado en el campo equivocado.
 
-   SI NO HAY LISTA CARGADA NO APARECE NADA. Es opcional, como el calendario.
+   ⚠️ Y SI EL MOTOR NO LLEGA A MOSTRAR LA SECCIÓN, LA MUESTRA ESTE MÓDULO.
+   El motor sólo mira `spotifyUrl`. `regina-y-santiago` tiene su playlist en
+   `musicaUrl` (el campo equivocado), así que el motor deja la sección oculta.
+   Antes la salvaba la sección propia de este módulo; ahora que esa sección no
+   existe más, si nadie encendiera la del motor esa invitación se quedaría sin
+   música. Por eso `encenderSeccion()` arma el reproductor y la muestra.
 
-   DÓNDE SE UBICA
-   Justo antes de la mesa de regalos. Es el orden natural: primero la fiesta
-   (qué se baila), después el detalle.
-
-   ⚠️ `secOrden` NO acepta "musica": la lista de secciones que ordena el panel
-   está escrita en el motor y no la incluye. Por eso esta sección se inserta
-   sola en un lugar fijo en vez de pedirle permiso a `secOrden`.
+   ⚠️ SI NO HAY PLAYLIST NO APARECE NADA. Es opcional, como el calendario.
 
    ⚠️ LA CLASE QUE HACE APARECER UN `.reveal` ES `in`, NO `on`.
-   Esto costó un rato: la sección se insertaba bien, medía 649 px de alto,
-   tenía el texto y el reproductor adentro… y en pantalla se veía un rectángulo
-   marfil vacío, porque todo quedaba en `opacity:0`. En el HTML del motor
-   conviven las dos palabras (`.carousel.reveal` tiene un hermano con clase
-   `on`), y es fácil agarrar la equivocada. La correcta es `in`.
+   Esto costó un rato: el bloque se insertaba bien, tenía el texto adentro… y
+   en pantalla no se veía nada, porque quedaba en `opacity:0`. En el HTML del
+   motor conviven las dos palabras. La correcta es `in`.
 
-   Igual el observador del motor ya no está mirando cuando insertamos esto, así
-   que las encendemos a mano.
-
-   ⚠️ El link tiene que ser de Spotify. Se convierte a `/embed/` para poder
-   incrustarlo; si el link es de otra cosa (YouTube, Apple Music) se muestra
-   igual pero como botón, sin reproductor.
+   ⚠️ EL TEXTO DE ACÁ NO PASA POR `i/textos-es-mx.php`. Ese archivo cambia el
+   HTML en el servidor, antes de mandarlo; lo que escribe un módulo en vivo no
+   lo toca. Por eso todo lo que se escriba acá va YA en español de México.
    ============================================================================ */
 (function () {
   'use strict';
 
-  var ID = 'inv-musica';
-  var VISIBLE = 'in';          /* ⚠️ no es 'on'. Ver la nota de arriba. */
+  var MARCA  = 'inv-musica-extra';   /* para no agregar lo mismo dos veces */
+  var VIEJA  = 'inv-musica';         /* la sección que este módulo armaba antes */
+  var VISIBLE = 'in';                /* ⚠️ no es 'on'. Ver la nota de arriba. */
 
   function ev() { return window.INVEV || {}; }
 
-  function limpio(s) {
-    return String(s == null ? '' : s).trim();
-  }
+  function limpio(s) { return String(s == null ? '' : s).trim(); }
 
   function esc(s) {
     return limpio(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
                     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  /* open.spotify.com/playlist/ID  →  open.spotify.com/embed/playlist/ID */
-  function aEmbed(url) {
-    var m = String(url).match(/open\.spotify\.com\/(?:intl-[a-z]{2}\/)?(playlist|album|track|artist)\/([A-Za-z0-9]+)/);
-    if (!m) return null;
-    return 'https://open.spotify.com/embed/' + m[1] + '/' + m[2] + '?theme=0';
+  function esAudio(u) {
+    return /^https?:\/\//i.test(u) && /\.(mp3|m4a|aac|ogg|wav)(\?|$)/i.test(u);
   }
+
+  /* Salvavidas para las invitaciones viejas: el link de la playlist guardado
+     en `musicaUrl`. Nunca devuelve un archivo de audio: ése es la música de
+     fondo y robarlo apagaría la bocina. */
+  function rescate() {
+    var u = limpio(ev().musicaUrl);
+    return (u && !esAudio(u)) ? u : '';
+  }
+
+  function playlist() { return limpio(ev().spotifyUrl) || rescate(); }
 
   function telefono() {
     var e = ev();
@@ -68,48 +78,47 @@
     return t.replace(/[^0-9]/g, '');
   }
 
-  function donde() {
-    /* antes de la mesa de regalos */
-    return [].slice.call(document.querySelectorAll('section.sec')).filter(function (s) {
-      return /mesa de regalos|regalos/i.test(s.innerText || '');
-    })[0] || null;
+  /* La sección del motor. Está oculta hasta que el motor le encuentra playlist. */
+  function seccion() { return document.getElementById('spotify-sec'); }
+
+  function estaVisible(s) {
+    return !!s && s.style.display !== 'none' &&
+           getComputedStyle(s).display !== 'none';
   }
 
-  function construir() {
+  /* Arma el reproductor y muestra la sección del motor. Mismo criterio que el
+     motor (i/index.html, línea 1897): un track mide 152 px, todo lo demás 352. */
+  function encenderSeccion(s, url) {
+    var m = String(url).match(/(playlist|album|track|artist)\/([A-Za-z0-9]+)/);
+    if (!m) return false;
+    var caja = document.getElementById('spotify-embed');
+    if (caja && !caja.innerHTML.trim()) {
+      caja.innerHTML =
+        '<iframe style="border-radius:12px;width:100%;height:' +
+        (m[1] === 'track' ? 152 : 352) + 'px" frameborder="0" loading="lazy" ' +
+        'src="https://open.spotify.com/embed/' + m[1] + '/' + m[2] + '" ' +
+        'allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture"></iframe>';
+    }
+    s.style.display = '';
+    encender(s);
+    return true;
+  }
+
+  function bloque() {
     var e = ev();
-    var url = limpio(e.musicaUrl);
-    if (!url) return null;
-
     var texto = limpio(e.musica);
-    var embed = aEmbed(url);
-    var tel = telefono();
+    var tel   = telefono();
+    if (!texto && !tel) return null;      /* nada que agregar */
+
     var nombres = [limpio(e.n1), limpio(e.n2)].filter(Boolean).join(' y ');
+    var d = document.createElement('div');
+    d.id = MARCA;
 
-    var s = document.createElement('section');
-    s.className = 'sec';
-    s.id = ID;
-
-    var html = '<div class="kick reveal">La fiesta</div>' +
-               '<h2 class="reveal">La música</h2>';
-
+    var html = '';
     if (texto) {
-      html += '<p class="reveal" style="max-width:34em;margin:0 auto 18px;line-height:1.6">' +
+      html += '<p class="reveal" style="max-width:34em;margin:14px auto 0;line-height:1.6">' +
               esc(texto) + '</p>';
     }
-
-    if (embed) {
-      html += '<div class="reveal" style="max-width:520px;margin:0 auto;' +
-              'border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(60,45,30,.16)">' +
-              '<iframe src="' + esc(embed) + '" width="100%" height="352" frameborder="0" ' +
-              'loading="lazy" style="display:block;border:0" ' +
-              'allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>' +
-              '</div>';
-    } else {
-      html += '<div class="reveal" style="margin-top:6px">' +
-              '<a class="btn" href="' + esc(url) + '" target="_blank" rel="noopener">Escuchar la lista</a>' +
-              '</div>';
-    }
-
     if (tel) {
       var msg = 'Hola! Para la boda' + (nombres ? ' de ' + nombres : '') +
                 ' quiero sugerir una canción: ';
@@ -117,36 +126,42 @@
               '<a class="btn" target="_blank" rel="noopener" href="https://wa.me/' + tel +
               '?text=' + encodeURIComponent(msg) + '">Sugerir una canción</a></div>';
     }
-
-    s.innerHTML = html;
-    return s;
+    d.innerHTML = html;
+    return d;
   }
 
-  function encender(s) {
-    [].forEach.call(s.querySelectorAll('.reveal'), function (e) {
+  function encender(n) {
+    [].forEach.call(n.querySelectorAll('.reveal'), function (e) {
       e.classList.add(VISIBLE);
     });
   }
 
   function poner() {
-    if (document.getElementById(ID)) return;
-    var s = construir();
-    if (!s) return;
-    var ancla = donde();
-    if (!ancla || !ancla.parentNode) return;
-    ancla.parentNode.insertBefore(s, ancla);
+    /* si quedó dando vueltas la sección vieja de una carga anterior, se va */
+    var v = document.getElementById(VIEJA);
+    if (v && v.parentNode) v.parentNode.removeChild(v);
 
-    /* el observador del motor ya terminó de mirar: las encendemos nosotros.
-       Se hace dos veces por si alguna se pisa con una animación en curso. */
-    setTimeout(function () { encender(s); }, 120);
-    setTimeout(function () { encender(s); }, 900);
+    if (document.getElementById(MARCA)) return true;
+    if (!playlist()) return true;          /* sin playlist no hay sección: listo */
+
+    var s = seccion();
+    if (!s) return false;                  /* motor viejo, sin la sección */
+    /* el motor sólo mira `spotifyUrl`: si la playlist vino del campo viejo,
+       la sección sigue oculta y la encendemos nosotros */
+    if (!estaVisible(s) && !encenderSeccion(s, playlist())) return false;
+
+    var b = bloque();
+    if (!b) return true;
+    s.appendChild(b);
+    setTimeout(function () { encender(b); }, 120);
+    setTimeout(function () { encender(b); }, 900);
+    return true;
   }
 
   function arrancar() {
-    poner();
+    if (poner()) return;
     var n = 0, t = setInterval(function () {
-      poner();
-      if (document.getElementById(ID) || ++n > 50) clearInterval(t);
+      if (poner() || ++n > 50) clearInterval(t);
     }, 320);
     addEventListener('message', function () { setTimeout(poner, 120); });
   }
