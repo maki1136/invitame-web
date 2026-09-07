@@ -112,8 +112,7 @@
     var frase = '';
     try {
       var ev = window.INVEV || {};
-      frase = String(ev['c_frase-para-seccion-confirmacion'] ||
-                     ev['c_frase-para-secci-n-de-confirmaci-n'] || '').trim();
+      frase = String(ev['c_frase-para-seccion-confirmacion'] || '').trim();
     } catch (e) {}
     if (p && frase && p.textContent !== frase) p.textContent = frase;
 
