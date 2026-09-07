@@ -1801,10 +1801,23 @@
       /* Hospedaje: la sección puede seguir viva por la imagen aunque no haya texto. */
       if(!hay(ev['c_descripcion-hotel']))  vaciar('hosp-texto');
 
-      /* Las fotos: acá ya corrieron [data-imgbg], la galería, las personas y el
-         fondo de la banda. Lo que TODAVÍA apunte a Unsplash es del ejemplo. */
-      document.querySelectorAll('[style*="images.unsplash.com"], img[src*="images.unsplash.com"]')
-        .forEach(function(n){ n.style.display='none'; });
+      /* ⚠️ Las fotos de ejemplo NO se reconocen por la URL. El primer intento hizo
+         justo eso —esconder todo lo que apuntara a Unsplash— y escondió la foto
+         del hotel y el fondo de Contacto, que eran las que ELLOS habían cargado:
+         nada impide elegir a propósito una foto de Unsplash. Se mira SI HAY
+         DATO, y cuando no lo hay va un degradé de la paleta, nunca un hueco. */
+      var _degrade='linear-gradient(160deg,var(--sage-cl),var(--sage))';
+      document.querySelectorAll('[data-imgbg]').forEach(function(n){
+        var b=n.dataset.imgbg;
+        var cands=[b, b.replace(/-+$/,''),
+                   b.replace(/^img_f-/,'img_c_'), b.replace(/^img_f-/,'img_c_').replace(/-+$/,''),
+                   b.replace(/^img_c_/,'img_f-'), b.replace(/^img_c_/,'img_f-').replace(/-+$/,'')];
+        var tiene=false; for(var i=0;i<cands.length;i++){ if(ev[cands[i]]){ tiene=true; break; } }
+        if(!tiene) n.style.backgroundImage=_degrade;
+      });
+      /* El fondo de la banda de la frase también trae una foto de ejemplo. */
+      var _bandPropia=IMGV('img_c_fondo-seccion-frase-larga','img_c_fondo-secci-n-frase-larga','img_f-fondo-secci-n-frase-larga');
+      if(!_bandPropia){ var _bb2=el('bandbg'); if(_bb2) _bb2.style.backgroundImage=_degrade; }
 
       /* La foto del cierre vive en una variable de CSS, así que no la agarra el
          barrido de arriba. Sin foto propia va un degradé de la paleta del
