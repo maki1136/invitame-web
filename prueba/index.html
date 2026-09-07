@@ -827,13 +827,13 @@
     <p>Escuchá la música de la fiesta y sugerí las canciones que no pueden faltar.</p>
     <div class="reveal" id="spotify-embed" style="margin-top:16px;border-radius:14px;overflow:hidden;max-width:420px;margin-left:auto;margin-right:auto"></div></section>
 
-  <section data-sec="trivia" class="sec verde"><div class="kick">¡Jugá con nosotros!</div><h2>Trivia</h2>
-    <p style="color:#d7cebb">¿Cuánto conocés a la pareja? Sumá puntos y entrá al ranking.</p>
+  <section data-sec="trivia" class="sec verde"><div class="kick" id="tv-kick">¡Jugá con nosotros!</div><h2 id="tv-h2">Trivia</h2>
+    <p style="color:#d7cebb" id="tv-bajada">¿Cuánto conocés a la pareja? Sumá puntos y entrá al ranking.</p>
     <div class="trivia reveal">
-      <div id="tv-login"><input class="tv-in" id="tvname" placeholder="Ingresá tu nombre"><button class="tv-btn" onclick="tvLogin()">Iniciar sesión</button></div>
-      <div id="tv-start" style="display:none"><div class="tv-q" id="tv-hi"></div><button class="tv-btn" onclick="tvStart()">Comenzar trivia</button></div>
+      <div id="tv-login"><input class="tv-in" id="tvname" placeholder="Ingresá tu nombre"><button class="tv-btn" id="tv-btn-login" onclick="tvLogin()">Iniciar sesión</button></div>
+      <div id="tv-start" style="display:none"><div class="tv-q" id="tv-hi"></div><button class="tv-btn" id="tv-btn-start" onclick="tvStart()">Comenzar trivia</button><div class="tv-prog" style="margin-top:12px"><span id="tv-nosos">¿No sos vos?</span> <a href="#" id="tv-btn-salir" style="color:#e7ddc8;text-decoration:underline" onclick="tvSalir();return false;">Cerrar sesión</a></div></div>
       <div id="tv-quiz" style="display:none"><div class="tv-prog" id="tv-prog"></div><div class="tv-q" id="tv-q"></div><div id="tv-opts"></div></div>
-      <div id="tv-end" style="display:none"><div class="tv-prog">Tu puntaje</div><div class="tv-score" id="tv-final"></div><div class="tv-prog" style="margin-top:16px">Tabla de posiciones</div><div class="board" id="tv-board"></div></div>
+      <div id="tv-end" style="display:none"><div class="tv-prog" id="tv-lbl-puntaje">Tu puntaje</div><div class="tv-score" id="tv-final"></div><div class="tv-prog" style="margin-top:16px" id="tv-lbl-tabla">Tabla de posiciones</div><div class="board" id="tv-board"></div></div>
     </div></section>
 
   <section data-sec="regalos" class="sec">    <img id="reg-adorno" alt="" style="display:none"><div class="kick" id="reg-kick">Con cariño</div><h2 id="reg-h2">Mesa de Regalos</h2>
@@ -1292,12 +1292,27 @@
     {q:'¿Cuántos años llevan juntos?',o:['3 años','5 años','7 años'],c:1},
     {q:'¿Cómo fue la propuesta?',o:['En la playa al atardecer','En casa','En un restaurante'],c:0}
   ];
+  /* ===== LOS TEXTOS DE LA TRIVIA SON DE LA PAREJA, NO MÍOS ====================
+     La pestaña TRIVIA del panel tiene 14 campos. Hasta el 7/9/2026 NINGUNO se
+     leía: Jazmín los llenaba, guardaba, y la trivia seguía diciendo lo mismo de
+     siempre —y en voseo—. Acá está el único lugar donde se leen.
+     ⚠️ Si se agrega un texto nuevo a la trivia, se agrega TAMBIÉN a esta tabla
+     y a la pestaña TRIVIA del panel. Un campo que nadie lee es una mentira que
+     el chequeo automático canta. */
+  const TVTXT={
+    hola:'¡Hola', pregunta:'Pregunta', pts:'pts',
+    nombreCol:'Nombre', noSos:'¿No sos vos?'
+  };
   let tvName='',tvIdx=0,tvScore=0,tvLock=false;
   function tvLogin(){ const n=el('tvname').value.trim(); if(!n){el('tvname').focus();return;} tvName=n;
-    el('tv-login').style.display='none'; el('tv-start').style.display=''; el('tv-hi').textContent='¡Hola '+tvName+'! ¿Listo para jugar?'; }
+    el('tv-login').style.display='none'; el('tv-start').style.display=''; el('tv-hi').textContent=TVTXT.hola+' '+tvName+'!'; }
+  /* "cerrar sesión": vuelve al principio para que juegue otra persona en el mismo celular */
+  function tvSalir(){ tvName=''; tvIdx=0; tvScore=0; el('tvname').value='';
+    el('tv-start').style.display='none'; el('tv-quiz').style.display='none'; el('tv-end').style.display='none';
+    el('tv-login').style.display=''; el('tvname').focus(); }
   function tvStart(){ el('tv-start').style.display='none'; el('tv-quiz').style.display=''; tvIdx=0; tvScore=0; tvShow(); }
   function tvShow(){ const p=PREGUNTAS[tvIdx];
-    el('tv-prog').textContent='Pregunta '+(tvIdx+1)+' de '+PREGUNTAS.length+' · '+tvScore+' pts';
+    el('tv-prog').textContent=TVTXT.pregunta+' '+(tvIdx+1)+' de '+PREGUNTAS.length+' · '+tvScore+' '+TVTXT.pts;
     el('tv-q').textContent=p.q;
     el('tv-opts').innerHTML=p.o.map((t,i)=>'<button class="topt" onclick="tvAns('+i+')">'+t+'</button>').join(''); }
   function tvAns(i){ if(tvLock)return; tvLock=true; const p=PREGUNTAS[tvIdx];
@@ -1306,10 +1321,17 @@
     if(i===p.c) tvScore+=10;
     setTimeout(()=>{ tvLock=false; tvIdx++; if(tvIdx<PREGUNTAS.length){tvShow();} else {tvEnd();} },1000); }
   function tvEnd(){ el('tv-quiz').style.display='none'; el('tv-end').style.display='';
-    el('tv-final').textContent=tvScore+' pts';
-    const base=[['Familia Gómez',40],['Lucía Fernández',30],['Martín y Sofía',20],['Los Pérez',10]];
-    base.push([tvName+' (vos)',tvScore]); base.sort((a,b)=>b[1]-a[1]);
-    el('tv-board').innerHTML=base.map((r,i)=>'<div class="r'+(r[0].indexOf('(vos)')>-1?' me':'')+'"><span class="pos">'+(i+1)+'</span><span style="flex:1">'+r[0]+'</span><span>'+r[1]+' pts</span></div>').join(''); }
+    el('tv-final').textContent=tvScore+' '+TVTXT.pts;
+    /* ⚠️ ACÁ HABÍA CUATRO INVITADOS INVENTADOS: "Familia Gómez 40, Lucía Fernández
+       30, Martín y Sofía 20, Los Pérez 10". Se veían en la boda de CUALQUIER
+       cliente, como si fueran su gente. Y el puntaje no se guarda en ningún lado:
+       no hay ranking compartido, cada celular juega solo.
+       Mientras no haya dónde guardarlo, la tabla muestra lo único cierto: cómo le
+       fue a quien está jugando. Inventar competidores es peor que no tener tabla. */
+    const filas=[[tvName,tvScore]];
+    el('tv-board').innerHTML=
+      '<div class="r" style="opacity:.65"><span class="pos"></span><span style="flex:1">'+TVTXT.nombreCol+'</span><span>'+TVTXT.pts+'</span></div>'+
+      filas.map(function(r,i){ return '<div class="r me"><span class="pos">'+(i+1)+'</span><span style="flex:1">'+r[0]+'</span><span>'+r[1]+' '+TVTXT.pts+'</span></div>'; }).join(''); }
 </script>
 
 <!-- ====== CARGADOR DE DATOS (Firebase) ====== -->
@@ -1819,6 +1841,28 @@
     // (antes salían "¿Dónde se conocieron María y Diego?" en invitaciones reales)
     if(ev.trivia&&ev.trivia.length){ PREGUNTAS=ev.trivia; verSeccion('trivia', true); }
     else { verSeccion('trivia', false); }
+    /* ---- los 14 textos y colores de la pestaña TRIVIA del panel -------------
+       Antes ninguno se leía: se podían llenar y no pasaba nada. Cada línea de
+       acá es UN campo del panel; si se saca una, ese campo vuelve a ser mentira. */
+    (function(){
+      var T=function(k){ return String(ev[k]||'').trim(); };
+      var pon=function(id,k){ var t=T(k), e=el(id); if(t&&e) e.textContent=t; };
+      pon('tv-kick',      'c_texto-sobre-titulo');
+      pon('tv-lbl-puntaje','c_texto-tabla-de-resultados');
+      pon('tv-lbl-tabla', 'c_texto-tabla-de-posiciones');
+      pon('tv-btn-login', 'c_texto-boton-iniciar-sesion');
+      pon('tv-btn-start', 'c_texto-boton-comenzar-trivia');
+      pon('tv-btn-salir', 'c_texto-boton-cerrar-sesion');
+      pon('tv-nosos',     'c_texto-no-sos-para-cerrar-sesion');
+      var ph=T('c_texto-del-campo-para-ingresar-el-nombre'); if(ph){ var i1=el('tvname'); if(i1) i1.placeholder=ph; }
+      if(T('c_texto-puntos'))    TVTXT.pts=T('c_texto-puntos');
+      if(T('c_texto-pregunta'))  TVTXT.pregunta=T('c_texto-pregunta');
+      if(T('c_texto-hola-antes-del-nombre')) TVTXT.hola=T('c_texto-hola-antes-del-nombre');
+      if(T('c_texto-columna-nombre-en-tabla-de-resulta')) TVTXT.nombreCol=T('c_texto-columna-nombre-en-tabla-de-resulta');
+      var c1=T('c_color-1-titulo-trivia'), c2=T('c_color-2-titulo-trivia');
+      if(c1){ var h=el('tv-h2'); if(h) h.style.color=c1; }
+      if(c2){ var k=el('tv-kick'); if(k) k.style.color=c2; }
+    })();
     if(ev.fecha){const _f=new Date(ev.fecha); if(!isNaN(_f)){const _d=el('sc-day'),_m=el('sc-mon'); if(_d)_d.textContent=_f.getDate(); if(_m)_m.textContent=_meses[_f.getMonth()]+' '+_f.getFullYear();}}
     if(typeof ev.petalos!=='undefined')FX.particulas.on=ev.petalos; // compat viejo
     if(ev.fx)mergeFX(ev.fx);
