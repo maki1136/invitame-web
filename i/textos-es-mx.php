@@ -62,7 +62,9 @@ $ES_MX_FRASES = array(
   'Una carta para vos'            => 'Una carta para ti',
   'una carta para vos'            => 'una carta para ti',
   'para vos'                      => 'para ti',
-  '¿Cuánto conocés a la pareja?'  => '¿Cuánto conoces a la pareja?'
+  '¿Cuánto conocés a la pareja?'  => '¿Cuánto conoces a la pareja?',
+  /* la trivia: frase entera, porque 'vos' suelto está prohibido (rompe otras palabras) */
+  '¿No sos vos?'                  => '¿No eres tú?'
 );
 
 /* Palabras sueltas, en sus dos capitalizaciones. */
