@@ -49,12 +49,15 @@ const slug = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 /* ⚠️ 7/9/2026: el cerebro del admin dejó de estar adentro de admin.html y pasó
    a /admin/1..4. `admin` de acá abajo es LOS CUATRO pegados: así este chequeo
    sigue viendo lo mismo que antes, sin importar en qué archivo esté cada cosa. */
-const PARTES = ['admin/1-campos.js','admin/2-panel.js','admin/3-evento.js','admin/4-solicitudes.js'];
+const PARTES = ['admin/0-claves.js','admin/1-campos.js','admin/2-panel.js','admin/3-evento.js','admin/4-solicitudes.js'];
 const admin = PARTES.map(leer).join('\n') + '\n' + leer('admin.html');
 const lineas = admin.split('\n');
 const lnBind = lineas.findIndex(l => /const BIND\s*=/.test(l));
+/* ⚠️ 7/9/2026: BIND se mudó a /admin/0-claves.js y pasó a ocupar muchas líneas,
+   así que ya no alcanza con leer UNA línea: se lee el bloque entero hasta su `};`. */
+let finBind = lnBind; while (!/^\s*\};/.test(lineas[finBind])) finBind++;
 const BIND = {};
-for (const m of lineas[lnBind].matchAll(/"((?:[^"\\]|\\.)*)"\s*:\s*"([^"]*)"/g)) BIND[m[1].replace(/\\"/g, '"')] = m[2];
+for (const m of lineas.slice(lnBind, finBind + 1).join('\n').matchAll(/"((?:[^"\\]|\\.)*)"\s*:\s*"([^"]*)"/g)) BIND[m[1].replace(/\\"/g, '"')] = m[2];
 const lnF = lineas.findIndex(l => /const FIELDS\s*=/.test(l));
 let fin = lnF; while (!/^\s*\};/.test(lineas[fin])) fin++;
 const bloqueF = lineas.slice(lnF, fin + 1).join('\n');
