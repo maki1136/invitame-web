@@ -78,9 +78,7 @@
         if (String(m.h || '').trim() || String(m.t || '').trim()) return true;
       }
     }
-    var t = e['c_itinerario-descripcion'] ||
-            e['c_itinerario-descripci-n'] ||
-            e.itDescrip || '';
+    var t = e['c_itinerario-descripcion'] || e.itDescrip || '';
     return String(t).trim().length > 0;
   }
 
