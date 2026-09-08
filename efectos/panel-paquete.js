@@ -228,10 +228,26 @@
     var ya = document.getElementById(ID);
     if (ya) { if (ya.__sync) ya.__sync(); return; }
 
-    var m = document.querySelector('.mejoras');
-    if (!m || !m.parentNode) return;
-    /* va PRIMERO de todo: es lo que decide qué corresponde en el resto */
-    m.parentNode.insertBefore(construir(d), m);
+    /* ⚠️⚠️ VA ÚLTIMO, Y NO ES UNA PREFERENCIA: ES UN CHOQUE MEDIDO.
+
+       La primera versión lo metía PRIMERO, porque el paquete es lo que decide
+       qué corresponde en el resto. Resultado: como este bloque también lleva
+       la clase «mejoras», pasó a ser el que devuelve
+       `document.querySelector('.mejoras')` — y TODOS los demás módulos del
+       panel, que se cuelgan justo de ahí, empezaron a dibujarse ADENTRO de
+       este bloque. La colección, los colores, el fondo: todo apilado adentro
+       del cartelito del paquete.
+
+       No dio ningún error. Sólo se veía raro.
+
+       Regla: un bloque nuevo con la clase «mejoras» NUNCA se inserta antes de
+       los que ya existen. Si algún día tiene que verse arriba, se resuelve con
+       CSS (`order`), no cambiando el orden del HTML. */
+    var todas = document.querySelectorAll('.mejoras');
+    if (!todas.length) return;
+    var ultima = todas[todas.length - 1];
+    if (!ultima.parentNode) return;
+    ultima.parentNode.insertBefore(construir(d), ultima.nextSibling);
   }
 
   var n = 0;
