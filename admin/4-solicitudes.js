@@ -76,6 +76,14 @@
     box.innerHTML='<div class="invmodal" style="background:#fff;max-width:780px;width:100%;border-radius:14px;padding:20px;font-family:Nunito,sans-serif"><div style="color:#9a8f88">Cargando…</div></div>';
     try{
       const data=await INV.exportAll();
+      /* Quién armó cada una: vive en `inv_privado` (no en el evento, que es público).
+         Una sola lectura de toda la colección: es chica, un documento por invitación. */
+      _autores={};
+      try{
+        const _m=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const _pv=await _m.getDocs(_m.collection(window.INV.db,'inv_privado'));
+        _pv.forEach(function(d){ const x=d.data()||{}; _autores[d.id]={creo:x.creadoPor||'', guardo:x.guardadoPor||'', el:x.guardadoEl||''}; });
+      }catch(_e){ /* sin permiso o sin conexión: la columna queda vacía, no se rompe nada */ }
       const counts={},pers={};
       data.invitados.forEach(g=>{if(g.activo!==false){counts[g.slug]=(counts[g.slug]||0)+1;pers[g.slug]=(pers[g.slug]||0)+(parseInt(g.usosMax,10)||1);}});
       _invData=data.eventos.map(ev=>({ev,inv:counts[ev.slug]||0,pp:pers[ev.slug]||0}))
@@ -86,14 +94,31 @@
         '<button style="background:#F56770;color:#fff;border:0;border-radius:20px;padding:8px 15px;font-weight:800;font-family:Nunito;cursor:pointer" onclick="location.href=\'admin.html\'">＋ Nueva invitación</button></div>'+
         '<input id="invfiltro" placeholder="Filtrar por pareja, página, orden…" oninput="filtrarInv()" style="width:100%;padding:11px 12px;border:1px solid #e7ddd3;border-radius:10px;font-family:Nunito;font-size:14px;margin-bottom:12px" autofocus>'+
         '<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="text-align:left;color:#9a8f88;border-bottom:2px solid #efe7de">'+
-        '<th style="padding:8px 6px">Evento</th><th style="padding:8px 6px">N° Orden</th><th style="padding:8px 6px">Página</th><th style="padding:8px 6px">Fecha</th><th style="padding:8px 6px;text-align:right">Acciones</th>'+
+        '<th style="padding:8px 6px">Evento</th><th style="padding:8px 6px">N° Orden</th><th style="padding:8px 6px">Página</th><th style="padding:8px 6px">Fecha</th><th style="padding:8px 6px">Armó</th><th style="padding:8px 6px;text-align:right">Acciones</th>'+
         '</tr></thead><tbody id="invrows"></tbody></table></div>'+
         '<div style="margin-top:14px;text-align:right"><button style="background:#efe7de;color:#49111A;border:0;border-radius:20px;padding:8px 16px;font-family:Nunito;font-weight:700;cursor:pointer" onclick="document.getElementById(\'invbox\').remove()">Cerrar</button></div>';
       pintarFilasInv(_invData);
     }catch(e){console.error(e);box.querySelector('.invmodal').innerHTML='<p style="color:#F56770">Error: '+(e.message||e)+'</p>';}
   }
   function filtrarInv(){const q=(el('invfiltro').value||'').toLowerCase();
-    pintarFilasInv(_invData.filter(r=>((r.ev.n1||'')+' '+(r.ev.n2||'')+' '+(r.ev.slug||'')+' '+(r.ev.orden||'')+' '+(r.ev.tpl||'')).toLowerCase().includes(q)));}
+    pintarFilasInv(_invData.filter(r=>((r.ev.n1||'')+' '+(r.ev.n2||'')+' '+(r.ev.slug||'')+' '+(r.ev.orden||'')+' '+(r.ev.tpl||'')+' '+quien(r.ev.slug)).toLowerCase().includes(q)));}
+  let _autores={};
+  /* Del mail sale el nombre: littlemomentsok@ es Maki, info@invitameok es Jazmín.
+     Si mañana entra alguien más, se agrega acá y listo. */
+  function quien(slug){
+    const a=_autores[slug]; if(!a) return '—';
+    const nombre=function(mail){
+      const m=String(mail||'').toLowerCase();
+      if(!m) return '';
+      if(m.indexOf('littlemoments')===0) return 'Maki';
+      if(m.indexOf('info@invitameok')===0) return 'Jazmín';
+      return m.split('@')[0];
+    };
+    const c=nombre(a.creo), g=nombre(a.guardo);
+    if(!c && !g) return '—';
+    if(!c || c===g) return g||c;
+    return c+'<div style="font-size:10px;color:#b0a89f">últ.: '+g+'</div>';
+  }
   function pintarFilasInv(rows){
     const fmt=f=>{const d=new Date(f);return isNaN(d)?'—':(String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear());};
     const A='style="background:none;border:0;cursor:pointer;font-size:16px;padding:3px 5px" ';
@@ -103,6 +128,7 @@
         '<td style="padding:9px 6px">'+(ev.orden||'—')+'</td>'+
         '<td style="padding:9px 6px"><b>'+(nom||'—')+'</b><div style="font-size:11px;color:#b0a89f">'+s+' · '+r.inv+' inv · '+r.pp+' pases</div></td>'+
         '<td style="padding:9px 6px;color:#7d756c">'+fmt(ev.fecha)+'</td>'+
+        '<td style="padding:9px 6px;color:#7d756c;font-size:12px">'+quien(s)+'</td>'+
         '<td style="padding:9px 6px;text-align:right;white-space:nowrap">'+
           '<button '+A+'title="Ver invitación (nueva ventana)" onclick="window.open(\'/i/?e='+encodeURIComponent(s)+'\',\'_blank\')">👁</button>'+
           '<button '+A+'title="Editar invitación" onclick="location.href=\'admin.html?e='+encodeURIComponent(s)+'\'">✏️</button>'+
