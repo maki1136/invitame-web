@@ -420,9 +420,47 @@ $estilosServidor = ($hojaExtra !== false && trim($hojaExtra) !== '')
 /* el cartel rojo sólo cuando se sirve el motor de /prueba/ desde acá */
 $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!important}</style>' : '';
 
+/* ===== QUE LOS MODULOS EMPIECEN A BAJAR YA, NO EN DOS SALTOS ================
+   Maki, 8/9/2026: «con wifi y todo no carga, tarda muchísimo». Medido en vivo:
+
+     · el HTML aparece a los 1231 ms (este archivo consulta Firestore antes de
+       imprimir una letra: ése es el precio de que la invitación llegue lista);
+     · pero los 56 módulos de /efectos/ recién EMPEZABAN a bajar a los 1442 ms.
+
+   ¿Por qué tan tarde? Porque venían al final de una cadena de tres saltos:
+       el HTML  →  sobres/catalogo.js  →  efectos/index.js  →  los 56 módulos
+   Cada flecha es un viaje completo al servidor. El navegador no puede adivinar
+   que los va a necesitar, porque los nombres están adentro de un JavaScript que
+   todavía no bajó.
+
+   LA SOLUCIÓN: se los decimos en el HTML, con `preload`. El navegador los pide
+   todos juntos apenas lee la cabecera, y cuando `efectos/index.js` los agrega,
+   ya están en su bolsillo. No cambia NADA de cómo funciona el sistema: los
+   módulos se siguen cargando igual, sólo llegan antes.
+
+   ⚠️⚠️ Y LA LISTA NO SE COPIA ACÁ. Se LEE de `efectos/index.js`, que es donde
+      vive. Copiarla sería repetir el error que costó tres intentos con el iPad:
+      dos copias del mismo dato, una de ellas vieja. Si mañana se agrega o se
+      saca un módulo, esto se entera solo.
+   ============================================================================ */
+$preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+          . '<link rel="preload" as="script" href="/sobres/catalogo.js">'
+          . '<link rel="preload" as="script" href="/efectos/index.js">';
+$listaModulos = @file_get_contents(__DIR__ . '/../efectos/index.js');
+if ($listaModulos !== false) {
+  if (preg_match_all("~'(/(?:efectos|muestras|colecciones)/[A-Za-z0-9._-]+\\.js)'~", $listaModulos, $mm)) {
+    $yaEsta = array();
+    foreach ($mm[1] as $u) {
+      if (isset($yaEsta[$u])) continue;
+      $yaEsta[$u] = 1;
+      $preCarga .= '<link rel="preload" as="script" href="' . htmlspecialchars($u, ENT_QUOTES) . '">';
+    }
+  }
+}
+
 /* ⚠️ EL ORDEN IMPORTA: la hoja general primero y la paleta DESPUÉS, para que
    lo que eligió la clienta sea lo último en escribirse. */
-$aInyectar = $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
+$aInyectar = $preCarga . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
