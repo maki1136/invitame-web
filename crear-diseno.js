@@ -101,7 +101,11 @@
     var d = armarBorrador();
     if (!d) return;
     try {
+      /* el ida y vuelta por JSON deja afuera cualquier cosa que no se pueda
+         clonar (elementos del DOM, la marca de hora de Firestore). Sin esto,
+         postMessage tira DataCloneError y no se dibuja nada. */
       var copia = JSON.parse(JSON.stringify(d));
+      delete copia.creado;
       delete copia.invitados;                 /* la vista previa no los necesita */
       iframe.contentWindow.postMessage({ type: 'inv-preview', ev: copia }, '*');
     } catch (e) {}
@@ -276,6 +280,14 @@
     };
 
     iframe = $('dis-frame');
+    /* ⚠️ NO ALCANZA CON ESPERAR EL AVISO DEL MOTOR. La invitación manda un
+       `inv-preview-ready` cuando terminó de cargar, pero medido acá: ese aviso
+       no llegaba —o llegaba antes de que este archivo estuviera escuchando— y
+       la vista previa se quedaba mostrando la boda de ejemplo para siempre.
+       Sin dar ningún error: el envío salía y nadie lo recibía.
+       El panel de Jazmín ya resolvía esto igual (`fr.addEventListener('load',
+       postPreview)` en admin/3-evento.js): se escuchan LAS DOS señales. */
+    iframe.addEventListener('load', function () { listo = true; dibujar(); });
     iframe.src = '/i/?preview=1';
   }
 
