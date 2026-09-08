@@ -402,7 +402,7 @@
           if(window.CREAR_DISENO) window.CREAR_DISENO.vestirLoQueSeManda(evento, data);
           const r = await fetch('/solicitud-crear.php', {
             method:'POST', headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({ evento, solicId: ref.id })
+            body: JSON.stringify({ evento, solicId: ref.id, marca: (new URLSearchParams(location.search).get('marca')||'invitame') })
           });
           const j = await r.json().catch(()=>({}));
           if(!j.ok) console.warn('no se pudo crear la invitacion sola:', j.error||r.status);

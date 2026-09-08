@@ -256,6 +256,29 @@ if ($n1Sol === '' || mb_strtolower($n1Sol) !== mb_strtolower($n1Ev)) {
 }
 
 
+/* ---------- 3c. ⭐ LA MARCA DECIDE EL MODO DE ENTREGA ----------
+   Maki, 8/9/2026: «por ahora quiero que Jazmín haga el control de calidad, pero
+   el otro sistema seguro lo use con otra marca». Por eso el modo no vive en una
+   línea de código sino en `inv_marcas/{marca}`, que ella prende y apaga desde el
+   panel. Dos marcas pueden estar en modos distintos AL MISMO TIEMPO.
+
+   ⚠️ SI LA MARCA NO EXISTE, MANDA EL INTERRUPTOR DE ARRIBA (hoy: control de
+      calidad). El modo seguro es siempre el que revisa: una invitación de más
+      escondida no le arruina el día a nadie; una entregada sin mirar, sí.
+
+   ⚠️ La marca la manda el navegador (`/crear.html?marca=…`). Lo peor que puede
+      hacer alguien mintiendo ahí es entregarse SU PROPIA invitación antes de
+      tiempo. No abre ninguna otra puerta: el paquete, el estado y las claves los
+      sigue poniendo el servidor. */
+$marca = preg_replace('/[^a-z0-9\-]/', '', strtolower((string)($in['marca'] ?? 'invitame')));
+if ($marca === '') $marca = 'invitame';
+list($rm, $cm) = pedir($FS . 'inv_marcas/' . rawurlencode($marca), 'GET', null, $auth);
+if ($cm == 200) {
+  $dm = json_decode($rm, true);
+  $fm = isset($dm['fields']) ? $dm['fields'] : array();
+  if (isset($fm['entregaAutomatica'])) $ENTREGA_AUTOMATICA = !empty($fm['entregaAutomatica']['booleanValue']);
+}
+
 // ---------- 4. lo que pone el SERVIDOR, no el cliente ----------
 $ahora    = gmdate('Y-m-d\TH:i:s\Z');
 $clave    = codigo(8);          // la del panel de los novios
@@ -265,6 +288,7 @@ $estado   = $ENTREGA_AUTOMATICA ? 'entregada' : 'por-revisar';
 $ev['estado']   = $estado;
 $ev['revision'] = $revision;
 $ev['privado']  = false;
+$ev['marca']    = $marca;   /* de qué marca es esta invitación */
 
 /* Los invitados salen del evento: van a su propia colección. */
 $invitados = array();
@@ -340,6 +364,7 @@ echo json_encode(array(
   'ok'        => true,
   'slug'      => $slug,
   'estado'    => $estado,
+  'marca'     => $marca,
   'invitados' => count($tokens),
   'fallados'  => $fallados,
   /* El link para ver la invitación. En modo control de calidad lleva el código

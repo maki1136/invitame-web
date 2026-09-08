@@ -67,6 +67,7 @@
   <button class="btn-c" onclick="abrirEscaner()" title="Abrir el control de acceso para escanear los QR en la puerta"><span data-ico="ticket"></span> Escáner puerta</button>
   <button class="btn-c" onclick="backup()" title="Descargar copia de seguridad"><span data-ico="bajar"></span> Backup</button>
   <button class="btn-c" onclick="restaurar()" title="Volver a subir una copia de seguridad"><span data-ico="subir"></span> Restaurar</button>
+  <button class="btn-c" onclick="verMarcas()" title="Marcas: cuál se entrega sola y cuál revisa Jazmín"><span data-ico="etiqueta"></span> Marcas</button>
   <button class="btn-c" onclick="limpiarVencidas()" title="Borrar invitaciones vencidas (+90 días de la fecha) para liberar la base"><span data-ico="escoba"></span> Limpiar vencidas</button>
   <button class="btn-g" onclick="publicar()">Guardar y publicar</button>
   <button class="btn-c" onclick="salir()" title="Cerrar sesión del equipo">Salir</button>
@@ -108,6 +109,12 @@
   <script src="/admin/2-panel.js"></script>
   <script src="/admin/3-evento.js"></script>
   <script src="/admin/4-solicitudes.js"></script>
+  <!-- LA CAJA DE ENTREGA · 8/9/2026
+       El estado de la invitación, el link para verla antes de entregarla, el
+       botón de entregar y el mensaje listo para mandarle al cliente. Más el
+       ajuste de las marcas (quién se entrega sola y quién pasa por Jazmín).
+       ⚠️ Va ÚLTIMO y en su propio archivo: los otros cuatro ya funcionan. -->
+  <script src="/admin/5-entrega.js"></script>
 <script src="/sobres/catalogo.js"></script>
 <script type="module" src="/firebase-inv.js?v=23"></script>
 <script type="module">
