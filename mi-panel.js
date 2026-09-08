@@ -12,12 +12,13 @@
    El panel que usan los novios con su slug y su clave: ven quién confirmó,
    arman las mesas, leen los mensajes, imprimen los QR y cargan el itinerario.
 
-   ⚠️ LOS NOVIOS NO ESCRIBEN EN LA INVITACIÓN
+   ⚠️ LOS NOVIOS NO ESCRIBEN EN LA INVITACIÓN — PERO LO QUE TOCAN LLEGA SOLO
    Todo lo que tocan queda en `inv_paneles/<slug>__<clave>`. Las reglas de
    Firestore no los dejan tocar `inv_eventos`, y está bien: cualquiera con el
-   link del panel podría romper la invitación. Lo que eligen viaja a la
-   invitación cuando la diseñadora toca «Traer lo de los novios» en el bloque
-   del itinerario del admin, y publica.
+   link del panel podría romper la invitación. Desde el 8/9/2026, apenas
+   guardan, este panel le avisa a un portero del servidor (mesas-guardar.php e
+   itinerario-guardar.php), que comprueba la clave y escribe por ellos.
+   Ya no hay que traer nada a mano desde el admin.
 
    ⚠️ Y ESE DOCUMENTO SE BORRABA SOLO
    `admin.html` lo guardaba con `setDoc` sin `{merge:true}`: cada "Guardar y
@@ -76,17 +77,82 @@
     }
     return out;
   }
-  // Los novios NO escriben en la ficha de cada invitado (eso lo protege la regla).
-  // Todo lo que tocan queda guardado en SU propio documento de panel, cuyo id lleva
-  // la clave adentro: sin la clave, ese documento no se puede ni encontrar ni tocar.
+  // Los novios NO escriben en la ficha de cada invitado ni en la invitacion (eso
+  // lo protege la regla). Todo lo que tocan queda guardado en SU propio documento
+  // de panel, cuyo id lleva la clave adentro: sin la clave, ese documento no se
+  // puede ni encontrar ni tocar.
+  //
+  // Y DE ACA VIAJA SOLO A LA INVITACION.  (8/9/2026)
+  // Antes no: las mesas y el itinerario se quedaban en este documento, que la
+  // invitacion NO lee, hasta que alguien del equipo abria el admin, tocaba
+  // «Traer lo de los novios» y publicaba. Si se olvidaba, la pareja veia su
+  // tablero al dia y los invitados llegaban a la fiesta con la mesa vieja: el
+  // pase MUESTRA el numero de mesa.
+  //   Maki, textual: «si lo cambian ellos, Jazmin que tiene que ver?».
+  //
+  // ⚠️ EL AVISO VA ACA Y EN NINGUN OTRO LADO. Las mesas se tocan desde cuatro
+  //    lugares distintos (arrastrar, elegirla de una lista en el celular,
+  //    escribir el nombre en la tabla de invitados, y borrar o renombrar una
+  //    mesa) y el itinerario desde tres. Todos pasan por esta funcion. Colgar el
+  //    aviso de cada boton seria garantizar que el dia que se agregue el octavo
+  //    camino, nadie se acuerde.
   async function guardarPanel(cambios){
     try{
       await updateDoc(doc(db,'inv_paneles', SLUG + '__' + CLAVE),
         Object.assign({}, cambios, {actualizado:new Date().toISOString()}));
       Object.assign(PANEL, cambios);
       toast('Guardado');
+      sincronizarInvitacion(cambios);
       return true;
     }catch(e){ console.error(e); toast('No se pudo guardar'); return false; }
+  }
+
+  /* Le avisa al portero que corresponda, segun lo que se acaba de tocar.
+     No se espera el resultado: guardar tiene que sentirse instantaneo. Pero si
+     el aviso falla SI se avisa en pantalla, porque la invitacion quedaria
+     desactualizada y la pareja tiene que enterarse ahora, no el dia de la
+     fiesta. */
+  const _sinc = {corriendo:false, pendiente:null};
+  function sincronizarInvitacion(cambios){
+    if(!SLUG || !CLAVE) return;
+    const q = { mesas: !!(cambios.asig || cambios.mesas), itin: !!cambios.itinerario };
+    if(!q.mesas && !q.itin) return;
+    if(_sinc.corriendo){
+      /* Mientras se estaba avisando, tocaron otra cosa. Se anota y se vuelve a
+         llamar al terminar: si no, el ultimo arrastre no llegaria nunca. */
+      _sinc.pendiente = _sinc.pendiente
+        ? {mesas:_sinc.pendiente.mesas||q.mesas, itin:_sinc.pendiente.itin||q.itin}
+        : q;
+      return;
+    }
+    _sinc.corriendo = true;
+    correrSincronizacion(q);
+  }
+  async function correrSincronizacion(q){
+    const destinos = [];
+    if(q.mesas) destinos.push('/mesas-guardar.php');
+    if(q.itin)  destinos.push('/itinerario-guardar.php');
+    try{
+      for(const url of destinos){
+        /* La primera vez, una lista larga puede no entrar en un solo pedido: el
+           portero avisa cuantos quedaron y se lo vuelve a llamar. Se acuerda de
+           lo que ya escribio, asi que sigue donde quedo. */
+        for(let i=0;i<6;i++){
+          const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+                                     body:JSON.stringify({slug:SLUG, clave:CLAVE})});
+          const j = await r.json();
+          if(!j || !j.ok) throw new Error((j && j.error) || 'sin respuesta');
+          if(!j.pendientes) break;
+        }
+      }
+    }catch(e){
+      console.error('sincronizar', e);
+      toast('Se guardo, pero la invitacion no se actualizo. Proba de nuevo.');
+    }
+    const otra = _sinc.pendiente;
+    _sinc.pendiente = null;
+    if(otra) return correrSincronizacion(otra);
+    _sinc.corriendo = false;
   }
 
   // ---------------- mesas ----------------
@@ -179,9 +245,9 @@
   // /!\ POR QUE NO ESCRIBE DIRECTO EN LA INVITACION
   // Las reglas de Firestore NO dejan que los novios toquen `inv_eventos`, y esta
   // bien que sea asi: cualquiera con el link del panel podria romper la
-  // invitacion. Lo que cargan queda en SU documento (`inv_paneles`), y la
-  // disenadora lo trae con un boton desde el admin y publica. Es el mismo
-  // camino que ya usan las mesas.
+  // invitacion. Lo que cargan queda en SU documento (`inv_paneles`) y, apenas
+  // guardan, `itinerario-guardar.php` lo copia solo a la invitacion. Es el
+  // mismo camino que ahora usan tambien las mesas.
   const ITIN = () => (PANEL.itinerario && typeof PANEL.itinerario==='object')
     ? PANEL.itinerario : {modo:'', momentos:[]};
   const ITIN_MS = () => Array.isArray(ITIN().momentos) ? ITIN().momentos.slice() : [];
@@ -228,7 +294,7 @@
         '<button class="lnk" id="itMas" style="margin-top:8px">+ Agregar momento</button>'+
       '</div>')+
       '<div class="card"><button class="btn" id="itGuardar" style="max-width:200px">Guardar</button>'+
-        '<div style="color:#6b6058;font-size:12.5px;margin-top:8px">Cuando guardes, le avisamos a quien armo tu invitacion para que lo publique.</div>'+
+        '<div style="color:#6b6058;font-size:12.5px;margin-top:8px">Cuando guardes, se actualiza solo en tu invitacion.</div>'+
       '</div>';
   }
 
