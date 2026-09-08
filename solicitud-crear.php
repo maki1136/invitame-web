@@ -60,7 +60,7 @@ header('Content-Type: application/json; charset=utf-8');
    verla en vivo... así que las dos opciones quiero ya tenerlas».
    Las dos ramas están escritas y probadas. Se cambia ESTA línea y nada más.
    ============================================================================ */
-$ENTREGA_AUTOMATICA = false;
+$ENTREGA_AUTOMATICA = true;   /* PRENDIDO el 8/9/2026, a pedido de Maki, recién con la solapa de diseños terminada */
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
   http_response_code(405);
