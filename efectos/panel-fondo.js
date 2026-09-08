@@ -75,7 +75,7 @@
     estado.style.cssText = 'font-size:11px;opacity:.7;margin:4px 0 0;line-height:1.35';
     function mostrar() {
       var u = fondo(d)[cual];
-      estado.textContent = u ? '✓ cargado' : 'todavía no hay archivo';
+      estado.innerHTML = u ? (ico('tilde') + ' cargado') : 'todavía no hay archivo';
     }
     mostrar();
 

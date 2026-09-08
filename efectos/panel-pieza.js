@@ -113,8 +113,8 @@
     i.oninput = function () {
       pieza(d)[clave] = this.value;
       if (aviso) {
-        aviso.textContent = (cuerpoFinal(this.value, G) < 11)
-          ? '⚠ muy larga: va a quedar chiquita' : '';
+        aviso.innerHTML = (cuerpoFinal(this.value, G) < 11)
+          ? ico('alerta') + ' muy larga: va a quedar chiquita' : '';
       }
       refrescar();
     };

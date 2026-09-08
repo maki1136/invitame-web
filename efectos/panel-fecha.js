@@ -175,8 +175,8 @@
       var hayDisp = !!selDisp.value;
       if (hayDisp && !chk.checked) {
         /* ⚠️ el caso que reportó Maki: «la raspada viene ya raspada» */
-        aviso.textContent =
-          '⚠️ Con una disposición elegida y la raspadita apagada, la fecha se ve ' +
+        aviso.innerHTML = ico('alerta') +
+          ' Con una disposición elegida y la raspadita apagada, la fecha se ve ' +
           'directamente, sin tapar. Si el título de la sección dice "raspa para ' +
           'revelar", cambiálo o prendé la raspadita.';
         aviso.style.color = '#b06a2a';

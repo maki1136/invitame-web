@@ -158,7 +158,7 @@
     b.textContent = txt;
     b.onclick = function () {
       var listo = function () {
-        b.textContent = '✓ Copiado';
+        b.innerHTML = ico('tilde') + ' Copiado';
         setTimeout(function () { b.textContent = txt; }, 1600);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -181,7 +181,7 @@
 
     var h = document.createElement('div');
     h.className = 'h';
-    h.textContent = '✨ Galería de fotos de los invitados';
+    h.innerHTML = ico('destello') + ' Galería de fotos de los invitados';
     caja.appendChild(h);
 
     var ayuda = document.createElement('div');
@@ -213,7 +213,7 @@
 
     var pie = document.createElement('div');
     pie.className = 'hint';
-    pie.textContent = 'La vista previa del panel no muestra la galería. Se ve tocando 👁 en la invitación real.';
+    pie.textContent = 'La vista previa del panel no muestra la galería. Se ve abriendo la invitación real.';
     caja.appendChild(pie);
 
     return caja;
@@ -221,18 +221,18 @@
 
   /* ---- engancharse al panel --------------------------------------------- */
 
-  /* ¿Estamos parados en la pestaña ✨ Efectos?
+  /* ¿Estamos parados en la pestaña EFECTOS?
 
      No alcanza con buscar un `.mejoras`: otras pestañas también tienen bloques
-     con esa clase (PRINCIPAL trae «✨ Empezá por acá») y el nuestro se colaba
-     ahí. La señal buena son los títulos que escribe efectosHtml(), que empiezan
-     todos con «✨ Efectos». Verificado en el panel real. */
+     con esa clase (PRINCIPAL trae «Empezá por acá») y el nuestro se colaba ahí.
+
+     ⚠️ ANTES ESTO LEÍA EL TEXTO del encabezado («empieza con ✨ Efectos»), y el
+        8/9/2026, cuando los emojis del panel se cambiaron por dibujos, ese texto
+        dejó de existir: el bloque se habría colgado en la pestaña equivocada sin
+        dar ningún error. La señal ahora está en el HTML, no en la prosa: los
+        encabezados de efectosHtml() llevan la clase «efx». */
   function enEfectos() {
-    var hs = document.querySelectorAll('.mejoras .h');
-    for (var i = 0; i < hs.length; i++) {
-      if (/^\s*✨\s*Efectos/.test(hs[i].textContent || '')) return true;
-    }
-    return false;
+    return !!document.querySelector('.mejoras .h.efx');
   }
 
   function anclaje() {

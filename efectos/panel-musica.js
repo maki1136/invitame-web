@@ -80,7 +80,7 @@
        '<div id="inv-mus-aviso" style="display:none;margin-top:6px;color:#a4243b;font-size:13px"></div>' +
       '</div>' +
       '<div class="mejoras"><div class="h">Playlist de Spotify</div>' +
-       '<div class="hint" style="margin-bottom:8px">En Spotify: Compartir → Copiar enlace de la ' +
+       '<div class="hint" style="margin-bottom:8px">En Spotify: Compartir y después Copiar enlace de la ' +
        'playlist, y pegalo acá. Se muestra en la sección «Playlist del evento», con el ' +
        'reproductor y el botón para sugerir una canción.</div>' +
        '<input value="' + esc(dato('spotifyUrl')) + '" oninput="setB(\'spotifyUrl\',this.value)" ' +

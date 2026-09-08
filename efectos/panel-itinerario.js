@@ -151,7 +151,7 @@
     var cajaImg = chico(document.createElement('div'), 'display:none;margin:0 0 12px');
 
     var subir = chico(document.createElement('button'), 'cursor:pointer;padding:6px 10px');
-    subir.type = 'button'; subir.textContent = '⬆ Subir imagen del itinerario';
+    subir.type = 'button'; subir.innerHTML = ico('subir') + ' Subir imagen del itinerario';
     var file = document.createElement('input');
     file.type = 'file'; file.accept = 'image/*'; file.style.display = 'none';
     subir.onclick = function () { file.click(); };
@@ -280,7 +280,7 @@
 
         var bor = chico(document.createElement('button'),
           'cursor:pointer;line-height:1;padding:6px 8px');
-        bor.type = 'button'; bor.textContent = '✕'; bor.title = 'Borrar este momento';
+        bor.type = 'button'; bor.innerHTML = ico('equis'); bor.title = 'Borrar este momento';
         bor.onclick = function () {
           datos(d).momentos.splice(i, 1);
           dibujar(); refrescar();
