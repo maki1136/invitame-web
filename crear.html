@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Invítame · Completá tu invitación</title>
+<title>Invítame · Completa tu invitación</title>
 <link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -80,7 +80,7 @@
 </style>
 </head>
 <body>
-  <div class="top"><div class="brand">invítame!</div><div class="sub">Completá los datos y armamos tu invitación ✨</div></div>
+  <div class="top"><div class="brand">invítame!</div><div class="sub">Completa tus datos y armamos tu invitación</div></div>
   <div class="wrap" id="wrap">
 
     <!-- Lo que el formulario viejo de Google decía al principio. Sin esto el cliente
@@ -88,18 +88,18 @@
     <div class="card avisos">
       <h2>Antes de empezar, tres cosas</h2>
       <ul>
-        <li><b>Escribí los datos tal cual los querés ver.</b> Los cargamos como los mandás: nombres, horarios, direcciones y acentos se copian exactamente. Revisá antes de enviar.</li>
-        <li><b>Las fotos van como las mandás.</b> No las retocamos ni las recortamos. Si querés una foto editada, mandala ya editada.</li>
-        <li><b>Tiempos:</b> la primera versión llega en <b>48 horas hábiles</b>. Después tenés <b>una instancia de corrección con hasta 3 cambios</b>. Si algún dato lo dejás vacío o escribís <i>"lo dejo a criterio del diseñador"</i>, decidimos nosotros y eso no cuenta como corrección.</li>
+        <li><b>Escribe los datos tal cual los quieres ver.</b> Los cargamos como los mandas: nombres, horarios, direcciones y acentos se copian exactamente. Revísalos antes de enviar.</li>
+        <li><b>Las fotos van como las mandas.</b> No las retocamos ni las recortamos. Si quieres una foto editada, mándala ya editada.</li>
+        <li><b>Tiempos:</b> la primera versión llega en <b>48 horas hábiles</b>. Después tienes <b>una ronda de correcciones con hasta 3 cambios</b>. Si algún dato lo dejas vacío o escribes <i>"lo dejo a criterio del diseñador"</i>, decidimos nosotros y eso no cuenta como corrección.</li>
       </ul>
       <div class="fotoslista">
-        <b>📸 Fotos que conviene tener a mano</b>
+        <b>Fotos que conviene tener a la mano</b>
         <ul>
           <li><b>Portada:</b> 1 foto vertical (o un video corto vertical).</li>
           <li><b>Frase / dedicatoria:</b> 1 foto de fondo (opcional).</li>
           <li><b>Cada lugar:</b> 1 foto del salón, la iglesia o la locación.</li>
           <li><b>Dress code:</b> 1 o 2 fotos de inspiración (opcional).</li>
-          <li><b>Galería:</b> las que quieras, entre 6 y 20 quedan lindas.</li>
+          <li><b>Galería:</b> las que quieras; entre 6 y 20 se ven muy bien.</li>
           <li><b>Personas importantes:</b> 1 foto de cada una (opcional).</li>
           <li><b>Cierre:</b> 1 foto para el final de la invitación.</li>
         </ul>
@@ -110,22 +110,22 @@
     <div class="modelo" id="modelo"><div class="sw" style="background:#a5674f"></div><div><div style="font-size:12px;color:var(--muted)">Modelo elegido</div><b id="modelo-nom">Boho</b></div><a class="ch" href="catalogo.html" style="color:var(--rosa);font-weight:800;text-decoration:none;font-size:13px">cambiar</a></div>
 
     <div class="card">
-      <h2>¿Qué festejás?</h2>
-      <p class="desc">Elegí el tipo de evento.</p>
+      <h2>¿Qué festejas?</h2>
+      <p class="desc">Elige el tipo de evento.</p>
       <label>Número de clave / pedido</label><input type="text" id="orden" placeholder="Ej: 128">
-      <div class="hint">Es el número que te dimos al contratar. Si no tenés ninguno, dejalo vacío.</div>
+      <div class="hint">Es el número que te dimos al contratar. Si no tienes ninguno, déjalo vacío.</div>
       <label>Tipo de evento</label>
       <select id="tipo">
-        <option value="boda">Boda 💍</option>
-        <option value="xv">XV años 👑</option>
-        <option value="bautismo">Bautismo 🕊️</option>
-        <option value="comunion">Comunión ✝️</option>
-        <option value="cumple">Cumpleaños 🎂</option>
+        <option value="boda">Boda</option>
+        <option value="xv">XV años</option>
+        <option value="bautismo">Bautizo</option>
+        <option value="comunion">Primera comunión</option>
+        <option value="cumple">Cumpleaños</option>
         <option value="otro">Otro evento</option>
       </select>
       <div data-help="tipo"></div>
-      <label>Título (el textito de arriba)</label><input type="text" id="kick" placeholder="Nuestra Boda">
-      <div class="hint">Es el texto chiquito que aparece arriba de los nombres en la portada (ej: "Nuestra Boda", "Mis XV").</div>
+      <label>Título (el texto de arriba)</label><input type="text" id="kick" placeholder="Nuestra Boda">
+      <div class="hint">Es el texto pequeño que aparece arriba de los nombres en la portada (ej: "Nuestra Boda", "Mis XV").</div>
       <div data-help="kick"></div>
     </div>
 
@@ -139,8 +139,8 @@
       <div data-help="nombres"></div>
       <label>Fecha y hora del evento <span class="req">*</span></label><input type="datetime-local" id="fecha">
       <div data-help="fecha"></div>
-      <label>Frase o dedicatoria</label><textarea id="frase" placeholder="Una frase linda para la portada…"></textarea>
-      <div class="hint">💡 Aparece en una sección propia, en letra cursiva. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre."</div>
+      <label>Frase o dedicatoria</label><textarea id="frase" placeholder="Una frase bonita para la portada…"></textarea>
+      <div class="hint">Aparece en una sección propia, en letra cursiva. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre."</div>
       <div data-help="frase"></div>
     </div>
 
@@ -148,46 +148,46 @@
       <h2>Portada: foto o video</h2>
       <p class="desc">La primera pantalla, a pantalla completa. Puede ser una <b>foto</b> o un <b>video</b> corto. <b>Vertical</b> se ve mejor (llena el celular).</p>
       <div class="two">
-        <div class="up" id="up-cover" onclick="document.getElementById('f-cover').click()">⬆ Subir foto</div>
-        <div class="up" id="up-covervid" onclick="document.getElementById('f-covervid').click()">🎬 Subir video</div>
+        <div class="up" id="up-cover" onclick="document.getElementById('f-cover').click()">Subir foto</div>
+        <div class="up" id="up-covervid" onclick="document.getElementById('f-covervid').click()">Subir video</div>
       </div>
       <input type="file" id="f-cover" accept="image/*" style="display:none">
       <input type="file" id="f-covervid" accept="video/*" style="display:none">
       <div id="prev-cover"></div>
-      <div class="hint">🎬 <b>Si subís video:</b> vertical (9:16), cortito (6 a 15 seg), en MP4, ideal menos de 40 MB. Nosotros lo optimizamos. Si subís los dos, mostramos el video.</div>
+      <div class="hint"><b>Si subes video:</b> vertical (9:16), cortito (de 6 a 15 segundos), en MP4 y de menos de 40 MB. Nosotros lo optimizamos. Si subes los dos, mostramos el video.</div>
       <div data-help="foto"></div>
     </div>
 
     <div class="card">
       <h2>¿Dónde y cuándo?</h2>
-      <p class="desc">Hasta tres lugares. Completá los que tengas: los vacíos no aparecen.</p>
+      <p class="desc">Hasta tres lugares. Completa los que tengas: los vacíos no aparecen.</p>
       <div class="subt">1 · Ceremonia</div>
       <label>Ceremonia — lugar</label><input type="text" id="ev1t" placeholder="Basílica de Santa María">
       <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev1f" placeholder="12:00 hs"></div>
       <div><label>Dirección</label><input type="text" id="ev1d" placeholder="Calle 123, Ciudad"></div></div>
-      <label>Link de Google Maps de la ceremonia (opcional)</label><input type="text" id="ev1maps" placeholder="Pegá el link de Google Maps">
+      <label>Link de Google Maps de la ceremonia (opcional)</label><input type="text" id="ev1maps" placeholder="Pega el link de Google Maps">
       <div class="subt">2 · Fiesta</div>
       <label>Fiesta — lugar</label><input type="text" id="ev2t" placeholder="Salón Las Rosas">
       <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev2f" placeholder="14:00 hs"></div>
       <div><label>Dirección</label><input type="text" id="ev2d" placeholder="Av. Siempre 456, Ciudad"></div></div>
-      <label>Link de Google Maps de la fiesta (opcional)</label><input type="text" id="ev2maps" placeholder="Pegá el link de Google Maps">
+      <label>Link de Google Maps de la fiesta (opcional)</label><input type="text" id="ev2maps" placeholder="Pega el link de Google Maps">
       <div class="subt">3 · Un tercer lugar (opcional)</div>
-      <div class="hint" style="margin-bottom:2px">Para la tornaboda, el after, el civil o lo que sea que pase en otro lado. Si no tenés un tercer lugar, dejalo vacío y no aparece.</div>
+      <div class="hint" style="margin-bottom:2px">Para la tornaboda, el after, el civil o lo que sea que pase en otro lado. Si no tienes un tercer lugar, déjalo vacío y no aparece.</div>
       <label>Tercer lugar — nombre</label><input type="text" id="ev3t" placeholder="Tornaboda">
       <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev3f" placeholder="Domingo 10:00 hs"></div>
       <div><label>Dirección</label><input type="text" id="ev3d" placeholder="Calle 789, Ciudad"></div></div>
-      <label>Link de Google Maps del tercer lugar (opcional)</label><input type="text" id="ev3maps" placeholder="Pegá el link de Google Maps">
-      <div class="hint">📍 Con la <b>dirección</b> ya armamos el mapa, así que este campo es opcional. Si querés que el pin caiga exacto, lo que sirve son las <b>coordenadas</b>: abrí Google Maps en la computadora, hacé clic derecho sobre el lugar y copiá los dos números que aparecen arriba (ej: <i>-34.6037, -58.3816</i>). El link corto de "Compartir" no sirve para esto.</div>
+      <label>Link de Google Maps del tercer lugar (opcional)</label><input type="text" id="ev3maps" placeholder="Pega el link de Google Maps">
+      <div class="hint">Con la <b>dirección</b> ya armamos el mapa, así que este campo es opcional. Si quieres que el pin caiga exacto, lo que sirve son las <b>coordenadas</b>: abre Google Maps en la computadora, haz clic derecho sobre el lugar y copia los dos números que aparecen arriba (ej: <i>20.9674, -89.5926</i>). El link corto de «Compartir» no sirve para esto.</div>
       <div data-help="eventos"></div>
     </div>
 
     <div class="card">
       <h2>Hospedaje (opcional)</h2>
-      <p class="desc">Si vienen invitados de afuera, acá van los hoteles que recomendás.</p>
+      <p class="desc">Si vienen invitados de fuera, aquí van los hoteles que recomiendas.</p>
       <label>Frase de la sección</label><input type="text" id="hotDesc" placeholder="Estos son los hoteles que recomendamos">
       <label>Hoteles recomendados</label>
-      <textarea id="hoteles" rows="6" placeholder="Hotel Casa del Sol&#10;Calle 60 nº 123, Centro&#10;www.casadelsol.com&#10;999 123 4567&#10;Código de descuento: BODAMD26&#10;&#10;(dejá un renglón vacío y seguí con el próximo hotel)"></textarea>
-      <div class="hint">Por cada hotel poné: <b>nombre</b>, <b>dirección</b>, <b>página web</b>, <b>teléfono</b> y el <b>código de descuento</b> si conseguiste uno. Uno debajo del otro, y un renglón en blanco entre hotel y hotel.</div>
+      <textarea id="hoteles" rows="6" placeholder="Hotel Casa del Sol&#10;Calle 60 nº 123, Centro&#10;www.casadelsol.com&#10;999 123 4567&#10;Código de descuento: BODAMD26&#10;&#10;(deja un renglón vacío y sigue con el siguiente hotel)"></textarea>
+      <div class="hint">Por cada hotel pon: <b>nombre</b>, <b>dirección</b>, <b>página web</b>, <b>teléfono</b> y el <b>código de descuento</b> si conseguiste uno. Uno debajo del otro, y un renglón en blanco entre hotel y hotel.</div>
       <div data-help="hospedaje"></div>
     </div>
 
@@ -206,25 +206,25 @@
       <label>Frase de la sección</label><input type="text" id="persFrase" placeholder="Con la bendición de nuestros padres">
       <div id="personas" style="margin-top:12px"></div>
       <button class="addg" type="button" id="pers-add" onclick="addPersona()">+ Agregar persona</button>
-      <div class="hint" style="margin-top:8px">Las fotos de cada persona se cargan después, con la diseñadora. Si no cargás ninguna persona, la sección no aparece.</div>
+      <div class="hint" style="margin-top:8px">Las fotos de cada persona se cargan después, con la diseñadora. Si no cargas ninguna persona, la sección no aparece.</div>
     </div>
 
     <div class="card">
       <h2>Detalles</h2>
       <label>Código de vestimenta (dress code)</label><input type="text" id="dress" placeholder="Elegante / Formal / Campestre…">
       <div data-help="dress"></div>
-      <label>Mesa de regalos / datos</label><textarea id="regalos" placeholder="Alias, CBU, tienda de regalos, o lo que quieras poner…"></textarea>
+      <label>Mesa de regalos / datos</label><textarea id="regalos" placeholder="CLABE, número de cuenta, mesa de regalos, o lo que quieras poner…"></textarea>
       <div data-help="regalos"></div>
-      <label>Música de fondo (opcional)</label><input type="text" id="musica" placeholder="Pegá el link de YouTube de la canción">
-      <div class="hint">🎵 Pegá el <b>link de YouTube</b> de la canción que querés de fondo. Si lo dejás vacío, elegimos una acorde al estilo.</div>
+      <label>Música de fondo (opcional)</label><input type="text" id="musica" placeholder="Pega el link de YouTube de la canción">
+      <div class="hint">Pega el <b>link de YouTube</b> de la canción que quieres de fondo. Si lo dejas vacío, elegimos una acorde al estilo.</div>
     </div>
 
     <div class="card">
       <h2>Confirmación de asistencia</h2>
       <p class="desc">Cómo te avisan los invitados si vienen.</p>
-      <label>Frase de la sección</label><input type="text" id="cfFrase" placeholder="Confirmanos tu asistencia antes del 1 de marzo">
-      <label>Email donde querés recibir las confirmaciones</label><input type="email" id="cfMail" placeholder="tucorreo@gmail.com">
-      <div class="hint">Cada vez que alguien confirme, te llega un correo acá. Puede ser el mismo que dejás abajo o uno distinto.</div>
+      <label>Frase de la sección</label><input type="text" id="cfFrase" placeholder="Confírmanos tu asistencia antes del 1 de marzo">
+      <label>Correo donde quieres recibir las confirmaciones</label><input type="email" id="cfMail" placeholder="tucorreo@gmail.com">
+      <div class="hint">Cada vez que alguien confirme, te llega un correo acá. Puede ser el mismo que dejas abajo o uno distinto.</div>
       <div class="two">
         <div><label>WhatsApp de contacto 1</label><input type="tel" id="cfWsp1" placeholder="+52 999 123 4567"></div>
         <div><label>¿De quién es?</label><input type="text" id="cfWsp1n" placeholder="Ej: Mamá de la novia"></div>
@@ -233,22 +233,22 @@
         <div><label>WhatsApp de contacto 2 (opcional)</label><input type="tel" id="cfWsp2" placeholder="+52 999 765 4321"></div>
         <div><label>¿De quién es?</label><input type="text" id="cfWsp2n" placeholder="Ej: Wedding planner"></div>
       </div>
-      <div class="hint">📞 Poné el número <b>con código de país</b> (+52 México, +54 Argentina). Sin el código, el botón de WhatsApp no abre desde el exterior.</div>
+      <div class="hint">Pon el número <b>con clave de país</b> (+52 México, +54 Argentina). Sin la clave, el botón de WhatsApp no abre desde el extranjero.</div>
     </div>
 
     <div class="card">
-      <h2>✨ Extras</h2>
+      <h2>Extras</h2>
       <label>Fondo con movimiento (frase principal)</label>
       <select id="fraseFx"><option value="">Ninguno</option><option value="bokeh">Bokeh (círculos suaves)</option><option value="destellos">Destellos</option><option value="estrellas">Estrellas doradas</option><option value="petalos">Pétalos cayendo</option><option value="gradiente">Degradado animado</option><option value="ondas">Ondas suaves</option></select>
       <label>Hashtag de Instagram (opcional)</label><input type="text" id="igHashtag" placeholder="#MariaYDiego2026">
       <label>Cuenta de Instagram (opcional)</label><input type="text" id="igUser" placeholder="@mariaydiego">
-      <div class="hint">📸 La cuenta donde querés que suban las fotos del evento. Va con arroba.</div>
+      <div class="hint">La cuenta donde quieres que suban las fotos del evento. Va con arroba.</div>
       <label>Video por link (opcional)</label><input type="text" id="videoUrl" placeholder="Link de YouTube o Vimeo">
-      <div class="hint">🎬 Si tenés un video (el save the date, la propuesta), pegá el link y aparece con un botón "Ver video".</div>
+      <div class="hint">Si tienes un video (el save the date, la propuesta), pega el link y aparece con un botón «Ver video».</div>
       <label>Playlist de Spotify (opcional)</label><input type="text" id="spotifyUrl" placeholder="Link de la playlist de Spotify">
-      <div class="hint">🎶 En Spotify: Compartir → Copiar enlace de la playlist.</div>
-      <label style="margin-top:16px;display:block;font-weight:800;color:var(--uva)">🎁 Mesa de Regalos (botones)</label>
-      <div class="hint" style="margin-bottom:8px">Pegá el link de cada tienda. Los que dejes vacíos no aparecen.</div>
+      <div class="hint">En Spotify: Compartir → Copiar enlace de la playlist.</div>
+      <label style="margin-top:16px;display:block;font-weight:800;color:var(--uva)">Mesa de regalos (botones)</label>
+      <div class="hint" style="margin-bottom:8px">Pega el link de cada tienda. Los que dejes vacíos no aparecen.</div>
       <label>Liverpool</label><input type="text" id="reg_liverpool" placeholder="link Liverpool">
       <label>Amazon</label><input type="text" id="reg_amazon" placeholder="link Amazon">
       <label>Sears</label><input type="text" id="reg_sears" placeholder="link Sears">
@@ -256,16 +256,16 @@
       <label>Palacio de Hierro</label><input type="text" id="reg_palacio" placeholder="link Palacio de Hierro">
       <label>Venmo</label><input type="text" id="reg_venmo" placeholder="link o usuario Venmo">
       <label>PayPal</label><input type="text" id="reg_paypal" placeholder="link PayPal">
-      <div class="hint" style="margin-top:6px">🌤️ El clima del día se muestra automático solo si arriba cargaste las <b>coordenadas</b> de la ceremonia (los dos números). Con la dirección sola no se puede.</div>
+      <div class="hint" style="margin-top:6px">El clima del día se muestra automático sólo si arriba cargaste las <b>coordenadas</b> de la ceremonia (los dos números). Con la dirección sola no se puede.</div>
     </div>
 
     <div class="card">
       <h2>Galería (opcional)</h2>
       <p class="desc">Fotos que quieras mostrar en la invitación.</p>
-      <div class="up small" id="up-gal" onclick="document.getElementById('f-gal').click()">⬆ Subir fotos de la galería</div>
+      <div class="up small" id="up-gal" onclick="document.getElementById('f-gal').click()">Subir fotos de la galería</div>
       <input type="file" id="f-gal" accept="image/*" multiple style="display:none">
       <div id="prev-gal"></div>
-      <label>¿Cómo querés que se vean?</label>
+      <label>¿Cómo quieres que se vean?</label>
       <select id="galEstilo">
         <option value="">Lo dejo a criterio del diseñador</option>
         <option value="Slider">Slider — una foto a la vez, se pasan con flechas</option>
@@ -279,7 +279,7 @@
       <p class="desc">Lo último que ve el invitado antes de salir de la invitación.</p>
       <label>Frase final</label><input type="text" id="fraseFinal" placeholder="¡Te esperamos!">
       <label>Texto final</label><textarea id="textoFinal" placeholder="Gracias por acompañarnos en este día tan importante."></textarea>
-      <div class="hint">Si lo dejás vacío, ponemos algo acorde al estilo.</div>
+      <div class="hint">Si lo dejas vacío, ponemos algo acorde al estilo.</div>
     </div>
 
     <div class="card">
@@ -293,7 +293,7 @@
         <div class="hint" id="pv-estado" style="margin-top:7px">Hasta 60 segundos. Se graba desde el celular o la computadora.</div>
         <audio id="pv-oir" controls style="display:none;width:100%;margin-top:9px"></audio>
       </div>
-      <div class="hint" style="margin-top:8px">Consejo: decí los nombres de ustedes y una frase corta. Queda mejor que un mensaje largo.</div>
+      <div class="hint" style="margin-top:8px">Consejo: digan sus nombres y una frase corta. Queda mejor que un mensaje largo.</div>
     </div>
 
     <div class="card">
@@ -301,12 +301,12 @@
       <p class="desc">Cada uno recibe su link + QR único.</p>
       <div data-help="invitados"></div>
       <div style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px;margin-bottom:12px">
-        <b style="color:var(--uva);font-size:13px">📊 ¿Tenés muchos invitados? Subí un Excel</b>
+        <b style="color:var(--uva);font-size:13px">¿Tienes muchos invitados? Sube un Excel</b>
         <div class="hint" style="margin-top:4px">Columnas en este orden: <b>Nombre</b> · <b>Personas</b> · <b>Mesa</b>. Formato .xlsx o .csv.</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px">
-          <div class="up small" style="flex:1;min-width:150px" id="up-xls" onclick="document.getElementById('f-xls').click()">⬆ Subir Excel / CSV</div>
+          <div class="up small" style="flex:1;min-width:150px" id="up-xls" onclick="document.getElementById('f-xls').click()">Subir Excel / CSV</div>
           <input type="file" id="f-xls" accept=".xlsx,.xls,.csv" style="display:none">
-          <a href="#" id="tpl-xls" class="up small" style="flex:1;min-width:140px;text-decoration:none">⬇ Descargar plantilla</a>
+          <a href="#" id="tpl-xls" class="up small" style="flex:1;min-width:140px;text-decoration:none">Descargar plantilla</a>
         </div>
       </div>
       <div id="guests"></div>
@@ -314,13 +314,13 @@
     </div>
 
     <div class="card">
-      <h2>¿Querés algo especial?</h2>
-      <p class="desc">Contanos si querés algún cambio, color, detalle o pedido particular. Lo vemos nosotros.</p>
+      <h2>¿Quieres algo especial?</h2>
+      <p class="desc">Cuéntanos si quieres algún cambio, color, detalle o pedido especial. Lo vemos nosotros.</p>
       <div class="two">
         <div><label>Colores que te gustaría</label><input type="text" id="colorSug" placeholder="Ej: verde oliva y dorado"></div>
         <div><label>Estilo de letra</label><input type="text" id="tipoSug" placeholder="Ej: cursiva elegante"></div>
       </div>
-      <div class="hint">Si no tenés preferencia, dejalos vacíos: elegimos lo que mejor le quede al modelo.</div>
+      <div class="hint">Si no tienes preferencia, déjalos vacíos: elegimos lo que mejor le quede al modelo.</div>
       <label>Cualquier otra cosa</label>
       <textarea id="obs" placeholder="Ej: me gustaría que los nombres sean dorados, agregar una sección de padrinos, cambiar la música…"></textarea>
       <div data-help="observaciones"></div>
@@ -330,25 +330,25 @@
       <h2>Tus datos de contacto</h2>
       <p class="desc">Para avisarte cuando esté lista.</p>
       <div class="two"><div><label>Tu nombre <span class="req">*</span></label><input type="text" id="cnom" placeholder="Tu nombre"></div>
-      <div><label>WhatsApp <span class="req">*</span></label><input type="tel" id="cwsp" placeholder="+54 9 …"></div></div>
+      <div><label>WhatsApp <span class="req">*</span></label><input type="tel" id="cwsp" placeholder="+52 999 123 4567"></div></div>
       <label>Email <span class="req">*</span></label><input type="email" id="cmail" placeholder="tucorreo@gmail.com">
-      <div class="hint">Te avisamos por acá cuando la invitación esté lista.</div>
+      <div class="hint">Te avisamos por aquí en cuanto la invitación esté lista.</div>
       <div data-help="contacto"></div>
     </div>
 
     <div class="err" id="err"></div>
-    <button class="btn" id="send" onclick="enviar()">Enviar mis datos 💌</button>
+    <button class="btn" id="send" onclick="enviar()">Enviar mis datos</button>
     <p class="hint" style="text-align:center;margin-top:14px">Al enviar, nuestro equipo arma tu invitación y te avisa cuando esté lista.</p>
   </div>
 
   <div class="done" id="done">
-    <div class="big">💌</div>
+    <div class="big"><svg viewBox="0 0 64 48" width="64" height="48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="58" height="38" rx="5"/><path d="M4 8l28 20L60 8"/></svg></div>
     <h1>¡Listo! Recibimos tus datos</h1>
-    <p>Ya estamos armando tu invitación.<br>Te vamos a avisar por WhatsApp cuando esté lista. ¡Gracias! 🤍</p>
+    <p id="done-txt">Ya estamos armando tu invitación.<br>Te avisamos por WhatsApp en cuanto esté lista. ¡Gracias!</p>
   </div>
 
-  <div class="lbox" id="lbox" onclick="closeLB()"><span class="x">✕</span><img id="lbimg" src="" alt=""><div class="cap">Tocá en cualquier lado para cerrar</div></div>
-  <div class="loadingbar" id="loading"><div class="box">Enviando… ⏳</div></div>
+  <div class="lbox" id="lbox" onclick="closeLB()"><span class="x">✕</span><img id="lbimg" src="" alt=""><div class="cap">Toca en cualquier lado para cerrar</div></div>
+  <div class="loadingbar" id="loading"><div class="box">Enviando…</div></div>
 
 <script type="module" src="firebase-inv.js?v=23"></script>
 <script src="/muestras/catalogo.js?v=1"></script>
