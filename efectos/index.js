@@ -627,11 +627,44 @@
     '/efectos/panel-dresscode.js'      /* y el editor para elegirlos a mano */
   ];
 
-  MODULOS.forEach(function (src) {
-    if (document.querySelector('script[src="' + src + '"]')) return;
-    var s = document.createElement('script');
-    s.src = src;
-    s.defer = true;
-    (document.head || document.documentElement).appendChild(s);
-  });
+  /* ===== CÓMO SE CARGAN ======================================================
+     Maki, 8/9/2026: «con wifi y todo no carga, tarda muchísimo».
+
+     Medido: estos módulos eran 56 pedidos sueltos, con 618 ms de espera en cola
+     CADA UNO, y el último llegaba a los 3,2 segundos. El peso no era el problema
+     (319 KB en total): era la cantidad de viajes.
+
+     Ahora se piden TODOS JUNTOS a `/efectos/todo.php`, que los pega en el
+     servidor en este mismo orden. Un pedido en vez de sesenta.
+
+     ⚠️ LA LISTA SIGUE SIENDO ESTA DE ARRIBA. `todo.php` la lee de este archivo;
+        no hay una segunda copia que se pueda quedar vieja, y no hay ningún paso
+        de compilación que alguien tenga que acordarse de correr.
+     ⚠️ Y SI EL PAQUETE NO LLEGA, se cargan de a uno como siempre. Una
+        invitación sin sus módulos es una invitación rota: el camino viejo queda
+        de red de seguridad, no se borra.
+     ============================================================================ */
+  function cargarSueltos() {
+    MODULOS.forEach(function (src) {
+      if (document.querySelector('script[src="' + src + '"]')) return;
+      var s = document.createElement('script');
+      s.src = src;
+      s.defer = true;
+      (document.head || document.documentElement).appendChild(s);
+    });
+  }
+
+  if (window.INVEFECTOS_JUNTOS) return;                 /* ya vino el paquete */
+  if (document.querySelector('script[src^="/efectos/todo.php"]')) return;
+
+  var paquete = document.createElement('script');
+  paquete.src = '/efectos/todo.php';
+  paquete.defer = true;
+  paquete.onerror = cargarSueltos;                      /* red de seguridad */
+  paquete.onload  = function () {
+    /* Llegó, pero ¿llegó completo? Si el servidor cortó a la mitad, la marca
+       no está y se completa por el camino viejo. */
+    if (!window.INVEFECTOS_JUNTOS) cargarSueltos();
+  };
+  (document.head || document.documentElement).appendChild(paquete);
 })();
