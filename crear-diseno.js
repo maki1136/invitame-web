@@ -78,6 +78,31 @@
      Por eso la vista previa no puede mentir: usa exactamente los mismos dos
      módulos que usa el servidor cuando la crea.
      --------------------------------------------------------------------------- */
+  /* ===== LO QUE ELIGIÓ EL CLIENTE, ENCIMA DEL VESTIDO =======================
+     ⚠️⚠️ Y ACÁ HAY UNA TRAMPA QUE NO ES DE ESTA PANTALLA, ES DEL MOTOR:
+     **el color cargado a mano le gana a la paleta.** `efectos/paleta.js` lo
+     dice explícitamente: si el evento tiene `color`, ese pisa a `--verde`.
+     Y `color` es una de las cosas que se copian de la muestra al vestirse.
+     Resultado medido: el cliente elegía otra paleta y el color principal no
+     se movía ni un poco. No era la vista previa: pasaría igual en la
+     invitación entregada.
+     → Si eligió paleta, se borran los colores a mano que le ganarían. Elegir
+       una paleta tiene que verse.
+     ========================================================================= */
+  function aplicarEleccion(d) {
+    if (paleta) {
+      d.fx = d.fx || {};
+      d.fx.paleta = { id: paleta };
+      delete d.color;                                   /* --verde */
+      if (d.fx.sobre) delete d.fx.sobre.selloColor;     /* el lacre */
+    }
+    if (letra != null && LETRAS[letra]) {
+      d.nfont = LETRAS[letra].nfont;
+      d.fTit  = LETRAS[letra].fTit;
+    }
+    return d;
+  }
+
   function armarBorrador() {
     if (!window.CREAR || !window.SOLICITUD_A_EVENTO) return null;
     var s = window.CREAR.leerFormulario();
@@ -88,12 +113,7 @@
 
     /* lo que eligió el cliente en «Personalizar» va DESPUÉS del vestido: es su
        decisión y le gana a la de la muestra */
-    if (paleta) { d.fx = d.fx || {}; d.fx.paleta = { id: paleta }; }
-    if (letra != null && LETRAS[letra]) {
-      d.nfont = LETRAS[letra].nfont;
-      d.fTit  = LETRAS[letra].fTit;
-    }
-    return d;
+    return aplicarEleccion(d);
   }
 
   function dibujar() {
@@ -362,9 +382,7 @@
       var m = elegido && window.muestraDe ? window.muestraDe(elegido) : null;
       var ev = (m && m.muestra && muestraCache[m.muestra]) ? muestraCache[m.muestra] : null;
       if (ev && window.INVVESTIR) window.INVVESTIR.vestir(d, ev, solicitud);
-      if (paleta) { d.fx = d.fx || {}; d.fx.paleta = { id: paleta }; }
-      if (letra != null && LETRAS[letra]) { d.nfont = LETRAS[letra].nfont; d.fTit = LETRAS[letra].fTit; }
-      return d;
+      return aplicarEleccion(d);
     }
   };
 
