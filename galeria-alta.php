@@ -31,9 +31,17 @@
  *   comprobación, cualquiera que encontrara la dirección podría crear galerías
  *   y quemarte los gigas del mes.
  *
- * ⚠️ LA CLAVE NO ESTÁ ACÁ. Vive en `invitame-panel.php`, fuera del repo y fuera
- *    de public_html, en la variable `$GALERIA_CLAVE_ALTA`. Es el mismo archivo
- *    donde ya viven el usuario y la contraseña del sistema.
+ * ⚠️ LA CLAVE NO ESTÁ ACÁ. Vive en `invitame-galeria.php`, fuera del repo y
+ *    fuera de public_html, en la variable `$GALERIA_CLAVE_ALTA`.
+ *
+ *    ⭐ ES UN ARCHIVO PROPIO, DE UNA SOLA LÍNEA, Y ESO ES A PROPÓSITO. La
+ *    tentación era meterla en `invitame-panel.php`, que ya existe. Pero ese
+ *    archivo guarda el usuario y la contraseña del sistema: si al editarlo se
+ *    pisa algo o la línea nueva queda después del `?>`, se caen de golpe TODOS
+ *    los porteros — las mesas, el itinerario, los pases, la confirmación y la
+ *    trivia. Un archivo nuevo no puede romper nada que ya funcione.
+ *    (Igual se sigue aceptando en `invitame-panel.php`, por si alguna vez está
+ *    ahí.)
  *
  * ⚠️ ACÁ NO SE ESCRIBE NADA EN LA INVITACIÓN. Devuelve el código y listo; el
  *    panel lo guarda con «Guardar y publicar», como cualquier otro campo.
@@ -147,12 +155,15 @@ $PANEL_USER = ''; $PANEL_PASS = '';   // los declara el mismo archivo de config
 $candidatos = array();
 $dir = __DIR__;
 for ($i = 0; $i < 6; $i++) {
+  $candidatos[] = $dir . '/invitame-galeria.php';
   $candidatos[] = $dir . '/invitame-panel.php';
   $padre = dirname($dir);
   if ($padre === $dir) break;
   $dir = $padre;
 }
 if (isset($_SERVER['DOCUMENT_ROOT'])) {
+  $candidatos[] = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-galeria.php';
+  $candidatos[] = dirname(dirname($_SERVER['DOCUMENT_ROOT'])) . '/invitame-galeria.php';
   $candidatos[] = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-panel.php';
   $candidatos[] = dirname(dirname($_SERVER['DOCUMENT_ROOT'])) . '/invitame-panel.php';
 }
@@ -164,7 +175,7 @@ foreach (array_unique($candidatos) as $ruta) {
 if ($GALERIA_CLAVE_ALTA === '') {
   echo json_encode(array(
     'ok' => false, 'error' => 'sin-clave',
-    'detalle' => 'Falta $GALERIA_CLAVE_ALTA en invitame-panel.php'
+    'detalle' => 'Falta $GALERIA_CLAVE_ALTA en invitame-galeria.php'
   ));
   exit;
 }
