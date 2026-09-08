@@ -510,6 +510,10 @@
      lugares e invitados son del cliente.
    · `fecha.js` va ANTES de `raspadita.js`: la raspadita se monta encima.
    · `panel-galeria.js` va DESPUÉS de `galeria.js`.
+   · «filtro.js» va DESPUÉS de «galeria.js»: su sección se cuelga JUSTO ANTES de
+     la de la galería, así el invitado primero se saca la foto y después entra a
+     verlas todas. Si la galería no está, se cuelga antes de los contactos.
+     «panel-filtro.js» va DESPUÉS: es su bloque del panel.
    · `musica.js` NO tiene orden: se cuelga de la sección `#spotify-sec` que ya
      trae el motor y le agrega el texto de los novios y el botón de sugerir.
      `panel-musica.js` va DESPUÉS: es su bloque del panel, y lleva los dos
@@ -585,6 +589,8 @@
     '/efectos/acordeon.js',            /* los "Ver mapa" abrían en blanco: recarga los iframes */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
     '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
+    '/efectos/filtro.js',              /* la cámara con el marco de la boda (fx.filtro) */
+    '/efectos/panel-filtro.js',        /* y su bloque en el panel, con el subidor del marco */
     '/efectos/pase-voz.js',            /* el ticket con el mensaje de voz de los anfitriones */
     '/efectos/panel-pase-voz.js',      /* y sus veinte campos en el panel, con la onda medible */
     '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */

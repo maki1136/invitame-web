@@ -146,7 +146,7 @@
   }
 
   /* canvas no tiene letter-spacing: se mete un cabello de espacio a mano. */
-  function espaciar(s) { return String(s).split('').join(' '); }
+  function espaciar(s) { return String(s).split('').join(' '); }
 
   function textoFecha(ev) {
     var t = String(ev.fechaTexto || '').trim();
