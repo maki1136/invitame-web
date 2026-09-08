@@ -107,7 +107,18 @@ if (cortados.length) avisos.push(['RÓTULOS TAN LARGOS QUE LA CLAVE SE CORTA (si
   cortados.map(c => `${c.rotulo.slice(0, 52).padEnd(54)} -> ${c.clave}`)]);
 
 /* ---- 4. archivos de /efectos/ que nadie carga --------------------------- */
-const APARTE = { 'crear-muestra.js': 'firebase-inv.js', 'panel-audio-invitado.js': 'mi-panel.html', 'terciopelo.js': 'botones.js (a pedido)' };
+/* Los que NO van en la lista de efectos/index.js porque los carga otro, y está
+   bien que así sea. Si se suma uno acá, se explica POR QUÉ va aparte. */
+const APARTE = {
+  'crear-muestra.js': 'firebase-inv.js',
+  'panel-audio-invitado.js': 'mi-panel.html',
+  'terciopelo.js': 'botones.js (a pedido)',
+  /* Va en la cabeza del documento, sin defer, puesto por i/index.php: tiene que
+     correr ANTES de que exista la primera imagen. Cargado con los demás llega
+     tarde y las fotos se bajan dos veces. */
+  'imagenes-livianas.js': 'i/index.php (en la cabeza, antes que todo)',
+  'todo.php': 'no es un modulo: es el paquete de todos'
+};
 const idx = leer('efectos/index.js');
 let sueltos = [];
 try {
