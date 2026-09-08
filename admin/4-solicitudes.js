@@ -320,51 +320,23 @@
       box.querySelector('.invmodal').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="margin:0;color:#6D1233;font-weight:900">'+ICO.entrada+' Solicitudes de clientes <span style="color:#b0a89f;font-weight:700;font-size:13px">('+list.length+')</span></h3><button style="background:#efe7de;border:0;border-radius:20px;padding:8px 16px;font-family:Nunito;font-weight:700;cursor:pointer" onclick="document.getElementById(\'solicbox\').remove()">Cerrar</button></div>'+rows;
     }catch(e){console.error(e);box.querySelector('.invmodal').innerHTML='<p style="color:#F56770">Error: '+(e.message||e)+'</p>';}
   }
+  /* ⚠️⚠️ EL MAPEO NO ESTÁ ACÁ. Vive en /solicitud-a-evento.js.  (8/9/2026)
+
+     Es EL MISMO código que corre del lado del cliente cuando manda el
+     formulario y la invitación se crea sola. Si estuviera duplicado, el día
+     que alguien agregue un campo en un solo lado, el dato del cliente se
+     perdería EN SILENCIO — el bug que más veces se pagó en esta plataforma.
+
+     Acá quedó sólo lo que es del admin: repintar la pantalla y avisarle a
+     Jazmín qué se cargó. */
   function cargarSolicitudIdx(i){ const s=(window._solicCache||[])[i]; if(!s)return;
-    if(s.tpl&&TEMAS[s.tpl])setTema(s.tpl);
-    D.n1=s.n1||D.n1; D.n2=s.n2||''; if(s.fecha)D.fecha=s.fecha; D.frase=s.frase||''; if(s.kick)D.kick=s.kick; if(s.cover)D.cover=s.cover; if(s.coverVideo)D.coverVideo=s.coverVideo; if(s.galeria&&s.galeria.length)D.galeria=s.galeria;
-    if(s.tipoEvento)D.tipoEvento=s.tipoEvento; if(s.musica)D.musica=s.musica; if(s.musicaUrl)D.musicaUrl=s.musicaUrl;
-    if(s.fraseFx)D.fraseFx=s.fraseFx; if(s.igHashtag)D.igHashtag=s.igHashtag; if(s.spotifyUrl)D.spotifyUrl=s.spotifyUrl;
-    ['reg_liverpool','reg_amazon','reg_sears','reg_mercadolibre','reg_palacio','reg_venmo','reg_paypal','reg_otro_n','reg_otro_u','regClabe','regTitular','regBanco'].forEach(k=>{ if(s[k])D[k]=s[k]; });
-    D.ev1t=s.ev1t||''; D.ev1dir=s.ev1d||''; D.ev1fecha=s.ev1f||''; D.ev1maps=s.ev1maps||''; D.ev2t=s.ev2t||''; D.ev2dir=s.ev2d||''; D.ev2fecha=s.ev2f||''; D.ev2maps=s.ev2maps||'';
-    D.ev3t=s.ev3t||''; D.ev3dir=s.ev3d||''; D.ev3fecha=s.ev3f||''; D.ev3maps=s.ev3maps||'';
-    D.slug=slug((s.n1||'pareja')+(s.n2?'-y-'+s.n2:''));
-    // Dress code, mesa de regalos y pedido especial: antes solo aparecían en un
-    // alert() y la diseñadora tenía que retipearlos a mano (o se perdían).
-    if(s.dress) D['c_dresscode-texto']=s.dress;
-    if(s.regalos) D['c_frase-para-seccion-regalos-mesa']=s.regalos;
-    // El resto de lo que ahora pide el formulario. Cada uno va a la MISMA clave que
-    // usa su campo del panel, así la invitación queda armada sin retipear nada.
-    if(s.orden)       D.orden=s.orden;
-    if(s.hoteles)     D['c_datos-de-hoteles-recomendados']=s.hoteles;
-    if(s.hotDesc)     D['c_descripcion-hotel']=s.hotDesc;
-    if(s.itinerario)  D['c_itinerario-descripcion']=s.itinerario;
-    if(s.persFrase)   D['c_frase-para-la-seccion-personas']=s.persFrase;
-    if(s.galEstilo)   D['c_estilo-de-la-galeria-de-fotos']=s.galEstilo;
-    if(s.videoUrl)    D.videoUrl=s.videoUrl;
-    if(s.igUser)      D['c_usuario-de-instragram']=s.igUser;
-    if(s.cfFrase)     D['c_frase-para-seccion-confirmacion']=s.cfFrase;
-    if(s.cfMail)      D['c_email-para-confirmaciones']=s.cfMail;
-    if(s.cfWsp1)      D['c_numero-de-whatsapp']=s.cfWsp1;
-    if(s.cfWsp1n)     D['c_texto-corto-boton-wsp']=s.cfWsp1n;
-    if(s.cfWsp2)      D['c_numero-de-whatsapp-2']=s.cfWsp2;
-    if(s.cfWsp2n)     D['c_texto-corto-boton-wsp-2']=s.cfWsp2n;
-    if(s.fraseFinal)  D.fraseFinal=s.fraseFinal;
-    if(s.textoFinal)  D['c_texto-final']=s.textoFinal;
-    if(Array.isArray(s.personas)&&s.personas.length){
-      D.personas=s.personas.slice(0,12).map(p=>({nombre:p.nombre||'',rel:p.rel||'',foto:p.foto||''}));
+    if(!window.SOLICITUD_A_EVENTO){
+      alert('No cargó /solicitud-a-evento.js, así que no puedo traer los datos.\n\nRecargá la página y probá de nuevo.');
+      return;
     }
-    // Lo que NO tiene un lugar propio en la invitación (preferencias de color y letra,
-    // el link de la música) va al pedido especial, que la diseñadora ve al abrir.
-    {
-      const notas=[];
-      if(s.observaciones) notas.push(s.observaciones);
-      if(s.colorSug)  notas.push('Colores que pidió: '+s.colorSug);
-      if(s.tipoSug)   notas.push('Estilo de letra que pidió: '+s.tipoSug);
-      if(s.musica)    notas.push('Música que pidió: '+s.musica);
-      if(notas.length) D['c_pedido-especial-del-cliente']=notas.join('\n');
-    }
-    D.invitados=(s.invitados||[]).map(g=>({n:g.n,p:g.p||'1',m:g.m||'-',t:nuevoTokenSeguro()}));
+    /* el tema sale afuera porque ponerlo repinta media pantalla, y eso es
+       asunto del admin, no del mapeo */
+    window.SOLICITUD_A_EVENTO.mapear(s, D, { tema:function(k){ if(TEMAS[k]) setTema(k); } });
     D._solicId=s.id;
     const bx=el('solicbox'); if(bx)bx.remove();
     go('PRINCIPAL'); render(); if(typeof renderPanel==='function')renderPanel();
