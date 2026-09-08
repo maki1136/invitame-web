@@ -72,21 +72,21 @@
      ⚠️ Las claves de la derecha están clavadas en /admin/0-claves.js. No se
         inventan ni se derivan del rótulo: si una cambia, el dato se pierde. */
   var DIRECTOS = {
-    dress:       'c_dresscode-texto',
-    regalos:     'c_frase-para-seccion-regalos-mesa',
-    hoteles:     'c_datos-de-hoteles-recomendados',
-    hotDesc:     'c_descripcion-hotel',
-    itinerario:  'c_itinerario-descripcion',
-    persFrase:   'c_frase-para-la-seccion-personas',
-    galEstilo:   'c_estilo-de-la-galeria-de-fotos',
-    igUser:      'c_usuario-de-instragram',
-    cfFrase:     'c_frase-para-seccion-confirmacion',
-    cfMail:      'c_email-para-confirmaciones',
-    cfWsp1:      'c_numero-de-whatsapp',
-    cfWsp1n:     'c_texto-corto-boton-wsp',
-    cfWsp2:      'c_numero-de-whatsapp-2',
-    cfWsp2n:     'c_texto-corto-boton-wsp-2',
-    textoFinal:  'c_texto-final'
+    'dress':       'c_dresscode-texto',
+    'regalos':     'c_frase-para-seccion-regalos-mesa',
+    'hoteles':     'c_datos-de-hoteles-recomendados',
+    'hotDesc':     'c_descripcion-hotel',
+    'itinerario':  'c_itinerario-descripcion',
+    'persFrase':   'c_frase-para-la-seccion-personas',
+    'galEstilo':   'c_estilo-de-la-galeria-de-fotos',
+    'igUser':      'c_usuario-de-instragram',
+    'cfFrase':     'c_frase-para-seccion-confirmacion',
+    'cfMail':      'c_email-para-confirmaciones',
+    'cfWsp1':      'c_numero-de-whatsapp',
+    'cfWsp1n':     'c_texto-corto-boton-wsp',
+    'cfWsp2':      'c_numero-de-whatsapp-2',
+    'cfWsp2n':     'c_texto-corto-boton-wsp-2',
+    'textoFinal':  'c_texto-final'
   };
 
   /* Los que se llaman igual en los dos lados. */
