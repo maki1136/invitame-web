@@ -85,6 +85,20 @@
     return cambio ? salida : '';
   }
 
+  /* Cualquier dirección de Cloudinary adentro de un texto: un pedazo de HTML
+     armado a mano, una hoja de estilo escrita por un módulo, lo que sea. */
+  function livianaTexto(txt) {
+    if (typeof txt !== 'string' || txt.indexOf('res.cloudinary.com') < 0) return '';
+    var cambio = false;
+    var salida = txt.replace(/https?:\/\/res\.cloudinary\.com\/[^\s"'<>()]+/g, function (u) {
+      var n = liviana(u);
+      if (!n) return u;
+      cambio = true;
+      return n;
+    });
+    return cambio ? salida : '';
+  }
+
   try {
     /* 1. img.src = '...' */
     var descSrc = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
@@ -131,7 +145,38 @@
       return setPropOriginal.call(this, prop, valor, prioridad);
     };
 
-    /* 4. Las que ya vinieran escritas en el HTML. Acá sí hay que mirarlas, pero
+    /* 4. ⚠️⚠️ EL CAMINO QUE FALTABA: `innerHTML`.
+       Medido: con los tres de arriba puestos, seguían bajando OCHO fotos
+       pesadas. Los módulos no crean las imágenes una por una: arman un pedazo
+       de HTML como texto («<img src=…>») y lo sueltan de una. Ahí no pasa por
+       `img.src` ni por `setAttribute`: el navegador lee el texto y pide la foto
+       en el mismo instante. Por eso también se corrige el TEXTO, antes de que
+       se convierta en pantalla. */
+    ['innerHTML', 'outerHTML'].forEach(function (prop) {
+      var d = Object.getOwnPropertyDescriptor(Element.prototype, prop);
+      if (!d || !d.set) return;
+      Object.defineProperty(Element.prototype, prop, {
+        configurable: true, enumerable: d.enumerable, get: d.get,
+        set: function (v) { d.set.call(this, livianaTexto(v) || v); }
+      });
+    });
+    var insertarOriginal = Element.prototype.insertAdjacentHTML;
+    Element.prototype.insertAdjacentHTML = function (donde, html) {
+      return insertarOriginal.call(this, donde, livianaTexto(html) || html);
+    };
+    /* Y las hojas de estilo que escriben los módulos con textContent. */
+    var dTexto = Object.getOwnPropertyDescriptor(Node.prototype, 'textContent');
+    if (dTexto && dTexto.set) {
+      Object.defineProperty(Node.prototype, 'textContent', {
+        configurable: true, enumerable: dTexto.enumerable, get: dTexto.get,
+        set: function (v) {
+          if (this.tagName === 'STYLE') v = livianaTexto(v) || v;
+          dTexto.set.call(this, v);
+        }
+      });
+    }
+
+    /* 5. Las que ya vinieran escritas en el HTML. Acá sí hay que mirarlas, pero
           este archivo corre antes del cuerpo, así que todavía no existe
           ninguna: es sólo por si alguna se cuela. */
     var repasar = function () {
