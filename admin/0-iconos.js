@@ -53,6 +53,8 @@ const ICO = (function(){
     /* --- estructura y orden --- */
     ordenar:   '<path d="M8 4v16"/><path d="M5 7l3-3 3 3"/><path d="M16 20V4"/><path d="M13 17l3 3 3-3"/>',
     agarre:    '<path d="M8 7h8M8 12h8M8 17h8"/>',
+    sube:      '<path d="M7 14.5l5-5 5 5"/>',
+    baja:      '<path d="M7 9.5l5 5 5-5"/>',
     actualizar:'<path d="M12 20V6"/><path d="M7 11l5-5 5 5"/>',
 
     /* --- contenido --- */

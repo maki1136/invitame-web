@@ -26,22 +26,22 @@
   function invitadosHtml(){
     return '<div class="stat"><div class="b"><div class="n" id="st-inv">0</div><div class="l">Invitados</div></div><div class="b"><div class="n" id="st-per">0</div><div class="l">Personas</div></div></div>'+
       '<div class="addrow"><div class="f"><label>Nombre</label><input type="text" id="gname" placeholder="Familia Pérez"></div><div class="f" style="max-width:70px"><label>Pers.</label><input type="text" id="gper" value="2"></div><div class="f" style="max-width:70px"><label>Mesa</label><input type="text" id="gmesa" value="1"></div><button class="addbtn" onclick="addGuest()">+ Agregar</button></div>'+
-      '<div style="margin-top:10px"><button class="addbtn" style="background:var(--uva)" onclick="verMesas()">🍽 Gestión de mesas (arrastrar)</button></div>'+
-      '<div style="margin-top:8px"><button class="addbtn" style="background:#5b8ac9" onclick="traerMesasDeLosNovios()">⬇ Traer las mesas que armaron los novios</button>'+
+      '<div style="margin-top:10px"><button class="addbtn" onclick="verMesas()">'+ICO.mesa+' Gestión de mesas (arrastrar)</button></div>'+
+      '<div style="margin-top:8px"><button class="addbtn gh" onclick="traerMesasDeLosNovios()">'+ICO.bajar+' Traer las mesas que armaron los novios</button>'+
       '<div class="hint">Si les diste clave de panel, ellos arman sus mesas desde el celular. Esto las baja acá.</div></div>'+
-      '<div class="mejoras" style="margin-top:14px"><div class="h">📄 Carga masiva por Excel</div>'+
+      '<div class="mejoras" style="margin-top:14px"><div class="h">'+ICO.planilla+' Carga masiva por Excel</div>'+
       '<div class="hint" style="margin-bottom:8px">1) Descargá la plantilla · 2) Completala en Excel (una fila por invitado) · 3) Subila acá: se cargan todos y cada uno recibe su link único.</div>'+
-      '<button class="addbtn" style="background:#5a5a58;margin-right:6px" onclick="descargarPlantilla()">⬇ Descargar plantilla</button>'+
-      '<label class="addbtn" style="display:inline-block;cursor:pointer">⬆ Subir Excel/CSV completado<input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="importarArchivo(this)"></label>'+
-      '<div style="margin-top:10px"><button class="lnk" onclick="tcsv()">▾ …o pegar la lista a mano</button><div id="csvbox" style="display:none;margin-top:8px"><textarea id="csv" rows="4" placeholder="Familia Pérez,4,3"></textarea><div class="hint">Un renglón por invitado: nombre,personas,mesa</div><button class="addbtn" style="margin-top:6px" onclick="impcsv()">Importar</button></div></div>'+
-      '<div style="margin-top:10px"><button class="addbtn" style="background:var(--uva)" onclick="exportarLinks()">⬇ Exportar todos los links</button></div>'+
+      '<button class="addbtn gh" style="margin-right:6px" onclick="descargarPlantilla()">'+ICO.bajar+' Descargar plantilla</button>'+
+      '<label class="addbtn" style="display:inline-block;cursor:pointer">'+ICO.subir+' Subir Excel/CSV completado<input type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="importarArchivo(this)"></label>'+
+      '<div style="margin-top:10px"><button class="lnk" onclick="tcsv()">…o pegar la lista a mano</button><div id="csvbox" style="display:none;margin-top:8px"><textarea id="csv" rows="4" placeholder="Familia Pérez,4,3"></textarea><div class="hint">Un renglón por invitado: nombre,personas,mesa</div><button class="addbtn" style="margin-top:6px" onclick="impcsv()">Importar</button></div></div>'+
+      '<div style="margin-top:10px"><button class="addbtn gh" onclick="exportarLinks()">'+ICO.bajar+' Exportar todos los links</button></div>'+
       '</div>'+
       '<div class="hint">Cada invitado recibe su link único + QR automáticamente.</div><div id="guests" style="margin-top:12px"></div>';
   }
 
   // ==== PERSONAS IMPORTANTES (hasta 12) ====
   function personasHtml(){
-    return '<div class="mejoras"><div class="h">👑 Personas importantes (hasta 12)</div>'+
+    return '<div class="mejoras"><div class="h">'+ICO.corona+' Personas importantes (hasta 12)</div>'+
       '<div class="hint" style="margin-bottom:8px">Padres, padrinos, testigos, damas, caballeros… Cargá foto, nombre y relación. Aparecen en la sección de la invitación.</div>'+
       '<div id="pers-list"></div>'+
       '<button class="addbtn" id="pers-add" style="margin-top:8px" onclick="addPersona()">+ Agregar persona</button>'+
@@ -51,14 +51,14 @@
     if(!Array.isArray(D.personas))D.personas=[];
     const cont=el('pers-list'); if(!cont)return;
     cont.innerHTML=D.personas.map((p,i)=>{
-      const foto=p.foto?'<img src="'+p.foto+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover">':'<div style="width:52px;height:52px;border-radius:50%;background:#e7dfd2;display:flex;align-items:center;justify-content:center;color:#9a8">📷</div>';
+      const foto=p.foto?'<img src="'+p.foto+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover">':'<div style="width:52px;height:52px;border-radius:50%;background:#e7dfd2;display:flex;align-items:center;justify-content:center;color:#9a8">'+ICO.camara+'</div>';
       return '<div class="guest" style="align-items:center;gap:10px">'+foto+
         '<div style="flex:1;display:flex;flex-direction:column;gap:6px">'+
         '<input type="text" placeholder="Nombre" value="'+(p.nombre||'').replace(/"/g,'&quot;')+'" oninput="setPersona('+i+',\'nombre\',this.value)">'+
         '<input type="text" placeholder="Relación (ej: Mamá de la novia)" value="'+(p.rel||'').replace(/"/g,'&quot;')+'" oninput="setPersona('+i+',\'rel\',this.value)">'+
-        '<label class="lnk" style="cursor:pointer;color:#6D1233">⬆ '+(p.foto?'Cambiar foto':'Subir foto')+'<input type="file" accept="image/*" style="display:none" onchange="subirImgPersona(this,'+i+')"></label>'+
+        '<label class="lnk" style="cursor:pointer;color:#6D1233">'+ICO.subir+' '+(p.foto?'Cambiar foto':'Subir foto')+'<input type="file" accept="image/*" style="display:none" onchange="subirImgPersona(this,'+i+')"></label>'+
         '</div>'+
-        '<span class="x" onclick="delPersona('+i+')">✕</span></div>';
+        '<span class="x" onclick="delPersona('+i+')">'+ICO.equis+'</span></div>';
     }).join('')||'<div class="hint">Todavía no agregaste personas. (Si no cargás ninguna, la invitación muestra el diseño por defecto.)</div>';
     const add=el('pers-add'); if(add)add.style.display=D.personas.length>=12?'none':'';
   }
@@ -69,14 +69,14 @@
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     const lbl=input.parentElement; const prev=lbl?lbl.firstChild.textContent:'';
-    if(lbl)lbl.childNodes[0].textContent='⏳ Subiendo…';
+    if(lbl)lbl.childNodes[0].textContent='Subiendo…';
     try{const url=await INV.uploadImage(f); if(D.personas[i])D.personas[i].foto=url; renderPersonas();
       if(typeof postPreview==='function') postPreview();}
     catch(e){alert('No pude subir la foto. Probá de nuevo.'); if(lbl)lbl.childNodes[0].textContent=prev;}
   }
 
   let cur="PRINCIPAL";
-  function buildTabs(){el('tabs').innerHTML=ORDER.map(t=>'<div class="tab '+(t===cur?'on':'')+(t==='INVITADOS'||t==='EFECTOS'?' nuevo':'')+'" onclick="go(\''+t+'\')">'+(t==='INVITADOS'?'INVITADOS ✦':t==='EFECTOS'?'✨ EFECTOS':t)+'</div>').join('');}
+  function buildTabs(){el('tabs').innerHTML=ORDER.map(t=>'<div class="tab '+(t===cur?'on':'')+(t==='INVITADOS'||t==='EFECTOS'?' nuevo':'')+'" onclick="go(\''+t+'\')">'+(t==='INVITADOS'?'INVITADOS':t==='EFECTOS'?ICO.destello+' EFECTOS':t)+'</div>').join('');}
   // Cada pestaña edita principalmente una sección de la invitación.
   // Al cambiar de pestaña, scrolleamos el preview a esa sección para que
   // la diseñadora VEA lo que está tocando (antes el preview se quedaba en la portada).
@@ -199,7 +199,7 @@
       const av=document.createElement('div');
       av.className='avisoFoto';
       av.style.cssText='margin-top:6px;padding:8px 10px;border-radius:8px;background:#FFF4E5;border:1px solid #F0C48A;color:#7A4A00;font-size:12px;line-height:1.45';
-      av.innerHTML='⚠️ '+msg;
+      av.innerHTML=ICO.alerta+' '+msg;
       caja.appendChild(av);
     };
     img.src=url;
@@ -207,16 +207,16 @@
   async function subirImg(input,key,id){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
-    const box=input.previousElementSibling; const prev=box?box.textContent:'';
-    if(box)box.textContent='Subiendo… ⏳';
+    const box=input.previousElementSibling; const prev=box?box.innerHTML:'';
+    if(box)box.textContent='Subiendo…';
     try{const url=await INV.uploadImage(f); D[key]=url;
-      if(box)box.textContent='✓ Imagen subida (tocá para cambiar)';
+      if(box)box.innerHTML=ICO.tilde+' Imagen subida (tocá para cambiar)';
       const p=el('prev-'+id); if(p)p.innerHTML='<img src="'+url+'" style="max-height:60px;border-radius:8px;margin-top:6px">';
       if(/fondo/i.test(key)) avisarFotoFondo(url,id);
       // La vista previa NO se refrescaba al subir una foto: la diseñadora cargaba la
       // imagen y seguía viendo la de antes ("elijo la foto y no se aplica").
       if(typeof postPreview==='function') postPreview();
-    }catch(e){console.error(e); if(box)box.textContent=prev||'⬆ Subir imagen'; alert('No se pudo subir: '+(e.message||e));}
+    }catch(e){console.error(e); if(box)box.innerHTML=prev||(ICO.subir+' Subir imagen'); alert('No se pudo subir: '+(e.message||e));}
     input.value='';
   }
   function cargarFontCustom(val,target){
@@ -230,20 +230,20 @@
   async function subirVideo(input){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadVideo){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
-    const b=el('vidbtn'); if(b)b.textContent='Subiendo video… ⏳';
+    const b=el('vidbtn'); if(b)b.textContent='Subiendo video…';
     try{const url=await INV.uploadVideo(f); setB('coverVideo',url); renderPanel();}
-    catch(e){console.error(e); if(b)b.textContent='⬆ Subir video (.mp4)'; alert('No se pudo subir: '+(e.message||e));}
+    catch(e){console.error(e); if(b)b.innerHTML=ICO.subir+' Subir video (.mp4)'; alert('No se pudo subir: '+(e.message||e));}
     input.value='';
   }
   async function subirFoto(input,campo){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
-    const btn=el('coverbtn'); const prev=btn?btn.textContent:'';
-    if(btn){btn.textContent='Subiendo… ⏳';}
-    try{ const url=await INV.uploadImage(f); setB(campo,url); if(btn)btn.textContent='✓ Foto subida'; }
-    catch(e){ console.error(e); if(btn)btn.textContent='⬆ Subir tu propia foto'; alert('No se pudo subir: '+(e.message||e)); }
+    const btn=el('coverbtn'); const prev=btn?btn.innerHTML:'';
+    if(btn){btn.textContent='Subiendo…';}
+    try{ const url=await INV.uploadImage(f); setB(campo,url); if(btn)btn.innerHTML=ICO.tilde+' Foto subida'; }
+    catch(e){ console.error(e); if(btn)btn.innerHTML=ICO.subir+' Subir tu propia foto'; alert('No se pudo subir: '+(e.message||e)); }
     input.value='';
-    setTimeout(()=>{if(btn)btn.textContent=prev||'⬆ Subir tu propia foto';},2500);
+    setTimeout(()=>{if(btn)btn.innerHTML=prev||(ICO.subir+' Subir tu propia foto');},2500);
   }
 
   const mesesL=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
@@ -319,8 +319,8 @@
       D.invitados.push({n:nom,p:((c[1]!=null&&c[1]!=='')?c[1]:'1').toString().trim(),m:((c[2]!=null&&c[2]!=='')?c[2]:'-').toString().trim(),restriccion:(c[3]||'').toString().trim(),t:nuevoTokenSeguro()});n++;}
     renderGuests();
     let msg;
-    if(n>0){ msg='✅ Se cargaron '+n+' invitados.';
-      if(repes.length) msg+='\n\n↷ Salteé '+repes.length+' que ya estaban en la lista:\n· '+repes.slice(0,8).join('\n· ')+(repes.length>8?'\n…y más':'');
+    if(n>0){ msg='Se cargaron '+n+' invitados.';
+      if(repes.length) msg+='\n\nSalteé '+repes.length+' que ya estaban en la lista:\n· '+repes.slice(0,8).join('\n· ')+(repes.length>8?'\n…y más':'');
       msg+='\n\nRevisá la lista y tocá "Guardar y publicar" para activar todos los links.';
     } else if(repes.length){ msg='Esos '+repes.length+' invitados YA estaban cargados, así que no agregué ninguno.\n\nSi querés cargarlos igual (por ejemplo dos familias con el mismo apellido), cambiales un poco el nombre.';
     } else { msg='No encontré invitados en el archivo. Revisá que la primera columna tenga los nombres.'; }
@@ -360,15 +360,15 @@
     // Estado de la confirmación al lado de cada invitado. Antes el RSVP se guardaba
     // en la base y NO se veía en ninguna pantalla: la diseñadora no tenía forma de
     // saber quién confirmó.
-    const _RS={confirmado:['✅','confirmó','#1f7a4d'],rechazado:['✖','no puede','#8a2b2b'],pendiente:['·','sin responder','#a39a90']};
+    const _RS={confirmado:[ICO.tilde,'confirmó','#1f7a4d'],rechazado:[ICO.equis,'no puede','#8a2b2b'],pendiente:['','sin responder','#a39a90']};
     el('guests').innerHTML=D.invitados.map((g,i)=>{const url=BASEURL+'?e='+encodeURIComponent(D.slug||'')+'&g='+g.t;
       const r=_RS[g.rsvp||'pendiente']||_RS.pendiente;
       const cuantos=(g.rsvp==='confirmado'&&g.rsvpPersonas)?(' ('+g.rsvpPersonas+')'):'';
       return '<div class="guest"><b>'+g.n+'</b>'+
       '<span title="'+r[1]+'" style="font-size:12px;font-weight:800;color:'+r[2]+';margin-left:8px;white-space:nowrap">'+r[0]+' '+r[1]+cuantos+'</span>'+
-      '<button class="lnk" style="margin-left:auto;color:#6D1233" onclick="navigator.clipboard.writeText(\''+url+'\');this.textContent=\'¡copiado!\';setTimeout(()=>this.textContent=\'🔗 copiar link\',1500)">🔗 copiar link</button>'+
-      '<a class="lnk" href="'+url+'" target="_blank" style="text-decoration:none;color:#6D1233">👁 ver</a>'+
-      '<span class="x" onclick="delGuest('+i+')">✕</span></div>';}).join('')||'<div class="hint">Todavía no cargaste invitados. (Los links quedan activos después de \'Guardar y publicar\'.)</div>';}
+      '<button class="lnk" style="margin-left:auto;color:#6D1233" onclick="navigator.clipboard.writeText(\''+url+'\');this.textContent=\'¡copiado!\';setTimeout(()=>this.innerHTML=ICO.enlace+\' copiar link\',1500)">'+ICO.enlace+' copiar link</button>'+
+      '<a class="lnk" href="'+url+'" target="_blank" style="text-decoration:none;color:#6D1233">'+ICO.ojo+' ver</a>'+
+      '<span class="x" onclick="delGuest('+i+')">'+ICO.equis+'</span></div>';}).join('')||'<div class="hint">Todavía no cargaste invitados. (Los links quedan activos después de \'Guardar y publicar\'.)</div>';}
   // ==== GUARDAR/PUBLICAR EN FIREBASE (de verdad) ====
   const BASEURL="https://invitame.littlemomentsok.com/i/";
   // ¿Quedó algo del ejemplo sin cambiar? El panel arranca con la demo cargada,
@@ -460,7 +460,7 @@
     const _rd=restosDemo();
     const _firma=_rd.join('|');
     if(_rd.length && _firma!==_demoAceptado){
-      if(!confirm('⚠️ Antes de publicar, revisá esto:\n\n· '+_rd.join('\n· ')+
+      if(!confirm('Antes de publicar, revisá esto:\n\n· '+_rd.join('\n· ')+
         '\n\nEsos datos son del EJEMPLO y se van a ver así en la invitación del cliente.\n\n'+
         'Aceptar = publicar igual   ·   Cancelar = volver y corregir')) return;
       _demoAceptado=_firma;
@@ -471,7 +471,7 @@
     // Nunca publicar el video de ejemplo (la flor de MDN)
     if(/interactive-examples|flower\.mp4/i.test(D.coverVideo||'')){
       D.coverVideo='';
-      alert("⚠️ Saqué el video de ejemplo (la flor) porque no corresponde a esta pareja.\n\nSi querés video de portada, subí el de los novios; si no, queda solo la foto. Ya podés volver a tocar 'Guardar y publicar'.");
+      alert("Saqué el video de ejemplo (la flor) porque no corresponde a esta pareja.\n\nSi querés video de portada, subí el de los novios; si no, queda solo la foto. Ya podés volver a tocar 'Guardar y publicar'.");
       if(cur==='PRINCIPAL') go('PRINCIPAL');
       return;
     }
@@ -541,7 +541,7 @@
       var m=String(e&&e.message||e);
       // "Missing or insufficient permissions" casi siempre = se cayó la sesión.
       // Antes salía el error técnico y la diseñadora no sabía qué hacer.
-      if(/permission|insufficient/i.test(m)) alert('⚠️ Se cerró tu sesión, por eso no se pudo guardar.\n\nNO cierres esta pestaña: iniciá sesión de nuevo en la ventana que aparece y volvé a tocar "Guardar y publicar". Lo que cargaste sigue acá.');
+      if(/permission|insufficient/i.test(m)) alert('Se cerró tu sesión, por eso no se pudo guardar.\n\nNO cierres esta pestaña: iniciá sesión de nuevo en la ventana que aparece y volvé a tocar "Guardar y publicar". Lo que cargaste sigue acá.');
       else if(/network|offline|unavailable|failed to fetch/i.test(m)) alert('Sin internet: no se pudo guardar. Revisá la conexión y volvé a tocar "Guardar y publicar" (no cierres la pestaña).');
       else alert("No se pudo guardar: "+m);
     }

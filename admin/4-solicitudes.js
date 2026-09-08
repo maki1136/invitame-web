@@ -40,10 +40,10 @@
     let box=el('linksbox');
     if(!box){box=document.createElement('div');box.id='linksbox';box.style.cssText='position:fixed;inset:0;background:rgba(20,16,26,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px';document.body.appendChild(box);}
     box.innerHTML='<div style="background:#fff;max-width:520px;width:100%;max-height:80vh;overflow:auto;border-radius:14px;padding:22px;font-family:system-ui">'+
-      '<h3 style="margin:0 0 4px">✓ Publicado: '+slug+'</h3>'+
+      '<h3 style="margin:0 0 4px">'+ICO.tilde+' Publicado: '+slug+'</h3>'+
       '<p style="color:#666;font-size:13px;margin:0 0 14px">'+(links.length?'Estos son los links únicos de cada invitado. Copiá y mandá por WhatsApp.':'Guardaste el diseño. Cargá invitados en la pestaña INVITADOS para generar sus links.')+'</p>'+
       bloquePanelNovios()+
-      links.map(l=>'<div style="border:1px solid #eee;border-radius:8px;padding:10px;margin-bottom:8px"><b style="font-size:13px">'+l.nombre+'</b><br><input readonly value="'+l.url+'" style="width:100%;font-size:11px;padding:6px;margin-top:4px;border:1px solid #ddd;border-radius:6px" onclick="this.select()"><button style="margin-top:6px;font-size:12px;padding:5px 10px;border:0;background:#5b2a4e;color:#fff;border-radius:6px;cursor:pointer" onclick="navigator.clipboard.writeText(\''+l.url+'\');this.textContent=\'¡Copiado!\'">Copiar link</button> <a href="'+l.url+'" target="_blank" style="font-size:12px;margin-left:6px">Abrir ↗</a></div>').join('')+
+      links.map(l=>'<div style="border:1px solid #eee;border-radius:8px;padding:10px;margin-bottom:8px"><b style="font-size:13px">'+l.nombre+'</b><br><input readonly value="'+l.url+'" style="width:100%;font-size:11px;padding:6px;margin-top:4px;border:1px solid #ddd;border-radius:6px" onclick="this.select()"><button style="margin-top:6px;font-size:12px;padding:5px 10px;border:0;background:#6D1233;color:#fff;border-radius:6px;cursor:pointer" onclick="navigator.clipboard.writeText(\''+l.url+'\');this.textContent=\'¡Copiado!\'">Copiar link</button> <a href="'+l.url+'" target="_blank" style="font-size:12px;margin-left:6px">Abrir '+ICO.diagonal+'</a></div>').join('')+
       '<button style="margin-top:8px;padding:8px 16px;border:0;background:#333;color:#fff;border-radius:8px;cursor:pointer" onclick="document.getElementById(\'linksbox\').remove()">Cerrar</button></div>';
   }
 
@@ -90,7 +90,7 @@
         .sort((a,b)=>((parseInt(b.ev.orden,10)||0)-(parseInt(a.ev.orden,10)||0)));
       box.querySelector('.invmodal').innerHTML=
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'+
-        '<h3 style="margin:0;color:#6D1233;font-weight:900">🗂 Invitaciones <span style="color:#b0a89f;font-weight:700;font-size:13px">('+_invData.length+')</span></h3>'+
+        '<h3 style="margin:0;color:#6D1233;font-weight:900">'+ICO.carpeta+' Invitaciones <span style="color:#b0a89f;font-weight:700;font-size:13px">('+_invData.length+')</span></h3>'+
         '<button style="background:#F56770;color:#fff;border:0;border-radius:20px;padding:8px 15px;font-weight:800;font-family:Nunito;cursor:pointer" onclick="location.href=\'admin.html\'">＋ Nueva invitación</button></div>'+
         '<input id="invfiltro" placeholder="Filtrar por pareja, página, orden…" oninput="filtrarInv()" style="width:100%;padding:11px 12px;border:1px solid #e7ddd3;border-radius:10px;font-family:Nunito;font-size:14px;margin-bottom:12px" autofocus>'+
         '<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="text-align:left;color:#9a8f88;border-bottom:2px solid #efe7de">'+
@@ -130,10 +130,10 @@
         '<td style="padding:9px 6px;color:#7d756c">'+fmt(ev.fecha)+'</td>'+
         '<td style="padding:9px 6px;color:#7d756c;font-size:12px">'+quien(s)+'</td>'+
         '<td style="padding:9px 6px;text-align:right;white-space:nowrap">'+
-          '<button '+A+'title="Ver invitación (nueva ventana)" onclick="window.open(\'/i/?e='+encodeURIComponent(s)+'\',\'_blank\')">👁</button>'+
-          '<button '+A+'title="Editar invitación" onclick="location.href=\'admin.html?e='+encodeURIComponent(s)+'\'">✏️</button>'+
-          '<button '+A+'title="Invitados y mesas" onclick="location.href=\'admin.html?e='+encodeURIComponent(s)+'&tab=INVITADOS\'">🗂</button>'+
-          '<button '+A+'title="Clonar" onclick="clonarInv(\''+s+'\')">⧉</button>'+
+          '<button '+A+'title="Ver invitación (nueva ventana)" onclick="window.open(\'/i/?e='+encodeURIComponent(s)+'\',\'_blank\')">'+ICO.ojo+'</button>'+
+          '<button '+A+'title="Editar invitación" onclick="location.href=\'admin.html?e='+encodeURIComponent(s)+'\'">'+ICO.lapiz+'</button>'+
+          '<button '+A+'title="Invitados y mesas" onclick="location.href=\'admin.html?e='+encodeURIComponent(s)+'&tab=INVITADOS\'">'+ICO.carpeta+'</button>'+
+          '<button '+A+'title="Clonar" onclick="clonarInv(\''+s+'\')">'+ICO.copiar+'</button>'+
         '</td></tr>';
     }).join('')||'<tr><td colspan="5" style="padding:16px;color:#9a8f88">Sin resultados.</td></tr>';
   }
@@ -149,7 +149,7 @@
     const soyOwner=OWNER.map(x=>x.toLowerCase()).includes(yo);
     const puedePedir=PUEDE_PEDIR.map(x=>x.toLowerCase()).includes(yo);
     if(!soyOwner && !puedePedir){
-      alert('🔒 No tenés permiso para borrar invitaciones.\n\nEste botón es solo para Jazmin (que lo pide) y para Maki (que lo aprueba).');
+      alert('No tenés permiso para borrar invitaciones.\n\nEste botón es solo para Jazmin (que lo pide) y para Maki (que lo aprueba).');
       return;
     }
     try{
@@ -157,7 +157,7 @@
       const snap=await getDocs(collection(window.INV.db,'inv_eventos'));
       const ahora=Date.now(), venc=[];
       snap.forEach(d=>{ const ev=d.data(); if(ev.sinVencimiento||!ev.fecha)return; const f=new Date(ev.fecha); if(isNaN(f))return; const dias=(typeof ev.diasVigencia==='number'&&ev.diasVigencia>0)?ev.diasVigencia:90; if(ahora>(f.getTime()+dias*86400000)) venc.push({id:d.id, nombre:((ev.n1||'')+(ev.n2?' & '+ev.n2:''))||d.id, fecha:(ev.fecha||'').slice(0,10)}); });
-      if(!venc.length){ alert('🎉 No hay invitaciones vencidas. Todo al día.'); return; }
+      if(!venc.length){ alert('No hay invitaciones vencidas. Todo al día.'); return; }
       const lista=venc.slice(0,25).map(v=>'• '+v.nombre+'  ('+v.fecha+')').join('\n');
 
       // --- Jazmin: NO borra, crea un PEDIDO para que Maki apruebe ---
@@ -168,7 +168,7 @@
           solicitante:yo, creado:serverTimestamp(), creadoMs:Date.now(),
           detalle:venc.length+' vencida(s)'
         });
-        alert('📨 ¡Listo! Le avisé a Maki.\n\nCuando él dé el OK desde su panel, se borran las '+venc.length+' invitación(es) vencidas. Vos no tenés que hacer nada más.');
+        alert('¡Listo! Le avisé a Maki.\n\nCuando él dé el OK desde su panel, se borran las '+venc.length+' invitación(es) vencidas. Vos no tenés que hacer nada más.');
         return;
       }
 
@@ -179,7 +179,7 @@
         try{ const gs=await getDocs(query(collection(window.INV.db,'inv_invitados'), where('slug','==',v.id))); for(const g of gs.docs){ await deleteDoc(doc(window.INV.db,'inv_invitados',g.id)); bG++; } }catch(_e){}
         await deleteDoc(doc(window.INV.db,'inv_eventos',v.id)); bEv++;
       }
-      alert('✅ Listo. Borré '+bEv+' invitación(es) y '+bG+' invitado(s) vencidos.\n\nLa base quedó más liviana.');
+      alert('Listo. Borré '+bEv+' invitación(es) y '+bG+' invitado(s) vencidos.\n\nLa base quedó más liviana.');
     }catch(e){ alert('No se pudo limpiar: '+(e.message||e)); }
   }
   function abrirEscaner(){
@@ -191,7 +191,7 @@
     if(!window.INV||!window.INV.ok){alert('Todavía no se conectó la base. Esperá 2 segundos.');return;}
     const base=(D.slug||'').trim();
     if(!base){alert("Primero poné la 'Dirección del evento' de esta invitación.");return;}
-    const nuevo=prompt('📋 Duplicar esta invitación.\n\nEscribí la dirección (link) de la NUEVA pareja\n(minúsculas, sin espacios, ej: sofia-y-mateo):', base+'-copia');
+    const nuevo=prompt('Duplicar esta invitación.\n\nEscribí la dirección (link) de la NUEVA pareja\n(minúsculas, sin espacios, ej: sofia-y-mateo):', base+'-copia');
     if(!nuevo)return;
     const ns=nuevo.toLowerCase().replace(/[^a-z0-9-]+/g,'-');
     try{
@@ -208,7 +208,7 @@
       const _pv={}; (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _pv[k]=cfg[k]; delete cfg[k]; } });
       await INV.saveEvento(ns,{...cfg, slug:ns, nEvento, tpl:(D.tpl||'')+' (copia)'});
       if(Object.keys(_pv).length) await INV.savePrivado(ns, _pv);
-      alert('✓ ¡Listo! Se creó la copia en "'+ns+'".\n\nAhora la vas a abrir para cambiarle los nombres, la fecha y las fotos. Los invitados NO se copian (cada pareja tiene los suyos).');
+      alert('¡Listo! Se creó la copia en "'+ns+'".\n\nAhora la vas a abrir para cambiarle los nombres, la fecha y las fotos. Los invitados NO se copian (cada pareja tiene los suyos).');
       location.href='admin.html?e='+encodeURIComponent(ns);
     }catch(e){alert('No se pudo duplicar: '+(e.message||e));}
   }
@@ -225,7 +225,7 @@
       delete _c.orden; delete _c.ver;
       await INV.saveEvento(ns,{..._c,slug:ns,nEvento:_nEv,tpl:(ev.tpl||'')+' (copia)'});
       if(Object.keys(_pv2).length) await INV.savePrivado(ns, _pv2);
-      alert('✓ Clonada como '+ns); verInvitaciones();
+      alert('Clonada como '+ns); verInvitaciones();
     }catch(e){alert('No se pudo clonar: '+(e.message||e));}
   }
   async function backup(){
@@ -303,21 +303,21 @@
       const list=await window.solicListar(); window._solicCache=list;
       const rows=list.map((s,i)=>{
         const fecha=s.fecha?new Date(s.fecha):null; const fstr=(fecha&&!isNaN(fecha))?fecha.toLocaleDateString('es'):'—';
-        const obs=s.observaciones?('<div style="background:#fff6e9;border-left:3px solid #c98a2e;border-radius:8px;padding:7px 10px;margin-top:7px;font-size:12.5px">📝 <b>Pedido especial:</b> '+_esc(s.observaciones)+'</div>'):'';
-        const extra=[s.dress?('👗 '+s.dress):'',s.regalos?('🎁 '+s.regalos):''].filter(Boolean).join(' · ');
+        const obs=s.observaciones?('<div style="background:#fff6e9;border-left:3px solid #c98a2e;border-radius:8px;padding:7px 10px;margin-top:7px;font-size:12.5px">'+ICO.papel+' <b>Pedido especial:</b> '+_esc(s.observaciones)+'</div>'):'';
+        const extra=[s.dress?(ICO.percha+' '+s.dress):'',s.regalos?(ICO.regalo+' '+s.regalos):''].filter(Boolean).join(' · ');
         return '<div style="border:1px solid #eee2d8;border-radius:12px;padding:12px;margin-bottom:10px">'+
           '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'+
             '<div style="min-width:0"><b style="color:#6D1233;font-size:16px">'+_esc((s.n1||'')+(s.n2?' & '+s.n2:''))+'</b>'+
               '<div style="font-size:12px;color:#9a8f88">'+(s.tipoEvento?'<b style="color:#6D1233">'+_esc(s.tipoEvento)+'</b> · ':'')+_esc(s.tplNombre||s.tpl||'')+' · '+fstr+' · '+((s.invitados||[]).length)+' invitados</div>'+
-              '<div style="font-size:12px;color:#7d756c;margin-top:2px">📱 '+_esc(s.contactoNombre||'—')+' · '+_esc(s.contactoWsp||'')+(s.contactoEmail?' · ✉ '+_esc(s.contactoEmail):'')+'</div>'+
+              '<div style="font-size:12px;color:#7d756c;margin-top:2px">'+ICO.telefono+' '+_esc(s.contactoNombre||'—')+' · '+_esc(s.contactoWsp||'')+(s.contactoEmail?' · '+ICO.sobre+' '+_esc(s.contactoEmail):'')+'</div>'+
               (extra?'<div style="font-size:12px;color:#7d756c;margin-top:2px">'+_esc(extra)+'</div>':'')+ obs +'</div>'+
             '<div style="white-space:nowrap;display:flex;flex-direction:column;gap:6px">'+
               '<button class="addbtn" onclick="cargarSolicitudIdx('+i+')">Cargar en el editor</button>'+
               '<button class="lnk" onclick="marcarResuelta(\''+s.id+'\')">Marcar resuelta</button>'+
             '</div>'+
           '</div></div>';
-      }).join('')||'<div style="color:#9a8f88;padding:14px;text-align:center">No hay solicitudes pendientes. 🎉</div>';
-      box.querySelector('.invmodal').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="margin:0;color:#6D1233;font-weight:900">📥 Solicitudes de clientes <span style="color:#b0a89f;font-weight:700;font-size:13px">('+list.length+')</span></h3><button style="background:#efe7de;border:0;border-radius:20px;padding:8px 16px;font-family:Nunito;font-weight:700;cursor:pointer" onclick="document.getElementById(\'solicbox\').remove()">Cerrar</button></div>'+rows;
+      }).join('')||'<div style="color:#9a8f88;padding:14px;text-align:center">No hay solicitudes pendientes.</div>';
+      box.querySelector('.invmodal').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="margin:0;color:#6D1233;font-weight:900">'+ICO.entrada+' Solicitudes de clientes <span style="color:#b0a89f;font-weight:700;font-size:13px">('+list.length+')</span></h3><button style="background:#efe7de;border:0;border-radius:20px;padding:8px 16px;font-family:Nunito;font-weight:700;cursor:pointer" onclick="document.getElementById(\'solicbox\').remove()">Cerrar</button></div>'+rows;
     }catch(e){console.error(e);box.querySelector('.invmodal').innerHTML='<p style="color:#F56770">Error: '+(e.message||e)+'</p>';}
   }
   function cargarSolicitudIdx(i){ const s=(window._solicCache||[])[i]; if(!s)return;
@@ -368,8 +368,8 @@
     D._solicId=s.id;
     const bx=el('solicbox'); if(bx)bx.remove();
     go('PRINCIPAL'); render(); if(typeof renderPanel==='function')renderPanel();
-    let extra=''; if(s.observaciones)extra+='\n\n📝 PEDIDO ESPECIAL:\n'+s.observaciones; if(s.dress)extra+='\n\n👗 Dress code: '+s.dress; if(s.regalos)extra+='\n\n🎁 Regalos: '+s.regalos;
-    alert('✓ Cargué los datos de '+(s.n1||'')+(s.n2?' & '+s.n2:'')+'.\n\nRevisá, ajustá lo que haga falta y tocá "Guardar y publicar".'+extra+'\n\nCuando termines, volvé a 📥 Solicitudes y tocá "Marcar resuelta".');
+    let extra=''; if(s.observaciones)extra+='\n\nPEDIDO ESPECIAL:\n'+s.observaciones; if(s.dress)extra+='\n\nDress code: '+s.dress; if(s.regalos)extra+='\n\nRegalos: '+s.regalos;
+    alert('Cargué los datos de '+(s.n1||'')+(s.n2?' & '+s.n2:'')+'.\n\nRevisá, ajustá lo que haga falta y tocá "Guardar y publicar".'+extra+'\n\nCuando termines, volvé a Solicitudes y tocá "Marcar resuelta".');
   }
   async function marcarResuelta(id){ if(!confirm('¿Marcar esta solicitud como resuelta? Sale de la lista de pendientes.'))return; try{ await window.solicResolver(id); actualizarBadgeSolic(); verSolicitudes(); }catch(e){alert('No se pudo: '+(e.message||e));} }
   buildTabs();renderPanel();render();setInterval(updCount,1000);

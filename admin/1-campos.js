@@ -50,7 +50,7 @@
   const VER_CANDADO_SERVIDOR='2026-08-11b';
   const ORDER=["PRINCIPAL","LUGAR_VEST","GALERIA_INSTA_VID","PERSONAS","REGALOS","CONFIRMACIÓN","MUSIC_PASES","AVANZADO","TRIVIA","EFECTOS","INVITADOS"];
   /* Lista CURADA: solo fuentes que la invitación carga sí o sí (ver <link> en i/index.html). Menos, pero TODAS funcionan. */
-  const FONTS=[["'Great Vibes',cursive","Great Vibes ✒"],["'Rouge Script',cursive","Rouge Script ✒"],["'Dancing Script',cursive","Dancing Script ✒"],["'Parisienne',cursive","Parisienne ✒"],["'Tangerine',cursive","Tangerine ✒"],["'Sacramento',cursive","Sacramento ✒"],["'Cormorant Garamond',serif","Cormorant"],["'Playfair Display',serif","Playfair Display"],["'Forum',serif","Forum"],["'Marcellus',serif","Marcellus"],["'EB Garamond',serif","EB Garamond"],["'Lora',serif","Lora"],["'Cinzel',serif","Cinzel"],["'Prata',serif","Prata"],["'Montserrat',sans-serif","Montserrat"],["'Poppins',sans-serif","Poppins"],["'Jost',sans-serif","Jost"]];
+  const FONTS=[["'Great Vibes',cursive","Great Vibes"],["'Rouge Script',cursive","Rouge Script"],["'Dancing Script',cursive","Dancing Script"],["'Parisienne',cursive","Parisienne"],["'Tangerine',cursive","Tangerine"],["'Sacramento',cursive","Sacramento"],["'Cormorant Garamond',serif","Cormorant"],["'Playfair Display',serif","Playfair Display"],["'Forum',serif","Forum"],["'Marcellus',serif","Marcellus"],["'EB Garamond',serif","EB Garamond"],["'Lora',serif","Lora"],["'Cinzel',serif","Cinzel"],["'Prata',serif","Prata"],["'Montserrat',sans-serif","Montserrat"],["'Poppins',sans-serif","Poppins"],["'Jost',sans-serif","Jost"]];
   const TEMAS={rustica:{n:"Rústica",v:"#2e433c",v2:"#26372f",lino:"#f4efe6",sage:"#7f9079",fD:"'Forum',serif",fS:"'Rouge Script',cursive",sw:"#2e433c"},uva:{n:"Uva",v:"#5b2a4e",v2:"#43203a",lino:"#f6efe8",sage:"#a06d92",fD:"'Cormorant Garamond',serif",fS:"'Great Vibes',cursive",sw:"#5b2a4e"},blanco:{n:"Blanco",v:"#5f574d",v2:"#463f37",lino:"#efece7",sage:"#b7ad9e",fD:"'Playfair Display',serif",fS:"'Cormorant Garamond',serif",sw:"#5f574d"},xv:{n:"XV Rosa",v:"#b06a7e",v2:"#8a4f60",lino:"#f7eef0",sage:"#c9a0b0",fD:"'Cormorant Garamond',serif",fS:"'Great Vibes',cursive",sw:"#b06a7e"},boho:{n:"Boho",v:"#a5674f",v2:"#8a5240",lino:"#f4ebde",sage:"#b98c6a",fD:"'Cormorant Garamond',serif",fS:"'Tangerine',cursive",sw:"#a5674f"}};
   const D={n1:"María",n2:"Diego",layout:"apilados",kick:"Nuestra Boda",fecha:"2026-11-28T12:00",frase:"Hay un instante en la vida en que se decide caminar juntos para siempre.",cer:"Basílica de Santa María",pnom:"Hugo y Lucía",tema:"rustica",tpl:"Rústica Campestre",slug:"maria-y-diego",color:"#2e433c",ncolor:"#fbf7ef",nsize:"52",nfont:"'Rouge Script',cursive",fTit:"'Forum',serif",cover:"https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80",cx:50,cy:45,cz:100,invitados:[]};
   D.trivia=[{q:'¿Dónde se conocieron?',o:['En un viaje','En la facultad','En el trabajo'],c:0},{q:'¿Primer viaje juntos?',o:['Brasil','Bariloche','Europa'],c:1},{q:'¿Quién dijo te amo primero?',o:['Ella','Él'],c:1}];
@@ -112,7 +112,7 @@
     const oi=bind?(' oninput="setB(\''+bind+'\',this.value)"'):'';
     let inp;
     if(t==='c')inp='<input type="color" id="'+id+'"'+oi+' value="'+((bind&&D[bind])?D[bind]:'#2e433c')+'">';
-    else if(t==='f'){const _k=bind?('img_'+bind):('img_'+id);inp='<div class="file" onclick="this.nextElementSibling.click()">⬆ Subir imagen · '+l.replace(/\(.*?\)/,'').trim()+'</div><input type="file" accept="image/*" style="display:none" onchange="subirImg(this,\''+_k+'\',\''+id+'\')"><div id="prev-'+id+'">'+(D[_k]?'<img src="'+D[_k]+'" style="max-height:60px;border-radius:8px;margin-top:6px">':'')+'</div>';}
+    else if(t==='f'){const _k=bind?('img_'+bind):('img_'+id);inp='<div class="file" onclick="this.nextElementSibling.click()">'+ICO.subir+' Subir imagen · '+l.replace(/\(.*?\)/,'').trim()+'</div><input type="file" accept="image/*" style="display:none" onchange="subirImg(this,\''+_k+'\',\''+id+'\')"><div id="prev-'+id+'">'+(D[_k]?'<img src="'+D[_k]+'" style="max-height:60px;border-radius:8px;margin-top:6px">':'')+'</div>';}
     else if(t==='font-custom'){const _tg=/secundaria/i.test(l)?'fTit':'nfont';inp='<input type="text" id="'+id+'" placeholder="Nombre o link de Google Fonts (ej: Great Vibes)" oninput="cargarFontCustom(this.value,\''+_tg+'\')">';}
     else if(t==='k'){const _b=claveDe(l);   // antes usaba solo BIND: las casillas sin BIND no guardaban
       inp='<label class="chk"><input type="checkbox"'+(_b?(' onchange="setB(\''+_b+'\',this.checked)"'):'')+((_b&&D[_b])?' checked':'')+'> Activar</label>';}
@@ -159,12 +159,12 @@
     "Color 2 titulo trivia:":"El color del textito de arriba del título.",
     "IDIOMA de la invitación:":"El idioma con el que SIEMPRE abre la invitación. Por defecto Español (México). Es lo que ve el invitado si no activás nada más.",
     "Detectar el del celular del invitado:":"Si lo activás, la invitación se abre sola en el idioma del celular del invitado (si lo tenemos traducido). Si está apagado, siempre abre en el idioma de arriba.",
-    "Mostrar botón para que el invitado elija:":"Si lo activás, aparece un botón 🌐 arriba a la izquierda para que el invitado cambie el idioma a mano.",
+    "Mostrar botón para que el invitado elija:":"Si lo activás, aparece un botón "+ICO.globo+" arriba a la izquierda para que el invitado cambie el idioma a mano.",
     "Pagina (minúsculas sin espacios ni símbolos):":"Es la dirección del link (ej: maria-y-diego). Cada pareja tiene que tener una distinta. Sin espacios, sin tildes, sin símbolos.",
     "Protagonista 1:":"Nombre de la primera persona (ej: María). Aparece en la portada.",
     "Protagonista 2:":"Nombre de la segunda persona (ej: Diego).",
     "Foto principal (JPG 2000x1200)":"Foto de fondo de la portada (la primera pantalla). Horizontal y de buena calidad.",
-    "Imágen miniatura al compartir":"📲 MUY IMPORTANTE: es la foto que se ve cuando mandás el link por WhatsApp. Subí una foto linda y horizontal de la pareja. Si la dejás vacía, se usa la foto de portada.",
+    "Imágen miniatura al compartir":ICO.telefono+" MUY IMPORTANTE: es la foto que se ve cuando mandás el link por WhatsApp. Subí una foto linda y horizontal de la pareja. Si la dejás vacía, se usa la foto de portada.",
     "Titulo al compartir:":"El título que aparece en la vista previa de WhatsApp (ej: María & Diego — Nuestra Boda).",
     "Descripción al compartir:":"El textito que aparece debajo del título en la vista previa de WhatsApp.",
     "Fecha para Cuenta Regresiva":"Fecha y hora del evento. Con esto se arma la cuenta regresiva de la portada.",
@@ -195,11 +195,11 @@
     "Dresscode Imagen (aprox JPG 250x250)":"Si subís una imagen, reemplaza los dibujitos del traje y el vestido.",
     "vestimenta titulo 2:":"Opcional: un SEGUNDO bloque de dress code (ej: 'Para la fiesta'). Se muestra solo si lo llenás.",
     "Dresscode Texto 2:":"El texto del segundo bloque de dress code.",
-    "Pedido especial del cliente:":"📝 Lo que el cliente escribió en el formulario. Es SOLO para ustedes: no se publica en la invitación. Se carga solo cuando traés una solicitud desde 📥 Solicitudes.",
-    "Clave del panel de los novios:":"🔑 Con esto los novios entran a mi-panel.html y ven SOLO su lista de invitados y quién confirmó. No pueden tocar el diseño ni ver otros clientes. Poné algo fácil de dictar por teléfono (ej: sofia2027). Si lo dejás vacío, no tienen panel. Al publicar te muestro el link listo para pasarles.",
-    "Fondo sección frase larga":"🖼️ Es una franja, no una pantalla entera: se ve una tira horizontal de la foto. Cargá una foto APAISADA (horizontal) y con el motivo al centro. Si subís una vertical, se recorta y queda un primerísimo plano.",
-    "Habilitar aviso por mail:":"🔔 Apagado por defecto. Las confirmaciones SIEMPRE se guardan y se ven en la pestaña INVITADOS: esto es solo un extra. Prendelo únicamente si el cliente PIDE que le llegue un mail cada vez que alguien confirma. Cada mail que se manda le cuesta plata a Invítame, así que no lo dejes prendido \"por las dudas\".",
-    "Email para confirmaciones:":"📩 A dónde va ese aviso. Solo se usa si arriba prendiste \"Habilitar aviso por mail\". Si está apagado o este campo vacío, no se manda nada — las confirmaciones se siguen viendo en la pestaña INVITADOS igual.",
+    "Pedido especial del cliente:":ICO.papel+" Lo que el cliente escribió en el formulario. Es SOLO para ustedes: no se publica en la invitación. Se carga solo cuando traés una solicitud desde el botón Solicitudes.",
+    "Clave del panel de los novios:":ICO.llave+" Con esto los novios entran a mi-panel.html y ven SOLO su lista de invitados y quién confirmó. No pueden tocar el diseño ni ver otros clientes. Poné algo fácil de dictar por teléfono (ej: sofia2027). Si lo dejás vacío, no tienen panel. Al publicar te muestro el link listo para pasarles.",
+    "Fondo sección frase larga":ICO.imagen+" Es una franja, no una pantalla entera: se ve una tira horizontal de la foto. Cargá una foto APAISADA (horizontal) y con el motivo al centro. Si subís una vertical, se recorta y queda un primerísimo plano.",
+    "Habilitar aviso por mail:":ICO.campana+" Apagado por defecto. Las confirmaciones SIEMPRE se guardan y se ven en la pestaña INVITADOS: esto es solo un extra. Prendelo únicamente si el cliente PIDE que le llegue un mail cada vez que alguien confirma. Cada mail que se manda le cuesta plata a Invítame, así que no lo dejes prendido \"por las dudas\".",
+    "Email para confirmaciones:":ICO.sobre+" A dónde va ese aviso. Solo se usa si arriba prendiste \"Habilitar aviso por mail\". Si está apagado o este campo vacío, no se manda nada — las confirmaciones se siguen viendo en la pestaña INVITADOS igual.",
     "TÍTULO DEL CORREO:":"El asunto del mail que te llega (ej: Confirmación de asistencia). Se le agrega el nombre del invitado.",
     "Frase para sección confirmación:":"El textito que ve el invitado arriba del formulario de confirmación."
   };
@@ -219,7 +219,7 @@
       (_nueva ? '<div style="background:#fff3cd;border:1px solid #ffe08a;border-radius:10px;padding:9px 11px;margin-bottom:10px;font-size:12.5px;color:#7a5c00;line-height:1.45">'+
         '<b>Invitación NUEVA.</b> Todo lo que ves a la derecha son los datos de ejemplo (María &amp; Diego). '+
         'Cambiá los nombres, la fecha, la dirección del link y las fotos antes de publicar.</div>' : '')+
-      '<div class="h">✨ Empezá por acá</div>'+
+      '<div class="h">'+ICO.destello+' Empezá por acá</div>'+
       /* "Nombre de esta plantilla" sacado a pedido de Jazmín (estaba DOS veces y no
          aporta nada a quien arma la invitación). El valor sigue existiendo en D.tpl
          para uso interno: lo fija la plantilla base que se elige más abajo. */
@@ -232,9 +232,9 @@
         ? '<div class="grp" style="background:#fff6e5;border:1px solid #f0d9a8;border-radius:10px;padding:12px">'
           +'<label style="color:#8a6d3b">Esta invitación usa el diseño del '+D.ver+'</label>'
           +'<div class="hint" style="margin:4px 0 8px">Se mantiene tal cual la entregaste. Los cambios que hacemos en la plataforma NO la tocan.</div>'
-          +'<button class="addbtn" style="background:#8a6d3b" onclick="actualizarVersion()">↑ Actualizar al diseño más nuevo</button></div>'
+          +'<button class="addbtn" onclick="actualizarVersion()">'+ICO.actualizar+' Actualizar al diseño más nuevo</button></div>'
         : '')+
-      '<div class="grp"><label>Orden de las secciones</label><button class="addbtn" style="background:var(--uva)" onclick="verOrden()">↕ Reordenar secciones</button></div>'+
+      '<div class="grp"><label>Orden de las secciones</label><button class="addbtn" onclick="verOrden()">'+ICO.ordenar+' Reordenar secciones</button></div>'+
       '<div class="grp"><label>Plantilla base</label><div class="temas" id="temas"></div></div>'+
       '<div class="two"><div class="grp"><label>Tipografía de los nombres</label><select id="mf-nfont" onchange="setB(\'nfont\',this.value)">'+FONTS.map(f=>'<option value="'+f[0]+'">'+f[1]+'</option>').join('')+'</select></div>'+
       /* el select ahora muestra lo que está guardado (antes volvía siempre a "apilados") */
@@ -244,8 +244,8 @@
       '</select><div class="hint">Con nombres largos, "juntos" achica la letra para que entren en una sola línea.</div></div></div>'+
       '<div class="two"><div class="grp"><label>Color nombres</label><input type="color" value="#fbf7ef" oninput="setB(\'ncolor\',this.value)"></div>'+
       '<div class="grp"><label>Tamaño nombres</label><input type="range" min="30" max="90" value="52" oninput="setB(\'nsize\',this.value)"></div></div>'+
-      '<div class="grp"><label>Foto de portada</label><select onchange="setB(\'cover\',this.value)"><option value="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80">Campo</option><option value="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=80">Elegante</option><option value="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1000&q=80">Rosas</option></select><div class="file" style="margin-top:6px" id="coverbtn" onclick="document.getElementById(\'coverfile\').click()">⬆ Subir tu propia foto</div><input type="file" id="coverfile" accept="image/*" style="display:none" onchange="subirFoto(this,\'cover\')"></div>'+
-      '<div class="grp"><label>Acomodá la foto — arrastrala para centrar 👆</label>'+
+      '<div class="grp"><label>Foto de portada</label><select onchange="setB(\'cover\',this.value)"><option value="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80">Campo</option><option value="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=80">Elegante</option><option value="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1000&q=80">Rosas</option></select><div class="file" style="margin-top:6px" id="coverbtn" onclick="document.getElementById(\'coverfile\').click()">'+ICO.subir+' Subir tu propia foto</div><input type="file" id="coverfile" accept="image/*" style="display:none" onchange="subirFoto(this,\'cover\')"></div>'+
+      '<div class="grp"><label>Acomodá la foto — arrastrala para centrar</label>'+
       '<div id="imgedit" class="imgedit" onmousedown="edStart(event)" ontouchstart="edStart(event)"><span class="edtag">Arrastrá para mover</span></div>'+
-      '<div class="zoomrow"><span>Zoom</span><input type="range" min="100" max="260" value="'+D.cz+'" oninput="setB(\'cz\',this.value)"></div></div>'+'<div class="grp"><label>Video de portada (opcional) — se reproduce al abrir</label>'+'<div class="file" id="vidbtn" onclick="document.getElementById(\'coverviddile\').click()">⬆ Subir video (.mp4)</div>'+'<input type="file" id="coverviddile" accept="video/*" style="display:none" onchange="subirVideo(this)">'+'<input type="text" value="'+(D.coverVideo||'')+'" oninput="setB(\'coverVideo\',this.value)" placeholder="…o pegá el link del video (.mp4)" style="margin-top:6px">'+'<div class="hint">Si tu Cloudinary no reproduce el video subido, pegá acá un link .mp4.</div>'+'<div class="aviso">⚠️ Dejá este campo <b>vacío</b> si no vas a poner video (queda solo la foto). <b>No dejes el video de ejemplo (la flor)</b>: subí el de la pareja o borralo.</div></div>'+'</div>';
+      '<div class="zoomrow"><span>Zoom</span><input type="range" min="100" max="260" value="'+D.cz+'" oninput="setB(\'cz\',this.value)"></div></div>'+'<div class="grp"><label>Video de portada (opcional) — se reproduce al abrir</label>'+'<div class="file" id="vidbtn" onclick="document.getElementById(\'coverviddile\').click()">'+ICO.subir+' Subir video (.mp4)</div>'+'<input type="file" id="coverviddile" accept="video/*" style="display:none" onchange="subirVideo(this)">'+'<input type="text" value="'+(D.coverVideo||'')+'" oninput="setB(\'coverVideo\',this.value)" placeholder="…o pegá el link del video (.mp4)" style="margin-top:6px">'+'<div class="hint">Si tu Cloudinary no reproduce el video subido, pegá acá un link .mp4.</div>'+'<div class="aviso">'+ICO.alerta+' Dejá este campo <b>vacío</b> si no vas a poner video (queda solo la foto). <b>No dejes el video de ejemplo (la flor)</b>: subí el de la pareja o borralo.</div></div>'+'</div>';
   }
