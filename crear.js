@@ -318,6 +318,49 @@
     };
   })();
 
+  /* ===== LEER EL FORMULARIO ENTERO  (8/9/2026) ===============================
+     Esto vivía adentro de `enviar()`. Se sacó afuera porque ahora lo necesitan
+     DOS cosas:
+       · mandar la solicitud, como siempre
+       · y dibujar la VISTA PREVIA EN VIVO mientras el cliente escribe
+     Si estuviera duplicado, el día que se agregue un campo la vista previa
+     mostraría una cosa y se guardaría otra. Una sola lectura, dos usos.
+     ========================================================================== */
+  function leerFormulario(){
+      const invitados=[...document.querySelectorAll('#guests .rowinv')].map(r=>{const i=r.querySelectorAll('input');return {n:i[0].value.trim(),p:i[1].value.trim()||'1',m:i[2].value.trim()||'-'};}).filter(g=>g.n);
+      return {
+        estado:'pendiente', creado:serverTimestamp(),
+        tpl, tplNombre:T.n, tipoEvento:$('tipo').value, kick:$('kick').value.trim(),
+        n1, n2:$('n2').value.trim(), fecha, frase:$('frase').value.trim(),
+        cover:coverURL, coverVideo:coverVideoURL, galeria:galURLs,
+        orden:$('orden').value.trim(),
+        ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1maps:$('ev1maps').value.trim(),
+        ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2maps:$('ev2maps').value.trim(),
+        ev3t:$('ev3t').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3maps:$('ev3maps').value.trim(),
+        hotDesc:$('hotDesc').value.trim(), hoteles:$('hoteles').value.trim(),
+        itinerario:$('itinerario').value.trim(),
+        persFrase:$('persFrase').value.trim(), personas:leerPersonas(),
+        galEstilo:$('galEstilo').value, videoUrl:$('videoUrl').value.trim(), igUser:$('igUser').value.trim(),
+        cfFrase:$('cfFrase').value.trim(), cfMail:$('cfMail').value.trim(),
+        cfWsp1:$('cfWsp1').value.trim(), cfWsp1n:$('cfWsp1n').value.trim(),
+        cfWsp2:$('cfWsp2').value.trim(), cfWsp2n:$('cfWsp2n').value.trim(),
+        fraseFinal:$('fraseFinal').value.trim(), textoFinal:$('textoFinal').value.trim(),
+        colorSug:$('colorSug').value.trim(), tipoSug:$('tipoSug').value.trim(),
+        dress:$('dress').value.trim(), regalos:$('regalos').value.trim(), musica:$('musica').value.trim(),
+        fraseFx:$('fraseFx').value, igHashtag:$('igHashtag').value.trim(), spotifyUrl:$('spotifyUrl').value.trim(),
+        reg_liverpool:$('reg_liverpool').value.trim(), reg_amazon:$('reg_amazon').value.trim(), reg_sears:$('reg_sears').value.trim(),
+        reg_mercadolibre:$('reg_mercadolibre').value.trim(), reg_palacio:$('reg_palacio').value.trim(), reg_venmo:$('reg_venmo').value.trim(), reg_paypal:$('reg_paypal').value.trim(),
+        invitados, observaciones:$('obs').value.trim(),
+        contactoNombre:cnom, contactoWsp:cwsp, contactoEmail:cmail,
+        pasevozAudio:pasevozURL, pasevozOnda,
+        origen:'formulario-cliente'
+      };
+
+  }
+
+  /* lo que este archivo le presta a /crear-diseno.js (la solapa de diseños) */
+  window.CREAR = { leerFormulario: leerFormulario };
+
   window.enviar=async function(){
     $('err').style.display='none';
     const n1=$('n1').value.trim(), fecha=$('fecha').value, cnom=$('cnom').value.trim(), cwsp=$('cwsp').value.trim(), cmail=$('cmail').value.trim();
@@ -325,34 +368,7 @@
     if(!fecha){ return showErr('Poné la fecha del evento.'); }
     if(!cnom||!cwsp||!cmail){ return showErr('Dejanos tu nombre, WhatsApp y email para poder avisarte.'); }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cmail)){ return showErr('Revisá el email, parece que tiene un error.'); }
-    const invitados=[...document.querySelectorAll('#guests .rowinv')].map(r=>{const i=r.querySelectorAll('input');return {n:i[0].value.trim(),p:i[1].value.trim()||'1',m:i[2].value.trim()||'-'};}).filter(g=>g.n);
-    const data={
-      estado:'pendiente', creado:serverTimestamp(),
-      tpl, tplNombre:T.n, tipoEvento:$('tipo').value, kick:$('kick').value.trim(),
-      n1, n2:$('n2').value.trim(), fecha, frase:$('frase').value.trim(),
-      cover:coverURL, coverVideo:coverVideoURL, galeria:galURLs,
-      orden:$('orden').value.trim(),
-      ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1maps:$('ev1maps').value.trim(),
-      ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2maps:$('ev2maps').value.trim(),
-      ev3t:$('ev3t').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3maps:$('ev3maps').value.trim(),
-      hotDesc:$('hotDesc').value.trim(), hoteles:$('hoteles').value.trim(),
-      itinerario:$('itinerario').value.trim(),
-      persFrase:$('persFrase').value.trim(), personas:leerPersonas(),
-      galEstilo:$('galEstilo').value, videoUrl:$('videoUrl').value.trim(), igUser:$('igUser').value.trim(),
-      cfFrase:$('cfFrase').value.trim(), cfMail:$('cfMail').value.trim(),
-      cfWsp1:$('cfWsp1').value.trim(), cfWsp1n:$('cfWsp1n').value.trim(),
-      cfWsp2:$('cfWsp2').value.trim(), cfWsp2n:$('cfWsp2n').value.trim(),
-      fraseFinal:$('fraseFinal').value.trim(), textoFinal:$('textoFinal').value.trim(),
-      colorSug:$('colorSug').value.trim(), tipoSug:$('tipoSug').value.trim(),
-      dress:$('dress').value.trim(), regalos:$('regalos').value.trim(), musica:$('musica').value.trim(),
-      fraseFx:$('fraseFx').value, igHashtag:$('igHashtag').value.trim(), spotifyUrl:$('spotifyUrl').value.trim(),
-      reg_liverpool:$('reg_liverpool').value.trim(), reg_amazon:$('reg_amazon').value.trim(), reg_sears:$('reg_sears').value.trim(),
-      reg_mercadolibre:$('reg_mercadolibre').value.trim(), reg_palacio:$('reg_palacio').value.trim(), reg_venmo:$('reg_venmo').value.trim(), reg_paypal:$('reg_paypal').value.trim(),
-      invitados, observaciones:$('obs').value.trim(),
-      contactoNombre:cnom, contactoWsp:cwsp, contactoEmail:cmail,
-      pasevozAudio:pasevozURL, pasevozOnda,
-      origen:'formulario-cliente'
-    };
+    const data = leerFormulario();
     $('loading').style.display='flex'; $('send').disabled=true;
     try{
       await ready();
