@@ -22,10 +22,25 @@
    /efectos/galeria.js lee fx.galeria = { encendido, gid, titulo, bajada, boton }.
    Si está apagado o el gid no tiene forma válida, no monta nada.
 
-   EL ALTA DEL EVENTO NO SE HACE ACÁ. Crear una galería necesita la clave del
-   Worker, y esa clave no puede vivir en el navegador (el repo es público).
-   Por eso Jazmín pega el código que le pasa Maki. El alta desde el panel es
-   parte del módulo suelto para fotógrafos.
+   ⭐ EL ALTA SE HACE ACÁ.  (8/9/2026)
+   Durante meses este bloque decía que crear una galería «necesita la clave del
+   Worker» y que por eso el código lo tenía que pasar Maki a mano. Era falso:
+   el Worker NO pide ninguna clave, pide el TOKEN DE LA SESIÓN de Firebase, y
+   en el panel esa sesión ya está abierta. O sea que la razón por la que la
+   función estaba trabada no existía.
+
+   ⚠️ PERO CREAR UNA GALERÍA GASTA UN CRÉDITO, y los créditos son plata. Por
+      eso el botón:
+        · muestra el saldo ANTES de tocar nada,
+        · pregunta antes de crear,
+        · y se niega si esta invitación YA tiene galería. Crear dos veces no
+          rompe nada visible: simplemente quema un crédito y deja huérfana la
+          primera. Es el error más caro que se puede cometer desde acá.
+
+   ⚠️ La galería se crea a nombre de LA CUENTA QUE ESTÉ ABIERTA en el panel, y
+      es esa cuenta la que paga. Si el Worker contesta «no existe», esa cuenta
+      todavía no tiene saldo: se carga desde /galeria/creditos.html, que es la
+      pantalla de Maki.
    ============================================================================ */
 (function () {
 
@@ -188,16 +203,102 @@
     ayuda.className = 'hint';
     ayuda.style.marginBottom = '10px';
     ayuda.innerHTML = 'Los invitados sacan fotos desde la invitación y las ven todos al toque. ' +
-      'Vos elegís cuáles se muestran. <b>El código del evento te lo pasa Maki</b> cuando crea ' +
-      'la galería de esa fiesta.';
+      'Con el botón de acá abajo se crea la galería de esta fiesta y el código queda puesto solo.';
     caja.appendChild(ayuda);
 
     caja.appendChild(grupo('', tilde(d, 'encendido', 'Mostrar la galería en la invitación')));
 
     var links = document.createElement('div');
 
+    /* ---- crear la galería de esta fiesta ---------------------------------
+       Ver la nota grande de arriba: esto GASTA UN CRÉDITO. */
+    var cajaAlta = document.createElement('div');
+    cajaAlta.style.cssText = 'margin:2px 0 12px';
+    var btnAlta = document.createElement('button');
+    btnAlta.type = 'button';
+    btnAlta.className = 'addbtn gh';
+    btnAlta.innerHTML = ico('destello') + ' Crear la galería de esta fiesta';
+    var saldo = document.createElement('div');
+    saldo.className = 'hint';
+    saldo.style.marginTop = '5px';
+    cajaAlta.appendChild(btnAlta); cajaAlta.appendChild(saldo);
+    caja.appendChild(cajaAlta);
+
+    function sesion() {
+      return (window.INV && window.INV.user) ? window.INV.user : null;
+    }
+    function acomodarAlta() {
+      var dd = borrador() || d;
+      var ya = FORMA_GID.test(String(cfg(dd).gid || '').trim());
+      btnAlta.style.display = ya ? 'none' : '';
+      saldo.style.display   = ya ? 'none' : '';
+    }
+    acomodarAlta();
+
+    /* el saldo se mira UNA vez al abrir el bloque: es sólo lectura */
+    (function () {
+      var u = sesion(); if (!u) { saldo.textContent = 'Entrá al panel para poder crear la galería.'; return; }
+      u.getIdToken(true).then(function (tok) {
+        return fetch(WORKER + '/cuenta', { headers: { Authorization: 'Bearer ' + tok } })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); });
+      }).then(function (res) {
+        if (!res.ok) {
+          saldo.innerHTML = 'Esta cuenta todavía no tiene saldo de galerías. Se carga en ' +
+            '<a href="/galeria/creditos.html" target="_blank">Cargar créditos</a>.';
+          btnAlta.disabled = true;
+          return;
+        }
+        var n = res.j.creditos;
+        if (n == null) n = res.j.saldo;
+        saldo.textContent = (n === 0)
+          ? 'No te quedan créditos de galería.'
+          : 'Crear la galería usa 1 crédito. Te quedan ' + n + '.';
+        if (n === 0) btnAlta.disabled = true;
+      })['catch'](function () { saldo.textContent = 'No pude leer el saldo de galerías.'; });
+    })();
+
+    btnAlta.onclick = function () {
+      var dd = borrador(); if (!dd) return;
+      /* ⚠️ el freno que evita quemar un crédito al pedo */
+      if (FORMA_GID.test(String(cfg(dd).gid || '').trim())) {
+        alert('Esta invitación ya tiene su galería. Si creás otra, gastás un crédito y la de antes queda huérfana.');
+        acomodarAlta(); return;
+      }
+      var u = sesion(); if (!u) { alert('No hay sesión abierta.'); return; }
+      var quienes = [dd.n1, dd.n2].filter(Boolean).join(' & ') || String(dd.slug || 'la fiesta');
+      if (!confirm('Voy a crear la galería de "' + quienes + '".\n\nEsto usa 1 crédito y no se puede deshacer.\n\n¿La creo?')) return;
+      var antes = btnAlta.innerHTML;
+      btnAlta.disabled = true; btnAlta.textContent = 'Creando…';
+      u.getIdToken(true).then(function (tok) {
+        return fetch(WORKER + '/crear', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+          /* modo "auto": las fotos aparecen al toque, que es la gracia. Se
+             cambia después en /galeria/moderar.html si la pareja prefiere
+             revisarlas antes. */
+          body: JSON.stringify({ nombre: quienes, fecha: String(dd.fecha || '').slice(0, 10), modo: 'auto', audios: true })
+        }).then(function (r) { return r.json()['catch'](function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); });
+      }).then(function (res) {
+        btnAlta.disabled = false; btnAlta.innerHTML = antes;
+        if (!res.ok || !res.j.gid) {
+          alert('No se pudo crear la galería.\n\n' + (res.j.error || 'Probá de nuevo en un rato.'));
+          return;
+        }
+        var d2 = borrador(); if (!d2) return;
+        cfg(d2).gid = res.j.gid;
+        cfg(d2).encendido = true;
+        pintarLinks(d2, links);
+        acomodarAlta();
+        refrescar();
+        alert('Listo: la galería quedó creada y prendida.\n\nAcordate de tocar "Guardar y publicar" para que quede.');
+      })['catch'](function (e) {
+        btnAlta.disabled = false; btnAlta.innerHTML = antes;
+        alert('No se pudo crear la galería: ' + (e.message || e));
+      });
+    };
+
     caja.appendChild(grupo('Código del evento',
-      texto(d, 'gid', 'Pegá acá el código que te pasó Maki', function () { pintarLinks(d, links); })));
+      texto(d, 'gid', 'Se completa solo al crear la galería', function () { pintarLinks(d, links); acomodarAlta(); })));
     caja.appendChild(links);
     pintarLinks(d, links);
 
