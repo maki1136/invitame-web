@@ -24,9 +24,14 @@
 
    ⚠️ LA CÁMARA DEL NAVEGADOR NO SIEMPRE ESTÁ. Adentro del navegador de
       WhatsApp en iPhone, `getUserMedia` puede no andar. Cuando eso pasa NO se
-      muestra un error: se abre la cámara del teléfono con el selector de
-      archivos (`capture`), que funciona en todos lados, y el marco se compone
-      igual. El invitado no se entera de la diferencia.
+      muestra un error: queda el marco a la vista y un botón «Tomar la foto»
+      que abre la cámara del teléfono (`capture`), que funciona en todos lados,
+      y el marco se compone igual.
+
+   ⚠️⚠️ Y ESE CAMINO TIENE DOS TRAMPAS QUE YA SE PAGARON (8/9/2026, en el
+      iPhone de Maki). Están explicadas en `porArchivo()`, que es donde vivían:
+      esconder el marco, y abrir el selector de archivos sin un gesto de la
+      persona. Las dos hacían que el filtro pareciera roto estando entero.
 
    ⚠️ EL MARCO SUBIDO SE PIDE CON crossOrigin. Sin eso el navegador "ensucia" el
       canvas y `toBlob` devuelve null: la foto no se puede guardar y no hay
@@ -270,14 +275,41 @@
     var av = document.getElementById('filtro-aviso');
     var ov = document.getElementById('filtro-overlay');
     if (v) v.style.display = 'none';
-    if (ov) ov.style.display = 'none';
+
+    /* ⚠️⚠️ ACÁ SE ESCONDÍA EL MARCO, Y ERA MEDIO BUG (8/9/2026).
+       Maki, desde el iPhone: «abro el filtro y no me aparece cargado el marco».
+       Este camino es el que corre cuando el navegador no da la cámara — que en
+       iPhone es lo NORMAL cuando la invitación se abre desde WhatsApp. Y lo
+       primero que hacía era apagar el marco. Resultado: una pantalla negra con
+       una frase suelta y nada más. La función parecía rota estando entera.
+       El marco SE DEJA PUESTO: es lo único que le muestra a la persona qué va a
+       recibir, y es lo que hace que se entienda para qué es el botón.
+       Medido: el marco se genera bien, 1080x1920, 366 KB, con los nombres y la
+       fecha. Lo único que faltaba era no taparlo. */
+    if (ov) ov.style.display = '';
+
     if (av) {
       av.style.display = 'block';
+      /* ⚠️ El aviso va ABAJO, no en el medio: en el medio se dibujaba encima
+         del marco y tapaba justo los nombres. Medido: con esto el aviso queda
+         en y=669 y el botón «Tomar la foto» en y=747, sin pisarse. */
+      av.style.top = 'auto';
+      av.style.bottom = '96px';
+      av.style.transform = 'none';
       av.textContent = 'Tómate la foto con la cámara de tu teléfono y le ponemos el marco.';
     }
     barraDeArchivo();
-    var inp = document.getElementById('filtro-archivo');
-    if (inp) inp.click();
+
+    /* ⚠️⚠️ Y ACÁ ESTABA LA OTRA MITAD: EL «NO PASA NADA» DEL iPHONE.
+       Antes, acá se hacía `inp.click()` para abrir el selector de fotos solo.
+       En iPhone eso NO FUNCIONA y no avisa: Safari sólo deja abrir el selector
+       de archivos dentro del mismo gesto de la persona, y para cuando llegamos
+       acá ya pasamos por el `.catch()` de una promesa —el permiso de cámara—,
+       así que el gesto ya se consumió. El navegador lo ignora sin un error.
+       Resultado exacto que reportó Maki: tocás «Abrir la cámara» y no pasa nada.
+       Ahora NO se abre nada solo: queda el marco a la vista y el botón
+       «Tomar la foto», que la persona toca. Ese sí es un gesto de verdad y
+       funciona en todos lados, incluido WhatsApp adentro del iPhone. */
   }
 
   function desdeArchivo(e) {
@@ -346,6 +378,9 @@
   function barraDeArchivo() {
     var b = limpiarBarra();
     if (!b) return;
+    /* ⚠️ ESTE botón SÍ abre el selector, y funciona: el click lo hace la
+       persona, así que el gesto es de verdad. Ver el comentario grande de
+       `porArchivo()`. */
     b.appendChild(boton('Tomar la foto', function () {
       var inp = document.getElementById('filtro-archivo');
       if (inp) inp.click();
@@ -394,6 +429,8 @@
     var ov = document.getElementById('filtro-overlay');
     var av = document.getElementById('filtro-aviso');
     if (v) v.style.display = 'none';
+    /* Acá SÍ se apaga el marco, y está bien: la foto que se muestra ya lo
+       tiene dibujado adentro. Si se dejara puesto, se vería dos veces. */
     if (ov) ov.style.display = 'none';
     if (av) av.style.display = 'none';
     if (vista) {
