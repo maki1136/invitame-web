@@ -17,10 +17,11 @@
    es lo que hace que la invitación se sienta suya.
    PRENDER FUNCIONES lo decide esta tabla. No hay otra forma de prenderlas.
 
-   ⚠️ LOS PRECIOS SALEN DE LA PÁGINA PÚBLICA (`/index.html`), leídos el
-      8/9/2026. Están acá para que las pantallas puedan mostrarlos, NO para
-      decidir nada comercial. **Antes de usarlos para vender se reverifican**:
-      los precios de este rubro cambian todo el tiempo.
+   ⚠️ LOS PRECIOS son los de la grilla decidida el 8/9/2026 (vuelta a los
+      precios históricos 1.200 / 2.240 / 2.800). Están acá para que las
+      pantallas puedan mostrarlos, NO para decidir nada comercial.
+      **Antes de usarlos para vender se reverifican**: los precios de este
+      rubro cambian todo el tiempo.
 
    ⚠️ SI SE CAMBIA UN PAQUETE, SE CAMBIA ACÁ Y EN `/index.html`. Son los dos
       lugares donde vive la promesa. Si se separan, le estamos prometiendo al
@@ -61,13 +62,16 @@
     trivia:          { nombre: '¡Pregúntame!',               clase: 'killer', interruptor: null,
       nota: 'La trivia con ranking. En la página pública se llama «¡Pregúntame!» y se vende dentro de Premium.' },
 
-    /* --- desde Platinum QR --- */
+    /* --- desde Platinum --- */
     accesoQR:        { nombre: 'Control de acceso QR',       clase: 'leader', interruptor: null,
       nota: 'El escáner de la puerta (/scan.html). Nunca en un paquete regalado.' },
 
-    /* --- los extras nuevos: al 8/9/2026 van TODOS a Platinum ---
-       Maki: «respetá los paquetes de ahora y sumale al Platinum todo lo extra
-       que tenemos, para comenzar con algo». */
+    /* --- los que ya no van todos al mismo lado (grilla del 8/9/2026) ---
+       Los fillers que no cuestan nada bajaron al Estándar, para que el paquete
+       de entrada le gane de lejos a los de 399-599 del mercado. Los tres
+       LEADERS (filtro, galería de invitados, acceso QR) se quedan arriba:
+       «el gratis nunca lleva un leader». El pase con voz sube a Premium, que
+       es lo que hace que valga el salto desde el Estándar. */
     filtro:          { nombre: 'El filtro de la fiesta',     clase: 'leader', interruptor: 'fx.filtro.encendido',
       nota: 'La cámara con el marco de la boda. Es lo único que no tiene nadie más en el mercado: no se regala.' },
     galeriaInvitados:{ nombre: 'Galería de los invitados',   clase: 'leader', interruptor: 'fx.galeria.encendido',
@@ -83,35 +87,42 @@
     video:           { nombre: 'Nuestro video',              clase: 'filler', interruptor: null }
   };
 
+  /* La invitación completa. Todo esto no cuesta nada de servir (USD 0,44 por
+     evento), así que va desde el paquete más barato: es lo que hace que el
+     Estándar se vea tres veces mejor que un paquete de 599 en los primeros
+     tres segundos. */
   var BASE = ['cuentaRegresiva', 'ubicacion', 'itinerario', 'hospedaje', 'dresscode',
-              'galeriaPareja', 'regalos', 'hashtag', 'rsvp'];
+              'galeriaPareja', 'regalos', 'hashtag', 'rsvp',
+              'sobreAnimado', 'carta', 'personas', 'calendario', 'video'];
 
-  var DE_PREMIUM = BASE.concat(['pases', 'musica', 'trivia']);
+  /* Lo que hace que alguien suba: cada invitado con su pase, su música, la
+     trivia y —lo que no tiene nadie— su mensaje grabado. */
+  var DE_PREMIUM = BASE.concat(['pases', 'musica', 'trivia', 'paseVoz']);
 
-  var TODO_LO_EXTRA = ['filtro', 'galeriaInvitados', 'paseVoz', 'raspadita',
-                       'calendario', 'sobreAnimado', 'carta', 'personas', 'video'];
+  /* El día del evento resuelto. Los tres leaders viven acá. */
+  var DE_PLATINUM = DE_PREMIUM.concat(['accesoQR', 'filtro', 'galeriaInvitados', 'raspadita']);
 
   /* ---------------------------------------------------------------------------
-     LOS PAQUETES  (precios de /index.html, leídos el 8/9/2026 — reverificar)
+     LOS PAQUETES  (grilla del 8/9/2026 — reverificar antes de vender)
      --------------------------------------------------------------------------- */
   var PAQUETES = {
     estandar: {
       nombre: 'Estándar',
-      bajada: 'Lo esencial para informar y emocionar.',
-      precio: 850, moneda: 'MXN',
+      bajada: 'La invitación completa, con sobre animado.',
+      precio: 1200, moneda: 'MXN',
       incluye: BASE.slice()
     },
     premium: {
       nombre: 'Premium',
-      bajada: 'Todo lo anterior, con música y pases.',
-      precio: 1600, moneda: 'MXN',
+      bajada: 'Un mensaje con voz para cada invitado.',
+      precio: 2240, moneda: 'MXN',
       incluye: DE_PREMIUM.slice()
     },
     platinum: {
-      nombre: 'Platinum QR',
-      bajada: 'Todo, más control de acceso en la puerta.',
-      precio: 2000, moneda: 'MXN',
-      incluye: DE_PREMIUM.concat(['accesoQR']).concat(TODO_LO_EXTRA)
+      nombre: 'Platinum',
+      bajada: 'Todo, más el día del evento resuelto.',
+      precio: 2800, moneda: 'MXN',
+      incluye: DE_PLATINUM.slice()
     }
   };
 
