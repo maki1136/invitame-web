@@ -36,20 +36,31 @@
  *    arrastra a una sola persona, a todos los demas se les borraria la mesa que
  *    habia cargado el equipo. Es justo lo contrario de lo que uno espera.
  *
+ * ⚠️⚠️ NO SE PUEDE USAR `:batchWrite`. Probado el 8/9/2026 contra una invitacion
+ *    de descarte: devuelve 403 PERMISSION_DENIED. Esa llamada NO pasa por las
+ *    reglas de Firestore, asi que exige credenciales de cuenta de servicio, y
+ *    aca entramos con el usuario del sistema (mail y contrasena). Se escribe de
+ *    a un invitado por vez, con PATCH, que es lo mismo que hace pase-nuevo.php.
+ *
+ * ⚠️ POR ESO SE ESCRIBE SOLO LO QUE CAMBIO. Si mandaramos los 200 invitados en
+ *    cada arrastre, mover a una persona tardaria quince segundos. En el panel
+ *    queda guardado `asigAplicada`: lo que ya se escribio en la invitacion. Se
+ *    compara contra `asig` y se tocan unicamente las diferencias. Arrastrar a
+ *    alguien = UNA escritura. La primera vez, las que hagan falta.
+ *
+ * ⚠️ `forzar: true` ignora esa comparacion. Lo usa el admin despues de publicar:
+ *    «Guardar y publicar» reescribe la ficha de cada invitado con lo que tiene
+ *    cargado el equipo, asi que puede pisar el reparto de los novios. Con
+ *    `forzar` se vuelve a aplicar todo y queda bien de nuevo.
+ *
+ * ⚠️ `currentDocument.exists=true` en cada escritura. Sin eso, un token que ya
+ *    no existe (un invitado dado de baja) haria que Firestore CREE una ficha
+ *    fantasma con una sola linea: mesa. El link viejo de esa persona volveria a
+ *    funcionar a medias y nadie entenderia de donde salio.
+ *
  * ⚠️ EL `updateMask` NO ES OPCIONAL. Un PATCH sin mascara REEMPLAZA el
  *    documento entero: le borraria al invitado su nombre, sus pases, su
  *    confirmacion y sus usos en la puerta. Con `mesa` se toca solo esa hoja.
- *
- * ⚠️ `currentDocument.exists = true` en cada escritura. Sin eso, un token que ya
- *    no existe (un invitado dado de baja) haria que Firestore CREE una ficha
- *    fantasma con una sola linea: mesa. Entraria en el panel de los novios como
- *    un invitado sin nombre y nadie entenderia de donde salio.
- *
- * ⚠️ SE ESCRIBE DE A TANDAS (`:batchWrite`). Una fiesta de 300 invitados serian
- *    300 pedidos sueltos: el navegador se cansa antes de terminar. Asi es UN
- *    pedido cada 400. `batchWrite` NO es todo-o-nada: devuelve el resultado de
- *    cada escritura por separado, que es lo que queremos (si un token quedo
- *    viejo, que no arrastre a los otros 299).
  *
  * El usuario y la contrasena viven FUERA del repositorio, en invitame-panel.php
  * (fuera del repo y fuera de public_html).
@@ -63,12 +74,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
   exit;
 }
 
+$ARRANQUE = microtime(true);
+$TOPE_SEG = 18;   // el navegador no espera para siempre: ver «pendientes» abajo
+
 $PROJECT = 'invitame-9b51f';
 $APIKEY  = 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc';
 $FS      = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT . '/databases/(default)/documents/';
 
 // ---------- entrada ----------
-// Entra poquito a proposito: direccion y clave. Nada mas.
+// Entra poquito a proposito: direccion, clave y si hay que forzar. Nada mas.
 if ((int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 4096) { http_response_code(413); echo json_encode(array('ok'=>false,'error'=>'muy-grande')); exit; }
 $in = json_decode(file_get_contents('php://input'), true);
 if (!is_array($in)) $in = array();
@@ -81,8 +95,9 @@ function limpio($v, $max = 200) {
   return trim(mb_substr($v, 0, $max));
 }
 
-$slug  = preg_replace('/[^a-z0-9\-]/', '', strtolower(limpio($in['slug'] ?? '', 60)));
-$clave = limpio($in['clave'] ?? '', 60);
+$slug   = preg_replace('/[^a-z0-9\-]/', '', strtolower(limpio($in['slug'] ?? '', 60)));
+$clave  = limpio($in['clave'] ?? '', 60);
+$forzar = !empty($in['forzar']);
 
 if ($slug === '' || $clave === '') {
   http_response_code(400);
@@ -110,7 +125,7 @@ function pedir($url, $metodo = 'GET', $cuerpo = null, $headers = array()) {
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_CUSTOMREQUEST  => $metodo,
     CURLOPT_CONNECTTIMEOUT => 5,
-    CURLOPT_TIMEOUT        => 20,
+    CURLOPT_TIMEOUT        => 12,
     CURLOPT_SSL_VERIFYPEER => true,
   );
   if ($cuerpo !== null) {
@@ -153,13 +168,45 @@ if (isset($campos['asig']['mapValue']['fields'])) {
     $asig[$tok] = isset($v['stringValue']) ? $v['stringValue'] : '';
   }
 }
+// Lo que YA se escribio en la invitacion, guardado como {token: nombreDeMesa}.
+$aplicada = array();
+if (!$forzar && isset($campos['asigAplicada']['mapValue']['fields'])) {
+  foreach ($campos['asigAplicada']['mapValue']['fields'] as $tok => $v) {
+    $aplicada[$tok] = isset($v['stringValue']) ? $v['stringValue'] : '';
+  }
+}
 if (!count($asig)) {
   // Todavia no movieron a nadie. No es un error: no hay nada que aplicar.
   echo json_encode(array('ok' => true, 'tocados' => 0, 'nada' => true));
   exit;
 }
 
-// ---------- 3. credenciales del sistema ----------
+// ---------- 3. resolver que mesa le toca a cada uno ----------
+$quiero   = array();   // token => nombre de mesa a escribir
+$saltados = 0;
+foreach ($asig as $tok => $idMesa) {
+  // El token viene de una CLAVE de mapa de Firestore, asi que ya es texto sano;
+  // igual se filtra, porque va a formar parte del nombre de un documento.
+  $tokL = preg_replace('/[^A-Za-z0-9_\-]/', '', (string)$tok);
+  if ($tokL === '') continue;
+  if ($idMesa !== '' && !isset($nombreDe[$idMesa])) { $saltados++; continue; }  // mesa que no conozco: no piso nada
+  $nuevo = ($idMesa === '') ? '-' : $nombreDe[$idMesa];
+  if ($nuevo === '') $nuevo = '-';
+  $quiero[$tokL] = mb_substr($nuevo, 0, 40);
+}
+
+// Solo lo que cambio respecto de la ultima vez.
+$hacer = array();
+foreach ($quiero as $tok => $nom) {
+  if (array_key_exists($tok, $aplicada) && $aplicada[$tok] === $nom) continue;
+  $hacer[$tok] = $nom;
+}
+if (!count($hacer)) {
+  echo json_encode(array('ok' => true, 'tocados' => 0, 'yaEstaba' => true, 'saltados' => $saltados));
+  exit;
+}
+
+// ---------- 4. credenciales del sistema ----------
 $PANEL_USER = ''; $PANEL_PASS = '';
 // Se busca hacia ARRIBA desde esta carpeta. El archivo vive fuera de public_html.
 // OJO: en public_html hay OTRO invitame-config.php (el de Cloudinary). Por eso el
@@ -202,58 +249,48 @@ $idToken = isset($sesion['idToken']) ? $sesion['idToken'] : '';
 if ($idToken === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
 $auth = array('Authorization: Bearer ' . $idToken);
 
-// ---------- 4. armar las escrituras ----------
-$prefijo = 'projects/' . $PROJECT . '/databases/(default)/documents/inv_invitados/';
-$writes  = array();
-$saltados = 0;
-foreach ($asig as $tok => $idMesa) {
-  // El token viene de una CLAVE de mapa de Firestore, asi que ya es texto sano;
-  // igual se filtra, porque va a formar parte del nombre de un documento.
-  $tok = preg_replace('/[^A-Za-z0-9_\-]/', '', (string)$tok);
-  if ($tok === '') continue;
-  if ($idMesa !== '' && !isset($nombreDe[$idMesa])) { $saltados++; continue; }  // mesa que no conozco: no piso nada
-  $nuevo = ($idMesa === '') ? '-' : $nombreDe[$idMesa];
-  if ($nuevo === '') $nuevo = '-';
-  $writes[] = array(
-    'update' => array(
-      'name'   => $prefijo . $slug . '__' . $tok,
-      'fields' => array('mesa' => array('stringValue' => $nuevo)),
-    ),
-    'updateMask'      => array('fieldPaths' => array('mesa')),
-    'currentDocument' => array('exists' => true),
-  );
-}
-if (!count($writes)) {
-  echo json_encode(array('ok' => true, 'tocados' => 0, 'nada' => true, 'saltados' => $saltados));
-  exit;
-}
-
-// ---------- 5. escribir, de a tandas ----------
-$urlLote = rtrim($FS, '/') . ':batchWrite';
-$tocados = 0;
-$fallados = 0;
-foreach (array_chunk($writes, 400) as $tanda) {
-  list($rl, $cl) = pedir($urlLote, 'POST', json_encode(array('writes' => $tanda)), $auth);
-  if ($cl < 200 || $cl >= 300) {
-    echo json_encode(array('ok' => false, 'error' => 'guardar', 'detalle' => 'http' . $cl . ' ' . substr((string)$rl, 0, 200)));
+// ---------- 5. escribir, de a uno ----------
+$tocados    = 0;
+$viejos     = 0;
+$pendientes = 0;
+$nuevaAplicada = $aplicada;
+foreach ($hacer as $tok => $nom) {
+  if (microtime(true) - $ARRANQUE > $TOPE_SEG) { $pendientes++; continue; }
+  $url = $FS . 'inv_invitados/' . rawurlencode($slug . '__' . $tok)
+       . '?updateMask.fieldPaths=mesa&currentDocument.exists=true';
+  $doc = array('fields' => array('mesa' => array('stringValue' => $nom)));
+  list($rc, $cc) = pedir($url, 'PATCH', json_encode($doc), $auth);
+  if ($cc >= 200 && $cc < 300) {
+    $tocados++;
+    $nuevaAplicada[$tok] = $nom;
+  } elseif ($cc == 404 || $cc == 400) {
+    // Ficha que ya no existe (invitado dado de baja). No es un error del pedido:
+    // se anota como aplicada para no volver a intentarlo en cada arrastre.
+    $viejos++;
+    $nuevaAplicada[$tok] = $nom;
+  } else {
+    echo json_encode(array('ok' => false, 'error' => 'guardar', 'detalle' => 'http' . $cc . ' ' . substr((string)$rc, 0, 200), 'tocados' => $tocados));
     exit;
   }
-  // `batchWrite` no corta: contesta el resultado de cada escritura por separado.
-  // Un `status` con codigo distinto de 0 es una ficha que ya no existe (invitado
-  // dado de baja). No es un error del pedido: se cuenta y se sigue.
-  $res = json_decode($rl, true);
-  if (isset($res['status']) && is_array($res['status'])) {
-    foreach ($res['status'] as $st) {
-      if (empty($st['code'])) $tocados++; else $fallados++;
-    }
-  } else {
-    $tocados += count($tanda);
-  }
+}
+
+// ---------- 6. anotar que quedo aplicado ----------
+// Se guarda en el panel de los novios, con mascara: el resto del documento
+// (mesas, asignacion, itinerario, tokens, mensaje para compartir) no se toca.
+if ($tocados || $viejos) {
+  $mapa = array();
+  foreach ($nuevaAplicada as $t => $n) $mapa[$t] = array('stringValue' => (string)$n);
+  $patch = array('fields' => array('asigAplicada' => array('mapValue' => array('fields' => $mapa))));
+  pedir($FS . 'inv_paneles/' . rawurlencode($idPanel) . '?updateMask.fieldPaths=asigAplicada',
+        'PATCH', json_encode($patch), $auth);
 }
 
 echo json_encode(array(
-  'ok'       => true,
-  'tocados'  => $tocados,
-  'saltados' => $saltados,
-  'viejos'   => $fallados,
+  'ok'         => true,
+  'tocados'    => $tocados,
+  'saltados'   => $saltados,
+  'viejos'     => $viejos,
+  // Si quedo algo sin escribir por tiempo, el navegador vuelve a llamar y sigue
+  // donde quedo: lo ya escrito quedo anotado en `asigAplicada`.
+  'pendientes' => $pendientes,
 ));
