@@ -387,7 +387,7 @@
     // aviso no se llene de ruido y se termine ignorando.
     return av;
   }
-  let _demoAvisado=false;
+  let _demoAceptado='';   // qué restos del ejemplo ya se aceptó publicar (ver la nota de publicar)
   // Deja armado (o actualizado) el acceso de los novios a SU panel.
   // No rompe la publicación si falla: la invitación es lo importante.
   // Los novios arman las mesas desde SU panel. No escriben en la ficha de cada invitado
@@ -451,12 +451,19 @@
 
   async function publicar(){
     if(!window.INV||!window.INV.ok){alert("Todavía no se conectó la base de datos. Esperá 2 segundos y probá de nuevo.");return;}
+    /* ⚠️ ESTE AVISO ES LO ÚLTIMO QUE SEPARA AL CLIENTE DE VER LA BODA DE OTRO.
+       Antes se prendía una marca y el aviso no volvía a aparecer NUNCA en toda la
+       sesión: alcanzaba con aceptarlo una vez —o cancelar y arreglar la mitad—
+       para que lo que quedaba del ejemplo se publicara en silencio.
+       Ahora se recuerda EXACTAMENTE qué se aceptó: si la lista cambia (arregló
+       unos y quedan otros), vuelve a preguntar. Si es la misma, no molesta. */
     const _rd=restosDemo();
-    if(_rd.length && !_demoAvisado){
-      _demoAvisado=true;
+    const _firma=_rd.join('|');
+    if(_rd.length && _firma!==_demoAceptado){
       if(!confirm('⚠️ Antes de publicar, revisá esto:\n\n· '+_rd.join('\n· ')+
         '\n\nEsos datos son del EJEMPLO y se van a ver así en la invitación del cliente.\n\n'+
         'Aceptar = publicar igual   ·   Cancelar = volver y corregir')) return;
+      _demoAceptado=_firma;
     }
     const slug=(D.slug||"").trim();
     if(!D.nEvento){ try{ const _all=await INV.exportAll(); const _mx=_all.eventos.reduce((m,e)=>Math.max(m,parseInt(e.nEvento,10)||0),0); D.nEvento=_mx+1; }catch(_e){ D.nEvento=1; } }
