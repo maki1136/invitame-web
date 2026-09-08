@@ -46,6 +46,11 @@
   .lat a:hover{background:#fbf7f2}
   .lat a.on{background:#fbf1f2;color:var(--uva);border-left-color:var(--rosa)}
   .lat .ico{width:18px;text-align:center;opacity:.8}
+  /* Los iconos dibujados de /admin/0-iconos.js. Antes eran emojis del sistema
+     (una carita de cubiertos, un reloj despertador, un ojo): cada telefono los
+     dibuja distinto y no son de la marca. Maki: «nada de emojis a la vista». */
+  .lat .ico{display:inline-flex;align-items:center;justify-content:center}
+  .ic{width:17px;height:17px;display:inline-block;flex:none}
   .lat .sep{font-size:10px;font-weight:900;color:var(--muted);letter-spacing:.09em;
             padding:16px 18px 6px;text-transform:uppercase}
   .main{flex:1;min-width:0;padding:20px 22px 60px}
@@ -184,7 +189,7 @@
 <div id="entrar">
   <div class="login">
     <h1>Mi panel</h1>
-    <p class="sub">Mirá quién confirmó y armá tus mesas.</p>
+    <p class="sub">Mira quién confirmó y arma tus mesas.</p>
     <label for="slug">Dirección de tu invitación</label>
     <input type="text" id="slug" placeholder="maria-y-diego" autocapitalize="off" autocorrect="off" spellcheck="false">
     <div class="hint">Es lo que va después de /i/?e= en el link de tu invitación.</div>
@@ -207,17 +212,17 @@
   <div class="cuerpo">
     <nav class="lat" id="lat">
       <div class="sep">Resumen</div>
-      <a data-vista="resumen" class="on"><span class="ico">&#9788;</span> Panel de control</a>
+      <a data-vista="resumen" class="on"><span class="ico" data-ico="planilla"></span> Panel de control</a>
       <div class="sep">Invitados</div>
-      <a data-vista="invitados"><span class="ico">&#128101;</span> Personas y pases</a>
-      <a data-vista="mesas"><span class="ico">&#127869;</span> Mesas</a>
-      <a data-vista="itinerario"><span class="ico">&#9200;</span> Itinerario</a>
-      <a data-vista="mensajes"><span class="ico">&#9993;</span> Mensajes</a>
+      <a data-vista="invitados"><span class="ico" data-ico="ticket"></span> Personas y pases</a>
+      <a data-vista="mesas"><span class="ico" data-ico="mesa"></span> Mesas</a>
+      <a data-vista="itinerario"><span class="ico" data-ico="lista"></span> Itinerario</a>
+      <a data-vista="mensajes"><span class="ico" data-ico="sobre"></span> Mensajes</a>
       <div class="sep">Herramientas</div>
-      <a data-vista="qr"><span class="ico">&#9635;</span> QR para imprimir</a>
-      <a data-vista="opciones"><span class="ico">&#9881;</span> Opciones</a>
+      <a data-vista="qr"><span class="ico" data-ico="papel"></span> QR para imprimir</a>
+      <a data-vista="opciones"><span class="ico" data-ico="llave"></span> Opciones</a>
       <div class="sep">&nbsp;</div>
-      <a id="verInv"><span class="ico">&#128065;</span> Ver mi invitación</a>
+      <a id="verInv"><span class="ico" data-ico="ojo"></span> Ver mi invitación</a>
     </nav>
 
     <main class="main">
@@ -230,6 +235,10 @@
   </div>
 </div>
 <div class="guardando" id="toast">Guardado</div>
+<!-- Los iconos dibujados del panel. Es el MISMO archivo que usa el admin: un
+     solo lugar donde vive cada dibujo. -->
+<script src="/admin/0-iconos.js"></script>
+<script>document.querySelectorAll('[data-ico]').forEach(function(e){var d=(typeof ICO!=='undefined')&&ICO[e.dataset.ico]; if(d) e.innerHTML=d;});</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <!-- El grabador de mensajes de voz por invitado. Va ANTES del panel para que la
      lista ya lo encuentre cargado y dibuje la columna "Voz". Vive aparte de
