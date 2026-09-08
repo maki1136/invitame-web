@@ -197,7 +197,7 @@ async function procesarCola(autor) {
         await idbPoner(t);
         if (t.intentos >= 5) {
           marcarCelda(t.id, 'espera');
-          avisar('No hay señal para subir. Lo intento de nuevo solo cuando regrese 📶', false);
+          avisar('No hay señal para subir. Lo intento de nuevo solo cuando regrese la señal', false);
           break;
         }
         await new Promise((x) => setTimeout(x, ESPERAS[Math.min(t.intentos - 1, 3)]));
@@ -244,7 +244,7 @@ async function subirUno(t, autor) {
 
     /* 429 = "pará un poco": vale la pena reintentar más tarde. */
     if (r.status === 429) {
-      avisar(j.error || 'Subiste muchas seguidas, espera un momento 😉', false);
+      avisar(j.error || 'Subiste muchas seguidas, espera un momento', false);
       return { ok: false, permanente: false };
     }
     /* 4xx = la foto o el evento tienen un problema: reintentar no sirve. */
@@ -265,7 +265,7 @@ let EV = null, AUTOR = null;
 async function entraron(files) {
   if (!files || !files.length) return;
   let lista = [...files];
-  if (lista.length > 15) { toast('Máximo 15 a la vez 😉'); lista = lista.slice(0, 15); }
+  if (lista.length > 15) { toast('Máximo 15 a la vez'); lista = lista.slice(0, 15); }
 
   for (const f of lista) {
     let listo;
@@ -273,7 +273,7 @@ async function entraron(files) {
       listo = await comprimir(f);
     } catch (e) {
       /* HEIC del iPhone que este navegador no puede abrir, o archivo raro. */
-      avisar('Esa foto no se pudo leer en este teléfono. Intenta con «Tomar una foto» 📷', true);
+      avisar('Esa foto no se pudo leer en este teléfono. Intenta con «Tomar una foto»', true);
       continue;
     }
     const id = Date.now() + '-' + Math.random().toString(36).slice(2, 8);
@@ -311,7 +311,7 @@ function marcarCelda(id, comoQuedo) {
   b.classList.remove('subiendo');
   if (comoQuedo === 'lista') {
     b.classList.add('ok');
-    if (EV && EV.modo === 'previa') toast('¡Listo! Aparece en cuanto la aprueben 💛', 3600);
+    if (EV && EV.modo === 'previa') toast('¡Listo! Aparece en cuanto la aprueben', 3600);
   } else if (comoQuedo === 'falló') {
     b.classList.add('error');
   } else {
@@ -420,7 +420,7 @@ function prepararMensaje() {
 
   boton.addEventListener('click', async () => {
     const texto = caja.value.trim();
-    if (!texto) { mostrarError('msj-error', 'Escribe algo primero 💛'); return; }
+    if (!texto) { mostrarError('msj-error', 'Escribe algo primero'); return; }
     boton.disabled = true; boton.textContent = 'Enviando…';
     try {
       const r = await fetch(WORKER + '/firmar', {
@@ -433,8 +433,8 @@ function prepararMensaje() {
       caja.value = ''; contar();
       cerrarHoja('hoja-mensaje');
       toast(j.estado === 'aprobada'
-        ? '¡Listo! Ya quedó en el libro de firmas 💛'
-        : '¡Listo! Aparece en cuanto lo aprueben 💛', 3600);
+        ? '¡Listo! Ya quedó en el libro de firmas'
+        : '¡Listo! Aparece en cuanto lo aprueben', 3600);
     } catch (e) {
       mostrarError('msj-error', e.message || 'No se pudo enviar.');
     }
@@ -591,7 +591,7 @@ function prepararAudio() {
       if (!r.ok || !j.ok) throw new Error(j.error || ('No se pudo enviar (' + r.status + ')'));
       resetAudio();
       cerrarHoja('hoja-audio');
-      toast('¡Listo! Tu saludo aparece en cuanto lo aprueben 💛', 3600);
+      toast('¡Listo! Tu saludo aparece en cuanto lo aprueben', 3600);
     } catch (e) {
       mostrarError('aud-error', e.message || 'No se pudo enviar.');
     }
