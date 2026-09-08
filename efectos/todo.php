@@ -91,3 +91,79 @@ foreach ($mm[1] as $url) {
 /* La marca de que llegó completo. `efectos/index.js` la mira para saber que no
    tiene que cargar nada más. */
 echo "\nwindow.INVEFECTOS_JUNTOS = " . $cuantos . ";\n";
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   LA MARCA DE QUE EL SOBRE YA ESTÁ DECIDIDO  (8/9/2026)
+
+   Va acompañada de una regla en `i/estilos-servidor.css` que APAGA todo lo que
+   cuelga de `#env` mientras no exista la clase `inv-sobre-listo`. Las dos
+   cosas son una sola: si se toca una, se toca la otra.
+
+   POR QUÉ HACE FALTA UNA MARCA PROPIA — el cuarto intento del bug del sobre.
+   El motor, en su script de arranque, hace:
+
+       if (CONFIG.sobreTriangulos) { initEnvTri(); } else { initEnvVideo(); }
+
+   …y eso pone `tri-mode` (o `video-mode`) EN EL ACTO, antes de saber qué sobre
+   compró esta pareja. `#env.tri-mode .triflap{display:block}` prende las cuatro
+   solapas del sobre viejo a pantalla completa, y recién después —cuando llegan
+   los datos y corre `sobre-catalogo.js`— se cambia al sobre de verdad.
+
+   ⚠️ POR ESO NINGUNA CLASE DE MODO SIRVE COMO SEÑAL. En el intento anterior
+      excluí `tri-mode` y `video-mode` creyendo que significaban «ya está
+      decidido». Significan lo contrario: son la conjetura del motor. Medido en
+      los cuatro navegadores: seguían apareciendo las cuatro solapas
+      (.tri-t, .tri-r, .tri-b, .tri-l), a 1440x900 en la compu y a 834x1194 en
+      el iPad.
+
+   LO QUE SÍ SIGNIFICA «DECIDIDO»: que el módulo del catálogo haya hablado, o
+   sea que `#env` gane una clase que NO sea una de las tres tempranas. Por eso
+   acá se mira, y si todavía no pasó se espera con un observador — la decisión
+   puede ser asíncrona, porque depende de que lleguen los datos de la fiesta.
+
+   ⚠️ ESTO VA AL FINAL DEL PAQUETE A PROPÓSITO: para cuando corre, ya corrieron
+      todos los módulos, incluido `sobre-catalogo.js`.
+
+   ⚠️ Y SI ESTE ARCHIVO NO LLEGA (se cae, o se cargan los módulos de a uno por
+      el camino viejo), la marca nunca se pone y NO PASA NADA GRAVE: el CSS
+      tiene un rescate por animación que enciende igual a los 1,5 s. Prefiero un
+      sobre viejo a los 1,5 segundos que una pantalla muerta.
+   ═════════════════════════════════════════════════════════════════════════════ */
+?>
+;(function () {
+  try {
+    /* las tres que pone el motor de arranque, antes de saber nada */
+    var TEMPRANAS = { 'tri-mode': 1, 'video-mode': 1, 'sello-video': 1 };
+
+    function yaDecidio(env) {
+      var c = (env.className || '').split(/\s+/);
+      for (var i = 0; i < c.length; i++) {
+        if (c[i] && c[i] !== 'inv-sobre-listo' && !TEMPRANAS[c[i]]) return true;
+      }
+      return false;
+    }
+
+    function encender(env) { env.classList.add('inv-sobre-listo'); }
+
+    function enganchar() {
+      var env = document.getElementById('env');
+      if (!env) return false;
+      if (yaDecidio(env)) { encender(env); return true; }
+      if (window.MutationObserver) {
+        var obs = new MutationObserver(function () {
+          if (yaDecidio(env)) { encender(env); obs.disconnect(); }
+        });
+        obs.observe(env, { attributes: true, attributeFilter: ['class'] });
+      } else {
+        encender(env);   /* navegador viejo: mejor encender que dejarlo apagado */
+      }
+      return true;
+    }
+
+    if (!enganchar()) {
+      document.addEventListener('DOMContentLoaded', enganchar);
+    }
+  } catch (e) { /* jamás dejar la invitación a oscuras por esto */
+    try { var e2 = document.getElementById('env'); if (e2) e2.classList.add('inv-sobre-listo'); } catch (x) {}
+  }
+})();
