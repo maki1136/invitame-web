@@ -101,11 +101,11 @@
     var col = tinta();
 
     /* Un velo abajo para que el texto se lea sobre cualquier foto. */
-    var velo = x.createLinearGradient(0, ALTO * 0.62, 0, ALTO);
+    var velo = x.createLinearGradient(0, ALTO * 0.58, 0, ALTO);
     velo.addColorStop(0, 'rgba(20,12,16,0)');
-    velo.addColorStop(1, 'rgba(20,12,16,.42)');
+    velo.addColorStop(1, 'rgba(20,12,16,.46)');
     x.fillStyle = velo;
-    x.fillRect(0, ALTO * 0.62, ANCHO, ALTO * 0.38);
+    x.fillRect(0, ALTO * 0.58, ANCHO, ALTO * 0.42);
 
     /* Los dos filetes. */
     x.strokeStyle = col;
@@ -130,7 +130,7 @@
         tam -= 4; x.font = tam + 'px ' + fuente;
       }
       x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowBlur = 18; x.shadowOffsetY = 3;
-      x.fillText(nombres, ANCHO / 2, ALTO - 250);
+      x.fillText(nombres, ANCHO / 2, ALTO - 380);
       x.shadowColor = 'transparent'; x.shadowBlur = 0; x.shadowOffsetY = 0;
     }
 
@@ -138,12 +138,18 @@
     if (fecha) {
       x.font = "42px 'Forum', 'Cormorant Garamond', Georgia, serif";
       x.globalAlpha = 0.92;
-      x.fillText(espaciar(fecha.toUpperCase()), ANCHO / 2, ALTO - 168);
+      x.fillText(espaciar(fecha.toUpperCase()), ANCHO / 2, ALTO - 292);
       x.globalAlpha = 1;
     }
 
     return c;
   }
+
+  /* ⚠️ LOS NOMBRES Y LA FECHA VAN ARRIBA DE LOS CONTROLES. La primera versión
+     los ponía a 250 y 168 px del piso, que en la pantalla es justo donde está
+     el disparador: en la foto guardada se veían bien, pero mientras el
+     invitado se encuadraba estaban tapados por los botones. Se probó con la
+     cámara en vivo y se subieron a 380 y 292. */
 
   /* canvas no tiene letter-spacing: se mete un cabello de espacio a mano. */
   function espaciar(s) { return String(s).split('').join(' '); }
@@ -267,6 +273,7 @@
         'line-height:1.5;display:none;"></div>' +
       '<div id="filtro-barra" style="position:absolute;left:0;right:0;bottom:0;' +
         'padding:18px 16px calc(18px + env(safe-area-inset-bottom));' +
+        'background:linear-gradient(to top, rgba(13,10,12,.72), rgba(13,10,12,0));' +
         'display:flex;align-items:center;justify-content:center;gap:18px;"></div>' +
       '<button type="button" id="filtro-cerrar" aria-label="Cerrar" ' +
         'style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:12px;' +
