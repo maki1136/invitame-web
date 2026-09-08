@@ -27,8 +27,7 @@
     return '<div class="stat"><div class="b"><div class="n" id="st-inv">0</div><div class="l">Invitados</div></div><div class="b"><div class="n" id="st-per">0</div><div class="l">Personas</div></div></div>'+
       '<div class="addrow"><div class="f"><label>Nombre</label><input type="text" id="gname" placeholder="Familia Pérez"></div><div class="f" style="max-width:70px"><label>Pers.</label><input type="text" id="gper" value="2"></div><div class="f" style="max-width:70px"><label>Mesa</label><input type="text" id="gmesa" value="1"></div><button class="addbtn" onclick="addGuest()">+ Agregar</button></div>'+
       '<div style="margin-top:10px"><button class="addbtn" onclick="verMesas()">'+ICO.mesa+' Gestión de mesas (arrastrar)</button></div>'+
-      '<div style="margin-top:8px"><button class="addbtn gh" onclick="traerMesasDeLosNovios()">'+ICO.bajar+' Traer las mesas que armaron los novios</button>'+
-      '<div class="hint">Si les diste clave de panel, ellos arman sus mesas desde el celular. Esto las baja acá.</div></div>'+
+      '<div class="hint" style="margin-top:8px">Si les diste clave de panel, ellos arman sus mesas desde el celular y la mesa de cada invitado se actualiza SOLA. No hay que traer nada.</div>'+
       '<div class="mejoras" style="margin-top:14px"><div class="h">'+ICO.planilla+' Carga masiva por Excel</div>'+
       '<div class="hint" style="margin-bottom:8px">1) Descargá la plantilla · 2) Completala en Excel (una fila por invitado) · 3) Subila acá: se cargan todos y cada uno recibe su link único.</div>'+
       '<button class="addbtn gh" style="margin-right:6px" onclick="descargarPlantilla()">'+ICO.bajar+' Descargar plantilla</button>'+
@@ -390,37 +389,71 @@
   let _demoAceptado='';   // qué restos del ejemplo ya se aceptó publicar (ver la nota de publicar)
   // Deja armado (o actualizado) el acceso de los novios a SU panel.
   // No rompe la publicación si falla: la invitación es lo importante.
-  // Los novios arman las mesas desde SU panel. No escriben en la ficha de cada invitado
-  // (eso lo bloquea la regla): guardan la asignacion en su propio documento de panel.
-  window.traerMesasDeLosNovios = async function(){
+  /* ===== YA NO HAY QUE «TRAER» NADA  (8/9/2026) ==========================
+     Aca vivia `traerMesasDeLosNovios()`: un boton que leia el panel de los
+     novios y copiaba la mesa de cada invitado a mano. Existia porque los novios
+     no pueden escribir en `inv_invitados`, asi que su reparto se quedaba en su
+     propio documento, que la invitacion NO lee.
+
+     El problema no era el boton: era que hubiera que apretarlo. Si nadie se
+     acordaba, la pareja veia su tablero al dia y los invitados llegaban a la
+     fiesta con la mesa vieja, porque el pase MUESTRA el numero de mesa.
+
+     Maki, textual: «si lo cambian ellos, Jazmin que tiene que ver?».
+
+     Ahora lo hace solo `mesas-guardar.php`, al que llama el panel de los novios
+     apenas guardan. Lo unico que quedo de este lado es reponer lo de ellos
+     DESPUES de publicar (ver `reponerLoDeLosNovios`), porque publicar reescribe
+     la ficha de cada invitado y podria pisarlo.
+     ====================================================================== */
+
+  /* ⚠️ «Guardar y publicar» reescribe la ficha de CADA invitado con lo que tiene
+     cargado el equipo, y tambien el `fx` entero del evento. Si en el medio los
+     novios movieron una mesa o corrieron un horario, publicar lo pisaria.
+     Por eso, apenas se termina de publicar, se les avisa a los dos porteros que
+     vuelvan a aplicar lo de ellos. `forzar` es lo que hace que reescriban aunque
+     ya lo tuvieran anotado como aplicado.
+     ⚠️ Si esto falla NO se rompe la publicacion (la invitacion ya quedo
+        guardada), pero SI se avisa: la mesa equivocada se descubre en la puerta
+        del salon, y para entonces es tarde. */
+  async function reponerLoDeLosNovios(slug){
     const clave=String(D['c_clave-del-panel-de-los-novios']||'').trim();
-    if(!clave){ alert('Esta invitacion todavia no tiene clave de panel. Ponesela en AVANZADO y publica.'); return; }
-    const slug=String(D.slug||'').trim();
+    if(!clave) return;                     // sin panel de novios no hay nada que reponer
+    const fallo=[];
+    for(const [url,que] of [['/mesas-guardar.php','las mesas'],['/itinerario-guardar.php','el itinerario']]){
+      try{
+        /* La primera vez, una lista larga puede no entrar en un solo pedido: el
+           portero avisa cuantos quedaron y se lo vuelve a llamar. */
+        for(let i=0;i<6;i++){
+          const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+                                   body:JSON.stringify({slug, clave, forzar:true})});
+          const j=await r.json();
+          if(!j||!j.ok) throw new Error((j&&j.error)||'sin respuesta');
+          if(!j.pendientes) break;
+        }
+      }catch(e){ console.error('reponer',url,e); fallo.push(que); }
+    }
+    /* La pantalla tiene que decir la verdad: si no, ella ve una mesa y la base
+       tiene otra. Se relee el panel de los novios (UNA lectura) y se refleja. */
     try{
       const m=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
       const snap=await m.getDoc(m.doc(window.INV.db,'inv_paneles',slug+'__'+clave));
-      if(!snap.exists()){ alert('No encontre el panel de los novios. Publica de nuevo para crearlo.'); return; }
-      const p=snap.data()||{};
-      const mesas=Array.isArray(p.mesas)?p.mesas:[];
-      const asig=(p.asig&&typeof p.asig==='object')?p.asig:{};
-      if(!mesas.length && !Object.keys(asig).length){ alert('Los novios todavia no armaron ninguna mesa.'); return; }
-      const nombreDe={}; mesas.forEach(x=>{ nombreDe[x.id]=x.nombre; });
-      let tocados=0;
-      (D.invitados||[]).forEach(g=>{
-        const t=g.t||g.token; if(!t) return;
-        // Si los novios no lo tocaron, NO se le cambia nada. Antes esto borraba la mesa
-        // de todos los que no habian movido, que es justo lo contrario de lo que se espera.
-        if(!Object.prototype.hasOwnProperty.call(asig,t)) return;
-        const id=asig[t];
-        if(id && !nombreDe[id]) return;              // mesa que no conozco: no piso nada
-        const nuevo = id ? nombreDe[id] : '-';
-        if(String(g.m||'')!==String(nuevo)){ g.m=nuevo; tocados++; }
-      });
-      renderGuests();
-      alert(tocados ? ('Listo: actualice la mesa de '+tocados+' invitado(s). Acordate de tocar Guardar y publicar.')
-                    : 'Ya estaba todo igual, no habia nada que traer.');
-    }catch(e){ console.error(e); alert('No pude traer las mesas: '+(e.message||e)); }
-  };
+      if(snap.exists()){
+        const p=snap.data()||{};
+        const nombreDe={}; (Array.isArray(p.mesas)?p.mesas:[]).forEach(x=>{ nombreDe[x.id]=x.nombre; });
+        const asig=(p.asig&&typeof p.asig==='object')?p.asig:{};
+        (D.invitados||[]).forEach(g=>{
+          const t=g.t||g.token; if(!t) return;
+          if(!Object.prototype.hasOwnProperty.call(asig,t)) return;
+          const id=asig[t];
+          if(id && !nombreDe[id]) return;
+          g.m = id ? nombreDe[id] : '-';
+        });
+        renderGuests();
+      }
+    }catch(e){ console.error('reflejar mesas',e); }
+    if(fallo.length) alert('La invitacion se publico bien, pero no pude actualizar '+fallo.join(' ni ')+' con lo que cargaron los novios.\n\nVolve a tocar "Guardar y publicar" en un rato.');
+  }
   window._panelNoviosLink='';
   async function guardarPanelNovios(slug, res){
     window._panelNoviosLink='';
@@ -535,6 +568,8 @@
       //    existe. Guarda solo la lista de tokens, así el panel puede leer cada
       //    invitado por separado y ver las confirmaciones al día.
       await guardarPanelNovios(slug, res);
+      // y se repone lo que hayan cargado ellos, que esto acaba de pisar
+      await reponerLoDeLosNovios(slug);
       renderGuests();
       showLinks(slug, res);
     }catch(e){console.error(e);
