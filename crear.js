@@ -108,7 +108,7 @@
       } else if(h.special==='qr' && typeof QRVIS!=='undefined'){
         html+='<div class="helpbox open"><div class="vis">'+QRVIS+'</div></div>';
       }
-      html+='<button type="button" class="helpbtn" onclick="toggleHelp(this)">ℹ️ ¿Qué es y cómo lo completo?</button>'
+      html+='<button type="button" class="helpbtn" onclick="toggleHelp(this)">¿Qué es y cómo lo completo?</button>'
           + '<div class="helpbox"><div class="txt">'+h.txt+'</div></div>';
       w.innerHTML=html;
       ph.replaceWith(w);
