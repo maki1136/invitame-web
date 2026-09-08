@@ -446,7 +446,23 @@ $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!importan
 $preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
           . '<link rel="preload" as="script" href="/sobres/catalogo.js">'
           . '<link rel="preload" as="script" href="/efectos/index.js">'
-          . '<link rel="preload" as="script" href="/efectos/todo.php">';
+          . '<link rel="preload" as="script" href="/efectos/todo.php">'
+          . '<link rel="preload" as="script" href="/efectos/imagenes-livianas.js">';
+
+/* ===== LAS FOTOS, LIVIANAS — Y ESTE TIENE QUE CORRER ANTES QUE TODO =========
+   `/efectos/imagenes-livianas.js` le pide a Cloudinary las fotos convertidas y
+   achicadas: medido, 3 MB pasan a poco más de 1. Pero SÓLO sirve si corre antes
+   de que exista la primera imagen.
+
+   ⚠️⚠️ PRIMERO LO PUSE EN LA LISTA DE `efectos/index.js` Y SALIÓ PEOR. Llegaba
+   a los 1,2 s, cuando el motor ya le había puesto la dirección original a cada
+   foto: el navegador bajaba la pesada Y DESPUÉS la liviana. El doble. Medido:
+   36 pedidos viejos (5113 KB) + 36 nuevos (2387 KB) en la misma carga.
+
+   Por eso va acá, en la cabeza del documento y SIN `defer`: son 5 KB que corren
+   antes de que el navegador lea una sola etiqueta del cuerpo.
+   ============================================================================ */
+$fotosLivianas = '<script src="/efectos/imagenes-livianas.js"></' . 'script>';
 
 /* ⚠️ Antes acá se listaban los 63 módulos, uno por uno, leyendo la lista de
    `efectos/index.js`. Ya no hace falta: los 63 vienen en UN solo pedido
@@ -454,7 +470,7 @@ $preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin
 
 /* ⚠️ EL ORDEN IMPORTA: la hoja general primero y la paleta DESPUÉS, para que
    lo que eligió la clienta sea lo último en escribirse. */
-$aInyectar = $preCarga . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
+$aInyectar = $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
