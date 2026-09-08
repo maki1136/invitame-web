@@ -332,7 +332,13 @@
         estado:'pendiente', creado:serverTimestamp(),
         /* el diseño que eligió en la solapa; si no tocó nada, el que traía el link */
       tpl: (window.CREAR_DISENO && window.CREAR_DISENO.elegido()) || tpl, tplNombre:T.n, tipoEvento:$('tipo').value, kick:$('kick').value.trim(),
-        n1, n2:$('n2').value.trim(), fecha, frase:$('frase').value.trim(),
+        /* ⚠️ ACÁ SE LEE EL VALOR, NO EL CASILLERO. Cuando este bloque estaba
+           adentro de enviar(), `n1` y `fecha` eran constantes de esa función.
+           Al mudarlo, el nombre suelto pasó a resolver contra `window.n1`, que
+           el navegador apunta al ELEMENTO con ese id: se guardaba el casillero,
+           no lo que escribió la persona. No daba error; simplemente viajaba
+           basura. Lo mismo pasaba con los tres datos de contacto. */
+        n1:$('n1').value.trim(), n2:$('n2').value.trim(), fecha:$('fecha').value, frase:$('frase').value.trim(),
         cover:coverURL, coverVideo:coverVideoURL, galeria:galURLs,
         orden:$('orden').value.trim(),
         ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1maps:$('ev1maps').value.trim(),
@@ -352,7 +358,7 @@
         reg_liverpool:$('reg_liverpool').value.trim(), reg_amazon:$('reg_amazon').value.trim(), reg_sears:$('reg_sears').value.trim(),
         reg_mercadolibre:$('reg_mercadolibre').value.trim(), reg_palacio:$('reg_palacio').value.trim(), reg_venmo:$('reg_venmo').value.trim(), reg_paypal:$('reg_paypal').value.trim(),
         invitados, observaciones:$('obs').value.trim(),
-        contactoNombre:cnom, contactoWsp:cwsp, contactoEmail:cmail,
+        contactoNombre:$('cnom').value.trim(), contactoWsp:$('cwsp').value.trim(), contactoEmail:$('cmail').value.trim(),
         pasevozAudio:pasevozURL, pasevozOnda,
         origen:'formulario-cliente'
       };
