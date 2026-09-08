@@ -87,3 +87,10 @@ const ICO = (function(){
   for (var k in D) o[k] = A + D[k] + Z;
   return o;
 })();
+
+/* Los módulos de /efectos/ también dibujan bloques del panel, pero corren
+   además en /crear.html y /mi-panel.html, donde este archivo NO se carga.
+   Por eso piden el dibujo con ico('loquesea'): si no está, devuelve vacío y
+   no rompe nada. Adentro del admin, usar ICO.loquesea directamente. */
+window.ICO = ICO;
+window.ico = function (n) { return (window.ICO && window.ICO[n]) || ''; };

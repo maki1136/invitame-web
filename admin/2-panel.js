@@ -187,12 +187,19 @@
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     try{ const url=await INV.uploadImage(f); ensureFX(); D.fx.diseno.adornoCustom=url; D.fx.diseno.adorno=''; renderPanel(); }
     catch(e){ console.error(e); alert('No se pudo subir: '+(e.message||e)); } }
+  /* ⚠️ LA MARCA «efx» NO ES DECORACIÓN.
+     /efectos/panel-galeria.js necesita saber si estamos parados en la pestaña
+     EFECTOS para colgar ahí su bloque. Antes lo adivinaba leyendo el TEXTO del
+     encabezado («empieza con ✨ Efectos»), y el día que los emojis se cambiaron
+     por dibujos ese texto dejó de existir y el bloque se habría colgado mal.
+     Ahora la señal está en el HTML, no en la prosa: «.mejoras .h.efx».
+     Si agregás un bloque de Efectos, ponele la clase. */
   function efectosHtml(){
     ensureFX();
     const secOpts=Object.keys(SECLABELS).map(k=>[k,SECLABELS[k]]);
     const pauto=(D.fx.particulas.color==='auto');
     const _esCarta=(D.fx.sobre.tipo==='carta');
-    return '<div class="mejoras"><div class="h">'+ICO.destello+' Efectos — sobre de entrada</div>'+
+    return '<div class="mejoras"><div class="h efx">'+ICO.destello+' Efectos — sobre de entrada</div>'+
         '<div class="hint" style="margin-bottom:10px">El sobre que se abre al inicio. Todo se puede prender/apagar y cambiar de color.</div>'+
         '<div class="grp"><label>Cómo se abre</label>'+
           selR('sobre','tipo',[['clasico','Clásico — el sobre se abre y aparece la invitación'],['carta','Carta — la tarjeta se desliza hacia arriba, sale y se convierte en la portada']])+
@@ -221,7 +228,7 @@
         '<div class="grp"><label>Iniciales (ej: M&D)</label>'+txt('sobre','ini','M&D')+'</div></div>'+
       '</div>'+
         (function(){ D.fx=D.fx||{}; D.fx.calendario=D.fx.calendario||{}; return ''; })()+
-        '<div class="h">'+ICO.destello+' Efectos — calendario de la fecha</div>'+
+        '<div class="h efx">'+ICO.destello+' Efectos — calendario de la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">La grilla del mes se arma sola con la fecha del evento. Si la fecha cambia, el calendario se acomoda y el día nunca queda en la columna equivocada. No es una imagen.</div>'+
         '<div class="grp">'+chk('calendario','encendido','Mostrar el calendario')+'</div>'+
         '<div class="two"><div class="grp"><label>Tipo de número</label>'+sel('calendario','fuente',[['forum','Forum — serif clásica'],['marcellus','Marcellus — serif fina'],['prata','Prata — serif marcada'],['montserrat','Montserrat — sin serif']])+'</div>'+
@@ -239,10 +246,10 @@
           var R=D.fx.raspadita; if(R.polvillo===undefined)R.polvillo=true;
           if(R.destello===undefined)R.destello=true; if(R.vibrar===undefined)R.vibrar=true;
           return ''; })()+
-        '<div class="h">'+ICO.destello+' Efectos — itinerario</div>'+
+        '<div class="h efx">'+ICO.destello+' Efectos — itinerario</div>'+
         '<div class="hint" style="margin-bottom:10px">La línea se dibuja sola a medida que el invitado baja, y cada momento aparece cuando le toca. Sólo funciona si el itinerario está cargado como LISTA (con su hora, título y descripción); si subiste una imagen, no hay nada que animar.</div>'+
         '<div class="grp"><label>Cómo se ve la línea</label>'+sel('itinerario','estilo',[['izquierda','A la izquierda — todo el texto a la derecha'],['centro','Al medio — los momentos alternando en zigzag']])+'</div>'+
-        '<div class="h">'+ICO.destello+' Efectos — cómo se muestra la fecha</div>'+
+        '<div class="h efx">'+ICO.destello+' Efectos — cómo se muestra la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">Nueve maneras de mostrar la fecha. Se arma sola con la fecha del evento. Las de FOTOS necesitan tres imágenes.</div>'+
         '<div class="grp"><label>Disposición</label>'+sel('fecha','disposicion',[['','Como siempre'],['fotos','Tres fotos — un número sobre cada una'],['circulos','Tres círculos con foto'],['barras','Barras — 28 | 11 | 26'],['apilada','Apilada — una debajo de la otra'],['filetes','Con filetes — NOV — 28 — 2026'],['semana','Con día de la semana y hora'],['monograma','Monograma arriba y la fecha abajo'],['grande','El día grande y el mes al costado'],['manuscrita','Manuscrita — Save the date en cursiva']])+'</div>'+
         '<div class="two"><div class="grp"><label>Color del texto</label>'+col('fecha','color')+'</div>'+
@@ -254,7 +261,7 @@
         '<div class="grp"><label>Foto 1 — va con el día</label>'+txt('fecha','foto1','pegá el link de la imagen')+'</div>'+
         '<div class="two"><div class="grp"><label>Foto 2 — el mes</label>'+txt('fecha','foto2','link')+'</div>'+
         '<div class="grp"><label>Foto 3 — el año</label>'+txt('fecha','foto3','link')+'</div></div>'+
-        '<div class="h">'+ICO.destello+' Efectos — raspadita de la fecha</div>'+
+        '<div class="h efx">'+ICO.destello+' Efectos — raspadita de la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">Tapa la fecha con una capa que el invitado rasca con el dedo. Se monta sobre la disposición que hayas elegido arriba: si elegiste una de fotos, va apareciendo una foto por vez.</div>'+
         '<div class="grp">'+chk('raspadita','encendido','Tapar la fecha para rascar')+'</div>'+
         '<div class="two"><div class="grp"><label>Cómo se rasca</label>'+sel('raspadita','modo',[['simple','Todo junto'],['partes','Por partes — el día, el mes y el año']])+'</div>'+
@@ -270,7 +277,7 @@
         '<div class="grp">'+chk('raspadita','vibrar','Vibración al completar cada parte')+'</div>'+
         '<div class="hint" style="margin-bottom:10px">La vibración sólo funciona en Android: iPhone no permite vibrar desde una página web. No es un error — en iPhone simplemente no pasa nada y todo lo demás anda igual.</div>'+
                 
-      '<div class="mejoras"><div class="h">'+ICO.destello+' Efectos — lluvia delicada</div>'+
+      '<div class="mejoras"><div class="h efx">'+ICO.destello+' Efectos — lluvia delicada</div>'+
         '<div class="hint" style="margin-bottom:10px">Partículas suaves cayendo. Elegí que combinen con tu paleta.</div>'+
         '<div class="grp">'+chk('particulas','on','Mostrar el efecto')+'</div>'+
         '<div class="two"><div class="grp"><label>Forma</label>'+sel('particulas','tipo',[['hoja','Hojitas'],['petalo','Pétalos'],['perla','Perlas'],['flor','Flores secas'],['corazon','Corazones'],['nieve','Copos de nieve'],['luz','Lucecitas'],['ninguno','Ninguno']])+'</div>'+
@@ -278,7 +285,7 @@
         '<div class="grp"><label class="chk"><input type="checkbox" id="fx-pauto" '+(pauto?'checked':'')+' onchange="D.fx.particulas.color=this.checked?\'auto\':(el(\'fx-pcolor\').value)"> Color automático (combina con el tema)</label></div>'+
         '<div class="grp"><label>…o elegí un color</label><input type="color" id="fx-pcolor" value="'+(pauto?'#a9b8a0':D.fx.particulas.color)+'" oninput="if(!el(\'fx-pauto\').checked)D.fx.particulas.color=this.value"></div>'+
       '</div>'+
-      '<div class="mejoras"><div class="h">'+ICO.destello+' Efectos — carta que sale del sobre</div>'+
+      '<div class="mejoras"><div class="h efx">'+ICO.destello+' Efectos — carta que sale del sobre</div>'+
         '<div class="hint" style="margin-bottom:10px">Una sección donde un sobre de color se abre y sale una cartita con tu mensaje.</div>'+
         '<div class="grp">'+chk('carta','on','Mostrar la sección de la carta')+'</div>'+
         '<div class="grp"><label>Color del sobre — elegí un preset o un color libre</label>'+
@@ -290,7 +297,7 @@
         '<div class="two"><div class="grp"><label>Tipografía de la carta</label>'+sel('carta','fuente',CFFONTS)+'</div>'+
         '<div class="grp"><label>Color del texto</label>'+col('carta','colorTexto')+'</div></div>'+
       '</div>'+
-      '<div class="mejoras"><div class="h">'+ICO.destello+' Efectos — fondo de una sección</div>'+
+      '<div class="mejoras"><div class="h efx">'+ICO.destello+' Efectos — fondo de una sección</div>'+
         '<div class="hint" style="margin-bottom:10px">Un fondo animado (nubes, degradado o luces) detrás de la sección que elijas.</div>'+
         '<div class="grp">'+chk('ambiente','on','Mostrar el fondo animado')+'</div>'+
         '<div class="two"><div class="grp"><label>Tipo</label>'+sel('ambiente','tipo',[['nubes','Nubes / cielo'],['degradado','Degradado'],['bokeh','Luces suaves'],['ninguno','Ninguno']])+'</div>'+
@@ -298,13 +305,13 @@
         '<div class="two"><div class="grp"><label>Color de arriba</label>'+col('ambiente','colorTop')+'</div>'+
         '<div class="grp"><label>Color de abajo</label>'+col('ambiente','colorBot')+'</div></div>'+
       '</div>'+
-      '<div class="mejoras"><div class="h">'+ICO.destello+' Cortes y textura de fondo</div>'+
+      '<div class="mejoras"><div class="h efx">'+ICO.destello+' Cortes y textura de fondo</div>'+
         '<div class="hint" style="margin-bottom:10px">El borde entre secciones y la textura del fondo. En vez de líneas rectas y color plano, elegí un corte con diseño y una textura real (le da el toque premium).</div>'+
         '<div class="grp"><label>Estilo del corte entre secciones</label>'+sel('diseno','cortes',[['','Recto (sin corte)'],['onda','Onda'],['curva','Curva suave'],['diagonal','Diagonal'],['arco','Arcos / festón'],['rasgado','Papel rasgado']])+'</div>'+
         '<div class="grp"><label>Textura del fondo</label>'+sel('diseno','textura',[['','Color liso (sin textura)'],['papel','Papel'],['lino','Lino'],['kraft','Kraft'],['marmol','Mármol'],['acuarela','Acuarela']])+'</div>'+
         '<div class="hint">La textura se tiñe con el color de cada sección, así combina con tu paleta.</div>'+
       '</div>'+
-      '<div class="mejoras"><div class="h">'+ICO.destello+' Adorno de las secciones</div>'+
+      '<div class="mejoras"><div class="h efx">'+ICO.destello+' Adorno de las secciones</div>'+
         '<div class="hint" style="margin-bottom:10px">El detallito decorativo que aparece arriba de cada sección. Elegí uno de la biblioteca o subí el tuyo (PNG con fondo transparente).</div>'+
         '<div class="adgrid">'+ MOTIFS.map(m=>'<button type="button" class="adopt'+((D.fx.diseno.adorno===m.id&&!D.fx.diseno.adornoCustom)?' on':'')+'" title="'+m.name+'" onclick="setAdorno(\''+m.id+'\')">'+(m.svg?('<svg viewBox=\'0 0 120 44\'>'+m.svg+'</svg>'):'<span class="adnone">—</span>')+'</button>').join('') +'</div>'+
         '<div class="grp" style="margin-top:10px"><div class="file" onclick="document.getElementById(\'adornofile\').click()">'+ICO.subir+' Subir mi adorno</div>'+
