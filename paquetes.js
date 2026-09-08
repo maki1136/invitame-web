@@ -2,10 +2,22 @@
 
    ESTE ES **EL ÚNICO** ARCHIVO QUE DECIDE QUÉ FUNCIONES TIENE UNA INVITACIÓN.
 
-   Lo usan tres pantallas, y las tres tienen que decir lo mismo:
-     · `/crear.html`   — qué solapas ve el cliente mientras arma su invitación
-     · `/admin.html`   — qué compró, y qué extra le vendieron aparte
-     · `/mi-panel.html`— qué puede tocar la pareja después
+   QUIÉN LO USA HOY, DE VERDAD (verificado el 8/9/2026):
+     · `/admin.html` → sí. Es la única pantalla que lo carga, y la única que
+       PRENDE funciones: el bloque de `efectos/panel-paquete.js`.
+     · `/solicitud-crear.php` → sí, del lado del servidor. Lee de acá qué
+       funciones son `leader` o `killer` y las apaga TODAS al crear una
+       invitación desde el formulario, pase lo que pase.
+
+   ⚠️⚠️ ANTES ACÁ DECÍA QUE LO USABAN TRES PANTALLAS —`crear.html` y
+      `mi-panel.html` incluidas— Y NO ERA CIERTO: ninguna de las dos lo carga.
+      No hacía falta que lo cargaran, porque ninguna de las dos tiene un solo
+      interruptor de función: el formulario junta datos y el panel de la pareja
+      toca invitados, mesas, itinerario y textos. Lo que sí faltaba era el
+      candado del servidor, y ése ya está puesto.
+      ★ Un comentario que describe lo que uno querría no protege nada. Si
+        mañana alguna de esas pantallas suma un interruptor, ahí sí tiene que
+        cargar este archivo y preguntarle a `tiene()` antes de dibujarlo.
 
    ⚠️⚠️ POR QUÉ ESTO EXISTE, Y NO ES BUROCRACIA
    Desde que el cliente puede personalizar su invitación solo, alguien con el
