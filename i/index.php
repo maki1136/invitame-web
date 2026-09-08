@@ -445,18 +445,12 @@ $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!importan
    ============================================================================ */
 $preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
           . '<link rel="preload" as="script" href="/sobres/catalogo.js">'
-          . '<link rel="preload" as="script" href="/efectos/index.js">';
-$listaModulos = @file_get_contents(__DIR__ . '/../efectos/index.js');
-if ($listaModulos !== false) {
-  if (preg_match_all("~'(/(?:efectos|muestras|colecciones)/[A-Za-z0-9._-]+\\.js)'~", $listaModulos, $mm)) {
-    $yaEsta = array();
-    foreach ($mm[1] as $u) {
-      if (isset($yaEsta[$u])) continue;
-      $yaEsta[$u] = 1;
-      $preCarga .= '<link rel="preload" as="script" href="' . htmlspecialchars($u, ENT_QUOTES) . '">';
-    }
-  }
-}
+          . '<link rel="preload" as="script" href="/efectos/index.js">'
+          . '<link rel="preload" as="script" href="/efectos/todo.php">';
+
+/* ⚠️ Antes acá se listaban los 63 módulos, uno por uno, leyendo la lista de
+   `efectos/index.js`. Ya no hace falta: los 63 vienen en UN solo pedido
+   (`/efectos/todo.php`), así que se precarga ese y nada más. */
 
 /* ⚠️ EL ORDEN IMPORTA: la hoja general primero y la paleta DESPUÉS, para que
    lo que eligió la clienta sea lo último en escribirse. */
