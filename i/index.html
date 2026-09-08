@@ -1188,7 +1188,31 @@
   };
   let tvName='',tvIdx=0,tvScore=0,tvLock=false;
   function tvLogin(){ const n=el('tvname').value.trim(); if(!n){el('tvname').focus();return;} tvName=n;
-    el('tv-login').style.display='none'; el('tv-start').style.display=''; el('tv-hi').textContent=TVTXT.hola+' '+tvName+'!'; }
+    el('tv-login').style.display='none'; el('tv-start').style.display=''; el('tv-hi').textContent=TVTXT.hola+' '+tvName+'!';
+    tvYaJugo(); }
+  /* ⚠️ SE JUEGA UNA SOLA VEZ. Maki: «obvio no pueden jugar mas de una vez porque
+     sino sabrian la respuesta». Antes de mostrar las preguntas se le pregunta al
+     servidor si esta persona ya jugó; si ya jugó, va derecho a su resultado y a
+     la tabla. El freno de verdad está en el servidor —acá es para no hacerla
+     jugar al pedo y después decirle que no contó. */
+  function tvYaJugo(){
+    try{
+      var _d=window.INVDATA||{}, _e=window.INVEV||{};
+      fetch('/trivia-guardar.php', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ slug:_d.slug||_e.slug||'', token:_d.token||'', nombre:tvName, consultar:true })})
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          if(!j || !j.ok || !j.yaJugaste) return;          /* no jugó todavía: que juegue */
+          tvScore = parseInt(j.miPuntaje,10)||0;
+          el('tv-start').style.display='none'; el('tv-quiz').style.display='none';
+          el('tv-end').style.display='';
+          el('tv-final').textContent=tvScore+' '+TVTXT.pts;
+          if(j.tabla && j.tabla.length) tvTabla(j.tabla.map(function(t){ return [t.nombre, t.puntaje, t.clave]; }), j.yo);
+          else tvTabla([[tvName, tvScore]], null);
+        })
+        .catch(function(){});
+    }catch(e){}
+  }
   /* "cerrar sesión": vuelve al principio para que juegue otra persona en el mismo celular */
   function tvSalir(){ tvName=''; tvIdx=0; tvScore=0; el('tvname').value='';
     el('tv-start').style.display='none'; el('tv-quiz').style.display='none'; el('tv-end').style.display='none';
