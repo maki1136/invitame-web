@@ -514,6 +514,10 @@
      la de la galería, así el invitado primero se saca la foto y después entra a
      verlas todas. Si la galería no está, se cuelga antes de los contactos.
      «panel-filtro.js» va DESPUÉS: es su bloque del panel.
+   · «filtro-marcos.js» va ANTES que los dos: publica window.INVFILTRO, que es de
+     donde salen los seis diseños. La lista vive en UN solo lado, igual que
+     window.INVPALETAS, para que la miniatura del panel no se despegue nunca de
+     lo que ve el invitado.
    · `musica.js` NO tiene orden: se cuelga de la sección `#spotify-sec` que ya
      trae el motor y le agrega el texto de los novios y el botón de sugerir.
      `panel-musica.js` va DESPUÉS: es su bloque del panel, y lleva los dos
@@ -589,6 +593,7 @@
     '/efectos/acordeon.js',            /* los "Ver mapa" abrían en blanco: recarga los iframes */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
     '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
+    '/efectos/filtro-marcos.js',       /* los SEIS marcos, vestidos con la temática */
     '/efectos/filtro.js',              /* la cámara con el marco de la boda (fx.filtro) */
     '/efectos/panel-filtro.js',        /* y su bloque en el panel, con el subidor del marco */
     '/efectos/pase-voz.js',            /* el ticket con el mensaje de voz de los anfitriones */

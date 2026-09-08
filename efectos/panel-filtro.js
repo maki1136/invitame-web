@@ -77,6 +77,20 @@
     return i;
   }
 
+  /* El campo de la frase. El placeholder sale de la MISMA tabla que usa la
+     invitación (INVFILTRO.frases), no de una copia escrita acá. */
+  function fraseCampo(d) {
+    var i = document.createElement('input');
+    i.type = 'text';
+    i.maxLength = 60;
+    var tipo = String(d.tipoEvento || d.tipo || 'boda').toLowerCase();
+    var F = (window.INVFILTRO && window.INVFILTRO.frases) || {};
+    i.placeholder = F[tipo] || F.otro || 'En la fiesta de';
+    i.value = String(cfg(d).frase || '');
+    i.oninput = function () { cfg(d).frase = this.value; refrescar(); };
+    return i;
+  }
+
   function color(d, clave, porDefecto) {
     var i = document.createElement('input');
     i.type = 'color';
@@ -152,6 +166,65 @@
     return caja;
   }
 
+  /* ---- el selector de diseños, con miniaturas de verdad ------------------
+
+     Las miniaturas NO son imágenes guardadas: se dibujan con la misma función
+     que usa la invitación (INVFILTRO.dibujar), con los datos de ESTA boda.
+     Así lo que ve Jazmín es exactamente lo que va a ver el invitado, y el día
+     que cambie la paleta las seis se repintan solas. */
+
+  function miniatura(d, id, ancho) {
+    var img = document.createElement('canvas');
+    var alto = Math.round(ancho * window.INVFILTRO.ALTO / window.INVFILTRO.ANCHO);
+    img.width = ancho; img.height = alto;
+    var x = img.getContext('2d');
+    /* un fondo gris de fotito, para que se lea el marco claro */
+    var g = x.createLinearGradient(0, 0, 0, alto);
+    g.addColorStop(0, '#9aa2a8'); g.addColorStop(1, '#5d5550');
+    x.fillStyle = g; x.fillRect(0, 0, ancho, alto);
+    try {
+      x.drawImage(window.INVFILTRO.dibujar(window.INVFILTRO.tema({ diseno: id }, d)),
+                  0, 0, ancho, alto);
+    } catch (e) {}
+    return img;
+  }
+
+  function selectorDisenos(d) {
+    var caja = document.createElement('div');
+    caja.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:10px';
+    if (!window.INVFILTRO) {
+      caja.className = 'hint';
+      caja.textContent = 'Los diseños todavía no cargaron. Recargá la página.';
+      return caja;
+    }
+    window.INVFILTRO.disenos.forEach(function (dis) {
+      var id = dis[0];
+      var ficha = document.createElement('div');
+      var elegido = (String(cfg(d).diseno || 'filete') === id);
+      ficha.style.cssText = 'border:2px solid ' + (elegido ? 'var(--rosa)' : 'var(--line)') +
+        ';border-radius:12px;overflow:hidden;cursor:pointer;background:#fff;' +
+        (elegido ? 'box-shadow:0 6px 14px -8px rgba(240,80,92,.9);' : '');
+      ficha.title = dis[2];
+      var mini = miniatura(d, id, 150);
+      mini.style.cssText = 'width:100%;height:auto;display:block';
+      ficha.appendChild(mini);
+      var nom = document.createElement('div');
+      nom.textContent = dis[1];
+      nom.style.cssText = 'padding:6px 4px;font-size:11.5px;text-align:center;font-weight:600;' +
+        'color:' + (elegido ? 'var(--uva)' : 'var(--ink)');
+      ficha.appendChild(nom);
+      ficha.onclick = function () {
+        cfg(d).diseno = id;
+        refrescar();
+        var padre = caja.parentNode;
+        var nueva = selectorDisenos(d);
+        if (padre) padre.replaceChild(nueva, caja);
+      };
+      caja.appendChild(ficha);
+    });
+    return caja;
+  }
+
   function construir(d) {
     var caja = document.createElement('div');
     caja.className = 'mejoras';
@@ -172,6 +245,17 @@
     caja.appendChild(ayuda);
 
     caja.appendChild(grupo('', tilde(d, 'encendido', 'Mostrar el filtro en la invitación')));
+
+    caja.appendChild(grupo('El diseño del marco', selectorDisenos(d),
+      'Se dibujan solos con la paleta, la tipografía y la colección de ESTA invitación. ' +
+      'Si cambiás la paleta, los seis cambian con ella.'));
+
+    /* ⚠️ El placeholder NO es un texto de relleno: es exactamente lo que va a
+       salir si el campo queda vacío, calculado según el tipo de evento. */
+    caja.appendChild(grupo('La frase de arriba', fraseCampo(d),
+      'Va arriba de los nombres. Si la dejás vacía sale la de fábrica según el tipo ' +
+      'de evento. Los novios también pueden cambiarla desde su panel: vale la última ' +
+      'que se guarda.'));
 
     caja.appendChild(grupo('El marco de la foto', subidor(d),
       'Un PNG con fondo transparente, de 1080 × 1920 (una historia). Si no subís ninguno, ' +

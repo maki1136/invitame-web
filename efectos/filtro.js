@@ -79,91 +79,21 @@
     } catch (e) {}
     return (c || '').trim() || '#6D1233';
   }
-  function tinta() {
-    var k = cfg();
-    if (k && k.colorMarco) return String(k.colorMarco);
-    var c = '';
-    try {
-      c = getComputedStyle(document.documentElement).getPropertyValue('--cream') || '';
-    } catch (e) {}
-    return (c || '').trim() || '#F2E9D8';
-  }
 
   /* ---------------------------------------------------------------- el marco */
 
-  /* El de fábrica: dos filetes finos y, abajo, los nombres y la fecha con la
-     tipografía de la invitación. Se dibuja una sola vez. */
+  /* Los SEIS diseños viven en /efectos/filtro-marcos.js, que publica
+     «window.INVFILTRO». Ahí se lee la temática de la invitación (paleta,
+     tipografía, colección, tipo de evento) y se dibuja el marco.
+     ⚠️ El panel usa ESA MISMA función para sus miniaturas: por eso la lista de
+        diseños no se copia acá. Una copia se queda vieja y la miniatura deja de
+        coincidir con lo que ve el invitado. */
   function marcoDeFabrica() {
-    var ev = window.INVEV || {};
+    if (window.INVFILTRO && window.INVFILTRO.dibujar) return window.INVFILTRO.dibujar();
+    /* Si ese archivo no cargó, la fiesta sigue: lienzo vacío y foto sin marco. */
     var c = document.createElement('canvas');
     c.width = ANCHO; c.height = ALTO;
-    var x = c.getContext('2d');
-    var col = tinta();
-
-    /* Un velo abajo para que el texto se lea sobre cualquier foto. */
-    var velo = x.createLinearGradient(0, ALTO * 0.58, 0, ALTO);
-    velo.addColorStop(0, 'rgba(20,12,16,0)');
-    velo.addColorStop(1, 'rgba(20,12,16,.46)');
-    x.fillStyle = velo;
-    x.fillRect(0, ALTO * 0.58, ANCHO, ALTO * 0.42);
-
-    /* Los dos filetes. */
-    x.strokeStyle = col;
-    x.globalAlpha = 0.9;  x.lineWidth = 4;  x.strokeRect(46, 46, ANCHO - 92, ALTO - 92);
-    x.globalAlpha = 0.55; x.lineWidth = 2;  x.strokeRect(66, 66, ANCHO - 132, ALTO - 132);
-    x.globalAlpha = 1;
-
-    /* Los nombres. Si no hay, no se escribe nada: no se inventa una pareja. */
-    var n1 = String(ev.n1 || '').trim();
-    var n2 = String(ev.n2 || '').trim();
-    var nombres = n1 && n2 ? (n1 + ' & ' + n2) : (n1 || n2 || '');
-
-    x.textAlign = 'center';
-    x.fillStyle = col;
-
-    if (nombres) {
-      var fuente = (ev.nfont && String(ev.nfont)) || "'Great Vibes', cursive";
-      x.font = '120px ' + fuente;
-      /* Si la tipografía elegida no entra en el ancho, se achica hasta entrar. */
-      var tam = 120;
-      while (tam > 46 && x.measureText(nombres).width > ANCHO - 220) {
-        tam -= 4; x.font = tam + 'px ' + fuente;
-      }
-      x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowBlur = 18; x.shadowOffsetY = 3;
-      x.fillText(nombres, ANCHO / 2, ALTO - 380);
-      x.shadowColor = 'transparent'; x.shadowBlur = 0; x.shadowOffsetY = 0;
-    }
-
-    var fecha = textoFecha(ev);
-    if (fecha) {
-      x.font = "42px 'Forum', 'Cormorant Garamond', Georgia, serif";
-      x.globalAlpha = 0.92;
-      x.fillText(espaciar(fecha.toUpperCase()), ANCHO / 2, ALTO - 292);
-      x.globalAlpha = 1;
-    }
-
     return c;
-  }
-
-  /* ⚠️ LOS NOMBRES Y LA FECHA VAN ARRIBA DE LOS CONTROLES. La primera versión
-     los ponía a 250 y 168 px del piso, que en la pantalla es justo donde está
-     el disparador: en la foto guardada se veían bien, pero mientras el
-     invitado se encuadraba estaban tapados por los botones. Se probó con la
-     cámara en vivo y se subieron a 380 y 292. */
-
-  /* canvas no tiene letter-spacing: se mete un cabello de espacio a mano. */
-  function espaciar(s) { return String(s).split('').join(' '); }
-
-  function textoFecha(ev) {
-    var t = String(ev.fechaTexto || '').trim();
-    if (t) return t.slice(0, 40);
-    var f = ev.fecha || ev.fechaISO || '';
-    if (!f) return '';
-    var d = new Date(f);
-    if (isNaN(d.getTime())) return '';
-    var M = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
-             'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    return d.getDate() + ' de ' + M[d.getMonth()] + ' de ' + d.getFullYear();
   }
 
   /* Devuelve el marco listo para dibujar. Promesa, porque el subido tarda. */
