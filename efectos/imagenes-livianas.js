@@ -19,108 +19,136 @@
 
    LA SOLUCIÓN, SIN TOCAR NINGUNA FOTO
    Cloudinary sabe convertir y achicar al vuelo: alcanza con pedírselo en la
-   dirección. Este módulo agrega ese pedido a cada foto de la invitación:
+   dirección:
 
        .../upload/v1784.../foto.png
        .../upload/f_auto,q_auto:good,w_1200,c_limit/v1784.../foto.png
 
-     · `f_auto`  → le manda a cada teléfono el formato que ese teléfono entiende
-                   mejor (WebP o AVIF); si es viejo, el de siempre.
+     · `f_auto` → le manda a cada teléfono el formato que ese teléfono entiende
+                  mejor (WebP o AVIF); si es viejo, el de siempre.
      · `q_auto:good` → la calidad justa. Ojo humano: no se nota. Peso: sí.
      · `w_1200,c_limit` → ninguna foto viaja más grande de lo que se ve.
-                   `c_limit` sólo ACHICA: a una foto chica no la estira.
+                  `c_limit` sólo ACHICA: a una foto chica no la estira.
 
-   MEDIDO, esta misma invitación:  5961 KB  →  2247 KB   (62% menos)
-   Las dos grandes:  995 KB → 50 KB  ·  528 KB → 53 KB.
+   MEDIDO en esta misma invitación: 995 KB → 50 KB y 528 KB → 53 KB.
+
+   ⚠️⚠️ POR QUÉ SE CAMBIA LA DIRECCIÓN **ANTES** DE ASIGNARLA, Y NO DESPUÉS
+   La primera versión de este archivo miraba las imágenes ya puestas en la
+   pantalla y les corregía la dirección. **Salió peor.** Cuando una imagen ya
+   está en el documento, el navegador YA empezó a bajarla: cambiarle la
+   dirección no cancela ese pedido, agrega otro. Medido en vivo: 36 pedidos con
+   la foto pesada (5113 KB) MÁS 36 con la liviana (2387 KB). El doble.
+
+   Por eso ahora se corrige en el momento exacto en que alguien escribe la
+   dirección —`img.src = ...`, `setAttribute('src', ...)`, el fondo por estilo—,
+   antes de que el navegador se entere. Un solo pedido, y el liviano.
+
+   ⚠️ SE CAMBIA SÓLO LA DIRECCIÓN, NUNCA LA FOTO. No se re-sube ni se modifica
+      nada en Cloudinary. Si esto se apaga, todo vuelve a como estaba.
 
    ⚠️ NO SE TOCA NINGUNA FOTO QUE YA TENGA INSTRUCCIONES. Si la dirección ya
       trae algo (un recorte, un `g_face`, un tamaño), se la deja como está: ese
-      recorte lo puso alguien a propósito y cambiarlo movería el encuadre. Sólo
-      se completan las que están crudas, que son justamente las pesadas.
+      recorte lo puso alguien a propósito y cambiarlo movería el encuadre.
 
-   ⚠️ NO SE TOCA CLOUDINARY. No se re-sube ni se modifica ninguna imagen: se
-      piden distinto. Si mañana esto se apaga, todo vuelve a como estaba.
+   ⚠️ VA EN LA CABEZA DEL DOCUMENTO Y SIN `defer` (lo pone `i/index.php`), y no
+      espera al `DOMContentLoaded`: tiene que estar puesto antes de que exista
+      la primera imagen. En la lista de `efectos/index.js` NO sirve: llega a los
+      1,2 s, cuando el motor ya pidió todo.
 
-   ⚠️ MIRA TAMBIÉN LAS QUE APARECEN DESPUÉS. La invitación arma secciones a
-      medida que llegan los datos, así que no alcanza con pasar una vez: queda
-      un observador escuchando lo que se agrega.
+   ⚠️ TODO VA ADENTRO DE UN `try`: si algo de esto fallara, la invitación tiene
+      que seguir funcionando exactamente como antes, con las fotos pesadas.
    ============================================================================ */
 (function () {
 
   var RECETA = 'f_auto,q_auto:good,w_1200,c_limit/';
 
-  /* Devuelve la dirección optimizada, o '' si no hay que tocarla. */
+  /* La dirección liviana, o '' si no hay que tocarla. */
   function liviana(url) {
-    if (!url || url.indexOf('res.cloudinary.com') < 0) return '';
-    if (url.indexOf('/image/upload/') < 0) return '';        /* video no */
+    if (typeof url !== 'string' || url.indexOf('res.cloudinary.com') < 0) return '';
+    if (url.indexOf('/image/upload/') < 0) return '';          /* el video, no */
     var i = url.indexOf('/upload/') + 8;
     var cola = url.slice(i);
-    /* ⚠️ Si lo que sigue a /upload/ NO es la versión (vNNN), ya hay
-       instrucciones puestas a mano: no se tocan. */
-    if (!/^v\d+\//.test(cola)) return '';
+    if (!/^v\d+\//.test(cola)) return '';   /* ya tiene instrucciones: se respeta */
     return url.slice(0, i) + RECETA + cola;
   }
 
-  function arreglarImg(img) {
-    if (img.dataset.liviana) return;
-    var n = liviana(img.getAttribute('src') || '');
-    if (!n) { img.dataset.liviana = 'no'; return; }
-    img.dataset.liviana = 'si';
-    img.src = n;
+  /* Lo mismo, adentro de un texto de CSS: url("...") */
+  function livianaCss(txt) {
+    if (typeof txt !== 'string' || txt.indexOf('res.cloudinary.com') < 0) return '';
+    var cambio = false;
+    var salida = txt.replace(/url\((['"]?)([^'")]+)\1\)/g, function (todo, comilla, u) {
+      var n = liviana(u);
+      if (!n) return todo;
+      cambio = true;
+      return 'url("' + n + '")';
+    });
+    return cambio ? salida : '';
   }
 
-  /* Los fondos puestos por estilo: `background-image:url(...)`. */
-  function arreglarFondo(el) {
-    if (el.dataset && el.dataset.livianaBg) return;
-    var bg = el.style && el.style.backgroundImage;
-    if (!bg || bg.indexOf('res.cloudinary.com') < 0) return;
-    var m = bg.match(/url\((['"]?)(.*?)\1\)/);
-    if (!m) return;
-    var n = liviana(m[2]);
-    if (el.dataset) el.dataset.livianaBg = n ? 'si' : 'no';
-    if (n) el.style.backgroundImage = 'url("' + n + '")';
-  }
+  try {
+    /* 1. img.src = '...' */
+    var descSrc = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
+    if (descSrc && descSrc.set) {
+      Object.defineProperty(HTMLImageElement.prototype, 'src', {
+        configurable: true,
+        enumerable: descSrc.enumerable,
+        get: descSrc.get,
+        set: function (v) { descSrc.set.call(this, liviana(v) || v); }
+      });
+    }
 
-  function pasada(raiz) {
-    if (!raiz || !raiz.querySelectorAll) return;
-    var imgs = raiz.querySelectorAll('img[src*="res.cloudinary.com"]');
-    for (var i = 0; i < imgs.length; i++) arreglarImg(imgs[i]);
-    var fondos = raiz.querySelectorAll('[style*="res.cloudinary.com"]');
-    for (var j = 0; j < fondos.length; j++) arreglarFondo(fondos[j]);
-    if (raiz.tagName === 'IMG') arreglarImg(raiz);
-  }
-
-  function arrancar() {
-    pasada(document);
-
-    /* Lo que se agrega después: secciones, galería, tarjetas. */
-    try {
-      var obs = new MutationObserver(function (cambios) {
-        for (var i = 0; i < cambios.length; i++) {
-          var c = cambios[i];
-          if (c.type === 'attributes') {
-            if (c.target.tagName === 'IMG') { delete c.target.dataset.liviana; arreglarImg(c.target); }
-            else { if (c.target.dataset) delete c.target.dataset.livianaBg; arreglarFondo(c.target); }
-            continue;
-          }
-          for (var j = 0; j < c.addedNodes.length; j++) {
-            var n = c.addedNodes[j];
-            if (n.nodeType !== 1) continue;
-            if (n.tagName === 'IMG') arreglarImg(n);
-            arreglarFondo(n);
-            pasada(n);
-          }
+    /* 2. elemento.setAttribute('src', ...) y setAttribute('style', ...) */
+    var setAttrOriginal = Element.prototype.setAttribute;
+    Element.prototype.setAttribute = function (nombre, valor) {
+      try {
+        var n = String(nombre).toLowerCase();
+        if ((n === 'src' || n === 'data-src') && this.tagName === 'IMG') {
+          valor = liviana(valor) || valor;
+        } else if (n === 'style') {
+          valor = livianaCss(valor) || valor;
         }
-      });
-      obs.observe(document.documentElement, {
-        childList: true, subtree: true,
-        attributes: true, attributeFilter: ['src', 'style']
-      });
-      /* A los 25 segundos ya está todo dibujado: se deja de escuchar. */
-      setTimeout(function () { try { obs.disconnect(); } catch (e) {} }, 25000);
-    } catch (e) { /* navegador viejo: al menos quedó la primera pasada */ }
-  }
+      } catch (e) {}
+      return setAttrOriginal.call(this, nombre, valor);
+    };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
-  else arrancar();
+    /* 3. elemento.style.backgroundImage = 'url(...)' y setProperty(...) */
+    var descBg = Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype, 'backgroundImage');
+    if (descBg && descBg.set) {
+      Object.defineProperty(CSSStyleDeclaration.prototype, 'backgroundImage', {
+        configurable: true,
+        enumerable: descBg.enumerable,
+        get: descBg.get,
+        set: function (v) { descBg.set.call(this, livianaCss(v) || v); }
+      });
+    }
+    var setPropOriginal = CSSStyleDeclaration.prototype.setProperty;
+    CSSStyleDeclaration.prototype.setProperty = function (prop, valor, prioridad) {
+      try {
+        if (typeof valor === 'string' && valor.indexOf('res.cloudinary.com') > -1) {
+          valor = livianaCss(valor) || valor;
+        }
+      } catch (e) {}
+      return setPropOriginal.call(this, prop, valor, prioridad);
+    };
+
+    /* 4. Las que ya vinieran escritas en el HTML. Acá sí hay que mirarlas, pero
+          este archivo corre antes del cuerpo, así que todavía no existe
+          ninguna: es sólo por si alguna se cuela. */
+    var repasar = function () {
+      try {
+        var imgs = document.querySelectorAll('img[src*="res.cloudinary.com"]');
+        for (var i = 0; i < imgs.length; i++) {
+          var n = liviana(imgs[i].getAttribute('src') || '');
+          if (n) imgs[i].setAttribute('src', n);
+        }
+      } catch (e) {}
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', repasar, { once: true });
+    } else { repasar(); }
+
+  } catch (e) {
+    /* Si algo de esto no se puede hacer en este navegador, no pasa nada:
+       la invitación sigue igual que siempre, con las fotos como están. */
+  }
 })();
