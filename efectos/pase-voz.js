@@ -133,7 +133,21 @@
       /* ⚠️ padding-right 60: le RESERVA el lugar a la columna del mensaje. Sin eso
          el titulo corre por debajo y, mientras la columna esta pegada, se lee
          "PASE DE INVITA...O". El boleto tiene que verse ENTERO y limpio. */
-      '#pv-sec .pv-cuerpo{padding:20px 60px 18px 18px;display:flex;flex-direction:column;',
+      /* ⚠️⚠️ 44%, NO 60px — Y ES UN NUMERO MEDIDO (8/9/2026).
+         Maki, con una captura del iPhone: «el ticket mira como se ve». En la
+         foto, «PASE DE INVITADO» y «Un mensaje para ti» quedaban TAPADOS por la
+         columna del mensaje, que se dibuja ENCIMA del cuerpo.
+         El reservado de 60px no alcanzaba: medido, la columna arranca a 120px
+         del borde derecho del boleto, no a 60. Y tiene que ser PORCENTAJE, no
+         pixeles, porque la columna se posiciona en % del ancho: con un valor
+         fijo se vuelve a pisar apenas cambia la pantalla.
+         Verificado a 360 y a 390 px de ancho: cero superposicion con el titulo,
+         con «PASE DE INVITADO» y con «De parte de», y el titulo entra en un solo
+         renglon. Con 38% todavia se pisaba; 44% deja 9-13 px de aire.
+         ⚠️ Y OJO CON COMO SE COMPRUEBA: que el texto no se corte por su propia
+            caja (scrollWidth) NO alcanza — el texto entra entero y queda TAPADO.
+            Hay que medir la superposicion de los rectangulos. */
+      '#pv-sec .pv-cuerpo{padding:20px 44% 18px 18px;display:flex;flex-direction:column;',
       '  justify-content:center;min-height:168px;min-width:0}',
       '#pv-sec .pv-over{font-family:var(--pv-dat);font-size:8px;letter-spacing:.16em;',
       '  text-transform:uppercase;font-weight:600;color:var(--pv-acento);margin:0;line-height:1.35}',
