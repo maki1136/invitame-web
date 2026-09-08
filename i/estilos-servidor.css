@@ -314,61 +314,78 @@ iframe[src*="spotify"]{
 
    Maki lo reportó TRES VECES: «se ve un sobre raro y un sello raro antes que
    cargue la foto de portada, queda como el culo». Se arregló tres veces y las
-   tres volvió. Esta es la cuarta y ataca la causa, no las piezas.
+   tres volvió.
 
-   POR QUÉ VOLVÍA SIEMPRE — dos motivos, medidos el 8/9/2026:
+   ⚠️ ESTA REGLA NO VIVE SOLA. Su otra mitad está al final de
+   `efectos/todo.php`, que es quien pone la clase `inv-sobre-listo`. Si se toca
+   una, se toca la otra. Están explicadas las dos.
+
+   ── POR QUÉ VOLVÍA SIEMPRE ───────────────────────────────────────────────────
 
    1. EL MOTOR APAGA, NO ENCIENDE. Adentro de `#env` conviven varios sobres
-      superpuestos. Casi todos nacen en `display:none` y cada modo prende el
-      suyo… menos `.scene` —el sobre de papel con `.seal`, que es literalmente
-      "el sello raro"— que NO tiene `display:none` y se ve por defecto. Recién
-      lo apaga el JS, después. Entre el primer pintado y ese momento, el
-      invitado ve el sobre viejo. Con caché caliente es un parpadeo; con red
-      lenta, un segundo largo.
+      superpuestos, y el motor decide cuál mostrar recién cuando corre el JS.
+      Antes de eso, en el primer pintado, hay uno a la vista que no es el de
+      esta pareja.
 
    2. LOS TRES ARREGLOS ANTERIORES ENUMERARON PIEZAS
       (`.triflap`, `#scene`, `.ct-wrap`, `#e-back`…) y encima adentro de un
       `if` de `i/index.php` que sólo corre para los sobres en video de la tabla
-      `$SOBRES_VIDEO`. Dos fallas en una:
-        · la lista de piezas CAMBIA en cada versión congelada del motor
-          (`.ct-wrap` ni siquiera existe en la que se sirve hoy);
-        · y esa condición deja afuera a todas las invitaciones con sobre de
-          carta, que son las nuestras. Medido: camila-y-tomas es
-          `modelo: maestro`, `tipo: carta` → NUNCA entró en ese `if`.
+      `$SOBRES_VIDEO`. Dos fallas en una: la lista de piezas CAMBIA en cada
+      versión congelada del motor (`.ct-wrap` ni siquiera existe en la que se
+      sirve hoy), y esa condición deja afuera a todas las invitaciones con sobre
+      de carta, que son las nuestras. Medido: camila-y-tomas es
+      `modelo: maestro`, `tipo: carta` → NUNCA entró en ese `if`.
 
-   ★ LA REGLA NUEVA: NO SE ENUMERA NINGUNA PIEZA. Se apaga TODO lo que cuelga
-     de `#env` hasta que el modo esté decidido. Una versión nueva del motor
-     puede agregar las piezas que quiera: nacen apagadas.
+   ── Y POR QUÉ EL CUARTO INTENTO TAMPOCO ALCANZÓ (mismo día) ──────────────────
 
-   ★ Y SE ENUMERAN LOS MODOS, QUE SÍ SON ESTABLES (los define el motor y son
-     seis). Apenas `#env` tiene su clase de modo, esta regla entera deja de
-     aplicar y mandan el motor y su módulo, sin pelearse con nadie.
+   El cuarto intento apagó todo lo que cuelga de `#env` —bien— pero se creyó
+   que tener clase de modo (`tri-mode`, `video-mode`, `sello-video`) significaba
+   «el sobre ya está decidido». Es exactamente al revés. El motor hace, en su
+   script de arranque y antes de saber nada de esta pareja:
 
-   ⚠️ POR QUÉ `visibility` Y NO `display`. `display:none` sacaría las piezas
-     del cálculo de tamaño y algunos módulos miden al arrancar. `visibility`
-     las deja donde están, ocupando su lugar, sin verse.
+       if (CONFIG.sobreTriangulos) { initEnvTri(); } else { initEnvVideo(); }
 
-   ⚠️ NO PUEDE QUEDAR TODO VACÍO PARA SIEMPRE — ése fue el error del primer
-     intento («apagar los otros tres sin encender el video dejaba todo VACÍO»).
-     Por eso está el rescate: a los 1,5 s se enciende igual, pase lo que pase,
-     sin una línea de JavaScript. Prefiero un sobre viejo a los 1,5 segundos
-     que una pantalla muerta.
+   O sea: esas clases son LA CONJETURA DEL MOTOR, no la decisión. Medido en los
+   cuatro navegadores: seguían apareciendo las cuatro solapas del sobre viejo
+   (.tri-t, .tri-r, .tri-b, .tri-l), a 1440x900 en la compu y a 834x1194 en el
+   iPad.
 
-   ⚠️ EL FONDO. Mientras no se decidió el modo, `#env` es un verde oscuro del
-     motor y después pasa a marfil: eso también es un parpadeo. Se le pone el
-     marfil desde el principio, y SÓLO en esa ventana: apenas hay modo, la
-     regla no aplica más y el color lo decide quien corresponde.
+   ★ LA LECCIÓN, QUE YA COSTÓ CUATRO INTENTOS: no alcanza con no enumerar las
+     piezas; tampoco hay que confiar en una señal que el sistema emite ANTES de
+     tener el dato. La única señal válida es una que se ponga cuando la decisión
+     ya está tomada — y si no existe, se crea.
+
+   ── LO QUE HACE ESTA REGLA ───────────────────────────────────────────────────
+
+   Apaga TODO lo que cuelga de `#env` hasta que aparece `inv-sobre-listo`. No
+   nombra ni una pieza: una versión nueva del motor puede agregar las que
+   quiera, nacen apagadas.
+
+   ⚠️ `visibility` y no `display`: `display:none` sacaría las piezas del cálculo
+     de tamaño y hay módulos que miden al arrancar.
+
+   ⚠️ EL RESCATE NO ES DECORATIVO. Si `efectos/todo.php` no llega —o los módulos
+     se cargan de a uno por el camino viejo— la clase nunca se pone. A los 1,5 s
+     se enciende igual, con una animación, sin una línea de JavaScript.
+     Prefiero un sobre viejo a los 1,5 segundos que una pantalla muerta: ése fue
+     el error del primer intento («apagar los otros tres sin encender el video
+     dejaba todo VACÍO»).
+
+   ⚠️ EL FONDO. Mientras no se decidió, `#env` es un verde oscuro del motor y
+     después pasa a marfil: eso también es un parpadeo. Se le pone el marfil en
+     esa ventana y nada más; apenas hay marca, la regla no aplica y el color lo
+     decide quien corresponde.
 
    CÓMO SE COMPRUEBA: `probar.command`, chequeo «no asoma otro sobre al abrir»,
-   que mide a los 150 ms con red lenta y caché vacía. Antes: 4 piezas a la
-   vista en los cuatro navegadores. Tiene que dar cero en los cuatro.
+   que mide a los 150 ms con red lenta y caché vacía, y ahora NOMBRA la pieza
+   que quedó a la vista. Tiene que dar cero en los cuatro navegadores.
    ============================================================================ */
 
-#env:not(.video-mode):not(.tri-mode):not(.carta-video):not(.sello-video):not(.reveal):not(.gone){
+#env:not(.inv-sobre-listo){
   background: #efe9e0;
 }
 
-#env:not(.video-mode):not(.tri-mode):not(.carta-video):not(.sello-video):not(.reveal):not(.gone) > *{
+#env:not(.inv-sobre-listo) > *{
   visibility: hidden;
   animation: inv-rescate-sobre 0s linear 1.5s forwards;
 }
