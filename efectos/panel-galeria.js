@@ -29,18 +29,23 @@
    en el panel esa sesión ya está abierta. O sea que la razón por la que la
    función estaba trabada no existía.
 
-   ⚠️ PERO CREAR UNA GALERÍA GASTA UN CRÉDITO, y los créditos son plata. Por
-      eso el botón:
-        · muestra el saldo ANTES de tocar nada,
-        · pregunta antes de crear,
-        · y se niega si esta invitación YA tiene galería. Crear dos veces no
-          rompe nada visible: simplemente quema un crédito y deja huérfana la
-          primera. Es el error más caro que se puede cometer desde acá.
+   ⚠️⚠️ Y ACÁ ESTUVO MI ERROR, QUE MAKI CORRIGIÓ. El Worker tiene DOS puertas
+      para dar de alta una fiesta, y la primera versión de este botón usó la
+      equivocada:
+        · `X-Clave: CLAVE_ALTA`  → NO gasta crédito. Es la de la casa: la que
+          va cuando la fiesta es de un cliente nuestro.
+        · `Bearer <token>`       → gasta 1 crédito. Es la del canal B2B: un
+          fotógrafo consumiendo las fiestas que nos compró.
+      Maki: «pero no entiendo que gasten créditos los B2C». Tenía razón: el
+      crédito es la unidad de VENTA del canal mayorista; en una venta directa
+      no hay nada que descontar.
 
-   ⚠️ La galería se crea a nombre de LA CUENTA QUE ESTÉ ABIERTA en el panel, y
-      es esa cuenta la que paga. Si el Worker contesta «no existe», esa cuenta
-      todavía no tiene saldo: se carga desde /galeria/creditos.html, que es la
-      pantalla de Maki.
+   ⭐ Por eso este botón llama a `/galeria-alta.php`, que guarda la clave
+      afuera del repo y entra por la puerta de la casa. NO gasta créditos y no
+      hace falta que ninguna cuenta tenga saldo.
+
+   ⚠️ Igual se niega si esta invitación YA tiene galería. Crear dos veces no
+      se ve roto: deja huérfana la primera y duplica los gigas del mes.
    ============================================================================ */
 (function () {
 
@@ -211,85 +216,65 @@
     var links = document.createElement('div');
 
     /* ---- crear la galería de esta fiesta ---------------------------------
-       Ver la nota grande de arriba: esto GASTA UN CRÉDITO. */
+       Ver la nota grande de arriba: va por /galeria-alta.php, que NO gasta
+       créditos. Los créditos son del canal mayorista, no de nuestros clientes. */
     var cajaAlta = document.createElement('div');
     cajaAlta.style.cssText = 'margin:2px 0 12px';
     var btnAlta = document.createElement('button');
     btnAlta.type = 'button';
     btnAlta.className = 'addbtn gh';
     btnAlta.innerHTML = ico('destello') + ' Crear la galería de esta fiesta';
-    var saldo = document.createElement('div');
-    saldo.className = 'hint';
-    saldo.style.marginTop = '5px';
-    cajaAlta.appendChild(btnAlta); cajaAlta.appendChild(saldo);
+    var notaAlta = document.createElement('div');
+    notaAlta.className = 'hint';
+    notaAlta.style.marginTop = '5px';
+    notaAlta.textContent = 'Se crea a nombre de Invítame. No gasta créditos: los créditos son de los fotógrafos que compran fiestas por volumen.';
+    cajaAlta.appendChild(btnAlta); cajaAlta.appendChild(notaAlta);
     caja.appendChild(cajaAlta);
 
-    function sesion() {
-      return (window.INV && window.INV.user) ? window.INV.user : null;
-    }
     function acomodarAlta() {
       var dd = borrador() || d;
       var ya = FORMA_GID.test(String(cfg(dd).gid || '').trim());
-      btnAlta.style.display = ya ? 'none' : '';
-      saldo.style.display   = ya ? 'none' : '';
+      cajaAlta.style.display = ya ? 'none' : '';
     }
     acomodarAlta();
 
-    /* el saldo se mira UNA vez al abrir el bloque: es sólo lectura */
-    (function () {
-      var u = sesion(); if (!u) { saldo.textContent = 'Entrá al panel para poder crear la galería.'; return; }
-      u.getIdToken(true).then(function (tok) {
-        return fetch(WORKER + '/cuenta', { headers: { Authorization: 'Bearer ' + tok } })
-          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); });
-      }).then(function (res) {
-        if (!res.ok) {
-          saldo.innerHTML = 'Esta cuenta todavía no tiene saldo de galerías. Se carga en ' +
-            '<a href="/galeria/creditos.html" target="_blank">Cargar créditos</a>.';
-          btnAlta.disabled = true;
-          return;
-        }
-        var n = res.j.creditos;
-        if (n == null) n = res.j.saldo;
-        saldo.textContent = (n === 0)
-          ? 'No te quedan créditos de galería.'
-          : 'Crear la galería usa 1 crédito. Te quedan ' + n + '.';
-        if (n === 0) btnAlta.disabled = true;
-      })['catch'](function () { saldo.textContent = 'No pude leer el saldo de galerías.'; });
-    })();
-
     btnAlta.onclick = function () {
       var dd = borrador(); if (!dd) return;
-      /* ⚠️ el freno que evita quemar un crédito al pedo */
+      /* el freno: crear dos veces deja huérfana la primera */
       if (FORMA_GID.test(String(cfg(dd).gid || '').trim())) {
-        alert('Esta invitación ya tiene su galería. Si creás otra, gastás un crédito y la de antes queda huérfana.');
-        acomodarAlta(); return;
+        alert('Esta invitación ya tiene su galería.'); acomodarAlta(); return;
       }
-      var u = sesion(); if (!u) { alert('No hay sesión abierta.'); return; }
+      var u = (window.INV && window.INV.user) ? window.INV.user : null;
+      if (!u) { alert('No hay sesión abierta en el panel.'); return; }
       var quienes = [dd.n1, dd.n2].filter(Boolean).join(' & ') || String(dd.slug || 'la fiesta');
-      if (!confirm('Voy a crear la galería de "' + quienes + '".\n\nEsto usa 1 crédito y no se puede deshacer.\n\n¿La creo?')) return;
+      if (!confirm('Creo la galería de "' + quienes + '"?')) return;
       var antes = btnAlta.innerHTML;
       btnAlta.disabled = true; btnAlta.textContent = 'Creando…';
       u.getIdToken(true).then(function (tok) {
-        return fetch(WORKER + '/crear', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
-          /* modo "auto": las fotos aparecen al toque, que es la gracia. Se
-             cambia después en /galeria/moderar.html si la pareja prefiere
-             revisarlas antes. */
-          body: JSON.stringify({ nombre: quienes, fecha: String(dd.fecha || '').slice(0, 10), modo: 'auto', audios: true })
-        }).then(function (r) { return r.json()['catch'](function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); });
-      }).then(function (res) {
+        return fetch('/galeria-alta.php', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          /* modo "auto": las fotos se ven al toque, que es la gracia. Se cambia
+             después en /galeria/moderar.html si prefieren revisarlas antes. */
+          body: JSON.stringify({ idToken: tok, nombre: quienes,
+                                 fecha: String(dd.fecha || '').slice(0, 10),
+                                 modo: 'auto', audios: true })
+        }).then(function (r) { return r.json()['catch'](function () { return {}; }); });
+      }).then(function (j) {
         btnAlta.disabled = false; btnAlta.innerHTML = antes;
-        if (!res.ok || !res.j.gid) {
-          alert('No se pudo crear la galería.\n\n' + (res.j.error || 'Probá de nuevo en un rato.'));
+        if (!j || !j.ok || !j.gid) {
+          var porQue = {
+            'sesion': 'Se venció tu sesión. Recargá el panel y probá de nuevo.',
+            'no-sos-del-equipo': 'Tu cuenta no está habilitada para crear galerías.',
+            'sin-clave': 'Falta terminar una configuración del servidor. Avisale a Maki.'
+          };
+          alert((porQue[j && j.error] || 'No se pudo crear la galería.') +
+                ((j && j.detalle) ? '\n\n(' + j.detalle + ')' : ''));
           return;
         }
         var d2 = borrador(); if (!d2) return;
-        cfg(d2).gid = res.j.gid;
+        cfg(d2).gid = j.gid;
         cfg(d2).encendido = true;
-        pintarLinks(d2, links);
-        acomodarAlta();
-        refrescar();
+        pintarLinks(d2, links); acomodarAlta(); refrescar();
         alert('Listo: la galería quedó creada y prendida.\n\nAcordate de tocar "Guardar y publicar" para que quede.');
       })['catch'](function (e) {
         btnAlta.disabled = false; btnAlta.innerHTML = antes;
