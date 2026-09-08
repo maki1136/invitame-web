@@ -98,6 +98,14 @@ if (!$ev || $solicId === '') {
    --------------------------------------------------------------------------- */
 $PROHIBIDOS = array(
   'estado', 'revision', 'ver', 'nEvento', 'orden', 'privado',
+  /* ⚠️⚠️ `paquete` y `extras` FALTABAN DE VERDAD. El comentario de arriba decía
+     desde el primer día que estaban en la lista, y no estaban: probado el
+     8/9/2026 mandando el pedido a mano, la invitación nació con
+     `paquete: platinum`. Nadie se prendía una función —eso ya está trabado más
+     abajo— pero Jazmín abría el panel, leía «Platinum» y se las prendía ella,
+     de buena fe. El engaño no era a la máquina: era a la persona.
+     ★ Un comentario que dice lo que el código debería hacer no lo hace. */
+  'paquete', 'extras',
   'creadoPor', 'creadoEl', 'guardadoPor', 'guardadoEl', '_solicId',
   'c_clave-del-panel-de-los-novios', 'c_contrasena-para-el-evento',
 );
@@ -107,6 +115,14 @@ if (isset($ev['fx']) && is_array($ev['fx'])) {
      llamado «¿quieres la tuya?». En la invitación de un cliente no van nunca. */
   unset($ev['fx']['muestra']);
   unset($ev['fx']['paquete']);
+  /* ⚠️ Y el código de la galería de invitados. Es el que apunta a UNA fiesta en
+     el Worker: si el cliente pudiera mandarlo, entraría a la galería de otra
+     pareja —ver sus fotos, o llenársela—. Lo da de alta el panel y nadie más.
+     `vestir.js` ya lo limpia al copiar una muestra, pero eso corre en el
+     navegador: acá se limpia otra vez, del lado que manda. */
+  if (isset($ev['fx']['galeria']) && is_array($ev['fx']['galeria'])) {
+    unset($ev['fx']['galeria']['gid']);
+  }
 }
 
 $slug = preg_replace('/[^a-z0-9\-]/', '', strtolower((string)($ev['slug'] ?? '')));
