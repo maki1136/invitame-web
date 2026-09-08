@@ -31,6 +31,13 @@
 
   var BASE = 'https://invitame.littlemomentsok.com';
 
+  /* ⚠️⚠️ `D` ES UN `let` DE 1-campos.js: NO EXISTE COLGADO DE `window`.
+     La primera versión de esta caja lo pedía por ahí, recibía undefined siempre,
+     leía el estado vacío y dibujaba «Entregada» aunque la invitación estuviera
+     por revisar. No dio ningún error: mintió en silencio.
+     Se lee por el nombre pelado, con red por si el archivo todavía no cargó. */
+  function dat() { try { return (typeof D !== 'undefined') ? D : null; } catch (e) { return null; } }
+
   function slugAbierto() {
     var p = new URLSearchParams(location.search);
     return (p.get('e') || '').trim();
@@ -43,7 +50,7 @@
   function estadoDe() {
     /* Vacío es «entregada»: las invitaciones de antes de este cambio no tienen
        el campo y se ven, como siempre. */
-    var e = String((window.D && D.estado) || '').trim();
+    var e = String((dat() && dat().estado) || '').trim();
     return e === 'por-revisar' ? 'por-revisar' : 'entregada';
   }
 
@@ -63,8 +70,8 @@
     }
 
     var est   = estadoDe();
-    var rev   = String((window.D && D.revision) || '').trim();
-    var clave = String((window.D && D['c_clave-del-panel-de-los-novios']) || '').trim();
+    var rev   = String((dat() && dat().revision) || '').trim();
+    var clave = String((dat() && dat()['c_clave-del-panel-de-los-novios']) || '').trim();
     var linkInv = BASE + '/i/?e=' + encodeURIComponent(slug);
     var linkRev = linkInv + (rev ? '&rev=' + encodeURIComponent(rev) : '');
     var linkPan = BASE + '/mi-panel.html?e=' + encodeURIComponent(slug);
@@ -125,8 +132,8 @@
 
   window.copiarMensajeEntrega = function (btn) {
     var slug = slugAbierto();
-    var clave = String((window.D && D['c_clave-del-panel-de-los-novios']) || '').trim();
-    var nom = String((window.D && D.n1) || '').trim() + ((window.D && D.n2) ? ' y ' + D.n2 : '');
+    var clave = String((dat() && dat()['c_clave-del-panel-de-los-novios']) || '').trim();
+    var nom = String((dat() && dat().n1) || '').trim() + ((dat() && dat().n2) ? ' y ' + dat().n2 : '');
     var t = '¡' + (nom || 'Hola') + ', ya está lista su invitación!\n\n'
       + 'Este es el link para compartir con sus invitados:\n'
       + BASE + '/i/?e=' + encodeURIComponent(slug) + '\n\n'
@@ -145,7 +152,7 @@
     var m = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     await m.updateDoc(m.doc(INV.db, 'inv_eventos', slug), { estado: nuevo });
     /* ⚠️ También en memoria: si no, el próximo «Guardar y publicar» lo pisa. */
-    if (window.D) D.estado = nuevo;
+    if (dat()) dat().estado = nuevo;
     var c = document.getElementById('cajaentrega');
     if (c) c.dataset.firma = '';
     pintar();
