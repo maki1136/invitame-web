@@ -259,7 +259,7 @@ if ($n1Sol === '' || mb_strtolower($n1Sol) !== mb_strtolower($n1Ev)) {
 /* ---------- 3c. ⭐ LA MARCA DECIDE EL MODO DE ENTREGA ----------
    Maki, 8/9/2026: «por ahora quiero que Jazmín haga el control de calidad, pero
    el otro sistema seguro lo use con otra marca». Por eso el modo no vive en una
-   línea de código sino en `inv_marcas/{marca}`, que ella prende y apaga desde el
+   línea de código sino en `inv_privado/__marcas`, que ella prende y apaga desde el
    panel. Dos marcas pueden estar en modos distintos AL MISMO TIEMPO.
 
    ⚠️ SI LA MARCA NO EXISTE, MANDA EL INTERRUPTOR DE ARRIBA (hoy: control de
@@ -272,11 +272,22 @@ if ($n1Sol === '' || mb_strtolower($n1Sol) !== mb_strtolower($n1Ev)) {
       sigue poniendo el servidor. */
 $marca = preg_replace('/[^a-z0-9\-]/', '', strtolower((string)($in['marca'] ?? 'invitame')));
 if ($marca === '') $marca = 'invitame';
-list($rm, $cm) = pedir($FS . 'inv_marcas/' . rawurlencode($marca), 'GET', null, $auth);
+/* ⚠️ El ajuste vive en `inv_privado/__marcas`, en un campo `json`, y NO en una
+   coleccion propia: `inv_marcas` da permission-denied (medido). Ver marcas.php. */
+list($rm, $cm) = pedir($FS . 'inv_privado/__marcas', 'GET', null, $auth);
 if ($cm == 200) {
   $dm = json_decode($rm, true);
-  $fm = isset($dm['fields']) ? $dm['fields'] : array();
-  if (isset($fm['entregaAutomatica'])) $ENTREGA_AUTOMATICA = !empty($fm['entregaAutomatica']['booleanValue']);
+  if (isset($dm['fields']['json']['stringValue'])) {
+    $lista = json_decode($dm['fields']['json']['stringValue'], true);
+    if (is_array($lista)) {
+      foreach ($lista as $mk) {
+        if (isset($mk['id']) && $mk['id'] === $marca) {
+          $ENTREGA_AUTOMATICA = !empty($mk['entregaAutomatica']);
+          break;
+        }
+      }
+    }
+  }
 }
 
 // ---------- 4. lo que pone el SERVIDOR, no el cliente ----------
