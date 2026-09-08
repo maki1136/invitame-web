@@ -25,7 +25,7 @@
      · El ESTILO de la línea: al costado o al medio en zigzag.
      · Un botón que ARMA LOS MOMENTOS LEYENDO EL TEXTO que ya está escrito en la
        sección («17:00 · Llegada…»), para no volver a tipear lo mismo.
-     · Un botón que TRAE LO QUE CARGARON LOS NOVIOS en su propio panel.
+     · Lo que cargan los novios en SU panel entra solo: no hay que traerlo.
 
    ⚠️ LA COMBINACIÓN QUE ROMPE, Y POR ESO ESTÁ AVISADA ACÁ ARRIBA
       Si el evento tiene una IMAGEN de itinerario cargada, el motor esconde la
@@ -323,52 +323,15 @@
     };
     botones.appendChild(traer);
 
-    /* ---- lo que cargaron los novios en SU panel ---------------------------
-       Las reglas de Firestore NO dejan que los novios escriban en `inv_eventos`
-       (y está bien: cualquiera con el link del panel podría romper la
-       invitación). Lo que ellos eligen queda en `inv_paneles/<slug>__<clave>`,
-       y de acá se trae con un botón. Es el mismo camino que ya usan las mesas.
-       ⚠️ Traer NO publica: después hay que tocar "Guardar y publicar". */
-    var novios = chico(document.createElement('button'), 'cursor:pointer;padding:6px 10px');
-    novios.type = 'button'; novios.textContent = 'Traer lo de los novios';
-    novios.title = 'Trae los momentos y la elección (escrito o imagen) que cargaron en su panel';
-    novios.onclick = function () {
-      var dd = borrador(); if (!dd) return;
-      var slug  = String(dd.slug || '').trim();
-      var clave = String(dd['c_clave-del-panel-de-los-novios'] || '').trim();
-      if (!slug || !clave) { avisar('Este evento no tiene panel de novios'); return; }
-      if (!window.INV || !window.INV.db) { avisar('Todavía no cargó la base'); return; }
-      var antes = novios.textContent; novios.textContent = 'Buscando…';
-      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
-        .then(function (m) {
-          return m.getDoc(m.doc(window.INV.db, 'inv_paneles', slug + '__' + clave));
-        })
-        .then(function (snap) {
-          novios.textContent = antes;
-          var p = snap && snap.exists() ? snap.data() : null;
-          var it = p && p.itinerario;
-          if (!it) { avisar('No cargaron nada todavía'); return; }
-          var d2 = borrador(); if (!d2) return;
-          var c = datos(d2);
-          if (it.modo === 'texto' || it.modo === 'imagen') c.modo = it.modo;
-          if (Object.prototype.toString.call(it.momentos) === '[object Array]' &&
-              it.momentos.length) c.momentos = it.momentos;
-          if (it.imagen) d2['img_c_itinerario-imagen'] = it.imagen;
-          if (selModo.value !== String(c.modo || '')) selModo.value = String(c.modo || '');
-          acomodarModo(); pintarImg(); dibujar(); refrescar();
-          avisar('Listo — tocá "Guardar y publicar"');
-        })['catch'](function () {
-          novios.textContent = antes;
-          avisar('No pude leer su panel');
-        });
-    };
-    function avisar(txt) {
-      var v = novios.textContent;
-      novios.textContent = txt;
-      setTimeout(function () { novios.textContent = 'Traer lo de los novios'; }, 2400);
-    }
-    botones.appendChild(novios);
-
+    /* ---- ¿y lo que cargan los novios? ------------------------------------
+       Aca habia un boton, «Traer lo de los novios», que leia su panel y copiaba
+       los momentos a mano. Desde el 8/9/2026 no hace falta: apenas ellos
+       guardan, su propio panel le avisa a `/itinerario-guardar.php`, que
+       comprueba la clave y escribe el itinerario en la invitacion.
+       Maki, textual: «si lo cambian ellos, Jazmin que tiene que ver?».
+       ⚠️ Lo que se ve aca es el itinerario de la INVITACION. Si los novios lo
+          cambian mientras este panel esta abierto, hay que recargar para verlo:
+          este bloque lee el borrador, no la base. */
     caja.appendChild(botones);
 
     /* se re-sincroniza en vivo: el evento llega DESPUÉS de que se arma esto */
