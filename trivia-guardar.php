@@ -34,8 +34,15 @@
  *      se acepta del navegador: se usa el nombre REAL del invitado que está en
  *      la lista. Así el ranking es de los invitados de la fiesta y nadie entra
  *      con el nombre de otro.
- *   5. Se guarda el MEJOR puntaje: si vuelve a jugar y le va peor, no se le baja.
+ *   5. SE JUEGA UNA SOLA VEZ. Vale el PRIMER puntaje y no se puede pisar.
+ *      Maki: «obvio no pueden jugar mas de una vez porque sino sabrian la respuesta».
+ *      Si pudieran repetir, la segunda vuelta la contestan de memoria y el ranking
+ *      no dice nada. El freno está ACÁ, en el servidor: aunque alguien toque el
+ *      navegador, el segundo puntaje se ignora.
  *   6. Tope de 400 jugadores por boda, para que nadie llene el documento.
+ *   7. Modo CONSULTA ('consultar': true, sin puntaje): la invitación pregunta si
+ *      esa persona ya jugó ANTES de mostrarle las preguntas. Así no la hace jugar
+ *      al pedo para después decirle que no cuenta.
  *
  * Las credenciales del sistema viven FUERA del repo, en invitame-panel.php.
  */
@@ -77,6 +84,8 @@ $slug    = preg_replace('/[^a-z0-9\-]/', '', strtolower(limpio($in['slug'] ?? ''
 $token   = preg_replace('/[^A-Za-z0-9]/', '', limpio($in['token'] ?? '', 20));
 $nombre  = limpio($in['nombre'] ?? '', 40);
 $puntaje = isset($in['puntaje']) ? (int)$in['puntaje'] : -1;
+$consultar = !empty($in['consultar']);       // preguntar si ya jugó, sin guardar nada
+if ($consultar && $puntaje < 0) $puntaje = 0;
 
 if ($slug === '' || $puntaje < 0) {
   http_response_code(400);
@@ -204,9 +213,13 @@ if ($ct == 200) {
   }
 }
 
-$anterior = isset($jug[$clave]) ? (int)$jug[$clave]['puntaje'] : -1;
-$guardar  = ($puntaje > $anterior);                       // se queda el MEJOR
-if ($anterior < 0 && count($jug) >= $TOPE_JUGADORES) $guardar = false;  // boda llena
+$yaJugo   = isset($jug[$clave]);
+$anterior = $yaJugo ? (int)$jug[$clave]['puntaje'] : -1;
+/* ⚠️ VALE LA PRIMERA VUELTA Y NADA MÁS. No es "se guarda el mejor": el que ya
+   jugó conoce las respuestas, así que un segundo intento no cuenta ni aunque
+   sea más alto. En modo consulta tampoco se escribe nada. */
+$guardar = (!$yaJugo && !$consultar);
+if (!$yaJugo && count($jug) >= $TOPE_JUGADORES) $guardar = false;       // boda llena
 
 // ---------- 5. escribir SOLO a este jugador ----------
 if ($guardar) {
@@ -239,10 +252,12 @@ $puesto = 0;
 foreach ($tabla as $i => $t) { if ($t['clave'] === $clave) { $puesto = $i + 1; break; } }
 
 echo json_encode(array(
-  'ok'      => true,
-  'guardado'=> $guardar,
-  'yo'      => $clave,
-  'puesto'  => $puesto,
-  'total'   => count($tabla),
-  'tabla'   => $top,
+  'ok'         => true,
+  'guardado'   => $guardar,
+  'yaJugaste'  => $yaJugo,                 // la invitación lo usa para no dejarlo repetir
+  'miPuntaje'  => $yaJugo ? $anterior : ($guardar ? $puntaje : null),
+  'yo'         => $clave,
+  'puesto'     => $puesto,
+  'total'      => count($tabla),
+  'tabla'      => $top,
 ), JSON_UNESCAPED_UNICODE);
