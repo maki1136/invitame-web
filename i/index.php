@@ -536,6 +536,17 @@ function setMeta($tpl, $attr, $key, $val) {
   }, $tpl, 1);
 }
 
+/* ⚠️⚠️ ACÁ, SOBRE LA PÁGINA ENTERA, Y NO SÓLO SOBRE LO QUE INYECTAMOS.
+   Primero apliqué la receta sólo al bloque inyectado y no alcanzó: medido, la
+   foto de portada seguía apareciendo CUATRO veces sin optimizar, porque el
+   motor la escribe en varios lugares suyos. Se pasa por todo el documento.
+
+   ⚠️ Y VA JUSTO ANTES DE LA FOTO PARA COMPARTIR: la de `og:image` se pone
+      DESPUÉS, con la dirección original, a propósito. Esa la lee WhatsApp para
+      dibujar la tarjetita del link, no un navegador, y ahí conviene la grande
+      y en su formato de siempre. */
+$tpl = iv_fotos_livianas($tpl);
+
 if ($img !== '') {
   if (strpos($img, 'http') !== 0) { $img = $SITE . ($img[0] === '/' ? '' : '/i/') . $img; }
   $tpl = setMeta($tpl, 'property', 'og:image', $img);
