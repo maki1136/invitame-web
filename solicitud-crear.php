@@ -301,6 +301,43 @@ if ($cm == 200) {
   }
 }
 
+/* ---------- 3d. ⭐⭐ EL CLIENTE NO PUEDE PRENDERSE UNA FUNCIÓN PAGA ---------
+   Regla comercial de Maki, en `/paquetes.js`: «el gratis nunca lleva un leader».
+
+   La pantalla del formulario no ofrece ningún interruptor, así que por ahí no
+   entra nadie. Pero el navegador manda el evento ENTERO a este archivo, y hasta
+   hoy los interruptores llegaban tal cual: cualquiera que supiera armar el
+   pedido a mano podía nacer con el filtro, la galería de invitados, el pase con
+   voz y la raspadita prendidos. O sea, regalarse justo lo único que no se
+   regala. Un candado en la pantalla no sirve: el candado va acá.
+
+   Las funciones pagas se prenden en UN solo lugar: el panel, cuando el equipo
+   verifica qué compró. Acá nacen todas apagadas, sin excepción.
+
+   ⚠️ LA LISTA NO SE COPIA. Se lee de `/paquetes.js`, que es el único archivo
+      que decide qué es pago (`clase: 'leader'` o `'killer'`). Si mañana una
+      función cambia de clase, esto se entera solo. */
+$interruptoresPagos = array();
+$tablaPaquetes = @file_get_contents(__DIR__ . '/paquetes.js');
+if ($tablaPaquetes !== false) {
+  if (preg_match_all("~clase:\\s*'(?:leader|killer)'\\s*,\\s*interruptor:\\s*'([A-Za-z0-9_.]+)'~", $tablaPaquetes, $mp)) {
+    $interruptoresPagos = $mp[1];
+  }
+}
+foreach ($interruptoresPagos as $ruta) {
+  $partes = explode('.', $ruta);          /* fx.filtro.encendido */
+  if (count($partes) < 2) continue;
+  $ref = &$ev;
+  $ok = true;
+  for ($k = 0; $k < count($partes) - 1; $k++) {
+    $p = $partes[$k];
+    if (!isset($ref[$p]) || !is_array($ref[$p])) { $ok = false; break; }
+    $ref = &$ref[$p];
+  }
+  if ($ok) $ref[$partes[count($partes) - 1]] = false;
+  unset($ref);
+}
+
 // ---------- 4. lo que pone el SERVIDOR, no el cliente ----------
 $ahora    = gmdate('Y-m-d\TH:i:s\Z');
 $clave    = codigo(8);          // la del panel de los novios
