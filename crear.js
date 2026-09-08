@@ -358,6 +358,30 @@
       await ready();
       const ref=doc(collection(window.INV.db,'inv_solicitudes'));
       await setDoc(ref, data);
+
+      /* ===== Y LA INVITACIÓN SE CREA SOLA  (8/9/2026) =====================
+         Maki: «que los novios completen el formulario y todo se guarde y la
+         invitación se cree sola».
+
+         El mapeo NO se escribe acá: se llama al MISMO módulo que usa el panel
+         de Jazmín (`/solicitud-a-evento.js`). Una sola copia, dos caminos.
+
+         ⚠️ SI ESTO FALLA, EL CLIENTE NO SE ENTERA NI PIERDE NADA. La solicitud
+            ya quedó guardada dos líneas más arriba, así que el equipo puede
+            armarla desde el panel como se hacía siempre. Por eso va en su
+            propio try y no corta el «¡Gracias!». */
+      try{
+        if(window.SOLICITUD_A_EVENTO){
+          const evento = window.SOLICITUD_A_EVENTO.mapear(data, {});
+          const r = await fetch('/solicitud-crear.php', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ evento, solicId: ref.id })
+          });
+          const j = await r.json().catch(()=>({}));
+          if(!j.ok) console.warn('no se pudo crear la invitacion sola:', j.error||r.status);
+        }
+      }catch(e){ console.warn('no se pudo crear la invitacion sola:', e); }
+
       borrarBorrador();
       $('loading').style.display='none';
       $('wrap').style.display='none'; document.querySelector('.top .sub').textContent='¡Gracias!';
