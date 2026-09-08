@@ -470,8 +470,29 @@ $fotosLivianas = '<script src="/efectos/imagenes-livianas.js"></' . 'script>';
 
 /* ⚠️ EL ORDEN IMPORTA: la hoja general primero y la paleta DESPUÉS, para que
    lo que eligió la clienta sea lo último en escribirse. */
+/* ===== Y LAS FOTOS QUE ESCRIBE ESTE MISMO ARCHIVO ==========================
+   `/efectos/imagenes-livianas.js` corrige todo lo que pasa por el navegador,
+   pero NO puede tocar lo que sale escrito de acá: la portada que se pone desde
+   el primer cuadro (`--cover`), el póster del sobre, la paleta.
+   Medido: con el módulo puesto seguían bajando las dos fotos más pesadas de
+   todas —995 KB y 528 KB— justamente porque salían por este camino.
+   Se les aplica acá la MISMA receta.
+   ⚠️ Sólo a las que están crudas (`/image/upload/vNNN/`): si alguien ya le
+      puso un recorte a mano, se respeta.
+   ⚠️ La foto de `og:image` (la que se ve al compartir por WhatsApp) NO pasa
+      por acá a propósito: ahí conviene la grande y de una sola vez.
+   ============================================================================ */
+function iv_fotos_livianas($html) {
+  return preg_replace(
+    '~(https?://res\\.cloudinary\\.com/[A-Za-z0-9_-]+/image/upload/)(v\\d+/)~',
+    '$1f_auto,q_auto:good,w_1200,c_limit/$2',
+    $html
+  );
+}
+
 $aInyectar = $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
+$aInyectar = iv_fotos_livianas($aInyectar);
 if ($aInyectar !== '') {
   if (strpos($tpl, '</head>') !== false) {
     $tpl = str_replace('</head>', $aInyectar . '</head>', $tpl);
