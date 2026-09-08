@@ -187,6 +187,21 @@ if (!$hay) {
   array_unshift($marcas, array('id' => 'invitame', 'nombre' => 'Invítame', 'entregaAutomatica' => false));
 }
 
+// ---------- 3b. borrar una marca ----------
+/* Se puede sacar una marca que se agregó de más. A Invítame no: es la de la
+   casa y la que usa el formulario cuando no viene ninguna. */
+if ($accion === 'borrar') {
+  $id = preg_replace('/[^a-z0-9\-]/', '', strtolower((string)($in['id'] ?? '')));
+  if ($id === '' || $id === 'invitame') {
+    http_response_code(400);
+    echo json_encode(array('ok' => false, 'error' => 'no-se-puede'));
+    exit;
+  }
+  $quedan = array();
+  foreach ($marcas as $mk) { if (($mk['id'] ?? '') !== $id) $quedan[] = $mk; }
+  $marcas = $quedan;
+}
+
 // ---------- 4. guardar ----------
 if ($accion === 'guardar') {
   $id = preg_replace('/[^a-z0-9\-]/', '', strtolower((string)($in['id'] ?? '')));
