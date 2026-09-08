@@ -282,23 +282,54 @@ $encuadreSobre = ($preFirma !== '')
   : '';
 
 /* ===== EL ENCUADRE DE LA COLUMNA, DESDE EL PRIMER FRAME =======================
-   ⚠️ Copia exacta del CSS de `efectos/encuadre-monitor.js`, con el MISMO id.
-   SI SE CAMBIA ESE CSS EN EL MÓDULO, HAY QUE CAMBIARLO ACÁ TAMBIÉN.
+   Esto existe para que la invitación aparezca YA encuadrada, sin el salto del
+   primer cuadro. Es una copia del CSS de `efectos/encuadre-monitor.js`.
+
+   ⚠️⚠️ Y ACÁ SE PAGÓ UN BUG QUE VOLVIÓ TRES VECES (8/9/2026).
+   Esta etiqueta lleva el MISMO id que la que pone el módulo, y el módulo
+   arranca con `if (document.getElementById('encuadre-monitor')) return;`.
+   O sea: **mientras exista esta copia, el CSS del módulo NUNCA se instala.**
+   Cuando en el módulo se arregló el iPad, el arreglo no llegaba a ninguna
+   parte: acá seguía viviendo la versión vieja, sin el bloque de tablet. Maki lo
+   dijo tres veces: «no ocupa toda la pantalla, hasta parece lento de cargar».
+   La invitación se quedaba en 474 px de 834 —el 57%— con las franjas grises al
+   costado, que es exactamente lo que parece una página a medio cargar.
+
+   ★ SI SE TOCA EL CSS DEL MÓDULO, SE TOCA ACÁ. Son el mismo CSS. Y el bloque
+     de tablet va SIEMPRE ÚLTIMO: deshace, con la misma especificidad, lo que
+     puso el bloque de escritorio y lo que pone el @media de 680 del motor.
    ============================================================================ */
 $encuadreColumna =
   '<style id="encuadre-monitor">' .
-  '#inv-lienzo,#inv-vinieta{display:none}' .
+  '#inv-lienzo,#inv-tinte,#inv-vinieta{display:none}' .
   '@media (min-width:680px){' .
-  '  #inv-lienzo{display:block;position:fixed;inset:0;z-index:-2;' .
+  '  #inv-lienzo{display:block;position:fixed;inset:0;z-index:-3;' .
   '    background-size:cover;background-position:center;' .
-  '    filter:blur(70px) saturate(.65) brightness(.92);transform:scale(1.3)}' .
+  '    filter:blur(36px) saturate(1.05) brightness(.80);transform:scale(1.14)}' .
+  '  #inv-tinte{display:block;position:fixed;inset:0;z-index:-2;' .
+  '    pointer-events:none;background:var(--verde,#4a4436);opacity:.22}' .
   '  #inv-vinieta{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none;' .
-  '    background:radial-gradient(120% 85% at 50% 45%,rgba(0,0,0,0) 36%,' .
-  '    rgba(0,0,0,.18) 76%, rgba(0,0,0,.34) 100%)}' .
-  '  html{background:#cfc4b4}' .
+  '    background:radial-gradient(115% 78% at 50% 42%,rgba(0,0,0,0) 26%,' .
+  '    rgba(0,0,0,.26) 70%, rgba(0,0,0,.50) 100%)}' .
+  '  html{background:var(--muted,#cfc4b4)}' .
   '  .frame{max-width:var(--inv-col,474px);margin-left:auto;margin-right:auto;' .
-  '    overflow:hidden;box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
+  '    overflow:hidden;' .
+  '    box-shadow:0 2px 6px rgba(20,14,6,.10),' .
+  '               0 18px 40px rgba(20,14,6,.24),' .
+  '               0 54px 110px rgba(20,14,6,.34);' .
+  '    outline:1px solid rgba(255,255,255,.20);outline-offset:-1px}' .
   '  .frame img{max-width:100%;height:auto}' .
+  '}' .
+  /* ---- LA TABLET: un iPad no es una Mac chica --------------------------- */
+  '@media (min-width:680px) and (any-pointer: coarse){' .
+  '  #inv-lienzo,#inv-tinte,#inv-vinieta{display:none}' .
+  '  html{background:var(--lino,#f6f2ea)}' .
+  '  .frame{max-width:none;width:100%;margin:0;' .
+  '    box-shadow:none;outline:0;border-radius:0}' .
+  '  .portada{max-width:none;min-height:100vh;height:auto;margin:0;' .
+  '    border-radius:0;box-shadow:none}' .
+  '  .footer{max-width:none;min-height:70vh;height:auto;margin:0;' .
+  '    border-radius:0;box-shadow:none}' .
   '}' .
   '</style>';
 
