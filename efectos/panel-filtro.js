@@ -205,7 +205,7 @@
         ';border-radius:12px;overflow:hidden;cursor:pointer;background:#fff;' +
         (elegido ? 'box-shadow:0 6px 14px -8px rgba(240,80,92,.9);' : '');
       ficha.title = dis[2];
-      var mini = miniatura(d, id, 150);
+      var mini = miniatura(d, id, 110);
       mini.style.cssText = 'width:100%;height:auto;display:block';
       ficha.appendChild(mini);
       var nom = document.createElement('div');

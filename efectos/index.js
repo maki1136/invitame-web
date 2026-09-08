@@ -596,6 +596,7 @@
     '/efectos/filtro-marcos.js',       /* los SEIS marcos, vestidos con la temática */
     '/efectos/filtro.js',              /* la cámara con el marco de la boda (fx.filtro) */
     '/efectos/panel-filtro.js',        /* y su bloque en el panel, con el subidor del marco */
+    '/efectos/panel-filtro-novios.js', /* y la frase, editable por los novios desde SU panel */
     '/efectos/pase-voz.js',            /* el ticket con el mensaje de voz de los anfitriones */
     '/efectos/panel-pase-voz.js',      /* y sus veinte campos en el panel, con la onda medible */
     '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */

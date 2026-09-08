@@ -229,7 +229,9 @@
     x.globalAlpha = 0.55; x.lineWidth = 2; x.strokeRect(66, 66, ANCHO - 132, ALTO - 132);
     x.globalAlpha = 1;
     bloque(x, T, ALTO - 380, T.tinta);
-    perlas(x, T, ALTO - 300);
+    /* ⚠️ Las perlas van ARRIBA de la frase, no debajo de los nombres: probado
+       en el panel, ahí se montaban justo encima de la fecha. */
+    perlas(x, T, ALTO - 600);
   }
 
   function dArco(x, T) {
