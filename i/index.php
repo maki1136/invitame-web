@@ -53,6 +53,7 @@ $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
 $img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
 $coverReal = ''; $idioma = ''; $paleta = '';
+$estado = ''; $revision = '';
 
 $campos = array(); $tamElegidos = array(); $leyoEvento = false;
 
@@ -110,6 +111,10 @@ if ($slug !== '') {
     $idioma = $sv('idioma');
     $paleta = strtolower($sv('paleta'));
 
+    // ¿ya se puede ver? Ver el bloque grande más abajo. Sin campo = sí.
+    $estado   = $sv('estado');
+    $revision = $sv('revision');
+
     // QUÉ SOBRE ES. Vive anidado: fx → sobre → modelo.
     if (isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue'])) {
       $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
@@ -129,6 +134,37 @@ if ($slug !== '') {
 
     $leyoEvento = true;
   }
+}
+
+/* ===== ¿ESTA INVITACIÓN YA SE PUEDE VER?  (8/9/2026) =========================
+
+   Desde que la invitación SE CREA SOLA al enviar el formulario, existe un rato
+   en el que está armada pero todavía nadie la miró. Este es el portón.
+
+   `estado`, en el documento del evento:
+     · vacío o "entregada"  -> se ve. Las invitaciones que ya existían no tienen
+                               el campo, así que siguen andando igual que antes.
+     · "por-revisar"        -> no se ve: sale i/en-preparacion.php.
+
+   POR QUÉ ESTE CONTROL VA ACÁ Y NO EN EL MOTOR. Tres razones, las tres pesan:
+     1. Este archivo YA LEE el evento de Firestore para armar los meta tags al
+        compartir. Mirar un campo más sale CERO lecturas.
+     2. El motor (i/index.html) está CONGELADO por versión: un control puesto
+        ahí no llegaría a las invitaciones ya entregadas hasta subir la versión.
+        Por acá, en cambio, pasan TODAS.
+     3. Se corta ANTES de mandar una sola línea de la invitación. No es esconder
+        con CSS algo que ya viajó: los datos no salen.
+
+   ⚠️ EL LINK DE REVISIÓN NO ES "?rev=1". La dirección de una invitación se
+      adivina (son los nombres de la pareja), así que una marca fija no
+      protegería nada. Se compara contra `revision`, un código al azar que le
+      pone el portero al crearla, y con hash_equals, para que el tiempo de
+      respuesta no delate cuántos caracteres acertó quien esté probando.
+   ============================================================================ */
+if ($estado === 'por-revisar') {
+  $pide  = isset($_GET['rev']) ? preg_replace('/[^A-Za-z0-9_\-]/', '', $_GET['rev']) : '';
+  $puede = ($pide !== '' && $revision !== '' && hash_equals($revision, $pide));
+  if (!$puede) { include __DIR__ . '/en-preparacion.php'; exit; }
 }
 
 /* Para poder PROBAR una paleta o un tamaño sin guardarlos:
