@@ -140,6 +140,34 @@ window.SOBRES_INVITAME = {
     color:  "#f2f2f4"
   },
 
+  /* ---- ★ LA PRESENTACIÓN BORDADA  (8/9/2026) ---------------------------
+     No es un sobre: es una PRESENTACIÓN. Copia la muestra que mandó Maki
+     (@hadar.cohennn): una máquina de bordar cosiendo con hilo champagne
+     sobre lino crudo, tono sobre tono, y la cámara que se aleja en un solo
+     plano hasta mostrar la pieza entera.
+
+     Medido sobre la muestra: el paneo del macro dura ~2,9 s, después la
+     cámara se queda quieta ~2 s bordando un corazón, y el alejamiento abre
+     el cuadro 3,1 veces en 4,1 s frenando fuerte al final. Nuestro video
+     hace el mismo recorrido en 8 s.
+
+     ⚠️ SE RENDERIZA A 540×960 A PROPÓSITO. El lino tiene una trama finita
+        que a 720p produce un MOARÉ vertical bien visible (se vio). Bajando
+        a 540 la trama promedia y desaparece; encima el archivo pasa de 7,8
+        MB a 2,1 MB, que para una invitación importa.
+
+     El texto dice "Nuestra boda", así que sirve para cualquier pareja sin
+     regenerar nada. Queda pendiente la versión "Mis XV" y una sin texto
+     para dibujar los nombres reales por encima con HTML.
+     ---------------------------------------------------------------------- */
+  bordado: {
+    nombre:  "Bordado · la máquina borda la pieza (video)",
+    video:   "/sobres/presentacion-bordado.mp4",
+    poster:  "/sobres/presentacion-bordado-poster.jpg",
+    color:   "#ac8f6f",
+    empalme: "foto"
+  },
+
   /* ---- EL SOBRE DE ANILLOS  (3/9/2026) ----------------------------------
      Sobre marfil de solapa clásica, papel con damasco EN RELIEVE (grabado
      seco, no impreso) y un lacre color hueso con DOS ANILLOS ENTRELAZADOS.
