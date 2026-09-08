@@ -471,7 +471,8 @@
     const btn=document.querySelector('.btn-g');const txt=btn?btn.textContent:'';if(btn){btn.textContent='Guardando…';btn.disabled=true;}
     try{
       // 1) guarda la config del evento (todo el objeto de diseño)
-      if(!D.ver) D.ver=VERSION;              // primera publicación => queda clavada a esta versión
+      const _primeraVez = !D.ver;            // ¿es la primera vez que se publica?
+      if(_primeraVez) D.ver=VERSION;         // queda clavada a esta versión
       const {invitados, ...cfg}=D;
       // La clave del panel y el mail NO van al documento publico (lo lee cualquiera que
       // tenga el link de la invitacion). Se guardan aparte, en inv_privado.
@@ -492,7 +493,20 @@
         }
       }
       await INV.saveEvento(slug, cfg);
-      if(Object.keys(_priv).length) await INV.savePrivado(slug, _priv);
+      /* ===== QUIÉN LA ARMÓ Y QUIÉN LA TOCÓ ÚLTIMO ==========================
+         El 7/9/2026 nadie pudo decir dónde estaba la invitación que había hecho
+         Jazmín: el sistema no guardaba el autor. Con tres personas cargando
+         invitaciones, esa pregunta vuelve siempre.
+
+         ⚠️ VA EN `inv_privado`, NO en el documento del evento. El evento lo lee
+         CUALQUIERA que tenga el link de la invitación; los mails del equipo no
+         son asunto de los invitados. `inv_privado` sólo se lee con login. */
+      _priv.guardadoPor = ((window.INV&&INV.user&&INV.user.email)||'').toLowerCase();
+      _priv.guardadoEl  = new Date().toISOString();
+      if(_primeraVez){ _priv.creadoPor=_priv.guardadoPor; _priv.creadoEl=_priv.guardadoEl; }
+      /* Ojo: antes esto sólo se guardaba si había campos privados. Ahora siempre
+         hay algo que guardar, así que la llamada va sin condición. */
+      await INV.savePrivado(slug, _priv);
       await INV.limpiarPrivadosDelPublico(slug);   // saca los que habian quedado de antes
       // 2) guarda cada invitado y obtiene su token/link
       const arr=D.invitados.map(g=>({n:g.n,p:g.p,m:g.m,restriccion:g.restriccion,token:g.t}));
