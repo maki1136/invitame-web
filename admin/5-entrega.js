@@ -214,6 +214,8 @@
         + '<input type="checkbox" ' + (m.entregaAutomatica ? 'checked' : '')
         + ' onchange="guardarMarca(this,\'' + esc(m.id) + '\',\'' + esc(m.nombre).replace(/'/g, "\\'") + '\')">'
         + 'Se entrega sola</label>'
+        + (m.id === 'invitame' ? '' :
+            '<button class="btn-c" style="padding:4px 9px;font-size:12px" title="Quitar esta marca" onclick="borrarMarca(\'' + esc(m.id) + '\')">Quitar</button>')
         + '</div>';
     }).join('');
 
@@ -245,6 +247,14 @@
       alert('No se pudo guardar: ' + (e.message || e));
     }
     chk.disabled = false;
+  };
+
+  window.borrarMarca = async function (id) {
+    if (!confirm('¿Quitar la marca «' + id + '»? Las invitaciones que ya se crearon con ella no se tocan.')) return;
+    try {
+      await pedirMarcas({ accion: 'borrar', id: id });
+      await window.verMarcas();
+    } catch (e) { alert('No se pudo quitar: ' + (e.message || e)); }
   };
 
   window.agregarMarca = async function () {
