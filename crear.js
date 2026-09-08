@@ -41,28 +41,28 @@
     rows.forEach(([t,hot])=>{ inner+='<rect x="15" y="'+y.toFixed(1)+'" width="90" height="'+rowH.toFixed(1)+'" rx="6" fill="'+(hot?'#F56770':'#e5d8ca')+'"/><text x="60" y="'+(y+rowH/2+2.6).toFixed(1)+'" text-anchor="middle" font-size="7.5" font-weight="700" fill="'+(hot?'#fff':'#8a7a6a')+'" font-family="Nunito,sans-serif">'+t+'</text>'; y+=rowH+gap; });
     return '<svg viewBox="0 0 120 214" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="4" width="110" height="206" rx="18" fill="#efe6da" stroke="#d3c4b4"/><rect x="10" y="10" width="100" height="194" rx="13" fill="#fbf6ef"/>'+inner+'</svg>';
   }
-  const FOTOVIS='<svg viewBox="0 0 120 214" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="4" width="110" height="206" rx="18" fill="#efe6da" stroke="#d3c4b4"/><rect x="10" y="10" width="100" height="194" rx="13" fill="#b98c6a"/><text x="60" y="104" text-anchor="middle" font-size="30">📷</text><text x="60" y="128" text-anchor="middle" font-size="8" fill="#fff" font-family="Nunito,sans-serif">tu foto de fondo</text></svg>';
+  const FOTOVIS='<svg viewBox="0 0 120 214" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="4" width="110" height="206" rx="18" fill="#efe6da" stroke="#d3c4b4"/><rect x="10" y="10" width="100" height="194" rx="13" fill="#b98c6a"/><rect x="42" y="92" width="36" height="25" rx="5" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M52 92l3-5h10l3 5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><circle cx="60" cy="105" r="7" fill="none" stroke="#fff" stroke-width="2.4"/><text x="60" y="128" text-anchor="middle" font-size="8" fill="#fff" font-family="Nunito,sans-serif">tu foto de fondo</text></svg>';
   let _qr=''; for(let i=0;i<7;i++)for(let j=0;j<7;j++){ if((i*j+i+j)%3===0)_qr+='<rect x="'+(20+j*6)+'" y="'+(18+i*6)+'" width="6" height="6" fill="#3f3730"/>'; }
   const QRVIS='<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="13" fill="#fbf6ef" stroke="#e5d8ca"/>'+_qr+'<rect x="16" y="70" width="88" height="9" rx="4" fill="#F56770"/><rect x="16" y="84" width="66" height="7" rx="3" fill="#e5d8ca"/><text x="60" y="108" text-anchor="middle" font-size="8" font-weight="700" fill="#6D1233" font-family="Nunito,sans-serif">link + QR único</text></svg>';
-  const NOTEVIS='<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="13" fill="#fbf6ef" stroke="#e5d8ca"/><rect x="26" y="24" width="68" height="72" rx="7" fill="#fff" stroke="#e5d8ca"/><rect x="34" y="36" width="52" height="6" rx="3" fill="#F56770"/><rect x="34" y="50" width="44" height="5" rx="2" fill="#e5d8ca"/><rect x="34" y="62" width="50" height="5" rx="2" fill="#e5d8ca"/><rect x="34" y="74" width="36" height="5" rx="2" fill="#e5d8ca"/><text x="88" y="30" font-size="15">✏️</text></svg>';
+  const NOTEVIS='<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="13" fill="#fbf6ef" stroke="#e5d8ca"/><rect x="26" y="24" width="68" height="72" rx="7" fill="#fff" stroke="#e5d8ca"/><rect x="34" y="36" width="52" height="6" rx="3" fill="#F56770"/><rect x="34" y="50" width="44" height="5" rx="2" fill="#e5d8ca"/><rect x="34" y="62" width="50" height="5" rx="2" fill="#e5d8ca"/><rect x="34" y="74" width="36" height="5" rx="2" fill="#e5d8ca"/><path d="M80 36l11-11 4 4-11 11-5.5 1.5z" fill="none" stroke="#F56770" stroke-width="2.2" stroke-linejoin="round"/></svg>';
   const HELP={
-    tipo:{rows:[['Título',1],['Nombres',0],['Fecha ⏳',0]],txt:'<b>Elegí qué estás festejando.</b> Con esto adaptamos los textos automáticamente. Ej: si elegís <b>XV</b>, el título sugerido pasa a "Mis XV"; si es <b>Bautismo</b>, "Mi Bautismo". Igual después podés escribir el título que quieras.'},
-    kick:{rows:[['Título',1],['Nombres',0],['Fecha',0],['Cuenta ⏳',0]],txt:'<b>Es el textito chico de arriba de todo</b>, arriba de los nombres, en la portada. Ejemplos: "Nuestra Boda", "Mis XV", "¡Nos casamos!". Va en mayúsculas y separado. Si lo dejás con el sugerido, está perfecto.'},
-    nombres:{rows:[['Título',0],['Nombres',1],['Fecha',0],['Cuenta ⏳',0]],txt:'<b>Los nombres de los protagonistas</b>, en letra grande y destacada en la portada. Si es una pareja, poné los dos; si es una persona (XV, bautismo), con el primero alcanza.'},
-    fecha:{rows:[['Título',0],['Nombres',0],['Fecha',1],['Cuenta ⏳',1]],txt:'<b>La fecha y hora del evento.</b> Se usa para dos cosas: se muestra escrita en la portada (ej: "Sábado 28 · Noviembre") <b>y</b> alimenta la <b>cuenta regresiva</b> (los días/horas/minutos que faltan). Elegí la fecha exacta.'},
-    foto:{special:'foto',txt:'<b>Es el fondo de toda la portada</b> (la primera pantalla). Puede ser <b>foto o video</b>. Consejos: que sea <b>vertical</b> y de buena calidad (llena mejor el celular), con la pareja/protagonista bien visible. La foto la achicamos sola; el video, si lo subís, que sea vertical, de 6 a 15 seg y en MP4 (ideal menos de 40 MB) — nosotros lo optimizamos. Los nombres van encima, así que evitá imágenes muy cargadas en el centro.'},
-    frase:{rows:[['Portada',0],['La frase',1],['Eventos',0],['Galería',0]],txt:'<b>Una frase o dedicatoria</b> que aparece en una sección propia, en letra cursiva elegante. Puede ser romántica, un versículo, o algo tuyo. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre." Si no ponés nada, se saltea esa sección.'},
-    eventos:{rows:[['Portada',0],['La frase',0],['Dónde y cuándo',1],['Galería',0]],txt:'<b>El lugar y horario de la ceremonia y la fiesta.</b> Cada uno aparece como una tarjeta con foto, dirección y un botón de "Ver mapa". Completá lo que tengas: si es un solo lugar, dejá el otro vacío.'},
-    hospedaje:{rows:[['Eventos',0],['Hospedaje',1],['Dress code',0]],txt:'<b>Los hoteles que recomendás</b> para los invitados que vienen de otra ciudad. Aparece como una sección propia. Poné el nombre, la dirección, la web, el teléfono y el código de descuento si conseguiste uno. Si no cargás ninguno, la sección no aparece.'},
-    itinerario:{rows:[['Eventos',0],['Itinerario',1],['Dress code',0]],txt:'<b>El cronograma del día</b>, momento por momento, con la hora. Se muestra como una lista vertical. Ej: "17:00 · Ceremonia". Si lo dejás vacío, la sección no aparece.'},
-    dress:{rows:[['Eventos',0],['Dress code',1],['Regalos',0]],txt:'<b>El código de vestimenta.</b> Aparece en su propia sección. Ej: "Elegante", "Formal", "Campestre", "De gala". Podés aclarar algo (ej: "evitar el blanco").'},
-    regalos:{rows:[['Dress code',0],['Mesa de regalos',1],['Galería',0]],txt:'<b>Datos para los regalos.</b> Aparece en una sección con un botón. Podés poner el alias/CBU para transferencias, el link de una tienda de regalos, o lo que prefieras. Si no querés mostrarlo, dejalo vacío.'},
-    galeria:{rows:[['Frase',0],['Galería',1],['Invitados',0]],txt:'<b>Fotos que se muestran en un carrusel</b> dentro de la invitación. Subí las que quieras (las achicamos solas). Es opcional: si no subís, no aparece la sección.'},
-    invitados:{special:'qr',txt:'<b>Cada invitado recibe su propio link + QR.</b> Con eso entran a la invitación con su nombre, y en la puerta escaneás el QR para controlar el ingreso.<br><br><b>Para cargar muchos de una:</b><ul><li>Descargá la <b>plantilla</b> (botón de arriba).</li><li>Completá una fila por invitado con: <b>Nombre</b> (ej: "Familia Pérez"), <b>Personas</b> (cuántos entran, ej: 4) y <b>Mesa</b> (número o nombre).</li><li>Guardá el Excel y subilo con "Subir Excel / CSV". ¡Listo, se cargan todos solos!</li></ul>También podés cargar de a uno a mano.'},
-    observaciones:{special:'note',txt:'<b>Contanos cualquier pedido especial</b> que quieras. Ej: "que los nombres sean dorados", "agregar una sección de padrinos", "cambiar la música", "quiero un color distinto". Nuestro equipo lo revisa y lo arma. Si no se puede automático, te avisamos.'},
-    contacto:{special:'note',txt:'<b>Tus datos para avisarte</b> cuando la invitación esté lista. El WhatsApp y el email son para contactarte y mandarte el link final.'}
+    tipo:{rows:[['Título',1],['Nombres',0],['Fecha',0]],txt:'<b>Elige qué estás festejando.</b> Con esto adaptamos los textos automáticamente. Ej: si eliges <b>XV</b>, el título sugerido pasa a «Mis XV»; si es <b>Bautizo</b>, «Mi Bautizo». Igual después puedes escribir el título que quieras.'},
+    kick:{rows:[['Título',1],['Nombres',0],['Fecha',0],['Cuenta',0]],txt:'<b>Es el texto pequeño de arriba de todo</b>, arriba de los nombres, en la portada. Ejemplos: "Nuestra Boda", "Mis XV", "¡Nos casamos!". Va en mayúsculas y separado. Si lo dejas con el sugerido, está perfecto.'},
+    nombres:{rows:[['Título',0],['Nombres',1],['Fecha',0],['Cuenta',0]],txt:'<b>Los nombres de los protagonistas</b>, en letra grande y destacada en la portada. Si es una pareja, pon los dos; si es una persona (XV, bautizo), con el primero basta.'},
+    fecha:{rows:[['Título',0],['Nombres',0],['Fecha',1],['Cuenta',1]],txt:'<b>La fecha y hora del evento.</b> Se usa para dos cosas: se muestra escrita en la portada (ej: "Sábado 28 · Noviembre") <b>y</b> alimenta la <b>cuenta regresiva</b> (los días/horas/minutos que faltan). Elige la fecha exacta.'},
+    foto:{special:'foto',txt:'<b>Es el fondo de toda la portada</b> (la primera pantalla). Puede ser <b>foto o video</b>. Consejos: que sea <b>vertical</b> y de buena calidad (llena mejor el celular), con la pareja/protagonista bien visible. La foto la achicamos sola; el video, si lo subes, que sea vertical, de 6 a 15 segundos y en MP4 (de menos de 40 MB); nosotros lo optimizamos. Los nombres van encima, así que evita imágenes muy cargadas en el centro.'},
+    frase:{rows:[['Portada',0],['La frase',1],['Eventos',0],['Galería',0]],txt:'<b>Una frase o dedicatoria</b> que aparece en una sección propia, en letra cursiva elegante. Puede ser romántica, un versículo o algo suyo. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre." Si no pones nada, esa sección no aparece.'},
+    eventos:{rows:[['Portada',0],['La frase',0],['Dónde y cuándo',1],['Galería',0]],txt:'<b>El lugar y horario de la ceremonia y la fiesta.</b> Cada uno aparece como una tarjeta con foto, dirección y un botón de "Ver mapa". Completa lo que tengas: si es un solo lugar, deja el otro vacío.'},
+    hospedaje:{rows:[['Eventos',0],['Hospedaje',1],['Dress code',0]],txt:'<b>Los hoteles que recomiendas</b> para los invitados que vienen de otra ciudad. Aparece como una sección propia. Pon el nombre, la dirección, la página web, el teléfono y el código de descuento si conseguiste uno. Si no cargas ninguno, la sección no aparece.'},
+    itinerario:{rows:[['Eventos',0],['Itinerario',1],['Dress code',0]],txt:'<b>El cronograma del día</b>, momento por momento, con la hora. Se muestra como una lista vertical. Ej: "17:00 · Ceremonia". Si lo dejas vacío, la sección no aparece.'},
+    dress:{rows:[['Eventos',0],['Dress code',1],['Regalos',0]],txt:'<b>El código de vestimenta.</b> Aparece en su propia sección. Ej: "Elegante", "Formal", "Campestre", "De gala". Puedes aclarar algo (ej: «evitar el blanco»).'},
+    regalos:{rows:[['Dress code',0],['Mesa de regalos',1],['Galería',0]],txt:'<b>Datos para los regalos.</b> Aparece en una sección con un botón. Puedes poner la CLABE o el número de cuenta para transferencias, el link de una mesa de regalos, o lo que prefieras. Si no quieres mostrarlo, déjalo vacío.'},
+    galeria:{rows:[['Frase',0],['Galería',1],['Invitados',0]],txt:'<b>Fotos que se muestran en un carrusel</b> dentro de la invitación. Sube las que quieras (las achicamos solas). Es opcional: si no subes ninguna, la sección no aparece.'},
+    invitados:{special:'qr',txt:'<b>Cada invitado recibe su propio link + QR.</b> Con eso entran a la invitación con su nombre, y en la puerta escaneas el QR para controlar el acceso.<br><br><b>Para cargar muchos de una:</b><ul><li>Descarga la <b>plantilla</b> (botón de arriba).</li><li>Completa una fila por invitado con: <b>Nombre</b> (ej: "Familia Pérez"), <b>Personas</b> (cuántos entran, ej: 4) y <b>Mesa</b> (número o nombre).</li><li>Guarda el Excel y súbelo con «Subir Excel / CSV». ¡Listo, se cargan todos solos!</li></ul>También puedes cargarlos uno por uno a mano.'},
+    observaciones:{special:'note',txt:'<b>Cuéntanos cualquier pedido especial</b> que quieras. Ej: "que los nombres sean dorados", "agregar una sección de padrinos", "cambiar la música", "quiero un color distinto". Nuestro equipo lo revisa y lo arma. Si no se puede automático, te avisamos.'},
+    contacto:{special:'note',txt:'<b>Tus datos para avisarte</b> cuando la invitación esté lista. El WhatsApp y el correo son para contactarte y mandarte el link final.'}
   };
-  window.toggleHelp=function(btn){ const box=btn.nextElementSibling; const op=box.classList.toggle('open'); btn.innerHTML=op?'✕ Cerrar':'ℹ️ ¿Qué es y cómo lo completo?'; };
+  window.toggleHelp=function(btn){ const box=btn.nextElementSibling; const op=box.classList.toggle('open'); btn.innerHTML=op?'Cerrar':'¿Qué es y cómo lo completo?'; };
   window.openLB=function(src){ $('lbimg').src=src; $('lbox').classList.add('open'); document.body.style.overflow='hidden'; };
   window.closeLB=function(){ $('lbox').classList.remove('open'); document.body.style.overflow=''; };
   document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLB(); });
@@ -130,7 +130,7 @@
 
   // ready() con tope de espera: si firebase-inv.js no cargó (404, caché vieja, red
   // bloqueada) el evento 'inv-ready' no llega nunca y antes el botón quedaba
-  // "Enviando… ⏳" para siempre, sin decir nada.
+  // "Enviando…" para siempre, sin decir nada.
   function ready(){
     if(window.INV&&window.INV.ok) return Promise.resolve();
     return new Promise((res,rej)=>{
@@ -143,15 +143,15 @@
   let coverURL='', coverVideoURL='', galURLs=[];
 
   // subir foto portada
-  $('f-cover').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f)return; $('up-cover').textContent='Subiendo…'; try{ await ready(); coverURL=await window.INV.uploadImage(await comprimir(f,1600,0.85)); $('prev-cover').innerHTML='<img class="prev" src="'+coverURL+'">'; $('up-cover').textContent='✓ Foto cargada — cambiar'; }catch(err){ $('up-cover').textContent='⬆ Subir foto'; alert('No se pudo subir: '+(err.message||err)); } });
+  $('f-cover').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f)return; $('up-cover').textContent='Subiendo…'; try{ await ready(); coverURL=await window.INV.uploadImage(await comprimir(f,1600,0.85)); $('prev-cover').innerHTML='<img class="prev" src="'+coverURL+'">'; $('up-cover').textContent='✓ Foto cargada — cambiar'; }catch(err){ $('up-cover').textContent='Subir foto'; alert('No se pudo subir: '+(err.message||err)); } });
   // subir video portada (no se comprime en el navegador; Cloudinary lo optimiza al entregar)
-  $('f-covervid').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f)return; const mb=Math.round(f.size/1048576); if(f.size>80*1024*1024){ if(!confirm('El video pesa '+mb+' MB, puede tardar bastante o fallar. Lo ideal es menos de 40 MB. ¿Subir igual?')) { e.target.value=''; return; } } $('up-covervid').textContent='Subiendo video… ⏳'; try{ await ready(); coverVideoURL=await window.INV.uploadVideo(f); $('prev-cover').innerHTML='<video class="prev" src="'+coverVideoURL+'" muted autoplay loop playsinline></video>'; $('up-covervid').textContent='✓ Video cargado — cambiar'; }catch(err){ $('up-covervid').textContent='🎬 Subir video'; alert('No se pudo subir el video: '+(err.message||err)); } });
+  $('f-covervid').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f)return; const mb=Math.round(f.size/1048576); if(f.size>80*1024*1024){ if(!confirm('El video pesa '+mb+' MB, puede tardar bastante o fallar. Lo ideal es menos de 40 MB. ¿Subir igual?')) { e.target.value=''; return; } } $('up-covervid').textContent='Subiendo video…'; try{ await ready(); coverVideoURL=await window.INV.uploadVideo(f); $('prev-cover').innerHTML='<video class="prev" src="'+coverVideoURL+'" muted autoplay loop playsinline></video>'; $('up-covervid').textContent='✓ Video cargado — cambiar'; }catch(err){ $('up-covervid').textContent='Subir video'; alert('No se pudo subir el video: '+(err.message||err)); } });
   // subir galería
-  $('f-gal').addEventListener('change',async e=>{ const fs=[...e.target.files]; if(!fs.length)return; $('up-gal').textContent='Subiendo…'; try{ await ready(); for(const f of fs){ const u=await window.INV.uploadImage(await comprimir(f,1400,0.8)); galURLs.push(u); $('prev-gal').innerHTML+='<img class="prevmini" src="'+u+'">'; } $('up-gal').textContent='⬆ Agregar más fotos'; }catch(err){ $('up-gal').textContent='⬆ Subir fotos de la galería'; alert('No se pudo subir: '+(err.message||err)); } });
+  $('f-gal').addEventListener('change',async e=>{ const fs=[...e.target.files]; if(!fs.length)return; $('up-gal').textContent='Subiendo…'; try{ await ready(); for(const f of fs){ const u=await window.INV.uploadImage(await comprimir(f,1400,0.8)); galURLs.push(u); $('prev-gal').innerHTML+='<img class="prevmini" src="'+u+'">'; } $('up-gal').textContent='Agregar más fotos'; }catch(err){ $('up-gal').textContent='Subir fotos de la galería'; alert('No se pudo subir: '+(err.message||err)); } });
 
   // ---- Invitados por Excel/CSV ----
   window.addGuest=function(n,p,m){ const d=document.createElement('div'); d.className='rowinv'; d.innerHTML='<input type="text" placeholder="Nombre (ej: Familia Pérez)"><input type="text" placeholder="Pers." value="2"><input type="text" placeholder="Mesa"><button class="rmx" type="button">✕</button>'; const ins=d.querySelectorAll('input'); if(typeof n==='string'){ins[0].value=n; if(p)ins[1].value=p; if(m)ins[2].value=m;} d.querySelector('.rmx').onclick=()=>d.remove(); $('guests').appendChild(d); };
-  $('f-xls').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; if(typeof XLSX==='undefined'){alert('Esperá unos segundos y volvé a intentar.');return;} const rd=new FileReader(); rd.onload=ev=>{ try{ const wb=XLSX.read(ev.target.result,{type:'array'}); const ws=wb.Sheets[wb.SheetNames[0]]; const rows=XLSX.utils.sheet_to_json(ws,{header:1}); document.querySelectorAll('#guests .rowinv').forEach(r=>{ if(!r.querySelector('input').value.trim())r.remove(); }); let added=0; rows.forEach((r,i)=>{ if(!r||r[0]==null)return; const nom=String(r[0]).trim(); if(!nom)return; if(i===0&&/nombre/i.test(nom))return; addGuest(nom, r[1]!=null?String(r[1]).trim():'', r[2]!=null?String(r[2]).trim():''); added++; }); $('up-xls').textContent='✓ '+added+' invitados cargados'; }catch(err){ alert('No pude leer el archivo. Revisá que tenga las columnas Nombre, Personas, Mesa.'); } }; rd.readAsArrayBuffer(f); });
+  $('f-xls').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; if(typeof XLSX==='undefined'){alert('Espera unos segundos y vuelve a intentar.');return;} const rd=new FileReader(); rd.onload=ev=>{ try{ const wb=XLSX.read(ev.target.result,{type:'array'}); const ws=wb.Sheets[wb.SheetNames[0]]; const rows=XLSX.utils.sheet_to_json(ws,{header:1}); document.querySelectorAll('#guests .rowinv').forEach(r=>{ if(!r.querySelector('input').value.trim())r.remove(); }); let added=0; rows.forEach((r,i)=>{ if(!r||r[0]==null)return; const nom=String(r[0]).trim(); if(!nom)return; if(i===0&&/nombre/i.test(nom))return; addGuest(nom, r[1]!=null?String(r[1]).trim():'', r[2]!=null?String(r[2]).trim():''); added++; }); $('up-xls').textContent='✓ '+added+' invitados cargados'; }catch(err){ alert('No pude leer el archivo. Revisa que tenga las columnas Nombre, Personas, Mesa, WhatsApp.'); } }; rd.readAsArrayBuffer(f); });
   $('tpl-xls').addEventListener('click',e=>{ e.preventDefault(); if(typeof XLSX==='undefined')return; const ws=XLSX.utils.aoa_to_sheet([['Nombre','Personas','Mesa'],['Familia Pérez',4,'1'],['Juan y Ana',2,'2'],['Carlos López',1,'3']]); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Invitados'); XLSX.writeFile(wb,'plantilla-invitados.xlsx'); });
 
   // invitados: fila inicial vacía
@@ -275,7 +275,7 @@
         pasevozURL=url; pasevozOnda=onda;
         oir.src=URL.createObjectURL(blob); oir.style.display='block';
         btn.style.display='none'; otra.style.display='block';
-        est.textContent='Listo. Escuchalo acá abajo; si no te gusta, grabalo de nuevo.';
+        est.textContent='Listo. Escúchalo aquí abajo; si no te gusta, grábalo de nuevo.';
       }catch(err){
         pasevozURL=''; pasevozOnda='';
         btn.textContent='Grabar el mensaje';
@@ -297,11 +297,11 @@
           señal.getTracks().forEach(t=>t.stop());   /* apaga el micrófono */
           const blob=new Blob(trozos,{type:rec.mimeType||'audio/webm'});
           if(blob.size>1000) guardar(blob);
-          else { btn.textContent='Grabar el mensaje'; est.textContent='Quedó muy cortito. Probá de nuevo.'; }
+          else { btn.textContent='Grabar el mensaje'; est.textContent='Quedó muy cortito. Prueba de nuevo.'; }
         };
         rec.start();
         btn.textContent='Detener y guardar';
-        est.textContent='Grabando… hablá tranquilo.';
+        est.textContent='Grabando… habla tranquilo.';
         corte=setTimeout(parar,60000);            /* el minuto, solo */
       }catch(e){
         est.textContent='No nos dejó usar el micrófono. Se puede habilitar en los permisos del navegador.';
@@ -371,10 +371,10 @@
   window.enviar=async function(){
     $('err').style.display='none';
     const n1=$('n1').value.trim(), fecha=$('fecha').value, cnom=$('cnom').value.trim(), cwsp=$('cwsp').value.trim(), cmail=$('cmail').value.trim();
-    if(!n1){ return showErr('Poné al menos el primer nombre.'); }
-    if(!fecha){ return showErr('Poné la fecha del evento.'); }
-    if(!cnom||!cwsp||!cmail){ return showErr('Dejanos tu nombre, WhatsApp y email para poder avisarte.'); }
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cmail)){ return showErr('Revisá el email, parece que tiene un error.'); }
+    if(!n1){ return showErr('Pon al menos el primer nombre.'); }
+    if(!fecha){ return showErr('Pon la fecha del evento.'); }
+    if(!cnom||!cwsp||!cmail){ return showErr('Déjanos tu nombre, WhatsApp y correo para poder avisarte.'); }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cmail)){ return showErr('Revisa el correo, parece que tiene un error.'); }
     const data = leerFormulario();
     $('loading').style.display='flex'; $('send').disabled=true;
     try{
@@ -406,12 +406,26 @@
           });
           const j = await r.json().catch(()=>({}));
           if(!j.ok) console.warn('no se pudo crear la invitacion sola:', j.error||r.status);
+          /* MODO AUTOMATICO. Si la marca entrega sola, el cliente se lleva TODO
+             aca mismo: el link y su panel con la clave. Sin esto le deciamos «te
+             avisamos cuando este lista» aunque ya estuviera funcionando. */
+          if(j.ok && j.estado==='entregada' && j.link) window.__entregada = j;
         }
       }catch(e){ console.warn('no se pudo crear la invitacion sola:', e); }
 
       borrarBorrador();
       $('loading').style.display='none';
       $('wrap').style.display='none'; document.querySelector('.top .sub').textContent='¡Gracias!';
+      const _e = window.__entregada, _t = $('done-txt');
+      if(_e && _t){
+        _t.innerHTML = 'Tu invitación ya está lista.<br><br>'
+          + '<b>Link para compartir con tus invitados</b><br>'
+          + '<a href="'+_e.link+'" target="_blank" style="color:var(--rosa);word-break:break-all">'+_e.link+'</a>'
+          + (_e.panel ? '<br><br><b>Tu panel</b>, para cargar invitados, acomodar las mesas y el itinerario<br>'
+              + '<a href="'+_e.panel.url+'" target="_blank" style="color:var(--rosa);word-break:break-all">'+_e.panel.url+'</a>'
+              + '<br>Clave: <b>'+_e.panel.clave+'</b>' : '')
+          + '<br><br>Te lo mandamos también por WhatsApp.';
+      }
       $('done').style.display='block'; window.scrollTo(0,0);
     }catch(err){ $('loading').style.display='none'; $('send').disabled=false; showErr('No se pudo enviar: '+(err.message||err)); }
   };
