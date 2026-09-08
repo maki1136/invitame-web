@@ -7,123 +7,22 @@
 <link rel="icon" type="image/png" href="/favicon-in.png"><link rel="apple-touch-icon" href="/favicon-in.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Forum&family=Rouge+Script&family=Great+Vibes&family=Dancing+Script&family=Parisienne&family=Allura&family=Sacramento&family=Tangerine:wght@700&family=Pinyon+Script&family=Alex+Brush&family=Yellowtail&family=Kaushan+Script&family=Satisfy&family=Cormorant+Garamond:wght@500;600&family=Playfair+Display:wght@600&family=Marcellus&family=EB+Garamond&family=Italiana&family=Lora:ital@0;1&family=Cardo&family=Cinzel&family=Bodoni+Moda&family=DM+Serif+Display&family=Prata&family=Spectral&family=Josefin+Sans&family=Poppins&family=Raleway&family=Jost&family=Montserrat:wght@300;400;500;600&family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&family=Lobster&family=Pacifico&family=Cookie&family=Courgette&family=Marck+Script&family=Bad+Script&family=Charm:wght@400;700&family=Petit+Formal+Script&family=Berkshire+Swash&family=Niconne&family=Clicker+Script&family=Arizonia&family=Mr+De+Haviland&family=League+Script&family=Aguafina+Script&family=Abril+Fatface&family=Cinzel+Decorative&family=Cormorant+SC&family=Marcellus+SC&family=Tenor+Sans&family=Julius+Sans+One&family=Sorts+Mill+Goudy&family=Amiri&family=Old+Standard+TT&family=Libre+Baskerville&family=Quicksand&family=Comfortaa&family=Questrial&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=Forum&family=Rouge+Script&family=Great+Vibes&family=Dancing+Script&family=Parisienne&family=Allura&family=Sacramento&family=Tangerine:wght@700&family=Pinyon+Script&family=Alex+Brush&family=Yellowtail&family=Kaushan+Script&family=Satisfy&family=Cormorant+Garamond:wght@500;600&family=Playfair+Display:wght@600&family=Marcellus&family=EB+Garamond&family=Italiana&family=Lora:ital@0;1&family=Cardo&family=Cinzel&family=Bodoni+Moda&family=DM+Serif+Display&family=Prata&family=Spectral&family=Josefin+Sans&family=Poppins&family=Raleway&family=Jost&family=Montserrat:wght@300;400;500;600&family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&family=Lobster&family=Pacifico&family=Cookie&family=Courgette&family=Marck+Script&family=Bad+Script&family=Charm:wght@400;700&family=Petit+Formal+Script&family=Berkshire+Swash&family=Niconne&family=Clicker+Script&family=Arizonia&family=Mr+De+Haviland&family=League+Script&family=Aguafina+Script&family=Abril+Fatface&family=Cinzel+Decorative&family=Cormorant+SC&family=Marcellus+SC&family=Tenor+Sans&family=Julius+Sans+One&family=Sorts+Mill+Goudy&family=Amiri&family=Old+Standard+TT&family=Libre+Baskerville&family=Quicksand&family=Comfortaa&family=Questrial&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-  :root{--ink:#49111A;--muted:#9a8f88;--line:#e7ddd3;--uva:#6D1233;--rosa:#F56770;--bg:#F9F3EF}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Nunito',sans-serif;color:var(--ink);background:var(--bg);height:100vh;overflow:hidden}
-  .top{height:56px;background:var(--uva);color:#fff;display:flex;align-items:center;gap:11px;padding:0 16px}
-  .brandlogo{display:flex;align-items:center;gap:9px}
-  .brandlogo svg,.brandlogo .blogo{width:32px;height:36px;display:block;object-fit:contain}
-  .brandlogo .wm{font-family:'Nunito',sans-serif;font-weight:900;font-size:19px;color:#fff;letter-spacing:-.3px}
-  .brandlogo .adm{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--rosa);background:rgba(255,255,255,.14);padding:3px 8px;border-radius:6px}
-  .logo{background:var(--rosa);color:#fff;font-weight:700;padding:5px 14px;border-radius:8px;font-size:17px}
-  .logo small{font-size:9px;opacity:.85;letter-spacing:2px}
-  .top .sp{margin-left:auto}
-  .btn-g{background:var(--rosa);color:#fff;border:none;padding:9px 22px;border-radius:22px;font-size:13px;cursor:pointer;font-weight:800;font-family:'Nunito'}
-  .btn-c{background:rgba(255,255,255,.16);color:#fff;border:none;padding:9px 20px;border-radius:22px;font-size:13px;cursor:pointer;font-family:'Nunito';font-weight:700}
-  .layout{display:flex;height:calc(100vh - 52px)}
-  .editor{flex:1;overflow:hidden;display:flex;flex-direction:column}
-  .tabs{display:flex;flex-wrap:wrap;gap:3px;padding:8px 12px 0;background:linear-gradient(90deg,#6D1233,#8f1a42)}
-  .tab{padding:8px 12px;font-size:11.5px;cursor:pointer;color:#f4dae1;background:rgba(255,255,255,.16);border-radius:6px 6px 0 0;letter-spacing:.5px}
-  .tab.on{background:#faf5f1;color:var(--ink);font-weight:600}
-  .tab.nuevo{background:#F56770;color:#ffffff}
-  .panel{flex:1;overflow-y:auto;background:#faf5f1;padding:22px 26px}
-  .col{max-width:640px}
-  .grp{margin-bottom:16px}
-  label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:5px}
-  input[type=text],input[type=datetime-local],select,textarea{width:100%;border:1px solid var(--line);border-radius:5px;padding:9px 11px;font-family:'Nunito';font-size:13px;color:var(--ink);background:#ffffff}
-  input[readonly]{background:#efe7de;color:#8a7f76}
-  textarea{resize:vertical;min-height:60px}
-  input[type=color]{width:52px;height:36px;border:1px solid var(--line);border-radius:5px;background:#fff;padding:2px;vertical-align:middle}
-  input[type=range]{width:100%}
-  .file{border:1px dashed rgba(109,18,51,.3);border-radius:8px;padding:12px;text-align:center;color:var(--uva);font-size:12px;background:#f6ece6;cursor:pointer}
-  .chk{display:flex;align-items:center;gap:9px}.chk input{width:18px;height:18px}
-  .mejoras{background:#fbeef0;border:1px solid rgba(245,103,112,.35);border-radius:10px;padding:16px;margin-bottom:22px}
-  .mejoras .h{font-size:12px;font-weight:600;color:var(--uva);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .temas{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-  .tema{border:2px solid transparent;border-radius:9px;overflow:hidden;cursor:pointer;background:#fff}
-  .tema.on{border-color:var(--uva)}.tema .sw{height:24px}.tema .nm{padding:4px;font-size:11px;text-align:center;font-weight:500}
-  /* invitados */
-  .stat{display:flex;gap:10px;margin-bottom:14px}.stat .b{flex:1;background:#f6ece6;border-radius:10px;padding:12px;text-align:center}
-  .stat .n{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--uva)}.stat .l{font-size:10px;text-transform:uppercase;color:var(--muted)}
-  .addrow{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.addrow .f{flex:1;min-width:80px}
-  .addbtn{background:var(--uva);color:#fff;border:none;border-radius:22px;padding:9px 18px;font-size:12.5px;cursor:pointer;font-family:'Nunito'}
-  .lnk{font-size:12.5px;color:var(--uva);cursor:pointer;text-decoration:underline;background:none;border:none;padding:0;font-family:'Nunito'}
-  .guest{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:13px}
-  .guest .lk{font-size:11px;color:var(--muted)}.guest .x{color:#F56770;cursor:pointer;margin-left:auto}
-  .hint{font-size:11.5px;color:var(--muted);margin-top:5px;font-style:italic}
-  .guia{background:#fbf3f6;border:1px solid #e6cdd7;border-left:4px solid var(--uva);border-radius:11px;padding:13px 15px;margin:0 0 15px;font-size:12.5px;line-height:1.55;color:#5a4450}
-  .guia .gt{font-weight:900;color:var(--uva);font-size:13.5px;margin-bottom:5px}
-  .guia ol{margin:7px 0 0;padding-left:19px}
-  .guia li{margin:4px 0}
-  .guia b{color:var(--uva)}
-  .aviso{background:#fff6e9;border:1px solid #f0d9b0;border-left:4px solid #c98a2e;border-radius:9px;padding:8px 11px;margin-top:6px;font-size:11.5px;line-height:1.5;color:#7a5a24}
-  .adgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .adopt{background:#fff;border:1.5px solid #e7ddd3;border-radius:10px;height:44px;cursor:pointer;color:#7a6a5c;display:flex;align-items:center;justify-content:center;padding:5px 6px}
-  .adopt:hover{border-color:#c9b8a8}
-  .adopt.on{border-color:var(--uva);box-shadow:0 0 0 2px rgba(109,18,51,.15);color:var(--uva)}
-  .adopt svg{width:100%;height:100%}
-  .adopt .adnone{color:#b0a89f;font-size:13px}
-  .imgedit{height:130px;border-radius:10px;background-repeat:no-repeat;background-position:50% 45%;background-size:auto 100%;background-color:#e8e2d8;cursor:grab;position:relative;overflow:hidden;border:1px solid var(--line);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
-  .imgedit:active{cursor:grabbing}
-  .imgedit .edtag{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(20,18,24,.55);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;pointer-events:none;opacity:.85}
-  .zoomrow{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12px;color:var(--uva)}
-  .zoomrow input{flex:1}
-  /* preview */
-  .stage{width:360px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:#d9d5ce;border-left:1px solid #cfc9c0}
-  .phone{width:300px;height:86vh;max-height:660px;border-radius:36px;background:#15140f;padding:9px;box-shadow:0 20px 50px rgba(0,0,0,.28)}
-  .screen{border-radius:28px;overflow-y:auto;overflow-x:hidden;height:100%;background:var(--v-lino,#f4efe6);position:relative;
-    --verde:#2e433c;--verde2:#26372f;--cream:#eee6d6;--sage:#7f9079;--sage-cl:#a9b8a0;--muted2:#7d857a;--fD:'Forum',serif;--fS:'Rouge Script',cursive}
-  .screen::-webkit-scrollbar{width:0}
-  .p-portada{position:relative;min-height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding:0 20px 34px;color:#fbf7ef;background:linear-gradient(rgba(25,28,22,.12) 26%,rgba(20,24,18,.66)),var(--v-cover) var(--v-pos,50% 45%)/auto var(--v-size,100%);background-repeat:no-repeat}
-  .p-kick{font-family:var(--fD);font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#e7ddc8}
-  .p-names{line-height:1.02;margin:7px 0 14px;color:#fbf7ef;text-shadow:0 2px 16px rgba(0,0,0,.45)}
-  .p-fecha{font-family:var(--fD);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#efe7d6}
-  .p-count{display:flex;justify-content:center;gap:3px;margin-top:11px}.p-count .b{min-width:34px;text-align:center}
-  .p-count .num{font-family:var(--fD);font-size:21px;color:#fbf7ef}.p-count .l{font-family:'Lora',serif;font-style:italic;font-size:8px;color:#e7ddc8}.p-count .s{font-family:var(--fD);font-size:16px;color:#cdbf9f}
-  .p-pase{background:var(--verde);color:var(--cream);padding:24px 20px;text-align:center}.p-pase .t{font-family:var(--fS);font-size:27px;color:#f0e7d4}
-  .p-card{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:10px;margin-top:11px;text-align:left}
-  .p-card .qr{background:#fff;padding:5px;border-radius:8px;line-height:0}.p-card .k{font-family:'Lora',serif;font-style:italic;font-size:9px;color:var(--sage-cl)}.p-card .v{font-family:var(--fD);font-size:14px;color:#fff}
-  .p-sec{padding:26px 20px;text-align:center}.p-sec.v{background:var(--verde);color:var(--cream)}
-  .p-kk{font-family:var(--fS);font-size:24px;color:var(--sage)}.p-sec.v .p-kk{color:var(--sage-cl)}
-  .p-sec h3{font-family:var(--fD);font-size:20px;color:var(--verde);margin:2px 0 7px}.p-sec.v h3{color:#fff}
-  .p-sec p{font-family:'Lora',serif;font-size:12px;line-height:1.6;color:var(--muted2);max-width:270px;margin:0 auto}.p-sec.v p{color:#d7cebb}
-  .p-foot{background:var(--verde2);color:#c9bfad;padding:22px 20px;text-align:center}.p-foot .n{font-family:var(--fS);font-size:34px;color:#f0e7d4}
-
-  /* ==== Contraseña del panel ==== */
-  #gate{position:fixed;inset:0;z-index:99999;background:var(--uva);display:flex;align-items:center;justify-content:center;padding:24px}
-  #gate .gbox{background:#fff;border-radius:16px;padding:30px 26px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-  #gate .gwm{font-family:'Nunito';font-weight:900;color:var(--uva);font-size:24px;margin-bottom:2px}
-  #gate p{font-size:13px;color:var(--muted);margin-bottom:16px}
-  #gate input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:15px;margin-bottom:10px;font-family:'Nunito'}
-  #gate button{width:100%;padding:12px;border:0;border-radius:22px;background:var(--rosa);color:#fff;font-weight:800;font-family:'Nunito';font-size:15px;cursor:pointer}
-  #gate #gm{color:var(--rosa);font-size:12.5px;margin-top:10px;min-height:16px}
-  .tqcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
-  .tqhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;color:var(--uva)}
-  .tqopts{margin-top:8px}
-  .tqopt{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-  .tqopt input[type=radio]{width:18px;height:18px;accent-color:var(--rosa)}
-  .tqx{cursor:pointer;color:var(--rosa);font-size:12px}
-  .mcard{border:1px solid #e7ddd3;border-radius:10px;padding:10px;background:#faf5f1;min-height:64px}
-  .mcard.over{border-color:#F56770;background:#fbeef0}
-  .mcardh{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;color:#6D1233}
-  .mchip{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e7ddd3;border-radius:8px;padding:6px 8px;margin-bottom:5px;font-size:12px;cursor:grab}
-  .mchip:active{cursor:grabbing}
-  .ordrow{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid #e7ddd3;border-radius:8px;margin-bottom:6px;background:#faf5f1;font-size:13px}
-  .ordb{border:0;background:#efe7de;color:#49111A;border-radius:6px;cursor:pointer;padding:3px 8px;font-size:12px}
-  .gthumbs{display:flex;flex-wrap:wrap;gap:8px}
-  .gthumb{position:relative;width:82px;height:82px;border-radius:8px;overflow:hidden;border:1px solid #e7ddd3}
-  .gthumb img{width:100%;height:100%;object-fit:cover;display:block}
-  .gx{position:absolute;top:2px;right:2px;background:rgba(20,16,24,.6);color:#fff;border-radius:50%;width:19px;height:19px;text-align:center;cursor:pointer;font-size:11px;line-height:19px}
-</style>
+<!-- Los íconos dibujados del panel. Va acá arriba porque lo usan tanto el HTML
+     de la barra de arriba como los cuatro módulos del cerebro. -->
+<script src="/admin/0-iconos.js"></script>
+<!-- LA PINTURA DEL PANEL · 8/9/2026
+     Estaba acá adentro, como 200 líneas de <style>. Ahora es un archivo:
+     se puede leer, se puede cambiar sin tocar el HTML, y el navegador se lo
+     guarda en vez de bajarlo en cada carga.
+     ⚠️ Si cambiás el archivo, subile el ?v= o el navegador sigue mostrando el viejo. -->
+<link rel="stylesheet" href="/admin/estilo.css?v=2026-09-08">
 </head>
 <body>
 <div id="gate">
   <div class="gbox">
-    <div class="gwm">inv&iacute;tame!</div>
+    <img class="glogo" src="/invitame-marca.png" alt="Invítame">
     <p>Ingres&aacute; con el usuario del equipo</p>
     <input id="gmail" type="email" placeholder="Correo" autocomplete="username" autofocus>
     <input id="gp" type="password" placeholder="Contrase&ntilde;a" autocomplete="current-password" onkeydown="if(event.key==='Enter')chkpass()">
@@ -151,26 +50,24 @@
 </script>
   <div class="top">
   <div class="brandlogo">
-    <!-- EL LOGO DEL ADMIN · 7/9/2026
-         Antes vivía acá adentro como base64: 9 KB de imagen escritos dentro del
-         HTML. Ahora es un archivo de verdad, que además se cachea en vez de
-         viajar en cada carga del panel.
-         ⚠️ NO volver a meterlo como base64. Una imagen adentro del HTML no se
-            puede copiar de un archivo a otro con garantía de que llegue
-            idéntica (son 12.364 caracteres al azar), y un solo carácter
-            cambiado la deja rota sin que se note. -->
-    <img class="blogo" alt="Invítame" src="/invitame-logo-admin.png">
-    <span class="wm">invítame!</span>
+    <!-- LA MARCA · 8/9/2026
+         Antes acá había un <span> con la palabra "invítame!" escrita en
+         Nunito 900. Maki: «esa tipografía no tiene nada que ver con la
+         marca». Y tenía razón: el logo de una marca no se re-tipea, se usa.
+         Ahora es la imagen de marca, la misma que ella mandó.
+         ⚠️ NO volver a escribir el nombre con una fuente. Si hace falta más
+            grande o en otro color, se cambia el archivo, no el CSS. -->
+    <img class="blogo" alt="Invítame" src="/invitame-marca.png">
     <span class="adm">ADMIN</span>
   </div>
   <div class="sp"></div>
-  <button class="btn-c" onclick="verSolicitudes()" title="Solicitudes de clientes por revisar">📥 Solicitudes <span id="solic-badge" style="display:none;background:#F56770;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:800;margin-left:2px">0</span></button>
-  <button class="btn-c" onclick="verInvitaciones()" title="Ver todas las invitaciones">🗂 Invitaciones</button>
-  <button class="btn-c" onclick="duplicarActual()" title="Hacer una copia de esta invitación para otra pareja">⧉ Duplicar</button>
-  <button class="btn-c" onclick="abrirEscaner()" title="Abrir el control de acceso para escanear los QR en la puerta">🎟️ Escáner puerta</button>
-  <button class="btn-c" onclick="backup()" title="Descargar copia de seguridad">⬇ Backup</button>
-  <button class="btn-c" onclick="restaurar()" title="Volver a subir una copia de seguridad">⬆ Restaurar</button>
-  <button class="btn-c" onclick="limpiarVencidas()" title="Borrar invitaciones vencidas (+90 días de la fecha) para liberar la base">🧹 Limpiar vencidas</button>
+  <button class="btn-c" onclick="verSolicitudes()" title="Solicitudes de clientes por revisar"><span data-ico="entrada"></span> Solicitudes <span id="solic-badge" style="display:none;background:#F56770;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:800;margin-left:2px">0</span></button>
+  <button class="btn-c" onclick="verInvitaciones()" title="Ver todas las invitaciones"><span data-ico="carpeta"></span> Invitaciones</button>
+  <button class="btn-c" onclick="duplicarActual()" title="Hacer una copia de esta invitación para otra pareja"><span data-ico="copiar"></span> Duplicar</button>
+  <button class="btn-c" onclick="abrirEscaner()" title="Abrir el control de acceso para escanear los QR en la puerta"><span data-ico="ticket"></span> Escáner puerta</button>
+  <button class="btn-c" onclick="backup()" title="Descargar copia de seguridad"><span data-ico="bajar"></span> Backup</button>
+  <button class="btn-c" onclick="restaurar()" title="Volver a subir una copia de seguridad"><span data-ico="subir"></span> Restaurar</button>
+  <button class="btn-c" onclick="limpiarVencidas()" title="Borrar invitaciones vencidas (+90 días de la fecha) para liberar la base"><span data-ico="escoba"></span> Limpiar vencidas</button>
   <button class="btn-g" onclick="publicar()">Guardar y publicar</button>
   <button class="btn-c" onclick="salir()" title="Cerrar sesión del equipo">Salir</button>
 </div>
@@ -182,8 +79,11 @@
   </div>
   <div class="stage">
     <div class="phone"><div class="screen" id="screen">
-      <iframe id="pv-frame" src="i/?preview=1" title="Vista previa de la invitación"
-        style="width:100%;height:100%;border:0;display:block;background:#f4efe6"></iframe>
+      <!-- ⚠️ SIN style= acá adentro: el tamaño del iframe lo pone estilo.css
+           (390 × 844, un iPhone de verdad, achicado con scale). Un style
+           escrito en la etiqueta le gana al archivo y volvería a dibujar la
+           invitación a 282 px, que es lo que la cortaba. -->
+      <iframe id="pv-frame" src="i/?preview=1" title="Vista previa de la invitación"></iframe>
     </div></div>
   </div>
 </div>
@@ -214,6 +114,33 @@
   window.solicListar=async function(){ await _ready(); const snap=await getDocs(query(collection(window.INV.db,'inv_solicitudes'), where('estado','==','pendiente'))); const arr=snap.docs.map(d=>({id:d.id,...d.data()})); arr.sort((a,b)=>((b.creado&&b.creado.seconds)||0)-((a.creado&&a.creado.seconds)||0)); return arr; };
   window.solicResolver=async function(id){ await _ready(); await updateDoc(doc(window.INV.db,'inv_solicitudes',id),{estado:'procesada'}); };
   _ready().then(()=>{ if(window.actualizarBadgeSolic) window.actualizarBadgeSolic(); });
+</script>
+<script>
+/* ── Los íconos dibujados en el HTML fijo ────────────────────────────────
+   En los módulos se usa ICO.loquesea dentro del texto que arman. Acá, en
+   HTML escrito a mano, se marca el lugar con data-ico y se rellena una vez.
+   Así el dibujo vive en UN solo archivo (/admin/0-iconos.js) y no copiado. */
+document.querySelectorAll('[data-ico]').forEach(function(e){
+  var d = (typeof ICO !== 'undefined') && ICO[e.dataset.ico];
+  if (d) e.innerHTML = d;
+});
+
+/* ── El tamaño del celular de la vista previa ────────────────────────────
+   --pvh es el alto útil de la pantalla, en px pero SIN unidad, porque de
+   ahí salen por cálculo el ancho (proporción de iPhone) y la escala del
+   iframe. En CSS no se puede dividir una medida por otra, por eso el número
+   se pone desde acá. */
+(function(){
+  var ph = document.querySelector('.phone');
+  function medir(){
+    if(!ph) return;
+    var libre = (ph.parentElement ? ph.parentElement.clientHeight : innerHeight) - 34;
+    ph.style.setProperty('--pvh', Math.max(430, Math.min(760, Math.round(libre - 22))));
+  }
+  addEventListener('resize', medir);
+  addEventListener('load', medir);
+  medir();
+})();
 </script>
 </body>
 </html>
