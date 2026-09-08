@@ -173,6 +173,12 @@
       if(existe && !confirm('Ya existe una invitación en "'+ns+'". ¿La querés sobrescribir?')) return;
       const {invitados, ...cfg}=D;
       let nEvento; try{ const _all=await INV.exportAll(); const _mx=_all.eventos.reduce((m,e)=>Math.max(m,parseInt(e.nEvento,10)||0),0); nEvento=_mx+1; }catch(_e){ nEvento=(parseInt(D.nEvento,10)||1)+1; }
+      /* ⚠️ LOS NÚMEROS DE SEGUIMIENTO NO SE COPIAN. El nº de evento y el nº de
+         orden identifican UNA venta: si la copia se los lleva, quedan dos
+         invitaciones con el mismo número y el seguimiento deja de servir.
+         Ya pasó: hay pares con el mismo nº (Juliana/…-copia, Caro/…-copia).
+         Y `ver` tampoco: la copia es nueva, se publica con el motor de hoy. */
+      delete cfg.orden; delete cfg.ver;
       const _pv={}; (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _pv[k]=cfg[k]; delete cfg[k]; } });
       await INV.saveEvento(ns,{...cfg, slug:ns, nEvento, tpl:(D.tpl||'')+' (copia)'});
       if(Object.keys(_pv).length) await INV.savePrivado(ns, _pv);
@@ -186,7 +192,12 @@
     try{const ev=await INV.getEvento(slug); if(!ev){alert('No encontré el evento');return;}
       const _c={...ev}; const _pv2={};
       (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(_c[k]!==undefined){ _pv2[k]=_c[k]; delete _c[k]; } });
-      await INV.saveEvento(ns,{..._c,slug:ns,tpl:(ev.tpl||'')+' (copia)'});
+      /* ⚠️ Mismo cuidado que en "Duplicar": el nº de evento, el nº de orden y la
+         versión del motor son de la venta original, no de la copia. Este botón
+         se los llevaba: por eso hay invitaciones distintas con el mismo número. */
+      let _nEv; try{ const _a=await INV.exportAll(); _nEv=_a.eventos.reduce((m,e)=>Math.max(m,parseInt(e.nEvento,10)||0),0)+1; }catch(_e){ _nEv=(parseInt(ev.nEvento,10)||1)+1; }
+      delete _c.orden; delete _c.ver;
+      await INV.saveEvento(ns,{..._c,slug:ns,nEvento:_nEv,tpl:(ev.tpl||'')+' (copia)'});
       if(Object.keys(_pv2).length) await INV.savePrivado(ns, _pv2);
       alert('✓ Clonada como '+ns); verInvitaciones();
     }catch(e){alert('No se pudo clonar: '+(e.message||e));}
