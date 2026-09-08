@@ -285,7 +285,11 @@
   });
 
   function armar() {
-    var anclaje = $('send') ? $('send').closest('.card') : null;
+    /* ⚠️ EL BOTÓN DE ENVIAR NO ESTÁ ADENTRO DE NINGUNA TARJETA: es hermano de
+       la última. Con `closest('.card')` esto daba null y el bloque no se
+       montaba nunca —sin dar ningún error. Se cuelga de la última tarjeta. */
+    var cards = document.querySelectorAll('#wrap .card');
+    var anclaje = cards.length ? cards[cards.length - 1] : null;
     if (!anclaje || $('card-diseno')) return false;
     css();
 
@@ -294,7 +298,7 @@
     card.id = 'card-diseno';
     card.innerHTML =
       '<h3>El diseño de tu invitación</h3>' +
-      '<p class="ay" style="margin:0 0 4px">Elige el que más te guste. Lo vas viendo al instante, ' +
+      '<p class="desc">Elige el que más te guste. Lo vas viendo al instante, ' +
       'y lo puedes cambiar todas las veces que quieras.</p>' +
       '<div id="dis-modelos"></div>' +
       '<details id="dis-mas">' +
@@ -314,6 +318,7 @@
     tarjetasPaletas($('dis-paletas'));
     botonesLetra($('dis-letras'));
     armarFono();
+    avisoBorrador();
     if (elegido) bajarYDibujar(elegido);
 
     /* mientras escribe, la invitación se va armando */
@@ -335,6 +340,40 @@
       return d;
     }
   };
+
+  /* ===== QUE SEPA QUE SE GUARDA SOLO  (8/9/2026) ============================
+     Maki: «imagino que van a ir completando los campos de a poco… un botón que
+     diga guardar y seguir más adelante».
+     El borrador YA existía: /crear.js guarda en cada tecla y lo ofrece de
+     vuelta hasta 30 días después. El problema era otro: NADIE SE ENTERABA. Sin
+     un cartel, el cliente siente que tiene que terminar de una sentada.
+     ⚠️ Dice «en este dispositivo» a propósito: el borrador vive en ESTE
+        navegador. Prometer que puede seguir desde el celular sería mentirle. */
+  function avisoBorrador() {
+    if ($('dis-borrador')) return;
+    var b = $('send'); if (!b) return;
+    var caja = document.createElement('div');
+    caja.id = 'dis-borrador';
+    caja.style.cssText = 'display:flex;gap:10px;align-items:center;justify-content:center;' +
+      'flex-wrap:wrap;margin:16px 0 0;padding:11px 14px;border-radius:12px;' +
+      'background:#f6f1e8;border:1px solid #e8ddcb';
+    var t = document.createElement('span');
+    t.style.cssText = 'font-size:13px;color:#6b6058;line-height:1.45';
+    t.textContent = 'Tranquilo: se guarda solo mientras escribes. Puedes cerrar y continuar después en este dispositivo.';
+    var g = document.createElement('button');
+    g.type = 'button';
+    g.style.cssText = 'border:1px solid #cbb9a2;background:#fff;color:#6D1233;font-weight:800;' +
+      'font-size:13px;padding:9px 14px;border-radius:999px;cursor:pointer';
+    g.textContent = 'Guardar y seguir después';
+    g.onclick = function () {
+      var antes = g.textContent;
+      g.textContent = 'Guardado'; g.disabled = true;
+      t.textContent = 'Listo, guardamos lo que llevas. Cuando vuelvas a abrir esta página desde este dispositivo, seguimos donde quedaste.';
+      setTimeout(function () { g.textContent = antes; g.disabled = false; }, 3200);
+    };
+    caja.appendChild(t); caja.appendChild(g);
+    b.parentNode.insertBefore(caja, b.nextSibling);
+  }
 
   var n = 0;
   var t = setInterval(function () {

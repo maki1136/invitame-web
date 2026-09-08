@@ -209,7 +209,7 @@
     if(!d||!d.n1) return;
     const dias=(Date.now()-(d._t||0))/86400000;
     if(dias>30){ borrarBorrador(); return; }
-    if(!confirm('Encontramos lo que habías empezado a cargar. ¿Lo recuperamos?\n\n(Si decís que no, arrancás de cero.)')){ borrarBorrador(); return; }
+    if(!confirm('Encontramos lo que empezaste a llenar. ¿Lo recuperamos?\n\n(Si dices que no, empiezas de cero.)')){ borrarBorrador(); return; }
     CAMPOS.forEach(function(k){ const e=$(k); if(e&&d[k]!=null) e.value=d[k]; });
     if(d.kick) $('kick').dataset.touched='1';
     try{ aplicarTipo(); }catch(e){}
@@ -330,7 +330,8 @@
       const invitados=[...document.querySelectorAll('#guests .rowinv')].map(r=>{const i=r.querySelectorAll('input');return {n:i[0].value.trim(),p:i[1].value.trim()||'1',m:i[2].value.trim()||'-'};}).filter(g=>g.n);
       return {
         estado:'pendiente', creado:serverTimestamp(),
-        tpl, tplNombre:T.n, tipoEvento:$('tipo').value, kick:$('kick').value.trim(),
+        /* el diseño que eligió en la solapa; si no tocó nada, el que traía el link */
+      tpl: (window.CREAR_DISENO && window.CREAR_DISENO.elegido()) || tpl, tplNombre:T.n, tipoEvento:$('tipo').value, kick:$('kick').value.trim(),
         n1, n2:$('n2').value.trim(), fecha, frase:$('frase').value.trim(),
         cover:coverURL, coverVideo:coverVideoURL, galeria:galURLs,
         orden:$('orden').value.trim(),
@@ -389,6 +390,10 @@
       try{
         if(window.SOLICITUD_A_EVENTO){
           const evento = window.SOLICITUD_A_EVENTO.mapear(data, {});
+          /* y le ponemos el vestido de la muestra que eligió, con las cinco
+             limpiezas de /vestir.js. Sin esto la invitación nacería armada pero
+             con el diseño genérico. */
+          if(window.CREAR_DISENO) window.CREAR_DISENO.vestirLoQueSeManda(evento, data);
           const r = await fetch('/solicitud-crear.php', {
             method:'POST', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({ evento, solicId: ref.id })
