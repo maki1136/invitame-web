@@ -554,6 +554,9 @@
    ============================================================================ */
 (function () {
   var MODULOS = [
+    /* ⚠️ VA PRIMERO: le pide a Cloudinary las fotos ya optimizadas, y tiene
+       que estar escuchando ANTES de que las demás secciones se dibujen. */
+    '/efectos/imagenes-livianas.js',  /* 3 MB de fotos -> 62% menos, sin tocar ninguna */
     '/efectos/sobre-catalogo.js',      /* el sobre de entrada: el motor lo ignoraba */
     '/efectos/paleta.js',              /* la paleta: pinta las 12 variables de color de una */
     '/efectos/panel-paleta.js',        /* y el selector de las 20, en el panel */
