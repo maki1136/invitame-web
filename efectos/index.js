@@ -597,6 +597,10 @@
     '/efectos/filtro.js',              /* la cámara con el marco de la boda (fx.filtro) */
     '/efectos/panel-filtro.js',        /* y su bloque en el panel, con el subidor del marco */
     '/efectos/panel-filtro-novios.js', /* y la frase, editable por los novios desde SU panel */
+    /* ⚠️ VA AL FINAL PERO SE DIBUJA PRIMERO: el bloque del paquete se mete
+       ARRIBA de todo en la pestaña EFECTOS, porque es el que decide qué le
+       corresponde al resto. Cargarlo último no cambia dónde aparece. */
+    '/efectos/panel-paquete.js',       /* qué compró, qué se le vendió aparte, y qué quedó regalado */
     '/efectos/pase-voz.js',            /* el ticket con el mensaje de voz de los anfitriones */
     '/efectos/panel-pase-voz.js',      /* y sus veinte campos en el panel, con la onda medible */
     '/efectos/perla.js',               /* el material: una perla de verdad, recortada (3.3 KB) */
