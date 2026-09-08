@@ -127,11 +127,30 @@ if (iData > 0) {
   /* estos son del pedido, no de la invitación: no tienen que viajar */
   const INTERNOS = ['estado', 'creado', 'origen', 'tplNombre', 'id',
                     'contactoNombre', 'contactoWsp', 'contactoEmail'];
-  const carga = admin + leer('efectos/panel-solicitud-muestra.js');
+  /* ⚠️ 8/9/2026: el mapeo dejó de estar adentro del admin y pasó a
+     /solicitud-a-evento.js, que es EL MISMO que usa el formulario del cliente
+     para que la invitación se cree sola. Si no se lo sumara acá, este chequeo
+     avisaría que treinta campos «no llegan al panel» siendo mentira — y un
+     aviso que miente se termina ignorando, que es peor que no tenerlo. */
+  const carga = admin + leer('efectos/panel-solicitud-muestra.js') +
+                leer('solicitud-a-evento.js');
+  /* ⚠️ Claves armadas en un BUCLE. Los tres eventos se mapean con
+     'ev' + i + 't', no escritos uno por uno. Sin esta regla, el chequeo
+     avisaría de doce campos que SÍ llegan — y un aviso que miente se termina
+     ignorando. Es la misma idea que ya usa el bloque 2 para las claves por
+     concatenación. */
+  const porBucle = k => {
+    const m = k.match(/^([a-zA-Z]+)\d+([a-zA-Z]*)$/);
+    /* ⚠️ Se exige ver la LECTURA de la solicitud —  s['ev' + i + 'maps']  —
+       y no sólo el molde. Probado rompiéndolo a propósito: si el mapeo escribe
+       la clave pero deja de leer el dato del cliente, esto salta igual. */
+    return !!m && carga.includes("s['" + m[1] + "' + i + '" + m[2] + "']");
+  };
   const perdidos = [...delCliente].filter(k =>
     !INTERNOS.includes(k) &&
     !carga.includes('s.' + k) && !carga.includes("s['" + k + "']") &&
-    !carga.includes("'" + k + "'"));      /* el bucle de los reg_* */
+    !carga.includes("'" + k + "'") &&    /* el bucle de los reg_* */
+    !porBucle(k));
   if (perdidos.length) avisos.push(['LO LLENA EL CLIENTE Y NO LLEGA AL PANEL', perdidos]);
 }
 
