@@ -153,7 +153,18 @@ function pedir($url, $metodo = 'GET', $cuerpo = null, $headers = array()) {
    De un valor de PHP al formato de Firestore.
    ⚠️ Una lista vacía y un objeto vacío se ven IGUAL en PHP (array()). Se
       resuelve mirando si las claves son 0,1,2…: si lo son, es lista.
+
+   ⚠⚠ Y LO VACÍO DIRECTAMENTE NO SE ESCRIBE. Acá se pagó un bug feo:
+      `fx.dresscode`, `fx.motivo` y `fx.calendario` llegan vacíos desde el
+      formulario. Como PHP no distingue `{}` de `[]`, se guardaban como LISTA
+      vacía. Después Jazmín escribía ahí adentro desde el panel, y el dato
+      **no se guardaba y no daba ningún error**: una propiedad puesta sobre un
+      array desaparece al convertirlo a JSON.
+      Un grupo ausente y un grupo vacío son lo mismo para el panel y para el
+      motor (los dos hacen `|| {}`), así que la salida limpia es no escribirlo.
+      Así el primero que escriba lo crea bien, del tipo que corresponda.
    --------------------------------------------------------------------------- */
+function estaVacio($v) { return is_array($v) && count($v) === 0; }
 function aFirestore($v) {
   if (is_null($v))  return array('nullValue' => null);
   if (is_bool($v))  return array('booleanValue' => $v);
@@ -168,14 +179,14 @@ function aFirestore($v) {
       return array('arrayValue' => array('values' => $vals));
     }
     $campos = array();
-    foreach ($v as $k => $x) $campos[$k] = aFirestore($x);
+    foreach ($v as $k => $x) { if (estaVacio($x)) continue; $campos[$k] = aFirestore($x); }
     return array('mapValue' => array('fields' => $campos));
   }
   return array('stringValue' => (string)$v);
 }
 function docDe($arr) {
   $campos = array();
-  foreach ($arr as $k => $v) $campos[$k] = aFirestore($v);
+  foreach ($arr as $k => $v) { if (estaVacio($v)) continue; $campos[$k] = aFirestore($v); }
   return array('fields' => $campos);
 }
 
