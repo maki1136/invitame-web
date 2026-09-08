@@ -197,24 +197,6 @@ if ($ce == 200) {
   exit;
 }
 
-// ---------- 2. ¿la solicitud existe y es ésta? ----------
-list($rs, $cs) = pedir($FS . 'inv_solicitudes/' . rawurlencode($solicId) . '?key=' . $APIKEY);
-if ($cs != 200) {
-  http_response_code(404);
-  echo json_encode(array('ok' => false, 'error' => 'sin-solicitud'));
-  exit;
-}
-$sol = json_decode($rs, true);
-$campos = isset($sol['fields']) ? $sol['fields'] : array();
-$n1Sol = isset($campos['n1']['stringValue']) ? trim($campos['n1']['stringValue']) : '';
-$n1Ev  = trim((string)($ev['n1'] ?? ''));
-if ($n1Sol === '' || mb_strtolower($n1Sol) !== mb_strtolower($n1Ev)) {
-  /* Lo que llegó no se corresponde con la solicitud que dice ser. */
-  http_response_code(400);
-  echo json_encode(array('ok' => false, 'error' => 'no-coincide'));
-  exit;
-}
-
 // ---------- 3. credenciales del sistema ----------
 $PANEL_USER = ''; $PANEL_PASS = '';
 $candidatos = array();
@@ -249,6 +231,30 @@ $sesion  = json_decode($ra, true);
 $idToken = isset($sesion['idToken']) ? $sesion['idToken'] : '';
 if ($idToken === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
 $auth = array('Authorization: Bearer ' . $idToken);
+
+// ---------- 3b. ¿la solicitud existe y es ésta? ----------
+/* ⚠️ ESTO VA DESPUÉS DEL LOGIN, Y NO ES CAPRICHO. La primera versión lo leía
+   con la apiKey a secas y siempre contestaba «sin-solicitud»: `inv_solicitudes`
+   se puede CREAR desde el navegador pero NO se puede LEER sin sesión —y está
+   bien que así sea: ahí están los teléfonos y los mails de todos los que
+   pidieron presupuesto. Con la sesión del sistema, se lee. */
+list($rs, $cs) = pedir($FS . 'inv_solicitudes/' . rawurlencode($solicId) . '', 'GET', null, $auth);
+if ($cs != 200) {
+  http_response_code(404);
+  echo json_encode(array('ok' => false, 'error' => 'sin-solicitud'));
+  exit;
+}
+$sol = json_decode($rs, true);
+$campos = isset($sol['fields']) ? $sol['fields'] : array();
+$n1Sol = isset($campos['n1']['stringValue']) ? trim($campos['n1']['stringValue']) : '';
+$n1Ev  = trim((string)($ev['n1'] ?? ''));
+if ($n1Sol === '' || mb_strtolower($n1Sol) !== mb_strtolower($n1Ev)) {
+  /* Lo que llegó no se corresponde con la solicitud que dice ser. */
+  http_response_code(400);
+  echo json_encode(array('ok' => false, 'error' => 'no-coincide'));
+  exit;
+}
+
 
 // ---------- 4. lo que pone el SERVIDOR, no el cliente ----------
 $ahora    = gmdate('Y-m-d\TH:i:s\Z');
