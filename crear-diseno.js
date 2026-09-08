@@ -192,6 +192,7 @@
         b.classList.add('on');
         guardarElegido();
         bajarYDibujar(id);
+        recargarFono();   /* el diseño trae su propia paleta */
         abrirFono();
       };
       caja.appendChild(b);
@@ -207,7 +208,7 @@
     cero.className = 'dis-p' + (paleta ? '' : ' on');
     cero.innerHTML = '<div class="tiras"><i style="background:#e9e2d6"></i><i style="background:#cfc4b4"></i>' +
                      '<i style="background:#8a7a6a"></i></div><span class="nm">La del diseño</span>';
-    cero.onclick = function () { paleta = null; guardarElegido(); tarjetasPaletas(caja); pedirDibujo(); };
+    cero.onclick = function () { paleta = null; guardarElegido(); tarjetasPaletas(caja); recargarFono(); };
     caja.appendChild(cero);
 
     P.forEach(function (p) {
@@ -221,7 +222,7 @@
         '<i style="background:' + p.lino + '"></i></div>' +
         '<span class="nm"></span>';
       b.querySelector('.nm').textContent = p.nombre;
-      b.onclick = function () { paleta = p.id; guardarElegido(); tarjetasPaletas(caja); pedirDibujo(); };
+      b.onclick = function () { paleta = p.id; guardarElegido(); tarjetasPaletas(caja); recargarFono(); };
       caja.appendChild(b);
     });
   }
@@ -233,7 +234,7 @@
     cero.className = 'dis-l' + (letra == null ? ' on' : '');
     cero.textContent = 'La del diseño';
     cero.style.fontSize = '13px';
-    cero.onclick = function () { letra = null; guardarElegido(); botonesLetra(caja); pedirDibujo(); };
+    cero.onclick = function () { letra = null; guardarElegido(); botonesLetra(caja); recargarFono(); };
     caja.appendChild(cero);
 
     LETRAS.forEach(function (l, i) {
@@ -242,9 +243,23 @@
       b.className = 'dis-l' + (letra === i ? ' on' : '');
       b.textContent = l.n;
       b.style.fontFamily = l.nfont;
-      b.onclick = function () { letra = i; guardarElegido(); botonesLetra(caja); pedirDibujo(); };
+      b.onclick = function () { letra = i; guardarElegido(); botonesLetra(caja); recargarFono(); };
       caja.appendChild(b);
     });
+  }
+
+  /* ⚠️ LA PALETA Y LA LETRA NO SE REPINTAN CON UN `inv-preview` A SECAS.
+     Medido: se cambia la paleta, el nombre se actualiza al instante pero los
+     colores se quedan en los de la muestra. Es porque el motor aplica la
+     paleta UNA sola vez, cuando arranca —parte la escribe el servidor con
+     `!important`, parte /efectos/paleta.js al cargar— y un mensaje posterior
+     no vuelve a pasar por ahí.
+     Se recarga el marco entero: son 300 ms y el resultado es la verdad. Los
+     datos (nombres, fechas, textos) siguen yendo por mensaje, sin recargar. */
+  function recargarFono() {
+    if (!iframe) return;
+    listo = false;
+    iframe.src = '/i/?preview=1&r=' + Date.now();   /* al cargar, dibuja solo */
   }
 
   function abrirFono() {
