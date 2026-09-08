@@ -628,6 +628,7 @@
     '/efectos/regalo-perlas.js',       /* un regalo dibujado con perlas, en Mesa de regalos */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
 
+    '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
     '/efectos/panel-dresscode.js'      /* y el editor para elegirlos a mano */
   ];
