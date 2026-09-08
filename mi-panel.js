@@ -353,7 +353,7 @@
       '</div>'+
       '<div class="tablaWrap">'+
         (lista.length ? '<table><thead><tr>'+
-          '<th>Invitado</th><th>Personas</th><th>Mesa</th><th class="ocultar-chico">Usos</th>'+
+          '<th>Invitado</th><th>Personas</th><th>Mesa</th><th class="ocultar-chico">WhatsApp</th><th class="ocultar-chico">Usos</th>'+
           '<th>Estado</th><th class="ocultar-chico">Mensaje</th>'+
           (conVoz?'<th>Voz</th>':'')+'<th>Compartir</th>'+
         '</tr></thead><tbody>'+ lista.map((g,i)=>{
@@ -362,6 +362,8 @@
             '<td><button class="lapiz" data-ver="'+esc(g.token)+'" title="Ver ficha">&#9998;</button><b>'+esc(g.nombre)+'</b></td>'+
             '<td>'+personasDe(g)+' <span style="color:var(--muted);font-size:11.5px">de '+num(g.pases)+'</span></td>'+
             '<td><input class="mini mesaInput" data-tok="'+esc(g.token)+'" value="'+esc(nombreMesa(mesaDe(g)))+'" placeholder="—"></td>'+
+            '<td class="ocultar-chico"><input class="mini telInput" data-tok="'+esc(g.token)+'" inputmode="tel" '+
+              'value="'+esc(g.tel||'')+'" placeholder="52 999 123 4567" title="Con clave de pais. Con esto el boton de WhatsApp abre su chat directo."></td>'+
             '<td class="ocultar-chico">'+num(g.usos)+'/'+(num(g.usosMax)||num(g.pases))+'</td>'+
             '<td><span class="chip '+e+'">'+(e==='si'?'Confirmó ✓':(e==='no'?'No puede':'Sin responder'))+'</span></td>'+
             '<td class="ocultar-chico" style="max-width:210px;color:#6b6058;font-size:12.5px">'+
@@ -418,7 +420,7 @@
         '<span><i style="background:var(--no)"></i>No asistirán</span>'+
         '<span><i style="background:var(--sin)"></i>Sin confirmar</span>'+
       '</div>'+
-      '<div class="aviso">Arrastrá cada invitado a su mesa. Se guarda solo. '+
+      '<div class="aviso">Arrastra cada invitado a su mesa. Se guarda solo. '+
         'Si una mesa se pasa de lugares, se pone roja.</div>'+
       '<div class="grillaMesas">'+
         tarjetaMesa('', '', sinMesa(), true, cap)+
@@ -451,7 +453,7 @@
   }
   function elegirMesa(token){
     const ms = mesasDe();
-    if(!ms.length){ alert('Primero creá una mesa con "+ Nueva mesa".'); return; }
+    if(!ms.length){ alert('Primero crea una mesa con «+ Nueva mesa».'); return; }
     const g = GENTE.find(x=>x.token===token); if(!g) return;
     const op = ms.map((m,i)=>(i+1)+') '+m.nombre).join('\n');
     const r = prompt('¿A qué mesa va '+g.nombre+'?\n\n'+op+'\n\n0) Sacarlo de la mesa', '1');
@@ -529,12 +531,12 @@
 
   // ---------- 6. OPCIONES ----------
   function vOpciones(){
-    const msj = PANEL.msjCompartir || 'Te esperamos en nuestro gran día. Acá está tu invitación:';
+    const msj = PANEL.msjCompartir || 'Te esperamos en nuestro gran día. Aquí está tu invitación:';
     $('vista').innerHTML =
       '<div class="card" style="max-width:560px">'+
         '<h3>Mensaje para compartir</h3>'+
         '<p style="font-size:13px;color:var(--muted);margin:0 0 10px">Es el texto que se manda junto '+
-          'con el link cuando tocás el botón de WhatsApp o Telegram en la lista de invitados.</p>'+
+          'con el link cuando tocas el botón de WhatsApp o de Telegram en la lista de invitados. Escríbelo como quieras: el link de cada invitado se agrega solo al final.</p>'+
         '<textarea id="msjComp" rows="3">'+esc(msj)+'</textarea>'+
         '<button class="btn" id="guardarOps" style="max-width:200px">Guardar</button>'+
       '</div>'+
@@ -565,6 +567,8 @@
           '<div><label>Personas</label><input type="number" id="np-personas" min="1" max="30" value="1"></div>'+
           '<div><label>Número de mesa</label><input type="text" id="np-mesa" placeholder="—"></div>'+
         '</div>'+
+        '<label>WhatsApp (opcional)</label><input type="tel" id="np-tel" placeholder="52 999 123 4567">'+
+        '<div class="hint">Con clave de país. Con esto, el botón de WhatsApp de la lista abre su chat directo, con el mensaje y su link ya escritos.</div>'+
         '<label>Cantidad de usos</label><input type="number" id="np-usos" min="1" max="30" value="1">'+
         '<div class="hint">Cuántas veces se puede escanear su QR en la puerta. '+
           'Normalmente, igual que la cantidad de personas.</div>'+
@@ -589,7 +593,7 @@
   async function guardarNuevoPase(f){
     const err=f.querySelector('#np-err');
     const nombre=f.querySelector('#np-nombre').value.trim();
-    if(!nombre){ err.textContent='Poneles un nombre.'; return; }
+    if(!nombre){ err.textContent='Ponles un nombre.'; return; }
     const btn=f.querySelector('#np-guardar');
     btn.disabled=true; btn.textContent='Creando…'; err.textContent='';
     try{
@@ -607,22 +611,29 @@
       const j=await r.json();
       if(!j.ok){
         const porQue={
-          'clave':'No pudimos verificar tu clave. Volvé a entrar al panel.',
-          'sin-config':'Falta terminar una configuración del sistema. Escribinos.',
-          'login':'El sistema no pudo conectarse. Escribinos.',
+          'clave':'No pudimos verificar tu clave. Vuelve a entrar al panel.',
+          'sin-config':'Falta terminar una configuración del sistema. Escríbenos.',
+          'login':'El sistema no pudo conectarse. Escríbenos.',
           'faltan-datos':'Falta el nombre.'
         };
-        err.textContent = porQue[j.error] || 'No se pudo crear. Probá de nuevo.';
+        err.textContent = porQue[j.error] || 'No se pudo crear. Inténtalo de nuevo.';
         btn.disabled=false; btn.textContent='Guardar';
         return;
       }
       f.remove();
+      /* El teléfono lo guarda el portero de datos, no el de alta: así
+         `pase-nuevo.php` sigue haciendo una sola cosa. */
+      const _tl=String((f.querySelector('#np-tel')||{}).value||'').replace(/[^0-9]/g,'');
+      if(_tl.length>=8){
+        try{ await fetch('/pase-datos.php',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({slug:SLUG, clave:CLAVE, token:j.token, tel:_tl})}); }catch(_e){}
+      }
       PANEL.tokens=(PANEL.tokens||[]).concat([j.token]);
       await cargar();
       toast('Invitado creado');
     }catch(e){
       console.error(e);
-      err.textContent='No se pudo crear. Revisá tu conexión.';
+      err.textContent='No se pudo crear. Revisa tu conexión.';
       btn.disabled=false; btn.textContent='Guardar';
     }
   }
@@ -636,9 +647,9 @@
   }
   function bajarLista(){
     bajarCSV('invitados-'+SLUG+'.csv',
-      [['Invitado','Lugares','Vienen','Mesa','Usos','Estado','Mensaje']].concat(
+      [['Invitado','Lugares','Vienen','Mesa','WhatsApp','Usos','Estado','Mensaje']].concat(
         filtrada().map(g=>{ const e=estadoDe(g);
-          return [g.nombre, num(g.pases), personasDe(g), nombreMesa(mesaDe(g)), num(g.usos)+'/'+(num(g.usosMax)||num(g.pases)),
+          return [g.nombre, num(g.pases), personasDe(g), nombreMesa(mesaDe(g)), g.tel||'', num(g.usos)+'/'+(num(g.usosMax)||num(g.pases)),
                   e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder'), g.rsvpMensaje||'']; })));
   }
   function bajarMesas(){
@@ -654,7 +665,7 @@
   //  EVENTOS (uno solo, delegado: la vista se redibuja todo el tiempo)
   // =====================================================================
   function textoCompartir(g){
-    const base = PANEL.msjCompartir || 'Te esperamos en nuestro gran día. Acá está tu invitación:';
+    const base = PANEL.msjCompartir || 'Te esperamos en nuestro gran día. Aquí está tu invitación:';
     return base + ' ' + linkDe(g);
   }
   document.addEventListener('click', async e=>{
@@ -689,7 +700,11 @@
     }
     if(t.dataset && t.dataset.wa){
       const g=GENTE.find(x=>x.token===t.dataset.wa); if(!g) return;
-      window.open('https://wa.me/?text='+encodeURIComponent(textoCompartir(g)),'_blank'); return;
+      /* ENVIO DIRECTO (8/9/2026). Con el numero guardado se abre el chat de ESA
+         persona con el mensaje y su link ya escritos: un clic y enviar. Sin
+         numero cae en el selector de contactos, que es lo que habia antes. */
+      const _tel=String(g.tel||'').replace(/[^0-9]/g,'');
+      window.open('https://wa.me/'+_tel+'?text='+encodeURIComponent(textoCompartir(g)),'_blank'); return;
     }
     if(t.dataset && t.dataset.tg){
       const g=GENTE.find(x=>x.token===t.dataset.tg); if(!g) return;
@@ -699,7 +714,7 @@
     if(t.dataset && t.dataset.cp){
       const g=GENTE.find(x=>x.token===t.dataset.cp); if(!g) return;
       try{ await navigator.clipboard.writeText(linkDe(g)); toast('Link copiado'); }
-      catch(_){ prompt('Copiá el link:', linkDe(g)); }
+      catch(_){ prompt('Copia el link:', linkDe(g)); }
       return;
     }
     if(t.id==='guardarOps'){
@@ -755,6 +770,23 @@
       vInvitados(); const n=$('buscar'); if(n){ n.focus(); try{n.setSelectionRange(p,p);}catch(_){} } }
   });
   document.addEventListener('change', async e=>{
+    /* EL WHATSAPP DE CADA INVITADO. No se escribe en Firestore desde aca: va por
+       el portero /pase-datos.php, igual que las mesas y el itinerario. */
+    if(e.target.classList.contains('telInput')){
+      const inp=e.target, tok=inp.dataset.tok;
+      const tel=String(inp.value||'').replace(/[^0-9]/g,'');
+      if(tel && tel.length<8){ toast('Ese número parece incompleto: va con clave de país'); return; }
+      inp.disabled=true;
+      try{
+        const r=await fetch('/pase-datos.php',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({slug:SLUG, clave:CLAVE, token:tok, tel:tel})});
+        const j=await r.json().catch(()=>({}));
+        if(!j.ok) throw new Error(j.error||'http'+r.status);
+        const g=GENTE.find(x=>x.token===tok); if(g) g.tel=tel;
+        inp.value=tel; toast(tel? 'WhatsApp guardado' : 'WhatsApp borrado');
+      }catch(_e){ toast('No se pudo guardar el WhatsApp'); }
+      inp.disabled=false; return;
+    }
     if(e.target.classList.contains('mesaInput')){
       const v=e.target.value.trim();
       const tok=e.target.dataset.tok;
