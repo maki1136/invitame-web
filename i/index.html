@@ -1203,18 +1203,38 @@
     btns[i].classList.add(i===p.c?'ok':'bad'); btns[p.c].classList.add('ok');
     if(i===p.c) tvScore+=10;
     setTimeout(()=>{ tvLock=false; tvIdx++; if(tvIdx<PREGUNTAS.length){tvShow();} else {tvEnd();} },1000); }
+  /* ⚠️ Los nombres los escribe gente: SIEMPRE se escapan antes de pintarlos.
+     Sin esto, un invitado que se llame "<img onerror=...>" ejecuta código en la
+     invitación de todos los demás. */
+  function tvEsc(v){ return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function tvTabla(filas, yo){
+    el('tv-board').innerHTML=
+      '<div class="r" style="opacity:.65"><span class="pos"></span><span style="flex:1">'+tvEsc(TVTXT.nombreCol)+'</span><span>'+tvEsc(TVTXT.pts)+'</span></div>'+
+      filas.map(function(r,i){
+        var mio = yo ? (r[2]===yo) : (r[0]===tvName);
+        return '<div class="r'+(mio?' me':'')+'"><span class="pos">'+(i+1)+'</span><span style="flex:1">'+tvEsc(r[0])+'</span><span>'+(parseInt(r[1],10)||0)+' '+tvEsc(TVTXT.pts)+'</span></div>';
+      }).join(''); }
   function tvEnd(){ el('tv-quiz').style.display='none'; el('tv-end').style.display='';
     el('tv-final').textContent=tvScore+' '+TVTXT.pts;
     /* ⚠️ ACÁ HABÍA CUATRO INVITADOS INVENTADOS: "Familia Gómez 40, Lucía Fernández
        30, Martín y Sofía 20, Los Pérez 10". Se veían en la boda de CUALQUIER
-       cliente, como si fueran su gente. Y el puntaje no se guarda en ningún lado:
-       no hay ranking compartido, cada celular juega solo.
-       Mientras no haya dónde guardarlo, la tabla muestra lo único cierto: cómo le
-       fue a quien está jugando. Inventar competidores es peor que no tener tabla. */
-    const filas=[[tvName,tvScore]];
-    el('tv-board').innerHTML=
-      '<div class="r" style="opacity:.65"><span class="pos"></span><span style="flex:1">'+TVTXT.nombreCol+'</span><span>'+TVTXT.pts+'</span></div>'+
-      filas.map(function(r,i){ return '<div class="r me"><span class="pos">'+(i+1)+'</span><span style="flex:1">'+r[0]+'</span><span>'+r[1]+' '+TVTXT.pts+'</span></div>'; }).join(''); }
+       cliente, como si fueran su gente, y el puntaje no se guardaba en ningún lado.
+       Ahora el ranking es de verdad y es de los invitados de ESA fiesta: el puntaje
+       va a `trivia-guardar.php`, que lo escribe en `inv_trivia/{slug}` y devuelve
+       la tabla. Los invitados no tienen usuario de Firebase —ni deben tenerlo—,
+       por eso pasa por el servidor, igual que el audio del pase con voz. */
+    tvTabla([[tvName, tvScore]], null);          /* lo propio se ve al instante */
+    try{
+      var _d=window.INVDATA||{}, _e=window.INVEV||{};
+      fetch('/trivia-guardar.php', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ slug:_d.slug||_e.slug||'', token:_d.token||'', nombre:tvName, puntaje:tvScore })})
+        .then(function(r){ return r.json(); })
+        .then(function(j){ if(j && j.ok && j.tabla && j.tabla.length)
+          tvTabla(j.tabla.map(function(t){ return [t.nombre, t.puntaje, t.clave]; }), j.yo); })
+        /* si el servidor no contesta, queda la fila propia: nunca se inventa nada */
+        .catch(function(){});
+    }catch(e){}
+  }
 </script>
 
 <!-- ====== CARGADOR DE DATOS (Firebase) ====== -->
