@@ -211,7 +211,15 @@
   function mejorasHtml(){
     /* ORDEN pedido por Jazmín: nombre de plantilla → número de orden → usuario asignado → protagonistas */
     var _usuarios=['Otro','Jime','Vale','Aylen','Flor'];
-    return '<div class="mejoras"><div class="h">✨ Empezá por acá</div>'+
+    /* Sin ?e= en el link no se está editando ninguna invitación: es una NUEVA, y
+       lo que se ve en la vista previa es la boda de ejemplo. Sin este cartel más
+       de uno creyó que estaba editando algo real. */
+    var _nueva = !new URLSearchParams(location.search).get('e');
+    return '<div class="mejoras">'+
+      (_nueva ? '<div style="background:#fff3cd;border:1px solid #ffe08a;border-radius:10px;padding:9px 11px;margin-bottom:10px;font-size:12.5px;color:#7a5c00;line-height:1.45">'+
+        '<b>Invitación NUEVA.</b> Todo lo que ves a la derecha son los datos de ejemplo (María &amp; Diego). '+
+        'Cambiá los nombres, la fecha, la dirección del link y las fotos antes de publicar.</div>' : '')+
+      '<div class="h">✨ Empezá por acá</div>'+
       /* "Nombre de esta plantilla" sacado a pedido de Jazmín (estaba DOS veces y no
          aporta nada a quien arma la invitación). El valor sigue existiendo en D.tpl
          para uso interno: lo fija la plantilla base que se elige más abajo. */
