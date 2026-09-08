@@ -65,8 +65,18 @@
   var CURVA   = 'cubic-bezier(.155,.144,.429,.933)';
   var T_CAE   = 200;    /* ms que dura la traslación */
   var T_GIRA  = 250;    /* ms que dura el giro: sigue un poco más */
-  var DX      = 45;     /* % del ancho del boleto que sube a la derecha */
-  var DY      = 42;     /* % del ancho del boleto que baja */
+  /* ⚠️⚠️ 79 y 124, NO 45 y 42 (8/9/2026). Maki: «el ticket tiene que ser un
+     ticket completo; te entregan el ticket entero, vos lo cortas y ahi sale el
+     pedazo. ¿Por que aparece directamente en el medio?».
+     Tenia razon: MEDIDO en pantalla, la columna arrancaba 70 px ADENTRO del
+     borde derecho del boleto y se salia 29 px por ABAJO. O sea que nunca
+     estuvo pegada: flotaba en el medio y colgaba. Con 79% / 124% queda al ras
+     del borde derecho (-1 px) y con 9 y 15 px de aire arriba y abajo, adentro
+     del boleto. Verificado MIRANDO la captura, no solo midiendo.
+     Los valores 45/42 salieron del video pero describen EL RECORRIDO de la
+     caida, no el punto de partida. El final no cambia: sigue siendo 0 0. */
+  var DX      = 79;     /* % del ancho: deja la columna al ras del borde derecho */
+  var DY      = 124;    /* % del alto: la centra adentro del boleto */
 
   /* ---- DE QUIEN ES EL AUDIO ---------------------------------------------
      Por defecto suena el del evento: uno solo para todos, cargado en el panel.
@@ -147,8 +157,14 @@
          ⚠️ Y OJO CON COMO SE COMPRUEBA: que el texto no se corte por su propia
             caja (scrollWidth) NO alcanza — el texto entra entero y queda TAPADO.
             Hay que medir la superposicion de los rectangulos. */
-      '#pv-sec .pv-cuerpo{padding:20px 44% 18px 18px;display:flex;flex-direction:column;',
-      '  justify-content:center;min-height:168px;min-width:0}',
+      /* padding-right 70: le reserva el lugar a la columna, que ahora vive
+         PEGADA al borde derecho. (El 44% de la version anterior corria el texto
+         para no quedar tapado por una columna que estaba mal ubicada: era un
+         sintoma, no la causa.) */
+      '#pv-sec .pv-cuerpo{padding:20px 70px 18px 18px;display:flex;flex-direction:column;',
+      /* min-height 220: la columna rotada mide 204 de alto. Con 168 el boleto
+         quedaba mas bajo que su propio talon y el play colgaba por fuera. */
+      '  justify-content:center;min-height:220px;min-width:0}',
       '#pv-sec .pv-over{font-family:var(--pv-dat);font-size:8px;letter-spacing:.16em;',
       '  text-transform:uppercase;font-weight:600;color:var(--pv-acento);margin:0;line-height:1.35}',
       '#pv-sec .pv-titulo{font-family:var(--pv-tit);font-weight:600;line-height:1.08;margin:5px 0 0;',
