@@ -7,30 +7,42 @@
  *   pero el otro sistema seguro lo use con otra marca o quizás después con
  *   Invítame»*.
  *
- *   O sea: el modo de entrega NO puede seguir siendo una línea de código que
- *   cambio yo. Tiene que ser un ajuste que ella prende y apaga, y tiene que
- *   poder valer distinto para cada marca AL MISMO TIEMPO:
+ *   O sea: el modo de entrega NO puede ser una línea de código que cambia el
+ *   programador. Tiene que ser un ajuste que ella prende y apaga desde el panel,
+ *   y tiene que poder valer distinto para cada marca AL MISMO TIEMPO:
  *
- *     inv_marcas/invitame   → entregaAutomatica: false  (Jazmín revisa)
- *     inv_marcas/laotra     → entregaAutomatica: true   (sale sola)
+ *     invitame → entregaAutomatica: false  (Jazmín revisa)
+ *     laotra   → entregaAutomatica: true   (sale sola)
  *
- *   `solicitud-crear.php` lee ese documento y decide. Si la marca no existe,
- *   cae en control de calidad: **el modo seguro es el que revisa**.
+ *   `solicitud-crear.php` lee esto y decide. Si la marca no figura, cae en
+ *   control de calidad: **el modo seguro es siempre el que revisa**.
  *
- * ⚠️ POR QUÉ UN PORTERO Y NO FIRESTORE DIRECTO
- *   `inv_marcas` es una colección nueva y las reglas de Firestore la niegan por
- *   defecto. Cambiar una regla es de las poquísimas cosas que se le preguntan a
- *   Maki antes de hacer, y no hace falta: este archivo entra con el usuario del
- *   sistema, igual que los demás porteros.
+ * ⚠️⚠️ DÓNDE SE GUARDA, Y POR QUÉ NO DONDE PARECÍA
+ *   La primera versión usaba una colección nueva, `inv_marcas`. **No se puede:
+ *   medido en vivo, `permission-denied`.** Las reglas de Firestore sólo conocen
+ *   las colecciones que ya existen, y crear una regla nueva es de las poquísimas
+ *   cosas que se le preguntan a Maki antes de hacer.
+ *
+ *   Así que las marcas viven en **`inv_privado/__marcas`**, en un solo documento
+ *   y en un solo campo `json`. `inv_privado` ya es la colección de lo que no se
+ *   muestra: se escribe con la sesión del sistema y no se lee sin login. Es
+ *   exactamente lo que hace falta para un ajuste del negocio.
+ *
+ *   El campo es un JSON de una línea a propósito: son cuatro datos por marca y
+ *   los toca una sola persona. No hace falta un documento por marca ni parsear
+ *   los `mapValue` de Firestore.
+ *
+ *   ⚠️ Ese documento aparece en la lista de `inv_privado` con el id `__marcas`.
+ *      No es una invitación y nada lo trata como tal (el panel busca por slug).
  *
  * ⚠️ QUIÉN PUEDE
  *   Sólo el equipo, y se comprueba de verdad: el navegador manda el token de su
  *   sesión de Firebase, se lo damos a Google para que diga de quién es, y recién
  *   si ese mail está en la lista sigue. Mismo criterio que `galeria-alta.php`.
  *
- * ⚠️ ACÁ NO SE ENTREGA NINGUNA INVITACIÓN. Esto sólo guarda el ajuste de la
- *    marca. Cambiar el estado de UNA invitación lo hace el panel, con la sesión
- *    de la diseñadora, sobre `inv_eventos`.
+ * ⚠️ ACÁ NO SE ENTREGA NINGUNA INVITACIÓN. Esto guarda el ajuste de la marca.
+ *    Cambiar el estado de UNA invitación lo hace el panel (`admin/5-entrega.js`)
+ *    con la sesión de la diseñadora, sobre `inv_eventos`.
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -44,6 +56,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 $PROJECT = 'invitame-9b51f';
 $APIKEY  = 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc';
 $FS      = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT . '/databases/(default)/documents/';
+$DOC     = 'inv_privado/__marcas';
 
 /* Quiénes pueden tocar las marcas. No es un secreto: sin la sesión de esa
    persona, saber el mail no sirve para nada. */
@@ -154,7 +167,27 @@ $auth = array('Authorization: Bearer ' . $tok);
 
 $ahora = gmdate('Y-m-d\TH:i:s\Z');
 
-// ---------- 3. guardar ----------
+// ---------- 3. lo que hay hoy ----------
+$marcas = array();
+list($rl, $cl) = pedir($FS . $DOC, 'GET', null, $auth);
+if ($cl == 200) {
+  $d = json_decode($rl, true);
+  if (isset($d['fields']['json']['stringValue'])) {
+    $tmp = json_decode($d['fields']['json']['stringValue'], true);
+    if (is_array($tmp)) $marcas = $tmp;
+  }
+}
+
+/* La primera vez no hay nada. Invítame nace en control de calidad, que es el
+   modo seguro y el que Maki quiere hoy. Así el ajuste queda ESCRITO y no
+   supuesto, y la pantalla nunca aparece vacía. */
+$hay = false;
+foreach ($marcas as $m) { if (($m['id'] ?? '') === 'invitame') { $hay = true; break; } }
+if (!$hay) {
+  array_unshift($marcas, array('id' => 'invitame', 'nombre' => 'Invítame', 'entregaAutomatica' => false));
+}
+
+// ---------- 4. guardar ----------
 if ($accion === 'guardar') {
   $id = preg_replace('/[^a-z0-9\-]/', '', strtolower((string)($in['id'] ?? '')));
   if (strlen($id) < 2 || strlen($id) > 40) {
@@ -166,65 +199,37 @@ if ($accion === 'guardar') {
   if ($nombre === '') $nombre = $id;
   $auto = !empty($in['entregaAutomatica']);
 
-  $cuerpo = json_encode(array('fields' => array(
-    'nombre'            => array('stringValue'  => $nombre),
-    'entregaAutomatica' => array('booleanValue' => $auto),
-    'actualizadoEl'     => array('stringValue'  => $ahora),
-    'actualizadoPor'    => array('stringValue'  => $mail),
-  )));
-  /* Con máscara: así, si mañana la marca guarda algo más (un teléfono, un
-     logo), esto no se lo lleva puesto. */
-  $url = $FS . 'inv_marcas/' . rawurlencode($id)
-       . '?updateMask.fieldPaths=nombre'
-       . '&updateMask.fieldPaths=entregaAutomatica'
-       . '&updateMask.fieldPaths=actualizadoEl'
-       . '&updateMask.fieldPaths=actualizadoPor';
-  list($rg, $cg) = pedir($url, 'PATCH', $cuerpo, $auth);
-  if ($cg < 200 || $cg >= 300) {
-    echo json_encode(array('ok' => false, 'error' => 'guardar', 'detalle' => 'http' . $cg));
-    exit;
+  $encontrada = false;
+  foreach ($marcas as $k => $m) {
+    if (($m['id'] ?? '') === $id) {
+      $marcas[$k] = array('id' => $id, 'nombre' => $nombre, 'entregaAutomatica' => $auto);
+      $encontrada = true;
+      break;
+    }
   }
-  echo json_encode(array('ok' => true, 'id' => $id, 'entregaAutomatica' => $auto));
+  if (!$encontrada) $marcas[] = array('id' => $id, 'nombre' => $nombre, 'entregaAutomatica' => $auto);
+  if (count($marcas) > 30) { http_response_code(400); echo json_encode(array('ok' => false, 'error' => 'demasiadas')); exit; }
+  $marcas = array_values($marcas);
+}
+
+// ---------- 5. escribir ----------
+/* ⚠️ CON MÁSCARA. `inv_privado/__marcas` es un documento nuestro y hoy sólo
+   tiene estos campos, pero un PATCH sin máscara reemplaza el documento ENTERO:
+   si mañana alguien le suma algo, se lo llevaría puesto. */
+$cuerpo = json_encode(array('fields' => array(
+  'json'           => array('stringValue' => json_encode(array_values($marcas))),
+  'actualizadoEl'  => array('stringValue' => $ahora),
+  'actualizadoPor' => array('stringValue' => $mail),
+)));
+list($rg, $cg) = pedir(
+  $FS . $DOC . '?updateMask.fieldPaths=json'
+      . '&updateMask.fieldPaths=actualizadoEl'
+      . '&updateMask.fieldPaths=actualizadoPor',
+  'PATCH', $cuerpo, $auth
+);
+if ($cg < 200 || $cg >= 300) {
+  echo json_encode(array('ok' => false, 'error' => 'guardar', 'detalle' => 'http' . $cg, 'marcas' => array_values($marcas)));
   exit;
 }
 
-// ---------- 4. listar ----------
-list($rl, $cl) = pedir($FS . 'inv_marcas?pageSize=100', 'GET', null, $auth);
-$marcas = array();
-if ($cl == 200) {
-  $d = json_decode($rl, true);
-  if (isset($d['documents']) && is_array($d['documents'])) {
-    foreach ($d['documents'] as $doc) {
-      $partes = explode('/', (string)($doc['name'] ?? ''));
-      $id = end($partes);
-      $f  = isset($doc['fields']) ? $doc['fields'] : array();
-      $marcas[] = array(
-        'id'                => $id,
-        'nombre'            => isset($f['nombre']['stringValue']) ? $f['nombre']['stringValue'] : $id,
-        'entregaAutomatica' => !empty($f['entregaAutomatica']['booleanValue']),
-      );
-    }
-  }
-}
-
-/* La primera vez no hay nada. Se crea Invítame en control de calidad, que es el
-   modo seguro y el que Maki quiere hoy. Así la pantalla nunca aparece vacía y el
-   ajuste queda escrito, no supuesto. */
-$hayInvitame = false;
-foreach ($marcas as $m) { if ($m['id'] === 'invitame') { $hayInvitame = true; break; } }
-if (!$hayInvitame) {
-  pedir($FS . 'inv_marcas/invitame'
-        . '?updateMask.fieldPaths=nombre'
-        . '&updateMask.fieldPaths=entregaAutomatica'
-        . '&updateMask.fieldPaths=actualizadoEl'
-        . '&updateMask.fieldPaths=actualizadoPor',
-    'PATCH', json_encode(array('fields' => array(
-      'nombre'            => array('stringValue'  => 'Invítame'),
-      'entregaAutomatica' => array('booleanValue' => false),
-      'actualizadoEl'     => array('stringValue'  => $ahora),
-      'actualizadoPor'    => array('stringValue'  => 'sistema'),
-    ))), $auth);
-  array_unshift($marcas, array('id' => 'invitame', 'nombre' => 'Invítame', 'entregaAutomatica' => false));
-}
-
-echo json_encode(array('ok' => true, 'marcas' => $marcas, 'por' => $mail));
+echo json_encode(array('ok' => true, 'marcas' => array_values($marcas), 'por' => $mail));
