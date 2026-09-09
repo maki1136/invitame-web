@@ -88,6 +88,15 @@ async function escenario(nombre, tipo, opciones, esTablet){
 
   const motor = tipo === 'webkit' ? webkit : chromium;
   const br = await motor.launch();
+  /* ⚠️ EL NAVEGADOR SE CIERRA SIEMPRE, PASE LO QUE PASE (9/9/2026).
+     Antes el `br.close()` estaba sólo al final: si un escenario se caía a la
+     mitad, ese navegador quedaba abierto y seguía comiendo memoria mientras
+     corrían los otros tres. En la Mac de Maki sobra memoria y nunca se notó;
+     en el runner de GitHub el cuarto escenario moría con «Target page, context
+     or browser has been closed» y parecía que no había podido ni arrancar.
+     No era eso: era el escenario anterior que nunca soltó el navegador.
+     Por eso todo el cuerpo va adentro de un try/finally. */
+  try {
   const ctx = await br.newContext(opciones);
   const page = await ctx.newPage();
 
@@ -98,9 +107,22 @@ async function escenario(nombre, tipo, opciones, esTablet){
      como error de página. Salían dos «errores de JavaScript» en tres
      escenarios y ninguno era del producto: era el banco cerrando la puerta.
      Se filtran SÓLO esos: cualquier otro error sigue siendo rojo. */
+  const ruidoAjeno = [];
   page.on('pageerror', e => {
     const m = String(e.message);
     if (/firestore\.googleapis\.com.*Listen\/channel/.test(m)) return;
+    /* ⚠️ LO QUE ROMPE UN SERVICIO AJENO NO ES UN BUG DE LA INVITACIÓN (9/9/2026).
+       Desde que el banco corre en GitHub, Spotify contesta con «access control
+       checks» a su propio apresolve: bloquea las peticiones que salen de un
+       datacenter. En la casa de un invitado eso no pasa. Daba rojo un escenario
+       entero por algo que no es del producto y que nosotros no podemos arreglar.
+       Regla: si el mensaje nombra un dominio que NO es nuestro y es una falla de
+       red o de permisos, se anota aparte y no cuenta. Cualquier otro error
+       —y cualquier error de littlemomentsok.com— sigue siendo rojo. */
+    const host = (m.match(/https?:\/\/([^\/\s)]+)/) || [])[1] || '';
+    const ajeno = host && !/littlemomentsok\.com$/.test(host);
+    const deRed = /access control checks|Failed to load|Load failed|network error|ERR_/i.test(m);
+    if (ajeno && deRed) { ruidoAjeno.push(host); return; }
     erroresJS.push(m.slice(0,140));
   });
 
@@ -905,6 +927,10 @@ async function escenario(nombre, tipo, opciones, esTablet){
   /* ---- 9 · SIN ERRORES ------------------------------------------------- */
   chequear('sin errores de JavaScript', erroresJS.length === 0,
     erroresJS.slice(0,2).join(' | '));
+  if (ruidoAjeno.length) {
+    log('   (no cuentan: ' + ruidoAjeno.length + ' fallas de servicios ajenos — ' +
+        [...new Set(ruidoAjeno)].join(', ') + ')');
+  }
 
   const archivo = 'captura-' + nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '.png';
   await page.screenshot({ path: path.join(AQUI, archivo) });
@@ -927,10 +953,27 @@ async function escenario(nombre, tipo, opciones, esTablet){
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(600 * k);
-    await page.screenshot({
-      path: path.join(AQUI, 'entera-' + nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '.png'),
-      fullPage: true
-    });
+    /* ⚠️ UNA CAPTURA DEMASIADO ALTA MATA AL NAVEGADOR (9/9/2026).
+       La invitación mide once pantallas. En el iPad, que dibuja al doble de
+       resolución, eso da más de 32.767 píxeles de alto y WebKit se planta:
+       «Cannot take screenshot larger than 32767». No sólo falla la captura —
+       en el runner de GitHub se llevó puesto el navegador entero.
+       Se mide antes, y si no entra se sacan tres pedazos en vez de una tira. */
+    const escala = (opciones && opciones.deviceScaleFactor) || 1;
+    const base = nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+    if (alto * escala < 30000) {
+      await page.screenshot({ path: path.join(AQUI, 'entera-' + base + '.png'), fullPage: true });
+    } else {
+      const trozo = Math.floor(28000 / escala);
+      for (let i = 0, y = 0; y < alto; y += trozo, i++) {
+        await page.screenshot({
+          path: path.join(AQUI, 'entera-' + base + '-' + (i + 1) + '.png'),
+          clip: { x: 0, y, width: (opciones.viewport ? opciones.viewport.width : 1440),
+                  height: Math.min(trozo, alto - y) }
+        });
+      }
+      log('   (la invitación no entra en una sola captura: salió en pedazos)');
+    }
   } catch (e) {
     log('   (no se pudo sacar la captura entera: ' + String(e.message).slice(0, 60) + ')');
   }
@@ -965,9 +1008,15 @@ async function escenario(nombre, tipo, opciones, esTablet){
                  slug: new URLSearchParams(location.search).get('e') || '' };
       });
 
+      /* ⚠️ EL CLIC NECESITA MÁS PACIENCIA EN RED LENTA (9/9/2026).
+         Con los 30 s que trae Playwright de fábrica, en GitHub daba
+         «elementHandle.click: Timeout 30000ms exceeded» y el viaje entero
+         quedaba rojo. No es que el botón no funcione: es que con la red
+         frenada la sección todavía está entrando con animación y Playwright
+         espera —bien— a que el elemento se quede quieto. Se le da el doble. */
       await Promise.all([
         page.waitForNavigation({ waitUntil: 'load', timeout: 20000 }).catch(() => {}),
-        gal.click()                       /* el dedo de verdad: dispara pointerdown */
+        gal.click({ timeout: 60000 })     /* el dedo de verdad: dispara pointerdown */
       ]);
 
       /* ⚠️ LA ALTURA DE SALIDA SE LA PREGUNTO AL PRODUCTO, NO LA MIDO YO.
@@ -1034,7 +1083,9 @@ async function escenario(nombre, tipo, opciones, esTablet){
   log('   (captura: ' + archivo + ' · y la tira del arranque: tira-…-1, -2, -3)');
   log('   (tardó ' + ((Date.now() - cronometro) / 1000).toFixed(1) + ' s de punta a punta)');
 
-  await br.close();
+  } finally {
+    await br.close().catch(() => {});
+  }
 }
 
 /* ===== LOS ESCENARIOS ======================================================
