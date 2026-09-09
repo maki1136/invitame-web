@@ -51,6 +51,63 @@ function esInApp() {
   return /Instagram|FBAV|FBAN|FB_IAB/i.test(ua);
 }
 
+/* ---------- volver a la invitacion (9/9/2026) --------------------------------
+
+   Maki: «cuando entras a la camara de las fotos de la fiesta, tener un boton
+   para volver a la invitacion, porque cuando das para atras se abre desde el
+   sobre y deberia volver al mismo lugar de donde salio».
+
+   La invitacion se encarga de saltear el sobre y reponer la altura: al salir
+   deja anotada la posicion en sessionStorage (ver efectos/galeria.js). Aca
+   alcanza con volver a su direccion; ese sessionStorage es del mismo origen.
+
+   ⚠️ VA COLGADO DEL `body`, FIJO, Y NO ADENTRO DE `#gal-main`.
+   Primero lo colgue de `.cabecera` y el banco lo marco en rojo en tres
+   navegadores: «esta pero no se ve». `#gal-main` nace `hidden` y recien se
+   muestra cuando la galeria ya sabe el nombre del invitado. O sea que el
+   invitado que cae en la pantalla de «decinos tu nombre» —justo el que mas
+   perdido esta— era el unico que NO tenia salida. Fijo arriba a la izquierda
+   esta siempre, en las dos pantallas.
+
+   ⚠️ Y SE ARMA APENAS CARGA, sin esperar a Firestore: si la base tarda, el
+   boton tiene que estar igual.
+
+   ⚠️ Aparece SOLO si se llego desde una invitacion (parametro `ev`). Si
+   alguien entro por el QR del salon no hay invitacion a la que volver, y un
+   boton que no lleva a ningun lado es peor que nada.
+
+   El token va porque sin el la invitacion no sabe QUE invitado es y pierde el
+   nombre, el pase y su audio. No es un dato nuevo en la direccion: es el
+   mismo `t` con el que se entro.
+   --------------------------------------------------------------------------- */
+(function volverALaInvitacion() {
+  const poner = () => {
+    if (document.getElementById('volver-inv')) return;
+    const slug = (params.get('ev') || '').trim();
+    const tok  = (params.get('t')  || '').trim();
+    if (!slug || !/^[a-z0-9-]{1,60}$/.test(slug)) return;
+    if (!document.body) return;
+
+    const a = document.createElement('a');
+    a.id = 'volver-inv';
+    a.href = '/i/?e=' + encodeURIComponent(slug) + (tok ? '&g=' + encodeURIComponent(tok) : '');
+    a.innerHTML =
+      '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" ' +
+      'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M14.5 19 7.5 12l7-7"/></svg>Volver a la invitacion';
+    a.style.cssText =
+      'position:fixed;top:calc(10px + env(safe-area-inset-top));left:12px;z-index:60;' +
+      'display:inline-flex;align-items:center;gap:6px;padding:8px 15px 8px 11px;' +
+      'border:1px solid rgba(109,18,51,.20);border-radius:26px;' +
+      'background:rgba(255,255,255,.82);box-shadow:0 2px 10px rgba(60,10,30,.10);' +
+      'font-size:13px;font-weight:600;color:#6D1233;text-decoration:none;' +
+      '-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)';
+    document.body.appendChild(a);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', poner);
+  else poner();
+})();
+
 /* ---------- identidad del invitado ---------- */
 function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -684,44 +741,6 @@ function pintarVentana(ev) {
   }
   document.title = (ev.nombre || 'Galería') + ' · Fotos';
   $('ev-nombre').textContent = ev.nombre || 'Nuestra fiesta';
-
-  /* ---- volver a la invitacion (9/9/2026) ------------------------------
-     Maki: «cuando das para atras se abre desde el sobre y deberia volver al
-     mismo lugar de donde salio».
-     La invitacion se encarga de saltear el sobre y reponer la altura: al
-     salir dejo anotada la posicion en sessionStorage (ver efectos/galeria.js).
-     Aca alcanza con volver a su direccion; ese sessionStorage es del mismo
-     origen, asi que sigue estando.
-     El token va porque sin el la invitacion no sabe QUE invitado es y pierde
-     el nombre, el pase y su audio. No es un dato nuevo en la direccion: es el
-     mismo `t` con el que se entro. */
-  (function () {
-    const slug = (params.get('ev') || '').trim();
-    const tok  = (params.get('t')  || '').trim();
-    if (!slug || !/^[a-z0-9-]{1,60}$/.test(slug)) return;   /* se entro por el QR del salon */
-    const cab = document.querySelector('.cabecera');
-    if (!cab || document.getElementById('volver-inv')) return;
-
-    const a = document.createElement('a');
-    a.id = 'volver-inv';
-    a.href = '/i/?e=' + encodeURIComponent(slug) + (tok ? '&g=' + encodeURIComponent(tok) : '');
-    a.innerHTML =
-      '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" ' +
-      'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-      '<path d="M14.5 19 7.5 12l7-7"/></svg>Volver a la invitacion';
-    /* El estilo va aca y no en galeria.css a proposito: el boton solo existe
-       cuando se llego desde una invitacion, asi que su aspecto vive con la
-       unica linea de codigo que lo crea. Discreto: es una salida, no una
-       accion de la galeria. */
-    a.style.cssText =
-      'position:relative;display:inline-flex;align-items:center;gap:6px;' +
-      'margin-top:12px;padding:7px 15px 7px 11px;' +
-      'border:1px solid rgba(109,18,51,.20);border-radius:26px;' +
-      'background:rgba(255,255,255,.55);' +
-      'font-size:13px;font-weight:600;color:#6D1233;text-decoration:none;' +
-      '-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)';
-    cab.appendChild(a);
-  })();
 
   if (esInApp()) $('gal-inapp').hidden = false;
 
