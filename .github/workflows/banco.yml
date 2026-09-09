@@ -30,8 +30,13 @@
 # ni tokens. Las capturas quedan como artifact de la corrida (30 dias).
 #
 # ATENCION - EL COMMIT DEL RESULTADO NO PUEDE DISPARAR OTRA CORRIDA.
-# Por eso chequeo/** esta en paths-ignore y el mensaje lleva [skip ci]. Sin eso,
-# cada corrida dispara la siguiente y el bucle no para nunca.
+# Por eso chequeo/ NO esta en la lista de paths y el mensaje lleva [skip ci].
+# Sin eso, cada corrida dispara la siguiente y el bucle no para nunca.
+#
+# ATENCION - NO SE PUEDEN USAR `paths` Y `paths-ignore` JUNTOS EN EL MISMO EVENTO.
+# El primer intento los tenia a los dos y GitHub rechazo el archivo entero:
+# «you may only define one of paths and paths-ignore for a single event».
+# Con `paths` alcanza: lo que no esta en la lista, no dispara.
 # ==============================================================================
 name: Banco de pruebas
 
@@ -45,8 +50,6 @@ on:
       - 'admin/**'
       - 'sobres/**'
       - '.github/workflows/banco.yml'
-    paths-ignore:
-      - 'chequeo/**'
   schedule:
     - cron: '0 15 * * *'
   workflow_dispatch:
