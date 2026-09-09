@@ -1,0 +1,103 @@
+# ===== EL BANCO DE PRUEBAS, CORRIENDO SOLO =====================================
+#
+# POR QUE EXISTE ESTO
+# Maki, 9/9/2026: «como podemos hacer para que no me hagas perder el tiempo
+# apretando botones... me tiene podrido que me esperes para algo tan basico».
+# Tenia razon: cada corrida del banco le costaba un doble clic y tres minutos
+# mirando una terminal.
+#
+# POR QUE SE PUEDE MOVER ACA SIN PERDER NADA
+# El banco NUNCA uso Safari.app: usa el motor WebKit que trae Playwright, que
+# es el mismo motor de Safari. Lo unico que aportaba la Mac era la red y el
+# disco. GitHub tiene las dos cosas y llega igual de bien a
+# invitame.littlemomentsok.com. O sea: MISMA fidelidad, cero clics.
+#
+# ATENCION - LO QUE SI SE PIERDE, Y HAY QUE SABERLO:
+#   - No es un iPhone de verdad ni un iPad de verdad: es la emulacion de
+#     Playwright, igual que en la Mac. Un bug que solo pase en iOS de verdad
+#     sigue necesitando el telefono de Maki.
+#   - La red de GitHub es mas rapida que un 4G. Por eso se fuerza RED=lenta,
+#     que es lo que hace aparecer las carreras. Sin eso el banco no encuentra
+#     nada (ver la nota grande al principio de probar.mjs).
+#
+# CUANDO CORRE
+#   - en cada cambio de /efectos/, /colecciones/, /i/, /galeria/, /admin/, /sobres/
+#   - todos los dias a las 9 de la manana de Mexico (15:00 UTC)
+#   - cuando alguien lo pide a mano desde la pestana Actions
+#
+# DONDE QUEDA EL RESULTADO
+# En chequeo/resultado.txt, commiteado al repo: asi Claude lo lee sin permisos
+# ni tokens. Las capturas quedan como artifact de la corrida (30 dias).
+#
+# ATENCION - EL COMMIT DEL RESULTADO NO PUEDE DISPARAR OTRA CORRIDA.
+# Por eso chequeo/** esta en paths-ignore y el mensaje lleva [skip ci]. Sin eso,
+# cada corrida dispara la siguiente y el bucle no para nunca.
+# ==============================================================================
+name: Banco de pruebas
+
+on:
+  push:
+    paths:
+      - 'efectos/**'
+      - 'colecciones/**'
+      - 'i/**'
+      - 'galeria/**'
+      - 'admin/**'
+      - 'sobres/**'
+      - '.github/workflows/banco.yml'
+    paths-ignore:
+      - 'chequeo/**'
+  schedule:
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Que invitacion probar'
+        required: false
+        default: 'camila-y-tomas'
+
+permissions:
+  contents: write
+
+jobs:
+  banco:
+    runs-on: ubuntu-latest
+    # La imagen oficial de Playwright ya trae WebKit y Chromium con TODAS sus
+    # librerias. Es justo lo que en el sandbox de Claude no se puede instalar
+    # (faltan 11 librerias del stack GTK y no hay root): aca vienen puestas.
+    container: mcr.microsoft.com/playwright:v1.62.1-noble
+
+    steps:
+      - name: Traer el repo
+        uses: actions/checkout@v4
+
+      - name: Instalar Playwright
+        run: npm init -y && npm i -D playwright@1.62.1
+
+      - name: Correr el banco
+        # ATENCION - el `|| true`: el banco sale con codigo 1 cuando encuentra
+        # problemas, y eso es su trabajo, no un error del workflow. Si el paso
+        # fallara no se llegaria a guardar el resultado, que es justamente lo
+        # que hay que leer.
+        run: |
+          cd chequeo
+          RED=lenta node probar.mjs "${{ github.event.inputs.slug || 'camila-y-tomas' }}" || true
+          echo "-----"
+          tail -6 resultado.txt || echo "no quedo resultado.txt"
+
+      - name: Guardar las capturas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas
+          path: chequeo/*.png
+          retention-days: 30
+
+      - name: Dejar el resultado en el repo
+        if: always()
+        run: |
+          git config user.name  "banco-de-pruebas"
+          git config user.email "banco@invitame.local"
+          git add chequeo/resultado.txt || true
+          git diff --staged --quiet || git commit -m "Resultado del banco [skip ci]"
+          git push || true
