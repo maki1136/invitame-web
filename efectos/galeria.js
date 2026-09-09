@@ -229,10 +229,36 @@
       try { if (typeof window.startParticles === 'function') window.startParticles(); } catch (e) {}
     }
 
+    /* ⚠️⚠️ NO ALCANZA CON PEDIR EL SCROLL UNAS VECES: HAY QUE INSISTIR HASTA
+       LLEGAR. Medido el 9/9/2026 en los cuatro navegadores del banco:
+
+         la invitación anotó 13304  y volvió a 8347
+         la invitación anotó 13666  y volvió a 8447
+         la invitación anotó 11953  y volvió a 8073
+
+       Siempre MÁS ARRIBA, y siempre alrededor de 8300. No es que el scroll
+       falle: es que en ese momento la página TODAVÍA NO MIDE TANTO. Las
+       secciones las montan los módulos (galería, pase, filtro, trivia) y hasta
+       que no están el documento mide unos 9000 px. Pedirle al navegador que
+       baje a 13304 cuando el fondo está en 8300 lo deja en 8300, sin error.
+
+       La primera versión insistía a los 60, 200, 500, 900 y 1200 ms. Se quedaba
+       corta por segundos: cuando los módulos terminan de montar, ya nadie
+       estaba pidiendo el scroll.
+
+       Ahora se reintenta cada 200 ms HASTA LLEGAR, con techo de 12 s. Se corta
+       sola apenas la posición cae a menos de 40 px del objetivo, así que en una
+       página que ya está armada no cuesta nada. */
     var y = parseInt(alto, 10) || 0;
-    var poner = function () { try { window.scrollTo(0, y); } catch (e) {} };
+    var desde = Date.now();
+    var poner = function () {
+      try { window.scrollTo(0, y); } catch (e) {}
+      var actual = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (Math.abs(actual - y) > 40 && Date.now() - desde < 12000) {
+        setTimeout(poner, 200);
+      }
+    };
     poner();
-    [60, 200, 500, 900, 1200].forEach(function (ms) { setTimeout(poner, ms); });
   }
 
   /* ⚠️ DÓNDE SE CUELGA LA SECCIÓN (31/8/2026)
