@@ -540,6 +540,25 @@ function iv_sin_ejemplo($html) {
     $r = preg_replace($rx, '$1$2', $html, -1, $n);
     if ($r !== null && $n === 1) { $html = $r; }
   }
+  /* ATENCION - LAS FOTOS DE STOCK TAMBIEN SON DE LA BODA DE EJEMPLO, Y ADEMAS
+     SE BAJAN. El banco midio 18 pedidos a images.unsplash.com en el primer
+     segundo: fotos de otra gente, que el invitado paga con sus datos moviles y
+     que el motor va a reemplazar igual. Se sacan las dos tandas que el motor
+     apaga solo cuando no hay dato:
+       · la galeria      -> `verSeccion('galeria', false)` si no cargaron fotos
+       · la inspiracion  -> `g.innerHTML=''` y el boton escondido si no hay
+     Las otras (portada, cierre, la banda y las dos de ceremonia) NO se tocan:
+     esas se ven cuando la clienta no subio nada, y sacarlas dejaria un hueco. */
+  $tandas = array(
+    '~(<div class="inspgrid" id="insp-grid">)\s*(?:<img[^>]*>\s*)+~s',
+    '~(<div class="carousel reveal" id="car">)\s*(?:<img[^>]*>\s*)+~s',
+  );
+  foreach ($tandas as $rx) {
+    $n = 0;
+    $r = preg_replace($rx, '$1', $html, -1, $n);
+    if ($r !== null && $n === 1) { $html = $r; }
+  }
+
   /* y los textos sueltos de la boda de ejemplo que el motor pisa cuando hay dato */
   $sueltos = array('ev1-s', 'ev1-a', 'ev2-s', 'ev2-a', 'ev3-s', 'ev3-a', 'dress-texto');
   foreach ($sueltos as $id) {
