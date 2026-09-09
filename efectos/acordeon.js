@@ -128,9 +128,22 @@
         }).observe(document.documentElement,
                    { subtree: true, attributes: true, attributeFilter: ['src'] });
 
-        /* y los iframes que aparecen después (Spotify se arma con innerHTML) */
-        new MutationObserver(function () { todos().forEach(dormir); })
-          .observe(document.documentElement, { subtree: true, childList: true });
+        /* y los iframes que aparecen después (Spotify se arma con innerHTML)
+
+           ATENCION - ESTE OBSERVADOR TIENE QUE ESPERAR, Y CUESTA CARO NO HACERLO.
+           La primera version barria el documento entero (querySelectorAll) en
+           CADA nodo insertado. El motor inserta miles mientras dibuja, asi que
+           el costo crecia al cuadrado. En Chrome pasaba; en WebKit no: en la
+           corrida del banco murieron los TRES escenarios de Safari —escritorio,
+           iPhone y iPad— y sobrevivio solo Chrome. O sea que le habria pasado
+           igual a una invitada con iPhone. Ahora se junta todo lo que llego y
+           se barre UNA vez cada 200 ms. */
+        var pendiente = false;
+        new MutationObserver(function () {
+          if (pendiente) return;
+          pendiente = true;
+          setTimeout(function () { pendiente = false; todos().forEach(dormir); }, 200);
+        }).observe(document.documentElement, { subtree: true, childList: true });
       }
 
       /* la red de seguridad, que es también el despertador normal */
