@@ -654,14 +654,32 @@ async function escenario(nombre, tipo, opciones, esTablet){
       });
       if (!cand.length) return;
 
-      /* 2 · escondidos (visibility no cambia el layout: el fondo queda igual) */
+      /* 2 · ⚠️⚠️ SE BORRA LA TINTA, NO EL ELEMENTO (9/9/2026).
+         Primer intento: `visibility:hidden`. MAL, y el error es fino: esconder
+         el elemento le borra TAMBIÉN SU PROPIO FONDO. En un botón verde, lo que
+         quedaba debajo no era el verde del botón sino el papel de la página, y
+         el chequeo comparaba la tinta contra un fondo que ese texto nunca pisa.
+         Salieron 57 «ilegibles» con razón exactamente 1.0 —la firma de estar
+         midiendo el color contra sí mismo— y ninguno era real.
+         Lo que hay que sacar es la TINTA: el fondo del elemento tiene que
+         quedar dibujado, porque ése es el fondo contra el que se lee.
+         `-webkit-text-fill-color` va aparte: en WebKit le gana a `color`. */
       await page.evaluate(() => document.querySelectorAll('[data-cq]')
-        .forEach(e => { e.style.setProperty('visibility', 'hidden', 'important'); }));
+        .forEach(e => {
+          e.style.setProperty('color', 'transparent', 'important');
+          e.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
+          e.style.setProperty('text-shadow', 'none', 'important');
+        }));
       /* 3 · la foto del fondo de verdad */
-      const buf = await page.screenshot();
-      /* 4 · se los devuelve a su lugar */
+      const buf = await page.screenshot({ timeout: 60000, caret: 'hide' });
+      /* 4 · se les devuelve la tinta */
       await page.evaluate(() => document.querySelectorAll('[data-cq]')
-        .forEach(e => { e.style.removeProperty('visibility'); e.removeAttribute('data-cq'); }));
+        .forEach(e => {
+          e.style.removeProperty('color');
+          e.style.removeProperty('-webkit-text-fill-color');
+          e.style.removeProperty('text-shadow');
+          e.removeAttribute('data-cq');
+        }));
 
       /* 5 · el contraste, contra los píxeles */
       const img = PNG.sync.read(buf);
@@ -716,10 +734,16 @@ async function escenario(nombre, tipo, opciones, esTablet){
       }
     };
 
+    /* ⚠️ EL PASO ES DE UNA PANTALLA, NO DE 500 px (9/9/2026).
+       Con 500 px se sacaban ~25 capturas por escenario y el runner de GitHub se
+       quedaba sin aire: dos escenarios murieron con «page.screenshot: Timeout».
+       Con el alto de la ventana no se pierde nada —cada texto entra en alguna
+       pantalla igual— y las capturas bajan a un tercio. */
     const alto = await page.evaluate(() => document.documentElement.scrollHeight);
-    for (let y = 0; y <= alto; y += 500) {
+    const paso = await page.evaluate(() => Math.max(400, innerHeight - 80));
+    for (let y = 0; y <= alto; y += paso) {
       await page.evaluate(v => window.scrollTo(0, v), y);
-      await page.waitForTimeout(200 * k);
+      await page.waitForTimeout(250 * k);
       await unaPantalla();
     }
     await page.evaluate(() => window.scrollTo(0, 0));
