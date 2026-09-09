@@ -111,7 +111,10 @@
       /* El motor puede llamar a `aplicarInvitado` DESPUÉS de que esta sección
          se montó: si el href se calcula una sola vez, la foto sale sin firmar
          justo cuando el invitado tarda en cargar. Se rearma al tocarlo. */
-      var refrescar = function () { a.setAttribute('href', armarUrl(cfg.gid)); };
+      var refrescar = function () {
+        a.setAttribute('href', armarUrl(cfg.gid));
+        anotarSalida();          /* se anota la altura ANTES de irse */
+      };
       a.addEventListener('pointerdown', refrescar);
       a.addEventListener('focus', refrescar);
       a.addEventListener('click', refrescar);
@@ -152,13 +155,84 @@
     return new URLSearchParams(location.search).get('g') || '';
   }
 
+  /* El slug de la invitación. Sale de la dirección, que es el dato más firme:
+     `INVDATA.slug` se llena después de leer Firestore y puede estar en null. */
+  function slugEvento() {
+    try { return new URLSearchParams(location.search).get('e') || ''; } catch (e) { return ''; }
+  }
+
   function armarUrl(gid) {
     var u = '/galeria/?g=' + encodeURIComponent(gid);
     var n = nombreInvitado();
     var t = tokenInvitado();
+    var e = slugEvento();
     if (n) u += '&n=' + encodeURIComponent(n);
     if (t) u += '&t=' + encodeURIComponent(t);
+    /* ⚠️ para que la galería sepa a dónde volver. Ver «LA VUELTA» abajo. */
+    if (e) u += '&ev=' + encodeURIComponent(e);
     return u;
+  }
+
+  /* ===== LA VUELTA A LA INVITACIÓN (9/9/2026) ================================
+
+     Maki: «cuando entrás a la cámara de las fotos de la fiesta, tener un botón
+     para volver a la invitación, porque cuando das para atrás se abre desde el
+     sobre y debería volver al mismo lugar de donde salió».
+
+     Eran dos molestias en una:
+       1. no había forma de volver salvo el botón Atrás del navegador;
+       2. al volver, la invitación se cargaba de cero: el sobre otra vez, la
+          ceremonia entera, y el invitado de nuevo arriba de todo — después de
+          haber bajado ocho pantallas hasta la galería.
+
+     CÓMO SE RESUELVE, y por qué así:
+
+     · Al SALIR se deja una marca en `sessionStorage` con la altura del scroll.
+     · Al VOLVER, si la marca está, se saltea el sobre y se repone la altura.
+     · Y la marca SE BORRA al usarla.
+
+     ⚠️ ESE BORRADO ES EL CORAZÓN DEL ASUNTO. Si la marca quedara puesta, el
+     invitado no volvería a ver el sobre en toda la sesión: recargar la
+     invitación le mostraría la portada pelada. El sobre es la ceremonia de
+     entrada — se saltea UNA vez, la de la vuelta, y nada más.
+
+     ⚠️ Sirve para las dos vueltas: el botón nuevo de la galería y el Atrás del
+     navegador. Por eso la marca no es un parámetro en la dirección (el Atrás
+     no lo llevaría) sino `sessionStorage`.
+
+     ⚠️ La altura se repone VARIAS VECES. La invitación tiene animaciones de
+     scroll que devuelven la página a su lugar: medido, se fija `scrollTop` y a
+     los 300 ms volvió sola. Se insiste hasta los 1200 ms.
+     ========================================================================== */
+
+  function marca() { return 'inv_volver_' + slugEvento(); }
+
+  function anotarSalida() {
+    if (!slugEvento()) return;
+    try {
+      sessionStorage.setItem(marca(), String(Math.round(
+        window.pageYOffset || document.documentElement.scrollTop || 0)));
+    } catch (e) {}
+  }
+
+  function volviendo() {
+    var alto = null;
+    try { alto = sessionStorage.getItem(marca()); } catch (e) {}
+    if (alto === null) return;
+    try { sessionStorage.removeItem(marca()); } catch (e) {}   /* ⚠️ una sola vez */
+
+    /* el sobre no se vuelve a mirar */
+    var env = document.getElementById('env');
+    if (env) {
+      env.classList.add('gone');
+      env.style.display = 'none';
+      try { if (typeof window.startParticles === 'function') window.startParticles(); } catch (e) {}
+    }
+
+    var y = parseInt(alto, 10) || 0;
+    var poner = function () { try { window.scrollTo(0, y); } catch (e) {} };
+    poner();
+    [60, 200, 500, 900, 1200].forEach(function (ms) { setTimeout(poner, ms); });
   }
 
   /* ⚠️ DÓNDE SE CUELGA LA SECCIÓN (31/8/2026)
@@ -182,6 +256,12 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+
+  /* ⚠️ LA VUELTA SE RESUELVE YA, SIN ESPERAR A `INVEV`. Si esperara los datos
+     del evento, el sobre alcanzaría a arrancar su animación y el invitado
+     vería medio segundo de ceremonia antes de que se la saquen de encima —
+     justo el parpadeo que estamos tratando de evitar. */
+  volviendo();
 
   /* El motor puede publicar INVEV después de que este archivo cargue. */
   if (window.INVEV) arrancar();

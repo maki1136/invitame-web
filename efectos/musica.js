@@ -38,6 +38,30 @@
    en pantalla no se veía nada, porque quedaba en `opacity:0`. En el HTML del
    motor conviven las dos palabras. La correcta es `in`.
 
+   ===== LA SOLAPA (9/9/2026) ==================================================
+   Maki: «me quedó el link de Spotify a la vista, no sé si eso es normal. Me
+   gustaría que tenga una solapa desplegable para ocultar la pista de música
+   que no coincide con el estilo de la invitación».
+
+   El reproductor de Spotify es una caja negra de 352 px con la tipografía y
+   los colores de Spotify: en una invitación de papel y perlas se ve pegado
+   con cinta. Ahora vive adentro de una solapa.
+
+   ⚠️ POR DEFECTO ABIERTA. Es lo que pidió: «que venga por defecto con la
+   solapa para que se vea». La solapa no está para esconder la playlist, está
+   para que el invitado pueda cerrarla. Se arranca cerrada SÓLO si el panel
+   prende `fx.musica.cerrada` («si la gente pide que no se vea»).
+
+   ⚠️ SE REUSAN LAS CLASES DEL MOTOR (`acc-btn`, `chev`, `acc-panel`,
+   `acc-inner`), que es el mismo mecanismo de «Ver mapa» y «Ver hoteles». Así
+   la solapa se ve y se anima igual que las demás, sin CSS nuevo. Pero el
+   click NO usa el `acc()` global del motor: se engancha acá, porque las
+   versiones congeladas de `i/v/` pueden no tenerlo y un botón que no abre es
+   peor que no tener solapa.
+
+   ⚠️ `.acc-panel.open` llega hasta `max-height:560px` y el reproductor mide
+   352: entra. Si algún día se agranda el embed, hay que mirar ese número.
+
    ⚠️ EL TEXTO DE ACÁ NO PASA POR `i/textos-es-mx.php`. Ese archivo cambia el
    HTML en el servidor, antes de mandarlo; lo que escribe un módulo en vivo no
    lo toca. Por eso todo lo que se escriba acá va YA en español de México.
@@ -48,6 +72,7 @@
   var MARCA  = 'inv-musica-extra';   /* para no agregar lo mismo dos veces */
   var VIEJA  = 'inv-musica';         /* la sección que este módulo armaba antes */
   var VISIBLE = 'in';                /* ⚠️ no es 'on'. Ver la nota de arriba. */
+  var SOLAPA = 'inv-musica-solapa';  /* la solapa que envuelve al reproductor */
 
   function ev() { return window.INVEV || {}; }
 
@@ -104,6 +129,57 @@
     return true;
   }
 
+  /* ¿arranca cerrada? Sólo si el panel lo pidió. */
+  function arrancaCerrada() {
+    var f = ev().fx || {};
+    var m = f.musica || {};
+    return m.cerrada === true || m.cerrada === 'on' || m.cerrada === 'true';
+  }
+
+  /* Mete `#spotify-embed` adentro de una solapa. Idempotente. */
+  function solapa() {
+    var caja = document.getElementById('spotify-embed');
+    if (!caja) return false;
+    if (document.getElementById(SOLAPA)) return true;   /* ya está puesta */
+
+    var cont = document.createElement('div');
+    cont.id = SOLAPA;
+    cont.style.marginTop = '16px';
+
+    var fila = document.createElement('div');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn lt acc-btn';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = 'Escuchar la playlist <span class="chev">\u25BE</span>';
+    fila.appendChild(btn);
+
+    var panel = document.createElement('div');
+    panel.className = 'acc-panel';
+    var dentro = document.createElement('div');
+    dentro.className = 'acc-inner';
+
+    /* se MUEVE la caja del motor, no se copia: el motor la busca por id y
+       tiene que seguir encontrando la misma. */
+    caja.parentNode.insertBefore(cont, caja);
+    dentro.appendChild(caja);
+    panel.appendChild(dentro);
+    cont.appendChild(fila);
+    cont.appendChild(panel);
+
+    function abrir(si) {
+      btn.classList.toggle('open', si);
+      panel.classList.toggle('open', si);
+      btn.setAttribute('aria-expanded', si ? 'true' : 'false');
+    }
+    btn.addEventListener('click', function () {
+      abrir(!panel.classList.contains('open'));
+    });
+
+    abrir(!arrancaCerrada());     /* ⚠️ ABIERTA por defecto */
+    return true;
+  }
+
   function bloque() {
     var e = ev();
     var texto = limpio(e.musica);
@@ -157,6 +233,8 @@
     /* el motor sólo mira `spotifyUrl`: si la playlist vino del campo viejo,
        la sección sigue oculta y la encendemos nosotros */
     if (!estaVisible(s) && !encenderSeccion(s, playlist())) return false;
+
+    solapa();                    /* el reproductor, adentro de la solapa */
 
     var b = bloque();
     if (!b) return true;
