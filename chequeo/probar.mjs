@@ -131,7 +131,18 @@ async function escenario(nombre, tipo, opciones, esTablet){
      paquete, y si alguna foto viaja sin optimizar. Maki: «con wifi y todo no
      carga, tarda muchísimo». */
   const pedidos = [];
-  page.on('request', r => pedidos.push(r.url()));
+  /* ⚠️ SE GUARDA TAMBIEN COMO SE PIDIO CADA COSA (9/9/2026).
+     Con la lista de direcciones sola, cinco fotos pesadas aparecian en el
+     informe y no habia forma de saber de donde salian: no estan en el repo, no
+     estan en el documento del evento, no estan en el paquete de modulos. Sin
+     saber quien las pide no se arregla en el origen, y parchear a ciegas es
+     justo lo que no hay que hacer. Ahora se anota el tipo de pedido y en que
+     marco ocurrio. */
+  const comoSePidio = new Map();
+  page.on('request', r => {
+    pedidos.push(r.url());
+    try { comoSePidio.set(r.url(), r.resourceType()); } catch (e) {}
+  });
 
   /* la red del celular: cada pedido tarda, como en la vida real */
   if (LENTO) {
@@ -638,7 +649,20 @@ async function escenario(nombre, tipo, opciones, esTablet){
         const grande = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight) >= 700);
         const min = grande ? 3 : 4.5;
         const r = (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
-        if (r < min) malos.push('"' + t.slice(0, 26) + '" ' + r.toFixed(1) + '/' + min);
+        if (r < min) {
+          /* ⚠️ NO ALCANZA CON DECIR «NO SE LEE» (9/9/2026).
+             La primera version escupia 55 textos y el numero de contraste, y con
+             eso no se puede arreglar nada: no se sabe QUE color hay que tocar ni
+             en que regla vive. Para cambiar un color hay que saber cual es, cual
+             es el fondo contra el que cae, y de que elemento se trata. */
+          const hex = c => '#' + [c.r, c.g, c.b].map(v =>
+            Math.round(v).toString(16).padStart(2, '0')).join('');
+          const quien = el.tagName.toLowerCase() +
+            (el.className && typeof el.className === 'string'
+              ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '');
+          malos.push('"' + t.slice(0, 22) + '" ' + r.toFixed(1) + '/' + min +
+                     ' [' + hex(cf) + ' sobre ' + hex(fo) + ' · ' + quien + ']');
+        }
       });
       return malos;
     });
@@ -809,7 +833,15 @@ async function escenario(nombre, tipo, opciones, esTablet){
     /res\.cloudinary\.com\/[^/]+\/image\/upload\/v\d+\//.test(u));
   chequear('ninguna foto viaja sin optimizar', fotosCrudas.length === 0,
     fotosCrudas.length + ' cruda(s): ' +
-    [...new Set(fotosCrudas.map(u => u.split('/').pop()))].join(', '));
+    [...new Set(fotosCrudas.map(u => {
+      /* la cuenta de Cloudinary, la carpeta, el archivo y como se pidio:
+         los cuatro datos que hacen falta para encontrar quien la escribe. */
+      const m = u.match(/res\.cloudinary\.com\/([^/]+)\/image\/upload\/v\d+\/(.*)$/);
+      const cuenta = m ? m[1] : '?';
+      const resto = m ? m[2] : u;
+      return resto + ' (cuenta ' + cuenta + ', por ' +
+             (comoSePidio.get(u) || 'no se') + ')';
+    }))].join(' | '));
 
   chequear('la invitación no pide un archivo por cada cosa', pedidosAlCargar <= 90,
     pedidosAlCargar + ' pedidos al cargar (eran 129 antes del 8/9) · ' +
