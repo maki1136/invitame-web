@@ -490,6 +490,68 @@ function iv_fotos_livianas($html) {
   );
 }
 
+/* ===== LA BODA DE EJEMPLO NO PUEDE VIAJAR EN EL HTML (9/9/2026) ==============
+
+   QUE PASO
+   El banco lo agarro: en Safari escritorio, la invitacion de Camila y Tomas
+   mostraba «Basilica de Santa Maria», «Hotel Los Robles», «Posada del Valle»,
+   «A bailar hasta el amanecer» y cuatro padres inventados —Irene Estrada,
+   Rafael Lizama, Carmen Ruiz, Jorge Medina—. En Chrome, la misma invitacion en
+   el mismo momento salia BIEN.
+
+   POR QUE PASA
+   No es que falten datos: los datos estan. Es una carrera. El `index.html` del
+   motor trae una boda entera escrita a mano, y el JavaScript la reemplaza
+   recien cuando Firestore contesta. Con la red lenta de un celular, entre que
+   se dibuja el HTML y llega el dato hay un rato — y en ese rato el invitado ve
+   la boda de OTRA pareja. Chrome llega antes y no se nota; Safari no.
+
+   POR QUE NO ALCANZABA `sin-demo.php`
+   Ese archivo apaga un elemento cuando TODOS sus campos estan vacios, que es
+   el otro caso. Cuando la clienta SI cargo sus datos, el ejemplo se queda
+   igual hasta que el JavaScript lo pisa. O sea: justamente las invitaciones
+   que se venden son las que muestran el parpadeo.
+
+   COMO SE ARREGLA
+   No se manda. Si pudimos leer el evento, el ejemplo se saca del HTML ACA,
+   antes de que salga del servidor. El motor llena esas listas siempre —lo hace
+   con `innerHTML=` en los dos caminos, con datos y sin datos— asi que vaciarlas
+   no le saca nada a nadie: o las llena el dato, o la seccion se oculta sola.
+
+   ⚠️ SI FIRESTORE NO CONTESTO, NO SE TOCA NADA (`$leyoEvento`). Misma regla que
+      el resto del archivo: ante la duda, se muestra de mas, no de menos.
+
+   ⚠️ CADA REGLA TIENE QUE COINCIDIR UNA VEZ, NI MAS NI MENOS. Si coincide dos
+      veces o ninguna, esa regla se descarta sola y el HTML queda intacto. Es la
+      diferencia entre sacar un bloque conocido y hacer un reemplazo a ciegas,
+      que es lo que este archivo prohibe mas arriba. Comprobado contra las SEIS
+      copias del motor (i/index.html, las cuatro de i/v/ y prueba/index.html):
+      una coincidencia en cada una.
+   ============================================================================ */
+function iv_sin_ejemplo($html) {
+  /* las tres listas que el motor reescribe entero desde los datos */
+  $listas = array(
+    '~(<div class="tl reveal" id="it-lista">).*?(\s*</div>\s*<img id="it-img")~s',
+    '~(<div class="acc-inner" id="hosp-lista">).*?(\s*</div></div></section>)~s',
+    '~(<section data-sec="padres".*?<div class="padres reveal">).*?(\s*</div></section>)~s',
+  );
+  foreach ($listas as $rx) {
+    $n = 0;
+    $r = preg_replace($rx, '$1$2', $html, -1, $n);
+    if ($r !== null && $n === 1) { $html = $r; }
+  }
+  /* y los textos sueltos de la boda de ejemplo que el motor pisa cuando hay dato */
+  $sueltos = array('ev1-s', 'ev1-a', 'ev2-s', 'ev2-a', 'ev3-s', 'ev3-a', 'dress-texto');
+  foreach ($sueltos as $id) {
+    $rx = '~(<[a-z0-9]+ [^>]*id="' . preg_quote($id, '~') . '"[^>]*>)[^<]*(</)~';
+    $n = 0;
+    $r = preg_replace($rx, '$1$2', $html, -1, $n);
+    if ($r !== null && $n === 1) { $html = $r; }
+  }
+  return $html;
+}
+if ($leyoEvento) { $tpl = iv_sin_ejemplo($tpl); }
+
 $aInyectar = $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 $aInyectar = iv_fotos_livianas($aInyectar);
