@@ -125,7 +125,7 @@
      '<select onchange="setB(\'fraseFx\',this.value)">'+fxOpts.map(o=>_selOpt(o,D.fraseFx)).join('')+'</select></div>'+
     '<div class="mejoras"><div class="h">'+ICO.camara+' Hashtag de Instagram</div>'+inp('igHashtag','#MariaYDiego2026')+'</div>'+
     '<div class="mejoras"><div class="h">'+ICO.lista+' Playlist de Spotify</div>'+
-     '<div class="hint" style="margin-bottom:8px">En Spotify: Compartir y después Copiar enlace de la playlist, y pegalo acá.</div>'+inp('spotifyUrl','https://open.spotify.com/playlist/...')+'</div>'+
+     '<div class="hint" style="margin-bottom:8px">En Spotify: Compartir y después Copiar enlace de la playlist, y pegalo acá.</div>'+inp('spotifyUrl','https://open.spotify.com/playlist/...')+'<div class="hint" style="margin-top:10px">El reproductor aparece adentro de una solapa. Por defecto viene ABIERTA para que se vea; tildá esto sólo si el cliente prefiere que arranque plegada.</div>'+chk('musica','cerrada','La playlist arranca cerrada')+'</div>'+
     '<div class="mejoras"><div class="h">'+ICO.regalo+' Mesa de Regalos (botones)</div>'+
      '<div class="hint" style="margin-bottom:8px">Pegá el link de cada mesa. Los que dejes vacíos no aparecen.</div>'+
      '<label>Liverpool</label>'+inp('reg_liverpool','link Liverpool')+

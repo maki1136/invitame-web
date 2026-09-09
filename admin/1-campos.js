@@ -60,7 +60,12 @@
     particulas:{on:true,tipo:'hoja',color:'auto',densidad:'suave'},
     carta:{on:true,sobreColor:'',kicker:'Con cariño',titulo:'Queridos amigos y familia',texto:'Hoy queremos compartir con ustedes uno de los días más felices de nuestras vidas. Gracias por acompañarnos en este camino de amor.',fuente:'Lora',colorTexto:'#5a5145'},
     ambiente:{on:true,tipo:'nubes',colorTop:'#cfe4f2',colorBot:'#eaf4fb',seccion:'itinerario'},
-    diseno:{cortes:'',textura:'',adorno:'',adornoCustom:''}
+    diseno:{cortes:'',textura:'',adorno:'',adornoCustom:''},
+    /* La playlist de Spotify vive adentro de una solapa. ABIERTA por defecto:
+       la solapa está para que el invitado pueda cerrarla, no para esconderla.
+       `cerrada:true` la arranca plegada, para el cliente que pide que el
+       reproductor no compita con el diseño. (9/9/2026) */
+    musica:{cerrada:false}
   };
   const MOTIFS=[
    {id:'',name:'Ninguno',svg:''},
