@@ -21,6 +21,7 @@
    ============================================================================ */
 
 import { webkit, chromium, devices } from 'playwright';
+import { PNG } from 'pngjs';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -577,112 +578,153 @@ async function escenario(nombre, tipo, opciones, esTablet){
      cambia píxel a píxel y cualquier número sería inventado. Eso se revisa
      mirando la captura `entera-…png`, y se resuelve con el velo que pone
      `i/estilos-servidor.css`.                                              */
+  /* ⚠️⚠️ SE MIDE CONTRA LOS PÍXELES, NO CONTRA EL CSS (9/9/2026).
+     Cuarto error de este mismo chequeo, y el peor: reportaba 55 textos
+     ilegibles que se leen perfecto. La causa: cuando la invitación tiene foto
+     de fondo, esa foto vive en una capa fija con `pointer-events:none`, y
+     `elementsFromPoint` NO DEVUELVE las capas que no reciben el mouse. El
+     chequeo no veía la foto, se caía hasta el velo de papel y calculaba el
+     contraste contra un color que nadie ve. Encima, `.sec.verde` con fondo se
+     vuelve semitransparente a propósito (fondo-invitacion.js), así que el color
+     que declara el CSS tampoco es el que se dibuja.
+
+     Conclusión: NINGUNA cadena de reglas CSS puede decir qué hay detrás de un
+     texto. Lo único que lo sabe es la pantalla. Así que ahora:
+       1. se marcan los textos candidatos,
+       2. se los esconde a todos (visibility:hidden, que no mueve nada de lugar),
+       3. se saca UNA foto de la pantalla: eso es el fondo de verdad,
+       4. se los muestra otra vez,
+       5. y el contraste se calcula contra los píxeles de esa foto.
+
+     Sobre una foto el fondo no es un color sino muchos: se toman el percentil
+     10 y el 90 de luminancia y se usa EL PEOR de los dos. Un texto blanco sobre
+     un cielo con una nube clara tiene que dar mal, aunque el promedio dé bien.
+
+     Ventaja de fondo: se terminó el «sobre foto no se mide». Ahora sí se mide,
+     que es justamente donde un texto se pierde de verdad. */
   const ilegibles = await (async () => {
-    const enPantalla = () => page.evaluate(() => {
-      const col = c => {
-        const m = (c || '').match(/rgba?\(([^)]+)\)/); if (!m) return null;
-        const p = m[1].split(',').map(parseFloat);
-        return { r: p[0], g: p[1], b: p[2], a: p.length < 4 ? 1 : p[3] };
-      };
-      const mezcla = (f, b) => ({
-        r: f.r * f.a + b.r * (1 - f.a),
-        g: f.g * f.a + b.g * (1 - f.a),
-        b: f.b * f.a + b.b * (1 - f.a), a: 1
-      });
-      const lum = c => {
-        const f = [c.r, c.g, c.b].map(v => {
-          v = v / 255;
-          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    const escala = (opciones && opciones.deviceScaleFactor) || 1;
+    const juntados = new Map();
+
+    const unaPantalla = async () => {
+      /* 1 · los candidatos, marcados */
+      const cand = await page.evaluate(() => {
+        const col = c => {
+          const m = (c || '').match(/rgba?\(([^)]+)\)/); if (!m) return null;
+          const p = m[1].split(',').map(parseFloat);
+          return { r: p[0], g: p[1], b: p[2], a: p.length < 4 ? 1 : p[3] };
+        };
+        const opacidadReal = el => {
+          let o = 1, p = el;
+          while (p && p !== document.documentElement) {
+            o *= parseFloat(getComputedStyle(p).opacity || '1');
+            if (o < 0.01) return 0;
+            p = p.parentElement;
+          }
+          return o;
+        };
+        const out = [];
+        let i = 0;
+        document.querySelectorAll('body *').forEach(el => {
+          if (el.children.length) return;
+          const t = (el.textContent || '').trim();
+          if (t.length < 3) return;
+          const cs = getComputedStyle(el);
+          if (cs.display === 'none' || cs.visibility === 'hidden') return;
+          const r = el.getBoundingClientRect();
+          if (!r.width || !r.height) return;
+          if (r.bottom <= 0 || r.top >= innerHeight) return;      /* fuera de pantalla */
+          if (opacidadReal(el) < 0.5) return;
+          const cf = col(cs.color); if (!cf || cf.a < 0.15) return;
+          el.setAttribute('data-cq', String(i));
+          out.push({
+            i: i++,
+            t: t.slice(0, 22),
+            color: [cf.r, cf.g, cf.b, cf.a],
+            px: parseFloat(cs.fontSize) || 16,
+            negrita: (parseInt(cs.fontWeight) || 400) >= 700,
+            caja: [Math.max(0, r.left), Math.max(0, r.top),
+                   Math.min(innerWidth, r.right), Math.min(innerHeight, r.bottom)],
+            quien: el.tagName.toLowerCase() +
+              (el.className && typeof el.className === 'string'
+                ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '')
+          });
         });
-        return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2];
-      };
-      /* fotos: también las que viven en ::before / ::after */
-      const tieneFoto = el => ['', '::before', '::after'].some(p => {
-        const cs = p ? getComputedStyle(el, p) : getComputedStyle(el);
-        return cs.backgroundImage && cs.backgroundImage !== 'none' &&
-               cs.backgroundImage.includes('url(');
+        return out;
       });
-      /* opacidad real = la del elemento por la de todos sus padres */
-      const opacidadReal = el => {
-        let o = 1, p = el;
-        while (p && p !== document.documentElement) {
-          o *= parseFloat(getComputedStyle(p).opacity || '1');
-          if (o < 0.01) return 0;
-          p = p.parentElement;
-        }
-        return o;
+      if (!cand.length) return;
+
+      /* 2 · escondidos (visibility no cambia el layout: el fondo queda igual) */
+      await page.evaluate(() => document.querySelectorAll('[data-cq]')
+        .forEach(e => { e.style.setProperty('visibility', 'hidden', 'important'); }));
+      /* 3 · la foto del fondo de verdad */
+      const buf = await page.screenshot();
+      /* 4 · se los devuelve a su lugar */
+      await page.evaluate(() => document.querySelectorAll('[data-cq]')
+        .forEach(e => { e.style.removeProperty('visibility'); e.removeAttribute('data-cq'); }));
+
+      /* 5 · el contraste, contra los píxeles */
+      const img = PNG.sync.read(buf);
+      const lumCanal = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+      const lumRGB = (r, g, b) => 0.2126 * lumCanal(r) + 0.7152 * lumCanal(g) + 0.0722 * lumCanal(b);
+      const pixel = (x, y) => {
+        const k = (img.width * y + x) << 2;
+        return [img.data[k], img.data[k + 1], img.data[k + 2]];
       };
-      const detras = el => {
-        const r = el.getBoundingClientRect();
-        const cx = Math.round(r.left + r.width / 2);
-        const cy = Math.round(r.top + r.height / 2);
-        if (cy < 0 || cy > innerHeight || cx < 0 || cx > innerWidth) return 'fuera';
-        const pila = document.elementsFromPoint(cx, cy);
-        const i = pila.indexOf(el);
-        const capas = [];
-        for (let j = (i >= 0 ? i + 1 : 0); j < pila.length; j++) {
-          const e = pila[j];
-          if (['IMG', 'VIDEO', 'CANVAS'].includes(e.tagName)) return null;
-          if (tieneFoto(e)) return null;
-          const c = col(getComputedStyle(e).backgroundColor);
-          if (!c || c.a === 0) continue;
-          capas.push(c);
-          if (c.a >= 0.999) break;
+
+      for (const c of cand) {
+        const x0 = Math.round(c.caja[0] * escala), y0 = Math.round(c.caja[1] * escala);
+        const x1 = Math.min(img.width  - 1, Math.round(c.caja[2] * escala));
+        const y1 = Math.min(img.height - 1, Math.round(c.caja[3] * escala));
+        if (x1 <= x0 || y1 <= y0) continue;
+        const ls = [];
+        const pasoX = Math.max(1, Math.floor((x1 - x0) / 24));
+        const pasoY = Math.max(1, Math.floor((y1 - y0) / 12));
+        for (let y = y0; y <= y1; y += pasoY) {
+          for (let x = x0; x <= x1; x += pasoX) {
+            if (x < 0 || y < 0 || x >= img.width || y >= img.height) continue;
+            const p = pixel(x, y);
+            ls.push(lumRGB(p[0], p[1], p[2]));
+          }
         }
-        const ult = capas[capas.length - 1];
-        if (!ult || ult.a < 0.999) {
-          capas.push(col(getComputedStyle(document.body).backgroundColor) ||
-                     { r: 255, g: 255, b: 255, a: 1 });
-        }
-        let acc = capas[capas.length - 1];
-        for (let j = capas.length - 2; j >= 0; j--) acc = mezcla(capas[j], acc);
-        return acc;
-      };
-      const malos = [];
-      document.querySelectorAll('body *').forEach(el => {
-        if (el.children.length) return;
-        const t = (el.textContent || '').trim();
-        if (t.length < 3) return;
-        const cs = getComputedStyle(el);
-        if (cs.display === 'none' || cs.visibility === 'hidden') return;
-        if (!el.getBoundingClientRect().width) return;
-        if (opacidadReal(el) < 0.5) return;          /* se está desvaneciendo */
-        const cf = col(cs.color); if (!cf) return;
-        const fo = detras(el);
-        if (fo === 'fuera' || !fo) return;           /* sobre foto: no se mide */
-        const fg = lum(cf.a < 1 ? mezcla(cf, fo) : cf), bg = lum(fo);
-        const px = parseFloat(cs.fontSize) || 16;
-        const grande = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight) >= 700);
+        if (ls.length < 4) continue;
+        ls.sort((a, b) => a - b);
+        const p10 = ls[Math.floor(ls.length * 0.10)];
+        const p90 = ls[Math.floor(ls.length * 0.90)];
+        /* el texto, mezclado con el fondo si es semitransparente */
+        const mezclar = (fondoL) => {
+          if (c.color[3] >= 0.999) return lumRGB(c.color[0], c.color[1], c.color[2]);
+          /* aproximación: se mezcla en luminancia, alcanza para decidir */
+          return lumRGB(c.color[0], c.color[1], c.color[2]) * c.color[3] + fondoL * (1 - c.color[3]);
+        };
+        const razon = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+        const peor = Math.min(razon(mezclar(p10), p10), razon(mezclar(p90), p90));
+        const grande = c.px >= 24 || (c.px >= 18.66 && c.negrita);
         const min = grande ? 3 : 4.5;
-        const r = (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
-        if (r < min) {
-          /* ⚠️ NO ALCANZA CON DECIR «NO SE LEE» (9/9/2026).
-             La primera version escupia 55 textos y el numero de contraste, y con
-             eso no se puede arreglar nada: no se sabe QUE color hay que tocar ni
-             en que regla vive. Para cambiar un color hay que saber cual es, cual
-             es el fondo contra el que cae, y de que elemento se trata. */
-          const hex = c => '#' + [c.r, c.g, c.b].map(v =>
+        if (peor < min) {
+          const hex = '#' + c.color.slice(0, 3).map(v =>
             Math.round(v).toString(16).padStart(2, '0')).join('');
-          const quien = el.tagName.toLowerCase() +
-            (el.className && typeof el.className === 'string'
-              ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '');
-          malos.push('"' + t.slice(0, 22) + '" ' + r.toFixed(1) + '/' + min +
-                     ' [' + hex(cf) + ' sobre ' + hex(fo) + ' · ' + quien + ']');
+          const clave = c.t + '|' + c.quien;
+          const anterior = juntados.get(clave);
+          if (!anterior || peor < anterior.peor) {
+            juntados.set(clave, { peor, texto:
+              '"' + c.t + '" ' + peor.toFixed(1) + '/' + min +
+              ' [' + hex + ' sobre luminancia ' + p10.toFixed(2) + '-' + p90.toFixed(2) +
+              ' · ' + c.quien + ']' });
+          }
         }
-      });
-      return malos;
-    });
+      }
+    };
 
     const alto = await page.evaluate(() => document.documentElement.scrollHeight);
-    const juntados = new Set();
     for (let y = 0; y <= alto; y += 500) {
       await page.evaluate(v => window.scrollTo(0, v), y);
-      await page.waitForTimeout(130 * k);
-      (await enPantalla()).forEach(m => juntados.add(m));
+      await page.waitForTimeout(200 * k);
+      await unaPantalla();
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(300 * k);
-    return [...juntados];
+    return [...juntados.values()].sort((a, b) => a.peor - b.peor).map(x => x.texto);
   })();
   chequear('todos los textos se leen', ilegibles.length === 0,
     ilegibles.slice(0, 4).join(' · ') + (ilegibles.length > 4 ? ' y ' + (ilegibles.length - 4) + ' más' : ''));
