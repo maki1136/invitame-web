@@ -1,6 +1,6 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 9/9/2026, 5:58:24 p.m.
+Fecha: 9/9/2026, 7:16:55 p.m.
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
   (la invitación existe: Camila &amp; Tomás — Nos casamos frente al mar)
@@ -23,31 +23,31 @@ Caché: vacía, como un invitado que entra por primera vez
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Agendar" 1.2/4.5 [#f7e9e6 sobre #fdfcf8 · a.btn.gh] · "Con traslado incluido " 1.1/4.5 [#cdbfae sobre #d7ccbd · div.d] · "Reservar" 1.3/4.5 [#f7e9e6 sobre #d7ccbd · a.btn] · "Cabañas del Pinar" 1.6/4.5 [#ffffff sobre #d7ccbd · h4] y 14 más
+             -> "Ceremonia y fiesta" 1.2/3 [#c5bad2 sobre #d7ccbd · div.kick.reveal] · "Agendar" 1.2/4.5 [#f7e9e6 sobre #fdfcf8 · a.btn.gh] · "Con traslado incluido " 1.1/4.5 [#cdbfae sobre #d7ccbd · div.d] · "Reservar" 1.3/4.5 [#f7e9e6 sobre #d7ccbd · a.btn] y 13 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    MAL    ninguna foto viaja sin optimizar
              -> 5 cruda(s): invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image)
-   MAL    la invitación no pide un archivo por cada cosa
-             -> 143 pedidos al cargar (eran 129 antes del 8/9) · 181 en todo el recorrido del robot, que no es comparable
+             quien: rip8ks6ikk -> no la encontre en el documento
+             quien: r3v04rzv5g -> no la encontre en el documento
+             quien: atx4qqjpj7 -> no la encontre en el documento
+             quien: jfyn8cn9kp -> no la encontre en el documento
+             quien: npxvsup6bs -> no la encontre en el documento
+   BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
    BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no se pudo sacar la captura entera: page.screenshot: Timeout 30000ms exceeded.
-Call log:
-  - tak)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13334 y volvió a 6048
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 269.8 s de punta a punta)
+   (tardó 234.1 s de punta a punta)
 
 ──────────────────────────────────────────
   Safari iPhone
@@ -63,30 +63,34 @@ Call log:
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "La fecha" 3.3/4.5 [#756786 sobre #d7ccbd · div.kick.reveal] · "Con mucha alegría" 3.3/4.5 [#756786 sobre #d7ccbd · div.kick.reveal] · "El gran día" 3.3/4.5 [#756786 sobre #d7ccbd · div.kick.reveal] · "Para tu comodidad" 1.2/4.5 [#c5bad2 sobre #d7ccbd · div.kick.reveal] y 29 más
+             -> "La fecha" 3.3/4.5 [#756786 sobre #d7ccbd · div.kick.reveal] · "Con mucha alegría" 3.3/4.5 [#756786 sobre #d7ccbd · div.kick.reveal] · "El gran día" 3.3/4.5 [#756786 sobre #d7ccbd · div.kick.reveal] · "Para tu comodidad" 1.2/4.5 [#c5bad2 sobre #d7ccbd · div.kick.reveal] y 25 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x200 (tiene que quedar acostada) · a -212 px del boleto
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    MAL    ninguna foto viaja sin optimizar
              -> 5 cruda(s): invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image)
+             quien: rip8ks6ikk -> no la encontre en el documento
+             quien: r3v04rzv5g -> no la encontre en el documento
+             quien: atx4qqjpj7 -> no la encontre en el documento
+             quien: jfyn8cn9kp -> no la encontre en el documento
+             quien: npxvsup6bs -> no la encontre en el documento
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   MAL    al tocarla se cierra de verdad
-             -> cerrada mide 9px (abierta medía 186) · la clase open se sacó bien, asi que es el CSS/el motor · max-height calculado: 560px
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
-   MAL    sin errores de JavaScript
-             -> /apresolve.spotify.com/?type=dealer-g2&type=spclient due to access control checks. | /apresolve.spotify.com/?type=dealer-g2&type=spclient due to access control checks.
+   BIEN   sin errores de JavaScript
+   (no cuentan: 4 fallas de servicios ajenos — apresolve.spotify.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 11982 y volvió a 10673
+             -> la invitación anotó 12390 y volvió a 6600
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 467.0 s de punta a punta)
+   (tardó 430.9 s de punta a punta)
 
 ──────────────────────────────────────────
   Safari iPad
@@ -107,29 +111,32 @@ Call log:
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Para tu comodidad" 1.2/3 [#c5bad2 sobre #d7ccbd · div.kick.reveal] · "Ver más" 1.3/4.5 [#e9e6ee sobre #d7ccbd · button.iv-plie-btn] · "Dónde quedarse" 1.6/3 [#ffffff sobre #d7ccbd · h2.reveal.in] · "La playa queda a una h" 1.0/4.5 [#d7cebb sobre #d7ccbd · p.reveal.in] y 22 más
+             -> "Ceremonia y fiesta" 1.2/3 [#c5bad2 sobre #d7ccbd · div.kick.reveal] · "Dónde y cuándo" 1.6/3 [#ffffff sobre #d7ccbd · h2.reveal.in] · "Agendar" 1.2/4.5 [#f7e9e6 sobre #fdfcf8 · a.btn.gh] · "Para tu comodidad" 1.2/3 [#c5bad2 sobre #d7ccbd · div.kick.reveal] y 34 más
    BIEN   el boleto del pase se ve entero
-   MAL    al tocar el boleto, el pedazo se corta y baja
-             -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
+   BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    MAL    ninguna foto viaja sin optimizar
              -> 5 cruda(s): invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image)
+             quien: rip8ks6ikk -> no la encontre en el documento
+             quien: r3v04rzv5g -> no la encontre en el documento
+             quien: atx4qqjpj7 -> no la encontre en el documento
+             quien: jfyn8cn9kp -> no la encontre en el documento
+             quien: npxvsup6bs -> no la encontre en el documento
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
    BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
-   MAL    sin errores de JavaScript
-             -> /apresolve.spotify.com/?type=dealer-g2&type=spclient due to access control checks. | /apresolve.spotify.com/?type=dealer-g2&type=spclient due to access control checks.
+   BIEN   sin errores de JavaScript
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13695 y volvió a 8609
+             -> la invitación anotó 13695 y volvió a 8524
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 820.0 s de punta a punta)
+   (tardó 625.1 s de punta a punta)
 
 ──────────────────────────────────────────
   Chrome escritorio
@@ -154,9 +161,13 @@ Call log:
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    MAL    ninguna foto viaja sin optimizar
-             -> 5 cruda(s): invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image) | invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image)
-   MAL    la invitación no pide un archivo por cada cosa
-             -> 152 pedidos al cargar (eran 129 antes del 8/9) · 175 en todo el recorrido del robot, que no es comparable
+             -> 5 cruda(s): invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image)
+             quien: r3v04rzv5g -> no la encontre en el documento
+             quien: rip8ks6ikk -> no la encontre en el documento
+             quien: atx4qqjpj7 -> no la encontre en el documento
+             quien: jfyn8cn9kp -> no la encontre en el documento
+             quien: npxvsup6bs -> no la encontre en el documento
+   BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
@@ -168,8 +179,8 @@ Call log:
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 99.4 s de punta a punta)
+   (tardó 95.8 s de punta a punta)
 
 ══════════════════════════════════════════
-HAY 19 PROBLEMAS (y 95 cosas bien)
+HAY 12 PROBLEMAS (y 102 cosas bien)
 ══════════════════════════════════════════
