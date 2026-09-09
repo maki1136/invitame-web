@@ -50,6 +50,10 @@ on:
       - 'admin/**'
       - 'sobres/**'
       - '.github/workflows/banco.yml'
+      # ATENCION - se nombra el archivo, NO 'chequeo/**'. Asi, tocar el banco
+      # lo hace correr (que es lo que uno quiere al cambiarlo), pero el commit
+      # del resultado —que cae en chequeo/resultado.txt— no dispara nada.
+      - 'chequeo/probar.mjs'
   schedule:
     - cron: '0 15 * * *'
   workflow_dispatch:
