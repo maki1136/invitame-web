@@ -79,7 +79,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Instalar Playwright
-        run: npm init -y && npm i -D playwright@1.62.1
+        # pngjs: el chequeo de contraste lee los pixeles de una captura para
+        # saber que hay DETRAS de cada texto. Ninguna regla de CSS lo sabe.
+        run: npm init -y && npm i -D playwright@1.62.1 pngjs@7.0.0
 
       - name: Correr el banco
         # ATENCION - el `|| true`: el banco sale con codigo 1 cuando encuentra
