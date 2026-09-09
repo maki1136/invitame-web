@@ -511,7 +511,22 @@ $idiomaMin = function_exists('mb_strtolower')
   ? mb_strtolower($idioma, 'UTF-8')
   : strtolower($idioma);
 
-$esMexico = ($idioma !== '') &&
+/* ATENCION - MEXICO ES EL MERCADO: SI NADIE CARGO EL IDIOMA, SE SIRVE EN MEXICANO.
+
+   Antes esta condicion exigia que el campo `idioma` estuviera LLENO. Y el
+   formulario del cliente (`/crear.html`) NO lo escribe: solo lo escribe quien
+   toca ese campo a mano en el panel. Resultado: toda invitacion nacida sola
+   desde el formulario salia en argentino, con "Cuanto CONOCES(vos) a la pareja?
+   SUMA puntos y ENTRA al ranking" en la trivia y "Si QUERES tener un detalle"
+   en la mesa de regalos.
+
+   Medido el 9-9-2026 pidiendo las dos paginas al servidor y contando la frase:
+     - camila-y-tomas       (armada a mano, idioma cargado) -> mexicano  OK
+     - valentina-y-emiliano (del formulario, idioma vacio)  -> argentino MAL
+
+   Ahora el vacio cuenta como Mexico. Un idioma cargado distinto (Ingles,
+   Portugues...) sigue mandando: solo cambia que pasa cuando NO hay dato. */
+$esMexico = ($idioma === '') ||
             (strpos($idiomaMin, 'xico') !== false || strpos($idiomaMin, 'mx') !== false);
 
 if ($esMexico) {
