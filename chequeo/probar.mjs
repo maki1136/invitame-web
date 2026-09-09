@@ -119,7 +119,13 @@ async function escenario(nombre, tipo, opciones, esTablet){
        Regla: si el mensaje nombra un dominio que NO es nuestro y es una falla de
        red o de permisos, se anota aparte y no cuenta. Cualquier otro error
        —y cualquier error de littlemomentsok.com— sigue siendo rojo. */
-    const host = (m.match(/https?:\/\/([^\/\s)]+)/) || [])[1] || '';
+    /* ⚠️ EL MENSAJE PUEDE NO TRAER `http://` (9/9/2026).
+       Primer intento: buscaba `https?://` para sacar el dominio. Safari escribe
+       el de Spotify como «/apresolve.spotify.com/?type=...», sin esquema, asi
+       que el dominio salia vacio y el error seguia contando. Se busca cualquier
+       cosa con forma de dominio, con o sin esquema. */
+    const host = ((m.match(/https?:\/\/([^\/\s)]+)/) ||
+                   m.match(/([a-z0-9][a-z0-9.-]*\.[a-z]{2,})/i)) || [])[1] || '';
     const ajeno = host && !/littlemomentsok\.com$/.test(host);
     const deRed = /access control checks|Failed to load|Load failed|network error|ERR_/i.test(m);
     if (ajeno && deRed) { ruidoAjeno.push(host); return; }
@@ -831,6 +837,35 @@ async function escenario(nombre, tipo, opciones, esTablet){
      pedirle que la convierta y la achique. Ésas son las de 995 KB. */
   const fotosCrudas = pedidos.filter(u =>
     /res\.cloudinary\.com\/[^/]+\/image\/upload\/v\d+\//.test(u));
+  /* ⚠️⚠️ SABER QUE FOTO ES NO ALCANZA: HAY QUE SABER QUIEN LA PIDE (9/9/2026).
+     Se buscaron por todos lados y no estan: ni en el repo, ni en el documento
+     del evento, ni en el paquete de modulos. Sin saber que elemento la usa no
+     se puede arreglar en el origen, y parchear a ciegas esta prohibido.
+     Se le pregunta al documento: quien tiene esa direccion puesta, y adentro de
+     que seccion vive. */
+  const quienLasPide = fotosCrudas.length ? await page.evaluate((urls) => {
+    const salida = [];
+    for (const u of urls) {
+      const cola = u.split('/').pop();
+      let donde = 'no la encontre en el documento';
+      const todos = document.querySelectorAll('*');
+      for (const el of todos) {
+        const src = el.getAttribute && (el.getAttribute('src') || el.getAttribute('data-src') || '');
+        const bg = getComputedStyle(el).backgroundImage || '';
+        if ((src && src.includes(cola)) || bg.includes(cola)) {
+          const sec = el.closest('section,[id]');
+          donde = el.tagName.toLowerCase() +
+            (el.className && typeof el.className === 'string'
+              ? '.' + el.className.trim().split(/\s+/).slice(0,2).join('.') : '') +
+            (src && src.includes(cola) ? ' (src)' : ' (fondo)') +
+            ' dentro de ' + (sec ? (sec.id || sec.tagName.toLowerCase()) : 'nada');
+          break;
+        }
+      }
+      salida.push(cola.slice(0,10) + ' -> ' + donde);
+    }
+    return salida;
+  }, fotosCrudas) : [];
   chequear('ninguna foto viaja sin optimizar', fotosCrudas.length === 0,
     fotosCrudas.length + ' cruda(s): ' +
     [...new Set(fotosCrudas.map(u => {
@@ -842,9 +877,25 @@ async function escenario(nombre, tipo, opciones, esTablet){
       return resto + ' (cuenta ' + cuenta + ', por ' +
              (comoSePidio.get(u) || 'no se') + ')';
     }))].join(' | '));
+  quienLasPide.forEach(l => log('             quien: ' + l));
 
+  /* ⚠️ UN NUMERO SOLO NO SIRVE PARA BAJARLO (9/9/2026).
+     Este chequeo paso de «BIEN» a «143 pedidos» sin que nadie tocara el sitio.
+     Con el numero pelado no se sabe si son fotos, tipografias, o el mismo
+     archivo pedido veinte veces. Se agrupa por tipo y por dominio. */
+  const porTipo = {};
+  pedidos.slice(0, pedidosAlCargar).forEach(u => {
+    let h = 'raro';
+    try { h = new URL(u).hostname.replace(/^www\./,''); } catch (e) {}
+    const ext = (u.split('?')[0].match(/\.([a-z0-9]{2,5})$/i) || [,'(sin)'])[1].toLowerCase();
+    const k = h + ' ' + ext;
+    porTipo[k] = (porTipo[k] || 0) + 1;
+  });
+  const top = Object.entries(porTipo).sort((a,b) => b[1]-a[1]).slice(0,8)
+    .map(([k,n]) => k + '×' + n).join(', ');
   chequear('la invitación no pide un archivo por cada cosa', pedidosAlCargar <= 90,
-    pedidosAlCargar + ' pedidos al cargar (eran 129 antes del 8/9) · ' +
+    pedidosAlCargar + ' pedidos al cargar (eran 129 antes del 8/9) · de que son: ' +
+    top + ' · ' +
     pedidos.length + ' en todo el recorrido del robot, que no es comparable');
 
   /* ---- 10 · NI UN EMOJI A LA VISTA -------------------------------------
