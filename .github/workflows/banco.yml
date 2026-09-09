@@ -99,6 +99,13 @@ jobs:
       - name: Dejar el resultado en el repo
         if: always()
         run: |
+          # ATENCION - `safe.directory`: el contenedor de Playwright corre con un
+          # usuario distinto del que hizo el checkout, y git se planta con
+          # «detected dubious ownership» y sale con codigo 128. La corrida #2 se
+          # completa entera (dejo 34,8 MB de capturas) y despues moria justo aca,
+          # sin guardar el resultado. Se declara el workspace como seguro antes de
+          # tocar nada de git.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name  "banco-de-pruebas"
           git config user.email "banco@invitame.local"
           git add chequeo/resultado.txt || true
