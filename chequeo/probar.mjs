@@ -751,13 +751,29 @@ async function escenario(nombre, tipo, opciones, esTablet){
        pantalla igual— y las capturas bajan a un tercio. */
     const alto = await page.evaluate(() => document.documentElement.scrollHeight);
     const paso = await page.evaluate(() => Math.max(400, innerHeight - 80));
+    /* ⚠️ SI ESTA MEDICION SE CAE, NO PUEDE LLEVARSE PUESTO AL RESTO (10/9/2026).
+       El iPad moria justo al entrar acá y perdia los otros 19 chequeos del
+       escenario: terminaba con 10 contra los 29 de escritorio. Un chequeo que
+       falla tiene que reportarse y dejar seguir, igual que un navegador que no
+       arranca no puede tapar a los otros tres. Ademas asi queda escrito EN QUE
+       pantalla se cayo, que es el dato para arreglarlo. */
+    let cortado = null;
     for (let y = 0; y <= alto; y += paso) {
-      await page.evaluate(v => window.scrollTo(0, v), y);
-      await page.waitForTimeout(250 * k);
-      await unaPantalla();
+      try {
+        await page.evaluate(v => window.scrollTo(0, v), y);
+        await page.waitForTimeout(250 * k);
+        await unaPantalla();
+      } catch (e) {
+        cortado = 'a la altura ' + y + ' de ' + alto + ': ' +
+                  String(e.message || e).split('\n')[0].slice(0, 70);
+        break;
+      }
     }
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(300 * k);
+    if (cortado) log('   ----   el contraste no se pudo medir entero (' + cortado + ')');
+    try {
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(300 * k);
+    } catch (e) {}
     return [...juntados.values()].sort((a, b) => a.peor - b.peor).map(x => x.texto);
   })();
   chequear('todos los textos se leen', ilegibles.length === 0,
