@@ -2,41 +2,52 @@
 #
 # POR QUE EXISTE ESTO
 # Maki, 9/9/2026: «como podemos hacer para que no me hagas perder el tiempo
-# apretando botones... me tiene podrido que me esperes para algo tan basico».
-# Tenia razon: cada corrida del banco le costaba un doble clic y tres minutos
+# apretando botones». Antes cada corrida le costaba un doble clic y tres minutos
 # mirando una terminal.
 #
-# POR QUE SE PUEDE MOVER ACA SIN PERDER NADA
-# El banco NUNCA uso Safari.app: usa el motor WebKit que trae Playwright, que
-# es el mismo motor de Safari. Lo unico que aportaba la Mac era la red y el
-# disco. GitHub tiene las dos cosas y llega igual de bien a
-# invitame.littlemomentsok.com. O sea: MISMA fidelidad, cero clics.
+# POR QUE SE PUEDE CORRER ACA SIN PERDER NADA
+# El banco NUNCA uso Safari.app: usa el motor WebKit que trae Playwright, que es
+# el mismo motor de Safari. Lo unico que aportaba la Mac era la red y el disco.
+# GitHub tiene las dos cosas. O sea: MISMA fidelidad, cero clics.
 #
-# ATENCION - LO QUE SI SE PIERDE, Y HAY QUE SABERLO:
-#   - No es un iPhone de verdad ni un iPad de verdad: es la emulacion de
-#     Playwright, igual que en la Mac. Un bug que solo pase en iOS de verdad
-#     sigue necesitando el telefono de Maki.
-#   - La red de GitHub es mas rapida que un 4G. Por eso se fuerza RED=lenta,
-#     que es lo que hace aparecer las carreras. Sin eso el banco no encuentra
-#     nada (ver la nota grande al principio de probar.mjs).
+# ATENCION - LO QUE SI SE PIERDE:
+#   - No es un iPhone ni un iPad de verdad: es la emulacion de Playwright, igual
+#     que en la Mac. Un bug que solo pase en iOS de verdad sigue necesitando el
+#     telefono de Maki.
+#   - La red de GitHub es mas rapida que un 4G. Por eso se fuerza RED=lenta, que
+#     es lo que hace aparecer las carreras.
 #
-# CUANDO CORRE
-#   - en cada cambio de /efectos/, /colecciones/, /i/, /galeria/, /admin/, /sobres/
-#   - todos los dias a las 9 de la manana de Mexico (15:00 UTC)
-#   - cuando alguien lo pide a mano desde la pestana Actions
+# ═══════════════════════════════════════════════════════════════════════════════
+# ATENCION - UN ESCENARIO POR MAQUINA, Y ESTO NO ES UN DETALLE (9/9/2026)
+#
+# Los cuatro escenarios corrian uno atras del otro en la MISMA maquina, y dos se
+# morian siempre con «Target page, context or browser has been closed». El
+# informe salia con 66 chequeos en vez de ~100 y decia «8 problemas»: el numero
+# estaba mal, porque contaba la mitad de la prueba.
+#
+# Ya se habian arreglado dos causas —el navegador que no se cerraba cuando un
+# escenario fallaba, y un observador mio sin freno— y seguia pasando. La causa
+# que quedaba es simple: no hay memoria para cuatro navegadores y las capturas
+# que necesita la medicion de contraste por pixeles.
+#
+# La solucion no es apretar mas: es dejar de compartir. Cada escenario corre en
+# SU maquina, con su memoria entera. Ademas corren en paralelo, asi que la
+# corrida entera tarda lo que tarda el mas lento y no la suma de los cuatro.
+#
+# UN «TODO BIEN» SOLO VALE SI CORRIERON LOS CUATRO. Por eso el ultimo paso
+# rearma el informe, cuenta cuantas partes llegaron, y lo dice arriba de todo.
+# ═══════════════════════════════════════════════════════════════════════════════
 #
 # DONDE QUEDA EL RESULTADO
-# En chequeo/resultado.txt, commiteado al repo: asi Claude lo lee sin permisos
-# ni tokens. Las capturas quedan como artifact de la corrida (30 dias).
+# En chequeo/resultado.txt, commiteado al repo: asi Claude lo lee sin permisos ni
+# tokens. Las capturas quedan como artifact de la corrida (30 dias).
 #
 # ATENCION - EL COMMIT DEL RESULTADO NO PUEDE DISPARAR OTRA CORRIDA.
-# Por eso chequeo/ NO esta en la lista de paths y el mensaje lleva [skip ci].
-# Sin eso, cada corrida dispara la siguiente y el bucle no para nunca.
+# Por eso chequeo/ NO esta en la lista de paths (solo chequeo/probar.mjs) y el
+# mensaje lleva [skip ci]. Sin eso, cada corrida dispara la siguiente.
 #
 # ATENCION - NO SE PUEDEN USAR `paths` Y `paths-ignore` JUNTOS EN EL MISMO EVENTO.
-# El primer intento los tenia a los dos y GitHub rechazo el archivo entero:
-# «you may only define one of paths and paths-ignore for a single event».
-# Con `paths` alcanza: lo que no esta en la lista, no dispara.
+# El primer intento los tenia a los dos y GitHub rechazo el archivo entero.
 # ==============================================================================
 name: Banco de pruebas
 
@@ -50,9 +61,6 @@ on:
       - 'admin/**'
       - 'sobres/**'
       - '.github/workflows/banco.yml'
-      # ATENCION - se nombra el archivo, NO 'chequeo/**'. Asi, tocar el banco
-      # lo hace correr (que es lo que uno quiere al cambiarlo), pero el commit
-      # del resultado —que cae en chequeo/resultado.txt— no dispara nada.
       - 'chequeo/probar.mjs'
   schedule:
     - cron: '0 15 * * *'
@@ -67,12 +75,20 @@ permissions:
   contents: write
 
 jobs:
-  banco:
+
+  # ── UNA MAQUINA POR ESCENARIO ────────────────────────────────────────────────
+  probar:
     runs-on: ubuntu-latest
     # La imagen oficial de Playwright ya trae WebKit y Chromium con TODAS sus
-    # librerias. Es justo lo que en el sandbox de Claude no se puede instalar
-    # (faltan 11 librerias del stack GTK y no hay root): aca vienen puestas.
+    # librerias. Es justo lo que en el sandbox de Claude no se puede instalar.
     container: mcr.microsoft.com/playwright:v1.62.1-noble
+    strategy:
+      # ATENCION - `fail-fast: false`: si un escenario se cae, los otros TIENEN
+      # que seguir. Un navegador que falla no puede tapar a los otros tres — es
+      # la misma regla que ya vale adentro de probar.mjs.
+      fail-fast: false
+      matrix:
+        escenario: [safari-escritorio, safari-iphone, safari-ipad, chrome-escritorio]
 
     steps:
       - name: Traer el repo
@@ -86,34 +102,114 @@ jobs:
       - name: Correr el banco
         # ATENCION - el `|| true`: el banco sale con codigo 1 cuando encuentra
         # problemas, y eso es su trabajo, no un error del workflow. Si el paso
-        # fallara no se llegaria a guardar el resultado, que es justamente lo
-        # que hay que leer.
+        # fallara no se llegaria a guardar el resultado, que es lo que hay que
+        # leer.
+        env:
+          INV_MOTORES: ${{ matrix.escenario }}
+          RED: lenta
         run: |
           cd chequeo
-          RED=lenta node probar.mjs "${{ github.event.inputs.slug || 'camila-y-tomas' }}" || true
-          echo "-----"
-          tail -6 resultado.txt || echo "no quedo resultado.txt"
+          node probar.mjs "${{ github.event.inputs.slug || 'camila-y-tomas' }}" || true
+          # si el proceso murio antes de escribir, igual queda constancia
+          if [ ! -f resultado.txt ]; then
+            printf '  %s\n   MAL    el escenario no llego a escribir su informe\n' \
+              "${{ matrix.escenario }}" > resultado.txt
+          fi
+          cp resultado.txt "parte-${{ matrix.escenario }}.txt"
+
+      - name: Guardar la parte
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: parte-${{ matrix.escenario }}
+          path: chequeo/parte-${{ matrix.escenario }}.txt
+          retention-days: 30
 
       - name: Guardar las capturas
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: capturas
+          name: capturas-${{ matrix.escenario }}
           path: chequeo/*.png
           retention-days: 30
+
+  # ── Y UNA SOLA QUE JUNTA TODO Y ESCRIBE EL INFORME ───────────────────────────
+  juntar:
+    needs: probar
+    if: always()          # aunque algun escenario se haya caido
+    runs-on: ubuntu-latest
+    steps:
+      - name: Traer el repo
+        uses: actions/checkout@v4
+
+      - name: Bajar las cuatro partes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: parte-*
+          merge-multiple: true
+          path: partes
+
+      - name: Armar el informe
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          ESPERADOS="safari-escritorio safari-iphone safari-ipad chrome-escritorio"
+          LLEGARON=0
+          : > /tmp/cuerpo.txt
+          for e in $ESPERADOS; do
+            if [ -f "partes/parte-$e.txt" ]; then
+              LLEGARON=$((LLEGARON+1))
+              cat "partes/parte-$e.txt" >> /tmp/cuerpo.txt
+            else
+              printf '\n──────────────────────────────────────────\n  %s\n──────────────────────────────────────────\n   MAL    este escenario no devolvio nada\n' "$e" >> /tmp/cuerpo.txt
+            fi
+          done
+          # De cada parte se sacan: su linea de resumen (se recuenta al final) y
+          # su encabezado (se repetiria cuatro veces). El encabezado va UNA vez
+          # arriba de todo, armado aca.
+          grep -v -e '^HAY ' -e '^TODO BIEN' -e '^═' \
+                  -e '^BANCO DE PRUEBAS' -e '^Invitación:' -e '^Fecha:' \
+                  -e '^Red:' -e '^Caché:' -e '(la invitación existe' \
+                  /tmp/cuerpo.txt > /tmp/limpio.txt || cp /tmp/cuerpo.txt /tmp/limpio.txt
+          MAL=$(grep -c '   MAL ' /tmp/limpio.txt || true)
+          BIEN=$(grep -c '   BIEN ' /tmp/limpio.txt || true)
+          {
+            echo 'BANCO DE PRUEBAS DE INVÍTAME'
+            echo "Invitación: https://invitame.littlemomentsok.com/i/?e=${{ github.event.inputs.slug || 'camila-y-tomas' }}"
+            echo "Fecha: $(TZ=America/Mexico_City date '+%d/%m/%Y, %H:%M')"
+            echo 'Red: lenta, como un celular con 4G (+220 ms por pedido)'
+            echo 'Caché: vacía, como un invitado que entra por primera vez'
+            echo 'Cada escenario corrió en su propia máquina, en paralelo.'
+            echo
+            echo '══════════════════════════════════════════'
+            if [ "$LLEGARON" -lt 4 ]; then
+              echo "⚠️ OJO: corrieron $LLEGARON de 4 escenarios."
+              echo '   Este informe esta INCOMPLETO: un «todo bien» no vale.'
+            else
+              echo "Corrieron los 4 escenarios."
+            fi
+            if [ "$MAL" -eq 0 ] && [ "$LLEGARON" -eq 4 ]; then
+              echo "TODO BIEN — $BIEN chequeos pasaron"
+            else
+              echo "HAY $MAL PROBLEMAS (y $BIEN cosas bien)"
+            fi
+            echo '══════════════════════════════════════════'
+            echo
+            cat /tmp/limpio.txt
+          } > chequeo/resultado.txt
+          tail -c 600 chequeo/resultado.txt
 
       - name: Dejar el resultado en el repo
         if: always()
         run: |
-          # ATENCION - `safe.directory`: el contenedor de Playwright corre con un
-          # usuario distinto del que hizo el checkout, y git se planta con
-          # «detected dubious ownership» y sale con codigo 128. La corrida #2 se
-          # completa entera (dejo 34,8 MB de capturas) y despues moria justo aca,
-          # sin guardar el resultado. Se declara el workspace como seguro antes de
-          # tocar nada de git.
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name  "banco-de-pruebas"
           git config user.email "banco@invitame.local"
-          git add chequeo/resultado.txt || true
+          # ATENCION - se rebasa sobre lo ultimo antes de commitear. Sin esto, si
+          # alguien empujo algo mientras corria el banco, el push se rechaza y el
+          # `|| true` se lo tragaba en silencio: la corrida quedaba sin informe.
+          cp chequeo/resultado.txt /tmp/r.txt
+          git fetch origin main
+          git reset --hard origin/main
+          cp /tmp/r.txt chequeo/resultado.txt
+          git add chequeo/resultado.txt
           git diff --staged --quiet || git commit -m "Resultado del banco [skip ci]"
           git push || true
