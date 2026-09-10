@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 09/09/2026, 18:05
+Fecha: 10/09/2026, 08:14
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 7 PROBLEMAS (y 67 cosas bien)
+HAY 10 PROBLEMAS (y 84 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,7 +29,49 @@ HAY 7 PROBLEMAS (y 67 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "El filtro de la boda" 1.0/3 [#463b52 sobre luminancia 0.05-0.86 · h2] · "Reservar" 1.0/4.5 [#f7e9e6 sobre luminancia 0.84-0.92 · a.btn] · "Y las últimas fotos." 1.0/4.5 [#615c69 sobre luminancia 0.12-0.72 · div.d] · "Compartir por WhatsApp" 1.1/4.5 [#f7e9e6 sobre luminancia 0.89-0.94 · a.wsp] y 24 más
+             -> "Vestimenta" 1.0/3 [#463b52 sobre luminancia 0.05-0.06 · h2.reveal.in] · "Contamos las sillas an" 1.0/4.5 [#d7cebb sobre luminancia 0.60-0.87 · p.reveal.in] · "Los colores de la boda" 1.0/4.5 [#3a453d sobre luminancia 0.05-0.05 · div.col-dc-tit] · "Confirmar Asistencia" 1.1/3 [#ffffff sobre luminancia 0.66-0.90 · h2.reveal.in] y 23 más
+   BIEN   el boleto del pase se ve entero
+   BIEN   al tocar el boleto, el pedazo se corta y baja
+   BIEN   los módulos vienen en un solo pedido, no de a sesenta
+   MAL    ninguna foto viaja sin optimizar
+             -> 5 cruda(s): invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image)
+             quien: rip8ks6ikk -> no la encontre en el documento
+             quien: r3v04rzv5g -> no la encontre en el documento
+             quien: atx4qqjpj7 -> no la encontre en el documento
+             quien: jfyn8cn9kp -> no la encontre en el documento
+             quien: npxvsup6bs -> no la encontre en el documento
+   BIEN   la invitación no pide un archivo por cada cosa
+   BIEN   no hay ni un emoji a la vista
+   BIEN   el reproductor de Spotify está adentro de la solapa
+   BIEN   la solapa de la música viene ABIERTA
+   MAL    al tocarla se cierra de verdad
+             -> cerrada mide 91px (abierta medía 386) · la clase open se sacó bien, asi que es el CSS/el motor · max-height calculado: 490.525848px
+   BIEN   y se vuelve a abrir
+   BIEN   sin errores de JavaScript
+   BIEN   al salir, la invitación anota dónde estaba
+   BIEN   en la galería hay botón para volver a la invitación
+   BIEN   al volver NO se repite el sobre
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 13334 y volvió a 5942
+   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 315.9 s de punta a punta)
+
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   BIEN   no asoma otro sobre al abrir
+   BIEN   la portada no es la de otra invitación
+   BIEN   sin voseo desde el primer pintado
+   BIEN   la raspadita pone una tapa por número
+   BIEN   las tapas caen justo encima de los números
+   BIEN   se puede raspar y se revela la fecha
+   BIEN   una vez raspada, queda raspada
+   BIEN   está en español de México, sin voseo
+   BIEN   no se ve nada de la boda de ejemplo
+   BIEN   los botones flotantes no se pisan
+   MAL    todos los textos se leen
+             -> "Queridos amigos y fami" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h4] · "Sábado 6 de marzo de 2" 1.0/4.5 [#463b52 sobre luminancia 0.04-0.05 · div.addr] · "Cómo va a ser el día" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] · "19:30 · Cena" 1.0/4.5 [#463b52 sobre luminancia 0.04-0.05 · div.h] y 49 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -47,29 +89,14 @@ HAY 7 PROBLEMAS (y 67 cosas bien)
    BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
+   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13774 y volvió a 5942
-   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 248.1 s de punta a punta)
-
-
-──────────────────────────────────────────
-  Safari iPhone
-──────────────────────────────────────────
-   BIEN   no asoma otro sobre al abrir
-   BIEN   la portada no es la de otra invitación
-   BIEN   sin voseo desde el primer pintado
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-
-──────────────────────────────────────────
-  Safari iPhone
-──────────────────────────────────────────
-   MAL    no se pudo ni abrir el navegador
-             -> page.evaluate: Target page, context or browser has been closed
+             -> la invitación anotó 12182 y volvió a 5731
+   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 790.3 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -111,7 +138,7 @@ HAY 7 PROBLEMAS (y 67 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Reservar" 1.0/4.5 [#f7e9e6 sobre luminancia 0.83-0.90 · a.btn] · "Cabañas del Pinar" 1.1/4.5 [#ffffff sobre luminancia 0.86-0.94 · h4] · "Hotel Mirador" 1.1/4.5 [#ffffff sobre luminancia 0.66-0.91 · h4] · "Ideal si vienen en fam" 1.2/4.5 [#cdbfae sobre luminancia 0.68-0.87 · div.d] y 22 más
+             -> "Reservar" 1.0/4.5 [#f7e9e6 sobre luminancia 0.83-0.90 · a.btn] · "Cabañas del Pinar" 1.1/4.5 [#ffffff sobre luminancia 0.86-0.94 · h4] · "Hotel Mirador" 1.1/4.5 [#ffffff sobre luminancia 0.66-0.91 · h4] · "Ideal si vienen en fam" 1.3/4.5 [#cdbfae sobre luminancia 0.68-0.87 · div.d] y 23 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -134,5 +161,5 @@ HAY 7 PROBLEMAS (y 67 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 100.3 s de punta a punta)
+   (tardó 101.1 s de punta a punta)
 
