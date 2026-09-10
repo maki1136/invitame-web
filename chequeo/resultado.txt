@@ -1,9 +1,15 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 9/9/2026, 11:40:59 p.m.
+Fecha: 09/09/2026, 18:05
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
-  (la invitación existe: Camila &amp; Tomás — Nos casamos frente al mar)
+Cada escenario corrió en su propia máquina, en paralelo.
+
+══════════════════════════════════════════
+Corrieron los 4 escenarios.
+HAY 7 PROBLEMAS (y 67 cosas bien)
+══════════════════════════════════════════
+
 
 ──────────────────────────────────────────
   Safari escritorio
@@ -23,7 +29,7 @@ Caché: vacía, como un invitado que entra por primera vez
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Nuestra carta" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] · "Vestimenta" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] · "Horas" 1.0/4.5 [#e7ddc8 sobre luminancia 0.73-0.83 · div.lab] · "Min" 1.0/4.5 [#e7ddc8 sobre luminancia 0.68-0.74 · div.lab] y 33 más
+             -> "El filtro de la boda" 1.0/3 [#463b52 sobre luminancia 0.05-0.86 · h2] · "Reservar" 1.0/4.5 [#f7e9e6 sobre luminancia 0.84-0.92 · a.btn] · "Y las últimas fotos." 1.0/4.5 [#615c69 sobre luminancia 0.12-0.72 · div.d] · "Compartir por WhatsApp" 1.1/4.5 [#f7e9e6 sobre luminancia 0.89-0.94 · a.wsp] y 24 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -38,17 +44,17 @@ Caché: vacía, como un invitado que entra por primera vez
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   MAL    al tocarla se cierra de verdad
-             -> cerrada mide 142px (abierta medía 386) · la clase open se sacó bien, asi que es el CSS/el motor · max-height calculado: 560px
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13334 y volvió a 5942
+             -> la invitación anotó 13774 y volvió a 5942
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 354.8 s de punta a punta)
+   (tardó 248.1 s de punta a punta)
+
 
 ──────────────────────────────────────────
   Safari iPhone
@@ -64,6 +70,7 @@ Caché: vacía, como un invitado que entra por primera vez
 ──────────────────────────────────────────
    MAL    no se pudo ni abrir el navegador
              -> page.evaluate: Target page, context or browser has been closed
+
 
 ──────────────────────────────────────────
   Safari iPad
@@ -85,6 +92,7 @@ Caché: vacía, como un invitado que entra por primera vez
    MAL    no se pudo ni abrir el navegador
              -> page.evaluate: Target page, context or browser has been closed
 
+
 ──────────────────────────────────────────
   Chrome escritorio
 ──────────────────────────────────────────
@@ -103,17 +111,17 @@ Caché: vacía, como un invitado que entra por primera vez
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Reservar" 1.0/4.5 [#f7e9e6 sobre luminancia 0.83-0.90 · a.btn] · "Cabañas del Pinar" 1.1/4.5 [#ffffff sobre luminancia 0.86-0.94 · h4] · "Hotel Mirador" 1.1/4.5 [#ffffff sobre luminancia 0.66-0.91 · h4] · "Ideal si vienen en fam" 1.3/4.5 [#cdbfae sobre luminancia 0.68-0.87 · div.d] y 22 más
+             -> "Reservar" 1.0/4.5 [#f7e9e6 sobre luminancia 0.83-0.90 · a.btn] · "Cabañas del Pinar" 1.1/4.5 [#ffffff sobre luminancia 0.86-0.94 · h4] · "Hotel Mirador" 1.1/4.5 [#ffffff sobre luminancia 0.66-0.91 · h4] · "Ideal si vienen en fam" 1.2/4.5 [#cdbfae sobre luminancia 0.68-0.87 · div.d] y 22 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    MAL    ninguna foto viaja sin optimizar
-             -> 5 cruda(s): invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image) | invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image)
+             -> 5 cruda(s): invitame/r3v04rzv5gq9gfqaznom.png (cuenta oc8cgqt4, por image) | invitame/rip8ks6ikk4krp7o6ke0.jpg (cuenta oc8cgqt4, por image) | invitame/atx4qqjpj7updy8ajef4.png (cuenta oc8cgqt4, por image) | invitame/jfyn8cn9kpb7znufq3k9.jpg (cuenta oc8cgqt4, por image) | invitame/npxvsup6bsq4u2kg8ajp.jpg (cuenta oc8cgqt4, por image)
              quien: r3v04rzv5g -> no la encontre en el documento
              quien: rip8ks6ikk -> no la encontre en el documento
              quien: atx4qqjpj7 -> no la encontre en el documento
-             quien: npxvsup6bs -> no la encontre en el documento
              quien: jfyn8cn9kp -> no la encontre en el documento
+             quien: npxvsup6bs -> no la encontre en el documento
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
@@ -126,8 +134,5 @@ Caché: vacía, como un invitado que entra por primera vez
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 97.9 s de punta a punta)
+   (tardó 100.3 s de punta a punta)
 
-══════════════════════════════════════════
-HAY 8 PROBLEMAS (y 66 cosas bien)
-══════════════════════════════════════════
