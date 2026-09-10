@@ -603,7 +603,17 @@ async function escenario(nombre, tipo, opciones, esTablet){
      Ventaja de fondo: se terminó el «sobre foto no se mide». Ahora sí se mide,
      que es justamente donde un texto se pierde de verdad. */
   const ilegibles = await (async () => {
-    const escala = (opciones && opciones.deviceScaleFactor) || 1;
+    /* ⚠️ LA CAPTURA SE PIDE EN PIXELES DE CSS, NO DE PANTALLA (9/9/2026).
+       Con `scale:'device'` —lo que trae de fabrica— el iPhone dibuja a 3x y el
+       iPad a 2x: cada captura pesa NUEVE veces mas en el iPhone. Con eso esos
+       dos escenarios se quedaban sin memoria y morian a mitad de camino
+       —terminaban con 6 y 10 chequeos contra los 29 de escritorio—, incluso
+       corriendo cada uno en su propia maquina.
+       Para medir luminancia no hace falta resolucion de retina: alcanza con un
+       pixel por pixel de CSS. Y como asi la captura queda en la misma unidad
+       que `getBoundingClientRect`, la escala pasa a ser 1.
+       ⚠️ La captura ENTERA de mas abajo NO se toca: esa es para mirarla. */
+    const escala = 1;
     const juntados = new Map();
 
     const unaPantalla = async () => {
@@ -671,7 +681,7 @@ async function escenario(nombre, tipo, opciones, esTablet){
           e.style.setProperty('text-shadow', 'none', 'important');
         }));
       /* 3 · la foto del fondo de verdad */
-      const buf = await page.screenshot({ timeout: 60000, caret: 'hide' });
+      const buf = await page.screenshot({ timeout: 60000, caret: 'hide', scale: 'css' });
       /* 4 · se les devuelve la tinta */
       await page.evaluate(() => document.querySelectorAll('[data-cq]')
         .forEach(e => {
