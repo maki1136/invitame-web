@@ -14,6 +14,39 @@
       al tocar se pausa lo que esté sonando y se devuelve al terminar.
 
    ───────────────────────────────────────────────────────────────────────────
+   CÓMO SE ENTREGA EL AUDIO  (14/9/2026) — y por qué no es una cuestión de peso
+
+   El archivo se sube tal como lo produjo el navegador de quien grabó. Eso
+   significa que **cada anfitriona sube un formato distinto**: Android y Chrome
+   dan WebM/Opus, el iPhone da MP4. Y WebM/Opus no es terreno seguro en el
+   Safari de un iPhone. Con la mitad de los invitados en iPhone, una anfitriona
+   que grabó desde Android dejaba a media fiesta sin escuchar nada — y sin que
+   se note: el boleto se arranca igual, la onda está dibujada, y no suena.
+
+   Medido hoy, grabando 4 s de verdad y subiéndolos por el preset unsigned que
+   ya usa el formulario (el mismo `INV.uploadVideo`):
+
+       lo que grabó el navegador  WebM/Opus   369 KB por minuto
+       ac_aac,br_32k,ar_22050     audio/mp4   274 KB por minuto   200, decodifica
+       ac_aac,br_24k,ar_22050     audio/mp4   213 KB por minuto   200, decodifica
+       ac_mp3,br_48k              audio/mpeg  361 KB por minuto   200, decodifica
+
+   Las cuatro responden 200 y las cuatro las puede leer el navegador. Así que
+   sí: el preset unsigned acepta audio y Cloudinary transcodifica al entregar.
+   (Estaba escrito como deducción en la spec; ahora está medido.)
+
+   ⚠️ LA CONVERSIÓN VA ACÁ, EN LA ENTREGA, Y NO AL GUARDAR. Si se hiciera al
+      subir, arreglaría sólo los audios nuevos y dejaría rotos los que ya están
+      guardados. Acá alcanza a todos, incluidos los que grabó cada invitado por
+      su cuenta (`INVGUEST.pasevozAudio`), que son los más variados de todos.
+
+   ⚠️ Y SI LA VERSIÓN LIVIANA NO SE PUEDE BAJAR, SE VUELVE AL ORIGINAL. Una vez,
+      sin loop. 369 KB es mejor que silencio.
+
+   ⚠️ 32k y no 24k: es una persona hablándole a sus invitados, no una nota de
+      voz apurada. Los 60 KB por minuto de diferencia están bien gastados.
+
+   ───────────────────────────────────────────────────────────────────────────
    LA ROTURA, MEDIDA DEL VIDEO DE MAKI  (4/9/2026)
 
    Referencia: admit-two.replit.app, grabación de pantalla a 59,95 fps. La mano
@@ -77,6 +110,20 @@
      caida, no el punto de partida. El final no cambia: sigue siendo 0 0. */
   var DX      = 79;     /* % del ancho: deja la columna al ras del borde derecho */
   var DY      = 124;    /* % del alto: la centra adentro del boleto */
+
+  /* ---- CÓMO SE PIDE EL AUDIO ---------------------------------------------
+     Ver la nota grande del encabezado. Devuelve '' cuando no hay nada que
+     cambiar, y el que llama se queda con la dirección original.               */
+  var RECETA = 'ac_aac,br_32k,ar_22050';
+
+  function liviana(u) {
+    u = String(u || '');
+    if (u.indexOf('/video/upload/') < 0) return '';   /* no es de Cloudinary */
+    /* si ya trae una receta puesta a mano, no se toca: alguien decidió eso */
+    if (/\/video\/upload\/[^/]*(?:ac_|br_|f_|q_)/.test(u)) return '';
+    return u.replace('/video/upload/', '/video/upload/' + RECETA + '/')
+            .replace(/\.[a-z0-9]+$/i, '.m4a');
+  }
 
   /* ---- DE QUIEN ES EL AUDIO ---------------------------------------------
      Por defecto suena el del evento: uno solo para todos, cargado en el panel.
@@ -339,7 +386,12 @@
     var msg = sec.querySelector('.pv-msg');
     var au = document.createElement('audio');
     au.preload = 'none';
-    au.src = f.audio;
+
+    /* la versión que se entrega: ver la nota grande del encabezado */
+    var crudo   = String(f.audio || '');
+    var liviano = liviana(crudo);
+    var usandoLiviano = !!liviano;
+    au.src = liviano || crudo;
     sec.appendChild(au);
 
     var raf = 0, pausados = [];
@@ -373,6 +425,26 @@
       for (var k = 0; k < N; k++) barras[k].classList.remove('pv-ya');
       devolverLaMusica();
     }
+    function arrancar() {
+      var p = au.play();
+      if (p && p.then) p.then(function () { if (!raf) seguir(); })['catch'](parar);
+      else if (!raf) seguir();
+    }
+
+    /* ⚠️ LA VUELTA ATRÁS, UNA SOLA VEZ. Si la versión liviana no se pudo bajar
+       —Cloudinary caído, o una receta que esa cuenta no permita— se pide el
+       archivo original. `usandoLiviano` se apaga antes de reintentar, así que
+       si el original también falla esto termina en parar() y no en un loop. */
+    function alFallar() {
+      if (usandoLiviano) {
+        usandoLiviano = false;
+        var queriaSonar = msg.classList.contains('pv-son');
+        au.src = crudo;
+        try { au.load(); } catch (e) {}
+        if (queriaSonar) { arrancar(); return; }
+      }
+      parar();
+    }
 
     msg.addEventListener('click', function () {
       /* ⚠️ EL PRIMER TOQUE ROMPE, NO REPRODUCE. En la muestra el dedo baja sobre
@@ -383,13 +455,11 @@
       if (au.paused) {
         pausarLaMusica();
         msg.classList.add('pv-son');
-        var p = au.play();
-        if (p && p.then) p.then(function () { if (!raf) seguir(); }).catch(parar);
-        else if (!raf) seguir();
+        arrancar();
       } else { au.pause(); parar(); }
     });
     au.addEventListener('ended', parar);
-    au.addEventListener('error', parar);
+    au.addEventListener('error', alFallar);
   }
 
   /* ---- CUANDO SE MONTA -----------------------------------------------------
@@ -432,4 +502,5 @@
   setInterval(revisar, 400);
 
   window.PV_montar = montar;                    /* el panel lo llama al previsualizar */
+  window.PV_liviana = liviana;                  /* para que el banco la pueda medir */
 })();
