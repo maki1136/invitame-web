@@ -908,6 +908,12 @@ async function escenario(nombre, tipo, opciones, esTablet){
        piezas: si hay `<audio>` en el sector (el oyente del click se registra
        adentro de `audio()`, así que sin audio no hay oyente) y si la marca
        `__roto` quedó puesta (rotura arrancada pero sin terminar). */
+    /* mismo criterio que la solapa: el scroll lo hace el navegador, no la pagina */
+    try {
+      const hm = await page.$('#pv-sec .pv-msg');
+      if (hm) { await hm.scrollIntoViewIfNeeded({ timeout: 6000 }); await page.waitForTimeout(800); }
+    } catch (e) {}
+
     const rotura = await page.evaluate(async () => {
       const sec = document.querySelector('#pv-sec');
       const m = document.querySelector('#pv-sec .pv-msg');
@@ -928,8 +934,8 @@ async function escenario(nombre, tipo, opciones, esTablet){
          transicion no arranca; las medidas que devuelve son las viejas. Llevando
          el elemento al centro de la pantalla antes de tocarlo, funciona.
          Y es lo que hace una persona: nadie toca un boleto que no ve. */
-      m.scrollIntoView({ block: 'center' });
-      await esperar(700);
+      const rr = m.getBoundingClientRect();
+      const aLaVista = rr.top > -rr.height && rr.bottom < innerHeight + rr.height;
 
       const antes = foto();
       m.click();  await esperar(1600);
@@ -955,10 +961,13 @@ async function escenario(nombre, tipo, opciones, esTablet){
         hizoFaltaSegundo: tras1.pegada && !tras2.pegada,
         hayAudio: !!(sec && sec.querySelector('audio')),
         quedoAbajo: Math.round(r.top - tk.bottom),
-        ancho: Math.round(r.width), alto: Math.round(r.height)
+        ancho: Math.round(r.width), alto: Math.round(r.height),
+        aLaVista
       };
     });
-    if (rotura) {
+    if (rotura && !rotura.aLaVista) {
+      log('   ----   el boleto no se pudo traer a la pantalla: no se midio');
+    } else if (rotura) {
       const porque =
         !rotura.hayAudio ? 'NO hay <audio> en el sector: el oyente del click vive adentro de audio(), asi que el boleto no escucha nada'
         : rotura.tras2.roto ? 'la rotura ARRANCO (__roto puesta) pero pv-pegada nunca se saco: se corto en los dos requestAnimationFrame'
@@ -1101,6 +1110,21 @@ async function escenario(nombre, tipo, opciones, esTablet){
      `<div>` tenga la clase `open` no quiere decir que se vea abierto: la
      apertura la hace una transición de `max-height`, y una transición puede
      no correr. Se mide el rectángulo, que es lo que ve una persona.       */
+  /* SE SCROLLEA COMO UNA PERSONA, NO DESDE ADENTRO DE LA PAGINA. (14/9/2026)
+     El intento anterior llamaba a `scrollIntoView()` dentro de la pagina y no
+     alcanzo: la invitacion tiene animaciones de scroll que devuelven la pagina
+     a su lugar, asi que a veces no se movia nada y el chequeo volvia a medir un
+     elemento que no estaba en pantalla. Medido: `scrollIntoView` dejo la caja
+     en 2718 px antes y 2718 px despues.
+     `scrollIntoViewIfNeeded` de Playwright no es JavaScript de la pagina: es el
+     propio navegador moviendo la vista, y a eso la pagina no lo puede deshacer.
+     Y si aun asi no se logra, se dice y NO se da rojo: un chequeo que no se pudo
+     hacer no es lo mismo que uno que fallo. */
+  try {
+    const hb = await page.$('#inv-musica-solapa .acc-btn');
+    if (hb) { await hb.scrollIntoViewIfNeeded({ timeout: 6000 }); await page.waitForTimeout(800); }
+  } catch (e) {}
+
   const musica = await page.evaluate(async () => {
     const sol = document.getElementById('inv-musica-solapa');
     if (!sol) return { hay: false };
@@ -1147,8 +1171,11 @@ async function escenario(nombre, tipo, opciones, esTablet){
        cierra perfecto: alto 0, max-height 0px, medido a los 100, 600, 1200,
        2500 y 4000 ms.
        Y ademas es lo que hace una persona: nadie toca una solapa que no ve. */
-    btn.scrollIntoView({ block: 'center' });
-    await esperar(700);
+    const enPantalla = () => {
+      const r = btn.getBoundingClientRect();
+      return r.top > -r.height && r.bottom < innerHeight + r.height;
+    };
+    const aLaVista = enPantalla();
 
     const abiertaAlEntrar = await estable();
     btn.click();
@@ -1166,7 +1193,7 @@ async function escenario(nombre, tipo, opciones, esTablet){
       hay: true,
       adentro: !!(emb && sol.contains(emb)),
       rotulo: (btn.textContent || '').trim(),
-      abiertaAlEntrar, alCerrar, alVolverAAbrir,
+      abiertaAlEntrar, alCerrar, alVolverAAbrir, aLaVista,
       claseAlCerrar, claseAlAbrir,
       maxHCerrada: claseAlCerrar ? '(seguia open)' : getComputedStyle(pan).maxHeight
     };
@@ -1177,6 +1204,9 @@ async function escenario(nombre, tipo, opciones, esTablet){
       'rótulo: ' + musica.rotulo);
     chequear('la solapa de la música viene ABIERTA', musica.abiertaAlEntrar > 100,
       'alto al entrar ' + musica.abiertaAlEntrar + 'px');
+    if (!musica.aLaVista) {
+      log('   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio');
+    } else
     chequear('al tocarla se cierra de verdad', musica.alCerrar <= 4,
       'cerrada mide ' + musica.alCerrar + 'px (abierta medía ' + musica.abiertaAlEntrar +
       ') · la clase open ' + (musica.claseAlCerrar ? 'SIGUIO PUESTA: el click no la sacó'
