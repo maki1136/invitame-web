@@ -68,8 +68,25 @@
     if (url.indexOf('/image/upload/') < 0) return '';          /* el video, no */
     var i = url.indexOf('/upload/') + 8;
     var cola = url.slice(i);
-    if (!/^v\d+\//.test(cola)) return '';   /* ya tiene instrucciones: se respeta */
-    return url.slice(0, i) + RECETA + cola;
+    if (/^v\d+\//.test(cola)) return url.slice(0, i) + RECETA + cola;
+
+    /* ⚠️ LA FOTO FIJA DEL VIDEO DE FONDO TAMBIÉN CUENTA. (14/9/2026)
+       Cuando la clienta pone un VIDEO de fondo, la foto de respaldo es un
+       cuadro que saca Cloudinary del propio video, y llega escrita así:
+           /image/upload/so_1.5/v1788.../archivo.jpg
+                         └─ "segundo 1,5 del video"
+       Como ya trae UNA instrucción, la regla de arriba la dejaba pasar entera
+       —y viajaba sin `f_auto`, en el formato y el peso originales—. El banco la
+       marcaba una y otra vez como «foto sin optimizar» y tenía razón.
+       No se puede pisar el `so_`: sin él no hay cuadro. Se ENCADENA: primero
+       Cloudinary saca el cuadro, y después lo achica y lo convierte. El orden
+       importa y es éste.
+       Si la dirección ya pide formato o calidad, no se toca: alguien decidió. */
+    var m = cola.match(/^([^\/]+)\/(v\d+\/.*)$/);
+    if (m && !/\b(f_|q_)/.test(m[1])) {
+      return url.slice(0, i) + m[1] + '/' + RECETA + m[2];
+    }
+    return '';                              /* ya tiene instrucciones: se respeta */
   }
 
   /* Lo mismo, adentro de un texto de CSS: url("...") */
@@ -111,12 +128,26 @@
       });
     }
 
+    /* 1 bis. video.poster = '...' */
+    var descPoster = Object.getOwnPropertyDescriptor(HTMLVideoElement.prototype, 'poster');
+    if (descPoster && descPoster.set) {
+      Object.defineProperty(HTMLVideoElement.prototype, 'poster', {
+        configurable: true,
+        enumerable: descPoster.enumerable,
+        get: descPoster.get,
+        set: function (v) { descPoster.set.call(this, liviana(v) || v); }
+      });
+    }
+
     /* 2. elemento.setAttribute('src', ...) y setAttribute('style', ...) */
     var setAttrOriginal = Element.prototype.setAttribute;
     Element.prototype.setAttribute = function (nombre, valor) {
       try {
         var n = String(nombre).toLowerCase();
         if ((n === 'src' || n === 'data-src') && this.tagName === 'IMG') {
+          valor = liviana(valor) || valor;
+        } else if (n === 'poster') {
+          /* el <video> del fondo y el del sobre ponen su foto fija por acá */
           valor = liviana(valor) || valor;
         } else if (n === 'style') {
           valor = livianaCss(valor) || valor;

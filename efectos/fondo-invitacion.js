@@ -172,11 +172,43 @@
     caja.insertBefore(im, caja.firstChild);
   }
 
+  /* ⚠️ LA FOTO DE RESPALDO DEL VIDEO ESTABA ROTA, Y NO SE NOTABA. (14/9/2026)
+     Cuando el fondo es un video, el `<video>` necesita una foto fija para
+     mostrar mientras carga —y para cuando NO puede reproducir: iPhone en modo
+     de ahorro de batería, datos apagados, conexión lenta—. Medido en
+     camila-y-tomas: la dirección guardada era
+         /image/upload/so_1.5/v178…/archivo.jpg
+     y Cloudinary respondía 404. `so_1.5` quiere decir «el cuadro del segundo
+     1,5 DEL VIDEO», y eso sólo existe bajo `/video/upload/`, nunca bajo
+     `/image/upload/`. O sea: el invitado que no podía ver el video no veía
+     NADA de fondo, y nadie se enteraba porque el 404 es silencioso.
+     Se arregla en dos pasos, sin tocar los datos de nadie:
+       1. si la foto guardada tiene esa forma imposible, se la corrige;
+       2. si directamente no hay foto y el video es de Cloudinary, se saca una
+          del propio video.
+     Verificado contra Cloudinary: la de `/video/upload/` responde 200. */
+  function cuadroDelVideo(url) {
+    if (typeof url !== 'string' || url.indexOf('res.cloudinary.com') < 0) return '';
+    var m = url.match(/^(https?:\/\/res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*\/)?(v\d+\/.+?)\.[a-z0-9]+$/i);
+    if (!m) return '';
+    return m[1] + '/video/upload/so_1.5,f_auto,q_auto:good,w_1200,c_limit/' + m[2] + '.jpg';
+  }
+  function posterSano(f) {
+    var p = f.poster || '';
+    /* forma imposible: un cuadro de video pedido por la puerta de las fotos */
+    if (/\/image\/upload\/[^\/]*so_[\d.]+/.test(p)) {
+      p = p.replace('/image/upload/', '/video/upload/');
+    }
+    if (!p && f.tipo === 'video') p = cuadroDelVideo(f.url);
+    return p;
+  }
+
   function poner(f) {
     hoja();
     sacar();
 
     var a = (typeof f.velo === 'number') ? f.velo : 0.3;
+    f.poster = posterSano(f);
     var fija = f.poster || f.url;
 
     raiz.style.setProperty('--inv-fuerza', String(
