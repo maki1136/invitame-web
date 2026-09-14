@@ -95,19 +95,17 @@
 
   /* ---- 1 · CUANTO DE CLARA Y CUANTO DE OSCURA TIENE LA FOTO --------------- */
   var fotoMedida = null;       /* {p10, p90} o {p10:0, p90:1} si no se pudo */
+  var pedido = false;          /* ya se pidio el cuadro con permiso de lectura */
+  var arranque = Date.now();
 
-  function medirFoto() {
-    var im = document.querySelector('#inv-fondo > img, #inv-fondo > video');
-    if (!im) return null;
-    /* el video no se puede medir asi de simple: se asume el peor caso */
-    if (im.tagName === 'VIDEO') return { p10: 0, p90: 1, seguro: false };
-    if (!im.complete || !im.naturalWidth) return null;   /* todavia no cargo */
+  /* mide un <img> o un <video> ya dibujable; null si no se pudo */
+  function medirDe(fuente) {
     try {
       var n = 48;                                  /* 48x48 alcanza y sobra */
       var c = document.createElement('canvas');
       c.width = n; c.height = n;
       var g = c.getContext('2d', { willReadFrequently: true });
-      g.drawImage(im, 0, 0, n, n);
+      g.drawImage(fuente, 0, 0, n, n);
       var d = g.getImageData(0, 0, n, n).data;
       var ls = [];
       for (var i = 0; i < d.length; i += 4) ls.push(lumRGB(d[i], d[i + 1], d[i + 2]));
@@ -117,10 +115,64 @@
         p90: ls[Math.floor(ls.length * 0.90)],
         seguro: true
       };
-    } catch (e) {
-      /* canvas manchado: la foto no se puede leer. No se adivina. */
-      return { p10: 0, p90: 1, seguro: false };
+    } catch (e) { return null; }   /* canvas manchado: no se adivina */
+  }
+
+  /* la direccion de un cuadro del video, sacado por Cloudinary */
+  function cuadroDe(url) {
+    if (typeof url !== 'string' || url.indexOf('res.cloudinary.com') < 0) return '';
+    var m = url.match(/^(https?:\/\/res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*\/)?(v\d+\/.+?)\.[a-z0-9]+$/i);
+    if (!m) return '';
+    return m[1] + '/video/upload/so_1.5,f_auto,q_auto:good,w_1200,c_limit/' + m[2] + '.jpg';
+  }
+
+  /* pide la imagen OTRA VEZ, pero con permiso para leerla.
+     La que ya esta en la pagina viene sin permiso y mancha el canvas. */
+  function pedirConPermiso(src) {
+    if (pedido || !src) return;
+    pedido = true;
+    var im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = function () { var m = medirDe(im); if (m) fotoMedida = m; };
+    im.src = src;
+  }
+
+  function medirFoto() {
+    var el = document.querySelector('#inv-fondo > img, #inv-fondo > video');
+    if (!el) return null;
+
+    /* ⚠️ EL VIDEO NO ES "IMPOSIBLE DE MEDIR". (14/9/2026)
+       Antes esta funcion devolvia directamente el peor caso —«podria ser negro
+       Y podria ser blanco»— para cualquier video. Con ese supuesto NINGUN velo
+       alcanza nunca: el unico valor que satisface los dos extremos es tapar el
+       100%. Resultado medido en camila-y-tomas: 15 de 21 secciones quedaron
+       completamente opacas y el video de fondo, que la clienta eligio y paga,
+       dejo de verse.
+       Y no hacia falta: el video de esa invitacion es CLARO (luminancia 0.56 a
+       0.88 medida de verdad), y el texto morado encima se lee a 6.3 de razon,
+       muy por encima del 4.5 que pide la norma. O sea: se estaba tapando una
+       foto perfectamente legible por no molestarse en mirarla.
+       Ahora se mira, en este orden:
+         1. el <video> mismo, si el navegador deja dibujarlo;
+         2. su cuadro fijo, pedido de nuevo CON permiso de lectura
+            (`crossOrigin`), porque el que ya esta en la pagina mancha el canvas;
+         3. recien si en 5 segundos no se pudo, el peor caso de antes.
+       Mientras no se sepa, no se toca nada: es mejor esperar medio segundo que
+       taparle la pantalla a la clienta por las dudas. */
+    if (el.tagName === 'VIDEO') {
+      if (el.readyState >= 2) {
+        var v = medirDe(el);
+        if (v) return v;
+      }
+      pedirConPermiso(el.getAttribute('poster') || cuadroDe(el.currentSrc || el.src));
+      return (Date.now() - arranque > 5000) ? { p10: 0, p90: 1, seguro: false } : null;
     }
+
+    if (!el.complete || !el.naturalWidth) return null;   /* todavia no cargo */
+    var m = medirDe(el);
+    if (m) return m;
+    pedirConPermiso(el.currentSrc || el.src);
+    return (Date.now() - arranque > 5000) ? { p10: 0, p90: 1, seguro: false } : null;
   }
 
   /* ---- 2 · EL TEXTO QUE PEOR LA PASA EN CADA SECCION ---------------------- */
