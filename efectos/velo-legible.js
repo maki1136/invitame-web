@@ -304,6 +304,10 @@
       for (var a2 = alfaAhora; a2 <= 1.0001; a2 += 0.05) {
         var n2 = nota(Math.min(1, a2), lSec, fotoMedida, textos);
         if (n2 > mejorNota + 0.001) { mejorNota = n2; mejorAlfa = Math.min(1, a2); }
+        /* se tapa LO JUSTO: apenas el peor texto llega a su minimo, se corta.
+           Sin este freno, sobre papel claro el "mejor" puntaje siempre era
+           tapar el 100%, y el video de fondo se perdia aunque ya se leyera. */
+        if (mejorNota >= 1) break;
       }
       if (mejorAlfa <= alfaAhora + 0.001) {      /* no hay nada que ganar */
         sec.style.removeProperty(variable);
