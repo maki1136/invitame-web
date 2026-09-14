@@ -9,7 +9,7 @@
 $SITE = 'https://invitame.littlemomentsok.com';
 $PROJECT = 'invitame-9b51f';
 // Versión base: la que estaba viva cuando arrancó el versionado.
-$BASE_VER = '2026-07-20';
+$BASE_VER = '2026-09-14';
 
 /* ===== LOS SOBRES QUE SON VIDEO ===============================================
    ⚠️ ESTA LISTA ESTÁ DUPLICADA A PROPÓSITO. La original vive en
