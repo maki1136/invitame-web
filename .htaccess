@@ -41,9 +41,24 @@
 # --- Seguridad ---
 # Referrer-Policy es la clave: evita que el link de la invitación (con el token del
 # invitado) se filtre a sitios de afuera cuando el invitado toca un mapa o mesa de regalos.
+#
+# QUIÉN PUEDE MOSTRAR LA INVITACIÓN ADENTRO DE UN MARCO (iframe). (14/9/2026)
+#   Antes decía `X-Frame-Options "SAMEORIGIN"`, que sólo sabe decir dos cosas:
+#   "nadie" o "sólo yo mismo". No sabe decir "yo y estos otros dominios míos".
+#   Por eso la web nueva de Invítame no podía mostrar la invitación en vivo.
+#
+#   `frame-ancestors` sí acepta una lista, y en los navegadores modernos le gana
+#   a X-Frame-Options, así que reemplaza a esa línea (tener las dos se contradice).
+#   Mismo patrón que ya usa panel-pia/.htaccess.
+#
+#   ⚠️ NUNCA poner `*` acá. La invitación muestra nombres de invitados y
+#      confirmaciones de asistencia: con comodín, cualquier sitio podría montarla
+#      adentro de una página suya y robarle clics al invitado (clickjacking).
+#      La lista va siempre explícita, y sólo con dominios nuestros.
+#   ⚠️ `'self'` tiene que quedar, o se rompe la vista previa del panel de los novios.
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
-  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Content-Security-Policy "frame-ancestors 'self' https://invitameok.com https://www.invitameok.com https://littlemomentsok.com https://www.littlemomentsok.com"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 </IfModule>
