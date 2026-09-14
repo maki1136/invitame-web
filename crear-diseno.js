@@ -31,6 +31,17 @@
       decide el PAQUETE (ver /paquetes.js). Si esta pantalla pudiera prenderlos,
       el cliente del plan más barato se regalaría solo lo único irrepetible.
 
+   ⚠️⚠️ LA VOZ DEL CLIENTE NO CUELGA DEL DISEÑO  (14/9/2026)
+      Este archivo llamaba a `INVVESTIR.vestir(d, ev, s)` sólo si ya tenía
+      bajada la muestra elegida, y adentro de `vestir()` estaba el paso que
+      copia el mensaje de voz que grabó el cliente. O sea que el mensaje
+      dependía de una condición que no tiene nada que ver con él.
+      Medido, con una solicitud de prueba en memoria: con muestra elegida el
+      pase quedaba prendido y con audio; sin muestra elegida `fx.pasevoz` ni
+      siquiera existía. Se perdía en silencio.
+      Ahora `laVozDelCliente()` se llama SIEMPRE, en los dos lugares donde este
+      archivo arma un borrador. Es idempotente.
+
    DE QUÉ DEPENDE (todo ya existía; acá no se copió nada)
      · window.MUESTRAS_INVITAME  → /muestras/catalogo.js
      · window.INVPALETAS         → /efectos/paleta.js
@@ -69,6 +80,15 @@
       var d = JSON.parse(localStorage.getItem(LLAVE) || 'null');
       if (d) { elegido = d.elegido || elegido; paleta = d.paleta || null; letra = (d.letra == null ? null : d.letra); }
     } catch (e) {}
+  }
+
+  /* La voz que grabó el cliente. Va aparte del vestido a propósito: ver la nota
+     grande de arriba y la de /vestir.js. */
+  function ponerLaVoz(d, s) {
+    if (window.INVVESTIR && typeof window.INVVESTIR.laVozDelCliente === 'function') {
+      try { window.INVVESTIR.laVozDelCliente(d, s); } catch (e) {}
+    }
+    return d;
   }
 
   /* ---------------------------------------------------------------------------
@@ -110,6 +130,10 @@
     var m = elegido && window.muestraDe ? window.muestraDe(elegido) : null;
     var ev = (m && m.muestra && muestraCache[m.muestra]) ? muestraCache[m.muestra] : null;
     if (ev && window.INVVESTIR) window.INVVESTIR.vestir(d, ev, s);
+
+    /* la voz SIEMPRE, aunque todavía no haya diseño: así el cliente ve su pase
+       con voz en el celular de la derecha apenas termina de grabarlo */
+    ponerLaVoz(d, s);
 
     /* lo que eligió el cliente en «Personalizar» va DESPUÉS del vestido: es su
        decisión y le gana a la de la muestra */
@@ -382,6 +406,12 @@
       var m = elegido && window.muestraDe ? window.muestraDe(elegido) : null;
       var ev = (m && m.muestra && muestraCache[m.muestra]) ? muestraCache[m.muestra] : null;
       if (ev && window.INVVESTIR) window.INVVESTIR.vestir(d, ev, solicitud);
+
+      /* ⚠️ SIEMPRE, haya vestido o no. Ver la nota grande del encabezado: el
+         mensaje de voz del cliente no tiene por qué depender de que la muestra
+         haya terminado de bajar. */
+      ponerLaVoz(d, solicitud);
+
       return aplicarEleccion(d);
     }
   };
