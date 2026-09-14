@@ -1021,6 +1021,19 @@ async function escenario(nombre, tipo, opciones, esTablet){
      Este chequeo paso de «BIEN» a «143 pedidos» sin que nadie tocara el sitio.
      Con el numero pelado no se sabe si son fotos, tipografias, o el mismo
      archivo pedido veinte veces. Se agrupa por tipo y por dominio. */
+  /* ⚠️ LO DE AFUERA SE CUENTA APARTE, Y NO DA ROJO. (14/9/2026)
+     Este chequeo promete una cosa: que la invitacion no se arme pidiendo un
+     archivo por cada cosita SUYA. Pero al total se le colaban los pedidos de
+     Google Maps, YouTube y Spotify, que son de terceros y que ya tienen su
+     propio chequeo ("no se bajan hasta que el invitado los abre"). Con la red
+     lenta el evento `load` llega tarde, el robot ya scrolleo, y esos embebidos
+     inflaban el numero: marco 107 cuando lo nuestro eran 56. Dos varas
+     distintas otra vez. Ahora la vara cuenta lo nuestro, y lo de afuera queda
+     al lado como dato. */
+  const esAjeno = u => /googleapis\.com|gstatic\.com|youtube|ytimg|spotify|doubleclick/i.test(u);
+  const propios = pedidos.slice(0, pedidosAlCargar).filter(u => !esAjeno(u));
+  const ajenos  = pedidos.slice(0, pedidosAlCargar).length - propios.length;
+
   const porTipo = {};
   pedidos.slice(0, pedidosAlCargar).forEach(u => {
     let h = 'raro';
@@ -1031,8 +1044,9 @@ async function escenario(nombre, tipo, opciones, esTablet){
   });
   const top = Object.entries(porTipo).sort((a,b) => b[1]-a[1]).slice(0,8)
     .map(([k,n]) => k + '×' + n).join(', ');
-  chequear('la invitación no pide un archivo por cada cosa', pedidosAlCargar <= 90,
-    pedidosAlCargar + ' pedidos al cargar (eran 129 antes del 8/9) · de que son: ' +
+  chequear('la invitación no pide un archivo por cada cosa', propios.length <= 90,
+    propios.length + ' pedidos nuestros al cargar (eran 129 antes del 8/9) · y ' +
+    ajenos + ' de afuera, que no cuentan · de que son: ' +
     top + ' · ' +
     pedidos.length + ' en todo el recorrido del robot, que no es comparable');
 
