@@ -33,6 +33,23 @@
       fondo de la sección de la frase es una FOTO DE LA PAREJA. Regla sin
       excepciones: **una imagen es contenido**.
 
+   ⚠️⚠️ LA VOZ DEL CLIENTE NO ES PARTE DEL VESTIDO  (14/9/2026)
+   Estuvo escrita adentro de `vestir()`, y eso la ataba a una condición que no
+   tiene nada que ver con ella: `crear-diseno.js` sólo llama a `vestir()` si ya
+   terminó de bajar la muestra elegida. Medido con una solicitud de prueba:
+
+       con muestra elegida →  fx.pasevoz encendido, con audio y onda   OK
+       sin muestra elegida →  fx.pasevoz no existe                     SE PIERDE
+
+   O sea: el cliente que llena todo el formulario y manda sin bajar hasta la
+   tarjeta del diseño —o el que eligió diseño pero tiene mala señal y todavía
+   no bajó— grababa su mensaje y el mensaje no llegaba a ninguna parte. En
+   silencio: el audio queda guardado en `inv_solicitudes`, así que ni siquiera
+   se pierde del todo, simplemente no aparece y nadie se entera.
+
+   Ahora es su propio paso, `laVozDelCliente()`, que se puede llamar SIEMPRE.
+   Es idempotente: llamarla dos veces escribe exactamente lo mismo.
+
    ⚠️ ES UN SCRIPT CLÁSICO (no módulo): publica `window.INVVESTIR`.
    ============================================================================ */
 (function () {
@@ -59,6 +76,32 @@
 
   function copia(v) {
     try { return JSON.parse(JSON.stringify(v)); } catch (e) { return v; }
+  }
+
+  /**
+   * El mensaje de voz que grabó ESTE cliente en /crear.js.
+   *
+   * Se llama sola desde `vestir()`, y aparte —siempre— desde
+   * `crear-diseno.js`, porque el cliente puede haber grabado su mensaje sin
+   * haber elegido ningún diseño. Ver la nota grande de arriba.
+   *
+   * @param d   el borrador de la invitación (SE MODIFICA)
+   * @param s   la solicitud, tal como la guardó /crear.js
+   * @return    true si había una voz que poner
+   */
+  function laVozDelCliente(d, s) {
+    if (!d) return false;
+    s = s || {};
+    var audio = String(s.pasevozAudio || '').trim();
+    if (!audio) return false;
+    if (!d.fx) d.fx = {};
+    if (!d.fx.pasevoz) d.fx.pasevoz = {};
+    d.fx.pasevoz.audio = audio;
+    d.fx.pasevoz.onda  = String(s.pasevozOnda || '');
+    /* se prende SOLO si hay audio: dejarlo prendido en falso le mentiría al
+       panel, y el motor no dibuja un pase mudo igual */
+    d.fx.pasevoz.encendido = true;
+    return true;
   }
 
   /**
@@ -101,17 +144,10 @@
       if (d.fx.paquete) delete d.fx.paquete;
     }
 
-    /* y recién ahora, la voz que grabó ESTE cliente en /crear.js */
-    var s = solicitud || {};
-    var audio = String(s.pasevozAudio || '').trim();
-    if (audio) {
-      if (!d.fx) d.fx = {};
-      if (!d.fx.pasevoz) d.fx.pasevoz = {};
-      d.fx.pasevoz.audio = audio;
-      d.fx.pasevoz.onda  = String(s.pasevozOnda || '');
-      d.fx.pasevoz.encendido = true;
-      puestos.push('pase con voz del cliente');
-    }
+    /* y recién ahora, la voz que grabó ESTE cliente. Va DESPUÉS de la limpieza
+       5 a propósito: primero se borra la de la muestra, después se pone la suya. */
+    if (laVozDelCliente(d, solicitud)) puestos.push('pase con voz del cliente');
+
     return puestos;
   }
 
@@ -149,6 +185,7 @@
     DISENO: DISENO,
     esDeDiseno: esDeDiseno,
     vestir: vestir,
+    laVozDelCliente: laVozDelCliente,
     bajarMuestra: bajarMuestra,
     desdeFirestore: desdeFirestore
   };
