@@ -51,14 +51,25 @@
 #   a X-Frame-Options, así que reemplaza a esa línea (tener las dos se contradice).
 #   Mismo patrón que ya usa panel-pia/.htaccess.
 #
-#   ⚠️ NUNCA poner `*` acá. La invitación muestra nombres de invitados y
-#      confirmaciones de asistencia: con comodín, cualquier sitio podría montarla
-#      adentro de una página suya y robarle clics al invitado (clickjacking).
-#      La lista va siempre explícita, y sólo con dominios nuestros.
-#   ⚠️ `'self'` tiene que quedar, o se rompe la vista previa del panel de los novios.
+#   LA LISTA, Y POR QUÉ CADA UNO:
+#     'self'                             el panel de los novios muestra la
+#                                        vista previa adentro de un celular.
+#                                        Si se saca, se rompe.
+#     invitameweb.littlemomentsok.com    la web nueva, mientras se arma.
+#     invitameok.com / www               la web cuando se mude al dominio final.
+#                                        Ya está puesto: la mudanza no va a
+#                                        necesitar volver a tocar este archivo.
+#     littlemomentsok.com / www          el sitio de Little Moments.
+#
+#   ⚠️ NUNCA poner `*` acá, y tampoco `https://*.littlemomentsok.com`.
+#      La invitación muestra nombres de invitados y confirmaciones de asistencia.
+#      Con comodín, CUALQUIER subdominio —incluido uno que mañana apunte a otro
+#      lado, o uno que ya no usemos— puede montarla adentro de una página suya y
+#      robarle los clics al invitado (clickjacking). Agregar un renglón cada
+#      tanto cuesta menos que eso. La lista va explícita, dominio por dominio.
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
-  Header always set Content-Security-Policy "frame-ancestors 'self' https://invitameok.com https://www.invitameok.com https://littlemomentsok.com https://www.littlemomentsok.com"
+  Header always set Content-Security-Policy "frame-ancestors 'self' https://invitameweb.littlemomentsok.com https://invitameok.com https://www.invitameok.com https://littlemomentsok.com https://www.littlemomentsok.com"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 </IfModule>
