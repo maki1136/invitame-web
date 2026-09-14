@@ -692,9 +692,26 @@ async function escenario(nombre, tipo, opciones, esTablet){
           if (!vis) return;                       /* esta adentro de algo cerrado */
           if (opacidadReal(el) < 0.5) return;
           const cf = col(cs.color); if (!cf || cf.a < 0.15) return;
+          /* ⚠️⚠️ EL FONDO QUE DECLARA EL CSS, COMO SEGUNDA OPINION (14/9/2026).
+             La medicion por pixeles es la buena y no se cambia. Pero cuando se
+             equivoca no hay forma de saberlo, y sale un rojo que nadie puede
+             reproducir mirando la pantalla.
+             Caso real y medido en el navegador: 'Liverpool' figuraba 1.3/4.5
+             cuando es BLANCO sobre rgb(70,59,82) -o sea 10.46-. Es una pildora
+             morada opaca; el texto no pisa la foto ni por un pixel.
+             Asi que ademas se guarda el primer fondo OPACO que el texto tenga
+             encima suyo en el arbol. Si las dos mediciones se contradicen, el
+             chequeo NO da rojo: no pudo decidir. Un chequeo que no se pudo
+             hacer no es lo mismo que uno que fallo. */
+          let propio = null;
+          for (let an = el; an && an !== document.body; an = an.parentElement) {
+            const ca = col(getComputedStyle(an).backgroundColor);
+            if (ca && ca.a >= 0.85) { propio = [ca.r, ca.g, ca.b]; break; }
+          }
           el.setAttribute('data-cq', String(i));
           out.push({
             i: i++,
+            propio: propio,
             t: t.slice(0, 22),
             color: [cf.r, cf.g, cf.b, cf.a],
             px: parseFloat(cs.fontSize) || 16,
@@ -775,6 +792,11 @@ async function escenario(nombre, tipo, opciones, esTablet){
         const peor = Math.min(razon(mezclar(p10), p10), razon(mezclar(p90), p90));
         const grande = c.px >= 24 || (c.px >= 18.66 && c.negrita);
         const min = grande ? 3 : 4.5;
+        /* ⚠️ LA SEGUNDA OPINION: ver la nota del fondo propio, mas arriba. */
+        if (peor < min && c.propio) {
+          const lp = lumRGB(c.propio[0], c.propio[1], c.propio[2]);
+          if (razon(mezclar(lp), lp) >= min) continue;
+        }
         if (peor < min) {
           const hex = '#' + c.color.slice(0, 3).map(v =>
             Math.round(v).toString(16).padStart(2, '0')).join('');
