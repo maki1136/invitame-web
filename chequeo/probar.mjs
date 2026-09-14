@@ -1292,10 +1292,22 @@ async function escenario(nombre, tipo, opciones, esTablet){
          Ahora leo la marca que la invitación dejó en `sessionStorage`: ése es
          el número que el producto se comprometió a reponer, y contra ése hay
          que medirlo. */
+      /* LA MARCA YA NO ES UN NUMERO SUELTO. (14/9/2026)
+         Desde que volver se resuelve POR SECCION, la invitacion guarda
+         {y, sec, dy} en vez de un numero pelado. El banco seguia haciendo
+         parseInt sobre el texto entero y le salia NaN: por eso el rojo decia
+         "anoto NaN y volvio a 5942". El numero de referencia sigue siendo `y`.
+         Se aceptan las dos formas: la nueva y la vieja. */
       const salida = await page.evaluate((slug) => {
+        let bruto = null;
+        try { bruto = sessionStorage.getItem('inv_volver_' + slug); } catch (e) {}
+        if (bruto === null) return { y: null, href: null };
         let y = null;
-        try { y = sessionStorage.getItem('inv_volver_' + slug); } catch (e) {}
-        return { y: y === null ? null : parseInt(y, 10), href: null };
+        if (String(bruto).charAt(0) === '{') {
+          try { y = JSON.parse(bruto).y; } catch (e) { y = null; }
+        } else { y = parseInt(bruto, 10); }
+        if (typeof y !== 'number' || isNaN(y)) y = null;
+        return { y: y, href: null };
       }, antes.slug);
       salida.href = antes.href;
       chequear('al salir, la invitación anota dónde estaba',
