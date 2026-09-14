@@ -237,6 +237,20 @@
 
   var polvo = null, polvoCtx = null, particulas = [], corriendo = false;
 
+  /* ⚠️ TOPE DE PARTÍCULAS. (14/9/2026)
+     Cada movimiento del dedo soltaba 5 partículas y NADA las limitaba: la lista
+     sólo se achicaba cuando el animador corría y alguna se apagaba sola.
+     Si el invitado raspa rápido —o si arrastra sin soltar en una pantalla
+     grande— se disparan cientos de movimientos entre cuadro y cuadro: el
+     animador no llega a correr, la lista crece sin freno y cada cuadro tiene
+     que dibujar miles de círculos. En el banco de pruebas esto mataba el
+     navegador entero en Safari de escritorio y en el iPad («Target page,
+     context or browser has been closed»), justo en el paso de raspar.
+     No era sólo un problema del banco: era el mismo camino que recorre un
+     invitado con el dedo apoyado.
+     220 alcanza y sobra para que se vea la nube de polvo. */
+  var TOPE_POLVO = 220;
+
   function prepararPolvo(card) {
     if (polvo && polvo.isConnected) return;
     polvo = document.createElement('canvas');
@@ -259,6 +273,8 @@
         col: Math.random() < .5 ? '255,255,255' : comp(cfg.color).join(',')
       });
     }
+    if (particulas.length > TOPE_POLVO)
+      particulas.splice(0, particulas.length - TOPE_POLVO);
     if (!corriendo) { corriendo = true; requestAnimationFrame(animarPolvo); }
   }
 
@@ -296,6 +312,12 @@
     var cv = zona.querySelector('canvas');
     var g = cv.getContext('2d');
     var raspando = false, ultimo = null, cuenta = 0, terminada = false;
+    /* ⚠️ `porcentaje()` lee TODOS los píxeles de la tapa (getImageData). En una
+       pantalla de escritorio eso es caro. Antes se llamaba cada 6 movimientos,
+       sin mirar el reloj: con el dedo apoyado son decenas de lecturas completas
+       por segundo. Ahora además espera 120 ms entre lectura y lectura. El
+       invitado no nota nada (la tapa se completa igual), el navegador respira. */
+    var ultimaMedicion = 0;
 
     pintarCapa(cv, cfg);
 
@@ -325,7 +347,11 @@
       var r = cv.getBoundingClientRect();
       var cr = zona.parentNode.getBoundingClientRect();
       soltarPolvo(p.px + (r.left - cr.left), p.py + (r.top - cr.top), cfg);
-      if (++cuenta % 6 === 0 && cfg.auto > 0 && porcentaje(cv) >= cfg.auto) completar();
+      var ahora = Date.now();
+      if (++cuenta % 6 === 0 && cfg.auto > 0 && ahora - ultimaMedicion > 120) {
+        ultimaMedicion = ahora;
+        if (porcentaje(cv) >= cfg.auto) completar();
+      }
     }
 
     function completar() {

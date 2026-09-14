@@ -124,6 +124,26 @@
   }
 
   /* ---- 2 · EL TEXTO QUE PEOR LA PASA EN CADA SECCION ---------------------- */
+
+  /* ¿entre este texto y la seccion hay alguien que pinta de verdad?
+     Se acepta desde 0.6 de opacidad: una tarjeta a medio pintar ya cambia
+     tanto el fondo que el velo de la seccion deja de ser el que manda. */
+  function tapadoPorSuTarjeta(el, sec) {
+    var p = el;
+    while (p && p !== sec) {
+      var cs = getComputedStyle(p);
+      if (cs.backgroundImage && cs.backgroundImage !== 'none') return true;
+      var m = String(cs.backgroundColor).match(/rgba?\(([^)]+)\)/);
+      if (m) {
+        var q = m[1].split(',').map(parseFloat);
+        var a = q.length < 4 ? 1 : q[3];
+        if (a >= 0.6) return true;
+      }
+      p = p.parentElement;
+    }
+    return false;
+  }
+
   function textosDe(sec) {
     var out = [];
     var todos = sec.querySelectorAll('h1,h2,h3,h4,p,span,div,a,button,li');
@@ -139,11 +159,17 @@
       var px = parseFloat(cs.fontSize) || 16;
       var grande = px >= 24 || (px >= 18.66 && (parseInt(cs.fontWeight) || 400) >= 700);
       /* ATENCION - un texto con su propio fondo opaco NO pisa la foto: su
-         legibilidad la resuelve ese fondo, no el velo de la seccion. */
-      var fondoPropio = color(cs.backgroundColor);
-      var m = String(cs.backgroundColor).match(/rgba?\(([^)]+)\)/);
-      var alfa = m ? (m[1].split(',').map(parseFloat)[3]) : 0;
-      if (fondoPropio && (alfa === undefined || alfa > 0.85)) continue;
+         legibilidad la resuelve ese fondo, no el velo de la seccion.
+         ⚠️ Y ESTO NO ALCANZA CON MIRAR AL TEXTO. (14/9/2026)
+         Casi ningún texto tiene fondo propio: el fondo lo pone la TARJETA que
+         lo contiene. En «Dónde y cuándo», el título CEREMONIA es morado
+         oscuro y está parado sobre una tarjeta BLANCA, dentro de una sección
+         morada. Mirándole sólo el fondo al texto, este archivo creía que el
+         morado caía sobre morado y subía el velo al máximo para «arreglar»
+         algo que se lee perfecto. Hay que subir por los padres: si antes de
+         llegar a la sección aparece alguien que pinta de verdad, ese texto no
+         es asunto del velo. */
+      if (tapadoPorSuTarjeta(el, sec)) continue;
       out.push({ l: c.l, min: grande ? 3 : 4.5 });
     }
     return out;
@@ -160,6 +186,20 @@
       if (Math.min(razon(t.l, a), razon(t.l, b)) < t.min) return false;
     }
     return true;
+  }
+
+  /* que tan bien esta el PEOR texto, medido como "cuanto de su minimo llega".
+     1 = justo llega; menos de 1 = no llega; mas de 1 = sobra. */
+  function nota(alfa, lSec, foto, textos) {
+    var peor = Infinity;
+    for (var i = 0; i < textos.length; i++) {
+      var t = textos[i];
+      var a = alfa * lSec + (1 - alfa) * foto.p10;
+      var b = alfa * lSec + (1 - alfa) * foto.p90;
+      var r = Math.min(razon(t.l, a), razon(t.l, b)) / t.min;
+      if (r < peor) peor = r;
+    }
+    return peor === Infinity ? 99 : peor;
   }
 
   function acomodar() {
@@ -196,11 +236,30 @@
         sec.removeAttribute(MARCA);
         continue;
       }
-      /* y si no, se sube de a poco hasta que se lea */
-      var alfa = alfaAhora;
-      while (alfa < 1 && !alcanza(alfa, lSec, fotoMedida, textos)) alfa = Math.min(1, alfa + 0.05);
-      sec.style.setProperty(variable, String(Math.max(0, 1 - alfa)));
-      sec.setAttribute(MARCA, (Math.round(alfa * 100)) + '%');
+
+      /* ⚠⚠ LA REGLA DE ORO: ESTE ARCHIVO NUNCA PUEDE DEJAR ALGO PEOR.
+         (14/9/2026) La version anterior subía el velo hasta el tope y lo
+         aplicaba SIEMPRE, aunque el resultado fuera igual de ilegible o peor.
+         El caso feo: una seccion morada con texto morado. Tapar mas la foto
+         acerca el fondo al morado de la seccion... que es el color del texto.
+         O sea: el «arreglo» lo hacía desaparecer del todo.
+         Ahora se prueban todos los pasos, se mide CUANTO le falta al peor
+         texto en cada uno, y se aplica el mejor — y solo si de verdad mejora.
+         Si ninguno mejora, se deja como estaba: ilegible es malo, invisible
+         es peor, y la decision de la clienta al menos es suya. */
+      var mejorAlfa = alfaAhora;
+      var mejorNota = nota(alfaAhora, lSec, fotoMedida, textos);
+      for (var a2 = alfaAhora; a2 <= 1.0001; a2 += 0.05) {
+        var n2 = nota(Math.min(1, a2), lSec, fotoMedida, textos);
+        if (n2 > mejorNota + 0.001) { mejorNota = n2; mejorAlfa = Math.min(1, a2); }
+      }
+      if (mejorAlfa <= alfaAhora + 0.001) {      /* no hay nada que ganar */
+        sec.style.removeProperty(variable);
+        sec.removeAttribute(MARCA);
+        continue;
+      }
+      sec.style.setProperty(variable, String(Math.max(0, 1 - mejorAlfa)));
+      sec.setAttribute(MARCA, (Math.round(mejorAlfa * 100)) + '%');
     }
   }
 
