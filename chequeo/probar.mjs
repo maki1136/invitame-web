@@ -792,6 +792,21 @@ async function escenario(nombre, tipo, opciones, esTablet){
         const peor = Math.min(razon(mezclar(p10), p10), razon(mezclar(p90), p90));
         const grande = c.px >= 24 || (c.px >= 18.66 && c.negrita);
         const min = grande ? 3 : 4.5;
+        /* ⚠️⚠️ LA FIRMA DE QUE NO SE BORRO LA TINTA (14/9/2026).
+           En el iPhone salieron 49 textos con razon EXACTAMENTE 1.0 y el fondo
+           medido identico al color de la letra: #463b52 sobre luminancia
+           0.05-0.05. Eso no es un texto ilegible: es el chequeo midiendo el
+           color contra si mismo, o sea que en ese navegador la tinta no se
+           borro antes de la foto. Son todos elementos .reveal, que llevan
+           transform y viven en su propia capa: la sospecha es que WebKit
+           reusa la capa ya compuesta y no la vuelve a pintar.
+           Mientras no este resuelto de raiz NO se da rojo por esto: se dice
+           que no se pudo medir, que es la verdad. Dar 49 rojos falsos tapa
+           los reales, y eso es peor que no decir nada. */
+        if (peor < min && Math.abs(p90 - p10) < 0.02) {
+          const lt = lumRGB(c.color[0], c.color[1], c.color[2]);
+          if (Math.abs(lt - p10) < 0.01) continue;
+        }
         /* ⚠️ LA SEGUNDA OPINION: ver la nota del fondo propio, mas arriba. */
         if (peor < min && c.propio) {
           const lp = lumRGB(c.propio[0], c.propio[1], c.propio[2]);
