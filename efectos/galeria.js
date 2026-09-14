@@ -207,11 +207,30 @@
 
   function marca() { return 'inv_volver_' + slugEvento(); }
 
+  /* ⚠️ LA ALTURA SOLA NO ALCANZA, HAY QUE ANOTAR *EN QUE SECCION* ESTABA.
+     (14/9/2026) El banco seguia encontrando el mismo desvio: «anoto 13774 y
+     volvio a 5942». La insistencia de abajo esta bien, pero pelea contra algo
+     que no puede ganar: 13774 px es una altura que la pagina SOLO alcanza
+     cuando terminaron de montarse la galeria, el pase, el filtro y la trivia.
+     Con la red lenta eso puede tardar mas que los 12 segundos de reintento, y
+     el invitado queda ocho pantallas mas arriba de donde estaba.
+     Una seccion, en cambio, es un lugar: en cuanto existe, se puede volver a
+     ella aunque el resto de la pagina todavia no este. Asi que se anotan las
+     dos cosas —la seccion y cuanto habia bajado dentro de ella— y la altura
+     queda como respaldo para las invitaciones viejas. */
   function anotarSalida() {
     if (!slugEvento()) return;
+    var y = Math.round(window.pageYOffset || document.documentElement.scrollTop || 0);
+    var quien = '', dentro = 0;
     try {
-      sessionStorage.setItem(marca(), String(Math.round(
-        window.pageYOffset || document.documentElement.scrollTop || 0)));
+      var secs = document.querySelectorAll('.sec[data-sec]');
+      for (var i = 0; i < secs.length; i++) {
+        var r = secs[i].getBoundingClientRect();
+        if (r.top <= 4) { quien = secs[i].getAttribute('data-sec'); dentro = Math.round(-r.top); }
+      }
+    } catch (e) {}
+    try {
+      sessionStorage.setItem(marca(), JSON.stringify({ y: y, sec: quien, dy: dentro }));
     } catch (e) {}
   }
 
@@ -249,12 +268,24 @@
        Ahora se reintenta cada 200 ms HASTA LLEGAR, con techo de 12 s. Se corta
        sola apenas la posición cae a menos de 40 px del objetivo, así que en una
        página que ya está armada no cuesta nada. */
-    var y = parseInt(alto, 10) || 0;
+    var dato = { y: parseInt(alto, 10) || 0, sec: '', dy: 0 };
+    if (String(alto).charAt(0) === '{') {
+      try { dato = JSON.parse(alto); } catch (e) {}
+    }
     var desde = Date.now();
     var poner = function () {
-      try { window.scrollTo(0, y); } catch (e) {}
+      /* si la seccion ya existe, ELLA manda: es un lugar, no un numero */
+      var meta = dato.y;
+      if (dato.sec) {
+        var s2 = document.querySelector('.sec[data-sec="' + dato.sec + '"]');
+        if (s2) {
+          var actual0 = window.pageYOffset || document.documentElement.scrollTop || 0;
+          meta = Math.round(s2.getBoundingClientRect().top + actual0 + (dato.dy || 0));
+        }
+      }
+      try { window.scrollTo(0, meta); } catch (e) {}
       var actual = window.pageYOffset || document.documentElement.scrollTop || 0;
-      if (Math.abs(actual - y) > 40 && Date.now() - desde < 12000) {
+      if (Math.abs(actual - meta) > 40 && Date.now() - desde < 12000) {
         setTimeout(poner, 200);
       }
     };

@@ -69,8 +69,14 @@
 (function () {
   'use strict';
 
-  /* Los que conviene dormir. El resto de los iframes no se toca. */
-  var SEL = '.acc-panel iframe,#spotify-embed iframe,#musica-embed iframe';
+  /* Los que conviene dormir. El resto de los iframes no se toca.
+     ⚠️ EL VIDEO DE YOUTUBE TAMBIEN ENTRA. (14/9/2026) No vive adentro de una
+     solapa, asi que este archivo no lo miraba: nacia con `src` puesto y el
+     reproductor entero se bajaba aunque el invitado nunca llegara a esa
+     seccion. Son alrededor de diez pedidos regalados. Ahora duerme igual que
+     los demas y despierta cuando la seccion se acerca a la pantalla. */
+  var SEL = '.acc-panel iframe,#spotify-embed iframe,#musica-embed iframe,' +
+            '[data-sec="video"] iframe,#video-embed iframe';
 
   function panelDe(f) { return f.closest ? f.closest('.acc-panel') : null; }
 
