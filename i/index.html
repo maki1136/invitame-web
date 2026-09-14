@@ -20,9 +20,16 @@
 <style>
   :root{--verde:#2e433c;--verde2:#26372f;--lino:#f4efe6;--lino2:#faf7f1;--sage:#7f9079;--sage-cl:#a9b8a0;
     --cream:#eee6d6;--oro:#b9a56a;--muted:#7d857a;
-    --cover:url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80');
+  /* ⚠️ SIN FOTO DE BANCO POR DEFECTO. (14/9/2026)
+     Estas dos variables traian fotos de Unsplash de bodas ajenas. El motor las
+     pisa en cuanto llegan los datos del evento, pero el navegador las PIDE
+     antes: medido en camila-y-tomas, cuatro pedidos a Unsplash que ya no se ven
+     en ningun lado, y el parpadeo de la portada antes de que cargue la foto de
+     verdad. Ahora el respaldo es el papel de lino de la propia invitacion: si la
+     clienta todavia no subio su foto, ve papel, no la boda de otra. */
+    --cover:url('tex-lino.jpg');
     --sobre:url('https://d8j0ntlcm91z4.cloudfront.net/user_32tuXc6hpcPcIwII7onZiCsFnMt/hf_20260707_014549_b3cd916a-b3c3-457d-87fe-8426c7c92850.png');
-    --final:url('https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1000&q=80');}
+    --final:url('tex-lino.jpg');}
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:'Montserrat',sans-serif;color:#3a453d;background:#d7ccbd}
@@ -597,7 +604,7 @@
        maneja desde el panel — el texto con "Frase Larga", su color, tipografía y
        tamaño, y la foto con "Fondo sección frase larga". -->
   <section data-sec="frase" class="sec fraseSec band" style="padding:0;height:32vh;min-height:200px;max-height:320px;display:flex;align-items:center;justify-content:center;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 86%,transparent 100%)">
-    <div class="bg" id="bandbg" style="position:absolute;inset:-20%;background:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=80') center/cover"></div>
+    <div class="bg" id="bandbg" style="position:absolute;inset:-20%;background:none center/cover"></div>
     <div class="capa" id="bandfg" style="position:absolute;inset:0;background-position:center;background-repeat:no-repeat;background-size:contain"></div>
     <div id="frase-tint" class="capa" style="position:absolute;inset:0;background:rgba(28,34,26,.5)"></div>
     <div class="frasefx" id="frasefx"></div>
@@ -605,12 +612,12 @@
   </section>
 
   <section data-sec="eventos" class="sec verde"><div class="kick" id="dq-kick">Dónde &amp; Cuándo</div><h2 id="dq-h2">Los eventos</h2>
-    <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-1-imagen-jpg-480x320-" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=700&q=80')"></div>
+    <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-1-imagen-jpg-480x320-"></div>
       <div class="bd"><h3 id="ev1-t">Ceremonia</h3><div class="sub" id="ev1-s">Basílica de Santa María</div><div class="addr" id="ev1-a">28 nov · 12:00 hs · Fray Juan de Zumárraga 2</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
       <a class="btn gh" id="ev1-cal" href="#" target="_blank">Agendar</a></div>
       <div class="acc-panel"><div class="acc-inner"><iframe id="ev1-map" src="https://www.google.com/maps?q=19.4847,-99.1176&z=15&output=embed" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div>
-    <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-2-imagen-jpg-480x320-" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=700&q=80')"></div>
+    <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-2-imagen-jpg-480x320-"></div>
       <div class="bd"><h3 id="ev2-t">Recepción</h3><div class="sub" id="ev2-s">Masía Mas Badó</div><div class="addr" id="ev2-a">28 nov · 14:00 hs · Juan Vázquez de Mella 525</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
       <a class="btn gh" id="ev2-cal" href="#" target="_blank">Agendar</a></div>
