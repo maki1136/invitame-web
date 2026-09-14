@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 14/09/2026, 03:29
+Fecha: 14/09/2026, 03:37
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 12 PROBLEMAS (y 94 cosas bien)
+HAY 9 PROBLEMAS (y 74 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -27,7 +27,7 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Ceremonia" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · h3] · "Mirador de las Caracol" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.sub] · "Sábado 6 de marzo de 2" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.addr] · "Vestimenta" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] y 27 más
+             -> "Con cariño, te esperam" 1.0/3 [#f0e7d4 sobre luminancia 0.55-0.83 · div.t] · "Sin usar" 1.0/4.5 [#dcefdc sobre luminancia 0.16-0.79 · span.estado] · "Comparte el momento" 1.0/3 [#f7f7f1 sobre luminancia 0.64-0.89 · div.kick.reveal] · "MAR" 1.0/4.5 [#3a453d sobre luminancia 0.05-0.05 · div.r3-f] y 32 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
@@ -37,18 +37,16 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   MAL    al tocarla se cierra de verdad
-             -> cerrada mide 293px (abierta medía 386) · la clase open se sacó bien, asi que es el CSS/el motor · max-height calculado: 188.099564px
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   MAL    sin errores de JavaScript
+             -> FirebaseError: Firebase: Error (auth/network-request-failed).
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó NaN y volvió a 13433
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 312.8 s de punta a punta)
+   (tardó 259.6 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -57,33 +55,15 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   sin voseo desde el primer pintado
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   MAL    todos los textos se leen
-             -> "Ver en Instagram" 1.0/4.5 [#f7e9e6 sobre luminancia 0.83-0.94 · a.btn.lt] · "Sube tus fotos y video" 1.0/4.5 [#f7f7f1 sobre luminancia 0.86-0.94 · p.reveal.in] · "#CamilaYTomas2027" 1.1/3 [#ffffff sobre luminancia 0.86-0.94 · div.reveal.in] · "Contamos las sillas an" 1.1/4.5 [#d7cebb sobre luminancia 0.68-0.85 · p.reveal.in] y 24 más
-   BIEN   el boleto del pase se ve entero
-   MAL    al tocar el boleto, el pedazo se corta y baja
-             -> quedo 50x200 (tiene que quedar acostada) · a -212 px del boleto
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó NaN y volvió a 5731
-   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 968.4 s de punta a punta)
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 3 chequeos y se cayó
+             -> el último que sí corrió: "sin voseo desde el primer pintado"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
 
 
 ──────────────────────────────────────────
@@ -103,7 +83,7 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Fiesta" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · h3] · "Casa Salvia · sobre la" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.sub] · "Sábado 6 de marzo de 2" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.addr] · "Vestimenta" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] y 30 más
+             -> "Nuestra carta" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] · "Queridos amigos y fami" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h4] · "Ver más" 1.0/4.5 [#3a453d sobre luminancia 0.05-0.05 · button.iv-plie-btn] · "Nuestras personas" 1.1/3 [#ffffff sobre luminancia 0.82-0.93 · h2.reveal.in] y 20 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
@@ -113,18 +93,18 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
+   MAL    al tocarla se cierra de verdad
+             -> cerrada mide 386px (abierta medía 386) · la clase open se sacó bien, asi que es el CSS/el motor · max-height calculado: 560px
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó NaN y volvió a 11807
+   MAL    el viaje a la galería y la vuelta
+             -> elementHandle.click: Timeout 60000ms exceeded.
+Call log:
+  - attempting click action
+    -
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 984.6 s de punta a punta)
+   (tardó 948.3 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -158,8 +138,7 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó NaN y volvió a 13357
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 99.7 s de punta a punta)
+   (tardó 101.1 s de punta a punta)
 
