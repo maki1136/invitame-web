@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 14/09/2026, 11:22
+Fecha: 14/09/2026, 11:30
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 8 PROBLEMAS (y 85 cosas bien)
+HAY 6 PROBLEMAS (y 68 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -23,33 +23,15 @@ HAY 8 PROBLEMAS (y 85 cosas bien)
    BIEN   no se sale nada de la columna
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   MAL    todos los textos se leen
-             -> "Amazon" 1.3/4.5 [#ffffff sobre luminancia 0.61-0.78 · a] · "Liverpool" 1.4/4.5 [#ffffff sobre luminancia 0.04-0.73 · a] · "Agendar" 1.4/4.5 [#f7e9e6 sobre luminancia 0.03-0.58 · a.btn.gh] · "Con cariño" 2.0/3 [#756786 sobre luminancia 0.05-0.83 · div.kick.reveal] y 7 más
-   BIEN   el boleto del pase se ve entero
-   MAL    al tocar el boleto, el pedazo se corta y baja
-             -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 12879 y volvió a 5942
-   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 255.8 s de punta a punta)
+
+──────────────────────────────────────────
+  Safari escritorio
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 8 chequeos y se cayó
+             -> el último que sí corrió: "las tapas caen justo encima de los números"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
 
 
 ──────────────────────────────────────────
@@ -60,15 +42,33 @@ HAY 8 PROBLEMAS (y 85 cosas bien)
    BIEN   sin voseo desde el primer pintado
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
-
-──────────────────────────────────────────
-  Safari iPhone
-──────────────────────────────────────────
-   MAL    el escenario se cortó a la mitad
-             -> alcanzó a correr 5 chequeos y se cayó
-             -> el último que sí corrió: "las tapas caen justo encima de los números"
-             -> page.evaluate: Target page, context or browser has been closed
-             -> (los chequeos que faltan NO se probaron: este verde no vale)
+   BIEN   se puede raspar y se revela la fecha
+   BIEN   una vez raspada, queda raspada
+   BIEN   está en español de México, sin voseo
+   BIEN   no se ve nada de la boda de ejemplo
+   BIEN   los botones flotantes no se pisan
+   MAL    todos los textos se leen
+             -> "Raspa para revelar" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] · "Sábado 6 de marzo de 2" 1.0/4.5 [#463b52 sobre luminancia 0.04-0.05 · div.addr] · "Cómo va a ser el día" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] · "17:00 · Llegada" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.h] y 45 más
+   BIEN   el boleto del pase se ve entero
+   MAL    al tocar el boleto, el pedazo se corta y baja
+             -> quedo 50x200 (tiene que quedar acostada) · a -212 px del boleto
+   BIEN   los módulos vienen en un solo pedido, no de a sesenta
+   BIEN   ninguna foto viaja sin optimizar
+   BIEN   la invitación no pide un archivo por cada cosa
+   BIEN   no hay ni un emoji a la vista
+   BIEN   el reproductor de Spotify está adentro de la solapa
+   BIEN   la solapa de la música viene ABIERTA
+   BIEN   al tocarla se cierra de verdad
+   BIEN   y se vuelve a abrir
+   BIEN   sin errores de JavaScript
+   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
+   BIEN   al salir, la invitación anota dónde estaba
+   BIEN   en la galería hay botón para volver a la invitación
+   BIEN   al volver NO se repite el sobre
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 11880 y volvió a 5731
+   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 917.8 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -84,34 +84,15 @@ HAY 8 PROBLEMAS (y 85 cosas bien)
    BIEN   no se sale nada de la columna
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   MAL    todos los textos se leen
-             -> "Sugerir una canción" 1.0/4.5 [#f7e9e6 sobre luminancia 0.67-0.82 · a.btn] · "Contamos las sillas an" 1.0/4.5 [#d7cebb sobre luminancia 0.60-0.86 · p.reveal.in] · "Nuestro Hashtag" 1.0/3 [#f7f7f1 sobre luminancia 0.60-0.88 · h2.reveal.in] · "Abrir la cámara" 1.1/4.5 [#ffffff sobre luminancia 0.85-0.94 · button] y 28 más
-   BIEN   el boleto del pase se ve entero
-   MAL    al tocar el boleto, el pedazo se corta y baja
-             -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13029 y volvió a 6052
-   (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1085.9 s de punta a punta)
+
+──────────────────────────────────────────
+  Safari iPad
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 9 chequeos y se cayó
+             -> el último que sí corrió: "las tapas caen justo encima de los números"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
 
 
 ──────────────────────────────────────────
@@ -149,5 +130,5 @@ HAY 8 PROBLEMAS (y 85 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 99.8 s de punta a punta)
+   (tardó 100.0 s de punta a punta)
 
