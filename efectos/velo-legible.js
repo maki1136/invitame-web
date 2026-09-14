@@ -137,6 +137,52 @@
     im.src = src;
   }
 
+  /* UN VIDEO CAMBIA DE BRILLO MIENTRAS CORRE, Y UN SOLO CUADRO MIENTE.
+     (14/9/2026) Medido en camila-y-tomas: el cuadro del segundo 1,5 da
+     luminancia 0.56 a 0.88 (claro) y el texto verde oscuro encima se lee a 6.8.
+     Pero el banco, midiendo en otro momento, encontro el mismo texto sobre
+     0.05 a 0.23 (oscuro), y ahi desaparece. Los dos tenian razon: el fondo se
+     movia. Asi que se miran VARIOS cuadros y se toma el peor de todos: el mas
+     oscuro que llegue a haber y el mas claro que llegue a haber.
+     Cloudinary entrega cualquier cuadro con so_<segundo>, asi que son cinco
+     fotitos de 600 px, pedidas una sola vez. */
+  var SEGUNDOS = [0.5, 1.5, 3, 5, 8];
+  var cuadrosPedidos = false;
+  var medidas = [];
+
+  function idDeVideo(url) {
+    if (typeof url !== 'string' || url.indexOf('res.cloudinary.com') < 0) return null;
+    var m = url.match(/^(https?:\/\/res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*\/)?(v\d+\/.+?)\.[a-z0-9]+$/i);
+    return m ? { base: m[1], id: m[2] } : null;
+  }
+
+  function combinarMedidas() {
+    if (!medidas.length) return;
+    var p10 = 1, p90 = 0;
+    for (var i = 0; i < medidas.length; i++) {
+      if (medidas[i].p10 < p10) p10 = medidas[i].p10;
+      if (medidas[i].p90 > p90) p90 = medidas[i].p90;
+    }
+    fotoMedida = { p10: p10, p90: p90, seguro: true, cuadros: medidas.length };
+  }
+
+  function pedirCuadros(v) {
+    if (cuadrosPedidos) return;
+    cuadrosPedidos = true;
+    for (var i = 0; i < SEGUNDOS.length; i++) {
+      (function (seg) {
+        var im = new Image();
+        im.crossOrigin = 'anonymous';
+        im.onload = function () {
+          var m = medirDe(im);
+          if (m) { medidas.push(m); combinarMedidas(); }
+        };
+        im.src = v.base + '/video/upload/so_' + seg +
+                 ',f_auto,q_auto:good,w_600,c_limit/' + v.id + '.jpg';
+      })(SEGUNDOS[i]);
+    }
+  }
+
   function medirFoto() {
     var el = document.querySelector('#inv-fondo > img, #inv-fondo > video');
     if (!el) return null;
@@ -159,13 +205,22 @@
          3. recien si en 5 segundos no se pudo, el peor caso de antes.
        Mientras no se sepa, no se toca nada: es mejor esperar medio segundo que
        taparle la pantalla a la clienta por las dudas. */
+    /* el fondo puede llegar como <video>, o como la foto fija que se saco de
+       ese video: en los dos casos lo que importa es EL VIDEO, no un cuadro */
+    var vid = idDeVideo(el.currentSrc || el.src || '') ||
+              idDeVideo(el.getAttribute('poster') || '');
+    if (vid) {
+      pedirCuadros(vid);
+      return (Date.now() - arranque > 6000) ? { p10: 0, p90: 1, seguro: false } : null;
+    }
+
     if (el.tagName === 'VIDEO') {
       if (el.readyState >= 2) {
         var v = medirDe(el);
         if (v) return v;
       }
       pedirConPermiso(el.getAttribute('poster') || cuadroDe(el.currentSrc || el.src));
-      return (Date.now() - arranque > 5000) ? { p10: 0, p90: 1, seguro: false } : null;
+      return (Date.now() - arranque > 6000) ? { p10: 0, p90: 1, seguro: false } : null;
     }
 
     if (!el.complete || !el.naturalWidth) return null;   /* todavia no cargo */
