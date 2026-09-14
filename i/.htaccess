@@ -35,23 +35,32 @@ DirectoryIndex index.php index.html
 #     siempre y ya no volveria a preguntarle al servidor: si mañana se cambia
 #     una textura, media Mexico seguiria viendo la vieja.
 <IfModule mod_rewrite.c>
+  # ⚠️ LAS FOTOS DE ESTOS DESVIOS VIAJABAN CRUDAS. (14/9/2026)
+  #    El banco las encontraba una y otra vez —«ninguna foto viaja sin
+  #    optimizar: 5 crudas»— y no las encontraba en el documento, porque la
+  #    página no pide la URL de Cloudinary: pide `/i/cielo.jpg` y es EL SERVIDOR
+  #    el que la desvía acá. El resto del sistema ya pedía las fotos con
+  #    `f_auto,q_auto:good,w_1200,c_limit`; estas ocho se habían quedado afuera.
+  #    f_auto cambia el formato solo (webp/avif) y respeta la transparencia de
+  #    los .png, así que la nube y la cera del lacre se siguen viendo igual.
+
   RewriteEngine On
   RewriteBase /i/
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^tex-papel\.jpg$    https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574616/invitame/jfyn8cn9kpb7znufq3k9.jpg [R=302,L]
+  RewriteRule ^tex-papel\.jpg$    https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788574616/invitame/jfyn8cn9kpb7znufq3k9.jpg [R=302,L]
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^tex-lino\.jpg$     https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574616/invitame/npxvsup6bsq4u2kg8ajp.jpg [R=302,L]
+  RewriteRule ^tex-lino\.jpg$     https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788574616/invitame/npxvsup6bsq4u2kg8ajp.jpg [R=302,L]
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^tex-kraft\.jpg$    https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574617/invitame/zqnxomgyktcreaytwckr.jpg [R=302,L]
+  RewriteRule ^tex-kraft\.jpg$    https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788574617/invitame/zqnxomgyktcreaytwckr.jpg [R=302,L]
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^tex-marmol\.jpg$   https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574618/invitame/y4tyqoqjiqcjcia3nbep.jpg [R=302,L]
+  RewriteRule ^tex-marmol\.jpg$   https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788574618/invitame/y4tyqoqjiqcjcia3nbep.jpg [R=302,L]
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^tex-acuarela\.jpg$ https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574618/invitame/j7qd6s85tgsg7md467nv.jpg [R=302,L]
+  RewriteRule ^tex-acuarela\.jpg$ https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788574618/invitame/j7qd6s85tgsg7md467nv.jpg [R=302,L]
 
   # `textura.jpg` es el respaldo de `var(--tex, url('textura.jpg'))` (lineas 167,
   # 174 y 177): se usa cuando la coleccion no define --tex. Va al papel liso.
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^textura\.jpg$      https://res.cloudinary.com/oc8cgqt4/image/upload/v1788574616/invitame/jfyn8cn9kpb7znufq3k9.jpg [R=302,L]
+  RewriteRule ^textura\.jpg$      https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788574616/invitame/jfyn8cn9kpb7znufq3k9.jpg [R=302,L]
 
   # --- Las otras tres que faltaban ---
   # `nube.png` son las DOS nubes de adelante que se abren al scrollear
@@ -62,9 +71,9 @@ DirectoryIndex index.php index.html
   # `sello-marfil.png` es la cera del lacre del sobre que se abre en tres
   # (#tri-seal, linea 147): salia un anillo vacio, sin cera atras.
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^nube\.png$         https://res.cloudinary.com/oc8cgqt4/image/upload/v1788575006/invitame/atx4qqjpj7updy8ajef4.png [R=302,L]
+  RewriteRule ^nube\.png$         https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788575006/invitame/atx4qqjpj7updy8ajef4.png [R=302,L]
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^cielo\.jpg$        https://res.cloudinary.com/oc8cgqt4/image/upload/v1788575007/invitame/rip8ks6ikk4krp7o6ke0.jpg [R=302,L]
+  RewriteRule ^cielo\.jpg$        https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788575007/invitame/rip8ks6ikk4krp7o6ke0.jpg [R=302,L]
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^sello-marfil\.png$ https://res.cloudinary.com/oc8cgqt4/image/upload/v1788575008/invitame/r3v04rzv5gq9gfqaznom.png [R=302,L]
+  RewriteRule ^sello-marfil\.png$ https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788575008/invitame/r3v04rzv5gq9gfqaznom.png [R=302,L]
 </IfModule>
