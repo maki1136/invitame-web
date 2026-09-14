@@ -67,12 +67,30 @@
   function lumRGB(r, g, b) { return 0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b); }
   function razon(a, b) { return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05); }
 
+  /* ⚠️ HAY QUE ENTENDER LAS DOS FORMAS, Y ESTO YA COSTO UNA CORRIDA ENTERA.
+     `getComputedStyle(el).color` siempre devuelve `rgb(...)`, pero una VARIABLE
+     de CSS devuelve el texto tal cual se escribio: `--sec-col` vale "#e9e6ee",
+     no "rgb(233,230,238)". La primera version solo leia `rgb()`, asi que al
+     preguntar por el color de la seccion recibia null, se salteaba la seccion,
+     y el modulo entero no tocaba NADA — pasaba el banco sin cambiar un pixel.
+     Se comprobo en la invitacion de verdad: 21 secciones, 0 con la marca. */
   function color(txt) {
-    var m = String(txt || '').match(/rgba?\(([^)]+)\)/);
-    if (!m) return null;
-    var p = m[1].split(',').map(parseFloat);
-    if (p.length > 3 && p[3] < 0.05) return null;
-    return { r: p[0], g: p[1], b: p[2], l: lumRGB(p[0], p[1], p[2]) };
+    var t = String(txt || '').trim();
+    var m = t.match(/rgba?\(([^)]+)\)/);
+    if (m) {
+      var p = m[1].split(',').map(parseFloat);
+      if (p.length > 3 && p[3] < 0.05) return null;
+      return { r: p[0], g: p[1], b: p[2], l: lumRGB(p[0], p[1], p[2]) };
+    }
+    var h = t.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (h) {
+      var x = h[1];
+      if (x.length === 3) x = x[0] + x[0] + x[1] + x[1] + x[2] + x[2];
+      var n = parseInt(x, 16);
+      var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+      return { r: r, g: g, b: b, l: lumRGB(r, g, b) };
+    }
+    return null;
   }
 
   /* ---- 1 · CUANTO DE CLARA Y CUANTO DE OSCURA TIENE LA FOTO --------------- */
