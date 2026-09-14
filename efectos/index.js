@@ -570,6 +570,10 @@
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
+    /* ⚠️ VA JUSTO DESPUES DEL FONDO, y no puede ir antes: necesita que la
+       foto ya este puesta para poder medirla. Sin foto de fondo no hace
+       absolutamente nada. */
+    '/efectos/velo-legible.js',        /* que el texto se lea sobre CUALQUIER foto que suban */
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
