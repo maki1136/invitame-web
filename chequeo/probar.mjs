@@ -919,6 +919,18 @@ async function escenario(nombre, tipo, opciones, esTablet){
         roto:   !!m.__roto
       });
 
+      /* PRIMERO SE VA HASTA EL BOLETO. (14/9/2026)
+         Este chequeo daba "quedo 50x204 (tiene que quedar acostada) - a -216 px
+         del boleto" en los tres escenarios. 50x204 es la caja de la tira TODAVIA
+         girada -90 grados: o sea, la rotura no habia corrido.
+         Comprobado en vivo con la solapa de la musica, que fallaba igual: si el
+         elemento esta FUERA DE PANTALLA, el navegador se ahorra el trabajo y la
+         transicion no arranca; las medidas que devuelve son las viejas. Llevando
+         el elemento al centro de la pantalla antes de tocarlo, funciona.
+         Y es lo que hace una persona: nadie toca un boleto que no ve. */
+      m.scrollIntoView({ block: 'center' });
+      await esperar(700);
+
       const antes = foto();
       m.click();  await esperar(1600);
       let tras1 = foto();
@@ -1122,6 +1134,21 @@ async function escenario(nombre, tipo, opciones, esTablet){
       }
       return previo;
     };
+
+    /* PRIMERO HAY QUE IR HASTA LA SOLAPA. (14/9/2026)
+       Este chequeo venia dando rojo con un numero imposible: "cerrada mide
+       78px (abierta medía 386) - la clase open se saco bien - max-height
+       calculado: 560px". O sea: la clase se sacaba, pero el navegador seguia
+       diciendo que el alto maximo era 560.
+       Comprobado en vivo, en el navegador, con la misma invitacion: si la
+       solapa esta FUERA DE PANTALLA, el navegador se ahorra el trabajo de
+       recalcularla y devuelve medidas viejas; la transicion de max-height
+       tampoco arranca. Llevandola al centro de la pantalla ANTES de tocarla,
+       cierra perfecto: alto 0, max-height 0px, medido a los 100, 600, 1200,
+       2500 y 4000 ms.
+       Y ademas es lo que hace una persona: nadie toca una solapa que no ve. */
+    btn.scrollIntoView({ block: 'center' });
+    await esperar(700);
 
     const abiertaAlEntrar = await estable();
     btn.click();
