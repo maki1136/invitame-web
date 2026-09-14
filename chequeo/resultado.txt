@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 14/09/2026, 04:40
+Fecha: 14/09/2026, 04:53
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 12 PROBLEMAS (y 94 cosas bien)
+HAY 9 PROBLEMAS (y 96 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -27,10 +27,9 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Ver en Instagram" 1.0/4.5 [#f7e9e6 sobre luminancia 0.83-0.88 · a.btn.lt] · "Min" 1.0/4.5 [#e7ddc8 sobre luminancia 0.74-0.78 · div.lab] · "Días" 1.0/4.5 [#e7ddc8 sobre luminancia 0.74-0.82 · div.lab] · "Seg" 1.0/4.5 [#e7ddc8 sobre luminancia 0.74-0.79 · div.lab] y 21 más
+             -> "Padres de Tomás" 1.0/4.5 [#c5bad2 sobre luminancia 0.06-0.54 · div.rl] · "Los colores de la boda" 1.0/4.5 [#3a453d sobre luminancia 0.05-0.05 · div.col-dc-tit] · "Sube tus fotos y video" 1.1/4.5 [#f7f7f1 sobre luminancia 0.65-0.88 · p.reveal.in] · "Toca tu respuesta" 1.1/4.5 [#d7cebb sobre luminancia 0.66-0.86 · p.rsvp-pie] y 40 más
    BIEN   el boleto del pase se ve entero
-   MAL    al tocar el boleto, el pedazo se corta y baja
-             -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
+   ----   el boleto no se pudo traer a la pantalla: no se midio
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
@@ -38,17 +37,16 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
    BIEN   al tocarla se cierra de verdad
-   MAL    y se vuelve a abrir
-             -> reabierta 0px
+   BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
              -> la invitación anotó 13356 y volvió a 5942
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 469.4 s de punta a punta)
+   (tardó 459.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -63,7 +61,7 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Cómo va a ser el día" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] · "17:00 · Llegada" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.h] · "17:30 · Ceremonia" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.h] · "18:30 · Brindis" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.h] y 32 más
+             -> "Compartir por WhatsApp" 1.0/4.5 [#f7e9e6 sobre luminancia 0.35-0.85 · a.wsp] · "El filtro de la boda" 1.0/3 [#463b52 sobre luminancia 0.05-0.78 · h2] · "Nuestro Hashtag" 1.1/3 [#f7f7f1 sobre luminancia 0.60-0.87 · h2.reveal.in] · "Confirmar Asistencia" 1.1/3 [#ffffff sobre luminancia 0.05-0.90 · h2.reveal.in] y 25 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x200 (tiene que quedar acostada) · a -212 px del boleto
@@ -82,9 +80,9 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 12352 y volvió a 5731
+             -> la invitación anotó 11944 y volvió a 5731
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 654.2 s de punta a punta)
+   (tardó 588.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -104,7 +102,7 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Mesa" 1.0/4.5 [#c5bad2 sobre luminancia 0.48-0.53 · div.k] · "Personas" 1.0/4.5 [#c5bad2 sobre luminancia 0.54-0.60 · div.k] · "Estado del pase" 1.1/4.5 [#c5bad2 sobre luminancia 0.46-0.55 · div.k] · "173" 1.1/3 [#fbf7ef sobre luminancia 0.70-0.86 · div.num] y 20 más
+             -> "Fiesta" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · h3] · "Casa Salvia · sobre la" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.sub] · "Sábado 6 de marzo de 2" 1.0/4.5 [#463b52 sobre luminancia 0.05-0.05 · div.addr] · "Playlist del evento" 1.0/3 [#463b52 sobre luminancia 0.05-0.05 · h2.reveal.in] y 24 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
@@ -114,19 +112,18 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   MAL    al tocarla se cierra de verdad
-             -> cerrada mide 19px (abierta medía 386) · la clase open se sacó bien, asi que es el CSS/el motor · max-height calculado: 560px
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13505 y volvió a 8252
+             -> la invitación anotó 13065 y volvió a 6052
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 658.0 s de punta a punta)
+   (tardó 738.8 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -145,7 +142,7 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Invitación creada con " 2.6/4.5 [#a9b8a0 sobre luminancia 0.01-0.14 · div.sm] · "Agendar" 3.0/4.5 [#f7e9e6 sobre luminancia 0.03-0.25 · a.btn.gh] · "Palacio de Hierro" 3.0/4.5 [#ffffff sobre luminancia 0.05-0.30 · a] · "Amazon" 3.2/4.5 [#ffffff sobre luminancia 0.05-0.28 · a] y 14 más
+             -> "Invitación creada con " 2.6/4.5 [#a9b8a0 sobre luminancia 0.01-0.14 · div.sm] · "Agendar" 3.0/4.5 [#f7e9e6 sobre luminancia 0.03-0.25 · a.btn.gh] · "Palacio de Hierro" 3.0/4.5 [#ffffff sobre luminancia 0.05-0.30 · a] · "Liverpool" 3.2/4.5 [#ffffff sobre luminancia 0.05-0.28 · a] y 14 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -162,5 +159,5 @@ HAY 12 PROBLEMAS (y 94 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 101.4 s de punta a punta)
+   (tardó 100.1 s de punta a punta)
 
