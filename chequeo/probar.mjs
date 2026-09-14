@@ -423,13 +423,24 @@ async function escenario(nombre, tipo, opciones, esTablet){
     const raspado = await page.evaluate(async () => {
       function ev(t,x,y){ return new MouseEvent(t,{clientX:x,clientY:y,bubbles:true}); }
       const zonas = [...document.querySelectorAll('.rasp-zona')];
+      /* ⚠️ ESTO TIENE QUE PARECERSE A UN DEDO, NO A UNA AMETRALLADORA. (14/9/2026)
+         Antes se disparaban 23×9 = 207 `mousemove` SEGUIDOS, sin soltar el hilo
+         ni una vez. El navegador no llegaba a pintar un solo cuadro entre medio,
+         así que el polvillo se acumulaba y la medición del avance (que lee la
+         tapa entera) corría decenas de veces por segundo. En Safari de escritorio
+         y en el iPad eso mataba el navegador y el banco perdía el escenario.
+         Un dedo de verdad hace unos 60 movimientos y deja respirar entre cada
+         pasada. Con 11×5 = 55 y un respiro por fila, la tapa se raspa igual. */
       for (const z of zonas) {
         z.classList.remove('dormida');
         const cv = z.querySelector('canvas'); if (!cv) continue;
         const r = cv.getBoundingClientRect();
         cv.dispatchEvent(ev('mousedown', r.left+4, r.top+4));
-        for (let i=0;i<=22;i++) for (let j=0;j<=8;j++)
-          cv.dispatchEvent(ev('mousemove', r.left+(r.width*i/22), r.top+(r.height*j/8)));
+        for (let j=0;j<=5;j++) {
+          for (let i=0;i<=11;i++)
+            cv.dispatchEvent(ev('mousemove', r.left+(r.width*i/11), r.top+(r.height*j/5)));
+          await new Promise(x=>setTimeout(x,30));
+        }
         window.dispatchEvent(ev('mouseup', r.left, r.top));
         await new Promise(x=>setTimeout(x,650));
       }
@@ -633,6 +644,39 @@ async function escenario(nombre, tipo, opciones, esTablet){
           }
           return o;
         };
+        /* ⚠⚠ LO QUE ESTA DENTRO DE UNA SOLAPA CERRADA NO SE VE, PERO
+           SIGUE TENIENDO POSICION. (14/9/2026)
+           Las solapas se cierran con `.acc-panel{max-height:0;overflow:hidden}`.
+           El texto de adentro NO desaparece: conserva su `getBoundingClientRect`
+           y ese rectangulo cae encima de lo que hay MAS ABAJO en la pagina.
+           Asi que se le sacaba la tinta a un texto invisible y se median los
+           pixeles de otra cosa: por eso «Cabañas del Pinar» (blanco sobre
+           morado oscuro, perfectamente legible) figuraba como blanco sobre un
+           fondo de luminancia 0.9. Eran 44 avisos en iPhone y 25 en Chrome, y
+           NINGUNO era real: se comprobó mirando la seccion en vivo.
+           La unica forma honesta de saberlo es recortar la caja contra TODOS
+           los antepasados que recortan, y descartar el texto si de su caja no
+           queda casi nada a la vista. */
+        const cajaVisible = el => {
+          let r = el.getBoundingClientRect();
+          let x1 = r.left, y1 = r.top, x2 = r.right, y2 = r.bottom;
+          let p = el.parentElement;
+          while (p && p !== document.documentElement) {
+            const cp = getComputedStyle(p);
+            if (/hidden|clip|auto|scroll/.test(cp.overflow + cp.overflowX + cp.overflowY)) {
+              const q = p.getBoundingClientRect();
+              x1 = Math.max(x1, q.left); y1 = Math.max(y1, q.top);
+              x2 = Math.min(x2, q.right); y2 = Math.min(y2, q.bottom);
+              if (x2 <= x1 || y2 <= y1) return null;
+            }
+            p = p.parentElement;
+          }
+          const propia = r.width * r.height;
+          const queda = (x2 - x1) * (y2 - y1);
+          if (!propia || queda / propia < 0.6) return null;   /* mas de un 40% tapado */
+          return { left: x1, top: y1, right: x2, bottom: y2 };
+        };
+
         const out = [];
         let i = 0;
         document.querySelectorAll('body *').forEach(el => {
@@ -644,6 +688,8 @@ async function escenario(nombre, tipo, opciones, esTablet){
           const r = el.getBoundingClientRect();
           if (!r.width || !r.height) return;
           if (r.bottom <= 0 || r.top >= innerHeight) return;      /* fuera de pantalla */
+          const vis = cajaVisible(el);
+          if (!vis) return;                       /* esta adentro de algo cerrado */
           if (opacidadReal(el) < 0.5) return;
           const cf = col(cs.color); if (!cf || cf.a < 0.15) return;
           el.setAttribute('data-cq', String(i));
@@ -653,8 +699,8 @@ async function escenario(nombre, tipo, opciones, esTablet){
             color: [cf.r, cf.g, cf.b, cf.a],
             px: parseFloat(cs.fontSize) || 16,
             negrita: (parseInt(cs.fontWeight) || 400) >= 700,
-            caja: [Math.max(0, r.left), Math.max(0, r.top),
-                   Math.min(innerWidth, r.right), Math.min(innerHeight, r.bottom)],
+            caja: [Math.max(0, vis.left), Math.max(0, vis.top),
+                   Math.min(innerWidth, vis.right), Math.min(innerHeight, vis.bottom)],
             quien: el.tagName.toLowerCase() +
               (el.className && typeof el.className === 'string'
                 ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '')
@@ -1328,19 +1374,42 @@ try {
       String(err.message).split('\n')[0] + '). Se sigue igual.');
 }
 
+/* ⚠️ EL CARTEL TIENE QUE DECIR LA VERDAD. (14/9/2026)
+   Este mismo `catch` decía siempre «no se pudo ni abrir el navegador», incluso
+   cuando el escenario había corrido diez chequeos antes de caerse. Así el
+   informe manda a buscar el problema al lugar equivocado: uno va a mirar la
+   instalación del navegador cuando en realidad se murió raspando la raspadita.
+   Ahora se cuenta cuánto había pasado antes de la caída y se dice cuál fue el
+   último chequeo que sí llegó a correr. */
 for (const clave of MOTORES) {
   const e = TODOS[clave.trim()];
   if (!e) continue;
+  const antes = pasan + fallos;
+  const ultimaLinea = lineas.length;
   try {
     await escenario(e[0], e[1], e[2], e[3]);
   } catch (err) {
     fallos++;
     const m = String(err.message).split('\n')[0];
+    const hizo = (pasan + fallos - 1) - antes;
+    let ultimo = '';
+    for (let k = lineas.length - 1; k >= ultimaLinea; k--) {
+      const t = lineas[k].match(/^   (?:BIEN|MAL) {3}(.+)$/);
+      if (t) { ultimo = t[1]; break; }
+    }
     log('\n──────────────────────────────────────────');
     log('  ' + e[0]);
     log('──────────────────────────────────────────');
-    log('   MAL    no se pudo ni abrir el navegador');
-    log('             -> ' + m);
+    if (hizo > 0) {
+      log('   MAL    el escenario se cortó a la mitad');
+      log('             -> alcanzó a correr ' + hizo + ' chequeos y se cayó');
+      if (ultimo) log('             -> el último que sí corrió: "' + ultimo + '"');
+      log('             -> ' + m);
+      log('             -> (los chequeos que faltan NO se probaron: este verde no vale)');
+    } else {
+      log('   MAL    no se pudo ni abrir el navegador');
+      log('             -> ' + m);
+    }
     if (/Executable doesn't exist/.test(m)) {
       log('             -> falta bajarlo: npx playwright install ' + e[1]);
     }
