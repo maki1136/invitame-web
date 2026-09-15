@@ -100,6 +100,15 @@
   var TINTA2  = '#8d8781';   /* bajadas y datos */
   var TINTA3  = '#b6b0a8';   /* rótulos, segundos, filetes */
 
+  /* el marfil canónico, el mismo que declara marfil-texturas.js. Va también
+     como color plano abajo del papel: si la textura tardara, no se ve un
+     salto de blanco a marfil. */
+  var PAPEL_HEX = '#e5e0d5';
+
+  function laPieza(k) {
+    try { return (window.INVPIEZAS || {})[k] || ''; } catch (e) { return ''; }
+  }
+
   var CSS = [
     /* ---- LA ESCALA: se setean LAS VARIABLES DEL MOTOR -------------------
        El motor tiene exactamente tres roles y cada uno lee su variable con
@@ -233,6 +242,121 @@
     'h[c] #pv-kick {',
     '  font-family:' + SANS + ';',
     '  letter-spacing:.14em; text-transform:uppercase; font-size:10.5px;',
+    '}',
+
+    /* =====================================================================
+       FASE 3 — LA ESCENA: una tarjeta marfil FLOTANDO sobre el fondo oscuro
+       =====================================================================
+       ★★★ ESTO ES LO QUE SEPARA A MARFIL DE TODO LO DEMÁS ★★★
+       El motor alterna secciones claras con BANDAS OSCURAS (`.sec.verde`).
+       La referencia no tiene ninguna banda: es UNA tarjeta marfil continua,
+       y lo oscuro está AFUERA, atrás. Entonces acá las bandas se apagan y
+       el oscuro pasa al fondo de la escena.
+
+       ⚠️ Y NO ES SÓLO ESTÉTICA: en la fase 1 les puse la tinta gris oscura a
+          TODAS las secciones, incluidas las 6 bandas. Medido el 15/9:
+          «Dónde y cuándo» quedaba rgb(74,70,66) sobre rgb(70,59,82) —
+          contraste 1,03, o sea invisible. Transparentar las bandas arregla
+          las dos cosas de una.
+
+       ⚠️ SE ESCRIBE `background-color`, NUNCA `background`. El atajo pone
+          `background-image:none` y borra la textura. Ya pasó en Perlas y
+          Jazmín lo marcó con un círculo verde en el WhatsApp.
+    */
+    'h[c] body {',
+    '  background-color:#2a231e;',
+    '  background-image:var(--mf-fondo,none);',
+    /* ⚠️ NADA DE `background-attachment:fixed`: en iPad una capa fija a
+          pantalla completa fue exactamente lo que trabó la invitación
+          (tarea #100). El fondo ya viene desenfocado en los píxeles, así que
+          se repite y listo — sobre una foto fuera de foco la costura no se
+          ve, y del fondo sólo asoma una franja a cada lado de la tarjeta. */
+    '  background-size:760px auto; background-repeat:repeat;',
+    '}',
+
+    /* la tarjeta
+       ⚠️ NI UNA PALABRA SOBRE EL ANCHO NI LOS MÁRGENES. El motor ya le puso
+          `max-width:474px; margin:auto`. Le escribí `margin-left:10px` para
+          separarla del borde y la DESCENTRÉ: se fue pegada a la izquierda con
+          todo el fondo a la derecha. Después le puse `max-width:calc(100vw -
+          20px)` y le pisé el ancho del motor: quedó de 1420 px. Las dos veces,
+          por tocar algo que ya estaba resuelto. */
+    'h[c] .frame {',
+    '  background-color:' + PAPEL_HEX + ';',
+    '  background-image:var(--mf-papel,none);',
+    '  background-size:512px 512px; background-repeat:repeat;',
+    '  border-radius:18px; overflow:hidden;',
+    '  box-shadow:0 26px 60px rgba(0,0,0,.42), 0 2px 10px rgba(0,0,0,.18);',
+    '}',
+
+    /* Las secciones se apagan para que la tarjeta se lea como UNA pieza.
+       ⚠️ VAN CON `!important` porque `fondo-invitacion.js` escribe
+          `html[data-fondo] .sec.verde { background-color: color-mix(...)
+          !important }`. Sin el `!important` las seis bandas oscuras se
+          quedaban puestas, y encima con la tinta clara de la fase 1 encima:
+          «Dónde y cuándo» medía contraste 1,03 contra su propio fondo. */
+    'h[c] .frame .sec, h[c] .frame .sec.verde, h[c] .frame .pase {',
+    '  background-color:transparent !important;',
+    '}',
+    /* la banda de la frase traía su propia imagen de papel: sobra */
+    'h[c] .frame .sec.band { background-image:none !important }',
+
+    /* la tinta de las que ERAN bandas oscuras */
+    'h[c] .frame .sec.verde h2, h[c] .frame .pase h2 { color:' + TINTA + ' }',
+    'h[c] .frame .sec.verde .kick, h[c] .frame .sec.verde p,',
+    'h[c] .frame .sec.verde .sm, h[c] .frame .pase p { color:' + TINTA2 + ' }',
+
+    /* ---- EL BOTÓN PÍLDORA FANTASMA ------------------------------------
+       En la referencia el «Abrir mapa» es una píldora de filete fino, fondo
+       transparente y texto gris. Acá son dos clases: `.btn.gh` («Agendar») y
+       `.btn.acc-btn` («Ver mapa», «Ver hoteles»).
+
+       ★★★ POR QUÉ ESTÁ ESE `#mf-nada` QUE NO EXISTE ★★★
+       `botones.js` pinta con
+           [data-boton="lacre"] :is(.btn, #btn-ingresar, .wsp, …) { … !important }
+       y `:is()` toma la especificidad de su argumento MÁS FUERTE: ese
+       `#btn-ingresar` de adentro le da peso de ID a toda la regla.
+       Contra un ID no gana NINGUNA cantidad de clases ni de atributos — la
+       especificidad se compara por tramos, y (0,99,99) pierde contra (1,0,0).
+       Probado: con `h[c] .frame .btn.gh` (0,5,2) el botón seguía con el
+       material de lacre puesto.
+       → La única salida es meter un ID propio. `#mf-nada` no existe en ningún
+         lado, así que no cambia a qué elementos agarra la regla: está sólo
+         para subirle el peso. Es el mismo recurso que usa botones.js.
+       ⚠️ El color va también en el `span` interno (la flechita `.chev`).
+       ⚠️ Y el fondo del botón NO es un color: es un `background-image`
+          (el material). Apagar `background-color` solo no alcanza. */
+    'h[c] .frame :is(#mf-nada, .btn.gh, .btn.acc-btn) {',
+    '  background-image:none !important; background-color:transparent !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
+    '  color:' + TINTA2 + ' !important;',
+    '  font-family:' + SANS + ' !important; font-size:11px !important;',
+    '  letter-spacing:.14em !important; text-transform:uppercase !important;',
+    '  font-weight:400 !important; padding:11px 24px !important;',
+    '  box-shadow:none !important; text-shadow:none !important;',
+    '}',
+    'h[c] .frame :is(#mf-nada, .btn.gh, .btn.acc-btn) span {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+
+    /* ---- LAS FOTOS, TIPO POLAROID -------------------------------------
+       Marco blanco grueso, sombra suave y un grado de giro. Van y vienen
+       para un lado y para el otro, como en la referencia.
+       ⚠️ Sólo a la imagen que es HIJA DIRECTA de una sección. Si esto
+          agarrara cualquier <img> le pondría marco a los iconos. */
+    'h[c] .frame .sec > img {',
+    '  background:#fdfcfa; padding:11px 11px 32px;',
+    '  border-radius:2px;',
+    '  box-shadow:0 10px 24px rgba(42,35,30,.20), 0 1px 3px rgba(42,35,30,.14);',
+    '  transform:rotate(-1.4deg);',
+    '}',
+    'h[c] .frame .sec:nth-of-type(even) > img { transform:rotate(1.6deg) }',
+
+    /* ---- LAS PERLAS SUELTAS, APOYADAS SOBRE EL PAPEL ------------------- */
+    'h[c] .mf-perla {',
+    '  position:absolute; pointer-events:none; z-index:1;',
+    '  background-position:center; background-size:contain;',
+    '  background-repeat:no-repeat;',
     '}'
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
@@ -300,6 +424,68 @@
     }
   }
 
+  /* ---------------------------------------------------------- las perlas
+     Perlas sueltas apoyadas sobre el papel de la tarjeta, como en la
+     referencia: de tres tamaños, salteadas, nunca dos iguales juntas.
+
+     ⚠️ NO SE RECORTAN NI FLOTAN SOBRE CUALQUIER FONDO: traen su propio papel
+        marfil con el alfa apagado en el borde, así que SÓLO funcionan sobre
+        una sección clara. Por eso van salteando y nunca sobre una foto.
+     ⚠️ Van como `background-image` de un div vacío y no como <img> a propósito:
+        la regla Polaroid de más arriba agarra `.sec > img` y les pondría un
+        marco blanco a las perlas.
+     ⚠️ `pointer-events:none` para que no se coman un toque del invitado.
+     -------------------------------------------------------------------- */
+
+  var CL_PERLA = 'mf-perla';
+  /* izquierda o derecha, arriba o abajo, y el tamaño. Salteado a mano para
+     que no se lea un patrón. */
+  var SIEMBRA = [
+    { pieza: 'marfilPerlaA', lado: 'left:6%',   alto: 'top:7%',    tam: 34 },
+    { pieza: 'marfilPerlaC', lado: 'right:9%',  alto: 'top:22%',   tam: 22 },
+    { pieza: 'marfilPerlaB', lado: 'right:5%',  alto: 'bottom:12%',tam: 40 },
+    { pieza: 'marfilPerlaC', lado: 'left:11%',  alto: 'bottom:8%', tam: 26 }
+  ];
+
+  function claras() {
+    var out = [];
+    var todas = document.querySelectorAll('.frame .sec');
+    for (var i = 0; i < todas.length; i++) {
+      var s = todas[i];
+      /* ni la portada (es foto), ni la galería, ni el filtro, ni la trivia:
+         ahí la perla se apoyaría sobre una imagen o sobre un juego. */
+      var n = s.getAttribute('data-sec') || '';
+      if (n === 'galeria' || n === 'trivia' || n === 'filtro' || n === 'video') continue;
+      if (s.querySelector('.fxlayer')) continue;
+      out.push(s);
+    }
+    return out;
+  }
+
+  function colocarPerlas() {
+    var secs = claras();
+    var puestas = 0;
+    for (var i = 0; i < secs.length; i += 3) {          /* una de cada tres */
+      var s = secs[i];
+      if (s.querySelector('.' + CL_PERLA)) { puestas++; continue; }
+      var d = SIEMBRA[puestas % SIEMBRA.length];
+      var src = laPieza(d.pieza);
+      if (!src) return;
+      var n = document.createElement('div');
+      n.className = CL_PERLA;
+      n.setAttribute('aria-hidden', 'true');
+      n.style.cssText = d.lado + ';' + d.alto + ';width:' + d.tam + 'px;height:' + d.tam + 'px;' +
+                        'background-image:url("' + src + '")';
+      s.appendChild(n);
+      puestas++;
+    }
+  }
+
+  function sacarPerlas() {
+    var v = document.querySelectorAll('.' + CL_PERLA);
+    for (var i = 0; i < v.length; i++) v[i].remove();
+  }
+
   /* ---------------------------------------------------------------- montaje */
   var puesta = false;
 
@@ -307,6 +493,15 @@
     hoja();
     var raiz = document.documentElement;
     raiz.setAttribute(MARCA, NOMBRE);
+
+    /* el papel y el fondo entran como variables, no clavados en la hoja:
+       así la hoja se arma aunque las texturas todavía no hayan llegado. */
+    var papel = laPieza('marfilPapel');
+    var fondo = laPieza('marfilFondo');
+    if (papel) raiz.style.setProperty('--mf-papel', 'url("' + papel + '")');
+    if (fondo) raiz.style.setProperty('--mf-fondo', 'url("' + fondo + '")');
+
+    colocarPerlas();
 
     if (tieneFuentePropia()) {
       raiz.removeAttribute(MARCA_T);
@@ -323,6 +518,9 @@
     var raiz = document.documentElement;
     raiz.removeAttribute(MARCA);
     raiz.removeAttribute(MARCA_T);
+    raiz.style.removeProperty('--mf-papel');
+    raiz.style.removeProperty('--mf-fondo');
+    sacarPerlas();
     juntarNombres();
     puesta = false;
   }
