@@ -178,9 +178,13 @@
 
     /* ---- EL SEPARADOR DE LOS NOMBRES ------------------------------------ */
     /* Va como nodo porque el CSS no sabe meterse ENTRE dos hermanos.        */
+    /* ⚠️ Los márgenes van casi en cero: el separador ya es de línea completa
+          (es `display:flex`), así que NO necesita un <br> que lo separe del
+          segundo nombre. Cuando le puse uno, el bloque pasó de 150 a 211 px
+          y quedó un hueco enorme entre el filete y EMILIANO. */
     'h[c] .' + CL_Y + ' {',
     '  display:flex; align-items:center; justify-content:center; gap:14px;',
-    '  width:min(64%,260px); margin:.10em auto .04em;',
+    '  width:min(64%,260px); margin:.02em auto;',
     '}',
     'h[c] .' + CL_Y + ' i {',
     '  flex:1 1 auto; height:1px; background:currentColor;',
@@ -206,6 +210,29 @@
     'h[t] #pv-names > span:not(.' + CL_Y + ') {',
     '  padding-left:.17em; display:inline-block;',
     '}',
+
+    /* ⚠️⚠️ EL HALO DE LA PORTADA — SIN ESTO LOS NOMBRES NO SE LEEN ⚠️⚠️
+       Los nombres van sobre la FOTO de tapa. El motor les pone el color en
+       línea (crema) y una sombra `0 2px 18px`, que es un desenfoque ancho y
+       no hace borde. Con la cursiva gruesa del motor alcanzaba; con esta
+       serif fina y muy espaciada, NO: en la muestra los nombres quedaron
+       casi invisibles sobre la foto.
+       → Mismo halo que ya usa la cuenta regresiva en `i/estilos-servidor.css`
+         (el arreglo de contraste de la tarea #195), y peso 400 en vez de 300.
+       → Sólo en la PORTADA. Los títulos de sección van sobre papel y ahí la
+         fina de 300 se lee perfecto.
+       ⚠️ Y ojo con el encadenado: vaciar `nfont` para que mande la colección
+          también saca el tamaño y el color que venían con esa elección. Si se
+          cambia una, hay que mirar la otra. */
+    'h[t] #pv-names, h[t] #pv-names > span {',
+    '  font-weight:400 !important;',
+    '  text-shadow:0 0 9px rgba(26,18,13,.68), 0 1px 3px rgba(26,18,13,.5),',
+    '              0 0 26px rgba(26,18,13,.35) !important;',
+    '}',
+    'h[t] .' + CL_Y + ' b {',
+    '  text-shadow:0 0 9px rgba(26,18,13,.68), 0 1px 3px rgba(26,18,13,.5) !important;',
+    '}',
+    'h[t] .' + CL_Y + ' i { opacity:.66; box-shadow:0 0 6px rgba(26,18,13,.45) }',
 
     /* ---- LA CUENTA REGRESIVA ------------------------------------------- */
     /* ⚠️ LAS CIFRAS DE CORMORANT SON DE ESTILO ANTIGUO. Sin pedirle las de
@@ -404,8 +431,9 @@
     b.textContent = m[1] === 'and' ? '&' : m[1];
     sep.appendChild(i1); sep.appendChild(b); sep.appendChild(i2);
 
+    /* el separador es `display:flex`, o sea de línea completa: NO lleva <br>.
+       Con uno, quedaba un renglón vacío entre el filete y el segundo nombre. */
     n.insertBefore(sep, segundo);
-    n.insertBefore(document.createElement('br'), segundo);
   }
 
   function juntarNombres() {
@@ -413,6 +441,7 @@
     if (!n) return;
     var sep = n.querySelector('.' + CL_Y);
     if (sep) {
+      /* por si quedó un <br> de una versión vieja del módulo */
       var br = sep.nextElementSibling;
       if (br && br.tagName === 'BR') br.remove();
       sep.remove();
