@@ -742,7 +742,19 @@ async function escenario(nombre, tipo, opciones, esTablet){
         .forEach(e => {
           e.style.setProperty('color', 'transparent', 'important');
           e.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
-          e.style.setProperty('text-shadow', 'none', 'important');
+          /* ⚠️⚠️ LA SOMBRA NO SE BORRA, Y ES A PROPOSITO (15/9/2026).
+             Antes decia text-shadow none, y eso dejaba ciego al chequeo.
+             Un halo oscuro detras de una letra clara ES el fondo contra el que
+             esa letra se lee: es lo que hacen los subtitulos de cualquier
+             reproductor, y es lo que se le puso a la cuenta regresiva de la
+             portada y a los botones fantasma de Ceremonia y Fiesta.
+             Borrandola, el chequeo medi­a la letra contra la foto pelada y
+             marcaba en rojo textos que se leen perfecto. Y lo peor: como una
+             sombra nunca cambia el fondo, esos rojos NO SE PODIAN ARREGLAR
+             NUNCA. El tablero prometia un verde inalcanzable.
+             text-shadow se sigue pintando aunque la tinta sea transparente,
+             asi que dejandola puesta la foto muestra exactamente lo que el
+             invitado tiene detras de la letra. */
         }));
       /* 3 · la foto del fondo de verdad */
       const buf = await page.screenshot({ timeout: 60000, caret: 'hide', scale: 'css' });
@@ -751,7 +763,6 @@ async function escenario(nombre, tipo, opciones, esTablet){
         .forEach(e => {
           e.style.removeProperty('color');
           e.style.removeProperty('-webkit-text-fill-color');
-          e.style.removeProperty('text-shadow');
           e.removeAttribute('data-cq');
         }));
 
