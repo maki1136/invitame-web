@@ -652,6 +652,26 @@ if ($title !== '') {
   $sfx = ($kick !== '' && empty($titleEsPropio)) ? ' — ' . $kick : '';
   $tpl = setMeta($tpl, 'property', 'og:title', $title . $sfx);
   $tpl = setMeta($tpl, 'name', 'twitter:title', $title . $sfx);
+
+  /* ⚠️ EL TITULO DE LA PESTAÑA TAMBIEN, NO SOLO EL DE COMPARTIR (15/9/2026).
+     Visto al cargar camila-y-tomas: durante el primer segundo la pestaña decia
+     "Maria & Diego - Nuestra Boda" -la boda de ejemplo- y recien despues
+     pasaba a "Camila & Tomas". El <title> por defecto vive en el HTML del
+     motor y lo corregia el JavaScript, o sea tarde.
+     Es la misma fuga de la boda de ejemplo que ya se tapo en todo lo demas,
+     pero en el unico lugar donde el invitado la ve ANTES que nada: la pestaña,
+     y el historial, y el marcador si la guarda.
+     Se escribe del lado del servidor, que ya tiene el nombre calculado aca
+     arriba para og:title, y asi le llega a TODAS las versiones del motor sin
+     tocar los 199 KB de index.html.
+     Va por callback y no por reemplazo directo: si el nombre de la pareja
+     tuviera algo como $1, preg_replace lo interpretaria como referencia. */
+  if ($title !== '') {
+    $tituloPestana = htmlspecialchars($title . $sfx, ENT_QUOTES, 'UTF-8');
+    $tpl = preg_replace_callback('/<title>.*?<\/title>/is',
+      function () use ($tituloPestana) { return '<title>' . $tituloPestana . '</title>'; },
+      $tpl, 1);
+  }
 }
 if ($desc !== '') {
   $tpl = setMeta($tpl, 'property', 'og:description', $desc);
