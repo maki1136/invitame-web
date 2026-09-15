@@ -223,10 +223,24 @@
     var y = Math.round(window.pageYOffset || document.documentElement.scrollTop || 0);
     var quien = '', dentro = 0;
     try {
-      var secs = document.querySelectorAll('.sec[data-sec]');
+      /* ⚠️⚠️ NO SOLO LAS QUE TIENEN data-sec (14/9/2026, lo vio Maki en el iPhone).
+         Maki, probando desde el telefono: «ahora abre pero cerca de la galeria
+         de fotos, no donde estaba».
+         La causa: esto miraba `.sec[data-sec]`, y las secciones que arman los
+         MODULOS -la galeria (#gal-seccion), el pase con voz (#pv-sec), el
+         filtro y la trivia- se crean con la clase `sec` pero SIN data-sec. O
+         sea que justo la seccion desde la que el invitado se va a la galeria
+         era invisible para la marca, y el ancla terminaba siendo una seccion
+         muy anterior: medido, quedaba 1687 px por encima. Un ancla tan lejos
+         se desarma en cuanto algo en el medio cambia de alto.
+         Ahora vale cualquier `.sec`, y el nombre sale de data-sec o, si no lo
+         tiene, de su id. */
+      var secs = document.querySelectorAll('.sec');
       for (var i = 0; i < secs.length; i++) {
+        var nom = secs[i].getAttribute('data-sec') || secs[i].id;
+        if (!nom) continue;
         var r = secs[i].getBoundingClientRect();
-        if (r.top <= 4) { quien = secs[i].getAttribute('data-sec'); dentro = Math.round(-r.top); }
+        if (r.top <= 4) { quien = nom; dentro = Math.round(-r.top); }
       }
     } catch (e) {}
     try {
@@ -277,7 +291,9 @@
       /* si la seccion ya existe, ELLA manda: es un lugar, no un numero */
       var meta = dato.y;
       if (dato.sec) {
+        /* por data-sec o por id: ver la nota de anotarSalida() */
         var s2 = document.querySelector('.sec[data-sec="' + dato.sec + '"]');
+        if (!s2) { var p2 = document.getElementById(dato.sec); if (p2 && p2.classList.contains('sec')) s2 = p2; }
         if (s2) {
           var actual0 = window.pageYOffset || document.documentElement.scrollTop || 0;
           meta = Math.round(s2.getBoundingClientRect().top + actual0 + (dato.dy || 0));
