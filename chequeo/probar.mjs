@@ -625,6 +625,7 @@ async function escenario(nombre, tipo, opciones, esTablet){
        que `getBoundingClientRect`, la escala pasa a ser 1.
        ⚠️ La captura ENTERA de mas abajo NO se toca: esa es para mirarla. */
     const escala = 1;
+    let movidas = 0;
     const juntados = new Map();
 
     const unaPantalla = async () => {
@@ -843,8 +844,31 @@ async function escenario(nombre, tipo, opciones, esTablet){
     let cortado = null;
     for (let y = 0; y <= alto; y += paso) {
       try {
-        await page.evaluate(v => window.scrollTo(0, v), y);
+        /* ⚠️⚠️ EL SCROLL LO HACE EL NAVEGADOR, NO LA PAGINA (14/9/2026).
+           `window.scrollTo` desde adentro de la pagina NO MUEVE esta invitacion.
+           Medido en vivo, con la invitacion real abierta: scrollTo(0, 1200) deja
+           scrollY en 0. El motor tiene animaciones de scroll que la devuelven a
+           su lugar. O sea que este chequeo creia estar recorriendo la pagina y
+           fotografiaba siempre lo mismo -o peor: la pagina a medio moverse entre
+           la medida de las cajas y la foto-. De ahi salian los 'ilegibles' con
+           fondo claro donde en realidad hay un panel morado oscuro:
+             'Comparte el momento' 1.1/3 sobre luminancia 0.72-0.85
+           cuando en pantalla es blanco sobre morado, comprobado mirandolo.
+           Es la MISMA causa que ya se arreglo para la solapa de la musica y para
+           el boleto del pase, y aca habia quedado sin arreglar.
+           La rueda del mouse la maneja el navegador y la pagina no la deshace.
+           Y si aun asi no llega, esa pantalla NO se mide: se cuenta y se dice. */
+        const yAhora = await page.evaluate(() => Math.round(window.scrollY || 0));
+        await page.mouse.move(20, 20);
+        await page.mouse.wheel(0, y - yAhora);
         await page.waitForTimeout(250 * k);
+        let yReal = await page.evaluate(() => Math.round(window.scrollY || 0));
+        if (Math.abs(yReal - y) > paso) {
+          await page.evaluate(v => window.scrollTo(0, v), y);
+          await page.waitForTimeout(250 * k);
+          yReal = await page.evaluate(() => Math.round(window.scrollY || 0));
+        }
+        if (Math.abs(yReal - y) > paso) { movidas++; continue; }
         await unaPantalla();
       } catch (e) {
         cortado = 'a la altura ' + y + ' de ' + alto + ': ' +
@@ -853,6 +877,7 @@ async function escenario(nombre, tipo, opciones, esTablet){
       }
     }
     if (cortado) log('   ----   el contraste no se pudo medir entero (' + cortado + ')');
+    if (movidas) log('   ----   ' + movidas + ' pantallas no se pudieron recorrer: ahi no se midio el contraste');
     try {
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForTimeout(300 * k);
