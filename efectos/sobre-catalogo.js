@@ -459,7 +459,20 @@
       '  transform:translate(-50%,-50%);',
       '  height:' + cajaAlto + ';width:' + cajaAncho + ';',
       '  perspective:1400px;pointer-events:none;z-index:6;',
-      '  opacity:0;transition:opacity .45s ease}',
+        /* ⚠⚠ EL RETARDO NO ES UN CAPRICHO: SIN EL, EL SOBRE SPOILEA (15/9/2026).
+           Maki filmo la carga en un iPhone. Durante unos 3 decimos SE VE LA FOTO
+           DE LOS NOVIOS a traves del papel, antes de que el sobre termine de
+           aparecer. Es lo PRIMERO que ve el invitado: la sorpresa del sobre se
+           pierde antes de empezar.
+           Las capas del sobre se desvanecen todas juntas en .45s, y esta -la
+           foto- esta ABAJO. Mientras el papel de arriba todavia es translucido,
+           la foto se lee igual. Con el retardo, la foto recien empieza cuando el
+           papel ya es opaco, o sea que no se llega a ver.
+           ⚠ Y VA ACA, NO EN i/estilos-servidor.css. Ya lo intente alla y NO
+             sirvio: esta hoja se inyecta por JavaScript, o sea despues, y con la
+             misma especificidad le gana a la del servidor. Medido en vivo: el
+             transition-delay seguia en 0s. */
+      '  opacity:0;transition:opacity .45s ease .5s}',
       '#env.carta-video.puesto #col-sobre-foto{opacity:1}',
 
       '#col-sobre-foto .hoja{position:absolute;inset:0;',
