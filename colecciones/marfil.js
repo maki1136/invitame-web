@@ -101,6 +101,23 @@
   var TINTA3  = '#b6b0a8';   /* rótulos, segundos, filetes */
 
   var CSS = [
+    /* ---- LA ESCALA: se setean LAS VARIABLES DEL MOTOR -------------------
+       El motor tiene exactamente tres roles y cada uno lee su variable con
+       `!important`:
+           .sec h2          { font-size: var(--fs-titulo, 30px) !important }
+           .kick            { font-size: var(--fs-cursiva, 34px) !important }
+           .sec p:not(.frase){ font-size: var(--fs-texto, 16px) !important }
+       ⚠️ Escribir `font-size` acá NO SIRVE: el `!important` del motor gana
+          aunque la colección tenga más especificidad. Medido el 15/9: la
+          cursiva se quedaba en 34px con la regla de 12,5 px puesta.
+       ⚠️ `--fs-texto` NO SE TOCA. Jazmín pidió agrandar el cuerpo y
+          `perlas-ajustes.js` ya lo dejó donde ella lo quería. Achicarlo para
+          parecerse a la referencia sería deshacer un pedido suyo.
+    */
+    'h[c] {',
+    '  --fs-cursiva:21px;',
+    '}',
+
     /* ---- 1. LA VOZ SERIF: títulos de sección ---------------------------- */
     'h[c] .sec h2, h[c] .sec h2.reveal {',
     '  font-family:' + SERIF + ';',
@@ -108,23 +125,41 @@
     '  color:' + TINTA + ';',
     '}',
 
-    /* ---- 2. LA VOZ SANS: bajadas, rótulos y párrafos -------------------- */
-    'h[c] .sec .kick, h[c] .sec .sm, h[c] .sec p {',
+    /* ---- 2. LA VOZ SANS: los párrafos ----------------------------------
+       ⚠️ `.kick` NO VA ACÁ, y es el error que ya se cometió una vez: por el
+          nombre parece una bajada, pero el motor la llama CURSIVA y dice
+          «La fecha», «Con mucha alegría», «El gran día». Es la línea a mano
+          arriba del título — el mismo papel que `and` / `day` / `Wedding` en
+          la referencia. Ponerle una sans la aplanaba.
+          → Antes de asignarle una voz a una clase, LEER QUÉ DICE adentro.
+    */
+    'h[c] .sec p, h[c] .sec .sm {',
     '  font-family:' + SANS + ';',
     '  letter-spacing:.02em; line-height:1.78;',
     '  color:' + TINTA2 + ';',
     '}',
-    'h[c] .sec .kick {',
-    '  font-size:12.5px; letter-spacing:.03em;',
-    '}',
 
-    /* ---- 3. LA VOZ CURSIVA: SÓLO las palabras que unen ------------------ */
+    /* ---- 3. LA VOZ CURSIVA: la línea a mano y las palabras que unen ----- */
+    'h[c] .sec .kick {',
+    '  font-family:' + CURSIVA + ';',
+    '  font-weight:400; letter-spacing:0;',
+    '  color:' + TINTA2 + ';',
+    '}',
+    /* ⚠️ `text-transform:none` y `letter-spacing:0` NO SON ADORNO: el motor
+          trata este rótulo como versalitas chiquitas
+          (`text-transform:uppercase; font-size:9.5px; letter-spacing:.24em`).
+          Si se le pone la cursiva SIN sacarle eso, queda «LOS COLORES DE LA
+          BODA» en script y mayúsculas, partido en dos renglones — y los dos
+          filetes se achican hasta desaparecer. Visto y corregido el 15/9.
+       ⚠️ `white-space:nowrap` es lo que garantiza UNA línea, que es lo que
+          hace que los filetes queden a los costados y no arriba y abajo. */
     'h[c] .col-dc .col-dc-tit {',
     '  font-family:' + CURSIVA + ';',
-    '  font-size:21px; font-weight:400; letter-spacing:0;',
+    '  font-size:19px; font-weight:400; letter-spacing:0;',
+    '  text-transform:none; white-space:nowrap;',
     '  color:' + TINTA + ';',
     '  display:flex; align-items:center; gap:14px;',
-    '  max-width:300px; margin-left:auto; margin-right:auto;',
+    '  max-width:340px; margin-left:auto; margin-right:auto;',
     '}',
     /* los dos filetes, que es EL gesto de la referencia */
     'h[c] .col-dc .col-dc-tit::before, h[c] .col-dc .col-dc-tit::after {',
@@ -164,8 +199,14 @@
     '}',
 
     /* ---- LA CUENTA REGRESIVA ------------------------------------------- */
+    /* ⚠️ LAS CIFRAS DE CORMORANT SON DE ESTILO ANTIGUO. Sin pedirle las de
+          caja alta, «172» se dibuja con el 1 a la altura de una minúscula y
+          se lee «I72»; «14» se lee «I4». En la referencia las cuatro cifras
+          son parejas (166:08:00:52). Es un detalle chico que canta mucho. */
     'h[c] .count .num {',
     '  font-family:' + SERIF + '; font-weight:300; letter-spacing:.01em;',
+    '  font-variant-numeric:lining-nums;',
+    '  font-feature-settings:"lnum" 1,"onum" 0;',
     '}',
     'h[c] .count .sep { opacity:.5; font-weight:300 }',
     /* los rótulos: versalitas muy chicas y muy espaciadas */
