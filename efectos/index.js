@@ -550,6 +550,11 @@
      en esa misma sección. Si corriera antes no tendría de dónde copiar.
    · `panel-coleccion.js` va DESPUÉS de `panel-paleta.js`: al elegir colección
      propone la paleta que le corresponde.
+   · `colecciones/marfil-texturas.js` va ANTES de `colecciones/marfil.js`:
+     es el material (window.INVPIEZAS.marfil*), igual que las pieza-*.js.
+   · `colecciones/marfil.js` va DESPUÉS del bloque de Perlas y ANTES de
+     `dresscode-colores.js`, que se dispara con la marca `data-coleccion` y
+     tiene que ver la que haya puesto CUALQUIER colección.
    · `acordeon.js` NO tiene orden: se cuelga del click y no depende de nadie.
    ============================================================================ */
 (function () {
@@ -623,6 +628,7 @@
     '/colecciones/pieza-sobre.js',     /* DIFUMINADO · la carta */
     '/colecciones/pieza-mono.js',      /* DIFUMINADO · el soporte de la tarjeta de contacto */
     '/colecciones/pieza-collar.js',    /* MULTIPLICADO · el collar que cruza la invitación */
+    '/colecciones/marfil-texturas.js', /* las cinco de Marfil: papel, tres perlas sueltas, fondo */
 
     /* ---- LAS COLECCIONES: una decisión que trae todo junto ---- */
     '/colecciones/perlas.js',          /* copia de la referencia de Maki: serif fina, aire, perlas */
@@ -631,6 +637,8 @@
     '/efectos/perlas-ajustes.js',      /* los retoques de Jazmín: el papel, las caras, la frase */
     '/efectos/regalo-perlas.js',       /* un regalo dibujado con perlas, en Mesa de regalos */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
+
+    '/colecciones/marfil.js',          /* copia de la referencia BOMA: serif espaciada y filetes */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
