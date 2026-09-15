@@ -344,3 +344,28 @@ iframe[src*="spotify"]{
 .portada .kicker {
   text-shadow: 0 0 8px rgba(26,18,13,.62), 0 1px 2px rgba(26,18,13,.45);
 }
+
+
+/* ===== LOS BOTONES FANTASMA DE CEREMONIA Y FIESTA  (14/9/2026)
+   Misma historia que la cuenta regresiva, y el banco los marca en los cuatro
+   navegadores: "Agendar" 1.4 sobre un minimo de 4.5.
+   Medidos en la invitacion real, los tres son iguales: letra CLARA, borde claro
+   y CERO relleno (alfa 0), parados sobre la foto de la seccion. La foto va de
+   0.03 a 0.58 de luminancia dentro del mismo boton: donde esta oscura se leen,
+   donde se aclara desaparecen.
+
+   No se les pone relleno: el punto de un boton fantasma es que se vea la foto
+   a traves. Se les suma el mismo halo suave de la portada.
+   OJO: se repite el text-shadow que ya tenian -el relieve de dos lineas, negro
+   arriba y blanco abajo- porque text-shadow NO se acumula: si se escribe solo
+   el halo, el relieve se pierde y los botones quedan planos.
+
+   .sm es la linea "Invitacion creada con Invitame" del pie: verde salvia sobre
+   fondo oscuro, 2.6. Es nuestra firma, tiene que leerse. */
+.evento .btnrow .btn.gh {
+  text-shadow: 0 -1px 0 rgba(0,0,0,.55), 0 1px 0 rgba(255,255,255,.16),
+               0 0 8px rgba(26,18,13,.62);
+}
+.sm {
+  text-shadow: 0 0 8px rgba(26,18,13,.62), 0 1px 2px rgba(26,18,13,.45);
+}
