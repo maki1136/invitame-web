@@ -283,7 +283,25 @@
           meta = Math.round(s2.getBoundingClientRect().top + actual0 + (dato.dy || 0));
         }
       }
-      try { window.scrollTo(0, meta); } catch (e) {}
+      /* ⚠️⚠️ `html { scroll-behavior: smooth }` CONVIERTE ESTE SALTO EN UNA
+         ANIMACION QUE NUNCA LLEGA (14/9/2026).
+         Medido en la invitacion real, con el sobre ya abierto:
+           window.scrollTo(0, 5000)                 -> a los 600 ms scrollY sigue en 0
+           lo mismo con scroll-behavior en auto     -> scrollY 5000 al instante
+         Y es peor que lento: este mismo bucle vuelve a pedir el scroll cada
+         200 ms, y cada pedido REEMPIEZA la animacion desde donde iba. Por eso
+         se quedaba a mitad de camino -'anoto 13304 y volvio a 8347'- y a los
+         12 s se rendia. La explicacion que estaba escrita aca abajo -que la
+         pagina todavia no media tanto- era cierta pero no era la causa.
+         Se apaga el suavizado SOLO para este salto y se vuelve a poner, asi el
+         resto de la invitacion sigue scrolleando suave como hasta ahora. */
+      var H = document.documentElement;
+      var suave = H.style.scrollBehavior;
+      try {
+        H.style.scrollBehavior = 'auto';
+        window.scrollTo(0, meta);
+      } catch (e) {}
+      H.style.scrollBehavior = suave;
       var actual = window.pageYOffset || document.documentElement.scrollTop || 0;
       if (Math.abs(actual - meta) > 40 && Date.now() - desde < 12000) {
         setTimeout(poner, 200);
