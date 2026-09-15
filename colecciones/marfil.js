@@ -404,6 +404,57 @@
     '  letter-spacing:.005em !important; text-shadow:none !important;',
     '}',
 
+    /* ---- CONFIRMAR ASISTENCIA ------------------------------------------
+       ⚠️ ESTA SECCIÓN ESTABA ENTERA DISEÑADA PARA BANDA OSCURA y al
+          transparentarla quedó ILEGIBLE DE PUNTA A PUNTA. Medido el 15/9:
+            .kick   → rgb(255,255,255)  blanco
+            p       → rgb(215,206,187)  crema
+            label   → rgb(197,186,210)  lavanda pálido
+            input   → texto blanco, relleno rgba(255,255,255,.08),
+                      borde rgba(255,255,255,.25)
+          Sobre papel marfil no se veía NADA: ni el título, ni «Tu nombre»,
+          ni los dos botones del sí/no.
+       → La lección: cuando se apaga un fondo oscuro hay que revisar TODA la
+         tinta que ese fondo justificaba, no sólo el h2 y el párrafo. */
+    'h[c] [data-sec="confirmacion"] .kick,',
+    'h[c] [data-sec="confirmacion"] p,',
+    'h[c] [data-sec="confirmacion"] small {',
+    '  color:' + TINTA2 + ' !important;',
+    '}',
+    'h[c] [data-sec="confirmacion"] label {',
+    '  color:' + TINTA2 + ' !important;',
+    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
+    '  letter-spacing:.16em !important; text-transform:uppercase !important;',
+    '}',
+    'h[c] [data-sec="confirmacion"] input,',
+    'h[c] [data-sec="confirmacion"] select,',
+    'h[c] [data-sec="confirmacion"] textarea {',
+    '  color:' + TINTA + ' !important;',
+    '  background-color:rgba(255,255,255,.42) !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:2px !important;',
+    '  font-family:' + SANS + ' !important;',
+    '}',
+    'h[c] [data-sec="confirmacion"] input::placeholder,',
+    'h[c] [data-sec="confirmacion"] textarea::placeholder {',
+    '  color:' + TINTA3 + ' !important;',
+    '}',
+    /* el interruptor del sí / no podré */
+    'h[c] .et, h[c] .et.s, h[c] .et.n { color:' + TINTA2 + ' !important }',
+    'h[c] .et.on, h[c] .et.sel, h[c] .et[aria-checked="true"] {',
+    '  color:' + TINTA + ' !important;',
+    '}',
+
+    /* ---- LA PLAYLIST: el reproductor no manda ---------------------------
+       Maki: «en la playlist no la podés ocultar». El acordeón ya existe pero
+       nace ABIERTO, y el widget de Spotify —que es un iframe ajeno y no se
+       puede vestir por dentro— se comía media sección.
+       → Marfil lo deja PLEGADO: queda la píldora fantasma invitando, y el
+         invitado lo abre si quiere. Se pliega UNA sola vez (ver `plegarMusica`). */
+    'h[c] [data-sec="spotify"] .acc-panel.open .acc-inner {',
+    '  border:1px solid ' + TINTA3 + '; border-radius:3px; padding:10px;',
+    '  background:rgba(255,255,255,.35);',
+    '}',
+
     /* ---- LAS PERLAS SUELTAS, APOYADAS SOBRE EL PAPEL ------------------- */
     'h[c] .mf-perla {',
     '  position:absolute; pointer-events:none; z-index:1;',
@@ -492,34 +543,40 @@
      -------------------------------------------------------------------- */
 
   var CL_PERLA = 'mf-perla';
-  /* izquierda o derecha, arriba o abajo, y el tamaño. Salteado a mano para
-     que no se lea un patrón. */
+  /* ⚠️ NINGUNA A MENOS DEL 8% DEL BORDE. Con `left:6%` una perla quedaba
+        colgada del canto de la tarjeta y se leía como una mota mal recortada
+        — Maki: «veo una perla tirada por ahí, mal cortada». Medido: ahora
+        ninguna queda a menos de 24 px del borde del papel. */
   var SIEMBRA = [
-    { pieza: 'marfilPerlaA', lado: 'left:6%',   alto: 'top:7%',    tam: 34 },
-    { pieza: 'marfilPerlaC', lado: 'right:9%',  alto: 'top:22%',   tam: 22 },
-    { pieza: 'marfilPerlaB', lado: 'right:5%',  alto: 'bottom:12%',tam: 40 },
-    { pieza: 'marfilPerlaC', lado: 'left:11%',  alto: 'bottom:8%', tam: 26 }
+    { pieza: 'marfilPerlaA', lado: 'left:13%',  alto: 'top:9%',     tam: 38 },
+    { pieza: 'marfilPerlaC', lado: 'right:15%', alto: 'top:26%',    tam: 24 },
+    { pieza: 'marfilPerlaB', lado: 'right:11%', alto: 'bottom:16%', tam: 44 },
+    { pieza: 'marfilPerlaC', lado: 'left:18%',  alto: 'bottom:11%', tam: 27 },
+    { pieza: 'marfilPerlaB', lado: 'left:9%',   alto: 'top:38%',    tam: 31 },
+    { pieza: 'marfilPerlaA', lado: 'right:8%',  alto: 'bottom:34%', tam: 29 }
   ];
 
+  /* Secciones donde una perla SÍ se puede apoyar: claras, altas y sin foto.
+     La perla trae su propio papel marfil con el alfa apagado en el borde, así
+     que sobre una foto o sobre una sección baja canta. */
+  var SIN_PERLA = ['galeria', 'trivia', 'filtro', 'video', 'portada'];
+
   function claras() {
-    var out = [];
-    var todas = document.querySelectorAll('.frame .sec');
+    var out = [], todas = document.querySelectorAll('.frame .sec');
     for (var i = 0; i < todas.length; i++) {
       var s = todas[i];
-      /* ni la portada (es foto), ni la galería, ni el filtro, ni la trivia:
-         ahí la perla se apoyaría sobre una imagen o sobre un juego. */
       var n = s.getAttribute('data-sec') || '';
-      if (n === 'galeria' || n === 'trivia' || n === 'filtro' || n === 'video') continue;
-      if (s.querySelector('.fxlayer')) continue;
+      if (SIN_PERLA.indexOf(n) >= 0) continue;
+      if (s.querySelector(':scope > img, :scope > video, .fxlayer')) continue;
+      if (s.getBoundingClientRect().height < 420) continue;   /* nada de secciones bajas */
       out.push(s);
     }
     return out;
   }
 
   function colocarPerlas() {
-    var secs = claras();
-    var puestas = 0;
-    for (var i = 0; i < secs.length; i += 3) {          /* una de cada tres */
+    var secs = claras(), puestas = 0;
+    for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
       if (s.querySelector('.' + CL_PERLA)) { puestas++; continue; }
       var d = SIEMBRA[puestas % SIEMBRA.length];
@@ -533,6 +590,27 @@
       s.appendChild(n);
       puestas++;
     }
+  }
+
+  /* ---------------------------------------------------------- la playlist
+     El acordeón de la música nace ABIERTO y el widget de Spotify se come
+     media sección. Marfil lo pliega UNA sola vez y lo marca, para no volver
+     a cerrárselo en la cara al invitado que lo abrió a propósito.
+     ⚠️ Esto NO se puede hacer por CSS: hay que sacar la clase `.open`. */
+
+  function plegarMusica() {
+    var s = document.querySelector('[data-sec="spotify"]');
+    if (!s || s.getAttribute('data-mf-plegado')) return;
+    var b = s.querySelector('.acc-btn.open'), p = s.querySelector('.acc-panel.open');
+    if (!b && !p) return;
+    if (b) { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }
+    if (p) p.classList.remove('open');
+    s.setAttribute('data-mf-plegado', '1');
+  }
+
+  function desplegarMusica() {
+    var s = document.querySelector('[data-sec="spotify"]');
+    if (s) s.removeAttribute('data-mf-plegado');
   }
 
   function sacarPerlas() {
@@ -556,6 +634,7 @@
     if (fondo) raiz.style.setProperty('--mf-fondo', 'url("' + fondo + '")');
 
     colocarPerlas();
+    plegarMusica();
 
     if (tieneFuentePropia()) {
       raiz.removeAttribute(MARCA_T);
@@ -575,6 +654,7 @@
     raiz.style.removeProperty('--mf-papel');
     raiz.style.removeProperty('--mf-fondo');
     sacarPerlas();
+    desplegarMusica();
     juntarNombres();
     puesta = false;
   }
