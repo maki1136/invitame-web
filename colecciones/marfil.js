@@ -379,6 +379,31 @@
     '}',
     'h[c] .frame .sec:nth-of-type(even) > img { transform:rotate(1.6deg) }',
 
+    /* ---- LA FRASE: NI BANDA NEGRA NI GLOBITOS -------------------------
+       Maki, 15/9, mirando la muestra: «donde están los globitos rojos esos
+       que está la frase. Es una frase gigante con un fondo negro horrible
+       atrás y el texto grandísimo que no tiene nada que ver».
+       ⚠️ Transparentar la `.sec` NO alcanza: la banda oscura, el velo y el
+          bokeh viven DENTRO de la sección, en tres nodos propios —
+          `.bg` (un linear-gradient), `.capa` (rgba(28,34,26,.5)) y
+          `.frasefx.fx-bokeh` (los «globitos», que son `span.fp` con
+          radial-gradients). Medido el 15/9.
+       → La regla general: antes de dar una sección por vestida, mirar sus
+         HIJOS. Una sección transparente puede tener tres capas adentro. */
+    'h[c] .fraseSec .bg {',
+    '  background-image:none !important; background-color:transparent !important;',
+    '}',
+    'h[c] .fraseSec .capa {',
+    '  background-color:transparent !important; backdrop-filter:none !important;',
+    '}',
+    'h[c] .fraseSec .frasefx { display:none !important }',
+    'h[c] .fraseSec .frase, h[c] .fraseSec p {',
+    '  color:' + TINTA + ' !important;',
+    '  font-family:' + SERIF + ' !important; font-weight:300 !important;',
+    '  font-size:20px !important; line-height:1.62 !important;',
+    '  letter-spacing:.005em !important; text-shadow:none !important;',
+    '}',
+
     /* ---- LAS PERLAS SUELTAS, APOYADAS SOBRE EL PAPEL ------------------- */
     'h[c] .mf-perla {',
     '  position:absolute; pointer-events:none; z-index:1;',
