@@ -459,20 +459,7 @@
       '  transform:translate(-50%,-50%);',
       '  height:' + cajaAlto + ';width:' + cajaAncho + ';',
       '  perspective:1400px;pointer-events:none;z-index:6;',
-        /* ⚠⚠ EL RETARDO NO ES UN CAPRICHO: SIN EL, EL SOBRE SPOILEA (15/9/2026).
-           Maki filmo la carga en un iPhone. Durante unos 3 decimos SE VE LA FOTO
-           DE LOS NOVIOS a traves del papel, antes de que el sobre termine de
-           aparecer. Es lo PRIMERO que ve el invitado: la sorpresa del sobre se
-           pierde antes de empezar.
-           Las capas del sobre se desvanecen todas juntas en .45s, y esta -la
-           foto- esta ABAJO. Mientras el papel de arriba todavia es translucido,
-           la foto se lee igual. Con el retardo, la foto recien empieza cuando el
-           papel ya es opaco, o sea que no se llega a ver.
-           ⚠ Y VA ACA, NO EN i/estilos-servidor.css. Ya lo intente alla y NO
-             sirvio: esta hoja se inyecta por JavaScript, o sea despues, y con la
-             misma especificidad le gana a la del servidor. Medido en vivo: el
-             transition-delay seguia en 0s. */
-      '  opacity:0;transition:opacity .45s ease .5s}',
+      '  opacity:0;transition:opacity .45s ease}',
       '#env.carta-video.puesto #col-sobre-foto{opacity:1}',
 
       '#col-sobre-foto .hoja{position:absolute;inset:0;',
@@ -605,16 +592,7 @@
       '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto .h-arriba{',
       '  transform:rotateX(' + GIRO + 'deg);filter:brightness(.80)}',
       '#env.carta-video[data-solapa="1"] #col-sobre-foto{',
-        /* ⚠ EL RETARDO TAMBIEN ACA, Y ESTE ES EL QUE MANDA (15/9/2026).
-           Lo puse dos veces antes y las dos fallaron: primero en
-           i/estilos-servidor.css -que pierde porque esta hoja se inyecta
-           despues- y despues en la regla base #col-sobre-foto -que pierde
-           contra ESTA, que es mas especifica (id + clase + atributo + id) y
-           redefine el transition entero, borrandole el retardo-.
-           Medido en vivo las dos veces: transition-delay seguia en 0s.
-           Para que no vuelva a pasar: si se toca el fade de la foto, hay que
-           mirar QUE regla gana, no cual se escribio ultima. */
-      '  transition:opacity .45s ease .5s,',
+      '  transition:opacity .45s ease,',
       '             transform ' + CAIDA + 's ' + EASE_CUE + ' ' + ESPERA + 's}',
       /* ⚠️ SIN `scale`. Medí los puntos de las solapas laterales entre 11,0 y
          12,7 y la escala se queda en 1,00: el sobre NO se acerca, sólo baja. */
@@ -637,7 +615,22 @@
       '  transform:translate(-50%,-50%);',
       '  height:' + cajaAlto + ';width:' + cajaAncho + ';',
       '  pointer-events:none;z-index:5;overflow:hidden;',
-      '  opacity:0;transition:opacity .45s ease}',
+        /* ⚠⚠ ESTA ES LA CAPA QUE SPOILEABA, Y ME COSTO TRES INTENTOS (15/9/2026).
+           Maki filmo la carga en un iPhone: durante unos 3 decimos se ve la FOTO
+           DE LOS NOVIOS antes de que el sobre termine de aparecer. Es lo primero
+           que ve el invitado y arruina la sorpresa.
+           ⚠ EL NOMBRE ENGANA Y ME HIZO PERDER TRES INTENTOS. Retrase tres veces
+             #col-sobre-FOTO pensando que era la foto de la pareja. No lo es:
+             sus capas usan sobre-maestro.jpg, o sea el PAPEL del sobre. La foto
+             de los novios vive aca, en #col-sobre-CARTA > .h-fondo, que es la
+             hoja que va adentro del sobre. Comprobado comparando los archivos
+             que carga cada capa.
+           Con el retardo, la carta recien aparece cuando el papel de arriba ya
+           es opaco. La carta es justamente lo que NO se tiene que ver hasta que
+           el invitado abra.
+           Si alguna vez hay que tocar esto: mirar QUE ARCHIVO carga cada capa
+           antes de confiar en el nombre. */
+      '  opacity:0;transition:opacity .45s ease .5s}',
       '#env.carta-video.puesto #col-sobre-carta{opacity:1}',
       '#col-sobre-carta .h-fondo{position:absolute;inset:0;',
       '  background-size:cover;background-position:center;',
