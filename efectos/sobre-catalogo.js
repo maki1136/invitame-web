@@ -605,7 +605,16 @@
       '#env.carta-video[data-solapa="1"].abriendo #col-sobre-foto .h-arriba{',
       '  transform:rotateX(' + GIRO + 'deg);filter:brightness(.80)}',
       '#env.carta-video[data-solapa="1"] #col-sobre-foto{',
-      '  transition:opacity .45s ease,',
+        /* ⚠ EL RETARDO TAMBIEN ACA, Y ESTE ES EL QUE MANDA (15/9/2026).
+           Lo puse dos veces antes y las dos fallaron: primero en
+           i/estilos-servidor.css -que pierde porque esta hoja se inyecta
+           despues- y despues en la regla base #col-sobre-foto -que pierde
+           contra ESTA, que es mas especifica (id + clase + atributo + id) y
+           redefine el transition entero, borrandole el retardo-.
+           Medido en vivo las dos veces: transition-delay seguia en 0s.
+           Para que no vuelva a pasar: si se toca el fade de la foto, hay que
+           mirar QUE regla gana, no cual se escribio ultima. */
+      '  transition:opacity .45s ease .5s,',
       '             transform ' + CAIDA + 's ' + EASE_CUE + ' ' + ESPERA + 's}',
       /* ⚠️ SIN `scale`. Medí los puntos de las solapas laterales entre 11,0 y
          12,7 y la escala se queda en 1,00: el sobre NO se acerca, sólo baja. */
