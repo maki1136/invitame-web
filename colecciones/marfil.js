@@ -455,6 +455,22 @@
     '  background:rgba(255,255,255,.35);',
     '}',
 
+    /* ---- NUESTRAS PERSONAS ----------------------------------------------
+       Los nombres venían en BLANCO puro (255,255,255) y el parentesco en
+       lavanda pálido (197,186,210): otra sección pensada para banda oscura.
+       ⚠️ Mi barrido de contraste NO los encontró porque son `div` y yo
+          consultaba una lista fija de etiquetas (h1,h2,p,span,a,li…).
+          → El barrido tiene que recorrer TODOS los nodos hoja con texto. */
+    'h[c] [data-sec="padres"] .nm { color:' + TINTA + ' !important }',
+    'h[c] [data-sec="padres"] .rl { color:' + TINTA2 + ' !important }',
+
+    /* ---- NUESTRA CARTA --------------------------------------------------
+       El título salía blanco. Lo pinta una regla con ID (`#carta-sec`), así
+       que `h[c] .sec h2` —que es todo clases— perdía. Hay que nombrar el id. */
+    'h[c] #carta-sec h2, h[c] #carta-sec .cartatit {',
+    '  color:' + TINTA + ' !important;',
+    '}',
+
     /* ---- LA RASPADITA: NO SE TAPA UN PAPEL CON OTRO PAPEL ---------------
        `#scratchcard` trae su propia tarjeta blanca (rgb(251,250,252)) apoyada
        sobre el papel de la sección. Dos claros distintos, uno encima del otro,
