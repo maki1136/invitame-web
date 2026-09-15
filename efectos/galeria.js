@@ -295,18 +295,31 @@
          pagina todavia no media tanto- era cierta pero no era la causa.
          Se apaga el suavizado SOLO para este salto y se vuelve a poner, asi el
          resto de la invitacion sigue scrolleando suave como hasta ahora. */
+      /* el suavizado se apaga UNA vez y se devuelve cuando termina todo. En
+         Safari, apagarlo y volver a ponerlo en el mismo tick cancelaba el
+         salto: quedaba igual que antes (anoto 12879, volvio a 5942). */
       var H = document.documentElement;
-      var suave = H.style.scrollBehavior;
-      try {
-        H.style.scrollBehavior = 'auto';
-        window.scrollTo(0, meta);
-      } catch (e) {}
-      H.style.scrollBehavior = suave;
+      if (!apagado) { suave = H.style.scrollBehavior; H.style.scrollBehavior = 'auto'; apagado = true; }
+      try { window.scrollTo(0, meta); } catch (e) {}
       var actual = window.pageYOffset || document.documentElement.scrollTop || 0;
-      if (Math.abs(actual - meta) > 40 && Date.now() - desde < 12000) {
+
+      /* ⚠️ LLEGAR UNA VEZ NO ALCANZA: EL DESTINO SE MUEVE. En el iPad anoto
+         13469 y quedo en 14487 -se paso 1000 px-. No es que fallara el salto:
+         llego perfecto al lugar que la seccion ocupaba EN ESE MOMENTO, y
+         despues se montaron mas secciones y el lugar cambio. Por eso ahora no
+         se corta al primer acierto: hay que acertar DOS veces seguidas al
+         mismo numero, o sea que el destino ya dejo de moverse. */
+      var cerca = Math.abs(actual - meta) <= 40;
+      var quieto = cerca && Math.abs(meta - metaAnterior) <= 4;
+      metaAnterior = meta;
+      if (!quieto && Date.now() - desde < 12000) {
         setTimeout(poner, 200);
+      } else if (apagado) {
+        H.style.scrollBehavior = suave;
+        apagado = false;
       }
     };
+    var apagado = false, suave = '', metaAnterior = -99999;
     poner();
   }
 
