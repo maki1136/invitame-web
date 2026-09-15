@@ -455,6 +455,46 @@
     '  background:rgba(255,255,255,.35);',
     '}',
 
+    /* ---- LA RASPADITA: NO SE TAPA UN PAPEL CON OTRO PAPEL ---------------
+       `#scratchcard` trae su propia tarjeta blanca (rgb(251,250,252)) apoyada
+       sobre el papel de la sección. Dos claros distintos, uno encima del otro,
+       y el borde entre los dos canta: se lee como un parche, no como papel.
+       Es la misma lección que Maki ya había marcado en Perlas.
+       → Fondo transparente, sin sombra y sin esquinas: quedan sólo los tres
+         círculos plateados sobre el papel. */
+    'h[c] #scratchcard {',
+    '  background-color:transparent !important; box-shadow:none !important;',
+    '  border-radius:0 !important;',
+    '}',
+
+    /* ---- EL PASE CON EL QR ----------------------------------------------
+       Otro bloque diseñado para banda oscura: el rótulo en crema (240,231,212)
+       y la tarjeta en lavanda pálido (233,230,238) sobre un relleno blanco al
+       7%. Sobre papel marfil no se leía ni el nombre del invitado.
+       ⚠️ El cuadrado BLANCO del QR se deja como está: si se le baja el
+          contraste, deja de escanear. */
+    'h[c] .pase .t { color:' + TINTA2 + ' !important }',
+    'h[c] .pase .pasecard {',
+    '  background-color:rgba(255,255,255,.38) !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:3px !important;',
+    '  color:' + TINTA + ' !important;',
+    '}',
+    'h[c] .pase .pasecard * { color:' + TINTA + ' !important }',
+    'h[c] .pase .pasecard .k, h[c] .pase .pasecard small, h[c] .pase .pasecard .lb {',
+    '  color:' + TINTA2 + ' !important;',
+    '  font-family:' + SANS + ' !important; font-size:9.5px !important;',
+    '  letter-spacing:.16em !important; text-transform:uppercase !important;',
+    '}',
+    /* la etiqueta «Sin usar» venía como pastilla verde */
+    'h[c] .pase .estado {',
+    '  background:none !important; background-color:transparent !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
+    '  color:' + TINTA2 + ' !important;',
+    '  font-family:' + SANS + ' !important; font-size:9px !important;',
+    '  letter-spacing:.16em !important; text-transform:uppercase !important;',
+    '  padding:4px 12px !important; box-shadow:none !important; text-shadow:none !important;',
+    '}',
+
     /* ---- LAS PERLAS SUELTAS, APOYADAS SOBRE EL PAPEL ------------------- */
     'h[c] .mf-perla {',
     '  position:absolute; pointer-events:none; z-index:1;',
