@@ -804,9 +804,16 @@ async function escenario(nombre, tipo, opciones, esTablet){
            Mientras no este resuelto de raiz NO se da rojo por esto: se dice
            que no se pudo medir, que es la verdad. Dar 49 rojos falsos tapa
            los reales, y eso es peor que no decir nada. */
-        if (peor < min && Math.abs(p90 - p10) < 0.02) {
+        /* La ventana era demasiado angosta y se seguian colando. Caso real:
+             'Min' 1.0/4.5 [#e7ddc8 sobre luminancia 0.76-0.79]
+           #e7ddc8 tiene luminancia 0.76: el fondo medido ES la letra, en todo el
+           rectangulo, con 0.03 entre extremos. Mirado en pantalla ese texto SE
+           LEE -flojo sobre la parte clara de la foto, pero se lee-. Un texto no
+           puede tener de fondo su propio color en todo su rectangulo: eso es la
+           tinta sin borrar, no un texto ilegible. */
+        if (peor < min && Math.abs(p90 - p10) < 0.06) {
           const lt = lumRGB(c.color[0], c.color[1], c.color[2]);
-          if (Math.abs(lt - p10) < 0.01) continue;
+          if (Math.abs(lt - p10) < 0.02) continue;
         }
         /* ⚠️ LA SEGUNDA OPINION: ver la nota del fondo propio, mas arriba. */
         if (peor < min && c.propio) {
@@ -858,16 +865,28 @@ async function escenario(nombre, tipo, opciones, esTablet){
            el boleto del pase, y aca habia quedado sin arreglar.
            La rueda del mouse la maneja el navegador y la pagina no la deshace.
            Y si aun asi no llega, esa pantalla NO se mide: se cuenta y se dice. */
-        const yAhora = await page.evaluate(() => Math.round(window.scrollY || 0));
-        await page.mouse.move(20, 20);
-        await page.mouse.wheel(0, y - yAhora);
+        /* ⚠️ Y LA CAUSA DE VERDAD ERA UNA LINEA DE CSS: scroll-behavior smooth.
+           La rueda del mouse funcionaba, pero en el iPhone Playwright no la
+           tiene ('Mouse wheel is not supported in mobile WebKit') y el chequeo
+           no corria ni una pantalla. Buscando por que, aparecio lo que pasaba
+           de verdad: la invitacion trae html { scroll-behavior: smooth }, asi
+           que TODO scroll pedido por codigo se vuelve una animacion. Medido en
+           el navegador, con la pagina quieta:
+             window.scrollTo(0, 5000)              a los 600 ms scrollY sigue 0
+             igual, con el suavizado en auto       scrollY 5000 al instante
+           Por eso scrollTo 'no movia nada': movia, pero tardaba una eternidad,
+           y el chequeo fotografiaba la pagina a medio camino.
+           Se apaga el suavizado, se salta, y se vuelve a poner. Funciona igual
+           en escritorio y en telefono, que es lo que la rueda no hacia. */
+        await page.evaluate(function (v) {
+          var H = document.documentElement;
+          var suave = H.style.scrollBehavior;
+          H.style.scrollBehavior = 'auto';
+          window.scrollTo(0, v);
+          H.style.scrollBehavior = suave;
+        }, y);
         await page.waitForTimeout(250 * k);
-        let yReal = await page.evaluate(() => Math.round(window.scrollY || 0));
-        if (Math.abs(yReal - y) > paso) {
-          await page.evaluate(v => window.scrollTo(0, v), y);
-          await page.waitForTimeout(250 * k);
-          yReal = await page.evaluate(() => Math.round(window.scrollY || 0));
-        }
+        const yReal = await page.evaluate(() => Math.round(window.scrollY || 0));
         if (Math.abs(yReal - y) > paso) { movidas++; continue; }
         await unaPantalla();
       } catch (e) {
