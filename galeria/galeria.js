@@ -94,7 +94,7 @@ function esInApp() {
     a.innerHTML =
       '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" ' +
       'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-      '<path d="M14.5 19 7.5 12l7-7"/></svg>Volver a la invitacion';
+      '<path d="M14.5 19 7.5 12l7-7"/></svg>Volver a la invitación';
     a.style.cssText =
       'position:fixed;top:calc(10px + env(safe-area-inset-top));left:12px;z-index:60;' +
       'display:inline-flex;align-items:center;gap:6px;padding:8px 15px 8px 11px;' +
