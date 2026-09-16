@@ -19,6 +19,19 @@
    aparecieron módulos puestos por otro lado. Nunca reescribirlo de memoria:
    bajarlo, agregar la línea y subirlo.
 
+   ★★★★★ LAS REGLAS QUE NO SE PUEDEN ROMPER VAN EN EL MOTOR ★★★★★ (16/9/2026)
+      Maki, despues de que las mismas tres cosas salieran mal por tercera vez:
+      la frase gigante suelta, el preview crudo de YouTube y la carta perdida
+      al final. Las tres ESTABAN ESCRITAS en la skill de muestras, con sus
+      palabras, y se repitieron igual.
+
+      Su conclusion, textual: «las reglas duras adentro del motor».
+
+      → `/efectos/reglas-duras.js`. Que el motor NO PUEDA pintarlo mal, en vez
+        de confiar en que alguien se acuerde de leer la regla.
+      → Una regla que se repite tres veces dejo de ser un criterio: es un bug
+        del sistema. Se codifica.
+
    ★★★★★ ANTES DE ESCRIBIR CÓDIGO, MIRAR SI ES UN DATO ★★★★★  (3/9/2026)
       Maki señaló la sección de la carta en la muestra: «el sobre que quedó
       verde, no entiendo por qué está ahí con esa frase "confirma con alegría"
@@ -41,6 +54,14 @@
       → Y al revés: un campo que sólo se puede corregir a mano en la base es,
         para Jazmín, un campo roto. Todo lo que se cargue mal tiene que poder
         corregirse desde el panel.
+
+      ⚠️ PERO VACIAR UN CAMPO NO SIEMPRE APAGA LA SECCIÓN (16/9/2026)
+         Medido en `martina-mis15`: con el campo `frase` en blanco y 'frase'
+         sacado de `secOrden`, la sección `.fraseSec` seguía en el DOM y traía
+         el texto de la boda de EJEMPLO. O sea que "vaciar" no borra: rellena
+         con otra cosa. Misma familia que la tarea #187.
+         → Lo tapa `/efectos/reglas-duras.js`, pero la causa de fondo sigue en
+           el motor y hay que mirarla.
 
    ★★★★★ TODA FUNCIÓN TIENE QUE ESTAR EN EL PANEL ★★★★★  (1/9/2026)
       Maki, dicho tres veces ya: «recordate que todos tienen que estar en el
@@ -106,6 +127,12 @@
         frase, el papel de una banda, el motivo de la mesa de regalos—.
         Igual que `carta-perlas.js` y `itinerario-perlas.js`. Lo que Jazmín
         elige es la colección; lo de adentro es diseño, no configuración.
+
+        ★ Y LA OTRA EXCEPCIÓN: LAS REGLAS DURAS (16/9/2026)
+          `/efectos/reglas-duras.js` tampoco tiene bloque en el panel, y
+          también está bien: no es una perilla. Es lo contrario de una perilla
+          — son decisiones que Maki ya tomó y que NO se negocian invitación por
+          invitación. Si tuviera interruptor, alguien lo apagaría.
 
    ★★★★★ LO QUE ESCRIBEN LOS NOVIOS NO SE PISA ★★★★★  (4/9/2026)
       `admin.html` guardaba el documento del panel de los novios con `setDoc`
@@ -175,6 +202,18 @@
       → El teléfono de ventas es el mismo que atiende invitameok.com. Si algún
         día se separa el número de ventas del de planners, se cambia en el
         panel, no en el código.
+
+      ★ Y UNA MUESTRA TIENE QUE TRAER TODO LO QUE TRAE LA MUESTRA #1 (16/9/2026)
+        Maki: «nos cagamos trabajando en Perlas al pedo porque empezás desde
+        cero otra vez cometiendo los mismos errores».
+        Armar una muestra tiene DOS mitades y confundirlas es el error:
+          · PARIDAD — tiene que traer TODO lo que trae `camila-y-tomas`.
+            Eso se MIDE, no se opina: campos vacíos, claves de `fx` vacías, y
+            cuántas secciones se cuentan en vivo. Si alguno da distinto de
+            cero, no se entrega.
+          · DIFERENCIA — sobre, fotos, colores, botones, fondo. Ahí sí hay
+            criterio, y ahí «distinto» está bien.
+        → Skills `invitame-muestras-nuevas` y `invitame-perlas-referencia`.
 
    ★★★ LO QUE SE CARGA ADENTRO DE UNA CAJA DE 0 PX SE DIBUJA EN 0×0 ★★★ (1/9/2026)
       Los tres "Ver mapa" y "Ver inspiración" abrían y adentro había un
@@ -400,6 +439,12 @@
       hora en 17, mientras los párrafos ya estaban en 22.
       → Lo hace `/efectos/perlas-ajustes.js`, con los números a la vista.
 
+      ⚠️ Y NO SE INVENTAN CAMPOS DE TAMAÑO (16/9/2026). Se le puso `fraseSize`
+         a una muestra de XV; `camila-y-tomas` no tiene ese campo. La frase
+         salió deforme. Con el campo vacío, las dos miden igual (26-27 px, que
+         es lo que da el motor). → Si la muestra aprobada no tiene un campo,
+         la muestra nueva tampoco.
+
    ★ LAS COSAS DIBUJADAS CON CSS NO REEMPLAZAN A UNA FOTO (31/8/2026)
       Un objeto fotografiado —una perla, un lacre, un moño— tiene microrrelieve
       y nácar que el CSS no imita. El CSS sirve para SUPERFICIES (papel,
@@ -408,6 +453,9 @@
    ★ NO SE TAPA UN PAPEL CON OTRO PAPEL (1/9/2026)
       Para cubrir algo que ya está adentro de una sección con su propio papel,
       la tapa va TRANSPARENTE y lo de abajo se apaga con `visibility:hidden`.
+      → Es exactamente el método que usa `/efectos/reglas-duras.js` para el
+        video de YouTube y la playlist. Tapar con un rectángulo opaco es el
+        arreglo que Maki rechazó.
 
    ★ EL EMPALME DEL SOBRE CON LA INVITACIÓN SE MIDE (2/9/2026)
       Un video de sobre tiene que TERMINAR EN BLANCO, o el corte se ve. Y el
@@ -556,6 +604,12 @@
      `dresscode-colores.js`, que se dispara con la marca `data-coleccion` y
      tiene que ver la que haya puesto CUALQUIER colección.
    · `acordeon.js` NO tiene orden: se cuelga del click y no depende de nadie.
+   · `reglas-duras.js` va EL ÚLTIMO DE TODOS, y tiene que ser el último: saca
+     la frase suelta, sube la carta arriba y tapa el video y la playlist. Como
+     mueve nodos y esconde secciones, necesita que TODOS los demás —incluidas
+     las colecciones— ya hayan terminado de armar. Y cede: si la colección ya
+     resolvió el bloque (Perlas tiene su `carta-perlas.js` y su propia tapa),
+     no se mete. Igual se vuelve a pasar solo, porque el panel repinta.
    ============================================================================ */
 (function () {
   var MODULOS = [
@@ -642,7 +696,11 @@
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
-    '/efectos/panel-dresscode.js'      /* y el editor para elegirlos a mano */
+    '/efectos/panel-dresscode.js',     /* y el editor para elegirlos a mano */
+
+    /* ⚠️ EL ÚLTIMO DE TODOS, Y TIENE QUE SERLO. Mueve nodos y esconde
+       secciones: necesita que todo lo demás ya haya terminado de armar. */
+    '/efectos/reglas-duras.js'         /* la frase no se pinta suelta, la carta va arriba, el video y la playlist nunca crudos */
   ];
 
   /* ===== CÓMO SE CARGAN ======================================================
