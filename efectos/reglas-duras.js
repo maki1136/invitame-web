@@ -22,7 +22,7 @@
    REGLA 1 — LA FRASE NO SE PINTA SUELTA. NUNCA.
 
      «Donde esta la frase, jamas podemos dejarla asi como la haces siempre, es
-      muy poco estetica.»
+      muy poco estetica. Mira como la hicimos en Perlas, esa es la idea.»
      «El sobre que se abre la carta lo quiero en lugar de la frase. A partir de
       ahora la frase va con el sobre.»
 
@@ -35,12 +35,19 @@
       vida...»). Es el mismo problema de la tarea #187. Por eso este modulo no
       mira el dato: saca la seccion y punto.
 
+   ⚠️ PERO EN PERLAS NO SE TOCA, y la razon esta en la propia frase de Maki:
+      «mira como la hicimos en Perlas, ESA ES LA IDEA». En Perlas esa seccion
+      no es una banda con una cita: es EL COLLAR, una pieza fotografiada que se
+      va enhebrando con el scroll. Es el ejemplo bueno, no el malo.
+      Medido el 16/9/2026: con el candado sacado, Perlas perdia el collar.
+      → La regla apunta a la frase suelta y generica, no a una pieza de diseno.
+
    REGLA 2 — LA CARTA VA ARRIBA, EN EL LUGAR QUE DEJO LA FRASE
 
    El motor la deja al final, entre la mesa de regalos y el clima. En Perlas ya
    se subia con `efectos/carta-perlas.js`, pero con un candado `esPerlas()` y
-   anclada a `.fraseSec`. Ahora que la frase se elimina de todas, ese ancla
-   desaparece y el lugar queda libre en todas: la carta sube a ocuparlo.
+   anclada a `.fraseSec`. Ahora que la frase se elimina en las demas, ese ancla
+   desaparece y el lugar queda libre: la carta sube a ocuparlo.
 
    ⚠️ ANCLA MEDIDA EN EL DOM REAL, no supuesta. Los sectores que arma `secOrden`
       (eventos, itinerario, hospedaje, dresscode, padres, galeria, trivia,
@@ -50,9 +57,6 @@
       `contacto-sec`). Por eso la carta NO se ancla por id de sector: se
       cuelga despues de la entrada — portada, pase con QR y raspadita — que es
       exactamente donde estaba la frase, que era el primero de `secOrden`.
-
-   Si esta cargada `carta-perlas.js`, ese modulo gana y este no hace nada: no
-   se pelean dos manos por el mismo nodo.
 
    REGLA 3 — EL VIDEO Y LA PLAYLIST NUNCA SE VEN CRUDOS
 
@@ -75,8 +79,9 @@
 
    · Reversible: se saca la linea de `efectos/index.js` y la invitacion vuelve
      exactamente a como estaba. No toca el motor ni reescribe nada.
-   · Cede ante las colecciones: si una coleccion ya resolvio el bloque, este
-     modulo se aparta.
+   · Cede ante las colecciones: LAS TRES reglas se apartan si la coleccion ya
+     resolvio el bloque. Verificado en camila-y-tomas: la tapa de Perlas gana,
+     la carta se queda donde la puso `carta-perlas.js` y el collar sigue ahi.
    · Revisa cada tanto, porque EL PANEL REPINTA: cada tecla que toca Jazmin en
      la vista previa vuelve a armar los sectores. Misma leccion que dejaron el
      itinerario y la carta de Perlas.
@@ -95,8 +100,9 @@
     return String((D.fx && D.fx.coleccion) || D.coleccion || '').toLowerCase();
   }
 
-  /* Perlas ya tiene su propio modulo para la carta y su propia tapa de video.
-     Ahi este archivo no se mete. */
+  /* Perlas tiene su propio modulo para la carta, su propia tapa de video y,
+     sobre todo, su collar colgado de la seccion de la frase. Ahi este archivo
+     no se mete en NINGUNA de las tres reglas. */
   function loResuelveLaColeccion() {
     return laColeccion() === 'perlas';
   }
@@ -107,6 +113,8 @@
   /* ── REGLA 1: fuera la frase suelta ───────────────────────────────────── */
 
   function sacarLaFrase() {
+    if (loResuelveLaColeccion()) return;
+
     var secs = document.querySelectorAll('.fraseSec, section.frase');
     for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
