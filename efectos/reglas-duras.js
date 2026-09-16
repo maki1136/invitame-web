@@ -4,107 +4,100 @@
 
    Maki, cansado, despues de que las mismas cosas salieran mal por tercera vez:
 
-     «te dije que dejes... la frase sigue asi grande, eliminala directo y
-      anotate no quiero mas asi grande fuera de diseno. vos ves la skill antes
-      de trabajar? ya lo habiamos agregado o no?»
+     «te dije que dejes... la frase sigue asi grande, eliminala directo»
      «hay palabras claras sobre claro»
-     «letras blancas no se lee / ingresa tu nombre no se lee»
+     «y el blanco sobre el rosita? no se lee una mierda»
 
-   Si: ya estaba agregado. Estaba escrito en la skill de muestras, con sus
-   palabras, y aun asi se repitio. La conclusion la eligio el:
+   Estaba todo escrito en la skill de muestras, con sus palabras, y se repitio
+   igual. La conclusion la eligio el:
 
-     «las reglas duras adentro del motor» — que el motor NO PUEDA pintarlo mal,
-     en vez de confiar en que alguien se acuerde de leer la regla.
-
-   Eso es este archivo. No son colecciones ni gustos: son reglas que Maki ya
-   dicto y que valen para TODAS las invitaciones.
+     «las reglas duras adentro del motor» — que el motor NO PUEDA pintarlo mal.
 
    ---------------------------------------------------------------------------
    REGLA 1 — LA FRASE NO SE PINTA SUELTA. NUNCA.
 
-     «Donde esta la frase, jamas podemos dejarla asi como la haces siempre, es
-      muy poco estetica. Mira como la hicimos en Perlas, esa es la idea.»
-     «El sobre que se abre la carta lo quiero en lugar de la frase. A partir de
-      ahora la frase va con el sobre.»
+     «El sobre que se abre la carta lo quiero en lugar de la frase.»
 
-   ⚠️ TRAMPA MEDIDA: vaciar el campo `frase` NO alcanza. Con el campo en blanco,
-      `.fraseSec` seguia en el DOM y traia el texto de la boda de EJEMPLO
-      («Hay un instante en la vida...»). Mismo problema que la tarea #187.
-
-   ⚠️ PERO EN PERLAS NO SE TOCA: ahi esa seccion no es una banda con una cita,
-      es EL COLLAR. Es el ejemplo bueno, no el malo.
+   ⚠️ Vaciar el campo `frase` NO alcanza: `.fraseSec` seguia en el DOM y traia
+      el texto de la boda de EJEMPLO. Por eso se esconde la seccion.
+   ⚠️ EN PERLAS NO SE TOCA: ahi la frase es EL COLLAR, el ejemplo bueno.
 
    REGLA 2 — LA CARTA VA ARRIBA, EN EL LUGAR QUE DEJO LA FRASE
 
-   ⚠️ ANCLA MEDIDA EN EL DOM REAL. Los sectores que arma `secOrden` NO TIENEN
-      id: son `.sec` pelados. Por eso la carta se cuelga despues de la ENTRADA
-      — portada, pase con QR y raspadita — que es donde estaba la frase.
+   ⚠️ Los sectores de `secOrden` NO TIENEN id: son `.sec` pelados. La carta se
+      cuelga despues de la ENTRADA — portada, pase con QR y raspadita.
 
    REGLA 3 — EL VIDEO Y LA PLAYLIST NUNCA SE VEN CRUDOS
 
-     NO SE TAPA UN PAPEL CON OTRO PAPEL. Se esconde el medio con `visibility`
+     NO SE TAPA UN PAPEL CON OTRO PAPEL: se esconde el medio con `visibility`
      y se deja pasar una tapa dibujada encima.
 
-   REGLA 4 — NINGUN TEXTO ILEGIBLE  (16/9/2026)
+   ---------------------------------------------------------------------------
+   REGLA 4 — NINGUN TEXTO ILEGIBLE, Y SE MIDE EL PAPEL DE VERDAD
 
-   Maki, con la captura al lado: «hay palabras claras sobre claro», «letras
-   blancas no se lee», «ingresa tu nombre no se lee».
+   ★★★★★ EL ERROR QUE COSTO DOS VUELTAS ★★★★★
 
-   Medido en el pase con QR de martina-mis15:
-     · «Nombre», «Personas», «Mesa», «Estado del pase» iban en oro #d8b877
-       sobre el rosa del pase #b06a7e → contraste 2.12. WCAG AA pide 4.5.
-     · «Familia Peraza» en blanco puro → 4.03. Tambien por debajo.
+   Primer intento: se buscaba el primer ancestro con un `background-color`
+   opaco y se media contra ese color. En el pase con QR eso daba
+   `rgb(176,106,126)` — un rosa medio — y el corrector, creyendo que el papel
+   era oscuro, ACLARO los rotulos hasta casi blanco.
 
-   No era el descuido de una muestra: era el oro de la paleta cayendo sobre un
-   papel de color medio. Va a volver a pasar con CUALQUIER paleta que Jazmin
-   combine, y nadie lo va a medir a ojo.
+   Pero ese color NO SE VE. El mismo elemento tiene encima una IMAGEN de fondo:
+   el papel rosa clarisimo del pase. Medido con la propia imagen:
+   **rgb(246,236,234)**. O sea: se estaba corrigiendo contra un color tapado, y
+   el resultado fue blanco sobre papel casi blanco. Maki: «no se lee una
+   mierda». Tenia razon — la correccion lo habia EMPEORADO.
 
-   → Se mide y se corrige solo: se conserva el TONO del color elegido y se le
-     mueve la luminosidad hasta que pase. El diseno no cambia de color; cambia
-     de claridad lo justo para leerse.
+   → **UN `background-color` DEBAJO DE UN `background-image` NO ES EL FONDO.**
+     Es lo que quedaria si la imagen no cargara. No se mide contra eso.
 
-   ⚠️⚠️ LA TRAMPA DE MEDIR CONTRASTE: LO QUE ESTA SOBRE UNA FOTO
-      La cuenta regresiva de la portada es blanca sobre una foto oscura, se lee
-      perfecto, y cualquier medicion ingenua la reporta como fallada porque no
-      sabe de que color es la foto abajo. Medido: de 57 "errores" del primer
-      barrido, los primeros siete eran exactamente eso.
+   ★ COMO SE MIDE EL PAPEL AHORA
 
-      ⚠️ PERO EL PRIMER GUARDIA SE PASO DE LARGO. Descartaba todo lo que
-         tuviera CUALQUIER `background-image` en la cadena de padres — y el
-         pase con QR tiene su papel de fondo. Resultado: el modulo corregia 11
-         cosas y justo los rotulos que Maki habia marcado seguian en 2.12,
-         porque ni los miraba.
-      → Ahora el guardia es por BLOQUE, no por imagen: se dejan en paz la
-        PORTADA y el CIERRE, que son los dos que llevan foto de gente a
-        pantalla completa. En todo lo demas se mide contra el color opaco mas
-        cercano, que es el papel de la seccion. Si no hay ningun color opaco en
-        la cadena, tampoco se toca: no hay contra que medir.
+   Cloudinary sirve las imagenes con CORS abierto, asi que se puede pedir la
+   MISMA imagen reducida a 1x1 pixel — que es su color promedio — y leerla en
+   un canvas sin que se contamine. Comprobado el 16/9/2026:
+
+       .../upload/w_1,h_1,c_fill,f_png/v1785954032/invitame/xxx.jpg  →  246,236,234
+
+   Se piden una sola vez por URL y quedan en memoria. Mientras no esten, la
+   regla no corrige nada: no se decide sobre un fondo que todavia no se sabe.
+
+   ⚠️ Si la imagen no es de Cloudinary y no se puede medir (un degradado, un
+      data URI), ese bloque se deja en paz. Mejor no tocar que empeorar.
+
+   ⚠️⚠️ Y LA PORTADA Y EL CIERRE NO SE TOCAN NUNCA. Son los dos bloques con
+      foto de gente a pantalla completa: ahi el texto blanco va con sombra y se
+      lee perfecto, y el color promedio de una foto no dice nada. De 57
+      "errores" del primer barrido, los primeros siete eran exactamente eso.
+
+   ★ COMO CORRIGE
+
+   Conserva el TONO del color elegido y mueve SOLO la luminosidad hasta
+   alcanzar el minimo (4.5, o 3 si el texto es grande).
+   ⚠️ Tiene techo: un tono muy saturado sobre un papel de color medio puede no
+      llegar. Si ni el extremo alcanza, se cae a negro o blanco puro, que
+      siempre llega.
 
    ---------------------------------------------------------------------------
-   ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★  (16/9/2026)
+   ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★
 
-   Este modulo se rompio solo la primera vez que se subio:
-
-     El motor dibuja la invitacion PRIMERO y recien despues llega el documento
-     de Firestore y aparece `window.INVEV`. En esa ventana, preguntar
-     «¿que coleccion es?» devuelve VACIO. O sea: en Perlas contestaba «no es
-     Perlas», le escondia la frase — y con ella EL COLLAR — y como dejaba
-     puesta su marca, las pasadas siguientes ni lo volvian a mirar.
-
-   Es la misma leccion que dejo `musica.js`, anotada en `efectos/index.js`.
+   El motor dibuja primero y `window.INVEV` llega despues. En esa ventana,
+   preguntar «¿que coleccion es?» devuelve VACIO: en Perlas contestaba «no es
+   Perlas», le escondia la frase — y con ella el collar — y como dejaba su
+   marca puesta, no lo volvia a mirar. Misma leccion que `musica.js`.
 
    → No se hace NADA hasta que los datos esten, y si se equivoco, se desanda.
 
-   ⚠️ Y AL VERIFICAR: `todo.php` queda cacheado. La primera comprobacion dio
-      falso rojo. Hay que recargar de verdad, no con otro `?cb=`.
+   ⚠️ Y AL VERIFICAR: `todo.php` queda cacheado. Recargar con otro `?cb=` NO lo
+      bustea: eso bustea el HTML, no el paquete de modulos. Dio falso rojo TRES
+      veces seguidas. Forzar con `fetch('/efectos/todo.php',{cache:'reload'})`
+      antes de recargar.
 
    ---------------------------------------------------------------------------
    COMO ESTA HECHO
 
-   · Reversible: se saca la linea de `efectos/index.js` y la invitacion vuelve
-     exactamente a como estaba.
-   · Cede ante las colecciones: las reglas 1, 2 y 3 se apartan si la coleccion
-     ya resolvio el bloque. La 4 corre siempre: la legibilidad no se negocia.
+   · Reversible: se saca la linea de `efectos/index.js` y vuelve todo atras.
+   · Cede ante las colecciones en las reglas 1, 2 y 3. La 4 corre siempre.
    · Revisa cada tanto, porque EL PANEL REPINTA.
    ============================================================================ */
 (function () {
@@ -116,7 +109,6 @@
 
   function datos() { return window.INVEV || null; }
 
-  /* ⚠️ Mientras esto sea false NO SE DECIDE NADA. */
   function hayDatos() {
     var D = datos();
     return !!(D && typeof D === 'object' && Object.keys(D).length > 3);
@@ -141,16 +133,11 @@
     for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
       var yaLaSacamos = s.getAttribute('data-regla-frase') === 'fuera';
-
       if (cede) {
-        if (yaLaSacamos) {          /* la escondimos por error: se desanda */
-          s.removeAttribute('data-regla-frase');
-          s.style.display = '';
-        }
+        if (yaLaSacamos) { s.removeAttribute('data-regla-frase'); s.style.display = ''; }
         continue;
       }
       if (yaLaSacamos) continue;
-
       s.setAttribute('data-regla-frase', 'fuera');
       s.style.display = 'none';
     }
@@ -205,8 +192,6 @@
       '  border-color:transparent transparent transparent currentColor}',
       '.rd-tapa .rd-txt{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.65}',
       '.rd-tapa.rd-ida{opacity:0;pointer-events:none;transition:opacity .45s ease}',
-      /* REGLA 4 · los textos de relleno se pintan con el color del campo, que
-         ya esta corregido, en vez del gris del navegador que nadie mira. */
       '.frame input::placeholder,.frame textarea::placeholder{',
       '  color:currentColor !important;opacity:.72 !important}'
     ].join('');
@@ -216,7 +201,7 @@
   function taparUno(caja, rotulo) {
     if (!caja) return;
     if (caja.querySelector('.rd-tapa')) return;
-    if (caja.querySelector('.col-vtapa')) return;        /* la puso la coleccion */
+    if (caja.querySelector('.col-vtapa')) return;
     if (!caja.querySelector('iframe') && !caja.querySelector('video')) return;
 
     ponerCss();
@@ -266,19 +251,67 @@
     return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
   }
 
-  /* ⚠️ Los DOS bloques que llevan foto de gente a pantalla completa. Ahi el
-     texto va sobre la foto y medir contra un color es mentira. */
+  /* --- el color promedio de un papel de Cloudinary, pedido en 1x1 --------- */
+
+  var PAPEL = {};          /* url -> [r,g,b] | 'no' mientras se pide | false si no se pudo */
+
+  function urlDe1px(url) {
+    var i = url.indexOf('/upload/');
+    if (i < 0) return null;
+    var cola = url.slice(i + 8);
+    /* si lo que sigue no es la version, es una transformacion: se reemplaza */
+    if (!/^v\d+\//.test(cola)) cola = cola.replace(/^[^/]*\//, '');
+    return url.slice(0, i + 8) + 'w_1,h_1,c_fill,f_png/' + cola;
+  }
+
+  function pedirPapel(url) {
+    if (PAPEL[url] !== undefined) return;
+    var chico = urlDe1px(url);
+    if (!chico) { PAPEL[url] = false; return; }
+    PAPEL[url] = 'no';
+    var im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = function () {
+      try {
+        var c = document.createElement('canvas'); c.width = 1; c.height = 1;
+        var x = c.getContext('2d'); x.drawImage(im, 0, 0);
+        var d = x.getImageData(0, 0, 1, 1).data;
+        PAPEL[url] = [d[0], d[1], d[2], 1];
+      } catch (e) { PAPEL[url] = false; }
+    };
+    im.onerror = function () { PAPEL[url] = false; };
+    im.src = chico;
+  }
+
+  function laImagenDe(cs) {
+    if (!cs.backgroundImage || cs.backgroundImage === 'none') return null;
+    var m = String(cs.backgroundImage).match(/url\(["']?([^"')]+)/);
+    if (!m) return null;                       /* degradado: no se puede medir */
+    if (m[1].indexOf('res.cloudinary.com') < 0) return null;
+    return m[1];
+  }
+
+  /* Los dos bloques con foto de gente a pantalla completa: no se tocan. */
   function sobreFoto(el) {
     return !!(el.closest && el.closest('.portada, .footer'));
   }
 
-  /* El fondo de verdad: el primer ancestro con color OPACO — que es el papel
-     de la seccion. Si no hay ninguno, no hay contra que medir. */
-  function fondoSolido(el) {
+  /* El fondo de VERDAD. Si el elemento que aporta color tiene ademas una
+     imagen encima, el color no vale: vale el papel. */
+  function fondoReal(el) {
     if (sobreFoto(el)) return null;
     var n = el;
     while (n && n !== document.documentElement) {
-      var c = aRGB(getComputedStyle(n).backgroundColor);
+      var cs = getComputedStyle(n);
+      var img = laImagenDe(cs);
+      if (img) {
+        pedirPapel(img);
+        var p = PAPEL[img];
+        if (p && p !== 'no') return p;         /* el papel medido */
+        return null;                           /* todavia no, o no se pudo */
+      }
+      if (cs.backgroundImage && cs.backgroundImage !== 'none') return null;
+      var c = aRGB(cs.backgroundColor);
       if (c && c[3] >= 0.85) return c;
       n = n.parentElement;
     }
@@ -308,21 +341,17 @@
     return [f(0), f(8), f(4), 1];
   }
 
-  /* Conserva el tono; mueve SOLO la claridad, hacia el lado contrario al
-     fondo, hasta alcanzar el minimo. Si ni el extremo alcanza, deja el
-     extremo: siempre mejor que lo que habia. */
   function corregir(frente, fondo, minimo) {
     var hsl = aHSL(frente);
     var haciaOscuro = luminancia(fondo) > 0.45;
-    var mejor = null;
     for (var paso = 1; paso <= 40; paso++) {
       var l = haciaOscuro ? hsl[2] - paso * 0.025 : hsl[2] + paso * 0.025;
       if (l < 0 || l > 1) break;
       var c = deHSL(hsl[0], hsl[1], l);
-      mejor = c;
       if (contraste(c, fondo) >= minimo) return c;
     }
-    return mejor;
+    /* ni el extremo del tono alcanza: negro o blanco, que siempre llegan */
+    return haciaOscuro ? [20, 18, 18, 1] : [255, 255, 255, 1];
   }
 
   function legibles() {
@@ -337,7 +366,7 @@
 
       var esCampo = /^(INPUT|TEXTAREA)$/.test(el.tagName);
       if (!esCampo) {
-        if (el.children.length) continue;                    /* solo hojas de texto */
+        if (el.children.length) continue;
         if ((el.textContent || '').trim().length < 2) continue;
       }
 
@@ -348,8 +377,8 @@
       var r = el.getBoundingClientRect();
       if (r.width < 6 || r.height < 6) continue;
 
-      var fondo = fondoSolido(el);
-      if (!fondo) continue;                                  /* portada, cierre o sin papel */
+      var fondo = fondoReal(el);
+      if (!fondo) continue;      /* foto de gente, papel sin medir, o nada opaco */
 
       var frente = aRGB(cs.color);
       if (!frente || frente[3] < 0.85) continue;
@@ -364,8 +393,7 @@
       }
 
       var nuevo = corregir(frente, fondo, minimo);
-      if (!nuevo) continue;
-      el.style.color = 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')';
+      el.style.setProperty('color', 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')', 'important');
       el.setAttribute('data-regla-luz', 'corregido');
     }
   }
@@ -375,7 +403,7 @@
 
   function pasada() {
     if (!elMarco()) return;
-    if (!hayDatos()) return;      /* ⚠️ sin datos no se decide nada */
+    if (!hayDatos()) return;
     sacarLaFrase();
     subirLaCarta();
     taparCrudos();
