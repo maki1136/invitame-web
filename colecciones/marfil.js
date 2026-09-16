@@ -79,6 +79,8 @@
         4.4 hashtag y trivia: la tinta que quedó huérfana al apagar la banda
         4.5 el resto de los botones, que en la fase 3 quedaron sin vestir
         4.6 la frase se muda adentro del sobre de la carta
+   ★ FASE 5 (16/9): el fondo de perlas VIENE CON LA COLECCIÓN, y las perlas
+     no tocan el texto — el bloque de la portada se achica a la franja limpia.
 
    ⚠️⚠️ EL FONDO NO SE DIBUJA ACÁ: ES UN DATO ⚠️⚠️
       La foto de fondo se carga por `fx.fondo` (efectos/fondo-invitacion.js),
@@ -120,8 +122,8 @@
   var SANS    = '"Jost", "Montserrat", system-ui, sans-serif';
 
   var TINTA   = '#4a4642';   /* la principal: gris pardo, no negro */
-  var TINTA2  = '#8d8781';   /* bajadas y datos */
-  var TINTA3  = '#b6b0a8';   /* rótulos, segundos, filetes */
+  var TINTA2  = '#55514b';   /* bajadas y datos */
+  var TINTA3  = '#b6b0a8';   /* SOLO filetes, bordes y separadores: nunca texto */
 
   /* el marfil canónico, el mismo que declara marfil-texturas.js. Va también
      como color plano abajo del papel: si la textura tardara, no se ve un
@@ -130,6 +132,64 @@
 
   function laPieza(k) {
     try { return (window.INVPIEZAS || {})[k] || ''; } catch (e) { return ''; }
+  }
+
+  /* ---------------------------------------------------------------- el fondo
+     ★★★ EL FONDO VIENE CON LA COLECCIÓN ★★★
+     Maki, 16/9: «quiero que se pueda copiar la invi cuando la elija la gente».
+     O sea: la clienta elige Marfil y le sale ASÍ, sin que nadie cargue nada.
+
+     Es una foto del papel blanco con las perlas apoyadas, generada para esta
+     colección, con las perlas SÓLO en el quinto exterior de cada lado. El
+     centro va limpio porque ahí cae el texto (ver FASE 5).
+
+     ⚠️ ESTO NO ESCRIBE EN LA BASE. Sólo completa `INVEV.fx.fondo` EN MEMORIA
+        cuando la invitación no trae uno propio, para que `fondo-invitacion.js`
+        lo pinte. Si Jazmín o la clienta eligen su fondo, ese gana y acá no se
+        toca nada. Y al apagar la colección, como nunca se guardó, no queda
+        rastro.
+     ⚠️ `donde:'marco'` y no `'pantalla'`: la foto es el PAPEL de la tarjeta, y
+        los costados quedan oscuros — así la tarjeta flota, como en BOMA. Con
+        `'pantalla'` el blanco invade todo y la tarjeta no se despega (probado
+        el 15/9).
+     ⚠️ `paso` lo recorta el propio módulo a 0,85 aunque se le pase más.
+
+     ★ ESTE FONDO LO APROBÓ MAKI EL 16/9/2026, y pasó el chequeo ANTES de
+       mostrárselo: sobre la imagen de 670×1200 se contaron las perlas por
+       tercios y dio 34 a la izquierda (x<20%), 38 a la derecha (x>80%) y
+       CERO en el centro estricto (27-73%), que es donde cae el texto. Las 4
+       que caen entre 20-22% y 79% son el borde de las dos columnas, igual
+       que en BOMA.
+     ⚠️ SI SE CAMBIA ESTA FOTO: volver a correr esa cuenta antes de ponerla.
+        La herramienta que las genera NO garantiza la composición — la
+        medición sí la verifica. */
+
+  var FONDO_PERLAS =
+    'https://res.cloudinary.com/oc8cgqt4/image/upload/v1789572034/invitame/evdefxkuiqajaskqo2kf.jpg';
+
+  function fondoPropio() {
+    try {
+      var f = ((window.INVEV || {}).fx || {}).fondo || {};
+      return !!(f.tipo && (f.url || f.poster));
+    } catch (e) { return false; }
+  }
+
+  function ponerFondoDeLaColeccion() {
+    try {
+      if (fondoPropio()) return;              /* la clienta eligió el suyo */
+      var E = window.INVEV; if (!E) return;
+      E.fx = E.fx || {};
+      E.fx.fondo = { tipo: 'imagen', url: FONDO_PERLAS, fuerza: 1.0,
+                     velo: 0, paso: 0.95, oscuras: 0, donde: 'marco' };
+      E.fx.__mfFondo = true;                  /* marca: lo puso la colección */
+    } catch (e) {}
+  }
+
+  function sacarFondoDeLaColeccion() {
+    try {
+      var E = window.INVEV;
+      if (E && E.fx && E.fx.__mfFondo) { delete E.fx.fondo; delete E.fx.__mfFondo; }
+    } catch (e) {}
   }
 
   var CSS = [
@@ -475,7 +535,7 @@
     '}',
     'h[c] [data-sec="confirmacion"] input::placeholder,',
     'h[c] [data-sec="confirmacion"] textarea::placeholder {',
-    '  color:' + TINTA3 + ' !important;',
+    '  color:' + TINTA2 + ' !important;',
     '}',
     /* el interruptor del sí / no podré */
     'h[c] .et, h[c] .et.s, h[c] .et.n { color:' + TINTA2 + ' !important }',
@@ -593,8 +653,8 @@
     'h[c] #pv-fecha, h[c] #pv-kick, h[c] .portada .count .lab {',
     '  color:' + TINTA2 + ' !important;',
     '}',
-    'h[c] .portada .count #s.num { color:' + TINTA3 + ' !important }',
-    'h[c] .portada .scrollcue { color:' + TINTA3 + ' !important; opacity:.9 }',
+    'h[c] .portada .count #s.num { color:' + TINTA2 + ' !important }',
+    'h[c] .portada .scrollcue { color:' + TINTA2 + ' !important; opacity:.9 }',
 
     /* ⚠️⚠️ EL HALO SE APAGA — Y ESTA REGLA TIENE QUE LLEVAR EL ID ⚠️⚠️
        Más arriba hay un halo oscuro para que los nombres se leyeran SOBRE LA
@@ -671,8 +731,8 @@
           propio, `botones.js` gana igual.
        ⚠️ Scopeado a `.frame` a propósito: el botón de WhatsApp flotante y el
           «Ingresar» del sobre viven AFUERA y no son de esta colección. */
-    'h[c] .frame :is(#mf-nada, .btn, .acc-btn) {',
-    '  background-image:none !important; background-color:transparent !important;',
+    'h[c] .frame :is(#mf-nada, .btn, .acc-btn, .wsp-in) {',
+    '  background:none !important; background-color:transparent !important;',
     '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
     '  color:' + TINTA2 + ' !important;',
     '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
@@ -709,6 +769,41 @@
     '  padding:0 0 18px !important;',
     '  border-bottom:1px solid ' + TINTA3 + ' !important;',
     '  background:none !important; background-color:transparent !important;',
+    '}',
+
+    /* =====================================================================
+       FASE 5 — QUE LAS PERLAS NO SE METAN CON EL TEXTO
+       =====================================================================
+       Maki, 16/9: «que las perlas no toquen los textos, como se ve en la
+       muestra». Medido en la referencia BOMA, sobre la tarjeta de la portada
+       (310×1057 px):
+
+         · el texto ocupa el 53% CENTRAL  →  23% a 77%
+         · queda 23% libre de cada lado, y ahí viven las perlas
+         · el 28% superior casi no tiene tinta (1.642 px contra 6.524)
+
+       Y medido en NUESTRA portada, antes de esto:
+
+         · #pv-names ocupaba del 17% al 85%   ← 8 puntos más ancho que BOMA
+
+       ★★★ LA CAUSA NO ERA EL FONDO, ERA EL ANCHO DEL TEXTO ★★★
+       Por más que se corran las perlas hacia los bordes, un bloque de
+       nombres que llega al 85% se les va encima igual. Se achica el bloque
+       hasta meterlo en la franja limpia. Medido después del cambio: 25%-77%.
+
+       ⚠️ Esto va de la mano con el fondo: las perlas se generan en el quinto
+          exterior de cada lado (ver FONDO_PERLAS arriba). Si alguna vez se
+          cambia el fondo por uno con perlas al centro, esto deja de alcanzar.
+       ⚠️ El `max-width` va sobre `.portada .c`, que es el contenedor de la
+          columna — NO sobre `.frame`. Tocar el ancho del marco descentra la
+          tarjeta entera (ya pasó dos veces, está documentado arriba). */
+    'h[c] .portada .c {',
+    '  max-width:78% !important;',
+    '  margin-left:auto !important; margin-right:auto !important;',
+    '}',
+    'h[c] #pv-names, h[c] #pv-names > span {',
+    '  font-size:44px !important;',
+    '  letter-spacing:.13em !important;',
     '}'
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
@@ -901,6 +996,7 @@
     if (papel) raiz.style.setProperty('--mf-papel', 'url("' + papel + '")');
     if (fondo) raiz.style.setProperty('--mf-fondo', 'url("' + fondo + '")');
 
+    ponerFondoDeLaColeccion();   /* la clienta elige Marfil y le sale con su fondo */
     sacarPerlas();        /* por si quedó alguna de una versión vieja cacheada */
     mudarFrase();
     plegarMusica();
@@ -923,6 +1019,7 @@
     raiz.style.removeProperty('--mf-papel');
     raiz.style.removeProperty('--mf-fondo');
     sacarPerlas();
+    sacarFondoDeLaColeccion();   /* el fondo de Marfil se va con Marfil */
     devolverFrase();      /* la frase vuelve a su banda: nada queda mudado */
     desplegarMusica();
     juntarNombres();
