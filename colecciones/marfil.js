@@ -82,8 +82,9 @@
    ★ FASE 5 (16/9): el fondo de perlas VIENE CON LA COLECCIÓN, y las perlas
      no tocan el texto — el bloque de la portada se achica a la franja limpia.
    ★ FASE 6 (16/9): el barrido de contraste medido de verdad (tarea #202).
-     Doce bloques en rojo, todos arreglados: el cierre, hospedaje, la
-     raspadita y los círculos de la fecha.
+     Dieciséis bloques en rojo, todos arreglados: el cierre, hospedaje, la
+     raspadita, los círculos de la fecha y los botones de WhatsApp, trivia y
+     confirmación. Cero en rojo sobre las 149 hojas con texto.
 
    ⚠️⚠️ EL FONDO NO SE DIBUJA ACÁ: ES UN DATO ⚠️⚠️
       La foto de fondo se carga por `fx.fondo` (efectos/fondo-invitacion.js),
@@ -733,7 +734,9 @@
           falta el `#mf-nada` — ver la explicación larga más arriba: sin un id
           propio, `botones.js` gana igual.
        ⚠️ Scopeado a `.frame` a propósito: el botón de WhatsApp flotante y el
-          «Ingresar» del sobre viven AFUERA y no son de esta colección. */
+          «Ingresar» del sobre viven AFUERA y no son de esta colección.
+       ⚠️ `.wsp-in` NO EXISTE — ver 6.4. Los de WhatsApp de adentro del marco
+          se llaman `.wsp` a secas y se visten allá. */
     'h[c] .frame :is(#mf-nada, .btn, .acc-btn, .wsp-in) {',
     '  background:none !important; background-color:transparent !important;',
     '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
@@ -812,18 +815,19 @@
     /* =====================================================================
        FASE 6 — EL BARRIDO DE CONTRASTE, MEDIDO DE VERDAD (tarea #202)
        =====================================================================
-       Corrido el 16/9 sobre renata-y-patricio, recorriendo las 572 hojas de
-       texto del marco y componiendo los fondos semitransparentes contra el
-       PAPEL REAL (la foto: peor caso medido 220,216,212).
+       Corrido el 16/9 sobre renata-y-patricio, recorriendo las hojas de texto
+       del marco y componiendo los fondos semitransparentes contra el PAPEL
+       REAL (la foto: peor caso medido 220,216,212).
 
        ★ Dieron 14 en rojo. Doce eran de verdad y dos eran mentira del propio
          barrido — las flechas ‹ › de la galería van sobre una píldora
          rgba(0,0,0,.58) y el barrido, al descartar los fondos con alfa < .85,
          las media contra el papel. ⚠️ UN BARRIDO QUE SALTEA EL ALFA MIENTE:
          hay que COMPONER las capas, no ignorarlas.
+       ★ Y con el sobre ABIERTO aparecieron cuatro más: ver 6.4.
 
-       Las doce reales son todas el mismo error de siempre: bloques pensados
-       para la banda oscura que quedaron en blanco o crema sobre el papel.
+       Las reales son todas el mismo error de siempre: bloques pensados para
+       la banda oscura que quedaron en blanco o crema sobre el papel.
        ===================================================================== */
 
     /* ---- 6.1 · EL CIERRE: el pie todavía tenía su foto oscura ----------
@@ -886,7 +890,56 @@
     '}',
     'h[c] .frame .ivf .c .n, h[c] .frame .ivf .c .m, h[c] .frame .ivf .c .a {',
     '  color:' + TINTA + ' !important; text-shadow:none !important;',
-    '}'
+    '}',
+
+    /* ---- 6.4 · LOS BOTONES QUE FALTABAN (otra vez) ---------------------
+       ⚠️ ESTOS NO APARECIERON EN EL PRIMER BARRIDO, Y NO PORQUE ESTUVIERAN
+          BIEN: el sobre estaba CERRADO y el motor sólo había pintado 109 de
+          las 180 hojas de texto. Un barrido con el sobre cerrado da un verde
+          falso. → HAY QUE ABRIR EL SOBRE Y SCROLLEAR TODA LA INVITACIÓN
+          ANTES DE MEDIR.
+
+       Con la invitación entera a la vista aparecieron cuatro más, todos en
+       crema (247,233,230) sobre el papel: contraste 1,20.
+         · `.wsp`  ×3 — «Compartir por WhatsApp», «Escríbele a Renata / a
+           Patricio». ⚠️ La regla de 4.5 nombraba `.wsp-in`, UNA CLASE QUE NO
+           EXISTE. La de adentro del marco se llama `.wsp` a secas; la que hay
+           que dejar en paz es la flotante, que vive AFUERA de `.frame` — y de
+           eso ya se encarga el `.frame` del selector, no el nombre.
+         · `.tv-btn` ×2 — «Iniciar sesión» de la trivia.
+       Se suman también `.si`, `.no` y `.mitad` (el interruptor del sí / no
+       podré), que son del mismo juego y estaban en blanco.
+
+       ★ LA LECCIÓN, PARA NO VOLVER A PERSEGUIRLOS DE A UNO: antes de dar los
+         botones por vestidos, listar TODOS los `button` y `a` de adentro del
+         marco con su color computado. Los que no estén en la tinta cantan
+         solos. */
+    'h[c] .frame :is(#mf-nada, .wsp, .tv-btn, .si, .no, .mitad) {',
+    '  background:none !important; background-color:transparent !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
+    '  color:' + TINTA2 + ' !important;',
+    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
+    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
+    '  box-shadow:none !important; text-shadow:none !important;',
+    '}',
+    'h[c] .frame :is(#mf-nada, .wsp, .tv-btn, .si, .no, .mitad) :is(span, b, small) {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+    /* ⚠️ LAS FLECHAS ‹ › DE LA GALERÍA NO SE TOCAN: van en blanco sobre una
+          píldora rgba(0,0,0,.58) y ahí el blanco es lo correcto. Fueron los
+          dos falsos positivos del barrido. */
+
+    /* ---- 6.5 · EL BARRIDO, COMO SE CORRE BIEN --------------------------
+       Queda escrito acá porque es lo que hace que este verde valga:
+         1. abrir el sobre y recorrer la invitación entera antes de medir
+            (si no, se miden 109 hojas de 180);
+         2. componer los fondos con alfa contra el papel, no descartarlos;
+         3. el papel NO se puede medir en la página — Cloudinary no manda
+            CORS y tiñe el canvas. Se mide sobre el archivo local: la franja
+            central de la foto aprobada da 229,224,222 de promedio y
+            220,216,212 en el 5% más oscuro. Ese último es el que se usa.
+       Corrido así el 16/9: 149 hojas con texto, CERO en rojo. */
+    ''
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
        orden de carga, que es la trampa que ya se pagó en Perlas. */
