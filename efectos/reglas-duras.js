@@ -27,13 +27,9 @@
      «El sobre que se abre la carta lo quiero en lugar de la frase. A partir de
       ahora la frase va con el sobre.»
 
-   Una frase grande, centrada, sola sobre una banda de color es lo que Maki
-   llama «fuera de diseno». El texto vive dentro de la pieza de la carta.
-
-   ⚠️ Y HAY UNA TRAMPA MEDIDA: vaciar el campo `frase` NO alcanza. Medido en
-      martina-mis15 el 16/9/2026 — con el campo en blanco, `.fraseSec` seguia
-      en el DOM y traia el texto de la boda de EJEMPLO («Hay un instante en la
-      vida...»). Es el mismo problema de la tarea #187.
+   ⚠️ TRAMPA MEDIDA: vaciar el campo `frase` NO alcanza. Con el campo en blanco,
+      `.fraseSec` seguia en el DOM y traia el texto de la boda de EJEMPLO
+      («Hay un instante en la vida...»). Mismo problema que la tarea #187.
 
    ⚠️ PERO EN PERLAS NO SE TOCA: ahi esa seccion no es una banda con una cita,
       es EL COLLAR. Es el ejemplo bueno, no el malo.
@@ -59,21 +55,30 @@
        sobre el rosa del pase #b06a7e → contraste 2.12. WCAG AA pide 4.5.
      · «Familia Peraza» en blanco puro → 4.03. Tambien por debajo.
 
-   O sea: no era un descuido de una muestra. Era el oro de la paleta cayendo
-   sobre un papel de color medio. Va a volver a pasar con CUALQUIER paleta que
-   Jazmin combine, y nadie lo va a medir a ojo.
+   No era el descuido de una muestra: era el oro de la paleta cayendo sobre un
+   papel de color medio. Va a volver a pasar con CUALQUIER paleta que Jazmin
+   combine, y nadie lo va a medir a ojo.
 
-   → Por eso se mide y se corrige solo: se conserva el TONO del color elegido y
-     se le mueve la luminosidad hasta que pase. El diseno no cambia de color;
-     cambia de claridad lo justo para leerse.
+   → Se mide y se corrige solo: se conserva el TONO del color elegido y se le
+     mueve la luminosidad hasta que pase. El diseno no cambia de color; cambia
+     de claridad lo justo para leerse.
 
-   ⚠️⚠️ Y NO SE TOCA NADA QUE ESTE SOBRE UNA FOTO. Es la trampa numero uno de
-      medir contraste: la cuenta regresiva de la portada es blanca sobre una
-      foto oscura, se lee perfecto, y cualquier medicion ingenua la reporta
-      como fallada porque no sabe de que color es la foto abajo.
-      Medido hoy: de 57 "errores" del primer barrido, los primeros siete eran
-      exactamente eso.
-      → Si en la cadena de padres hay un `background-image`, se deja en paz.
+   ⚠️⚠️ LA TRAMPA DE MEDIR CONTRASTE: LO QUE ESTA SOBRE UNA FOTO
+      La cuenta regresiva de la portada es blanca sobre una foto oscura, se lee
+      perfecto, y cualquier medicion ingenua la reporta como fallada porque no
+      sabe de que color es la foto abajo. Medido: de 57 "errores" del primer
+      barrido, los primeros siete eran exactamente eso.
+
+      ⚠️ PERO EL PRIMER GUARDIA SE PASO DE LARGO. Descartaba todo lo que
+         tuviera CUALQUIER `background-image` en la cadena de padres — y el
+         pase con QR tiene su papel de fondo. Resultado: el modulo corregia 11
+         cosas y justo los rotulos que Maki habia marcado seguian en 2.12,
+         porque ni los miraba.
+      → Ahora el guardia es por BLOQUE, no por imagen: se dejan en paz la
+        PORTADA y el CIERRE, que son los dos que llevan foto de gente a
+        pantalla completa. En todo lo demas se mide contra el color opaco mas
+        cercano, que es el papel de la seccion. Si no hay ningun color opaco en
+        la cadena, tampoco se toca: no hay contra que medir.
 
    ---------------------------------------------------------------------------
    ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★  (16/9/2026)
@@ -261,14 +266,19 @@
     return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
   }
 
-  /* El fondo de verdad: el primer ancestro con color OPACO.
-     Devuelve null si en el camino hay una FOTO — ahi no se mide ni se toca. */
+  /* ⚠️ Los DOS bloques que llevan foto de gente a pantalla completa. Ahi el
+     texto va sobre la foto y medir contra un color es mentira. */
+  function sobreFoto(el) {
+    return !!(el.closest && el.closest('.portada, .footer'));
+  }
+
+  /* El fondo de verdad: el primer ancestro con color OPACO — que es el papel
+     de la seccion. Si no hay ninguno, no hay contra que medir. */
   function fondoSolido(el) {
+    if (sobreFoto(el)) return null;
     var n = el;
     while (n && n !== document.documentElement) {
-      var cs = getComputedStyle(n);
-      if (cs.backgroundImage && cs.backgroundImage !== 'none') return null;
-      var c = aRGB(cs.backgroundColor);
+      var c = aRGB(getComputedStyle(n).backgroundColor);
       if (c && c[3] >= 0.85) return c;
       n = n.parentElement;
     }
@@ -339,7 +349,7 @@
       if (r.width < 6 || r.height < 6) continue;
 
       var fondo = fondoSolido(el);
-      if (!fondo) continue;                                  /* ⚠️ hay foto: no se toca */
+      if (!fondo) continue;                                  /* portada, cierre o sin papel */
 
       var frente = aRGB(cs.color);
       if (!frente || frente[3] < 0.85) continue;
