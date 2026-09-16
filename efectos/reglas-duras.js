@@ -33,13 +33,12 @@
       martina-mis15 el 16/9/2026 — con el campo en blanco, `.fraseSec` seguia
       en el DOM y traia el texto de la boda de EJEMPLO («Hay un instante en la
       vida...»). Es el mismo problema de la tarea #187. Por eso este modulo no
-      mira el dato: saca la seccion y punto.
+      mira el dato de la frase: saca la seccion y punto.
 
    ⚠️ PERO EN PERLAS NO SE TOCA, y la razon esta en la propia frase de Maki:
       «mira como la hicimos en Perlas, ESA ES LA IDEA». En Perlas esa seccion
       no es una banda con una cita: es EL COLLAR, una pieza fotografiada que se
       va enhebrando con el scroll. Es el ejemplo bueno, no el malo.
-      Medido el 16/9/2026: con el candado sacado, Perlas perdia el collar.
       → La regla apunta a la frase suelta y generica, no a una pieza de diseno.
 
    REGLA 2 — LA CARTA VA ARRIBA, EN EL LUGAR QUE DEJO LA FRASE
@@ -75,16 +74,36 @@
       alcanza con mirar si HAY iframe, sin esperar a que cargue.
 
    ---------------------------------------------------------------------------
+   ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★  (16/9/2026)
+
+   Este modulo se rompio solo la primera vez que se subio, y vale la pena
+   dejarlo escrito porque es una trampa que ya mordio a otros archivos:
+
+     El motor dibuja la invitacion PRIMERO y recien despues llega el documento
+     de Firestore y aparece `window.INVEV`. En esa ventana, preguntar
+     «¿que coleccion es?» devuelve VACIO. O sea: en Perlas contestaba «no es
+     Perlas», le escondia la frase — y con ella EL COLLAR — y como dejaba
+     puesta su marca, las pasadas siguientes ni lo volvian a mirar.
+
+   Es la misma leccion que dejo `musica.js`, anotada en `efectos/index.js`:
+   «contestaba "termine" ANTES de que INVEV existiera y se apagaba solo».
+
+   → Ahora no se hace NADA hasta que los datos esten. Y ademas, si mas tarde
+     resulta que si era Perlas, la frase se devuelve: la decision se puede
+     desandar.
+   → Y la regla general: un modulo que decide segun un dato del evento tiene
+     que esperar el dato. No alcanza con volver a pasar: hay que poder
+     cambiar de opinion.
+
+   ---------------------------------------------------------------------------
    COMO ESTA HECHO
 
    · Reversible: se saca la linea de `efectos/index.js` y la invitacion vuelve
      exactamente a como estaba. No toca el motor ni reescribe nada.
    · Cede ante las colecciones: LAS TRES reglas se apartan si la coleccion ya
-     resolvio el bloque. Verificado en camila-y-tomas: la tapa de Perlas gana,
-     la carta se queda donde la puso `carta-perlas.js` y el collar sigue ahi.
+     resolvio el bloque.
    · Revisa cada tanto, porque EL PANEL REPINTA: cada tecla que toca Jazmin en
-     la vista previa vuelve a armar los sectores. Misma leccion que dejaron el
-     itinerario y la carta de Perlas.
+     la vista previa vuelve a armar los sectores.
    ============================================================================ */
 (function () {
 
@@ -93,10 +112,16 @@
 
   /* ── ayudas ───────────────────────────────────────────────────────────── */
 
-  function datos() { return window.INVEV || {}; }
+  function datos() { return window.INVEV || null; }
+
+  /* ⚠️ Mientras esto sea false NO SE DECIDE NADA. Ver la nota de arriba. */
+  function hayDatos() {
+    var D = datos();
+    return !!(D && typeof D === 'object' && Object.keys(D).length > 3);
+  }
 
   function laColeccion() {
-    var D = datos();
+    var D = datos() || {};
     return String((D.fx && D.fx.coleccion) || D.coleccion || '').toLowerCase();
   }
 
@@ -113,16 +138,28 @@
   /* ── REGLA 1: fuera la frase suelta ───────────────────────────────────── */
 
   function sacarLaFrase() {
-    if (loResuelveLaColeccion()) return;
-
     var secs = document.querySelectorAll('.fraseSec, section.frase');
+    var cede = loResuelveLaColeccion();
+
     for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
-      if (s.getAttribute('data-regla-frase') === 'fuera') continue;
+      var yaLaSacamos = s.getAttribute('data-regla-frase') === 'fuera';
 
-      /* Se saca SIEMPRE, tenga o no texto: si tiene, es la frase suelta que
-         Maki no quiere; si no tiene, es una seccion vacia que ademas puede
-         rellenarse sola con el texto de la boda de ejemplo. */
+      if (cede) {
+        /* Si la escondimos nosotros por error —antes de que llegaran los
+           datos— la devolvemos. La decision se desanda. */
+        if (yaLaSacamos) {
+          s.removeAttribute('data-regla-frase');
+          s.style.display = '';
+        }
+        continue;
+      }
+
+      if (yaLaSacamos) continue;
+
+      /* Se saca tenga o no texto: si tiene, es la frase suelta que Maki no
+         quiere; si no tiene, es una seccion vacia que ademas puede rellenarse
+         sola con el texto de la boda de ejemplo. */
       s.setAttribute('data-regla-frase', 'fuera');
       s.style.display = 'none';
     }
@@ -232,6 +269,7 @@
 
   function pasada() {
     if (!elMarco()) return;
+    if (!hayDatos()) return;      /* ⚠️ sin datos no se decide nada */
     sacarLaFrase();
     subirLaCarta();
     taparCrudos();
