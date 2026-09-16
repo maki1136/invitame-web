@@ -45,11 +45,18 @@
          foto de tapa; si se les pusiera el gris de la referencia quedarían
          ilegibles. La referencia manda sobre el ESTILO, no sobre el contraste.
 
-   ⚠️ LA FOTO DE TAPA NO SE SACA. En la referencia la portada es una tarjeta
-      marfil sin foto, pero esa foto es CONTENIDO que carga la clienta. Si
-      Maki quiere la portada sin foto, es una decisión suya — NO se improvisa.
-      (La lección de la bandeja de Perlas: la referencia manda sobre el
-      estilo, el contenido que la clienta vende no se sacrifica.)
+   ★★★ LA PORTADA VA SIN FOTO — DECIDIDO POR MAKI EL 15/9/2026 ★★★
+      Acá decía lo contrario («la foto de tapa no se saca») porque no estaba
+      decidido. Maki lo decidió:
+
+        «La que te pasé tiene nombres solos en la portada, no tiene fotos.»
+        «No todas quieren la foto de portada, quiero tener diferentes diseños
+         para que la gente pueda elegir.»
+
+      Marfil ES el diseño sin foto de tapa: los nombres solos sobre el papel,
+      el enlace `and` en cursiva entre dos filetes, y la fecha debajo.
+      ⚠️ La foto NO se borra del documento: se tapa. Sigue siendo contenido de
+         la clienta y vuelve sola al apagar la colección o al elegir otra.
 
    ★★★ CÓMO GANARLE A UN MÓDULO DEL MOTOR ★★★  (heredado de Perlas)
       `!important` no alcanza: la colección se inserta ANTES que los módulos y
@@ -64,6 +71,22 @@
      sueltas, fondo oscuro).
    ★ FASE 3: la tarjeta flotando sobre el fondo, las Polaroid, las perlas
      sueltas colocadas, y la invitación de muestra armada.
+   ★ FASE 4 (15/9, después de que Maki mirara la muestra): EL FONDO PASA A SER
+     UNA FOTO. Las seis correcciones, todas textuales suyas:
+        4.1 fuera las perlas de CSS — vienen dentro de la foto de fondo
+        4.2 la portada, sólo tipográfica (sin foto de tapa, con «and»)
+        4.3 Personas: las tres en una fila
+        4.4 hashtag y trivia: la tinta que quedó huérfana al apagar la banda
+        4.5 el resto de los botones, que en la fase 3 quedaron sin vestir
+        4.6 la frase se muda adentro del sobre de la carta
+
+   ⚠️⚠️ EL FONDO NO SE DIBUJA ACÁ: ES UN DATO ⚠️⚠️
+      La foto de fondo se carga por `fx.fondo` (efectos/fondo-invitacion.js),
+      que es el módulo que la plataforma YA tenía y que Jazmín maneja desde el
+      panel. Esta colección NO pinta un color de papel y le pega adornos:
+      pone el escenario para que esa foto SEA el papel.
+      → `fx.fondo.paso` cerca de 1. En 0 la foto no se ve y vuelve el color
+        plano, que es exactamente el error que originó esta fase.
    ============================================================================ */
 (function () {
   'use strict';
@@ -223,7 +246,8 @@
          fina de 300 se lee perfecto.
        ⚠️ Y ojo con el encadenado: vaciar `nfont` para que mande la colección
           también saca el tamaño y el color que venían con esa elección. Si se
-          cambia una, hay que mirar la otra. */
+          cambia una, hay que mirar la otra.
+       ⚠️ EN LA FASE 4 ESTE HALO SE APAGA: ya no hay foto abajo. Ver 4.2. */
     'h[t] #pv-names, h[t] #pv-names > span {',
     '  font-weight:400 !important;',
     '  text-shadow:0 0 9px rgba(26,18,13,.68), 0 1px 3px rgba(26,18,13,.5),',
@@ -307,7 +331,11 @@
           separarla del borde y la DESCENTRÉ: se fue pegada a la izquierda con
           todo el fondo a la derecha. Después le puse `max-width:calc(100vw -
           20px)` y le pisé el ancho del motor: quedó de 1420 px. Las dos veces,
-          por tocar algo que ya estaba resuelto. */
+          por tocar algo que ya estaba resuelto.
+       ⚠️ FASE 4: cuando `fx.fondo` está puesto con `donde:'marco'`, el módulo
+          `fondo-invitacion.js` escribe `.frame{background:transparent}` y la
+          FOTO pasa a ser el papel. Este color y esta textura quedan como red:
+          si la foto no llegara, la tarjeta sigue siendo marfil y no blanca. */
     'h[c] .frame {',
     '  background-color:' + PAPEL_HEX + ';',
     '  background-image:var(--mf-papel,none);',
@@ -315,6 +343,10 @@
     '  border-radius:18px; overflow:hidden;',
     '  box-shadow:0 26px 60px rgba(0,0,0,.42), 0 2px 10px rgba(0,0,0,.18);',
     '}',
+    /* la capa de la foto de fondo es `position:fixed` y NO es hija del marco,
+       así que el `overflow:hidden` de arriba no la recorta: sin esto, en el
+       borde de arriba de la tarjeta asoma la esquina cuadrada de la foto. */
+    'h[c][data-fondo] #inv-fondo { border-radius:18px }',
 
     /* Las secciones se apagan para que la tarjeta se lea como UNA pieza.
        ⚠️ VAN CON `!important` porque `fondo-invitacion.js` escribe
@@ -352,7 +384,10 @@
          para subirle el peso. Es el mismo recurso que usa botones.js.
        ⚠️ El color va también en el `span` interno (la flechita `.chev`).
        ⚠️ Y el fondo del botón NO es un color: es un `background-image`
-          (el material). Apagar `background-color` solo no alcanza. */
+          (el material). Apagar `background-color` solo no alcanza.
+       ⚠️ FASE 4: esta regla agarraba SÓLO dos clases y por eso quedaron sin
+          vestir «Sugerir una canción» y «Ver en Instagram». La de 4.5 la
+          reemplaza y agarra cualquier `.btn` de adentro del marco. */
     'h[c] .frame :is(#mf-nada, .btn.gh, .btn.acc-btn) {',
     '  background-image:none !important; background-color:transparent !important;',
     '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
@@ -389,7 +424,11 @@
           `.frasefx.fx-bokeh` (los «globitos», que son `span.fp` con
           radial-gradients). Medido el 15/9.
        → La regla general: antes de dar una sección por vestida, mirar sus
-         HIJOS. Una sección transparente puede tener tres capas adentro. */
+         HIJOS. Una sección transparente puede tener tres capas adentro.
+       ⚠️ FASE 4: esto ya no alcanzaba. Maki lo volvió a marcar y la frase se
+          MUDA adentro del sobre de la carta. Ver 4.6. Estas reglas quedan
+          para el rato en que todavía no se mudó y para cuando la colección
+          se apaga. */
     'h[c] .fraseSec .bg {',
     '  background-image:none !important; background-color:transparent !important;',
     '}',
@@ -511,11 +550,165 @@
     '  padding:4px 12px !important; box-shadow:none !important; text-shadow:none !important;',
     '}',
 
-    /* ---- LAS PERLAS SUELTAS, APOYADAS SOBRE EL PAPEL ------------------- */
-    'h[c] .mf-perla {',
-    '  position:absolute; pointer-events:none; z-index:1;',
-    '  background-position:center; background-size:contain;',
-    '  background-repeat:no-repeat;',
+    /* =====================================================================
+       FASE 4 — LO QUE MARCÓ MAKI EL 15/9 MIRANDO LA MUESTRA ARMADA
+       =====================================================================
+       Seis correcciones, todas textuales. Están una por una en la skill
+       `invitame-muestras-nuevas`; acá va sólo lo que se ejecuta.
+       ===================================================================== */
+
+    /* ---- 4.1 · LAS PERLAS DE CSS SE VAN --------------------------------
+       > «El fondo lo dejás con colores base y no usás los fondos en foto con
+       >  esas perlas, y las recortás para ponerlas arriba de tu fondo liso, y
+       >  eso te caga el diseño.»
+       Las perlas ahora están DENTRO de la foto de fondo (`fx.fondo`), con su
+       propia luz y su sombra de contacto. Las de CSS se sacan del DOM en
+       `sacarPerlas()`; esta regla queda para que, si una sobrevive a un
+       módulo viejo cacheado, no se vea.
+       ⚠️ NO SE VUELVEN A PONER. Si aparece una perla flotando, el error está
+          en el fondo (`paso` bajo o `fx.fondo` sin cargar), no acá. */
+    'h[c] .mf-perla { display:none !important }',
+
+    /* ---- 4.2 · LA PORTADA, SÓLO TIPOGRÁFICA ----------------------------
+       > «La que te pasé tiene nombres solos en la portada, no tiene fotos.»
+       > «No todas quieren la foto de portada, quiero tener diferentes diseños
+       >  para que la gente pueda elegir.»
+       Marfil es el diseño SIN foto de tapa: los nombres sobre el papel.
+       ⚠️ La foto de portada NO se borra del documento — se tapa nada más.
+          Sigue siendo contenido de la clienta y vuelve sola al apagar la
+          colección o al elegir otra.
+       ⚠️ Y al sacar la foto, TODA la tinta clara que esa foto justificaba
+          queda huérfana: los nombres, la fecha, el rótulo y la cuenta
+          regresiva pasan a tinta oscura EN EL MISMO BLOQUE. Separarlos es
+          exactamente el error que ya se pagó con las bandas oscuras. */
+    'h[c] .portada #pbg, h[c] .portada .pveil, h[c] .portada #coverv,',
+    'h[c] .portada > img, h[c] .portada > video {',
+    '  display:none !important;',
+    '}',
+    'h[c] .portada { background-color:transparent !important }',
+    /* la tinta de la portada, ahora sobre papel */
+    'h[c] .portada .c, h[c] .portada .c * {',
+    '  color:' + TINTA + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] #pv-fecha, h[c] #pv-kick, h[c] .portada .count .lab {',
+    '  color:' + TINTA2 + ' !important;',
+    '}',
+    'h[c] .portada .count #s.num { color:' + TINTA3 + ' !important }',
+    'h[c] .portada .scrollcue { color:' + TINTA3 + ' !important; opacity:.9 }',
+
+    /* ⚠️⚠️ EL HALO SE APAGA — Y ESTA REGLA TIENE QUE LLEVAR EL ID ⚠️⚠️
+       Más arriba hay un halo oscuro para que los nombres se leyeran SOBRE LA
+       FOTO. Sin foto, ese halo es una mancha sucia alrededor de cada letra en
+       un papel marfil.
+       ⚠️ No alcanza con el `text-shadow:none` de la regla de `.portada .c *`:
+          aquélla no tiene ningún id y el halo sí (`#pv-names`), así que el
+          halo ganaba. Medido: la especificidad de un id no la alcanza ningún
+          encadenado de clases. Por eso acá se repite el id.
+       ⚠️ Y el peso vuelve a 300: el 400 del halo existía para engordar la
+          letra contra la foto. Sobre papel, la fina de la referencia. */
+    'h[c] #pv-names, h[c] #pv-names > span, h[c] #pv-names > span > span {',
+    '  color:' + TINTA + ' !important;',
+    '  font-weight:300 !important;',
+    '  text-shadow:none !important;',
+    '}',
+    'h[c] #pv-names .' + CL_Y + ' b {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] #pv-names .' + CL_Y + ' i {',
+    '  opacity:1 !important; box-shadow:none !important;',
+    '  background:' + TINTA3 + ' !important;',
+    '}',
+
+    /* ---- 4.3 · PERSONAS: LAS TRES EN UNA FILA ---------------------------
+       > «Las personas también están las 3 mal puestas, habíamos quedado que 3
+       >  iban juntas una al lado de la otra para que quede simétrica.»
+       ⚠️ El motor las deja en `wrap` y la tercera baja sola: escalera, no
+          fila. Se fuerzan tres columnas iguales y el avatar se achica para
+          que entren a 375 px (3 × 110 px de caja, avatar de 76). */
+    'h[c] [data-sec="padres"] .padres {',
+    '  display:grid !important; grid-template-columns:repeat(3,1fr) !important;',
+    '  gap:14px !important; align-items:start !important; justify-items:center;',
+    '}',
+    'h[c] [data-sec="padres"] .padres > * { width:100% !important; margin:0 !important }',
+    'h[c] [data-sec="padres"] .av {',
+    '  width:76px !important; height:76px !important; margin:0 auto 8px !important;',
+    '}',
+    'h[c] [data-sec="padres"] .nm { font-size:13px !important; line-height:1.3 !important }',
+    'h[c] [data-sec="padres"] .rl { font-size:10px !important; letter-spacing:.14em !important }',
+
+    /* ---- 4.4 · HASHTAG Y TRIVIA: LA TINTA HUÉRFANA ----------------------
+       > «¿Cuánto conoces a la pareja? Agrega puntos y entra al ranking — están
+       >  sobre blanco y claro no se lee nada.»
+       > «Comparte el momento / Nuestro Hashtag / Sube tus fotos y videos… esto
+       >  lo mismo, todo blanco con claro.»
+       Las dos secciones estaban pensadas para banda oscura. Al apagar la
+       banda quedaron en crema sobre marfil: contraste 1,05.
+       ⚠️ Se pintan TODAS las hojas, no el `h2` y el `p`. `.kick`, la bajada,
+          el hashtag grande, el contador y los rótulos del ranking. */
+    'h[c] [data-sec="hashtag"] .kick, h[c] [data-sec="trivia"] .kick {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] [data-sec="hashtag"] h2, h[c] [data-sec="trivia"] h2 {',
+    '  color:' + TINTA + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] [data-sec="hashtag"] p, h[c] [data-sec="trivia"] p,',
+    'h[c] [data-sec="hashtag"] .sm, h[c] [data-sec="trivia"] .sm,',
+    'h[c] #tv-bajada, h[c] [data-sec="trivia"] li, h[c] [data-sec="trivia"] .rk {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] #hashtag-big, h[c] [data-sec="hashtag"] .big {',
+    '  color:' + TINTA + ' !important; text-shadow:none !important;',
+    '}',
+
+    /* ---- 4.5 · LOS BOTONES QUE FALTABAN --------------------------------
+       > «El botón de sugerir una canción con una perla mal definida, poco
+       >  estético.»
+       La perla se fue con 4.1. Pero el botón seguía siendo el de terciopelo
+       del motor: en la fase 3 sólo se habían vestido `.btn.gh` y `.btn.acc-btn`,
+       y quedaron afuera «Sugerir una canción», «Ver en Instagram» y el resto.
+       ⚠️ Ahora entra CUALQUIER `.btn` de adentro del marco. Sigue haciendo
+          falta el `#mf-nada` — ver la explicación larga más arriba: sin un id
+          propio, `botones.js` gana igual.
+       ⚠️ Scopeado a `.frame` a propósito: el botón de WhatsApp flotante y el
+          «Ingresar» del sobre viven AFUERA y no son de esta colección. */
+    'h[c] .frame :is(#mf-nada, .btn, .acc-btn) {',
+    '  background-image:none !important; background-color:transparent !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
+    '  color:' + TINTA2 + ' !important;',
+    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
+    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
+    '  font-weight:400 !important;',
+    '  box-shadow:none !important; text-shadow:none !important;',
+    '}',
+    'h[c] .frame :is(#mf-nada, .btn, .acc-btn) :is(span, b, small) {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+    /* los íconos dibujados del motor: que sigan a la tinta */
+    'h[c] .frame :is(#mf-nada, .btn, .acc-btn) svg { stroke:' + TINTA2 + ' !important }',
+
+    /* ---- 4.6 · LA FRASE SE MUDA ADENTRO DEL SOBRE ----------------------
+       > «Donde está la frase, jamás podemos dejarla así como la hacés siempre,
+       >  es muy poco estética. Mirá cómo la hicimos en Perlas, ésa es la idea.»
+       > «El sobre que se abre la carta lo quiero en lugar de la frase. A partir
+       >  de ahora la frase va con el sobre.»
+       La frase deja de ser una banda propia y pasa a ser la primera línea de
+       la carta que sale del sobre. El movimiento lo hace `mudarFrase()`; acá
+       va cómo se ve una vez adentro.
+       ⚠️ La banda vieja se esconde SÓLO si la mudanza salió bien (la marca
+          `data-mf-frase`). Si el motor todavía no dibujó la carta, la frase
+          se queda donde estaba y se ve — nunca desaparece. */
+    'h[c] .fraseSec[data-mf-frase] { display:none !important }',
+    'h[c] #carta-sec .mf-frase {',
+    '  display:block !important;',
+    '  font-family:' + SERIF + ' !important; font-weight:300 !important;',
+    '  font-style:italic !important;',
+    '  font-size:19px !important; line-height:1.66 !important;',
+    '  letter-spacing:.005em !important; text-align:center !important;',
+    '  color:' + TINTA + ' !important; text-shadow:none !important;',
+    '  max-width:330px; margin:0 auto 20px !important;',
+    '  padding:0 0 18px !important;',
+    '  border-bottom:1px solid ' + TINTA3 + ' !important;',
+    '  background:none !important; background-color:transparent !important;',
     '}'
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
@@ -535,7 +728,7 @@
 
   /* ---------------------------------------------------------------- nombres
      `<span>Camila</span><br><span>& Tomás</span>`
-       → `<span>Camila</span><br><span class="col-mf-y"><i></i><b>&</b><i></i></span><br><span>Tomás</span>`
+       → `<span>Camila</span><br><span class="col-mf-y"><i></i><b>and</b><i></i></span><br><span>Tomás</span>`
      Se rehace en cada pasada del bucle porque el motor repone los nodos.
      ⚠️ Deshacer SIEMPRE mirando el DOM de AHORA, nunca desde una copia del
         HTML: el motor dibuja primero la boda de ejemplo.
@@ -560,7 +753,14 @@
     var i1 = document.createElement('i');
     var b  = document.createElement('b');
     var i2 = document.createElement('i');
-    b.textContent = m[1] === 'and' ? '&' : m[1];
+    /* ⚠️ EL NEXO ES SIEMPRE «and» — Maki, 15/9: «ni respetaste el and».
+          Antes esto normalizaba a `&`, que es justo al revés de la
+          referencia. En BOMA el enlace es la palabra `and` en cursiva entre
+          dos filetes, igual que `day` y `Wedding`: es EL gesto de la
+          colección, no una traducción. Va en inglés a propósito, como el
+          «Save the date» que ya usa todo el rubro.
+          Lo que venga escrito (`&`, `y`, `and`) se reemplaza por `and`. */
+    b.textContent = 'and';
     sep.appendChild(i1); sep.appendChild(b); sep.appendChild(i2);
 
     /* el separador es `display:flex`, o sea de línea completa: NO lleva <br>.
@@ -585,67 +785,79 @@
     }
   }
 
-  /* ---------------------------------------------------------- las perlas
-     Perlas sueltas apoyadas sobre el papel de la tarjeta, como en la
-     referencia: de tres tamaños, salteadas, nunca dos iguales juntas.
+  /* --------------------------------------------- las perlas: YA NO SE PONEN
+     ★★★ ACÁ ESTABA EL ERROR QUE MARCÓ MAKI EL 15/9 ★★★
 
-     ⚠️ NO SE RECORTAN NI FLOTAN SOBRE CUALQUIER FONDO: traen su propio papel
-        marfil con el alfa apagado en el borde, así que SÓLO funcionan sobre
-        una sección clara. Por eso van salteando y nunca sobre una foto.
-     ⚠️ Van como `background-image` de un div vacío y no como <img> a propósito:
-        la regla Polaroid de más arriba agarra `.sec > img` y les pondría un
-        marco blanco a las perlas.
-     ⚠️ `pointer-events:none` para que no se coman un toque del invitado.
+     Había seis perlas recortadas, sembradas por CSS sobre las secciones
+     claras. Cada una traía su propio papel marfil con el alfa apagado en el
+     borde. Sobre un color plano eso se lee como sticker: se le ve el canto,
+     no tiene sombra de contacto y la luz no coincide con la del papel.
+
+     > «El fondo lo dejás con colores base y no usás los fondos en foto con
+     >  esas perlas, y las recortás para ponerlas arriba de tu fondo liso, y
+     >  eso te caga el diseño.»
+     > «El botón de sugerir una canción con una perla mal definida.»
+     > «Tu nombre, hay una perla que lo tapa, ¿no lo ves?»
+
+     Los tres síntomas eran el mismo error. Ahora las perlas vienen DENTRO de
+     la foto de fondo (`fx.fondo`), fotografiadas sobre el papel, con su luz y
+     su sombra propias. `sacarPerlas()` se quedó para limpiar las que hubiera
+     dejado una versión vieja cacheada.
+
+     ⚠️ NO SE VUELVEN A SEMBRAR PERLAS POR CSS. Si el papel se ve pelado, lo
+        que falta es el fondo: `fx.fondo.paso` cerca de 1, no un div más.
      -------------------------------------------------------------------- */
 
   var CL_PERLA = 'mf-perla';
-  /* ⚠️ NINGUNA A MENOS DEL 8% DEL BORDE. Con `left:6%` una perla quedaba
-        colgada del canto de la tarjeta y se leía como una mota mal recortada
-        — Maki: «veo una perla tirada por ahí, mal cortada». Medido: ahora
-        ninguna queda a menos de 24 px del borde del papel. */
-  var SIEMBRA = [
-    { pieza: 'marfilPerlaA', lado: 'left:13%',  alto: 'top:9%',     tam: 38 },
-    { pieza: 'marfilPerlaC', lado: 'right:15%', alto: 'top:26%',    tam: 24 },
-    { pieza: 'marfilPerlaB', lado: 'right:11%', alto: 'bottom:16%', tam: 44 },
-    { pieza: 'marfilPerlaC', lado: 'left:18%',  alto: 'bottom:11%', tam: 27 },
-    { pieza: 'marfilPerlaB', lado: 'left:9%',   alto: 'top:38%',    tam: 31 },
-    { pieza: 'marfilPerlaA', lado: 'right:8%',  alto: 'bottom:34%', tam: 29 }
-  ];
 
-  /* Secciones donde una perla SÍ se puede apoyar: claras, altas y sin foto.
-     La perla trae su propio papel marfil con el alfa apagado en el borde, así
-     que sobre una foto o sobre una sección baja canta. */
-  var SIN_PERLA = ['galeria', 'trivia', 'filtro', 'video', 'portada'];
+  /* ------------------------------------------------- la frase y el sobre
+     > «El sobre que se abre la carta lo quiero en lugar de la frase. A partir
+     >  de ahora la frase va con el sobre.»
 
-  function claras() {
-    var out = [], todas = document.querySelectorAll('.frame .sec');
-    for (var i = 0; i < todas.length; i++) {
-      var s = todas[i];
-      var n = s.getAttribute('data-sec') || '';
-      if (SIN_PERLA.indexOf(n) >= 0) continue;
-      if (s.querySelector(':scope > img, :scope > video, .fxlayer')) continue;
-      if (s.getBoundingClientRect().height < 420) continue;   /* nada de secciones bajas */
-      out.push(s);
+     La frase deja de ser una banda propia: pasa a ser la primera línea de la
+     carta, arriba del texto, separada por un filete. Y la carta sube al lugar
+     donde estaba la banda, así el orden de lectura no cambia.
+
+     ⚠️ SE MUEVE EL NODO, NO SE COPIA EL TEXTO. Si se clonara, la frase que
+        escribe la clienta en el panel dejaría de actualizarse.
+     ⚠️ La banda vieja se esconde SÓLO si la mudanza salió bien. Mientras el
+        motor no haya dibujado la carta, la frase se queda donde estaba: es
+        preferible verla en el lugar viejo que no verla.
+     -------------------------------------------------------------------- */
+
+  function mudarFrase() {
+    var carta = document.getElementById('carta-sec');
+    var banda = document.querySelector('.fraseSec');
+    if (!carta || !banda) return;
+    if (carta.querySelector('.mf-frase')) return;      /* ya está mudada */
+
+    var p = banda.querySelector('p.frase') || banda.querySelector('p');
+    if (!p || !(p.textContent || '').trim()) return;   /* sin frase no hay nada que mudar */
+
+    p.classList.add('mf-frase');
+    p.classList.remove('reveal');                      /* si no, entra invisible */
+    p.removeAttribute('style');                        /* el motor le clava tamaño en línea */
+
+    /* va justo abajo del título de la carta */
+    var tit = carta.querySelector('h2, .cartatit');
+    if (tit && tit.parentNode) tit.parentNode.insertBefore(p, tit.nextSibling);
+    else carta.insertBefore(p, carta.firstChild);
+
+    banda.setAttribute('data-mf-frase', 'mudada');
+
+    /* y el sobre ocupa el lugar que dejó la banda */
+    if (banda.parentNode === carta.parentNode && banda.previousElementSibling !== carta) {
+      banda.parentNode.insertBefore(carta, banda);
     }
-    return out;
   }
 
-  function colocarPerlas() {
-    var secs = claras(), puestas = 0;
-    for (var i = 0; i < secs.length; i++) {
-      var s = secs[i];
-      if (s.querySelector('.' + CL_PERLA)) { puestas++; continue; }
-      var d = SIEMBRA[puestas % SIEMBRA.length];
-      var src = laPieza(d.pieza);
-      if (!src) return;
-      var n = document.createElement('div');
-      n.className = CL_PERLA;
-      n.setAttribute('aria-hidden', 'true');
-      n.style.cssText = d.lado + ';' + d.alto + ';width:' + d.tam + 'px;height:' + d.tam + 'px;' +
-                        'background-image:url("' + src + '")';
-      s.appendChild(n);
-      puestas++;
-    }
+  function devolverFrase() {
+    var banda = document.querySelector('.fraseSec[data-mf-frase]');
+    var p = document.querySelector('#carta-sec .mf-frase');
+    if (!banda || !p) return;
+    p.classList.remove('mf-frase');
+    banda.appendChild(p);
+    banda.removeAttribute('data-mf-frase');
   }
 
   /* ---------------------------------------------------------- la playlist
@@ -689,7 +901,8 @@
     if (papel) raiz.style.setProperty('--mf-papel', 'url("' + papel + '")');
     if (fondo) raiz.style.setProperty('--mf-fondo', 'url("' + fondo + '")');
 
-    colocarPerlas();
+    sacarPerlas();        /* por si quedó alguna de una versión vieja cacheada */
+    mudarFrase();
     plegarMusica();
 
     if (tieneFuentePropia()) {
@@ -710,6 +923,7 @@
     raiz.style.removeProperty('--mf-papel');
     raiz.style.removeProperty('--mf-fondo');
     sacarPerlas();
+    devolverFrase();      /* la frase vuelve a su banda: nada queda mudado */
     desplegarMusica();
     juntarNombres();
     puesta = false;
