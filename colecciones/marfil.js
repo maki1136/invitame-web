@@ -85,6 +85,9 @@
      Dieciséis bloques en rojo, todos arreglados: el cierre, hospedaje, la
      raspadita, los círculos de la fecha y los botones de WhatsApp, trivia y
      confirmación. Cero en rojo sobre las 149 hojas con texto.
+   ★ FASE 7 (16/9): la portada centrada, los nombres y el «and» más chicos,
+     el velo de papel detrás del texto, y los botones en NÁCAR — con relieve
+     de verdad, no la píldora dibujada.
 
    ⚠️⚠️ EL FONDO NO SE DIBUJA ACÁ: ES UN DATO ⚠️⚠️
       La foto de fondo se carga por `fx.fondo` (efectos/fondo-invitacion.js),
@@ -93,6 +96,8 @@
       pone el escenario para que esa foto SEA el papel.
       → `fx.fondo.paso` cerca de 1. En 0 la foto no se ve y vuelve el color
         plano, que es exactamente el error que originó esta fase.
+      → Y desde la FASE 7, el MATERIAL DEL BOTÓN va por el mismo camino:
+        `fx.boton.estilo = 'nacar'`, que lo pinta `efectos/botones.js`.
    ============================================================================ */
 (function () {
   'use strict';
@@ -193,6 +198,79 @@
     try {
       var E = window.INVEV;
       if (E && E.fx && E.fx.__mfFondo) { delete E.fx.fondo; delete E.fx.__mfFondo; }
+    } catch (e) {}
+  }
+
+  /* ------------------------------------------------- el material del botón
+     Mismo trato que el fondo: es un DATO, no CSS. Marfil pide NÁCAR y
+     `efectos/botones.js` lo pinta. Si Jazmín o la clienta eligieron otro
+     material, ese gana y acá no se toca nada.
+     ⚠️ TAMPOCO ESCRIBE EN LA BASE: sólo completa `INVEV.fx.boton` en memoria.
+     -------------------------------------------------------------------- */
+
+  var MATERIAL = 'nacar';
+
+  function botonPropio() {
+    try {
+      var b = ((window.INVEV || {}).fx || {}).boton || {};
+      return !!(b.estilo && String(b.estilo).trim());
+    } catch (e) { return false; }
+  }
+
+  function ponerBotonDeLaColeccion() {
+    try {
+      if (botonPropio()) return;              /* la clienta eligió el suyo */
+      var E = window.INVEV; if (!E) return;
+      E.fx = E.fx || {};
+      E.fx.boton = { estilo: MATERIAL };
+      E.fx.__mfBoton = true;                  /* marca: lo puso la colección */
+    } catch (e) {}
+  }
+
+  function sacarBotonDeLaColeccion() {
+    try {
+      var E = window.INVEV;
+      if (E && E.fx && E.fx.__mfBoton) { delete E.fx.boton; delete E.fx.__mfBoton; }
+    } catch (e) {}
+  }
+
+  /* --------------------------------------------- la clase prestada del botón
+     `botones.js` pinta sólo `.btn, #btn-ingresar, .wsp, .tv-btn, .inv-prev-btn`.
+     El «Ver más» del hospedaje (`.iv-plie-btn`), el WhatsApp del pie
+     (`.col-mvta-b`) y el interruptor del sí / no podré (`.si`, `.no`,
+     `.mitad`) NO están en esa lista: con el material puesto quedaban como
+     texto pelado, sin forma.
+
+     ⚠️ NO SE TOCA LA LISTA DEL MOTOR. Agregarlos allá le cambiaría el aspecto
+        a las invitaciones YA ENTREGADAS que tengan un material elegido, y ese
+        módulo promete justamente lo contrario. Acá se les presta la clase, y
+        se la devuelve al apagar la colección.
+     ⚠️ La marca `data-mf-btn` es la que permite devolverla sin llevarse por
+        delante un `.btn` que el elemento ya tuviera de antes.
+     -------------------------------------------------------------------- */
+
+  var PRESTAR = '.frame .iv-plie-btn, .frame .col-mvta-b,' +
+                ' .frame .si, .frame .no, .frame .mitad';
+
+  function prestarClaseBtn() {
+    try {
+      var v = document.querySelectorAll(PRESTAR);
+      for (var i = 0; i < v.length; i++) {
+        if (!v[i].classList.contains('btn')) {
+          v[i].classList.add('btn');
+          v[i].setAttribute('data-mf-btn', '1');
+        }
+      }
+    } catch (e) {}
+  }
+
+  function devolverClaseBtn() {
+    try {
+      var v = document.querySelectorAll('[data-mf-btn]');
+      for (var i = 0; i < v.length; i++) {
+        v[i].classList.remove('btn');
+        v[i].removeAttribute('data-mf-btn');
+      }
     } catch (e) {}
   }
 
@@ -430,40 +508,22 @@
     'h[c] .frame .sec.verde .sm, h[c] .frame .pase p { color:' + TINTA2 + ' }',
 
     /* ---- EL BOTÓN PÍLDORA FANTASMA ------------------------------------
-       En la referencia el «Abrir mapa» es una píldora de filete fino, fondo
-       transparente y texto gris. Acá son dos clases: `.btn.gh` («Agendar») y
-       `.btn.acc-btn` («Ver mapa», «Ver hoteles»).
+       ⚠️⚠️ ESTA REGLA YA NO EXISTE — LA BORRÓ LA FASE 7 ⚠️⚠️
+       Pintaba una píldora de filete fino y fondo transparente. Maki, 16/9:
+       «los botones quiero que le des como en Perlas pero claritos, NO
+       dibujados». Ahora el fondo, el borde, la sombra y el color los pone el
+       material NÁCAR de `efectos/botones.js`. Ver 7.4.
 
-       ★★★ POR QUÉ ESTÁ ESE `#mf-nada` QUE NO EXISTE ★★★
+       ★★★ SE CONSERVA LA EXPLICACIÓN DEL `#mf-nada`, QUE SIGUE VALIENDO ★★★
        `botones.js` pinta con
            [data-boton="lacre"] :is(.btn, #btn-ingresar, .wsp, …) { … !important }
        y `:is()` toma la especificidad de su argumento MÁS FUERTE: ese
        `#btn-ingresar` de adentro le da peso de ID a toda la regla.
        Contra un ID no gana NINGUNA cantidad de clases ni de atributos — la
        especificidad se compara por tramos, y (0,99,99) pierde contra (1,0,0).
-       Probado: con `h[c] .frame .btn.gh` (0,5,2) el botón seguía con el
-       material de lacre puesto.
-       → La única salida es meter un ID propio. `#mf-nada` no existe en ningún
-         lado, así que no cambia a qué elementos agarra la regla: está sólo
-         para subirle el peso. Es el mismo recurso que usa botones.js.
-       ⚠️ El color va también en el `span` interno (la flechita `.chev`).
-       ⚠️ Y el fondo del botón NO es un color: es un `background-image`
-          (el material). Apagar `background-color` solo no alcanza.
-       ⚠️ FASE 4: esta regla agarraba SÓLO dos clases y por eso quedaron sin
-          vestir «Sugerir una canción» y «Ver en Instagram». La de 4.5 la
-          reemplaza y agarra cualquier `.btn` de adentro del marco. */
-    'h[c] .frame :is(#mf-nada, .btn.gh, .btn.acc-btn) {',
-    '  background-image:none !important; background-color:transparent !important;',
-    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
-    '  color:' + TINTA2 + ' !important;',
-    '  font-family:' + SANS + ' !important; font-size:11px !important;',
-    '  letter-spacing:.14em !important; text-transform:uppercase !important;',
-    '  font-weight:400 !important; padding:11px 24px !important;',
-    '  box-shadow:none !important; text-shadow:none !important;',
-    '}',
-    'h[c] .frame :is(#mf-nada, .btn.gh, .btn.acc-btn) span {',
-    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
-    '}',
+       → Si alguna vez hay que pisarle algo a un botón, hay que meter un ID
+         propio: `#mf-nada` no existe en ningún lado, así que no cambia a qué
+         elementos agarra la regla — está sólo para subirle el peso. */
 
     /* ---- LAS FOTOS, TIPO POLAROID -------------------------------------
        Marco blanco grueso, sombra suave y un grado de giro. Van y vienen
@@ -551,8 +611,8 @@
        Maki: «en la playlist no la podés ocultar». El acordeón ya existe pero
        nace ABIERTO, y el widget de Spotify —que es un iframe ajeno y no se
        puede vestir por dentro— se comía media sección.
-       → Marfil lo deja PLEGADO: queda la píldora fantasma invitando, y el
-         invitado lo abre si quiere. Se pliega UNA sola vez (ver `plegarMusica`). */
+       → Marfil lo deja PLEGADO: queda la píldora invitando, y el invitado lo
+         abre si quiere. Se pliega UNA sola vez (ver `plegarMusica`). */
     'h[c] [data-sec="spotify"] .acc-panel.open .acc-inner {',
     '  border:1px solid ' + TINTA3 + '; border-radius:3px; padding:10px;',
     '  background:rgba(255,255,255,.35);',
@@ -725,32 +785,11 @@
     '}',
 
     /* ---- 4.5 · LOS BOTONES QUE FALTABAN --------------------------------
-       > «El botón de sugerir una canción con una perla mal definida, poco
-       >  estético.»
-       La perla se fue con 4.1. Pero el botón seguía siendo el de terciopelo
-       del motor: en la fase 3 sólo se habían vestido `.btn.gh` y `.btn.acc-btn`,
-       y quedaron afuera «Sugerir una canción», «Ver en Instagram» y el resto.
-       ⚠️ Ahora entra CUALQUIER `.btn` de adentro del marco. Sigue haciendo
-          falta el `#mf-nada` — ver la explicación larga más arriba: sin un id
-          propio, `botones.js` gana igual.
-       ⚠️ Scopeado a `.frame` a propósito: el botón de WhatsApp flotante y el
-          «Ingresar» del sobre viven AFUERA y no son de esta colección.
-       ⚠️ `.wsp-in` NO EXISTE — ver 6.4. Los de WhatsApp de adentro del marco
-          se llaman `.wsp` a secas y se visten allá. */
-    'h[c] .frame :is(#mf-nada, .btn, .acc-btn, .wsp-in) {',
-    '  background:none !important; background-color:transparent !important;',
-    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
-    '  color:' + TINTA2 + ' !important;',
-    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
-    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
-    '  font-weight:400 !important;',
-    '  box-shadow:none !important; text-shadow:none !important;',
-    '}',
-    'h[c] .frame :is(#mf-nada, .btn, .acc-btn) :is(span, b, small) {',
-    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
-    '}',
-    /* los íconos dibujados del motor: que sigan a la tinta */
-    'h[c] .frame :is(#mf-nada, .btn, .acc-btn) svg { stroke:' + TINTA2 + ' !important }',
+       ⚠️⚠️ ESTA REGLA TAMBIÉN LA BORRÓ LA FASE 7 ⚠️⚠️
+       Vestía cualquier `.btn` de adentro del marco como píldora dibujada.
+       Ahora lo hace el material NÁCAR. Ver 7.4.
+       ⚠️ Y nombraba `.wsp-in`, UNA CLASE QUE NO EXISTE — el error está
+          documentado en 6.4, que fue donde se descubrió. */
 
     /* ---- 4.6 · LA FRASE SE MUDA ADENTRO DEL SOBRE ----------------------
        > «Donde está la frase, jamás podemos dejarla así como la hacés siempre,
@@ -795,7 +834,7 @@
        ★★★ LA CAUSA NO ERA EL FONDO, ERA EL ANCHO DEL TEXTO ★★★
        Por más que se corran las perlas hacia los bordes, un bloque de
        nombres que llega al 85% se les va encima igual. Se achica el bloque
-       hasta meterlo en la franja limpia. Medido después del cambio: 25%-77%.
+       hasta meterlo en la franja limpia.
 
        ⚠️ Esto va de la mano con el fondo: las perlas se generan en el quinto
           exterior de cada lado (ver FONDO_PERLAS arriba). Si alguna vez se
@@ -806,10 +845,6 @@
     'h[c] .portada .c {',
     '  max-width:78% !important;',
     '  margin-left:auto !important; margin-right:auto !important;',
-    '}',
-    'h[c] #pv-names, h[c] #pv-names > span {',
-    '  font-size:44px !important;',
-    '  letter-spacing:.13em !important;',
     '}',
 
     /* =====================================================================
@@ -837,43 +872,28 @@
     'h[c] .frame .footer {',
     '  background-image:none !important; background-color:transparent !important;',
     '}',
-    'h[c] .frame .footer, h[c] .frame .footer * {',
+    /* ⚠️ `:not(.btn)` NO ES ADORNO — FASE 7. Al «Escríbenos por WhatsApp» del
+          pie se le presta la clase `.btn` para que el material lo pinte; si
+          esta regla siguiera agarrándolo, le pisaría el color del nácar con
+          la tinta y el botón quedaría plano otra vez. */
+    'h[c] .frame .footer, h[c] .frame .footer *:not(.btn):not(.btn *) {',
     '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
     '}',
     'h[c] .frame .footer .n, h[c] .frame .footer .col-mvta-t {',
     '  color:' + TINTA + ' !important;',
     '}',
-    /* el «Escríbenos por WhatsApp» pasa a píldora fantasma como el resto */
-    'h[c] .frame .footer .col-mvta-b {',
-    '  background:none !important; background-color:transparent !important;',
-    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
-    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
-    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
-    '  box-shadow:none !important;',
-    '}',
 
     /* ---- 6.2 · HOSPEDAJE: otra sección de banda oscura ------------------
        Los nombres de los hoteles salían en blanco puro (1,42) y el «Ver más»
        en lavanda pálido (1,15). Van adentro de un acordeón, así que hay que
-       pintar todo el `.acc-inner`, no sólo el `h4`.
-       ⚠️ `.iv-plie-btn` NO es `.btn` ni `.acc-btn`: por eso la regla de 4.5
-          no lo agarraba. Se lo suma acá con el mismo `#mf-nada` que le da
-          peso de id (ver la explicación larga más arriba). */
+       pintar todo el `.acc-inner`, no sólo el `h4`. */
     'h[c] .frame [data-sec="hospedaje"] p,',
-    'h[c] .frame [data-sec="hospedaje"] .acc-inner *,',
-    'h[c] .frame [data-sec="hospedaje"] .iv-plie-btn,',
-    'h[c] .frame [data-sec="hospedaje"] .iv-plie-btn * {',
+    'h[c] .frame [data-sec="hospedaje"] .acc-inner *:not(.btn):not(.btn *) {',
     '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
     '}',
     'h[c] .frame [data-sec="hospedaje"] .hotel h4 { color:' + TINTA + ' !important }',
-    'h[c] .frame :is(#mf-nada, .iv-plie-btn) {',
-    '  background:none !important; background-color:transparent !important;',
-    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
-    '  color:' + TINTA2 + ' !important;',
-    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
-    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
-    '  box-shadow:none !important; text-shadow:none !important;',
-    '}',
+    /* ⚠️ el «Ver más» (`.iv-plie-btn`) ya NO se pinta acá: la FASE 7 le presta
+          la clase `.btn` y lo pinta el material. */
 
     /* ---- 6.3 · LA RASPADITA Y LOS CÍRCULOS DE LA FECHA ------------------
        ★★★ ACÁ ESTABA EL FAMOSO «.c .n EN BLANCO PURO» ★★★
@@ -907,25 +927,15 @@
            que dejar en paz es la flotante, que vive AFUERA de `.frame` — y de
            eso ya se encarga el `.frame` del selector, no el nombre.
          · `.tv-btn` ×2 — «Iniciar sesión» de la trivia.
-       Se suman también `.si`, `.no` y `.mitad` (el interruptor del sí / no
-       podré), que son del mismo juego y estaban en blanco.
 
        ★ LA LECCIÓN, PARA NO VOLVER A PERSEGUIRLOS DE A UNO: antes de dar los
          botones por vestidos, listar TODOS los `button` y `a` de adentro del
          marco con su color computado. Los que no estén en la tinta cantan
-         solos. */
-    'h[c] .frame :is(#mf-nada, .wsp, .tv-btn, .si, .no, .mitad) {',
-    '  background:none !important; background-color:transparent !important;',
-    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
-    '  color:' + TINTA2 + ' !important;',
-    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
-    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
-    '  box-shadow:none !important; text-shadow:none !important;',
-    '}',
-    'h[c] .frame :is(#mf-nada, .wsp, .tv-btn, .si, .no, .mitad) :is(span, b, small) {',
-    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
-    '}',
-    /* ⚠️ LAS FLECHAS ‹ › DE LA GALERÍA NO SE TOCAN: van en blanco sobre una
+         solos.
+       ⚠️ FASE 7: los cinco pasaron al material NÁCAR. `.si`, `.no` y `.mitad`
+          no están en la lista de `botones.js`, así que se les presta la clase
+          `.btn` desde el JS (ver `prestarClaseBtn`).
+       ⚠️ LAS FLECHAS ‹ › DE LA GALERÍA NO SE TOCAN: van en blanco sobre una
           píldora rgba(0,0,0,.58) y ahí el blanco es lo correcto. Fueron los
           dos falsos positivos del barrido. */
 
@@ -939,7 +949,101 @@
             central de la foto aprobada da 229,224,222 de promedio y
             220,216,212 en el 5% más oscuro. Ese último es el que se usa.
        Corrido así el 16/9: 149 hojas con texto, CERO en rojo. */
-    ''
+
+    /* =====================================================================
+       FASE 7 — LO QUE MARCÓ MAKI EL 16/9 MIRANDO LA MUESTRA EN EL CELULAR
+       =====================================================================
+       Cuatro pedidos, todos textuales:
+         7.1 «cuando termina de abrir tiene ese aire gigante arriba y tiene
+              que estar centrado todo»
+         7.2 «el and me gustaría que sea más chico, bastante más, y los textos
+              de los nombres más chicos también»
+         7.3 «estaría bueno tener en los textos algo para que no se opaquen
+              con las perlas de costado»
+         7.4 «los botones quiero que le des como en Perlas pero claritos, no
+              dibujados» + «los colores tenés que cambiarlos para que no sea
+              como la de Perlas»
+       ===================================================================== */
+
+    /* ---- 7.1 · LA PORTADA VA CENTRADA ----------------------------------
+       ★★★ LA CAUSA ERA `justify-content:flex-end` ★★★
+       El motor pega el bloque ABAJO, porque su portada nació con una FOTO
+       detrás y el texto iba al pie. Marfil le sacó la foto (4.2) y ese
+       `flex-end` quedó huérfano: 359 px de aire arriba contra 58 abajo.
+       Con `center` queda 228 y 228. Medido el 16/9.
+       ⚠️ Va también el `padding-bottom:0`: esos 58 px eran el contrapeso de
+          la foto y descentran igual. */
+    'h[c] .portada {',
+    '  justify-content:center !important;',
+    '  padding-bottom:0 !important;',
+    '}',
+
+    /* ---- 7.2 · LOS NOMBRES Y EL «and», MÁS CHICOS ----------------------
+       A 44 px «PATRICIO» iba del 20% al 80% del marco y se metía con las
+       perlas, que llegan hasta el 22%. A 33 px va del 31,5% al 68,5%: entra
+       entero en la franja limpia, con aire de los dos lados.
+       ⚠️ Y el «and» baja de .46em a .36em (11 px). En BOMA el enlace es
+          MUCHO más chico que los nombres — es un respiro, no un tercer
+          nombre. Con .46em competía.
+       ⚠️ Los filetes también se acortan: en BOMA no cruzan la tarjeta, sólo
+          acompañan la palabra (~39% del ancho). Estaban en 260 px. */
+    'h[c] #pv-names, h[c] #pv-names > span {',
+    '  font-size:33px !important;',
+    '  letter-spacing:.12em !important;',
+    '}',
+    'h[c] .' + CL_Y + ' { width:min(52%,172px) !important }',
+    'h[c] .' + CL_Y + ' b { font-size:.36em !important }',
+    /* la cuenta regresiva baja con los nombres: si no, «395» le gana a
+       «RENATA», y en la referencia manda el nombre, no el número. */
+    'h[c] .portada .count .num { font-size:27px !important }',
+    'h[c] .portada .count .lab { font-size:7.5px !important }',
+
+    /* ---- 7.3 · EL VELO DE PAPEL DETRÁS DEL TEXTO -----------------------
+       > «estaría bueno tener en los textos algo para que no se opaquen con
+       >  las perlas de costado»
+       Nuestro fondo tiene MUCHAS más perlas que BOMA y se acercan al texto.
+       Un aclarado radial muy difuso levanta el bloque del papel sin dibujar
+       ninguna caja.
+       ⚠️ VA CON `::before` Y `z-index:-1`, NUNCA como una capa encima. Poner
+          una capa arriba del texto es exactamente el bug que ya se pagó en
+          `botones.js`: el texto de un botón es un nodo suelto y desaparece.
+       ⚠️ Y lleva `blur`. Sin él se ve el óvalo: la primera versión, sin blur
+          y con la parada en 78%, cantaba el borde. Probado el 16/9. */
+    'h[c] .portada .c { position:relative }',
+    'h[c] .portada .c::before {',
+    '  content:""; position:absolute; z-index:-1; inset:-14% -26%;',
+    '  background:radial-gradient(58% 46% at 50% 50%,',
+    '    rgba(253,252,251,.88) 0%, rgba(253,252,251,.66) 38%,',
+    '    rgba(253,252,251,.30) 62%, rgba(253,252,251,0) 85%);',
+    '  filter:blur(6px); pointer-events:none;',
+    '}',
+
+    /* ---- 7.4 · LOS BOTONES: NÁCAR, NO PÍLDORA DIBUJADA -----------------
+       > «los botones quiero que le des como en Perlas pero claritos, no
+       >  dibujados»  ·  «los colores tenés que cambiarlos para que no sea
+       >  como la de Perlas»
+       Perlas usa el material LACRE (cera oscura, sobre --verde). Marfil usa
+       NÁCAR: tornasol frío, claro, con relieve de verdad — el hermano de las
+       perlas del fondo. Elegido por Maki el 16/9.
+
+       ★★★ EL MATERIAL LO PINTA `efectos/botones.js`, NO ESTA COLECCIÓN ★★★
+       Por eso TODAS las reglas de píldora fantasma se borraron de las fases
+       3, 4.5, 6.1, 6.2 y 6.4. Si alguien las vuelve a escribir, le pisan el
+       material y el botón queda plano otra vez.
+       Acá queda SÓLO la tipografía, que es lo único que el material no toca
+       (lo dice su propia cabecera: «no toca tamaños, ni espaciados»).
+
+       ⚠️ `.iv-plie-btn`, `.col-mvta-b`, `.si`, `.no` y `.mitad` NO están en la
+          lista de `botones.js`, así que el material no los alcanzaba y
+          quedaban como texto pelado. En vez de tocar el motor —que le
+          cambiaría el aspecto a invitaciones YA ENTREGADAS— se les presta la
+          clase `.btn` desde el JS. Ver `prestarClaseBtn`. */
+    'h[c] .frame :is(.btn, .acc-btn, .wsp, .tv-btn) {',
+    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
+    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
+    '  font-weight:400 !important; border-radius:999px !important;',
+    '  padding:12px 26px !important;',
+    '}'
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
        orden de carga, que es la trampa que ya se pagó en Perlas. */
@@ -1132,6 +1236,8 @@
     if (fondo) raiz.style.setProperty('--mf-fondo', 'url("' + fondo + '")');
 
     ponerFondoDeLaColeccion();   /* la clienta elige Marfil y le sale con su fondo */
+    ponerBotonDeLaColeccion();   /* y con sus botones de nácar */
+    prestarClaseBtn();           /* los cinco que el material no alcanza */
     sacarPerlas();        /* por si quedó alguna de una versión vieja cacheada */
     mudarFrase();
     plegarMusica();
@@ -1155,6 +1261,8 @@
     raiz.style.removeProperty('--mf-fondo');
     sacarPerlas();
     sacarFondoDeLaColeccion();   /* el fondo de Marfil se va con Marfil */
+    sacarBotonDeLaColeccion();   /* y el material del botón también */
+    devolverClaseBtn();          /* cada uno recupera sus clases de origen */
     devolverFrase();      /* la frase vuelve a su banda: nada queda mudado */
     desplegarMusica();
     juntarNombres();
