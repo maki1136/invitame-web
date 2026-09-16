@@ -81,6 +81,9 @@
         4.6 la frase se muda adentro del sobre de la carta
    ★ FASE 5 (16/9): el fondo de perlas VIENE CON LA COLECCIÓN, y las perlas
      no tocan el texto — el bloque de la portada se achica a la franja limpia.
+   ★ FASE 6 (16/9): el barrido de contraste medido de verdad (tarea #202).
+     Doce bloques en rojo, todos arreglados: el cierre, hospedaje, la
+     raspadita y los círculos de la fecha.
 
    ⚠️⚠️ EL FONDO NO SE DIBUJA ACÁ: ES UN DATO ⚠️⚠️
       La foto de fondo se carga por `fx.fondo` (efectos/fondo-invitacion.js),
@@ -804,6 +807,85 @@
     'h[c] #pv-names, h[c] #pv-names > span {',
     '  font-size:44px !important;',
     '  letter-spacing:.13em !important;',
+    '}',
+
+    /* =====================================================================
+       FASE 6 — EL BARRIDO DE CONTRASTE, MEDIDO DE VERDAD (tarea #202)
+       =====================================================================
+       Corrido el 16/9 sobre renata-y-patricio, recorriendo las 572 hojas de
+       texto del marco y componiendo los fondos semitransparentes contra el
+       PAPEL REAL (la foto: peor caso medido 220,216,212).
+
+       ★ Dieron 14 en rojo. Doce eran de verdad y dos eran mentira del propio
+         barrido — las flechas ‹ › de la galería van sobre una píldora
+         rgba(0,0,0,.58) y el barrido, al descartar los fondos con alfa < .85,
+         las media contra el papel. ⚠️ UN BARRIDO QUE SALTEA EL ALFA MIENTE:
+         hay que COMPONER las capas, no ignorarlas.
+
+       Las doce reales son todas el mismo error de siempre: bloques pensados
+       para la banda oscura que quedaron en blanco o crema sobre el papel.
+       ===================================================================== */
+
+    /* ---- 6.1 · EL CIERRE: el pie todavía tenía su foto oscura ----------
+       `.footer` NO es una `.sec`, así que las reglas que transparentan las
+       bandas nunca lo tocaron: se quedó con su `background-image` y con los
+       cinco textos en crema (1,05 a 1,47 de contraste). */
+    'h[c] .frame .footer {',
+    '  background-image:none !important; background-color:transparent !important;',
+    '}',
+    'h[c] .frame .footer, h[c] .frame .footer * {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] .frame .footer .n, h[c] .frame .footer .col-mvta-t {',
+    '  color:' + TINTA + ' !important;',
+    '}',
+    /* el «Escríbenos por WhatsApp» pasa a píldora fantasma como el resto */
+    'h[c] .frame .footer .col-mvta-b {',
+    '  background:none !important; background-color:transparent !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
+    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
+    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
+    '  box-shadow:none !important;',
+    '}',
+
+    /* ---- 6.2 · HOSPEDAJE: otra sección de banda oscura ------------------
+       Los nombres de los hoteles salían en blanco puro (1,42) y el «Ver más»
+       en lavanda pálido (1,15). Van adentro de un acordeón, así que hay que
+       pintar todo el `.acc-inner`, no sólo el `h4`.
+       ⚠️ `.iv-plie-btn` NO es `.btn` ni `.acc-btn`: por eso la regla de 4.5
+          no lo agarraba. Se lo suma acá con el mismo `#mf-nada` que le da
+          peso de id (ver la explicación larga más arriba). */
+    'h[c] .frame [data-sec="hospedaje"] p,',
+    'h[c] .frame [data-sec="hospedaje"] .acc-inner *,',
+    'h[c] .frame [data-sec="hospedaje"] .iv-plie-btn,',
+    'h[c] .frame [data-sec="hospedaje"] .iv-plie-btn * {',
+    '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] .frame [data-sec="hospedaje"] .hotel h4 { color:' + TINTA + ' !important }',
+    'h[c] .frame :is(#mf-nada, .iv-plie-btn) {',
+    '  background:none !important; background-color:transparent !important;',
+    '  border:1px solid ' + TINTA3 + ' !important; border-radius:999px !important;',
+    '  color:' + TINTA2 + ' !important;',
+    '  font-family:' + SANS + ' !important; font-size:10.5px !important;',
+    '  letter-spacing:.18em !important; text-transform:uppercase !important;',
+    '  box-shadow:none !important; text-shadow:none !important;',
+    '}',
+
+    /* ---- 6.3 · LA RASPADITA Y LOS CÍRCULOS DE LA FECHA ------------------
+       ★★★ ACÁ ESTABA EL FAMOSO «.c .n EN BLANCO PURO» ★★★
+       Eran DOS cosas distintas con el mismo síntoma:
+         · `.scratch-under .sc-day` — los números que quedan al raspar. Como
+           4.x transparentó `#scratchcard`, pasaron a caer sobre el papel.
+         · `.ivf .c .n` — los números de la fecha adentro de los círculos
+           plateados (`ivf-circ`, de `efectos/fecha.js`). Blanco sobre
+           rgb(207,198,186): contraste 1,69. Con la tinta oscura da 5,54.
+       ⚠️ NO es el calendario (`efectos/calendario.js` usa `.ivcal-*`). Lo
+          busqué ahí primero y perdí un rato: el `.c .n` es de la fecha. */
+    'h[c] .frame .scratch-under, h[c] .frame .scratch-under * {',
+    '  color:' + TINTA + ' !important; text-shadow:none !important;',
+    '}',
+    'h[c] .frame .ivf .c .n, h[c] .frame .ivf .c .m, h[c] .frame .ivf .c .a {',
+    '  color:' + TINTA + ' !important; text-shadow:none !important;',
     '}'
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
