@@ -33,14 +33,23 @@
       martina-mis15 el 16/9/2026 — con el campo en blanco, `.fraseSec` seguia
       en el DOM y traia el texto de la boda de EJEMPLO («Hay un instante en la
       vida...»). Es el mismo problema de la tarea #187. Por eso este modulo no
-      mira el dato: mira si la seccion quedo sin texto propio, y la saca.
+      mira el dato: saca la seccion y punto.
 
    REGLA 2 — LA CARTA VA ARRIBA, EN EL LUGAR QUE DEJO LA FRASE
 
    El motor la deja al final, entre la mesa de regalos y el clima. En Perlas ya
-   se subia con `efectos/carta-perlas.js`, pero con un candado `esPerlas()`.
-   Ahora que la frase se elimina de todas, el lugar queda libre en todas: la
-   carta sube a ocuparlo.
+   se subia con `efectos/carta-perlas.js`, pero con un candado `esPerlas()` y
+   anclada a `.fraseSec`. Ahora que la frase se elimina de todas, ese ancla
+   desaparece y el lugar queda libre en todas: la carta sube a ocuparlo.
+
+   ⚠️ ANCLA MEDIDA EN EL DOM REAL, no supuesta. Los sectores que arma `secOrden`
+      (eventos, itinerario, hospedaje, dresscode, padres, galeria, trivia,
+      regalos) NO TIENEN id: son `.sec` pelados. Los unicos con id son los
+      bloques sueltos del motor (`carta-sec`, `clima-sec`, `video-sec`,
+      `spotify-sec`, `share-sec`, `pv-sec`, `filtro-sec`, `gal-seccion`,
+      `contacto-sec`). Por eso la carta NO se ancla por id de sector: se
+      cuelga despues de la entrada — portada, pase con QR y raspadita — que es
+      exactamente donde estaba la frase, que era el primero de `secOrden`.
 
    Si esta cargada `carta-perlas.js`, ese modulo gana y este no hace nada: no
    se pelean dos manos por el mismo nodo.
@@ -56,6 +65,10 @@
      y se deja pasar una tapa dibujada encima.
 
    Tapar con un rectangulo opaco es justamente el arreglo que Maki rechazo.
+
+   ⚠️ Los dos medios se bajan tarde (tarea #188): el iframe existe desde el
+      arranque pero con `src` vacio hasta que el invitado lo abre. Por eso
+      alcanza con mirar si HAY iframe, sin esperar a que cargue.
 
    ---------------------------------------------------------------------------
    COMO ESTA HECHO
@@ -110,26 +123,37 @@
 
   /* ── REGLA 2: la carta, arriba ────────────────────────────────────────── */
 
-  /* Va antes del primer sector de contenido — que es «Donde y cuando» — y
-     despues de la portada, la raspadita y el pase con el QR, que son la
-     entrada. Se ancla por el sector de eventos, que existe en toda invitacion. */
-  function elAncla() {
-    return document.getElementById('eventos-sec') ||
-           document.getElementById('ev-sec') ||
-           null;
+  /* Devuelve el ULTIMO bloque de la entrada: la raspadita si esta, si no el
+     pase con el QR, si no la portada. La carta va justo despues de eso. */
+  function finDeLaEntrada() {
+    var marco = elMarco();
+    if (!marco) return null;
+
+    var ultimo = null;
+    var hijos = marco.children;
+    for (var i = 0; i < hijos.length; i++) {
+      var n = hijos[i];
+      var c = ' ' + String(n.className || '') + ' ';
+      if (c.indexOf(' portada ') >= 0 ||
+          c.indexOf(' pase ') >= 0 ||
+          c.indexOf(' scratch-sec ') >= 0) {
+        ultimo = n;
+      }
+    }
+    return ultimo;
   }
 
   function subirLaCarta() {
     if (loResuelveLaColeccion()) return;
 
     var carta = document.getElementById('carta-sec');
-    var ancla = elAncla();
-    if (!carta || !ancla) return;
-    if (carta.parentNode !== ancla.parentNode) return;   /* distinto padre: no aplica */
-    if (ancla.previousElementSibling === carta) return;  /* ya esta: no tocar,
-                                                            mover reinicia las
-                                                            animaciones de entrada */
-    ancla.parentNode.insertBefore(carta, ancla);
+    var tope  = finDeLaEntrada();
+    if (!carta || !tope) return;
+    if (carta.parentNode !== tope.parentNode) return;   /* distinto padre: no aplica */
+    if (tope.nextElementSibling === carta) return;      /* ya esta: no tocar, mover
+                                                           reinicia las animaciones
+                                                           de entrada y parpadea */
+    tope.parentNode.insertBefore(carta, tope.nextSibling);
   }
 
 
