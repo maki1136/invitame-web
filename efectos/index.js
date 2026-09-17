@@ -698,6 +698,8 @@
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
     '/efectos/panel-dresscode.js',     /* y el editor para elegirlos a mano */
 
+    '/efectos/vestido-basico.js',   /* sin colección elegida: el pase con QR y el itinerario */
+
     /* ⚠️ EL ÚLTIMO DE TODOS, Y TIENE QUE SERLO. Mueve nodos y esconde
        secciones: necesita que todo lo demás ya haya terminado de armar. */
     '/efectos/reglas-duras.js'         /* la frase no se pinta suelta, la carta va arriba, el video y la playlist nunca crudos */
