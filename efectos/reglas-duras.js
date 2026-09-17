@@ -55,8 +55,8 @@
      optimizacion: es un bug que se esconde de sus propias pruebas.
 
    ---------------------------------------------------------------------------
-   ★ LOS DOCE ERRORES ANTERIORES. NO REPETIRLOS. ★
-   Los seis primeros son de MEDICION; los seis siguientes, de MODELO.
+   ★ LOS OTROS TRECE ERRORES. NO REPETIRLOS. ★
+   Los seis primeros son de MEDICION; del 7 al 12, de MODELO.
 
    1. MEDIR CONTRA UN COLOR TAPADO.
       Un `background-color` debajo de un `background-image` opaco NO es el fondo.
@@ -108,8 +108,23 @@
       Un boton es una pastilla chica con brillo arriba y sombra abajo: el tono
       medio no se lee. → Control con `background-image`: extremo + sombra.
 
+  14. ★ CONFUNDIR «NO PUEDO MEDIR» CON «NO PUEDO HACER NADA». ★  (17/9/2026)
+      Sobre una FOTO el fondo cambia pixel a pixel: no hay un color contra el
+      cual medir, y por eso `.portada` y `.footer` quedaban excluidos. Pero
+      excluirlos dejo el cierre de Martina con «MARTINA · 28.11.2026» en rosa y
+      el credito «INVITACION CREADA CON INVITAME» casi invisibles — mientras
+      «¡Gracias!» y «¿Quieres la tuya?», en el MISMO bloque, se leian perfecto
+      en blanco con sombra.
+      → No hace falta medir para saber que hacer: **se copia lo que ya funciona
+        en ese bloque.** Se mira que extremo usan los hermanos que si se leen
+        (blanco o negro) y se lleva ahi a los que quedaron en un tono medio,
+        con sombra. Los que ya son extremos no se tocan: la portada queda igual.
+      → Moraleja: cuando no se puede calcular la respuesta, **mirar la que ya
+        esta bien al lado.**
+
    ★ DE DONDE SALE EL FONDO, EN ORDEN
-     · `.portada` y `.footer` → NO SE TOCAN (foto de gente, texto con sombra).
+     · `.portada` y `.footer` → no se mide (foto): se copia el extremo del
+       bloque, y sólo para los textos en tono medio (error 14).
      · capas del `background-image`, de la ultima a la primera (error 8), cada
        una compuesta segun su `background-blend-mode` (error 11):
          - imagen medible → 1x1 y leer el pixel CON SU ALFA.
@@ -279,7 +294,8 @@
   var MIN_NORMAL = 5.0;
   var MIN_GRANDE = 4.0;
   var RANGO_AMPLIO = 0.25;   /* ★ error 10 */
-  var CAMBIO_FONDO = 7;      /* ★ error 13: cuanto tiene que moverse el fondo */
+  var CAMBIO_FONDO = 7;      /* ★ error 13 */
+  var CLARO = 0.62, OSCURO = 0.10;   /* ★ error 14: que se considera «extremo» */
 
   var LIENZO = null;
   function elLienzo() {
@@ -462,8 +478,30 @@
     return false;
   }
 
-  function sobreFoto(el) {
-    return !!(el.closest && el.closest('.portada, .footer'));
+  function elBloqueFoto(el) {
+    return el.closest ? el.closest('.portada, .footer') : null;
+  }
+
+  /* ★ ERROR 14: no se mide la foto — se copia el extremo que ya usan los
+     hermanos que si se leen. */
+  function extremoDelBloque(bloque) {
+    var guardado = bloque.getAttribute('data-regla-extremo');
+    if (guardado) return guardado === 'b' ? BLANCO : NEGRO;
+    var claros = 0, oscuros = 0;
+    var hs = bloque.querySelectorAll('*');
+    for (var i = 0; i < hs.length; i++) {
+      if (hs[i].children.length) continue;
+      if (!(hs[i].textContent || '').trim()) continue;
+      var t = tintaDe(getComputedStyle(hs[i]));
+      if (!t) continue;
+      var L = luminancia(t);
+      if (L > CLARO) claros++;
+      else if (L < OSCURO) oscuros++;
+    }
+    if (!claros && !oscuros) return null;          /* sin referencia: no inventar */
+    var r = claros >= oscuros ? 'b' : 'n';
+    bloque.setAttribute('data-regla-extremo', r);
+    return r === 'b' ? BLANCO : NEGRO;
   }
 
   function colorDebajo(desde) {
@@ -478,7 +516,6 @@
 
   /* Devuelve [color] y, en `.rango`, la diferencia de luminancia de los stops. */
   function fondosDe(el) {
-    if (sobreFoto(el)) return null;
     var n = el;
     while (n && n !== document.documentElement) {
       var cs = getComputedStyle(n);
@@ -612,7 +649,7 @@
     ponerCss();
 
     var c = { mirados: 0, resueltos: 0, corregidos: 0, ok: 0,
-              foto: 0, sinFondo: 0, papelEnCamino: 0,
+              foto: 0, fotoArreglados: 0, sinFondo: 0, papelEnCamino: 0,
               conSombra: 0, rehechos: 0 };
 
     var nodos = marco.querySelectorAll('*');
@@ -633,13 +670,32 @@
 
       c.mirados++;
 
-      if (sobreFoto(el)) { c.foto++; continue; }
+      /* ★ ERROR 14: sobre foto no se mide, pero se copia lo que ya funciona */
+      var bloqueFoto = elBloqueFoto(el);
+      if (bloqueFoto) {
+        c.foto++;
+        if (el.getAttribute('data-regla-luz')) continue;
+        var t = tintaDe(cs);
+        if (!t) { el.setAttribute('data-regla-luz', 'foto'); continue; }
+        var L = luminancia(t);
+        if (L > CLARO || L < OSCURO) { el.setAttribute('data-regla-luz', 'foto'); continue; }
+        var ext2 = extremoDelBloque(bloqueFoto);
+        if (!ext2) { el.setAttribute('data-regla-luz', 'foto'); continue; }
+        var txt2 = 'rgb(' + aTexto(ext2) + ')';
+        el.style.setProperty('color', txt2, 'important');
+        el.style.setProperty('-webkit-text-fill-color', txt2, 'important');
+        el.style.setProperty('text-shadow',
+          luminancia(ext2) > 0.5 ? 'rgba(0,0,0,.55) 0 1px 3px' : 'rgba(255,255,255,.6) 0 1px 3px',
+          'important');
+        el.setAttribute('data-regla-luz', 'foto');
+        c.fotoArreglados++;
+        continue;
+      }
 
       var fondos = fondosDe(el);
       if (!fondos) { c.papelEnCamino++; continue; }
 
-      /* ★★★ ERROR 13: la marca NO es definitiva. Si el fondo cambio desde la
-         ultima vez, se vuelve a decidir — partiendo del color ORIGINAL. */
+      /* ★★★ ERROR 13: la marca NO es definitiva. */
       var marca   = el.getAttribute('data-regla-luz');
       var antes   = deTexto(el.getAttribute('data-regla-fondo'));
       var cambio  = marca && lejos(antes, fondos[0]);
