@@ -38,6 +38,16 @@
     return (ev && ev.fx && ev.fx.cierre) || {};
   }
 
+  /* La foto que el panel carga en «Foto para el fin de página». Son las tres
+     formas en que esa clave pudo quedar escrita (ver /admin/0-claves.js). */
+  function finDelPanel(ev) {
+    var k = ['img_c_foto-para-el-fin-de-pagina',
+             'img_f-foto-para-el-fin-de-p-gina',
+             'img_c_foto-para-el-fin-de-p-gina'];
+    for (var i = 0; i < k.length; i++) if (ev && ev[k[i]]) return ev[k[i]];
+    return null;
+  }
+
   function elegir(ev) {
     var c = cierre(ev);
     var gal = (ev && ev.galeria) || [];
@@ -49,6 +59,15 @@
       if (!(i >= 0 && i < gal.length)) i = gal.length - 1;
       if (gal[i]) return gal[i];
     }
+
+    /* ⚠️⚠️ EL BUG QUE HIZO QUE LA FOTO DEL FIN NUNCA SE VIERA.  (17/9/2026)
+       Si el panel cargó una «Foto para el fin de página», el MOTOR ya la puso
+       en `--final`. Este módulo la pisaba igual con la PORTADA y con
+       `!important`, así que ese campo del panel no servía para nada: el cierre
+       repetía siempre la portada. Cargar esa foto ES elegir. Devolver `null`
+       deja la del motor, que es justo la correcta.
+       Sólo se ignora si en el panel eligieron a mano «La foto de portada». */
+    if (c.origen !== 'portada' && finDelPanel(ev)) return null;
 
     if (ev && ev.cover) return ev.cover;
     if (gal.length) return gal[gal.length - 1];
