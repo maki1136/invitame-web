@@ -7,7 +7,7 @@
      «la frase sigue asi grande, eliminala directo»
      «hay palabras claras sobre claro»
      «y el blanco sobre el rosita? no se lee una mierda»
-     «se lee bien todo? color con color?»
+     «la revisaste? se lee bien todo? color con color?»
 
    Estaba todo escrito en la skill, con sus palabras, y se repitio igual. La
    conclusion la eligio el: «las reglas duras adentro del motor» — que el motor
@@ -29,7 +29,7 @@
    ---------------------------------------------------------------------------
    REGLA 4 — NINGUN TEXTO ILEGIBLE
 
-   ★ TRES ERRORES PROPIOS, EN ORDEN, QUE VALE LA PENA NO REPETIR ★
+   ★ CUATRO ERRORES PROPIOS, EN ORDEN. NO REPETIRLOS. ★
 
    1. MEDIR CONTRA UN COLOR TAPADO.
       Se buscaba el primer ancestro con `background-color` opaco. En el pase con
@@ -39,48 +39,48 @@
       → **UN `background-color` DEBAJO DE UN `background-image` NO ES EL FONDO.**
 
    2. DESCARTAR TODO LO QUE TUVIERA IMAGEN.
-      El guardia contra fotos descartaba cualquier `background-image` en la
-      cadena — y el pase tiene su papel. Corregia 11 cosas y justo las marcadas
-      ni las miraba.
-      → El guardia va por BLOQUE: sólo `.portada` y `.footer`, que llevan foto
-        de gente a pantalla completa.
+      El guardia contra fotos descartaba cualquier `background-image` — y el
+      pase tiene su papel. Corregia 11 cosas y justo las marcadas ni las miraba.
+      → El guardia va por BLOQUE: sólo `.portada` y `.footer`.
 
    3. LEER LOS COLORES CON UNA EXPRESION REGULAR.
-      Chrome devuelve `color(srgb 0.69 0.41 0.49 / 0.58)` cuando el color se
-      definio en un espacio moderno. Sacar «los numeros» de ahi da 0.69, 0.41,
-      0.49 leidos como 0-255: CASI NEGRO. Donde se mide mal, no se corrige — y
-      quedaban textos sin evaluar sin que nadie se enterara.
-      → **QUE PARSEE EL NAVEGADOR, NO NOSOTROS.** Se pinta el color en un canvas
-        de 1x1 y se lee el pixel. Entiende `rgb`, `rgba`, `hsl`, `#hex`,
-        `color(srgb …)`, `oklch(…)` y lo que venga, sin tocar nada.
+      Chrome devuelve `color(srgb 0.69 0.41 0.49 / 0.58)`. Sacar «los numeros»
+      de ahi da 0.69, 0.41, 0.49 leidos como 0-255: CASI NEGRO. Donde se mide
+      mal, NO SE CORRIGE — y quedaban textos sin evaluar en silencio.
+      → **QUE PARSEE EL NAVEGADOR.** Se pinta el color en un canvas de 1x1 y se
+        lee el pixel: entiende rgb, rgba, hsl, #hex, color(srgb), oklch, todo.
 
-   ★ EL PAPEL SE MIDE DE VERDAD
-     Cloudinary sirve con CORS abierto: se pide la MISMA imagen en 1x1 —su color
-     promedio— y se lee en canvas. `.../upload/w_1,h_1,c_fill,f_png/v…/x.jpg`.
-     Comprobado: el papel del pase es rgb(246,236,234).
-     ⚠️ Al armar la URL: si despues de `/upload/` viene `v123456/` la
-        transformacion se INSERTA; si viene otra cosa, se REEMPLAZA.
+   4. MEDIR POCO Y CANTAR VICTORIA.
+      El primer barrido «completo» reviso 31 elementos de 94 y no fallaba
+      ninguno. Parecia verde y era ceguera: los otros 63 no se estaban mirando.
+      → Por eso ahora se publica la COBERTURA en `window.__REGLA4`, no solo los
+        errores. **Un barrido que revisa poco y dice «todo bien» es peor que no
+        revisar.**
 
-   ★ LOS DEGRADADOS TAMBIEN SE MIDEN
-     Antes se descartaban y por eso la cobertura era baja (31 elementos en una
-     invitacion de 24 secciones). Ahora se sacan todos los colores del degradado
-     y se mide contra EL PEOR — el que menos contrasta con el texto. Si se lee
-     sobre el peor tramo, se lee en todo el degradado.
+   ★ DE DONDE SALE EL FONDO, EN ORDEN
 
-   ★ COLOR SOBRE COLOR  (pedido de Maki, 16/9/2026)
-     WCAG mide CLARIDAD, no TONO: un rosa sobre otro rosa puede dar 4.5 y aun
-     asi verse embarrado. Cuando texto y fondo comparten tono (menos de 28° de
-     diferencia) y los dos tienen color de verdad, se exige mas contraste (+1.5)
-     y ademas se le baja la saturacion al texto para despegarlo.
+     · `.portada` y `.footer` → NO SE TOCAN. Foto de gente a pantalla completa;
+       ahi el texto blanco va con sombra y el promedio de una foto no dice nada.
+     · imagen de fondo MEDIBLE → se pide en 1x1 y se lee el pixel:
+         - Cloudinary: `.../upload/w_1,h_1,c_fill,f_png/v…/x.jpg` (CORS abierto)
+           ⚠️ si despues de `/upload/` viene `v123456/` la transformacion se
+              INSERTA; si viene otra cosa, se REEMPLAZA.
+         - texturas propias del motor (mismo dominio) y `data:` → se carga la
+           imagen y se dibuja escalada a 1x1, que promedia igual.
+     · degradado → se sacan TODOS sus colores y se mide contra EL PEOR. Si se
+       lee sobre el tramo peor, se lee en todo el degradado.
+     · color opaco → ese.
+     · nada de lo anterior → no se toca. Mejor no tocar que empeorar.
+
+   ★ COLOR SOBRE COLOR  (pedido de Maki)
+     WCAG mide CLARIDAD, no TONO: un rosa sobre otro rosa puede dar 4.5 y verse
+     embarrado igual. Cuando texto y fondo comparten tono (menos de 28°) y los
+     dos tienen color de verdad, se exige +1.5 de contraste y ademas se le baja
+     la saturacion al texto para despegarlo.
 
    ★ COMO CORRIGE
-     Conserva el TONO y mueve la LUMINOSIDAD hasta alcanzar el minimo. Si ni el
-     extremo alcanza, cae a negro o blanco puro, que siempre llegan.
-
-   ★ SE PUEDE AUDITAR
-     Deja `window.__REGLA4 = {vistos, corregidos, ok, sinFondo, sinPapel}` para
-     poder medir la COBERTURA, no solo los que fallan. Un barrido que revisa
-     poco y dice «todo bien» es peor que no revisar.
+     Conserva el TONO y mueve la LUMINOSIDAD hasta el minimo. Si ni el extremo
+     alcanza, cae a negro o blanco puro, que siempre llegan.
 
    ---------------------------------------------------------------------------
    ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★
@@ -219,9 +219,7 @@
 
   /* ── REGLA 4 ──────────────────────────────────────────────────────────── */
 
-  /* ★ EL NAVEGADOR PARSEA, NOSOTROS NO.
-     Se pinta el color en un canvas de 1x1 y se lee el pixel. Asi entiende
-     rgb, rgba, hsl, #hex, color(srgb …), oklch(…) y lo que venga. */
+  /* ★ EL NAVEGADOR PARSEA, NOSOTROS NO. */
   var LIENZO = null;
   function elLienzo() {
     if (!LIENZO) {
@@ -241,8 +239,9 @@
     try {
       x.clearRect(0, 0, 1, 1);
       x.fillStyle = '#000000';
-      x.fillStyle = s;                 /* si no lo entiende, queda en negro */
-      if (x.fillStyle === '#000000' && !/^#0{3,8}$|black|rgba?\(\s*0\s*,\s*0\s*,\s*0/i.test(s)) return null;
+      x.fillStyle = s;
+      if (x.fillStyle === '#000000' &&
+          !/^#0{3,8}$|black|rgba?\(\s*0\s*,\s*0\s*,\s*0/i.test(s)) return null;
       x.globalCompositeOperation = 'copy';
       x.fillRect(0, 0, 1, 1);
       x.globalCompositeOperation = 'source-over';
@@ -269,13 +268,23 @@
     return [f[0] * a + b[0] * (1 - a), f[1] * a + b[1] * (1 - a), f[2] * a + b[2] * (1 - a), 1];
   }
 
-  /* --- el papel de Cloudinary, en 1x1 ------------------------------------ */
+  /* --- el papel: Cloudinary, texturas propias y data URI ----------------- */
 
   var PAPEL = {};
 
+  function esCloudinary(u) { return u.indexOf('res.cloudinary.com') >= 0; }
+
+  function sePuedeMedir(u) {
+    if (u.indexOf('data:') === 0) return true;
+    if (esCloudinary(u)) return true;
+    if (u.indexOf('//') < 0) return true;                    /* relativa */
+    return u.indexOf(location.origin) === 0;                 /* mismo dominio */
+  }
+
   function urlDe1px(url) {
+    if (!esCloudinary(url)) return url;      /* se achica al dibujar */
     var i = url.indexOf('/upload/');
-    if (i < 0) return null;
+    if (i < 0) return url;
     var cola = url.slice(i + 8);
     if (!/^v\d+\//.test(cola)) cola = cola.replace(/^[^/]*\//, '');
     return url.slice(0, i + 8) + 'w_1,h_1,c_fill,f_png/' + cola;
@@ -283,21 +292,21 @@
 
   function pedirPapel(url) {
     if (PAPEL[url] !== undefined) return;
-    var chico = urlDe1px(url);
-    if (!chico) { PAPEL[url] = false; return; }
+    if (!sePuedeMedir(url)) { PAPEL[url] = false; return; }
     PAPEL[url] = 'no';
     var im = new Image();
     im.crossOrigin = 'anonymous';
     im.onload = function () {
       try {
         var c = document.createElement('canvas'); c.width = 1; c.height = 1;
-        var x = c.getContext('2d'); x.drawImage(im, 0, 0);
+        var x = c.getContext('2d');
+        x.drawImage(im, 0, 0, 1, 1);          /* escalar a 1x1 = promediar */
         var d = x.getImageData(0, 0, 1, 1).data;
         PAPEL[url] = [d[0], d[1], d[2], 1];
       } catch (e) { PAPEL[url] = false; }
     };
     im.onerror = function () { PAPEL[url] = false; };
-    im.src = chico;
+    im.src = urlDe1px(url);
   }
 
   /* --- los colores de un degradado --------------------------------------- */
@@ -317,17 +326,13 @@
   function laImagenDe(cs) {
     if (!cs.backgroundImage || cs.backgroundImage === 'none') return null;
     var m = String(cs.backgroundImage).match(/url\(["']?([^"')]+)/);
-    if (!m) return null;
-    if (m[1].indexOf('res.cloudinary.com') < 0) return null;
-    return m[1];
+    return m ? m[1] : null;
   }
 
   function sobreFoto(el) {
     return !!(el.closest && el.closest('.portada, .footer'));
   }
 
-  /* Devuelve UNA LISTA de fondos posibles. Con un degradado son varios y hay
-     que aguantar el peor. `null` = no se puede medir, no se toca. */
   function fondosDe(el) {
     if (sobreFoto(el)) return null;
     var n = el;
@@ -342,7 +347,7 @@
       }
 
       if (cs.backgroundImage && cs.backgroundImage !== 'none') {
-        var g = coloresDe(cs.backgroundImage);      /* es un degradado */
+        var g = coloresDe(cs.backgroundImage);      /* degradado */
         if (g.length) return g;
         return null;
       }
@@ -377,10 +382,9 @@
     return [f(0), f(8), f(4), 1];
   }
 
-  /* ★ COLOR SOBRE COLOR: mismo tono y los dos con color de verdad. */
   function mismoTono(a, b) {
     var A = aHSL(a), B = aHSL(b);
-    if (A[1] < 0.12 || B[1] < 0.12) return false;     /* uno es casi gris */
+    if (A[1] < 0.12 || B[1] < 0.12) return false;
     var d = Math.abs(A[0] - B[0]);
     if (d > 180) d = 360 - d;
     return d < 28;
@@ -404,7 +408,8 @@
     if (!marco) return;
     ponerCss();
 
-    var cuenta = { vistos: 0, corregidos: 0, ok: 0, sinFondo: 0, sinPapel: 0 };
+    var cuenta = { mirados: 0, resueltos: 0, corregidos: 0, ok: 0,
+                   foto: 0, sinFondo: 0, papelEnCamino: 0 };
 
     var nodos = marco.querySelectorAll('*');
     for (var i = 0; i < nodos.length; i++) {
@@ -423,10 +428,19 @@
       var r = el.getBoundingClientRect();
       if (r.width < 6 || r.height < 6) continue;
 
-      if (el.getAttribute('data-regla-luz')) { cuenta.vistos++; continue; }
+      cuenta.mirados++;
+
+      var marca = el.getAttribute('data-regla-luz');
+      if (marca) {
+        cuenta.resueltos++;
+        if (marca === 'ok') cuenta.ok++; else cuenta.corregidos++;
+        continue;
+      }
+
+      if (sobreFoto(el)) { cuenta.foto++; continue; }
 
       var fondos = fondosDe(el);
-      if (!fondos) { cuenta.sinFondo++; continue; }
+      if (!fondos) { cuenta.papelEnCamino++; continue; }
 
       var crudo = aRGB(cs.color);
       if (!crudo) { cuenta.sinFondo++; continue; }
@@ -434,18 +448,17 @@
       var px = parseFloat(cs.fontSize) || 14;
       var grande = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
 
-      /* el PEOR de los fondos posibles manda */
       var peor = null, peorV = Infinity, peorMin = 0;
       for (var k = 0; k < fondos.length; k++) {
         var b = fondos[k];
         var f = mezcla(crudo, b);
         var min = grande ? 3 : 4.5;
-        if (mismoTono(f, b)) min += 1.5;             /* color sobre color */
+        if (mismoTono(f, b)) min += 1.5;
         var v = contraste(f, b);
         if (v - min < peorV - peorMin) { peorV = v; peor = b; peorMin = min; }
       }
 
-      cuenta.vistos++;
+      cuenta.resueltos++;
 
       if (peorV >= peorMin) { el.setAttribute('data-regla-luz', 'ok'); cuenta.ok++; continue; }
 
@@ -456,7 +469,7 @@
       cuenta.corregidos++;
     }
 
-    window.__REGLA4 = cuenta;       /* para poder auditar la COBERTURA */
+    window.__REGLA4 = cuenta;     /* ★ la COBERTURA, no solo los errores */
   }
 
 
