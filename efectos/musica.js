@@ -180,6 +180,17 @@
     return true;
   }
 
+  /* ⚠️ NO DECIR «LA BODA» SIEMPRE.  (17/9/2026)
+     El mensaje decia «Para la boda de Martina» en una invitacion de XV. La
+     tabla de tipos de evento vive en UN solo lugar —el motor, que la publica
+     en `window.INVTIPO`— para que no haya dos listas que se desincronicen.
+     Si el motor es una version vieja que todavia no la publica, se dice «la
+     fiesta», que sirve para cualquier evento y nunca miente. */
+  function elEvento() {
+    var t = window.INVTIPO || {};
+    return limpio(t.de) || 'la fiesta';
+  }
+
   function bloque() {
     var e = ev();
     var texto = limpio(e.musica);
@@ -196,7 +207,7 @@
               esc(texto) + '</p>';
     }
     if (tel) {
-      var msg = 'Hola! Para la boda' + (nombres ? ' de ' + nombres : '') +
+      var msg = 'Hola! Para ' + elEvento() + (nombres ? ' de ' + nombres : '') +
                 ' quiero sugerir una canción: ';
       html += '<div class="reveal" style="margin-top:18px">' +
               '<a class="btn" target="_blank" rel="noopener" href="https://wa.me/' + tel +

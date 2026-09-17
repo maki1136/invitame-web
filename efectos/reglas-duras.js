@@ -246,7 +246,7 @@
     var s = document.createElement('style');
     s.id = CSS_ID;
     s.textContent = [
-      '[data-crudo="tapado"]{position:relative}',
+      '[data-crudo]{position:relative}',
       '[data-crudo="tapado"] > iframe,',
       '[data-crudo="tapado"] > video{visibility:hidden}',
       '.rd-tapa{position:absolute;inset:0;z-index:2;display:flex;',
@@ -268,6 +268,15 @@
 
   function taparUno(caja, rotulo) {
     if (!caja) return;
+    /* ⚠️⚠️ SI EL INVITADO YA LA ABRIO, NO SE VUELVE A TAPAR NUNCA MAS.
+       (17/9/2026) Sin esta linea la playlist y el video eran IMPOSIBLES de ver:
+       el invitado tocaba la tapa, el reproductor aparecia medio segundo y la
+       tapa volvia. La culpa no era del click: era que `pasada()` corre con cada
+       cambio de clase o de atributo del marco — y quitar la tapa ES un cambio.
+       Asi que el propio click se disparaba a si mismo el modulo que lo deshacia.
+       → El estado «abierto» tiene que quedar ESCRITO en el DOM, porque es el
+         unico lugar que sobrevive a la siguiente pasada. */
+    if (caja.getAttribute('data-crudo') === 'abierto') return;
     if (caja.querySelector('.rd-tapa')) return;
     if (caja.querySelector('.col-vtapa')) return;
     if (!caja.querySelector('iframe') && !caja.querySelector('video')) return;
@@ -280,7 +289,7 @@
     txt.textContent = rotulo;
     tapa.appendChild(aro); tapa.appendChild(txt);
     tapa.addEventListener('click', function () {
-      caja.removeAttribute('data-crudo');
+      caja.setAttribute('data-crudo', 'abierto');   /* queda abierta PARA SIEMPRE */
       tapa.classList.add('rd-ida');
       setTimeout(function () { if (tapa.parentNode) tapa.parentNode.removeChild(tapa); }, 500);
     });
