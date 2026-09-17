@@ -492,8 +492,34 @@
     return false;
   }
 
+  /* ⚠️⚠️ ERROR 19 — «ESTÁ SOBRE UNA FOTO» NO ES LO MISMO QUE «HAY UNA FOTO». (17/9/2026)
+     Esta función daba por foto CUALQUIER cosa dentro de `.portada` o `.footer`,
+     por el nombre del bloque. En Marfil la portada es sólo tipográfica y el pie
+     no tiene foto de cierre: son PAPEL. Y arriba, la rama de foto marca
+     `data-regla-luz="foto"` y se va cuando la tinta es un extremo — así que
+     «Invitación creada con InvitaME» quedó en BLANCO PURO sobre el papel marfil
+     (contraste 1,32) y los dos puntos de la cuenta regresiva en 1,15, los dos
+     marcados como resueltos. Es el blanco sobre blanco que vio Maki.
+     → Un bloque es foto sólo si HAY una imagen puesta: fondo con imagen, o un
+       img/video/canvas que cubra el bloque de verdad. Si no, es papel y se mide. */
+  function hayFotoEn(bloque) {
+    if (!bloque) return false;
+    var cs = getComputedStyle(bloque);
+    if (cs.backgroundImage && cs.backgroundImage !== 'none') return true;
+    var caja = bloque.getBoundingClientRect();
+    var area = caja.width * caja.height;
+    if (area <= 0) return false;
+    var media = bloque.querySelectorAll('img, video, canvas');
+    for (var i = 0; i < media.length; i++) {
+      var rm = media[i].getBoundingClientRect();
+      if (rm.width * rm.height > area * 0.3) return true;
+    }
+    return false;
+  }
+
   function elBloqueFoto(el) {
-    return el.closest ? el.closest('.portada, .footer') : null;
+    var b = el.closest ? el.closest('.portada, .footer') : null;
+    return hayFotoEn(b) ? b : null;
   }
 
   /* ★ ERROR 14: no se mide la foto — se copia el extremo que ya usan los
@@ -672,7 +698,21 @@
     return { c: ext, alcanzo: false };
   }
 
-  function pintar(el, c, conSombra, fondo) {
+  /* ⚠️ ERROR 20 — se apaga la opacidad sólo cuando estamos CORRIGIENDO, y sólo
+     si no se está animando: si el elemento aparece con una transición de
+     `opacity`, congelarla en 1 le rompe la aparición. */
+  function apagarOpacidad(el) {
+    var cs = getComputedStyle(el);
+    var o = parseFloat(cs.opacity);
+    if (!isFinite(o) || o >= 1) return;
+    if (cs.animationName && cs.animationName !== 'none') return;
+    if (/opacity|all/.test(cs.transitionProperty || '') &&
+        (parseFloat(cs.transitionDuration) || 0) > 0) return;
+    el.style.setProperty('opacity', '1', 'important');
+  }
+
+  function pintar(el, c, conSombra, fondo, neutralizar) {
+    if (neutralizar) apagarOpacidad(el);
     var txt = 'rgb(' + aTexto(c) + ')';
     el.style.setProperty('color', txt, 'important');
     el.style.setProperty('-webkit-text-fill-color', txt, 'important');
@@ -712,6 +752,24 @@
 
       var r = el.getBoundingClientRect();
       if (r.width < 4 || r.height < 4) continue;
+
+      /* ⚠️⚠️ ERROR 20 — LA REGLA NO MIRABA LA OPACIDAD. (17/9/2026)
+         Medía `color` y nada más. Un rótulo con `opacity:.45` sobre el papel
+         marfil daba 7,15 en la cuenta y 1,98 en el ojo: se marcaba «ok» y
+         quedaba esfumado. Maki: «quedó demasiado esfumado», «hay palabras
+         claras sobre claro».
+         → La opacidad se dobla dentro del alfa de la tinta ANTES de medir, y
+           cuando hay que corregir se apaga (ver `apagarOpacidad`), para que el
+           color elegido llegue de verdad a la pantalla.
+         ⚠️ Si ahora mismo es invisible (en mitad de una aparición) no se toca
+            NI se marca: se reintenta en la próxima pasada (★ error 13). */
+      var opa = parseFloat(cs.opacity);
+      if (!isFinite(opa)) opa = 1;
+      if (opa < 0.08) continue;
+      var conOpa = function (col) {
+        if (opa >= 1 || !col) return col;
+        return [col[0], col[1], col[2], (col[3] === undefined ? 1 : col[3]) * opa];
+      };
 
       c.mirados++;
 
@@ -766,7 +824,7 @@
       var peor = null, peorV = Infinity, peorMin = 0;
       for (var k = 0; k < fondos.length; k++) {
         var b = fondos[k];
-        var f = mezcla(crudo, b);
+        var f = mezcla(conOpa(crudo), b);
         var min = grande ? MIN_GRANDE : MIN_NORMAL;
         if (mismoTono(f, b)) min += 1.5;
         var v = contraste(f, b);
@@ -778,7 +836,7 @@
       /* ★ ERRORES 10 y 12: rango amplio o boton con volumen → extremo + sombra */
       if ((fondos.rango || 0) > RANGO_AMPLIO || esBotonConVolumen(el)) {
         var ext = contraste(BLANCO, peor) >= contraste(NEGRO, peor) ? BLANCO : NEGRO;
-        pintar(el, ext, true, fondos[0]); c.corregidos++; c.conSombra++;
+        pintar(el, ext, true, fondos[0], true); c.corregidos++; c.conSombra++;
         continue;
       }
 
@@ -803,9 +861,9 @@
         continue;
       }
 
-      var frente = mezcla(crudo, peor);
+      var frente = mezcla(conOpa(crudo), peor);
       var res = corregir(frente, peor, peorMin, mismoTono(frente, peor));
-      pintar(el, res.c, !res.alcanzo, fondos[0]);
+      pintar(el, res.c, !res.alcanzo, fondos[0], true);
       c.corregidos++;
       if (!res.alcanzo) c.conSombra++;
     }
