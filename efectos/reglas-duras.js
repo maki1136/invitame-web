@@ -9,92 +9,103 @@
      «y el blanco sobre el rosita? no se lee una mierda»
      «la revisaste? se lee bien todo? color con color?»
      «no podes verlo en tu navegador? o no queres hacerlo?»
-
-   La ultima es la que mas duele y tenia razon: SE PUEDE VER. Las capturas
-   fallaban porque `scrollIntoView` no sirve cuando quien scrollea es
-   `document.documentElement` y no el contenedor. Se arregla con
-   `window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY)`.
-   Medir sin mirar es la mitad del trabajo.
+     «mira todo siempre y arregla todo siempre sin frenar ni preguntar»
 
    ---------------------------------------------------------------------------
    REGLA 1 — LA FRASE NO SE PINTA SUELTA. NUNCA.
-   ⚠️ Vaciar el campo NO alcanza: la seccion seguia trayendo el texto de la boda
-      de EJEMPLO. Se esconde la seccion.
+   ⚠️ Vaciar el campo NO alcanza: la seccion traia el texto de la boda de EJEMPLO.
    ⚠️ EN PERLAS NO SE TOCA: ahi la frase es EL COLLAR.
 
    REGLA 2 — LA CARTA VA ARRIBA, DONDE ESTABA LA FRASE
    ⚠️ Los sectores de `secOrden` NO tienen id. Se ancla despues de la ENTRADA.
 
    REGLA 3 — EL VIDEO Y LA PLAYLIST NUNCA SE VEN CRUDOS
-     NO SE TAPA UN PAPEL CON OTRO PAPEL: se esconde con `visibility` y se deja
-     pasar una tapa dibujada.
+     NO SE TAPA UN PAPEL CON OTRO PAPEL: `visibility` + tapa dibujada.
 
    ---------------------------------------------------------------------------
    REGLA 4 — NINGUN TEXTO ILEGIBLE
 
-   ★ CINCO ERRORES PROPIOS, EN ORDEN. NO REPETIRLOS. ★
+   ★ SIETE ERRORES PROPIOS. NO REPETIRLOS. ★
 
    1. MEDIR CONTRA UN COLOR TAPADO.
-      **Un `background-color` debajo de un `background-image` NO es el fondo.**
-      Midiendo el color de abajo, el corrector ACLARO los textos hasta casi
-      blanco sobre un papel clarisimo. Lo EMPEORO.
+      **Un `background-color` debajo de un `background-image` opaco NO es el fondo.**
+      Midiendo el color de abajo, el corrector ACLARO los textos hasta casi blanco
+      sobre un papel clarisimo. Lo EMPEORO.
 
    2. DESCARTAR TODO LO QUE TUVIERA IMAGEN.
       El guardia anti-foto descartaba cualquier `background-image` — y el pase
-      tiene su papel. Corregia 11 cosas y justo las marcadas ni las miraba.
+      tiene su papel. Corregia 11 cosas y las marcadas ni las miraba.
       → El guardia va por BLOQUE: sólo `.portada` y `.footer`.
 
    3. LEER LOS COLORES CON UNA EXPRESION REGULAR.
-      Chrome devuelve `color(srgb 0.69 0.41 0.49 / 0.58)`. Sacar «los numeros»
-      da casi negro. Donde se mide mal, NO SE CORRIGE, en silencio.
-      → **QUE PARSEE EL NAVEGADOR:** se pinta en un canvas 1x1 y se lee el pixel.
+      Chrome devuelve `color(srgb 0.69 0.41 0.49 / 0.58)`; sacar «los numeros» da
+      casi negro. Donde se mide mal, NO SE CORRIGE, en silencio.
+      → **QUE PARSEE EL NAVEGADOR:** canvas de 1x1 y leer el pixel.
 
    4. MEDIR POCO Y CANTAR VICTORIA.
       El primer barrido «completo» reviso 31 de 94 y no fallaba ninguno.
-      → Se publica la COBERTURA en `window.__REGLA4`, no solo los errores.
+      → Publicar la COBERTURA en `window.__REGLA4`, no solo los errores.
 
-   5. ★ APAGARSE AL MINUTO. ★  (17/9/2026 — el que encontro Maki mirando)
-      El modulo revisaba cada 700 ms durante 60 segundos y despues paraba. Todo
-      lo que aparecia DESPUES quedaba sin corregir para siempre: los numeros de
-      «Personas» y «Mesa» del pase seguian en BLANCO PURO sobre papel claro,
-      contraste **1.16**, sin tocar. Y la cuenta de cobertura decia 97% porque
-      contaba «resueltos» a los que ya tenian marca — no a los que nunca la
-      recibieron.
-      → **Fuera el temporizador.** Ahora mira cuando cada seccion APARECE
-        (`IntersectionObserver`) y cuando el DOM cambia (`MutationObserver`).
-        No hay ventana de tiempo: si aparece a los diez minutos, se corrige.
-      → Y la leccion general: **un proceso con fecha de vencimiento deja
-        agujeros que ninguna medicion posterior ve**, porque lo que quedo afuera
-        no figura en ningun lado.
+   5. APAGARSE AL MINUTO.
+      Revisaba 60 s y paraba: lo que aparecia despues quedaba sin corregir para
+      siempre (los numeros del pase, en blanco puro, contraste 1.16).
+      → `IntersectionObserver` + `MutationObserver`. Sin fecha de vencimiento.
+      → **Un proceso que caduca deja agujeros que ninguna medicion posterior ve.**
 
-   ★ EL PISO NO ES WCAG, ES «SE LEE»  (17/9/2026)
-     «Con cariño, te esperamos» daba 3.09 y PASABA — WCAG AA pide 3 para texto
-     grande. Maki lo miro y dijo que no se lee. Tenia razon: 4.5/3 es el minimo
-     legal para que un sitio no sea inaccesible, no el estandar de una
-     invitacion que se manda a vender.
-     → Piso propio: **5.0 el texto normal, 4.0 el grande.** Un escalon arriba
-       de la norma.
+   6. ★ CREER QUE UNA TEXTURA TAPA EL COLOR DE ABAJO. ★  (17/9/2026)
+      «Donde quedarse» quedo ilegible: kicker dorado, titulo gris y parrafo
+      verdoso sobre el papel ROSA OSCURO. El modulo decia «corregido».
+      La causa: esa seccion tiene `background-color: rgb(176,106,126)` **y encima**
+      `background-image: /i/tex-*.png`, que es una textura **CON ALFA**. Se estaba
+      midiendo la textura SOLA — clarita — y el corrector llevo el texto a gris
+      medio, que sobre el rosa real no se ve.
+      → **Una imagen con alfa NO reemplaza al color: se COMPONE encima.**
+        Ahora se lee tambien el canal alfa del papel y, si es translucido, se
+        mezcla con el color que tiene debajo.
+
+   7. ★ CORREGIR EN UNA SOLA DIRECCION. ★  (17/9/2026)
+      Cinco botones quedaron en 4.03 con el piso en 5.0 — «Liverpool», «Amazon»,
+      «Palacio de Hierro», «Abrir la camara», «Entrar a la galeria» — todos
+      marcados «corregido». Eran blancos sobre el rosa `#b06a7e`: el corrector
+      miraba la luminancia del fondo, decidia «hay que aclarar», y **del blanco no
+      se puede pasar**. Se quedaba corto y se daba por hecho.
+      → Ahora prueba **las dos direcciones** y se queda con la que alcanza. Sobre
+        ese rosa, oscurecer sí llega.
 
    ★ DE DONDE SALE EL FONDO, EN ORDEN
      · `.portada` y `.footer` → NO SE TOCAN (foto de gente, texto con sombra).
-     · imagen medible → se pide en 1x1 y se lee el pixel:
+     · imagen medible → 1x1 y leer el pixel CON SU ALFA; si es translucida, se
+       compone sobre lo que haya debajo.
          - Cloudinary: `.../upload/w_1,h_1,c_fill,f_png/v…/x.jpg`
            ⚠️ si tras `/upload/` viene `v123456/` la transformacion se INSERTA;
               si viene otra cosa, se REEMPLAZA.
          - texturas propias y `data:` → se dibuja escalada a 1x1.
      · degradado → todos sus colores, y se mide contra EL PEOR.
      · color opaco → ese.
-     · nada → no se toca. Mejor no tocar que empeorar.
+     · nada → no se toca.
 
    ★ COLOR SOBRE COLOR
      WCAG mide CLARIDAD, no TONO. Mismo tono (menos de 28°) y los dos con color
      de verdad → se exige +1.5 y se le baja la saturacion al texto.
 
+   ★ EL PISO NO ES WCAG, ES «SE LEE»
+     «Con cariño, te esperamos» daba 3.09 y PASABA (WCAG pide 3 para texto
+     grande). Maki lo miro y dijo que no se lee.
+     → **5.0 normal · 4.0 grande.** Un escalon arriba de la norma.
+
    ---------------------------------------------------------------------------
+   ★★★★★ MIRAR, NO SOLO MEDIR ★★★★★
+   Las capturas encontraron cosas que el barrido daba por buenas (la seccion de
+   hospedaje entera, el boton «Agendar» dorado sobre dorado) y el codigo encontro
+   cosas que el ojo no ve (un 4.03 que parece bien). **Ni el ojo solo ni el numero
+   solo alcanzan: hay que cruzarlos.**
+   ⚠️ `scrollIntoView` NO sirve acá: scrollea el documento, no el contenedor.
+      `window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY)`.
+   ⚠️ Y esperar: una captura durante el fundido del sobre muestra todo velado.
+
    ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★
-   `window.INVEV` llega despues del dibujo. En esa ventana, preguntar «¿que
-   coleccion es?» devuelve VACIO: en Perlas contestaba «no es Perlas», escondia
-   la frase — y con ella el collar — y no lo volvia a mirar.
+   `window.INVEV` llega despues del dibujo. En esa ventana «¿que coleccion es?»
+   devuelve VACIO: en Perlas contestaba «no es Perlas» y le sacaba el collar.
    → No se decide sin datos, y se puede DESANDAR.
 
    ⚠️ AL VERIFICAR: `todo.php` queda cacheado. Otro `?cb=` NO lo bustea.
@@ -102,7 +113,7 @@
    ============================================================================ */
 (function () {
 
-  var CADA = 700;          /* ronda de cortesia; el trabajo real lo hacen los observadores */
+  var CADA = 700;
 
   function datos() { return window.INVEV || null; }
 
@@ -196,10 +207,8 @@
     if (caja.querySelector('.rd-tapa')) return;
     if (caja.querySelector('.col-vtapa')) return;
     if (!caja.querySelector('iframe') && !caja.querySelector('video')) return;
-
     ponerCss();
     caja.setAttribute('data-crudo', 'tapado');
-
     var tapa = document.createElement('div');
     tapa.className = 'rd-tapa';
     var aro = document.createElement('div'); aro.className = 'rd-aro';
@@ -223,9 +232,8 @@
 
   /* ── REGLA 4 ──────────────────────────────────────────────────────────── */
 
-  /* ★ EL PISO: un escalon arriba de WCAG. «Pasa la norma» no es «se lee». */
-  var MIN_NORMAL = 5.0;      /* WCAG AA pide 4.5 */
-  var MIN_GRANDE = 4.0;      /* WCAG AA pide 3   */
+  var MIN_NORMAL = 5.0;
+  var MIN_GRANDE = 4.0;
 
   var LIENZO = null;
   function elLienzo() {
@@ -275,6 +283,8 @@
     return [f[0] * a + b[0] * (1 - a), f[1] * a + b[1] * (1 - a), f[2] * a + b[2] * (1 - a), 1];
   }
 
+  /* --- el papel, CON SU ALFA ---------------------------------------------- */
+
   var PAPEL = {};
 
   function esCloudinary(u) { return u.indexOf('res.cloudinary.com') >= 0; }
@@ -305,10 +315,13 @@
       try {
         var c = document.createElement('canvas'); c.width = 1; c.height = 1;
         var x = c.getContext('2d');
+        x.clearRect(0, 0, 1, 1);
         x.drawImage(im, 0, 0, 1, 1);
         var d = x.getImageData(0, 0, 1, 1).data;
-        PAPEL[url] = [d[0], d[1], d[2], 1];
-        pasada();                       /* ya hay papel: volver a mirar */
+        /* ⚠️ EL ALFA IMPORTA: una textura translucida NO reemplaza al color de
+           abajo. Se guarda tal cual y se compone despues. */
+        PAPEL[url] = [d[0], d[1], d[2], d[3] / 255];
+        pasada();
       } catch (e) { PAPEL[url] = false; }
     };
     im.onerror = function () { PAPEL[url] = false; };
@@ -337,22 +350,39 @@
     return !!(el.closest && el.closest('.portada, .footer'));
   }
 
+  /* Lo que hay DEBAJO de `desde` (sin contar su propia imagen). */
+  function colorDebajo(desde) {
+    var n = desde;
+    while (n && n !== document.documentElement) {
+      var c = aRGB(getComputedStyle(n).backgroundColor);
+      if (c && c[3] >= 0.85) return c;
+      n = n.parentElement;
+    }
+    return [255, 255, 255, 1];
+  }
+
   function fondosDe(el) {
     if (sobreFoto(el)) return null;
     var n = el;
     while (n && n !== document.documentElement) {
       var cs = getComputedStyle(n);
+
       var img = laImagenDe(cs);
       if (img) {
         pedirPapel(img);
         var p = PAPEL[img];
-        return (p && p !== 'no') ? [p] : null;
+        if (!p || p === 'no') return null;
+        /* ★ si la textura es translucida, se COMPONE sobre lo de abajo */
+        if (p[3] < 0.95) return [mezcla(p, colorDebajo(n))];
+        return [p];
       }
+
       if (cs.backgroundImage && cs.backgroundImage !== 'none') {
         var g = coloresDe(cs.backgroundImage);
         if (g.length) return g;
         return null;
       }
+
       var c = aRGB(cs.backgroundColor);
       if (c && c[3] >= 0.85) return [c];
       n = n.parentElement;
@@ -391,17 +421,36 @@
     return d < 28;
   }
 
+  /* ★ Prueba LAS DOS DIRECCIONES. Del blanco no se puede seguir aclarando: si
+     sólo se mira la luminancia del fondo, sobre un rosa medio el corrector se
+     queda en blanco y en 4.03 para siempre. */
   function corregir(frente, fondo, minimo, despegar) {
     var hsl = aHSL(frente);
     var sat = despegar ? Math.max(0, hsl[1] * 0.45) : hsl[1];
-    var haciaOscuro = luminancia(fondo) > 0.45;
-    for (var paso = 1; paso <= 40; paso++) {
-      var l = haciaOscuro ? hsl[2] - paso * 0.025 : hsl[2] + paso * 0.025;
-      if (l < 0 || l > 1) break;
-      var c = deHSL(hsl[0], sat, l);
-      if (contraste(c, fondo) >= minimo) return c;
+
+    function buscar(haciaOscuro) {
+      var mejorC = null, mejorV = -1;
+      for (var paso = 1; paso <= 40; paso++) {
+        var l = haciaOscuro ? hsl[2] - paso * 0.025 : hsl[2] + paso * 0.025;
+        if (l < 0 || l > 1) break;
+        var c = deHSL(hsl[0], sat, l);
+        var v = contraste(c, fondo);
+        if (v > mejorV) { mejorV = v; mejorC = c; }
+        if (v >= minimo) return { c: c, v: v };
+      }
+      return { c: mejorC, v: mejorV };
     }
-    return haciaOscuro ? [20, 18, 18, 1] : [255, 255, 255, 1];
+
+    var a = buscar(true), b = buscar(false);
+    if (a.v >= minimo && b.v >= minimo) {
+      /* las dos llegan: la que menos se aleja del color original */
+      return Math.abs(aHSL(a.c)[2] - hsl[2]) <= Math.abs(aHSL(b.c)[2] - hsl[2]) ? a.c : b.c;
+    }
+    if (a.v >= minimo) return a.c;
+    if (b.v >= minimo) return b.c;
+    /* ninguna llega por tono: negro o blanco, el que mas contraste da */
+    var neg = [20, 18, 18, 1], bla = [255, 255, 255, 1];
+    return contraste(neg, fondo) >= contraste(bla, fondo) ? neg : bla;
   }
 
   function legibles() {
@@ -461,6 +510,7 @@
       var frente = mezcla(crudo, peor);
       var nuevo = corregir(frente, peor, peorMin, mismoTono(frente, peor));
       el.style.setProperty('color', 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')', 'important');
+      el.style.setProperty('-webkit-text-fill-color', 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')', 'important');
       el.setAttribute('data-regla-luz', 'corregido');
       c.corregidos++;
     }
@@ -489,16 +539,13 @@
     var marco = elMarco();
     if (!marco) return;
 
-    /* cuando una seccion APARECE — es lo que fallaba: el `.reveal` se dispara
-       al scrollear, y con un temporizador de 60 s lo de abajo quedaba afuera */
     if (window.IntersectionObserver) {
       var io = new IntersectionObserver(function (es) {
         for (var i = 0; i < es.length; i++) if (es[i].isIntersecting) { pasada(); break; }
-      }, { rootMargin: '200px' });
+      }, { rootMargin: '600px' });
       [].forEach.call(marco.children, function (n) { io.observe(n); });
     }
 
-    /* cuando el DOM cambia (el panel repinta, el motor agrega cosas) */
     if (window.MutationObserver) {
       new MutationObserver(function () { pasada(); })
         .observe(marco, { childList: true, subtree: true, attributes: true,
@@ -513,8 +560,6 @@
   function arrancar() {
     pasada();
     observar();
-    /* ronda de cortesia mientras el motor termina de armar; los observadores
-       son los que mandan y no caducan nunca */
     var n = 0;
     var t = setInterval(function () {
       pasada();
