@@ -69,31 +69,35 @@
       se puede pasar**. Se quedaba corto y se daba por hecho.
       → Prueba **las dos direcciones** y se queda con la que alcanza.
 
-   8. ★★★ TOMAR UN EXTREMO DEL DEGRADADO POR EL FONDO. ★★★  (17/9/2026)
-      **Este es el que produjo «el blanco sobre el rosita no se lee una mierda»,
-      y tambien el boton «AGENDAR» dorado sobre dorado.** Costo DOS intentos
-      fallidos, uno para cada lado; vale la pena entenderlo entero.
+   8. ★★★ NO ENTENDER COMO SE PINTA UN FONDO DE VARIAS CAPAS. ★★★ (17/9/2026)
+      **De aca salio «el blanco sobre el rosita no se lee una mierda» y tambien el
+      boton «AGENDAR» dorado sobre dorado.** Costo TRES intentos. Vale la pena
+      entenderlo entero, porque el patron del error se repite.
 
       Los botones de Invitame (`.btn`, `.chev`, `.tv-btn`) son terciopelo:
-      `background-color: rgb(231,221,200)` — crema — y encima **TRES capas** de
-      degradado que van de un brillo claro `rgb(184,167,143)` a una sombra
-      `rgb(90,68,37)`.
+      `background-image` con **TRES capas** de degradado apiladas, algunas con
+      alfa, que juntas dan un dorado oscuro. Colores sueltos que aparecen ahi:
+      un brillo `rgb(184,167,143)` y una sombra `rgb(90,68,37)`.
 
-      · Intento 1 — «el fondo es el PEOR color del degradado». Tomaba la sombra
-        `rgb(90,68,37)`, daba contraste 1.16 y empujaba el texto a un extremo.
-        Trece textos quedaron ilegibles, los trece marcados «corregido».
-      · Intento 2 — «si hay color opaco debajo, el color manda y el degradado es
-        volumen». Entonces medi contra el crema… pero el degradado SI se ve: lo
-        que se pinta arriba de todo es dorado oscuro. «AGENDAR» quedo dorado
-        claro sobre dorado oscuro, al lado de «VER MAPA» que en blanco se lee
-        perfecto. Otra vez mal, para el otro lado.
+      · Intento 1 — «el fondo es el PEOR color». Tomaba la sombra, daba 1.16 y
+        empujaba el texto a un extremo. Trece textos ilegibles, los trece
+        marcados «corregido».
+      · Intento 2 — «si hay color opaco debajo, el degradado es volumen». Medi
+        contra el crema, pero el degradado SI se ve. «AGENDAR» quedo dorado
+        sobre dorado, al lado de «VER MAPA» que en blanco se lee perfecto.
+      · Intento 3 — «el degradado es el promedio de TODOS sus colores». Promedie
+        capas distintas juntas, **mezclando alfas que en realidad se apilan**: el
+        alfa promedio dio translucido, el fondo calculado se fue al marfil de
+        abajo, y «AGENDAR» siguio en bordo sobre dorado. Igual de mal.
 
-      → **Un degradado no es su sombra ni su brillo: es su PROMEDIO.** Los
-        extremos son volumen, unos pocos pixeles arriba y abajo; la superficie
-        que ocupa la letra es el promedio. Se promedia y se compone sobre el
-        color opaco que tenga debajo.
-      → Moraleja general: **cuando dos hipotesis opuestas fallan, la pregunta
-        estaba mal planteada.** No era «cual de los colores es el fondo».
+      → **Las capas se APILAN, no se promedian entre si.** Se separa el
+        `background-image` en capas (comas de primer nivel, cuidado con las que
+        van adentro de los parentesis), se promedian los stops de CADA capa por
+        separado, y se componen **de la ultima a la primera** — en CSS la primera
+        capa declarada se pinta ARRIBA — sobre el color opaco de abajo.
+      → Moraleja: **cuando tres hipotesis fallan, el modelo esta mal, no el
+        numero.** Habia que modelar como pinta el navegador, no adivinar cual de
+        los colores «es» el fondo.
 
    9. ★ MEDIR `color` CUANDO LO QUE SE VE ES `-webkit-text-fill-color`. ★
       `.btn.gh` tenia `color: rgb(176,106,126)` y fill bordo: el ojo ve el FILL.
@@ -107,8 +111,8 @@
            ⚠️ si tras `/upload/` viene `v123456/` la transformacion se INSERTA;
               si viene otra cosa, se REEMPLAZA.
          - texturas propias y `data:` → se dibuja escalada a 1x1.
-     · degradado → **el PROMEDIO de sus colores**, compuesto sobre el color
-       opaco de abajo. Nunca un extremo (error 8).
+     · degradados → **capa por capa, de la ultima a la primera**, cada una por su
+       promedio, compuestas sobre el color opaco de abajo (error 8).
      · color opaco → ese.
      · nada → no se toca.
 
@@ -126,8 +130,8 @@
    Las capturas encontraron cosas que el barrido daba por buenas (la seccion de
    hospedaje entera, el boton «AGENDAR» dorado sobre dorado) y el codigo encontro
    cosas que el ojo no ve (un 4.03 que parece bien). **Ni el ojo solo ni el numero
-   solo alcanzan: hay que cruzarlos.** Los dos intentos fallidos del error 8
-   pasaban la medicion; los dos se cayeron de una mirada.
+   solo alcanzan: hay que cruzarlos.** Los tres intentos fallidos del error 8
+   pasaban la medicion; los tres se cayeron de una mirada.
 
    ⚠️ COMO SE MIRA ESTA INVITACION, QUE TIENE SUS TRAMPAS:
      · Arranca con el SOBRE puesto. Se abre con el boton «Ingresa» y despues el
@@ -331,7 +335,7 @@
     return [f[0] * a + b[0] * (1 - a), f[1] * a + b[1] * (1 - a), f[2] * a + b[2] * (1 - a), 1];
   }
 
-  /* ★ ERROR 8: la superficie que ocupa la letra es el PROMEDIO del degradado. */
+  /* Promedio de los stops de UNA capa (rgb ponderado por alfa, alfa promedio). */
   function promedio(lista) {
     var r = 0, g = 0, b = 0, a = 0, n = lista.length;
     for (var i = 0; i < n; i++) {
@@ -339,6 +343,21 @@
       a += (lista[i][3] === undefined ? 1 : lista[i][3]);
     }
     return [r / n, g / n, b / n, a / n];
+  }
+
+  /* ★★★ ERROR 8: separar en CAPAS. Las comas de adentro de `rgba(...)` o de
+     `linear-gradient(...)` NO separan capas: sólo las de primer nivel. */
+  function capasDe(bi) {
+    var out = [], nivel = 0, act = '';
+    for (var i = 0; i < bi.length; i++) {
+      var ch = bi.charAt(i);
+      if (ch === '(') nivel++;
+      else if (ch === ')') nivel--;
+      if (ch === ',' && nivel === 0) { out.push(act); act = ''; continue; }
+      act += ch;
+    }
+    if (act.replace(/\s/g, '')) out.push(act);
+    return out;
   }
 
   /* --- el papel, CON SU ALFA ---------------------------------------------- */
@@ -396,12 +415,6 @@
     return out;
   }
 
-  function laImagenDe(cs) {
-    if (!cs.backgroundImage || cs.backgroundImage === 'none') return null;
-    var m = String(cs.backgroundImage).match(/url\(["']?([^"')]+)/);
-    return m ? m[1] : null;
-  }
-
   function sobreFoto(el) {
     return !!(el.closest && el.closest('.portada, .footer'));
   }
@@ -424,21 +437,30 @@
       var cs = getComputedStyle(n);
       var propio = aRGB(cs.backgroundColor);
       var opaco  = propio && propio[3] >= 0.85 ? propio : null;
+      var bi     = cs.backgroundImage;
 
-      var img = laImagenDe(cs);
-      if (img) {
-        pedirPapel(img);
-        var p = PAPEL[img];
-        if (!p || p === 'no') return null;
-        if (p[3] < 0.95) return [mezcla(p, opaco || colorDebajo(n))];
-        return [p];
-      }
-
-      if (cs.backgroundImage && cs.backgroundImage !== 'none') {
-        /* ★★★ ERROR 8: ni la sombra ni el brillo. El PROMEDIO. */
-        var g = coloresDe(cs.backgroundImage);
-        if (!g.length) return opaco ? [opaco] : null;
-        return [mezcla(promedio(g), opaco || colorDebajo(n.parentElement || n))];
+      if (bi && bi !== 'none') {
+        var capas = capasDe(bi);
+        var base  = opaco || colorDebajo(n.parentElement || n);
+        var algo  = false;
+        /* ★ de la ULTIMA a la PRIMERA: en CSS la primera se pinta arriba */
+        for (var q = capas.length - 1; q >= 0; q--) {
+          var capa = capas[q];
+          var mu = capa.match(/url\(["']?([^"')]+)/);
+          if (mu) {
+            pedirPapel(mu[1]);
+            var p = PAPEL[mu[1]];
+            if (!p || p === 'no') return null;   /* falta un dato: no se decide */
+            base = mezcla(p, base); algo = true;
+            continue;
+          }
+          var cols = coloresDe(capa);
+          if (!cols.length) continue;
+          base = mezcla(promedio(cols), base);
+          algo = true;
+        }
+        if (!algo) return opaco ? [opaco] : null;
+        return [base];
       }
 
       if (opaco) return [opaco];
