@@ -25,8 +25,8 @@
    ---------------------------------------------------------------------------
    REGLA 4 — NINGUN TEXTO ILEGIBLE
 
-   ★ ONCE ERRORES PROPIOS. NO REPETIRLOS. ★
-   Los seis primeros son de medicion; los cinco ultimos, de MODELO: creer que se
+   ★ DOCE ERRORES PROPIOS. NO REPETIRLOS. ★
+   Los seis primeros son de MEDICION; los seis ultimos, de MODELO: creer que se
    sabe como pinta el navegador sin haberlo mirado.
 
    1. MEDIR CONTRA UN COLOR TAPADO.
@@ -95,7 +95,7 @@
         existir.** Y si algo parecido ya funciona en la misma pantalla, copiarlo
         en vez de inventar.
 
-  11. ★★★ IGNORAR `background-blend-mode`. ★★★  (17/9/2026)
+  11. ★★★ IGNORAR `background-blend-mode`. ★★★
       **Este dejo «Donde quedarse» ilegible hasta el final.** La seccion tiene
       `background-color: rgb(176,106,126)` — rosa — y encima la textura
       `/i/tex-*.png`, que medida da `rgb(252,252,252)` con **alfa 1**: blanca y
@@ -109,6 +109,17 @@
       → Moraleja: **una capa opaca no siempre tapa.** Antes de dar por cerrado
         «de que color es el fondo», mirar TODAS las propiedades que participan
         del pintado, no sólo color e imagen.
+
+  12. ★★★ TRATAR UN BOTON COMO SI FUERA UNA PAGINA. ★★★
+      Despues de arreglar «AGENDAR» aparecio «Iniciar sesion» de la trivia con
+      el mismo defecto, y despues otro, y otro. Todos botones, todos con
+      degradado de volumen, en todos el corrector buscando un tono intermedio.
+      Un boton es una pastilla CHICA con brillo arriba y sombra abajo: el tono
+      medio no se lee en toda su superficie. Un parrafo sobre papel plano si.
+      → **Si el texto esta en un control (BUTTON, A, [role=button], .btn, .chev)
+        que tiene `background-image`, no se busca tono: extremo + sombra.** Es
+        lo que ya hacia el CSS de `.btn`, el unico boton que se leia bien.
+      → Moraleja: **la misma regla no sirve para superficies distintas.**
 
    ★ DE DONDE SALE EL FONDO, EN ORDEN
      · `.portada` y `.footer` → NO SE TOCAN (foto de gente, texto con sombra).
@@ -137,8 +148,8 @@
    Las capturas encontraron lo que el barrido daba por bueno (la seccion de
    hospedaje entera, «AGENDAR» dorado sobre dorado) y el codigo encontro lo que
    el ojo no ve (un 4.03 que parece bien). **Ni el ojo solo ni el numero solo
-   alcanzan.** Todos los intentos fallidos de los errores 8, 10 y 11 pasaban la
-   medicion; todos se cayeron de una mirada.
+   alcanzan.** Todos los intentos fallidos de los errores 8, 10, 11 y 12 pasaban
+   la medicion; todos se cayeron de una mirada.
 
    ⚠️ COMO SE MIRA ESTA INVITACION, QUE TIENE SUS TRAMPAS:
      · Arranca con el SOBRE puesto. Se abre con el boton «Ingresa» y despues el
@@ -161,6 +172,8 @@
 
    ⚠️ AL VERIFICAR: `todo.php` queda cacheado. Otro `?cb=` NO lo bustea.
       `fetch('/efectos/todo.php',{cache:'reload'})` antes de recargar.
+      Y el bundle TARDA en tomar un archivo recien subido: hay que reintentar el
+      fetch hasta que aparezca el texto nuevo, o se verifica la version vieja.
    ============================================================================ */
 (function () {
 
@@ -343,9 +356,9 @@
     var out = [0, 0, 0, 1];
     for (var i = 0; i < 3; i++) {
       var f = capa[i], b = base[i], m;
-      if (modo === 'multiply')    m = f * b / 255;
-      else if (modo === 'screen') m = 255 - (255 - f) * (255 - b) / 255;
-      else if (modo === 'darken') m = Math.min(f, b);
+      if (modo === 'multiply')     m = f * b / 255;
+      else if (modo === 'screen')  m = 255 - (255 - f) * (255 - b) / 255;
+      else if (modo === 'darken')  m = Math.min(f, b);
       else if (modo === 'lighten') m = Math.max(f, b);
       else m = f;
       out[i] = m * a + b * (1 - a);
@@ -432,6 +445,24 @@
       if (c && c[3] > 0.05) out.push(c);
     }
     return out;
+  }
+
+  /* ★★★ ERROR 12: un boton no es un parrafo. */
+  function esBotonConVolumen(el) {
+    var n = el, k = 0;
+    while (n && k < 4) {
+      var t = n.tagName;
+      var cl = ' ' + String(n.className || '') + ' ';
+      var ctrl = t === 'BUTTON' || t === 'A' ||
+                 (n.getAttribute && n.getAttribute('role') === 'button') ||
+                 /\sbtn|btn\s|-btn|\schev\s|tv-btn|\spill\s/.test(cl);
+      if (ctrl) {
+        var cs = getComputedStyle(n);
+        if (cs.backgroundImage && cs.backgroundImage !== 'none') return true;
+      }
+      n = n.parentElement; k++;
+    }
+    return false;
   }
 
   function sobreFoto(el) {
@@ -559,7 +590,6 @@
     }
     if (a.v >= minimo) return { c: a.c, alcanzo: true };
     if (b.v >= minimo) return { c: b.c, alcanzo: true };
-    /* ningun tono llega: extremo + sombra */
     var ext = contraste(BLANCO, fondo) >= contraste(NEGRO, fondo) ? BLANCO : NEGRO;
     return { c: ext, alcanzo: false };
   }
@@ -630,8 +660,9 @@
 
       c.resueltos++;
 
-      /* ★★★ ERROR 10: fondo de rango amplio → no existe tono. Extremo + sombra. */
-      if ((fondos.rango || 0) > RANGO_AMPLIO) {
+      /* ★★★ ERRORES 10 y 12: fondo de rango amplio, o un BOTON con volumen →
+         no existe tono que sirva en toda la superficie. Extremo + sombra. */
+      if ((fondos.rango || 0) > RANGO_AMPLIO || esBotonConVolumen(el)) {
         var ext = contraste(BLANCO, peor) >= contraste(NEGRO, peor) ? BLANCO : NEGRO;
         pintar(el, ext, true); c.corregidos++; c.conSombra++;
         continue;
