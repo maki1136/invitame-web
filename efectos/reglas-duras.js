@@ -753,9 +753,20 @@
       }
 
       if (peorV >= peorMin) {
-        el.style.removeProperty('color');
-        el.style.removeProperty('-webkit-text-fill-color');
-        el.style.removeProperty('text-shadow');
+        /* ⚠️⚠️ ERROR 15 — NO SE BORRA EL COLOR: SE REPONE EL ORIGINAL. (17/9/2026)
+           Acá había `el.style.removeProperty('color')`, pensado para deshacer
+           una corrección NUESTRA. Pero borraba también el color que el elemento
+           traía DE FÁBRICA en su propio `style`. Los botones que arma un módulo
+           nacen así: «Entrar a la galería» y «Abrir la cámara» llevan
+           `color:#fff` inline. Al borrárselo quedaban con el color por defecto
+           del navegador — el `<a>` en AZUL DE LINK sobre el botón oscuro y el
+           `<button>` en NEGRO sobre el violeta. Medido: contraste 1,01 y 2,01.
+           O sea: la regla que existe para que todo se lea era la que lo rompía,
+           y encima se marcaba «ok» y no se volvía a mirar.
+           → Si nunca lo tocamos (sin marca), NO se toca nada: ya se leía bien.
+             Si lo habíamos pintado, se repone `crudo`, que es el color original
+             guardado en `data-regla-orig`. */
+        if (marca) pintar(el, crudo, false, fondos[0]);
         el.setAttribute('data-regla-luz', 'ok');
         el.setAttribute('data-regla-fondo', aTexto(fondos[0]));
         c.ok++;
