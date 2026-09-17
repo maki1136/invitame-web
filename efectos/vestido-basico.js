@@ -28,32 +28,41 @@
 
   var CSS = [
     /* ── EL PASE CON EL QR ──────────────────────────────────────────────
-       De caja de vidrio a LÁMINA: esquina casi recta, dos filetes (uno al
-       borde y otro por dentro, que es lo que le da el aire de papelería), y
-       el QR levantado sobre blanco con su sombra, para que se lea como un
-       objeto apoyado y no como un dibujo pegado. */
+       Maki: «salí de lo plano». Era una caja de vidrio sobre la banda.
+       Ahora es una LÁMINA DE PAPEL apoyada: marfil opaco, esquina casi recta,
+       dos filetes (uno al borde y otro por dentro, que es lo que le da el aire
+       de papelería fina), y el QR levantado con su sombra.
+       ⚠ La lámina es CLARA y su tinta va fijada acá. La probé primero oscura
+         y semitransparente: sobre la banda rosa clara de Martina quedaba una
+         mancha gris. Un pase tiene que verse igual de bien sobre una banda
+         clara, una oscura o una foto — por eso el papel no depende del fondo. */
     'html:not([data-coleccion]) .pase .pasecard {',
-    '  background:rgba(26,20,24,.34) !important;',
-    '  -webkit-backdrop-filter:blur(3px) !important; backdrop-filter:blur(3px) !important;',
-    '  border:1px solid rgba(255,255,255,.34) !important;',
+    '  background:#fbf8f2 !important; background-image:none !important;',
+    '  -webkit-backdrop-filter:none !important; backdrop-filter:none !important;',
+    '  border:1px solid rgba(58,48,40,.22) !important;',
     '  border-radius:3px !important;',
-    '  box-shadow:0 14px 34px rgba(16,12,14,.34) !important;',
+    '  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,',
+    '             0 16px 36px rgba(20,16,14,.28) !important;',
     '  max-width:330px !important; margin:0 auto !important;',
     '  padding:24px 20px !important; position:relative !important;',
+    '  color:#2f2a26 !important;',
     '}',
     'html:not([data-coleccion]) .pase .pasecard::before {',
     '  content:""; position:absolute; inset:6px; pointer-events:none;',
-    '  border:1px solid rgba(255,255,255,.24);',
+    '  border:1px solid rgba(58,48,40,.16);',
     '}',
-    'html:not([data-coleccion]) .pase #qr {',
-    '  background:#fff !important; padding:10px !important;',
-    '  border-radius:2px !important;',
-    '  box-shadow:0 2px 4px rgba(16,12,14,.28),',
-    '             0 12px 26px rgba(16,12,14,.26) !important;',
+    'html:not([data-coleccion]) .pase .pasecard .v {',
+    '  color:#2f2a26 !important;',
     '}',
     'html:not([data-coleccion]) .pase .pasecard .k {',
-    '  opacity:1 !important; color:rgba(255,255,255,.86) !important;',
+    '  opacity:1 !important; color:#6a6156 !important;',
     '  letter-spacing:.2em !important; text-transform:uppercase !important;',
+    '}',
+    'html:not([data-coleccion]) .pase #qr {',
+    '  background:#fff !important; padding:9px !important;',
+    '  border-radius:2px !important;',
+    '  box-shadow:0 0 0 1px rgba(58,48,40,.18),',
+    '             0 2px 4px rgba(20,16,14,.16) !important;',
     '}',
 
     /* ── EL ITINERARIO, SOBRE PAPEL ─────────────────────────────────────
