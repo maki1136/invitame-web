@@ -52,9 +52,18 @@
 
   var CSS = [
     '.iv-plie{position:relative}',
+    /* ⚠️ EL CORTE CAE ENTRE RENGLONES, NUNCA POR LA MITAD DE UNA LÍNEA.
+       (17/9/2026) Maki: «en nuestra carta se corta al medio unas palabras
+       arriba del Ver más». `-webkit-line-clamp` solo no alcanza: si el texto
+       hereda un `line-height` con decimales, la caja queda con una altura que
+       no es múltiplo exacto del renglón y la última línea asoma cortada al
+       medio. Con el `line-height` fijado acá y el `max-height` en `em`, la
+       altura es exactamente N renglones y el corte queda limpio. */
     '.iv-plie .iv-plie-txt{display:-webkit-box;-webkit-box-orient:vertical;',
+    '  line-height:1.6;max-height:calc(1.6em * ' + RENGLONES + ');',
     '  -webkit-line-clamp:' + RENGLONES + ';overflow:hidden}',
-    '.iv-plie.abierto .iv-plie-txt{display:block;-webkit-line-clamp:unset;overflow:visible}',
+    '.iv-plie.abierto .iv-plie-txt{display:block;-webkit-line-clamp:unset;',
+    '  max-height:none;overflow:visible}',
     '.iv-plie-btn{display:inline-block;margin-top:10px;cursor:pointer;',
     '  background:none;border:0;padding:4px 2px;font:inherit;',
     '  font-size:.8em;letter-spacing:.1em;text-transform:uppercase;',
