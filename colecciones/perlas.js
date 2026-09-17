@@ -357,6 +357,18 @@
       'border-top-left-radius:50% 90px;border-top-right-radius:50% 90px}',
     '@media (max-width:420px){h[c] .pase{padding:72px 24px 68px;' +
       'border-top-left-radius:50% 58px;border-top-right-radius:50% 58px}}',
+    /* ⚠️⚠️ LA BANDA DEL PASE ES MARFIL HONDO, NO EL COLOR DE LA PALETA. (17/9/2026)
+       Maki: «el pase de invitado cambiale el color por un marfil más oscuro,
+       que ese violeta no me gusta».
+       El motor pinta `.pase` con `var(--verde)`, y la paleta elegida
+       (lavanda-perla) repinta esa VARIABLE en violeta cada 1,5 s con
+       `!important`. Por eso no alcanza con tocar la paleta: la banda se viste
+       acá, en la colección, con un marfil hondo propio de Perlas.
+       Medido: #efe9de sobre #665c50 = 5,37 · #e0d8c9 sobre #665c50 = 4,66.
+       ⚠️ El rótulo `.k` venía con opacity .55: sobre la banda daba 2,8 real.
+          Ahora va opaco y con su color, no con transparencia. */
+    'h[c] .pase{background:#665c50!important;background-image:none!important;' +
+      'color:#efe9de!important}',
     'h[c] .pase .t{' +
       'font-family:"Great Vibes",cursive!important;font-weight:400!important;' +
       'font-size:var(--fs-cursiva,22px)!important;line-height:1.35!important;' +
@@ -369,8 +381,8 @@
     'h[c] .pase .pasecard .k{' +
       'font-family:Montserrat,sans-serif!important;font-size:9px!important;' +
       'font-weight:500!important;letter-spacing:.2em!important;' +
-      'text-transform:uppercase!important;opacity:.55!important;' +
-      'padding-left:.2em;margin-bottom:3px!important}',
+      'text-transform:uppercase!important;opacity:1!important;' +
+      'color:#e0d8c9!important;padding-left:.2em;margin-bottom:3px!important}',
     'h[c] .pase .pasecard .v{' +
       'font-family:"Cormorant Garamond",serif!important;font-weight:300!important;' +
       'font-size:21px!important;letter-spacing:.02em!important;line-height:1.2!important}',
