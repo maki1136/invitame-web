@@ -1047,8 +1047,31 @@
     buildAmbiente();
   }
   let playing=false; const audio=el('audio-bg');
-  function playMusic(){ if(!CONFIG.musica)return; playing=true; el('music').classList.remove('paused'); if(audio&&audio.src){audio.play().catch(()=>{});} }
-  function toggleMusic(){ playing=!playing; el('music').classList.toggle('paused',!playing); if(audio&&audio.src){ playing?audio.play().catch(()=>{}):audio.pause(); } }
+  /* ⚠️ La música de fondo puede ser un archivo de audio o un video de YouTube.
+     Ninguna pestaña puede sonar sola: YouTube arranca con el GESTO de la
+     persona. Los dos lugares desde donde se llama acá son gestos (abrir el
+     sobre y tocar la bocina), así que el iframe se crea recién ahí — y de paso
+     ninguna invitación sin música le pide nada a YouTube.
+     Va por `youtube-nocookie.com`: el invitado no tiene por qué quedar marcado
+     por entrar a una invitación. */
+  let ytFrame=null;
+  function ytCmd(f){ try{ ytFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:[]}),'*'); }catch(e){} }
+  function ytArrancar(){
+    if(ytFrame){ ytCmd('playVideo'); return; }
+    const id=window.__musicaYT; if(!id) return;
+    ytFrame=document.createElement('iframe');
+    ytFrame.title='Música de fondo';
+    ytFrame.setAttribute('allow','autoplay');
+    ytFrame.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;border:0;pointer-events:none';
+    ytFrame.src='https://www.youtube-nocookie.com/embed/'+id+'?enablejsapi=1&autoplay=1&loop=1&playlist='+id+'&controls=0&playsinline=1';
+    document.body.appendChild(ytFrame);
+  }
+  function playMusic(){ if(!CONFIG.musica)return; playing=true; el('music').classList.remove('paused');
+    if(window.__musicaYT){ ytArrancar(); return; }
+    if(audio&&audio.src){audio.play().catch(()=>{});} }
+  function toggleMusic(){ playing=!playing; el('music').classList.toggle('paused',!playing);
+    if(window.__musicaYT){ playing?ytArrancar():ytCmd('pauseVideo'); return; }
+    if(audio&&audio.src){ playing?audio.play().catch(()=>{}):audio.pause(); } }
   // "Ya confirmaron N personas": el 87 que estaba escrito en el HTML era un número
   // INVENTADO y se publicaba en TODAS las invitaciones reales. Ahora solo se muestra
   // si el evento trae un número de verdad (campo rsvpCount); si no, la línea se oculta.
@@ -1996,7 +2019,14 @@
       var sh=el('wa-share');
       if(sh){ var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ');
         var _ti=(window.INVTIPO&&window.INVTIPO.de)||'la fiesta';   /* ver la tabla unica de tipos de evento */
-        var t='¡Estás invitado a '+_ti+(nombres?' de '+nombres:'')+'! Mirá la invitación: '+location.href.split('#')[0];
+        /* ⚠️⚠️ NUNCA SE COMPARTE EL LINK DEL INVITADO.  (17/9/2026)
+           Antes se mandaba `location.href`, que trae el `&g=TOKEN` de ESA
+           persona: quien recibía el mensaje entraba como ella — con su nombre,
+           sus pases, su mesa y su QR de entrada, y podía confirmar en su lugar.
+           Se comparte la invitación en modo vidriera: sólo `?e=`. */
+        var _sl=(INVDATA&&INVDATA.slug)||new URLSearchParams(location.search).get('e')||'';
+        var _link=location.origin+location.pathname+(_sl?'?e='+encodeURIComponent(_sl):'');
+        var t='¡Estás invitado a '+_ti+(nombres?' de '+nombres:'')+'! Mirá la invitación: '+_link;
         sh.href='https://wa.me/?text='+encodeURIComponent(t); }
     })();
     aplicarFeatures(ev);
@@ -2073,13 +2103,22 @@
   }
   function aplicarFeatures(ev){
     // --- Música de fondo ---
-    // Solo se acepta un link de audio REAL. El cliente muchas veces escribe el
-    // nombre de la canción o un link de YouTube/Spotify: con eso el botón de
-    // música aparecía y no sonaba nada. Si no es audio, no se muestra el botón.
+    // ⚠️⚠️ VALE UN ARCHIVO DE AUDIO **O** UN LINK DE YOUTUBE.  (17/9/2026)
+    // `crear.html` le pide al cliente el link de YouTube de su canción (nadie
+    // tiene el mp3 de un tema), y el motor lo tiraba: sólo aceptaba audio y
+    // escondía la bocina. El cliente cargaba su música y no sonaba NADA, sin
+    // ningún aviso. Ahora YouTube suena: lo arranca `ytArrancar()`, mas abajo.
+    // ⚠️ Y NO se mira `ev.musica`: ése es el TEXTO de la playlist, no una
+    //    dirección. Leerlo acá hacía que un texto cualquiera prendiera la
+    //    bocina, y que el link escrito por el cliente saliera impreso como
+    //    párrafo en la invitación.
     { const mb=el('music'), a=el('audio-bg');
-      let url=(ev.musicaUrl||ev.musica||'').trim();
-      if(url && !(/^https?:\/\//i.test(url) && /\.(mp3|m4a|aac|ogg|wav)(\?|$)/i.test(url) && !/youtube|youtu\.be|spotify/i.test(url))) url='';
-      if(url){ if(typeof CONFIG!=='undefined'){CONFIG.musica=true;CONFIG.musicaUrl=url;} if(a)a.src=url; if(mb)mb.style.display=''; }
+      const url=String(ev.musicaUrl||'').trim();
+      const esAudio=/^https?:\/\//i.test(url) && /\.(mp3|m4a|aac|ogg|wav)(\?|$)/i.test(url) && !/youtube|youtu\.be|spotify/i.test(url);
+      const yt=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+      window.__musicaYT=null;
+      if(esAudio){ if(typeof CONFIG!=='undefined'){CONFIG.musica=true;CONFIG.musicaUrl=url;} if(a)a.src=url; if(mb)mb.style.display=''; }
+      else if(yt){ window.__musicaYT=yt[1]; if(typeof CONFIG!=='undefined'){CONFIG.musica=true;CONFIG.musicaUrl='';} if(a)a.removeAttribute('src'); if(mb)mb.style.display=''; }
       else { if(typeof CONFIG!=='undefined')CONFIG.musica=false; if(mb)mb.style.display='none'; } }
     // --- Frase con movimiento ---
     const fl=el('frasefx'); if(fl){ const t=(ev.fraseFx||'none'); fl.className='frasefx'+(t&&t!=='none'?(' fx-'+t):''); fraseParticulas(fl,t); }
