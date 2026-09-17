@@ -173,21 +173,49 @@
     raiz.removeAttribute('data-paleta');
   }
 
+  /* ⚠️⚠️ LA COLECCIÓN MANDA SOBRE LA PALETA.  (17/9/2026)
+     Perlas y Marfil no son «los colores de la boda»: son el PAPEL y la TINTA
+     del diseño. Este módulo reescribe sus variables cada 1,5 s con `!important`
+     en el `<html>`, así que la colección no podía tener color propio: Marfil
+     quedaba VIOLETA con la paleta lavanda, y ni una hoja de estilo ni un
+     `setProperty(..., 'important')` le ganaban — la vuelta siguiente lo
+     reponía. Perseguir clases una por una era el error: es UNA paleta.
+     → La colección publica en `window.INVCOLPALETA` las variables que son
+       SUYAS ({'--verde':'#…'}) y este módulo las pinta con ESE valor. Deja de
+       pelearse consigo mismo, y las que la colección NO reclama (los acentos)
+       siguen siendo de la pareja. */
+  function deLaColeccion() {
+    var c = window.INVCOLPALETA;
+    return (c && typeof c === 'object') ? c : null;
+  }
+
   /* qué variables van y con qué color, mirando qué hay cargado a mano */
   function loQueVa(pal) {
     var plan = [], k, i;
-    if (!pal) return plan;
 
-    for (k in SIEMPRE) {
-      if (!Object.prototype.hasOwnProperty.call(SIEMPRE, k) || !pal[k]) continue;
-      for (i = 0; i < SIEMPRE[k].length; i++) plan.push([SIEMPRE[k][i], pal[k]]);
+    if (pal) {
+      for (k in SIEMPRE) {
+        if (!Object.prototype.hasOwnProperty.call(SIEMPRE, k) || !pal[k]) continue;
+        for (i = 0; i < SIEMPRE[k].length; i++) plan.push([SIEMPRE[k][i], pal[k]]);
+      }
+
+      for (k in CON_CAMPO) {
+        if (!Object.prototype.hasOwnProperty.call(CON_CAMPO, k) || !pal[k]) continue;
+        var r = CON_CAMPO[k];
+        var valor = r.aMano() || pal[k];      /* ← acá gana el de a mano */
+        for (i = 0; i < r.vars.length; i++) plan.push([r.vars[i], valor]);
+      }
     }
 
-    for (k in CON_CAMPO) {
-      if (!Object.prototype.hasOwnProperty.call(CON_CAMPO, k) || !pal[k]) continue;
-      var r = CON_CAMPO[k];
-      var valor = r.aMano() || pal[k];      /* ← acá gana el de a mano */
-      for (i = 0; i < r.vars.length; i++) plan.push([r.vars[i], valor]);
+    /* y acá gana la colección: se le saca a la paleta lo que la colección
+       reclamó y se pinta con el color de la colección. Vale también sin
+       paleta elegida: el papel de la colección no depende de eso. */
+    var col = deLaColeccion();
+    if (col) {
+      for (i = plan.length - 1; i >= 0; i--) if (col[plan[i][0]]) plan.splice(i, 1);
+      for (k in col) {
+        if (Object.prototype.hasOwnProperty.call(col, k) && col[k]) plan.push([k, col[k]]);
+      }
     }
 
     return plan;
@@ -195,21 +223,20 @@
 
   function pintar(pal) {
     limpiar();
-    if (!pal) return;
     var plan = loQueVa(pal);
     for (var i = 0; i < plan.length; i++) {
       raiz.style.setProperty(plan[i][0], plan[i][1], 'important');
       puestas.push(plan[i][0]);
     }
-    raiz.setAttribute('data-paleta', pal.id);
+    if (pal) raiz.setAttribute('data-paleta', pal.id);
   }
 
   var firmaAnterior = null;
   var pintando = false;
 
   function sigueAplicada(pal) {
-    if (!pal) return puestas.length === 0;
     var plan = loQueVa(pal);
+    if (!plan.length) return puestas.length === 0;
     if (plan.length !== puestas.length) return false;
     for (var i = 0; i < plan.length; i++) {
       var hay = raiz.style.getPropertyValue(plan[i][0]).trim().toLowerCase();
