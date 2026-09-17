@@ -816,6 +816,9 @@
         crudo = tintaDe(cs);
         if (!crudo) { c.sinFondo++; continue; }
         el.setAttribute('data-regla-orig', aTexto(crudo));
+        /* ★ error 22: ¿ese color venía del `style` propio del elemento, o del CSS? */
+        el.setAttribute('data-regla-inline',
+          (el.style && (el.style.color || el.style.webkitTextFillColor)) ? '1' : '0');
       }
 
       var px = parseFloat(cs.fontSize) || 14;
@@ -910,9 +913,42 @@
     window.addEventListener('message', pasada);
   }
 
+  /* ⚠️⚠️ ERROR 22 — EL «ORIGINAL» SE GUARDÓ DURANTE EL ARRANQUE. (17/9/2026)
+     `data-regla-orig` se toma la primera vez que miramos el elemento. Pero al
+     arrancar hay una carrera: la paleta elegida pinta las variables y la
+     colección las vuelve a pintar con las suyas. Si miramos en el medio,
+     guardamos como «color de fábrica» un color que ya no existe — y despues lo
+     REPONEMOS con `!important` para siempre.
+     Se vio así: «Ceremonia» y «Fiesta» de Marfil quedaron con
+     `color:rgb(70,59,82)` en línea (el violeta de la paleta lavanda) aunque
+     `--verde` ya valía #4a4642, el gris de Marfil. La regla que existe para que
+     todo se lea estaba congelando el color equivocado.
+     → A los 2,6 s y a los 7 s se OLVIDA lo pintado y se vuelve a mirar todo
+       desde cero. Sólo se olvida lo que pintamos nosotros: si el elemento traía
+       color en su propio `style` de fábrica (`data-regla-inline="1"`), no se
+       toca — esa es la lección del error 15. */
+  function olvidarLoPintado() {
+    var marco = elMarco();
+    if (!marco) return;
+    var nodos = marco.querySelectorAll('[data-regla-luz]');
+    for (var i = 0; i < nodos.length; i++) {
+      var el = nodos[i];
+      if (el.getAttribute('data-regla-inline') === '1') continue;
+      el.style.removeProperty('color');
+      el.style.removeProperty('-webkit-text-fill-color');
+      el.style.removeProperty('text-shadow');
+      el.style.removeProperty('opacity');
+      el.removeAttribute('data-regla-luz');
+      el.removeAttribute('data-regla-fondo');
+      el.removeAttribute('data-regla-orig');
+    }
+  }
+
   function arrancar() {
     pasada();
     observar();
+    setTimeout(function () { olvidarLoPintado(); pasada(); }, 2600);
+    setTimeout(function () { olvidarLoPintado(); pasada(); }, 7000);
     var n = 0;
     var t = setInterval(function () {
       pasada();
