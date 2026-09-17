@@ -1054,15 +1054,36 @@
      ninguna invitación sin música le pide nada a YouTube.
      Va por `youtube-nocookie.com`: el invitado no tiene por qué quedar marcado
      por entrar a una invitación. */
-  let ytFrame=null;
+  let ytFrame=null, ytOyendo=false;
   function ytCmd(f){ try{ ytFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:[]}),'*'); }catch(e){} }
+  /* ⚠️⚠️ MUCHAS CANCIONES NO SE DEJAN INCRUSTAR.  Medido el 17/9/2026.
+     El sello del tema puede prohibir el embed: YouTube contesta `onError` 101 o
+     150 y no suena nada. Una bocina que no suena es el mismo bug de antes con
+     otra cara, así que cuando eso pasa la bocina se ESCONDE. */
+  function ytOir(){
+    if(ytOyendo) return; ytOyendo=true;
+    window.addEventListener('message', function(m){
+      if(!/youtube/.test(String(m.origin))) return;
+      var d; try{ d=JSON.parse(m.data); }catch(e){ return; }
+      if(!d || d.event!=='onError') return;
+      window.__musicaYTerror=d.info;            /* 100 no existe · 101/150 no deja incrustar */
+      if(typeof CONFIG!=='undefined') CONFIG.musica=false;
+      var b=el('music'); if(b) b.style.display='none';
+      if(ytFrame){ ytFrame.remove(); ytFrame=null; }
+    }, false);
+  }
   function ytArrancar(){
     if(ytFrame){ ytCmd('playVideo'); return; }
     const id=window.__musicaYT; if(!id) return;
+    ytOir();
     ytFrame=document.createElement('iframe');
     ytFrame.title='Música de fondo';
     ytFrame.setAttribute('allow','autoplay');
     ytFrame.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;border:0;pointer-events:none';
+    ytFrame.addEventListener('load', function(){
+      /* el saludo que hace que YouTube mande sus avisos a esta página */
+      try{ ytFrame.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*'); }catch(e){}
+    });
     ytFrame.src='https://www.youtube-nocookie.com/embed/'+id+'?enablejsapi=1&autoplay=1&loop=1&playlist='+id+'&controls=0&playsinline=1';
     document.body.appendChild(ytFrame);
   }
