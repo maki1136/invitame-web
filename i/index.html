@@ -1054,7 +1054,7 @@
      ninguna invitación sin música le pide nada a YouTube.
      Va por `youtube-nocookie.com`: el invitado no tiene por qué quedar marcado
      por entrar a una invitación. */
-  let ytFrame=null, ytOyendo=false;
+  let ytFrame=null, ytOyendo=false, ytSonando=false;
   function ytCmd(f){ try{ ytFrame.contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:[]}),'*'); }catch(e){} }
   /* ⚠️⚠️ MUCHAS CANCIONES NO SE DEJAN INCRUSTAR.  Medido el 17/9/2026.
      El sello del tema puede prohibir el embed: YouTube contesta `onError` 101 o
@@ -1065,12 +1065,26 @@
     window.addEventListener('message', function(m){
       if(!/youtube/.test(String(m.origin))) return;
       var d; try{ d=JSON.parse(m.data); }catch(e){ return; }
+      if(d && d.event==='onStateChange'){ if(d.info===1) ytSonando=true; return; }
       if(!d || d.event!=='onError') return;
       window.__musicaYTerror=d.info;            /* 100 no existe · 101/150 no deja incrustar */
       if(typeof CONFIG!=='undefined') CONFIG.musica=false;
       var b=el('music'); if(b) b.style.display='none';
       if(ytFrame){ ytFrame.remove(); ytFrame=null; }
     }, false);
+  }
+  /* ⚠️ NINGÚN NAVEGADOR DEJA SONAR ALGO SOLO.
+     Abrir el sobre es un gesto de la persona, así que casi siempre alcanza —
+     pero no siempre (iOS es más estricto, y algunos navegadores cuentan el
+     gesto de otra manera). Si a los 4 segundos el reproductor no confirmó que
+     está sonando, la bocina vuelve a mostrarse APAGADA: así el invitado la
+     toca, y ese toque sí vale. Mentir con una bocina «prendida» que no suena
+     es el bug que estamos sacando, no uno nuevo. */
+  function ytVigilar(){
+    setTimeout(function(){
+      if(ytSonando || !playing || window.__musicaYTerror!==undefined) return;
+      playing=false; var b=el('music'); if(b) b.classList.add('paused');
+    }, 4000);
   }
   function ytArrancar(){
     if(ytFrame){ ytCmd('playVideo'); return; }
@@ -1083,6 +1097,8 @@
     ytFrame.addEventListener('load', function(){
       /* el saludo que hace que YouTube mande sus avisos a esta página */
       try{ ytFrame.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*'); }catch(e){}
+      ytCmd('playVideo');
+      ytVigilar();
     });
     ytFrame.src='https://www.youtube-nocookie.com/embed/'+id+'?enablejsapi=1&autoplay=1&loop=1&playlist='+id+'&controls=0&playsinline=1';
     document.body.appendChild(ytFrame);
