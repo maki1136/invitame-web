@@ -388,12 +388,12 @@
     /* ── "NUESTRO VIDEO": SIN RECTÁNGULO BLANCO ───────────────────────────
        No se tapa un papel con otro papel: se esconde el video y se deja pasar
        el papel de la sección. La tapa va transparente. Ver la nota de arriba. */
-    'h[c] #video-embed{' +
+    'h[c] #video-embed, h[c] #spotify-embed{' +
       'position:relative;background:transparent!important;' +
       'box-shadow:none!important;border-radius:0!important;overflow:visible}',
-    'h[c] #video-embed[data-col-video="tapado"] iframe,' +
-    'h[c] #video-embed[data-col-video="tapado"] video,' +
-    'h[c] #video-embed[data-col-video="tapado"] img{visibility:hidden!important}',
+    'h[c] [data-col-crudo="tapado"] > iframe,' +
+    'h[c] [data-col-crudo="tapado"] > video,' +
+    'h[c] [data-col-crudo="tapado"] > img{visibility:hidden!important}',
     'h[c] .col-vtapa{' +
       'position:absolute;inset:0;z-index:2;cursor:pointer;' +
       'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;' +
@@ -666,16 +666,25 @@
     port.parentNode.insertBefore(pase, port.nextSibling);
   }
 
-  /* ---- "Nuestro video": la tapa, sin rectángulo blanco -------------------
+  /* ---- LOS DOS CRUDOS: el video de YouTube y el reproductor de Spotify ----
+     ⚠️⚠️ NUNCA SE VE EL PREVIEW DE YOUTUBE NI LA CAJA NEGRA DE SPOTIFY.
+        Son las dos únicas piezas de la invitación que traen el diseño de otra
+        marca adentro. En Perlas van tapadas con el aro de perla y un rótulo, y
+        recién al tocarlas aparece el reproductor. Es la regla 3 del motor
+        (`efectos/reglas-duras.js`), que CEDE en Perlas justamente para que la
+        tape la colección con su propio estilo: si la colección se olvida de
+        una, nadie la tapa. Pasó con la playlist hasta el 17/9/2026 — el video
+        estaba vestido y el Spotify quedaba crudo adentro de la solapa.
      ⚠️ Una vez abierto queda abierto. Sin la marca, el bucle de 400 ms le
         vuelve a poner la tapa encima del video ya andando.
-     ⚠️ La marca `tapado` es la que esconde el video de abajo: no hay fondo
-        propio, se ve el papel de la sección. */
-  function armarVideo() {
-    var emb = document.getElementById('video-embed');
+     ⚠️ La marca `tapado` es la que esconde lo de abajo: no hay fondo propio,
+        se ve el papel de la sección. No se tapa un papel con otro papel. */
+  function armarCrudo(id, rotulo, conAutoplay) {
+    var emb = document.getElementById(id);
     if (!emb) return;
-    if (emb.dataset.colVideo === 'abierto') return;
-    if (emb.querySelector('.col-vtapa')) { emb.dataset.colVideo = 'tapado'; return; }
+    if (!emb.querySelector('iframe') && !emb.querySelector('video')) return;
+    if (emb.dataset.colCrudo === 'abierto') return;
+    if (emb.querySelector('.col-vtapa')) { emb.dataset.colCrudo = 'tapado'; return; }
 
     var t = document.createElement('div');
     t.className = 'col-vtapa';
@@ -686,22 +695,27 @@
           '<path d="M8 5 L19 12 L8 19 Z"/>' +
         '</svg>' +
       '</span>' +
-      '<span class="txt">Ver el video</span>';
+      '<span class="txt">' + rotulo + '</span>';
 
     t.addEventListener('click', function () {
-      emb.dataset.colVideo = 'abierto';
+      emb.dataset.colCrudo = 'abierto';
       /* sirve para los dos casos: no se asume cuál es */
       var f = emb.querySelector('iframe');
-      if (f && f.src) {
+      if (conAutoplay && f && f.src) {
         f.src = f.src + (f.src.indexOf('?') > -1 ? '&' : '?') + 'autoplay=1';
       }
       var v = emb.querySelector('video');
-      if (v && v.play) { try { v.play(); } catch (e) {} }
+      if (conAutoplay && v && v.play) { try { v.play(); } catch (e) {} }
       t.remove();
     });
 
     emb.appendChild(t);
-    emb.dataset.colVideo = 'tapado';
+    emb.dataset.colCrudo = 'tapado';
+  }
+
+  function armarVideo() {
+    armarCrudo('video-embed',   'Ver el video',  true);
+    armarCrudo('spotify-embed', 'La playlist',   false);   /* Spotify no autoplayea */
   }
 
   function colocarPiezas() {
@@ -726,8 +740,10 @@
       s.removeAttribute('data-col-lugar');
     });
     [].forEach.call(document.querySelectorAll('.col-vest,.col-vtapa'), function (e) { e.remove(); });
-    var emb = document.getElementById('video-embed');
-    if (emb) delete emb.dataset.colVideo;
+    ['video-embed', 'spotify-embed'].forEach(function (id) {
+      var emb = document.getElementById(id);
+      if (emb) delete emb.dataset.colCrudo;
+    });
     [].forEach.call(document.querySelectorAll('.col-pza'), function (e) { e.remove(); });
     devolverPase();
   }
