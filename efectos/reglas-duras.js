@@ -69,20 +69,31 @@
       se puede pasar**. Se quedaba corto y se daba por hecho.
       → Prueba **las dos direcciones** y se queda con la que alcanza.
 
-   8. ★★ CONFUNDIR UN BRILLO CON EL FONDO. ★★  (17/9/2026)
-      **Este es el que produjo «el blanco sobre el rosita no se lee una mierda».**
-      Los botones de Invitame (`.btn`, `.chev`, `.tv-btn`) son terciopelo: encima
-      de `background-color: rgb(231,221,200)` — crema — llevan **TRES capas** de
-      degradado que dibujan el volumen, y una de esas capas tiene un marron
-      oscuro `rgb(90,68,37)`. El modulo tomaba ese marron como «el fondo», daba
-      contraste 1.16, y empujaba el texto a BLANCO. Blanco sobre crema: ilegible.
-      Trece textos quedaron asi, los trece marcados «corregido».
-      → **Si el nodo tiene un `background-color` OPACO y encima degradados, el
-        color es el fondo y los degradados son VOLUMEN.** Un degradado solo es
-        fondo cuando no hay color opaco debajo suyo.
-      → Moraleja general: **un fondo no es «el color mas oscuro que encuentro en
-        el CSS». Es lo que se ve.** Ante la duda, el color plano le gana al
-        degradado decorativo.
+   8. ★★★ TOMAR UN EXTREMO DEL DEGRADADO POR EL FONDO. ★★★  (17/9/2026)
+      **Este es el que produjo «el blanco sobre el rosita no se lee una mierda»,
+      y tambien el boton «AGENDAR» dorado sobre dorado.** Costo DOS intentos
+      fallidos, uno para cada lado; vale la pena entenderlo entero.
+
+      Los botones de Invitame (`.btn`, `.chev`, `.tv-btn`) son terciopelo:
+      `background-color: rgb(231,221,200)` — crema — y encima **TRES capas** de
+      degradado que van de un brillo claro `rgb(184,167,143)` a una sombra
+      `rgb(90,68,37)`.
+
+      · Intento 1 — «el fondo es el PEOR color del degradado». Tomaba la sombra
+        `rgb(90,68,37)`, daba contraste 1.16 y empujaba el texto a un extremo.
+        Trece textos quedaron ilegibles, los trece marcados «corregido».
+      · Intento 2 — «si hay color opaco debajo, el color manda y el degradado es
+        volumen». Entonces medi contra el crema… pero el degradado SI se ve: lo
+        que se pinta arriba de todo es dorado oscuro. «AGENDAR» quedo dorado
+        claro sobre dorado oscuro, al lado de «VER MAPA» que en blanco se lee
+        perfecto. Otra vez mal, para el otro lado.
+
+      → **Un degradado no es su sombra ni su brillo: es su PROMEDIO.** Los
+        extremos son volumen, unos pocos pixeles arriba y abajo; la superficie
+        que ocupa la letra es el promedio. Se promedia y se compone sobre el
+        color opaco que tenga debajo.
+      → Moraleja general: **cuando dos hipotesis opuestas fallan, la pregunta
+        estaba mal planteada.** No era «cual de los colores es el fondo».
 
    9. ★ MEDIR `color` CUANDO LO QUE SE VE ES `-webkit-text-fill-color`. ★
       `.btn.gh` tenia `color: rgb(176,106,126)` y fill bordo: el ojo ve el FILL.
@@ -96,9 +107,8 @@
            ⚠️ si tras `/upload/` viene `v123456/` la transformacion se INSERTA;
               si viene otra cosa, se REEMPLAZA.
          - texturas propias y `data:` → se dibuja escalada a 1x1.
-     · degradado CON color opaco en el mismo nodo → **manda el color** (error 8).
-     · degradado SIN color opaco → sus colores, compuestos sobre lo de abajo,
-       y se mide contra el peor.
+     · degradado → **el PROMEDIO de sus colores**, compuesto sobre el color
+       opaco de abajo. Nunca un extremo (error 8).
      · color opaco → ese.
      · nada → no se toca.
 
@@ -114,12 +124,20 @@
    ---------------------------------------------------------------------------
    ★★★★★ MIRAR, NO SOLO MEDIR ★★★★★
    Las capturas encontraron cosas que el barrido daba por buenas (la seccion de
-   hospedaje entera, el boton «Agendar» dorado sobre dorado) y el codigo encontro
+   hospedaje entera, el boton «AGENDAR» dorado sobre dorado) y el codigo encontro
    cosas que el ojo no ve (un 4.03 que parece bien). **Ni el ojo solo ni el numero
-   solo alcanzan: hay que cruzarlos.**
-   ⚠️ `scrollIntoView` NO sirve acá: scrollea el documento, no el contenedor.
-      `window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY)`.
-   ⚠️ Y esperar: una captura durante el fundido del sobre muestra todo velado.
+   solo alcanzan: hay que cruzarlos.** Los dos intentos fallidos del error 8
+   pasaban la medicion; los dos se cayeron de una mirada.
+
+   ⚠️ COMO SE MIRA ESTA INVITACION, QUE TIENE SUS TRAMPAS:
+     · Arranca con el SOBRE puesto. Se abre con el boton «Ingresa» y despues el
+       sello (`.scene`). Hasta entonces no hay nada que mirar.
+     · **`window.scrollTo` NO FUNCIONA acá**: algo lo devuelve a 67 al instante.
+       Se baja con la RUEDA (el scroll de verdad), que es lo que hace el invitado.
+       Un barrido de scroll programatico da la sensacion de haber recorrido todo
+       sin haberse movido ni un pixel.
+     · Las secciones entran con `.reveal`: hay que ESPERAR despues de bajar, o la
+       captura sale velada y parece un problema de contraste que no existe.
 
    ★★★★★ EL AUDITOR VA APARTE DEL CORRECTOR ★★★★★
    La marca `data-regla-luz="corregido"` NO prueba nada: los trece textos del
@@ -133,8 +151,6 @@
 
    ⚠️ AL VERIFICAR: `todo.php` queda cacheado. Otro `?cb=` NO lo bustea.
       `fetch('/efectos/todo.php',{cache:'reload'})` antes de recargar.
-   ⚠️ Y la invitacion arranca con el SOBRE puesto: hasta que no se abre (boton
-      «Ingresa» y despues el sello) el contenido no esta a la vista.
    ============================================================================ */
 (function () {
 
@@ -315,6 +331,16 @@
     return [f[0] * a + b[0] * (1 - a), f[1] * a + b[1] * (1 - a), f[2] * a + b[2] * (1 - a), 1];
   }
 
+  /* ★ ERROR 8: la superficie que ocupa la letra es el PROMEDIO del degradado. */
+  function promedio(lista) {
+    var r = 0, g = 0, b = 0, a = 0, n = lista.length;
+    for (var i = 0; i < n; i++) {
+      r += lista[i][0]; g += lista[i][1]; b += lista[i][2];
+      a += (lista[i][3] === undefined ? 1 : lista[i][3]);
+    }
+    return [r / n, g / n, b / n, a / n];
+  }
+
   /* --- el papel, CON SU ALFA ---------------------------------------------- */
 
   var PAPEL = {};
@@ -409,18 +435,10 @@
       }
 
       if (cs.backgroundImage && cs.backgroundImage !== 'none') {
-        /* ★★ ERROR 8: degradado ENCIMA de un color opaco = VOLUMEN, no fondo.
-           Los botones de terciopelo llevan tres capas y una tiene un marron
-           oscuro: tomarlo como fondo empujaba el texto a blanco sobre crema. */
-        if (opaco) return [opaco];
-        var base = colorDebajo(n.parentElement || n);
+        /* ★★★ ERROR 8: ni la sombra ni el brillo. El PROMEDIO. */
         var g = coloresDe(cs.backgroundImage);
-        if (g.length) {
-          var comp = [];
-          for (var q = 0; q < g.length; q++) comp.push(mezcla(g[q], base));
-          return comp;
-        }
-        return null;
+        if (!g.length) return opaco ? [opaco] : null;
+        return [mezcla(promedio(g), opaco || colorDebajo(n.parentElement || n))];
       }
 
       if (opaco) return [opaco];
@@ -484,6 +502,7 @@
     }
     if (a.v >= minimo) return a.c;
     if (b.v >= minimo) return b.c;
+    /* ninguna llega por tono: el extremo que mas contraste da contra ESTE fondo */
     var neg = [20, 18, 18, 1], bla = [255, 255, 255, 1];
     return contraste(neg, fondo) >= contraste(bla, fondo) ? neg : bla;
   }
