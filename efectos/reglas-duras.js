@@ -25,7 +25,7 @@
    ---------------------------------------------------------------------------
    REGLA 4 — NINGUN TEXTO ILEGIBLE
 
-   ★ SIETE ERRORES PROPIOS. NO REPETIRLOS. ★
+   ★ NUEVE ERRORES PROPIOS. NO REPETIRLOS. ★
 
    1. MEDIR CONTRA UN COLOR TAPADO.
       **Un `background-color` debajo de un `background-image` opaco NO es el fondo.**
@@ -60,8 +60,6 @@
       midiendo la textura SOLA — clarita — y el corrector llevo el texto a gris
       medio, que sobre el rosa real no se ve.
       → **Una imagen con alfa NO reemplaza al color: se COMPONE encima.**
-        Ahora se lee tambien el canal alfa del papel y, si es translucido, se
-        mezcla con el color que tiene debajo.
 
    7. ★ CORREGIR EN UNA SOLA DIRECCION. ★  (17/9/2026)
       Cinco botones quedaron en 4.03 con el piso en 5.0 — «Liverpool», «Amazon»,
@@ -69,8 +67,26 @@
       marcados «corregido». Eran blancos sobre el rosa `#b06a7e`: el corrector
       miraba la luminancia del fondo, decidia «hay que aclarar», y **del blanco no
       se puede pasar**. Se quedaba corto y se daba por hecho.
-      → Ahora prueba **las dos direcciones** y se queda con la que alcanza. Sobre
-        ese rosa, oscurecer sí llega.
+      → Prueba **las dos direcciones** y se queda con la que alcanza.
+
+   8. ★★ CONFUNDIR UN BRILLO CON EL FONDO. ★★  (17/9/2026)
+      **Este es el que produjo «el blanco sobre el rosita no se lee una mierda».**
+      Los botones de Invitame (`.btn`, `.chev`, `.tv-btn`) son terciopelo: encima
+      de `background-color: rgb(231,221,200)` — crema — llevan **TRES capas** de
+      degradado que dibujan el volumen, y una de esas capas tiene un marron
+      oscuro `rgb(90,68,37)`. El modulo tomaba ese marron como «el fondo», daba
+      contraste 1.16, y empujaba el texto a BLANCO. Blanco sobre crema: ilegible.
+      Trece textos quedaron asi, los trece marcados «corregido».
+      → **Si el nodo tiene un `background-color` OPACO y encima degradados, el
+        color es el fondo y los degradados son VOLUMEN.** Un degradado solo es
+        fondo cuando no hay color opaco debajo suyo.
+      → Moraleja general: **un fondo no es «el color mas oscuro que encuentro en
+        el CSS». Es lo que se ve.** Ante la duda, el color plano le gana al
+        degradado decorativo.
+
+   9. ★ MEDIR `color` CUANDO LO QUE SE VE ES `-webkit-text-fill-color`. ★
+      `.btn.gh` tenia `color: rgb(176,106,126)` y fill bordo: el ojo ve el FILL.
+      → Se mide el fill cuando existe y difiere; se escriben los dos.
 
    ★ DE DONDE SALE EL FONDO, EN ORDEN
      · `.portada` y `.footer` → NO SE TOCAN (foto de gente, texto con sombra).
@@ -80,7 +96,9 @@
            ⚠️ si tras `/upload/` viene `v123456/` la transformacion se INSERTA;
               si viene otra cosa, se REEMPLAZA.
          - texturas propias y `data:` → se dibuja escalada a 1x1.
-     · degradado → todos sus colores, y se mide contra EL PEOR.
+     · degradado CON color opaco en el mismo nodo → **manda el color** (error 8).
+     · degradado SIN color opaco → sus colores, compuestos sobre lo de abajo,
+       y se mide contra el peor.
      · color opaco → ese.
      · nada → no se toca.
 
@@ -103,6 +121,11 @@
       `window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY)`.
    ⚠️ Y esperar: una captura durante el fundido del sobre muestra todo velado.
 
+   ★★★★★ EL AUDITOR VA APARTE DEL CORRECTOR ★★★★★
+   La marca `data-regla-luz="corregido"` NO prueba nada: los trece textos del
+   error 8 estaban marcados. **Se audita el estado final con codigo que no
+   comparte la decision del corrector**, y recien ahi se cuenta.
+
    ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★
    `window.INVEV` llega despues del dibujo. En esa ventana «¿que coleccion es?»
    devuelve VACIO: en Perlas contestaba «no es Perlas» y le sacaba el collar.
@@ -110,6 +133,8 @@
 
    ⚠️ AL VERIFICAR: `todo.php` queda cacheado. Otro `?cb=` NO lo bustea.
       `fetch('/efectos/todo.php',{cache:'reload'})` antes de recargar.
+   ⚠️ Y la invitacion arranca con el SOBRE puesto: hasta que no se abre (boton
+      «Ingresa» y despues el sello) el contenido no esta a la vista.
    ============================================================================ */
 (function () {
 
@@ -248,7 +273,7 @@
   function aRGB(txt) {
     if (!txt) return null;
     var s = String(txt).trim();
-    if (!s || s === 'none' || s === 'transparent') return null;
+    if (!s || s === 'none' || s === 'transparent' || s === 'currentcolor') return null;
     var x = elLienzo();
     if (!x) return null;
     try {
@@ -263,6 +288,13 @@
       var d = x.getImageData(0, 0, 1, 1).data;
       return [d[0], d[1], d[2], d[3] / 255];
     } catch (e) { return null; }
+  }
+
+  /* ★ ERROR 9: el ojo ve el fill, no `color`. */
+  function tintaDe(cs) {
+    var f = aRGB(cs.webkitTextFillColor);
+    if (f) return f;
+    return aRGB(cs.color);
   }
 
   function luminancia(c) {
@@ -318,8 +350,6 @@
         x.clearRect(0, 0, 1, 1);
         x.drawImage(im, 0, 0, 1, 1);
         var d = x.getImageData(0, 0, 1, 1).data;
-        /* ⚠️ EL ALFA IMPORTA: una textura translucida NO reemplaza al color de
-           abajo. Se guarda tal cual y se compone despues. */
         PAPEL[url] = [d[0], d[1], d[2], d[3] / 255];
         pasada();
       } catch (e) { PAPEL[url] = false; }
@@ -350,7 +380,7 @@
     return !!(el.closest && el.closest('.portada, .footer'));
   }
 
-  /* Lo que hay DEBAJO de `desde` (sin contar su propia imagen). */
+  /* Lo que hay DEBAJO de `desde`, sin contar su propia imagen. */
   function colorDebajo(desde) {
     var n = desde;
     while (n && n !== document.documentElement) {
@@ -366,25 +396,34 @@
     var n = el;
     while (n && n !== document.documentElement) {
       var cs = getComputedStyle(n);
+      var propio = aRGB(cs.backgroundColor);
+      var opaco  = propio && propio[3] >= 0.85 ? propio : null;
 
       var img = laImagenDe(cs);
       if (img) {
         pedirPapel(img);
         var p = PAPEL[img];
         if (!p || p === 'no') return null;
-        /* ★ si la textura es translucida, se COMPONE sobre lo de abajo */
-        if (p[3] < 0.95) return [mezcla(p, colorDebajo(n))];
+        if (p[3] < 0.95) return [mezcla(p, opaco || colorDebajo(n))];
         return [p];
       }
 
       if (cs.backgroundImage && cs.backgroundImage !== 'none') {
+        /* ★★ ERROR 8: degradado ENCIMA de un color opaco = VOLUMEN, no fondo.
+           Los botones de terciopelo llevan tres capas y una tiene un marron
+           oscuro: tomarlo como fondo empujaba el texto a blanco sobre crema. */
+        if (opaco) return [opaco];
+        var base = colorDebajo(n.parentElement || n);
         var g = coloresDe(cs.backgroundImage);
-        if (g.length) return g;
+        if (g.length) {
+          var comp = [];
+          for (var q = 0; q < g.length; q++) comp.push(mezcla(g[q], base));
+          return comp;
+        }
         return null;
       }
 
-      var c = aRGB(cs.backgroundColor);
-      if (c && c[3] >= 0.85) return [c];
+      if (opaco) return [opaco];
       n = n.parentElement;
     }
     return null;
@@ -421,9 +460,7 @@
     return d < 28;
   }
 
-  /* ★ Prueba LAS DOS DIRECCIONES. Del blanco no se puede seguir aclarando: si
-     sólo se mira la luminancia del fondo, sobre un rosa medio el corrector se
-     queda en blanco y en 4.03 para siempre. */
+  /* ★ ERROR 7: prueba LAS DOS DIRECCIONES. */
   function corregir(frente, fondo, minimo, despegar) {
     var hsl = aHSL(frente);
     var sat = despegar ? Math.max(0, hsl[1] * 0.45) : hsl[1];
@@ -443,12 +480,10 @@
 
     var a = buscar(true), b = buscar(false);
     if (a.v >= minimo && b.v >= minimo) {
-      /* las dos llegan: la que menos se aleja del color original */
       return Math.abs(aHSL(a.c)[2] - hsl[2]) <= Math.abs(aHSL(b.c)[2] - hsl[2]) ? a.c : b.c;
     }
     if (a.v >= minimo) return a.c;
     if (b.v >= minimo) return b.c;
-    /* ninguna llega por tono: negro o blanco, el que mas contraste da */
     var neg = [20, 18, 18, 1], bla = [255, 255, 255, 1];
     return contraste(neg, fondo) >= contraste(bla, fondo) ? neg : bla;
   }
@@ -487,7 +522,7 @@
       var fondos = fondosDe(el);
       if (!fondos) { c.papelEnCamino++; continue; }
 
-      var crudo = aRGB(cs.color);
+      var crudo = tintaDe(cs);
       if (!crudo) { c.sinFondo++; continue; }
 
       var px = parseFloat(cs.fontSize) || 14;
@@ -509,8 +544,9 @@
 
       var frente = mezcla(crudo, peor);
       var nuevo = corregir(frente, peor, peorMin, mismoTono(frente, peor));
-      el.style.setProperty('color', 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')', 'important');
-      el.style.setProperty('-webkit-text-fill-color', 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')', 'important');
+      var txt = 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')';
+      el.style.setProperty('color', txt, 'important');
+      el.style.setProperty('-webkit-text-fill-color', txt, 'important');
       el.setAttribute('data-regla-luz', 'corregido');
       c.corregidos++;
     }
