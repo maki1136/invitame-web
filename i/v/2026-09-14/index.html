@@ -353,7 +353,11 @@
   .dots span{width:8px;height:8px;border-radius:50%;background:#cdbf9f;cursor:pointer;transition:.2s}.dots span.on{background:var(--verde);width:22px;border-radius:6px}
 
   .trivia{max-width:360px;margin:12px auto 0}
-  .tv-in{width:100%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:12px;font-family:'Montserrat';font-size:14px;text-align:center}
+  /* ⚠️ El campo del nombre HEREDA la tinta de la sección. Estaba clavado en
+     `color:#fff` porque la trivia nacía sobre la banda oscura; en una colección
+     de papel claro (Marfil) el invitado escribía BLANCO SOBRE BLANCO y no veía
+     lo que tipeaba. Con `inherit` funciona en los dos casos. */
+  .tv-in{width:100%;border:1px solid rgba(128,128,128,.35);background:rgba(255,255,255,.08);color:inherit;border-radius:10px;padding:12px;font-family:'Montserrat';font-size:14px;text-align:center}
   .tv-btn{width:100%;margin-top:12px;background:#e7ddc8;color:var(--verde);border:none;padding:13px;border-radius:30px;font-family:'Montserrat';font-weight:500;font-size:14px;cursor:pointer}
   .tv-q{font-family:'Forum',serif;font-size:19px;color:#fff;margin:6px 0 14px}
   .tv-prog{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--sage-cl)}
@@ -1100,7 +1104,8 @@
       ytCmd('playVideo');
       ytVigilar();
     });
-    ytFrame.src='https://www.youtube-nocookie.com/embed/'+id+'?enablejsapi=1&autoplay=1&loop=1&playlist='+id+'&controls=0&playsinline=1';
+    const desde=window.__musicaYTseg||0;
+    ytFrame.src='https://www.youtube-nocookie.com/embed/'+id+'?enablejsapi=1&autoplay=1&loop=1&playlist='+id+'&controls=0&playsinline=1'+(desde?'&start='+desde:'');
     document.body.appendChild(ytFrame);
   }
   function playMusic(){ if(!CONFIG.musica)return; playing=true; el('music').classList.remove('paused');
@@ -2153,9 +2158,16 @@
       const url=String(ev.musicaUrl||'').trim();
       const esAudio=/^https?:\/\//i.test(url) && /\.(mp3|m4a|aac|ogg|wav)(\?|$)/i.test(url) && !/youtube|youtu\.be|spotify/i.test(url);
       const yt=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
-      window.__musicaYT=null;
+      /* ⚠️ EL SEGUNDO EN QUE ARRANCA. (17/9/2026)
+         Maki: «tiene que arrancar cuando comienza a cantar, al principio hay
+         sólo ruido y arruina la estética». Casi ningún tema empieza cantado:
+         hay intro. En YouTube, «Copiar enlace con la hora actual» agrega `?t=`
+         al link — o sea que el dato YA viene en el link, sin inventar campos ni
+         casilleros nuevos. Se respeta tal cual, y también `&start=`. */
+      const seg=(url.match(/[?&](?:t|start)=(\d+)/)||[])[1];
+      window.__musicaYT=null; window.__musicaYTseg=0;
       if(esAudio){ if(typeof CONFIG!=='undefined'){CONFIG.musica=true;CONFIG.musicaUrl=url;} if(a)a.src=url; if(mb)mb.style.display=''; }
-      else if(yt){ window.__musicaYT=yt[1]; if(typeof CONFIG!=='undefined'){CONFIG.musica=true;CONFIG.musicaUrl='';} if(a)a.removeAttribute('src'); if(mb)mb.style.display=''; }
+      else if(yt){ window.__musicaYT=yt[1]; window.__musicaYTseg=seg?parseInt(seg,10):0; if(typeof CONFIG!=='undefined'){CONFIG.musica=true;CONFIG.musicaUrl='';} if(a)a.removeAttribute('src'); if(mb)mb.style.display=''; }
       else { if(typeof CONFIG!=='undefined')CONFIG.musica=false; if(mb)mb.style.display='none'; } }
     // --- Frase con movimiento ---
     const fl=el('frasefx'); if(fl){ const t=(ev.fraseFx||'none'); fl.className='frasefx'+(t&&t!=='none'?(' fx-'+t):''); fraseParticulas(fl,t); }
