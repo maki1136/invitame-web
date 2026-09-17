@@ -1,17 +1,20 @@
 /* ===== LAS REGLAS DURAS DEL MOTOR ===========================================
 
-   POR QUE EXISTE ESTE ARCHIVO  (16/9/2026)
+   POR QUE EXISTE ESTE ARCHIVO  (16-17/9/2026)
 
-   Maki, despues de que las mismas cosas salieran mal tres veces:
+   Maki, despues de que las mismas cosas salieran mal varias veces:
 
      «la frase sigue asi grande, eliminala directo»
      «hay palabras claras sobre claro»
      «y el blanco sobre el rosita? no se lee una mierda»
      «la revisaste? se lee bien todo? color con color?»
+     «no podes verlo en tu navegador? o no queres hacerlo?»
 
-   Estaba todo escrito en la skill, con sus palabras, y se repitio igual. La
-   conclusion la eligio el: «las reglas duras adentro del motor» — que el motor
-   NO PUEDA pintarlo mal.
+   La ultima es la que mas duele y tenia razon: SE PUEDE VER. Las capturas
+   fallaban porque `scrollIntoView` no sirve cuando quien scrollea es
+   `document.documentElement` y no el contenedor. Se arregla con
+   `window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY)`.
+   Medir sin mirar es la mitad del trabajo.
 
    ---------------------------------------------------------------------------
    REGLA 1 — LA FRASE NO SE PINTA SUELTA. NUNCA.
@@ -29,76 +32,77 @@
    ---------------------------------------------------------------------------
    REGLA 4 — NINGUN TEXTO ILEGIBLE
 
-   ★ CUATRO ERRORES PROPIOS, EN ORDEN. NO REPETIRLOS. ★
+   ★ CINCO ERRORES PROPIOS, EN ORDEN. NO REPETIRLOS. ★
 
    1. MEDIR CONTRA UN COLOR TAPADO.
-      Se buscaba el primer ancestro con `background-color` opaco. En el pase con
-      QR daba un rosa medio y el corrector ACLARO los textos hasta casi blanco.
-      Pero encima hay una IMAGEN: el papel rosa clarisimo. Maki: «no se lee una
-      mierda». La correccion lo habia EMPEORADO.
-      → **UN `background-color` DEBAJO DE UN `background-image` NO ES EL FONDO.**
+      **Un `background-color` debajo de un `background-image` NO es el fondo.**
+      Midiendo el color de abajo, el corrector ACLARO los textos hasta casi
+      blanco sobre un papel clarisimo. Lo EMPEORO.
 
    2. DESCARTAR TODO LO QUE TUVIERA IMAGEN.
-      El guardia contra fotos descartaba cualquier `background-image` — y el
-      pase tiene su papel. Corregia 11 cosas y justo las marcadas ni las miraba.
+      El guardia anti-foto descartaba cualquier `background-image` — y el pase
+      tiene su papel. Corregia 11 cosas y justo las marcadas ni las miraba.
       → El guardia va por BLOQUE: sólo `.portada` y `.footer`.
 
    3. LEER LOS COLORES CON UNA EXPRESION REGULAR.
       Chrome devuelve `color(srgb 0.69 0.41 0.49 / 0.58)`. Sacar «los numeros»
-      de ahi da 0.69, 0.41, 0.49 leidos como 0-255: CASI NEGRO. Donde se mide
-      mal, NO SE CORRIGE — y quedaban textos sin evaluar en silencio.
-      → **QUE PARSEE EL NAVEGADOR.** Se pinta el color en un canvas de 1x1 y se
-        lee el pixel: entiende rgb, rgba, hsl, #hex, color(srgb), oklch, todo.
+      da casi negro. Donde se mide mal, NO SE CORRIGE, en silencio.
+      → **QUE PARSEE EL NAVEGADOR:** se pinta en un canvas 1x1 y se lee el pixel.
 
    4. MEDIR POCO Y CANTAR VICTORIA.
-      El primer barrido «completo» reviso 31 elementos de 94 y no fallaba
-      ninguno. Parecia verde y era ceguera: los otros 63 no se estaban mirando.
-      → Por eso ahora se publica la COBERTURA en `window.__REGLA4`, no solo los
-        errores. **Un barrido que revisa poco y dice «todo bien» es peor que no
-        revisar.**
+      El primer barrido «completo» reviso 31 de 94 y no fallaba ninguno.
+      → Se publica la COBERTURA en `window.__REGLA4`, no solo los errores.
+
+   5. ★ APAGARSE AL MINUTO. ★  (17/9/2026 — el que encontro Maki mirando)
+      El modulo revisaba cada 700 ms durante 60 segundos y despues paraba. Todo
+      lo que aparecia DESPUES quedaba sin corregir para siempre: los numeros de
+      «Personas» y «Mesa» del pase seguian en BLANCO PURO sobre papel claro,
+      contraste **1.16**, sin tocar. Y la cuenta de cobertura decia 97% porque
+      contaba «resueltos» a los que ya tenian marca — no a los que nunca la
+      recibieron.
+      → **Fuera el temporizador.** Ahora mira cuando cada seccion APARECE
+        (`IntersectionObserver`) y cuando el DOM cambia (`MutationObserver`).
+        No hay ventana de tiempo: si aparece a los diez minutos, se corrige.
+      → Y la leccion general: **un proceso con fecha de vencimiento deja
+        agujeros que ninguna medicion posterior ve**, porque lo que quedo afuera
+        no figura en ningun lado.
+
+   ★ EL PISO NO ES WCAG, ES «SE LEE»  (17/9/2026)
+     «Con cariño, te esperamos» daba 3.09 y PASABA — WCAG AA pide 3 para texto
+     grande. Maki lo miro y dijo que no se lee. Tenia razon: 4.5/3 es el minimo
+     legal para que un sitio no sea inaccesible, no el estandar de una
+     invitacion que se manda a vender.
+     → Piso propio: **5.0 el texto normal, 4.0 el grande.** Un escalon arriba
+       de la norma.
 
    ★ DE DONDE SALE EL FONDO, EN ORDEN
-
-     · `.portada` y `.footer` → NO SE TOCAN. Foto de gente a pantalla completa;
-       ahi el texto blanco va con sombra y el promedio de una foto no dice nada.
-     · imagen de fondo MEDIBLE → se pide en 1x1 y se lee el pixel:
-         - Cloudinary: `.../upload/w_1,h_1,c_fill,f_png/v…/x.jpg` (CORS abierto)
-           ⚠️ si despues de `/upload/` viene `v123456/` la transformacion se
-              INSERTA; si viene otra cosa, se REEMPLAZA.
-         - texturas propias del motor (mismo dominio) y `data:` → se carga la
-           imagen y se dibuja escalada a 1x1, que promedia igual.
-     · degradado → se sacan TODOS sus colores y se mide contra EL PEOR. Si se
-       lee sobre el tramo peor, se lee en todo el degradado.
+     · `.portada` y `.footer` → NO SE TOCAN (foto de gente, texto con sombra).
+     · imagen medible → se pide en 1x1 y se lee el pixel:
+         - Cloudinary: `.../upload/w_1,h_1,c_fill,f_png/v…/x.jpg`
+           ⚠️ si tras `/upload/` viene `v123456/` la transformacion se INSERTA;
+              si viene otra cosa, se REEMPLAZA.
+         - texturas propias y `data:` → se dibuja escalada a 1x1.
+     · degradado → todos sus colores, y se mide contra EL PEOR.
      · color opaco → ese.
-     · nada de lo anterior → no se toca. Mejor no tocar que empeorar.
+     · nada → no se toca. Mejor no tocar que empeorar.
 
-   ★ COLOR SOBRE COLOR  (pedido de Maki)
-     WCAG mide CLARIDAD, no TONO: un rosa sobre otro rosa puede dar 4.5 y verse
-     embarrado igual. Cuando texto y fondo comparten tono (menos de 28°) y los
-     dos tienen color de verdad, se exige +1.5 de contraste y ademas se le baja
-     la saturacion al texto para despegarlo.
-
-   ★ COMO CORRIGE
-     Conserva el TONO y mueve la LUMINOSIDAD hasta el minimo. Si ni el extremo
-     alcanza, cae a negro o blanco puro, que siempre llegan.
+   ★ COLOR SOBRE COLOR
+     WCAG mide CLARIDAD, no TONO. Mismo tono (menos de 28°) y los dos con color
+     de verdad → se exige +1.5 y se le baja la saturacion al texto.
 
    ---------------------------------------------------------------------------
    ★★★★★ NO DECIDIR ANTES DE QUE LLEGUEN LOS DATOS ★★★★★
+   `window.INVEV` llega despues del dibujo. En esa ventana, preguntar «¿que
+   coleccion es?» devuelve VACIO: en Perlas contestaba «no es Perlas», escondia
+   la frase — y con ella el collar — y no lo volvia a mirar.
+   → No se decide sin datos, y se puede DESANDAR.
 
-   El motor dibuja primero y `window.INVEV` llega despues. En esa ventana,
-   preguntar «¿que coleccion es?» devuelve VACIO: en Perlas contestaba «no es
-   Perlas», le escondia la frase — y con ella el collar — y como dejaba su marca
-   puesta, no lo volvia a mirar. Misma leccion que `musica.js`.
-   → No se hace nada hasta tener los datos, y se puede DESANDAR.
-
-   ⚠️ Y AL VERIFICAR: `todo.php` queda cacheado. Recargar con otro `?cb=` NO lo
-      bustea: eso bustea el HTML, no el paquete. Dio falso rojo TRES veces.
-      Forzar con `fetch('/efectos/todo.php',{cache:'reload'})` antes de recargar.
+   ⚠️ AL VERIFICAR: `todo.php` queda cacheado. Otro `?cb=` NO lo bustea.
+      `fetch('/efectos/todo.php',{cache:'reload'})` antes de recargar.
    ============================================================================ */
 (function () {
 
-  var CADA  = 700;
-  var HASTA = 60000;
+  var CADA = 700;          /* ronda de cortesia; el trabajo real lo hacen los observadores */
 
   function datos() { return window.INVEV || null; }
 
@@ -219,7 +223,10 @@
 
   /* ── REGLA 4 ──────────────────────────────────────────────────────────── */
 
-  /* ★ EL NAVEGADOR PARSEA, NOSOTROS NO. */
+  /* ★ EL PISO: un escalon arriba de WCAG. «Pasa la norma» no es «se lee». */
+  var MIN_NORMAL = 5.0;      /* WCAG AA pide 4.5 */
+  var MIN_GRANDE = 4.0;      /* WCAG AA pide 3   */
+
   var LIENZO = null;
   function elLienzo() {
     if (!LIENZO) {
@@ -268,8 +275,6 @@
     return [f[0] * a + b[0] * (1 - a), f[1] * a + b[1] * (1 - a), f[2] * a + b[2] * (1 - a), 1];
   }
 
-  /* --- el papel: Cloudinary, texturas propias y data URI ----------------- */
-
   var PAPEL = {};
 
   function esCloudinary(u) { return u.indexOf('res.cloudinary.com') >= 0; }
@@ -277,12 +282,12 @@
   function sePuedeMedir(u) {
     if (u.indexOf('data:') === 0) return true;
     if (esCloudinary(u)) return true;
-    if (u.indexOf('//') < 0) return true;                    /* relativa */
-    return u.indexOf(location.origin) === 0;                 /* mismo dominio */
+    if (u.indexOf('//') < 0) return true;
+    return u.indexOf(location.origin) === 0;
   }
 
   function urlDe1px(url) {
-    if (!esCloudinary(url)) return url;      /* se achica al dibujar */
+    if (!esCloudinary(url)) return url;
     var i = url.indexOf('/upload/');
     if (i < 0) return url;
     var cola = url.slice(i + 8);
@@ -300,16 +305,15 @@
       try {
         var c = document.createElement('canvas'); c.width = 1; c.height = 1;
         var x = c.getContext('2d');
-        x.drawImage(im, 0, 0, 1, 1);          /* escalar a 1x1 = promediar */
+        x.drawImage(im, 0, 0, 1, 1);
         var d = x.getImageData(0, 0, 1, 1).data;
         PAPEL[url] = [d[0], d[1], d[2], 1];
+        pasada();                       /* ya hay papel: volver a mirar */
       } catch (e) { PAPEL[url] = false; }
     };
     im.onerror = function () { PAPEL[url] = false; };
     im.src = urlDe1px(url);
   }
-
-  /* --- los colores de un degradado --------------------------------------- */
 
   var RE_COLOR = /#[0-9a-f]{3,8}|rgba?\([^)]*\)|hsla?\([^)]*\)|color\([^)]*\)|oklch\([^)]*\)|oklab\([^)]*\)|lab\([^)]*\)|lch\([^)]*\)/gi;
 
@@ -338,20 +342,17 @@
     var n = el;
     while (n && n !== document.documentElement) {
       var cs = getComputedStyle(n);
-
       var img = laImagenDe(cs);
       if (img) {
         pedirPapel(img);
         var p = PAPEL[img];
         return (p && p !== 'no') ? [p] : null;
       }
-
       if (cs.backgroundImage && cs.backgroundImage !== 'none') {
-        var g = coloresDe(cs.backgroundImage);      /* degradado */
+        var g = coloresDe(cs.backgroundImage);
         if (g.length) return g;
         return null;
       }
-
       var c = aRGB(cs.backgroundColor);
       if (c && c[3] >= 0.85) return [c];
       n = n.parentElement;
@@ -408,8 +409,8 @@
     if (!marco) return;
     ponerCss();
 
-    var cuenta = { mirados: 0, resueltos: 0, corregidos: 0, ok: 0,
-                   foto: 0, sinFondo: 0, papelEnCamino: 0 };
+    var c = { mirados: 0, resueltos: 0, corregidos: 0, ok: 0,
+              foto: 0, sinFondo: 0, papelEnCamino: 0 };
 
     var nodos = marco.querySelectorAll('*');
     for (var i = 0; i < nodos.length; i++) {
@@ -418,32 +419,27 @@
       var esCampo = /^(INPUT|TEXTAREA)$/.test(el.tagName);
       if (!esCampo) {
         if (el.children.length) continue;
-        if ((el.textContent || '').trim().length < 2) continue;
+        if ((el.textContent || '').trim().length < 1) continue;
       }
 
       var cs = getComputedStyle(el);
       if (cs.visibility === 'hidden' || cs.display === 'none') continue;
-      if (parseFloat(cs.opacity) < 0.15) continue;
 
       var r = el.getBoundingClientRect();
-      if (r.width < 6 || r.height < 6) continue;
+      if (r.width < 4 || r.height < 4) continue;
 
-      cuenta.mirados++;
+      c.mirados++;
 
       var marca = el.getAttribute('data-regla-luz');
-      if (marca) {
-        cuenta.resueltos++;
-        if (marca === 'ok') cuenta.ok++; else cuenta.corregidos++;
-        continue;
-      }
+      if (marca) { c.resueltos++; if (marca === 'ok') c.ok++; else c.corregidos++; continue; }
 
-      if (sobreFoto(el)) { cuenta.foto++; continue; }
+      if (sobreFoto(el)) { c.foto++; continue; }
 
       var fondos = fondosDe(el);
-      if (!fondos) { cuenta.papelEnCamino++; continue; }
+      if (!fondos) { c.papelEnCamino++; continue; }
 
       var crudo = aRGB(cs.color);
-      if (!crudo) { cuenta.sinFondo++; continue; }
+      if (!crudo) { c.sinFondo++; continue; }
 
       var px = parseFloat(cs.fontSize) || 14;
       var grande = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
@@ -452,46 +448,78 @@
       for (var k = 0; k < fondos.length; k++) {
         var b = fondos[k];
         var f = mezcla(crudo, b);
-        var min = grande ? 3 : 4.5;
+        var min = grande ? MIN_GRANDE : MIN_NORMAL;
         if (mismoTono(f, b)) min += 1.5;
         var v = contraste(f, b);
         if (v - min < peorV - peorMin) { peorV = v; peor = b; peorMin = min; }
       }
 
-      cuenta.resueltos++;
+      c.resueltos++;
 
-      if (peorV >= peorMin) { el.setAttribute('data-regla-luz', 'ok'); cuenta.ok++; continue; }
+      if (peorV >= peorMin) { el.setAttribute('data-regla-luz', 'ok'); c.ok++; continue; }
 
       var frente = mezcla(crudo, peor);
       var nuevo = corregir(frente, peor, peorMin, mismoTono(frente, peor));
       el.style.setProperty('color', 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')', 'important');
       el.setAttribute('data-regla-luz', 'corregido');
-      cuenta.corregidos++;
+      c.corregidos++;
     }
 
-    window.__REGLA4 = cuenta;     /* ★ la COBERTURA, no solo los errores */
+    window.__REGLA4 = c;
   }
 
 
-  /* ── el ciclo ─────────────────────────────────────────────────────────── */
+  /* ── el ciclo: SIN FECHA DE VENCIMIENTO ───────────────────────────────── */
 
+  var pendiente = null;
   function pasada() {
-    if (!elMarco()) return;
-    if (!hayDatos()) return;
-    sacarLaFrase();
-    subirLaCarta();
-    taparCrudos();
-    legibles();
+    if (pendiente) return;
+    pendiente = setTimeout(function () {
+      pendiente = null;
+      if (!elMarco()) return;
+      if (!hayDatos()) return;
+      sacarLaFrase();
+      subirLaCarta();
+      taparCrudos();
+      legibles();
+    }, 60);
+  }
+
+  function observar() {
+    var marco = elMarco();
+    if (!marco) return;
+
+    /* cuando una seccion APARECE — es lo que fallaba: el `.reveal` se dispara
+       al scrollear, y con un temporizador de 60 s lo de abajo quedaba afuera */
+    if (window.IntersectionObserver) {
+      var io = new IntersectionObserver(function (es) {
+        for (var i = 0; i < es.length; i++) if (es[i].isIntersecting) { pasada(); break; }
+      }, { rootMargin: '200px' });
+      [].forEach.call(marco.children, function (n) { io.observe(n); });
+    }
+
+    /* cuando el DOM cambia (el panel repinta, el motor agrega cosas) */
+    if (window.MutationObserver) {
+      new MutationObserver(function () { pasada(); })
+        .observe(marco, { childList: true, subtree: true, attributes: true,
+                          attributeFilter: ['style', 'class'] });
+    }
+
+    window.addEventListener('scroll', pasada, { passive: true });
+    window.addEventListener('resize', pasada);
+    window.addEventListener('message', pasada);
   }
 
   function arrancar() {
     pasada();
-    var t0 = Date.now();
+    observar();
+    /* ronda de cortesia mientras el motor termina de armar; los observadores
+       son los que mandan y no caducan nunca */
+    var n = 0;
     var t = setInterval(function () {
       pasada();
-      if (Date.now() - t0 > HASTA) clearInterval(t);
+      if (++n > 40) { clearInterval(t); observar(); }
     }, CADA);
-    window.addEventListener('message', function () { setTimeout(pasada, 120); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
