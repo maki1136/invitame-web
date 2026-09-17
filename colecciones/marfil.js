@@ -142,6 +142,26 @@
      salto de blanco a marfil. */
   var PAPEL_HEX = '#e5e0d5';
 
+  /* ⚠️⚠️ LAS VARIABLES QUE MARFIL RECLAMA COMO PROPIAS.  (17/9/2026)
+     El violeta de la invitación no salía de Perlas: salía de la PALETA elegida
+     («lavanda perla»), que `efectos/paleta.js` reescribe cada 1,5 s en el
+     `<html>` con `!important`. Contra eso no gana ninguna hoja de estilo, así
+     que Marfil no podía tener su papel y su tinta.
+     → Se publica esta tabla en `window.INVCOLPALETA` y la paleta pinta ESTOS
+       valores en lugar de los suyos. Son el PAPEL y la TINTA: lo que hace que
+       Marfil sea Marfil.
+     ⚠️ A propósito NO se reclaman `--sage`, `--sage-cl` ni `--oro`: ésos son
+        los acentos, y ahí sí manda el color que eligió la pareja. */
+  var PALETA_PROPIA = {
+    '--verde':     TINTA,        /* el color principal: títulos, botones, bocina */
+    '--verde2':    '#3a3733',    /* su versión más oscura, para los degradés */
+    '--muted':     TINTA2,       /* bajadas y datos */
+    '--cream':     '#f5f1e9',    /* el texto que va ARRIBA del color principal */
+    '--lino':      PAPEL_HEX,    /* el papel */
+    '--lino2':     '#f1ede4',    /* el papel, un tono más claro */
+    '--sec-col-v': TINTA         /* el color de sector, que el motor ata a --verde */
+  };
+
   function laPieza(k) {
     try { return (window.INVPIEZAS || {})[k] || ''; } catch (e) { return ''; }
   }
@@ -1190,6 +1210,7 @@
     hoja();
     var raiz = document.documentElement;
     raiz.setAttribute(MARCA, NOMBRE);
+    window.INVCOLPALETA = PALETA_PROPIA;   /* el papel y la tinta le ganan a la paleta */
 
     /* el papel y el fondo entran como variables, no clavados en la hoja:
        así la hoja se arma aunque las texturas todavía no hayan llegado. */
@@ -1221,6 +1242,7 @@
     var raiz = document.documentElement;
     raiz.removeAttribute(MARCA);
     raiz.removeAttribute(MARCA_T);
+    if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
     raiz.style.removeProperty('--mf-papel');
     raiz.style.removeProperty('--mf-fondo');
     sacarPerlas();
