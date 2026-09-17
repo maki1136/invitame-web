@@ -25,7 +25,7 @@
    ---------------------------------------------------------------------------
    REGLA 4 — NINGUN TEXTO ILEGIBLE
 
-   ★ NUEVE ERRORES PROPIOS. NO REPETIRLOS. ★
+   ★ DIEZ ERRORES PROPIOS. NO REPETIRLOS. ★
 
    1. MEDIR CONTRA UN COLOR TAPADO.
       **Un `background-color` debajo de un `background-image` opaco NO es el fondo.**
@@ -56,52 +56,50 @@
       «Donde quedarse» quedo ilegible: kicker dorado, titulo gris y parrafo
       verdoso sobre el papel ROSA OSCURO. El modulo decia «corregido».
       La causa: esa seccion tiene `background-color: rgb(176,106,126)` **y encima**
-      `background-image: /i/tex-*.png`, que es una textura **CON ALFA**. Se estaba
-      midiendo la textura SOLA — clarita — y el corrector llevo el texto a gris
-      medio, que sobre el rosa real no se ve.
+      una textura `/i/tex-*.png` **CON ALFA**. Se medía la textura SOLA — clarita —
+      y el texto terminaba en gris medio, invisible sobre el rosa real.
       → **Una imagen con alfa NO reemplaza al color: se COMPONE encima.**
 
    7. ★ CORREGIR EN UNA SOLA DIRECCION. ★  (17/9/2026)
       Cinco botones quedaron en 4.03 con el piso en 5.0 — «Liverpool», «Amazon»,
-      «Palacio de Hierro», «Abrir la camara», «Entrar a la galeria» — todos
-      marcados «corregido». Eran blancos sobre el rosa `#b06a7e`: el corrector
-      miraba la luminancia del fondo, decidia «hay que aclarar», y **del blanco no
-      se puede pasar**. Se quedaba corto y se daba por hecho.
+      «Palacio de Hierro», «Abrir la camara», «Entrar a la galeria». Eran blancos
+      sobre el rosa `#b06a7e`: el corrector miraba la luminancia del fondo,
+      decidia «hay que aclarar», y **del blanco no se puede pasar**.
       → Prueba **las dos direcciones** y se queda con la que alcanza.
 
    8. ★★★ NO ENTENDER COMO SE PINTA UN FONDO DE VARIAS CAPAS. ★★★ (17/9/2026)
-      **De aca salio «el blanco sobre el rosita no se lee una mierda» y tambien el
-      boton «AGENDAR» dorado sobre dorado.** Costo TRES intentos. Vale la pena
-      entenderlo entero, porque el patron del error se repite.
-
-      Los botones de Invitame (`.btn`, `.chev`, `.tv-btn`) son terciopelo:
-      `background-image` con **TRES capas** de degradado apiladas, algunas con
-      alfa, que juntas dan un dorado oscuro. Colores sueltos que aparecen ahi:
-      un brillo `rgb(184,167,143)` y una sombra `rgb(90,68,37)`.
-
-      · Intento 1 — «el fondo es el PEOR color». Tomaba la sombra, daba 1.16 y
-        empujaba el texto a un extremo. Trece textos ilegibles, los trece
-        marcados «corregido».
+      **De aca salio «el blanco sobre el rosita no se lee una mierda».** Los
+      botones de Invitame son terciopelo: `background-image` con TRES capas de
+      degradado apiladas, algunas con alfa.
+      · Intento 1 — «el fondo es el PEOR color». Trece textos ilegibles.
       · Intento 2 — «si hay color opaco debajo, el degradado es volumen». Medi
-        contra el crema, pero el degradado SI se ve. «AGENDAR» quedo dorado
-        sobre dorado, al lado de «VER MAPA» que en blanco se lee perfecto.
-      · Intento 3 — «el degradado es el promedio de TODOS sus colores». Promedie
-        capas distintas juntas, **mezclando alfas que en realidad se apilan**: el
-        alfa promedio dio translucido, el fondo calculado se fue al marfil de
-        abajo, y «AGENDAR» siguio en bordo sobre dorado. Igual de mal.
-
-      → **Las capas se APILAN, no se promedian entre si.** Se separa el
-        `background-image` en capas (comas de primer nivel, cuidado con las que
-        van adentro de los parentesis), se promedian los stops de CADA capa por
-        separado, y se componen **de la ultima a la primera** — en CSS la primera
-        capa declarada se pinta ARRIBA — sobre el color opaco de abajo.
-      → Moraleja: **cuando tres hipotesis fallan, el modelo esta mal, no el
-        numero.** Habia que modelar como pinta el navegador, no adivinar cual de
-        los colores «es» el fondo.
+        contra el crema, pero el degradado SI se ve.
+      · Intento 3 — «el promedio de TODOS los colores juntos». Promedie capas
+        distintas, mezclando alfas que en realidad se APILAN.
+      → **Las capas se apilan**: se separa el `background-image` en capas (comas
+        de primer nivel), se promedian los stops de CADA capa, y se componen de
+        la ULTIMA a la PRIMERA — en CSS la primera declarada se pinta arriba.
 
    9. ★ MEDIR `color` CUANDO LO QUE SE VE ES `-webkit-text-fill-color`. ★
       `.btn.gh` tenia `color: rgb(176,106,126)` y fill bordo: el ojo ve el FILL.
-      → Se mide el fill cuando existe y difiere; se escriben los dos.
+      → Se mide el fill cuando existe; se escriben los dos.
+
+  10. ★★★ BUSCAR UN TONO DONDE NO EXISTE NINGUNO. ★★★  (17/9/2026)
+      El boton «AGENDAR» (`.btn.gh`) quedo dorado sobre dorado hasta el cuarto
+      intento. Medido: su fondo es un degradado de **rango 0.334** de luminancia
+      (stops en 0.398, 0.128 y 0.064). Contra un rango asi **NO EXISTE ningun
+      color de texto** que de 5:1 en toda la pastilla: blanco da 2.2 contra el
+      brillo, negro da 3.9 contra la sombra. El corrector buscaba y buscaba un
+      tono intermedio que no podia existir, y se quedaba con «el menos malo».
+      Al lado, «VER MAPA» — el MISMO boton — se lee perfecto: blanco **con
+      `text-shadow: rgba(0,0,0,.42) 0 1px 2px`**. La sombra es lo que lo salva.
+      → **Si el rango del fondo supera 0.25, no se busca tono: se va al extremo
+        (blanco o negro) que mas contraste de contra el PROMEDIO, y se le agrega
+        sombra del color contrario.** Es lo que hace un diseñador y lo que ya
+        hacia el CSS del boton que funciona.
+      → Moraleja: **antes de buscar mejor, preguntarse si lo que se busca puede
+        existir.** Y cuando algo parecido ya funciona en la misma pantalla,
+        copiar eso en vez de inventar.
 
    ★ DE DONDE SALE EL FONDO, EN ORDEN
      · `.portada` y `.footer` → NO SE TOCAN (foto de gente, texto con sombra).
@@ -111,8 +109,8 @@
            ⚠️ si tras `/upload/` viene `v123456/` la transformacion se INSERTA;
               si viene otra cosa, se REEMPLAZA.
          - texturas propias y `data:` → se dibuja escalada a 1x1.
-     · degradados → **capa por capa, de la ultima a la primera**, cada una por su
-       promedio, compuestas sobre el color opaco de abajo (error 8).
+     · degradados → **capa por capa, de la ultima a la primera** (error 8), y se
+       anota el RANGO de luminancia de sus stops (error 10).
      · color opaco → ese.
      · nada → no se toca.
 
@@ -127,19 +125,18 @@
 
    ---------------------------------------------------------------------------
    ★★★★★ MIRAR, NO SOLO MEDIR ★★★★★
-   Las capturas encontraron cosas que el barrido daba por buenas (la seccion de
-   hospedaje entera, el boton «AGENDAR» dorado sobre dorado) y el codigo encontro
-   cosas que el ojo no ve (un 4.03 que parece bien). **Ni el ojo solo ni el numero
-   solo alcanzan: hay que cruzarlos.** Los tres intentos fallidos del error 8
-   pasaban la medicion; los tres se cayeron de una mirada.
+   Las capturas encontraron lo que el barrido daba por bueno (la seccion de
+   hospedaje entera, «AGENDAR» dorado sobre dorado) y el codigo encontro lo que
+   el ojo no ve (un 4.03 que parece bien). **Ni el ojo solo ni el numero solo
+   alcanzan.** Los cuatro intentos fallidos de los errores 8 y 10 pasaban la
+   medicion; los cuatro se cayeron de una mirada.
 
    ⚠️ COMO SE MIRA ESTA INVITACION, QUE TIENE SUS TRAMPAS:
      · Arranca con el SOBRE puesto. Se abre con el boton «Ingresa» y despues el
        sello (`.scene`). Hasta entonces no hay nada que mirar.
      · **`window.scrollTo` NO FUNCIONA acá**: algo lo devuelve a 67 al instante.
-       Se baja con la RUEDA (el scroll de verdad), que es lo que hace el invitado.
-       Un barrido de scroll programatico da la sensacion de haber recorrido todo
-       sin haberse movido ni un pixel.
+       Se baja con la RUEDA, que es lo que hace el invitado. Un barrido de scroll
+       programatico da la sensacion de haber recorrido todo sin moverse un pixel.
      · Las secciones entran con `.reveal`: hay que ESPERAR despues de bajar, o la
        captura sale velada y parece un problema de contraste que no existe.
 
@@ -279,6 +276,7 @@
 
   var MIN_NORMAL = 5.0;
   var MIN_GRANDE = 4.0;
+  var RANGO_AMPLIO = 0.25;   /* ★ error 10 */
 
   var LIENZO = null;
   function elLienzo() {
@@ -335,7 +333,6 @@
     return [f[0] * a + b[0] * (1 - a), f[1] * a + b[1] * (1 - a), f[2] * a + b[2] * (1 - a), 1];
   }
 
-  /* Promedio de los stops de UNA capa (rgb ponderado por alfa, alfa promedio). */
   function promedio(lista) {
     var r = 0, g = 0, b = 0, a = 0, n = lista.length;
     for (var i = 0; i < n; i++) {
@@ -419,7 +416,6 @@
     return !!(el.closest && el.closest('.portada, .footer'));
   }
 
-  /* Lo que hay DEBAJO de `desde`, sin contar su propia imagen. */
   function colorDebajo(desde) {
     var n = desde;
     while (n && n !== document.documentElement) {
@@ -430,6 +426,7 @@
     return [255, 255, 255, 1];
   }
 
+  /* Devuelve [color] y, en `.rango`, la diferencia de luminancia de los stops. */
   function fondosDe(el) {
     if (sobreFoto(el)) return null;
     var n = el;
@@ -442,7 +439,7 @@
       if (bi && bi !== 'none') {
         var capas = capasDe(bi);
         var base  = opaco || colorDebajo(n.parentElement || n);
-        var algo  = false;
+        var algo  = false, minL = 1, maxL = 0;
         /* ★ de la ULTIMA a la PRIMERA: en CSS la primera se pinta arriba */
         for (var q = capas.length - 1; q >= 0; q--) {
           var capa = capas[q];
@@ -452,18 +449,28 @@
             var p = PAPEL[mu[1]];
             if (!p || p === 'no') return null;   /* falta un dato: no se decide */
             base = mezcla(p, base); algo = true;
+            var lp = luminancia(p);
+            if (lp < minL) minL = lp;
+            if (lp > maxL) maxL = lp;
             continue;
           }
           var cols = coloresDe(capa);
           if (!cols.length) continue;
+          for (var w = 0; w < cols.length; w++) {
+            var lw = luminancia(mezcla(cols[w], base));
+            if (lw < minL) minL = lw;
+            if (lw > maxL) maxL = lw;
+          }
           base = mezcla(promedio(cols), base);
           algo = true;
         }
         if (!algo) return opaco ? [opaco] : null;
-        return [base];
+        var r1 = [base];
+        r1.rango = maxL - minL;
+        return r1;
       }
 
-      if (opaco) return [opaco];
+      if (opaco) { var r2 = [opaco]; r2.rango = 0; return r2; }
       n = n.parentElement;
     }
     return null;
@@ -500,6 +507,9 @@
     return d < 28;
   }
 
+  var NEGRO  = [20, 18, 18, 1];
+  var BLANCO = [255, 255, 255, 1];
+
   /* ★ ERROR 7: prueba LAS DOS DIRECCIONES. */
   function corregir(frente, fondo, minimo, despegar) {
     var hsl = aHSL(frente);
@@ -524,9 +534,21 @@
     }
     if (a.v >= minimo) return a.c;
     if (b.v >= minimo) return b.c;
-    /* ninguna llega por tono: el extremo que mas contraste da contra ESTE fondo */
-    var neg = [20, 18, 18, 1], bla = [255, 255, 255, 1];
-    return contraste(neg, fondo) >= contraste(bla, fondo) ? neg : bla;
+    return contraste(NEGRO, fondo) >= contraste(BLANCO, fondo) ? NEGRO : BLANCO;
+  }
+
+  function pintar(el, c, conSombra) {
+    var txt = 'rgb(' + Math.round(c[0]) + ',' + Math.round(c[1]) + ',' + Math.round(c[2]) + ')';
+    el.style.setProperty('color', txt, 'important');
+    el.style.setProperty('-webkit-text-fill-color', txt, 'important');
+    if (conSombra) {
+      /* la misma receta del boton que SI se lee */
+      var oscura = luminancia(c) > 0.5;
+      el.style.setProperty('text-shadow',
+        oscura ? 'rgba(0,0,0,.45) 0 1px 2px' : 'rgba(255,255,255,.55) 0 1px 2px',
+        'important');
+    }
+    el.setAttribute('data-regla-luz', 'corregido');
   }
 
   function legibles() {
@@ -535,7 +557,7 @@
     ponerCss();
 
     var c = { mirados: 0, resueltos: 0, corregidos: 0, ok: 0,
-              foto: 0, sinFondo: 0, papelEnCamino: 0 };
+              foto: 0, sinFondo: 0, papelEnCamino: 0, conSombra: 0 };
 
     var nodos = marco.querySelectorAll('*');
     for (var i = 0; i < nodos.length; i++) {
@@ -581,14 +603,22 @@
 
       c.resueltos++;
 
+      /* ★★★ ERROR 10: si el fondo tiene rango amplio, NO existe tono que sirva.
+         Extremo + sombra, como el boton que si se lee. */
+      if ((fondos.rango || 0) > RANGO_AMPLIO) {
+        var ext = contraste(BLANCO, peor) >= contraste(NEGRO, peor) ? BLANCO : NEGRO;
+        var yaEsta = Math.abs(crudo[0] - ext[0]) < 12 && Math.abs(crudo[1] - ext[1]) < 12 &&
+                     Math.abs(crudo[2] - ext[2]) < 12;
+        if (!yaEsta || cs.textShadow === 'none') {
+          pintar(el, ext, true); c.corregidos++; c.conSombra++;
+        } else { el.setAttribute('data-regla-luz', 'ok'); c.ok++; }
+        continue;
+      }
+
       if (peorV >= peorMin) { el.setAttribute('data-regla-luz', 'ok'); c.ok++; continue; }
 
       var frente = mezcla(crudo, peor);
-      var nuevo = corregir(frente, peor, peorMin, mismoTono(frente, peor));
-      var txt = 'rgb(' + nuevo[0] + ',' + nuevo[1] + ',' + nuevo[2] + ')';
-      el.style.setProperty('color', txt, 'important');
-      el.style.setProperty('-webkit-text-fill-color', txt, 'important');
-      el.setAttribute('data-regla-luz', 'corregido');
+      pintar(el, corregir(frente, peor, peorMin, mismoTono(frente, peor)), false);
       c.corregidos++;
     }
 
