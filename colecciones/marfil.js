@@ -136,6 +136,8 @@
   var TINTA   = '#4a4642';   /* la principal: gris pardo, no negro */
   var TINTA2  = '#55514b';   /* bajadas y datos */
   var TINTA3  = '#b6b0a8';   /* SOLO filetes, bordes y separadores: nunca texto */
+  var ORO     = '#8a7446';   /* oro viejo: el metal de la colección */
+  var ORO_CL  = 'rgba(138,116,70,.32)';  /* el mismo, en filete fino */
 
   /* el marfil canónico, el mismo que declara marfil-texturas.js. Va también
      como color plano abajo del papel: si la textura tardara, no se ve un
@@ -159,7 +161,18 @@
     '--cream':     '#f5f1e9',    /* el texto que va ARRIBA del color principal */
     '--lino':      PAPEL_HEX,    /* el papel */
     '--lino2':     '#f1ede4',    /* el papel, un tono más claro */
-    '--sec-col-v': TINTA         /* el color de sector, que el motor ata a --verde */
+    '--sec-col-v': TINTA,        /* el color de sector, que el motor ata a --verde */
+    /* ⚠️⚠️ LOS ACENTOS TAMBIÉN SON DE LA COLECCIÓN. (17/9/2026)
+       Hasta hoy Marfil dejaba `--sage`, `--sage-cl` y `--oro` en manos de la
+       paleta elegida. Con «lavanda-perla» eso pintaba de VIOLETA el nombre del
+       lugar debajo de «Ceremonia» y «Fiesta», adentro de una invitación que es
+       marfil y tinta. Maki: «mirá que le cambiaste los colores acá».
+       → Marfil se queda con los tres, en sus propios neutros cálidos. Los
+         colores que eligió la pareja siguen estando donde corresponde: en los
+         círculos de «Los colores de la boda», que salen del dato. */
+    '--sage':      '#635c4d',    /* bajadas y nombres de lugar: 5,10 sobre el papel */
+    '--sage-cl':   '#cdc5b4',    /* el mismo, aclarado: filetes y fondos suaves */
+    '--oro':       ORO           /* el metal de la colección: oro viejo, no lila */
   };
 
   function laPieza(k) {
@@ -1045,7 +1058,68 @@
     '}',
     'h[c] .frame .sec > *, h[c] .frame .pase > *, h[c] .frame .footer > * {',
     '  position:relative; z-index:1;',
-    '}'
+    '}',
+
+    /* ── LA TARJETA GRABADA: CEREMONIA Y FIESTA, Y LA RASPADITA ───────────
+       Maki, 17/9: «en la parte de ceremonia y fiesta estaría bueno que le
+       pongas otro tipo de rectángulo, algo diferente, como en perlas que le
+       pusiste más diseño a esos recuadros», y «donde dice la fecha y raspar la
+       fecha quedó demasiado esfumado».
+       Perlas hace ARCOS. Marfil hace GRABADO: esquina recta, filete de oro
+       viejo, un segundo filete por dentro que no llega al borde, y la foto
+       montada como una lámina con su propio filete y su aire alrededor.
+       ⚠️ La raspadita NO estaba sin tarjeta: la tarjeta era del mismo tono que
+          el papel y su sombra se perdía contra el nácar. Se veía como tres
+          monedas flotando. Mismo grabado que Ceremonia y Fiesta, para que la
+          colección hable un solo idioma. */
+    'h[c] .evento {',
+    '  border-radius:2px !important;',
+    '  border:1px solid ' + ORO + ' !important;',
+    '  background:#f3efe6 !important;',
+    '  box-shadow:0 1px 0 rgba(255,255,255,.75) inset,',
+    '             0 12px 30px rgba(58,52,43,.16) !important;',
+    '  padding:14px !important;',
+    '  position:relative !important;',
+    '}',
+    'h[c] .evento::after {',
+    '  content:""; position:absolute; inset:6px;',
+    '  border:1px solid ' + ORO_CL + '; pointer-events:none; z-index:4;',
+    '}',
+    'h[c] .evento .ph {',
+    '  border:1px solid ' + ORO_CL + ' !important;',
+    '  height:168px !important;',
+    '  filter:saturate(.9) contrast(1.02);',
+    '}',
+    'h[c] .evento .bd {',
+    '  padding:18px 10px 12px !important; text-align:center !important;',
+    '}',
+    'h[c] .evento h3 {',
+    '  letter-spacing:.03em !important; margin-bottom:2px !important;',
+    '}',
+    'h[c] .evento .sub  { color:' + TINTA2 + ' !important; }',
+    'h[c] .evento .addr { color:' + TINTA2 + ' !important; }',
+    'h[c] .evento .btnrow { justify-content:center !important; }',
+
+    'h[c] .scratchcard {',
+    '  border-radius:2px !important;',
+    '  border:1px solid ' + ORO + ' !important;',
+    '  background:#f3efe6 !important;',
+    '  box-shadow:0 1px 0 rgba(255,255,255,.75) inset,',
+    '             0 12px 30px rgba(58,52,43,.16) !important;',
+    '  width:min(86%,320px) !important; height:176px !important;',
+    '}',
+    'h[c] .scratchcard::after {',
+    '  content:""; position:absolute; inset:6px;',
+    '  border:1px solid ' + ORO_CL + '; pointer-events:none; z-index:6;',
+    '}',
+    'h[c] .scratchcard .ivf-circ .c {',
+    '  box-shadow:0 0 0 1px ' + ORO + ', 0 3px 8px rgba(58,52,43,.22) !important;',
+    '}',
+    'h[c] .scratch-sec .scratch-hint {',
+    '  color:' + TINTA2 + ' !important; opacity:1 !important;',
+    '  font-size:12.5px !important; letter-spacing:.02em !important;',
+    '}',
+    'h[c] .sc-day, h[c] .sc-mon { color:' + TINTA + ' !important; }'
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
        orden de carga, que es la trampa que ya se pagó en Perlas. */
