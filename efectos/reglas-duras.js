@@ -514,6 +514,22 @@
       var rm = media[i].getBoundingClientRect();
       if (rm.width * rm.height > area * 0.3) return true;
     }
+    /* ⚠️⚠️ Y LA FOTO PUEDE SER EL FONDO DE UN HIJO, NO DEL BLOQUE. (17/9/2026)
+       Esto fue una regresión mía el mismo día: al escribir el error 19 miré el
+       `background-image` del bloque nada más. La portada NO lleva la foto: la
+       lleva `.pbg`, un div adentro. Resultado: la portada de Valentina se midió
+       contra el papel y los textos CLAROS del diseño —que se leían perfecto
+       sobre la foto— se dieron vuelta a oscuros y quedaron ilegibles.
+       → Se mira también en los hijos. Un degradado no cuenta: tiene que haber
+         una imagen de verdad (`url(...)`) cubriendo el bloque. */
+    var hijos = bloque.querySelectorAll('*');
+    for (var j = 0; j < hijos.length; j++) {
+      var ch = getComputedStyle(hijos[j]);
+      if (!ch.backgroundImage || ch.backgroundImage === 'none') continue;
+      if (ch.backgroundImage.indexOf('url(') < 0) continue;
+      var rh = hijos[j].getBoundingClientRect();
+      if (rh.width * rh.height > area * 0.3) return true;
+    }
     return false;
   }
 
