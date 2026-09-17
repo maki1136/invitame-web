@@ -530,8 +530,35 @@
   }
 
   /* Devuelve [color] y, en `.rango`, la diferencia de luminancia de los stops. */
+  /* ⚠️⚠️ ERROR 16 — EL PAPEL NO ES EL BODY. (17/9/2026)
+     `fondo-invitacion.js` pinta el papel de la invitación con un `<img>` dentro
+     de `#inv-fondo`, NO con `background-image`. Así que al subir por los
+     ancestros buscando algo opaco no se encontraba nada… hasta el `body`, que
+     es OSCURO (#2a231e). Con eso el módulo concluía que el texto iba sobre
+     fondo oscuro y lo ACLARABA. Resultado medido en Marfil: los kickers («La
+     fecha», «Con mucha alegría», «La banda sonora»…) pintados inline en
+     #d5cdc2 sobre papel marfil —contraste 1,20— y «Nuestra carta» en BLANCO
+     PURO, 1,31. Otra vez: la regla que existe para que todo se lea era la que
+     lo dejaba ilegible, y encima pisaba con `!important` el color correcto que
+     la colección ya le había puesto.
+     → La búsqueda se CORTA en el marco. Lo que hay detrás del texto es el
+       papel: la foto de fondo si se puede medir, y si no el `--lino` de la
+       colección. */
+  function elPapel() {
+    var im = document.querySelector('#inv-fondo img');
+    var u = im && (im.currentSrc || im.src);
+    if (u) {
+      pedirPapel(u);
+      var p = PAPEL[u];
+      if (p && p !== 'no') return p;
+    }
+    var v = '';
+    try { v = getComputedStyle(document.documentElement).getPropertyValue('--lino'); } catch (e) {}
+    return aRGB(v) || null;
+  }
+
   function fondosDe(el) {
-    var n = el;
+    var n = el, tope = elMarco();
     while (n && n !== document.documentElement) {
       var cs = getComputedStyle(n);
       var propio = aRGB(cs.backgroundColor);
@@ -574,8 +601,11 @@
       }
 
       if (opaco) { var r2 = [opaco]; r2.rango = 0; return r2; }
+      if (n === tope) break;            /* ← se corta en el marco: arriba está el body oscuro */
       n = n.parentElement;
     }
+    var pap = elPapel();
+    if (pap) { var r3 = [pap]; r3.rango = 0; return r3; }
     return null;
   }
 
