@@ -100,9 +100,9 @@
     '.rsvp-caja{margin:14px auto 4px;text-align:center}' +
     '.rsvp-fila{display:flex;align-items:center;justify-content:center;gap:16px}' +
     '.rsvp-fila .et{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;' +
-      'opacity:.45;white-space:nowrap;transition:opacity .25s}' +
-    '.rsvp-caja[data-r="si"] .et.s{opacity:1}' +
-    '.rsvp-caja[data-r="no"] .et.n{opacity:1}' +
+      'opacity:.86;white-space:nowrap;transition:opacity .25s}' +
+    '.rsvp-caja[data-r="si"] .et.s{opacity:1;font-weight:700}' +
+    '.rsvp-caja[data-r="no"] .et.n{opacity:1;font-weight:700}' +
     '.rsvp-pie{font-size:10.5px;opacity:.5;letter-spacing:.04em;margin:8px 0 0;min-height:15px}' +
 
     /* chico y sobrio: las sombras a la mitad de lo que pedía el tamaño grande */
