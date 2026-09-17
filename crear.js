@@ -353,7 +353,13 @@
         cfWsp2:$('cfWsp2').value.trim(), cfWsp2n:$('cfWsp2n').value.trim(),
         fraseFinal:$('fraseFinal').value.trim(), textoFinal:$('textoFinal').value.trim(),
         colorSug:$('colorSug').value.trim(), tipoSug:$('tipoSug').value.trim(),
-        dress:$('dress').value.trim(), regalos:$('regalos').value.trim(), musica:$('musica').value.trim(),
+        dress:$('dress').value.trim(), regalos:$('regalos').value.trim(),
+        /* ⚠️ EL CAMPO «Música de fondo» VA A `musicaUrl`, NO A `musica`.  (17/9/2026)
+           `musica` es el TEXTO que se muestra abajo de la playlist; `musicaUrl`
+           es la canción que suena. Guardarlo en `musica` hacía dos desastres a
+           la vez: el link de YouTube del cliente salía IMPRESO como párrafo en
+           la invitación, y la canción no sonaba nunca. */
+        musicaUrl:$('musica').value.trim(),
         fraseFx:$('fraseFx').value, igHashtag:$('igHashtag').value.trim(), spotifyUrl:$('spotifyUrl').value.trim(),
         reg_liverpool:$('reg_liverpool').value.trim(), reg_amazon:$('reg_amazon').value.trim(), reg_sears:$('reg_sears').value.trim(),
         reg_mercadolibre:$('reg_mercadolibre').value.trim(), reg_palacio:$('reg_palacio').value.trim(), reg_venmo:$('reg_venmo').value.trim(), reg_paypal:$('reg_paypal').value.trim(),
