@@ -26,7 +26,7 @@
    REGLA 4 — NINGUN TEXTO ILEGIBLE
 
    ★★★★★ EL ERROR QUE ESTABA ABAJO DE TODOS LOS DEMAS ★★★★★
-   ★ 13. LA MARCA ERA DEFINITIVA. ★  (17/9/2026)
+   ★ 13. MARCAR COMO RESUELTO LO QUE TODAVIA NO SE PUDO RESOLVER. ★ (17/9/2026)
 
    Durante horas aparecio, se arreglo y VOLVIO A APARECER el mismo defecto en
    distintos botones: «AGENDAR», «Iniciar sesion», «Comenzar trivia»… Cada vez
@@ -44,11 +44,17 @@
    fondo cambiaba un segundo despues y el texto quedaba fijado contra un fondo
    que ya no existia. Ninguna medicion posterior lo veia: estaba «resuelto».
 
-   → **Ahora se recuerda contra QUE fondo se corrigio (`data-regla-fondo`) y cual
-     era el color ORIGINAL (`data-regla-orig`).** En cada pasada se vuelve a
-     calcular el fondo; si cambio, se recorrige **partiendo del color original**,
-     no del corregido (si no, cada correccion se apila sobre la anterior y el
-     texto se va derivando).
+   → **Se recuerda contra QUE fondo se corrigio (`data-regla-fondo`) y cual era
+     el color ORIGINAL (`data-regla-orig`).** En cada pasada se recalcula el
+     fondo; si cambio, se recorrige **partiendo del original**, no del corregido
+     (si no, cada correccion se apila y el texto se va derivando).
+
+   ⚠️ Y ME VOLVIO A PASAR EN EL MISMO DIA: al escribir la rama del error 14 puse
+      `el.setAttribute('data-regla-luz','foto')` tambien en los caminos de
+      SALIDA — «no pude leer el color», «todavia no hay referencia en el
+      bloque» — y el cierre quedo sin arreglar, marcado como listo. El error no
+      es el cache: es **usar la misma marca para "ya esta" y para "no pude"**.
+      → Solo se marca lo que se RESOLVIO. Lo que no se pudo, se reintenta.
 
    → Moraleja, la mas cara del dia: **una decision tomada con datos incompletos
      tiene que poder revisarse.** Un cache sin invalidacion no es una
@@ -108,17 +114,16 @@
       Un boton es una pastilla chica con brillo arriba y sombra abajo: el tono
       medio no se lee. → Control con `background-image`: extremo + sombra.
 
-  14. ★ CONFUNDIR «NO PUEDO MEDIR» CON «NO PUEDO HACER NADA». ★  (17/9/2026)
+  14. CONFUNDIR «NO PUEDO MEDIR» CON «NO PUEDO HACER NADA».
       Sobre una FOTO el fondo cambia pixel a pixel: no hay un color contra el
       cual medir, y por eso `.portada` y `.footer` quedaban excluidos. Pero
-      excluirlos dejo el cierre de Martina con «MARTINA · 28.11.2026» en rosa y
-      el credito «INVITACION CREADA CON INVITAME» casi invisibles — mientras
-      «¡Gracias!» y «¿Quieres la tuya?», en el MISMO bloque, se leian perfecto
-      en blanco con sombra.
+      excluirlos dejo el cierre con «Martina · 28.11.2026» en rosa y el credito
+      «invitacion creada con Invitame» casi invisibles — mientras «¡Gracias!» y
+      «¿Quieres la tuya?», en el MISMO bloque, se leian perfecto en blanco.
       → No hace falta medir para saber que hacer: **se copia lo que ya funciona
-        en ese bloque.** Se mira que extremo usan los hermanos que si se leen
-        (blanco o negro) y se lleva ahi a los que quedaron en un tono medio,
-        con sombra. Los que ya son extremos no se tocan: la portada queda igual.
+        en ese bloque.** Se mira que extremo usan los hermanos que si se leen y
+        se lleva ahi a los que quedaron en tono medio, con sombra. Los que ya
+        son extremos no se tocan: la portada queda igual.
       → Moraleja: cuando no se puede calcular la respuesta, **mirar la que ya
         esta bien al lado.**
 
@@ -483,7 +488,8 @@
   }
 
   /* ★ ERROR 14: no se mide la foto — se copia el extremo que ya usan los
-     hermanos que si se leen. */
+     hermanos que si se leen. Devuelve null mientras no haya referencia, y
+     entonces NO se marca nada (★ error 13): se reintenta en la proxima pasada. */
   function extremoDelBloque(bloque) {
     var guardado = bloque.getAttribute('data-regla-extremo');
     if (guardado) return guardado === 'b' ? BLANCO : NEGRO;
@@ -649,8 +655,8 @@
     ponerCss();
 
     var c = { mirados: 0, resueltos: 0, corregidos: 0, ok: 0,
-              foto: 0, fotoArreglados: 0, sinFondo: 0, papelEnCamino: 0,
-              conSombra: 0, rehechos: 0 };
+              foto: 0, fotoArreglados: 0, fotoEnCamino: 0,
+              sinFondo: 0, papelEnCamino: 0, conSombra: 0, rehechos: 0 };
 
     var nodos = marco.querySelectorAll('*');
     for (var i = 0; i < nodos.length; i++) {
@@ -670,17 +676,18 @@
 
       c.mirados++;
 
-      /* ★ ERROR 14: sobre foto no se mide, pero se copia lo que ya funciona */
+      /* ★ ERROR 14: sobre foto no se mide, se copia lo que ya funciona.
+         ★ ERROR 13: sólo se marca lo RESUELTO; lo demas se reintenta. */
       var bloqueFoto = elBloqueFoto(el);
       if (bloqueFoto) {
         c.foto++;
-        if (el.getAttribute('data-regla-luz')) continue;
+        if (el.getAttribute('data-regla-luz') === 'foto') continue;
         var t = tintaDe(cs);
-        if (!t) { el.setAttribute('data-regla-luz', 'foto'); continue; }
+        if (!t) { c.fotoEnCamino++; continue; }
         var L = luminancia(t);
         if (L > CLARO || L < OSCURO) { el.setAttribute('data-regla-luz', 'foto'); continue; }
         var ext2 = extremoDelBloque(bloqueFoto);
-        if (!ext2) { el.setAttribute('data-regla-luz', 'foto'); continue; }
+        if (!ext2) { c.fotoEnCamino++; continue; }
         var txt2 = 'rgb(' + aTexto(ext2) + ')';
         el.style.setProperty('color', txt2, 'important');
         el.style.setProperty('-webkit-text-fill-color', txt2, 'important');
