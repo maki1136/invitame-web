@@ -727,6 +727,26 @@
     el.style.setProperty('opacity', '1', 'important');
   }
 
+  /* ⚠️⚠️ ERROR 24 — EL COLOR ELEGIDO LLEGABA APAGADO. (17/9/2026)
+     Cuando la opacidad NO se puede apagar (el elemento aparece con una
+     transición), el color que elegimos se mezcla con el fondo antes de llegar
+     al ojo: pedíamos 4,5 y en pantalla quedaba 1,9. Medido en «Sí, asistiré»
+     y «No podré» de Confirmar Asistencia.
+     → Se DESPEJA el color: se busca el que, visto a través de esa opacidad,
+       dé exactamente el color que queríamos. Si ese color no existe (se sale
+       de 0..255), se sube la opacidad lo mínimo necesario — no hasta 1: hasta
+       que se lea. */
+  function despejar(objetivo, fondo, a) {
+    if (!objetivo || !fondo || !(a > 0)) return null;
+    var out = [0, 0, 0];
+    for (var i = 0; i < 3; i++) {
+      var v = (objetivo[i] - (1 - a) * fondo[i]) / a;
+      if (v < -1.5 || v > 256.5) return null;
+      out[i] = Math.max(0, Math.min(255, Math.round(v)));
+    }
+    return out;
+  }
+
   function pintar(el, c, conSombra, fondo, neutralizar) {
     if (neutralizar) apagarOpacidad(el);
     var txt = 'rgb(' + aTexto(c) + ')';
@@ -882,7 +902,21 @@
 
       var frente = mezcla(conOpa(crudo), peor);
       var res = corregir(frente, peor, peorMin, mismoTono(frente, peor));
-      pintar(el, res.c, !res.alcanzo, fondos[0], true);
+      /* ★ error 24: primero se intenta apagar la opacidad; lo que quede, se despeja. */
+      apagarOpacidad(el);
+      var aReal = parseFloat(getComputedStyle(el).opacity);
+      if (!isFinite(aReal) || aReal > 1) aReal = 1;
+      var color = res.c;
+      if (aReal < 1) {
+        var d = despejar(res.c, peor, aReal);
+        if (!d) {
+          var a = aReal;
+          while (a < 1 && !d) { a = Math.min(1, a + 0.04); d = despejar(res.c, peor, a); }
+          el.style.setProperty('opacity', String(Math.round(a * 100) / 100), 'important');
+        }
+        if (d) color = d;
+      }
+      pintar(el, color, !res.alcanzo, fondos[0], false);
       c.corregidos++;
       if (!res.alcanzo) c.conSombra++;
     }
