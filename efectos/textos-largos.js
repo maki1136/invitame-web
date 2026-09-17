@@ -60,7 +60,14 @@
        medio. Con el `line-height` fijado acá y el `max-height` en `em`, la
        altura es exactamente N renglones y el corte queda limpio. */
     '.iv-plie .iv-plie-txt{display:-webkit-box;-webkit-box-orient:vertical;',
-    '  line-height:1.6;max-height:calc(1.6em * ' + RENGLONES + ');',
+    /* ⚠️ Y TODAVÍA CORTABA: los rasgos que BAJAN (p, g, j) salen del renglón.
+       Con la caja midiendo exactamente N renglones, `overflow:hidden` les comía
+       la patita y la última línea seguía pareciendo cortada al medio.
+       → Un respiro abajo: el relleno le da lugar a los descendentes y
+         `-webkit-line-clamp` sigue siendo el que manda cuántas líneas se ven,
+         así que no se asoma un renglón de más. (17/9/2026) */
+    '  line-height:1.6;max-height:calc(1.6em * ' + RENGLONES + ' + .3em);',
+    '  padding-bottom:.3em;',
     '  -webkit-line-clamp:' + RENGLONES + ';overflow:hidden}',
     '.iv-plie.abierto .iv-plie-txt{display:block;-webkit-line-clamp:unset;',
     '  max-height:none;overflow:visible}',
