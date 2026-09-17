@@ -356,8 +356,11 @@
   /* ⚠️ El campo del nombre HEREDA la tinta de la sección. Estaba clavado en
      `color:#fff` porque la trivia nacía sobre la banda oscura; en una colección
      de papel claro (Marfil) el invitado escribía BLANCO SOBRE BLANCO y no veía
-     lo que tipeaba. Con `inherit` funciona en los dos casos. */
-  .tv-in{width:100%;border:1px solid rgba(128,128,128,.35);background:rgba(255,255,255,.08);color:inherit;border-radius:10px;padding:12px;font-family:'Montserrat';font-size:14px;text-align:center}
+     lo que tipeaba. `inherit` TAMPOCO alcanzó: heredaba el crema de la sección
+     y quedaba crema sobre papel. Un campo de formulario se resuelve como
+     cualquier otro campo de la invitación —papel blanco y tinta oscura—, y así
+     funciona sobre cualquier fondo, claro u oscuro, sin depender de nadie. */
+  .tv-in{width:100%;border:1px solid rgba(128,128,128,.35);background:rgba(255,255,255,.92);color:#2a2724;border-radius:10px;padding:12px;font-family:'Montserrat';font-size:14px;text-align:center}
   .tv-btn{width:100%;margin-top:12px;background:#e7ddc8;color:var(--verde);border:none;padding:13px;border-radius:30px;font-family:'Montserrat';font-weight:500;font-size:14px;cursor:pointer}
   .tv-q{font-family:'Forum',serif;font-size:19px;color:#fff;margin:6px 0 14px}
   .tv-prog{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--sage-cl)}
