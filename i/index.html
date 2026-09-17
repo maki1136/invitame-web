@@ -650,7 +650,7 @@
   <section data-sec="hospedaje" class="sec verde"><div class="kick">Para tu comodidad</div><h2 id="hosp-h2">Hospedaje</h2>
     <p style="color:#d7cebb" id="hosp-texto">Tenemos tarifas especiales para nuestros invitados.</p>
     <img id="hosp-img" alt="" style="display:none;max-width:100%;border-radius:14px;margin:12px auto 0">
-    <div style="margin-top:16px"><button class="btn lt acc-btn" onclick="acc(this)">Ver hoteles <span class="chev">▾</span></button></div>
+    <div id="hosp-acc" style="margin-top:16px"><button class="btn lt acc-btn" onclick="acc(this)">Ver hoteles <span class="chev">▾</span></button></div>
     <div class="acc-panel"><div class="acc-inner" id="hosp-lista">
       <div class="hotel"><h4>Hotel Los Robles</h4><div class="d">A 5 min del salón · desde $8.000</div><a class="btn" href="https://www.google.com/search?q=Hotel+Los+Robles" target="_blank" rel="noopener">Reservar</a></div>
       <div class="hotel"><h4>Posada del Valle</h4><div class="d">A 10 min · desde $6.500</div><a class="btn" href="https://www.google.com/search?q=Posada+del+Valle" target="_blank" rel="noopener">Reservar</a></div>
@@ -1104,7 +1104,28 @@
   document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
 
   function acc(btn){ btn.classList.toggle('open'); const p=btn.parentElement.nextElementSibling; p.classList.toggle('open'); }
-  function cop(t){ if(navigator.clipboard) navigator.clipboard.writeText(t); }
+  /* ⚠️ COPIAR TIENE QUE AVISAR.  (17/9/2026)
+     Antes copiaba en silencio, y si `navigator.clipboard` no estaba (Safari
+     viejo, o la pagina servida sin https) no hacia absolutamente NADA: el
+     invitado tocaba «Copiar» y no pasaba nada, sin forma de saber si copio.
+     Ahora hay respaldo con execCommand y el rotulo confirma. */
+  function copViejo(t){ try{ var a=document.createElement('textarea'); a.value=t;
+      a.setAttribute('readonly',''); a.style.cssText='position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(a); a.select(); a.setSelectionRange(0,999999);
+      var r=document.execCommand('copy'); document.body.removeChild(a); return !!r;
+    }catch(e){ return false; } }
+  function cop(t,nodo){
+    function listo(){ if(!nodo) return; var v=nodo.getAttribute('data-rotulo')||nodo.textContent;
+      nodo.setAttribute('data-rotulo',v); nodo.textContent='¡Copiado!';
+      setTimeout(function(){ nodo.textContent=v; },1600); }
+    try{
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(t).then(listo,function(){ if(copViejo(t)) listo(); });
+        return;
+      }
+    }catch(e){}
+    if(copViejo(t)) listo();
+  }
 
   let confirmado=false;
   function rsvp(r){el('rmsg').style.color=r==='si'?'#e7ddc8':'#e6c6cd';
@@ -1446,10 +1467,28 @@
     // ---- Adaptar textos según el tipo de evento (XV, bautismo, comunión, cumple) ----
     (function(){
       const t=(ev.tipoEvento||ev.tipo||'boda').toLowerCase();
-      const L={ boda:{pk:'Nosotros',ph:'Nuestros Padres'}, xv:{pk:'Con cariño',ph:'Mis Padres y Padrinos'}, bautismo:{pk:'Mi familia',ph:'Mis Padres y Padrinos'}, comunion:{pk:'Mi familia',ph:'Mis Padres'}, cumple:{pk:'Los míos',ph:'Mi Familia'}, otro:{pk:'Nosotros',ph:'Los Nuestros'} };
+      /* ⚠️ ESTA ES LA UNICA TABLA DE TIPOS DE EVENTO DE TODA LA INVITACION.  (17/9/2026)
+         `de` = como se nombra el evento en una frase («Para LOS XV de Martina»).
+         `tv` = a quien conocen los invitados en la trivia.
+         Se publica en `window.INVTIPO` para que los modulos de /efectos/ la usen
+         en vez de escribir «la boda» a mano: eso mandaba «Para la boda de
+         Martina» por WhatsApp en una invitacion de QUINCE. Una sola tabla. */
+      const L={ boda:{pk:'Nosotros',ph:'Nuestros Padres',de:'la boda',tv:'a la pareja'},
+                xv:{pk:'Con cariño',ph:'Mis Padres y Padrinos',de:'los XV',tv:'a la quinceañera'},
+                bautismo:{pk:'Mi familia',ph:'Mis Padres y Padrinos',de:'el bautizo',tv:'a la familia'},
+                comunion:{pk:'Mi familia',ph:'Mis Padres',de:'la comunión',tv:'a la familia'},
+                cumple:{pk:'Los míos',ph:'Mi Familia',de:'el cumple',tv:'al festejado'},
+                otro:{pk:'Nosotros',ph:'Los Nuestros',de:'la fiesta',tv:'a los anfitriones'} };
       const c=L[t]||L.boda, pk=el('padres-kick'), ph=el('padres-h2');
       if(pk) pk.textContent = ev.padresKick || c.pk;
       if(ph) ph.textContent = ev.padresTitulo || c.ph;
+      window.INVTIPO={tipo:t, de:c.de, tv:c.tv};
+      /* La bajada de la trivia esta escrita para una BODA en el HTML («¿Cuánto
+         conoces a la pareja?»). En los demas eventos no hay pareja: se reescribe.
+         ⚠️ Lo que se escribe desde JS NO pasa por i/textos-es-mx.php (ese traduce
+         el HTML en el servidor, antes de mandarlo), asi que va YA en mexicano. */
+      if(t!=='boda'){ const tb=el('tv-bajada');
+        if(tb) tb.textContent='¿Cuánto conoces '+c.tv+'? Agrega puntos y entra al ranking.'; }
     })();
     // ---- Personas importantes: hasta 12, cargadas desde el admin (ev.personas) ----
     (function(){
@@ -1654,11 +1693,20 @@
       var filas=datos?datos.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean):[];
       // Sin hoteles cargados NO dejamos los de ejemplo (Los Robles / Posada del Valle / El Sauce):
       // si tampoco hay texto ni imagen, la sección entera se oculta.
+      /* ⚠️ EL BOTON «VER HOTELES» NO PUEDE QUEDAR SOLO.  (17/9/2026)
+         Sin hoteles cargados se vaciaba la lista pero el boton seguia ahi: el
+         invitado lo tocaba y se abria un cajon VACIO. Un control que no lleva a
+         nada es peor que no tener el control. Se muestra u oculta con la lista. */
+      var accH=el('hosp-acc'), panH=cont?cont.parentNode:null;
+      function verHoteles(si){ if(accH) accH.style.display=si?'':'none';
+                               if(panH) panH.style.display=si?'':'none'; }
       if(!filas.length){
         if(cont) cont.innerHTML='';
+        verHoteles(false);
         verSeccion('hospedaje', !!(tx||im));   // con texto o imagen la sección sigue viva
         return;
       }
+      verHoteles(true);
       verSeccion('hospedaje', true);
       if(!cont) return;
       cont.innerHTML=filas.map(function(f){
@@ -1946,8 +1994,9 @@
       var hay=!!(tel1||tel2);
       if(sec) sec.style.display=(hay && mostrar!==false)?'':'none';   // sin números o toggle apagado => oculta
       var sh=el('wa-share');
-      if(sh){ var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ')||'nuestra boda';
-        var t='¡Estás invitado a la boda de '+nombres+'! Mirá la invitación: '+location.href.split('#')[0];
+      if(sh){ var nombres=[ev.n1,ev.n2].filter(Boolean).join(' & ');
+        var _ti=(window.INVTIPO&&window.INVTIPO.de)||'la fiesta';   /* ver la tabla unica de tipos de evento */
+        var t='¡Estás invitado a '+_ti+(nombres?' de '+nombres:'')+'! Mirá la invitación: '+location.href.split('#')[0];
         sh.href='https://wa.me/?text='+encodeURIComponent(t); }
     })();
     aplicarFeatures(ev);
@@ -2063,7 +2112,7 @@
     // --- Datos para transferencia (opcional) ---
     const bw=el('reg-banco-wrap');
     if(bw){ const cbu=(ev.regClabe||ev.regCbu||'').trim();
-      if(cbu){ const c=el('rb-cbu'); if(c)c.innerHTML=cbu+' <span class="copy" onclick="cop(\''+cbu.replace(/[^\w.-]/g,'')+'\')">Copiar</span>';
+      if(cbu){ const c=el('rb-cbu'); if(c)c.innerHTML=cbu+' <span class="copy" onclick="cop(\''+cbu.replace(/[^\w.-]/g,'')+'\',this)">Copiar</span>';
         if(el('rb-l1'))el('rb-l1').textContent=(ev.regClabe?'CLABE':'CBU / Cuenta');
         if(el('rb-tit'))el('rb-tit').textContent=ev.regTitular||'—';
         if(el('rb-banco'))el('rb-banco').textContent=ev.regBanco||'—';
