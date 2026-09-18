@@ -94,6 +94,14 @@
      Ahí hay que medir EL PAPEL, en una esquina del PRIMER cuadro, porque ese
      `color` es el que rellena las barras cuando la foto va contenida. Si se
      pone el promedio, quedan dos franjas oscuras arriba y abajo.
+
+   ★★★ UN SOBRE PROPIO POR MUESTRA  (17/9/2026)
+     Maki, sobre las tres muestras entregadas con el mismo sobre `maestro`:
+     «poné otro sobre así va cambiando», «cambiá el sobre que es el mismo de
+     todos», «acá hasta tenías un sobre de playa y ni eso agregaste».
+     Cada muestra que se arma se lleva SU sobre. Si la temática no tiene uno,
+     se genera en Flow con la misma tanda de imágenes de esa temática, para que
+     el papel, la luz y el color sean los mismos que los del resto.
    ============================================================================ */
 window.SOBRES_INVITAME = {
 
@@ -138,6 +146,34 @@ window.SOBRES_INVITAME = {
     video:  "/sobres/sobre-perlas.mp4",
     poster: "/sobres/sobre-perlas-poster.jpg",
     color:  "#f2f2f4"
+  },
+
+  /* ---- ★ EL SOBRE DE PLAYA  (17/9/2026) ---------------------------------
+     El sobre propio de la muestra de Riviera Maya (Valeria & Emiliano). Salió
+     de la MISMA tanda de Flow que el resto de la temática, así que el papel,
+     la luz y el color son los mismos que los del resto de la invitación:
+     papel de lino marfil apoyado sobre arena blanca mojada, lacre NACARADO EN
+     FORMA DE CARACOLA y una ramita de pasto marino seco al costado.
+
+     El video hace el recorrido entero en 8 s: la espuma roza la arena, el
+     lacre se desprende, la solapa se abre y la cámara entra hasta que el papel
+     marfil del interior llena el cuadro. Termina en papel liso, por eso va
+     `empalme: 'blanco'` y NO 'foto'.
+
+     ⚠️ `color` MEDIDO, no estimado. Último cuadro, promedio de la banda
+        central del papel: #e7e6df. El píxel exacto del centro da #e8e7df y la
+        esquina #d0cec9 — esa esquina es la sombra del doblez y NO sirve para
+        rellenar las barras.
+
+     ⚠️ Vive en Cloudinary, no en /sobres/: es un mp4 de 3,1 MB. El catálogo
+        acepta una URL completa igual que una ruta del repo.
+     ---------------------------------------------------------------------- */
+  playa: {
+    nombre:  "Playa · lino marfil sobre arena, lacre de caracola (video)",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobre-playa.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-playa-poster.jpg",
+    color:   "#e7e6df",
+    empalme: "blanco"
   },
 
   /* ---- ★ LA PRESENTACIÓN BORDADA  (8/9/2026) ---------------------------
