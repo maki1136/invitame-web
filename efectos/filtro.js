@@ -77,12 +77,22 @@
 
   /* El color de la invitación. Si la paleta no está puesta, un marfil que
      queda bien sobre cualquier foto. */
+  /* ⚠️ ESTO DEVUELVE UNA VARIABLE, NO UN COLOR. BUG PAGADO EL 18/9/2026.
+     Antes leia --verde y devolvia el color ya resuelto, y ese color quedaba
+     CLAVADO en el style inline del boton. Pero --verde no esta quieto: paleta.js
+     y la coleccion la reescriben DESPUES de que este modulo dibuja.
+     Medido en renata-y-patricio: el boton «Abrir la camara» quedo en #463b52
+     (morado) mientras --verde ya valia #4a4642, y el de al lado, «Entrar a la
+     galeria» -que si usa var(--verde)- estaba bien. Dos botones pegados, dos
+     colores, y ninguno de la paleta de esa boda.
+     La cura es no resolver nunca el color: se deja la VARIABLE puesta y el
+     navegador la sigue sola, cambie cuando cambie y la escriba quien la escriba.
+     Es el mismo patron que las bandas tematicas.
+     ⚠️ Los cinco lugares que usan esto pintan CSS (background). Si algun dia
+        hace falta el valor RESUELTO para calcular, hay que leer --verde ahi,
+        no volver a clavarlo aca. */
   function acento() {
-    var c = '';
-    try {
-      c = getComputedStyle(document.documentElement).getPropertyValue('--verde') || '';
-    } catch (e) {}
-    return (c || '').trim() || '#6D1233';
+    return 'var(--verde, #6D1233)';
   }
 
   /* ---------------------------------------------------------------- el marco */
