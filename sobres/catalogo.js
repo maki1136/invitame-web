@@ -171,6 +171,16 @@ window.SOBRES_INVITAME = {
   playa: {
     nombre:  "Playa · lino marfil sobre arena, lacre de caracola (video)",
     video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobre-playa.mp4",
+    /* ⭐ EN QUE SEGUNDO ARRANCA EL ZOOM — el destello va ahi (18/9/2026)
+       Maki: «tenes que esperar que se abra el sobre y CUANDO HACE EL ZOOM que
+       se vaya desvaneciendo con esa luz. Que no llegue al final del video y
+       despues venga la luz.»
+       Medido cuadro por cuadro sobre este mp4 (8 s), sacando fotogramas de
+       Cloudinary con `so_<segundo>`: quieto hasta 3,0 · las solapas se abren de
+       3,2 a 4,0 · el zoom empieza en 4,0. Por eso 4,2: deja ver la apertura
+       entera y entra apenas arranca el acercamiento.
+       ⚠️ CADA SOBRE NUEVO NECESITA LA SUYA. Se mide igual, con `so_`. */
+    luz:     4.2,
     poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-playa-poster.jpg",
     color:   "#e7e6df",
     empalme: "blanco"
