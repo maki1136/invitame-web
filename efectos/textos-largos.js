@@ -18,6 +18,24 @@
    · La MÚSICA y los formularios.
    Plegar algo que no hacía falta plegar es peor que no plegar nada.
 
+   ⚠️⚠️ Y LA CARTA SE ESTABA PLEGANDO IGUAL  (17/9/2026)
+
+     Maki, sobre Renata y Patricio: «la frase con el ver más queda cortada,
+     mirá bien el print: o estirás un poco más para que se vea completa, o
+     sacás el ver más directamente».
+
+     La lista de prohibidos decía `.carta, .sobre-carta, #carta` — y ninguno
+     de los tres existe. En la invitación real la carta vive en
+     `#carta-sec > #cartafx > .cf-letter`. Los selectores estaban escritos de
+     memoria, no leídos del HTML, así que la exclusión no agarraba nada y la
+     pieza más emocional de la invitación quedaba cortada a la mitad con un
+     "Ver más" encima.
+
+     LA LECCIÓN: un selector de exclusión que no matchea nada NO FALLA, calla.
+     Se ve igual que si no existiera. Cuando se agrega uno hay que ir a la
+     invitación viva y confirmar que el bloque que se quería proteger
+     efectivamente quedó afuera.
+
    ⚠️ EL UMBRAL: 165 CARACTERES. Arrancó en 220 y estaba mal: el texto del
    código de vestimenta mide 204 y se quedaba afuera justo, que era una de las
    dos cosas que había que plegar. 165 agarra los dos (hoteles y vestimenta) y
@@ -87,16 +105,28 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
-  /* los sectores que NO se tocan nunca */
+  /* ---- LOS SECTORES QUE NO SE TOCAN NUNCA -------------------------------
+     ⚠️ ESTOS SELECTORES ESTÁN LEÍDOS DEL HTML VIVO, no escritos de memoria.
+        Si se agrega uno nuevo, hay que abrir la invitación y confirmar que el
+        bloque quedó afuera: un selector que no matchea no avisa.
+
+        · la carta del sobre  →  #carta-sec > #cartafx > .cf-letter
+        · la frase            →  .fraseSec
+        · el itinerario       →  .tl
+     ---------------------------------------------------------------------- */
+  var PROHIBIDOS = [
+    '#inv-musica',
+    '.fraseSec', '.frase-sec', '#frase', '#frase-sec',
+    '#carta-sec', '#cartafx', '.cartafx', '.cf-letter',
+    '.carta', '.sobre-carta', '#carta',
+    '.tl', '.itin', '.timeline',
+    '#env',
+    'form'
+  ].join(',');
+
   function prohibido(el) {
     if (!el) return true;
-    if (el.closest('#inv-musica')) return true;
-    if (el.closest('.fraseSec')) return true;
-    if (el.closest('.carta,.sobre-carta,#carta')) return true;
-    if (el.closest('.tl,.itin,.timeline')) return true;
-    if (el.closest('#env')) return true;
-    if (el.closest('form')) return true;
-    return false;
+    return !!el.closest(PROHIBIDOS);
   }
 
   function plegar(p) {
@@ -136,10 +166,31 @@
     }, 400);
   }
 
+  /* ---- DESPLEGAR LO QUE YA SE HABÍA PLEGADO MAL -------------------------
+     Los módulos corren varias veces mientras la invitación se arma. Si un
+     bloque prohibido llegó a plegarse en una pasada anterior (porque todavía
+     no tenía puesta su clase), acá se deshace: el texto vuelve a su lugar y
+     el botón se va. Sin esto, el arreglo de arriba sólo servía en la primera
+     pasada. */
+  function desplegarProhibidos() {
+    [].forEach.call(document.querySelectorAll('.iv-plie'), function (caja) {
+      if (!prohibido(caja)) return;
+      var cuerpo = caja.querySelector('.iv-plie-txt');
+      if (!cuerpo) return;
+      while (cuerpo.firstChild) {
+        var hijo = cuerpo.firstChild;
+        if (hijo.dataset) delete hijo.dataset.ivPlie;
+        caja.parentNode.insertBefore(hijo, caja);
+      }
+      caja.remove();
+    });
+  }
+
   function pasar() {
     if (!encendido()) return;
     ponerEstilos();
     [].forEach.call(document.querySelectorAll('section p, .sec p'), plegar);
+    desplegarProhibidos();
   }
 
   function arrancar() {
