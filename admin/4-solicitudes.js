@@ -205,6 +205,11 @@
          Ya pasó: hay pares con el mismo nº (Juliana/…-copia, Caro/…-copia).
          Y `ver` tampoco: la copia es nueva, se publica con el motor de hoy. */
       delete cfg.orden; delete cfg.ver;
+      /* ⚠️ LA VOZ Y LA GALERIA NO SE COPIAN. Por acá se filtró la voz de Camila
+         y Tomás a la muestra de Valeria: el pase sonaba «Hola, somos Camila y
+         Tom» en otra boda. Es la misma limpieza que hace el camino del
+         formulario; vive en /vestir.js para que no haya dos versiones. */
+      if (window.INVVESTIR) INVVESTIR.limpiarLoQueEsDeOtros(cfg);
       const _pv={}; (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _pv[k]=cfg[k]; delete cfg[k]; } });
       await INV.saveEvento(ns,{...cfg, slug:ns, nEvento, tpl:(D.tpl||'')+' (copia)'});
       if(Object.keys(_pv).length) await INV.savePrivado(ns, _pv);
@@ -223,6 +228,7 @@
          se los llevaba: por eso hay invitaciones distintas con el mismo número. */
       let _nEv; try{ const _a=await INV.exportAll(); _nEv=_a.eventos.reduce((m,e)=>Math.max(m,parseInt(e.nEvento,10)||0),0)+1; }catch(_e){ _nEv=(parseInt(ev.nEvento,10)||1)+1; }
       delete _c.orden; delete _c.ver;
+      if (window.INVVESTIR) INVVESTIR.limpiarLoQueEsDeOtros(_c);   /* la voz y la galería, igual que en «Duplicar» */
       await INV.saveEvento(ns,{..._c,slug:ns,nEvento:_nEv,tpl:(ev.tpl||'')+' (copia)'});
       if(Object.keys(_pv2).length) await INV.savePrivado(ns, _pv2);
       alert('Clonada como '+ns); verInvitaciones();
