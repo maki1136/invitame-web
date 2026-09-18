@@ -179,6 +179,7 @@
     "Color texto Contacto:": "c_color-texto-contacto",
     "Color fondo Contacto:": "c_color-fondo-contacto",
     "Imagen de fondo sección \"Contacto\"": "c_imagen-de-fondo-seccion-contacto",
+    "Sobretítulo Contacto:": "c_kicker-contacto",
     "Título Contacto:": "c_titulo-contacto",
     "Frase para sección contacto:": "c_frase-para-seccion-contacto",
     "Número de whatsapp:": "c_numero-de-whatsapp",
