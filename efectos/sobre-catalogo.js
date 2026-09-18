@@ -371,7 +371,48 @@
   }
 
   function ev()  { return (window.INVEV || {}); }
-  function sobre() { return ((ev().fx || {}).sobre) || {}; }
+  function sobre() {
+    var esp = espiado();
+    if (esp) return { tipo: 'carta', modelo: esp };   /* vista previa, ver abajo */
+    return ((ev().fx || {}).sobre) || {};
+  }
+
+  /* ★★★ VER UN SOBRE SOBRE UNA INVITACIÓN DE VERDAD  (18/9/2026)
+
+     Maki: «poné el sobre en una invitación así lo vemos en acción».
+
+     Hasta acá, para ver un sobre sobre una portada real había que elegirlo en
+     el panel de esa invitación y GUARDAR. O sea: tocar una invitación —a veces
+     una ya entregada— nada más que para mirar.
+
+     Con `?sobre=<id>` la invitación se abre con ese sobre del catálogo:
+
+       /i/?e=camila-y-tomas&sobre=onyx
+
+     Se engancha en `sobre()`, que es EL ÚNICO lugar donde el módulo se entera
+     de qué sobre va. Devolviendo desde acá el sobre espiado, todo lo demás
+     —`elegido()`, `revisar()`, `actualizar()`, la comparación con
+     `armadoModelo`— funciona solo, sin tocar nada más.
+
+     ⚠️ NO GUARDA NADA. Ni en la base (este módulo nunca escribió en Firestore)
+        ni en `localStorage`: `recordar()` sale de una cuando hay `?sobre=`, así
+        que no le deja pegado el sobre espiado a esa invitación para la próxima
+        visita. Se saca el parámetro de la URL y todo vuelve a como estaba.
+     ⚠️ SI EL ID NO EXISTE, SE IGNORA. Sin esto, un `?sobre=` mal escrito dejaba
+        la invitación SIN SOBRE: `elegido()` devolvía null, el ciclo sacaba la
+        tapa y listo. Medido: apertura `undefined`. Un parámetro de vista previa
+        jamás puede empeorar la invitación.
+     ⚠️ Mientras el catálogo no cargó devuelve null, y el ciclo espera como
+        siempre.
+     -------------------------------------------------------------------------- */
+  function espiado() {
+    try {
+      var m = location.search.match(/[?&]sobre=([^&]+)/);
+      if (!m) return null;
+      var id = decodeURIComponent(m[1]);
+      return delCatalogo(id) ? id : null;
+    } catch (e) { return null; }
+  }
   function catalogo() {
     var c = window.SOBRES_INVITAME;
     return (c && typeof c === 'object') ? c : null;
@@ -386,6 +427,7 @@
     } catch (e) { return ''; }
   }
   function recordar(modelo) {
+    if (espiado()) return;          /* mirando de prestado: no se guarda nada */
     try { if (slug()) localStorage.setItem('inv_sobre_' + slug(), modelo || ''); } catch (e) {}
   }
   function recordado() {
