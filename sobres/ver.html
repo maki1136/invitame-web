@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Sobres de Invítame · vista previa</title>
+
+<!-- ===== POR QUÉ EXISTE ESTA PÁGINA  (18/9/2026) =============================
+     Maki, sobre el sobre onyx: «me sirve para ponerlo como opción... ¿cómo lo
+     usamos eso?».
+
+     El sobre ya es una opción del panel en cuanto entra al catálogo: el
+     `<select>` de ✨ Efectos → «Sobre del catálogo» se llena leyendo
+     `window.SOBRES_INVITAME` en el momento (ver /efectos/panel-sobre.js). No
+     hay nada que cablear.
+
+     Lo que NO había era forma de MIRAR un sobre sin publicar una invitación.
+     Para verlo había que elegirlo en el panel de una invitación de verdad,
+     guardar, y abrirla. Eso es justo lo que no se puede hacer con las muestras
+     entregadas.
+
+     Esta página usa EL MÓDULO DE VERDAD (/efectos/sobre-catalogo.js) sobre una
+     portada dibujada acá mismo, con nombres inventados.
+
+     ⚠️ NO TOCA NINGUNA INVITACIÓN. No lee ni escribe Firestore, no usa ningún
+        slug real: el slug es 'ver-sobres', inventado, y lo único que guarda es
+        su propia entrada de localStorage.
+     ⚠️ Lleva noindex: es una herramienta interna, no una página del sitio.
+     ⚠️ El único archivo que hay que tocar para que aparezca un sobre nuevo acá
+        es /sobres/catalogo.js. Esta página no tiene la lista escrita: la lee.
+     ========================================================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --onyx:#0d0d0d; --oro:#c9a55c; --marfil:#e6dccb;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#0d0d0d;overflow:hidden;
+    font-family:Montserrat,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+
+  /* ---- LA PORTADA DE ABAJO ------------------------------------------------
+     El motor no compone nada al abrir: apaga el sobre y deja ver lo que YA
+     estaba dibujado debajo. Esto es ese "debajo". La clase .pbg es la que el
+     módulo busca para llevarse la foto adentro del sobre. */
+  .portada{position:fixed;inset:0;z-index:1;display:grid;place-items:center}
+  .portada .pbg{position:absolute;inset:0;
+    background-image:
+      radial-gradient(120% 80% at 50% 12%, #23211c 0%, #141311 46%, #0b0a09 100%);
+    background-size:cover;background-position:center}
+  .portada .grano{position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/>\
+</filter><rect width='120' height='120' filter='url(%23n)' opacity='.38'/></svg>")}
+
+  .pdatos{position:relative;z-index:2;text-align:center;color:var(--marfil);
+    padding:0 26px}
+  .pdatos .arriba{font:500 11px/1 Montserrat;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--oro);opacity:.9}
+  .pdatos .nombres{font:300 clamp(46px,15vw,86px)/1.02 "Cormorant Garamond",serif;
+    margin:18px 0 10px;letter-spacing:.01em}
+  .pdatos .amp{display:block;font-size:.46em;color:var(--oro);margin:6px 0;
+    font-style:italic}
+  .pdatos .raya{width:54px;height:1px;background:var(--oro);opacity:.75;
+    margin:20px auto}
+  .pdatos .fecha{font:500 12px/1.7 Montserrat;letter-spacing:.26em;
+    text-transform:uppercase;opacity:.82}
+
+  /* Los datos entran medio segundo DESPUÉS de la foto. El módulo lo maneja con
+     una clase en el <html>, no tocando los nodos. */
+  .pdatos{transition:opacity .7s ease .1s, transform .7s ease .1s}
+  html.inv-datos-esperan .pdatos{opacity:0;transform:translateY(12px)}
+
+  /* ---- LA TAPA QUE ARMA EL MÓDULO ---------------------------------------- */
+  #env{position:fixed;inset:0;z-index:100}
+  #env-vid{width:100%;height:100%;display:block}
+
+  /* ---- LA BARRA DE ABAJO ------------------------------------------------- */
+  /* la barra aparece DESPUÉS de que el sobre se abre: si está desde el
+     principio le roba el momento, que es justo lo que se viene a mirar. */
+  .barra{opacity:0;pointer-events:none;transition:opacity .6s ease .4s}
+  .barra.ver{opacity:1;pointer-events:auto}
+  .barra{position:fixed;left:0;right:0;bottom:0;z-index:300;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    background:linear-gradient(to top, rgba(8,8,8,.96), rgba(8,8,8,.62) 70%, transparent);
+    display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none}
+  .barra::-webkit-scrollbar{display:none}
+  .barra a{flex:0 0 auto;text-decoration:none;
+    font:500 12px/1 Montserrat;letter-spacing:.02em;
+    color:#e9e2d4;background:rgba(255,255,255,.09);
+    border:1px solid rgba(201,165,92,.34);border-radius:999px;
+    padding:9px 14px;white-space:nowrap}
+  .barra a.act{background:var(--oro);border-color:var(--oro);color:#151208;
+    font-weight:600}
+  .barra .tit{flex:0 0 auto;align-self:center;
+    font:600 10px/1 Montserrat;letter-spacing:.2em;text-transform:uppercase;
+    color:rgba(201,165,92,.8);padding-right:4px}
+</style>
+</head>
+<body>
+
+<div class="portada">
+  <div class="pbg"></div>
+  <div class="grano"></div>
+  <div class="pdatos">
+    <div class="arriba">Nos casamos</div>
+    <h1 class="nombres">Sof&iacute;a<span class="amp">&amp;</span>Andr&eacute;s</h1>
+    <div class="raya"></div>
+    <div class="fecha">S&aacute;bado 14 de marzo &middot; 20:30</div>
+  </div>
+</div>
+
+<div id="env"><video id="env-vid"></video></div>
+
+<nav class="barra" id="barra"><span class="tit">Sobre</span></nav>
+
+<script>
+/* ===== EL MÍNIMO QUE EL MÓDULO ESPERA ENCONTRAR =============================
+   El motor de la invitación no está acá, así que le doy las tres cosas que el
+   módulo del sobre busca:
+     · window.INVDATA.slug  — para su propia memoria (slug inventado)
+     · window.INVEV.fx.sobre — el sobre elegido, como lo guardaría el panel
+     · window.abrir()        — lo que el motor haría al terminar la apertura
+   ========================================================================== */
+(function () {
+  var SLUG = 'ver-sobres';           /* inventado a propósito: no existe */
+  var PORDEF = 'onyx';
+
+  var m = location.search.match(/[?&]s=([^&]+)/);
+  var elegido = m ? decodeURIComponent(m[1]) : PORDEF;
+
+  window.INVDATA = { slug: SLUG };
+  window.INVEV   = { fx: { sobre: { tipo: 'carta', modelo: elegido } } };
+  /* el módulo llama a esto cuando termina de abrir. Es el momento exacto para
+     mostrar la barra: ni antes, porque tapa el sobre cerrado, ni por reloj,
+     porque el video puede tardar. */
+  window.abrir = function () {
+    var b = document.getElementById('barra');
+    if (b) b.classList.add('ver');
+  };
+
+  /* el atajo del módulo mira localStorage para poner algo al instante. Le dejo
+     puesto el que se pidió, así no arma primero el de la visita anterior. */
+  try { localStorage.setItem('inv_sobre_' + SLUG, elegido); } catch (e) {}
+
+  /* ---- la barra se dibuja LEYENDO el catálogo, nunca una lista escrita ---- */
+  function barra() {
+    var cat = window.SOBRES_INVITAME;
+    if (!cat) { setTimeout(barra, 60); return; }
+    var nav = document.getElementById('barra');
+    Object.keys(cat).forEach(function (id) {
+      var a = document.createElement('a');
+      a.href = '?s=' + encodeURIComponent(id);
+      /* el nombre del panel trae "(video)" y demás: acá sobra */
+      a.textContent = String(cat[id].nombre || id)
+        .replace(/\s*\((video|foto)\)\s*$/i, '')
+        .replace(/\s*·.*$/, '');
+      if (id === elegido) { a.className = 'act'; a.title = 'Repetir'; }
+      nav.appendChild(a);
+    });
+  }
+  barra();
+})();
+</script>
+
+<!-- ⚠️ /sobres/catalogo.js, además del catálogo, engancha /efectos/index.js y
+     con él los ~60 módulos del front. Acá no hace falta ninguno: el sobre se
+     dibuja solo. El enganche se saltea con un marcador: catalogo.js pregunta
+     `querySelector('script[src="/efectos/index.js"]')` antes de agregarlo, y
+     un <script> con type que no es JavaScript cumple el selector sin que el
+     navegador lo baje ni lo ejecute. Es el único modo de saltearlo sin tocar
+     catalogo.js, que lo usan todas las invitaciones. -->
+<script type="text/no-cargar" src="/efectos/index.js"></script>
+
+<script src="/sobres/catalogo.js"></script>
+<script src="/efectos/sobre-catalogo.js"></script>
+</body>
+</html>
