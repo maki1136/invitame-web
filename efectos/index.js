@@ -700,6 +700,7 @@
 
     '/efectos/vestido-basico.js',   /* sin colección elegida: el pase con QR y el itinerario */
     '/efectos/banda-tematica.js',   /* las 7 bandas de color pleno pasan a ser la foto de la temática */
+    '/efectos/simbolo-tematica.js', /* los aros de cada título y la marca del itinerario */
 
     /* ⚠️ EL ÚLTIMO DE TODOS, Y TIENE QUE SERLO. Mueve nodos y esconde
        secciones: necesita que todo lo demás ya haya terminado de armar. */
