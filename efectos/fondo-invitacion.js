@@ -240,24 +240,66 @@
       v.preload = 'auto';
       caja.appendChild(v);
 
-      /* se rinde una sola vez, venga por donde venga la mala noticia */
+      /* ⚠️⚠️ EL PLAZO SE CUENTA POR PROGRESO, NO POR RELOJ DE PARED.
+         BUG MEDIDO EL 18/9/2026 EN renata-y-patricio.
+
+         Maki: «en la Mac no tiene movimiento pero en el iPhone si». No era el
+         video ni el aparato: era una CARRERA por la conexion. Medido con
+         performance.getEntriesByType('resource') en una carga limpia:
+
+           sobre-perlas.mp4 (1,1 MB) ... empieza a 1016 ms, termina a 1219 ms
+           re-fondo.mp4     (785 KB) ... EMPIEZA A BAJARSE RECIEN A 4187 ms
+
+         O sea: el navegador pone el video del fondo en la cola detras del video
+         del sobre y del resto de la pagina, y a los 3500 ms -cuando saltaba el
+         plazo viejo- ese video todavia NO HABIA EMPEZADO. videoWidth valia 0
+         porque no habia llegado un solo byte, no porque estuviera roto.
+         Comprobado aparte: el archivo se decodifica en 78 ms y reproduce
+         perfecto. Y en el iPhone de Maki andaba porque ya lo tenia en cache.
+
+         Este vigia mira el PROGRESO, igual que el del sobre: se rinde solo si el
+         video pasa PLAZO milisegundos sin avanzar NADA -ni bytes en el buffer,
+         ni readyState, ni medida-. Mientras la descarga progrese, se lo espera. */
       var rendido = false;
       function rendirse() {
         if (rendido) return;
         rendido = true;
+        clearInterval(vigia);
         if (!v.parentNode) return;
         v.removeAttribute('src'); v.load();   /* que suelte la descarga */
         v.remove();
         foto(caja, fija);
       }
-      function anduvo() { rendido = true; }   /* ya arrancó: cancela el plazo */
+      function anduvo() { rendido = true; clearInterval(vigia); }
+
+      /* cualquier señal de vida sirve, no sólo loadeddata */
+      function sena() {
+        try { return v.videoWidth + v.readyState + (v.buffered.length ? v.buffered.end(0) : 0); }
+        catch (e) { return v.readyState; }
+      }
+      var ultima = sena(), quieto = 0;
+      var vigia = setInterval(function () {
+        if (rendido) { clearInterval(vigia); return; }
+        if (v.videoWidth) { anduvo(); return; }   /* ya midió: está vivo */
+        var ahora = sena();
+        if (ahora !== ultima) { ultima = ahora; quieto = 0; }
+        else { quieto += 500; }
+        if (quieto >= PLAZO) rendirse();
+      }, 500);
 
       v.addEventListener('loadeddata', anduvo, { once: true });
       v.addEventListener('error', rendirse, { once: true });
-      setTimeout(function () { if (!v.videoWidth) rendirse(); }, PLAZO);
 
-      var p = v.play();
-      if (p && p.catch) p.catch(rendirse);
+      /* ⚠️ Un play() rechazado NO es un video roto: casi siempre es «todavía no».
+         Se reintenta cuando llegan los datos; el que decide si se rinde es el
+         vigía de arriba, que es el único que mira si de verdad avanza. */
+      function arrancar() {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      }
+      arrancar();
+      v.addEventListener('loadeddata', arrancar, { once: true });
+      v.addEventListener('canplay', arrancar, { once: true });
     } else {
       foto(caja, fija);
     }
