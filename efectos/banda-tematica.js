@@ -19,9 +19,11 @@
 
    Como se enciende:
      INVEV.fx.tematica = {
-       banda:      'https://.../invitame/fondos/playa-banda-celeste-2',
-       bandaTinta: '#1f3f49',   // el color de los titulos sobre esa foto
-       bandaVelo:  0.10         // 0 = la foto limpia / 1 = tapada de blanco
+       banda:      'https://.../invitame/fondos/playa-deco-suave',
+       bandaTinta: '#1f3f49',   // el color de los titulos sobre la banda
+       bandaColor: '#dcecf2',   // el tono de la banda
+       bandaAlfa:  0.30,        // 0 = no se ve / 1 = tapa el video
+       bandaFuerza: 0.5         // cuanto se notan los objetos
      }
 
    ⭐⭐ SEGUNDA VUELTA (18/9/2026): LA BANDA NO PUEDE TAPAR EL VIDEO
@@ -53,17 +55,12 @@
    siempre entra completo y la foto se repite hacia abajo. Los bordes de
    caracoles no tienen principio ni fin, asi que la union no se nota.
 
-   LA FOTO ES CLARA, ASI QUE EL TEXTO TIENE QUE DARSE VUELTA
+   LA BANDA ES CLARA, ASI QUE EL TEXTO TIENE QUE DARSE VUELTA
    `.sec.verde` nace pensada para fondo oscuro: h2 blanco, p crema, kick verde
    claro. Sobre una banda celeste clarita eso es blanco sobre blanco. Por eso
    este modulo, cuando enciende la banda, ADEMAS reescribe esos colores con la
    tinta de la tematica. No se deja para que lo salve el corrector de
    contraste: un corrector es la red, no el diseno.
-
-   `background-blend-mode` PASA A `normal`
-   El motor mezcla la textura con el color de seccion en `multiply`, que sirve
-   para tenir un papel pero aca oscureceria la foto entera. Con la banda
-   encendida el color de seccion pasa a blanco y la mezcla a normal.
 
    SE REAPLICA POR UN RATO. La tematica llega de Firestore DESPUES de que carga
    este archivo, y el panel puede cambiarla en vivo. Mismo patron que
@@ -71,8 +68,8 @@
    pedo.
 
    ES UNA PIEL, NO TOCA EL HTML. Todo entra por una hoja de estilo propia con
-   `!important` acotado a `.sec.verde`. Se borra el <style> y la invitacion
-   vuelve exactamente a como estaba.
+   `!important` acotado a `.sec.verde`. Se borra el <style>, se sacan los
+   `<span>` marcados, y la invitacion vuelve exactamente a como estaba.
    ============================================================================ */
 (function () {
   'use strict';
@@ -115,7 +112,12 @@
     if (!(fuerza >= 0 && fuerza <= 1)) fuerza = 0.5; /* cuanto se notan los caracoles */
 
     return [
-      '.sec.verde{',
+      /* ⚠️ LA ESPECIFICIDAD IMPORTA: `fondo-invitacion.js` pinta con
+         `html[data-fondo] .sec.verde{...!important}`, que le gana a un
+         `.sec.verde` a secas aunque este tambien lleve !important. Medido en
+         vivo: la hoja se escribia bien y el color seguia siendo el turquesa
+         pleno. Por eso van los dos selectores. */
+      'html[data-fondo] .sec.verde,.sec.verde{',
       '  background-color:' + conAlfa(tono, alfa) + ' !important;',
       '  background-image:none !important;',
       '  color:' + tinta + ' !important;',
