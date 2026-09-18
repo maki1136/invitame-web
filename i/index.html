@@ -767,7 +767,7 @@
     <p>Ayudanos a que no falte nadie en nuestro gran día.</p>
     <div style="margin-top:16px"><a class="wsp" id="wa-share" href="https://wa.me/?text=" target="_blank">Compartir por WhatsApp</a></div></section>
 
-  <section class="sec" id="contacto-sec" style="padding-top:30px">    <div class="kick">Cualquier duda</div><h2 id="contacto-h2">Contacto</h2><p id="contacto-frase" style="display:none;max-width:520px;margin:0 auto 6px"></p>
+  <section class="sec" id="contacto-sec" style="padding-top:30px">    <div class="kick" id="contacto-kick">Cualquier duda</div><h2 id="contacto-h2">Contacto</h2><p id="contacto-frase" style="display:none;max-width:520px;margin:0 auto 6px"></p>
     <a class="wsp" id="wa-p1" href="https://wa.me/" target="_blank">Escribir a María</a>
     <a class="wsp" id="wa-p2" href="https://wa.me/" target="_blank">Escribir a Diego</a></section>
 
@@ -2058,6 +2058,24 @@
       if(b1){ if(tel1){ b1.textContent=(txt1||('Escribir a '+(ev.n1||''))); b1.href='https://wa.me/'+tel1; b1.style.display=''; } else b1.style.display='none'; }
       if(b2){ if(tel2){ b2.textContent=(txt2||('Escribir a '+(ev.n2||''))); b2.href='https://wa.me/'+tel2; b2.style.display=''; } else b2.style.display='none'; }
       var h2=el('contacto-h2'); if(h2&&ev['c_titulo-contacto'])h2.textContent=ev['c_titulo-contacto'];
+      /* EL SOBRETITULO DEL CONTACTO (17/9/2026)
+         Estaba clavado en "Cualquier duda" y no lo leia nadie. Si Jazmin ponia
+         "Alguna duda?" de titulo, el invitado leia DOS VECES lo mismo, una arriba
+         de la otra. Ahora: se puede escribir (c_kicker-contacto) y ademas el motor
+         lo esconde solo cuando repite lo que ya dice el titulo. Regla dura: no hace
+         falta que nadie se acuerde de borrarlo. */
+      var kc=el('contacto-kick');
+      if(kc){
+        if(ev['c_kicker-contacto'])kc.textContent=ev['c_kicker-contacto'];
+        var _palabras=function(s){ return String(s||'').toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+          .replace(/[^a-z0-9 ]/g,' ').split(/\s+/)
+          .filter(function(p){ return p.length>3 &&
+            !/^(cualquier|alguna|algun|algunas|algunos|todas|todos|tienes|tenes|sobre|para|nuestra|nuestro|nuestras|nuestros)$/.test(p); }); };
+        var _k=_palabras(kc.textContent), _t=_palabras(h2?h2.textContent:'');
+        var _repite=_k.length>0 && _k.every(function(p){ return _t.indexOf(p)>=0; });
+        kc.style.display=_repite?'none':'';
+      }
       var fr=el('contacto-frase'); if(fr){ var fv=ev['c_frase-para-seccion-contacto']||''; if(fv){fr.textContent=fv;fr.style.display='';} }
       var hay=!!(tel1||tel2);
       if(sec) sec.style.display=(hay && mostrar!==false)?'':'none';   // sin números o toggle apagado => oculta
