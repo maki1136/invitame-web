@@ -145,7 +145,19 @@ window.SOBRES_INVITAME = {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
     video:  "/sobres/sobre-perlas.mp4",
     poster: "/sobres/sobre-perlas-poster.jpg",
-    color:  "#f2f2f4"
+    color:  "#f2f2f4",
+    /* ⭐ MEDIDO CUADRO POR CUADRO EL 18/9/2026, con el video servido de verdad.
+       Este sobre NO tiene zoom: ABRE Y SE VUELVE A CERRAR. El ancho de la
+       abertura oscura, en pixeles de un cuadro de 160 de ancho:
+         1,4s = 0  ·  1,7s = 2  ·  2,0s = 8  ·  2,3s = 17  ·  2,6s = 23
+         2,8s = 25 (MAXIMO)  ·  3,0s = 25  ·  3,2s = 21  ·  3,5s = 13  ·  3,9s = 8
+       O sea: el mono se desata a 1,3-1,4, el sobre abre de 1,5 a 2,8 y de 3,2
+       en adelante SE CIERRA SOLO (el video esta armado para loopear).
+       Con el respaldo de 4,2 s el invitado veia el sobre abrirse, cerrarse, y
+       despues quedarse congelado hasta que saltaba el vigia. Por eso la luz va
+       a los 2,9: justo cuando termina de abrirse y antes de que empiece a
+       cerrarse. La mitad de vuelta del video no se ve nunca. */
+    luz:    2.9
   },
 
   /* ---- ★ EL SOBRE DE PLAYA  (17/9/2026) ---------------------------------
