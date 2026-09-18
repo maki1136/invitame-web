@@ -204,6 +204,82 @@ window.SOBRES_INVITAME = {
     empalme: "foto"
   },
 
+  /* ---- ★ ONYX · lino negro con lacre de oro grabado  (18/9/2026) ---------
+     Maki mandó la muestra de Invitely "luxury": «mirá la textura, el relieve,
+     hasta se ve relieve cuando se abre; el que me diste era todo plano».
+
+     Fui a verla en el navegador. El hallazgo: el sobre de Invitely NO es 3D ni
+     CSS, es un <video> de 4,18 MB con poster, y le bajan la opacidad 0,65 s al
+     terminar. El relieve que tanto gusta es FOTOGRÁFICO.
+
+     Este sale del onyx de agosto, que sí era plano. El relieve se agregó en
+     espacio de imagen con campo de altura + luz medida sobre el propio lacre
+     de la foto (ver /claude/ONYX-relieve-y-fluidez.md):
+       · trama de lino de ligamento tafetán, con irregularidad de fibra
+       · emblema damasco GRABADO en el disco, con especular de oro
+       · canto de papel en los dobleces, que es lo que se sigue viendo al abrir
+     Está aplicado a las CUATRO capas y el video se volvió a renderizar con
+     ellas, así que la textura está también durante la apertura.
+
+     ⚠️ LA SOLAPA ABRÍA PARA ADENTRO y lo cazó Maki de una: «¿dónde viste que
+        un sobre abre para adentro?». Medido, el área del lacre iba de 22.509 a
+        2.285 px achicándose siempre: se alejaba del ojo, o sea la solapa se iba
+        detrás del sobre, atravesándolo. Con la bisagra arriba, rotateX tiene
+        que ir POSITIVO. Ahora el lacre crece 39 % antes de irse de cuadro.
+        Y al abrir bien aparece el REVERSO, que antes no existía: se agregó como
+        segunda cara con backface-visibility.
+
+     ⚠️ PESA 341 KB, no 4 MB, y eso no es capricho: el invitado toca entre los
+        3 y los 6 s, y un sobre liviano arranca antes SIEMPRE. El de Invitely,
+        en la misma red, tarda 24 s en estar listo. (El motor ya no exige el
+        video entero para arrancar —mide si la descarga le gana a la aguja—
+        pero eso no cambia la regla del peso.)
+
+     ⚠️ VIVE EN CLOUDINARY, NO EN /sobres/  (18/9/2026)
+        Igual que `playa`, y por la misma razón práctica: el catálogo acepta
+        una URL completa lo mismo que una ruta del repo.
+
+        La transformación NO es la de `playa`. `vc_auto` devuelve perfil HIGH,
+        y los sobres se renderizan en **Constrained Baseline** a propósito, que
+        es lo que decodifica cualquier teléfono viejo. Con
+        `vc_h264:baseline:3.1` Cloudinary respeta el perfil y encima baja el
+        archivo de 406 a 341 KB.
+
+        Comparado cuadro por cuadro contra el original (128 cuadros):
+        PSNR mínimo 41,6 dB, medio 43,5 dB — arriba de 40 dB no se distingue.
+        Mismo 540×960, 24 fps, 128 cuadros, 5,333 s, moov al principio, y la
+        zona plana de la tarjeta NO tomó bandas (escalón máximo entre filas
+        10,5 contra 11,7 del original). El póster sale en webp de 26 KB.
+
+        ⚠️ El .mp4 y el .jpg NO están en el repo: no hay forma de subir un
+           binario por la API de GitHub. Si hay que regenerarlos, el video
+           está embebido en base64 en el artefacto «Sobre Onyx» y las fuentes
+           del relieve en ONYX-relieve-y-fluidez.md.
+
+     empalme 'foto': el video termina con una tarjeta marfil lisa subiendo, y
+     el motor la funde encima de la portada real que ya está dibujada debajo.
+     Por eso la tarjeta del video no tiene ni nombres ni adornos: es el papel
+     que se convierte en la invitación.
+
+     ⚠️ `color` ES EL PAPEL, NO LA TARJETA  (18/9/2026)
+        Estaba puesto #e6dccb, que es el marfil de la tarjeta que sube al final.
+        Pero `color` no pinta la tarjeta: es el fondo que queda DETRÁS del video
+        contenido (`object-fit:contain`, ver `estilo()` en el motor). Con el
+        video 9:16 en un teléfono 9:19,5 eso son dos franjas, y quedaban DOS
+        BANDAS MARFIL arriba y abajo del sobre negro. Se vio en la vista previa.
+        Va el papel MEDIDO en el primer cuadro: las cuatro esquinas dan
+        #0f0f0f / #161616 / #090909 / #090909 y el borde a media altura #171717.
+        Queda #0f0f0f. Es el caso exacto que avisa la nota "Y OJO CON QUÉ PARTE
+        SE MIDE" de más arriba, y caí igual.
+     ---------------------------------------------------------------------- */
+  onyx: {
+    nombre:  "Onyx · lino negro, lacre de oro grabado (video)",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/sobre-onyx.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-onyx-poster.jpg",
+    color:   "#0f0f0f",
+    empalme: "foto"
+  },
+
   /* ---- EL SOBRE DE ANILLOS  (3/9/2026) ----------------------------------
      Sobre marfil de solapa clásica, papel con damasco EN RELIEVE (grabado
      seco, no impreso) y un lacre color hueso con DOS ANILLOS ENTRELAZADOS.
