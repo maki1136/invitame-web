@@ -439,6 +439,17 @@
       '#env.carta-video #col-sobre-foto,',
       '#env.carta-video #col-sobre-solapa,',
       '#env.carta-video #col-sobre-velo,',
+      /* ⚠️ EL DESTELLO NO ES PARTE DEL SOBRE VIEJO  (18/9/2026)
+         Maki: «cuando hace el zoom estaria bueno que salga algun destello...
+         si se pone toda la pantalla en blanco y despues aparece la portada,
+         creo que estaria mejor».
+         El destello EXISTE desde siempre (`#env-bloom`, el motor lo enciende
+         al abrir), pero la linea de arriba esconde TODO lo que hay dentro de
+         `#env` para que no asome el sobre del motor… y se lo llevaba puesto.
+         Por eso Maki veia el corte seco y no el blanco: no faltaba el efecto,
+         estaba apagado por este selector. El destello es la transicion HACIA
+         la invitacion, no una pieza del sobre: se queda visible. */
+      '#env.carta-video #env-bloom,',
       '#env.carta-video .vhint{visibility:visible!important}',
 
       '#env.carta-video{background:' + color + '!important;cursor:pointer;',
@@ -490,8 +501,18 @@
       '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
       '}',
 
+      /* ⭐ EL DESTELLO ES BLANCO, NO DEL COLOR DEL SOBRE  (18/9/2026)
+         Maki: «viste que va haciendo un zoom, estaria bueno que salga algun
+         destello, para que despues se meta en la invitacion. Porque si no es
+         como que va al blanco... va como al sobre de una. Por ahi si se pone
+         toda la pantalla en blanco y despues aparece la portada, creo que
+         estaria mejor».
+         Y tenia razon en el diagnostico: este velo se pintaba del COLOR DEL
+         SOBRE. Sobre un sobre marfil, fundir a marfil no es un destello — es
+         mas sobre. Ahora va a blanco (la misma variable que usa el destello
+         del motor, `--env-destello`), asi el corte se lee como un flash. */
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
-      '  background:' + color + ';opacity:0;',
+      '  background:var(--env-destello,#ffffff);opacity:0;',
       '  transition:opacity ' + FUNDIDO + 's ease-in}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
@@ -853,10 +874,35 @@
     function esSolapas() { return env.dataset.apertura === 'solapas'; }
 
     var abierto = false;
+    /* cuanto se queda el blanco quieto, y cuanto tarda en disolverse */
+    var QUIETO = 0.35, SALIDA = 0.95;
+
     function entrar() {
       if (abierto) return;
       abierto = true;
       try { if (typeof abrir === 'function') abrir(); } catch (e) {}
+
+      /* ⭐ EL BLANCO TIENE QUE SOBREVIVIR AL SOBRE
+         Antes `#env` se escondia de golpe y el velo, que es hijo suyo, se iba
+         con el: la portada aparecia de un salto y el destello no se veia nunca.
+         Ahora el velo se muda al body, se queda un instante en blanco pleno y
+         recien despues se disuelve — y por debajo ya esta la portada. */
+      var velo = document.getElementById('col-sobre-velo');
+      if (velo && env.classList.contains('fundiendo')) {
+        try {
+          document.body.appendChild(velo);
+          velo.style.zIndex = '120';
+          velo.style.transition = 'none';
+          velo.style.opacity = '1';
+          setTimeout(function () {
+            velo.style.transition = 'opacity ' + SALIDA + 's ease-out';
+            velo.style.opacity = '0';
+            setTimeout(function () { try { velo.remove(); } catch (e) {} },
+                       SALIDA * 1000 + 150);
+          }, QUIETO * 1000);
+        } catch (e) {}
+      }
+
       env.classList.add('gone');
       env.style.opacity = '0';
       env.style.visibility = 'hidden';
