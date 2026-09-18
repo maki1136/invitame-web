@@ -356,11 +356,12 @@
          texto en cada uno, y se aplica el mejor — y solo si de verdad mejora.
          Si ninguno mejora, se deja como estaba: ilegible es malo, invisible
          es peor, y la decision de la clienta al menos es suya. */
+      var TOPE = Math.max(alfaAhora, techo());   /* ver la nota 3 ter */
       var mejorAlfa = alfaAhora;
       var mejorNota = nota(alfaAhora, lSec, fotoMedida, textos);
-      for (var a2 = alfaAhora; a2 <= 1.0001; a2 += 0.05) {
-        var n2 = nota(Math.min(1, a2), lSec, fotoMedida, textos);
-        if (n2 > mejorNota + 0.001) { mejorNota = n2; mejorAlfa = Math.min(1, a2); }
+      for (var a2 = alfaAhora; a2 <= TOPE + 0.0001; a2 += 0.05) {
+        var n2 = nota(Math.min(TOPE, a2), lSec, fotoMedida, textos);
+        if (n2 > mejorNota + 0.001) { mejorNota = n2; mejorAlfa = Math.min(TOPE, a2); }
         /* se tapa LO JUSTO: apenas el peor texto llega a su minimo, se corta.
            Sin este freno, sobre papel claro el "mejor" puntaje siempre era
            tapar el 100%, y el video de fondo se perdia aunque ya se leyera. */
@@ -398,6 +399,35 @@
      Y del lado seguro: ante la duda, tapado — o sea legible. */
   var YA = new WeakMap();          /* seccion -> alfa que ya se le aplico */
   var UMBRAL = 0.06;               /* menos que esto no justifica repintar */
+
+  /* ---- 3 ter · EL TECHO: EL FONDO SE TIENE QUE SEGUIR VIENDO  (18/9/2026) --
+     Maki, mirando la muestra de la playa:
+       «me sacaste mucho del fondo, y el fondo estaba buenisimo, el del video…
+        donde esta raspa para revelar, como estaba antes me gustaba mas: se
+        veia mucho mas el fondo de video.»
+       «en comparte la invitacion y el filtro de la boda tenes un filtro blanco
+        atras: que se vea mas el video de atras. El video de atras esta
+        buenisimo.»
+
+     Medido en esa invitacion: la raspadita estaba en 0,50 (le gusta) y el
+     filtro y la galeria en 0,95 (no le gusta). O sea: el problema no era el
+     parpadeo solo, era ADONDE convergia.
+
+     Este archivo buscaba el alfa que hiciera legible al PEOR texto, sin limite.
+     Sobre un fondo claro eso termina en «tapa casi todo» — y entonces el video
+     que se pago, se genero y se eligio no se ve nunca.
+     Ahora hay techo. Si con el techo un texto no llega, el que se corrige es
+     EL TEXTO (de eso se ocupa `reglas-duras.js`), no el fondo. Tapar la foto
+     hasta que cualquier texto entre es la salida facil y la que arruina el
+     diseno.
+     Se puede mover por evento con `fx.fondo.tapeMax`. */
+  var TECHO_DEF = 0.62;
+  function techo() {
+    var v;
+    try { v = Number((((window.INVEV || {}).fx || {}).fondo || {}).tapeMax); } catch (e) {}
+    if (!(v >= 0 && v <= 1)) v = TECHO_DEF;
+    return v;
+  }
 
   /* ---- 4 · CUANDO SE HACE ------------------------------------------------ */
   /* Las secciones y los textos los escribe el motor despues, y la clienta puede

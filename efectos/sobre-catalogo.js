@@ -219,6 +219,7 @@
 (function () {
 
   var FUNDIDO  = 1.0;   /* cuánto dura el desvanecido final */
+  var FLASH    = 0.14;  /* el golpe a blanco del destello: corto o no se lee como destello */
   var ANTES    = 1.4;   /* en modo video: cuánto antes del final arranca */
   var SOLAPAS  = 1.15;  /* en modo solapas: cuánto tarda en abrirse */
   var DATOS    = 550;   /* cuánto esperan los textos de la portada, en ms */
@@ -511,9 +512,20 @@
          SOBRE. Sobre un sobre marfil, fundir a marfil no es un destello — es
          mas sobre. Ahora va a blanco (la misma variable que usa el destello
          del motor, `--env-destello`), asi el corte se lee como un flash. */
+      /* ⭐⭐ ES UN DESTELLO, NO UN FUNDIDO  (18/9/2026, segunda vuelta)
+         Primer intento: lo puse en blanco y le di 1 segundo para subir. Maki:
+         «el destello no aparecio, o si aparecio yo no me di cuenta. Tiene que
+          ser cuando se va el zoom para el sobre: ahi tiene que haber un
+          destello que se vaya todo a blanco directamente. Pero CON EL DESTELLO
+          que se vaya a blanco, no que se vaya a blanco porque se acerco al
+          sobre.»
+         Exacto: en 1 segundo el blanco entra tan despacio que se confunde con
+         el zoom sobre un sobre marfil — parece que te acercaste al papel, no
+         que destello. Un destello es un GOLPE: sube en 0,14 s. Eso es lo que
+         separa las dos lecturas. */
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
       '  background:var(--env-destello,#ffffff);opacity:0;',
-      '  transition:opacity ' + FUNDIDO + 's ease-in}',
+      '  transition:opacity ' + FLASH + 's cubic-bezier(.2,.9,.3,1)}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
       '#env.carta-video.revelando{opacity:0!important;',
@@ -874,8 +886,11 @@
     function esSolapas() { return env.dataset.apertura === 'solapas'; }
 
     var abierto = false;
-    /* cuanto se queda el blanco quieto, y cuanto tarda en disolverse */
-    var QUIETO = 0.35, SALIDA = 0.95;
+    /* los tres tiempos del destello. Ver la nota del CSS de #col-sobre-velo.
+       FLASH  el golpe a blanco — corto a proposito
+       QUIETO cuanto se queda la pantalla en blanco pleno
+       SALIDA cuanto tarda el blanco en disolverse sobre la portada */
+    var QUIETO = 0.28, SALIDA = 0.8;
 
     function entrar() {
       if (abierto) return;
@@ -920,7 +935,9 @@
       } else {
         env.classList.add('fundiendo');
       }
-      setTimeout(entrar, FUNDIDO * 1000);
+      /* el sobre se va apenas la pantalla esta en blanco: si se espera el
+         segundo entero, el invitado ve el sobre detras del blanco a medio subir */
+      setTimeout(entrar, (esFoto() ? FUNDIDO : FLASH) * 1000);
     }
 
     vid.addEventListener('timeupdate', function () {
