@@ -3,7 +3,7 @@
    QUÉ HACE
    La línea del itinerario se va DIBUJANDO de arriba hacia abajo siguiendo el
    scroll, y cada momento (hora + título + descripción) ENTRA cuando le toca,
-   uno atrás del otro. El puntito de cada momento hace un "pop" al llegar.
+   uno atrás del otro. La marca de cada momento hace un "pop" al llegar.
 
    DOS ESTILOS
      izquierda · la línea al costado, todo el texto a la derecha (el de siempre)
@@ -24,7 +24,45 @@
 
    ACCESIBILIDAD
    Con "reducir movimiento" activado se muestra todo quieto y completo.
-   ============================================================================ */
+
+   ══════════════════════════════════════════════════════════════════════════
+   ★★★ LOS DOS ERRORES DEL ZIGZAG  (18/9/2026)
+   ══════════════════════════════════════════════════════════════════════════
+
+   Maki, mirando la muestra de la playa:
+
+     «La línea que estás poniendo con los puntos es desagradable directamente.
+      Está mal hecho, está horrible. El fondo está lindo, el cuadrado está
+      bien, los textos están bien, pero la línea con los puntitos da lástima.
+      No tiene nada que ver con lo que venimos haciendo. Ponerlo más en el
+      medio, hacerlo más lindo, poner unas palabras de un lado y otras de
+      otro, como hiciste en otros que lo resolviste muy bien.»
+
+   ERROR 1 — LOS MOMENTOS SE AMONTONABAN.
+     El zigzag apretaba las filas con `margin-top:-30px` fijo en los pares.
+     Treinta píxeles alcanzan cuando TODOS los momentos miden lo mismo, o sea
+     cuando todos tienen descripción. En la playa «22:00 · Baile» no tiene, y
+     mide un renglón menos: su marca y la del momento siguiente terminaban casi
+     pegadas, una encima de la otra. Se veía un error, no un diseño.
+     → Fuera el margen negativo fijo. Cada momento ocupa su propio renglón y
+       alterna de lado. Nunca se pisan, tenga descripción o no.
+
+   ERROR 2 — LA MARCA ERA UN PUNTITO LLENO DEL COLOR DEL SECTOR.
+     Un disco sólido de 8 px en el verde del sector. En Perlas la marca de cada
+     momento es una PERLA —un objeto de la temática— y por eso ahí quedó bien.
+     Acá era un bullet de lista.
+     → Ahora la marca es un anillo fino: relleno del papel, borde de 1,5 px en
+       la tinta de la temática y un halo muy tenue alrededor. Se lee como una
+       pieza de papelería, no como una viñeta.
+
+   ⚠️ LOS COLORES SALEN DE `fx.tematica`, NO DE LA PALETA DEL SECTOR.
+      Es la misma regla que el vestido básico: cada boda pone su tinta. Si el
+      evento no declaró temática, se usa `currentColor`, que es lo que hacía
+      antes — así ninguna invitación vieja cambia de aspecto sola.
+
+   ⚠️ Y LA LÍNEA TAMBIÉN. Era de 2 px en `var(--verde)`, el verde del motor,
+      aunque la boda fuera azul o arena. Ahora toma la misma tinta.
+   ══════════════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
@@ -55,15 +93,46 @@
     return 'izquierda';
   }
 
+  /* ---- la tinta de ESTA boda ------------------------------------------- */
+  function tema() {
+    try { return (((window.INVEV || {}).fx) || {}).tematica || {}; }
+    catch (e) { return {}; }
+  }
+
+  /* Pinta las tres variables que usan la marca y la línea.
+     Se vuelve a llamar por unos segundos porque la temática llega de Firestore
+     DESPUÉS que este archivo. */
+  function ponerTinta() {
+    var t = tema();
+    var raiz = document.documentElement;
+    var tinta = t.tinta || '';
+    if (tinta) {
+      raiz.style.setProperty('--tl-tinta', tinta);
+      raiz.style.setProperty('--tl-halo', 'color-mix(in srgb, ' + tinta + ' 14%, transparent)');
+    } else {
+      raiz.style.setProperty('--tl-tinta', 'currentColor');
+      raiz.style.setProperty('--tl-halo', 'transparent');
+    }
+    raiz.style.setProperty('--tl-papel', t.papelColor || '#fbf9f5');
+  }
+
   var CSS = [
     /* ---------- común a los dos estilos ---------- */
-    '.tl.tl-anim::before{opacity:.22}',
-    '.tl.tl-anim .tl-prog{position:absolute;top:6px;bottom:6px;width:2px;',
-    '  background:var(--verde);transform-origin:top center;transform:scaleY(0);',
-    '  transition:transform .18s linear;border-radius:2px}',
+    '.tl.tl-anim::before{opacity:.18;background:var(--tl-tinta)}',
+    '.tl.tl-anim .tl-prog{position:absolute;top:6px;bottom:6px;width:1.5px;',
+    '  background:var(--tl-tinta);transform-origin:top center;transform:scaleY(0);',
+    '  transition:transform .18s linear;border-radius:2px;opacity:.55}',
     '.tl.tl-anim > .it{opacity:0;transition:opacity .8s ease,transform .8s cubic-bezier(.22,.72,.28,1)}',
     '.tl.tl-anim > .it.on{opacity:1}',
-    '.tl.tl-anim > .it::before{transform:scale(.2);opacity:0;',
+
+    /* ---------- LA MARCA: un anillo, no un puntito lleno ---------- */
+    '.tl.tl-anim > .it::before{',
+    '  width:11px!important;height:11px!important;',
+    '  box-sizing:border-box!important;border-radius:50%!important;',
+    '  background:var(--tl-papel)!important;',
+    '  border:1.5px solid var(--tl-tinta)!important;',
+    '  box-shadow:0 0 0 4px var(--tl-halo)!important;',
+    '  transform:scale(.2);opacity:0;',
     '  transition:transform .55s cubic-bezier(.3,1.5,.5,1) .12s,opacity .35s ease .12s}',
     '.tl.tl-anim > .it.on::before{transform:scale(1);opacity:1}',
 
@@ -72,21 +141,25 @@
     '.tl.tl-anim:not(.tl-centro) > .it{transform:translateY(26px)}',
     '.tl.tl-anim:not(.tl-centro) > .it.on{transform:none}',
 
-    /* ---------- estilo 2: la línea al medio, en zigzag ---------- */
+    /* ---------- estilo 2: la línea al medio, en zigzag ----------
+       ⚠️ SIN margen negativo. Cada momento ocupa su renglón y alterna de lado:
+          con o sin descripción, las marcas nunca se pisan. */
     '.tl.tl-centro{padding-left:0;text-align:left}',
     '.tl.tl-centro::before{left:50%;margin-left:-1px}',
-    '.tl.tl-centro .tl-prog{left:50%;margin-left:-1px}',
-    '.tl.tl-centro > .it{width:calc(50% - 20px);margin-bottom:22px}',
+    '.tl.tl-centro .tl-prog{left:50%;margin-left:-.75px}',
+    '.tl.tl-centro > .it{width:calc(50% - 26px);margin-bottom:20px;',
+    '  min-height:46px;display:flex;flex-direction:column;justify-content:center}',
+    '.tl.tl-centro > .it:last-child{margin-bottom:0}',
 
     '.tl.tl-centro > .it:nth-child(odd){margin-right:auto;text-align:right;',
-    '  transform:translate(-14px,26px)}',
+    '  align-items:flex-end;transform:translate(-14px,26px)}',
     '.tl.tl-centro > .it:nth-child(odd).on{transform:translate(0,0)}',
-    '.tl.tl-centro > .it:nth-child(odd)::before{left:auto;right:-27px}',
+    '.tl.tl-centro > .it:nth-child(odd)::before{left:auto;right:-31px;top:50%;margin-top:-5.5px}',
 
     '.tl.tl-centro > .it:nth-child(even){margin-left:auto;text-align:left;',
-    '  margin-top:-30px;transform:translate(14px,26px)}',
+    '  align-items:flex-start;transform:translate(14px,26px)}',
     '.tl.tl-centro > .it:nth-child(even).on{transform:translate(0,0)}',
-    '.tl.tl-centro > .it:nth-child(even)::before{left:-27px}',
+    '.tl.tl-centro > .it:nth-child(even)::before{left:-31px;top:50%;margin-top:-5.5px}',
 
     /* ---------- si pidió menos movimiento ---------- */
     '@media(prefers-reduced-motion:reduce){',
@@ -211,12 +284,14 @@
   }
 
   function buscar() {
+    ponerTinta();
     forzarLista();
     [].forEach.call(document.querySelectorAll('.tl'), armar);
     dibujar();
   }
 
   function arrancar() {
+    ponerTinta();
     ponerEstilos();
     buscar();
     addEventListener('scroll', alScroll, { passive: true });
@@ -229,6 +304,9 @@
         [].forEach.call(document.querySelectorAll('.tl'), aplicarEstilo);
       }).observe(document.body, { attributes: true, attributeFilter: ['data-tl-estilo'] });
     }
+
+    /* ⚠️ la temática llega DESPUÉS: se repasa unos segundos */
+    var k = 0, tk = setInterval(function () { ponerTinta(); if (++k > 24) clearInterval(tk); }, 250);
 
     if (ES_PREVIEW) {
       setInterval(buscar, 700);
