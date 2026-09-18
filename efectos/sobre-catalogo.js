@@ -629,6 +629,11 @@
       '  color:rgba(60,52,44,.62);text-align:center;pointer-events:none;',
       '  opacity:0;transition:opacity .45s ease}',
       '#env.carta-video.puesto.listo .vhint{opacity:1}',
+      /* ⚠️ MEDIDO 18/9/2026: la regla de abajo con dos clases PERDIA contra la
+         de arriba, que tiene tres. Resultado: «TOCA PARA ABRIR» se quedaba en
+         opacity .66 y se leia ENCIMA del destello blanco. Va con las mismas
+         clases + .abriendo, asi gana por especificidad y por orden. */
+      '#env.carta-video.puesto.listo.abriendo .vhint{opacity:0!important}',
       '#env.carta-video.abriendo .vhint{opacity:0}',
 
       /* ★★★ FLUIDEZ: la capa del video va en su propia capa de composición,
