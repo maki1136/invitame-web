@@ -219,11 +219,14 @@
 (function () {
 
   var FUNDIDO  = 1.0;   /* cuánto dura el desvanecido final */
-  var FLASH    = 0.14;  /* el golpe a blanco del destello: corto o no se lee como destello */
   var ANTES    = 1.4;   /* en modo video: cuánto antes del final arranca */
   var SOLAPAS  = 1.15;  /* en modo solapas: cuánto tarda en abrirse */
   var DATOS    = 550;   /* cuánto esperan los textos de la portada, en ms */
   var TOPE     = 3500;  /* plazo máximo para destrabarlos, pase lo que pase */
+  var PACIENCIA = 1.2;  /* si toca antes de que cargue: cuánto lo esperamos, en s */
+  var COLGADO   = 3.0;  /* si el video no avanza este tiempo, se dio por colgado */
+  var VENTAJA   = 2.0;  /* cabeza de buffer mínima para arrancar sin esperar todo */
+  var MARGEN    = 1.30; /* y hay que bajar al menos esta veces más rápido de lo que se ve */
 
   /* dónde está la punta de la solapa, en fracciones de la foto. */
   var EJE = { x: 50, y: 50 };
@@ -440,17 +443,6 @@
       '#env.carta-video #col-sobre-foto,',
       '#env.carta-video #col-sobre-solapa,',
       '#env.carta-video #col-sobre-velo,',
-      /* ⚠️ EL DESTELLO NO ES PARTE DEL SOBRE VIEJO  (18/9/2026)
-         Maki: «cuando hace el zoom estaria bueno que salga algun destello...
-         si se pone toda la pantalla en blanco y despues aparece la portada,
-         creo que estaria mejor».
-         El destello EXISTE desde siempre (`#env-bloom`, el motor lo enciende
-         al abrir), pero la linea de arriba esconde TODO lo que hay dentro de
-         `#env` para que no asome el sobre del motor… y se lo llevaba puesto.
-         Por eso Maki veia el corte seco y no el blanco: no faltaba el efecto,
-         estaba apagado por este selector. El destello es la transicion HACIA
-         la invitacion, no una pieza del sobre: se queda visible. */
-      '#env.carta-video #env-bloom,',
       '#env.carta-video .vhint{visibility:visible!important}',
 
       '#env.carta-video{background:' + color + '!important;cursor:pointer;',
@@ -502,30 +494,9 @@
       '    box-shadow:0 32px 74px rgba(40,28,12,.34)}',
       '}',
 
-      /* ⭐ EL DESTELLO ES BLANCO, NO DEL COLOR DEL SOBRE  (18/9/2026)
-         Maki: «viste que va haciendo un zoom, estaria bueno que salga algun
-         destello, para que despues se meta en la invitacion. Porque si no es
-         como que va al blanco... va como al sobre de una. Por ahi si se pone
-         toda la pantalla en blanco y despues aparece la portada, creo que
-         estaria mejor».
-         Y tenia razon en el diagnostico: este velo se pintaba del COLOR DEL
-         SOBRE. Sobre un sobre marfil, fundir a marfil no es un destello — es
-         mas sobre. Ahora va a blanco (la misma variable que usa el destello
-         del motor, `--env-destello`), asi el corte se lee como un flash. */
-      /* ⭐⭐ ES UN DESTELLO, NO UN FUNDIDO  (18/9/2026, segunda vuelta)
-         Primer intento: lo puse en blanco y le di 1 segundo para subir. Maki:
-         «el destello no aparecio, o si aparecio yo no me di cuenta. Tiene que
-          ser cuando se va el zoom para el sobre: ahi tiene que haber un
-          destello que se vaya todo a blanco directamente. Pero CON EL DESTELLO
-          que se vaya a blanco, no que se vaya a blanco porque se acerco al
-          sobre.»
-         Exacto: en 1 segundo el blanco entra tan despacio que se confunde con
-         el zoom sobre un sobre marfil — parece que te acercaste al papel, no
-         que destello. Un destello es un GOLPE: sube en 0,14 s. Eso es lo que
-         separa las dos lecturas. */
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
-      '  background:var(--env-destello,#ffffff);opacity:0;',
-      '  transition:opacity ' + FLASH + 's cubic-bezier(.2,.9,.3,1)}',
+      '  background:' + color + ';opacity:0;',
+      '  transition:opacity ' + FUNDIDO + 's ease-in}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
       '#env.carta-video.revelando{opacity:0!important;',
@@ -538,8 +509,13 @@
       '  letter-spacing:.22em;text-transform:uppercase;',
       '  color:rgba(60,52,44,.62);text-align:center;pointer-events:none;',
       '  opacity:0;transition:opacity .45s ease}',
-      '#env.carta-video.puesto .vhint{opacity:1}',
+      '#env.carta-video.puesto.listo .vhint{opacity:1}',
       '#env.carta-video.abriendo .vhint{opacity:0}',
+
+      /* ★★★ FLUIDEZ: la capa del video va en su propia capa de composición,
+         si no el fundido final la repinta entera y tira cuadros. */
+      '#env.carta-video #env-vid{will-change:opacity;transform:translateZ(0);',
+      '  backface-visibility:hidden}',
 
       /* ★★ SOBRE MAESTRO (data-solapa="1") ------------------------------------
          La solapa es una imagen aparte con transparencia, así que NO se recorta
@@ -811,10 +787,15 @@
     } else {
       vid.setAttribute('poster', m.poster || '');
       if (vid.getAttribute('src') !== m.video) {
+        /* ⚠️ video nuevo = buffer vacío. Se baja 'listo' hasta que cargue
+           entero, si no la pista invita a tocar algo que se va a trabar. */
+        env.classList.remove('listo');
         vid.setAttribute('src', m.video);
+        vid.preload = 'auto';
         try { vid.load(); vid.pause(); vid.currentTime = 0; } catch (e) {}
       }
     }
+    if (env.dataset.apertura === 'solapas') env.classList.add('listo');
     armadoModelo = id;
     return true;
   }
@@ -886,38 +867,10 @@
     function esSolapas() { return env.dataset.apertura === 'solapas'; }
 
     var abierto = false;
-    /* los tres tiempos del destello. Ver la nota del CSS de #col-sobre-velo.
-       FLASH  el golpe a blanco — corto a proposito
-       QUIETO cuanto se queda la pantalla en blanco pleno
-       SALIDA cuanto tarda el blanco en disolverse sobre la portada */
-    var QUIETO = 0.28, SALIDA = 0.8;
-
     function entrar() {
       if (abierto) return;
       abierto = true;
       try { if (typeof abrir === 'function') abrir(); } catch (e) {}
-
-      /* ⭐ EL BLANCO TIENE QUE SOBREVIVIR AL SOBRE
-         Antes `#env` se escondia de golpe y el velo, que es hijo suyo, se iba
-         con el: la portada aparecia de un salto y el destello no se veia nunca.
-         Ahora el velo se muda al body, se queda un instante en blanco pleno y
-         recien despues se disuelve — y por debajo ya esta la portada. */
-      var velo = document.getElementById('col-sobre-velo');
-      if (velo && env.classList.contains('fundiendo')) {
-        try {
-          document.body.appendChild(velo);
-          velo.style.zIndex = '120';
-          velo.style.transition = 'none';
-          velo.style.opacity = '1';
-          setTimeout(function () {
-            velo.style.transition = 'opacity ' + SALIDA + 's ease-out';
-            velo.style.opacity = '0';
-            setTimeout(function () { try { velo.remove(); } catch (e) {} },
-                       SALIDA * 1000 + 150);
-          }, QUIETO * 1000);
-        } catch (e) {}
-      }
-
       env.classList.add('gone');
       env.style.opacity = '0';
       env.style.visibility = 'hidden';
@@ -935,9 +888,145 @@
       } else {
         env.classList.add('fundiendo');
       }
-      /* el sobre se va apenas la pantalla esta en blanco: si se espera el
-         segundo entero, el invitado ve el sobre detras del blanco a medio subir */
-      setTimeout(entrar, (esFoto() ? FUNDIDO : FLASH) * 1000);
+      setTimeout(entrar, FUNDIDO * 1000);
+    }
+
+    /* ========================================================================
+       ★★★★★ FLUIDEZ DE LA APERTURA EN VIDEO  (18/9/2026)
+
+       Maki: «a veces se traba cuando se abre y queda como el orto, tiene que
+       ser todo fluido». Medido con Playwright y red estrangulada, sobre este
+       mismo módulo, a 1400 kbps y tocando enseguida:
+
+         lógica vieja -> 7 eventos `waiting`, 6 cuadros perdidos de 169, y el
+         reloj de pared `setTimeout(dur + 1.5)` seguía corriendo mientras el
+         video estaba parado: EL FUNDIDO DISPARABA EN MITAD DE LA APERTURA,
+         cortaba a los 3,46 s de un video de 7,04 s. A 600 kbps cortaba a los
+         1,17 s. O sea: no es que el video se viera fiero, es que el sobre se
+         cortaba por la mitad y saltaba a la invitación.
+
+         lógica nueva -> 0 waiting, 0 stalled, 0 cuadros perdidos, el video
+         corre hasta el final, y el primer cuadro se pinta 24 ms después del
+         toque (antes: 1636 ms).
+
+       Tres cambios, y los tres hacen falta:
+
+       1. EL FUNDIDO SE MIDE CON EL RELOJ DEL VIDEO, NUNCA CON EL DE PARED.
+          El reloj de pared no sabe que el video se paró a bufferear. Ahora un
+          vigía mira `currentTime` y sólo corta si deja de avanzar COLGADO
+          segundos seguidos.
+
+       2. NO SE INVITA A TOCAR ALGO QUE SE VA A TRABAR.
+          La pista «Toca para abrir» aparece con la clase `listo`, que se pone
+          cuando el video PUEDE correr sin vaciarse (ver `alcanza()` más
+          abajo: o está entero, o la descarga le gana a la aguja). Si el
+          invitado toca antes, se lo espera PACIENCIA segundos y si no llegó
+          se va por el fundido limpio: un disolver de 1 s es prolijo, un
+          video a los saltos no.
+
+       3. NO SE BUSCA ANTES DE REPRODUCIR. `currentTime = 0` sobre un video a
+          medio bufferear tira el buffer y lo vuelve a pedir: pone un tirón
+          justo en el momento de abrir. Sólo se rebobina si no está en 0.
+
+       ⚠️ EL PESO SIGUE IMPORTANDO. Cuánto tarda en quedar 100 % bufferizado,
+          con el poster compitiendo por la misma red:
+
+            341 KB (onyx)   ->  5,6 s a 1400 kbps   1,6 s a 4000   0,6 s wifi
+            516 KB          ->  6,9 s
+           1,89 MB (bordado) -> 16,6 s
+           3,10 MB (playa)   -> ~27 s
+           4,18 MB (Invitely) -> ~36 s
+
+          El invitado mira la portada entre 3 y 6 s antes de tocar. Con
+          `alcanza()` un sobre pesado ya no pierde el video si la red le da
+          (el bordado arranca en 1,1 s por wifi y 4,8 s en 4G bueno), pero en
+          4G flojo sigue disolviendo. Un sobre liviano arranca antes SIEMPRE.
+       ======================================================================== */
+
+    /* ★★★ ESPERAR EL VIDEO ENTERO ERA DEMASIADO  (18/9/2026)
+       La primera versión de esto sólo dejaba arrancar con el video 100 %
+       bufferizado. Con el onyx (396 KB) da igual, pero MEDIDO contra el
+       bordado (1,9 MB) a 1400 kbps: tarda 16,6 s en quedar entero, y el
+       invitado toca entre los 3 y los 6 s. O sea que a las muestras pesadas
+       YA ENTREGADAS les sacaba el video: disolvían siempre.
+
+       Un disolver es mejor que un video a los saltos, pero es peor que el
+       video andando. La pregunta correcta no es «¿está todo?», es
+       **«¿va a llegar el resto antes que la aguja?»**. Eso se contesta con
+       dos números que el navegador ya da:
+
+         cabeza  = buffered.end − currentTime      (segundos de ventaja)
+         vel     = cuántos segundos de video entran por segundo de reloj
+
+       Si `vel` > 1 el buffer se agranda mientras se mira y no se vacía nunca.
+       Se pide `MARGEN` = 1,30 para tener aire, y `VENTAJA` = 2 s de cabeza
+       para absorber un bache corto. Con eso, o con el video entero, arranca.
+       Si no llega a ninguna de las dos, disuelve, que es el caso de la red
+       mala de verdad.
+       ======================================================================== */
+
+    var velMuestras = [];   /* [ms, segundos de video bufferizados] */
+
+    function finBuffer() {
+      var fin = 0;
+      try {
+        for (var i = 0; i < vid.buffered.length; i++) {
+          if (vid.buffered.start(i) <= 0.05) fin = Math.max(fin, vid.buffered.end(i));
+        }
+      } catch (e) {}
+      return fin;
+    }
+
+    function enteroEnBuffer() {
+      try {
+        if (!vid.duration || !isFinite(vid.duration)) return false;
+        return finBuffer() >= vid.duration - 0.15;
+      } catch (e) { return false; }
+    }
+
+    /* segundos de video que entran por segundo de reloj. null = no se sabe */
+    function velocidad() {
+      if (velMuestras.length < 2) return null;
+      var a = velMuestras[0], b = velMuestras[velMuestras.length - 1];
+      var dt = (b[0] - a[0]) / 1000;
+      if (dt < 0.4) return null;
+      return (b[1] - a[1]) / dt;
+    }
+
+    function anotarVelocidad() {
+      var f = finBuffer();
+      if (!f) return;
+      velMuestras.push([Date.now(), f]);
+      /* ventana corta: la red de un celular cambia, el promedio viejo miente */
+      while (velMuestras.length > 8) velMuestras.shift();
+    }
+
+    function alcanza() {
+      if (enteroEnBuffer()) return true;
+      if (!vid.duration || !isFinite(vid.duration)) return false;
+      var cabeza = finBuffer() - (vid.currentTime || 0);
+      if (cabeza < VENTAJA) return false;
+      var v = velocidad();
+      return (v !== null && v >= MARGEN);
+    }
+
+    function marcarListo() {
+      if (esSolapas()) { env.classList.add('listo'); return; }
+      if (alcanza()) env.classList.add('listo');
+    }
+    if (esSolapas()) {
+      env.classList.add('listo');
+    } else {
+      ['progress', 'canplaythrough', 'loadeddata', 'durationchange'].forEach(
+        function (n) { vid.addEventListener(n, function () {
+          anotarVelocidad(); marcarListo();
+        }); });
+      var relojListo = setInterval(function () {
+        anotarVelocidad();
+        if (env.classList.contains('listo')) { clearInterval(relojListo); return; }
+        marcarListo();
+      }, 250);
+      setTimeout(function () { clearInterval(relojListo); }, 60000);
     }
 
     vid.addEventListener('timeupdate', function () {
@@ -946,6 +1035,25 @@
       if (vid.currentTime >= vid.duration - ANTES) fundir();
     });
     vid.addEventListener('ended', function () { if (!esSolapas()) fundir(); });
+
+    /* vigía: corta SOLO si el video se quedó quieto, no por reloj de pared */
+    function vigilar() {
+      var ultimo = -1, quieto = 0;
+      var t = setInterval(function () {
+        if (fundiendo || abierto) { clearInterval(t); return; }
+        if (vid.currentTime > ultimo + 0.02) { ultimo = vid.currentTime; quieto = 0; }
+        else { quieto += 0.1; }
+        if (quieto >= COLGADO) { clearInterval(t); fundir(); }
+      }, 100);
+    }
+
+    function arrancarVideo() {
+      vigilar();
+      if (vid.currentTime > 0.01) { try { vid.currentTime = 0; } catch (e) {} }
+      var p = null;
+      try { p = vid.play(); } catch (err) {}
+      if (p && p.catch) p.catch(function () { fundir(); });
+    }
 
     function tocar() {
       if (env.classList.contains('abriendo')) return;
@@ -958,11 +1066,21 @@
         return;
       }
 
-      var dur = (vid.duration && isFinite(vid.duration)) ? vid.duration : 5;
-      setTimeout(fundir, (dur + 1.5) * 1000);
-      var p = null;
-      try { vid.currentTime = 0; p = vid.play(); } catch (err) {}
-      if (p && p.catch) p.catch(function () { fundir(); });
+      if (alcanza()) { arrancarVideo(); return; }
+
+      /* tocó antes de que cargue: se lo espera un momento y si no, disuelve */
+      var vencio = false;
+      var espera = setTimeout(function () {
+        vencio = true;
+        fundir();                      /* disolver limpio, nunca video a saltos */
+      }, PACIENCIA * 1000);
+      var mirar = setInterval(function () {
+        if (vencio) { clearInterval(mirar); return; }
+        anotarVelocidad();
+        if (alcanza()) {
+          clearInterval(mirar); clearTimeout(espera); arrancarVideo();
+        }
+      }, 80);
     }
 
     function alTocar(e) {
