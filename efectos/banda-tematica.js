@@ -24,6 +24,27 @@
        bandaVelo:  0.10         // 0 = la foto limpia / 1 = tapada de blanco
      }
 
+   ⭐⭐ SEGUNDA VUELTA (18/9/2026): LA BANDA NO PUEDE TAPAR EL VIDEO
+   El primer intento puso una FOTO OPACA, y con muchos objetos. Maki:
+     «me sacaste mucho del fondo, y el fondo estaba buenisimo, el del video.
+      Donde dice raspa para revelar, como estaba antes me gustaba mas: se veia
+      mucho mas el fondo de video.»
+     «esta muy cargado de estrellitas y caracoles. Tenes que hacerlo mucho mas
+      delicado: algun caracol dando vuelta por ahi. No 200, 1500. Se poblo de
+      caracoles.»
+   Dos correcciones, y las dos importan:
+     1. El color de la banda pasa a ser TRANSLUCIDO (`bandaAlfa`, 0,34 por
+        defecto). El video de fondo se ve a traves, que era el punto.
+     2. Los objetos ya no vienen en una foto opaca: vienen en una imagen sobre
+        BLANCO PURO que se aplica en una capa aparte con `mix-blend-mode:
+        multiply`. El blanco desaparece en la mezcla y quedan SOLO los
+        caracoles, flotando sobre el video. Sin recorte, sin canal alfa, sin
+        depender de quitar fondos.
+   ⚠️ LA CAPA VA EN UN HIJO, NO EN LA SECCION. `mix-blend-mode` mezcla con lo
+   que hay DETRAS del elemento; puesto en la seccion se mezclaria consigo misma.
+   Por eso se inyecta un `<span>` propio, absoluto, sin eventos y detras del
+   texto.
+
    POR QUE `repeat-y` Y NO `cover`  - esto costo pensarlo
    La gracia de la foto son LOS COSTADOS. Con `cover`, una seccion alta (la de
    ceremonia y fiesta, con sus dos tarjetas) escala la imagen por el alto y
@@ -64,8 +85,19 @@
   }
 
   function firma(t) {
-    return [t.banda || '', t.bandaTinta || '',
-            t.bandaVelo === undefined ? '' : t.bandaVelo].join('|');
+    return [t.banda || '', t.bandaTinta || '', t.bandaColor || '',
+            t.bandaVelo  === undefined ? '' : t.bandaVelo,
+            t.bandaAlfa  === undefined ? '' : t.bandaAlfa,
+            t.bandaFuerza === undefined ? '' : t.bandaFuerza].join('|');
+  }
+
+  /* '#1f3f49' -> 'rgba(31,63,73,α)' */
+  function conAlfa(hex, a) {
+    var h = String(hex || '').replace('#', '');
+    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    if (!/^[0-9a-fA-F]{6}$/.test(h)) return 'rgba(255,255,255,' + a + ')';
+    return 'rgba(' + parseInt(h.slice(0,2),16) + ',' + parseInt(h.slice(2,4),16) +
+           ',' + parseInt(h.slice(4,6),16) + ',' + a + ')';
   }
 
   /* un color mas suave que la tinta, para los parrafos */
@@ -76,21 +108,29 @@
   function css(t) {
     var url   = String(t.banda).replace(/"/g, '%22');
     var tinta = t.bandaTinta || t.tinta || '#2e433c';
-    var velo  = (t.bandaVelo === undefined || t.bandaVelo === null) ? 0.10 : Number(t.bandaVelo);
-    if (!(velo >= 0 && velo <= 1)) velo = 0.10;
-    var blanco = 'rgba(255,255,255,' + velo + ')';
+    var tono  = t.bandaColor || '#dcecf2';          /* el celeste de la banda */
+    var alfa  = Number(t.bandaAlfa);
+    if (!(alfa >= 0 && alfa <= 1)) alfa = 0.34;     /* translucido: se ve el video */
+    var fuerza = Number(t.bandaFuerza);
+    if (!(fuerza >= 0 && fuerza <= 1)) fuerza = 0.5; /* cuanto se notan los caracoles */
 
     return [
       '.sec.verde{',
-      '  background-color:#ffffff !important;',
-      '  background-image:linear-gradient(' + blanco + ',' + blanco + '),url("' + url + '") !important;',
-      /* ver la nota: el ancho entero siempre, y se repite hacia abajo */
-      '  background-size:100% 100%, 100% auto !important;',
-      '  background-repeat:no-repeat, repeat-y !important;',
-      '  background-position:center top, center top !important;',
-      '  background-blend-mode:normal !important;',
+      '  background-color:' + conAlfa(tono, alfa) + ' !important;',
+      '  background-image:none !important;',
       '  color:' + tinta + ' !important;',
+      '  position:relative;',
       '}',
+      /* la capa de objetos: blanco que desaparece en multiply. Ver la nota. */
+      '.inv-banda-deco{',
+      '  position:absolute;inset:0;pointer-events:none;z-index:0;',
+      '  background-image:url("' + url + '");',
+      '  background-size:100% auto;background-repeat:repeat-y;',
+      '  background-position:center top;',
+      '  mix-blend-mode:multiply;opacity:' + fuerza + ';',
+      '}',
+      /* el contenido queda por encima de la capa */
+      '.sec.verde > *:not(.inv-banda-deco){position:relative;z-index:1}',
       /* los colores que nacieron para fondo oscuro */
       '.sec.verde h2{color:' + tinta + ' !important}',
       '.sec.verde .kick{color:' + suave(tinta) + ' !important}',
@@ -112,7 +152,12 @@
     ultima = f;
 
     var hoja = document.getElementById(ID);
-    if (!t.banda) { if (hoja) hoja.remove(); return; }
+    if (!t.banda) {
+      if (hoja) hoja.remove();
+      var v = document.querySelectorAll('.inv-banda-deco');
+      for (var k = 0; k < v.length; k++) v[k].remove();
+      return;
+    }
 
     if (!hoja) {
       hoja = document.createElement('style');
@@ -120,6 +165,19 @@
       document.head.appendChild(hoja);
     }
     hoja.textContent = css(t);
+    capas();
+  }
+
+  /* una capa de objetos por banda, ni mas ni menos */
+  function capas() {
+    var secs = document.querySelectorAll('.sec.verde');
+    for (var i = 0; i < secs.length; i++) {
+      if (secs[i].querySelector(':scope > .inv-banda-deco')) continue;
+      var c = document.createElement('span');
+      c.className = 'inv-banda-deco';
+      c.setAttribute('aria-hidden', 'true');
+      secs[i].insertBefore(c, secs[i].firstChild);
+    }
   }
 
   function arrancar() {
