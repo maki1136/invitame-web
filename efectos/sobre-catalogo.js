@@ -256,6 +256,24 @@
      fotogramas que da Cloudinary (`so_<segundo>`). Si un sobre no la declara,
      se usa esto de respaldo. */
   var DESTELLO = 4.2;   /* respaldo, en segundos, si el sobre no declara `luz` */
+  /* ⭐⭐ LA LUZ QUE DEJA TODO BLANCO  (18/9/2026)
+     Maki: «cuando hace el zoom que se vaya desvaneciendo con esa luz que deja
+     todo blanco, pero la idea es que no llegue al final del video y despues
+     venga la luz, sino que cuando arranca con el zoom, despues de que el sobre
+     se abra, ahi viene todo».
+     Traducido a tres numeros:
+       FLASH  -> el golpe a blanco, rapido, arranca en `luz` (o sea, en el zoom).
+       QUIETO -> cuanto se queda el blanco solo, sin sobre y sin portada.
+       SALIDA -> en cuanto se disuelve ese blanco para que NAZCA la portada.
+     ⚠️ DOS TRAMPAS YA PAGADAS:
+        1. El velo NO se pinta del color del sobre. Marfil sobre marfil no se ve
+           ningun destello: fue el bug del 18/9. Va blanco. Ver luzColor().
+        2. El velo es hijo de #env, y #env se apaga en entrar(): si no se lo
+           saca de adentro, la luz se va junto con el sobre y la portada aparece
+           de golpe. Eso lo resuelve soltarLuz(). */
+  var FLASH    = 0.45;  /* el golpe a blanco, en segundos */
+  var QUIETO   = 0.22;  /* cuanto se queda todo blanco */
+  var SALIDA   = 0.85;  /* en cuanto se disuelve el blanco sobre la portada */
   var SOLAPAS  = 1.15;  /* en modo solapas: cuánto tarda en abrirse */
   var DATOS    = 550;   /* cuánto esperan los textos de la portada, en ms */
   var TOPE     = 3500;  /* plazo máximo para destrabarlos, pase lo que pase */
@@ -333,6 +351,16 @@
   var armadoModelo = null;
 
   /* en que segundo del video de ESTE sobre arranca el zoom. Ver DESTELLO. */
+  /* de que color es la luz. Blanco, salvo que el sobre pida otra cosa. */
+  function luzColor() {
+    try {
+      var c = window.SOBRES_INVITAME || {};
+      var v = (c[armadoModelo] || {}).luzColor;
+      if (v) return v;
+    } catch (e) {}
+    return '#ffffff';
+  }
+
   function luzDelSobre() {
     try {
       var c = window.SOBRES_INVITAME || {};
@@ -586,8 +614,8 @@
       '}',
 
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
-      '  background:' + color + ';opacity:0;',
-      '  transition:opacity ' + FUNDIDO + 's ease-in}',
+      '  background:' + luzColor() + ';opacity:0;',
+      '  transition:opacity ' + FLASH + 's ease-out}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
       '#env.carta-video.revelando{opacity:0!important;',
@@ -958,10 +986,26 @@
     function esSolapas() { return env.dataset.apertura === 'solapas'; }
 
     var abierto = false;
+    /* ⭐ EL DESTELLO SOBREVIVE AL SOBRE. Ver la nota de FLASH/QUIETO/SALIDA. */
+    function soltarLuz() {
+      var velo = document.getElementById('col-sobre-velo');
+      if (!velo) return;
+      if (Number(getComputedStyle(velo).opacity) < 0.9) return;  /* no hubo destello */
+      velo.style.cssText = 'position:fixed;inset:0;z-index:120;pointer-events:none;' +
+        'background:' + luzColor() + ';opacity:1;' +
+        'transition:opacity ' + SALIDA + 's ease-out';
+      document.body.appendChild(velo);
+      setTimeout(function () { velo.style.opacity = '0'; }, QUIETO * 1000);
+      setTimeout(function () {
+        if (velo.parentNode) velo.parentNode.removeChild(velo);
+      }, (QUIETO + SALIDA) * 1000 + 250);
+    }
+
     function entrar() {
       if (abierto) return;
       abierto = true;
       try { if (typeof abrir === 'function') abrir(); } catch (e) {}
+      soltarLuz();
       env.classList.add('gone');
       env.style.opacity = '0';
       env.style.visibility = 'hidden';
