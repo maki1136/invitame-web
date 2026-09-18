@@ -234,7 +234,28 @@
      Antes esto colgaba del FINAL del video. Ahora cuelga del PRINCIPIO: un
      reloj desde que se toca. `ANTES` sigue existiendo como red por si el video
      fuera mas corto que DESTELLO. */
-  var DESTELLO = 1.6;   /* segundos desde que se toca el sello hasta el blanco */
+  /* ⭐⭐⭐ CUANDO ARRANCA EL DESTELLO — tercera vuelta, y la buena (18/9/2026)
+     Maki, corrigiendo mis dos intentos anteriores:
+       1º «el destello no aparecio»  → estaba, pero dorado y lento.
+       2º «tiene que ser muchisimo antes, no al final de todo» → lo colgue de
+          1,6 s desde el toque, y entonces:
+       3º «pero no dejaste que se abra el sobre, sos muy exagerado. Tenes que
+           esperar que se abra el sobre y CUANDO HACE EL ZOOM que se vaya
+           desvaneciendo con esa luz. La idea es que no llegue al final del
+           video y despues venga la luz, sino que cuando arranca con el zoom,
+           despues de que el sobre se abra, ahi viene todo.»
+
+     O sea: el video tiene TRES tramos y el destello va en el tercero.
+       tramo 1  el sobre quieto (solo se mueve el agua)
+       tramo 2  las solapas se abren     ← esto hay que dejarlo ver ENTERO
+       tramo 3  la camara hace zoom      ← ACA arranca el blanco
+     Ni antes (te comes la apertura) ni al final (ya es tarde).
+
+     ⚠️ ES UN DATO POR SOBRE, NO UNA CONSTANTE. Cada video tiene su ritmo. Va
+     en `sobres/catalogo.js` como `luz`, medido cuadro por cuadro con los
+     fotogramas que da Cloudinary (`so_<segundo>`). Si un sobre no la declara,
+     se usa esto de respaldo. */
+  var DESTELLO = 4.2;   /* respaldo, en segundos, si el sobre no declara `luz` */
   var SOLAPAS  = 1.15;  /* en modo solapas: cuánto tarda en abrirse */
   var DATOS    = 550;   /* cuánto esperan los textos de la portada, en ms */
   var TOPE     = 3500;  /* plazo máximo para destrabarlos, pase lo que pase */
@@ -311,6 +332,16 @@
   var listo = false;
   var armadoModelo = null;
 
+  /* en que segundo del video de ESTE sobre arranca el zoom. Ver DESTELLO. */
+  function luzDelSobre() {
+    try {
+      var c = window.SOBRES_INVITAME || {};
+      var v = Number((c[armadoModelo] || {}).luz);
+      if (v > 0) return v;
+    } catch (e) {}
+    return DESTELLO;
+  }
+
   function ev()  { return (window.INVEV || {}); }
   function sobre() { return ((ev().fx || {}).sobre) || {}; }
   function catalogo() {
@@ -376,9 +407,54 @@
     '#env-vid::-webkit-media-controls-toggle-closed-captions-button{',
     '  display:none!important;-webkit-appearance:none!important;',
     '  opacity:0!important;pointer-events:none!important}',
-    '#env-vid::-internal-media-controls-overlay-cast-button{display:none!important}'
+    '#env-vid::-internal-media-controls-overlay-cast-button{display:none!important}',
+
+    /* ⭐⭐ SAFARI DE ESCRITORIO SIGUE DIBUJANDO LOS SUYOS  (18/9/2026)
+       Maki mando una captura del sobre de Valeria en Safari con los controles
+       ENCIMA: expandir, picture-in-picture, barra de volumen, play, 00:00/00:08.
+       «no quiero que se vea el reproductor de video como habiamos hablado.»
+       La lista de arriba tapaba los pseudo-elementos que Safari usaba en 2026-09
+       Y SOLO para `#env-vid`. Safari fue cambiando de nombres y ademas el sobre
+       puede montar otro <video>. Perseguir nombres de pseudo-elementos es una
+       carrera que se pierde.
+       Lo que NO depende de la version: que el video no reciba el puntero. Los
+       controles nativos aparecen al pasar o tocar encima; sin eventos, no hay
+       nada que los llame. El toque para abrir ya se captura en el DOCUMENTO
+       (ver la nota «EL TOQUE VA EN CAPTURA»), asi que no se pierde nada. */
+    '#env video,#env-vid{pointer-events:none!important}',
+    '#env video::-webkit-media-controls,',
+    '#env video::-webkit-media-controls-enclosure,',
+    '#env video::-webkit-media-controls-panel,',
+    '#env video::-webkit-media-controls-container,',
+    '#env video::-webkit-media-controls-overlay-play-button,',
+    '#env video::-webkit-media-controls-start-playback-button{',
+    '  display:none!important;-webkit-appearance:none!important;',
+    '  opacity:0!important;pointer-events:none!important}'
   ].join('\n');
   (document.head || document.documentElement).appendChild(sinControles);
+
+  /* ⭐ Y LOS ATRIBUTOS. El CSS esconde; esto directamente no los crea.
+     Se repasa un rato porque el <video> del sobre lo monta el catalogo despues. */
+  (function sinReproductor() {
+    function limpiar() {
+      var vs = document.querySelectorAll('#env video');
+      for (var i = 0; i < vs.length; i++) {
+        var v = vs[i];
+        if (v.hasAttribute('controls')) v.removeAttribute('controls');
+        v.controls = false;
+        v.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback noplaybackrate');
+        v.setAttribute('disablepictureinpicture', '');
+        v.setAttribute('disableremoteplayback', '');
+        try { v.disablePictureInPicture = true; } catch (e) {}
+      }
+    }
+    limpiar();
+    var n = 0;
+    var t = setInterval(function () {
+      try { limpiar(); } catch (e) { clearInterval(t); }
+      if (++n > 40) clearInterval(t);          /* 10 segundos */
+    }, 250);
+  })();
 
   /* ---- LOS TEXTOS DE LA PORTADA, RETENIDOS ---- */
   (function cssDatos() {
@@ -1068,8 +1144,8 @@
       var p = null;
       try { p = vid.play(); } catch (err) {}
       if (p && p.catch) p.catch(function () { fundir(); });
-      /* el destello cuelga del PRINCIPIO, no del final. Ver la nota de DESTELLO. */
-      setTimeout(fundir, DESTELLO * 1000);
+      /* el destello va en el ZOOM, no al final. Ver la nota de DESTELLO. */
+      setTimeout(fundir, luzDelSobre() * 1000);
     }
 
     function tocar() {
