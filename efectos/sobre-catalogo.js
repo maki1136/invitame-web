@@ -220,6 +220,21 @@
 
   var FUNDIDO  = 1.0;   /* cuánto dura el desvanecido final */
   var ANTES    = 1.4;   /* en modo video: cuánto antes del final arranca */
+  /* ⭐⭐ CUANDO ARRANCA EL DESTELLO  (18/9/2026, tercera vuelta)
+     Maki, despues de dos intentos:
+       «el destello tiene que ser muchisimo antes. Cuando empezas el movimiento
+        hacia el sobre le das uno o dos segundos y ya tiene que arrancar. No al
+        final de todo — al final de todo ya es tarde.»
+     Y tenia razon en algo que yo no habia entendido: el destello no es el
+     REMATE de la apertura, es lo que la CORTA. El video del sobre dura varios
+     segundos; esperar a que termine para recien destellar es contar el cuento
+     dos veces. Se toca el sello, el sobre arranca a abrirse, y cuando el ojo ya
+     entendio que algo se abre — al segundo y medio — entra el blanco y aparece
+     la invitacion.
+     Antes esto colgaba del FINAL del video. Ahora cuelga del PRINCIPIO: un
+     reloj desde que se toca. `ANTES` sigue existiendo como red por si el video
+     fuera mas corto que DESTELLO. */
+  var DESTELLO = 1.6;   /* segundos desde que se toca el sello hasta el blanco */
   var SOLAPAS  = 1.15;  /* en modo solapas: cuánto tarda en abrirse */
   var DATOS    = 550;   /* cuánto esperan los textos de la portada, en ms */
   var TOPE     = 3500;  /* plazo máximo para destrabarlos, pase lo que pase */
@@ -1053,6 +1068,8 @@
       var p = null;
       try { p = vid.play(); } catch (err) {}
       if (p && p.catch) p.catch(function () { fundir(); });
+      /* el destello cuelga del PRINCIPIO, no del final. Ver la nota de DESTELLO. */
+      setTimeout(fundir, DESTELLO * 1000);
     }
 
     function tocar() {
