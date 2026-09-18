@@ -339,6 +339,8 @@
 
       /* si ya se lee, no se toca: la clienta pidio ver la foto */
       if (alcanza(alfaAhora, lSec, fotoMedida, textos)) {
+        /* ⚠ NO se saca un velo ya puesto: eso es el parpadeo. Ver la nota 3 bis. */
+        if (YA.has(sec)) continue;
         sec.style.removeProperty(variable);
         sec.removeAttribute(MARCA);
         continue;
@@ -369,10 +371,33 @@
         sec.removeAttribute(MARCA);
         continue;
       }
+      /* monotono: solo sube, y solo si el salto vale la pena. Ver nota 3 bis. */
+      var previo = YA.has(sec) ? YA.get(sec) : -1;
+      if (previo >= 0 && mejorAlfa <= previo + UMBRAL) continue;
+      YA.set(sec, mejorAlfa);
       sec.style.setProperty(variable, String(Math.max(0, 1 - mejorAlfa)));
       sec.setAttribute(MARCA, (Math.round(mejorAlfa * 100)) + '%');
     }
   }
+
+  /* ---- 3 bis · POR QUE EL VELO NO PUEDE IR Y VENIR  (18/9/2026) -----------
+     Maki, mirando la seccion del filtro y la de las fotos de la fiesta:
+     «hay un blanco... es como que se apaga y se prende rapido, esta como que
+     esta fallando un poquito».
+
+     No fallaba: hacia exactamente lo que decia el codigo. `acomodar()` corre
+     CADA MEDIO SEGUNDO durante 20 segundos, y desde que el fondo es un VIDEO
+     la medicion de la foto cambia de cuadro en cuadro. Con la medicion
+     bailando, una pasada decia «ya se lee» y quitaba el velo, la siguiente
+     decia «no se lee» y lo ponia. Prendido, apagado, prendido.
+
+     La correccion no es medir menos: es que el velo sea MONOTONO. Una vez que
+     una seccion necesito taparse, se queda tapada, y solo se sube si de verdad
+     hace falta bastante mas (UMBRAL). Nunca se baja ni se saca. Asi converge
+     en las primeras pasadas y se queda quieto, que es lo que el ojo espera.
+     Y del lado seguro: ante la duda, tapado — o sea legible. */
+  var YA = new WeakMap();          /* seccion -> alfa que ya se le aplico */
+  var UMBRAL = 0.06;               /* menos que esto no justifica repintar */
 
   /* ---- 4 · CUANDO SE HACE ------------------------------------------------ */
   /* Las secciones y los textos los escribe el motor despues, y la clienta puede
