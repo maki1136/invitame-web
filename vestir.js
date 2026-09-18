@@ -105,6 +105,39 @@
   }
 
   /**
+   * LO QUE NUNCA VIAJA DE UNA INVITACION A OTRA, se copie por donde se copie.
+   *
+   * Nacio adentro de `vestir()` (el camino formulario -> invitacion), pero el
+   * admin tiene OTROS dos caminos —«Duplicar» y «Clonar»— que copiaban el
+   * documento entero. Por ahi se filtro la voz de Camila y Tomas a la muestra
+   * de Valeria: el pase sonaba «Hola, somos Camila y Tom» en una boda que no
+   * era la de ellos. Maki lo escucho y lo reporto tres veces.
+   *
+   * Son dos cosas, y las dos son IDENTIDAD de la otra fiesta, no diseño:
+   *   · la VOZ de los anfitriones (suena sola, dice sus nombres)
+   *   · el codigo de la galeria, que es de ESA fiesta: dos eventos con el
+   *     mismo codigo comparten las fotos que suben los invitados.
+   *
+   * @param d  el borrador de la invitacion (SE MODIFICA)
+   * @return   que se limpio, para poder contarlo
+   */
+  function limpiarLoQueEsDeOtros(d) {
+    var hecho = [];
+    if (!d || !d.fx) return hecho;
+    if (d.fx.pasevoz && (d.fx.pasevoz.audio || d.fx.pasevoz.encendido)) {
+      d.fx.pasevoz.audio = '';
+      d.fx.pasevoz.onda  = '';
+      d.fx.pasevoz.encendido = false;
+      hecho.push('la voz del pase');
+    }
+    if (d.fx.galeria && d.fx.galeria.gid) {
+      d.fx.galeria.gid = '';
+      hecho.push('el codigo de la galeria');
+    }
+    return hecho;
+  }
+
+  /**
    * Le pone a `d` el vestido de `muestra`.
    * @param d          el borrador de la invitación (SE MODIFICA)
    * @param muestra    el evento de la muestra, tal como sale de Firestore
@@ -125,17 +158,14 @@
     /* las cinco limpiezas. Ver la nota grande de arriba. */
     if (d.fx) {
       if (d.fx.muestra) delete d.fx.muestra;
-      if (d.fx.galeria && d.fx.galeria.gid) d.fx.galeria.gid = '';
       if (d.fx.carta) {
         d.fx.carta.titulo = '';
         d.fx.carta.texto  = '';
         d.fx.carta.kicker = '';
       }
       if (d.fx.itinerario) d.fx.itinerario.momentos = [];
+      limpiarLoQueEsDeOtros(d);   /* la voz y el codigo de la galeria */
       if (d.fx.pasevoz) {
-        d.fx.pasevoz.audio = '';
-        d.fx.pasevoz.onda  = '';
-        d.fx.pasevoz.encendido = false;
         d.fx.pasevoz.departe = '';
         d.fx.pasevoz.nota    = '';
         d.fx.pasevoz.titulo  = '';
@@ -185,6 +215,7 @@
     DISENO: DISENO,
     esDeDiseno: esDeDiseno,
     vestir: vestir,
+    limpiarLoQueEsDeOtros: limpiarLoQueEsDeOtros,
     laVozDelCliente: laVozDelCliente,
     bajarMuestra: bajarMuestra,
     desdeFirestore: desdeFirestore
