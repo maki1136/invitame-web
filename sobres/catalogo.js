@@ -225,15 +225,41 @@ window.SOBRES_INVITAME = {
         un sobre abre para adentro?». Medido, el área del lacre iba de 22.509 a
         2.285 px achicándose siempre: se alejaba del ojo, o sea la solapa se iba
         detrás del sobre, atravesándolo. Con la bisagra arriba, rotateX tiene
-        que ir POSITIVO. Ahora el lacre crece 39 % antes de irse de cuadro.
+        que ir POSITIVO. Ahora el lacre crece 31 % antes de irse de cuadro.
         Y al abrir bien aparece el REVERSO, que antes no existía: se agregó como
         segunda cara con backface-visibility.
 
-     ⚠️ PESA 341 KB, no 4 MB, y eso no es capricho: el invitado toca entre los
-        3 y los 6 s, y un sobre liviano arranca antes SIEMPRE. El de Invitely,
-        en la misma red, tarda 24 s en estar listo. (El motor ya no exige el
-        video entero para arrancar —mide si la descarga le gana a la aguja—
-        pero eso no cambia la regla del peso.)
+     ★★★ LA v2: TENÍA 2,5 s MUERTOS DE 5,33 Y NO LOS HABÍA VISTO  (18/9/2026)
+
+        Maki: «¿entraste de verdad y lo revisaste frame por frame? ¿usaste la
+        skill?». No la había usado. Al hacerlo, los 128 cuadros de a uno dieron
+        tres defectos, todos de TIEMPO:
+
+          cuadros   1–40   1,67 s con el lacre quieto (sólo un brillo pasando)
+          cuadros  76–80   0,21 s de PANTALLA NEGRA VACÍA: la solapa ya se fue
+                           y la tarjeta todavía no llegó. Medido: lacre 0 px,
+                           tarjeta 0 px. Es la sensación de «se traba», pero
+                           venía adentro del archivo, no del reproductor.
+          cuadros 113–128  0,65 s de cola muerta: la tarjeta sube 9 px
+
+        Se rearmó re-cronometrando los cuadros que ya estaban (las capas del
+        render no sobrevivieron al contenedor). Los cortes se eligieron
+        MIDIENDO la diferencia entre cuadros, no a ojo: el salto 76→81 da 0,91
+        contra 2,3 de un paso normal, o sea que el empalme es invisible.
+
+          v1: 128 cuadros, 5,33 s, 2,5 s muertos
+          v2:  80 cuadros, 3,33 s, CERO cuadros congelados, cero saltos
+
+        ⚠️ ES OTRO `public_id` A PROPÓSITO (`sobre-onyx-v2`). Cloudinary sirve
+           con `max-age=2592000`: pisar el mismo id dejaría a los invitados con
+           el archivo viejo en caché hasta 30 días. Un id nuevo es el único
+           corte limpio.
+
+     ⚠️ PESA 244 KB servidos, no 4 MB, y eso no es capricho: el invitado toca
+        entre los 3 y los 6 s, y un sobre liviano arranca antes SIEMPRE. El de
+        Invitely, en la misma red, tarda 24 s en estar listo. (El motor ya no
+        exige el video entero para arrancar —mide si la descarga le gana a la
+        aguja— pero eso no cambia la regla del peso.)
 
      ⚠️ VIVE EN CLOUDINARY, NO EN /sobres/  (18/9/2026)
         Igual que `playa`, y por la misma razón práctica: el catálogo acepta
@@ -242,8 +268,7 @@ window.SOBRES_INVITAME = {
         La transformación NO es la de `playa`. `vc_auto` devuelve perfil HIGH,
         y los sobres se renderizan en **Constrained Baseline** a propósito, que
         es lo que decodifica cualquier teléfono viejo. Con
-        `vc_h264:baseline:3.1` Cloudinary respeta el perfil y encima baja el
-        archivo de 406 a 341 KB.
+        `vc_h264:baseline:3.1` Cloudinary respeta el perfil y entrega 244 KB.
 
         Comparado cuadro por cuadro contra el original (128 cuadros):
         PSNR mínimo 41,6 dB, medio 43,5 dB — arriba de 40 dB no se distingue.
@@ -274,8 +299,8 @@ window.SOBRES_INVITAME = {
      ---------------------------------------------------------------------- */
   onyx: {
     nombre:  "Onyx · lino negro, lacre de oro grabado (video)",
-    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/sobre-onyx.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-onyx-poster.jpg",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/sobre-onyx-v2.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-onyx-v2-poster.jpg",
     color:   "#0f0f0f",
     empalme: "foto"
   },
