@@ -63,12 +63,28 @@
     }
   }
 
+  /* ⚠️⚠️ NO ALCANZA CON REINTENTAR A TIEMPOS FIJOS. MEDIDO 19/9/2026.
+     La primera versión de esto reintentaba a los 0,5 / 1,8 / 4 s del toque, y
+     el video de la PORTADA seguía pausado. La razón: el toque es el clic en
+     «Ingresa», el sobre tarda en abrirse, y el `.cover-vid` lo arma el motor
+     DESPUÉS de todo eso — cuando ya se gastaron los tres reintentos.
+     Comprobado en vivo: ese video pasaba el filtro y arrancaba al llamarle
+     play() a mano. No era el filtro: era que nadie lo miraba cuando nació.
+     Por eso acá hay un VIGÍA que no depende del reloj: cada video que aparece
+     en la página, si es decorativo y está pausado, se arranca. */
+  var vigia = null;
+  function mirarParaSiempre() {
+    if (vigia || !window.MutationObserver) return;
+    vigia = new MutationObserver(function () { if (yaPaso) arrancar(); });
+    vigia.observe(document.documentElement, { childList: true, subtree: true });
+  }
+
   function alPrimerToque() {
     if (yaPaso) return;
     yaPaso = true;
     arrancar();
-    /* y de nuevo más tarde: la portada se arma DESPUÉS de que el sobre se va,
-       así que al momento del toque todavía puede no existir. */
+    mirarParaSiempre();
+    /* y unos pocos repasos, por si el video ya existía y sólo faltaba permiso */
     setTimeout(arrancar, 500);
     setTimeout(arrancar, 1800);
     setTimeout(arrancar, 4000);
