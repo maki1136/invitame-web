@@ -699,6 +699,7 @@
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
 
     '/colecciones/marfil.js',          /* copia de la referencia BOMA: serif espaciada y filetes */
+    '/colecciones/disco.js',           /* la primera OSCURA: plata sobre grafito, para los XV de disco */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
