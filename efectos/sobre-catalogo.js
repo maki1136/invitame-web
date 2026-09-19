@@ -1236,7 +1236,20 @@
       try { p = vid.play(); } catch (err) {}
       if (p && p.catch) p.catch(function () { fundir(); });
       /* el destello va en el ZOOM, no al final. Ver la nota de DESTELLO. */
-      setTimeout(fundir, luzDelSobre() * 1000);
+      /* ⚠️ EL DESTELLO VA CON EL RELOJ DEL VIDEO, NO CON EL DE LA PAGINA (19/9/2026).
+         Estaba con un setTimeout que arrancaba cuando se LLAMA a play(). Pero play()
+         tarda en arrancar de verdad: hay que bajar y decodificar el mp4. Medido en el
+         sobre disco (2,1 MB): el blanco entraba con el sobre TODAVIA CERRADO y la
+         apertura de las solapas no se veia NUNCA. Justo lo que Maki corrigio tres veces.
+         `luz` es un segundo del VIDEO, medido cuadro por cuadro: hay que leerlo del
+         video. El setTimeout queda de respaldo por si el video nunca arranca. */
+      var _luz = luzDelSobre();
+      var _yaFundio = false;
+      var _fundirUnaVez = function () { if (_yaFundio) return; _yaFundio = true; fundir(); };
+      var _relojLuz = setInterval(function () {
+        if (!vid || !vid.duration || vid.currentTime >= _luz) { clearInterval(_relojLuz); _fundirUnaVez(); }
+      }, 80);
+      setTimeout(function () { clearInterval(_relojLuz); _fundirUnaVez(); }, (_luz + 4) * 1000);
     }
 
     function tocar() {
