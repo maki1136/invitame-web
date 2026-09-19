@@ -134,7 +134,13 @@
   function seccion() {
     var k = cfg();
     var col = acento();
-    var titulo = String(k.titulo || 'El filtro de la boda');
+    /* ⚠️ NO DIGAS "LA BODA" EN UN XV (19/9/2026). El titulo estaba clavado y en la
+       muestra de Lupita se leia «El filtro de la boda» en unos quince. El motor ya
+       publica el tipo de evento en window.INVTIPO: {tipo, de, tv}. Para un XV, `de`
+       vale «los XV»; para una boda, «la boda». Se usa eso y no hace falta que nadie
+       se acuerde de cambiar el texto a mano. */
+    var _T = window.INVTIPO || {};
+    var titulo = String(k.titulo || ('El filtro de ' + (_T.de || 'la boda')));
     var bajada = String(k.bajada || 'Tómate una foto con el marco de nuestra fiesta y compártela.');
     var boton  = String(k.boton  || 'Abrir la cámara');
     var vidriera = on(k.vidriera);
