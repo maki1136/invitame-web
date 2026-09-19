@@ -50,39 +50,56 @@
     return true;
   }
 
+  /* ⚠️ CUANDO SE INTENTO CADA UNO. Sin esto, dos llamadas seguidas a play()
+     sobre el mismo video ABORTAN la primera y no arranca nunca. */
+  var ultimoIntento = (typeof WeakMap === 'function') ? new WeakMap() : null;
+  var ESPERA = 1200;   /* lo minimo entre dos intentos sobre el MISMO video */
+
   function arrancar() {
     var vs = document.getElementsByTagName('video');
+    var quedan = 0;
+    var ahora = Date.now();
     for (var i = 0; i < vs.length; i++) {
       var v = vs[i];
-      if (!v.paused) continue;
       if (!esDecorativo(v)) continue;
+      if (!v.paused) continue;
+      quedan++;
+      if (ultimoIntento) {
+        var t = ultimoIntento.get(v);
+        if (t && ahora - t < ESPERA) continue;   /* todavia esta intentando */
+        ultimoIntento.set(v, ahora);
+      }
       try {
         var p = v.play();
         if (p && p.catch) p.catch(function () {});
       } catch (e) {}
     }
+    return quedan;
   }
 
-  /* ⚠️⚠️ UN MutationObserver ACÁ ROMPE LO QUE YA ANDABA. MEDIDO 19/9/2026.
-     Se probó colgar un MutationObserver del documento para arrancar cualquier
-     video nuevo sin depender del reloj. Resultado medido: dejó de arrancar
-     TAMBIÉN el fondo, que con la versión de abajo ya funcionaba.
-     La causa: esta invitación muta todo el tiempo —reglas-duras.js corre en
-     bucle con cada cambio de clase—, así que el observador disparaba `play()`
-     decenas de veces por segundo sobre el mismo video, y cada llamada ABORTA
-     el intento anterior. El video nunca llegaba a arrancar.
-     Si algún día se vuelve a intentar: hace falta recordar qué videos ya se
-     intentaron y esperar entre intentos, no reaccionar a cada mutación. */
+  /* ⚠️⚠️ UN MutationObserver ACÁ ROMPE TODO. PROBADO Y MEDIDO EL 19/9/2026.
+     Se colgó un MutationObserver del documento para arrancar cualquier video
+     nuevo sin depender del reloj. Resultado: dejó de arrancar TAMBIÉN el fondo,
+     que ya funcionaba. La causa es que esta invitación muta en bucle
+     —reglas-duras.js corre con cada cambio de clase o atributo del marco—, así
+     que el observador disparaba `play()` decenas de veces por segundo y cada
+     llamada abortaba la anterior. NO volver por ahí.
+
+     La forma que sí anda: un REPASO cada tanto, con memoria de a quién se le
+     intentó y cuándo. Cubre los videos que nacen tarde —la portada se arma
+     DESPUÉS de que el sobre se va— sin machacar a ninguno. */
+  var REPASO = 700;    /* cada cuánto se mira la página */
+  var PACIENCIA = 25000;  /* cuánto tiempo se sigue mirando después del toque */
 
   function alPrimerToque() {
     if (yaPaso) return;
     yaPaso = true;
     arrancar();
-    /* y de nuevo más tarde: la portada se arma DESPUÉS de que el sobre se va,
-       así que al momento del toque todavía puede no existir. */
-    setTimeout(arrancar, 500);
-    setTimeout(arrancar, 1800);
-    setTimeout(arrancar, 4000);
+    var desde = Date.now();
+    var reloj = setInterval(function () {
+      var quedan = arrancar();
+      if (!quedan || Date.now() - desde > PACIENCIA) clearInterval(reloj);
+    }, REPASO);
   }
 
   var eventos = ['pointerdown', 'touchstart', 'mousedown', 'keydown', 'click'];
