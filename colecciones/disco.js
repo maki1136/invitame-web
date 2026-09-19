@@ -129,9 +129,18 @@
     if (s) s.parentNode.removeChild(s);
   }
 
+  /* ⚠️⚠️ NO ESCRIBIR SI YA ESTÁ ESCRITO. MEDIDO EL 19/9/2026: 2 CUADROS POR SEGUNDO.
+     La primera versión hacía `setAttribute('data-col', ID)` en cada repaso, aunque
+     el atributo ya valiera lo mismo. Poner un atributo ES una mutación aunque no
+     cambie nada, y `reglas-duras.js` corre `pasada()` con CADA cambio de atributo
+     del marco: el repaso se disparaba a sí mismo el módulo más caro de la
+     invitación, doce veces cada diez segundos. Con los dos videos y las nubes
+     encima, la página quedaba en 2 fps y ni siquiera se le podía sacar una foto.
+     Es la misma trampa que los videos del 19/9, con otra cara. */
   function poner() {
-    document.documentElement.setAttribute('data-col', ID);
-    window.INVCOLPALETA = PALETA_PROPIA;
+    var raiz = document.documentElement;
+    if (raiz.getAttribute('data-col') !== ID) raiz.setAttribute('data-col', ID);
+    if (window.INVCOLPALETA !== PALETA_PROPIA) window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
   }
 
