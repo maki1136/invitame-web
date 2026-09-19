@@ -629,6 +629,12 @@
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
+    '/efectos/videos-arrancan.js',      /* los videos decorativos arrancan al primer toque del invitado */
+    /* ⚠️ VA DESPUES DEL FONDO pero no depende de el: barre TODOS los <video>
+       decorativos, incluido el de la PORTADA que arma el motor. Medido en
+       lupita-mis15: fondo y portada quedaban PAUSADOS y se veia el poster
+       ampliado, que parece un fondo borroso. Sin esto, un fondo en video que
+       carga rapido no arranca NUNCA. */
     /* ⚠️ VA JUSTO DESPUES DEL FONDO, y no puede ir antes: necesita que la
        foto ya este puesta para poder medirla. Sin foto de fondo no hace
        absolutamente nada. */
