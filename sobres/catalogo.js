@@ -141,6 +141,24 @@ window.SOBRES_INVITAME = {
         desde la costura del centro". Por eso tampoco sirve para 'solapas',
         que asume solapas triangulares.
      ---------------------------------------------------------------------- */
+  /* ----------------------------------------------------------------------
+     DISCO — el sobre de la muestra de XV de Lupita. Papel plata sobre raso
+     negro con destellos de bola de espejos, y un lacre redondo con la bola.
+     Generado en Flow el 19/9/2026 y MEDIDO cuadro por cuadro (ver `luz`).
+     ---------------------------------------------------------------------- */
+  disco: {
+    nombre: "Disco · plata con lacre de bola de espejos (video)",
+    video:  "/sobres/sobre-disco.mp4",
+    poster: "/sobres/sobre-disco-poster.jpg",
+    color:  "#FBFBFA",
+    /* MEDIDO EL 19/9/2026 sobre los 24 cuadros (3 por segundo), brillo medio:
+         0,0 a 3,0 s  quieto, cerrado            brillo 80
+         3,3 a 3,7 s  la solapa se levanta       brillo baja a 68
+         4,0 s        abierto, entra la luz      brillo 83
+         4,3 a 7,7 s  zoom, se llena de blanco   brillo 102 -> 251
+       El destello entra cuando ARRANCA el zoom: 4,0. */
+    luz: 4.0
+  },
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
     video:  "/sobres/sobre-perlas.mp4",
