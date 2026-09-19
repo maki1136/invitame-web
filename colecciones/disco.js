@@ -62,7 +62,34 @@
     '--sec-col-v': PAPEL2,   /* el color de sector */
     '--sage':      PLATA2,   /* acento 1 */
     '--sage-cl':   PLATA3,   /* acento 2 */
-    '--oro':       BRILLO    /* acento 3 — plata brillante, nunca dorado */
+    '--oro':       BRILLO,   /* acento 3 — plata brillante, nunca dorado */
+
+    /* ⚠️⚠️ LAS OCHO QUE FALTABAN. MEDIDAS EN VIVO EL 19/9/2026.
+       Con las diez de arriba solamente, la invitación seguía siendo un gris
+       sucio, y yo lo estaba peleando con `!important` a los martillazos sin
+       entender por qué. La razón, leída del `<html>` de lupita-mis15:
+
+         --sec-col: #e7e9ec !important    ← LAS BANDAS DE TODAS LAS SECCIONES
+         --tl-papel: #fbf9f5              ← el papel del itinerario
+         --cf-sobre: #E9E7EF              ← EL SOBRE DE LA CARTA (el marfil
+                                            con damasco que Maki marcó)
+         --sobre-c / --flap-base: #FBFBFA ← el sobre y su solapa
+
+       Ninguna estaba en la tabla, así que se las quedaba la temática de la
+       muestra: superficies CLARAS abajo de una invitación NEGRA. No era la
+       colección peleándose con la paleta — era la colección sin reclamar
+       las variables que de verdad pintan el papel.
+
+       REGLA: una colección oscura tiene que quedarse con TODA superficie,
+       no sólo con los colores de letra. */
+    '--sec-col':   PAPEL,    /* las bandas de sección */
+    '--tl-papel':  PAPEL2,   /* el papel del itinerario */
+    '--tl-tinta':  PLATA,    /* la tinta del itinerario */
+    '--cf-sobre':  PAPEL2,   /* el sobre de la carta */
+    '--cf-col':    PLATA,    /* la letra adentro de la carta */
+    '--sobre-c':   PAPEL2,   /* el sobre */
+    '--flap-base': PAPEL2,   /* su solapa */
+    '--seal-c':    PLATA2    /* el lacre */
   };
 
   /* ---- la hoja de estilo ---------------------------------------------------
@@ -73,7 +100,7 @@
        .pasecard  rgb(246,243,237)   el pase con el QR
        .scratchcard rgb(246,243,237) la raspadita
        .rd-tapa   rgb(246,243,237)   la tapa del video y de la playlist
-     El resto (.sec.verde, .e-tint, .cf-*-tint, body.tex-lino) sale de la
+     El resto (.sec, .sec.verde, .e-tint, .cf-*-tint, body.tex-lino) sale de la
      paleta y ya queda bien con la tabla de arriba.
 
      ⚠️ `#dc-nada` no existe: está para subirle el peso a la regla sin tener que
@@ -129,19 +156,66 @@
     if (s) s.parentNode.removeChild(s);
   }
 
-  /* ⚠️⚠️ NO ESCRIBIR SI YA ESTÁ ESCRITO. MEDIDO EL 19/9/2026: 2 CUADROS POR SEGUNDO.
+  /* ⚠️⚠️ QUE LAS REGLAS DURAS VUELVAN A MEDIR. MEDIDO EL 19/9/2026.
+     `reglas-duras.js` mira el color que hay DEBAJO de cada texto y le escribe
+     el color de letra en el ATRIBUTO `style`, con `!important`:
+
+       color: rgb(20,18,18) !important;
+       -webkit-text-fill-color: rgb(20,18,18) !important;
+       text-shadow: rgba(255,255,255,.55) 0 1px 2px !important;
+
+     Un estilo en línea con `!important` le gana a CUALQUIER hoja, incluso a
+     una hoja con `!important`. Y como las reglas duras miden ANTES de que la
+     colección oscurezca las superficies, dejan escrito «esto va casi negro
+     con halo blanco» sobre tarjetas que un segundo después son grafito: 115
+     textos negros sobre negro. Eso, y no otra cosa, era el «color con color».
+
+     No se toca el motor: las reglas duras firman lo que pintan con
+     `data-regla-luz`, así que alcanza con BORRARLES LA FIRMA una sola vez,
+     cuando la colección se prende. En el siguiente repaso vuelven a medir —
+     ahora contra el grafito — y pintan plata ellas solas.
+
+     ⚠️ UNA SOLA VEZ, cuando PASA de apagada a prendida. Si se hiciera en cada
+     repaso, se estaría borrando y repintando doce veces cada diez segundos.
+     `data-regla-inline` = 1 marca lo que ya venía escrito a mano: no se toca. */
+  function despintarUnaVez() {
+    var marco = document.querySelector('.frame');
+    if (!marco) return;
+    var nodos = marco.querySelectorAll('[data-regla-luz]');
+    for (var i = 0; i < nodos.length; i++) {
+      var el = nodos[i];
+      if (el.getAttribute('data-regla-inline') === '1') continue;
+      el.style.removeProperty('color');
+      el.style.removeProperty('-webkit-text-fill-color');
+      el.style.removeProperty('text-shadow');
+      el.removeAttribute('data-regla-luz');
+    }
+  }
+
+  var estabaPuesta = false;
+
+  /* ⚠️⚠️ NO ESCRIBIR SI YA ESTÁ ESCRITO. MEDIDO EL 19/9/2026.
      La primera versión hacía `setAttribute('data-col', ID)` en cada repaso, aunque
      el atributo ya valiera lo mismo. Poner un atributo ES una mutación aunque no
      cambie nada, y `reglas-duras.js` corre `pasada()` con CADA cambio de atributo
      del marco: el repaso se disparaba a sí mismo el módulo más caro de la
-     invitación, doce veces cada diez segundos. Con los dos videos y las nubes
-     encima, la página quedaba en 2 fps y ni siquiera se le podía sacar una foto.
-     Es la misma trampa que los videos del 19/9, con otra cara. */
+     invitación, doce veces cada diez segundos. Queda igual, porque está bien —
+     pero ojo con la lección de al lado: la caída a 2 fps que le eché la culpa a
+     esto NO era esto. Era la ventana de Chrome MINIMIZADA. Ver la skill del
+     banco de pruebas: una ventana minimizada no dibuja ni un cuadro, `rAF` no
+     corre nunca y la medición da 0 sin que nada esté roto. Medidos 60,3 fps con
+     la colección prendida, los dos videos andando y las nubes encima. */
   function poner() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-col') !== ID) raiz.setAttribute('data-col', ID);
     if (window.INVCOLPALETA !== PALETA_PROPIA) window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
+    if (!estabaPuesta) {
+      estabaPuesta = true;
+      /* un respiro para que la paleta ya haya repintado las variables */
+      setTimeout(despintarUnaVez, 1800);
+      setTimeout(despintarUnaVez, 4000);
+    }
   }
 
   function sacar() {
@@ -149,6 +223,7 @@
       document.documentElement.removeAttribute('data-col');
     }
     if (window.INVCOLPALETA === PALETA_PROPIA) { window.INVCOLPALETA = null; }
+    estabaPuesta = false;
     sacarHoja();
   }
 
