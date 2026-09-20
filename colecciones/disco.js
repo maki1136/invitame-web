@@ -130,6 +130,18 @@
     /* la raspadita y el pase, por dentro */
     ':is(#dc-nada, .scratchcard) *, :is(#dc-nada, .pasecard) *{ color:' + PLATA + '; }',
     /* el papel del marco */
+    /* ⚠️ EL BANDEJON DEL PASE. La regla del motor es `.pase{background:var(--verde)}`,
+       y en Disco `--verde` ES LA PLATA: la banda entera salia clara. */
+    ':is(#dc-nada, section.pase){ background:' + PAPEL + '!important; color:' + PLATA + '!important; }',
+    /* ⚠⚠ EL COLOR DE LETRA DE LA TARJETA, NO SOLO EL DE SUS HIJOS.
+       Medido el 20/9/2026 con la coleccion prendida: .pasecard heredaba
+       rgb(21,20,26) y .scratchcard, .tl y .rd-tapa rgb(58,69,61) — oscuro
+       sobre oscuro. La regla `.tarjeta *` NO alcanza al elemento mismo. */
+    ':is(#dc-nada, .pasecard), :is(#dc-nada, .scratchcard), :is(#dc-nada, .tl),',
+    ':is(#dc-nada, .rd-tapa), :is(#dc-nada, .padres), :is(#dc-nada, .col-vtapa){',
+    '  color:' + PLATA + '!important;',
+    '}',
+    ':is(#dc-nada, .tl), :is(#dc-nada, .padres){ background-color:rgba(30,28,37,.72)!important; }',
     'html[data-col="' + ID + '"] body{ background-color:' + PAPEL + '!important; }'
   ].join('\n');
 
@@ -208,6 +220,12 @@
   function poner() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-col') !== ID) raiz.setAttribute('data-col', ID);
+    /* ⚠⚠ EL GANCHO QUE EL MOTOR YA TENIA Y YO NO ESTABA USANDO.
+       17 reglas del motor estan escritas como `html:not([data-coleccion]) ...`
+       y son justo los defaults CLAROS: la raspadita, el pase, el QR, el
+       itinerario, la tapa del video y Personas. Poniendo el atributo se apagan
+       solas, como esta previsto, en vez de taparlas a martillazos. */
+    if (raiz.getAttribute('data-coleccion') !== ID) raiz.setAttribute('data-coleccion', ID);
     if (window.INVCOLPALETA !== PALETA_PROPIA) window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
     if (!estabaPuesta) {
@@ -221,6 +239,7 @@
   function sacar() {
     if (document.documentElement.getAttribute('data-col') === ID) {
       document.documentElement.removeAttribute('data-col');
+      document.documentElement.removeAttribute('data-coleccion');
     }
     if (window.INVCOLPALETA === PALETA_PROPIA) { window.INVCOLPALETA = null; }
     estabaPuesta = false;
