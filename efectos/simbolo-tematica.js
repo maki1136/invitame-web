@@ -24,7 +24,8 @@
    aros de siempre y la marca redonda de siempre.
 
    Como se enciende:
-     INVEV.fx.tematica.simbolo = 'mar'   // 'mar' | 'perlas' | 'hojas' | 'luz' | 'rombo'
+     INVEV.fx.tematica.simbolo = 'mar'
+     // 'mar' | 'perlas' | 'hojas' | 'luz' | 'rombo' | 'disco'
 
    LOS JUEGOS
      mar     estrella de mar de cinco puntas    (bodas en la playa)
@@ -32,6 +33,7 @@
      hojas   dos hojas de olivo enfrentadas     (campo, toscana)
      luz     una llama larga                    (velas, salones de noche)
      rombo   un rombo fino                      (neutro, papeleria clasica)
+     disco   una bola de espejos colgada        (XV disco, fiestas de noche)
 
    COMO ESTA DIBUJADO, Y POR QUE ASI
    Cada juego es UN dibujo en un viewBox de 24x24, para poder meterlo tanto en
@@ -40,10 +42,24 @@
    respetando el viewBox 120x44 que ya usa `.adorno`, asi entra donde estaba
    sin tocar una sola medida del motor.
 
+   ⚠️⚠️ LA TRAMPA DEL RELLENO. `dataUri()` reemplaza `fill="none"` por el color
+   del PAPEL, para que la marca del itinerario tape la linea vertical (ver mas
+   abajo). Ese reemplazo es GLOBAL al dibujo. Por eso, en un juego con varias
+   piezas, SOLO la pieza que tiene que quedar maciza lleva `fill="none"`; las
+   demas van con `fill="transparent"`, que no matchea el reemplazo y queda solo
+   el trazo. Si a las facetas de la bola se les pone `fill="none"` se rellenan
+   y la bola se convierte en una mancha.
+
    `currentColor` EN EL ADORNO. El motor ya decide el color del adorno segun la
    seccion (`.sec.verde .adorno{color:...}`), y `banda-tematica.js` lo cambia
    otra vez cuando la banda es clara. Si el simbolo trajera su propio color se
    pelearia con los dos. Dibuja en `currentColor` y hereda siempre.
+
+   ⭐ DEJA FIRMA EN EL `<html>`: `html[data-simbolo="<juego>"]`.
+   Antes no habia forma de comprobar DESDE AFUERA que la marca del itinerario
+   era la de la tematica y no el circulito de fabrica — y ese error se repitio
+   tres veces. Con la firma, `chequeo/muestra.js` lo puede exigir, y la
+   coleccion puede colgarle estilos propios sin adivinar.
 
    ES UNA PIEL. El SVG original del adorno NO se borra: se esconde, y el nuevo
    se agrega al lado. Sacando el <style> y los nodos marcados vuelve todo.
@@ -67,7 +83,18 @@
            '<path d="M12 12v8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
     luz: '<path d="M12 3c2.6 3.1 4 5.4 4 7.6a4 4 0 11-8 0C8 8.4 9.4 6.1 12 3z"' +
          ' fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    rombo: '<path d="M12 3.5L20.5 12 12 20.5 3.5 12z" fill="none" stroke="currentColor" stroke-width="1.3"/>'
+    rombo: '<path d="M12 3.5L20.5 12 12 20.5 3.5 12z" fill="none" stroke="currentColor" stroke-width="1.3"/>',
+
+    /* ⭐ LA BOLA DE ESPEJOS. El orden importa: primero la esfera maciza (la
+       unica con `fill="none"`, que se vuelve el color del papel y tapa la
+       linea del itinerario) y encima las facetas, que son solo trazo. */
+    disco: '<path d="M12 2.1v3.1" fill="transparent" stroke="currentColor"' +
+           ' stroke-width="1.1" stroke-linecap="round"/>' +
+           '<circle cx="12" cy="13.4" r="8.1" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
+           '<path d="M12 5.3v16.2M4.2 10.9h15.6M3.9 15.9h16.2" fill="transparent"' +
+           ' stroke="currentColor" stroke-width=".75" stroke-linecap="round"/>' +
+           '<path d="M8.3 6.2c-1.7 4.7-1.7 9.7 0 14.4M15.7 6.2c1.7 4.7 1.7 9.7 0 14.4"' +
+           ' fill="transparent" stroke="currentColor" stroke-width=".75"/>'
   };
 
   function tema() {
@@ -101,7 +128,11 @@
      variables que ya calcula `itinerario.js` (`--tl-tinta`, `--tl-papel`) y se
      escriben literales adentro del archivo, porque un data-URI no puede leer
      variables CSS. Si todavia no estan, se vuelve a intentar en la pasada
-     siguiente: por eso los colores entran en la firma. */
+     siguiente: por eso los colores entran en la firma.
+
+     ⚠️ Y esas dos variables las manda la COLECCION cuando hay una activa (ver
+     `efectos/itinerario.js`, error 3). Si no, el simbolo se hornea con el par
+     claro y queda marfil sobre papel negro. */
   function colores() {
     var cs = getComputedStyle(document.documentElement);
     var tinta = (cs.getPropertyValue('--tl-tinta') || '').trim();
@@ -121,6 +152,14 @@
     return 'url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '")';
   }
 
+  /* ⭐ publico, para que la coleccion o el chequeo puedan usar el mismo dibujo
+     en otros lugares (el boton de confirmar, por ejemplo) sin copiarlo. */
+  function uriDe(juego, tinta, papel) {
+    if (!JUEGOS[juego]) return '';
+    var c = colores();
+    return dataUri(juego, { tinta: tinta || c.tinta, papel: papel || c.papel });
+  }
+
   function css(juego) {
     var u = dataUri(juego, colores());
     return [
@@ -131,12 +170,12 @@
       '  border-radius:0 !important;',
       '  border:0 !important;',
       '  box-shadow:none !important;',
-      '  width:16px !important;height:16px !important;',
+      '  width:18px !important;height:18px !important;',
       '  background:' + u + ' center/contain no-repeat !important;',
       '  -webkit-mask:none !important; mask:none !important;',
       '}',
-      '.tl.tl-centro > .it:nth-child(odd)::before{margin-top:-8px !important;right:-33.5px !important}',
-      '.tl.tl-centro > .it:nth-child(even)::before{margin-top:-8px !important;left:-33.5px !important}'
+      '.tl.tl-centro > .it:nth-child(odd)::before{margin-top:-9px !important;right:-34.5px !important}',
+      '.tl.tl-centro > .it:nth-child(even)::before{margin-top:-9px !important;left:-34.5px !important}'
     ].join('\n');
   }
 
@@ -155,6 +194,7 @@
       for (var k = 0; k < nuevos.length; k++) nuevos[k].remove();
       var ori = document.querySelectorAll('.adorno > svg[data-original]');
       for (var m = 0; m < ori.length; m++) ori[m].removeAttribute('data-original');
+      document.documentElement.removeAttribute('data-simbolo');
       return;
     }
 
@@ -164,6 +204,12 @@
       document.head.appendChild(hoja);
     }
     hoja.textContent = css(juego);
+
+    /* ⭐ la firma: quien mire desde afuera puede comprobar que la marca del
+       itinerario es la de la tematica, no el circulito de fabrica. */
+    if (document.documentElement.getAttribute('data-simbolo') !== juego) {
+      document.documentElement.setAttribute('data-simbolo', juego);
+    }
 
     var ads = document.querySelectorAll('.adorno');
     for (var i = 0; i < ads.length; i++) {
@@ -192,6 +238,8 @@
       if (++n > 40) clearInterval(t);              /* 10 s: el itinerario tarda */
     }, 250);
   }
+
+  window.INVSIMBOLO = { juegos: JUEGOS, uri: uriDe, elegido: elegido };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', arrancar, { once: true });
