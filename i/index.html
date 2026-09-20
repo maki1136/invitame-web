@@ -632,12 +632,12 @@
       <div class="bd"><h3 id="ev1-t">Ceremonia</h3><div class="sub" id="ev1-s">Basílica de Santa María</div><div class="addr" id="ev1-a">28 nov · 12:00 hs · Fray Juan de Zumárraga 2</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
       <a class="btn gh" id="ev1-cal" href="#" target="_blank">Agendar</a></div>
-      <div class="acc-panel"><div class="acc-inner"><iframe id="ev1-map" src="https://www.google.com/maps?q=19.4847,-99.1176&z=15&output=embed" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div>
+      <div class="acc-panel"><div class="acc-inner"><iframe id="ev1-map" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div>
     <div class="evento reveal"><div class="ph" data-imgbg="img_f-ceremonia-2-imagen-jpg-480x320-"></div>
       <div class="bd"><h3 id="ev2-t">Recepción</h3><div class="sub" id="ev2-s">Masía Mas Badó</div><div class="addr" id="ev2-a">28 nov · 14:00 hs · Juan Vázquez de Mella 525</div>
       <div class="btnrow"><button class="btn acc-btn" onclick="acc(this)">Ver mapa <span class="chev">▾</span></button>
       <a class="btn gh" id="ev2-cal" href="#" target="_blank">Agendar</a></div>
-      <div class="acc-panel"><div class="acc-inner"><iframe id="ev2-map" src="https://www.google.com/maps?q=19.4326,-99.1332&z=15&output=embed" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div>
+      <div class="acc-panel"><div class="acc-inner"><iframe id="ev2-map" style="width:100%;height:190px;border:0;border-radius:10px" loading="lazy"></iframe></div></div></div></div>
     <!-- TERCER lugar (el form viejo permitia hasta 3). Se oculta solo si no lo cargan. -->
     <div class="evento reveal" style="display:none"><div class="ph" data-imgbg="img_f-ceremonia-3-imagen-jpg-480x320-"></div>
       <div class="bd"><h3 id="ev3-t">Fiesta</h3><div class="sub" id="ev3-s"></div><div class="addr" id="ev3-a"></div>
@@ -1193,7 +1193,15 @@
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.14});
   document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
 
-  function acc(btn){ btn.classList.toggle('open'); const p=btn.parentElement.nextElementSibling; p.classList.toggle('open'); }
+  function acc(btn){ btn.classList.toggle('open');
+    const p=btn.parentElement.nextElementSibling; p.classList.toggle('open');
+    /* al abrir, recien ahi se le da el src a los iframes que esperan en data-src */
+    if(p && p.classList.contains('open')){
+      p.querySelectorAll('iframe[data-src]').forEach(function(f){
+        if(!f.getAttribute('src')) f.setAttribute('src', f.getAttribute('data-src'));
+      });
+    }
+  }
   /* ⚠️ COPIAR TIENE QUE AVISAR.  (17/9/2026)
      Antes copiaba en silencio, y si `navigator.clipboard` no estaba (Safari
      viejo, o la pagina servida sin https) no hacia absolutamente NADA: el
@@ -1937,7 +1945,18 @@
         var u=par[0], f=el(par[1]); if(!f) return;
         var _caja=f.closest('.acc-panel'); var _fila=f.closest('.bd');
         var _btn=_fila&&_fila.querySelector('.acc-btn');
-        if(u){ f.src=u; if(_caja)_caja.style.display=''; if(_btn)_btn.style.display=''; return; }
+        /* ⚠⚠ EL SRC SE PONE AL ABRIR EL ACORDEON, NO ANTES. (20/9/2026)
+           El iframe nacia con un src de ejemplo (coordenadas fijas de Ciudad
+           de Mexico) y lo cambiabamos por codigo. Pero vive dentro de un panel
+           cerrado: el navegador ya habia empezado a cargar el src viejo y se
+           quedaba con ESE mapa, aunque el atributo dijera otra cosa. La
+           direccion escrita decia Guadalajara y el mapa marcaba la Basilica de
+           Guadalupe en CDMX. Se veia MIRANDO; el atributo no lo delataba.
+           Ahora la URL se guarda en data-src y el src se asigna la primera vez
+           que el invitado abre Ver mapa (ver acc()). De paso, el mapa no se
+           descarga hasta que lo piden, que era justo la idea. */
+        if(u){ f.setAttribute('data-src', u); f.removeAttribute('src');
+               if(_caja)_caja.style.display=''; if(_btn)_btn.style.display=''; return; }
         // Sin dato de mapa: esconder el botón "Ver mapa" en vez de dejar el mapa
         // de ejemplo (que apuntaba a unas coordenadas fijas de Ciudad de México).
         f.removeAttribute('src');
