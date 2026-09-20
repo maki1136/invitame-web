@@ -124,8 +124,11 @@
   function visible(el) {
     if (el.checkVisibility) {
       try {
-        if (!el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true,
-                                  contentVisibilityAuto: true })) return false;
+        /* ⚠ SIN `contentVisibilityAuto`: esa opción devuelve false para todo lo
+           que está FUERA DE PANTALLA, y acá se mide la invitación entera, no el
+           pedazo que se ve. Con ella puesta, Personas y el itinerario daban
+           "0 elementos" y las reglas cantaban OK sin haber mirado nada. */
+        if (!el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true })) return false;
       } catch (e) {}
     }
     var cs = getComputedStyle(el);
@@ -193,6 +196,13 @@
     var cont = document.querySelector('.padres');
     if (!cont) return { pasa: true, nota: 'esta invitación no tiene Personas' };
     var tar = [].slice.call(cont.children).filter(visible);
+    /* ⚠⚠ NO SE MARCA OK LO QUE NO SE PUDO MIRAR. Es el error 13 de
+       `reglas-duras`: un caché sin invalidación no es una optimización, es un
+       bug que se esconde de sus propias pruebas. Si el bloque EXISTE y no se
+       pudieron medir las tarjetas, eso es una FALLA, no un aprobado. */
+    if (!tar.length && cont.children.length) {
+      return { pasa: false, nota: 'hay ' + cont.children.length + ' persona(s) en el DOM y ninguna se pudo medir' };
+    }
     if (tar.length < 2) return { pasa: true, nota: tar.length + ' persona(s)' };
     var tops = tar.map(function (t) { return Math.round(t.getBoundingClientRect().top); });
     var filas = tops.filter(function (v, i, a) { return a.indexOf(v) === i; }).length;
@@ -352,6 +362,9 @@
       var cs = getComputedStyle(el);
       var fg = aRGB(cs.webkitTextFillColor) || aRGB(cs.color);
       if (!fg) return;
+      /* ⚠ LA FECHA DEBAJO DE LA RASPADITA ES PLATA SOBRE PLATA A PROPÓSITO:
+         está TAPADA hasta que el invitado raspa. Medirla da 1,19 y es correcto. */
+      if (el.closest && el.closest('.scratch-sec, .scratchcard')) return;
       var bg = fondoDe(el);
       var a = opacidadReal(el) * (fg[3] === undefined ? 1 : fg[3]);
       var v = contraste(mezcla([fg[0], fg[1], fg[2], a], bg), bg);
