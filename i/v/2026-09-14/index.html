@@ -952,9 +952,20 @@
     l.style.opacity=Math.max(0,Math.min(1,(p-0.05)*1.8));
     l.style.transform='translateY('+(160*(1-p)).toFixed(1)+'px) scale('+(0.97+p*0.03).toFixed(3)+')';
   }
-  function buildAmbiente(){ const c=FX.ambiente; if(!c||c.on===false||c.tipo==='ninguno')return;
+  function buildAmbiente(){ const c=FX.ambiente;
+    /* LIMPIAR SIEMPRE, ANTES DE DECIDIR. 20/9/2026.
+       Antes esto cortaba con `return` cuando el ambiente venia APAGADO, y la
+       limpieza estaba DESPUES del corte. Resultado: el cielo que se habia
+       armado con los datos de EJEMPLO quedaba pegado en la seccion, aunque el
+       evento real trajera ambiente.on = false. En la muestra de XV de Lupita
+       eso pintaba una foto de cielo DIURNO, blanca, adentro de una invitacion
+       negra: la banda blanca del itinerario.
+       Es la misma familia que todos los `se filtran datos de la boda de
+       ejemplo`: no alcanza con no pintar lo nuevo, hay que BORRAR lo viejo. */
+    document.querySelectorAll('.ambiente, .amb-front').forEach(e=>e.remove());
+    document.querySelectorAll('.sec.amb-on').forEach(e=>e.classList.remove('amb-on'));
+    if(!c||c.on===false||c.tipo==='ninguno')return;
     const sec=document.querySelector('section[data-sec="'+c.seccion+'"]'); if(!sec)return;
-    sec.querySelectorAll(':scope > .ambiente, :scope > .amb-front').forEach(e=>e.remove());
     sec.classList.add('amb-on');
     const a=document.createElement('div'); a.className='ambiente '+c.tipo;
     a.style.setProperty('--amb-top',c.colorTop); a.style.setProperty('--amb-bot',c.colorBot);
