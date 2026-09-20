@@ -209,12 +209,17 @@
     P + ':is(#dc-nada, .scratch-hint){',
     '  text-shadow:0 1px 2px rgba(10,9,13,.95), 0 0 10px rgba(10,9,13,.88), 0 0 24px rgba(10,9,13,.75)!important;',
     '}',
-    P + ':is(#dc-nada, .sec) > .kick,',
+    /* el sobretitulo lleva un velo MAS chico y mas suave: con el mismo que el
+       titulo se leia como una franja rectangular cruzando la seccion. */
+    P + ':is(#dc-nada, .sec) > .kick{',
+    '  background-image:radial-gradient(60% 150% at 50% 50%, rgba(8,7,11,.66) 0%, rgba(8,7,11,.38) 48%, rgba(8,7,11,0) 84%)!important;',
+    '  background-repeat:no-repeat!important; background-position:center!important;',
+    '  background-size:86% 220%!important;',
+    '}',
     P + ':is(#dc-nada, .sec) > h2{',
-    '  background-image:radial-gradient(70% 120% at 50% 50%, rgba(8,7,11,.86) 0%, rgba(8,7,11,.62) 45%, rgba(8,7,11,0) 82%)!important;',
-    '  background-repeat:no-repeat!important;',
-    '  background-position:center!important;',
-    '  background-size:118% 190%!important;',
+    '  background-image:radial-gradient(64% 130% at 50% 50%, rgba(8,7,11,.88) 0%, rgba(8,7,11,.60) 46%, rgba(8,7,11,0) 84%)!important;',
+    '  background-repeat:no-repeat!important; background-position:center!important;',
+    '  background-size:104% 210%!important;',
     '}',
     /* el papel del marco */
     /* ⚠️ EL BANDEJON DEL PASE. La regla del motor es `.pase{background:var(--verde)}`,
