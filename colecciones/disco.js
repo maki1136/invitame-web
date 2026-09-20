@@ -92,26 +92,33 @@
     '--seal-c':    PLATA2    /* el lacre */
   };
 
-  /* ---- la hoja de estilo ---------------------------------------------------
-     ⚠️ Sólo las superficies que están CLAVADAS en blanco y que la paleta no
-     alcanza. Medidas en vivo el 19/9/2026 sobre lupita-mis15:
-       .evento    rgb(250,251,252)   las tarjetas de ceremonia y fiesta
-       .hotel     rgba(255,255,255,.55)
-       .pasecard  rgb(246,243,237)   el pase con el QR
-       .scratchcard rgb(246,243,237) la raspadita
-       .rd-tapa   rgb(246,243,237)   la tapa del video y de la playlist
-       .cf-letter linear-gradient(#fffefb,#faf5ea)   la hoja de la carta
-     El resto (.sec, .sec.verde, .e-tint, .cf-*-tint, body.tex-lino) sale de la
-     paleta y ya queda bien con la tabla de arriba.
-
-     ⚠️ `#dc-nada` no existe: está para subirle el peso a la regla sin tener que
+  /* ⚠️ `#dc-nada` no existe: está para subirle el peso a la regla sin tener que
      perseguir clases. Es el truco que ya usa Marfil. */
   /* el ancla de peso: los DOS atributos que pone la coleccion en el marco */
   var P = 'html[data-col="' + ID + '"][data-coleccion="' + ID + '"] ';
 
+  /* ⭐ LA BOLA DE ESPEJOS NO SE COPIA ACÁ.
+     Se le pide a `efectos/simbolo-tematica.js`, que es el dueño del dibujo y
+     el que ya lo usa en el itinerario. Si algún día se redibuja, cambian los
+     dos lugares juntos. Por eso el CSS es una FUNCIÓN y no una constante:
+     necesita leer ese módulo en tiempo de ejecución. Si todavía no cargó,
+     devuelve '' y la regla se saltea; en el próximo repaso (1,2 s) entra. */
+  function bola(tinta, papel) {
+    try {
+      if (window.INVSIMBOLO && window.INVSIMBOLO.uri) {
+        return window.INVSIMBOLO.uri('disco', tinta, papel);
+      }
+    } catch (e) {}
+    return '';
+  }
+
+  function armarCSS() {
+    var uriBola  = bola(PLATA, PAPEL2);     /* para la perilla del interruptor */
+    var uriTenue = bola(PLATA3, 'transparent'); /* para el fondo de la tapa */
+
   var CSS = [
     ':is(#dc-nada, .evento), :is(#dc-nada, .hotel), :is(#dc-nada, .pasecard),',
-    ':is(#dc-nada, .scratchcard), :is(#dc-nada, .rd-tapa), :is(#dc-nada, .col-vtapa){',
+    ':is(#dc-nada, .scratchcard), :is(#dc-nada, .col-vtapa){',
     '  background-color:' + PAPEL2 + '!important;',
     '  border:1px solid rgba(230,228,238,.22)!important;',
     '  box-shadow:0 1px 0 rgba(230,228,238,.10) inset, 0 10px 28px rgba(0,0,0,.45)!important;',
@@ -153,6 +160,31 @@
     /* la tarjeta del clima, que nace blanca con letra oscura */
     ':is(#dc-nada, .clima-card){ background:' + PAPEL2 + '!important; color:' + PLATA + '!important; }',
     ':is(#dc-nada, .clima-card) *{ color:' + PLATA + '!important; }',
+
+    /* ⚠⚠⚠ EL CUADRADO VIOLETA. MAKI, 20/9/2026: «fijate que tenes un cuadrado
+       violeta. No va a eso, negro.»
+       La tapa que esconde el reproductor estaba en PAPEL2 (#1E1C25). Contra un
+       fondo casi negro eso no se lee como una tapa: se lee como un cuadrado
+       violaceo plantado en el medio de la seccion. Va en PAPEL, con un filete
+       de plata muy tenue y la bola de espejos dibujada detras del play, para
+       que sea una PIEZA y no un rectangulo. */
+    P + ':is(#dc-nada, .rd-tapa){',
+    '  background-color:' + PAPEL + '!important;',
+    (uriTenue
+      ? '  background-image:' + uriTenue + '!important;' +
+        'background-repeat:no-repeat!important;background-position:center!important;' +
+        'background-size:58% auto!important;'
+      : '  background-image:none!important;'),
+    '  border:1px solid rgba(230,228,238,.14)!important;',
+    '  box-shadow:0 10px 30px rgba(0,0,0,.55)!important;',
+    '  color:' + PLATA + '!important;',
+    '}',
+    P + ':is(#dc-nada, .rd-tapa) .rd-aro{',
+    '  border-color:rgba(230,228,238,.55)!important;',
+    '  background:rgba(21,20,26,.55)!important;',
+    '  backdrop-filter:blur(2px)!important;',
+    '}',
+
     /* ⚠⚠ EL CIELO DEL AMBIENTE. MEDIDO EL 20/9/2026.
        `fx.ambiente` tipo `nubes` dibuja SIEMPRE la misma foto, /i/cielo: un
        cielo DIURNO, blanco. Los colores de la tematica (colorTop/colorBot) no
@@ -217,9 +249,24 @@
     P + ':is(#dc-nada, .sec) > p,',
     P + ':is(#dc-nada, .sec) > .sub,',
     P + ':is(#dc-nada, .portada) .kicker,',
+    P + ':is(#dc-nada, .padres) .nm,',
+    P + ':is(#dc-nada, .padres) .rl,',
     P + ':is(#dc-nada, .scratch-hint){',
     '  text-shadow:0 1px 2px rgba(10,9,13,.95), 0 0 10px rgba(10,9,13,.88), 0 0 24px rgba(10,9,13,.75)!important;',
     '}',
+
+    /* ⚠⚠⚠ LOS NUEVE SOBRETITULOS DORADOS. MEDIDOS EL 20/9/2026.
+       «La fecha», «Antes que nada», «El gran dia», «Etiqueta», «Recuerdos»,
+       «La banda sonora», «Con cariño», «Corre la voz» y «Estamos para
+       ayudarte» salian en rgb(143,109,59): dorado adentro de una invitacion
+       que es plata y grafito. La coleccion se queda con el color del `.kick`.
+       Con el color de fabrica ya en plata media, `reglas-duras` mide, ve que
+       pasa sobrado contra el negro y lo deja en `ok` sin tocarlo. */
+    P + ':is(#dc-nada, .kick), ' + P + ':is(#dc-nada, .kicker){',
+    '  color:' + PLATA2 + '!important;',
+    '  -webkit-text-fill-color:' + PLATA2 + '!important;',
+    '}',
+
     /* el sobretitulo lleva un velo MAS chico y mas suave: con el mismo que el
        titulo se leia como una franja rectangular cruzando la seccion. */
     P + ':is(#dc-nada, .sec) > .kick{',
@@ -244,7 +291,48 @@
     ':is(#dc-nada, .rd-tapa), :is(#dc-nada, .padres), :is(#dc-nada, .col-vtapa){',
     '  color:' + PLATA + '!important;',
     '}',
-    ':is(#dc-nada, .tl), :is(#dc-nada, .padres){ background-color:rgba(30,28,37,.72)!important; }',
+    /* ⚠ El itinerario SI lleva panel (es una tarjeta con texto adentro).
+       Personas NO: ahi el panel hacia el mismo bulto violaceo que la tapa, y
+       las fotos redondas ya se recortan solas. Los nombres se apoyan en el
+       velo de texto de arriba. */
+    ':is(#dc-nada, .tl){ background-color:rgba(30,28,37,.72)!important; }',
+    P + ':is(#dc-nada, .padres){ background-color:transparent!important; }',
+
+    /* ⚠⚠⚠ PERSONAS: LAS TRES EN UNA FILA, PEGADAS, Y MAS GRANDES.
+       Maki, 20/9/2026: «la skill dice claramente que las personas, cuando son
+       tres, tienen que estar una pegada a la otra, y siempre cometes el mismo
+       error».
+       LA CAUSA, MEDIDA: `.padres` es un grid con `grid-template-columns:168px
+       168px` — DOS columnas FIJAS. Con tres personas caia 2 + 1. No era una
+       cuestion de lugar: el marco mide 500 px, asi que con `repeat(3,1fr)` y
+       8 px de hueco cada tarjeta queda en ~145 px, practicamente los mismos
+       151 que tenia. La fila no obligaba a achicar NADA.
+       Y ademas van mas grandes: la foto de 74 a 104 px, el nombre de 17 a 18
+       y el rol de 12 a 12,5.
+       ⚠ Esto lo exige `chequeo/muestra.js`: si las tarjetas de Personas no
+         comparten la misma linea, el chequeo FALLA. */
+    P + ':is(#dc-nada, .padres){',
+    '  display:grid!important;',
+    '  grid-template-columns:repeat(3,1fr)!important;',
+    '  gap:10px 8px!important;',
+    '  justify-items:center!important;',
+    '  align-items:start!important;',
+    '}',
+    P + ':is(#dc-nada, .padres) .p{ width:100%!important; min-width:0!important; }',
+    P + ':is(#dc-nada, .padres) .av{',
+    '  width:104px!important; height:104px!important;',
+    '  border:1px solid rgba(230,228,238,.30)!important;',
+    '  box-shadow:0 0 0 4px rgba(230,228,238,.07), 0 10px 26px rgba(0,0,0,.50)!important;',
+    '  filter:grayscale(.55) contrast(1.05)!important;',
+    '}',
+    P + ':is(#dc-nada, .padres) .nm{',
+    '  font-size:18px!important; line-height:1.35!important; color:' + PLATA + '!important;',
+    '  -webkit-text-fill-color:' + PLATA + '!important;',
+    '}',
+    P + ':is(#dc-nada, .padres) .rl{',
+    '  font-size:12.5px!important; line-height:1.35!important; color:' + PLATA2 + '!important;',
+    '  -webkit-text-fill-color:' + PLATA2 + '!important;',
+    '}',
 
     /* ⚠⚠⚠ LA HOJA DE LA CARTA. MIRADO —NO MEDIDO— EL 20/9/2026.
        El sobre de la carta ya era grafito (la coleccion se queda con
@@ -281,8 +369,31 @@
     '  color:' + PLATA2 + '!important; -webkit-text-fill-color:' + PLATA2 + '!important;',
     '}',
 
+    /* ⭐ LA BOLA DE ESPEJOS EN EL INTERRUPTOR DE CONFIRMAR.
+       Maki: «estaria bueno poner una bola de boliche tanto en el itinerario
+       cuando va bajando como en el boton de asistir o no asistir».
+       La perilla (`.per`) era un degrade generico. Ahora es la MISMA bola que
+       marca cada momento del itinerario — pedida al modulo del simbolo, no
+       copiada, asi no se pueden desincronizar. */
+    (uriBola
+      ? P + ':is(#dc-nada, .rsvp-sw) .per{' +
+        'background-color:' + PAPEL2 + '!important;' +
+        'background-image:' + uriBola + '!important;' +
+        'background-size:86% auto!important;' +
+        'background-position:center!important;' +
+        'background-repeat:no-repeat!important;' +
+        'box-shadow:0 0 0 1px rgba(230,228,238,.35), 0 3px 10px rgba(0,0,0,.6)!important;}'
+      : ''),
+    P + ':is(#dc-nada, .rsvp-sw) .pozo{',
+    '  background:' + PAPEL + '!important;',
+    '  box-shadow:inset 0 0 0 1px rgba(230,228,238,.18)!important;',
+    '}',
+
     'html[data-col="' + ID + '"] body{ background-color:' + PAPEL + '!important; }'
   ].join('\n');
+
+    return CSS;
+  }
 
   /* ---- prender y apagar ---------------------------------------------------- */
   function activa() {
@@ -299,7 +410,8 @@
       s.id = 'col-' + ID;
       document.head.appendChild(s);
     }
-    if (s.textContent !== CSS) s.textContent = CSS;
+    var txt = armarCSS();
+    if (s.textContent !== txt) s.textContent = txt;
   }
 
   function sacarHoja() {
@@ -346,7 +458,9 @@
          cuando» y «Como va a ser la noche» dejo `opacity: 0.49 !important`
          y `0.5`. Sobre negro eso no es un texto mas suave: es un texto que no
          esta. Borrarsela tambien deja que vuelva a medir contra el grafito, y
-         ahi ya no necesita compensar nada. */
+         ahi ya no necesita compensar nada.
+         (El error 26 de `reglas-duras` ya evita que eso vuelva a pasar; esto
+          queda como red para lo que hubiera quedado escrito antes.) */
       el.style.removeProperty('opacity');
       el.removeAttribute('data-regla-luz');
     }
@@ -416,5 +530,5 @@
   }
 
   /* para poder prenderla y apagarla a mano desde la consola, al revisar */
-  window.INVDISCO = { poner: poner, sacar: sacar, paleta: PALETA_PROPIA };
+  window.INVDISCO = { poner: poner, sacar: sacar, paleta: PALETA_PROPIA, css: armarCSS };
 })();
