@@ -809,6 +809,27 @@
             NI se marca: se reintenta en la próxima pasada (★ error 13). */
       var opa = parseFloat(cs.opacity);
       if (!isFinite(opa)) opa = 1;
+      /* ⚠⚠ ERROR 26 — LA OTRA MITAD DEL ERROR 25. (20/9/2026)
+         El error 25 arregló que no se CONGELARA una opacidad de paso. Pero
+         seguíamos MIDIENDO con ella: `conOpa` dobla la opacidad de ESE
+         instante dentro del alfa de la tinta, y a mitad del reveal eso da una
+         plata al 50% sobre negro — o sea un gris medio, que no llega al piso.
+         Resultado: el corrector «arreglaba» un texto que estaba perfecto, y lo
+         dejaba escrito en gris medio con !important para siempre.
+         Medido en lupita-mis15, con el MISMO color de fábrica (230,228,238) y
+         el MISMO fondo (11,10,15) en los cinco casos:
+           «Raspa para revelar»    → ok,        plata   (14,6:1)
+           «Dónde y cuándo»         → ok,        plata   (14,6:1)
+           «Una carta para ti»     → corregido, rgb(117,115,126)
+           «Cómo va a ser la noche» → corregido, rgb(115,112,125)
+           «Dónde quedarte»        → corregido, rgb(116,115,123)
+         Mismas entradas, salidas distintas: la única diferencia era EN QUÉ
+         MOMENTO del fundido lo mirábamos. Los tres corregidos son justo las
+         secciones que aparecen al hacer scroll.
+         → Si el elemento se está animando, su opacidad REAL es a la que va a
+           llegar: 1. Es la misma regla del error 25, aplicada también al
+           MEDIR, no sólo al corregir. */
+      if (seAnima(el)) opa = 1;
       if (opa < 0.08) continue;
       var conOpa = function (col) {
         if (opa >= 1 || !col) return col;
@@ -911,6 +932,22 @@
       var frente = mezcla(conOpa(crudo), peor);
       var res = corregir(frente, peor, peorMin, mismoTono(frente, peor));
       /* ★ error 24: primero se intenta apagar la opacidad; lo que quede, se despeja. */
+
+      /* ★ ERROR 26, RED DE SEGURIDAD — UNA CORRECCIÓN QUE DEJA EL TEXTO PEOR
+         NO ES UNA CORRECCIÓN. Está escrito en la skill de entrega desde el
+         18/9 y el módulo no lo comprobaba: elegía un color y lo escribía sin
+         verificar que de verdad le ganara al de fábrica contra ESE fondo. Si
+         no le gana, se deja el original y se marca `ok`. Es barato y corta de
+         raíz toda esta familia de errores, venga de donde venga la medición
+         mentirosa. */
+      if (contraste(res.c, peor) <= contraste(frente, peor)) {
+        if (marca) pintar(el, crudo, false, fondos[0]);
+        el.setAttribute('data-regla-luz', 'ok');
+        el.setAttribute('data-regla-fondo', aTexto(fondos[0]));
+        c.ok++;
+        continue;
+      }
+
       apagarOpacidad(el);
       /* ⚠⚠ ERROR 25 — CONGELABAMOS UNA OPACIDAD DE PASO. (20/9/2026)
          El error 20 dice, bien, que no hay que forzar `opacity:1` cuando el
