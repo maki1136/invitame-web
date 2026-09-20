@@ -187,6 +187,35 @@
     P + ':is(#dc-nada, .sec) .hotel img{',
     '  filter:grayscale(.88) contrast(1.06) brightness(.92);',
     '}',
+    /* ⚠⚠ EL VELO DETRAS DEL TEXTO. MAKI, 20/9/2026:
+         «muchos textos no se llegan a leer... una solucion quizas como hiciste
+          con la ultima muestra, poniendo algo abajo de los textos»
+       El texto es PLATA y cae justo sobre la cara brillante de una bola de
+       espejos: plata sobre plata. Las secciones son semitransparentes a
+       proposito (fondo-invitacion.js) para que se vea el fondo, asi que no se
+       arregla tapando la foto — Maki ya marco que no se tapa el fondo.
+       Va un halo oscuro en la letra + un velo redondo que se desvanece,
+       centrado en el bloque del titulo.
+       ⚠ EL VELO VA COMO `background-image` DEL PROPIO BLOQUE, no como un
+         `::before` con z-index:-1. Lo probe con pseudo-elemento y en las
+         secciones cuyo fondo lo pinta la seccion misma, el z-index negativo lo
+         manda DETRAS de ese fondo y no se ve. Como fondo del bloque siempre
+         queda arriba del fondo de la seccion y debajo de su propia letra. */
+    P + ':is(#dc-nada, .sec) > .kick,',
+    P + ':is(#dc-nada, .sec) > h2,',
+    P + ':is(#dc-nada, .sec) > p,',
+    P + ':is(#dc-nada, .sec) > .sub,',
+    P + ':is(#dc-nada, .portada) .kicker,',
+    P + ':is(#dc-nada, .scratch-hint){',
+    '  text-shadow:0 1px 2px rgba(10,9,13,.95), 0 0 10px rgba(10,9,13,.88), 0 0 24px rgba(10,9,13,.75)!important;',
+    '}',
+    P + ':is(#dc-nada, .sec) > .kick,',
+    P + ':is(#dc-nada, .sec) > h2{',
+    '  background-image:radial-gradient(70% 120% at 50% 50%, rgba(8,7,11,.86) 0%, rgba(8,7,11,.62) 45%, rgba(8,7,11,0) 82%)!important;',
+    '  background-repeat:no-repeat!important;',
+    '  background-position:center!important;',
+    '  background-size:118% 190%!important;',
+    '}',
     /* el papel del marco */
     /* ⚠️ EL BANDEJON DEL PASE. La regla del motor es `.pase{background:var(--verde)}`,
        y en Disco `--verde` ES LA PLATA: la banda entera salia clara. */
