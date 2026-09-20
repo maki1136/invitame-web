@@ -262,6 +262,16 @@
        que es plata y grafito. La coleccion se queda con el color del `.kick`.
        Con el color de fabrica ya en plata media, `reglas-duras` mide, ve que
        pasa sobrado contra el negro y lo deja en `ok` sin tocarlo. */
+    /* ⚠⚠ Y EL «Copiar» DE LA MESA DE REGALOS, QUE LO ENCONTRÓ EL CHEQUEO.
+       `span.copy` medía rgb(179,136,74): otro dorado. Es chiquito y vive adentro
+       del bloque de datos bancarios, o sea que a ojo no salta — lo cantó la regla
+       `familia-de-color` de `chequeo/muestra.js` en su primera corrida.
+       Para esto se escribió el chequeo. */
+    P + ':is(#dc-nada, .copy){',
+    '  color:' + PLATA + '!important;',
+    '  -webkit-text-fill-color:' + PLATA + '!important;',
+    '}',
+
     P + ':is(#dc-nada, .kick), ' + P + ':is(#dc-nada, .kicker){',
     '  color:' + PLATA2 + '!important;',
     '  -webkit-text-fill-color:' + PLATA2 + '!important;',
