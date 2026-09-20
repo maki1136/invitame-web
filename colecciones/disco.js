@@ -152,6 +152,41 @@
     /* la tarjeta del clima, que nace blanca con letra oscura */
     ':is(#dc-nada, .clima-card){ background:' + PAPEL2 + '!important; color:' + PLATA + '!important; }',
     ':is(#dc-nada, .clima-card) *{ color:' + PLATA + '!important; }',
+    /* ⚠⚠ EL CIELO DEL AMBIENTE. MEDIDO EL 20/9/2026.
+       `fx.ambiente` tipo `nubes` dibuja SIEMPRE la misma foto, /i/cielo: un
+       cielo DIURNO, blanco. Los colores de la tematica (colorTop/colorBot) no
+       los usa para nada. Prendido en una invitacion negra pintaba una banda
+       blanca gigante en el itinerario, la que se veia en la captura de Maki.
+       La skill de armado pide el ambiente PRENDIDO con los colores de ESA
+       tematica, asi que la coleccion le da el suyo: noche con destellos de
+       plata, dibujado, sin pedir una foto nueva. */
+    P + ':is(#dc-nada, .ambiente) .sky{',
+    '  background-image:',
+    '    radial-gradient(1.6px 1.6px at 18% 12%, rgba(230,228,238,.85), transparent 60%),',
+    '    radial-gradient(1.2px 1.2px at 62% 26%, rgba(230,228,238,.70), transparent 60%),',
+    '    radial-gradient(2px 2px at 81% 9%, rgba(247,246,250,.90), transparent 60%),',
+    '    radial-gradient(1.3px 1.3px at 34% 47%, rgba(230,228,238,.60), transparent 60%),',
+    '    radial-gradient(1.7px 1.7px at 73% 61%, rgba(230,228,238,.75), transparent 60%),',
+    '    radial-gradient(1.1px 1.1px at 12% 74%, rgba(230,228,238,.55), transparent 60%),',
+    '    radial-gradient(2.2px 2.2px at 49% 86%, rgba(247,246,250,.80), transparent 60%),',
+    '    radial-gradient(1.4px 1.4px at 90% 92%, rgba(230,228,238,.65), transparent 60%),',
+    '    radial-gradient(120% 70% at 50% 0%, rgba(168,165,182,.16), transparent 62%),',
+    '    linear-gradient(180deg, ' + PAPEL + ' 0%, ' + PAPEL2 + ' 55%, #2A2733 100%)!important;',
+    '  background-size:auto!important; background-repeat:no-repeat!important;',
+    '  opacity:1!important; filter:none!important;',
+    '}',
+    /* ⚠⚠ LAS FOTOS DE LUGAR, EN TONO. MEDIDO EL 20/9/2026 MIRANDO.
+       El hotel venia en naranja y azul de atardecer, y la iglesia en dorado:
+       peleaban de frente con el negro y plata. Cloudinary no aplica
+       transformaciones en esta cuenta (cambia el tamano pero ignora el efecto)
+       y Adobe solo acepta dominios de su lista, asi que el tratamiento va
+       donde corresponde: en la coleccion, en CSS, y se va solo al apagarla.
+       NO toca la galeria: esas fotos ya son de la tematica. */
+    P + ':is(#dc-nada, .ph),',
+    P + ':is(#dc-nada, .sec) > img,',
+    P + ':is(#dc-nada, .sec) .hotel img{',
+    '  filter:grayscale(.88) contrast(1.06) brightness(.92);',
+    '}',
     /* el papel del marco */
     /* ⚠️ EL BANDEJON DEL PASE. La regla del motor es `.pase{background:var(--verde)}`,
        y en Disco `--verde` ES LA PLATA: la banda entera salia clara. */
