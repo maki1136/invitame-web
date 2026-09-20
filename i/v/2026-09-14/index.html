@@ -1920,7 +1920,20 @@
       const dir1=[ev.ev1t,ev.ev1dir].filter(Boolean).join(', ');
       const dir2=[ev.ev2t,ev.ev2dir].filter(Boolean).join(', ');
       const dir3=[ev.ev3t,ev.ev3dir].filter(Boolean).join(', ');
-      [[mapEmbed(ev.ev1maps)||mapEmbed(dir1),'ev1-map'],[mapEmbed(ev.ev2maps)||mapEmbed(dir2),'ev2-map'],[mapEmbed(ev.ev3maps)||mapEmbed(dir3),'ev3-map']].forEach(function(par){
+      /* ⚠⚠ LA DIRECCION MANDA. MEDIDO EL 20/9/2026 MIRANDO EL MAPA.
+         Con la busqueda «Templo Expiatorio del Santisimo Sacramento
+         Guadalajara», el embed de Google marcaba la Basilica de Guadalupe en
+         CIUDAD DE MEXICO. Con «Av. Enrique Diaz de Leon Sur 930, Col.
+         Americana, Guadalajara, Jalisco» — la direccion sola — cae exacto.
+         Un nombre de lugar es ambiguo para el geocodificador; una direccion no.
+         Orden: coordenadas (lo mas preciso) > direccion escrita > la busqueda
+         que venga adentro del link de Maps > nombre + direccion. */
+      function esCoord(u){ return !!u && /maps\?q=-?\d+\.\d+,-?\d+\.\d+/.test(u); }
+      function elMapa(link, dir, nomYdir){
+        var m = mapEmbed(link);
+        return (esCoord(m) ? m : null) || mapEmbed(dir) || m || mapEmbed(nomYdir);
+      }
+      [[elMapa(ev.ev1maps,ev.ev1dir,dir1),'ev1-map'],[elMapa(ev.ev2maps,ev.ev2dir,dir2),'ev2-map'],[elMapa(ev.ev3maps,ev.ev3dir,dir3),'ev3-map']].forEach(function(par){
         var u=par[0], f=el(par[1]); if(!f) return;
         var _caja=f.closest('.acc-panel'); var _fila=f.closest('.bd');
         var _btn=_fila&&_fila.querySelector('.acc-btn');
