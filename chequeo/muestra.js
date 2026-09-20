@@ -419,7 +419,15 @@
        transición congelada, no la cascada.
        Es la misma familia que la ventana minimizada del banco de pruebas.
        → Con la pestaña oculta NO se mide: lo que salga es mentira. */
-    if (document.hidden) {
+    /* ⚠ EL ESCAPE, PARA CUANDO SE CORRE DESDE UNA HERRAMIENTA.
+       Un asistente que maneja el navegador por control remoto trabaja con la
+       pestaña en segundo plano: `visibilityState` dice "hidden" aunque cada
+       captura obligue a pintar. Para ese caso: INVCHEQUEO.correr({forzar:true}).
+       Lo que NO cambia: si se fuerza, los colores medidos pueden ser los de
+       partida de una transición. Se avisa y se deja constancia en el informe. */
+    if (document.hidden && opts.forzar) {
+      try { console.warn("CHEQUEO: pestaña oculta y se forzó igual. Los colores pueden mentir."); } catch (e) {}
+    } else if (document.hidden) {
       var aviso = { pasa: false, fallas: ["pestaña-oculta"], detalle: [{
         regla: "pestaña-oculta", titulo: "La pestaña tiene que estar A LA VISTA",
         pasa: false,
