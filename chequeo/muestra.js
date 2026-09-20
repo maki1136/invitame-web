@@ -121,6 +121,19 @@
      lupita-mis15: seis botones "crema" que resultaron ser copias invisibles.
      `checkVisibility` mira la cadena entera (display, visibility, opacity,
      content-visibility) y es lo único que no se deja engañar. */
+  /* ⚠⚠ LA GEOMETRÍA NO DEPENDE DE LA OPACIDAD. Una tarjeta de Personas a
+     opacidad 0 (todavía no se reveló) ocupa EXACTAMENTE su lugar en el grid: la
+     fila se puede medir igual. Si se le exige opacidad, la regla no encuentra
+     nada y no puede decir si están en una fila o en dos — que es justo lo que
+     hay que comprobar.
+     → `ubicable()` para las reglas de POSICIÓN, `visible()` para las de COLOR. */
+  function ubicable(el) {
+    var cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+    var r = el.getBoundingClientRect();
+    return r.width > 3 && r.height > 3;
+  }
+
   function visible(el) {
     if (el.checkVisibility) {
       try {
@@ -195,7 +208,7 @@
   regla('personas-una-fila', 'Personas: todas en la misma línea', function () {
     var cont = document.querySelector('.padres');
     if (!cont) return { pasa: true, nota: 'esta invitación no tiene Personas' };
-    var tar = [].slice.call(cont.children).filter(visible);
+    var tar = [].slice.call(cont.children).filter(ubicable);
     /* ⚠⚠ NO SE MARCA OK LO QUE NO SE PUDO MIRAR. Es el error 13 de
        `reglas-duras`: un caché sin invalidación no es una optimización, es un
        bug que se esconde de sus propias pruebas. Si el bloque EXISTE y no se
@@ -315,7 +328,8 @@
      temática. `simbolo-tematica.js` firma en `html[data-simbolo]`. */
   regla('simbolo-tematica', 'El itinerario lleva el símbolo de la temática', function () {
     var tl = document.querySelector('.tl');
-    if (!tl || !visible(tl)) return { pasa: true, nota: 'sin itinerario a la vista' };
+    if (!tl) return { pasa: true, nota: 'esta invitación no tiene itinerario' };
+    if (!ubicable(tl)) return { pasa: false, nota: 'hay itinerario en el DOM y no se pudo medir' };
     var firma = document.documentElement.getAttribute('data-simbolo') || '';
     if (!firma) return { pasa: false, nota: 'no hay símbolo: la marca es el circulito de fábrica' };
     var it = tl.querySelector('.it');
