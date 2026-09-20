@@ -187,6 +187,16 @@
     P + ':is(#dc-nada, .sec) .hotel img{',
     '  filter:grayscale(.88) contrast(1.06) brightness(.92);',
     '}',
+    /* ⚠ Y LAS QUE VAN COMO FONDO DE UN CONTENEDOR (el cierre, contacto).
+       Ahi NO se puede usar `filter`: grisaria tambien el texto de adentro.
+       `background-blend-mode:luminosity` mezcla SOLO la imagen con el color de
+       fondo y la deja monocroma; los hijos no se tocan. */
+    P + ':is(#dc-nada, .footer),',
+    P + ':is(#dc-nada, section.sec)[style*="background-image"]{',
+    '  background-color:' + PAPEL2 + '!important;',
+    '  background-blend-mode:luminosity!important;',
+    '  filter:grayscale(.88) contrast(1.06) brightness(.92);',
+    '}',
     /* ⚠⚠ EL VELO DETRAS DEL TEXTO. MAKI, 20/9/2026:
          «muchos textos no se llegan a leer... una solucion quizas como hiciste
           con la ultima muestra, poniendo algo abajo de los textos»
