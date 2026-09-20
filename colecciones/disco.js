@@ -100,6 +100,7 @@
        .pasecard  rgb(246,243,237)   el pase con el QR
        .scratchcard rgb(246,243,237) la raspadita
        .rd-tapa   rgb(246,243,237)   la tapa del video y de la playlist
+       .cf-letter linear-gradient(#fffefb,#faf5ea)   la hoja de la carta
      El resto (.sec, .sec.verde, .e-tint, .cf-*-tint, body.tex-lino) sale de la
      paleta y ya queda bien con la tabla de arriba.
 
@@ -244,6 +245,42 @@
     '  color:' + PLATA + '!important;',
     '}',
     ':is(#dc-nada, .tl), :is(#dc-nada, .padres){ background-color:rgba(30,28,37,.72)!important; }',
+
+    /* ⚠⚠⚠ LA HOJA DE LA CARTA. MIRADO —NO MEDIDO— EL 20/9/2026.
+       El sobre de la carta ya era grafito (la coleccion se queda con
+       `--cf-sobre`), pero la HOJA que sale de adentro seguia siendo blanca:
+       era la unica cosa clara de toda la invitacion. El motor la trae clavada,
+       sin variable:
+           .cf-letter{ background:linear-gradient(#fffefb,#faf5ea) }
+       asi que ninguna paleta ni ninguna coleccion la habia tocado nunca.
+
+       ⚠ Y OJO CON EL NUMERO: mi barrido de contraste daba ese parrafo en 3,29
+       porque resolvia el fondo subiendo hasta el body (negro) sin ver el papel
+       blanco del bloque. Contra el papel de verdad SE LEIA. El numero apuntaba
+       al bloque correcto por la razon equivocada; lo que estaba mal era la
+       tematica, no el contraste. Es la regla de la skill de entrega: la
+       medicion encuentra candidatos, la pantalla decide.
+
+       ⚠ POR QUE LA LETRA SE VEIA VIOLETA. `.cf-letter p{color:var(--cf-col)}`
+       y la coleccion pone `--cf-col` en plata: plata sobre papel blanco no se
+       lee. `reglas-duras.js` lo midio bien y corrigio oscureciendo la plata
+       —que tiene tono violeta-azul y poca saturacion— hasta rgb(108,96,153).
+       No era un color heredado de otra invitacion: era el guardia trabajando
+       sobre un papel equivocado. Con el papel oscuro detecta que el fondo
+       cambio (`data-regla-fondo`), vuelve a medir y repone la plata solo.
+       Por eso NO hay que tocar `reglas-duras` para esto. */
+    P + ':is(#dc-nada, .cf-letter){',
+    '  background:linear-gradient(' + PAPEL2 + ',' + PAPEL + ')!important;',
+    '  border-color:rgba(230,228,238,.18)!important;',
+    '}',
+    P + ':is(#dc-nada, .cf-letter)::before{ border-color:rgba(230,228,238,.14)!important; }',
+    P + ':is(#dc-nada, .cf-letter) h4{',
+    '  color:' + PLATA + '!important; -webkit-text-fill-color:' + PLATA + '!important;',
+    '}',
+    P + ':is(#dc-nada, .cf-letter) p{',
+    '  color:' + PLATA2 + '!important; -webkit-text-fill-color:' + PLATA2 + '!important;',
+    '}',
+
     'html[data-col="' + ID + '"] body{ background-color:' + PAPEL + '!important; }'
   ].join('\n');
 
