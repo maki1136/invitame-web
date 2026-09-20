@@ -116,7 +116,18 @@
     return (!isFinite(o) || o > 1) ? 1 : o;
   }
 
+  /* ⚠️⚠️ NO ALCANZA CON QUE MIDA. El motor deja en el DOM nodos de la boda de
+     ejemplo y bloques a medio armar que TIENEN tamaño y no se ven. Medidos en
+     lupita-mis15: seis botones "crema" que resultaron ser copias invisibles.
+     `checkVisibility` mira la cadena entera (display, visibility, opacity,
+     content-visibility) y es lo único que no se deja engañar. */
   function visible(el) {
+    if (el.checkVisibility) {
+      try {
+        if (!el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true,
+                                  contentVisibilityAuto: true })) return false;
+      } catch (e) {}
+    }
     var cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden') return false;
     var r = el.getBoundingClientRect();
@@ -246,9 +257,16 @@
       if (el.scrollWidth > el.clientWidth + 2 && /hidden|clip/.test(cs.overflowX)) {
         malos.push(corto(el) + ' (ancho)');
       }
+      /* ⚠️ EL RENGLÓN CORTO SÓLO CORTA SI LA LETRA TIENE BAJAS.
+         La cuenta regresiva («236», «22», «49») va con line-height igual al
+         cuerpo y no se corta nada: los dígitos no bajan de la línea de base.
+         El caso real era el sobretítulo en Rouge Script con `line-height:.9`
+         y la «g» de «gran». Se exige las DOS cosas: que haya una baja y que
+         el renglón sea claramente más corto que la letra. */
+      var conBajas = /[gjpqyçQ]/.test(el.textContent || "");
       var px = parseFloat(cs.fontSize) || 0;
       var lh = parseFloat(cs.lineHeight);
-      if (px > 0 && isFinite(lh) && lh < px * 1.05) {
+      if (conBajas && px > 0 && isFinite(lh) && lh < px * 0.95) {
         malos.push(corto(el) + ' (renglón ' + Math.round(lh) + 'px < letra ' + Math.round(px) + 'px)');
       }
     });
@@ -264,6 +282,10 @@
       var caja = m.parentElement;
       var tapada = caja && (caja.querySelector('.rd-tapa') || caja.querySelector('.col-vtapa'));
       var src = (m.getAttribute('src') || '') + (m.currentSrc || '');
+      /* ⚠️ LOS MAPAS NACEN SIN `src`: `acordeon.js` se lo pone recién cuando el
+         invitado abre el acordeón, para no bajarlos de entrada. Si se mira sólo
+         `src`, un mapa todavía sin cargar parece un iframe crudo. */
+      src += (m.getAttribute("data-src") || "");
       var esMapa = /google\.com\/maps|maps\.google/.test(src);
       if (esMapa) return;                       /* el mapa SÍ se muestra */
       if (m.tagName === 'VIDEO') {
@@ -308,7 +330,12 @@
       var c = aRGB(cs.backgroundColor);
       if (!c || c[3] < 0.85) return;
       var r = el.getBoundingClientRect();
-      if (r.width * r.height < 2500) return;       /* piezas chicas: no cuentan */
+      /* ⚠️ UN BOTÓN CLARO NO ES UN PARCHE: ES DISEÑO. Y el fondo del QR tiene
+         que ser claro o no se escanea. Lo que busca esta regla son PANELES del
+         molde claro asomando, no piezas que alguien eligió. */
+      if (/^(BUTTON|A|INPUT|SELECT|TEXTAREA)$/.test(el.tagName)) return;
+      if (el.closest && el.closest(".pasecard")) return;
+      if (r.width * r.height < 12000) return;       /* piezas chicas: no cuentan */
       if (lum(c) > 0.5) {
         malos.push((el.className || el.tagName) + ' rgb(' + c.slice(0, 3).map(Math.round) + ')');
       }
@@ -383,6 +410,28 @@
 
   function correr(opts) {
     opts = opts || {};
+    /* ⚠️⚠️⚠️ LA SÉPTIMA FORMA EN QUE UNA MEDICIÓN MIENTE, Y LA PEOR.
+       Una pestaña OCULTA no pinta. Las transiciones no avanzan y se quedan
+       clavadas en el valor de partida: el 20/9/2026 diez botones medían crema
+       —el color del molde claro— y apenas se tomó una captura, que obliga a
+       pintar, los diez pasaron a grafito. Ni un `style` inline con !important
+       los movía, porque lo que devolvía `getComputedStyle` era el valor de una
+       transición congelada, no la cascada.
+       Es la misma familia que la ventana minimizada del banco de pruebas.
+       → Con la pestaña oculta NO se mide: lo que salga es mentira. */
+    if (document.hidden) {
+      var aviso = { pasa: false, fallas: ["pestaña-oculta"], detalle: [{
+        regla: "pestaña-oculta", titulo: "La pestaña tiene que estar A LA VISTA",
+        pasa: false,
+        nota: "una pestaña oculta no pinta: las transiciones quedan congeladas y " +
+              "todos los colores que se midan van a ser los de partida. Traela al " +
+              "frente y volvé a correr el chequeo."
+      }] };
+      try { console.warn("CHEQUEO: la pestaña está oculta. No se midió nada."); } catch (e) {}
+      window.__CHEQUEO = aviso;
+      return Promise.resolve(aviso);
+    }
+
     var hacer = function () {
       var detalle = REGLAS.map(function (r) {
         var res;
