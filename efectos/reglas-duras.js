@@ -717,6 +717,14 @@
   /* ⚠️ ERROR 20 — se apaga la opacidad sólo cuando estamos CORRIGIENDO, y sólo
      si no se está animando: si el elemento aparece con una transición de
      `opacity`, congelarla en 1 le rompe la aparición. */
+  /* ¿este elemento esta apareciendo? (animacion o transicion sobre opacity) */
+  function seAnima(el) {
+    var cs = getComputedStyle(el);
+    if (cs.animationName && cs.animationName !== 'none') return true;
+    return /opacity|all/.test(cs.transitionProperty || '') &&
+           (parseFloat(cs.transitionDuration) || 0) > 0;
+  }
+
   function apagarOpacidad(el) {
     var cs = getComputedStyle(el);
     var o = parseFloat(cs.opacity);
@@ -904,7 +912,22 @@
       var res = corregir(frente, peor, peorMin, mismoTono(frente, peor));
       /* ★ error 24: primero se intenta apagar la opacidad; lo que quede, se despeja. */
       apagarOpacidad(el);
+      /* ⚠⚠ ERROR 25 — CONGELABAMOS UNA OPACIDAD DE PASO. (20/9/2026)
+         El error 20 dice, bien, que no hay que forzar `opacity:1` cuando el
+         elemento APARECE con una transicion: se le rompe la aparicion. Pero
+         despues leiamos igual la opacidad de ESE instante — 0,5 a mitad del
+         reveal — y si `despejar` no daba, la CLAVABAMOS con !important. El
+         texto se quedaba para siempre en la mitad de su aparicion.
+         Medido en lupita-mis15 (coleccion oscura): «La fecha» 0,52,
+         «Raspa para revelar» 0,5, «Antes que nada» 0,52, «Una carta para ti»
+         0,5, «Donde quedarte» 0,5. Sobre negro eso no es un texto mas suave:
+         es un texto que no esta. Y solo le pasaba a las secciones que se
+         revelaban al hacer scroll, que son justo las que uno no mira al
+         cargar.
+         Si el elemento se esta animando, su opacidad REAL es a la que va a
+         llegar: 1. Se calcula contra 1 y no se le toca la opacidad. */
       var aReal = parseFloat(getComputedStyle(el).opacity);
+      if (seAnima(el)) aReal = 1;
       if (!isFinite(aReal) || aReal > 1) aReal = 1;
       var color = res.c;
       if (aReal < 1) {
