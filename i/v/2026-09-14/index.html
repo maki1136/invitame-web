@@ -605,7 +605,7 @@
   .dc-mono .dc-amp{font-family:'Rouge Script','Great Vibes',cursive;font-size:40px;line-height:1;color:var(--verde)}
   .sec.verde .dc-mono,.sec.verde .dc-mono .dc-amp{color:#eee5d2}
 </style>
-  <section data-sec="carta" class="sec" id="carta-sec"><div class="kick" id="cf-kick">Con cariño</div><h2 id="cf-h2">Una carta para vos</h2>
+  <section data-sec="carta" class="sec" id="carta-sec"><div class="kick" id="cf-kick">Con cariño</div><h2 id="cf-h2c">Una carta para ti</h2>
     <div class="cartafx" id="cartafx">
       <div class="cf-back"></div>
       <div class="cf-back-tint"></div>
@@ -2571,7 +2571,7 @@
     // índice inverso por idioma: textoTraducido -> claveES
     var REV={}; LANGS.forEach(function(l){ if(l[0]==='es')return; REV[l[0]]={}; });
     Object.keys(D).forEach(function(k){ LANGS.forEach(function(l){ var c=l[0]; if(c==='es')return; var t=D[k][c]; if(t)REV[c][t]=k; }); });
-    var SEL='.kick,.kicker,.lab,.vhint,#hint,.k,.l,.btn,.acc-btn,button,#reg-h2,#cf-h2,#pv-kick';
+    var SEL='.kick,.kicker,.lab,.vhint,#hint,.k,.l,.btn,.acc-btn,button,#reg-h2,#cf-h2,#cf-h2c,#pv-kick';
     var cur='es';
     function apply(lang){
       var els=document.querySelectorAll(SEL);
