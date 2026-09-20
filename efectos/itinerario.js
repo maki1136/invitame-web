@@ -54,6 +54,8 @@
      → Ahora la marca es un anillo fino: relleno del papel, borde de 1,5 px en
        la tinta de la temática y un halo muy tenue alrededor. Se lee como una
        pieza de papelería, no como una viñeta.
+       (Y si la invitación declaró símbolo de temática, `simbolo-tematica.js`
+        reemplaza después este anillo por el símbolo. Ver el error 3.)
 
    ⚠️ LOS COLORES SALEN DE `fx.tematica`, NO DE LA PALETA DEL SECTOR.
       Es la misma regla que el vestido básico: cada boda pone su tinta. Si el
@@ -62,6 +64,39 @@
 
    ⚠️ Y LA LÍNEA TAMBIÉN. Era de 2 px en `var(--verde)`, el verde del motor,
       aunque la boda fuera azul o arena. Ahora toma la misma tinta.
+
+   ══════════════════════════════════════════════════════════════════════════
+   ★★★ ERROR 3 — LAS DOS VARIABLES LAS ESCRIBÍAN DOS ARCHIVOS  (20/9/2026)
+   ══════════════════════════════════════════════════════════════════════════
+
+   EL SÍNTOMA. En la muestra disco de Lupita —negro y plata— la marca de cada
+   momento salía MARFIL con el trazo VERDE RÚSTICO: el símbolo de otra
+   invitación, justo en la única sección oscura.
+
+   LA CAUSA. `--tl-tinta` y `--tl-papel` las escribían DOS archivos distintos:
+     · éste, desde `fx.tematica`. Y no una sola vez: `ponerTinta()` cuelga del
+       MutationObserver del body, así que se vuelve a escribir con cada cambio
+       del DOM, para siempre.
+     · `efectos/paleta.js`, desde `window.INVCOLPALETA`, cada 1,5 s.
+   Leyendo `--tl-papel` cinco veces seguidas en vivo daba:
+       #fbf9f5 · #fbf9f5 · #1E1C25 · #fbf9f5 · #1E1C25
+   o sea parpadeo permanente, gane quien gane.
+
+   POR QUÉ NO SE ARREGLABA SOLO. `simbolo-tematica.js` no puede usar variables
+   CSS —un data-URI no las lee—, así que HORNEA los dos colores literales
+   adentro del dibujo y guarda una firma `juego|tinta|papel` para no repintar
+   al pedo. Se los horneó en una pasada en la que había ganado el par claro, la
+   firma quedó clavada en ese par, y el símbolo se congeló ahí aunque la
+   colección después ganara mil veces.
+
+   EL ARREGLO. **La colección manda.** Si reclamó la variable en
+   `window.INVCOLPALETA`, acá no se toca. Es la convención que ya usan los
+   demás módulos, no un parche para Disco: sin colección activa no cambia
+   absolutamente nada.
+
+   ⚠️ Y EL HALO SIGUE A LA TINTA QUE DE VERDAD QUEDÓ PUESTA, no a la de
+      `fx.tematica`. Antes, en una colección oscura, la tinta terminaba bien y
+      el halo quedaba del color viejo.
    ══════════════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -99,21 +134,39 @@
     catch (e) { return {}; }
   }
 
+  /* ---- lo que reclamó la colección activa ------------------------------ */
+  function reclamadas() {
+    try { return window.INVCOLPALETA || {}; }
+    catch (e) { return {}; }
+  }
+
   /* Pinta las tres variables que usan la marca y la línea.
      Se vuelve a llamar por unos segundos porque la temática llega de Firestore
-     DESPUÉS que este archivo. */
+     DESPUÉS que este archivo.
+
+     ⚠️ LA COLECCIÓN MANDA (ver el error 3 arriba): una variable reclamada en
+     `window.INVCOLPALETA` no se toca desde acá. */
   function ponerTinta() {
     var t = tema();
     var raiz = document.documentElement;
-    var tinta = t.tinta || '';
-    if (tinta) {
-      raiz.style.setProperty('--tl-tinta', tinta);
-      raiz.style.setProperty('--tl-halo', 'color-mix(in srgb, ' + tinta + ' 14%, transparent)');
-    } else {
-      raiz.style.setProperty('--tl-tinta', 'currentColor');
-      raiz.style.setProperty('--tl-halo', 'transparent');
+    var pal = reclamadas();
+
+    /* la tinta que va a quedar de verdad: primero la de la colección */
+    var tinta = pal['--tl-tinta'] || t.tinta || '';
+
+    if (!pal['--tl-tinta']) {
+      raiz.style.setProperty('--tl-tinta', tinta || 'currentColor');
     }
-    raiz.style.setProperty('--tl-papel', t.papelColor || '#fbf9f5');
+
+    /* el halo se deriva de esa tinta, no de la de `fx.tematica` */
+    raiz.style.setProperty('--tl-halo',
+      (tinta && tinta !== 'currentColor')
+        ? 'color-mix(in srgb, ' + tinta + ' 14%, transparent)'
+        : 'transparent');
+
+    if (!pal['--tl-papel']) {
+      raiz.style.setProperty('--tl-papel', t.papelColor || '#fbf9f5');
+    }
   }
 
   var CSS = [
