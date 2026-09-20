@@ -105,6 +105,9 @@
 
      ⚠️ `#dc-nada` no existe: está para subirle el peso a la regla sin tener que
      perseguir clases. Es el truco que ya usa Marfil. */
+  /* el ancla de peso: los DOS atributos que pone la coleccion en el marco */
+  var P = 'html[data-col="' + ID + '"][data-coleccion="' + ID + '"] ';
+
   var CSS = [
     ':is(#dc-nada, .evento), :is(#dc-nada, .hotel), :is(#dc-nada, .pasecard),',
     ':is(#dc-nada, .scratchcard), :is(#dc-nada, .rd-tapa), :is(#dc-nada, .col-vtapa){',
@@ -120,10 +123,27 @@
     ':is(#dc-nada, .hotel) .sub{ color:' + PLATA2 + '!important; }',
     /* ⚠️ EL BOTÓN QUE NO SE LEÍA. Medido: texto rgb(247,233,230) sobre un botón
        claro. Ahora el botón es grafito con filete de plata y la letra plata. */
-    ':is(#dc-nada, .btn), :is(#dc-nada, .acc-btn), :is(#dc-nada, .wsp){',
+    /* ⚠⚠ LA TRAMPA DE LA ESPECIFICIDAD, MEDIDA EL 20/9/2026.
+       El estilo de boton del motor es:
+         [data-boton="lacre"] :is(.btn, #btn-ingresar, .wsp, .tv-btn, ...)
+       Ese :is() TIENE UN #id ADENTRO. Un :is() pesa lo que su argumento MAS
+       pesado, asi que la regla entera vale (1,1,0) — para TODA la lista, no
+       solo para el boton con id. Mi regla valia (1,0,0) y perdia: los botones
+       seguian con la letra crema rgb(247,233,230) del estilo lacre, ilegible
+       sobre plata. Era el «VER MAPA no se lee».
+       Se gana anclando en los dos atributos del marco: (1,2,1).
+       Tambien se pisa -webkit-text-fill-color, que es lo que pinta de verdad
+       la letra cuando el motor lo usa. */
+    P + ':is(#dc-nada, .btn),',
+    P + ':is(#dc-nada, .acc-btn),',
+    P + ':is(#dc-nada, .wsp),',
+    P + ':is(#dc-nada, .tv-btn),',
+    P + ':is(#dc-nada, .inv-prev-btn),',
+    P + ':is(#dc-nada, #btn-ingresar){',
     '  background-image:none!important;',
     '  background-color:' + PAPEL2 + '!important;',
     '  color:' + PLATA + '!important;',
+    '  -webkit-text-fill-color:' + PLATA + '!important;',
     '  border:1px solid rgba(230,228,238,.35)!important;',
     '  text-shadow:none!important;',
     '}',
