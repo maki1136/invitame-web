@@ -149,6 +149,9 @@
     '}',
     /* la raspadita y el pase, por dentro */
     ':is(#dc-nada, .scratchcard) *, :is(#dc-nada, .pasecard) *{ color:' + PLATA + '; }',
+    /* la tarjeta del clima, que nace blanca con letra oscura */
+    ':is(#dc-nada, .clima-card){ background:' + PAPEL2 + '!important; color:' + PLATA + '!important; }',
+    ':is(#dc-nada, .clima-card) *{ color:' + PLATA + '!important; }',
     /* el papel del marco */
     /* ⚠️ EL BANDEJON DEL PASE. La regla del motor es `.pase{background:var(--verde)}`,
        y en Disco `--verde` ES LA PLATA: la banda entera salia clara. */
@@ -220,6 +223,15 @@
       el.style.removeProperty('color');
       el.style.removeProperty('-webkit-text-fill-color');
       el.style.removeProperty('text-shadow');
+      /* ⚠⚠ Y LA OPACIDAD. MEDIDO EL 20/9/2026.
+         Cuando el texto tiene una transicion sobre `opacity` (todos los
+         titulos la tienen, por el reveal), reglas-duras no puede forzarla a 1:
+         entonces DESPEJA el color y deja una opacidad parcial. En «Donde y
+         cuando» y «Como va a ser la noche» dejo `opacity: 0.49 !important`
+         y `0.5`. Sobre negro eso no es un texto mas suave: es un texto que no
+         esta. Borrarsela tambien deja que vuelva a medir contra el grafito, y
+         ahi ya no necesita compensar nada. */
+      el.style.removeProperty('opacity');
       el.removeAttribute('data-regla-luz');
     }
   }
