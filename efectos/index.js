@@ -741,6 +741,24 @@
     });
   }
 
+  /* ⭐ EL CHEQUEO DE MUESTRA — LAS REGLAS DE MAKI, COMPROBADAS SOLAS.
+     Maki, 20/9/2026: «no me estás dando una forma de solución de que no vuelva
+     a pasar nunca más». Las skills describían las reglas y nada las medía: por
+     eso Personas en dos filas salió tres veces. `chequeo/muestra.js` las
+     convierte en pruebas que fallan.
+       https://invitame.littlemomentsok.com/i/?e=<id>&chequeo=1
+     ⚠️ Va ACÁ y no en MODULOS a propósito: así no viaja adentro del paquete
+        y el invitado no lo descarga nunca. */
+  try {
+    if (/[?&]chequeo=1/.test(location.search) &&
+        !document.querySelector('script[src="/chequeo/muestra.js"]')) {
+      var chk = document.createElement('script');
+      chk.src = '/chequeo/muestra.js';
+      chk.defer = true;
+      (document.head || document.documentElement).appendChild(chk);
+    }
+  } catch (e) {}
+
   if (window.INVEFECTOS_JUNTOS) return;                 /* ya vino el paquete */
   if (document.querySelector('script[src^="/efectos/todo.php"]')) return;
 
