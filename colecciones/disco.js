@@ -481,31 +481,21 @@
        ⚠ LA REGLA: todo panel que se oscurece declara su `background-color`
          OPACO. Los degradados van en `background-image`. Si el color no está,
          el que mide el contraste inventa uno — y te da vuelta el texto. */
+    /* ⚠️⚠️⚠️ EL FONDO DE ESTE PANEL NO LLEVA NINGUNA CAPA CLARA. NINGUNA.
+       Tercer intento, y acá está la regla de verdad (21/9/2026).
+       `reglas-duras.js` → `fondosDe()` abre cada degradado, compone sus
+       paradas y se queda con la MÁS CLARA para decidir el color del texto.
+       Con destellos blancos al 55% leyó el panel como BLANCO (240,239,242) y
+       dio vuelta el itinerario a texto negro sobre negro. Los bajé a plata al
+       26% y siguió leyendo claro (179,178,190): atenuar NO alcanza.
+       ⚠ LA REGLA, sin medias tintas: en un panel oscuro el `background` va
+         SÓLO con colores oscuros. Todo lo que brille se pinta en el `::after`,
+         que no es ancestro del texto y por eso no entra en la cuenta del
+         contraste. El brillo se ve igual; la cuenta no se ensucia. */
     '  background-color:#07070c!important;',
     '  background-image:',
-    /* ⚠️⚠️ LOS DESTELLOS VAN APAGADOS ACÁ, Y BRILLAN EN EL ::after.
-       Medido el 21/9/2026, y es la trampa más fina de todas.
-       `reglas-duras.js` → `fondosDe()` no mira sólo el color de fondo: abre
-       CADA degradado, compone sus paradas y se queda con la MÁS CLARA. Es lo
-       correcto para un degradado grande — pero mis destellos eran puntos de
-       `rgba(255,255,255,.55)` de 3 px. El motor leyó «fondo casi blanco»
-       (`data-regla-fondo="240,239,242"`) y dio vuelta TODO el itinerario a
-       texto negro… sobre un panel negro.
-       ⚠ LA REGLA: en un panel oscuro, ninguna capa de FONDO puede llevar un
-         color claro fuerte, por chiquita que se vea en pantalla. El brillo va
-         en un pseudo-elemento, que no entra en la cuenta del contraste porque
-         no es un ancestro del texto. */
-    '    radial-gradient(3.5px 3.5px at 13% 8%,   rgba(214,212,226,.26), transparent 64%),',
-    '    radial-gradient(2px 2px   at 29% 19%,    rgba(214,212,226,.20), transparent 64%),',
-    '    radial-gradient(2.5px 2.5px at 71% 12%,  rgba(214,212,226,.22), transparent 64%),',
-    '    radial-gradient(1.5px 1.5px at 88% 27%,  rgba(214,212,226,.17), transparent 64%),',
-    '    radial-gradient(3px 3px   at 8% 46%,     rgba(214,212,226,.16), transparent 64%),',
-    '    radial-gradient(2px 2px   at 93% 58%,    rgba(214,212,226,.16), transparent 64%),',
-    '    radial-gradient(2.5px 2.5px at 22% 71%,  rgba(214,212,226,.14), transparent 64%),',
-    '    radial-gradient(1.5px 1.5px at 62% 83%,  rgba(214,212,226,.13), transparent 64%),',
-    '    radial-gradient(2px 2px   at 40% 94%,    rgba(214,212,226,.11), transparent 64%),',
-    '    radial-gradient(150% 62% at 50% -10%, rgba(214,212,226,.09), transparent 62%),',
-    '    linear-gradient(180deg, rgba(10,9,18,.96) 0%, rgba(7,7,12,.98) 58%, #050509 100%)!important;',
+    '    radial-gradient(150% 62% at 50% -10%, rgba(24,23,34,.9), transparent 62%),',
+    '    linear-gradient(180deg, #0a0912 0%, #07070c 58%, #050509 100%)!important;',
     '  border-radius:20px!important;',
     '  border:1px solid rgba(230,228,238,.13)!important;',
     '  box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 22px 46px rgba(0,0,0,.55)!important;',
