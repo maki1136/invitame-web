@@ -194,7 +194,7 @@
     '  text-transform:uppercase!important;',
     '  color:#E6ECF5!important; -webkit-text-fill-color:#E6ECF5!important;',
     '  text-shadow:0 1px 2px rgba(0,0,0,.92), 0 0 14px rgba(120,190,255,.45)!important;',
-    '    /* ⚠ EL HUECO. Maki, 21/9/2026: «poné el texto de Mis XV años y la cuenta
+    /* ⚠ EL HUECO. Maki, 21/9/2026: «poné el texto de Mis XV años y la cuenta
        regresiva más abajo, donde está lo negro, sino queda mucho aire abajo».
        La bajada empuja también a la cuenta regresiva, que es su hermana de
        abajo: así el bloque de arriba se queda donde está y el pie baja a la
