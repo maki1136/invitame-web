@@ -37,7 +37,7 @@
   var P     = 'html[data-portada="' + MARCA + '"] ';
 
   /* el neón por defecto: hielo. Frío, no celeste de kiosco. */
-  var NEON_DEF = '#EAF6FF';
+  var NEON_DEF = '#CFEBFF';
 
   function ev()  { try { return window.INVEV || {}; } catch (e) { return {}; } }
   function cfg() { var e = ev(); return (e.fx && e.fx.neon) || {}; }
@@ -65,6 +65,29 @@
     '  padding-top:' + (ARRIBA ? '11%' : '0') + '!important;',
     '}',
 
+    /* ⭐⭐ EL VELO DETRÁS DEL BLOQUE. Medido el 21/9/2026 mirando la primera
+       versión: la portada de Lupita tiene la bola de espejos JUSTO donde ahora
+       va el texto, y encima es la zona más clara de la foto. El neón se perdía
+       y el cromado —que abajo tiene bandas oscuras a propósito— se leía como un
+       gris sucio. No es un problema de color del texto: es que no había dónde
+       apoyarlo.
+       ⚠ El velo va en un `::before` del bloque, NO en el fondo de la portada:
+         así no le tapa la foto a nadie más y, sobre todo, no entra en la cuenta
+         de `reglas-duras.js`, que mira el fondo de los ANCESTROS. Un pseudo
+         hermano no es ancestro.
+       ⚠ Y es RADIAL, no una banda: una banda recta se ve como una barra gris
+         cruzando la foto. El radial se apaga antes de llegar a los bordes. */
+    P + '.portada > .c{ position:relative!important; }',
+    P + '.portada > .c::before{',
+    '  content:""; position:absolute; left:50%; top:-22%;',
+    '  transform:translateX(-50%);',
+    '  width:200%; height:165%;',
+    '  background:radial-gradient(58% 52% at 50% 44%,',
+    '     rgba(5,5,9,.80) 0%, rgba(5,5,9,.62) 42%, rgba(5,5,9,.28) 64%, rgba(5,5,9,0) 80%);',
+    '  pointer-events:none; z-index:0;',
+    '}',
+    P + '.portada > .c > *{ position:relative!important; z-index:1!important; }',
+
     /* ⭐ LA PALABRA EN NEÓN.
        Versalitas muy espaciadas y un TUBO de luz hecho con cuatro sombras: una
        blanca finita pegada a la letra (el vidrio), y tres cada vez más abiertas
@@ -77,14 +100,15 @@
     P + '.portada .kicker{',
     '  font-family:Montserrat,"Forum",sans-serif!important;',
     '  font-weight:600!important;',
-    '  font-size:clamp(13px,3.4vw,17px)!important;',
+    '  font-size:clamp(14px,3.8vw,19px)!important;',
     '  letter-spacing:.42em!important; text-indent:.42em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + NEON + '!important; -webkit-text-fill-color:' + NEON + '!important;',
-    '  text-shadow:0 0 3px rgba(255,255,255,.95),' +
-                 ' 0 0 9px ' + NEON + ',' +
-                 ' 0 0 24px rgba(150,205,255,.55),' +
-                 ' 0 0 52px rgba(90,165,255,.32)!important;',
+    '  text-shadow:0 0 2px #ffffff,' +
+                 ' 0 0 6px ' + NEON + ',' +
+                 ' 0 0 14px ' + NEON + ',' +
+                 ' 0 0 30px rgba(120,190,255,.75),' +
+                 ' 0 0 64px rgba(70,150,255,.45)!important;',
     '  margin-bottom:2px!important;',
     '  animation:neonLatido 5.2s ease-in-out infinite!important;',
     '}',
@@ -95,10 +119,18 @@
     '  content:var(--neon-script,"");',
     '  display:block;',
     '  font-family:"Rouge Script",cursive;',
-    '  font-size:2.9em; line-height:1.05;',
+    '  font-size:3.4em; line-height:1.02;',
     '  letter-spacing:0; text-indent:0;',
     '  text-transform:none;',
-    '  margin-top:2px;',
+    '  margin-top:0;',
+    /* ⚠ la sombra NO se hereda a escala: el desenfoque va en px, así que sobre
+       una letra tres veces más grande el mismo halo se ve tres veces más
+       flaco. Se vuelve a escribir, más abierto. */
+    '  text-shadow:0 0 3px #ffffff,' +
+                 ' 0 0 10px ' + NEON + ',' +
+                 ' 0 0 26px ' + NEON + ',' +
+                 ' 0 0 54px rgba(120,190,255,.70),' +
+                 ' 0 0 96px rgba(70,150,255,.40);',
     '}',
 
     /* ⭐ EL NOMBRE EN CROMADO LÍQUIDO.
@@ -120,11 +152,16 @@
     '  -webkit-background-clip:text!important; background-clip:text!important;',
     '  -webkit-text-fill-color:transparent!important;',
     '  color:transparent!important;',
-    '  filter:drop-shadow(0 1px 0 rgba(0,0,0,.6))' +
-           ' drop-shadow(0 0 22px rgba(190,210,255,.30))!important;',
+    /* ⚠ el cromado tiene bandas OSCURAS a propósito (el horizonte reflejado).
+       Sobre una foto clara esas bandas desaparecen y la letra se deshace. Las
+       dos primeras sombras son el contorno que la sostiene; la tercera es el
+       brillo del metal. */
+    '  filter:drop-shadow(0 1px 1px rgba(0,0,0,.92))' +
+           ' drop-shadow(0 0 3px rgba(0,0,0,.65))' +
+           ' drop-shadow(0 0 26px rgba(190,210,255,.34))!important;',
     '}',
     P + '.portada .names{',
-    '  font-size:clamp(56px,15vw,96px)!important;',
+    '  font-size:clamp(64px,18vw,112px)!important;',
     '  line-height:1.02!important;',
     '  margin-top:6px!important;',
     '}',
