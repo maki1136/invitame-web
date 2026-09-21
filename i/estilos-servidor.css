@@ -503,3 +503,38 @@ video:not([data-video-tocable])::-webkit-media-controls-toggle-closed-captions-b
 }
 /* y el ▶ gigante que iOS pinta CENTRADO cuando el video no pudo arrancar */
 video:not([data-video-tocable]){ -webkit-appearance: none !important; }
+
+/* ======================================================================
+   EL VERDE DE #lock: LO VOLVI A TRAER YO, HOY MISMO. 21/9/2026.
+   La version anterior de estas reglas usaba el atajo background, que
+   tambien apaga background-image, y de paso mataba el degradado verde del
+   motor. Al pasarlas a background-color para no borrar el poster del sobre,
+   el degradado verde de #lock REVIVIO. Se apaga aparte y explicito.
+   LECCION: cuando se cambia un atajo por longhands, hay que preguntarse
+   QUE MAS estaba apagando el atajo sin que nadie lo dijera.
+   ====================================================================== */
+#lock { background-image: none !important; }
+
+/* ======================================================================
+   LA PISTA DE -TOCA PARA ABRIR- NO SE LEIA. 21/9/2026.
+   Maki: donde dice tocar, como para que se abra el sobre, no se lee en esta
+   invitacion.
+   Medido: .vhint sale del motor en rgba(60,52,44,.62) -- un marron oscuro --
+   a 10px y con la opacidad pulsando entre .35 y 1. Sobre el raso NEGRO del
+   sobre de disco es invisible; sobre papel claro pasaba de casualidad.
+   Pasa a blanco con sombra dura, que es lo unico que se lee IGUAL sobre
+   claro y sobre oscuro (el truco de los subtitulos), y un poco mas grande.
+   OJO: NO se toca la propiedad opacity con !important, porque hay un
+   keyframes -pulse- animandola y un !important de autor le gana a una
+   animacion y la deja clavada. Se le cambia el animation-name por uno
+   propio que pulsa entre .62 y 1, y se dejan duracion y curva del motor.
+   ====================================================================== */
+@keyframes invPulsoPista { 0%,100% { opacity:.62 } 50% { opacity:1 } }
+#env .vhint, #env .hint, #env #hint {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-size: 12px !important;
+  letter-spacing: .20em !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.92), 0 0 10px rgba(0,0,0,.70), 0 0 24px rgba(0,0,0,.50) !important;
+  animation-name: invPulsoPista !important;
+}
