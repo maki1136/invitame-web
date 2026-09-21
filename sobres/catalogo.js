@@ -570,6 +570,15 @@ window.SOBRES_INVITAME = {
            es parejo, así que no se nota, y el lacre y la solapa quedan sin
            tocar en su escala real.
 
+        ⚠️⚠️ Y EL LACRE SE LE BORRA AL PÓSTER. Maki: «queda un doblez raro
+           cuando se abre». Eran DOS LACRES: el póster traía el suyo y la
+           solapa el mismo, así que al levantarse la solapa aparecía el de
+           abajo, quieto, y se veía como un pliegue doble.
+           En el póster el disco del lacre se tapa con un parche de papel de
+           más abajo (mismo x, +250 px, máscara circular con 14 px de
+           desenfoque). Así el lacre existe UNA sola vez y viaja pegado a la
+           solapa, que es lo que hace un lacre de verdad al partirse el sobre.
+
      `solapa` = el triángulo de arriba MÁS EL LACRE, recortado con
      transparencia. Se armó por geometría sobre la propia foto (no a mano):
      triángulo (7,6 % · 18,2 %) → (92,4 % · 18,2 %) → (50 % · 45,2 %), más el
@@ -584,7 +593,7 @@ window.SOBRES_INVITAME = {
      ---------------------------------------------------------------------- */
   cenicienta: {
     nombre:   "Cenicienta · papel de hielo, lacre de zapatilla de cristal (foto)",
-    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790020449/invitame/cenicienta/xncmgdk9fkqoy6qvkzvu.jpg",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790020449/v1790020721/invitame/cenicienta/gwjikl5ehgocskdvl6dg.jpg",
     solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/ovst4cedqvfysmrf3xu1.webp",
     color:    "#EAF2FA",
     apertura: "solapas",
