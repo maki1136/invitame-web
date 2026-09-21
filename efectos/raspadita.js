@@ -284,7 +284,25 @@
     if (!img) {
       img = fotosTapa[url] = new Image();
       img.crossOrigin = 'anonymous';   /* si no, getImageData tiñe el lienzo */
-      img.onload = function () { if (intacto(cv)) dibujar(); };
+      /* ⚠️⚠️ CUANDO LLEGA LA FOTO SE REPINTAN TODOS, NO SÓLO EL PRIMERO.
+         Medido el 21/9/2026. Maki: «veo que no se puede poner la bola de
+         boliche para raspar, ¿siempre es liso?». De las tres fichas, la
+         PRIMERA salía con la bola y las otras dos lisas.
+         La causa: la foto se pide una sola vez y se guarda en `fotosTapa`.
+         La primera ficha es la que engancha el `onload`; cuando llegan la
+         segunda y la tercera la imagen ya "existe" pero todavía no terminó de
+         cargar, así que `dibujar()` devuelve false, pintan el degradado… y
+         nadie las vuelve a mirar nunca.
+         ⚠ LA REGLA: si varios elementos comparten un recurso que carga tarde,
+           el aviso de "ya llegó" tiene que alcanzarlos a TODOS. Engancharlo al
+           primero que pidió es una carrera que casi siempre se pierde. */
+      img.onload = function () {
+        try {
+          [].forEach.call(document.querySelectorAll('.rasp-zona canvas'), function (otro) {
+            if (tapaDe(otro) === url && intacto(otro)) pintarFoto(otro, url, cfg);
+          });
+        } catch (e) {}
+      };
       img.src = url;
     }
     return dibujar();
