@@ -395,9 +395,11 @@
     '}',
     /* y la vía deja de ser una raya muerta: hilo punteado con la luz bajando */
     P + '.tl::before{',
+    /* ⚠️ MEDIDO MIRANDO: con TINTA3 y 4/13 la vía casi no se veía sobre el
+       papel crema. Con TINTA2 y 5/12 se lee sin pesar. */
     '  background-image:repeating-linear-gradient(to bottom,',
-    '     ' + TINTA3 + ' 0 4px, rgba(122,116,88,0) 4px 13px)!important;',
-    '  background-size:100% 13px!important;',
+    '     ' + TINTA2 + ' 0 5px, rgba(85,82,58,0) 5px 12px)!important;',
+    '  background-size:100% 12px!important;',
     '  animation:campoHilo 1.1s linear infinite!important;',
     '}',
     '@keyframes campoHilo{ from{ background-position:0 0 } to{ background-position:0 13px } }',
@@ -416,6 +418,28 @@
     '  width:22px!important; height:22px!important; top:3px!important;',
     '  filter:drop-shadow(0 1px 2px rgba(34,30,20,.28));',
     '}',
+
+    /* =================================================== EL PASE DE DEMO ======
+       ⭐ LA TARJETA ES DE PAPEL, SIEMPRE. Maki, 21/9/2026: «me gusta el estilo
+          blanco que pusiste, pero no ese fondo de mesa de madera».
+
+       El fondo de madera se cambió por trigo desenfocado —eso va en `fx`, lo
+       elige Jazmín desde el panel— y ahí apareció el efecto de rebote: sobre
+       un fondo CLARO el motor vuelve translúcida la tarjeta (`rgba(255,255,
+       255,.07)` con tinta crema) y se pierde justamente lo que a Maki le
+       gustaba. Sobre el fondo oscuro pasaba lo mismo al revés.
+       → la tarjeta se clava en papel + tinta de la colección y deja de
+         depender de cuán clara sea la foto de atrás.
+       ⚠️ `backdrop-filter` apagado: con el papel opaco sólo agrega costo de
+          pintado en el teléfono. */
+    P + '.pase .pasecard{',
+    '  background-color:' + PAPEL + '!important; background-image:none!important;',
+    '  border:1px solid rgba(47,51,32,.18)!important;',
+    '  box-shadow:0 12px 26px rgba(40,32,20,.26)!important;',
+    '  color:' + TINTA + '!important;',
+    '  backdrop-filter:none!important; -webkit-backdrop-filter:none!important;',
+    '}',
+    P + '.pase .pasecard *{ color:' + TINTA + '!important; }',
 
     /* ====================================================== LA RASPADITA ======
        ⚠️ SON DOS RAMAS DEL ÁRBOL, NO UNA:
