@@ -219,6 +219,33 @@
 (function () {
 
   var FUNDIDO  = 1.0;   /* cuánto dura el desvanecido final */
+
+  /* ⭐⭐ CUÁNTO DURA EL BLANCO — `luzFundido`          ★ 21/9/2026 ★
+
+     Maki, cuarta vuelta sobre lo mismo: «todavía hay, cuando apenas abre».
+     No era verde: era BLANCO. Lo vi en capturas, cuadro por cuadro: al abrir
+     el sobre de Lupita había DOS SEGUNDOS ENTEROS de pantalla blanca antes de
+     que apareciera la portada. En una invitación negra eso no se lee como un
+     destello, se lee como que la página se rompió.
+
+     El destello está bien —ella misma lo pidió, y corta la apertura— pero un
+     segundo entero de fundido sobre negro es demasiado: el ojo pierde la
+     escena. Sobre papel marfil no molesta, porque el blanco ES el papel.
+
+     ⚠ LA REGLA: cuanto más oscura la invitación, más corto el destello. En
+       claro puede durar un segundo; en negro, menos de medio.
+
+     Por eso el tiempo deja de ser fijo y pasa a ser del SOBRE, como ya lo son
+     `luz` (cuándo arranca) y `luzColor` (de qué color es). Si el sobre no
+     dice nada, sigue valiendo 1.0 y ninguna invitación existente cambia. */
+  function luzFundido() {
+    try {
+      var c = window.SOBRES_INVITAME || {};
+      var v = Number((c[armadoModelo] || {}).luzFundido);
+      if (v > 0) return v;
+    } catch (e) {}
+    return FUNDIDO;
+  }
   var ANTES    = 1.4;   /* en modo video: cuánto antes del final arranca */
   /* ⭐⭐ CUANDO ARRANCA EL DESTELLO  (18/9/2026, tercera vuelta)
      Maki, despues de dos intentos:
@@ -661,7 +688,7 @@
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
       '#env.carta-video.revelando{opacity:0!important;',
-      '  transition:opacity ' + FUNDIDO + 's ease-in!important}',
+      '  transition:opacity var(--luz-fundido,' + FUNDIDO + 's) ease-in!important}',
       '#env.carta-video.revelando #col-sobre-velo{opacity:0!important}',
 
       '#env.carta-video .vhint{display:block!important;',
@@ -1090,7 +1117,11 @@
       } else {
         env.classList.add('fundiendo');
       }
-      setTimeout(entrar, FUNDIDO * 1000);
+      (function () {
+        var f = luzFundido();
+        try { document.documentElement.style.setProperty('--luz-fundido', f + 's'); } catch (e) {}
+        setTimeout(entrar, f * 1000);
+      })();
     }
 
     /* ========================================================================
