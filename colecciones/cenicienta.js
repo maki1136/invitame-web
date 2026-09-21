@@ -537,6 +537,20 @@
     '  background-repeat:no-repeat!important;',
     '}',
 
+    /* ⚠️ LA TAPA DEL VIDEO NO MIDE LO MISMO QUE LA DE LA PLAYLIST.
+       Las dos son la misma clase de pieza —un panel de papel que tapa el
+       reproductor crudo— pero la de la playlist es una teja ANCHA y baja
+       (392 px) y la del video es un panel 9:16: **418 x 747 medidos**. Con los
+       66 px de la playlist la zapatilla quedaba como una mancha chiquita a un
+       costado del play, adentro de medio metro de papel vacío.
+       Acá va grande y CENTRADA ARRIBA del aro (que el motor deja en el 44 %):
+       queda el emblema y abajo su botón, que es la misma idea de la playlist
+       resuelta para el alto que de verdad tiene. */
+    P + '.rd-tapa{',
+    '  background-size:132px 132px!important;',
+    '  background-position:50% 30%!important;',
+    '}',
+
     /* ── LA PERILLA DEL SÍ / NO ────────────────────────────────────────────
        ⚠️ El área de toque se mide: mínimo 44 px. La pastilla mide 77, o sea 38
           por mitad — por eso Maki dijo «me costó mucho poner que sí». Acá sólo
