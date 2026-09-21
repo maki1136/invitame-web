@@ -166,12 +166,37 @@
       /* el aro original se esconde, no se borra */
       '.adorno > svg[data-original]{display:none}',
       /* la marca del itinerario deja de ser un circulo */
-      '.tl.tl-anim > .it::before,.tl > .it::before{',
+      /* ⚠️⚠️⚠️ EL ATAJO `background:` CON `!important` MATA LAS ANIMACIONES.
+         MEDIDO EL 20/9/2026, con la bola de espejos FOTOGRAFIADA de Disco.
+         La linea de abajo dice `background: <url> center/contain no-repeat
+         !important`. Un ATAJO expande TODAS sus longhands, asi que tambien
+         escribe `background-position: center !important`. Y una declaracion
+         `!important` de autor LE GANA A UNA ANIMACION (asi esta la cascada:
+         las animaciones pierden contra !important de autor). Resultado: la
+         coleccion ponia su bola girando con un destello que barre, los
+         @keyframes se registraban, y el `background-position` quedaba clavado
+         en 50% 50% para siempre. Se veia la bola, quieta, sin brillo.
+         ⚠ Regla general que sale de aca: en un modulo que pinta encima de
+           otros, NUNCA usar el atajo `background:` con !important. Van las
+           longhands, y `background-position` se deja LIBRE para que una
+           coleccion o una animacion la puedan mover.
+
+         ⭐ Y EL GANCHO PARA QUE NO VUELVA A PASAR: `data-marca-propia`.
+         Cuando una coleccion tiene su PROPIA marca de itinerario (una foto,
+         no un dibujo), pone ese atributo en el <html> y este modulo se corre
+         solo — no pelea. Es el mismo patron que `data-coleccion` en el motor.
+         Las dos reglas de POSICION de abajo (tl-centro) NO llevan el gancho:
+         son geometria, y valen igual para la marca que sea. */
+      'html:not([data-marca-propia]) .tl.tl-anim > .it::before,',
+      'html:not([data-marca-propia]) .tl > .it::before{',
       '  border-radius:0 !important;',
       '  border:0 !important;',
       '  box-shadow:none !important;',
       '  width:18px !important;height:18px !important;',
-      '  background:' + u + ' center/contain no-repeat !important;',
+      '  background-image:' + u + ' !important;',
+      '  background-size:contain !important;',
+      '  background-repeat:no-repeat !important;',
+      '  background-position:center;',            /* SIN !important: ver arriba */
       '  -webkit-mask:none !important; mask:none !important;',
       '}',
       '.tl.tl-centro > .it:nth-child(odd)::before{margin-top:-9px !important;right:-34.5px !important}',
