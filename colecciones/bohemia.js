@@ -322,6 +322,33 @@
     '  color:' + TINTA + '!important;',
     '}',
 
+    /* ── EL PIE ────────────────────────────────────────────────────────────
+       ⚠️⚠️ `.footer` NO ES `.sec`: se queda con el velo del molde, que es VERDE
+       (`rgba(20,24,18,.75)`) y arranca recién al 30%. Medido el 21/9 sobre la
+       foto del cierre: los textos chicos —«María Paz & Santiago · 15.05.2027»,
+       «Invitación creada con Invítame»— caen justo sobre el pelo de la novia y
+       el cielo dorado, que son las zonas CLARAS de la foto, y se pierden.
+       ⚠️ El velo va en un `::after`, NO en el `background` del pie: `fondosDe()`
+          de `reglas-duras.js` abre los degradados de los ANCESTROS y se queda
+          con la parada más clara; un pseudo no es ancestro, así que el velo se
+          ve igual y no le ensucia la cuenta a nadie.
+       ⚠️ Y no tapa la foto: arranca en .10 arriba y sólo se cierra abajo, que
+          es donde está la letra chica. La foto del cierre se sigue viendo. */
+    P + '.footer{ position:relative!important; }',
+    P + '.footer::after{',
+    '  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;',
+    '  background:linear-gradient(to bottom,',
+    '     rgba(38,28,20,.10) 0%, rgba(34,25,17,.58) 40%, rgba(28,20,13,.88) 100%);',
+    '}',
+    P + '.footer > *{ position:relative!important; z-index:1!important; }',
+
+    /* ⚠️ el sobretítulo del contacto venía en rgb(160,148,138), un gris tibio
+       que NO es de la familia de Bohemia — lo marcaba la regla 2 del chequeo.
+       Su sección tiene foto OSCURA, así que va en crema. */
+    P + '#contacto-kick, ' + P + '.contacto .kick{',
+    '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
+    '}',
+
     /* ── FILETES Y ADORNOS ─────────────────────────────────────────────────
        TINTA3 da 1,36 sobre la foto: es un filete, NUNCA un texto. */
     P + '.frame hr, ' + P + '.frame .linea, ' + P + '.frame .adorno::before, ' + P + '.frame .adorno::after{',
