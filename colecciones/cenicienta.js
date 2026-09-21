@@ -443,6 +443,17 @@
     '  color:' + TINTA + '!important;',
     '}',
 
+    /* ⚠️ Y EL COLOR DE FONDO DE LA SECCIÓN SE DECLARA POR LO QUE SE VE.
+       `.pase` venía con `background-color: #14202E` (tinta) debajo de la foto.
+       Invisible en pantalla —la foto la tapa entera— pero es lo que encuentran
+       los que miden subiendo por los padres: `chequeo/muestra.js` leía tinta
+       sobre tinta y daba 1,00 en el sobretítulo, que en pantalla se lee
+       perfecto. El fondo REAL debajo de ese texto, medido por `reglas-duras`
+       sobre los píxeles con el velo puesto, es (162,182,190). Se declara ése:
+       no cambia nada de lo que se ve y deja de mentirle al que mide.
+       #14202E sobre #A2B6BE da 7,82 y #22344A da 6,01. */
+    P + '.frame .pase{ background-color:#A2B6BE!important; }',
+
     P + '.pasecard{',
     '  background:' + PAPEL2 + '!important;',
     '  border:1px solid ' + TINTA3 + '!important;',
