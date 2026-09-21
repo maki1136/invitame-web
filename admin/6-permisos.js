@@ -52,6 +52,9 @@
   var ROL = null;        // el rol de quien está adentro
   var MAIL = '';
   var pintado = false;
+  var AVISO = '';        // el renglón amarillo de la chapita, si hay algo que decir
+  var arrancando = false;
+  var latiendo = false;
 
   function puede(q) { return !!(PUEDE[ROL] && PUEDE[ROL][q]); }
   function esc(s) {
@@ -330,10 +333,45 @@
     pintar();
   }
 
-  /* --------------------------------------------------------------- arranque */
+  /* --------------------------------------------------------------- arranque
+
+     ⚠️⚠️ TRAMPA YA PAGADA — 21/9/2026, la misma tarde que se subió el archivo.
+     La chapita y las tres cajas cuelgan de `.mejoras`, que el panel dibuja
+     DESPUÉS de que este módulo resuelve el rol. La primera versión pintaba una
+     sola vez: llegaba, no encontraba `.mejoras`, se iba en silencio y ya había
+     marcado `pintado = true`. Resultado: el rol se calculaba bien y en pantalla
+     no aparecía NADA — ni la chapita, ni la caja de Equipo, ni los pedidos.
+     Por eso ahora se repasa en el mismo latido que los botones, y `pintado` se
+     marca recién cuando el ancla existe de verdad.
+
+     ⚠️ Y `esperar()` se llamaba dos veces (suelta y dentro del intervalo), así
+     que quedaban DOS escuchas de sesión y `arrancar` corría dos veces. */
+
+  function anclaje() { return document.querySelector('.mejoras'); }
+
+  function repasar() {
+    if (!ROL) return;
+    aplicar();                       // los botones llegan tarde: se repasa siempre
+    if (pintado || !anclaje()) return;
+    pintado = true;
+    chapita(AVISO);
+    cajaEquipo();
+    cajaPedidos();
+    cajaPedir();
+  }
+
+  function latir() {
+    if (latiendo) return;
+    latiendo = true;
+    repasar();
+    setInterval(repasar, 1200);
+  }
+
   function arrancar(user) {
+    if (arrancando) return;
     MAIL = String((user && user.email) || '').trim().toLowerCase();
     if (!MAIL) return;
+    arrancando = true;
 
     window.INV.listEquipo().then(function (lista) {
       lista = lista || [];
@@ -341,46 +379,42 @@
       for (var i = 0; i < lista.length; i++) {
         if (String(lista[i].mail || '').toLowerCase() === MAIL) { yo = lista[i]; break; }
       }
-      var aviso = '';
+      AVISO = '';
 
       if (MAIL === DUENA_FIJA) {
         ROL = 'duena';                                  // llave de repuesto
       } else if (!lista.length) {
         ROL = 'duena';
-        aviso = 'Todavía no hay equipo cargado: entrás con todos los permisos. ' +
+        AVISO = 'Todavía no hay equipo cargado: entrás con todos los permisos. ' +
                 'Cargá el equipo abajo para que esto se ordene.';
       } else if (!yo) {
         ROL = 'carga';
-        aviso = 'Tu correo no está en el equipo, así que entrás con permisos de carga. ' +
+        AVISO = 'Tu correo no está en el equipo, así que entrás con permisos de carga. ' +
                 'Pedile a Maki que te agregue.';
       } else if (yo.activo === false) {
         ROL = 'carga';
-        aviso = 'Tu permiso está dado de baja. Hablá con Maki.';
+        AVISO = 'Tu permiso está dado de baja. Hablá con Maki.';
       } else {
         ROL = (yo.rol === 'duena' || yo.rol === 'calidad') ? yo.rol : 'carga';
       }
 
       window.INVROL = ROL;   // para que otros módulos lo puedan mirar
-
-      if (pintado) return;
-      pintado = true;
-      chapita(aviso);
-      cajaEquipo();
-      cajaPedidos();
-      cajaPedir();
-      aplicar();
-      /* La caja de entrega y algunos botones llegan más tarde: se repasa. */
-      setInterval(aplicar, 1200);
+      latir();
     })['catch'](function () {
       /* Si no se puede leer el equipo, NO se abre la puerta: queda el rol más
-         chico, salvo que sea Maki. */
+         chico, salvo que sea Maki.
+
+         ⚠️ El motivo casi siempre es UNO: las reglas de Firestore todavía no
+         dejan tocar `inv_equipo` (permission-denied). Hay que decirlo con esas
+         palabras, no con un «no se pudo» que no lleva a ningún lado. */
       ROL = (MAIL === DUENA_FIJA) ? 'duena' : 'carga';
       window.INVROL = ROL;
-      if (pintado) return;
-      pintado = true;
-      chapita('No se pudo leer el equipo, así que entrás con permisos de carga.');
-      aplicar();
-      setInterval(aplicar, 1200);
+      AVISO = (MAIL === DUENA_FIJA)
+        ? 'La base todavía no deja leer el equipo: faltan pegar en Firebase las reglas ' +
+          'de inv_equipo e inv_borrados. Hasta que estén, la caja de Equipo no aparece ' +
+          'y los permisos son sólo prolijidad, no un candado.'
+        : 'No se pudo leer el equipo, así que entrás con permisos de carga.';
+      latir();
     });
   }
 
@@ -390,9 +424,10 @@
     return true;
   }
 
-  var n = 0;
-  var t = setInterval(function () {
-    if (esperar() || ++n > 80) clearInterval(t);
-  }, 250);
-  esperar();
+  if (!esperar()) {
+    var n = 0;
+    var t = setInterval(function () {
+      if (esperar() || ++n > 80) clearInterval(t);
+    }, 250);
+  }
 })();
