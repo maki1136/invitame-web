@@ -291,14 +291,29 @@
          quedaba en 1,56:1 en vez de 2,56:1 — o sea, un rectángulo gordo, no un
          boleto. Estas siete líneas repiten los MISMOS tamaños de arriba, con
          `!important`, para que nadie los pise. Si cambiás un tamaño arriba,
-         cambialo también acá. */
-      '#pv-sec .pv-over{font-size:8px!important;line-height:1.35!important}',
-      '#pv-sec .pv-titulo{font-size:clamp(18px,5.2vw,23px)!important;line-height:1.08!important}',
-      '#pv-sec .pv-departe{font-size:14px!important;line-height:1.2!important}',
-      '#pv-sec .pv-datos dt,#pv-sec .pv-nota dt{font-size:7.5px!important}',
-      '#pv-sec .pv-datos dd{font-size:13.5px!important;line-height:1.2!important}',
-      '#pv-sec .pv-nota dd{font-size:13px!important;line-height:1.25!important}',
-      '#pv-sec .pv-talon span{font-size:15px!important;line-height:1!important}'
+         cambialo también acá.
+
+         ⚠️ Y LA FAMILIA TAMBIÉN. Las colecciones declaran
+         `html[data-col="x"] p{font-family:<sans>!important}`, y el
+         sobretítulo y el título del boleto son `<p>`: medido en `bohemia`,
+         el título salía en la sans de los datos en vez de la romana que pide
+         `--pv-tit`. Por eso cada línea de acá abajo fija también su familia.
+         Las tres variables (`--pv-tit`, `--pv-dat`, `--pv-cur`) las elige
+         Jazmín desde el panel, así que esto no le clava una fuente a nadie. */
+      '#pv-sec .pv-over{font-size:8px!important;line-height:1.35!important;' +
+        'font-family:var(--pv-dat)!important;letter-spacing:.16em!important}',
+      '#pv-sec .pv-titulo{font-size:clamp(18px,5.2vw,23px)!important;line-height:1.08!important;' +
+        'font-family:var(--pv-tit)!important;letter-spacing:-.005em!important}',
+      '#pv-sec .pv-departe{font-size:14px!important;line-height:1.2!important;' +
+        'font-family:var(--pv-cur)!important}',
+      '#pv-sec .pv-datos dt,#pv-sec .pv-nota dt{font-size:7.5px!important;' +
+        'font-family:var(--pv-dat)!important}',
+      '#pv-sec .pv-datos dd{font-size:13.5px!important;line-height:1.2!important;' +
+        'font-family:var(--pv-tit)!important}',
+      '#pv-sec .pv-nota dd{font-size:13px!important;line-height:1.25!important;' +
+        'font-family:var(--pv-cur)!important}',
+      '#pv-sec .pv-talon span{font-size:15px!important;line-height:1!important;' +
+        'font-family:var(--pv-tit)!important}'
     ].join('\n');
     document.head.appendChild(s);
   }
