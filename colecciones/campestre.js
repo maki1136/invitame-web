@@ -100,7 +100,16 @@
     '--flap-base': '#d2c0a2',
     '--seal-c':    TERRA
   };
-  try { window.INVCOLPALETA = PALETA_PROPIA; } catch (e) {}
+  /* ⚠️⚠️⚠️ LA TABLA **NO** SE PUBLICA ACÁ ARRIBA.
+     Encontrado el 21/9/2026 mirando la muestra de PERLAS: este archivo se
+     carga en TODAS las invitaciones (viene en el paquete de `todo.php`), así
+     que un `window.INVCOLPALETA = PALETA_PROPIA` al ras del módulo le pisaba
+     la paleta a las invitaciones de las otras colecciones. Medido en
+     `camila-y-tomas`, que es perlas: `--verde` salía #2f3320 en vez del
+     #44513f de Perlas, `--sec-col` salía el papel crema de Campestre y
+     `--tl-papel` el panel #221e14 de Campestre. Y `paleta.js` los reescribe
+     en el <html> con `!important` cada 1,5 s, así que no había cómo ganarle.
+     Se publica en `poner()` y se BORRA en `sacar()`, como hace Marfil. */
 
   /* --------------------------------------------------------------- las piezas
      La rodaja de madera fotografiada y recortada por textura. Va en los CUATRO
@@ -447,6 +456,9 @@
        lo sigue vistiendo el símbolo (juego «campo»). */
     raiz.setAttribute('data-marca-propia', ID);
 
+    /* la tabla de la colección le gana a la paleta elegida (ver arriba) */
+    window.INVCOLPALETA = PALETA_PROPIA;
+
     var st = document.getElementById(HOJA);
     if (!st) { st = document.createElement('style'); st.id = HOJA; document.head.appendChild(st); }
     var css = armarCSS();
@@ -463,6 +475,9 @@
       raiz.removeAttribute('data-col');
       raiz.removeAttribute('data-coleccion');
       raiz.removeAttribute('data-marca-propia');
+    }
+    if (window.INVCOLPALETA === PALETA_PROPIA) {
+      try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; }
     }
     var st = document.getElementById(HOJA); if (st) st.remove();
     [].forEach.call(document.querySelectorAll('[data-cp-btn]'), function (el) {
