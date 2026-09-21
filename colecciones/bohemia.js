@@ -140,13 +140,13 @@
     /* el sobretítulo: «NUESTRA BODA», bien chico y muy abierto */
     P + '.portada #pv-kick{',
     '  font-family:' + SANS + '!important;',
-    '  font-size:clamp(10px,2.9vw,13px)!important;',
+    '  font-size:clamp(11px,3.1vw,14px)!important;',
     '  font-weight:500!important;',
     '  letter-spacing:.52em!important; text-indent:.52em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '  line-height:1.4!important;',
-    '  margin:0 0 .9em 0!important;',
+    '  margin:0 0 1.9em 0!important;',
     '  text-shadow:0 1px 3px rgba(24,16,10,.85)!important;',
     '}',
 
@@ -159,9 +159,16 @@
     '  font-family:' + DISPLAY + '!important;',
     '  font-weight:500!important;',
     '  font-style:normal!important;',
-    '  font-size:clamp(34px,10.5vw,62px)!important;',
-    '  line-height:1.16!important;',
-    '  letter-spacing:.17em!important; text-indent:.17em!important;',
+    /* ⚠️⚠️ MEDIDO EN VIVO EL 21/9, NO ELEGIDO DE OJO. Con el tamaño anterior
+       «MARÍA PAZ» se PARTÍA en dos renglones y la portada quedaba en cuatro
+       líneas con el «&» solo en el medio. La cuenta: el bloque mide 519 px y
+       «& Santiago» mide 454 px a 59,6 px de cuerpo — entra, pero sólo si se le
+       prohíbe cortar. Por eso van juntas las dos cosas: el cuerpo Y el
+       `white-space:nowrap` del span. Sin el nowrap, cualquier nombre largo
+       vuelve a partirse. */
+    '  font-size:clamp(32px,11vw,60px)!important;',
+    '  line-height:1.22!important;',
+    '  letter-spacing:.15em!important; text-indent:.15em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     /* ⚠️ longhands, no el atajo: ver la nota del itinerario */
@@ -173,6 +180,10 @@
     '  filter:drop-shadow(0 1px 2px rgba(24,16,10,.92))',
     '         drop-shadow(0 0 22px rgba(24,16,10,.55))!important;',
     '}',
+    /* ⚠️ cada nombre entero en su renglón: el motor los mete en spans sueltos y
+       sin esto «MARÍA PAZ» se parte al medio. */
+    P + '.portada #pv-names span{ white-space:nowrap!important; }',
+
     /* el nexo que mete el motor («&») en su propio tamaño y en camel */
     P + '.portada #pv-names span.amp, ' + P + '.portada #pv-names .amp{',
     '  font-size:.52em!important;',
@@ -183,19 +194,19 @@
 
     /* el filete camel debajo de los nombres */
     P + '.portada #pv-names::after{',
-    '  content:""; display:block; width:96px; height:1px;',
-    '  margin:.62em auto .1em;',
+    '  content:""; display:block; width:120px; height:1px;',
+    '  margin:1.05em auto .1em;',
     '  background-color:' + CAMEL + ';',
     '  opacity:.85;',
     '}',
 
     P + '.portada .fecha{',
     '  font-family:' + SANS + '!important;',
-    '  font-size:clamp(10px,2.7vw,12.5px)!important;',
+    '  font-size:clamp(11px,2.9vw,13.5px)!important;',
     '  letter-spacing:.40em!important; text-indent:.40em!important;',
     '  color:' + CREMA + '!important;',
     '  text-shadow:0 1px 3px rgba(24,16,10,.85)!important;',
-    '  margin-top:1.05em!important;',
+    '  margin-top:1.9em!important;',
     '}',
 
     /* ── PERSONAS: LAS TRES EN UNA FILA. SIEMPRE. ──────────────────────────
