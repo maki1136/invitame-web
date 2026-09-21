@@ -187,6 +187,53 @@
     SIN_FONDO + '.frame{ background-color:' + PAPEL + '!important; }',
     P + '.sec, ' + P + '.footer{ color:' + TINTA + '; }',
 
+    /* ⭐ EL VELO DE LECTURA. Maki, 21/9/2026: «fíjate de que se vea el fondo».
+       Con el `.frame` transparente el fondo se ve en TODA la invitación —que
+       es lo que se pidió— y ahí aparece el otro lado del problema: el texto
+       cae sobre las hojas de olivo, que son lo más oscuro del video.
+
+       MEDIDO, y con la playa que Maki aprobó como vara. El método: dos
+       capturas del MISMO cuadro del video, una con texto y otra sin, la resta
+       da la máscara de los glifos, y se mide el contraste de la tinta contra
+       el fondo QUE HAY DEBAJO DE CADA LETRA — no contra el promedio de la
+       sección, que miente porque la sección es casi toda aire.
+
+           playa (aprobada) ...... percentil 5 = 5,65  (mediana de secciones)
+           campestre sin velo .... 3,59   ← no llega
+           campestre con velo .... 6,25   ← pasa
+
+       ⚠️ NO SE ARREGLA ACLARANDO EL VIDEO. Se probó: subirle las sombras de
+          p5=94 a p5=132 lo deja clavado en los números de la playa (p5 137)
+          pero lo LAVA — las hojas de olivo pierden el verde y queda el mismo
+          error del lino que Maki ya rechazó. El video se deja como está y se
+          aclara SÓLO la franja donde cae el texto.
+       ⚠️ Es la misma idea de Marfil (una banda de papel difuminada), con dos
+          diferencias: el papel es el crema de Campestre, y los bordes quedan
+          abiertos —`inset:0 9%` y el degradado a cero en las puntas— así el
+          trigo sigue entrando por los costados y el fondo se sigue leyendo.
+       ⚠️ VA DETRÁS: `z-index:0` en el velo y `z-index:1` en los hijos. Al
+          revés TAPA EL TEXTO: es el mismo bug que ya pagó `botones.js`.
+       ⚠️ Y LLEVA `blur`: sin el desenfoque se ve el rectángulo.
+       ⚠️⚠️ LAS SECCIONES CON FOTO PROPIA QUEDAN AFUERA. `#contacto-sec` (las
+          velas) y el pase traen su propia foto en el `style` en línea: el
+          crema encima las apaga y deja el título ilegible. Visto.
+          El filtro busca `url(` y NO «background-image», porque las
+          `.sec.verde` también escriben `background-image` en línea —en
+          `none`, se lo pone el módulo de la temática— y buscando el nombre de
+          la propiedad se quedaban las cuatro sin velo. Medido antes y
+          después: con «background-image» la mediana daba 5,50 y cuatro
+          secciones seguían en 3,1; con `url(` da 6,25 y la peor es 5,10. */
+    P + '.sec:not([style*="url("]){ position:relative; }',
+    P + '.sec:not([style*="url("])::before{',
+    '  content:""; position:absolute; z-index:0; inset:0 9%;',
+    '  pointer-events:none;',
+    '  background:linear-gradient(90deg, rgba(243,233,217,0) 0%,',
+    '    rgba(243,233,217,.52) 15%, rgba(243,233,217,.52) 85%,',
+    '    rgba(243,233,217,0) 100%);',
+    '  filter:blur(14px);',
+    '}',
+    P + '.sec:not([style*="url("]) > *{ position:relative; z-index:1; }',
+
     /* ------------------------------------------------------------ tipografía
        Si la invitación eligió fuente propia desde el panel, la colección no
        le pisa los NOMBRES; el resto de la tipografía sí es de la colección. */
