@@ -488,6 +488,23 @@
   var sinControles = document.createElement('style');
   sinControles.id = 'col-sobre-sin-controles';
   sinControles.textContent = [
+    /* ⭐⭐⭐ EL ARREGLO DE VERDAD DEL BOTON DE PLAY DEL IPHONE. 21/9/2026.
+       Quinta vez que Maki lo reporta, y las cuatro anteriores yo ataque el
+       SINTOMA: sacar controls, poner controlslist, apagar los pseudo-elementos
+       de WebKit. En Chrome alcanza. En iOS no siempre.
+       LA CAUSA: frenarAutoplay deja el video del sobre PAUSADO en el cuadro 0 a
+       proposito, para que no se abra solo. Y Safari de iPhone dibuja su boton
+       de arranque encima de CUALQUIER video pausado que todavia no arranco.
+       Mientras haya un video pausado en pantalla, el riesgo existe.
+       ⭐ LA SOLUCION QUE NO DEPENDE DE NINGUN NAVEGADOR: que no haya un video
+         pausado en pantalla. El video nace INVISIBLE y lo que se ve es el
+         POSTER del sobre (la misma imagen, puesta como fondo de #env unas
+         lineas mas abajo). Recien cuando el video ESTA CORRIENDO de verdad
+         aparece. Sin video visible no hay boton que dibujar.
+       ⚠ El cambio es invisible para el invitado: antes del toque veia el
+         primer cuadro del video; ahora ve el poster, que es ese mismo cuadro. */
+    '#env-vid{ opacity:0; transition:opacity .22s linear; }',
+    '#env.vid-vivo #env-vid{ opacity:1; }',
     '#env-vid::-webkit-media-controls,',
     '#env-vid::-webkit-media-controls-enclosure,',
     '#env-vid::-webkit-media-controls-panel,',
@@ -588,6 +605,21 @@
       v.controls = false;
       v.pause();
       v.currentTime = 0;
+    } catch (e) {}
+    /* ⭐ Y ACA SE LE DA EL PERMISO DE APARECER (ver el bloque de CSS de arriba):
+       el video se muestra cuando ESTA CORRIENDO, no antes.
+       ⚠ Se escucha playing Y timeupdate: playing puede llegar antes de que haya
+         un cuadro pintado, y en iOS a veces no llega. timeupdate con el reloj ya
+         movido es la prueba de que hay imagen. */
+    try {
+      var env = document.getElementById('env');
+      var vivo = function () {
+        if (!env) env = document.getElementById('env');
+        if (env && v.currentTime > 0.04 && !v.paused) env.classList.add('vid-vivo');
+      };
+      v.addEventListener('timeupdate', vivo);
+      v.addEventListener('playing', function () { setTimeout(vivo, 60); });
+      v.addEventListener('emptied', function () { if (env) env.classList.remove('vid-vivo'); });
     } catch (e) {}
   })();
 
