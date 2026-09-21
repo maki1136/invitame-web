@@ -65,6 +65,11 @@
   var ACENTO   = '#3A5C80';
   var ACENTOCL = '#A9C3DE';
 
+  /* el claro de la nieve: mismo brillo que la crema del molde (L 0,75) pero
+     frío, para los textos que van sobre el video y sobre la foto del cierre.
+     El molde traía #E7DDC8 y #F5EDDA, que son cremas CÁLIDAS. */
+  var NIEVE = '#DCE8F4';
+
   /* la pieza fotografiada: la MISMA url en los cuatro lugares
      (itinerario, tapa de la playlist, perilla del sí/no, tapa de la raspadita) */
   var ZAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790008396/invitame/cenicienta/hpauay94v5mxookjs8bk.webp';
@@ -415,6 +420,25 @@
     '  background:' + TINTA + '!important; color:' + CREMA + '!important;',
     '  -webkit-text-fill-color:' + CREMA + '!important;',
     '  text-shadow:none!important;',
+    '}',
+
+    /* ── LOS CLAROS CÁLIDOS DEL MOLDE ──────────────────────────────────────
+       La cuenta regresiva y el cierre venían en cremas cálidas heredadas del
+       molde: #FBF7EF, #E7DDC8 y #F5EDDA. Pasan `familia-de-color` porque son
+       casi grises, pero adentro del hielo se ven amarillos. Se cambian por el
+       mismo brillo en frío. Van ACÁ, en la colección, y no como corrección
+       después: `reglas-duras` guarda la tinta de fábrica en `data-regla-orig`
+       la PRIMERA vez que mira el elemento y la reusa para siempre. Si el color
+       frío no está puesto desde que carga la página, lo que se guarda es el
+       crema y el corrector devuelve un marrón. */
+    P + '.portada .count .num, ' + P + '.portada .count .sep{',
+    '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
+    '}',
+    P + '.portada .count .lab{',
+    '  color:' + NIEVE + '!important; -webkit-text-fill-color:' + NIEVE + '!important;',
+    '}',
+    P + '.footer .n, ' + P + '.footer .sm, ' + P + '.col-mvta .col-mvta-t{',
+    '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '}',
 
     '@media (prefers-reduced-motion: reduce){',
