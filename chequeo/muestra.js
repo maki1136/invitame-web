@@ -300,7 +300,16 @@
      «no quiero que se vea el reproductor de video como habíamos hablado.» */
   regla('sin-crudos', 'Ningún reproductor a la vista', function () {
     var malos = [];
-    [].forEach.call(document.querySelectorAll('.frame iframe, .frame video'), function (m) {
+    /* ⚠️⚠️ ANTES DECÍA `.frame video`, Y EL QUE SE VEÍA ESTABA AFUERA.
+       Medido el 20/9/2026. Maki: «se sigue viendo el reproductor al principio
+       con el sobre». Esta regla daba VERDE igual, por dos motivos a la vez:
+         1) sólo miraba adentro de `.frame`, y el video del FONDO vive en
+            `#inv-fondo`, que está afuera. Nunca lo examinó.
+         2) la condición era un Y: un video sin `controlslist` pasaba si tenía
+            `pointer-events:none`. Justamente el caso del fondo.
+       Ahora se miran TODOS los <video> de la página, estén donde estén, y se
+       exigen las CINCO protecciones. Los iframes siguen scopeados al marco. */
+    [].forEach.call(document.querySelectorAll('.frame iframe, video'), function (m) {
       if (!visible(m)) return;
       var caja = m.parentElement;
       var tapada = caja && (caja.querySelector('.rd-tapa') || caja.querySelector('.col-vtapa'));
@@ -312,8 +321,17 @@
       var esMapa = /google\.com\/maps|maps\.google/.test(src);
       if (esMapa) return;                       /* el mapa SÍ se muestra */
       if (m.tagName === 'VIDEO') {
-        if (getComputedStyle(m).pointerEvents !== 'none' && !m.hasAttribute('controlslist')) {
-          malos.push('video sin blindar');
+        /* Las cinco. Falta UNA y está mal: en Safari y en iOS cada una destapa
+           algo distinto (el PLAY, el PiP, el AirPlay, el menú de descarga). */
+        var falta = [];
+        if (m.hasAttribute('controls'))                  falta.push('controls');
+        if (!m.hasAttribute('controlslist'))             falta.push('controlslist');
+        if (!m.hasAttribute('disablepictureinpicture'))  falta.push('PiP');
+        if (!m.hasAttribute('disableremoteplayback'))    falta.push('AirPlay');
+        if (getComputedStyle(m).pointerEvents !== 'none') falta.push('pointer-events');
+        if (falta.length) {
+          var quien = m.id ? '#' + m.id : ((m.currentSrc || m.src || '?').split('/').pop().slice(0, 28));
+          malos.push('video sin blindar (' + quien + '): falta ' + falta.join(', '));
         }
         return;
       }
