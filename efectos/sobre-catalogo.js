@@ -513,6 +513,19 @@
        hoja. Y acordarse de que el enemigo puede ser uno mismo. */
     '#env-vid{ opacity:0!important; transition:opacity .22s linear; }',
     '#env.vid-vivo #env-vid{ opacity:1!important; }',
+    /* ⚠⚠ Y EL POSTER NO PUEDE IR DE FONDO DE #env: ALGO OPACO LO TAPA.
+       Medido: puesto como `background-image` de #env, la pantalla quedaba de un
+       color liso igual. El fondo de #env esta por DEBAJO de las capas del
+       sobre. Asi que la foto va en una LAMINA propia, con la misma geometria
+       que el video (fixed, inset 0, contain) y ENCIMA de el. Cuando el video
+       arranca de verdad, la lamina se desvanece.
+       Resultado: nunca hay un video pausado A LA VISTA, que es lo que hace que
+       el iPhone dibuje su boton de arranque. */
+    '#env .env-poster{ position:fixed; inset:0; width:100%; height:100%;'
+      + ' background-size:contain; background-position:center;'
+      + ' background-repeat:no-repeat; z-index:2; pointer-events:none;'
+      + ' opacity:1; transition:opacity .22s linear; }',
+    '#env.vid-vivo .env-poster{ opacity:0; }',
     '#env-vid::-webkit-media-controls,',
     '#env-vid::-webkit-media-controls-enclosure,',
     '#env-vid::-webkit-media-controls-panel,',
@@ -637,10 +650,15 @@
           if (!env) env = document.getElementById('env');
           var pst = v.getAttribute('poster');
           if (pst && env) {
+            var lam = env.querySelector('.env-poster');
+            if (!lam) {
+              lam = document.createElement('i');
+              lam.className = 'env-poster';
+              lam.setAttribute('aria-hidden', 'true');
+              env.appendChild(lam);
+            }
             var bg = 'url("' + pst + '")';
-            if (env.style.backgroundImage !== bg) env.style.backgroundImage = bg;
-            env.style.backgroundSize = 'cover';
-            env.style.backgroundPosition = 'center';
+            if (lam.style.backgroundImage !== bg) lam.style.backgroundImage = bg;
             return;
           }
         } catch (e) {}
