@@ -525,8 +525,8 @@
          el fondo del panel, `reglas-duras.js` lo lee como panel claro y da
          vuelta el itinerario a texto negro sobre negro. */
     '@keyframes discoPista{',
-    '  from { background-position: 0 0, 0 0, -70% 0; }',
-    '  to   { background-position: 184px -92px, -184px 92px, 170% 0; }',
+    '  from { background-position: 0 0, 0 0, -85% 0; }',
+    '  to   { background-position: 296px -148px, -256px 128px, 185% 0; }',
     '}',
     /* la luz que baja por el hilo del itinerario, siempre */
     '@keyframes discoHilo{',
@@ -536,11 +536,19 @@
     P + ':is(#dc-nada, .tl)::after{',
     '  content:""; position:absolute; inset:0; pointer-events:none;',
     '  background-color:transparent;',
+    /* ⚠⚠ LA CALIBRACIÓN, MIRADA Y CORREGIDA EL MISMO Día. Primera versión:
+       lunares de 20 px en una grilla de 46 px. Se movía — y quedaba un
+       EMPAPELADO DE LUNARES peleando con el texto, no luz de bola de espejos.
+       ⚠ LA REGLA: la luz de una bola de espejos es POCA, CHICA Y SEPARADA.
+         Grilla grande (74 y 128 px), punto chico (6 y 16 px de radio) y alfa
+         baja (.34 y .14). Si los puntos se tocan entre sí, ya es un estampado.
+       ⚠ Y el haz baja a .09 y a una banda SIMÉTRICA: la versión anterior
+         terminaba en .03 y dejaba un borde vertical duro a la vista. */
     '  background-image:',
-    '    radial-gradient(circle at 50% 50%, rgba(255,255,255,.42) 0, rgba(255,255,255,0) 30%),',
-    '    radial-gradient(circle at 50% 50%, rgba(214,212,228,.26) 0, rgba(255,255,255,0) 26%),',
-    '    linear-gradient(100deg, transparent 0%, rgba(255,255,255,.13) 46%, rgba(255,255,255,.03) 62%, transparent 100%);',
-    '  background-size:46px 46px, 92px 92px, 62% 100%;',
+    '    radial-gradient(circle at 50% 50%, rgba(255,255,255,.34) 0, rgba(255,255,255,0) 11%),',
+    '    radial-gradient(circle at 50% 50%, rgba(214,212,228,.14) 0, rgba(255,255,255,0) 18%),',
+    '    linear-gradient(100deg, transparent 0%, rgba(255,255,255,.09) 50%, transparent 100%);',
+    '  background-size:74px 74px, 128px 128px, 80% 100%;',
     '  background-repeat:repeat, repeat, no-repeat;',
     '  mix-blend-mode:screen;',
     '  animation:discoPista 7s linear infinite;',
