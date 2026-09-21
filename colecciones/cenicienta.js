@@ -74,6 +74,17 @@
      (itinerario, tapa de la playlist, perilla del sí/no, tapa de la raspadita) */
   var ZAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790008396/invitame/cenicienta/hpauay94v5mxookjs8bk.webp';
 
+  /* ⚠️⚠️ LA TAPA DE LA RASPADITA VA APARTE, Y OPACA.
+     Maki: «está buena la raspada pero se ve atrás el número; respetá los
+     zapatos pero ponele relleno».
+     La causa: `raspadita.js` pinta la tapa en un CANVAS y hace `clearRect` y
+     después `drawImage` — no rellena nada debajo. La zapatilla es un WebP con
+     transparencia, así que por todo lo que no es zapato se veía la fecha.
+     No se toca el motor por esto: el contrato del módulo es que la colección
+     escribe `--r3-tapa` y él obedece. Se le da una imagen que YA es opaca:
+     la misma zapatilla sobre un disco de plata helada, 560x560, sin alfa. */
+  var ZAPA_TAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790016917/invitame/cenicienta/zyozqqok6olb8ouh1czr.jpg';
+
   /* la viñeta de los títulos: un cristal de hielo de seis puntas entre dos
      filetes. Va en VECTOR, no en foto: el adorno de arriba de cada título es
      una viñeta tipográfica; la foto es para los objetos reconocibles — acá, la
@@ -173,15 +184,27 @@
            #pv-names{ font-size:var(--fs-nombres,54px)!important }
            #pv-kick { font-size:var(--fs-kicker,15px) !important }
        Un ID (1,0,0) le gana a cualquier `html[data-x] .portada .names` (0,3,0).
-       ⚠️ Y LO PRIMERO QUE SE MIDE NO ES LA FUENTE, ES CUÁNTO OCUPA EL BLOQUE:
-          la referencia está arriba del 55% de la pantalla. Por eso los cuerpos
-          son grandes de verdad y el bloque va centrado.
-          MEDIDO en vivo el 21/9 con `INVCENICIENTA.alto()`: con los cuerpos
-          de fábrica daba 25%, con el nombre solo agrandado 52%, y con el
-          nombre + la cuenta regresiva + el aire de estos valores da **55%**.
-          Y la cola de la cursiva, medida con las métricas reales de la
-          fuente: tinta a 165 px contra un techo de 231 (line-height 186 +
-          padding-bottom 45). Entra con 66 px de sobra. */
+       ⚠️⚠️ EL CRITERIO DE LA PORTADA ES EL DE PERLAS, NO EL DE DISCO.
+          La primera versión llevaba el bloque al 55% de la pantalla con el
+          nombre en 186 px. Maki: «dejaste como regla los textos de la portada
+          como la de Disco, pero ese era sólo para Disco; quiero que respetes
+          como estaba Perlas».
+          Así que el número no se eligió: se MIDIÓ sobre Perlas en vivo
+          (`camila-y-tomas`, misma ventana de 1440x645):
+
+              bloque de la portada  37% de la pantalla
+              nombre                54 px   ·  sobretítulo 11 px
+              fecha                 12 px   ·  cuenta regresiva 44 px
+              letra del sobretítulo .34em de espaciado
+
+          Acá el nombre es una CURSIVA y no una romana en versalitas, así que
+          al mismo cuerpo se ve mucho más chico: con los valores de abajo el
+          bloque da **39%**, medido con `INVCENICIENTA.alto()` — dos puntos de
+          Perlas, no veinte. La cuenta regresiva queda como viene del motor
+          (`.count .num`), que es exactamente lo que hace Perlas.
+          Y la cola de la cursiva sigue entrando: el `padding-bottom` es
+          proporcional al cuerpo (.24em), así que al achicar el nombre achica
+          con él. */
     P + '.portada{ justify-content:center!important; }',
 
     /* el velo: radial, en un ::before del BLOQUE. Pseudo hermano, no ancestro,
@@ -201,13 +224,13 @@
     /* el sobretítulo: «MIS XV», chiquito y muy abierto */
     P + '.portada #pv-kick{',
     '  font-family:' + SANS + '!important;',
-    '  font-size:clamp(12px,3.6vw,16px)!important;',
+    '  font-size:clamp(10px,2.9vw,12px)!important;',
     '  font-weight:400!important;',
-    '  letter-spacing:.58em!important; text-indent:.58em!important;',
+    '  letter-spacing:.34em!important; text-indent:.34em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '  line-height:1.4!important;',
-    '  margin:0 0 .5em 0!important;',
+    '  margin:0 0 1.1em 0!important;',
     '  text-shadow:0 1px 3px rgba(6,12,22,.85)!important;',
     '}',
 
@@ -222,7 +245,7 @@
     '  font-family:' + SCRIPT + '!important;',
     '  font-weight:400!important;',
     '  font-style:normal!important;',
-    '  font-size:clamp(92px,29vw,186px)!important;',
+    '  font-size:clamp(46px,13.5vw,84px)!important;',
     '  line-height:1!important;',
     '  padding-bottom:.24em!important;',
     '  letter-spacing:.01em!important;',
@@ -253,14 +276,14 @@
 
     P + '.portada .fecha{',
     '  font-family:' + SANS + '!important;',
-    '  font-size:clamp(11px,2.9vw,13.5px)!important;',
-    '  letter-spacing:.42em!important; text-indent:.42em!important;',
+    '  font-size:clamp(10px,2.6vw,11.5px)!important;',
+    '  letter-spacing:.26em!important; text-indent:.26em!important;',
     '  color:' + CREMA + '!important;',
     '  text-shadow:0 1px 3px rgba(6,12,22,.85)!important;',
-    '  margin-top:1.5em!important;',
+    '  margin-top:1.1em!important;',
     '}',
     /* la cuenta regresiva, también grande: suma al % que ocupa el bloque */
-    P + '.portada .cd, ' + P + '.portada .ivf{ margin-top:1.5em!important; }',
+    P + '.portada .cd, ' + P + '.portada .ivf{ margin-top:1.1em!important; }',
     P + '.portada .cd .n, ' + P + '.portada .ivf .c .n{',
     '  font-family:' + DISPLAY + '!important;',
     '  font-size:clamp(34px,9vw,52px)!important;',
@@ -294,7 +317,7 @@
        ⚠️ Y la FORMA sale de `fx.raspadita.forma`, que ya está en el panel.
           Redondear `.r3-f` por CSS no sirve: es la otra rama. */
     ':is(#cen-nada, .scratch-sec, .rasp-3, .rasp-zona, #scratchcard){',
-    '  --r3-tapa:url("' + ZAPA + '");',
+    '  --r3-tapa:url("' + ZAPA_TAPA + '");',
     '}',
     /* ⚠️ EL RECUADRO. El motor le pone `background:var(--lino2)` al contenedor.
        Maki ya pidió sacarlo dos veces. Se apaga POR PARTES: el atajo
@@ -342,11 +365,16 @@
     /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
        ⚠️ LA TAPA NO ES UN RECTÁNGULO: va transparente, con el iframe en
           visibility:hidden (eso lo hace el motor). */
+    /* ⚠️ EL ZAPATO NO VA EN EL CENTRO: ahí está el círculo del play.
+       Maki: «el play con el zapato de la playlist quedaron juntos medio raro».
+       Los dos median lo mismo y se pisaban. La tapa es ancha (392 px medidos),
+       así que la pieza se corre a la izquierda y el play se queda solo en el
+       medio: quedan como un emblema y su botón, no como dos íconos peleando. */
     P + '.rd-tapa, ' + P + '.sp-tapa{',
     '  background-color:transparent!important;',
     '  background-image:url("' + ZAPA + '")!important;',
-    '  background-size:78px 78px!important;',
-    '  background-position:center!important;',
+    '  background-size:66px 66px!important;',
+    '  background-position:30% 44%!important;',
     '  background-repeat:no-repeat!important;',
     '}',
 
