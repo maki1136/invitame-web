@@ -578,6 +578,12 @@ window.SOBRES_INVITAME = {
            más abajo (mismo x, +250 px, máscara circular con 14 px de
            desenfoque). Así el lacre existe UNA sola vez y viaja pegado a la
            solapa, que es lo que hace un lacre de verdad al partirse el sobre.
+           ⚠️ El parche se elige midiendo: se toma el brillo del ANILLO que
+              rodea al lacre (entre 1,15 y 1,55 radios) y se prueba el papel a
+              230, 260, 290 y 320 px más abajo, quedándose con el que menos se
+              aparta; después se le iguala el brillo exacto. Con el primer
+              parche, elegido a ojo, quedaba un disco fantasma visible al
+              abrirse la solapa.
 
      `solapa` = el triángulo de arriba MÁS EL LACRE, recortado con
      transparencia. Se armó por geometría sobre la propia foto (no a mano):
@@ -593,7 +599,7 @@ window.SOBRES_INVITAME = {
      ---------------------------------------------------------------------- */
   cenicienta: {
     nombre:   "Cenicienta · papel de hielo, lacre de zapatilla de cristal (foto)",
-    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790020721/invitame/cenicienta/gwjikl5ehgocskdvl6dg.jpg",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790021600/invitame/cenicienta/ac56zi1gu4cjuy0jkr8j.jpg",
     solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/ovst4cedqvfysmrf3xu1.webp",
     color:    "#EAF2FA",
     apertura: "solapas",
