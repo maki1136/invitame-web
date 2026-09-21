@@ -99,7 +99,12 @@
       paleta: null, paletaNombre: null,
       ayuda: 'Boho chic: pampas en video, papel crema y tinta marron con ' +
              'acento camel, los nombres en versalitas muy abiertas SIN cursiva ' +
-             'y una rosa seca fotografiada como marca. Trae su propia paleta.' }
+             'y una rosa seca fotografiada como marca. Trae su propia paleta.' },
+    { id: 'cenicienta', nombre: 'Cenicienta',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Cuento de hadas de hielo: nieve y palacio en video, azul hielo y ' +
+             'plata, titulos en Forum y el nombre en cursiva grande, con una ' +
+             'zapatilla de cristal fotografiada como marca. Trae su propia paleta.' }
   ];
 
   function borrador() {
