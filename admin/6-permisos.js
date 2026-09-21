@@ -55,6 +55,12 @@
   var AVISO = '';        // el renglón amarillo de la chapita, si hay algo que decir
   var arrancando = false;
   var latiendo = false;
+  var intPedidos = false;   // el refresco de los pedidos se instala una sola vez
+
+  /* Rastro para poder mirar desde la consola qué pasó, sin adivinar:
+     escribí  INVPERM  en la consola del panel. */
+  var PASOS = [];
+  window.INVPERM = PASOS;
 
   function puede(q) { return !!(PUEDE[ROL] && PUEDE[ROL][q]); }
   function esc(s) {
@@ -194,6 +200,11 @@
     m.appendChild(c);
 
     function pintar() {
+      /* ⚠️ El nodo se busca por id cada vez: si el panel redibujó la columna,
+         el `c` de arriba quedó colgado fuera del documento y escribir ahí no
+         se ve en ningún lado. */
+      var c = document.getElementById('permpedidos');
+      if (!c) return;
       window.INV.listBorrados().then(function (lista) {
         var p = (lista || []).filter(function (x) { return (x.estado || '') === 'pendiente'; });
         if (!p.length) { c.style.display = 'none'; return; }
@@ -234,7 +245,7 @@
       })['catch'](function () { /* sin permiso de lectura: no se dibuja nada */ });
     }
     pintar();
-    setInterval(pintar, 30000);
+    if (!intPedidos) { intPedidos = true; setInterval(pintar, 30000); }
   }
 
   /* ------------------------------------------------------ la caja de EQUIPO
@@ -252,6 +263,8 @@
     m.appendChild(c);
 
     function pintar() {
+      var c = document.getElementById('permequipo');   // ver la nota de arriba
+      if (!c) return;
       window.INV.listEquipo().then(function (lista) {
         var h = '<div style="font-size:12.5px;font-weight:600;margin-bottom:2px">Equipo</div>' +
                 '<div style="font-size:11px;opacity:.65;margin-bottom:9px;line-height:1.35">' +
@@ -351,13 +364,25 @@
 
   function repasar() {
     if (!ROL) return;
-    aplicar();                       // los botones llegan tarde: se repasa siempre
-    if (pintado || !anclaje()) return;
-    pintado = true;
-    chapita(AVISO);
-    cajaEquipo();
-    cajaPedidos();
-    cajaPedir();
+    try { aplicar(); } catch (e) { PASOS.push('aplicar:' + e); }
+
+    /* ⚠️⚠️ EL BUG QUE COSTÓ LA TARDE (21/9/2026)
+       No alcanza con pintar una vez cuando aparece `.mejoras`: el panel
+       REDIBUJA esa columna cuando termina de bajar el evento de Firestore, y
+       se lleva puesta la chapita y las cajas que ya estaban adentro. Con un
+       `pintado = true` de una sola vez, quedaba todo invisible para siempre y
+       sin ningún error en la consola — el peor tipo de falla.
+       Por eso NO se marca nada como pintado: cada latido se fija si el nodo
+       sigue en el documento y, si no está, lo vuelve a poner. Las cajas ya
+       traen su propia guarda por id, así que esto no duplica nada. */
+    if (!anclaje()) { PASOS.push('sin .mejoras'); return; }
+    try {
+      if (!document.getElementById('permchapa')) chapita(AVISO);
+      cajaEquipo();
+      cajaPedidos();
+      cajaPedir();
+      pintado = true;                       // sólo informativo, ya no frena
+    } catch (e) { PASOS.push('pintar:' + e); }
   }
 
   function latir() {
