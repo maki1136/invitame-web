@@ -77,7 +77,19 @@
       paleta: 'cafe-caramelo', paletaNombre: 'Café y caramelo',
       ayuda: 'Serif fina en mayúsculas con la cursiva debajo, mucho aire, ' +
              'arcos, la foto en blanco y negro y un hilo de perlas de verdad ' +
-             'que recorre todo.' }
+             'que recorre todo.' },
+    { id: 'marfil', nombre: 'Marfil',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Papel marfil con textura, portada solo tipografica, la tarjeta ' +
+             'flotando y las perlas de los margenes. Trae su propia paleta.' },
+    { id: 'disco', nombre: 'Disco',
+      paleta: 'azul-noche-plata', paletaNombre: 'Azul noche y plata',
+      ayuda: 'Noche, bolas de espejos y plata. Portada sobria, con el nombre ' +
+             'en plata sobre negro.' },
+    { id: 'disco-neon', nombre: 'Disco Neon',
+      paleta: 'azul-noche-plata', paletaNombre: 'Azul noche y plata',
+      ayuda: 'El mismo Disco, con OTRA portada: dos palabras en neon arriba y ' +
+             'el nombre en cursiva cromada. Los textos se escriben aca abajo.' }
   ];
 
   function borrador() {
@@ -137,6 +149,104 @@
     ayuda.style.cssText = 'font-size:11px;opacity:.6;line-height:1.4';
     caja.appendChild(ayuda);
 
+    /* ⭐⭐ LOS CAMPOS DE «DISCO NEON».
+       Regla de Maki (21/9/2026): «todo lo que agregamos a las muestras despues
+       tiene que estar en el panel accesible para que Jazmin pueda armarlas asi
+       personalizadas. No puede pasar que mostramos una de estas muestras y
+       despues no la podamos armar manualmente».
+       Esta portada tiene tres textos propios, una altura y un color. Sin esto
+       solo se podian escribir a mano en la base. Se ven SOLO con «disco-neon». */
+    var neon = document.createElement('div');
+    neon.style.cssText = 'display:none;margin-top:10px;padding:10px 11px;border-radius:8px;' +
+      'background:rgba(0,0,0,.045);border:1px solid rgba(0,0,0,.08)';
+    caja.appendChild(neon);
+
+    var neonT = document.createElement('div');
+    neonT.textContent = 'La portada de neon';
+    neonT.style.cssText = 'font-size:12px;font-weight:600;margin-bottom:2px';
+    neon.appendChild(neonT);
+
+    function campoNeon(rotulo, clave, ejemplo, ayudita) {
+      var l = document.createElement('label');
+      l.textContent = rotulo;
+      l.style.cssText = 'display:block;font-size:11.5px;font-weight:600;margin:8px 0 3px';
+      neon.appendChild(l);
+      var i = document.createElement('input');
+      i.type = 'text'; i.placeholder = ejemplo || '';
+      i.style.cssText = 'width:100%';
+      i.oninput = function () {
+        var fx = datos(); if (!fx) return;
+        if (!fx.neon) fx.neon = {};
+        fx.neon[clave] = i.value;
+        refrescar();
+      };
+      neon.appendChild(i);
+      if (ayudita) {
+        var h = document.createElement('div');
+        h.textContent = ayudita;
+        h.style.cssText = 'font-size:10.5px;opacity:.6;margin-top:2px;line-height:1.35';
+        neon.appendChild(h);
+      }
+      return i;
+    }
+
+    var inPalabra = campoNeon('Palabra en neon', 'palabra', "LET'S",
+      'La de arriba de todo, en imprenta gruesa.');
+    var inScript = campoNeon('Palabra en cursiva', 'script', 'Party',
+      'Va pisando a la de arriba. Vacia = no se dibuja.');
+    var inBajada = campoNeon('Bajada, debajo del nombre', 'bajada', 'Mis XV anos',
+      'Vacia = no se dibuja.');
+
+    var labAlto = document.createElement('label');
+    labAlto.textContent = 'Donde va el bloque';
+    labAlto.style.cssText = 'display:block;font-size:11.5px;font-weight:600;margin:8px 0 3px';
+    neon.appendChild(labAlto);
+    var selAlto = document.createElement('select');
+    selAlto.style.cssText = 'width:100%';
+    [['centro', 'Centrado'], ['sube', 'Mas arriba']].forEach(function (o) {
+      var op = document.createElement('option');
+      op.value = o[0]; op.textContent = o[1];
+      selAlto.appendChild(op);
+    });
+    selAlto.onchange = function () {
+      var fx = datos(); if (!fx) return;
+      if (!fx.neon) fx.neon = {};
+      fx.neon.alto = selAlto.value;
+      refrescar();
+    };
+    neon.appendChild(selAlto);
+
+    var labColor = document.createElement('label');
+    labColor.textContent = 'Color del neon';
+    labColor.style.cssText = 'display:block;font-size:11.5px;font-weight:600;margin:8px 0 3px';
+    neon.appendChild(labColor);
+    var inColor = document.createElement('input');
+    inColor.type = 'color';
+    inColor.style.cssText = 'width:66px;height:28px;padding:0;border:0;background:none;cursor:pointer';
+    inColor.oninput = function () {
+      var fx = datos(); if (!fx) return;
+      if (!fx.neon) fx.neon = {};
+      fx.neon.color = inColor.value;
+      refrescar();
+    };
+    neon.appendChild(inColor);
+
+    /* ⚠ no se pisa lo que Jazmin esta escribiendo: pintar() corre cada 700 ms,
+       asi que el campo con el foco no se reescribe. */
+    function pintarNeon() {
+      var fx = datos() || {};
+      var esNeon = String(fx.coleccion || '') === 'disco-neon';
+      neon.style.display = esNeon ? 'block' : 'none';
+      if (!esNeon) return;
+      var n = fx.neon || {};
+      var act = document.activeElement;
+      if (act !== inPalabra) inPalabra.value = (n.palabra != null) ? n.palabra : '';
+      if (act !== inScript)  inScript.value  = (n.script  != null) ? n.script  : '';
+      if (act !== inBajada)  inBajada.value  = (n.bajada  != null) ? n.bajada  : '';
+      selAlto.value = (String(n.alto || 'centro').toLowerCase() === 'sube') ? 'sube' : 'centro';
+      inColor.value = /^#[0-9a-fA-F]{6}$/.test(String(n.color || '')) ? n.color : '#EAF4FF';
+    }
+
     /* los dos avisos: la paleta y la tipografía */
     function hacerAviso() {
       var e = document.createElement('div');
@@ -171,7 +281,11 @@
       if (c.id) {
         /* ---- 1. la paleta ---- */
         var actual = idDePaleta(fx);
-        if (!actual || actual === c.paleta) {
+        if (!c.paleta) {
+          /* ⚠ la coleccion trae su propia paleta adentro: no propone ninguna.
+             Sin esta guarda se escribia `fx.paleta = {id:null}` y el selector
+             de paletas se quedaba sin id que leer. */
+        } else if (!actual || actual === c.paleta) {
           fx.paleta = { id: c.paleta };    /* ⚠️ objeto, no texto */
         } else {
           avPaleta.textContent = 'Esta colección está diseñada para la paleta ' +
@@ -184,6 +298,18 @@
             refrescar();
           });
           avPaleta.style.display = 'block';
+        }
+
+        /* ---- 3. los textos de la portada de neon ----
+           Se siembran con lo de la muestra para que al elegirla se vea igual
+           que en el catalogo. Jazmin los cambia o los vacia. */
+        if (c.id === 'disco-neon') {
+          if (!fx.neon) fx.neon = {};
+          if (fx.neon.palabra == null) fx.neon.palabra = "LET'S";
+          if (fx.neon.script  == null) fx.neon.script  = 'Party';
+          if (fx.neon.bajada  == null) fx.neon.bajada  = 'Mis XV a\u00F1os';
+          if (!fx.neon.alto)  fx.neon.alto  = 'centro';
+          if (!fx.neon.color) fx.neon.color = '#EAF4FF';
         }
 
         /* ---- 2. la tipografía de los nombres ----
@@ -213,6 +339,7 @@
       var c = deId(fx.coleccion || '');
       if (!soloAyuda) sel.value = c.id;
       ayuda.textContent = c.ayuda;
+      pintarNeon();
     }
 
     caja.pintar = pintar;
