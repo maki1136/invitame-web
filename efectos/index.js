@@ -715,6 +715,9 @@
     '/colecciones/bohemia.js',        /* la QUINTA familia: boho chic. Pampa en video, crema y
                                           camel, sin una sola cursiva y con una rosa seca fotografiada
                                           como marca. Trae su propia paleta. */
+    '/colecciones/cenicienta.js',     /* la SEXTA familia: cuento de hadas de hielo. Nieve y palacio
+                                          en video, azul hielo y plata, titulos en Forum y una zapatilla
+                                          de cristal fotografiada como marca. Trae su propia paleta. */
 
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
