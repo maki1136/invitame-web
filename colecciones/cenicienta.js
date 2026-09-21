@@ -126,7 +126,13 @@
        Un ID (1,0,0) le gana a cualquier `html[data-x] .portada .names` (0,3,0).
        ⚠️ Y LO PRIMERO QUE SE MIDE NO ES LA FUENTE, ES CUÁNTO OCUPA EL BLOQUE:
           la referencia está arriba del 55% de la pantalla. Por eso los cuerpos
-          son grandes de verdad y el bloque va centrado. */
+          son grandes de verdad y el bloque va centrado.
+          MEDIDO en vivo el 21/9 con `INVCENICIENTA.alto()`: con los cuerpos
+          de fábrica daba 25%, con el nombre solo agrandado 52%, y con el
+          nombre + la cuenta regresiva + el aire de estos valores da **55%**.
+          Y la cola de la cursiva, medida con las métricas reales de la
+          fuente: tinta a 165 px contra un techo de 231 (line-height 186 +
+          padding-bottom 45). Entra con 66 px de sobra. */
     P + '.portada{ justify-content:center!important; }',
 
     /* el velo: radial, en un ::before del BLOQUE. Pseudo hermano, no ancestro,
@@ -146,13 +152,13 @@
     /* el sobretítulo: «MIS XV», chiquito y muy abierto */
     P + '.portada #pv-kick{',
     '  font-family:' + SANS + '!important;',
-    '  font-size:clamp(11px,3.1vw,14px)!important;',
+    '  font-size:clamp(12px,3.6vw,16px)!important;',
     '  font-weight:400!important;',
     '  letter-spacing:.58em!important; text-indent:.58em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '  line-height:1.4!important;',
-    '  margin:0 0 .35em 0!important;',
+    '  margin:0 0 .5em 0!important;',
     '  text-shadow:0 1px 3px rgba(6,12,22,.85)!important;',
     '}',
 
@@ -167,7 +173,7 @@
     '  font-family:' + SCRIPT + '!important;',
     '  font-weight:400!important;',
     '  font-style:normal!important;',
-    '  font-size:clamp(58px,19vw,118px)!important;',
+    '  font-size:clamp(92px,29vw,186px)!important;',
     '  line-height:1!important;',
     '  padding-bottom:.24em!important;',
     '  letter-spacing:.01em!important;',
@@ -202,12 +208,13 @@
     '  letter-spacing:.42em!important; text-indent:.42em!important;',
     '  color:' + CREMA + '!important;',
     '  text-shadow:0 1px 3px rgba(6,12,22,.85)!important;',
-    '  margin-top:1.05em!important;',
+    '  margin-top:1.5em!important;',
     '}',
     /* la cuenta regresiva, también grande: suma al % que ocupa el bloque */
+    P + '.portada .cd, ' + P + '.portada .ivf{ margin-top:1.5em!important; }',
     P + '.portada .cd .n, ' + P + '.portada .ivf .c .n{',
     '  font-family:' + DISPLAY + '!important;',
-    '  font-size:clamp(26px,7vw,40px)!important;',
+    '  font-size:clamp(34px,9vw,52px)!important;',
     '  color:' + CREMA + '!important;',
     '}',
 
