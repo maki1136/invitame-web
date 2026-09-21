@@ -804,7 +804,13 @@
       if (tl.querySelector(':scope > .dc-laser')) return;
       var v = document.createElement('video');
       v.className = 'dc-laser';
-      v.src = 'https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/piezas/laser-boliche.mp4';
+      /* OJO: SE SIRVE DESDE EL REPO, NO DESDE CLOUDINARY. Medido el 21/9/2026.
+         Cloudinary devuelve este mp4 con content-type video/mp4;codecs=avc1 y
+         Chrome no lo decodifica: networkState 2 (o sea, bajando), readyState 0 y
+         videoWidth 0, y NO tira ningun error. Se queda negro para siempre y no
+         hay nada en consola. Desde Hostinger, igual que los sobres, sale con el
+         content-type correcto y arranca. */
+      v.src = '/piezas/lp-laser.mp4';
       /* LAS CINCO PROTECCIONES + playsinline: un video de la invitacion
          nunca es un reproductor, es papel que se mueve. */
       v.muted = true; v.defaultMuted = true; v.loop = true; v.autoplay = true;
