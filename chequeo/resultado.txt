@@ -7,7 +7,7 @@ Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 13 PROBLEMAS (y 99 cosas bien)
+HAY 11 PROBLEMAS (y 100 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,7 +29,7 @@ HAY 13 PROBLEMAS (y 99 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Agendar" 1.7/4.5 [#ffffff sobre luminancia 0.02-0.58 · a.btn.gh] · "Formal playero" 2.0/3 [#70745e sobre luminancia 0.39-0.52 · div.kick] · "La fecha" 2.1/3 [#6b7558 sobre luminancia 0.40-0.55 · div.kick.reveal] · "La banda sonora" 2.1/3 [#6b7558 sobre luminancia 0.40-0.55 · div.kick.reveal] y 12 más
+             -> "Formal playero" 2.0/3 [#70745e sobre luminancia 0.39-0.52 · div.kick] · "La fecha" 2.1/3 [#6b7558 sobre luminancia 0.39-0.55 · div.kick.reveal] · "La banda sonora" 2.1/3 [#6b7558 sobre luminancia 0.40-0.55 · div.kick.reveal] · "Con mucha alegría" 2.1/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] y 11 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
@@ -39,18 +39,20 @@ HAY 13 PROBLEMAS (y 99 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
+   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
    BIEN   y se vuelve a abrir
    MAL    sin errores de JavaScript
              -> /www.youtube-nocookie.com'. | /www.youtube-nocookie.com'.
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
+   (no se pudo sacar la captura entera: page.screenshot: Timeout 30000ms exceeded.
+Call log:
+  - tak)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13311 y volvió a 6313
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 283.4 s de punta a punta)
+   (tardó 577.7 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -67,7 +69,7 @@ HAY 13 PROBLEMAS (y 99 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Entrar a la galería" 1.4/4.5 [#0000ee sobre luminancia 0.03-0.11 · a] · "Abrir la cámara" 1.4/4.5 [#000000 sobre luminancia 0.03-0.21 · button] · "Agendar" 1.6/4.5 [#ffffff sobre luminancia 0.02-0.60 · a.btn.gh] · "Dónde y cuándo" 2.0/3 [#ffffff sobre luminancia 0.03-0.48 · h2.reveal.in] y 18 más
+             -> "Entrar a la galería" 1.4/4.5 [#0000ee sobre luminancia 0.03-0.11 · a] · "Abrir la cámara" 1.4/4.5 [#000000 sobre luminancia 0.03-0.21 · button] · "Min" 1.5/4.5 [#e7ddc8 sobre luminancia 0.07-0.46 · div.lab] · "Agendar" 1.6/4.5 [#ffffff sobre luminancia 0.02-0.60 · a.btn.gh] y 22 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x200 (tiene que quedar acostada) · a -212 px del boleto
@@ -81,15 +83,14 @@ HAY 13 PROBLEMAS (y 99 cosas bien)
    BIEN   y se vuelve a abrir
    MAL    sin errores de JavaScript
              -> FirebaseError: Firebase: Error (auth/network-request-failed).
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 11911 y volvió a 10835
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1000.6 s de punta a punta)
+   (tardó 892.6 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -111,7 +112,7 @@ HAY 13 PROBLEMAS (y 99 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Corre la voz" 2.2/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] · "Con mucha alegría" 2.2/3 [#6b7558 sobre luminancia 0.41-0.51 · div.kick.reveal] · "Para verlo juntos" 2.2/3 [#6b7558 sobre luminancia 0.42-0.52 · div.kick.reveal] · "La fecha" 2.2/3 [#6b7558 sobre luminancia 0.42-0.52 · div.kick.reveal] y 12 más
+             -> "Corre la voz" 2.1/3 [#6b7558 sobre luminancia 0.40-0.56 · div.kick.reveal] · "Para verlo juntos" 2.1/3 [#6b7558 sobre luminancia 0.41-0.52 · div.kick.reveal] · "La banda sonora" 2.2/3 [#6b7558 sobre luminancia 0.42-0.52 · div.kick.reveal] · "La fecha" 2.2/3 [#6b7558 sobre luminancia 0.42-0.51 · div.kick.reveal] y 13 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
@@ -131,9 +132,9 @@ HAY 13 PROBLEMAS (y 99 cosas bien)
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13500 y volvió a 11797
+             -> la invitación anotó 13060 y volvió a 14543
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 849.4 s de punta a punta)
+   (tardó 466.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -171,5 +172,5 @@ HAY 13 PROBLEMAS (y 99 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 90.7 s de punta a punta)
+   (tardó 91.0 s de punta a punta)
 
