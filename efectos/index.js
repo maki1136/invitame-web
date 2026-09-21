@@ -716,6 +716,8 @@
                                           camel, sin una sola cursiva y con una rosa seca fotografiada
                                           como marca. Trae su propia paleta. */
 
+    '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
+
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
     '/efectos/panel-dresscode.js',     /* y el editor para elegirlos a mano */
