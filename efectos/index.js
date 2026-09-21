@@ -712,6 +712,9 @@
                                           Va DESPUÉS de las otras tres y no depende de ninguna:
                                           trae su propia paleta, su propio botón (arcilla) y su
                                           propia marca fotografiada (la rodaja de madera). */
+    '/colecciones/bohemia.js',        /* la QUINTA familia: boho chic. Pampa en video, crema y
+                                          camel, sin una sola cursiva y con una rosa seca fotografiada
+                                          como marca. Trae su propia paleta. */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
