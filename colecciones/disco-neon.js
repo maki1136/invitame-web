@@ -194,7 +194,15 @@
     '  text-transform:uppercase!important;',
     '  color:#E6ECF5!important; -webkit-text-fill-color:#E6ECF5!important;',
     '  text-shadow:0 1px 2px rgba(0,0,0,.92), 0 0 14px rgba(120,190,255,.45)!important;',
-    '    /* ⚠ EL HUECO. Maki, 21/9/2026: «pon\u00e9 el texto de Mis XV a\u00f1os y la cuenta\n       regresiva m\u00e1s abajo, donde est\u00e1 lo negro, sino queda mucho aire abajo».\n       La bajada empuja tambi\u00e9n a la cuenta regresiva, que es su hermana de\n       abajo: con esto el bloque de arriba (LET\u0027S / cursiva / nombre) se queda\n       donde est\u00e1 y el pie baja a la zona oscura. Medido: la cuenta termina al\n       85% de la portada, antes terminaba al 77% y sobraba un cuarto de pantalla.\n       ⚠ Va en `vh` porque la portada mide exactamente el alto de la pantalla,\n         y con `clamp` para que en un tel\u00e9fono bajito no se caiga de la vista. */\n    '  margin:clamp(34px,18vh,160px) 0 .35em 0!important;',
+    '    /* ⚠ EL HUECO. Maki, 21/9/2026: «poné el texto de Mis XV años y la cuenta
+       regresiva más abajo, donde está lo negro, sino queda mucho aire abajo».
+       La bajada empuja también a la cuenta regresiva, que es su hermana de
+       abajo: así el bloque de arriba se queda donde está y el pie baja a la
+       zona oscura. Medido: la cuenta termina al 85% de la portada; antes
+       terminaba al 77% y sobraba un cuarto de pantalla vacío.
+       ⚠ Va en `vh` porque la portada mide exactamente el alto de la pantalla,
+         y con `clamp` para que en un teléfono bajito no se caiga de la vista. */
+    '  margin:clamp(34px,18vh,160px) 0 .35em 0!important;',
     '}',
 
     /* la fecha: versalitas espaciadas, el pie del cartel */
