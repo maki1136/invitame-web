@@ -419,6 +419,18 @@
     '  filter:drop-shadow(0 1px 2px rgba(34,30,20,.28));',
     '}',
 
+    /* ⭐ LAS RODAJAS DORMIDAS SEGUÍAN SIENDO MADERA.
+       Maki, 21/9/2026, mirando la raspadita: «todo muy claro».
+       El motor apaga las fichas que todavía no tocan con
+       `.rasp-zona.dormida canvas{ filter:brightness(.84) saturate(.72) }`.
+       Sobre una rodaja de encino ese `saturate(.72)` le saca toda la calidez:
+       la primera se veía de madera y las otras dos grises, como apagadas.
+       Se afloja el apagado y se compensa con un poco de opacidad, que no
+       toca el color: siguen leyéndose como «todavía no», pero de madera. */
+    P + '.rasp-zona.dormida canvas{',
+    '  filter:brightness(.95) saturate(.9) opacity(.88)!important;',
+    '}',
+
     /* =================================================== EL PASE DE DEMO ======
        ⭐ LA TARJETA ES DE PAPEL, SIEMPRE. Maki, 21/9/2026: «me gusta el estilo
           blanco que pusiste, pero no ese fondo de mesa de madera».
