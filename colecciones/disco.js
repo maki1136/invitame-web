@@ -113,7 +113,11 @@
   }
 
   function armarCSS() {
-    /* ⚠ `bola()` queda a mano, sin usar todavía. El dibujo vectorial se sacó de
+    /* ⚠ `bola()` ES EL DIBUJO VECTORIAL, Y YA NO SE USA EN NINGUN LADO.
+     Queda como referencia de lo que NO hay que hacer: a 22 px un dibujo de
+     bola de espejos se lee como un circulito rayado. La pieza de verdad es
+     la FOTO de `invitame/piezas/bola-espejos` (ver mas abajo).
+     ⚠ Lo viejo, por las dudas: El dibujo vectorial se sacó de
        la perilla y de la tapa: a ese tamaño no se lee como una bola de espejos,
        se lee como un circulito rayado. Cuando esté la pieza FOTOGRAFIADA en
        `invitame/piezas/bola-espejos` — recortada con alfa, girando despacio y
@@ -398,9 +402,82 @@
        sirve para SUPERFICIES y para LÍNEAS, no para objetos».
        Hasta que esté la pieza FOTOGRAFIADA (`invitame/piezas/bola-espejos`), la
        perilla va lisa en plata pulida, que es prolijo y no finge ser un objeto. */
+    /* ⭐⭐⭐ LA BOLA DE ESPEJOS FOTOGRAFIADA. 20/9/2026.
+       Maki: «la dibujaste asi a mano... es muy malo eso, esta dibujado pesimo.
+       Necesitamos algo mas profesional. Es mas, hasta la bola esa estaria
+       bueno que este dando vueltas, que genere un brillo.»
+
+       LA PIEZA: generada en Google Flow (Imagen · 1:1 · Nano Banana 2 · x4,
+       0 creditos), recortada como CIRCULO con alfa y subida a Cloudinary en
+       `invitame/piezas/bola-espejos` — 480x480, WebP, 46 KB.
+       ⚠ El recorte va por TEXTURA, no por color: la bola tiene facetas y el
+         fondo y el DESTELLO DE LA LENTE son lisos. Recortando por color, el
+         destello entraba como parte del sujeto e inflaba el radio: quedaba un
+         anillo gris alrededor de la bola. Medido y corregido.
+
+       VA EN LOS TRES LUGARES QUE PIDIO MAKI, con la MISMA pieza:
+         · la marca de cada momento del itinerario
+         · la tapa de la playlist (el aro)
+         · la perilla de «asistire / no podre»
+
+       EL MOVIMIENTO (lo eligio Maki: «gira lento + destello que barre»):
+         · una luz que cruza la esfera de derecha a izquierda en 12 s — eso es
+           lo que se lee como que la bola gira, sin deformar la foto;
+         · un destello fino que la barre en diagonal cada 6 s.
+       Las dos son capas de degrade en `screen` ARRIBA de la foto, movidas con
+       `background-position`. Revisado cuadro por cuadro: el halo del giro
+       arranco al 55% y empanaba las facetas; quedo en 42% y bien chico.
+
+       ⚠⚠ POR QUE ESTO NO ANDABA: `efectos/simbolo-tematica.js` pintaba la
+       marca con el ATAJO `background: <url> ... !important`, y un atajo
+       escribe TODAS sus longhands — incluida `background-position: center
+       !important`. Una declaracion !important de autor le gana a una
+       animacion, asi que los @keyframes se registraban y no movian nada.
+       Arreglado EN EL ORIGEN: ese modulo ya no usa el atajo, y ademas se corre
+       solo cuando el <html> tiene `data-marca-propia`, que lo pone `poner()`
+       aca abajo. */
+    '@keyframes discoBola{',
+    '  0%    { background-position:-130% 50%, 140% 34%, 50% 50%; }',
+    '  7%    { background-position: 230% 50%, 127% 34%, 50% 50%; }',
+    '  7.01% { background-position:-130% 50%, 127% 34%, 50% 50%; }',
+    '  50%   { background-position:-130% 50%,  50% 34%, 50% 50%; }',
+    '  57%   { background-position: 230% 50%,  37% 34%, 50% 50%; }',
+    '  57.01%{ background-position:-130% 50%,  37% 34%, 50% 50%; }',
+    '  100%  { background-position:-130% 50%, -40% 34%, 50% 50%; }',
+    '}',
+    P + ':is(#dc-nada, .tl) > .it::before,',
+    P + ':is(#dc-nada, .rd-tapa) .rd-aro,',
     P + ':is(#dc-nada, .rsvp-sw) .per{',
-    '  background:radial-gradient(circle at 34% 30%, #FFFFFF 0%, ' + PLATA + ' 38%, ' + PLATA2 + ' 72%, ' + PLATA3 + ' 100%)!important;',
-    '  box-shadow:0 0 0 1px rgba(230,228,238,.35), 0 3px 10px rgba(0,0,0,.6)!important;',
+    '  background-image:',
+    '    linear-gradient(74deg, rgba(255,255,255,0) 47%, rgba(255,255,255,.95) 50%, rgba(255,255,255,0) 53%),',
+    '    radial-gradient(closest-side circle, rgba(255,255,255,.42), rgba(255,255,255,0) 100%),',
+    '    url("https://res.cloudinary.com/oc8cgqt4/image/upload/v1789953744/invitame/piezas/bola-espejos.webp")!important;',
+    '  background-size:300% 300%, 92% 92%, 100% 100%!important;',
+    '  background-repeat:no-repeat!important;',
+    '  background-blend-mode:screen, screen, normal!important;',
+    '  background-color:transparent!important;',
+    '  border-radius:50%!important;',
+    '  border:0!important;',
+    '  animation:discoBola 12s linear infinite;',
+    '}',
+    P + ':is(#dc-nada, .tl) > .it::before{',
+    '  width:22px!important; height:22px!important;',
+    '  box-shadow:0 0 10px rgba(230,228,238,.30)!important;',
+    '  -webkit-mask:none!important; mask:none!important;',
+    '}',
+    P + ':is(#dc-nada, .tl).tl-centro > .it:nth-child(odd)::before{ margin-top:-11px!important; right:-36.5px!important; }',
+    P + ':is(#dc-nada, .tl).tl-centro > .it:nth-child(even)::before{ margin-top:-11px!important; left:-36.5px!important; }',
+    P + ':is(#dc-nada, .rd-tapa) .rd-aro{',
+    '  box-shadow:0 0 0 1px rgba(230,228,238,.30), 0 0 22px rgba(230,228,238,.22)!important;',
+    '  backdrop-filter:none!important;',
+    '}',
+    P + ':is(#dc-nada, .rsvp-sw) .per{',
+    '  box-shadow:0 0 0 1px rgba(230,228,238,.32), 0 3px 10px rgba(0,0,0,.6)!important;',
+    '}',
+    '@media (prefers-reduced-motion: reduce){',
+    P + ':is(#dc-nada, .tl) > .it::before,',
+    P + ':is(#dc-nada, .rd-tapa) .rd-aro,',
+    P + ':is(#dc-nada, .rsvp-sw) .per{ animation:none!important; }',
     '}',
     P + ':is(#dc-nada, .rsvp-sw) .pozo{',
     '  background:' + PAPEL + '!important;',
@@ -506,6 +583,9 @@
        itinerario, la tapa del video y Personas. Poniendo el atributo se apagan
        solas, como esta previsto, en vez de taparlas a martillazos. */
     if (raiz.getAttribute('data-coleccion') !== ID) raiz.setAttribute('data-coleccion', ID);
+    /* ⭐ avisa que la marca del itinerario es NUESTRA (la bola fotografiada),
+       asi `efectos/simbolo-tematica.js` no le pinta encima su dibujo. */
+    if (raiz.getAttribute('data-marca-propia') !== ID) raiz.setAttribute('data-marca-propia', ID);
     if (window.INVCOLPALETA !== PALETA_PROPIA) window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
     if (!estabaPuesta) {
@@ -520,6 +600,7 @@
     if (document.documentElement.getAttribute('data-col') === ID) {
       document.documentElement.removeAttribute('data-col');
       document.documentElement.removeAttribute('data-coleccion');
+      document.documentElement.removeAttribute('data-marca-propia');
     }
     if (window.INVCOLPALETA === PALETA_PROPIA) { window.INVCOLPALETA = null; }
     estabaPuesta = false;
