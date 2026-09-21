@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 21/09/2026, 11:19
+Fecha: 21/09/2026, 11:20
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 9 PROBLEMAS (y 102 cosas bien)
+HAY 9 PROBLEMAS (y 80 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,7 +29,7 @@ HAY 9 PROBLEMAS (y 102 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Agendar" 1.7/4.5 [#ffffff sobre luminancia 0.02-0.58 · a.btn.gh] · "Formal playero" 2.1/3 [#6b7558 sobre luminancia 0.39-0.52 · div.kick] · "La banda sonora" 2.1/3 [#6b7558 sobre luminancia 0.40-0.55 · div.kick.reveal] · "Con cariño" 2.1/3 [#6b7558 sobre luminancia 0.41-0.59 · div.kick.reveal] y 12 más
+             -> "Formal playero" 2.0/3 [#70745e sobre luminancia 0.39-0.52 · div.kick] · "La banda sonora" 2.1/3 [#6b7558 sobre luminancia 0.40-0.55 · div.kick.reveal] · "La fecha" 2.1/3 [#6b7558 sobre luminancia 0.40-0.55 · div.kick.reveal] · "Con mucha alegría" 2.1/3 [#6b7558 sobre luminancia 0.40-0.56 · div.kick.reveal] y 12 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
@@ -39,57 +39,29 @@ HAY 9 PROBLEMAS (y 102 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    MAL    sin errores de JavaScript
              -> /www.youtube-nocookie.com'. | /www.youtube-nocookie.com'.
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Timeout 30000ms exceeded.
-Call log:
-  - tak)
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 488.8 s de punta a punta)
+   (tardó 219.9 s de punta a punta)
 
+  ⚠️ no se pudo preguntar si la invitación existe (fetch failed). Se sigue igual.
 
 ──────────────────────────────────────────
   Safari iPhone
 ──────────────────────────────────────────
-   BIEN   no asoma otro sobre al abrir
-   BIEN   la portada no es la de otra invitación
-   BIEN   sin voseo desde el primer pintado
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   MAL    todos los textos se leen
-             -> "Agendar" 1.1/4.5 [#ffffff sobre luminancia 0.03-0.90 · a.btn.gh] · "Entrar a la galería" 1.4/4.5 [#0000ee sobre luminancia 0.03-0.11 · a] · "Abrir la cámara" 1.4/4.5 [#000000 sobre luminancia 0.03-0.21 · button] · "Para verlo juntos" 2.5/4.5 [#5e664d sobre luminancia 0.38-0.56 · div.kick.reveal] y 17 más
-   BIEN   el boleto del pase se ve entero
-   MAL    al tocar el boleto, el pedazo se corta y baja
-             -> quedo 50x200 (tiene que quedar acostada) · a -212 px del boleto
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 762.6 s de punta a punta)
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   MAL    no se pudo ni abrir el navegador
+             -> page.goto: Operation was cancelled; maybe frame was detached?
 
 
 ──────────────────────────────────────────
@@ -111,9 +83,10 @@ Call log:
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Para verlo juntos" 2.1/3 [#6b7558 sobre luminancia 0.41-0.52 · div.kick.reveal] · "Corre la voz" 2.2/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] · "La banda sonora" 2.2/3 [#6b7558 sobre luminancia 0.42-0.52 · div.kick.reveal] · "La fecha" 2.2/3 [#6b7558 sobre luminancia 0.42-0.52 · div.kick.reveal] y 14 más
+             -> "Agendar" 1.2/4.5 [#ffffff sobre luminancia 0.03-0.83 · a.btn.gh] · "Corre la voz" 2.2/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] · "La banda sonora" 2.2/3 [#6b7558 sobre luminancia 0.42-0.53 · div.kick.reveal] · "Con mucha alegría" 2.2/3 [#6b7558 sobre luminancia 0.43-0.51 · div.kick.reveal] y 15 más
    BIEN   el boleto del pase se ve entero
-   ----   el boleto no se pudo traer a la pantalla: no se midio
+   MAL    al tocar el boleto, el pedazo se corta y baja
+             -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
@@ -124,21 +97,21 @@ Call log:
    BIEN   y se vuelve a abrir
    MAL    sin errores de JavaScript
              -> /www.youtube-nocookie.com'. | /www.youtube-nocookie.com'.
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13500 y volvió a 8684
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1025.9 s de punta a punta)
+   (tardó 391.5 s de punta a punta)
 
 
 ──────────────────────────────────────────
   Chrome escritorio
 ──────────────────────────────────────────
-   BIEN   no asoma otro sobre al abrir
+   MAL    no asoma otro sobre al abrir
+             -> 4 piezas a la vista: .triflap.tri-t 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-r 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-b 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-l 1440x900 [display:block visibility:visible opacity:1]  |  estado de las piezas a los 150 ms: .triflap:block/visible · .triflap:block/visible · .triflap:block/visible · .triflap:block/visible · #scene:none/visible  |  marca inv-sobre-listo: todavia no
    BIEN   la portada no es la de otra invitación
    BIEN   la columna ya está encuadrada en el primer pintado
    ----   el sobre no se pudo medir todavía (no es un fallo)
@@ -153,7 +126,7 @@ Call log:
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Con mucha alegría" 2.1/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] · "La banda sonora" 2.1/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] · "La fecha" 2.2/3 [#6b7558 sobre luminancia 0.42-0.53 · div.kick.reveal] · "Con cariño" 2.2/3 [#6b7558 sobre luminancia 0.42-0.62 · div.kick.reveal] y 15 más
+             -> "Formal playero" 2.1/3 [#70745e sobre luminancia 0.41-0.54 · div.kick] · "Con mucha alegría" 2.1/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] · "La banda sonora" 2.1/3 [#6b7558 sobre luminancia 0.41-0.56 · div.kick.reveal] · "Con cariño" 2.2/3 [#6b7558 sobre luminancia 0.43-0.62 · div.kick.reveal] y 14 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -170,5 +143,5 @@ Call log:
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 89.2 s de punta a punta)
+   (tardó 94.9 s de punta a punta)
 
