@@ -45,6 +45,7 @@ catch (e) { initError = e; console.error("INV init error", e); }
 const EV = "inv_eventos";
 const GU = "inv_invitados";
 const PV = "inv_privado";   // datos que NO puede ver un invitado
+const EQ = "inv_equipo";    // el equipo y su rol (ver admin/6-permisos.js)
 const gid = (slug, token) => slug + "__" + token;
 // El token de un invitado es su QR de entrada Y la llave que abre su ficha.
 // Math.random() NO es criptografico: viendo unos pocos tokens de una boda se pueden
@@ -205,6 +206,38 @@ const INV = {
   async delInvitado(slug, token) {
     // borrado lógico: se marca inactivo (nunca hard-delete)
     await updateDoc(doc(db, GU, gid(slug, token)), { activo: false, updatedAt: serverTimestamp() });
+  },
+
+  // ---- EL EQUIPO Y SUS PERMISOS ----
+  /* Cada persona del equipo es un documento de `inv_equipo`, con el CORREO en
+     minúscula como id.
+     ⭐ Se usa el correo y NO el uid de Firebase a propósito: el uid recién
+     existe después del primer ingreso, así que con el correo Maki puede dejar
+     el permiso cargado ANTES de que la persona entre por primera vez.
+     Roles: 'duena' | 'calidad' | 'carga'. Quién puede qué, en 6-permisos.js.
+     ⚠️ Esto es la FUENTE, no el candado. El candado son las reglas de
+        Firestore: sin ellas, esconder un botón no frena a nadie. */
+  async listEquipo() {
+    const snap = await getDocs(collection(db, EQ));
+    return snap.docs.map(d => ({ mail: d.id, ...d.data() }));
+  },
+  async getMiembro(mail) {
+    const m = String(mail || '').trim().toLowerCase();
+    if (!m) return null;
+    const s = await getDoc(doc(db, EQ, m));
+    return s.exists() ? { mail: m, ...s.data() } : null;
+  },
+  async saveMiembro(mail, datos) {
+    const m = String(mail || '').trim().toLowerCase();
+    if (!m) throw new Error('falta el correo');
+    await setDoc(doc(db, EQ, m), { ...(datos || {}), mail: m, updatedAt: serverTimestamp() }, { merge: true });
+    return m;
+  },
+  /* Baja LÓGICA, nunca hard-delete: si alguien se va queda el registro de que
+     estuvo y de quién le sacó el permiso. */
+  async bajaMiembro(mail) {
+    const m = String(mail || '').trim().toLowerCase();
+    await updateDoc(doc(db, EQ, m), { activo: false, updatedAt: serverTimestamp() });
   },
 
   // ---- Confirmación (RSVP) desde la invitación ----
