@@ -238,6 +238,26 @@
       v.setAttribute('playsinline', '');
       v.playsInline = true;
       v.preload = 'auto';
+      /* ⚠️⚠️ EL BLINDAJE, QUE ESTE VIDEO NO TENIA. Medido el 20/9/2026.
+         Maki: «se sigue viendo el reproductor al principio con el sobre».
+         El video del SOBRE (#env-vid) nace blindado desde el HTML del motor,
+         pero el del FONDO se crea ACA, y nacia pelado: sin `controlslist`, sin
+         `disablepictureinpicture` y sin `disableremoteplayback`. En Safari y en
+         iOS eso muestra el boton de PiP, el de AirPlay y —si no llega a
+         arrancar— el PLAY gigante en el medio. Y este video esta JUSTO DETRAS
+         DEL SOBRE, que es lo primero que ve el invitado.
+         ⚠ LA REGLA: un video de la invitacion NUNCA es un reproductor, es
+           papel que se mueve. No se toca, no se descarga, no sale a otra
+           pantalla. Cualquier <video> que cree un modulo nace asi. */
+      v.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback noplaybackrate');
+      v.setAttribute('disablepictureinpicture', '');
+      try { v.disablePictureInPicture = true; } catch (e) {}
+      v.setAttribute('disableremoteplayback', '');
+      v.removeAttribute('controls');
+      v.controls = false;
+      v.tabIndex = -1;
+      v.setAttribute('aria-hidden', 'true');
+      v.style.pointerEvents = 'none';
       caja.appendChild(v);
 
       /* ⚠️⚠️ EL PLAZO SE CUENTA POR PROGRESO, NO POR RELOJ DE PARED.
