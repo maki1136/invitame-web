@@ -97,14 +97,14 @@
        ⚠ `text-indent` compensa el `letter-spacing`: sin eso el bloque queda
          corrido a la izquierda, porque el espaciado se agrega DESPUÉS de la
          última letra y el centrado lo cuenta. */
-    P + '.portada .kicker{',
+    P + '.portada #pv-kick, ' + P + '.portada .kicker{',
     '  font-size:0!important; line-height:1!important;',
     '  letter-spacing:0!important; text-indent:0!important;',
     '  margin:0!important;',
     '  animation:neonLatido 5.2s ease-in-out infinite!important;',
     '}',
 
-    P + '.portada .kicker::before{',
+    P + '.portada #pv-kick::before, ' + P + '.portada .kicker::before{',
     '  content:var(--neon-p1,"")!important; display:block!important;',
     '  font-family:Montserrat,sans-serif!important; font-weight:800!important;',
     '  font-size:clamp(46px,15vw,92px)!important; line-height:.92!important;',
@@ -121,7 +121,7 @@
 
     /* la segunda palabra, en cursiva de neón. Sale de un campo del panel: si
        está vacía el pseudo no dibuja nada y la portada queda con una sola. */
-    P + '.portada .kicker::after{',
+    P + '.portada #pv-kick::after, ' + P + '.portada .kicker::after{',
     '  content:var(--neon-script,"");',
     '  display:block;',
     '  font-family:"Rouge Script",cursive;',
