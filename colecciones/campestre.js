@@ -234,6 +234,45 @@
     '}',
     P + '.sec:not([style*="url("]) > *{ position:relative; z-index:1; }',
 
+    /* ⭐ Y EL REVÉS DEL MISMO PROBLEMA: LA SECCIÓN CON FOTO DE NOCHE.
+       Visto el 21/9/2026 mirando la muestra entera después de destapar el
+       fondo: «¿Alguna duda?» trae su propia foto —velas, de noche— y el
+       sobretítulo «CORRE LA VOZ» era invisible.
+       MEDIDO contra los píxeles de esa foto (mediana de luminancia 0,013):
+           sobretítulo #55523A .... 2,12  ❌
+           título (lo que dejó reglas-duras) .. 4,02
+       Las secciones con foto propia se resuelven al revés que el resto: en
+       vez de aclarar, se OSCURECE la franja del texto y la tinta va crema.
+       Después del cambio: sobretítulo 15,70 · título 4,25 · bajada 7,30.
+       ⚠️ VA EN `::after`, no en `::before`: el `::before` ya lo usa el velo
+          claro de arriba y `.sec[style*="url("]` es un subconjunto de `.sec`.
+          (No lo es del `:not`, pero conviene no depender de eso.)
+       ⚠️ EL PASE QUEDA AFUERA, y tiene que quedar afuera: su foto es trigo
+          CLARO y su tarjeta es de papel con tinta oscura. Se salva solo
+          porque es `.pase` y no `.sec` — comprobado: el único elemento con
+          este `::after` es `#contacto-sec`.
+       ⚠️⚠️ AL TÍTULO Y A LA BAJADA NO LES LLEGA EL CREMA, y no es un error de
+          esta hoja: `reglas-duras.js` ya los «rescató» y les escribió el
+          color EN LÍNEA con !important (#778151 y #A9A799). Contra un inline
+          !important no gana ninguna hoja, ni con -webkit-text-fill-color.
+          Las reglas de crema quedan escritas igual, para el día que el motor
+          deje de pisarlos, y porque al SOBRETÍTULO —que el motor no tocó— sí
+          le llegan. Con el oscurecido los tres pasan el piso; el título se
+          lee apagado, en oliva medio en vez de crema. Arreglarlo del todo es
+          una línea en `reglas-duras.js`: NO SE TOCÓ, hay que avisar antes. */
+    P + '.sec[style*="url("]{ position:relative; }',
+    P + '.sec[style*="url("]::after{',
+    '  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;',
+    '  background:linear-gradient(180deg, rgba(22,19,12,.18) 0%,',
+    '    rgba(22,19,12,.54) 32%, rgba(22,19,12,.54) 68%,',
+    '    rgba(22,19,12,.18) 100%);',
+    '}',
+    P + '.sec[style*="url("] > *{ position:relative; z-index:1; }',
+    P + '.sec[style*="url("] :is(#cp-nada,.kick), ' +
+    P + '.sec[style*="url("] h2, ' + P + '.sec[style*="url("] p{',
+    '  color:#f7f1e4!important; -webkit-text-fill-color:#f7f1e4!important;',
+    '}',
+
     /* ------------------------------------------------------------ tipografía
        Si la invitación eligió fuente propia desde el panel, la colección no
        le pisa los NOMBRES; el resto de la tipografía sí es de la colección. */
