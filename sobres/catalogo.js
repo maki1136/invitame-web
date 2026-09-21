@@ -158,6 +158,13 @@ window.SOBRES_INVITAME = {
          4,3 a 7,7 s  zoom, se llena de blanco   brillo 102 -> 251
        El destello entra cuando ARRANCA el zoom: 4,0. */
     luz: 4.0
+    /* ⚠️ DOS SEGUNDOS DE BLANCO SOBRE NEGRO SE LEEN COMO PÁGINA ROTA.
+       Medido el 21/9/2026 mirando la apertura cuadro por cuadro: el destello
+       entraba bien, pero el fundido de 1 s dejaba la pantalla en blanco pleno
+       casi dos segundos. Sobre papel marfil no molesta —el blanco ES el
+       papel—; sobre una invitación negra tapa la escena. Acá va corto: el
+       fogonazo se ve y se va. */
+    luzFundido: 0.42,
   },
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
