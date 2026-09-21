@@ -627,14 +627,25 @@
          esto, esconder el video dejaria la pantalla en un color plano.
          ⚠ Va en `background-image` (longhand). El atajo `background` borraria
            el color que escribe el catalogo unas lineas mas arriba. */
-      try {
-        var pst = v.getAttribute('poster');
-        if (pst && env && !env.style.backgroundImage) {
-          env.style.backgroundImage = 'url("' + pst + '")';
-          env.style.backgroundSize = 'cover';
-          env.style.backgroundPosition = 'center';
-        }
-      } catch (e) {}
+      /* ⚠ EL POSTER TODAVIA NO EXISTE CUANDO ESTO CORRE. Medido: este bloque
+         arranca a los 20 ms, y el atributo `poster` se lo pone el catalogo un
+         rato despues, cuando ya sabe QUE sobre es. Asi que no alcanza con
+         leerlo una vez: se espera a que aparezca. Es el mismo patron que usa
+         `frenarAutoplay` unas lineas mas arriba para encontrar el video. */
+      (function ponerPoster(n) {
+        try {
+          if (!env) env = document.getElementById('env');
+          var pst = v.getAttribute('poster');
+          if (pst && env) {
+            var bg = 'url("' + pst + '")';
+            if (env.style.backgroundImage !== bg) env.style.backgroundImage = bg;
+            env.style.backgroundSize = 'cover';
+            env.style.backgroundPosition = 'center';
+            return;
+          }
+        } catch (e) {}
+        if ((n || 0) < 240) setTimeout(function () { ponerPoster((n || 0) + 1); }, 50);
+      })();
       var vivo = function () {
         if (!env) env = document.getElementById('env');
         if (env && v.currentTime > 0.04 && !v.paused) env.classList.add('vid-vivo');
