@@ -241,6 +241,53 @@ window.SOBRES_INVITAME = {
     empalme: "blanco"
   },
 
+  /* ---- ★ EL SOBRE CAMPESTRE  (21/9/2026) --------------------------------
+     El sobre propio de la Colección Campestre (boda de María Paz y Joaquín,
+     Tapalpa). Salió de la MISMA tanda de Flow que el resto de la temática:
+     papel de algodón hecho a mano color crema con borde deckled, atado con
+     hilo de yute, lacre redondo de TERRACOTA con una espiga grabada, y una
+     espiga de trigo seco con dos hojas de olivo metidas bajo el hilo, todo
+     apoyado en una mesa de roble envejecido.
+
+     El video hace el recorrido entero en 8 s: el trigo tiembla, el hilo se
+     afloja, el lacre se levanta, las dos solapas se abren y la cámara entra
+     hasta que el papel crema del interior llena el cuadro. Termina en papel
+     liso, por eso va `empalme: 'blanco'`.
+
+     ⭐ `luz` MEDIDA CUADRO POR CUADRO sobre el mp4 servido, no estimada.
+        Brillo medio y movimiento, muestreados tres veces por segundo:
+          0,0 a 3,0 s  quieto, cerrado          brillo 111 · movimiento 1,0-1,2
+          3,3 a 3,7 s  se afloja y abre         brillo baja a 106 · movimiento 7,6-8,0
+          4,0 s        ARRANCA EL ZOOM          brillo 124 (empieza a subir)
+          4,3 a 7,7 s  el papel llena el cuadro brillo 145 -> 208
+        El destello entra cuando arranca el zoom: 4,0.
+
+     ⚠️ SIN `luzFundido`: se queda con el valor de fábrica (1 s) A PROPÓSITO.
+        La regla es «cuanto más oscura la invitación, más corto el destello».
+        Disco lo necesita en 0,42 porque sobre negro dos segundos de blanco se
+        leen como página rota. Campestre es una invitación de papel CREMA: ahí
+        el blanco ES el papel y el segundo entero se lee como un fogonazo de
+        sol, no como un error.
+
+     ⚠️ `color` MEDIDO sobre el último cuadro, no estimado. Banda central del
+        papel: #e9d8c0 (el píxel exacto del centro da #ecdbc3). La esquina da
+        #aa9787 — eso es la sombra de la madera y NO sirve para rellenar las
+        barras, que es justo el error que se anotó en el sobre de playa.
+
+     ⚠️ Vive en Cloudinary, no en /sobres/: son 461 KB de mp4. El catálogo
+        acepta una URL completa igual que una ruta del repo, y se verificó que
+        Chrome lo decodifica desde ahí (el `content-type` con `codecs=avc1` no
+        molesta a un video de fondo o de sobre).
+     ---------------------------------------------------------------------- */
+  campestre: {
+    nombre:  "Campestre · papel crema, lacre de terracota y trigo (video)",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobre-campestre.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-campestre-poster.jpg",
+    luz:     4.0,
+    color:   "#e9d8c0",
+    empalme: "blanco"
+  },
+
   /* ---- ★ LA PRESENTACIÓN BORDADA  (8/9/2026) ---------------------------
      No es un sobre: es una PRESENTACIÓN. Copia la muestra que mandó Maki
      (@hadar.cohennn): una máquina de bordar cosiendo con hilo champagne
