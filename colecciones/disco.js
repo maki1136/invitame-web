@@ -535,7 +535,21 @@
        · Y las celdas pasan a círculo. El SVG de fondo sigue con esquinas
          redondeadas adentro, pero el `overflow:hidden` lo recorta: no hace
          falta tocarlo. */
-    P + ':is(#dc-nada, .rasp-3){',
+    /* ⚠️⚠️ LA VARIABLE VA EN LA RAMA DEL LIENZO, NO EN LA DE LAS FICHAS.
+       Medido el 21/9/2026. Maki: «veo que no se puede poner la bola de
+       boliche para raspar, ¿siempre es liso?».
+       Estaba programado y no se aplicaba. La raspadita son DOS ramas
+       separadas del árbol, no una:
+         · `.rasp-3 > .r3-f`   = las fichas de abajo (lo que se revela)
+         · `#scratchcard > .rasp-zona > canvas` = la tapa que se raspa
+       Yo había puesto `--r3-tapa` en `.rasp-3`, y las variables de CSS sólo
+       bajan a los DESCENDIENTES: el lienzo nunca la vio. Por eso seguía
+       pintando el degradado liso de fábrica.
+       ⚠ LA REGLA: antes de pasarle un dato por variable a un módulo, mirar
+         de quién CUELGA el elemento que la va a leer. Que el selector
+         'parezca' el del bloque no alcanza.
+       Va en la sección entera, así la ven las dos ramas. */
+    P + ':is(#dc-nada, .scratch-sec, .rasp-3, .rasp-zona){',
     '  --r3-tapa:url("https://res.cloudinary.com/oc8cgqt4/image/upload/v1789953744/invitame/piezas/bola-espejos.webp");',
     '}',
     P + ':is(#dc-nada, .rasp-3) .r3-f{',
