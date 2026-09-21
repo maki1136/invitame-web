@@ -539,8 +539,27 @@ window.SOBRES_INVITAME = {
         La primera versión se guardó recortada a su caja (660×510) y en pantalla
         la solapa salió corrida: el lacre quedaba colgando DEBAJO del sobre. El
         motor la apoya encima del póster 1:1, así que tiene que medir lo mismo
-        (acá 768×1376) y llevar todo lo demás en transparente. El maestro ya era
-        así —768×1376 con alfa— y se vio recién al comparar los dos archivos.
+        y llevar todo lo demás en transparente. El maestro ya era así —768×1376
+        con alfa— y se vio recién al comparar los dos archivos.
+
+     ⚠️⚠️⚠️ Y EL SOBRE TIENE QUE LLEGAR AL BORDE DE ARRIBA DE LA FOTO.
+        Maki: «el sobre se abre mal porque se ve el fondo y queda un doblez raro
+        cuando se abre en las solapas». Era esto, y no el giro.
+
+        `efectos/sobre-catalogo.js` arma cuatro hojas y le recorta a la de abajo
+        el triángulo `(0,0) → (100%,0) → (50%, eje.y)`, o sea que da por sentado
+        que **la solapa arranca en la fila 0 de la imagen**. Mi foto tenía 18,4 %
+        de nieve arriba del sobre: el recorte se comía esa nieve además de la
+        solapa y quedaba un agujero con la invitación asomando, justo arriba
+        del sobre cerrado.
+
+        La foto se recorta entonces desde el BORDE DE ARRIBA DEL SOBRE
+        (y = 244 de 1376 en el original) hasta el pie: 642×1132, o sea 0,567 de
+        proporción, que es la del marco — el motor estira la hoja con
+        `background-size:100% 100%`, así que una foto de otra proporción sale
+        deformada y el lacre redondo se vuelve un óvalo.
+        El maestro cumple las dos cosas: su alfa arranca en y = 0 y su foto es
+        768×1376 = 0,558.
 
      `solapa` = el triángulo de arriba MÁS EL LACRE, recortado con
      transparencia. Se armó por geometría sobre la propia foto (no a mano):
@@ -548,19 +567,20 @@ window.SOBRES_INVITAME = {
      disco del lacre centrado en (50 % · 49,6 %) con radio 9 % del ancho, y
      1,6 px de desenfoque en el borde para que no quede el filo del recorte.
 
-     `eje` = la punta de la solapa, MEDIDA sobre la foto con una grilla de
-     porcentajes encima: 50,0 % · 45,2 %. Acá la punta NO está en el medio
-     como en el maestro (49,9 %): la solapa es más corta y el lacre cuelga
-     debajo de la punta, así que el eje va más arriba.
+     `eje` = la punta de la solapa, MEDIDA sobre el recorte NUEVO: 50,0 % ·
+     33,4 %. (Sobre la foto entera daba 45,2 %; al recortar la nieve de arriba
+     el mismo píxel pasa a estar más arriba en porcentaje. Si alguna vez se
+     recorta de nuevo, hay que volver a medirlo: el eje es un porcentaje del
+     ARCHIVO, no del sobre.)
      ---------------------------------------------------------------------- */
   cenicienta: {
     nombre:   "Cenicienta · papel de hielo, lacre de zapatilla de cristal (foto)",
-    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/kfz09ahbncggflkjufyg.jpg",
-    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/rhyvs45gxxsp2mugztgu.webp",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/u2e2hufcf9agd6m1qjgd.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/ovst4cedqvfysmrf3xu1.webp",
     color:    "#EAF2FA",
     apertura: "solapas",
     empalme:  "foto",
-    eje:      { x: 50.0, y: 45.2 }
+    eje:      { x: 50.0, y: 33.4 }
   },
 
 
