@@ -561,6 +561,15 @@ window.SOBRES_INVITAME = {
         El maestro cumple las dos cosas: su alfa arranca en y = 0 y su foto es
         768×1376 = 0,558.
 
+        ⚠️ Y EL SOBRE TIENE QUE LLEGAR TAMBIÉN AL BORDE DE ABAJO. Recortado al
+           sobre nudo quedaba 642×892 = 0,72, y el motor lo estira a 0,567: el
+           lacre redondo se volvía un óvalo. Recortando hasta el pie de la foto
+           la proporción daba bien pero abajo quedaba una franja de nieve que se
+           leía como un hueco. La salida fue estirar SÓLO el papel liso de abajo
+           del lacre (de la fila 642 para abajo, ×1,96): el relieve de escarcha
+           es parejo, así que no se nota, y el lacre y la solapa quedan sin
+           tocar en su escala real.
+
      `solapa` = el triángulo de arriba MÁS EL LACRE, recortado con
      transparencia. Se armó por geometría sobre la propia foto (no a mano):
      triángulo (7,6 % · 18,2 %) → (92,4 % · 18,2 %) → (50 % · 45,2 %), más el
@@ -575,7 +584,7 @@ window.SOBRES_INVITAME = {
      ---------------------------------------------------------------------- */
   cenicienta: {
     nombre:   "Cenicienta · papel de hielo, lacre de zapatilla de cristal (foto)",
-    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/u2e2hufcf9agd6m1qjgd.jpg",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790020449/invitame/cenicienta/xncmgdk9fkqoy6qvkzvu.jpg",
     solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/ovst4cedqvfysmrf3xu1.webp",
     color:    "#EAF2FA",
     apertura: "solapas",
