@@ -503,26 +503,75 @@
     '  overflow:hidden!important;',
     '  position:relative!important;',
     '}',
-    '@keyframes discoHaz{',
-    '  0%,72%  { transform:translateX(-120%) skewX(-18deg); opacity:0; }',
-    '  80%     { opacity:1; }',
-    '  100%    { transform:translateX(120%)  skewX(-18deg); opacity:0; }',
+    /* ⭐⭐ EL FONDO DE LA PISTA SE MUEVE SIEMPRE, NO CADA TANTO. 21/9/2026.
+       Maki, mirando la primera versión de este recuadro: «si yo veo que algo
+       pasa, pasa varios segundos, o sea, como si lo paso de largo, es como
+       que no pasó nada, quedó derecho, quedó como una imagen fija, no como
+       algo atrás».
+       Tenía razón y el número lo dice: un haz cada 9 s son 8,2 s de NADA.
+       Y lo que hace una bola de espejos de verdad no es un destello cada
+       tanto: son puntitos de luz que nunca se quedan quietos.
+       Ahora el ::after lleva TRES capas que viajan juntas en un solo bucle
+       continuo, sin pausa:
+         · lunares chicos bajando en diagonal hacia la derecha,
+         · lunares grandes yendo al revés (dos velocidades = profundidad),
+         · y el haz, que cruza dentro del mismo ciclo.
+       ⚠ EL BUCLE NO SE NOTA PORQUE CADA CAPA VIAJA UN MÚLTIPLO EXACTO DE SU
+         MOSAICO: 184px = 4×46 y 2×92; 92px = 2×46 y 1×92. Si el viaje no es
+         múltiplo del `background-size`, al reiniciar pega un salto visible y
+         se ve peor que si no se moviera.
+       ⚠ Y SIGUE TODO ADENTRO DEL ::after. El `background` del panel no lleva
+         ninguna capa clara (ver la regla de arriba): si el brillo se mete en
+         el fondo del panel, `reglas-duras.js` lo lee como panel claro y da
+         vuelta el itinerario a texto negro sobre negro. */
+    '@keyframes discoPista{',
+    '  from { background-position: 0 0, 0 0, -70% 0; }',
+    '  to   { background-position: 184px -92px, -184px 92px, 170% 0; }',
+    '}',
+    /* la luz que baja por el hilo del itinerario, siempre */
+    '@keyframes discoHilo{',
+    '  from { background-position:0 0; }',
+    '  to   { background-position:0 14px; }',
     '}',
     P + ':is(#dc-nada, .tl)::after{',
     '  content:""; position:absolute; inset:0; pointer-events:none;',
-    '  background:',
-    '    radial-gradient(2.5px 2.5px at 13% 8%,  rgba(255,255,255,.75), transparent 62%),',
-    '    radial-gradient(2px 2px   at 71% 12%,   rgba(255,255,255,.62), transparent 62%),',
-    '    radial-gradient(2px 2px   at 8% 46%,    rgba(255,255,255,.45), transparent 62%),',
-    '    radial-gradient(1.5px 1.5px at 93% 58%, rgba(255,255,255,.42), transparent 62%),',
-    '    radial-gradient(2px 2px   at 22% 71%,   rgba(255,255,255,.38), transparent 62%),',
-    '    radial-gradient(1.5px 1.5px at 62% 83%, rgba(255,255,255,.34), transparent 62%),',
-    '    linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);',
+    '  background-color:transparent;',
+    '  background-image:',
+    '    radial-gradient(circle at 50% 50%, rgba(255,255,255,.42) 0, rgba(255,255,255,0) 30%),',
+    '    radial-gradient(circle at 50% 50%, rgba(214,212,228,.26) 0, rgba(255,255,255,0) 26%),',
+    '    linear-gradient(100deg, transparent 0%, rgba(255,255,255,.13) 46%, rgba(255,255,255,.03) 62%, transparent 100%);',
+    '  background-size:46px 46px, 92px 92px, 62% 100%;',
+    '  background-repeat:repeat, repeat, no-repeat;',
     '  mix-blend-mode:screen;',
-    '  animation:discoHaz 9s ease-in-out infinite;',
+    '  animation:discoPista 7s linear infinite;',
+    '}',
+    /* ⭐ LA LÍNEA EMPIEZA EN LA PRIMERA BOLA Y TERMINA EN LA ÚLTIMA.
+       Maki: «la línea esa que pasa entre las bolas de boliche... antes que
+       llegue la primera bola, eso lo podés eliminar porque queda muy mal. Y
+       después, cuando termina la última bola, lo podés eliminar la línea
+       para abajo, porque queda desubicada».
+       Son DOS elementos, no uno: la vía (`.tl::before`) y el relleno que
+       avanza con la hora. Los dos iban de borde a borde.
+       Las dos puntas se recortan con las variables de acá abajo, medidas por
+       la función del final del archivo (no se puede con CSS solo: dependen
+       del alto real de la primera y la última ficha, que lo decide el texto).
+       Y la vía deja de ser una raya muerta: es un hilo punteado de plata con
+       la luz bajando. */
+    P + ':is(#dc-nada, .tl)::before,',
+    P + ':is(#dc-nada, .tl) > .tl-prog{',
+    '  top:var(--tl-ini, 6px)!important;',
+    '  bottom:var(--tl-fin, 6px)!important;',
+    '  height:auto!important;',
+    '}',
+    P + ':is(#dc-nada, .tl)::before{',
+    '  background-color:transparent!important;',
+    '  background-image:repeating-linear-gradient(180deg, rgba(230,228,238,.60) 0 7px, rgba(230,228,238,.12) 7px 14px)!important;',
+    '  box-shadow:0 0 8px rgba(230,228,238,.20)!important;',
+    '  animation:discoHilo 1.1s linear infinite;',
     '}',
     '@media (prefers-reduced-motion: reduce){',
-    P + ':is(#dc-nada, .tl)::after{ animation:none; opacity:0; }',
+    P + ':is(#dc-nada, .tl)::after{ animation:none; }',
+    P + ':is(#dc-nada, .tl)::before{ animation:none; }',
     '}',
 
     /* ⭐⭐ LA RASPADITA: redonda, y se raspa una bola de espejos
@@ -691,6 +740,34 @@
      banco de pruebas: una ventana minimizada no dibuja ni un cuadro, `rAF` no
      corre nunca y la medición da 0 sin que nada esté roto. Medidos 60,3 fps con
      la colección prendida, los dos videos andando y las nubes encima. */
+  /* ⭐ LA MEDIDA DE LAS DOS PUNTAS DE LA LÍNEA DEL ITINERARIO. 21/9/2026.
+     El motor dibuja la vía y su relleno de avance de borde a borde del panel
+     (`top:6px; bottom:6px`), así que sobra línea antes de la primera bola y
+     después de la última.
+     ⚠ NO SE ARREGLA SÓLO CON CSS: la primera bola está en
+       `padding-top + alto-de-la-primera-ficha / 2`, y ese alto depende del
+       texto que cargue Jazmín. Por eso se MIDE y se pasa por variable.
+     ⚠ Se vuelve a medir en cada repaso (cada 1,2 s), así sigue bien cuando
+       gira el teléfono o cambia un texto. Son dos `getBoundingClientRect`:
+       no pesa. */
+  function lineaItinerario() {
+    try {
+      var tl = document.querySelector('.tl.tl-centro');
+      if (!tl) return;
+      var fichas = tl.querySelectorAll(':scope > .it');
+      if (fichas.length < 2) return;
+      var R = tl.getBoundingClientRect();
+      var a = fichas[0].getBoundingClientRect();
+      var b = fichas[fichas.length - 1].getBoundingClientRect();
+      if (!R.height || !a.height || !b.height) return;
+      var ini = Math.round(a.top + a.height / 2 - R.top);
+      var fin = Math.round(R.bottom - (b.top + b.height / 2));
+      if (!(ini > 0 && fin > 0)) return;
+      if (tl.style.getPropertyValue('--tl-ini') !== ini + 'px') tl.style.setProperty('--tl-ini', ini + 'px');
+      if (tl.style.getPropertyValue('--tl-fin') !== fin + 'px') tl.style.setProperty('--tl-fin', fin + 'px');
+    } catch (e) {}
+  }
+
   function poner() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-col') !== ID) raiz.setAttribute('data-col', ID);
@@ -705,6 +782,7 @@
     if (raiz.getAttribute('data-marca-propia') !== ID) raiz.setAttribute('data-marca-propia', ID);
     if (window.INVCOLPALETA !== PALETA_PROPIA) window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
+    lineaItinerario();
     if (!estabaPuesta) {
       estabaPuesta = true;
       /* un respiro para que la paleta ya haya repintado las variables */
