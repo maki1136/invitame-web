@@ -174,6 +174,27 @@
     '  font-size:11.5px!important; color:' + TINTA2 + '!important;',
     '}',
 
+    /* ⚠️⚠️ EL SOBRETÍTULO DE LA PORTADA NO VA SOBRE EL PAPEL: VA SOBRE LA FOTO.
+       Visto el 21/9/2026 en la muestra de María Paz: «Nos casamos en el campo»
+       era una mancha. La causa no es el tamaño ni la fuente — es que la regla
+       de arriba le pone TINTA2 (#55523A), que está calculada contra el papel
+       crema (6,58), y en la portada cae sobre una fotografía de tonos cálidos
+       oscuros. Tinta oscura sobre imagen oscura.
+       Y encima el motor le pone una sombra OSCURA, que despega un texto claro
+       y entierra uno oscuro: empeoraba lo que venía a arreglar.
+       → En la portada va el crema, igual que los nombres y la cuenta regresiva.
+       ⚠️ Va `-webkit-text-fill-color` además de `color`: `reglas-duras.js`
+          escribe `color` en línea con !important cuando cree que un texto no
+          se lee, y el fill le gana sin pelearse con las reglas duras.
+       ⚠️ Ojo al medirlo: el barrido de contraste NO ve esta foto, porque
+          `fondo-invitacion.js` la pinta con un `<img>` adentro de `#inv-fondo`
+          y no como `background-image`. Por eso la regla 7 marca los nombres
+          (1,07) que se leen perfecto y NO marcaba este sobretítulo, que era el
+          único roto de verdad. Acá se mira, no se le cree al número. */
+    P + '.portada .kick, ' + P + '.portada .kicker, ' + P + '.portada #pv-kick{',
+    '  color:#f7f1e4!important; -webkit-text-fill-color:#f7f1e4!important;',
+    '}',
+
     /* -------------------------------------------------------------- filetes
        ⚠️ TINTA3 da 3,91 sobre el papel: NO se usa para texto en ningún lado.
           Acá va sólo como línea. */
