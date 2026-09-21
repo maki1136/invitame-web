@@ -152,6 +152,13 @@
          reglas duras pueden hacer lo suyo sin romper nada. */
     P + '.portada #pv-names span, ' + P + '.portada .names span{',
     '  display:inline-block!important;',
+    /* ⚠ LA COLA DE LA «L» SE CORTABA. El degradado se recorta contra la
+       CAJA del span, y la tinta de una cursiva se sale de esa caja: medido
+       en «Lupita», 4 px a la izquierda y 4 a la derecha. Esos píxeles se
+       quedaban sin degradado, o sea transparentes, y el rulo de la L
+       aparecía cortado con un filo recto. Se le da aire a la caja. */
+    '  padding:0 .10em!important;',
+    '  background-size:100% 100%!important;',
     '  font:inherit!important; letter-spacing:inherit!important;',
     '  background-image:linear-gradient(174deg,',
     '    #ffffff 0%, #ffffff 14%, #dfe5ef 26%, #ffffff 36%,',
