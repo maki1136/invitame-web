@@ -395,3 +395,41 @@ iframe[src*="spotify"]{
 #env.carta-video.puesto #col-sobre-foto {
   transition-delay: .45s, 0s;
 }
+
+
+/* ======================================================================
+   EL VERDE DEL MOTOR NO EXISTE MÁS, EN NINGUNA VERSIÓN     ★ 21/9/2026 ★
+
+   Maki, por tercera vez: «se me sigue viendo el sobre verde al principio».
+
+   POR QUÉ SEGUÍA APARECIENDO DESPUÉS DE ARREGLARLO
+   El arreglo del 20/9 se hizo en `i/index.html` … y el motor está CONGELADO
+   POR VERSIÓN: las invitaciones se sirven desde `i/v/<version>/index.html`.
+   Hoy hay cinco versiones vivas. Arreglar el HTML de la raíz no cambia nada
+   para nadie hasta que se publique una versión nueva.
+
+   Esta hoja, en cambio, la inyecta `i/index.php` en la CABEZA del documento
+   (`<style id="estilos-servidor">`), es COMPARTIDA y NO está congelada. O sea:
+   llega a las cinco versiones, y llega ANTES DEL PRIMER PINTADO — que es el
+   único momento que importa cuando el problema es «se ve un instante».
+
+   ⚠️ LA REGLA: un color que NUNCA puede aparecer no se arregla en el HTML del
+      motor. Se apaga acá.
+
+   QUÉ SE APAGA — eran DOS lugares, no uno:
+
+   1. `#env` (la capa del sobre de entrada). En las versiones 2026-09-07 y
+      anteriores todavía dice `radial-gradient(… #3d493f, #111510)`: el verde.
+      Desde la 2026-09-14 ya sale de `--env-bg`, que escribe
+      `sobre-catalogo.js` con el color MEDIDO del sobre elegido.
+
+   2. `#lock` (la pantalla de «esta invitación es personal»). Ésta seguía
+      VERDE EN TODAS LAS VERSIONES, incluida la última. Tapa la pantalla
+      entera, y aparece justo al principio cuando el link no trae invitado.
+      Era, casi seguro, el verde que Maki seguía viendo.
+
+   Las dos pasan a un neutro oscuro que respeta el papel de la invitación, y
+   cualquier colección puede pisarlo escribiendo `--env-bg`.
+   ====================================================================== */
+#env  { background: var(--env-bg, #0f0e13) !important; }
+#lock { background: var(--env-bg, #0f0e13) !important; }
