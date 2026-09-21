@@ -44,6 +44,8 @@
       vivo: Perlas ocupa el 37% de la pantalla con nombres de 54px; Bohemia
       ocupaba el 54% con 60px y por eso se leía como una portada de Disco. El
       número que manda es el PORCENTAJE, no el font-size.
+      ⚠️ Y VA ABAJO, NO AL MEDIO: el bloque arranca al 53% y cierra al 91%,
+         como Campestre. Centrado le tapa la cara a la pareja de la foto.
    ============================================================================ */
 (function () {
   'use strict';
@@ -223,7 +225,17 @@
            #pv-kick { font-size:var(--fs-kicker,15px) !important }
        Un ID (1,0,0) le gana a cualquier `html[data-x] .portada .names` (0,3,0).
        Por eso acá se escribe #pv-names / #pv-kick y no la clase. */
-    P + '.portada{ justify-content:center!important; }',
+    /* ⚠️⚠️ EL BLOQUE VA ABAJO, NO AL MEDIO. 21/9, Maki, con una captura de
+       Campestre al lado: «la portada te está quedando en el medio, te dejo un
+       ejemplo de cómo va, sin tapar a nadie».
+       Centrar el bloque en vertical deja el nombre JUSTO ENCIMA DE LAS CARAS.
+       MEDIDO: Campestre usa `justify-content:flex-end` y su bloque va del 56%
+       al 91% de la pantalla. Bohemia estaba del 26% al 64% —sobre las caras—
+       y con flex-end queda del 53% al 91%: mismo pie, y la pareja libre.
+       ⚠️ El `padding:0 26px 58px` que deja ese 9% de aire abajo YA VIENE DEL
+          MOTOR, es idéntico en las dos. Lo único que hay que cambiar es el
+          justify-content: no se agrega padding propio. */
+    P + '.portada{ justify-content:flex-end!important; }',
 
     /* el velo. Va en un ::before del BLOQUE, no en el fondo de la portada:
        un pseudo hermano no es ancestro, así que no le ensucia la cuenta del
