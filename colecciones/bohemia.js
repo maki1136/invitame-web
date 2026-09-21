@@ -6,22 +6,18 @@
    estático. El pedido fue textual: «hay que hacer algo como esto pero con
    nuestra plataforma nueva, con movimiento, video, etc.».
 
-   ⭐ QUÉ LA HACE DISTINTA DE LAS OTRAS CINCO  (regla de Maki del 16/9:
-      «si vas a hacer lo mismo, ¿cuál es la gracia de tener diferentes
-      muestras?»). Bohemia se planta en lo único que ninguna otra hace:
+   ⭐ QUÉ LA HACE DISTINTA DE LAS OTRAS  (regla de Maki del 16/9: «si vas a
+      hacer lo mismo, ¿cuál es la gracia de tener diferentes muestras?»):
 
         · NO LLEVA CURSIVA. Ni una letra. Perlas, Marfil y la de Martina son
           todas de script, Campestre trae Sacramento y Disco Neón va en cromado
-          cursivo. Acá los nombres van en BODONI MODA, versalitas, con el
-          espaciado muy abierto. Es lo que hace la referencia y es lo que hace
-          que se lea "editorial" y no "invitación de plantilla".
+          cursivo. Acá los nombres van en BODONI MODA, versalitas.
         · La tinta es MARRÓN CÁLIDO y el acento es CAMEL (#A87D5A, medido de la
-          referencia). Perlas es violeta, Marfil blanco y gris, Campestre oliva,
-          Disco plata sobre negro.
+          referencia).
         · El fondo es un VIDEO de plumas de pampa meciéndose.
-        · La marca del itinerario es una ROSA SECA FOTOGRAFIADA, no un vector.
-        · El botón va en RELIEVE SECO (letterpress). Perlas lacre, Marfil nácar,
-          Campestre arcilla, XV Martina esmalte.
+        · La marca del itinerario es una ROSA SECA FOTOGRAFIADA, no un vector,
+          y la vía es un CORDÓN DE YUTE TRENZADO.
+        · El botón va en RELIEVE SECO (letterpress).
 
    ⚠️⚠️ LOS COLORES ESTÁN MEDIDOS, NO ELEGIDOS DE OJO.
       El papel de la foto base mide (236,209,179). Contra ese papel:
@@ -39,6 +35,13 @@
    ⚠️ LA MUESTRA VA CON LA FECHA EN `circulos`. No es estético: la raspadita
       en modo `partes` tapa las PIEZAS de la fecha, y una disposición que no
       las arma (como `filetes`) la hace caer a una sola zona rectangular.
+
+   ⚠️⚠️ LA PORTADA SE MIDE CONTRA PERLAS, NO SE ELIGE DE OJO. 21/9, Maki:
+      «no quiero la portada de disco, quiero los textos y las portadas más de
+      Perlas; la cuenta regresiva tiene que estar abajo de todo». Medido en
+      vivo: Perlas ocupa el 37% de la pantalla con nombres de 54px; Bohemia
+      ocupaba el 54% con 60px y por eso se leía como una portada de Disco. El
+      número que manda es el PORCENTAJE, no el font-size.
    ============================================================================ */
 (function () {
   'use strict';
@@ -57,8 +60,10 @@
   var PAPEL2 = '#F6EFE5';
   var CREMA  = '#F7F1E7';   /* el texto que va ARRIBA de la tinta */
 
-  /* la pieza fotografiada: la MISMA url en los cuatro lugares
-     (itinerario, tapa de la playlist, perilla del sí/no, tapa de la raspadita) */
+  /* la pieza fotografiada: la MISMA url en el itinerario, la tapa de la
+     playlist y la tapa de la raspadita.
+     ⚠️ YA NO va en la perilla del sí/no (Maki, 21/9: «dejale la normal») ni en
+        la tapa del video (ahí va el PLAY). */
   var ROSA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1789979950/invitame/piezas/bohemia-rosa.webp';
 
   /* la viñeta de los títulos: una hoja finita en camel entre dos filetes.
@@ -71,6 +76,34 @@
     "<path d='M60 11 C67 18 67 26 60 33 C53 26 53 18 60 11 Z'/>" +
     "<line x1='60' y1='14' x2='60' y2='30'/>" +
     "</g></svg>";
+
+  /* ⭐ LA VÍA DEL ITINERARIO: UN CORDÓN DE YUTE TRENZADO.
+     Maki, 21/9: «a la línea buscale otra vuelta porque queda mal, necesitamos
+     algo más con diseño». El hilo punteado era el recurso de siempre.
+     La vuelta no sale de inventar una forma: sale de la TEMÁTICA. El sobre de
+     Bohemia viene atado con hilo de yute, así que la vía es ese mismo cordón:
+     dos hebras que se cruzan, una en camel y otra en el tono del filete.
+     Mosaico de 6x16 → el viaje de la animación es 16 px EXACTOS, o el bucle
+     pega un salto visible. */
+  var CORDON = "data:image/svg+xml;utf8," +
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 16'>" +
+    "<g fill='none' stroke-linecap='round' stroke-width='1.5'>" +
+    "<path d='M3 0 C0.5 4 0.5 12 3 16' stroke='%23A87D5A'/>" +
+    "<path d='M3 0 C5.5 4 5.5 12 3 16' stroke='%23C7B5A1'/>" +
+    "</g></svg>";
+
+  /* ⭐ LA TAPA DE «NUESTRO VIDEO»: UN PLAY, NO LA ROSA.
+     Maki, 21/9: «cuando hice nuestro video se quedó muy mal eso, sacalo y
+     ponele algún dibujo que coincida con un play y con el estilo».
+     La rosa cuadrada estirada arriba del iframe no leía como "dale play".
+     Va un play dibujado en el MISMO lenguaje que los filetes: dos aros finos y
+     un triángulo camel. Nada de un botón de reproductor genérico. */
+  var PLAY = "data:image/svg+xml;utf8," +
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'>" +
+    "<circle cx='48' cy='48' r='43' fill='none' stroke='%23C7B5A1' stroke-width='0.9'/>" +
+    "<circle cx='48' cy='48' r='35' fill='none' stroke='%23A87D5A' stroke-width='1.6'/>" +
+    "<path d='M41 33 L67 48 L41 63 Z' fill='%23A87D5A'/>" +
+    "</svg>";
 
   /* ⚠️⚠️ LAS VARIABLES QUE BOHEMIA RECLAMA COMO PROPIAS.
      `efectos/paleta.js` reescribe estas variables en el <html> INLINE y con
@@ -186,18 +219,23 @@
     /* el sobretítulo: «NUESTRA BODA», bien chico y muy abierto */
     P + '.portada #pv-kick{',
     '  font-family:' + SANS + '!important;',
-    '  font-size:clamp(11px,3.1vw,14px)!important;',
+    '  font-size:clamp(10px,2.7vw,12.5px)!important;',
     '  font-weight:500!important;',
     '  letter-spacing:.52em!important; text-indent:.52em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '  line-height:1.4!important;',
-    '  margin:0 0 1.9em 0!important;',
+    '  margin:0 0 1.2em 0!important;',
     '  text-shadow:0 1px 3px rgba(24,16,10,.85)!important;',
     '}',
 
-    /* ⭐ LOS NOMBRES. Versalitas Bodoni, muy abiertas, en dos renglones.
-       ⚠️ Sin cursiva: es la firma de la colección.
+    /* ⭐ LOS NOMBRES. Versalitas Bodoni, abiertas, en dos renglones.
+       ⚠️⚠️ EL TAMAÑO SALE DE UNA MEDICIÓN CONTRA PERLAS, NO DE OJO.
+          Perlas: bloque al 37% de la pantalla, nombres de 54px.
+          Bohemia estaba al 54% con 60px → «portada de disco», y Maki la bajó.
+          Con clamp(26,8.2vw,44) y los aires cerrados el bloque cae en la misma
+          franja que Perlas, y la cuenta regresiva se lee ABAJO de todo, que es
+          lo que pidió.
        ⚠️ `text-indent` compensa el `letter-spacing`, o el bloque queda corrido
           a la izquierda: el espaciado se agrega DESPUÉS de la última letra y el
           centrado lo cuenta. */
@@ -205,16 +243,9 @@
     '  font-family:' + DISPLAY + '!important;',
     '  font-weight:500!important;',
     '  font-style:normal!important;',
-    /* ⚠️⚠️ MEDIDO EN VIVO EL 21/9, NO ELEGIDO DE OJO. Con el tamaño anterior
-       «MARÍA PAZ» se PARTÍA en dos renglones y la portada quedaba en cuatro
-       líneas con el «&» solo en el medio. La cuenta: el bloque mide 519 px y
-       «& Santiago» mide 454 px a 59,6 px de cuerpo — entra, pero sólo si se le
-       prohíbe cortar. Por eso van juntas las dos cosas: el cuerpo Y el
-       `white-space:nowrap` del span. Sin el nowrap, cualquier nombre largo
-       vuelve a partirse. */
-    '  font-size:clamp(32px,11vw,60px)!important;',
-    '  line-height:1.22!important;',
-    '  letter-spacing:.15em!important; text-indent:.15em!important;',
+    '  font-size:clamp(26px,8.2vw,44px)!important;',
+    '  line-height:1.20!important;',
+    '  letter-spacing:.14em!important; text-indent:.14em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     /* ⚠️ longhands, no el atajo: ver la nota del itinerario */
@@ -224,10 +255,10 @@
     /* la sombra va como filter para que envuelva la letra, no como text-shadow
        de caja */
     '  filter:drop-shadow(0 1px 2px rgba(24,16,10,.92))',
-    '         drop-shadow(0 0 22px rgba(24,16,10,.55))!important;',
+    '         drop-shadow(0 0 20px rgba(24,16,10,.55))!important;',
     '}',
     /* ⚠️ cada nombre entero en su renglón: el motor los mete en spans sueltos y
-       sin esto «MARÍA PAZ» se parte al medio. */
+       sin esto un nombre largo se parte al medio. */
     P + '.portada #pv-names span{ white-space:nowrap!important; }',
 
     /* el nexo que mete el motor («&») en su propio tamaño y en camel */
@@ -245,22 +276,21 @@
        alcanza TAMBIÉN a sus pseudos. El filete se llevaba las dos sombras y
        salía sucio y engrosado.
 
-       SEGUNDA (la que se pagó el 21/9 al arreglar la primera): lo mudé a
+       SEGUNDA (la que se pagó al arreglar la primera): lo mudé a
        `.fecha::before`, que es hermano del nombre y por lo tanto queda fuera
        del filter. Se veía bien… hasta que la muestra pasó a
        `fx.fecha.disposicion = 'circulos'` —obligatorio para que la raspadita
        funcione en modo `partes`— y el motor dejó `.fecha` en `display:none`.
        El filete desapareció sin un solo error. Es LITERALMENTE lo que avisa la
        skill: **`#pv-fecha` no sirve de percha, puede venir oculto según la
-       disposición elegida.** Lo leí, lo apliqué a medias y caí igual.
+       disposición elegida.**
 
-       → LA SOLUCIÓN BUENA, y la que manda la skill: un ELEMENTO PROPIO, que
-         crea `filete()` después de `#pv-names` y borra `sacar()`. No cuelga del
-         nombre y no depende de que ningún elemento del motor esté visible. */
+       → LA SOLUCIÓN BUENA: un ELEMENTO PROPIO, que crea `filete()` después de
+         `#pv-names` y borra `sacar()`. */
     P + '.portada #pv-names::after{ content:none!important; }',
     P + '.portada .bh-filete{',
-    '  display:block!important; width:120px; height:1px;',
-    '  margin:1.35em auto .2em!important;',
+    '  display:block!important; width:96px; height:1px;',
+    '  margin:1.05em auto .15em!important;',
     '  background-color:' + CAMEL + '!important;',
     '  opacity:.85;',
     '  position:relative; z-index:1;',
@@ -268,11 +298,11 @@
 
     P + '.portada .fecha{',
     '  font-family:' + SANS + '!important;',
-    '  font-size:clamp(11px,2.9vw,13.5px)!important;',
+    '  font-size:clamp(10px,2.6vw,12.5px)!important;',
     '  letter-spacing:.40em!important; text-indent:.40em!important;',
     '  color:' + CREMA + '!important;',
     '  text-shadow:0 1px 3px rgba(24,16,10,.85)!important;',
-    '  margin-top:1.9em!important;',
+    '  margin-top:1.2em!important;',
     '}',
 
     /* ── PERSONAS: LAS TRES EN UNA FILA. SIEMPRE. ──────────────────────────
@@ -298,22 +328,19 @@
             └── .rasp-zona > canvas ← la TAPA que se raspa   ← ESTA es la que se ve
        La variable `--r3-tapa` la lee `efectos/raspadita.js` desde el CANVAS, y
        una variable de CSS sólo baja a los DESCENDIENTES: hay que declararla en
-       los contenedores de LAS DOS ramas o el lienzo nunca la ve y sigue
-       pintando el degradado liso de fábrica.
+       los contenedores de LAS DOS ramas o el lienzo nunca la ve.
        ⚠️⚠️ Y LA FORMA NO ALCANZA CON PONERLA. `fx.raspadita.forma:'redondo'`
           estaba bien guardado y bien leído, y la raspadita salía igual un
           rectángulo con la rosa estirada. La causa real es OTRA CLAVE:
           `fx.fecha.disposicion`. El modo `partes` tapa las PIEZAS de la fecha;
           con `filetes` no hay piezas que tapar, cae a `simple` y pinta UNA sola
-          zona de 300x158 — ahí la rosa se estira y recién ahí aparece
-          `f-cuadrado`. Con `circulos`: tres celdas de 70x70. */
+          zona de 300x158. Con `circulos`: tres celdas de 70x70. */
     ':is(#bh-nada, .scratch-sec, .rasp-3, .rasp-zona, #scratchcard){',
     '  --r3-tapa:url("' + ROSA + '");',
     '}',
-    /* ⚠️ EL RECUADRO. El motor le pone `background:var(--lino2)` al contenedor,
-       y encima es fácil que se cuele en un grupo de "tarjetas". Maki ya pidió
-       sacarlo dos veces. Se apaga POR PARTES: el atajo `background:` con
-       !important pisa cosas que no queremos pisar. */
+    /* ⚠️ EL RECUADRO. El motor le pone `background:var(--lino2)` al contenedor.
+       Maki ya pidió sacarlo dos veces. Se apaga POR PARTES: el atajo
+       `background:` con !important pisa cosas que no queremos pisar. */
     ':is(#bh-nada, .scratchcard){',
     '  background-color:transparent!important;',
     '  background-image:none!important;',
@@ -321,13 +348,86 @@
     '  box-shadow:none!important;',
     '}',
 
-    /* ── EL ITINERARIO ─────────────────────────────────────────────────────
-       Nada de circulitos: la marca es la rosa fotografiada. La colección firma
-       `data-marca-propia` en el <html> y `simbolo-tematica.js` se corre solo.
+    /* ══ EL ITINERARIO ═════════════════════════════════════════════════════
+       Rediseñado el 21/9 a pedido de Maki: «la línea va centrada, y quiero más
+       movimiento de las palabras: que entren de izquierda a derecha y la
+       siguiente de derecha a izquierda, para que sea más fluido. Y a la línea
+       buscale otra vuelta porque queda mal.»
+
+       Tres cosas, y ninguna sale sólo de CSS:
+
+       1. LA VÍA VA AL CENTRO. De fábrica está a `left:6px` y las marcas cuelgan
+          a `-26px`, o sea todo el itinerario es una columna pegada al borde.
+       2. LAS FICHAS ALTERNAN LADO. No se puede con `nth-child`: `.tl` tiene
+          también al `<i class="tl-prog">` de hijo y correría la cuenta (es la
+          misma trampa que avisa la skill para el video del itinerario). Por eso
+          el lado lo escribe `lados()` en un atributo, contando SÓLO los `.it`.
+       3. CADA UNA ENTRA DESDE SU LADO, una sola vez, con IntersectionObserver.
+          ⚠️ Y con red de seguridad: si el observador no llega a disparar, a los
+             6 s se muestran todas igual. Una ficha invisible es peor que una
+             ficha sin animación.
+
+       La geometría: la ficha mide `50% - 26px`, así que entre su borde y el eje
+       hay 26 px. La marca mide 22 px y su CENTRO tiene que caer en el eje →
+       su borde exterior va a 26 + 11 = 37 px. De ahí el `-37px`. */
+    P + '.tl{',
+    '  position:relative!important;',
+    '  background-color:' + PAPEL2 + '!important;',
+    '  border:1px solid ' + TINTA3 + '!important;',
+    '  border-radius:14px!important;',
+    '  padding:22px 12px!important;',
+    '}',
+    P + '.tl::before, ' + P + '.tl > .tl-prog{',
+    '  top:var(--bh-tl-ini,6px)!important;',
+    '  bottom:var(--bh-tl-fin,6px)!important;',
+    '  height:auto!important;',
+    '  left:50%!important; right:auto!important;',
+    '  margin-left:-3px!important;',
+    '  width:6px!important;',
+    '}',
+    /* ⭐ EL CORDÓN DE YUTE, con la luz bajando. El viaje es 16 px = el mosaico
+       entero, o el bucle pega un salto.
        ⚠️ VAN LAS LONGHANDS, NUNCA el atajo `background:` con !important: el
           atajo expande TODAS sus longhands y clava `background-position`, y una
           declaración !important de autor le gana a una animación. Así se quedó
-          quieta la bola de espejos el 20/9 sin un solo error en consola. */
+          quieta la bola de espejos de Disco sin un solo error en consola. */
+    P + '.tl::before{',
+    '  background-image:url("' + CORDON + '")!important;',
+    '  background-repeat:repeat-y!important;',
+    '  background-size:6px 16px!important;',
+    '  background-color:transparent!important;',
+    '  opacity:.9!important;',
+    '  animation:bhVia 1.6s linear infinite!important;',
+    '}',
+    '@keyframes bhVia{ from{ background-position:0 0; } to{ background-position:0 16px; } }',
+    /* el relleno que avanza con la hora: el mismo cordón, más saturado */
+    P + '.tl > .tl-prog{',
+    '  background-image:url("' + CORDON + '")!important;',
+    '  background-repeat:repeat-y!important;',
+    '  background-size:6px 16px!important;',
+    '  background-color:transparent!important;',
+    '  opacity:1!important;',
+    '}',
+
+    /* las fichas, alternando lado */
+    P + '.tl > .it{',
+    '  width:calc(50% - 26px)!important;',
+    '  box-sizing:border-box!important;',
+    '  opacity:0;',
+    '  transition:opacity .5s ease, transform .55s cubic-bezier(.22,.7,.3,1);',
+    '}',
+    P + '.tl > .it[data-bh-lado="izq"]{',
+    '  margin-left:0!important; margin-right:auto!important;',
+    '  text-align:right!important; padding-right:6px!important;',
+    '  transform:translateX(-24px);',
+    '}',
+    P + '.tl > .it[data-bh-lado="der"]{',
+    '  margin-left:calc(50% + 26px)!important;',
+    '  text-align:left!important; padding-left:6px!important;',
+    '  transform:translateX(24px);',
+    '}',
+    P + '.tl > .it.bh-visto{ opacity:1!important; transform:translateX(0)!important; }',
+    /* la marca: la rosa fotografiada, con su centro sobre el eje */
     P + '.tl > .it::before{',
     '  background-image:url("' + ROSA + '")!important;',
     '  background-size:contain!important;',
@@ -338,88 +438,75 @@
     '  width:22px!important; height:22px!important;',
     '  content:""!important;',
     '}',
-    /* ⚠️ LA VÍA EMPIEZA Y TERMINA DONDE ESTÁ LA COSA. Son DOS elementos, no uno:
-       `.tl::before` es la vía y `.tl-prog` es el relleno que avanza con la hora.
-       Recortar sólo el primero deja el bug vivo para un evento ya empezado.
-       Los valores los mide `medirVia()` acá abajo y llegan por variable. */
-    P + '.tl::before, ' + P + '.tl > .tl-prog{',
-    '  top:var(--bh-tl-ini,6px)!important;',
-    '  bottom:var(--bh-tl-fin,6px)!important;',
-    '  height:auto!important;',
-    '}',
-    /* ⚠️⚠️ «UNA RAYA MUERTA» — corregido el 21/9.
-       El hilo punteado estaba QUIETO, y más abajo había un bloque
-       `prefers-reduced-motion` apagando una animación que NUNCA SE DEFINÍA:
-       quedó el apagador puesto y la luz sin conectar.
-       Ahora la luz BAJA, sin parar, como pidió la skill.
-       ⚠️ El viaje tiene que ser un MÚLTIPLO EXACTO del mosaico o el bucle pega
-          un salto visible: el `repeating-linear-gradient` repite cada 12 px
-          (5 de raya + 7 de aire), así que el recorrido es 12 px justos. */
-    P + '.tl::before{',
-    '  background-image:repeating-linear-gradient(to bottom,',
-    '     ' + TINTA3 + ' 0 5px, rgba(0,0,0,0) 5px 12px)!important;',
-    '  background-color:transparent!important;',
-    '  width:1px!important;',
-    '  animation:bhVia 1.1s linear infinite!important;',
-    '}',
-    '@keyframes bhVia{ from{ background-position:0 0; } to{ background-position:0 12px; } }',
+    P + '.tl > .it[data-bh-lado="izq"]::before{ left:auto!important; right:-37px!important; }',
+    P + '.tl > .it[data-bh-lado="der"]::before{ left:-37px!important; right:auto!important; }',
 
-    /* el panel del itinerario: papel propio y filete camel, no la caja de
-       fábrica (regla 9: ningún elemento del motor se queda como viene) */
-    P + '.tl{',
-    '  background-color:' + PAPEL2 + '!important;',
-    '  border:1px solid ' + TINTA3 + '!important;',
-    '  border-radius:14px!important;',
-    '  padding:18px 14px!important;',
-    '}',
-    P + '.tl .it .h{ font-family:' + SANS + '!important; letter-spacing:.20em!important; color:' + CAMEL + '!important; }',
+    P + '.tl .it .h{ font-family:' + SANS + '!important; letter-spacing:.18em!important; color:' + CAMEL + '!important; }',
+    P + '.tl .it .d{ font-family:' + SANS + '!important; color:' + TINTA2 + '!important; }',
     P + '.tl .it .t{ font-family:' + DISPLAY + '!important; letter-spacing:.10em!important; }',
 
-    /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
-       El preview crudo de YouTube y el reproductor de Spotify se tapan con la
-       pieza de la temática.
+    /* ── LA TAPA DE LA PLAYLIST ────────────────────────────────────────────
+       Sigue con la rosa. La del VIDEO cambia al play (abajo).
        ⚠️ LA TAPA NO ES UN RECTÁNGULO: va transparente, con el iframe en
           visibility:hidden. */
-    P + '.rd-tapa, ' + P + '.sp-tapa{',
+    P + '.sp-tapa{',
     '  background-color:transparent!important;',
     '  background-image:url("' + ROSA + '")!important;',
     '  background-size:78px 78px!important;',
     '  background-position:center!important;',
     '  background-repeat:no-repeat!important;',
     '}',
+    /* ⭐ NUESTRO VIDEO: el play dibujado, no la rosa estirada */
+    P + '.rd-tapa{',
+    '  background-color:transparent!important;',
+    '  background-image:url("' + PLAY + '")!important;',
+    '  background-size:86px 86px!important;',
+    '  background-position:center!important;',
+    '  background-repeat:no-repeat!important;',
+    '}',
 
     /* ── LA PERILLA DEL SÍ / NO ────────────────────────────────────────────
-       ⚠️⚠️ EL SELECTOR ESTABA MAL Y POR ESO LA PERILLA SALÍA BLANCA.
-       `.si .knob` / `.no .knob` / `.mitad .knob` NO EXISTEN en el motor. El
-       árbol real, medido el 21/9 sobre la invitación en vivo:
-
-           .rsvp-caja > .rsvp-fila
-                          ├── span.et         (el rótulo «No podré»)
-                          ├── div.rsvp-sw     77x30
-                          │     ├── span.aro  77x30
-                          │     ├── span.pozo 69x22
-                          │     └── span.per  22x22  ← LA PERILLA
-                          ├── button.mitad.izq 38x54
-                          ├── button.mitad.der 38x54
-                          └── span.et         (el rótulo «Sí, asistiré»)
-
-       ⚠️ Los `.mitad` miden 38 px de ancho, por debajo del piso de 44. Lo que
-          salva el toque son los rótulos `.et` (73 y 83 px), que el motor ya
-          hace tocables — por eso acá no se toca la geometría, sólo se viste. */
-    P + '.rsvp-sw .per{',
-    '  background-image:url("' + ROSA + '")!important;',
-    '  background-size:cover!important;',
-    '  background-position:center!important;',
-    '  background-color:transparent!important;',
-    '  box-shadow:0 1px 3px rgba(74,59,46,.35)!important;',
-    '}',
+       ⚠️ Maki, 21/9: «en el botón de no podré / sí asistiré, dejale la normal».
+       Tenía la rosa como perilla y no le gustó. Se le devuelve la forma de
+       fábrica y sólo se le tocan los tonos, para que no quede un gris ajeno a
+       la familia.
+       ⚠️ El árbol real, medido: `.rsvp-caja > .rsvp-fila > .rsvp-sw >
+          (.aro, .pozo, .per)`. `.si .knob` NO EXISTE, aunque lo diga cualquier
+          apunte viejo. Y los `.mitad` miden 38 px (bajo el piso de 44): lo que
+          salva el toque son los rótulos `.et`, de 73 y 83 px. */
     P + '.rsvp-sw .pozo{ background-color:' + PAPEL + '!important; }',
     P + '.rsvp-sw .aro{ border-color:' + TINTA3 + '!important; }',
+    P + '.rsvp-caja .et{ font-family:' + SANS + '!important; letter-spacing:.16em!important; text-transform:uppercase!important; }',
+
+    /* ── ⭐ EL PASE ────────────────────────────────────────────────────────
+       Maki, 21/9: «en el ticket ponele algo más relacionado a la temática, está
+       muy básico blanco».
+       El boleto venía con el papel de fábrica. Acá lleva el papel de Bohemia,
+       un doble filete camel arriba y abajo —el recurso de la colección— y los
+       rótulos en Karla versalita.
+       ⚠️ El cuadrado del QR se deja BLANCO a propósito: es la excepción que
+          pide la skill, porque un lector necesita el contraste. */
+    P + '.pasecard, ' + P + '.pase .pasecard{',
+    '  background-color:' + PAPEL2 + '!important;',
+    '  border:1px solid ' + TINTA3 + '!important;',
+    '  border-radius:10px!important;',
+    '  box-shadow:0 2px 10px rgba(74,59,46,.10)!important;',
+    '}',
+    P + '.pasecard::before, ' + P + '.pasecard::after{',
+    '  content:""!important; display:block!important;',
+    '  height:1px!important; margin:0 14px!important;',
+    '  background-color:' + CAMEL + '!important; opacity:.55!important;',
+    '}',
+    P + '.pase .lab, ' + P + '.pasecard .lab{',
+    '  font-family:' + SANS + '!important;',
+    '  letter-spacing:.20em!important; text-transform:uppercase!important;',
+    '  color:' + CAMEL + '!important; font-size:9.5px!important;',
+    '}',
+    P + '.pase .val, ' + P + '.pasecard .val{ font-family:' + DISPLAY + '!important; color:' + TINTA + '!important; }',
 
     /* ── LA CARTA ──────────────────────────────────────────────────────────
        ⚠️ LA HOJA DE LA CARTA TAMBIÉN ES SUPERFICIE: `.cf-letter` trae el papel
-          clavado en el motor. Acá va el papel de Bohemia, no el blanco del
-          molde. */
+          clavado en el motor. Acá va el papel de Bohemia, no el blanco. */
     P + '.cf-letter{',
     '  background-color:' + PAPEL2 + '!important;',
     '  color:' + TINTA + '!important;',
@@ -433,15 +520,11 @@
 
     /* ── EL PIE ────────────────────────────────────────────────────────────
        ⚠️⚠️ `.footer` NO ES `.sec`: se queda con el velo del molde, que es VERDE
-       (`rgba(20,24,18,.75)`) y arranca recién al 30%. Medido el 21/9 sobre la
-       foto del cierre: los textos chicos caen justo sobre el pelo de la novia y
-       el cielo dorado, que son las zonas CLARAS de la foto, y se pierden.
+       y arranca recién al 30%. Los textos chicos caen sobre las zonas CLARAS de
+       la foto del cierre y se pierden.
        ⚠️ El velo va en un `::after`, NO en el `background` del pie: `fondosDe()`
           de `reglas-duras.js` abre los degradados de los ANCESTROS y se queda
-          con la parada más clara; un pseudo no es ancestro, así que el velo se
-          ve igual y no le ensucia la cuenta a nadie.
-       ⚠️ Y no tapa la foto: arranca en .10 arriba y sólo se cierra abajo, que
-          es donde está la letra chica. La foto del cierre se sigue viendo. */
+          con la parada más clara; un pseudo no es ancestro. */
     P + '.footer{ position:relative!important; }',
     P + '.footer::after{',
     '  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;',
@@ -450,24 +533,27 @@
     '}',
     P + '.footer > *{ position:relative!important; z-index:1!important; }',
 
-    /* ⚠️ el sobretítulo del contacto venía en rgb(160,148,138), un gris tibio
-       que NO es de la familia de Bohemia — lo marcaba la regla 2 del chequeo.
-       Su sección tiene foto OSCURA, así que va en crema. */
-    P + '#contacto-kick, ' + P + '.contacto .kick{',
+    /* ── ⭐ ¿ALGUNA DUDA? ──────────────────────────────────────────────────
+       Maki, 21/9: «en alguna duda no se ve bien».
+       La sección tiene foto OSCURA de fondo (el muro con pampas) y el motor le
+       deja la tinta marrón: el título se comía con el fondo. Título, bajada y
+       sobretítulo van en crema, con una sombra corta que los despega de la
+       textura sin tapar la foto. */
+    P + '#contacto-kick, ' + P + '.contacto .kick,',
+    P + '#contacto-sec h2, ' + P + '#contacto-sec p, ' + P + '#contacto-sec .kick{',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
+    '  text-shadow:0 1px 4px rgba(24,16,10,.80)!important;',
     '}',
 
     /* ── EL ADORNO DE LOS TÍTULOS ──────────────────────────────────────────
-       Los 17 `.adorno` del motor son un SVG con dos filetes y DOS ANILLOS
+       Los `.adorno` del motor son un SVG con dos filetes y DOS ANILLOS
        ENTRELAZADOS: el adorno genérico de boda, el mismo en todas las
        invitaciones. Maki ya lo marcó («siempre ponés lo mismo»).
-       ⚠️ Acá NO va una foto: la regla dice que el adorno de arriba de cada
-          título es una VIÑETA TIPOGRÁFICA, y va en vector. La foto es para los
-          OBJETOS reconocibles — en Bohemia, la rosa del itinerario.
+       ⚠️ Acá NO va una foto: el adorno de arriba de cada título es una VIÑETA
+          TIPOGRÁFICA y va en vector. La foto es para los OBJETOS reconocibles
+          — en Bohemia, la rosa del itinerario.
        ⚠️ Y `simbolo-tematica.js` no lo pisa, porque esta colección firma
-          `data-marca-propia` y ese módulo se corre solo. Por eso el adorno lo
-          tiene que poner la colección.
-       La viñeta de Bohemia es una hoja finita en camel entre dos filetes. */
+          `data-marca-propia` y ese módulo se corre solo. */
     P + '.adorno > svg{ display:none!important; }',
     P + '.adorno{',
     '  background-image:url("' + ADORNO + '")!important;',
@@ -476,17 +562,16 @@
     '  background-repeat:no-repeat!important;',
     '}',
 
-    /* ── FILETES Y ADORNOS ─────────────────────────────────────────────────
+    /* ── FILETES ───────────────────────────────────────────────────────────
        TINTA3 da 1,36 sobre la foto: es un filete, NUNCA un texto. */
-    P + '.frame hr, ' + P + '.frame .linea, ' + P + '.frame .adorno::before, ' + P + '.frame .adorno::after{',
+    P + '.frame hr, ' + P + '.frame .linea{',
     '  background-color:' + TINTA3 + '!important; border-color:' + TINTA3 + '!important;',
     '}',
 
     /* ⚠️ NO se pinta fondo/borde/sombra de los botones: eso lo hace
        `efectos/botones.js` con el material elegido en `fx.boton.estilo`
        (acá: relieve-seco). Si la colección lo pinta, le pisa el material y
-       queda plano. Marfil borró todas sus reglas de píldora por esto. Sólo va
-       la tipografía. */
+       queda plano. Marfil borró todas sus reglas de píldora por esto. */
     P + '.btn, ' + P + '#btn-ingresar, ' + P + '.wsp, ' + P + '.tv-btn, ' + P + '.inv-prev-btn{',
     '  font-family:' + SANS + '!important;',
     '  letter-spacing:.20em!important; text-indent:.20em!important;',
@@ -496,6 +581,7 @@
 
     '@media (prefers-reduced-motion: reduce){',
     P + '.tl::before{ animation:none!important; }',
+    P + '.tl > .it{ transition:none!important; opacity:1!important; transform:none!important; }',
     '}'
 
     ].join('\n');
@@ -512,9 +598,7 @@
 
   /* ⚠️ EL FILETE DE LA PORTADA ES UN ELEMENTO DE VERDAD, NO UN PSEUDO.
      No puede colgar de `#pv-names` (el `filter` del nombre le mete las sombras)
-     ni de `.fecha` (el motor la esconde según la disposición elegida). Se crea
-     acá, después del nombre, y se vuelve a comprobar en cada repaso: el motor
-     redibuja la portada cuando cambian los datos y se lo lleva puesto. */
+     ni de `.fecha` (el motor la esconde según la disposición elegida). */
   function filete() {
     try {
       var n = document.getElementById('pv-names');
@@ -522,6 +606,53 @@
       var f = n.parentNode.querySelector('.bh-filete');
       if (!f) { f = document.createElement('div'); f.className = 'bh-filete'; }
       if (n.nextSibling !== f) n.parentNode.insertBefore(f, n.nextSibling);
+    } catch (e) {}
+  }
+
+  /* ⭐ EL LADO DE CADA FICHA Y SU ENTRADA.
+     ⚠️ NO se puede con `nth-child`: `.tl` tiene también al `<i class="tl-prog">`
+        de hijo y correría la cuenta. Se cuentan SÓLO los `.it`.
+     ⚠️ RED DE SEGURIDAD: si el IntersectionObserver no llega a disparar (la
+        sección se revela con otro mecanismo, el navegador no lo soporta), a los
+        6 s se muestran todas igual. Una ficha invisible es mucho peor que una
+        ficha sin animación. */
+  function lados() {
+    try {
+      var tl = document.querySelector('.tl');
+      if (!tl) return;
+      var its = tl.querySelectorAll(':scope > .it');
+      if (!its.length) return;
+
+      for (var i = 0; i < its.length; i++) {
+        var lado = (i % 2) ? 'der' : 'izq';
+        if (its[i].getAttribute('data-bh-lado') !== lado) its[i].setAttribute('data-bh-lado', lado);
+      }
+
+      if (!tl.__bhObs && window.IntersectionObserver) {
+        tl.__bhObs = new IntersectionObserver(function (ent) {
+          for (var j = 0; j < ent.length; j++) {
+            if (ent[j].isIntersecting) {
+              ent[j].target.classList.add('bh-visto');
+              try { tl.__bhObs.unobserve(ent[j].target); } catch (e) {}
+            }
+          }
+        }, { threshold: 0.3 });
+      }
+      if (tl.__bhObs) {
+        for (var k = 0; k < its.length; k++) {
+          if (!its[k].classList.contains('bh-visto')) tl.__bhObs.observe(its[k]);
+        }
+      }
+
+      if (!tl.__bhRed) {
+        tl.__bhRed = true;
+        setTimeout(function () {
+          try {
+            var todas = tl.querySelectorAll(':scope > .it');
+            for (var m = 0; m < todas.length; m++) todas[m].classList.add('bh-visto');
+          } catch (e) {}
+        }, 6000);
+      }
     } catch (e) {}
   }
 
@@ -556,6 +687,7 @@
     window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
     filete();
+    lados();
     medirVia();
   }
 
@@ -587,5 +719,5 @@
   else arrancar();
 
   /* para prenderla y apagarla a mano desde la consola, al revisar */
-  window.INVBOHEMIA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia, filete: filete };
+  window.INVBOHEMIA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia, filete: filete, lados: lados };
 })();
