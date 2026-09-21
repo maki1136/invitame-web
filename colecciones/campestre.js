@@ -163,12 +163,28 @@
   /* ================================================================ LA HOJA === */
   function armarCSS() {
     var P = SELLO;
+    /* el mismo sello, pero sólo cuando NO hay fondo de foto o video */
+    var SIN_FONDO = SELLO.replace('html', 'html:not([data-fondo])');
     var propia = tieneFuentePropia();
 
     return [
 
-    /* ---------------------------------------------------------------- papel */
-    P + '.frame{ background-color:' + PAPEL + '!important; }',
+    /* ---------------------------------------------------------------- papel
+       ⚠️⚠️ EL `!important` DE ACÁ TAPABA EL VIDEO DE FONDO. (21/9/2026)
+          `fondo-invitacion.js` abre la columna con
+              html[data-fondo] .frame{ background:transparent !important }
+          (especificidad 0,2,1). El SELLO de la colección es 0,3,1, así que
+          con `!important` de los dos lados ganaba la colección y el papel
+          crema quedaba OPACO sobre el video: el fondo cargaba, se reproducía
+          —medido, `paused:false`— y no se veía NADA. Se veía sólo el velo
+          de afuera, desenfocado, y por eso «se ve algo fuera de foco, muy
+          grande, y no se explica».
+          Marfil lo tiene bien desde siempre: su `.frame` va SIN `!important`
+          (línea 531), así el motor le gana cuando hay foto o video.
+          Acá se resuelve más explícito todavía: el papel se pinta SÓLO
+          cuando la invitación no tiene fondo puesto. Con fondo, manda el
+          motor. */
+    SIN_FONDO + '.frame{ background-color:' + PAPEL + '!important; }',
     P + '.sec, ' + P + '.footer{ color:' + TINTA + '; }',
 
     /* ------------------------------------------------------------ tipografía
