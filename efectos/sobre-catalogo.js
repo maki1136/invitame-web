@@ -521,7 +521,7 @@
        arranca de verdad, la lamina se desvanece.
        Resultado: nunca hay un video pausado A LA VISTA, que es lo que hace que
        el iPhone dibuje su boton de arranque. */
-    '#env .env-poster{ position:fixed; inset:0; width:100%; height:100%;'
+    '#env .env-poster{ visibility:visible!important; position:fixed; inset:0; width:100%; height:100%;'
       + ' background-size:contain; background-position:center;'
       + ' background-repeat:no-repeat; z-index:2; pointer-events:none;'
       + ' opacity:1; transition:opacity .22s linear; }',
