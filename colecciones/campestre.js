@@ -83,8 +83,15 @@
     '--sage':      SALVIA,
     '--sage-cl':   '#cdd3bd',
     '--oro':       TRIGO,
-    /* superficies */
-    '--sec-col':   OSCURO,
+    /* superficies
+       ⚠️⚠️ `--sec-col` ES EL PAPEL DE LAS SECCIONES NORMALES, NO EL PANEL OSCURO.
+          Visto el 21/9/2026 mirando la muestra: la primera versión le pasaba
+          OSCURO (#221e14) y el motor lo aplica al 38% sobre el fondo de video,
+          así que TODAS las secciones comunes quedaban con un velo gris topo,
+          alternando con las `.sec.verde` que sí salían claras. La invitación
+          parecía a dos aguas. El panel oscuro del itinerario no sale de acá:
+          lo pone la propia colección en `.tl` y en `--tl-papel`. */
+    '--sec-col':   PAPEL,
     '--tl-papel':  OSCURO,
     '--tl-tinta':  '#f3e9d9',
     '--cf-sobre':  '#ddcdb2',
