@@ -175,6 +175,36 @@
     (propia ? '' : P + '.portada .names, ' + P + '#pv-names{ font-family:' + CURSIVA + '!important; }'),
     P + '.cursiva, ' + P + '.nexo, ' + P + '.and{ font-family:' + CURSIVA + '!important; }',
 
+    /* ------------------------------------------------- el pase con voz
+       La colección le DEVUELVE al boleto su propia escala.
+
+       ⚠️ MEDIDO EL 21/9, y no es culpa de la colección: la hoja
+          `estilos-servidor` trae
+              .sec p:not(.frase){ font-size:var(--fs-texto,16px)!important }
+          y el boleto del pase vive adentro de una sección. Sus dos textos
+          son <p>, así que el SOBRETÍTULO sale de 16 px —cuando el motor lo
+          pide de 8— y el TÍTULO también, cuando el motor lo pide de 18-23.
+          Resultado: la jerarquía INVERTIDA, «PASE DE INVITADO» más grande
+          que «Un mensaje para ti». Le pasa a cualquier colección, no sólo
+          a ésta; acá se arregla del lado de la colección para no tocar el
+          motor. Si alguna vez `pase-voz.js` pone sus propios !important,
+          este bloque se puede borrar entero.
+
+       ⚠️ Y la regla de arriba (`P + 'p'`) le pisaba la familia al
+          sobretítulo. Las fuentes del boleto salen de sus variables
+          --pv-tit / --pv-dat / --pv-cur, que Jazmín elige desde el panel. */
+    P + '#pv-sec .pv-over{ font-size:8px!important;',
+    '  font-family:var(--pv-dat)!important; letter-spacing:.16em!important;',
+    '  line-height:1.35!important; }',
+    P + '#pv-sec .pv-titulo{ font-size:clamp(18px,5.2vw,23px)!important;',
+    '  font-family:var(--pv-tit)!important; line-height:1.08!important;',
+    '  letter-spacing:-.005em!important; }',
+    P + '#pv-sec .pv-departe{ font-size:14px!important;',
+    '  font-family:var(--pv-cur)!important; }',
+    P + '#pv-sec .pv-nota dd{ font-family:var(--pv-cur)!important; }',
+    P + '#pv-sec .pv-datos dd{ font-family:var(--pv-tit)!important; }',
+    P + '#pv-sec .pv-talon span{ font-family:var(--pv-tit)!important; }',
+
     /* los sobretítulos: versalitas muy espaciadas, como la referencia */
     /* ⚠️ NINGÚN ENCADENADO DE CLASES LE GANA A UN ID. Medido el 21/9: el
        sobretítulo de confirmación (`#cf-kick2`) nacía BLANCO —el motor lo pone
