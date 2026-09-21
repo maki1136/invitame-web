@@ -125,10 +125,25 @@
 
   var CSS = [
     ':is(#dc-nada, .evento), :is(#dc-nada, .hotel), :is(#dc-nada, .pasecard),',
-    ':is(#dc-nada, .scratchcard), :is(#dc-nada, .col-vtapa){',
+    ':is(#dc-nada, .col-vtapa){',
     '  background-color:' + PAPEL2 + '!important;',
     '  border:1px solid rgba(230,228,238,.22)!important;',
     '  box-shadow:0 1px 0 rgba(230,228,238,.10) inset, 0 10px 28px rgba(0,0,0,.45)!important;',
+    '}',
+
+    /* ⚠⚠ LA RASPADITA VA SIN RECUADRO. Maki, 21/9/2026:
+         «a la raspadita le agregaste otra vez un recuadro, sacalo, dejalo
+          como estaba antes».
+       Se habia colado en el grupo de tarjetas de arriba. Y NO alcanza con
+       sacarla del grupo: el motor le pone `background:var(--lino2)` —lino
+       CLARO— y en una coleccion oscura eso queda como una mancha. Hay que
+       apagarlo a proposito, y por partes (el atajo `background:` con
+       !important pisa cosas que no queremos pisar). */
+    ':is(#dc-nada, .scratchcard){',
+    '  background-color:transparent!important;',
+    '  background-image:none!important;',
+    '  border:0!important;',
+    '  box-shadow:none!important;',
     '}',
     /* el texto adentro de esas tarjetas */
     ':is(#dc-nada, .evento) *, :is(#dc-nada, .hotel) *, :is(#dc-nada, .pasecard) *{',
