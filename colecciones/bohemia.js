@@ -121,6 +121,37 @@
     '}',
     P + '.frame p, ' + P + '.frame li{ font-family:' + SANS + '!important; letter-spacing:.01em!important; }',
 
+    /* ── ⭐⭐⭐ NADA DE CURSIVA. ES LA FIRMA DE LA COLECCIÓN. ──────────────
+       MEDIDO EN VIVO EL 21/9 sobre `maria-paz-y-santiago`: había DOCE lugares
+       en cursiva y la colección no los tocaba. Son dos problemas distintos:
+
+       1. `font-style:italic` que pone EL MOTOR en un montón de elementos:
+          `.lab` y `label` (los rótulos del formulario), `.k`, `.sub`, `.d`,
+          `.rl`, `.sc-mon`, `.scratch-hint` («Desliza el dedo para descubrir»),
+          `.rsvp-pie` («Toca tu respuesta») y varios `p` sueltos.
+          → Se apaga de raíz con un `*`: es la única forma de no ir
+            persiguiendo clases de a una cada vez que el motor agrega otra.
+       2. `.t` —el título del pase, «Con cariño, te esperamos»— viene en
+          ROUGE SCRIPT, una fuente de puño. Ésa no se arregla con
+          `font-style`: hay que cambiarle la familia.
+
+       ⚠️ Y va DESPUÉS de los bloques de tipografía de arriba: con la misma
+          especificidad gana la última. */
+    P + '.frame *{ font-style:normal!important; }',
+    P + '.frame .lab, ' + P + '.frame label, ' + P + '.frame .k, ' + P + '.frame .sub, ' +
+      P + '.frame .d, ' + P + '.frame .rl, ' + P + '.frame .sc-mon, ' +
+      P + '.frame .scratch-hint, ' + P + '.frame .rsvp-pie{',
+    '  font-family:' + SANS + '!important;',
+    '  font-style:normal!important;',
+    '}',
+    /* el título del pase: de puño a versalitas Bodoni */
+    P + '.frame .t{',
+    '  font-family:' + DISPLAY + '!important;',
+    '  font-style:normal!important;',
+    '  letter-spacing:.12em!important;',
+    '  text-transform:uppercase!important;',
+    '}',
+
     /* ⚠️ lining-nums o «1739» se lee «I739» en una didona */
     P + '.frame{ font-variant-numeric:lining-nums!important; }',
 
@@ -203,10 +234,16 @@
     '  opacity:.95!important;',
     '}',
 
-    /* el filete camel debajo de los nombres */
-    P + '.portada #pv-names::after{',
+    /* ⚠️⚠️ EL FILETE NO PUEDE COLGAR DEL NOMBRE.
+       Estaba como `#pv-names::after`, y el `filter:drop-shadow(...)` del nombre
+       alcanza TAMBIÉN a sus pseudos: el filete camel se llevaba las dos sombras
+       y salía sucio y engrosado. Es la misma trampa que ya se pagó con la
+       bajada de Disco Neón.
+       → Va colgado de `.fecha`, que es un HERMANO y no entra en el filter. */
+    P + '.portada #pv-names::after{ content:none!important; }',
+    P + '.portada .fecha::before{',
     '  content:""; display:block; width:120px; height:1px;',
-    '  margin:1.05em auto .1em;',
+    '  margin:0 auto 1.7em;',
     '  background-color:' + CAMEL + ';',
     '  opacity:.85;',
     '}',
@@ -287,12 +324,33 @@
     '  bottom:var(--bh-tl-fin,6px)!important;',
     '  height:auto!important;',
     '}',
+    /* ⚠️⚠️ «UNA RAYA MUERTA» — corregido el 21/9.
+       El hilo punteado estaba QUIETO, y más abajo había un bloque
+       `prefers-reduced-motion` apagando una animación que NUNCA SE DEFINÍA:
+       quedó el apagador puesto y la luz sin conectar.
+       Ahora la luz BAJA, sin parar, como pidió la skill.
+       ⚠️ El viaje tiene que ser un MÚLTIPLO EXACTO del mosaico o el bucle pega
+          un salto visible: el `repeating-linear-gradient` repite cada 12 px
+          (5 de raya + 7 de aire), así que el recorrido es 12 px justos. */
     P + '.tl::before{',
     '  background-image:repeating-linear-gradient(to bottom,',
     '     ' + TINTA3 + ' 0 5px, rgba(0,0,0,0) 5px 12px)!important;',
     '  background-color:transparent!important;',
     '  width:1px!important;',
+    '  animation:bhVia 1.1s linear infinite!important;',
     '}',
+    '@keyframes bhVia{ from{ background-position:0 0; } to{ background-position:0 12px; } }',
+
+    /* el panel del itinerario: papel propio y filete camel, no la caja de
+       fábrica (regla 9: ningún elemento del motor se queda como viene) */
+    P + '.tl{',
+    '  background-color:' + PAPEL2 + '!important;',
+    '  border:1px solid ' + TINTA3 + '!important;',
+    '  border-radius:14px!important;',
+    '  padding:18px 14px!important;',
+    '}',
+    P + '.tl .it .h{ font-family:' + SANS + '!important; letter-spacing:.20em!important; color:' + CAMEL + '!important; }',
+    P + '.tl .it .t{ font-family:' + DISPLAY + '!important; letter-spacing:.10em!important; }',
 
     /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
        El preview crudo de YouTube y el reproductor de Spotify se tapan con la
@@ -308,15 +366,32 @@
     '}',
 
     /* ── LA PERILLA DEL SÍ / NO ────────────────────────────────────────────
-       ⚠️ El área de toque se mide: mínimo 44 px. La pastilla mide 77, o sea 38
-          por mitad — por eso Maki dijo «me costó mucho poner que sí». Los
-          rótulos de al lado también se tocan (eso lo arregla el motor); acá
-          sólo se viste la perilla con la pieza. */
-    P + '.si .knob, ' + P + '.no .knob, ' + P + '.mitad .knob{',
+       ⚠️⚠️ EL SELECTOR ESTABA MAL Y POR ESO LA PERILLA SALÍA BLANCA.
+       `.si .knob` / `.no .knob` / `.mitad .knob` NO EXISTEN en el motor. El
+       árbol real, medido el 21/9 sobre la invitación en vivo:
+
+           .rsvp-caja > .rsvp-fila
+                          ├── span.et         (el rótulo «No podré»)
+                          ├── div.rsvp-sw     77x30
+                          │     ├── span.aro  77x30
+                          │     ├── span.pozo 69x22
+                          │     └── span.per  22x22  ← LA PERILLA
+                          ├── button.mitad.izq 38x54
+                          ├── button.mitad.der 38x54
+                          └── span.et         (el rótulo «Sí, asistiré»)
+
+       ⚠️ Los `.mitad` miden 38 px de ancho, por debajo del piso de 44. Lo que
+          salva el toque son los rótulos `.et` (73 y 83 px), que el motor ya
+          hace tocables — por eso acá no se toca la geometría, sólo se viste. */
+    P + '.rsvp-sw .per{',
     '  background-image:url("' + ROSA + '")!important;',
     '  background-size:cover!important;',
+    '  background-position:center!important;',
     '  background-color:transparent!important;',
+    '  box-shadow:0 1px 3px rgba(74,59,46,.35)!important;',
     '}',
+    P + '.rsvp-sw .pozo{ background-color:' + PAPEL + '!important; }',
+    P + '.rsvp-sw .aro{ border-color:' + TINTA3 + '!important; }',
 
     /* ── LA CARTA ──────────────────────────────────────────────────────────
        ⚠️ LA HOJA DE LA CARTA TAMBIÉN ES SUPERFICIE: `.cf-letter` trae el papel
