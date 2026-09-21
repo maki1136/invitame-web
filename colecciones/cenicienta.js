@@ -441,6 +441,25 @@
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '}',
 
+    /* ── LA SECCIÓN «VERDE» QUE ACÁ NO ES OSCURA ──────────────────────────
+       `.sec.verde` es la sección de color del molde y su texto viene pintado
+       para fondo OSCURO: crema #D7CEBB y blanco cálido #F7F7F1. Con fondo de
+       video la sección se vuelve semitransparente y termina siendo CLARA, así
+       que `reglas-duras` oscurece esas dos cremas y devuelve OLIVA
+       (117,101,69 · 124,124,71 · 108,108,62). Aparecieron seis de golpe al
+       cambiar las fotos de Instagram y del juego.
+
+       Se arregla en el ORIGEN, como en el pase: si la tinta de fábrica ya es
+       de la familia, lo que derive el corrector también lo es. Y si en alguna
+       invitación esta sección sí queda oscura, `reglas-duras` corrige en las
+       DOS direcciones (su error 7) y las aclara sin cambiarles el tono. */
+    P + '.sec.verde .reveal:not(.kick){',
+    '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+    '}',
+    P + '.sec.verde .kick{',
+    '  color:' + ACENTO + '!important; -webkit-text-fill-color:' + ACENTO + '!important;',
+    '}',
+
     '@media (prefers-reduced-motion: reduce){',
     P + '.tl::before{ animation:none!important; }',
     '}'
