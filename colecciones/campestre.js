@@ -251,15 +251,20 @@
           CLARO y su tarjeta es de papel con tinta oscura. Se salva solo
           porque es `.pase` y no `.sec` — comprobado: el único elemento con
           este `::after` es `#contacto-sec`.
-       ⚠️⚠️ AL TÍTULO Y A LA BAJADA NO LES LLEGA EL CREMA, y no es un error de
-          esta hoja: `reglas-duras.js` ya los «rescató» y les escribió el
-          color EN LÍNEA con !important (#778151 y #A9A799). Contra un inline
-          !important no gana ninguna hoja, ni con -webkit-text-fill-color.
-          Las reglas de crema quedan escritas igual, para el día que el motor
-          deje de pisarlos, y porque al SOBRETÍTULO —que el motor no tocó— sí
-          le llegan. Con el oscurecido los tres pasan el piso; el título se
-          lee apagado, en oliva medio en vez de crema. Arreglarlo del todo es
-          una línea en `reglas-duras.js`: NO SE TOCÓ, hay que avisar antes. */
+       ⚠️⚠️ Y ACÁ HAY UNA LECCIÓN QUE CASI ME COMO: **EL ORDEN IMPORTA MÁS QUE
+          LA ESPECIFICIDAD.** Probando el bloque inyectado DESPUÉS de que la
+          página cargara, el crema le llegaba al sobretítulo pero NO al título
+          ni a la bajada: `reglas-duras.js` ya los había «rescatado» con un
+          color EN LÍNEA y !important (#778151 y #A9A799), y contra un inline
+          !important no gana ninguna hoja — tampoco `-webkit-text-fill-color`.
+          Con el archivo YA DESPLEGADO no pasa: la hoja de la colección está
+          puesta antes de que las reglas duras midan, las reglas duras ven un
+          texto que se lee y no escriben nada. Medido en vivo: los tres en
+          15,69.
+          → De esto se sacan dos cosas. Una: probar un arreglo de color
+            inyectándolo a mano MIENTE, y miente para el lado pesimista.
+            Dos: cuando un color no llega, antes de pelearse con la
+            especificidad conviene mirar QUIÉN llegó primero. */
     P + '.sec[style*="url("]{ position:relative; }',
     P + '.sec[style*="url("]::after{',
     '  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;',
