@@ -94,7 +94,12 @@
       paleta: null, paletaNombre: null,
       ayuda: 'Campo al atardecer en video, papel crema y tinta oliva, ' +
              'guirnaldas de luces y una rodaja de madera como marca. Trae su ' +
-             'propia paleta y su propio fondo.' }
+             'propia paleta y su propio fondo.' },
+    { id: 'bohemia', nombre: 'Bohemia',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Boho chic: pampas en video, papel crema y tinta marron con ' +
+             'acento camel, los nombres en versalitas muy abiertas SIN cursiva ' +
+             'y una rosa seca fotografiada como marca. Trae su propia paleta.' }
   ];
 
   function borrador() {
