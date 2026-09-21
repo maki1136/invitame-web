@@ -83,7 +83,14 @@
      No se toca el motor por esto: el contrato del módulo es que la colección
      escribe `--r3-tapa` y él obedece. Se le da una imagen que YA es opaca:
      la misma zapatilla sobre un disco de plata helada, 560x560, sin alfa. */
-  var ZAPA_TAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790016917/invitame/cenicienta/zyozqqok6olb8ouh1czr.jpg';
+  var ZAPA_TAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790017677/invitame/cenicienta/lh912pfu1gekkwwxj0ur.jpg';
+
+  /* ⚠️ Y LA ZAPATILLA VA GRANDE ADENTRO DEL DISCO (86% del lado). La primera
+     versión la puso al 62% y en pantalla se veía chiquita: `raspadita.js`
+     escala la imagen como `cover` dentro de una zona ANCHA (298x156 medidos) y
+     después la recorta al círculo, así que de los 560 px sólo se ve la franja
+     del medio. Lo que manda no es el tamaño del archivo: es cuánto ocupa la
+     pieza DENTRO de él. */
 
   /* la viñeta de los títulos: un cristal de hielo de seis puntas entre dos
      filetes. Va en VECTOR, no en foto: el adorno de arriba de cada título es
