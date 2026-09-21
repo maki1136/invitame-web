@@ -35,6 +35,10 @@
 
    ⭐ SE PRENDE con `INVEV.fx.coleccion = 'bohemia'`.
    ⭐ Jazmín la elige desde el selector de `efectos/panel-coleccion.js`.
+
+   ⚠️ LA MUESTRA VA CON LA FECHA EN `circulos`. No es estético: la raspadita
+      en modo `partes` tapa las PIEZAS de la fecha, y una disposición que no
+      las arma (como `filetes`) la hace caer a una sola zona rectangular.
    ============================================================================ */
 (function () {
   'use strict';
@@ -122,8 +126,8 @@
     P + '.frame p, ' + P + '.frame li{ font-family:' + SANS + '!important; letter-spacing:.01em!important; }',
 
     /* ── ⭐⭐⭐ NADA DE CURSIVA. ES LA FIRMA DE LA COLECCIÓN. ──────────────
-       MEDIDO EN VIVO EL 21/9 sobre `maria-paz-y-santiago`: había DOCE lugares
-       en cursiva y la colección no los tocaba. Son dos problemas distintos:
+       MEDIDO EN VIVO EL 21/9: había DOCE lugares en cursiva y la colección no
+       los tocaba. Son dos problemas distintos:
 
        1. `font-style:italic` que pone EL MOTOR en un montón de elementos:
           `.lab` y `label` (los rótulos del formulario), `.k`, `.sub`, `.d`,
@@ -234,18 +238,32 @@
     '  opacity:.95!important;',
     '}',
 
-    /* ⚠️⚠️ EL FILETE NO PUEDE COLGAR DEL NOMBRE.
-       Estaba como `#pv-names::after`, y el `filter:drop-shadow(...)` del nombre
-       alcanza TAMBIÉN a sus pseudos: el filete camel se llevaba las dos sombras
-       y salía sucio y engrosado. Es la misma trampa que ya se pagó con la
-       bajada de Disco Neón.
-       → Va colgado de `.fecha`, que es un HERMANO y no entra en el filter. */
+    /* ── ⚠️⚠️ EL FILETE CAMEL: DOS TRAMPAS, UNA DETRÁS DE LA OTRA ───────────
+
+       PRIMERA (la que ya avisaba la skill por la bajada de Disco Neón):
+       estaba como `#pv-names::after`, y el `filter:drop-shadow(...)` del nombre
+       alcanza TAMBIÉN a sus pseudos. El filete se llevaba las dos sombras y
+       salía sucio y engrosado.
+
+       SEGUNDA (la que se pagó el 21/9 al arreglar la primera): lo mudé a
+       `.fecha::before`, que es hermano del nombre y por lo tanto queda fuera
+       del filter. Se veía bien… hasta que la muestra pasó a
+       `fx.fecha.disposicion = 'circulos'` —obligatorio para que la raspadita
+       funcione en modo `partes`— y el motor dejó `.fecha` en `display:none`.
+       El filete desapareció sin un solo error. Es LITERALMENTE lo que avisa la
+       skill: **`#pv-fecha` no sirve de percha, puede venir oculto según la
+       disposición elegida.** Lo leí, lo apliqué a medias y caí igual.
+
+       → LA SOLUCIÓN BUENA, y la que manda la skill: un ELEMENTO PROPIO, que
+         crea `filete()` después de `#pv-names` y borra `sacar()`. No cuelga del
+         nombre y no depende de que ningún elemento del motor esté visible. */
     P + '.portada #pv-names::after{ content:none!important; }',
-    P + '.portada .fecha::before{',
-    '  content:""; display:block; width:120px; height:1px;',
-    '  margin:0 auto 1.7em;',
-    '  background-color:' + CAMEL + ';',
+    P + '.portada .bh-filete{',
+    '  display:block!important; width:120px; height:1px;',
+    '  margin:1.35em auto .2em!important;',
+    '  background-color:' + CAMEL + '!important;',
     '  opacity:.85;',
+    '  position:relative; z-index:1;',
     '}',
 
     P + '.portada .fecha{',
@@ -282,8 +300,13 @@
        una variable de CSS sólo baja a los DESCENDIENTES: hay que declararla en
        los contenedores de LAS DOS ramas o el lienzo nunca la ve y sigue
        pintando el degradado liso de fábrica.
-       ⚠️ Y la FORMA sale de `fx.raspadita.forma`, que ya está en el panel.
-          Redondear `.r3-f` por CSS no sirve: es la otra rama. */
+       ⚠️⚠️ Y LA FORMA NO ALCANZA CON PONERLA. `fx.raspadita.forma:'redondo'`
+          estaba bien guardado y bien leído, y la raspadita salía igual un
+          rectángulo con la rosa estirada. La causa real es OTRA CLAVE:
+          `fx.fecha.disposicion`. El modo `partes` tapa las PIEZAS de la fecha;
+          con `filetes` no hay piezas que tapar, cae a `simple` y pinta UNA sola
+          zona de 300x158 — ahí la rosa se estira y recién ahí aparece
+          `f-cuadrado`. Con `circulos`: tres celdas de 70x70. */
     ':is(#bh-nada, .scratch-sec, .rasp-3, .rasp-zona, #scratchcard){',
     '  --r3-tapa:url("' + ROSA + '");',
     '}',
@@ -411,8 +434,7 @@
     /* ── EL PIE ────────────────────────────────────────────────────────────
        ⚠️⚠️ `.footer` NO ES `.sec`: se queda con el velo del molde, que es VERDE
        (`rgba(20,24,18,.75)`) y arranca recién al 30%. Medido el 21/9 sobre la
-       foto del cierre: los textos chicos —«María Paz & Santiago · 15.05.2027»,
-       «Invitación creada con Invítame»— caen justo sobre el pelo de la novia y
+       foto del cierre: los textos chicos caen justo sobre el pelo de la novia y
        el cielo dorado, que son las zonas CLARAS de la foto, y se pierden.
        ⚠️ El velo va en un `::after`, NO en el `background` del pie: `fondosDe()`
           de `reglas-duras.js` abre los degradados de los ANCESTROS y se queda
@@ -488,6 +510,21 @@
     if (s.textContent !== txt) s.textContent = txt;
   }
 
+  /* ⚠️ EL FILETE DE LA PORTADA ES UN ELEMENTO DE VERDAD, NO UN PSEUDO.
+     No puede colgar de `#pv-names` (el `filter` del nombre le mete las sombras)
+     ni de `.fecha` (el motor la esconde según la disposición elegida). Se crea
+     acá, después del nombre, y se vuelve a comprobar en cada repaso: el motor
+     redibuja la portada cuando cambian los datos y se lo lleva puesto. */
+  function filete() {
+    try {
+      var n = document.getElementById('pv-names');
+      if (!n || !n.parentNode) return;
+      var f = n.parentNode.querySelector('.bh-filete');
+      if (!f) { f = document.createElement('div'); f.className = 'bh-filete'; }
+      if (n.nextSibling !== f) n.parentNode.insertBefore(f, n.nextSibling);
+    } catch (e) {}
+  }
+
   /* ⚠️ LA VÍA DEL ITINERARIO NO SE RESUELVE SÓLO CON CSS.
      Dónde cae el centro de la primera ficha depende de cuánto mide su texto, y
      ese texto lo carga Jazmín. Se MIDE y se pasa por variable, y se vuelve a
@@ -518,6 +555,7 @@
     if (raiz.getAttribute('data-marca-propia') !== ID) raiz.setAttribute('data-marca-propia', ID);
     window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
+    filete();
     medirVia();
   }
 
@@ -527,6 +565,8 @@
     if (raiz.getAttribute('data-coleccion') === ID) raiz.removeAttribute('data-coleccion');
     if (raiz.getAttribute('data-marca-propia') === ID) raiz.removeAttribute('data-marca-propia');
     if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
+    var f = document.querySelector('.bh-filete');
+    if (f && f.parentNode) f.parentNode.removeChild(f);
     var s = document.getElementById(ID_CSS);
     if (s && s.parentNode) s.parentNode.removeChild(s);
   }
@@ -547,5 +587,5 @@
   else arrancar();
 
   /* para prenderla y apagarla a mano desde la consola, al revisar */
-  window.INVBOHEMIA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia };
+  window.INVBOHEMIA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia, filete: filete };
 })();
