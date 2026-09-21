@@ -401,7 +401,7 @@
     P + ':is(#dc-nada, .rsvp-sw) .per{',
     '  background:radial-gradient(circle at 34% 30%, #FFFFFF 0%, ' + PLATA + ' 38%, ' + PLATA2 + ' 72%, ' + PLATA3 + ' 100%)!important;',
     '  box-shadow:0 0 0 1px rgba(230,228,238,.35), 0 3px 10px rgba(0,0,0,.6)!important;',
-    '}','),
+    '}',
     P + ':is(#dc-nada, .rsvp-sw) .pozo{',
     '  background:' + PAPEL + '!important;',
     '  box-shadow:inset 0 0 0 1px rgba(230,228,238,.18)!important;',
