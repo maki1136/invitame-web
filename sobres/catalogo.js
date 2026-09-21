@@ -164,7 +164,15 @@ window.SOBRES_INVITAME = {
        casi dos segundos. Sobre papel marfil no molesta —el blanco ES el
        papel—; sobre una invitación negra tapa la escena. Acá va corto: el
        fogonazo se ve y se va. */
-    luzFundido: 0.42,
+    /* ⚠️⚠️ ACÁ HUBO UN FUNDIDO CORTO (0,42 s) Y LO SAQUÉ. 21/9/2026.
+       El problema es real —medido cuadro por cuadro, al abrir había DOS
+       SEGUNDOS de blanco pleno sobre una invitación negra— pero acortar el
+       fundido dejó la PORTADA desteñida: gris claro en vez de negra, y no se
+       recuperaba. O sea que de ese tiempo cuelga algo más que el fundido.
+       Hasta entender qué, vale el valor de fábrica.
+       ⚠ La perilla del motor SIGUE EXISTIENDO y anda; lo que falta es saber
+         qué se rompe al acortarla. No volver a ponerla sin mirar la PORTADA
+         después, no sólo la apertura. */
   },
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
