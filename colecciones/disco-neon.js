@@ -169,7 +169,10 @@
     '  font-family:"Rouge Script",cursive!important;',
     '  font-weight:400!important;',
     '  font-size:clamp(84px,28vw,164px)!important;',
-    '  line-height:.92!important;',
+    '  line-height:1!important;',
+    /* ⚠ la cola de la «p» sobresale 30 px de la caja de linea en Rouge Script
+       a 152 px. Sin este piso se mete adentro del renglon de abajo. */
+    '  padding-bottom:.24em!important;',
     '  letter-spacing:0!important;',
     '  text-transform:none!important;',
     '  background:none!important;',
@@ -191,7 +194,7 @@
     '  text-transform:uppercase!important;',
     '  color:#E6ECF5!important; -webkit-text-fill-color:#E6ECF5!important;',
     '  text-shadow:0 1px 2px rgba(0,0,0,.92), 0 0 14px rgba(120,190,255,.45)!important;',
-    '  margin:.85em 0 .35em 0!important;',
+    '  margin:.55em 0 .35em 0!important;',
     '}',
 
     /* la fecha: versalitas espaciadas, el pie del cartel */
