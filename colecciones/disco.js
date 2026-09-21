@@ -524,34 +524,17 @@
          ninguna capa clara (ver la regla de arriba): si el brillo se mete en
          el fondo del panel, `reglas-duras.js` lo lee como panel claro y da
          vuelta el itinerario a texto negro sobre negro. */
-    '@keyframes discoPista{',
-    '  from { background-position: 0 0, 0 0, -85% 0; }',
-    '  to   { background-position: 296px -148px, -256px 128px, 185% 0; }',
-    '}',
     /* la luz que baja por el hilo del itinerario, siempre */
     '@keyframes discoHilo{',
     '  from { background-position:0 0; }',
     '  to   { background-position:0 14px; }',
     '}',
+    /* EL VELO, entre el video y el texto. Sin brillo propio: el movimiento
+       ahora lo pone el video, y esta capa solo existe para que el texto de
+       plata se siga leyendo encima. */
     P + ':is(#dc-nada, .tl)::after{',
-    '  content:""; position:absolute; inset:0; pointer-events:none;',
-    '  background-color:transparent;',
-    /* ⚠⚠ LA CALIBRACIÓN, MIRADA Y CORREGIDA EL MISMO Día. Primera versión:
-       lunares de 20 px en una grilla de 46 px. Se movía — y quedaba un
-       EMPAPELADO DE LUNARES peleando con el texto, no luz de bola de espejos.
-       ⚠ LA REGLA: la luz de una bola de espejos es POCA, CHICA Y SEPARADA.
-         Grilla grande (74 y 128 px), punto chico (6 y 16 px de radio) y alfa
-         baja (.34 y .14). Si los puntos se tocan entre sí, ya es un estampado.
-       ⚠ Y el haz baja a .09 y a una banda SIMÉTRICA: la versión anterior
-         terminaba en .03 y dejaba un borde vertical duro a la vista. */
-    '  background-image:',
-    '    radial-gradient(circle at 50% 50%, rgba(255,255,255,.34) 0, rgba(255,255,255,0) 11%),',
-    '    radial-gradient(circle at 50% 50%, rgba(214,212,228,.14) 0, rgba(255,255,255,0) 18%),',
-    '    linear-gradient(100deg, transparent 0%, rgba(255,255,255,.09) 50%, transparent 100%);',
-    '  background-size:74px 74px, 128px 128px, 80% 100%;',
-    '  background-repeat:repeat, repeat, no-repeat;',
-    '  mix-blend-mode:screen;',
-    '  animation:discoPista 7s linear infinite;',
+    '  content:\"\"; position:absolute; inset:0; pointer-events:none;',
+    '  background-image:linear-gradient(180deg, rgba(7,7,12,.62) 0%, rgba(7,7,12,.40) 38%, rgba(7,7,12,.44) 62%, rgba(7,7,12,.70) 100%);',
     '}',
     /* LOS CABEZALES DE LASER. 21/9/2026.
        Maki: le puedes cambiar el video ese de fondo del itinerario, que no me
@@ -573,54 +556,36 @@
          bucle. Van en screen, que es como se suma luz sobre luz.
        OJO 4: el elemento va DEBAJO de las fichas (z-index 0 contra 1): la luz
          pasa por detras del texto, no por encima. */
-    '@keyframes discoLaser{',
-    '  from { transform:translateX(-50%) rotate(-10deg); }',
-    '  to   { transform:translateX(-50%) rotate(10deg); }',
-    '}',
-    '@keyframes discoLaser2{',
-    '  from { transform:translateX(-50%) rotate(7deg); }',
-    '  to   { transform:translateX(-50%) rotate(-7deg); }',
-    '}',
+    /* EL VIDEO DE LOS CABEZALES DE LASER. 21/9/2026, segunda vuelta.
+       Maki, sobre la version anterior hecha con conic-gradient: el laser que
+       pusiste es bastante pedorro, pone algo mas copado en ese fondo, armalo
+       con Flow. Y tenia razon: un abanico de cunas de CSS no tiene humo, ni
+       grano, ni los cientos de puntitos que tira una bola de verdad.
+       Ahora el fondo del recuadro es un VIDEO generado en Flow: boliche vacio,
+       humo fino, varios cabezales barriendo y la bola girando en el centro.
+       480x854, 6,8 s, 385 KB, y con un CRUCE de 1,2 segundos entre el final y
+       el principio para que el loop no tenga costura.
+       OJO 1: el video es un ELEMENTO, no un background (CSS no reproduce
+         video). Lo inserta la coleccion AL FINAL de .tl, por el nth-child de
+         las bolas, y nace con las cinco protecciones: un video de la
+         invitacion nunca es un reproductor.
+       OJO 2: el orden de pintado es video (z-index 0) -> velo (el ::after, que
+         va en la capa 0 y se pinta despues) -> fichas (z-index 1). El velo
+         existe para que el texto de plata se siga leyendo sobre el video.
+       OJO 3: el brillo del video NO ensucia la cuenta del contraste, porque
+         reglas-duras.js mira el background de los ANCESTROS y un hermano no
+         cuenta. El background del panel sigue siendo negro opaco. */
     '@keyframes discoDestello{',
     '  0%,100% { box-shadow:0 0 10px rgba(230,228,238,.30); }',
     '  50%     { box-shadow:0 0 22px rgba(236,240,255,.72), 0 0 46px rgba(200,214,255,.26); }',
     '}',
     P + ':is(#dc-nada, .tl) > .it{ position:relative!important; z-index:1!important; }',
     P + ':is(#dc-nada, .tl) > .dc-laser{',
-    '  position:absolute!important; left:50%; top:-6%;',
-    '  width:300%; height:180%;',
-    '  transform:translateX(-50%) rotate(-10deg); transform-origin:50% 0;',
-    '  pointer-events:none; z-index:0; mix-blend-mode:screen; filter:blur(.6px);',
-    '  background:conic-gradient(from 171deg at 50% 0,',
-    '     transparent 0deg,',
-    '     rgba(255,255,255,0) 1.6deg, rgba(255,255,255,.20) 2.3deg, rgba(255,255,255,0) 3.0deg,',
-    '     transparent 5.6deg,',
-    '     rgba(214,224,255,0) 7.2deg, rgba(214,224,255,.16) 7.9deg, rgba(214,224,255,0) 8.6deg,',
-    '     transparent 11.4deg,',
-    '     rgba(255,255,255,0) 13.0deg, rgba(255,255,255,.13) 13.7deg, rgba(255,255,255,0) 14.4deg,',
-    '     transparent 360deg);',
-    '  animation:discoLaser 6.5s ease-in-out infinite alternate;',
-    '}',
-    P + ':is(#dc-nada, .tl) > .dc-laser::after{',
-    '  content:\"\"; position:absolute; left:50%; top:0; width:100%; height:100%;',
-    '  transform:translateX(-50%) rotate(7deg); transform-origin:50% 0;',
-    '  background:conic-gradient(from 174deg at 50% 0,',
-    '     transparent 0deg,',
-    '     rgba(236,232,255,0) 3.4deg, rgba(236,232,255,.12) 4.0deg, rgba(236,232,255,0) 4.6deg,',
-    '     transparent 9.8deg,',
-    '     rgba(255,255,255,0) 11.2deg, rgba(255,255,255,.10) 11.8deg, rgba(255,255,255,0) 12.4deg,',
-    '     transparent 360deg);',
-    '  animation:discoLaser2 9.1s ease-in-out infinite alternate;',
-    '}',
-    P + ':is(#dc-nada, .tl) > .dc-laser::before{',
-    '  content:\"\"; position:absolute; left:50%; top:0; width:72px; height:26px;',
-    '  transform:translate(-50%,-52%);',
-    '  background:radial-gradient(60% 100% at 50% 100%, rgba(255,255,255,.50), rgba(255,255,255,.10) 55%, transparent 76%);',
-    '  filter:blur(2px);',
-    '}',
-    '@media (prefers-reduced-motion: reduce){',
-    P + ':is(#dc-nada, .tl) > .dc-laser,',
-    P + ':is(#dc-nada, .tl) > .dc-laser::after{ animation:none; }',
+    '  position:absolute!important; inset:0!important;',
+    '  width:100%!important; height:100%!important;',
+    '  object-fit:cover!important; object-position:center 38%!important;',
+    '  z-index:0!important; opacity:.62!important;',
+    '  pointer-events:none!important; border:0!important; border-radius:20px!important;',
     '}',
     /* ⭐ LA LÍNEA EMPIEZA EN LA PRIMERA BOLA Y TERMINA EN LA ÚLTIMA.
        Maki: «la línea esa que pasa entre las bolas de boliche... antes que
@@ -837,10 +802,26 @@
       var tl = document.querySelector('.tl.tl-centro');
       if (!tl) return;
       if (tl.querySelector(':scope > .dc-laser')) return;
-      var l = document.createElement('i');
-      l.className = 'dc-laser';
-      l.setAttribute('aria-hidden', 'true');
-      tl.appendChild(l);
+      var v = document.createElement('video');
+      v.className = 'dc-laser';
+      v.src = 'https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/piezas/laser-boliche.mp4';
+      /* LAS CINCO PROTECCIONES + playsinline: un video de la invitacion
+         nunca es un reproductor, es papel que se mueve. */
+      v.muted = true; v.defaultMuted = true; v.loop = true; v.autoplay = true;
+      v.setAttribute('muted', '');
+      v.setAttribute('loop', '');
+      v.setAttribute('autoplay', '');
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('preload', 'auto');
+      v.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback noplaybackrate');
+      v.setAttribute('disablepictureinpicture', '');
+      v.setAttribute('disableremoteplayback', '');
+      v.setAttribute('aria-hidden', 'true');
+      v.setAttribute('tabindex', '-1');
+      v.controls = false;
+      tl.appendChild(v);
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
     } catch (e) {}
   }
 
