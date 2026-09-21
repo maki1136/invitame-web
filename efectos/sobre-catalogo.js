@@ -503,8 +503,16 @@
          aparece. Sin video visible no hay boton que dibujar.
        ⚠ El cambio es invisible para el invitado: antes del toque veia el
          primer cuadro del video; ahora ve el poster, que es ese mismo cuadro. */
-    '#env-vid{ opacity:0; transition:opacity .22s linear; }',
-    '#env.vid-vivo #env-vid{ opacity:1; }',
+    /* ⚠⚠ Y VA CON !important, PORQUE ME LO GANABA MI PROPIO MODULO. Medido:
+       `col-sobrecat-css` (la hoja de mas arriba, de este mismo archivo) tiene
+         #env.carta-video.puesto #env-vid { opacity:1 }
+       que pesa 0,3,1 contra el 0,1,0 de un `#env-vid` pelado, y encima esta
+       DESPUES en la cabeza. La primera version de estas dos lineas no hizo
+       absolutamente nada y el video seguia visible y pausado.
+       LA REGLA: antes de dar por puesta una regla, LEER EL COMPUTADO, no la
+       hoja. Y acordarse de que el enemigo puede ser uno mismo. */
+    '#env-vid{ opacity:0!important; transition:opacity .22s linear; }',
+    '#env.vid-vivo #env-vid{ opacity:1!important; }',
     '#env-vid::-webkit-media-controls,',
     '#env-vid::-webkit-media-controls-enclosure,',
     '#env-vid::-webkit-media-controls-panel,',
@@ -613,6 +621,20 @@
          movido es la prueba de que hay imagen. */
     try {
       var env = document.getElementById('env');
+      /* ⭐ Y LO QUE SE VE MIENTRAS TANTO ES EL POSTER DEL SOBRE.
+         El video ya lo trae en su atributo `poster`, asi que no hace falta ir a
+         buscar el modelo al catalogo: se copia de ahi al fondo de #env. Sin
+         esto, esconder el video dejaria la pantalla en un color plano.
+         ⚠ Va en `background-image` (longhand). El atajo `background` borraria
+           el color que escribe el catalogo unas lineas mas arriba. */
+      try {
+        var pst = v.getAttribute('poster');
+        if (pst && env && !env.style.backgroundImage) {
+          env.style.backgroundImage = 'url("' + pst + '")';
+          env.style.backgroundSize = 'cover';
+          env.style.backgroundPosition = 'center';
+        }
+      } catch (e) {}
       var vivo = function () {
         if (!env) env = document.getElementById('env');
         if (env && v.currentTime > 0.04 && !v.paused) env.classList.add('vid-vivo');
