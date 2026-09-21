@@ -57,6 +57,14 @@
   var PAPEL2 = '#FAFCFE';
   var CREMA  = '#F7FBFF';   /* el texto que va ARRIBA de la tinta */
 
+  /* ⚠️ LOS DOS TONOS DEL ACENTO. `--sage` va sobre papel CLARO y `--sage-cl`
+     sobre fondo OSCURO: un solo color no se lee contra los dos. Medidos contra
+     el papel de la colección, no a ojo:
+         ACENTO   #3A5C80 sobre #F2F7FC → 6,45 ✓ (piso 5,0)
+         ACENTOCL #A9C3DE sobre #14202E → 9,05 ✓ (piso 5,0) */
+  var ACENTO   = '#3A5C80';
+  var ACENTOCL = '#A9C3DE';
+
   /* la pieza fotografiada: la MISMA url en los cuatro lugares
      (itinerario, tapa de la playlist, perilla del sí/no, tapa de la raspadita) */
   var ZAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790008396/invitame/cenicienta/hpauay94v5mxookjs8bk.webp';
@@ -65,8 +73,15 @@
      `efectos/paleta.js` las reescribe en el <html> INLINE y con !important cada
      1,5 s, así que ninguna hoja le gana. El contrato (el mismo de Marfil desde
      el 17/9) es publicar acá la tabla y que la paleta pinte ESTOS valores.
-     ⚠️ A propósito NO se reclaman `--sage`, `--sage-cl` ni `--oro`: ésos son los
-        acentos y ahí manda el color que eligió la quinceañera. */
+     ⚠️⚠️ SÍ se reclaman `--sage`, `--sage-cl` y `--oro`, igual que Campestre.
+        La primera versión los dejaba libres «para que mandara el color que
+        eligió la quinceañera» y el chequeo cantó 15 textos colados: la paleta
+        del panel (menta-nácar) pintaba los sobretítulos en VERDE #4e7468 y las
+        etiquetas de Personas en verde seco, adentro de una colección de hielo.
+        No es una cuestión de gusto: la regla `familia-de-color` mide distancia
+        a los colores DECLARADOS, y esta paleta sólo declaraba casi-negros y
+        casi-blancos. Cualquier acento de tono medio quedaba afuera por
+        construcción. El acento es parte de la colección, como en Campestre. */
   var PALETA_PROPIA = {
     '--verde':     TINTA,
     '--verde2':    '#0D1722',
@@ -74,7 +89,10 @@
     '--cream':     CREMA,
     '--lino':      PAPEL,
     '--lino2':     PAPEL2,
-    '--sec-col-v': TINTA
+    '--sec-col-v': TINTA,
+    '--sage':      ACENTO,
+    '--sage-cl':   ACENTOCL,
+    '--oro':       PLATA
   };
 
   /* ------------------------------------------------------------- tipografía */
@@ -340,6 +358,63 @@
     '  letter-spacing:.22em!important; text-indent:.22em!important;',
     '  text-transform:uppercase!important;',
     '  font-size:12px!important;',
+    '}',
+
+    /* ── LOS TRES COLORES CLAVADOS A MANO ──────────────────────────────────
+       `i/estilos-servidor.css` fija tres marrones con `!important` en :root
+       para rescatar el contraste del molde viejo:
+           --sage: #7d5f34 · .ivcal-kick: #7d5f34 · .banco .copy: #7d5f34
+       La paleta gana en las variables, pero esas dos reglas de clase no las
+       toca nadie. Acá se las pisa con la misma fuerza y más especificidad.
+       #22344A sobre el papel da 12,1: muy por encima del piso. */
+    P + '.ivcal-kick, ' + P + '.banco .copy{',
+    '  color:' + TINTA2 + '!important;',
+    '  -webkit-text-fill-color:' + TINTA2 + '!important;',
+    '}',
+
+    /* ── EL PASE, MEDIDO SOBRE SU PROPIA FOTO ──────────────────────────────
+       El damasco de hielo que va de fondo del pase NO es papel: medido pixel
+       por pixel sobre la imagen de verdad (768x1376, muestreo cada 3 px):
+
+           blanco sobre el damasco  → 1,34 en el peor caso   ILEGIBLE
+           #14202E sobre el damasco → 3,64 en el peor caso   TAMPOCO llega
+
+       O sea que ahí no se lee NI claro NI oscuro: la foto tiene rango de sobra
+       (p5 0,18 · p95 0,71) y ningún color gana contra las dos puntas. Es el
+       error 10 de `reglas-duras`, tal cual. Por eso van dos cosas, no una:
+
+         1. un VELO de papel al 38 % sobre la foto. Con él la foto se sigue
+            viendo y el peor caso de #14202E sube a 6,82 (piso 5,0). Medido
+            componiendo el velo pixel por pixel, no a ojo.
+         2. la tarjeta deja de ser un vidrio (blanco al 7 %, que no tapa nada)
+            y pasa a ser PAPEL OPACO. Así el texto cae sobre papel y no sobre
+            la foto, y además `chequeo/muestra.js` encuentra un fondo opaco de
+            verdad para medir en vez de adivinar. */
+    P + '.pase{ position:relative!important; }',
+    P + '.pase::after{',
+    '  content:""; position:absolute; inset:0; pointer-events:none;',
+    '  background:' + PAPEL + '; opacity:.38; z-index:0;',
+    '}',
+    P + '.pase > *{ position:relative; z-index:1; }',
+
+    /* el sobretítulo en cursiva va sobre el velo, en tinta: 6,82 medido */
+    P + '.pase .t{',
+    '  color:' + TINTA + '!important;',
+    '}',
+
+    P + '.pasecard{',
+    '  background:' + PAPEL2 + '!important;',
+    '  border:1px solid ' + TINTA3 + '!important;',
+    '  box-shadow:0 10px 26px rgba(20,32,46,.14)!important;',
+    '}',
+    P + '.pasecard .k{ color:' + TINTA2 + '!important; }',
+    P + '.pasecard .v{ color:' + TINTA + '!important; }',
+
+    /* el sello del estado venía VERDE (#4d6a4f) del molde: acá es tinta */
+    P + '.pasecard .estado{',
+    '  background:' + TINTA + '!important; color:' + CREMA + '!important;',
+    '  -webkit-text-fill-color:' + CREMA + '!important;',
+    '  text-shadow:none!important;',
     '}',
 
     '@media (prefers-reduced-motion: reduce){',
