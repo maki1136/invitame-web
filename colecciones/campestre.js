@@ -176,9 +176,18 @@
     P + '.cursiva, ' + P + '.nexo, ' + P + '.and{ font-family:' + CURSIVA + '!important; }',
 
     /* los sobretítulos: versalitas muy espaciadas, como la referencia */
-    P + '.kick, ' + P + '.kicker{',
+    /* ⚠️ NINGÚN ENCADENADO DE CLASES LE GANA A UN ID. Medido el 21/9: el
+       sobretítulo de confirmación (`#cf-kick2`) nacía BLANCO —el motor lo pone
+       por ID— y esta regla no le llegaba. `reglas-duras.js` lo rescataba
+       pintándolo gris #6c6c6c en línea: se leía, pero fuera de la familia.
+       El contragolpe es `:is(#cp-nada, .kick)`, que pesa como un ID sin
+       seleccionar nada nuevo. Y va `-webkit-text-fill-color` además de
+       `color`, porque el inline con !important de las reglas duras no se le
+       gana de otra forma. */
+    P + ':is(#cp-nada, .kick), ' + P + ':is(#cp-nada, .kicker){',
     '  text-transform:uppercase!important; letter-spacing:.34em!important;',
-    '  font-size:11.5px!important; color:' + TINTA2 + '!important;',
+    '  font-size:11.5px!important;',
+    '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
     '}',
 
     /* ⚠️⚠️ EL SOBRETÍTULO DE LA PORTADA NO VA SOBRE EL PAPEL: VA SOBRE LA FOTO.
@@ -198,7 +207,13 @@
           y no como `background-image`. Por eso la regla 7 marca los nombres
           (1,07) que se leen perfecto y NO marcaba este sobretítulo, que era el
           único roto de verdad. Acá se mira, no se le cree al número. */
-    P + '.portada .kick, ' + P + '.portada .kicker, ' + P + '.portada #pv-kick{',
+    /* ⚠️ Y ESTA TIENE QUE PESAR MÁS QUE LA DE ARRIBA, o el sobretítulo de la
+       portada vuelve a la tinta oscura. La de arriba ya vale un ID por el
+       `:is(#cp-nada, .kick)`; ésta se anda con DOS, así gana siempre y no
+       depende del orden en que queden las reglas. */
+    P + ':is(#cp-nada, .portada) :is(#cp-nada, .kick), ' +
+    P + ':is(#cp-nada, .portada) :is(#cp-nada, .kicker), ' +
+    P + ':is(#cp-nada, .portada) #pv-kick{',
     '  color:#f7f1e4!important; -webkit-text-fill-color:#f7f1e4!important;',
     '}',
 
@@ -354,7 +369,13 @@
           entera, o sea 38 por mitad — por eso «me costó mucho poner que sí».
           Los rótulos de al lado se hacen tocables y hacen lo mismo. */
     P + '.si, ' + P + '.no, ' + P + '.mitad{ min-height:44px!important; }',
-    P + '.rsvp-rot{ cursor:pointer; padding:10px 6px; }',
+    /* ⭐ LOS RÓTULOS SON EL ÁREA DE TOQUE DE VERDAD.
+       Medido el 21/9/2026 en la muestra: la pastilla mide 77×30 y cada mitad
+       38, o sea la mitad del mínimo de 44. El motor ya hizo tocables los dos
+       rótulos («No podré» / «Sí, asistiré»), pero miden 13 px de alto: tocar
+       ahí es igual de difícil. Con este relleno pasan a ~45 y el invitado
+       puede cambiar de opinión sin pelearse con el dedo. */
+    P + '.et{ display:inline-block!important; padding:16px 12px!important; }',
     /* la perilla del interruptor, con la pieza */
     P + '.rsvp-sw .knob, ' + P + '.interruptor .knob{',
     '  background-image:url("' + RODAJA + '")!important;',
