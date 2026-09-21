@@ -704,7 +704,14 @@
   function activa() {
     try {
       var ev = window.INVEV || {};
-      return !!(ev.fx && String(ev.fx.coleccion || '').toLowerCase() === ID);
+      /* ⭐ DOS IDS, UNA SOLA HOJA. 21/9/2026.
+         `disco-neon` es ESTA misma coleccion con otra portada: la hoja de
+         Disco (papel, botones, itinerario, raspadita, sobre) se prende igual,
+         y `colecciones/disco-neon.js` agrega encima solo la portada de cartel.
+         Asi no hay dos juegos de reglas para mantener, y si manana Disco
+         cambia un color, Disco Neon lo hereda solo. */
+      var c = String((ev.fx || {}).coleccion || '').toLowerCase();
+      return !!(ev.fx && (c === ID || c === ID + '-neon'));
     } catch (e) { return false; }
   }
 
