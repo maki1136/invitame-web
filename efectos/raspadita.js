@@ -264,48 +264,53 @@
     }
   }
 
-  function pintarFoto(cv, url, cfg) {
+  /* ⚠️⚠️ CADA FICHA SE ANOTA Y LA FOTO LAS DESPIERTA A TODAS.
+     Dos intentos fallidos el 21/9/2026, los dos por una carrera.
+     Maki: «veo que no se puede poner la bola de boliche para raspar».
+     · 1er intento — el `onload` colgaba del PRIMER lienzo que pidió la foto.
+       Los otros dos la encontraban ya "existiendo" pero sin terminar de
+       cargar, pintaban el degradado y nadie los volvía a mirar: la primera
+       ficha con la bola, las otras dos lisas.
+     · 2do intento — el `onload` recorría TODOS los lienzos. Pero llegaba ANTES
+       de que existieran: `intacto()` miraba lienzos en blanco, daba false, y
+       no repintaba ninguno. Las tres lisas.
+     ⚠ LA REGLA: con un recurso que carga tarde no alcanza con avisar bien; hay
+       que saber A QUIÉN avisarle. El que no pudo dibujar SE ANOTA, y cuando la
+       foto llega se atiende esa lista. Sin carrera posible.
+     Y `intacto()` sigue mandando sobre los anotados: si el invitado empezó a
+     raspar mientras la foto viajaba, esa ficha se deja como está. */
+  var pendientes = {};
+
+  function dibujarEn(cv, img) {
     var g = cv.getContext('2d');
     var w = cv.width, h = cv.height;
+    g.globalCompositeOperation = 'source-over';
+    g.clearRect(0, 0, w, h);
+    var e = Math.max(w / img.naturalWidth, h / img.naturalHeight);   /* como cover */
+    var dw = img.naturalWidth * e, dh = img.naturalHeight * e;
+    g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+    polvillo(g, w, h);
+  }
+
+  function pintarFoto(cv, url, cfg) {
     var img = fotosTapa[url];
-
-    function dibujar() {
-      if (!img.complete || !img.naturalWidth) return false;
-      g.globalCompositeOperation = 'source-over';
-      g.clearRect(0, 0, w, h);
-      /* encajar como `cover`: la foto llena la celda sin deformarse */
-      var e = Math.max(w / img.naturalWidth, h / img.naturalHeight);
-      var dw = img.naturalWidth * e, dh = img.naturalHeight * e;
-      g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
-      polvillo(g, w, h);
-      return true;
-    }
-
     if (!img) {
       img = fotosTapa[url] = new Image();
-      img.crossOrigin = 'anonymous';   /* si no, getImageData tiñe el lienzo */
-      /* ⚠️⚠️ CUANDO LLEGA LA FOTO SE REPINTAN TODOS, NO SÓLO EL PRIMERO.
-         Medido el 21/9/2026. Maki: «veo que no se puede poner la bola de
-         boliche para raspar, ¿siempre es liso?». De las tres fichas, la
-         PRIMERA salía con la bola y las otras dos lisas.
-         La causa: la foto se pide una sola vez y se guarda en `fotosTapa`.
-         La primera ficha es la que engancha el `onload`; cuando llegan la
-         segunda y la tercera la imagen ya "existe" pero todavía no terminó de
-         cargar, así que `dibujar()` devuelve false, pintan el degradado… y
-         nadie las vuelve a mirar nunca.
-         ⚠ LA REGLA: si varios elementos comparten un recurso que carga tarde,
-           el aviso de "ya llegó" tiene que alcanzarlos a TODOS. Engancharlo al
-           primero que pidió es una carrera que casi siempre se pierde. */
+      img.crossOrigin = 'anonymous';   /* si no, getImageData tine el lienzo */
       img.onload = function () {
-        try {
-          [].forEach.call(document.querySelectorAll('.rasp-zona canvas'), function (otro) {
-            if (tapaDe(otro) === url && intacto(otro)) pintarFoto(otro, url, cfg);
-          });
-        } catch (e) {}
+        var lista = pendientes[url] || [];
+        pendientes[url] = [];
+        for (var i = 0; i < lista.length; i++) {
+          try { if (intacto(lista[i])) dibujarEn(lista[i], img); } catch (e) {}
+        }
       };
+      img.onerror = function () { pendientes[url] = []; };
       img.src = url;
     }
-    return dibujar();
+    if (img.complete && img.naturalWidth) { dibujarEn(cv, img); return true; }
+    var l = pendientes[url] = pendientes[url] || [];
+    if (l.indexOf(cv) < 0) l.push(cv);
+    return false;                      /* por ahora, el degradado de siempre */
   }
 
   function pintarCapa(cv, cfg) {
