@@ -116,7 +116,7 @@
         poner la colección. */
   var ADORNO = "data:image/svg+xml;utf8," +
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 44'>" +
-    "<g fill='none' stroke='%233A5C80' stroke-width='1.1' stroke-linecap='round'>" +
+    "<g fill='none' stroke='%232A4B72' stroke-width='1.1' stroke-linecap='round'>" +
     "<line x1='10' y1='22' x2='46' y2='22'/>" +
     "<line x1='74' y1='22' x2='110' y2='22'/>" +
     "<g transform='translate(60,22)'>" +
