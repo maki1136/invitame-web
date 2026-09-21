@@ -214,6 +214,40 @@
     P + '#pv-sec .pv-datos dd{ font-family:var(--pv-tit)!important; }',
     P + '#pv-sec .pv-talon span{ font-family:var(--pv-tit)!important; }',
 
+    /* ⭐ EL BOLETO ESTABA MAL CORTADO. Maki, 21/9/2026: «el ticket está mal
+       cortado, como siempre».
+
+       SON DOS COSAS, LAS DOS MEDIDAS mirando la esquina de arriba a la
+       derecha con el giro apagado y la columna escondida:
+
+       1. EL DIENTE DEL TROQUEL SE COME LA ESQUINA. El motor le pone al
+          boleto `mask: radial-gradient(circle 5px at 100% 50%)` con
+          `mask-size:100% 15px` y `repeat-y`: un diente de 5 px de radio cada
+          15 px sobre el borde derecho. El PRIMER diente tiene el centro en
+          y=7,5, así que muerde de 2,5 a 12,5 y **deja arriba un pico de
+          2,5 px**. Eso es el escaloncito. Y como el alto del boleto (220) no
+          es múltiplo de 15, abajo pasa lo mismo con el último diente.
+          Además los dientes NO SE VEN: dejan pasar el papel crema de la
+          sección, que es casi el mismo color. O sea que el troquel de ese
+          borde no aporta nada y sí rompe la silueta.
+          → se le saca la máscara al boleto. El desgarro sigue contado por el
+          borde mordido de la columna, que ahí sí se ve, y por la línea
+          punteada del talón.
+       2. EL FILETE INTERIOR PARECÍA UNA U. No estaba abierto: estaba TAPADO.
+          Cierra a `right:14px` del borde, o sea en el 856, y la columna ocupa
+          del 821 al 871. El filete terminaba DETRÁS de la columna. Ahora
+          cierra en el 57, ocho píxeles antes de la columna.
+
+       ⚠️ El 57 depende del ancho de `.pv-escena` (352) y del `width:58%` de
+          la columna que fija el motor. Si alguno cambia, se vuelve a medir:
+          columna escondida + `transform:none`, y se comparan los rectángulos.
+       ⚠️ NO se toca el `min-height:220` del motor: medido, con ese valor la
+          columna queda EXACTAMENTE centrada (12 px arriba y 12 abajo). */
+    P + '#pv-sec .pv-tk{',
+    '  -webkit-mask:none!important; mask:none!important; border-radius:2px!important;',
+    '}',
+    P + '#pv-sec .pv-cuerpo::before{ right:57px!important; }',
+
     /* los sobretítulos: versalitas muy espaciadas, como la referencia */
     /* ⚠️ NINGÚN ENCADENADO DE CLASES LE GANA A UN ID. Medido el 21/9: el
        sobretítulo de confirmación (`#cf-kick2`) nacía BLANCO —el motor lo pone
@@ -294,54 +328,61 @@
     P + '.padres .rel{ font-size:11.5px!important; color:' + TINTA2 + '!important; }',
 
     /* ========================================================= EL ITINERARIO ==
-       Panel oscuro, como la mesa a la luz de las velas de la sección contacto.
-       ⚠️ El `background-color` va DECLARADO Y OPACO. Si el panel se oscurece
-          sólo con degradados, `reglas-duras.js` se queda sin color de fondo,
-          resuelve BLANCO y da vuelta el texto a negro sobre negro. */
+       ⭐ LA VÍA VA AL MEDIO Y LOS MOMENTOS SE ALTERNAN.
+       Maki, 21/9/2026, mirando la muestra: «el itinerario, este fondo no va
+       definitivamente. Tiene que ir en el medio, y los textos de izquierda a
+       derecha». O sea: la línea por el eje, un momento a la izquierda, el
+       siguiente a la derecha, y el panel oscuro AFUERA.
+
+       ⚠️ EL PANEL OSCURO SE FUE. La primera versión era un rectángulo
+          #221e14 con polen animado adentro. Quedaba como una caja pegada
+          encima del papel crema, y tapaba el fondo de video —que es
+          protagonista, regla de Maki del 18/9. Ahora el itinerario respira
+          sobre el papel de la sección.
+       ⚠️ Y CON EL PANEL SE FUE EL POLEN. El `::after` tenía `mix-blend-mode:
+          screen`, que sobre claro no se ve. El movimiento continuo lo sostiene
+          ahora la VÍA: el hilo punteado con la luz bajando, que no para nunca.
+       ⚠️ El motor numera los hijos de `.tl` así: seis `DIV.it` y al final
+          `I.tl-prog`. Por eso `nth-child` sobre `.it` es seguro: el relleno de
+          progreso no es un `.it` y no corre la cuenta. */
     P + '.tl{',
     '  position:relative!important;',
-    '  background-color:' + OSCURO + '!important;',
-    '  border-radius:14px!important; padding:18px 16px!important;',
-    '  color:#f3e9d9!important; overflow:hidden!important;',
+    '  background-color:transparent!important; background-image:none!important;',
+    '  border-radius:0!important; padding:18px 0 6px!important;',
+    '  color:' + TINTA + '!important; overflow:visible!important;',
     '}',
+    P + '.tl::after{ content:none!important; }',
     P + '.tl .it, ' + P + '.tl .t, ' + P + '.tl .h{ position:relative; z-index:1; }',
-    P + '.tl .t{ font-family:' + SERIF + '!important; color:#f3e9d9!important; }',
-    P + '.tl .h{ color:' + SALVIACL + '!important; }',
-    P + '.tl .d{ color:#cfc6ad!important; }',
+    P + '.tl .t{ font-family:' + SERIF + '!important; color:' + TINTA + '!important; }',
+    P + '.tl .h{ color:' + TINTA + '!important; }',
+    P + '.tl .d{ color:' + TINTA2 + '!important; }',
 
-    /* ⭐⭐ EL MOVIMIENTO DEL PANEL ES CONTINUO O NO EXISTE.
-       Maki, 21/9: «si pasa cada varios segundos es como que no pasó nada,
-       quedó como una imagen fija». El láser de Disco cruzaba cada 9 s: eso son
-       8,2 s de NADA.
-       Acá abajo hay algo que no para nunca: motas de polen/polvo cálido
-       subiendo en diagonal a dos velocidades, y un soplo de luz tibia que
-       cruza DENTRO del mismo ciclo.
-       ⚠️ EL VIAJE ES MÚLTIPLO EXACTO DEL MOSAICO o el loop pega un salto:
-          264 = 4×66 · 132 = 2×66 · 228 = 2×114 · 114 = 1×114.
-       ⚠️ Y TODO EL BRILLO VA EN EL ::after, NUNCA en el background del panel:
-          `reglas-duras.js` abre los degradados de los ANCESTROS y se queda con
-          la parada más clara para decidir el color del texto. Un pseudo no es
-          ancestro. */
-    '@keyframes campoPolen{',
-    '  from{ background-position:0 0, 0 0, -85% 0; }',
-    '  to  { background-position:264px -132px, -228px 114px, 185% 0; }',
+    /* ⭐ EL EJE. `--tl-eje` es el semiancho que le queda a cada momento y
+       `--tl-aire` lo que separa el texto de la vía. Se tocan juntos: la marca
+       se ubica con los dos. */
+    P + '.tl{ --tl-aire:22px; }',
+    P + '.tl > .it{',
+    '  width:calc(50% - var(--tl-aire))!important;',
+    '  margin-bottom:20px!important; box-sizing:border-box!important;',
     '}',
-    P + '.tl::after{',
-    '  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;',
-    '  background-image:',
-    '    radial-gradient(circle at 50% 50%, rgba(255,231,180,.30) 0, rgba(255,231,180,0) 10%),',
-    '    radial-gradient(circle at 50% 50%, rgba(214,206,170,.13) 0, rgba(214,206,170,0) 17%),',
-    '    linear-gradient(100deg, transparent 0%, rgba(255,240,205,.085) 50%, transparent 100%);',
-    '  background-size:66px 66px, 114px 114px, 80% 100%;',
-    '  background-repeat:repeat, repeat, no-repeat;',
-    '  mix-blend-mode:screen;',
-    '  animation:campoPolen 7.4s linear infinite;',
+    /* impares a la IZQUIERDA, alineados contra la vía */
+    P + '.tl > .it:nth-child(odd){',
+    '  margin-left:0!important; margin-right:auto!important; text-align:right!important;',
     '}',
-    '@media (prefers-reduced-motion: reduce){ ' + P + '.tl::after{ animation:none; } }',
+    /* pares a la DERECHA */
+    P + '.tl > .it:nth-child(even){',
+    '  margin-left:auto!important; margin-right:0!important; text-align:left!important;',
+    '}',
+    /* ⚠️ LA MARCA SE CUELGA DEL LADO QUE MIRA A LA VÍA, no siempre a la
+       izquierda: 11 px es el medio de la rodaja de 22. */
+    P + '.tl > .it:nth-child(odd)::before{',
+    '  left:auto!important; right:calc(-1 * var(--tl-aire) - 11px)!important;',
+    '}',
+    P + '.tl > .it:nth-child(even)::before{',
+    '  left:calc(-1 * var(--tl-aire) - 11px)!important; right:auto!important;',
+    '}',
 
-    /* ⭐ LA VÍA EMPIEZA Y TERMINA DONDE ESTÁ LA COSA.
-       El motor la dibuja de borde a borde (`top:6px;bottom:6px`), así que
-       sobra línea antes de la primera marca y después de la última.
+    /* ⭐ LA VÍA EMPIEZA Y TERMINA DONDE ESTÁ LA COSA, y ahora va por el eje.
        ⚠️ SON DOS ELEMENTOS: `.tl::before` (la vía) y `.tl-prog` (el relleno que
           avanza con la hora). Recortar sólo el primero deja el bug vivo para
           cualquier evento ya empezado.
@@ -349,12 +390,13 @@
           alto de la primera ficha, que depende del texto que cargue Jazmín. */
     P + '.tl::before, ' + P + '.tl > .tl-prog{',
     '  top:var(--tl-ini,6px)!important; bottom:var(--tl-fin,6px)!important;',
-    '  height:auto!important;',
+    '  height:auto!important; left:calc(50% - 1px)!important; right:auto!important;',
+    '  width:2px!important;',
     '}',
     /* y la vía deja de ser una raya muerta: hilo punteado con la luz bajando */
     P + '.tl::before{',
     '  background-image:repeating-linear-gradient(to bottom,',
-    '     rgba(243,233,217,.52) 0 4px, rgba(243,233,217,0) 4px 13px)!important;',
+    '     ' + TINTA3 + ' 0 4px, rgba(122,116,88,0) 4px 13px)!important;',
     '  background-size:100% 13px!important;',
     '  animation:campoHilo 1.1s linear infinite!important;',
     '}',
@@ -371,8 +413,8 @@
     '  background-repeat:no-repeat!important;',
     '  background-size:contain!important;',
     '  border:0!important; box-shadow:none!important;',
-    '  width:22px!important; height:22px!important;',
-    '  filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));',
+    '  width:22px!important; height:22px!important; top:3px!important;',
+    '  filter:drop-shadow(0 1px 2px rgba(34,30,20,.28));',
     '}',
 
     /* ====================================================== LA RASPADITA ======
