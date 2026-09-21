@@ -312,7 +312,12 @@
         'font-family:var(--pv-tit)!important}',
       '#pv-sec .pv-nota dd{font-size:13px!important;line-height:1.25!important;' +
         'font-family:var(--pv-cur)!important}',
-      '#pv-sec .pv-talon span{font-size:15px!important;line-height:1!important;' +
+      /* ⚠️ `line-height:1` acá RECORTA. El talón va en `writing-mode:vertical-rl`,
+         así que el interlineado es el ANCHO de la tira: con 1 la caja queda de
+         15 px y una romana pide 18 (medido con Bodoni Moda, scrollWidth 18 contra
+         clientWidth 15, y el padre tiene overflow:hidden). 1.25 da 18,75 px y la
+         columna mide 51, así que sobra lugar. */
+      '#pv-sec .pv-talon span{font-size:15px!important;line-height:1.25!important;' +
         'font-family:var(--pv-tit)!important}'
     ].join('\n');
     document.head.appendChild(s);
