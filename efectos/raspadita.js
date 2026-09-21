@@ -281,6 +281,37 @@
      raspar mientras la foto viajaba, esa ficha se deja como está. */
   var pendientes = {};
 
+  /* ⚠️⚠️⚠️ Y UN REPASO, PORQUE LA COLECCIÓN LLEGA DESPUÉS.
+     Tercer intento, 21/9/2026. Los dos anteriores fueron carreras entre la
+     foto y los lienzos; éste es una carrera distinta y más difícil de ver:
+     LA VARIABLE TODAVÍA NO EXISTE cuando la raspadita se pinta.
+
+     El orden real es: el motor arma la raspadita → recién después la colección
+     inyecta su hoja de estilos con `--r3-tapa`. Cuando `pintarCapa` preguntó,
+     la variable estaba vacía, pintó el degradado liso, y no había nada que lo
+     hiciera volver a preguntar. Por eso se veía plateado aunque todo lo demás
+     estuviera bien.
+
+     ⚠ LA REGLA: un módulo del motor no puede asumir que las colecciones ya
+       hablaron. Si lee una variable que puede llegar tarde, tiene que volver a
+       mirar. Acá: cada medio segundo durante 15 s, y después se apaga solo.
+     Sólo toca fichas INTACTAS, así que nunca le borra el avance a nadie. */
+  function repasarTapas() {
+    try {
+      [].forEach.call(document.querySelectorAll('.rasp-zona canvas'), function (cv) {
+        var url = tapaDe(cv);
+        if (!url) return;
+        if (cv.__tapaFoto === url) return;      /* ya tiene esta foto */
+        if (!intacto(cv)) return;               /* el invitado ya raspó: no se toca */
+        if (pintarFoto(cv, url, null)) cv.__tapaFoto = url;
+      });
+    } catch (e) {}
+  }
+  (function () {
+    var n = 0;
+    var t = setInterval(function () { repasarTapas(); if (++n > 30) clearInterval(t); }, 500);
+  })();
+
   function dibujarEn(cv, img) {
     var g = cv.getContext('2d');
     var w = cv.width, h = cv.height;
@@ -290,6 +321,7 @@
     var dw = img.naturalWidth * e, dh = img.naturalHeight * e;
     g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
     polvillo(g, w, h);
+    try { cv.__tapaFoto = img.src; } catch (e) {}
   }
 
   function pintarFoto(cv, url, cfg) {
