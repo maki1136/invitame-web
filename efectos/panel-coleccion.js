@@ -89,7 +89,12 @@
     { id: 'disco-neon', nombre: 'Disco Neon',
       paleta: 'azul-noche-plata', paletaNombre: 'Azul noche y plata',
       ayuda: 'El mismo Disco, con OTRA portada: dos palabras en neon arriba y ' +
-             'el nombre en cursiva cromada. Los textos se escriben aca abajo.' }
+             'el nombre en cursiva cromada. Los textos se escriben aca abajo.' },
+    { id: 'campestre', nombre: 'Campestre',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Campo al atardecer en video, papel crema y tinta oliva, ' +
+             'guirnaldas de luces y una rodaja de madera como marca. Trae su ' +
+             'propia paleta y su propio fondo.' }
   ];
 
   function borrador() {
@@ -307,7 +312,7 @@
           if (!fx.neon) fx.neon = {};
           if (fx.neon.palabra == null) fx.neon.palabra = "LET'S";
           if (fx.neon.script  == null) fx.neon.script  = 'Party';
-          if (fx.neon.bajada  == null) fx.neon.bajada  = 'Mis XV a\u00F1os';
+          if (fx.neon.bajada  == null) fx.neon.bajada  = 'Mis XV años';
           if (!fx.neon.alto)  fx.neon.alto  = 'centro';
           if (!fx.neon.color) fx.neon.color = '#EAF4FF';
         }
