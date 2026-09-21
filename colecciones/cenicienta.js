@@ -435,46 +435,79 @@
     '  bottom:var(--cen-tl-fin,6px)!important;',
     '  height:auto!important;',
     '}',
-    /* ── EL HILO ───────────────────────────────────────────────────────────
-       Maki: «el hilo ese queda muy mal, buscá algo que salga de lo común».
-       Tenía razón y la causa no era el hilo: era `.tl-prog`, la línea que se
-       va dibujando con el scroll. Venía en `rgb(58,69,61)` —un gris VERDOSO
-       del molde— opaca y de 1,5 px: una regla gris cruzando la sección.
+    /* ── EL ITINERARIO NO LLEVA LÍNEA ──────────────────────────────────────
+       Maki, 21/9, después de dos intentos: «la línea del itinerario es
+       horrible. Horrible. Y ya te dije, quiero que vayan apareciendo las
+       palabras de izquierda a derecha y de derecha a izquierda. Que entre el
+       18 horas misa de acción de gracias y que entre el 19:30 recepción, y que
+       se vayan poniendo los puntitos. Y sacale la línea esa; si querés ponerle
+       unos, como hiciste con la otra, que había quedado bien.»
 
-       Lo que hay ahora son dos cosas distintas, y ahí está la idea:
-         · lo que TODAVÍA NO PASÓ es un rastro de escarcha — puntitos de plata
-           de 2,5 px con 5,5 de aire, con un destello que baja despacio, como
-           la luz corriendo por el hielo;
-         · lo que YA PASÓ es el mismo hilo pero LLENO, en tinta, con un halo
-           suave: el camino que la fiesta ya recorrió.
-       Las dos puntas se desvanecen con una máscara para que el hilo no arranque
-       ni termine con un corte seco.
-       ⚠️ El destello se apaga con `prefers-reduced-motion` (abajo del todo). */
+       «La otra que había quedado bien» es PERLAS: ahí la línea del itinerario
+       no es una línea, es una HEBRA DE PERLAS (`efectos/itinerario-perlas.js`,
+       2/9). Acá se copia ese criterio con el material de esta colección: un
+       rosario de cuentas de hielo, con aire entre una y otra, para que se lea
+       como un collar y no como una regla.
+
+       ⚠️ LA LECCIÓN DE PERLAS, QUE ACÁ TAMBIÉN APLICA: la cuenta del hilo
+          tiene que ser MUCHO más chica que la marca de cada momento, o las dos
+          se ven amontonadas. En Perlas fueron 7 px de hilo contra 17 de marca.
+          Acá la marca es la zapatilla de 22 px → la cuenta va en 6, cada 22.
+          Probado en vivo: con 17 de paso las cuentas se tocaban y volvía a
+          leerse como una raya punteada. Con 22 se lee el aire entre una y otra.
+       ⚠️ Y VAN EN EL MISMO EJE. La marca impar tiene `right:-37px` sobre un
+          item de `calc(50% - 26px)`: su borde derecho cae en 50 % + 11 y mide
+          22, así que su centro está EXACTO en el 50 %. El hilo va centrado ahí
+          con `margin-left:-3.5px`.
+
+       ⚠️ `.tl-prog` (la barra de avance) se apaga del todo: sin línea no hay
+          nada que rellenar, y encima venía en gris verdoso del molde. */
     P + '.tl::before{',
-    '  width:1px!important;',
+    '  width:7px!important; left:50%!important; margin-left:-3.5px!important;',
+    '  opacity:.9!important;',
+    '  animation:none!important;',
     '  background-color:transparent!important;',
-    '  background-image:linear-gradient(to bottom, rgba(233,242,251,0) 0%,',
-    '     rgba(255,255,255,.95) 45%, rgba(233,242,251,0) 100%),',
-    '     repeating-linear-gradient(to bottom, rgba(126,157,187,.9) 0 2.5px,',
-    '     rgba(126,157,187,.12) 2.5px 8px)!important;',
-    '  background-size:1px 160px, 1px 8px!important;',
-    '  background-repeat:no-repeat, repeat!important;',
-    '  animation:cenHilo 5.5s linear infinite!important;',
-    '  -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 5%,',
-    '     #000 95%, transparent 100%)!important;',
-    '  mask-image:linear-gradient(to bottom, transparent 0, #000 5%,',
-    '     #000 95%, transparent 100%)!important;',
+    '  background-image:radial-gradient(circle 3px at 2.5px 2.2px,',
+    '     rgba(255,255,255,1) 0 16%, rgba(206,226,244,.99) 52%,',
+    '     rgba(126,157,187,.95) 90%, rgba(126,157,187,0) 100%)!important;',
+    '  background-size:7px 22px!important;',
+    '  background-repeat:repeat-y!important;',
+    '  background-position:50% 0!important;',
+    '  filter:drop-shadow(0 1px 1.5px rgba(20,32,46,.22))!important;',
+    '  -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 7%,',
+    '     #000 93%, transparent 100%)!important;',
+    '  mask-image:linear-gradient(to bottom, transparent 0, #000 7%,',
+    '     #000 93%, transparent 100%)!important;',
     '}',
-    '@keyframes cenHilo{',
-    '  0%{ background-position:0 -160px, 0 0; }',
-    '  100%{ background-position:0 160px, 0 0; }',
+    P + '.tl .tl-prog, ' + P + '.tl > .tl-prog{ display:none!important; }',
+
+    /* ── Y LAS PALABRAS ENTRAN DE COSTADO, UNA POR UNA ─────────────────────
+       El motor YA las hace entrar de a una (un IntersectionObserver por
+       momento en `efectos/itinerario.js`) y YA alterna el lado… pero con
+       `translate(∓14px, 26px)`: 14 px de corrimiento no se ven. Lo que se
+       notaba era el salto vertical, no el lado.
+
+       Acá el corrimiento pasa a ser HORIZONTAL y grande: el momento de la
+       izquierda entra desde la izquierda y el de la derecha desde la derecha,
+       que es lo que pidió Maki. Y el puntito aterriza DESPUÉS del texto
+       (0,34 s de espera), así se ve «llegó la hora y después se marcó».
+
+       ⚠️ `overflow-x:clip` en `.tl`: 52 px hacia afuera de un item que ya mide
+          `calc(50% - 26px)` se salen del marco y aparecería una barra
+          horizontal. `clip` recorta sin crear contenedor de scroll, así que no
+          rompe el `position:sticky` de nada. */
+    P + '.tl{ overflow-x:clip!important; }',
+    P + '.tl.tl-anim > .it{',
+    '  transition:opacity .7s ease, transform .9s cubic-bezier(.22,.72,.28,1)!important;',
     '}',
-    P + '.tl > .tl-prog{',
-    '  width:1px!important; opacity:1!important;',
-    '  background-color:transparent!important;',
-    '  background-image:linear-gradient(to bottom, rgba(58,92,128,0) 0%,',
-    '     rgba(58,92,128,.85) 10%, rgba(34,52,74,.85) 100%)!important;',
-    '  box-shadow:0 0 6px rgba(58,92,128,.30)!important;',
+    P + '.tl.tl-centro > .it:nth-child(odd){ transform:translate(-52px,0)!important; }',
+    P + '.tl.tl-centro > .it:nth-child(even){ transform:translate(52px,0)!important; }',
+    P + '.tl.tl-centro > .it:nth-child(odd).on, ' + P + '.tl.tl-centro > .it:nth-child(even).on{',
+    '  transform:translate(0,0)!important;',
+    '}',
+    P + '.tl.tl-anim > .it::before{',
+    '  transition:transform .5s cubic-bezier(.3,1.55,.5,1) .34s,',
+    '             opacity .3s ease .34s!important;',
     '}',
 
     /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
@@ -659,6 +692,9 @@
 
     '@media (prefers-reduced-motion: reduce){',
     P + '.tl::before{ animation:none!important; }',
+    P + '.tl.tl-centro > .it:nth-child(odd), ' + P + '.tl.tl-centro > .it:nth-child(even){',
+    '  transform:none!important;',
+    '}',
     '}'
 
     ].join('\n');
