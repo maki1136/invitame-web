@@ -215,11 +215,90 @@
     return 'rgb(' + Math.max(0,c[0]-n) + ',' + Math.max(0,c[1]-n) + ',' + Math.max(0,c[2]-n) + ')';
   }
 
+  /* ⭐ LA TAPA PUEDE SER UNA FOTO — `--r3-tapa`        ★ 21/9/2026 ★
+
+     Maki, sobre los XV de temática boliche: «no sé si se puede poner en la
+     raspadita también las bolas de boliche. Si se puede y queda bien y se
+     puede raspar, genial».
+
+     Se puede, y así no hay que tocar este módulo nunca más: la colección
+     escribe una variable de CSS y esto la obedece.
+
+         .rasp-3 { --r3-tapa: url("…/bola-espejos.webp"); }
+
+     Si la variable no está, la tapa sigue siendo el degradado metálico de
+     siempre. O sea: ninguna invitación existente cambia.
+
+     ⚠️ LA FOTO TARDA EN LLEGAR, Y ESO IMPORTA. Mientras carga se pinta el
+        degradado, y cuando llega se repinta — PERO SÓLO SI TODAVÍA NADIE
+        RASPÓ. Si no, un repintado le taparía al invitado lo que ya había
+        descubierto. Se comprueba mirando el alfa de cinco puntos del lienzo:
+        si alguno ya es transparente, se deja como está. */
+  var fotosTapa = {};
+
+  function tapaDe(cv) {
+    try {
+      var el = cv.parentElement || cv;
+      var v = (getComputedStyle(el).getPropertyValue('--r3-tapa') || '').trim();
+      var m = v.match(/url\((['"]?)([^'")]+)\1\)/);
+      return m && m[2] ? m[2] : '';
+    } catch (e) { return ''; }
+  }
+
+  function intacto(cv) {
+    try {
+      var g = cv.getContext('2d');
+      var w = cv.width, h = cv.height;
+      var pts = [[w/2,h/2],[w*0.25,h*0.25],[w*0.75,h*0.25],[w*0.25,h*0.75],[w*0.75,h*0.75]];
+      for (var i = 0; i < pts.length; i++) {
+        if (g.getImageData(pts[i][0] | 0, pts[i][1] | 0, 1, 1).data[3] < 200) return false;
+      }
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function polvillo(g, w, h) {
+    for (var i = 0; i < (w * h) / 26; i++) {
+      g.fillStyle = 'rgba(255,255,255,' + (Math.random() * .16) + ')';
+      g.fillRect(Math.random() * w, Math.random() * h, 1, 1);
+    }
+  }
+
+  function pintarFoto(cv, url, cfg) {
+    var g = cv.getContext('2d');
+    var w = cv.width, h = cv.height;
+    var img = fotosTapa[url];
+
+    function dibujar() {
+      if (!img.complete || !img.naturalWidth) return false;
+      g.globalCompositeOperation = 'source-over';
+      g.clearRect(0, 0, w, h);
+      /* encajar como `cover`: la foto llena la celda sin deformarse */
+      var e = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+      var dw = img.naturalWidth * e, dh = img.naturalHeight * e;
+      g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+      polvillo(g, w, h);
+      return true;
+    }
+
+    if (!img) {
+      img = fotosTapa[url] = new Image();
+      img.crossOrigin = 'anonymous';   /* si no, getImageData tiñe el lienzo */
+      img.onload = function () { if (intacto(cv)) dibujar(); };
+      img.src = url;
+    }
+    return dibujar();
+  }
+
   function pintarCapa(cv, cfg) {
     var g = cv.getContext('2d');
     var w = cv.width, h = cv.height;
     g.globalCompositeOperation = 'source-over';
     g.clearRect(0, 0, w, h);
+
+    var url = tapaDe(cv);
+    if (url && pintarFoto(cv, url, cfg)) return;   /* la foto ya estaba lista */
+
     var base = cfg.color;
     var grad = g.createLinearGradient(0, 0, w, h);
     grad.addColorStop(0,   aclarar(base, 26));
