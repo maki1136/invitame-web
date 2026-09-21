@@ -593,7 +593,7 @@ window.SOBRES_INVITAME = {
      ---------------------------------------------------------------------- */
   cenicienta: {
     nombre:   "Cenicienta · papel de hielo, lacre de zapatilla de cristal (foto)",
-    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790020449/v1790020721/invitame/cenicienta/gwjikl5ehgocskdvl6dg.jpg",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790020721/invitame/cenicienta/gwjikl5ehgocskdvl6dg.jpg",
     solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/ovst4cedqvfysmrf3xu1.webp",
     color:    "#EAF2FA",
     apertura: "solapas",
