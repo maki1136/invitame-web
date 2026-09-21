@@ -553,6 +553,75 @@
     '  mix-blend-mode:screen;',
     '  animation:discoPista 7s linear infinite;',
     '}',
+    /* LOS CABEZALES DE LASER. 21/9/2026.
+       Maki: le puedes cambiar el video ese de fondo del itinerario, que no me
+       gusta, y armar algo tipo los cabezales de los laser de un boliche, que
+       despues se refleja en la bola.
+       No hace falta un video. Un cabezal de laser es un ABANICO DE HACES MUY
+       FINOS que sale de UN solo punto y BARRE. Eso es, tal cual, un
+       conic-gradient desde at 50% 0 con cunas de 0,7 grados, montado en un
+       elemento que rota con transform.
+       OJO 1: .tl::before ya es la via del itinerario y .tl::after ya son los
+         puntos de luz. Por eso la coleccion INSERTA un elemento propio, y lo
+         inserta AL FINAL: las bolas eligen lado con nth-child(odd/even) y
+         meterlo adelante daria vuelta el lado de cada ficha.
+       OJO 2: NO se puede animar el angulo de un conic-gradient sin @property,
+         que en Safari es reciente. Se anima el transform del elemento, que es
+         justo lo que hace un cabezal: el haz no cambia, gira el espejo.
+       OJO 3: dos abanicos con periodos que no encajan entre si (6,5 s y 9,1 s)
+         y en sentidos opuestos, asi nunca vuelven a coincidir y no se lee el
+         bucle. Van en screen, que es como se suma luz sobre luz.
+       OJO 4: el elemento va DEBAJO de las fichas (z-index 0 contra 1): la luz
+         pasa por detras del texto, no por encima. */
+    '@keyframes discoLaser{',
+    '  from { transform:translateX(-50%) rotate(-10deg); }',
+    '  to   { transform:translateX(-50%) rotate(10deg); }',
+    '}',
+    '@keyframes discoLaser2{',
+    '  from { transform:translateX(-50%) rotate(7deg); }',
+    '  to   { transform:translateX(-50%) rotate(-7deg); }',
+    '}',
+    '@keyframes discoDestello{',
+    '  0%,100% { box-shadow:0 0 10px rgba(230,228,238,.30); }',
+    '  50%     { box-shadow:0 0 22px rgba(236,240,255,.72), 0 0 46px rgba(200,214,255,.26); }',
+    '}',
+    P + ':is(#dc-nada, .tl) > .it{ position:relative!important; z-index:1!important; }',
+    P + ':is(#dc-nada, .tl) > .dc-laser{',
+    '  position:absolute!important; left:50%; top:-6%;',
+    '  width:300%; height:180%;',
+    '  transform:translateX(-50%) rotate(-10deg); transform-origin:50% 0;',
+    '  pointer-events:none; z-index:0; mix-blend-mode:screen; filter:blur(.6px);',
+    '  background:conic-gradient(from 171deg at 50% 0,',
+    '     transparent 0deg,',
+    '     rgba(255,255,255,0) 1.6deg, rgba(255,255,255,.20) 2.3deg, rgba(255,255,255,0) 3.0deg,',
+    '     transparent 5.6deg,',
+    '     rgba(214,224,255,0) 7.2deg, rgba(214,224,255,.16) 7.9deg, rgba(214,224,255,0) 8.6deg,',
+    '     transparent 11.4deg,',
+    '     rgba(255,255,255,0) 13.0deg, rgba(255,255,255,.13) 13.7deg, rgba(255,255,255,0) 14.4deg,',
+    '     transparent 360deg);',
+    '  animation:discoLaser 6.5s ease-in-out infinite alternate;',
+    '}',
+    P + ':is(#dc-nada, .tl) > .dc-laser::after{',
+    '  content:\"\"; position:absolute; left:50%; top:0; width:100%; height:100%;',
+    '  transform:translateX(-50%) rotate(7deg); transform-origin:50% 0;',
+    '  background:conic-gradient(from 174deg at 50% 0,',
+    '     transparent 0deg,',
+    '     rgba(236,232,255,0) 3.4deg, rgba(236,232,255,.12) 4.0deg, rgba(236,232,255,0) 4.6deg,',
+    '     transparent 9.8deg,',
+    '     rgba(255,255,255,0) 11.2deg, rgba(255,255,255,.10) 11.8deg, rgba(255,255,255,0) 12.4deg,',
+    '     transparent 360deg);',
+    '  animation:discoLaser2 9.1s ease-in-out infinite alternate;',
+    '}',
+    P + ':is(#dc-nada, .tl) > .dc-laser::before{',
+    '  content:\"\"; position:absolute; left:50%; top:0; width:72px; height:26px;',
+    '  transform:translate(-50%,-52%);',
+    '  background:radial-gradient(60% 100% at 50% 100%, rgba(255,255,255,.50), rgba(255,255,255,.10) 55%, transparent 76%);',
+    '  filter:blur(2px);',
+    '}',
+    '@media (prefers-reduced-motion: reduce){',
+    P + ':is(#dc-nada, .tl) > .dc-laser,',
+    P + ':is(#dc-nada, .tl) > .dc-laser::after{ animation:none; }',
+    '}',
     /* ⭐ LA LÍNEA EMPIEZA EN LA PRIMERA BOLA Y TERMINA EN LA ÚLTIMA.
        Maki: «la línea esa que pasa entre las bolas de boliche... antes que
        llegue la primera bola, eso lo podés eliminar porque queda muy mal. Y
@@ -634,10 +703,12 @@
     '  border:0!important;',
     '  animation:discoBola 2.6s linear infinite;',
     '}',
+    /* Y LA BOLA RECIBE EL HAZ: el destello acompana al barrido (6,5 s) por
+       encima del giro de 2,6 s que ya tenia. Dos animaciones en un elemento. */
     P + ':is(#dc-nada, .tl) > .it::before{',
     '  width:22px!important; height:22px!important;',
-    '  box-shadow:0 0 10px rgba(230,228,238,.30)!important;',
     '  -webkit-mask:none!important; mask:none!important;',
+    '  animation:discoBola 2.6s linear infinite, discoDestello 6.5s ease-in-out infinite alternate!important;',
     '}',
     P + ':is(#dc-nada, .tl).tl-centro > .it:nth-child(odd)::before{ margin-top:-11px!important; right:-36.5px!important; }',
     P + ':is(#dc-nada, .tl).tl-centro > .it:nth-child(even)::before{ margin-top:-11px!important; left:-36.5px!important; }',
@@ -758,6 +829,21 @@
      ⚠ Se vuelve a medir en cada repaso (cada 1,2 s), así sigue bien cuando
        gira el teléfono o cambia un texto. Son dos `getBoundingClientRect`:
        no pesa. */
+  /* EL CABEZAL DE LASER DEL ITINERARIO (ver el bloque de CSS de arriba).
+     Se inserta AL FINAL de .tl, nunca adelante: las bolas eligen lado con
+     nth-child(odd/even) y correr las fichas las daria vuelta. */
+  function cabezalLaser() {
+    try {
+      var tl = document.querySelector('.tl.tl-centro');
+      if (!tl) return;
+      if (tl.querySelector(':scope > .dc-laser')) return;
+      var l = document.createElement('i');
+      l.className = 'dc-laser';
+      l.setAttribute('aria-hidden', 'true');
+      tl.appendChild(l);
+    } catch (e) {}
+  }
+
   function lineaItinerario() {
     try {
       var tl = document.querySelector('.tl.tl-centro');
@@ -791,6 +877,7 @@
     if (window.INVCOLPALETA !== PALETA_PROPIA) window.INVCOLPALETA = PALETA_PROPIA;
     hoja();
     lineaItinerario();
+    cabezalLaser();
     if (!estabaPuesta) {
       estabaPuesta = true;
       /* un respiro para que la paleta ya haya repintado las variables */
@@ -800,6 +887,7 @@
   }
 
   function sacar() {
+    try { [].forEach.call(document.querySelectorAll('.dc-laser'), function (e) { if (e.parentNode) e.parentNode.removeChild(e); }); } catch (e) {}
     if (document.documentElement.getAttribute('data-col') === ID) {
       document.documentElement.removeAttribute('data-col');
       document.documentElement.removeAttribute('data-coleccion');
