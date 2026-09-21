@@ -157,22 +157,32 @@ window.SOBRES_INVITAME = {
          4,0 s        abierto, entra la luz      brillo 83
          4,3 a 7,7 s  zoom, se llena de blanco   brillo 102 -> 251
        El destello entra cuando ARRANCA el zoom: 4,0. */
-    luz: 4.0
+    luz: 4.0,
     /* ⚠️ DOS SEGUNDOS DE BLANCO SOBRE NEGRO SE LEEN COMO PÁGINA ROTA.
        Medido el 21/9/2026 mirando la apertura cuadro por cuadro: el destello
-       entraba bien, pero el fundido de 1 s dejaba la pantalla en blanco pleno
-       casi dos segundos. Sobre papel marfil no molesta —el blanco ES el
-       papel—; sobre una invitación negra tapa la escena. Acá va corto: el
-       fogonazo se ve y se va. */
-    /* ⚠️⚠️ ACÁ HUBO UN FUNDIDO CORTO (0,42 s) Y LO SAQUÉ. 21/9/2026.
-       El problema es real —medido cuadro por cuadro, al abrir había DOS
-       SEGUNDOS de blanco pleno sobre una invitación negra— pero acortar el
-       fundido dejó la PORTADA desteñida: gris claro en vez de negra, y no se
-       recuperaba. O sea que de ese tiempo cuelga algo más que el fundido.
-       Hasta entender qué, vale el valor de fábrica.
-       ⚠ La perilla del motor SIGUE EXISTIENDO y anda; lo que falta es saber
-         qué se rompe al acortarla. No volver a ponerla sin mirar la PORTADA
-         después, no sólo la apertura. */
+       entraba bien, pero después la pantalla se quedaba en blanco pleno casi
+       dos segundos. Sobre papel marfil no molesta —el blanco ES el papel—;
+       sobre una invitación negra tapa la escena. Acá va corto: el fogonazo se
+       ve y se va. */
+    /* ⭐⭐ POR QUÉ 0,42 Y POR QUÉ LA PRIMERA VEZ LO SAQUÉ MAL. 21/9/2026.
+       `luzFundido` NO es sólo cuánto dura el desvanecido: es también cuánto
+       ESPERA el motor, quieto y a opacidad 1, antes de empezarlo. Medido en
+       vivo, con el valor de fábrica (1 s):
+         4,16 s  entra `fundiendo`  — opacidad 1
+         5,04 s  recién ahí entra `gone` y arranca el desvanecido
+       O sea: casi un segundo entero mirándole al video del sobre el tramo en
+       que se llena de blanco (brillo 102 → 251). Eso es la pantalla en blanco
+       que veía Maki. Con 0,42 el corte pasa a los 4,58, cuando el blanco
+       recién empieza: se lee como fogonazo y no como página rota.
+       ⚠⚠ EL ERROR DE LA PRIMERA VUELTA, para no repetirlo: lo saqué porque
+          «dejaba la portada gris clara». NO era cierto: yo estaba mirando un
+          cuadro DE LA MITAD DEL FUNDIDO. Medido de nuevo cuadro por cuadro,
+          medio segundo después la portada está negra y los textos en plata,
+          exactamente igual que con 1 s.
+       ⚠ LA REGLA: un cuadro tomado durante una transición no dice cómo queda
+         la pantalla. Antes de culpar a un cambio, esperar a que la animación
+         TERMINE y recién ahí mirar. */
+    luzFundido: 0.42
   },
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
