@@ -21,6 +21,10 @@
           objeto de verdad: la tapa de la playlist y la tapa de la raspadita.
         · El botón va en RELIEVE SECO (letterpress).
 
+   ⚠️⚠️ NO LLEVAR CURSIVA TIENE UN PRECIO QUE HAY QUE PAGAR A MANO: TODA LA
+      ESCALA DEL MOTOR ESTÁ CALIBRADA PARA UN SCRIPT. Ver el bloque «LA ESCALA
+      TIPOGRÁFICA» más abajo. Es el error más caro del 21/9.
+
    ⚠️⚠️ LOS COLORES ESTÁN MEDIDOS, NO ELEGIDOS DE OJO.
       El papel de la foto base mide (236,209,179). Contra ese papel:
           TINTA  #4A3B2E → 7,33      TINTA2 #5E4B3C → 5,63
@@ -183,6 +187,48 @@
     '  text-transform:uppercase!important;',
     '}',
     P + '.frame p, ' + P + '.frame li{ font-family:' + SANS + '!important; letter-spacing:.01em!important; }',
+
+    /* ── ⭐⭐ LA ESCALA TIPOGRÁFICA. ES LA CORRECCIÓN MÁS GRANDE DEL DÍA ────
+       Maki, 21/9: «los textos están gigantes, tiene que ser más delicado; creo
+       que hasta la mitad tendría que ser el texto. Con el corazón lleno; una
+       carta para ti, gigante; con cariño te esperamos».
+
+       ⚠️⚠️ NO ES QUE ALGUIEN ELIGIÓ MAL UN TAMAÑO: ES QUE BOHEMIA NO LLEVA
+          CURSIVA Y NO REESCRIBIÓ LA ESCALA DEL MOTOR.
+          `i/estilos-servidor.css` clava, por clase y con !important:
+              .kick              → var(--fs-cursiva, 34px)
+              .sec h2            → var(--fs-titulo,  30px)
+              .frase             → var(--fs-frase,   26px)
+              .sec p:not(.frase) → var(--fs-texto,   16px)
+          Esos números están pensados para una CURSIVA. Perlas pone el `.kick`
+          en Great Vibes: 34 px de script son delicados. Bohemia lo pasó a
+          KARLA VERSALITA con .26em de espaciado, y el mismo número pesa el
+          doble al ojo.
+
+       ⚠️ Y LA JERARQUÍA QUEDABA AL REVÉS: el sobretítulo (34) era MÁS GRANDE
+          que el título (30). MEDIDO EN VIVO: «Raspa para revelar» ocupaba
+          112 px de alto —tres renglones— y «Con cariño, te esperamos» 214 px,
+          a 40 px de cuerpo.
+
+       LA ESCALA NUEVA (entre paréntesis, el alto del bloque, medido):
+              .kick    34 → 12   (89 → 20 px)
+              .sec h2  30 → 21   (112 → 28 px, un solo renglón)
+              .frase   26 → 18
+              .t       40 → 18   (214 → 26 px)
+              .sec p   16 → 16   ← NO se toca, el cuerpo se lee bien
+
+       ⚠️ VAN EN PX PELADOS, NO EN `vw`: el marco mide 500 px fijos en
+          escritorio, así que un `vw` se calcula contra la ventana entera y no
+          contra la pieza. El motor usa px y Perlas también.
+       ⚠️ Y GANAN POR ESPECIFICIDAD, NO tocando `--fs-*`: `efectos/paleta.js`
+          reescribe las variables cada 1,5 s. `html[data-col][data-coleccion]
+          .frame .kick` es (0,4,1) contra el (0,1,0) de `.kick`.
+       ⚠️ `.frame .t` es SÓLO el título del pase: medido, es el único `.t` del
+          marco. El itinerario usa otras clases. */
+    P + '.frame .kick{ font-size:12px!important; line-height:1.5!important; margin-bottom:.9em!important; }',
+    P + '.frame .sec h2, ' + P + '.frame h2{ font-size:21px!important; line-height:1.34!important; }',
+    P + '.frame .frase{ font-size:18px!important; line-height:1.62!important; }',
+    P + '.frame .t, ' + P + '.pase .t, ' + P + '.pasecard .t{ font-size:18px!important; line-height:1.45!important; }',
 
     /* ── ⭐⭐⭐ NADA DE CURSIVA. ES LA FIRMA DE LA COLECCIÓN. ──────────────
        MEDIDO EN VIVO EL 21/9: había DOCE lugares en cursiva y la colección no
