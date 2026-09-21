@@ -449,6 +449,80 @@
          seguido, o no hacerlo.
        AHORA: UNA sola banda de luz ancha que cruza la esfera entera, sin
        parar, una pasada cada 2,6 s. Eso es lo que el ojo lee como rotación. */
+    /* ⭐⭐ LA PISTA: el cuadrado del itinerario         ★ 21/9/2026 ★
+
+       Maki: «me gustaría que le pongas un poco más de diseño al cuadrado que
+       hiciste… puede ser más negro, con algún efecto. Pensá que es todo,
+       todo de temática boliche».
+
+       Era un rectángulo gris translúcido (rgba(30,28,37,.72)), sin borde, sin
+       esquinas, sin sombra: un bloque de relleno. Ahora es UNA PARED DE
+       BOLICHE con la bola tirándole luz encima:
+         · base casi negra, más oscura que el papel, con caída de luz desde
+           arriba (de donde cuelga la bola);
+         · los DESTELLOS que la bola tira sobre la pared, desparramados y de
+           tamaños distintos — no simétricos, que es lo que los delata como
+           dibujados;
+         · esquinas redondeadas, filete de plata finito y sombra propia, así
+           la pista se despega del fondo en vez de ser una mancha;
+         · y un HAZ de luz que la cruza cada 9 s (el ::after, que estaba
+           libre: el ::before es la línea vertical del itinerario).
+       ⚠ El haz va en `screen` y al 8%: tiene que ADIVINARSE, no iluminar. */
+    P + ':is(#dc-nada, .tl){',
+    '  background:',
+    '    radial-gradient(3.5px 3.5px at 13% 8%,   rgba(255,255,255,.55), transparent 64%),',
+    '    radial-gradient(2px 2px   at 29% 19%,    rgba(214,212,226,.40), transparent 64%),',
+    '    radial-gradient(2.5px 2.5px at 71% 12%,  rgba(255,255,255,.44), transparent 64%),',
+    '    radial-gradient(1.5px 1.5px at 88% 27%,  rgba(214,212,226,.34), transparent 64%),',
+    '    radial-gradient(3px 3px   at 8% 46%,     rgba(255,255,255,.30), transparent 64%),',
+    '    radial-gradient(2px 2px   at 93% 58%,    rgba(214,212,226,.30), transparent 64%),',
+    '    radial-gradient(2.5px 2.5px at 22% 71%,  rgba(255,255,255,.26), transparent 64%),',
+    '    radial-gradient(1.5px 1.5px at 62% 83%,  rgba(214,212,226,.24), transparent 64%),',
+    '    radial-gradient(2px 2px   at 40% 94%,    rgba(255,255,255,.20), transparent 64%),',
+    '    radial-gradient(150% 62% at 50% -10%, rgba(214,212,226,.13), transparent 62%),',
+    '    linear-gradient(180deg, #0a0912 0%, #07070c 58%, #050509 100%)!important;',
+    '  border-radius:20px!important;',
+    '  border:1px solid rgba(230,228,238,.13)!important;',
+    '  box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 22px 46px rgba(0,0,0,.55)!important;',
+    '  padding:26px 14px 22px!important;',
+    '  overflow:hidden!important;',
+    '  position:relative!important;',
+    '}',
+    '@keyframes discoHaz{',
+    '  0%,72%  { transform:translateX(-120%) skewX(-18deg); opacity:0; }',
+    '  80%     { opacity:1; }',
+    '  100%    { transform:translateX(120%)  skewX(-18deg); opacity:0; }',
+    '}',
+    P + ':is(#dc-nada, .tl)::after{',
+    '  content:""; position:absolute; inset:0; pointer-events:none;',
+    '  background:linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);',
+    '  mix-blend-mode:screen;',
+    '  animation:discoHaz 9s ease-in-out infinite;',
+    '}',
+    '@media (prefers-reduced-motion: reduce){',
+    P + ':is(#dc-nada, .tl)::after{ animation:none; opacity:0; }',
+    '}',
+
+    /* ⭐⭐ LA RASPADITA: redonda, y se raspa una bola de espejos
+       Maki: «no sé si se puede poner en la raspadita también las bolas de
+       boliche. Si se puede y queda bien y se puede raspar, genial. Si no,
+       hacé las circulares. Como todo es circular, estaría bueno que eso sea
+       así». Se pudo hacer LAS DOS COSAS.
+       · `--r3-tapa` es la variable que lee `efectos/raspadita.js` desde hoy:
+         pinta ESA foto sobre el lienzo, y el invitado la raspa.
+       · Y las celdas pasan a círculo. El SVG de fondo sigue con esquinas
+         redondeadas adentro, pero el `overflow:hidden` lo recorta: no hace
+         falta tocarlo. */
+    P + ':is(#dc-nada, .rasp-3){',
+    '  --r3-tapa:url("https://res.cloudinary.com/oc8cgqt4/image/upload/v1789953744/invitame/piezas/bola-espejos.webp");',
+    '}',
+    P + ':is(#dc-nada, .rasp-3) .r3-f{',
+    '  border-radius:50%!important; overflow:hidden!important;',
+    '  box-shadow:0 0 0 1px rgba(230,228,238,.22), 0 10px 22px rgba(0,0,0,.5)!important;',
+    '}',
+    P + ':is(#dc-nada, .rasp-3) .r3-f canvas{',
+    '  border-radius:50%!important;',
+    '}',
     '@keyframes discoBola{',
     '  from { background-position: 165% 50%, 50% 50%; }',
     '  to   { background-position:-165% 50%, 50% 50%; }',
