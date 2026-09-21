@@ -518,6 +518,45 @@ window.SOBRES_INVITAME = {
   },
 
 
+  /* ---- ★ EL SOBRE DE CENICIENTA  (21/9/2026) ----------------------------
+     El primero de hielo. Va con la colección `cenicienta`: papel de algodón
+     azul hielo con relieve de cristales de escarcha, y lacre de cera plateada
+     con una ZAPATILLA DE CRISTAL adentro — la misma pieza que la colección usa
+     como marca en el itinerario, la raspadita y la tapa de la playlist.
+
+     Es `apertura: 'solapas'` y NO video, a propósito. Regla de Maki después
+     del sobre de anillos: un video generado con IA hace lo que quiere. Acá el
+     movimiento lo maneja el motor: mismo tiempo, mismo ángulo, siempre.
+
+     ⚠️ EL PROMPT QUE FUNCIONÓ, para el que tenga que rehacerlo: la trampa es
+        pedir "sobre cerrado" y que devuelva la X de cuatro puntas. Hay que
+        decirlo en POSITIVO, como en el maestro: «una sola solapa triangular
+        doblada desde el borde de arriba, su punta termina en el centro exacto;
+        todo lo que está debajo de ese punto es una hoja de papel continua, sin
+        ningún doblez y sin costura». Salió a la primera, 4 de 4 usables.
+
+     `solapa` = el triángulo de arriba MÁS EL LACRE, recortado con
+     transparencia. Se armó por geometría sobre la propia foto (no a mano):
+     triángulo (7,6 % · 18,2 %) → (92,4 % · 18,2 %) → (50 % · 45,2 %), más el
+     disco del lacre centrado en (50 % · 49,6 %) con radio 9 % del ancho, y
+     1,6 px de desenfoque en el borde para que no quede el filo del recorte.
+
+     `eje` = la punta de la solapa, MEDIDA sobre la foto con una grilla de
+     porcentajes encima: 50,0 % · 45,2 %. Acá la punta NO está en el medio
+     como en el maestro (49,9 %): la solapa es más corta y el lacre cuelga
+     debajo de la punta, así que el eje va más arriba.
+     ---------------------------------------------------------------------- */
+  cenicienta: {
+    nombre:   "Cenicienta · papel de hielo, lacre de zapatilla de cristal (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/kfz09ahbncggflkjufyg.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/jbnyp3ayiqkq5vvfucsz.webp",
+    color:    "#EAF2FA",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.0, y: 45.2 }
+  },
+
+
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
