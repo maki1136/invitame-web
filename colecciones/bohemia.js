@@ -15,8 +15,10 @@
         · La tinta es MARRÓN CÁLIDO y el acento es CAMEL (#A87D5A, medido de la
           referencia).
         · El fondo es un VIDEO de plumas de pampa meciéndose.
-        · La marca del itinerario es una ROSA SECA FOTOGRAFIADA, no un vector,
-          y la vía es un CORDÓN DE YUTE TRENZADO.
+        · El itinerario va CENTRADO, con las fichas alternando lado, y su
+          vía es una REGLETA DE CUENTAS finita en camel con la misma HOJA de
+          los títulos por marca. La rosa fotografiada se queda donde es un
+          objeto de verdad: la tapa de la playlist y la tapa de la raspadita.
         · El botón va en RELIEVE SECO (letterpress).
 
    ⚠️⚠️ LOS COLORES ESTÁN MEDIDOS, NO ELEGIDOS DE OJO.
@@ -77,19 +79,41 @@
     "<line x1='60' y1='14' x2='60' y2='30'/>" +
     "</g></svg>";
 
-  /* ⭐ LA VÍA DEL ITINERARIO: UN CORDÓN DE YUTE TRENZADO.
+  /* ⭐⭐ LA VÍA DEL ITINERARIO Y SU MARCA.
      Maki, 21/9: «a la línea buscale otra vuelta porque queda mal, necesitamos
-     algo más con diseño». El hilo punteado era el recurso de siempre.
-     La vuelta no sale de inventar una forma: sale de la TEMÁTICA. El sobre de
-     Bohemia viene atado con hilo de yute, así que la vía es ese mismo cordón:
-     dos hebras que se cruzan, una en camel y otra en el tono del filete.
-     Mosaico de 6x16 → el viaje de la animación es 16 px EXACTOS, o el bucle
-     pega un salto visible. */
-  var CORDON = "data:image/svg+xml;utf8," +
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 16'>" +
-    "<g fill='none' stroke-linecap='round' stroke-width='1.5'>" +
-    "<path d='M3 0 C0.5 4 0.5 12 3 16' stroke='%23A87D5A'/>" +
-    "<path d='M3 0 C5.5 4 5.5 12 3 16' stroke='%23C7B5A1'/>" +
+     algo más con diseño; buscá en otro lado inspiración para estas cosas».
+
+     Lo primero que probé fue un CORDÓN DE YUTE TRENZADO —dos hebras cruzadas—
+     con la rosa fotografiada de marca. VISTO EN VIVO no funciona: a 6 px de
+     ancho las dos hebras se leen como una CADENA DE ESLABONES, y las rosas
+     recortadas parecen calcomanías pegadas encima. Dos objetos distintos
+     peleando en la misma columna.
+
+     La vuelta no sale de dibujar otro objeto: sale de lo que la invitación YA
+     tiene. Cada título lleva arriba la misma viñeta —una hoja finita en camel
+     entre dos filetes—. Ése es el idioma de la pieza. Entonces:
+
+        · la marca de cada hora es ESA MISMA HOJA, sobre un disco de papel que
+          le tapa la vía por detrás;
+        · la vía es una REGLETA DE CUENTAS: un punto camel cada 9 px, del
+          grosor de un filete. Es el recurso de papelería de toda la vida
+          (el punteado de una línea de puntos suspensivos), no un objeto.
+
+     Resultado: una sola familia gráfica de arriba abajo, y la vía deja de
+     competir con el texto.
+     ⚠️ El mosaico es de 9 px → el viaje de la animación es 9 px EXACTOS, o el
+        bucle pega un salto visible. */
+  var VIA = "data:image/svg+xml;utf8," +
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 9'>" +
+    "<circle cx='1.5' cy='2.2' r='1.15' fill='%23A87D5A'/>" +
+    "</svg>";
+
+  var MARCA = "data:image/svg+xml;utf8," +
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>" +
+    "<circle cx='12' cy='12' r='11.5' fill='%23F6EFE5'/>" +
+    "<g fill='none' stroke-linecap='round'>" +
+    "<path d='M12 2.8 C16.2 7.7 16.2 16.3 12 21.2 C7.8 16.3 7.8 7.7 12 2.8 Z' stroke='%23A87D5A' stroke-width='1.2'/>" +
+    "<line x1='12' y1='5.6' x2='12' y2='18.4' stroke='%23C7B5A1' stroke-width='0.8'/>" +
     "</g></svg>";
 
   /* ⭐ LA TAPA DE «NUESTRO VIDEO»: UN PLAY, NO LA ROSA.
@@ -368,8 +392,8 @@
              ficha sin animación.
 
        La geometría: la ficha mide `50% - 26px`, así que entre su borde y el eje
-       hay 26 px. La marca mide 22 px y su CENTRO tiene que caer en el eje →
-       su borde exterior va a 26 + 11 = 37 px. De ahí el `-37px`. */
+       hay 26 px. La marca mide 24 px y su CENTRO tiene que caer en el eje →
+       su borde exterior va a 26 + 12 = 38 px. De ahí el `-38px`. */
     P + '.tl{',
     '  position:relative!important;',
     '  background-color:' + PAPEL2 + '!important;',
@@ -382,29 +406,31 @@
     '  bottom:var(--bh-tl-fin,6px)!important;',
     '  height:auto!important;',
     '  left:50%!important; right:auto!important;',
-    '  margin-left:-3px!important;',
-    '  width:6px!important;',
+    '  margin-left:-1.5px!important;',
+    '  width:3px!important;',
     '}',
-    /* ⭐ EL CORDÓN DE YUTE, con la luz bajando. El viaje es 16 px = el mosaico
-       entero, o el bucle pega un salto.
+    /* ⭐ LA REGLETA DE CUENTAS, con las cuentas bajando despacio. El viaje es
+       9 px = el mosaico entero, o el bucle pega un salto.
        ⚠️ VAN LAS LONGHANDS, NUNCA el atajo `background:` con !important: el
           atajo expande TODAS sus longhands y clava `background-position`, y una
           declaración !important de autor le gana a una animación. Así se quedó
-          quieta la bola de espejos de Disco sin un solo error en consola. */
+          quieta la bola de espejos de Disco sin un solo error en consola.
+       ⚠️ 2,4 s, no 1,6: a 1,6 las cuentas se leen como una tira corriendo y
+          distraen del texto. Tiene que ser un latido, no una cinta. */
     P + '.tl::before{',
-    '  background-image:url("' + CORDON + '")!important;',
+    '  background-image:url("' + VIA + '")!important;',
     '  background-repeat:repeat-y!important;',
-    '  background-size:6px 16px!important;',
+    '  background-size:3px 9px!important;',
     '  background-color:transparent!important;',
-    '  opacity:.9!important;',
-    '  animation:bhVia 1.6s linear infinite!important;',
+    '  opacity:.60!important;',
+    '  animation:bhVia 2.4s linear infinite!important;',
     '}',
-    '@keyframes bhVia{ from{ background-position:0 0; } to{ background-position:0 16px; } }',
-    /* el relleno que avanza con la hora: el mismo cordón, más saturado */
+    '@keyframes bhVia{ from{ background-position:0 0; } to{ background-position:0 9px; } }',
+    /* el tramo que ya pasó, más presente */
     P + '.tl > .tl-prog{',
-    '  background-image:url("' + CORDON + '")!important;',
+    '  background-image:url("' + VIA + '")!important;',
     '  background-repeat:repeat-y!important;',
-    '  background-size:6px 16px!important;',
+    '  background-size:3px 9px!important;',
     '  background-color:transparent!important;',
     '  opacity:1!important;',
     '}',
@@ -427,19 +453,27 @@
     '  transform:translateX(24px);',
     '}',
     P + '.tl > .it.bh-visto{ opacity:1!important; transform:translateX(0)!important; }',
-    /* la marca: la rosa fotografiada, con su centro sobre el eje */
+    /* ⭐ LA MARCA: LA HOJA DE LOS TÍTULOS, no la rosa recortada.
+       El disco de papel va DENTRO del mismo SVG (no como background-color) para
+       que tape la regleta por detrás sin sumar una capa más.
+       ⚠️ LA GEOMETRÍA SE RECALCULA CUANDO CAMBIA EL TAMAÑO DE LA MARCA: la
+          ficha mide `50% - 26px`, así que entre su borde y el eje hay 26 px; la
+          marca mide 24 y su CENTRO tiene que caer en el eje → su borde exterior
+          va a 26 + 12 = 38 px. Con la rosa de 22 era 37. Si alguien cambia el
+          tamaño y se olvida de este número, la fila entera queda corrida. */
     P + '.tl > .it::before{',
-    '  background-image:url("' + ROSA + '")!important;',
+    '  background-image:url("' + MARCA + '")!important;',
     '  background-size:contain!important;',
     '  background-repeat:no-repeat!important;',
+    '  background-color:transparent!important;',
     '  border-radius:50%!important;',
     '  box-shadow:none!important;',
     '  border:0!important;',
-    '  width:22px!important; height:22px!important;',
+    '  width:24px!important; height:24px!important;',
     '  content:""!important;',
     '}',
-    P + '.tl > .it[data-bh-lado="izq"]::before{ left:auto!important; right:-37px!important; }',
-    P + '.tl > .it[data-bh-lado="der"]::before{ left:-37px!important; right:auto!important; }',
+    P + '.tl > .it[data-bh-lado="izq"]::before{ left:auto!important; right:-38px!important; }',
+    P + '.tl > .it[data-bh-lado="der"]::before{ left:-38px!important; right:auto!important; }',
 
     P + '.tl .it .h{ font-family:' + SANS + '!important; letter-spacing:.18em!important; color:' + CAMEL + '!important; }',
     P + '.tl .it .d{ font-family:' + SANS + '!important; color:' + TINTA2 + '!important; }',
@@ -481,28 +515,53 @@
     /* ── ⭐ EL PASE ────────────────────────────────────────────────────────
        Maki, 21/9: «en el ticket ponele algo más relacionado a la temática, está
        muy básico blanco».
-       El boleto venía con el papel de fábrica. Acá lleva el papel de Bohemia,
-       un doble filete camel arriba y abajo —el recurso de la colección— y los
-       rótulos en Karla versalita.
+
+       ⚠️⚠️ LOS RÓTULOS DEL PASE NO SON `.lab` Y `.val`. MEDIDO EN VIVO:
+          .pasecard > .row > (.k , .v)
+          `.k` es el rótulo («Nombre», «Mesa») y `.v` el dato. La primera
+          pasada escribió `.lab`/`.val` —los nombres de algún apunte viejo— y
+          no tocó NADA: el dato seguía saliendo en **#666 gris y en Forum**, un
+          gris que no pertenece a ninguna paleta de la colección. Ése era buena
+          parte del «muy básico».
+          Se dejan igual las dos familias de selectores: `.k`/`.v` es lo que hay
+          hoy y `.lab`/`.val` por si el motor vuelve atrás.
+
+       ⚠️⚠️ Y LA CHAPITA DE ESTADO VENÍA VERDE: rgb(77,106,79), el sage de otra
+          colección, clavado en el motor. Sobre el papel de Bohemia se veía como
+          una etiqueta pegada de otra invitación. Va en TINTA con letra crema
+          (7,33 de contraste).
+
+       El marco: en vez de dos filetes sueltos arriba y abajo —que a 1 px no se
+       veían— va un DOBLE FILETE INTERIOR hecho con `inset box-shadow`, que es
+       el recurso clásico del boleto impreso y no agrega elementos al flujo.
        ⚠️ El cuadrado del QR se deja BLANCO a propósito: es la excepción que
           pide la skill, porque un lector necesita el contraste. */
     P + '.pasecard, ' + P + '.pase .pasecard{',
     '  background-color:' + PAPEL2 + '!important;',
     '  border:1px solid ' + TINTA3 + '!important;',
     '  border-radius:10px!important;',
-    '  box-shadow:0 2px 10px rgba(74,59,46,.10)!important;',
+    '  box-shadow:inset 0 0 0 4px ' + PAPEL2 + ',',
+    '              inset 0 0 0 5px rgba(168,125,90,.42),',
+    '              0 2px 10px rgba(74,59,46,.10)!important;',
     '}',
-    P + '.pasecard::before, ' + P + '.pasecard::after{',
-    '  content:""!important; display:block!important;',
-    '  height:1px!important; margin:0 14px!important;',
-    '  background-color:' + CAMEL + '!important; opacity:.55!important;',
-    '}',
-    P + '.pase .lab, ' + P + '.pasecard .lab{',
+    P + '.pasecard .k, ' + P + '.pase .lab, ' + P + '.pasecard .lab{',
     '  font-family:' + SANS + '!important;',
-    '  letter-spacing:.20em!important; text-transform:uppercase!important;',
-    '  color:' + CAMEL + '!important; font-size:9.5px!important;',
+    '  letter-spacing:.20em!important;',
+    '  text-transform:uppercase!important;',
+    '  color:' + CAMEL + '!important;',
+    '  font-size:9.5px!important;',
     '}',
-    P + '.pase .val, ' + P + '.pasecard .val{ font-family:' + DISPLAY + '!important; color:' + TINTA + '!important; }',
+    P + '.pasecard .v, ' + P + '.pase .val, ' + P + '.pasecard .val{',
+    '  font-family:' + DISPLAY + '!important;',
+    '  color:' + TINTA + '!important;',
+    '  letter-spacing:.04em!important;',
+    '}',
+    P + '.pasecard .estado{',
+    '  background-color:' + TINTA + '!important;',
+    '  color:' + CREMA + '!important;',
+    '  font-family:' + SANS + '!important;',
+    '  letter-spacing:.14em!important; text-transform:uppercase!important;',
+    '}',
 
     /* ── LA CARTA ──────────────────────────────────────────────────────────
        ⚠️ LA HOJA DE LA CARTA TAMBIÉN ES SUPERFICIE: `.cf-letter` trae el papel
@@ -551,7 +610,9 @@
        invitaciones. Maki ya lo marcó («siempre ponés lo mismo»).
        ⚠️ Acá NO va una foto: el adorno de arriba de cada título es una VIÑETA
           TIPOGRÁFICA y va en vector. La foto es para los OBJETOS reconocibles
-          — en Bohemia, la rosa del itinerario.
+          — en Bohemia, la rosa de la playlist y de la raspadita. Y la marca del
+          itinerario es ESTA MISMA HOJA, a propósito: es lo que hace que la
+          pieza se lea como una sola.
        ⚠️ Y `simbolo-tematica.js` no lo pisa, porque esta colección firma
           `data-marca-propia` y ese módulo se corre solo. */
     P + '.adorno > svg{ display:none!important; }',
