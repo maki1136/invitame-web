@@ -431,5 +431,75 @@ iframe[src*="spotify"]{
    Las dos pasan a un neutro oscuro que respeta el papel de la invitación, y
    cualquier colección puede pisarlo escribiendo `--env-bg`.
    ====================================================================== */
-#env  { background: var(--env-bg, #0f0e13) !important; }
-#lock { background: var(--env-bg, #0f0e13) !important; }
+/* ⚠⚠⚠ VA `background-color`, NO EL ATAJO `background`. 21/9/2026.
+   La primera version de estas dos lineas usaba el ATAJO con `!important`, y el
+   atajo reescribe TODAS sus longhands: tambien `background-image: none`.
+   `sobre-catalogo.js` le pone al `#env` el POSTER del sobre elegido como
+   `background-image` INLINE... y una declaracion `!important` de hoja le gana
+   a un estilo inline sin `!important`. O sea: yo mismo estaba borrando el
+   poster del sobre. En un telefono donde el video no arranca solo, eso deja la
+   pantalla en un color plano en vez de la foto del sobre.
+   ⚠ LA REGLA, otra vez y ahora en los dos archivos: cuando se pisa un fondo
+     por encima de otro modulo, van las LONGHANDS. El atajo apaga cosas que no
+     se nombran. */
+#env  { background-color: var(--env-bg, #0f0e13) !important; }
+#lock { background-color: var(--env-bg, #0f0e13) !important; }
+
+/* ======================================================================
+   ⭐⭐⭐ EL BOTON DE PLAY DEL IPHONE. 21/9/2026, cuarta vez que lo reporta.
+
+   Maki: «en el iPhone se sigue viendo el reproductor, ya me tenes podrido con
+   eso, me dijiste que lo habias arreglado». Y tenia razon las cuatro veces.
+
+   LO QUE YO CREIA: que con `controls` fuera, `controlslist`,
+   `disablepictureinpicture`, `disableremoteplayback` y `pointer-events:none`
+   alcanzaba. En Chrome alcanza. EN iOS NO.
+
+   LO QUE PASA DE VERDAD: Safari de iPhone dibuja un boton ▶ NATIVO
+   (`::-webkit-media-controls-start-playback-button`) encima de CUALQUIER video
+   que este PAUSADO y todavia no haya arrancado. No es el reproductor: es el
+   boton de arranque, y NINGUN atributo lo saca. Solo lo saca CSS.
+   Y el sobre de entrada esta pausado a proposito hasta que el invitado toca:
+   o sea que en iPhone SIEMPRE se veia el ▶.
+
+   ⚠⚠ Y POR QUE «YA LO HABIA ARREGLADO» Y VOLVIA: el CSS que lo apaga estaba
+      escrito dentro de `efectos/sobre-catalogo.js`, un MODULO. Un modulo llega
+      despues del primer pintado y despues de bajar el paquete entero de
+      `/efectos/todo.php` (1 MB). En la Mac son milisegundos; en un telefono con
+      datos son uno o dos segundos — y esos dos segundos son justo lo que Maki
+      estaba mirando. El arreglo existia y llegaba tarde.
+
+   ⚠ LA REGLA: lo que no puede verse NI UN INSTANTE no puede vivir en un
+     modulo. Va aca, en la hoja que `i/index.php` mete en la cabeza de las cinco
+     versiones, antes del primer pintado.
+
+   Se apagan todos los pseudo-elementos conocidos porque WebKit les cambio el
+   nombre dos veces; si aparece uno nuevo, se suma a la lista.
+   La salida es `data-video-tocable`, para un video que SI tenga que tener
+   controles de verdad.
+   ====================================================================== */
+video:not([data-video-tocable])::-webkit-media-controls,
+video:not([data-video-tocable])::-webkit-media-controls-enclosure,
+video:not([data-video-tocable])::-webkit-media-controls-panel,
+video:not([data-video-tocable])::-webkit-media-controls-panel-container,
+video:not([data-video-tocable])::-webkit-media-controls-overlay-play-button,
+video:not([data-video-tocable])::-webkit-media-controls-start-playback-button,
+video:not([data-video-tocable])::-webkit-media-controls-play-button,
+video:not([data-video-tocable])::-webkit-media-controls-container,
+video:not([data-video-tocable])::-webkit-media-controls-timeline,
+video:not([data-video-tocable])::-webkit-media-controls-fullscreen-button,
+video:not([data-video-tocable])::-webkit-media-controls-current-time-display,
+video:not([data-video-tocable])::-webkit-media-controls-time-remaining-display,
+video:not([data-video-tocable])::-webkit-media-controls-mute-button,
+video:not([data-video-tocable])::-webkit-media-controls-volume-slider,
+video:not([data-video-tocable])::-webkit-media-controls-toggle-closed-captions-button{
+  display: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+/* y el ▶ gigante que iOS pinta CENTRADO cuando el video no pudo arrancar */
+video:not([data-video-tocable]){ -webkit-appearance: none !important; }
