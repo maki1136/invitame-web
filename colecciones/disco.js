@@ -113,8 +113,11 @@
   }
 
   function armarCSS() {
-    var uriBola  = bola(PLATA, PAPEL2);     /* para la perilla del interruptor */
-    var uriTenue = bola(PLATA3, 'transparent'); /* para el fondo de la tapa */
+    /* ⚠ `bola()` queda a mano, sin usar todavía. El dibujo vectorial se sacó de
+       la perilla y de la tapa: a ese tamaño no se lee como una bola de espejos,
+       se lee como un circulito rayado. Cuando esté la pieza FOTOGRAFIADA en
+       `invitame/piezas/bola-espejos` — recortada con alfa, girando despacio y
+       con un destello que barre — se enchufa acá y en el itinerario de una. */
 
   var CSS = [
     ':is(#dc-nada, .evento), :is(#dc-nada, .hotel), :is(#dc-nada, .pasecard),',
@@ -168,15 +171,17 @@
        violaceo plantado en el medio de la seccion. Va en PAPEL, con un filete
        de plata muy tenue y la bola de espejos dibujada detras del play, para
        que sea una PIEZA y no un rectangulo. */
+    /* ⚠⚠⚠ LA TAPA NO ES UN RECTÁNGULO. Maki, 20/9/2026: «sacá el rectángulo
+       ese» — la segunda vez que lo marca (antes fue «tenés un cuadrado violeta»).
+       La regla del motor ya decía «no se tapa un papel con otro papel» y la tapa
+       la estaba rompiendo: un bloque opaco plantado en el medio de la sección.
+       Va TRANSPARENTE. El iframe de abajo está en `visibility:hidden`, así que
+       lo que se ve es el fondo de la invitación, y encima sólo el aro. */
     P + ':is(#dc-nada, .rd-tapa){',
-    '  background-color:' + PAPEL + '!important;',
-    (uriTenue
-      ? '  background-image:' + uriTenue + '!important;' +
-        'background-repeat:no-repeat!important;background-position:center!important;' +
-        'background-size:58% auto!important;'
-      : '  background-image:none!important;'),
-    '  border:1px solid rgba(230,228,238,.14)!important;',
-    '  box-shadow:0 10px 30px rgba(0,0,0,.55)!important;',
+    '  background-color:transparent!important;',
+    '  background-image:none!important;',
+    '  border:0!important;',
+    '  box-shadow:none!important;',
     '  color:' + PLATA + '!important;',
     '}',
     P + ':is(#dc-nada, .rd-tapa) .rd-aro{',
@@ -385,15 +390,18 @@
        La perilla (`.per`) era un degrade generico. Ahora es la MISMA bola que
        marca cada momento del itinerario — pedida al modulo del simbolo, no
        copiada, asi no se pueden desincronizar. */
-    (uriBola
-      ? P + ':is(#dc-nada, .rsvp-sw) .per{' +
-        'background-color:' + PAPEL2 + '!important;' +
-        'background-image:' + uriBola + '!important;' +
-        'background-size:86% auto!important;' +
-        'background-position:center!important;' +
-        'background-repeat:no-repeat!important;' +
-        'box-shadow:0 0 0 1px rgba(230,228,238,.35), 0 3px 10px rgba(0,0,0,.6)!important;}'
-      : ''),
+    /* ⚠⚠ LA PERILLA VUELVE A SER LISA, A PROPÓSITO. Maki, 20/9/2026: «lo mismo
+       para el botón que le pusiste esa bola de boliche horrible».
+       Una bola de espejos DIBUJADA a 22 px no se lee como una bola: se lee como
+       un circulito rayado. Es la regla que ya estaba escrita y que volví a
+       romper: «las cosas dibujadas con CSS no reemplazan a una foto — el CSS
+       sirve para SUPERFICIES y para LÍNEAS, no para objetos».
+       Hasta que esté la pieza FOTOGRAFIADA (`invitame/piezas/bola-espejos`), la
+       perilla va lisa en plata pulida, que es prolijo y no finge ser un objeto. */
+    P + ':is(#dc-nada, .rsvp-sw) .per{',
+    '  background:radial-gradient(circle at 34% 30%, #FFFFFF 0%, ' + PLATA + ' 38%, ' + PLATA2 + ' 72%, ' + PLATA3 + ' 100%)!important;',
+    '  box-shadow:0 0 0 1px rgba(230,228,238,.35), 0 3px 10px rgba(0,0,0,.6)!important;',
+    '}','),
     P + ':is(#dc-nada, .rsvp-sw) .pozo{',
     '  background:' + PAPEL + '!important;',
     '  box-shadow:inset 0 0 0 1px rgba(230,228,238,.18)!important;',
