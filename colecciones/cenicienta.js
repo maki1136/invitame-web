@@ -75,8 +75,11 @@
 
   /* el claro de la nieve: mismo brillo que la crema del molde (L 0,75) pero
      frío, para los textos que van sobre el video y sobre la foto del cierre.
-     El molde traía #E7DDC8 y #F5EDDA, que son cremas CÁLIDAS. */
-  var NIEVE = '#DCE8F4';
+     El molde traía #E7DDC8 y #F5EDDA, que son cremas CÁLIDAS.
+     ⚠️ Queda a mano pero HOY NO SE USA EN NINGÚN TEXTO: los rótulos de la
+        cuenta, que eran su único cliente, pasaron a CREMA por contraste
+        medido (ver abajo). Si vuelve a usarse, medir primero. */
+  var NIEVE = '#DCE8F4';   /* eslint-disable-line no-unused-vars */
 
   /* la pieza fotografiada: la MISMA url en los cuatro lugares
      (itinerario, tapa de la playlist, perilla del sí/no, tapa de la raspadita) */
@@ -275,7 +278,7 @@
     '  transform:translateX(-50%); width:200%; height:82vh;',
     '  background:linear-gradient(to bottom,',
     '     rgba(8,16,28,0) 0%, rgba(8,16,28,.14) 34%,',
-    '     rgba(8,16,28,.44) 66%, rgba(8,16,28,.60) 100%);',
+    '     rgba(8,16,28,.52) 66%, rgba(8,16,28,.74) 100%);',
     '  pointer-events:none; z-index:0;',
     '}',
     P + '.portada > .c > *{ position:relative!important; z-index:1!important; }',
@@ -621,8 +624,15 @@
     P + '.portada .count .num, ' + P + '.portada .count .sep{',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '}',
+    /* ⚠️ LOS RÓTULOS DE LA CUENTA VAN EN CREMA, NO EN NIEVE.
+       Medido sobre la foto de la portada ya compuesta con los dos velos: a
+       9 px el piso del chequeo es 5,0 y #DCE8F4 daba 4,07 — justo abajo. La
+       crema sube el claro y la sombra propia le tapa los píxeles más claros
+       de la nieve. El resto del bloque (nombre 10,9 · sobretítulo 10,8 ·
+       números 4,6 con piso 4,0) ya entraba. */
     P + '.portada .count .lab{',
-    '  color:' + NIEVE + '!important; -webkit-text-fill-color:' + NIEVE + '!important;',
+    '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
+    '  text-shadow:0 1px 3px rgba(6,12,22,.9), 0 0 10px rgba(6,12,22,.6)!important;',
     '}',
     P + '.footer .n, ' + P + '.footer .sm, ' + P + '.col-mvta .col-mvta-t{',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
