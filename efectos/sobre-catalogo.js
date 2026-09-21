@@ -945,6 +945,26 @@
 
     if (m.eje && typeof m.eje.x === 'number') { EJE = { x: m.eje.x, y: m.eje.y }; }
     estilo(m.color || '#f4f2ee');
+
+    /* ⭐ EL SOBRE VERDE. Maki, 20/9/2026: «antes de abrir el sobre, cuando carga,
+       carga primero el sobre verde. Eso como siempre».
+       No era el primer cuadro de otro sobre: el motor tenía el fondo de la capa
+       del sobre CLAVADO en un degradado verde
+         #env{ background: radial-gradient(… #3d493f, #111510) }
+       que se pinta al instante, antes de que exista el video o el poster del
+       sobre elegido. Se veía en TODAS las muestras, siempre.
+       Ahora el motor arranca en `var(--env-bg, #0f0e13)` — un grafito neutro — y
+       acá, apenas se sabe QUÉ sobre es, se le pone su color y su poster: lo que
+       se ve mientras carga el video es el propio sobre, no un color ajeno. */
+    try {
+      document.documentElement.style.setProperty('--env-bg', m.color || '#0f0e13');
+      if (m.poster) {
+        var bgP = 'url("' + m.poster + '")';
+        if (env.style.backgroundImage !== bgP) env.style.backgroundImage = bgP;
+        env.style.backgroundSize = 'cover';
+        env.style.backgroundPosition = 'center';
+      }
+    } catch (e) {}
     env.dataset.empalme = (m.empalme === 'foto') ? 'foto' : 'blanco';
     env.dataset.apertura = (m.apertura === 'solapas') ? 'solapas' : 'video';
 
