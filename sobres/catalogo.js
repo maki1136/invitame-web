@@ -535,6 +535,13 @@ window.SOBRES_INVITAME = {
         todo lo que está debajo de ese punto es una hoja de papel continua, sin
         ningún doblez y sin costura». Salió a la primera, 4 de 4 usables.
 
+     ⚠️⚠️ LA SOLAPA VA EN EL MISMO LIENZO QUE EL PÓSTER, NO RECORTADA.
+        La primera versión se guardó recortada a su caja (660×510) y en pantalla
+        la solapa salió corrida: el lacre quedaba colgando DEBAJO del sobre. El
+        motor la apoya encima del póster 1:1, así que tiene que medir lo mismo
+        (acá 768×1376) y llevar todo lo demás en transparente. El maestro ya era
+        así —768×1376 con alfa— y se vio recién al comparar los dos archivos.
+
      `solapa` = el triángulo de arriba MÁS EL LACRE, recortado con
      transparencia. Se armó por geometría sobre la propia foto (no a mano):
      triángulo (7,6 % · 18,2 %) → (92,4 % · 18,2 %) → (50 % · 45,2 %), más el
@@ -549,7 +556,7 @@ window.SOBRES_INVITAME = {
   cenicienta: {
     nombre:   "Cenicienta · papel de hielo, lacre de zapatilla de cristal (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/kfz09ahbncggflkjufyg.jpg",
-    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/jbnyp3ayiqkq5vvfucsz.webp",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cenicienta/rhyvs45gxxsp2mugztgu.webp",
     color:    "#EAF2FA",
     apertura: "solapas",
     empalme:  "foto",
