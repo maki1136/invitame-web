@@ -316,6 +316,41 @@ window.SOBRES_INVITAME = {
     empalme: "foto"
   },
 
+  /* ---- ★ BOHEMIA · papel de algodón con lacre terracota  (21/9/2026) -----
+     El sobre de la colección Bohemia. Papel de algodón crema con borde deckle
+     sobre una mesa de roble, lacre redondo terracota con un grabado botánico,
+     espigas de trigo y eucalipto seco encima, y una pluma de pampa y dos rosas
+     secas alrededor. Generado en Flow a partir de la imagen base de la
+     temática.
+
+     ⭐ LA LUZ, MEDIDA CUADRO POR CUADRO (4 cuadros por segundo, brillo medio
+        y movimiento entre cuadros consecutivos):
+
+          0,0 a 3,0 s   quieto              brillo 162   movimiento 1 a 4
+          3,0 a 4,75 s  se abre la solapa   brillo 157   movimiento 3,7 a 7,8
+          5,0 s         ARRANCA EL ZOOM     brillo 161   movimiento salta a 11,3
+          5,0 a 7,75 s  zoom y luz          brillo 161 -> 227
+
+        Por eso `luz: 5.0`: el destello entra justo cuando arranca el
+        acercamiento, no cuando el video ya terminó.
+
+     ⚠️ `luzFundido` va LARGO acá, al revés que en Disco. La regla es: cuanto
+        más oscura la invitación, más corto el destello. Bohemia es de papel
+        crema, así que el blanco ES el papel y un segundo no se lee como
+        pantalla rota — se lee como que la luz entra. Disco necesita 0,42
+        porque es negra.
+
+     ⚠️ El color es el de la MESA, no el del sobre: `#env` se pinta con esto
+        mientras carga el video, y el sobre tiene que recortarse contra algo. */
+  bohemia: {
+    nombre:  "Bohemia · papel de algodón con lacre terracota (video)",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-bohemia.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto/invitame/sobres/sobre-bohemia-poster.jpg",
+    color:   "#B79876",
+    luz:     5.0,
+    luzFundido: 0.95
+  },
+
   /* ---- ★ ONYX · lino negro con lacre de oro grabado  (18/9/2026) ---------
      Maki mandó la muestra de Invitely "luxury": «mirá la textura, el relieve,
      hasta se ve relieve cuando se abre; el que me diste era todo plano».
