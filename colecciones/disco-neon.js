@@ -157,7 +157,8 @@
        en «Lupita», 4 px a la izquierda y 4 a la derecha. Esos píxeles se
        quedaban sin degradado, o sea transparentes, y el rulo de la L
        aparecía cortado con un filo recto. Se le da aire a la caja. */
-    '  padding:0 .10em!important;',
+    '  padding:0 .10em .17em!important;',
+    '  background-repeat:no-repeat!important;',
     '  background-size:100% 100%!important;',
     '  font:inherit!important; letter-spacing:inherit!important;',
     '  background-image:linear-gradient(174deg,',
@@ -179,7 +180,7 @@
     '  line-height:1!important;',
     /* ⚠ la cola de la «p» sobresale 30 px de la caja de linea en Rouge Script
        a 152 px. Sin este piso se mete adentro del renglon de abajo. */
-    '  padding-bottom:.24em!important;',
+    '  padding-bottom:.06em!important;',
     '  letter-spacing:0!important;',
     '  text-transform:none!important;',
     '  background:none!important;',
