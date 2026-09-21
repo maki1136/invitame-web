@@ -708,6 +708,10 @@
     '/colecciones/marfil.js',          /* copia de la referencia BOMA: serif espaciada y filetes */
     '/colecciones/disco.js',
     '/colecciones/disco-neon.js',           /* la primera OSCURA: plata sobre grafito, para los XV de disco */
+    '/colecciones/campestre.js',       /* la CUARTA familia: campo al atardecer, crema y oliva.
+                                          Va DESPUÉS de las otras tres y no depende de ninguna:
+                                          trae su propia paleta, su propio botón (arcilla) y su
+                                          propia marca fotografiada (la rodaja de madera). */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
