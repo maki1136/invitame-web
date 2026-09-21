@@ -618,6 +618,13 @@
        dirección original a cada foto, así que el navegador bajaba la pesada Y
        DESPUÉS la liviana: el doble. Ahora lo carga `i/index.php` en la cabeza
        del documento, antes de que exista una sola imagen. */
+    /* ⚠️⚠️ VA PRIMERO, Y NO ES CAPRICHO. Blinda todo <video> que aparezca.
+       Existe porque el motor (i/index.html) está CONGELADO POR VERSIÓN: las
+       invitaciones se sirven desde i/v/<version>/index.html, y hoy hay CINCO
+       versiones vivas. Un arreglo en el HTML no llega a ninguna invitación ya
+       entregada; un módulo sí llega a todas. Lo que NUNCA puede estar mal va
+       acá, no en el HTML. (20/9/2026: el PLAY del video del fondo.) */
+    '/efectos/videos-blindados.js',    /* ningún video es un reproductor, en ninguna versión */
     '/efectos/sobre-catalogo.js',      /* el sobre de entrada: el motor lo ignoraba */
     '/efectos/paleta.js',              /* la paleta: pinta las 12 variables de color de una */
     '/efectos/panel-paleta.js',        /* y el selector de las 20, en el panel */
