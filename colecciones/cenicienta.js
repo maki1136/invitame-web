@@ -154,11 +154,22 @@
     '--cream':     CREMA,
     '--lino':      PAPEL,
     '--lino2':     PAPEL2,
+    '--sec-col':   PAPEL,
     '--sec-col-v': TINTA,
     '--sage':      ACENTO,
     '--sage-cl':   ACENTOCL,
     '--oro':       PLATA
   };
+
+  /* ⚠️ `--sec-col` TAMBIÉN SE RECLAMA, Y NO ES DETALLE.
+     Es el papel de las secciones CLARAS: `fondo-invitacion.js` las pinta con
+     `color-mix(--sec-col, transparent, --inv-paso)`. Venía del molde en
+     **#e5ebe8**, que es un gris VERDOSO (229,235,232). Pasa `familia-de-color`
+     porque es casi gris, pero adentro de una colección de hielo el papel de
+     TODAS las secciones claras tenía tinte verde — y con él se pintan también
+     los agujeros del troquel del Pase con voz, que por contrato usan
+     `var(--sec-col)` para leerse como un recorte. Ahora es el papel de la
+     colección. */
 
   /* ------------------------------------------------------------- tipografía */
 
@@ -669,6 +680,30 @@
     '}',
     P + '.footer .n, ' + P + '.footer .sm, ' + P + '.col-mvta .col-mvta-t{',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
+    '}',
+
+    /* ── EL PASE CON VOZ ──────────────────────────────────────────────────
+       El boleto lo arma `efectos/pase-voz.js` y sus colores salen de
+       `fx.pasevoz` (papel #DCE8F4 · tinta #14202E · acento #2A4B72: 7,19 sobre
+       el papel, medido). Lo único que la colección corrige son los rótulos
+       CHICOS, y es un defecto de plataforma, no de esta colección:
+
+       `pase-voz.js` pinta `.pv-datos dt` y `.pv-nota dt` con
+           color-mix(in srgb, var(--pv-tinta) 58%, transparent)
+       o sea la tinta al 58 % sobre el papel. Compuesto pixel a pixel sobre
+       #DCE8F4 eso da **3,84**, con el cuerpo en 7,5 px — piso 5,0. Son
+       «FECHA» y «HORA», las dos palabras que el invitado va a buscar.
+       El chequeo no los canta porque su regla de contraste saltea las piezas
+       muy chicas, así que esto sale de medirlo a mano.
+
+       ⚠️ El arreglo de fondo va en `efectos/pase-voz.js` —le pasa a TODAS las
+          invitaciones con pase— pero ese archivo lo está tocando otra charla.
+          Mientras tanto se corrige acá, que es la capa de la colección, igual
+          que se hizo con los tres marrones de `estilos-servidor.css`.
+          #22344A sobre #DCE8F4 da **10,19**. */
+    P + '#pv-sec .pv-datos dt, ' + P + '#pv-sec .pv-nota dt{',
+    '  color:' + TINTA2 + '!important;',
+    '  -webkit-text-fill-color:' + TINTA2 + '!important;',
     '}',
 
     /* ── LA SECCIÓN «VERDE» QUE ACÁ NO ES OSCURA ──────────────────────────
