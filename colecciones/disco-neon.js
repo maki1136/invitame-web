@@ -77,13 +77,13 @@
          hermano no es ancestro.
        ⚠ Y es RADIAL, no una banda: una banda recta se ve como una barra gris
          cruzando la foto. El radial se apaga antes de llegar a los bordes. */
-    P + '.portada > .c{ position:relative!important; }',
+    P + '.portada > .c{ position:relative!important; padding:0 4.5vw!important; }',
     P + '.portada > .c::before{',
-    '  content:""; position:absolute; left:50%; top:-22%;',
+    '  content:""; position:absolute; left:50%; top:-30%;',
     '  transform:translateX(-50%);',
-    '  width:200%; height:165%;',
-    '  background:radial-gradient(58% 52% at 50% 44%,',
-    '     rgba(5,5,9,.80) 0%, rgba(5,5,9,.62) 42%, rgba(5,5,9,.28) 64%, rgba(5,5,9,0) 80%);',
+    '  width:200%; height:180%;',
+    '  background:radial-gradient(56% 46% at 50% 48%,',
+    '     rgba(4,4,8,.66) 0%, rgba(4,4,8,.52) 38%, rgba(4,4,8,.26) 60%, rgba(4,4,8,.08) 78%, rgba(4,4,8,0) 92%);',
     '  pointer-events:none; z-index:0;',
     '}',
     P + '.portada > .c > *{ position:relative!important; z-index:1!important; }',
@@ -101,7 +101,7 @@
     '  font-family:Montserrat,"Forum",sans-serif!important;',
     '  font-weight:600!important;',
     '  font-size:clamp(14px,3.8vw,19px)!important;',
-    '  letter-spacing:.42em!important; text-indent:.42em!important;',
+    '  letter-spacing:.46em!important; text-indent:.46em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + NEON + '!important; -webkit-text-fill-color:' + NEON + '!important;',
     '  text-shadow:0 0 2px #ffffff,' +
@@ -109,7 +109,7 @@
                  ' 0 0 14px ' + NEON + ',' +
                  ' 0 0 30px rgba(120,190,255,.75),' +
                  ' 0 0 64px rgba(70,150,255,.45)!important;',
-    '  margin-bottom:2px!important;',
+    '  margin-bottom:.28em!important;',
     '  animation:neonLatido 5.2s ease-in-out infinite!important;',
     '}',
 
@@ -119,10 +119,10 @@
     '  content:var(--neon-script,"");',
     '  display:block;',
     '  font-family:"Rouge Script",cursive;',
-    '  font-size:3.4em; line-height:1.02;',
+    '  font-size:3.1em; line-height:.86;',
     '  letter-spacing:0; text-indent:0;',
     '  text-transform:none;',
-    '  margin-top:0;',
+    '  margin:.08em 0 .10em;',
     /* ⚠ la sombra NO se hereda a escala: el desenfoque va en px, así que sobre
        una letra tres veces más grande el mismo halo se ve tres veces más
        flaco. Se vuelve a escribir, más abierto. */
@@ -144,11 +144,13 @@
          de `color:transparent`, esa corrección lo taparía con un gris plano y
          adiós cromado. `-webkit-text-fill-color` le gana a `color`, así que las
          reglas duras pueden hacer lo suyo sin romper nada. */
-    P + '.portada .names, ' + P + '.portada .names span{',
-    '  background-image:linear-gradient(177deg,',
-    '    #ffffff 0%, #f2f4f8 14%, #9aa0b0 26%, #dfe3ec 38%,',
-    '    #ffffff 49%, #5b6070 53%, #8e94a4 62%,',
-    '    #e9ecf3 78%, #ffffff 90%, #a9aebc 100%)!important;',
+    P + '.portada #pv-names span, ' + P + '.portada .names span{',
+    '  display:inline-block!important;',
+    '  font:inherit!important; letter-spacing:inherit!important;',
+    '  background-image:linear-gradient(176deg,',
+    '    #ffffff 0%, #ffffff 9%, #cdd4e0 22%, #ffffff 33%,',
+    '    #ffffff 45%, #5c6576 52%, #98a0b0 60%,',
+    '    #f6f8fc 76%, #ffffff 88%, #b6bdc9 100%)!important;',
     '  -webkit-background-clip:text!important; background-clip:text!important;',
     '  -webkit-text-fill-color:transparent!important;',
     '  color:transparent!important;',
@@ -156,14 +158,19 @@
        Sobre una foto clara esas bandas desaparecen y la letra se deshace. Las
        dos primeras sombras son el contorno que la sostiene; la tercera es el
        brillo del metal. */
-    '  filter:drop-shadow(0 1px 1px rgba(0,0,0,.92))' +
-           ' drop-shadow(0 0 3px rgba(0,0,0,.65))' +
-           ' drop-shadow(0 0 26px rgba(190,210,255,.34))!important;',
     '}',
-    P + '.portada .names{',
-    '  font-size:clamp(64px,18vw,112px)!important;',
-    '  line-height:1.02!important;',
-    '  margin-top:6px!important;',
+    P + '.portada #pv-names{',
+    '  font-family:Montserrat,sans-serif!important;',
+    '  font-weight:800!important;',
+    '  font-size:clamp(66px,21.5vw,132px)!important;',
+    '  line-height:.84!important;',
+    '  letter-spacing:-.025em!important;',
+    '  text-transform:uppercase!important;',
+    '  background:none!important;',
+    '  margin:0!important;',
+    '  filter:drop-shadow(0 2px 2px rgba(0,0,0,.90))' +
+           ' drop-shadow(0 0 28px rgba(120,190,255,.45))' +
+           ' drop-shadow(0 16px 40px rgba(0,0,0,.85))!important;',
     '}',
 
     /* la fecha: versalitas espaciadas, el pie del cartel */
