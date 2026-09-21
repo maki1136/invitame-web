@@ -46,6 +46,7 @@ const EV = "inv_eventos";
 const GU = "inv_invitados";
 const PV = "inv_privado";   // datos que NO puede ver un invitado
 const EQ = "inv_equipo";    // el equipo y su rol (ver admin/6-permisos.js)
+const BO = "inv_borrados";  // pedidos de borrado, los autoriza la dueña
 const gid = (slug, token) => slug + "__" + token;
 // El token de un invitado es su QR de entrada Y la llave que abre su ficha.
 // Math.random() NO es criptografico: viendo unos pocos tokens de una boda se pueden
@@ -238,6 +239,37 @@ const INV = {
   async bajaMiembro(mail) {
     const m = String(mail || '').trim().toLowerCase();
     await updateDoc(doc(db, EQ, m), { activo: false, updatedAt: serverTimestamp() });
+  },
+
+  // ---- PEDIDOS DE BORRADO ----
+  /* Nadie borra una invitación de prepo: se pide, queda anotado con quién y
+     por qué, y la dueña aprueba o rechaza desde su panel.
+     Un pedido por invitación: el id del documento ES el slug, así que pedir
+     dos veces lo mismo no duplica nada. */
+  async pedirBorrado(slug, motivo, quien) {
+    const s = String(slug || '').trim();
+    if (!s) throw new Error('falta la invitación');
+    await setDoc(doc(db, BO, s), {
+      slug: s,
+      motivo: String(motivo || '').slice(0, 300),
+      por: String(quien || ''),
+      estado: 'pendiente',
+      pedidoAt: serverTimestamp()
+    }, { merge: true });
+    return s;
+  },
+  async listBorrados() {
+    const snap = await getDocs(collection(db, BO));
+    return snap.docs.map(d => ({ slug: d.id, ...d.data() }));
+  },
+  /* `resuelto` es 'aprobado' o 'rechazado'. El borrado de verdad lo hace el
+     panel DESPUÉS de que esto vuelve bien, nunca antes. */
+  async resolverBorrado(slug, resuelto, quien) {
+    await setDoc(doc(db, BO, String(slug)), {
+      estado: String(resuelto || 'rechazado'),
+      resueltoPor: String(quien || ''),
+      resueltoAt: serverTimestamp()
+    }, { merge: true });
   },
 
   // ---- Confirmación (RSVP) desde la invitación ----
