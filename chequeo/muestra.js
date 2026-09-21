@@ -348,10 +348,31 @@
     var tl = document.querySelector('.tl');
     if (!tl) return { pasa: true, nota: 'esta invitación no tiene itinerario' };
     if (!ubicable(tl)) return { pasa: false, nota: 'hay itinerario en el DOM y no se pudo medir' };
-    var firma = document.documentElement.getAttribute('data-simbolo') || '';
-    if (!firma) return { pasa: false, nota: 'no hay símbolo: la marca es el circulito de fábrica' };
     var it = tl.querySelector('.it');
     var img = it ? getComputedStyle(it, '::before').backgroundImage : '';
+
+    /* ⭐ DOS CAMINOS VÁLIDOS, Y ESTA REGLA ACEPTA LOS DOS.
+       Hasta el 20/9/2026 exigía un SVG sí o sí, porque la marca siempre había
+       sido el símbolo vectorial de `simbolo-tematica.js`. Ese día Disco pasó a
+       traer su PROPIA marca: la bola de espejos FOTOGRAFIADA. El módulo del
+       símbolo se corre solo (ve `data-marca-propia` en el <html>) y entonces
+       no hay `data-simbolo` — y la regla daba FALLA con la marca perfecta
+       puesta. Una regla que grita con todo bien enseña a ignorarla, que es
+       peor que no tenerla.
+       ⚠ Lo que hay que comprobar no es CÓMO está hecha la marca: es que NO sea
+         el circulito de fábrica. */
+    var propia = document.documentElement.getAttribute('data-marca-propia') || '';
+    if (propia) {
+      var conFoto = /url\(/.test(img);
+      return {
+        pasa: conFoto,
+        nota: 'marca propia de la colección «' + propia + '»' +
+              (conFoto ? ' — foto puesta' : ' — DECLARADA pero sin foto')
+      };
+    }
+
+    var firma = document.documentElement.getAttribute('data-simbolo') || '';
+    if (!firma) return { pasa: false, nota: 'no hay símbolo: la marca es el circulito de fábrica' };
     return {
       pasa: /svg/.test(img),
       nota: firma + (/svg/.test(img) ? ' — dibujado' : ' — declarado pero NO dibujado')
