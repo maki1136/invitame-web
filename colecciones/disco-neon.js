@@ -98,19 +98,25 @@
          corrido a la izquierda, porque el espaciado se agrega DESPUÉS de la
          última letra y el centrado lo cuenta. */
     P + '.portada .kicker{',
-    '  font-family:Montserrat,"Forum",sans-serif!important;',
-    '  font-weight:600!important;',
-    '  font-size:clamp(14px,3.8vw,19px)!important;',
-    '  letter-spacing:.46em!important; text-indent:.46em!important;',
+    '  font-size:0!important; line-height:1!important;',
+    '  letter-spacing:0!important; text-indent:0!important;',
+    '  margin:0!important;',
+    '  animation:neonLatido 5.2s ease-in-out infinite!important;',
+    '}',
+
+    P + '.portada .kicker::before{',
+    '  content:var(--neon-p1,"")!important; display:block!important;',
+    '  font-family:Montserrat,sans-serif!important; font-weight:800!important;',
+    '  font-size:clamp(46px,15vw,92px)!important; line-height:.92!important;',
+    '  letter-spacing:.02em!important; text-indent:.02em!important;',
     '  text-transform:uppercase!important;',
     '  color:' + NEON + '!important; -webkit-text-fill-color:' + NEON + '!important;',
     '  text-shadow:0 0 2px #ffffff,' +
-                 ' 0 0 6px ' + NEON + ',' +
-                 ' 0 0 14px ' + NEON + ',' +
-                 ' 0 0 30px rgba(120,190,255,.75),' +
-                 ' 0 0 64px rgba(70,150,255,.45)!important;',
-    '  margin-bottom:.28em!important;',
-    '  animation:neonLatido 5.2s ease-in-out infinite!important;',
+                 ' 0 0 8px ' + NEON + ',' +
+                 ' 0 0 20px ' + NEON + ',' +
+                 ' 0 0 44px rgba(120,190,255,.75),' +
+                 ' 0 0 90px rgba(70,150,255,.45)!important;',
+    '  margin:0!important;',
     '}',
 
     /* la segunda palabra, en cursiva de neón. Sale de un campo del panel: si
@@ -119,10 +125,10 @@
     '  content:var(--neon-script,"");',
     '  display:block;',
     '  font-family:"Rouge Script",cursive;',
-    '  font-size:3.1em; line-height:.86;',
+    '  font-size:clamp(56px,19vw,116px); line-height:.80;',
     '  letter-spacing:0; text-indent:0;',
     '  text-transform:none;',
-    '  margin:.08em 0 .10em;',
+    '  margin:-.30em 0 0 0;',
     /* ⚠ la sombra NO se hereda a escala: el desenfoque va en px, así que sobre
        una letra tres veces más grande el mismo halo se ve tres veces más
        flaco. Se vuelve a escribir, más abierto. */
@@ -147,10 +153,10 @@
     P + '.portada #pv-names span, ' + P + '.portada .names span{',
     '  display:inline-block!important;',
     '  font:inherit!important; letter-spacing:inherit!important;',
-    '  background-image:linear-gradient(176deg,',
-    '    #ffffff 0%, #ffffff 9%, #cdd4e0 22%, #ffffff 33%,',
-    '    #ffffff 45%, #5c6576 52%, #98a0b0 60%,',
-    '    #f6f8fc 76%, #ffffff 88%, #b6bdc9 100%)!important;',
+    '  background-image:linear-gradient(174deg,',
+    '    #ffffff 0%, #ffffff 14%, #dfe5ef 26%, #ffffff 36%,',
+    '    #ffffff 48%, #8d95a6 54%, #c9d0dc 62%,',
+    '    #ffffff 74%, #ffffff 90%, #d7dce6 100%)!important;',
     '  -webkit-background-clip:text!important; background-clip:text!important;',
     '  -webkit-text-fill-color:transparent!important;',
     '  color:transparent!important;',
@@ -160,17 +166,32 @@
        brillo del metal. */
     '}',
     P + '.portada #pv-names{',
-    '  font-family:Montserrat,sans-serif!important;',
-    '  font-weight:800!important;',
-    '  font-size:clamp(66px,21.5vw,132px)!important;',
-    '  line-height:.84!important;',
-    '  letter-spacing:-.025em!important;',
-    '  text-transform:uppercase!important;',
+    '  font-family:"Rouge Script",cursive!important;',
+    '  font-weight:400!important;',
+    '  font-size:clamp(84px,28vw,164px)!important;',
+    '  line-height:.92!important;',
+    '  letter-spacing:0!important;',
+    '  text-transform:none!important;',
     '  background:none!important;',
-    '  margin:0!important;',
-    '  filter:drop-shadow(0 2px 2px rgba(0,0,0,.90))' +
-           ' drop-shadow(0 0 28px rgba(120,190,255,.45))' +
-           ' drop-shadow(0 16px 40px rgba(0,0,0,.85))!important;',
+    '  margin:.02em 0 0 0!important;',
+    '  filter:drop-shadow(0 1px 1px rgba(0,0,0,.95))' +
+           ' drop-shadow(0 0 4px rgba(0,0,0,.60))' +
+           ' drop-shadow(0 0 30px rgba(150,205,255,.55))' +
+           ' drop-shadow(0 14px 36px rgba(0,0,0,.80))!important;',
+    '}',
+
+    /* la bajada, debajo del nombre. Es un elemento DE VERDAD y no un pseudo:
+       el `filter` del nombre alcanzaria tambien al pseudo y le meteria las
+       sombras del cromado. */
+    P + '.portada .neon-bajada{',
+    '  display:block!important;',
+    '  font-family:Montserrat,sans-serif!important; font-weight:500!important;',
+    '  font-size:clamp(12px,3.2vw,16px)!important;',
+    '  letter-spacing:.44em!important; text-indent:.44em!important;',
+    '  text-transform:uppercase!important;',
+    '  color:#E6ECF5!important; -webkit-text-fill-color:#E6ECF5!important;',
+    '  text-shadow:0 1px 2px rgba(0,0,0,.92), 0 0 14px rgba(120,190,255,.45)!important;',
+    '  margin:.85em 0 .35em 0!important;',
     '}',
 
     /* la fecha: versalitas espaciadas, el pie del cartel */
@@ -207,17 +228,44 @@
   function poner() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-portada') !== MARCA) raiz.setAttribute('data-portada', MARCA);
-    /* la palabra en cursiva viaja por variable: el CSS la consume con content:var() */
-    var sc  = String(cfg().script || '').trim();
+    var c = cfg();
+    /* las DOS palabras de neon viajan por variable: el CSS las consume con
+       content:var(). Asi el motor puede reescribir el texto del kicker todas
+       las veces que quiera, que el que se ve es el pseudo. */
+    var p1  = String(c.palabra || "LET'S").trim();
+    var vp1 = p1 ? JSON.stringify(p1) : '""';
+    if (raiz.style.getPropertyValue('--neon-p1') !== vp1) raiz.style.setProperty('--neon-p1', vp1);
+    var sc  = String(c.script || '').trim();
     var val = sc ? JSON.stringify(sc) : '""';
     if (raiz.style.getPropertyValue('--neon-script') !== val) raiz.style.setProperty('--neon-script', val);
     hoja();
+    bajada(String(c.bajada || '').trim());
+  }
+
+  /* La bajada («Mis XV anos») va DEBAJO del nombre. Se crea a mano porque el
+     motor no tiene ese renglon: la fecha (#pv-fecha) puede venir en
+     display:none segun la disposicion elegida, asi que no sirve de percha. */
+  function bajada(txt) {
+    try {
+      var n = document.getElementById('pv-names'); if (!n || !n.parentElement) return;
+      var b = n.parentElement.querySelector('.neon-bajada');
+      if (!txt) { if (b && b.parentNode) b.parentNode.removeChild(b); return; }
+      if (!b) {
+        b = document.createElement('div');
+        b.className = 'neon-bajada';
+        n.insertAdjacentElement('afterend', b);
+      }
+      if (b.textContent !== txt) b.textContent = txt;
+    } catch (e) {}
   }
 
   function sacar() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-portada') === MARCA) raiz.removeAttribute('data-portada');
     raiz.style.removeProperty('--neon-script');
+    raiz.style.removeProperty('--neon-p1');
+    var vb = document.querySelector('.neon-bajada');
+    if (vb && vb.parentNode) vb.parentNode.removeChild(vb);
     var s = document.getElementById('col-' + ID);
     if (s) s.parentNode.removeChild(s);
   }
