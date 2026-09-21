@@ -85,6 +85,11 @@
      la misma zapatilla sobre un disco de plata helada, 560x560, sin alfa. */
   var ZAPA_TAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790017677/invitame/cenicienta/lh912pfu1gekkwwxj0ur.jpg';
 
+  /* y la MARCA DEL ITINERARIO también va sobre un disco, pero CLARO: a 22 px
+     el disco de plata de la raspadita se leía como una canica azul. Este es la
+     misma zapatilla sobre papel helado, con el aro de plata puesto por CSS. */
+  var ZAPA_MARCA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790018745/invitame/cenicienta/i4ibdbc6f96mzztf6clq.jpg';
+
   /* ⚠️ Y LA ZAPATILLA VA GRANDE ADENTRO DEL DISCO (86% del lado). La primera
      versión la puso al 62% y en pantalla se veía chiquita: `raspadita.js`
      escala la imagen como `cover` dentro de una zona ANCHA (298x156 medidos) y
@@ -185,6 +190,37 @@
     /* ⚠️ lining-nums o «2027» se lee «2O27» en una romana */
     P + '.frame{ font-variant-numeric:lining-nums!important; }',
 
+    /* ── LA ESCALA DE TEXTO ES LA DE PERLAS ────────────────────────────────
+       Maki: «todos los textos están muy grandes, grotescos; acomodá eso a la
+       normalidad de Perlas».
+       Medido en vivo sobre Perlas (`camila-y-tomas`, ventana 1440x645):
+
+           sobretítulo `.kick`   24 px · CURSIVA, sin versalitas ni espaciado
+           título      `h2`      33 px · romana con .2em
+           bajada      `.sub`    13 px
+           botones     `.btn`     9 px
+           cuenta      `.num`    44 px  ·  rótulos `.lab` 9 px
+
+       Cenicienta tenía la jerarquía DADA VUELTA: el sobretítulo en 34 px de
+       sans en versalitas con .28em, o sea MÁS GRANDE que el título. Cada
+       sección gritaba dos veces. Ahora el sobretítulo es la misma cursiva del
+       nombre de la portada —igual que Perlas, que usa Great Vibes— y el
+       título es la romana espaciada. */
+    P + '.sec .kick, ' + P + '.frame .kick{',
+    '  font-family:' + SCRIPT + '!important;',
+    '  font-size:clamp(20px,5.4vw,26px)!important;',
+    '  font-weight:400!important;',
+    '  letter-spacing:0!important; text-indent:0!important;',
+    '  text-transform:none!important;',
+    '  line-height:1.2!important;',
+    '  margin-bottom:.15em!important;',
+    '}',
+    P + '.sec h2{',
+    '  font-size:clamp(24px,6.4vw,33px)!important;',
+    '  letter-spacing:.2em!important; text-indent:.2em!important;',
+    '}',
+    P + '.count .lab{ font-size:9px!important; letter-spacing:.2em!important; }',
+
     /* ── LA PORTADA ────────────────────────────────────────────────────────
        ⚠️⚠️ LOS TAMAÑOS SE GANAN POR ID. `i/estilos-servidor.css` tiene, con
        !important y selector de ID:
@@ -212,18 +248,26 @@
           Y la cola de la cursiva sigue entrando: el `padding-bottom` es
           proporcional al cuerpo (.24em), así que al achicar el nombre achica
           con él. */
-    P + '.portada{ justify-content:center!important; }',
+    /* ⚠️⚠️ EL BLOQUE VA ABAJO, NO AL MEDIO. Maki, mirando la portada:
+       «fijate en la portada, está lavando la cara justamente».
+       Tenía razón y eran dos cosas a la vez: el bloque centrado dejaba el
+       nombre ENCIMA de la cara, y el velo era un óvalo oscuro puesto en el
+       CENTRO — o sea, justo sobre la cara. Perlas no hace nada de eso: el
+       bloque vive en el tercio de abajo y la foto queda limpia.
+       Acá se copia ese criterio: bloque abajo y el velo pasa a ser un
+       degradado que sube DESDE EL PIE, como un afiche. La cara no se toca. */
+    P + '.portada{ justify-content:flex-end!important; }',
 
     /* el velo: radial, en un ::before del BLOQUE. Pseudo hermano, no ancestro,
        así no le ensucia la cuenta del contraste a reglas-duras.js. Una banda
        recta se vería como una barra gris cruzando la foto. */
-    P + '.portada > .c{ position:relative!important; padding:0 6vw!important; }',
+    P + '.portada > .c{ position:relative!important; padding:0 6vw 7vh!important; }',
     P + '.portada > .c::before{',
-    '  content:""; position:absolute; left:50%; top:-20%;',
-    '  transform:translateX(-50%); width:190%; height:160%;',
-    '  background:radial-gradient(56% 46% at 50% 52%,',
-    '     rgba(8,16,28,.52) 0%, rgba(8,16,28,.40) 40%, rgba(8,16,28,.20) 62%,',
-    '     rgba(8,16,28,.06) 80%, rgba(8,16,28,0) 92%);',
+    '  content:""; position:absolute; left:50%; top:auto; bottom:-16vh;',
+    '  transform:translateX(-50%); width:200%; height:82vh;',
+    '  background:linear-gradient(to bottom,',
+    '     rgba(8,16,28,0) 0%, rgba(8,16,28,.14) 34%,',
+    '     rgba(8,16,28,.44) 66%, rgba(8,16,28,.60) 100%);',
     '  pointer-events:none; z-index:0;',
     '}',
     P + '.portada > .c > *{ position:relative!important; z-index:1!important; }',
@@ -343,15 +387,33 @@
           atajo expande TODAS sus longhands y clava `background-position`, y una
           declaración !important de autor le gana a una animación. Así se quedó
           quieta la bola de espejos el 20/9 sin un solo error en consola. */
+    /* ⚠️⚠️ EL MARCADOR SE CENTRA EN EL HILO, Y SU GEOMETRÍA VA CON SU TAMAÑO.
+       El motor pone los marcadores con `right:-31px` / `left:-31px` y
+       `margin-top:-5.5px`, números calculados para SU marcador de 11 px: la
+       separación del texto a la línea del medio es de 26 px, así que el centro
+       cae en `tamaño/2 + 26`. Acá la pieza mide 22, entonces van -37 y -11.
+       La primera versión sólo cambiaba el `width`/`height` y dejaba los
+       números del motor: las zapatillas quedaban colgadas a un costado del
+       hilo y encima del texto. Es la misma cuenta que hizo Disco para su bola.
+
+       Y la pieza va sobre disco CLARO con aro de plata: la foto de un zapato
+       de cristal transparente, a 22 px y sin fondo, es una mancha gris. */
     P + '.tl > .it::before{',
-    '  background-image:url("' + ZAPA + '")!important;',
-    '  background-size:contain!important;',
+    '  background-image:url("' + ZAPA_MARCA + '")!important;',
+    '  background-size:cover!important;',
+    '  background-position:center!important;',
     '  background-repeat:no-repeat!important;',
     '  border-radius:50%!important;',
-    '  box-shadow:none!important;',
     '  border:0!important;',
-    '  width:24px!important; height:24px!important;',
+    '  box-shadow:0 0 0 1px rgba(143,179,217,.9), 0 1px 5px rgba(20,32,46,.14)!important;',
+    '  width:22px!important; height:22px!important;',
     '  content:""!important;',
+    '}',
+    P + '.tl.tl-centro > .it:nth-child(odd)::before{',
+    '  right:-37px!important; left:auto!important; margin-top:-11px!important;',
+    '}',
+    P + '.tl.tl-centro > .it:nth-child(even)::before{',
+    '  left:-37px!important; right:auto!important; margin-top:-11px!important;',
     '}',
     /* ⚠️ LA VÍA EMPIEZA Y TERMINA DONDE ESTÁ LA COSA. Son DOS elementos:
        `.tl::before` es la vía y `.tl-prog` es el relleno que avanza con la hora.
@@ -362,11 +424,46 @@
     '  bottom:var(--cen-tl-fin,6px)!important;',
     '  height:auto!important;',
     '}',
+    /* ── EL HILO ───────────────────────────────────────────────────────────
+       Maki: «el hilo ese queda muy mal, buscá algo que salga de lo común».
+       Tenía razón y la causa no era el hilo: era `.tl-prog`, la línea que se
+       va dibujando con el scroll. Venía en `rgb(58,69,61)` —un gris VERDOSO
+       del molde— opaca y de 1,5 px: una regla gris cruzando la sección.
+
+       Lo que hay ahora son dos cosas distintas, y ahí está la idea:
+         · lo que TODAVÍA NO PASÓ es un rastro de escarcha — puntitos de plata
+           de 2,5 px con 5,5 de aire, con un destello que baja despacio, como
+           la luz corriendo por el hielo;
+         · lo que YA PASÓ es el mismo hilo pero LLENO, en tinta, con un halo
+           suave: el camino que la fiesta ya recorrió.
+       Las dos puntas se desvanecen con una máscara para que el hilo no arranque
+       ni termine con un corte seco.
+       ⚠️ El destello se apaga con `prefers-reduced-motion` (abajo del todo). */
     P + '.tl::before{',
-    '  background-image:repeating-linear-gradient(to bottom,',
-    '     ' + TINTA3 + ' 0 5px, rgba(0,0,0,0) 5px 12px)!important;',
-    '  background-color:transparent!important;',
     '  width:1px!important;',
+    '  background-color:transparent!important;',
+    '  background-image:linear-gradient(to bottom, rgba(233,242,251,0) 0%,',
+    '     rgba(255,255,255,.95) 45%, rgba(233,242,251,0) 100%),',
+    '     repeating-linear-gradient(to bottom, rgba(126,157,187,.9) 0 2.5px,',
+    '     rgba(126,157,187,.12) 2.5px 8px)!important;',
+    '  background-size:1px 160px, 1px 8px!important;',
+    '  background-repeat:no-repeat, repeat!important;',
+    '  animation:cenHilo 5.5s linear infinite!important;',
+    '  -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 5%,',
+    '     #000 95%, transparent 100%)!important;',
+    '  mask-image:linear-gradient(to bottom, transparent 0, #000 5%,',
+    '     #000 95%, transparent 100%)!important;',
+    '}',
+    '@keyframes cenHilo{',
+    '  0%{ background-position:0 -160px, 0 0; }',
+    '  100%{ background-position:0 160px, 0 0; }',
+    '}',
+    P + '.tl > .tl-prog{',
+    '  width:1px!important; opacity:1!important;',
+    '  background-color:transparent!important;',
+    '  background-image:linear-gradient(to bottom, rgba(58,92,128,0) 0%,',
+    '     rgba(58,92,128,.85) 10%, rgba(34,52,74,.85) 100%)!important;',
+    '  box-shadow:0 0 6px rgba(58,92,128,.30)!important;',
     '}',
 
     /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
@@ -431,9 +528,9 @@
        todas sus reglas de píldora por esto. Sólo va la tipografía. */
     P + '.btn, ' + P + '#btn-ingresar, ' + P + '.wsp, ' + P + '.tv-btn, ' + P + '.inv-prev-btn{',
     '  font-family:' + SANS + '!important;',
-    '  letter-spacing:.22em!important; text-indent:.22em!important;',
+    '  letter-spacing:.18em!important; text-indent:.18em!important;',
     '  text-transform:uppercase!important;',
-    '  font-size:12px!important;',
+    '  font-size:10px!important;',
     '}',
 
     /* ── LOS TRES COLORES CLAVADOS A MANO ──────────────────────────────────
