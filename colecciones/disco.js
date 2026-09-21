@@ -436,29 +436,36 @@
        Arreglado EN EL ORIGEN: ese modulo ya no usa el atajo, y ademas se corre
        solo cuando el <html> tiene `data-marca-propia`, que lo pone `poner()`
        aca abajo. */
+    /* ⚠️⚠️ LA PRIMERA VERSIÓN DE ESTO NO SE VEÍA, Y ESO ES LO MISMO QUE NO
+       ESTAR. Maki, 20/9/2026, mirándolo con la ventana adelante: «no dan
+       vueltas las bolas de boliche en el itinerario». Y tenía razón.
+       Estaba bien armado y mal pensado: eran DOS capas, un halo que se corría
+       3 px en 6 segundos y un destello de 840 ms que pasaba dos veces por
+       minuto. Sobre una bola de 22 px eso no se lee como que gira: no se lee
+       como nada.
+       ⚠ LA LECCIÓN: a 22 px un movimiento sutil no es sutil, es inexistente.
+         El tamaño manda sobre el buen gusto. Lo que a 200 px sería elegante,
+         a 22 px hay que hacerlo tres veces más grande y tres veces más
+         seguido, o no hacerlo.
+       AHORA: UNA sola banda de luz ancha que cruza la esfera entera, sin
+       parar, una pasada cada 2,6 s. Eso es lo que el ojo lee como rotación. */
     '@keyframes discoBola{',
-    '  0%    { background-position:-130% 50%, 140% 34%, 50% 50%; }',
-    '  7%    { background-position: 230% 50%, 127% 34%, 50% 50%; }',
-    '  7.01% { background-position:-130% 50%, 127% 34%, 50% 50%; }',
-    '  50%   { background-position:-130% 50%,  50% 34%, 50% 50%; }',
-    '  57%   { background-position: 230% 50%,  37% 34%, 50% 50%; }',
-    '  57.01%{ background-position:-130% 50%,  37% 34%, 50% 50%; }',
-    '  100%  { background-position:-130% 50%, -40% 34%, 50% 50%; }',
+    '  from { background-position: 165% 50%, 50% 50%; }',
+    '  to   { background-position:-165% 50%, 50% 50%; }',
     '}',
     P + ':is(#dc-nada, .tl) > .it::before,',
     P + ':is(#dc-nada, .rd-tapa) .rd-aro,',
     P + ':is(#dc-nada, .rsvp-sw) .per{',
     '  background-image:',
-    '    linear-gradient(74deg, rgba(255,255,255,0) 47%, rgba(255,255,255,.95) 50%, rgba(255,255,255,0) 53%),',
-    '    radial-gradient(closest-side circle, rgba(255,255,255,.42), rgba(255,255,255,0) 100%),',
+    '    linear-gradient(97deg, rgba(255,255,255,0) 26%, rgba(255,255,255,.62) 50%, rgba(255,255,255,0) 74%),',
     '    url("https://res.cloudinary.com/oc8cgqt4/image/upload/v1789953744/invitame/piezas/bola-espejos.webp")!important;',
-    '  background-size:300% 300%, 92% 92%, 100% 100%!important;',
+    '  background-size:200% 100%, 100% 100%!important;',
     '  background-repeat:no-repeat!important;',
-    '  background-blend-mode:screen, screen, normal!important;',
+    '  background-blend-mode:screen, normal!important;',
     '  background-color:transparent!important;',
     '  border-radius:50%!important;',
     '  border:0!important;',
-    '  animation:discoBola 12s linear infinite;',
+    '  animation:discoBola 2.6s linear infinite;',
     '}',
     P + ':is(#dc-nada, .tl) > .it::before{',
     '  width:22px!important; height:22px!important;',
