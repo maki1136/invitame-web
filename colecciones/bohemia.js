@@ -57,6 +57,17 @@
      (itinerario, tapa de la playlist, perilla del sí/no, tapa de la raspadita) */
   var ROSA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1789979950/invitame/piezas/bohemia-rosa.webp';
 
+  /* la viñeta de los títulos: una hoja finita en camel entre dos filetes.
+     Va en vector, no en foto: es una viñeta tipográfica, no un objeto. */
+  var ADORNO = "data:image/svg+xml;utf8," +
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 44'>" +
+    "<g fill='none' stroke='%23A87D5A' stroke-width='1.1' stroke-linecap='round'>" +
+    "<line x1='10' y1='22' x2='46' y2='22'/>" +
+    "<line x1='74' y1='22' x2='110' y2='22'/>" +
+    "<path d='M60 11 C67 18 67 26 60 33 C53 26 53 18 60 11 Z'/>" +
+    "<line x1='60' y1='14' x2='60' y2='30'/>" +
+    "</g></svg>";
+
   /* ⚠️⚠️ LAS VARIABLES QUE BOHEMIA RECLAMA COMO PROPIAS.
      `efectos/paleta.js` reescribe estas variables en el <html> INLINE y con
      !important cada 1,5 s, así que ninguna hoja de estilo le gana. El contrato
@@ -347,6 +358,25 @@
        Su sección tiene foto OSCURA, así que va en crema. */
     P + '#contacto-kick, ' + P + '.contacto .kick{',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
+    '}',
+
+    /* ── EL ADORNO DE LOS TÍTULOS ──────────────────────────────────────────
+       Los 17 `.adorno` del motor son un SVG con dos filetes y DOS ANILLOS
+       ENTRELAZADOS: el adorno genérico de boda, el mismo en todas las
+       invitaciones. Maki ya lo marcó («siempre ponés lo mismo»).
+       ⚠️ Acá NO va una foto: la regla dice que el adorno de arriba de cada
+          título es una VIÑETA TIPOGRÁFICA, y va en vector. La foto es para los
+          OBJETOS reconocibles — en Bohemia, la rosa del itinerario.
+       ⚠️ Y `simbolo-tematica.js` no lo pisa, porque esta colección firma
+          `data-marca-propia` y ese módulo se corre solo. Por eso el adorno lo
+          tiene que poner la colección.
+       La viñeta de Bohemia es una hoja finita en camel entre dos filetes. */
+    P + '.adorno > svg{ display:none!important; }',
+    P + '.adorno{',
+    '  background-image:url("' + ADORNO + '")!important;',
+    '  background-size:contain!important;',
+    '  background-position:center!important;',
+    '  background-repeat:no-repeat!important;',
     '}',
 
     /* ── FILETES Y ADORNOS ─────────────────────────────────────────────────
