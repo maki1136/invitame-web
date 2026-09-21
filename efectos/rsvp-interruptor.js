@@ -157,7 +157,7 @@
 
   /* un interruptor por bloque, cada uno con SU cerrojo */
   function construir(bs) {
-    var enviado = false;
+    var yendo = false;   /* true SÓLO mientras viaja un envío (ver elegir()) */
 
     var caja = document.createElement('div');
     caja.className = 'rsvp-caja';
@@ -200,7 +200,8 @@
        definida siempre termina colgado. */
     function limpiarPie() {
       var listo = false;
-      function cerrar() { if (listo) return; listo = true; pie.textContent = ''; }
+      /* ⭐ y el pie lo DICE, que si no nadie se entera de que se puede cambiar */
+      function cerrar() { if (listo) return; listo = true; pie.textContent = 'Puedes cambiar tu respuesta'; }
       var v = 0;
       var tv = setInterval(function () {
         var m = document.getElementById('rmsg');
@@ -209,12 +210,24 @@
       }, 100);
     }
 
+    /* ⚠️⚠️ EL CERROJO ERA PARA SIEMPRE, Y ESO NO ES UN CERROJO: ES UNA TRAMPA.
+       Medido el 20/9/2026. Maki: «me costó mucho poner que sí y después no lo
+       pude volver para atrás». `enviado` se ponía en true en el PRIMER toque y
+       no se soltaba nunca más, y encima el interruptor quedaba `disabled`. O
+       sea: el invitado que se equivoca de lado —o que después no puede ir—
+       queda clavado con la respuesta equivocada y sin manera de corregirla.
+       Y como el control quedaba apagado, ni siquiera se veía que se pudiera
+       volver a tocar: parecía roto.
+       ⚠ LO QUE HAY QUE EVITAR ES EL DOBLE ENVÍO, NO EL CAMBIO DE OPINIÓN.
+         El cerrojo ahora dura lo que dura el envío y se suelta SIEMPRE, también
+         cuando falla. Y un toque del lado que ya está elegido no hace nada, así
+         que no se reenvía lo mismo dos veces. */
     function elegir(cual) {
-      if (enviado) return;                 /* el cerrojo que le falta a rsvp() */
-      enviado = true;
+      if (yendo) return;                                /* un envío por vez */
+      if (sw.getAttribute('data-r') === cual) return;   /* ya está en ésa */
+      yendo = true;
       sw.setAttribute('data-r', cual);
       caja.setAttribute('data-r', cual);
-      sw.setAttribute('disabled', 'disabled');
       pie.textContent = 'Enviando…';
       /* se dispara el botón ORIGINAL: mismo camino de siempre */
       setTimeout(function () {
@@ -223,15 +236,22 @@
           limpiarPie();
         }
         catch (e) {
-          enviado = false;
-          sw.removeAttribute('disabled');
           pie.textContent = 'No se pudo enviar. Prueba de nuevo.';
         }
+        yendo = false;                       /* se suelta SIEMPRE */
       }, 340);                             /* que se vea moverse antes de irse */
     }
 
     izq.onclick = function () { elegir('no'); };
     der.onclick = function () { elegir('si'); };
+    /* ⭐ Y LOS RÓTULOS TAMBIÉN SE TOCAN. La pastilla mide 77 px, así que cada
+       mitad queda en 38: por debajo de los 44 que pide un dedo, y por eso
+       «me costó mucho poner que sí». La gente igual apunta a la PALABRA, que
+       está al lado y es más grande. Ahora la palabra hace lo que aparenta. */
+    etNo.style.cursor = 'pointer';
+    etSi.style.cursor = 'pointer';
+    etNo.onclick = function () { elegir('no'); };
+    etSi.onclick = function () { elegir('si'); };
     return caja;
   }
 
