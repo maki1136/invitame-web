@@ -282,7 +282,23 @@
       '@media (prefers-reduced-motion:reduce){',
       '  #pv-sec .pv-msg.pv-late{animation:none}',
       '  #pv-sec .pv-msg{transition:none}',
-      '  #pv-sec .pv-msg.pv-pegada{translate:0 0;rotate:-2.6deg}}'
+      '  #pv-sec .pv-msg.pv-pegada{translate:0 0;rotate:-2.6deg}}',
+
+      /* ⚠️ EL MOTOR PISA LOS TAMAÑOS. `estilos-servidor.css` sirve
+         `.sec p:not(.frase){font-size:var(--fs-texto,16px)!important}`, y el
+         `!important` le gana a `#pv-sec .pv-over` por más ID que tenga. Medido
+         el 21/9/2026: el sobretítulo y el título salían en 16px y el boleto
+         quedaba en 1,56:1 en vez de 2,56:1 — o sea, un rectángulo gordo, no un
+         boleto. Estas siete líneas repiten los MISMOS tamaños de arriba, con
+         `!important`, para que nadie los pise. Si cambiás un tamaño arriba,
+         cambialo también acá. */
+      '#pv-sec .pv-over{font-size:8px!important;line-height:1.35!important}',
+      '#pv-sec .pv-titulo{font-size:clamp(18px,5.2vw,23px)!important;line-height:1.08!important}',
+      '#pv-sec .pv-departe{font-size:14px!important;line-height:1.2!important}',
+      '#pv-sec .pv-datos dt,#pv-sec .pv-nota dt{font-size:7.5px!important}',
+      '#pv-sec .pv-datos dd{font-size:13.5px!important;line-height:1.2!important}',
+      '#pv-sec .pv-nota dd{font-size:13px!important;line-height:1.25!important}',
+      '#pv-sec .pv-talon span{font-size:15px!important;line-height:1!important}'
     ].join('\n');
     document.head.appendChild(s);
   }
