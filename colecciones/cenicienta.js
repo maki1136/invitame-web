@@ -74,6 +74,32 @@
      (itinerario, tapa de la playlist, perilla del sí/no, tapa de la raspadita) */
   var ZAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790008396/invitame/cenicienta/hpauay94v5mxookjs8bk.webp';
 
+  /* la viñeta de los títulos: un cristal de hielo de seis puntas entre dos
+     filetes. Va en VECTOR, no en foto: el adorno de arriba de cada título es
+     una viñeta tipográfica; la foto es para los objetos reconocibles — acá, la
+     zapatilla del itinerario. Los 17 `.adorno` del motor traen un SVG con DOS
+     ANILLOS ENTRELAZADOS: el adorno genérico de boda, que en unos XV de
+     Cenicienta no pinta nada. Maki ya lo marcó («siempre ponés lo mismo»).
+     ⚠️ Y `simbolo-tematica.js` no lo pisa, porque esta colección firma
+        `data-marca-propia` y ese módulo se corre solo: el adorno lo tiene que
+        poner la colección. */
+  var ADORNO = "data:image/svg+xml;utf8," +
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 44'>" +
+    "<g fill='none' stroke='%233A5C80' stroke-width='1.1' stroke-linecap='round'>" +
+    "<line x1='10' y1='22' x2='46' y2='22'/>" +
+    "<line x1='74' y1='22' x2='110' y2='22'/>" +
+    "<g transform='translate(60,22)'>" +
+    "<line x1='0' y1='-11' x2='0' y2='11'/>" +
+    "<line x1='-9.5' y1='-5.5' x2='9.5' y2='5.5'/>" +
+    "<line x1='-9.5' y1='5.5' x2='9.5' y2='-5.5'/>" +
+    "<path d='M0 -7.5 l-2.8 -2.8 M0 -7.5 l2.8 -2.8'/>" +
+    "<path d='M0 7.5 l-2.8 2.8 M0 7.5 l2.8 2.8'/>" +
+    "<path d='M-6.5 -3.8 l-3.8 0.5 M-6.5 -3.8 l-0.5 -3.8'/>" +
+    "<path d='M6.5 3.8 l3.8 -0.5 M6.5 3.8 l0.5 3.8'/>" +
+    "<path d='M-6.5 3.8 l-3.8 -0.5 M-6.5 3.8 l-0.5 3.8'/>" +
+    "<path d='M6.5 -3.8 l3.8 0.5 M6.5 -3.8 l0.5 -3.8'/>" +
+    "</g></g></svg>";
+
   /* ⚠️⚠️ LAS VARIABLES QUE CENICIENTA RECLAMA COMO PROPIAS.
      `efectos/paleta.js` las reescribe en el <html> INLINE y con !important cada
      1,5 s, así que ninguna hoja le gana. El contrato (el mismo de Marfil desde
@@ -346,6 +372,16 @@
     '  font-family:' + DISPLAY + '!important;',
     '  letter-spacing:.16em!important; text-transform:uppercase!important;',
     '  color:' + TINTA + '!important;',
+    '}',
+
+    /* ── EL ADORNO DE LOS TÍTULOS ──────────────────────────────────────────
+       Se apaga el SVG de los dos anillos y se pone el cristal de hielo. */
+    P + '.adorno > svg{ display:none!important; }',
+    P + '.adorno{',
+    '  background-image:url("' + ADORNO + '")!important;',
+    '  background-size:contain!important;',
+    '  background-position:center!important;',
+    '  background-repeat:no-repeat!important;',
     '}',
 
     /* ── FILETES Y ADORNOS ─────────────────────────────────────────────────
