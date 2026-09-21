@@ -60,9 +60,17 @@
   /* ⚠️ LOS DOS TONOS DEL ACENTO. `--sage` va sobre papel CLARO y `--sage-cl`
      sobre fondo OSCURO: un solo color no se lee contra los dos. Medidos contra
      el papel de la colección, no a ojo:
-         ACENTO   #3A5C80 sobre #F2F7FC → 6,45 ✓ (piso 5,0)
-         ACENTOCL #A9C3DE sobre #14202E → 9,05 ✓ (piso 5,0) */
-  var ACENTO   = '#3A5C80';
+         ACENTO   #2A4B72 sobre #F2F7FC → 8,30 ✓ (piso 5,0)
+         ACENTOCL #A9C3DE sobre #14202E → 9,05 ✓ (piso 5,0)
+
+     ⚠️ EL ACENTO SE OSCURECIÓ AL CAMBIAR EL FONDO. Con el video de escarcha
+        detrás y `paso 0.78`, el papel de las secciones deja pasar mucho más
+        fondo: medido sobre los 183 cuadros del video ya velado, el 5 % más
+        oscuro del fondo queda en L 0,539. Ahí el #3A5C80 daba **3,90** y el
+        sobretítulo va en 26 px, o sea piso 4,0 — pasaba raspando y en los
+        peores píxeles no pasaba. #2A4B72 da **5,02**: entra incluso con el
+        piso de texto chico. Sobre el papel mejora también (6,45 → 8,30). */
+  var ACENTO   = '#2A4B72';
   var ACENTOCL = '#A9C3DE';
 
   /* el claro de la nieve: mismo brillo que la crema del molde (L 0,75) pero
