@@ -116,8 +116,14 @@
        ajuste de las marcas (quién se entrega sola y quién pasa por Jazmín).
        ⚠️ Va ÚLTIMO y en su propio archivo: los otros cuatro ya funcionan. -->
   <script src="/admin/5-entrega.js"></script>
+  <!-- EL EQUIPO Y SUS PERMISOS · 21/9/2026
+       Tres roles: duena, calidad y carga. Apaga lo que no le toca a cada una,
+       trae la caja de Equipo (solo la duena) y los pedidos de borrado.
+       ⚠️ ESCONDER UN BOTON NO ES SEGURIDAD: el candado de verdad son las
+          reglas de Firestore. Leer el encabezado del archivo. -->
+  <script src="/admin/6-permisos.js"></script>
 <script src="/sobres/catalogo.js"></script>
-<script type="module" src="/firebase-inv.js?v=23"></script>
+<script type="module" src="/firebase-inv.js?v=24"></script>
 <script type="module">
   import { collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   function _ready(){ return (window.INV&&window.INV.ok)?Promise.resolve():new Promise(r=>window.addEventListener('inv-ready',r,{once:true})); }
