@@ -351,6 +351,82 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.95
   },
 
+  /* ---- ★ CANTERA · papel beige tallado, lacre de olivo  (22/9/2026) ------
+     El sobre propio de la Colección Cantera (boda de Regina y Emiliano, en
+     Morelia). Papel de algodón beige cálido con relieve seco de la cenefa de
+     CANTERA TALLADA de Morelia —la misma piedra que la colección usa de
+     textura en las seis bandas— y un lacre redondo de terracota con una rama
+     de olivo grabada, que es la marca de la colección (la viñeta de los
+     títulos, la marca de cada hora del itinerario y la tapa de la raspadita
+     son la misma hoja).
+
+     ⚠️ ES `apertura: 'solapas'`, NO VIDEO, A PROPÓSITO. Regla de Maki desde
+        el sobre de anillos: un video generado con IA hace lo que quiere. Acá
+        el movimiento lo maneja el motor: mismo tiempo, mismo ángulo, siempre.
+        Por eso tampoco lleva `luz` ni `luzFundido`: esos dos son del video.
+
+     ⭐ EL PROMPT QUE FUNCIONÓ (4 de 4 usables, 0 créditos en Nano Banana 2).
+        Las dos trampas, dichas EN POSITIVO como enseñó el maestro:
+          · que el sobre llene el cuadro: «FILLS THE ENTIRE FRAME edge to edge
+            and corner to corner. No table, no background, no surface: the
+            envelope paper covers every single pixel of the image.»
+            Sin eso devuelve el sobre apoyado en una mesa, y el recorte del
+            motor —que da por sentado que la solapa arranca en la fila 0— se
+            come la mesa y deja un agujero arriba (el error de Cenicienta).
+          · que no haya X de cuatro puntas: «One single triangular flap folded
+            down from the very top edge, its point ending at the exact centre;
+            everything below that point is one continuous sheet of paper with
+            no fold and no seam and no crossing edges.»
+        Salió 768×1376 = 0,558, que es JUSTO la proporción del maestro y la
+        del marco. No hizo falta recortar nada.
+
+     ⭐ TODO LO DEMÁS SE MIDIÓ SOBRE LA PROPIA FOTO, no se estimó:
+          lacre      centro (385, 691) = 50,1 % · 50,2 %, radio 112 px
+          diagonales y=150 → x=36 · y=300 → x=118 · y=450 → x=200
+                     pendiente 0,547 → se cruzan en y = 786
+                     y salen del lienzo 46 px por afuera en y = 0
+          eje        50,0 % · 57,1 %  (786 / 1376) — la punta de la solapa
+          papel      promedio #C9B398 (las esquinas de arriba dan #E8DDCE y
+                     las de abajo #A38A6C: ésas son la sombra, NO sirven para
+                     rellenar las barras — el error anotado en `playa`)
+
+     ⚠️⚠️ EL LACRE SE LE BORRA AL PÓSTER, y esto es lo que más costó.
+        Si el lacre está en las dos imágenes, al levantarse la solapa aparece
+        el de abajo, quieto, y se lee como un pliegue doble (lo pagó
+        Cenicienta). El parche se eligió MIDIENDO: se tomó el brillo del
+        ANILLO que rodea al lacre (entre 1,18 y 1,6 radios, L=177) y se probó
+        el papel a 230, 260, 290, 320 y 350 px más abajo:
+             +230 → L=171 (se aparta 5,9)     +290 → L=178 (1,0)
+             +260 → L=176 (1,9)               +320 → L=177 (0,0)  ← éste
+                                              +350 → L=176 (1,1)
+
+        ⚠️ Y DESPUÉS HUBO QUE DECIDIR QUÉ SE VE AHÍ. Tapar el lacre con papel
+           liso deja igual un disco: alrededor hay ornamento en relieve y el
+           parche no lo tiene. Probé subirle el grano al parche para igualar
+           el desvío del anillo (19,9 contra 9,7) y quedó PEOR: un bulto claro
+           y rugoso.
+           La salida no fue tapar mejor: fue cambiar qué cosa es. Se dejó el
+           parche liso, un 4,5 % más oscuro, con una sombra radial suave en el
+           borde de adentro. Ahora no se lee como «falta algo»: se lee como LA
+           HUELLA que deja el lacre en el papel al despegarse. Que es lo que
+           pasa de verdad.
+
+     `solapa` = el triángulo de arriba MÁS el lacre, con transparencia, EN EL
+     MISMO LIENZO de 768×1376 que el póster (recortarla a su caja la corre de
+     lugar: otro error ya pagado en Cenicienta). Armada por geometría sobre la
+     propia foto: triángulo (−46, 0) → (814, 0) → (384, 786) más el disco del
+     lacre en (385, 691) con radio 126, y 1,6 px de desenfoque en el borde.
+     ---------------------------------------------------------------------- */
+  cantera: {
+    nombre:   "Cantera · papel tallado, lacre de olivo en terracota (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cantera/sobre-cantera-poster-v4.webp",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/cantera/sobre-cantera-solapa.webp",
+    color:    "#C9B398",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.0, y: 57.1 }
+  },
+
   /* ---- ★ ONYX · lino negro con lacre de oro grabado  (18/9/2026) ---------
      Maki mandó la muestra de Invitely "luxury": «mirá la textura, el relieve,
      hasta se ve relieve cuando se abre; el que me diste era todo plano».
