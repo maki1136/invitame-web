@@ -113,9 +113,13 @@
 
   /* --------------------------------------------------------------- la pieza
      El medallón de papel hecho a mano con una ramita de OLIVO PRENSADA,
-     fotografiado y recortado con alfa. Va en los CUATRO lugares que pide la
-     skill: la marca del itinerario, la tapa de la playlist, la perilla del
-     interruptor de confirmar y la tapa de la raspadita.
+     fotografiado y recortado con alfa.
+
+     ⚠️ VA EN **TRES** LUGARES, NO EN CUATRO: la marca de cada momento del
+        itinerario, la perilla del interruptor de confirmar y la tapa de la
+        raspadita. La skill pide un cuarto —la tapa de la playlist— y **acá no
+        va**, porque Maki pidió el 22/9 que esas tapas no se vean. Se anota a
+        propósito para que nadie la «arregle» volviéndola a poner.
 
      ⭐ ANTES ERA UN DISCO DE MADERA, y se cambió por pedido de Maki:
         «me gustaría cambiar los troncos de la raspada, parecen culos, hacé
@@ -622,14 +626,68 @@
     '}',
 
     /* ============================================ EL VIDEO Y LA PLAYLIST ======
-       La tapa NO es un rectángulo: va transparente, con el iframe escondido
-       por `visibility`, y encima la pieza de la temática. */
-    P + '.tv-tapa, ' + P + '.sp-tapa{',
-    '  background-color:transparent!important;',
-    '  background-image:url("' + PIEZA + '")!important;',
-    '  background-repeat:no-repeat!important;',
-    '  background-position:center!important;',
-    '  background-size:84px 84px!important;',
+       ⚠️⚠️⚠️ ACÁ HABÍA UNA REGLA CONTRA UNA CLASE QUE NO EXISTE, Y ESTUVO
+          MESES SIN HACER NADA. Decía `.tv-tapa, .sp-tapa`. La clase de verdad
+          es **`.rd-tapa`**, la misma para el video y para la playlist. O sea
+          que la pieza propia NUNCA estuvo en la tapa de la playlist, aunque
+          yo lo venía contando como uno de los cuatro lugares. No dio ningún
+          error: una regla contra una clase inexistente no falla, no hace nada.
+          Se encontró imprimiendo el árbol real, que es lo que manda la skill
+          de entrega y lo que yo no había hecho.
+
+       ⭐ Y LA TAPA VA TRANSPARENTE. Maki, 22/9/2026: «los rectángulos no se
+          puedan ver, y después se quedan ahí en el aire los textos».
+          Medido: `.rd-tapa` salía `rgb(243,233,217)` OPACA, 374×214 en el
+          video y 366×356 en la playlist — dos bloques de papel plantados en
+          el medio de la sección, justo encima del fondo de video.
+       ⚠️ Y SE PUEDE SACAR SIN DESTAPAR EL REPRODUCTOR: el iframe de abajo
+          ya está en `visibility:hidden`. Lo dejó resuelto y escrito Disco
+          («no se tapa un papel con otro papel»); acá se copia el patrón en
+          vez de inventarlo de nuevo.
+       ⚠️ Lo que queda encima es SÓLO el aro, dibujado en el lenguaje de la
+          colección —filete de terracota y un halo de papel para despegarlo
+          del trigo—, nunca el botón de un reproductor. */
+    P + '.rd-tapa{',
+    '  background-color:transparent!important; background-image:none!important;',
+    '  border:0!important; box-shadow:none!important;',
+    '  color:' + TINTA2 + '!important;',
+    '}',
+    P + '.rd-tapa .rd-aro{',
+    '  border:1px solid rgba(150,80,47,.55)!important;',
+    '  background:radial-gradient(circle at 50% 50%,',
+    '     rgba(243,233,217,.82) 0 58%, rgba(243,233,217,0) 100%)!important;',
+    '  box-shadow:0 0 0 5px rgba(243,233,217,.42),',
+    '     0 0 0 6px rgba(150,80,47,.28)!important;',
+    '  backdrop-filter:none!important; -webkit-backdrop-filter:none!important;',
+    '}',
+    P + '.rd-tapa .rd-txt{',
+    '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+    '  text-shadow:0 1px 6px rgba(243,233,217,.9), 0 0 14px rgba(243,233,217,.7)!important;',
+    '}',
+
+    /* ================================================ EL FORMULARIO ==========
+       ⭐ LOS CAMPOS SON UNA RAYA, NO UNA CAJA. Maki, 22/9/2026, sobre la
+       sección de la carta: «los rectángulos no se puedan ver».
+       El motor los dibuja para una colección OSCURA: fondo
+       `rgba(255,255,255,.08)`, filete `rgba(255,255,255,.25)` y radio 10.
+       Sobre el papel crema eso es un rectángulo fantasma.
+       ⚠️ Y LA TINTA DEL CAMPO SALÍA BLANCA (la del motor) — tan ilegible que
+          `reglas-duras.js` la rescataba a `rgb(96,96,96)` EN LÍNEA, un gris
+          que no pertenece a ninguna paleta. Con la tinta puesta desde la hoja
+          de la colección, las reglas duras miden un texto que ya se lee y no
+          escriben nada (la lección del orden, más arriba). */
+    P + '.rsvpform input, ' + P + '.rsvpform select, ' + P + '.rsvpform textarea{',
+    '  background-color:transparent!important; background-image:none!important;',
+    '  border:0!important; border-bottom:1px solid rgba(122,116,88,.55)!important;',
+    '  border-radius:0!important; box-shadow:none!important;',
+    '  padding-left:2px!important; padding-right:2px!important;',
+    '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
+    '}',
+    P + '.rsvpform input:focus, ' + P + '.rsvpform select:focus, ' + P + '.rsvpform textarea:focus{',
+    '  outline:none!important; border-bottom-color:' + TERRA + '!important;',
+    '}',
+    P + '.rsvpform label{',
+    '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
     '}',
 
     /* ===================================================== EL SÍ / NO =========
@@ -658,16 +716,40 @@
     P + '.cf-letter p{ font-family:' + CUERPO + '!important; }',
 
     /* ================================================= EL «VER MÁS» ===========
-       Hereda `color:inherit` de una regla del servidor y ni el material del
-       botón se la gana. Se le presta la clase `.btn` desde el JS (marca
-       `data-cp-btn` para devolverla al apagar) y acá sólo el color. */
-    P + '.iv-plie-btn{ color:' + TINTA + '!important; font-family:' + SERIF + '!important; }',
+       ⭐ SE FUE. Maki, 22/9/2026, sobre Vestimenta: «sacá el ver más, y que el
+       texto llegue hasta donde tenga que llegar sin ver más».
+       El motor recorta con `-webkit-line-clamp:3` y `max-height:81.6px`.
+       Medido: el texto real mide 184 px, o sea que se comía la mitad —
+       «…así que mejor zapato bajo o de plataforma. El blanco se lo dejamos a
+       la novia» no se leía nunca.
+       ⚠️ El clamp NO se apaga sólo con `max-height`: mientras el elemento siga
+          en `display:-webkit-box` el navegador lo sigue recortando. Van las
+          cuatro: display, line-clamp, max-height y overflow. */
+    P + '.iv-plie-btn{ display:none!important; }',
+    P + '.iv-plie-txt{',
+    '  display:block!important; -webkit-line-clamp:unset!important;',
+    '  max-height:none!important; overflow:visible!important;',
+    '}',
 
     /* ========================================================= EL PIE =========
        ⚠️ `.footer` NO es `.sec`: en Marfil se quedó con su foto oscura y con la
           tinta clara encima. Acá se le pone el papel y la tinta a propósito. */
     P + '.footer{ background-color:' + PAPEL2 + '!important; color:' + TINTA + '!important; }',
-    P + '.footer a{ color:' + TERRA + '!important; }'
+    P + '.footer a{ color:' + TERRA + '!important; }',
+
+    /* ⭐ «¿QUIERES LA TUYA?» NO SE VEÍA, Y ES LA LÍNEA QUE VENDE.
+       Maki, 22/9/2026: «el texto final, quiere una invitación, no se ve».
+       Medido: `.col-mvta-t` salía en `rgb(47,51,32)` —la TINTA— sobre la foto
+       oscura del cierre. Y la culpa era MÍA: la regla `.footer{color:TINTA}`
+       de acá arriba se la pasaba por herencia, porque ese bloque es el único
+       del pie que no trae color propio. Todo lo demás del pie —«¡Gracias!»,
+       los nombres, el crédito— el motor ya lo pinta crema, porque el pie
+       SIEMPRE lleva foto.
+       → se le pone el mismo crema que usa el motor en `.n` (#f5edda), y así
+         el bloque de Invítame queda igual de legible que el resto. */
+    P + '.col-mvta-t{',
+    '  color:#f5edda!important; -webkit-text-fill-color:#f5edda!important;',
+    '}'
 
     ].filter(Boolean).join('\n');
   }
