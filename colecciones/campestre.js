@@ -11,7 +11,7 @@
      · Marfil   → papel marfil, portada sin foto, NÁCAR,  Cormorant + Parisienne
      · Disco    → noche, plata sobre negro, bola espejos, Montserrat + Rouge
      · Campestre→ campo al atardecer, crema y oliva,      Forum + Sacramento + Lora
-                  botón ARCILLA, marca de RODAJA DE MADERA fotografiada
+                  botón ARCILLA, marca de OLIVO PRENSADO fotografiado
 
    Cero cruce: ni una tipografía, ni un botón, ni un color, ni una foto
    compartida con las otras.
@@ -111,18 +111,33 @@
      en el <html> con `!important` cada 1,5 s, así que no había cómo ganarle.
      Se publica en `poner()` y se BORRA en `sacar()`, como hace Marfil. */
 
-  /* --------------------------------------------------------------- las piezas
-     La rodaja de madera fotografiada y recortada por textura. Va en los CUATRO
-     lugares que pide la skill: la marca del itinerario, la tapa de la playlist,
-     la perilla del interruptor de confirmar y la tapa de la raspadita.
+  /* --------------------------------------------------------------- la pieza
+     El medallón de papel hecho a mano con una ramita de OLIVO PRENSADA,
+     fotografiado y recortado con alfa. Va en los CUATRO lugares que pide la
+     skill: la marca del itinerario, la tapa de la playlist, la perilla del
+     interruptor de confirmar y la tapa de la raspadita.
 
-     ⚠️ NO SE DIBUJA A MANO, NI SIQUIERA A 22 px. Se probó sobre negro y sobre
-        crema a 160, 120, 62, 40 y 26 px: a 26 todavía se le lee la corteza.
-     ⚠️ Y EL RECORTE NO SE HACE POR VARIANZA. El método de desvío local daba
-        radio 404 px porque metía la SOMBRA DE CONTACTO adentro del sujeto.
-        Midiendo calidez (R−B > 12) el borde real está en 366. 38 px de
-        diferencia = un anillo gris alrededor de la pieza. */
-  var RODAJA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1789980148/invitame/piezas/rodaja-madera.webp';
+     ⭐ ANTES ERA UN DISCO DE MADERA, y se cambió por pedido de Maki:
+        «me gustaría cambiar los troncos de la raspada, parecen culos, hacé
+        otra cosa más linda». Tres discos en fila, con el canto oscuro y el
+        centro pálido, leían mal. El olivo prensado resuelve las dos cosas:
+        es más lindo, y lo que se repite son tres RAMITAS, no tres discos.
+
+     ⚠️ EL RECORTE NO SE HACE POR VARIANZA ni por luminancia. El desvío local
+        mete la SOMBRA DE CONTACTO adentro del sujeto. Acá va por COLOR, que
+        separa las tres cosas de una sola pasada: el papel es cálido
+        (R−B > 8), la hoja es verde (G−R > 3), y la sombra es gris neutro,
+        así que se cae sola. Después se ajusta un círculo al percentil 99,3 de
+        los radios, se cierra, se rellenan huecos, y el borde se difumina
+        1,2 px para que el canto deckle no salga con escalera.
+     ⚠️ SE PRUEBA A LOS CUATRO TAMAÑOS REALES sobre el papel crema: 22 px (la
+        marca del itinerario), 40, 84 (la tapa de la playlist) y 160. A 22 px
+        el disco casi se funde con el papel —es crema sobre crema— y lo que
+        sostiene la marca es EL VERDE de la hoja. Medido a 22 px sobre
+        #f3e9d9: luminancia media 213 contra 234 del papel, mínimo 130.
+        Si alguna vez se cambia la pieza, la cuenta se vuelve a hacer: una
+        pieza que sólo funcione grande deja el itinerario sin marca. */
+  var PIEZA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790044213/invitame/piezas/olivo-prensado.webp';
 
   /* el fondo por defecto de la colección: el campo con viento, en video.
      Medido: 6,83 s de loop, 945 KB, movimiento medio 4,52 con mínimo 2,24
@@ -481,7 +496,7 @@
     '  margin-left:auto!important; margin-right:0!important; text-align:left!important;',
     '}',
     /* ⚠️ LA MARCA SE CUELGA DEL LADO QUE MIRA A LA VÍA, no siempre a la
-       izquierda: 11 px es el medio de la rodaja de 22. */
+       izquierda: 11 px es el medio de la pieza de 22. */
     P + '.tl > .it:nth-child(odd)::before{',
     '  left:auto!important; right:calc(-1 * var(--tl-aire) - 11px)!important;',
     '}',
@@ -512,13 +527,13 @@
     '@keyframes campoHilo{ from{ background-position:0 0 } to{ background-position:0 13px } }',
     '@media (prefers-reduced-motion: reduce){ ' + P + '.tl::before{ animation:none!important } }',
 
-    /* ⭐ LA MARCA DE CADA MOMENTO: LA RODAJA FOTOGRAFIADA.
+    /* ⭐ LA MARCA DE CADA MOMENTO: EL MEDALLÓN DE OLIVO.
        ⚠️ NUNCA con el atajo `background:` + !important. El atajo expande TODAS
           las longhands, incluida `background-position`, y una declaración
           !important de autor le gana a una animación: la pieza queda clavada y
           se ve quieta sin un solo error en consola. Van las longhands. */
     P + '.tl > .it::before{',
-    '  background-image:url("' + RODAJA + '")!important;',
+    '  background-image:url("' + PIEZA + '")!important;',
     '  background-repeat:no-repeat!important;',
     '  background-size:contain!important;',
     '  border:0!important; box-shadow:none!important;',
@@ -526,29 +541,29 @@
     '  filter:drop-shadow(0 1px 2px rgba(34,30,20,.28));',
     '}',
 
-    /* ⭐⭐ LAS TRES RODAJAS SON LA MISMA MADERA. Maki lo marcó DOS VECES:
+    /* ⭐⭐ LAS TRES PIEZAS SALEN IGUALES. Maki lo marcó DOS VECES:
        21/9, «todo muy claro»; y después, mirando el arreglo,
        «las raspadas te quedaron de diferentes colores».
 
        QUÉ PASABA, medido sobre los píxeles de la muestra:
-           rodaja 1 (la que toca) .... luminancia 193,4
-           rodaja 2 (dormida) ........ 178,8
-           rodaja 3 (dormida) ........ 178,5     → 14,9 puntos de diferencia
+           pieza 1 (la que toca) ..... luminancia 193,4
+           pieza 2 (dormida) ......... 178,8
+           pieza 3 (dormida) ......... 178,5     → 14,9 puntos de diferencia
        El motor apaga las que todavía no tocan con
        `.rasp-zona.dormida canvas{ filter:brightness(.84) saturate(.72) }`.
        Eso NO es un apagado: es un CAMBIO DE COLOR. El `saturate` le baja el
-       rojo a una rodaja de encino y las deja grises al lado de la primera,
-       que sale dorada. Se leen como tres maderas distintas.
+       verde al olivo y el rojo al papel, y deja las dormidas grises al lado
+       de la primera. Se leen como tres piezas distintas.
        Mi primer arreglo (`brightness(.95) saturate(.9) opacity(.88)`) sólo
        aflojó el efecto: bajó de 14,9 a 12,7. Seguía siendo el mismo error.
 
-       → LA MADERA NO SE TOCA. Las tres salen idénticas: 2,2 puntos de
+       → LA PIEZA NO SE TOCA. Las tres salen idénticas: 2,2 puntos de
          diferencia, que es el resplandor del aro y el fondo de atrás.
 
        ⚠️⚠️ PERO `dormida` NO ES DECORACIÓN: ES UN CANDADO. En
           `efectos/raspadita.js`, `rascar()` arranca con
               if (terminada || zona.classList.contains('dormida')) return;
-          o sea que las rodajas se raspan EN ORDEN —día, mes, año— y el motor
+          o sea que las piezas se raspan EN ORDEN —día, mes, año— y el motor
           va sacando la clase de la siguiente. Si se borra el aviso y no se
           pone otro, el invitado rasca una que no responde y no entiende por
           qué. Por eso la que toca ahora se marca con un ARO cálido que late,
@@ -600,7 +615,7 @@
        ⚠️ Y EL CONTENEDOR VA SIN RECUADRO. Maki lo pidió dos veces. El motor le
           pone `background: var(--lino2)`, así que hay que apagarlo POR PARTES:
           el atajo `background:` con !important pisa cosas que no queremos. */
-    ':is(#cp-nada, .scratch-sec, .rasp-3, .rasp-zona){ --r3-tapa:url("' + RODAJA + '"); }',
+    ':is(#cp-nada, .scratch-sec, .rasp-3, .rasp-zona){ --r3-tapa:url("' + PIEZA + '"); }',
     P + ':is(#cp-nada, .scratchcard){',
     '  background-color:transparent!important; background-image:none!important;',
     '  border:0!important; box-shadow:none!important;',
@@ -611,7 +626,7 @@
        por `visibility`, y encima la pieza de la temática. */
     P + '.tv-tapa, ' + P + '.sp-tapa{',
     '  background-color:transparent!important;',
-    '  background-image:url("' + RODAJA + '")!important;',
+    '  background-image:url("' + PIEZA + '")!important;',
     '  background-repeat:no-repeat!important;',
     '  background-position:center!important;',
     '  background-size:84px 84px!important;',
@@ -631,7 +646,7 @@
     P + '.et{ display:inline-block!important; padding:16px 12px!important; }',
     /* la perilla del interruptor, con la pieza */
     P + '.rsvp-sw .knob, ' + P + '.interruptor .knob{',
-    '  background-image:url("' + RODAJA + '")!important;',
+    '  background-image:url("' + PIEZA + '")!important;',
     '  background-size:cover!important; background-color:transparent!important;',
     '}',
 
@@ -731,5 +746,5 @@
   window.addEventListener('load', repaso);
   window.addEventListener('resize', medirVia);
 
-  try { window.INVCAMPESTRE = { poner: poner, sacar: sacar, activa: activa, pieza: RODAJA }; } catch (e) {}
+  try { window.INVCAMPESTRE = { poner: poner, sacar: sacar, activa: activa, pieza: PIEZA }; } catch (e) {}
 })();
