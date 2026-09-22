@@ -526,17 +526,46 @@
     '  filter:drop-shadow(0 1px 2px rgba(34,30,20,.28));',
     '}',
 
-    /* ⭐ LAS RODAJAS DORMIDAS SEGUÍAN SIENDO MADERA.
-       Maki, 21/9/2026, mirando la raspadita: «todo muy claro».
-       El motor apaga las fichas que todavía no tocan con
+    /* ⭐⭐ LAS TRES RODAJAS SON LA MISMA MADERA. Maki lo marcó DOS VECES:
+       21/9, «todo muy claro»; y después, mirando el arreglo,
+       «las raspadas te quedaron de diferentes colores».
+
+       QUÉ PASABA, medido sobre los píxeles de la muestra:
+           rodaja 1 (la que toca) .... luminancia 193,4
+           rodaja 2 (dormida) ........ 178,8
+           rodaja 3 (dormida) ........ 178,5     → 14,9 puntos de diferencia
+       El motor apaga las que todavía no tocan con
        `.rasp-zona.dormida canvas{ filter:brightness(.84) saturate(.72) }`.
-       Sobre una rodaja de encino ese `saturate(.72)` le saca toda la calidez:
-       la primera se veía de madera y las otras dos grises, como apagadas.
-       Se afloja el apagado y se compensa con un poco de opacidad, que no
-       toca el color: siguen leyéndose como «todavía no», pero de madera. */
-    P + '.rasp-zona.dormida canvas{',
-    '  filter:brightness(.95) saturate(.9) opacity(.88)!important;',
+       Eso NO es un apagado: es un CAMBIO DE COLOR. El `saturate` le baja el
+       rojo a una rodaja de encino y las deja grises al lado de la primera,
+       que sale dorada. Se leen como tres maderas distintas.
+       Mi primer arreglo (`brightness(.95) saturate(.9) opacity(.88)`) sólo
+       aflojó el efecto: bajó de 14,9 a 12,7. Seguía siendo el mismo error.
+
+       → LA MADERA NO SE TOCA. Las tres salen idénticas: 2,2 puntos de
+         diferencia, que es el resplandor del aro y el fondo de atrás.
+
+       ⚠️⚠️ PERO `dormida` NO ES DECORACIÓN: ES UN CANDADO. En
+          `efectos/raspadita.js`, `rascar()` arranca con
+              if (terminada || zona.classList.contains('dormida')) return;
+          o sea que las rodajas se raspan EN ORDEN —día, mes, año— y el motor
+          va sacando la clase de la siguiente. Si se borra el aviso y no se
+          pone otro, el invitado rasca una que no responde y no entiende por
+          qué. Por eso la que toca ahora se marca con un ARO cálido que late,
+          no cambiándole el color a las otras dos: la marca va sobre la
+          ACTIVA, no sobre las bloqueadas. Y el aro se mueve solo, porque lo
+          pinta `:not(.dormida)` y el motor libera la siguiente al terminar. */
+    P + '.rasp-zona.dormida canvas{ filter:none!important; }',
+    P + '.rasp-zona:not(.dormida){',
+    '  animation:campoLatido 1.9s ease-in-out infinite;',
     '}',
+    '@keyframes campoLatido{',
+    '  0%,100%{ box-shadow:0 0 0 2px rgba(150,80,47,.42), 0 0 10px 2px rgba(194,154,91,.34) }',
+    '  50%{ box-shadow:0 0 0 2px rgba(150,80,47,.68), 0 0 18px 5px rgba(194,154,91,.62) }',
+    '}',
+    '@media (prefers-reduced-motion: reduce){ ' + P + '.rasp-zona:not(.dormida){',
+    '  animation:none!important;',
+    '  box-shadow:0 0 0 2px rgba(150,80,47,.55), 0 0 12px 3px rgba(194,154,91,.45)!important; } }',
 
     /* =================================================== EL PASE DE DEMO ======
        ⭐ LA TARJETA ES DE PAPEL, SIEMPRE. Maki, 21/9/2026: «me gusta el estilo
