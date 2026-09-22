@@ -14,11 +14,12 @@
           cursivo. Acá los nombres van en BODONI MODA, versalitas.
         · La tinta es MARRÓN CÁLIDO y el acento es CAMEL (#A87D5A, medido de la
           referencia).
-        · El fondo es un VIDEO de plumas de pampa meciéndose.
+        · El fondo es un VIDEO de plumas de pampa meciéndose, y SE TIENE QUE
+          VER: ningún recuadro de la invitación es opaco.
         · El itinerario va CENTRADO, con las fichas alternando lado, y su
           vía es una REGLETA DE CUENTAS finita en camel con la misma HOJA de
           los títulos por marca. La rosa fotografiada se queda donde es un
-          objeto de verdad: la tapa de la playlist y la tapa de la raspadita.
+          objeto de verdad: la tapa de la raspadita.
         · El botón va en RELIEVE SECO (letterpress).
 
    ⚠️⚠️ NO LLEVAR CURSIVA TIENE UN PRECIO QUE HAY QUE PAGAR A MANO: TODA LA
@@ -68,10 +69,29 @@
   var PAPEL2 = '#F6EFE5';
   var CREMA  = '#F7F1E7';   /* el texto que va ARRIBA de la tinta */
 
-  /* la pieza fotografiada: la MISMA url en el itinerario, la tapa de la
-     playlist y la tapa de la raspadita.
+  /* ⭐⭐ LOS RECUADROS NO SON PAPEL OPACO — Maki, 22/9 ★
+     «Los textos y los rectángulos se pierden con el fondo.»
+     MEDIDO: había 13 rectángulos OPACOS adentro del marco (`.tl`, `.evento`,
+     `.hotel`, `.banco`, `.pasecard`, las tintas de la carta…), todos en crema,
+     encima de un fondo de video que también es crema. Resultado: el video
+     desaparece detrás de ellos y ellos se leen como manchones sin borde.
+     ⚠️ Y el chequeo NO lo agarra: su regla 6 es «ninguna superficie clara suelta
+        en una colección OSCURA» y Bohemia es clara, así que da verde siempre.
+     LA SALIDA: que el fondo pase, y que el recuadro tenga BORDE y SOMBRA para
+     leerse como una tarjeta apoyada y no como un parche.
+     ⚠️ El alfa no se elige de ojo. El video mide 196 de brillo medio en la
+        columna; con 58% de crema encima la luminancia queda en .73, y contra
+        TINTA (#4A3B2E) eso da 7,75 y contra TINTA2 6,07 — los dos arriba del
+        piso de 5. Por eso .58 y no menos. */
+  var VELO    = 'rgba(246,239,229,.58)';   /* PAPEL2 al 58% */
+  var VELO2   = 'rgba(246,239,229,.72)';   /* el pase, que sí es un boleto */
+  var FILETE  = 'rgba(168,125,90,.38)';    /* el camel, de canto */
+  var LEVANTE = '0 2px 14px rgba(74,59,46,.10)';
+
+  /* la pieza fotografiada: la MISMA url en el itinerario y la tapa de la
+     raspadita.
      ⚠️ YA NO va en la perilla del sí/no (Maki, 21/9: «dejale la normal») ni en
-        la tapa del video (ahí va el PLAY). */
+        las tapas del video y la playlist: ahí el motor ya dibuja su aro. */
   var ROSA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1789979950/invitame/piezas/bohemia-rosa.webp';
 
   /* la viñeta de los títulos: una hoja finita en camel entre dos filetes.
@@ -475,10 +495,11 @@
        su borde exterior va a 26 + 12 = 38 px. De ahí el `-38px`. */
     P + '.tl{',
     '  position:relative!important;',
-    '  background-color:' + PAPEL2 + '!important;',
-    '  border:1px solid ' + TINTA3 + '!important;',
+    '  background-color:' + VELO + '!important;',
+    '  border:1px solid ' + FILETE + '!important;',
     '  border-radius:14px!important;',
     '  padding:22px 12px!important;',
+    '  box-shadow:' + LEVANTE + '!important;',
     '}',
     P + '.tl::before, ' + P + '.tl > .tl-prog{',
     '  top:var(--bh-tl-ini,6px)!important;',
@@ -577,7 +598,12 @@
        ⚠️ El aro viene con `opacity:.75` y el rótulo con `.65`: hay que subirlas
           o el camel se lava contra el papel. */
     P + '.rd-tapa, ' + P + '.sp-tapa{',
-    '  background-color:' + PAPEL2 + '!important;',
+    /* ⚠️ Maki, 22/9: «sacá el rectángulo blanco que no queda bien». La tapa NO
+       es una superficie: es sólo el aro y su rótulo flotando sobre lo que haya
+       detrás. Un bloque opaco plantado en el medio de la sección tapa el fondo
+       de video y se lee como un parche. Va TRANSPARENTE — el iframe de abajo ya
+       está en `visibility:hidden`, así que no asoma ningún reproductor. */
+    '  background-color:transparent!important;',
     '  background-image:none!important;',
     '  color:' + CAMEL + '!important;',
     '  border:0!important;',
@@ -634,6 +660,32 @@
     '}',
     P + '.rsvp-caja .et{ font-family:' + SANS + '!important; letter-spacing:.16em!important; text-transform:uppercase!important; }',
 
+    /* ── ⭐⭐ LOS RECUADROS DEJAN PASAR EL FONDO ─────────────────────────────
+       Ver la nota de VELO arriba. Uno por uno, lo que había:
+
+         .evento   x2  418x344  rgb(246,239,229) OPACO
+         .tl           418x569  rgb(246,239,229) OPACO
+         .hotel    x3  410x134  rgba(255,255,255,.55)  ← BLANCO PURO, ajeno
+         .banco        360x142  rgb(246,239,229) OPACO
+         .pasecard     422x161  rgb(246,239,229) OPACO
+         .cf-*-tint    340x459  rgb(239,228,214) OPACO
+
+       ⚠️ `.hotel` venía en BLANCO puro: no es de ninguna paleta de la colección.
+       ⚠️ La HOJA de la carta (`.cf-letter`) se deja casi opaca a propósito: ahí
+          el papel ES el objeto, no un recuadro de fondo. Lo que se afloja son
+          las tintas de atrás. */
+    P + '.evento, ' + P + '.hotel, ' + P + '.banco{',
+    '  background-color:' + VELO + '!important;',
+    '  background-image:none!important;',
+    '  border:1px solid ' + FILETE + '!important;',
+    '  box-shadow:' + LEVANTE + '!important;',
+    '}',
+    P + '.cf-back-tint, ' + P + '.cf-front-tint{',
+    '  background-color:rgba(239,228,214,.45)!important;',
+    '  background-image:none!important;',
+    '}',
+    P + '.cf-letter{ box-shadow:' + LEVANTE + '!important; }',
+
     /* ── ⭐ EL PASE ────────────────────────────────────────────────────────
        Maki, 21/9: «en el ticket ponele algo más relacionado a la temática, está
        muy básico blanco».
@@ -659,7 +711,7 @@
        ⚠️ El cuadrado del QR se deja BLANCO a propósito: es la excepción que
           pide la skill, porque un lector necesita el contraste. */
     P + '.pasecard, ' + P + '.pase .pasecard{',
-    '  background-color:' + PAPEL2 + '!important;',
+    '  background-color:' + VELO2 + '!important;',
     '  border:1px solid ' + TINTA3 + '!important;',
     '  border-radius:10px!important;',
     '  box-shadow:inset 0 0 0 4px ' + PAPEL2 + ',',
@@ -766,7 +818,12 @@
        ▾»). MEDIDA: salía en rgb(20,18,18), un casi-negro que no pertenece a
        ninguna paleta de la colección — el mismo bicho que el gris del pase y el
        verde de la chapita. Es decoración: va en camel y más chica que la
-       palabra. */
+       palabra.
+       ⚠️⚠️ OJO: esto NO gana. `reglas-duras.js` le escribe el color INLINE y
+          con `!important` (`color: rgb(20,18,18) !important`), porque el camel
+          da 2,50 sobre el papel y está bajo el piso. Contra un inline
+          !important no hay hoja que pueda. Se deja escrito para el día que el
+          motor prefiera la tinta de la colección en vez de un negro genérico. */
     P + '.btn .chev, ' + P + '.chev{',
     '  color:' + CAMEL + '!important;',
     '  font-size:.85em!important;',
