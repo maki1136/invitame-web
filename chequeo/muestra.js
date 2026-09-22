@@ -223,6 +223,28 @@
     return false;
   }
 
+  /* ★ TRAMPA 4: UN BOTÓN CON DEGRADADO TAMPOCO SE PUEDE MEDIR.
+     Medido el 22/9/2026 en `regina-y-emiliano` con el botón `placa`: los
+     estilos de botón (`lacre`, `nácar`, `oro`, `placa`, `arcilla`, `esmalte`)
+     pintan con el atajo `background: linear-gradient(...)`, y ese atajo deja
+     `background-color` en `transparent`. `fondoDe()` sube buscando un color
+     OPACO, se pasa de largo el botón y termina midiendo contra el papel de la
+     invitación: letra crema sobre un plato negro daba 1,35 y la regla la
+     cantaba ilegible. Le pasa a TODAS las colecciones, no a una: en campestre
+     eran los tres «Reservar» de los hoteles y el botón de WhatsApp.
+     → Un texto dentro de un control cuyo fondo es un degradado se manda a la
+       lista de MIRARLOS, igual que lo que cae sobre una foto. NO se da por
+       bueno ni por malo: lo decide el ojo. */
+  function sobreDegrade(el) {
+    var n = el;
+    for (var i = 0; n && i < 4; i++, n = n.parentElement) {
+      if (!/gradient\(/.test(getComputedStyle(n).backgroundImage || '')) continue;
+      if (/^(BUTTON|A)$/.test(n.tagName)) return true;
+      if (/(^| )btn( |$)/.test(String(n.className || ''))) return true;
+    }
+    return false;
+  }
+
   function textos() {
     var marco = document.querySelector('.frame');
     if (!marco) return [];
@@ -507,12 +529,12 @@
       var min = grande ? 4.0 : 5.0;
       if (v >= min) return;
       var linea = corto(el, 28) + ' → ' + v.toFixed(2) + ' (piso ' + min + ')';
-      if (tapaFoto(el)) sobreFoto.push(linea);
+      if (tapaFoto(el) || sobreDegrade(el)) sobreFoto.push(linea);
       else malos.push(linea);
     });
     var det = malos.slice(0, 12);
     if (sobreFoto.length) {
-      det = det.concat(['— SOBRE FOTO: la medición no vale, MIRARLOS —'], sobreFoto.slice(0, 12));
+      det = det.concat(['— SIN FONDO MEDIBLE (foto o degradado): MIRARLOS —'], sobreFoto.slice(0, 12));
     }
     return {
       pasa: malos.length === 0,
