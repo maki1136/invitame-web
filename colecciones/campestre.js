@@ -694,8 +694,12 @@
     '     0 0 0 6px rgba(150,80,47,.28)!important;',
     '  backdrop-filter:none!important; -webkit-backdrop-filter:none!important;',
     '}',
+    /* ⚠️ MEDIDO DESPUÉS DE SACAR LA TAPA, con máscara de glifos: con TINTA2
+       el rótulo daba mediana 4,81 — por debajo del piso de 5. Sin el papel
+       opaco atrás, este texto pasó a caer sobre el velo de lectura y ya no
+       le alcanza la tinta de las bajadas. Va la TINTA principal. */
     P + '.rd-tapa .rd-txt{',
-    '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+    '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
     '  text-shadow:0 1px 6px rgba(243,233,217,.9), 0 0 14px rgba(243,233,217,.7)!important;',
     '}',
 
@@ -720,8 +724,11 @@
     P + '.rsvpform input:focus, ' + P + '.rsvpform select:focus, ' + P + '.rsvpform textarea:focus{',
     '  outline:none!important; border-bottom-color:' + TERRA + '!important;',
     '}',
+    /* ⚠️ Lo mismo que el rótulo del video: sin la caja del campo atrás, el
+       rótulo quedó sobre el velo y con TINTA2 daba mediana 5,01, justo en el
+       filo. Va la TINTA principal. */
     P + '.rsvpform label{',
-    '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+    '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
     '}',
 
     /* ===================================================== EL SÍ / NO =========
