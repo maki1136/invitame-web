@@ -572,7 +572,21 @@
     P + '.footer{',
     '  position:relative!important;',
     '  background-color:' + PIE + '!important;',
-    '  background-image:none!important;',
+    /* ⚠️⚠️ EL PIE NO TAPA LA FOTO DEL CIERRE.  (22/9/2026)
+       Maki: «la foto final que dice gracias es larga y marrón, muy fea».
+       No era una foto fea: NO HABÍA FOTO. El motor pinta el pie con
+       `background: <velo>, var(--final) center/cover` —la foto del fin de
+       página— y acá había un `background-image:none!important` puesto para
+       vestir el pie con la piedra. Resultado: un bloque marrón plano de
+       452 px con «¡Gracias!» encima. Se veía en la captura, en ninguna
+       medición.
+       → El pie deja pasar `--final`, con velo de la familia para que la tinta
+         crema se lea. El color de respaldo queda DEBAJO: en una invitación sin
+         foto de cierre `var(--final)` sale vacía, la declaración se descarta
+         sola y vuelve el marrón. La piedra sigue en el `::before` con
+         opacidad, que es donde tiene que estar. */
+    '  background-image:linear-gradient(rgba(42,32,24,.34) 0%,rgba(42,32,24,.74) 100%),var(--final)!important;',
+    '  background-size:cover!important; background-position:center!important;',
     '  background-blend-mode:normal!important;',
     '  color:' + CREMA + '!important;',
     '}',
