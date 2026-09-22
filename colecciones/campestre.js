@@ -637,6 +637,7 @@
 
        → LA PIEZA NO SE TOCA. Las tres salen idénticas: 2,2 puntos de
          diferencia, que es el resplandor del aro y el fondo de atrás.
+
        ⚠️⚠️ PERO `dormida` NO ES DECORACIÓN: ES UN CANDADO. En
           `efectos/raspadita.js`, `rascar()` arranca con
               if (terminada || zona.classList.contains('dormida')) return;
