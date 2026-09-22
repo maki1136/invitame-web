@@ -455,6 +455,40 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.95
   },
 
+  /* ★ LOS DOS FINALES QUE SE PROBARON EL 22/9/2026 --------------------------
+     Maki sobre la v2: «salió medio mal el final». El principio y la apertura
+     estaban bien; lo que fallaba era cómo termina. Se hicieron dos finales
+     distintos sobre el MISMO cuadro de inicio, los dos de 4 s:
+       · cantera-video-b  la TARJETA sale del sobre y llena la pantalla de papel
+                          marfil plano. Termina en un cuadro quieto y limpio, que
+                          es el mejor empalme para el destello del motor.
+                          Medido: quieto hasta 2,00 · salida 2,17 a 2,83 (mov 17,8
+                          a 33,6) · brillo 176 -> 222 · último segundo plano en 219.
+       · cantera-video-c  la cámara NO se mueve: el sobre queda abierto sobre la
+                          piedra y la luz va creciendo. Más tranquilo y más lindo
+                          como pieza, pero termina en el sobre abierto, así que el
+                          destello tiene que hacer todo el trabajo del corte.
+                          Medido: apertura 0,83 a 2,17 · de 2,33 en adelante casi
+                          sin movimiento (<3) · brillo 189 -> 204.
+     --------------------------------------------------------------------- */
+  'cantera-video-b': {
+    nombre:     "Cantera · la tarjeta sale del sobre (video)",
+    video:      "/sobres/sobre-cantera-v3.mp4",
+    poster:     "/sobres/sobre-cantera-v3-poster.jpg",
+    color:      "#E6E0D3",
+    luz:        2.5,
+    luzFundido: 0.95
+  },
+
+  'cantera-video-c': {
+    nombre:     "Cantera · la luz entra en el sobre abierto (video)",
+    video:      "/sobres/sobre-cantera-v4.mp4",
+    poster:     "/sobres/sobre-cantera-v4-poster.jpg",
+    color:      "#E6E0D3",
+    luz:        2.3,
+    luzFundido: 0.95
+  },
+
   /* ---- ★ ONYX · lino negro con lacre de oro grabado  (18/9/2026) ---------
      Maki mandó la muestra de Invitely "luxury": «mirá la textura, el relieve,
      hasta se ve relieve cuando se abre; el que me diste era todo plano».
