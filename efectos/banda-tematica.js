@@ -135,6 +135,16 @@
 
   /* el color de cada banda, inline y con prioridad. Ver la nota de arriba. */
   function pintarSecciones(t) {
+    /* ⭐ LA BANDA FIRMA EN EL <html>. (22/9/2026)
+       Este módulo pinta las `.sec.verde` en CLARO, pero lo hacía en silencio:
+       no dejaba ninguna marca. Una colección que ya vistió esas bandas para
+       fondo OSCURO —Cantera les clava la tinta crema— no tenía forma de
+       enterarse, y al encender la banda los títulos quedaban crema sobre
+       claro: invisibles. Medido en `regina-y-emiliano` el 22/9.
+       → Con `data-banda` en el <html>, cualquier colección puede escribir su
+         juego oscuro con `:not([data-banda])` y su juego claro con
+         `[data-banda]`. Es el mismo patrón de `data-fondo` y `data-simbolo`. */
+    document.documentElement.setAttribute('data-banda', '');
     var a = Number(t.bandaAlfa);
     if (!(a >= 0 && a <= 1)) a = 0.30;
     var color = conAlfa(t.bandaColor || '#dcecf2', a);
@@ -153,6 +163,7 @@
   }
 
   function apagar(hoja) {
+    document.documentElement.removeAttribute('data-banda');
     if (hoja) hoja.remove();
     var v = document.querySelectorAll('.inv-banda-deco');
     for (var k = 0; k < v.length; k++) v[k].remove();
