@@ -717,6 +717,21 @@ window.SOBRES_INVITAME = {
            Comprobado: el peor retroceso de luminancia es de −0,65 puntos, que
            es ruido del codec.
 
+     ⭐ v3 · 22/9, Maki: «el reloj deberia terminar a las 12 DE LA NOCHE, como
+        el cuento». Las agujas ya clavaban en las 12 — el problema era que el
+        cuadro estaba soleado, o sea DOCE DEL MEDIODIA. Lo que dice medianoche
+        no es la aguja: es LA LUZ.
+        De 4,3 s a la campanada el cuadro se enfria y se apaga hasta un azul de
+        noche (16,26,44), al 26 % del brillo, y la campanada revienta DESDE la
+        oscuridad. El arco pasa a ser claro → noche → campanada → papel.
+        Y para que el reloj se siga leyendo en lo oscuro, la esfera recibe un
+        halo de luna (radial, 86 de amplitud, centrado en el cuadro).
+        Medido: el cuadro mas oscuro cae en t=6,17 con luminancia 71, justo
+        cuando las agujas se juntan en las XII.
+        ⚠️ El apagon va ANTES de la campanada a proposito; la regla de que la
+           luz no retroceda vale solo DESPUES (ver la nota de la v2).
+           Comprobado: retroceso posterior a la campanada = 0,00.
+
      Los tramos, medidos sobre el archivo (8,0 s · 720×1280 · 24 fps):
        · 0,0 – 1,9   sale de la oscuridad y del desenfoque (brillo 0,10 → 1,0,
                      blur 15 → 0,4). El mundo del cuento apareciendo.
@@ -733,8 +748,8 @@ window.SOBRES_INVITAME = {
      flashes seguidos.                                                       */
   'cenicienta-film': {
     nombre:  "Cenicienta · la película de llegada, el reloj da las 12 (video)",
-    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v2-22-9.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v2-poster-22-9.jpg",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v3-22-9.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v3-poster-22-9.jpg",
     color:   "#EAF2FA",
     luz:     7.1,
     luzFundido: 0.95
