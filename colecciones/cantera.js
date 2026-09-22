@@ -374,6 +374,29 @@
             estilo que Jazmín elija desde el panel. */
     P + '.btn .chev, ' + P + '.chev{ color:inherit!important; opacity:.85!important; }',
 
+    /* ────────────── 4quater · EL PASE CON EL QR NO ENTRA CON CANTO RECTO
+       Maki, 22/9/2026: «donde está el QR no me gusta cómo quedó ese corte
+       recto y el dibujo de atrás.»
+       El arco lo tiene `.pasecard`; lo que cortaba era la SECCIÓN `.pase`,
+       294 px con la foto en `cover` y `border-radius:0`.
+       ⚠⚠ NO se puede enmascarar `.pase` directo: `mask-image` se lleva
+          puestos también a los hijos y el boleto del QR quedaría desvanecido.
+       → La foto se muda a `.pase::before`, que la toma con
+         `background-image:inherit` —la URL vive en el `style` inline que
+         escribe el motor, así que SIGUE saliendo del panel— y se desvanece
+         arriba y abajo con `mask-image`. El padre conserva la URL (para que
+         `inherit` la vea) pero no la pinta: `background-size:0 0`. */
+    P + '.pase{ position:relative!important; background-size:0 0!important; }',
+    P + '.pase > *{ position:relative; z-index:1; }',
+    P + '.pase::before{ content:""!important; position:absolute!important; inset:0!important; z-index:0!important; background-image:inherit!important; background-size:cover!important; background-position:center!important; -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 24%,#000 76%,rgba(0,0,0,0) 100%)!important; mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 24%,#000 76%,rgba(0,0,0,0) 100%)!important; }',
+
+    /* ────────────── 4quinquies · LOS BOTONES DE WHATSAPP TAMBIÉN SON BOTONES
+       Medido el 22/9/2026: `.wsp` salía en Montserrat 13 px sin espaciado
+       —la tipografía por defecto del motor— mientras TODOS los demás botones
+       de Cantera van en Karla 12 px, versalitas, 1,68 px de espaciado.
+       Se leían pegados de otra invitación. */
+    P + '.wsp{ font-family:"Karla",sans-serif!important; text-transform:uppercase!important; letter-spacing:1.68px!important; font-size:12px!important; }',
+
     /* ────────────── 4ter · LA TAPA DEL VIDEO Y DE LA PLAYLIST NO ES UN PAPEL
        Maki, 22/9/2026: «en ver video está el rectángulo que no me gusta,
        anotalo en la skill porque parece que no está. Y la playlist lo mismo.»
