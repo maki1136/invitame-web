@@ -9,7 +9,7 @@
 
         Sage Green      #98A086   → el olivo: la viñeta y la marca de cada hora
         Dusty Rose      #A76D5E   → el acento segundo (la chapita del pase)
-        Golden Tan      #C4A071   → los rellenos: botones, filetes
+        Golden Tan      #C4A071   → los rellenos: botones, tapas, filetes
         Warm Beige      #DFCCB1   → el papel de las tarjetas
         Terracotta Brown#846044   → la familia de los marrones
 
@@ -38,8 +38,8 @@
       ⚠️ Antes tenía anotado acá que «el motor lo escribe inline con
          !important y no se puede pisar». ERA FALSO, y me costó una vuelta
          entera: el elemento NO tiene atributo style. Lo que pasaba es que yo
-         estaba peleando con `background-color` cuando la propiedad que gana
-         es `background`, y sobre todo que no estaba declarando la variable.
+         peleaba con `background-color` cuando la propiedad que gana es
+         `background`, y sobre todo que no estaba declarando la variable.
       → LA FORMA CORRECTA: la colección DECLARA `--verde` (y `--sec-col-v`).
         Es lo que hace Bohemia. No se pelea con la regla: se le cambia el
         valor a la variable que la regla lee.
@@ -49,6 +49,23 @@
       REGLA GENERAL, para la próxima colección: ANTES de dar por imposible
       pisar un color del motor, buscar qué REGLA gana y qué VARIABLE lee esa
       regla. Casi siempre la respuesta es declarar la variable.
+
+   ⭐⭐⭐ Y LA OTRA DE LA MISMA FAMILIA: LAS CLASES QUE ESCRIBÍ DE MEMORIA
+      El bloque de la raspadita apuntaba a `.rasp-3 .r3-f` y a la variable
+      `--r3-tapa`. **Ninguna de las dos existe en este motor.** Resultado: las
+      tres tapas quedaron del gris plomo de fábrica —fuera de paleta— y yo lo
+      daba por vestido porque el chequeo automático pasaba en verde.
+      Lo que este motor usa, medido en la página:
+          .scratchcard        → la caja
+          .scratchcard::after → ⚠️ EL RECUADRO de 1 px (¡el que Maki ya pidió
+                                sacar dos veces! El `border:0` del contenedor
+                                no lo toca: hay que apagar el ::after)
+          .ivf.ivf-circ       → la fila
+          .ivf .c             → LA TAPA que se raspa (70×70)
+          .ivf .n             → el número que aparece debajo
+      → REGLA: antes de vestir un bloque, LISTAR SUS CLASES REALES en la
+        página. Una regla que no engancha no falla: queda gris y pasa el
+        chequeo.
 
    ⭐⭐ EL CONCEPTO ES BOHEMIA
       Maki: «mirá la invitación de muestra de Bohemia: es excelente, deberías
@@ -180,8 +197,7 @@
     '--cf-col':     TINTA,
     '--sobre-c':    PAPEL,
     '--flap-base':  PAPEL2,
-    '--seal-c':     TERRA,
-    '--r3-tapa':    'url("' + MEDALLA + '")'
+    '--seal-c':     TERRA
   };
 
   function ev()  { try { return window.INVEV || {}; } catch (e) { return {}; } }
@@ -320,17 +336,30 @@
     '  box-shadow:0 0 0 5px ' + HALO + '.85)!important;',
     '}',
 
-    /* ─────────────────────────────────── 6 · LA RASPADITA */
-    P + ':is(#dc-nada, .scratchcard, .scratch-sec, .rasp-3, .rasp-zona){',
-    '  --r3-tapa:url("' + MEDALLA + '");',
-    '}',
-    P + ':is(#dc-nada, .scratchcard){',
+    /* ─────────────────────────────────── 6 · LA RASPADITA
+       ⚠️⚠️ LAS CLASES SON LAS QUE SE MIDIERON EN LA PÁGINA, no las que yo
+          recordaba. `.rasp-3 .r3-f` y `--r3-tapa` NO EXISTEN en este motor:
+          por eso las tapas quedaban del gris de fábrica y el chequeo seguía
+          en verde (una regla que no engancha no falla, sólo no hace nada).
+       ⚠️ EL RECUADRO VIVE EN `.scratchcard::after`. Ponerle `border:0` al
+          contenedor no lo apaga. Maki ya lo pidió sacar dos veces. */
+    P + '.scratchcard{',
     '  background-color:transparent!important;',
     '  background-image:none!important;',
     '  border:0!important;',
     '  box-shadow:none!important;',
     '}',
-    P + '.rasp-3 .r3-f{ border-radius:999px!important; }',
+    P + '.scratchcard::after{ display:none!important; }',
+    /* las tres tapas: el medallón de olivo, la pieza propia de Cantera */
+    P + '.ivf .c{',
+    '  background-color:' + TAN + '!important;',
+    '  background-image:url("' + MEDALLA + '")!important;',
+    '  background-size:cover!important;',
+    '  background-position:center!important;',
+    '  border-radius:50%!important;',
+    '  box-shadow:0 3px 9px rgba(74,53,36,.22)!important;',
+    '}',
+    P + '.ivf .n{ color:' + TINTA + '!important; text-shadow:0 1px 0 rgba(255,255,255,.28)!important; }',
 
     /* ─────────────────────────────────── 7 · EL PASE
        Los rótulos son .k y .v (NO .lab/.val: esos no existen). */
