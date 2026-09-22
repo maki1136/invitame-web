@@ -311,11 +311,39 @@
     '  content:""; position:absolute; left:50%; top:auto; bottom:-16vh;',
     '  transform:translateX(-50%); width:200%; height:82vh;',
     '  background:linear-gradient(to bottom,',
-    '     rgba(8,16,28,0) 0%, rgba(8,16,28,.14) 34%,',
-    '     rgba(8,16,28,.52) 66%, rgba(8,16,28,.74) 100%);',
+    '     rgba(8,16,28,0) 0%, rgba(8,16,28,.24) 28%,',
+    '     rgba(8,16,28,.54) 66%, rgba(8,16,28,.76) 100%);',
     '  pointer-events:none; z-index:0;',
     '}',
     P + '.portada > .c > *{ position:relative!important; z-index:1!important; }',
+
+    /* ⚠️⚠️ LAS PARADAS DEL VELO SE RECALCULAN CUANDO CAMBIA LA FOTO.
+       ⭐ 22/9 · Con la portada nueva —Clara en la escalinata del palacio— el
+       tercio de abajo dejo de ser un vestido azul OSCURO y paso a ser una
+       pollera de tul CLARA. Medido pixel a pixel sobre la foto real, con el
+       recorte real (`auto 106%` a `50% 38%`) y el velo compuesto encima:
+
+           banda               foto          velo   contraste   piso
+           MIS XV        (130,158,177)       0,25       4,24      5,0   NO
+           Clara         (120,147,167)       0,32       5,43      4,0   OK
+           filete        (108,134,154)       0,38       7,01      3,0   OK
+           cuenta        ( 82,113,135)       0,48       9,96      4,0   OK
+
+       O sea: fallaba SOLO el sobretitulo, y por poco. La causa es que el velo
+       arranca en 34vh y a la altura del kicker (69vh) todavia va por 0,25.
+       Paradas nuevas —`.24@28%` y `.54@66%`— y queda:
+
+           MIS XV 5,31 · Clara 6,45 · filete 7,89 · cuenta 10,44
+
+       ⚠️ SE MIDIO EL MAPEO DE VERDAD, NO EL QUE PARECIA. El primer calculo dio
+          2,80 y 3,66 porque supuse que el degrade abarcaba el BLOQUE. No: el
+          `::before` va `bottom:-16vh; height:82vh`, o sea de 34vh a 116vh de la
+          portada. Con el mapeo bueno los numeros son otros. **Antes de pedir un
+          arreglo grande, comprobar contra que se esta midiendo.**
+       ⚠️ Y se controlo cuanto se oscurece la foto DONDE NO HAY TEXTO: a 40vh
+          —la cara y el escote— pasa de 0,03 a 0,06. La cara sigue limpia. Lo
+          que se oscurece es la pollera, de 48vh para abajo, que es justo donde
+          conviene. */
 
     /* el sobretítulo: «MIS XV», chiquito y muy abierto */
     P + '.portada #pv-kick{',
