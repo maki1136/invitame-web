@@ -116,30 +116,45 @@
      del medio. Lo que manda no es el tamaño del archivo: es cuánto ocupa la
      pieza DENTRO de él. */
 
-  /* la viñeta de los títulos: un cristal de hielo de seis puntas entre dos
-     filetes. Va en VECTOR, no en foto: el adorno de arriba de cada título es
-     una viñeta tipográfica; la foto es para los objetos reconocibles — acá, la
-     zapatilla del itinerario. Los 17 `.adorno` del motor traen un SVG con DOS
-     ANILLOS ENTRELAZADOS: el adorno genérico de boda, que en unos XV de
-     Cenicienta no pinta nada. Maki ya lo marcó («siempre ponés lo mismo»).
-     ⚠️ Y `simbolo-tematica.js` no lo pisa, porque esta colección firma
-        `data-marca-propia` y ese módulo se corre solo: el adorno lo tiene que
-        poner la colección. */
+  /* ── LA VIÑETA DE LOS TÍTULOS: EL RELOJ DANDO LAS DOCE ─────────────────
+     ⭐ 22/9 · Maki: «¿por qué está el dibujo de nieve? ¿es temática o es otro?».
+     Tenía razón en sospechar: **la nieve no es de Cenicienta, es de Frozen.**
+     Lo que sí es del cuento: la zapatilla de cristal, el RELOJ A MEDIANOCHE,
+     el carruaje calabaza y la escalera del palacio.
+     Acá iba un cristal de hielo de seis puntas que puse yo, o sea el copo que
+     coronaba cada uno de los 17 títulos de la invitación. Va el reloj.
+
+     POR QUÉ EL RELOJ Y NO LA ZAPATILLA: la zapatilla ya es la PIEZA
+     FOTOGRAFIADA y está en sus cuatro lugares (itinerario, playlist, video,
+     raspadita). El adorno del título es otra cosa —una viñeta tipográfica— y
+     repetir el mismo objeto en los dos registros aplana la pieza. El reloj es
+     el segundo símbolo más fuerte del cuento y funciona en vector.
+
+     ⚠️ SE DIBUJA PARA EL TAMAÑO REAL, NO PARA EL viewBox. El `.adorno` mide
+        40 px de alto medido en vivo, o sea que el viewBox de 44 se escala casi
+        1:1 y la esfera de radio 10 se ve como un círculo de **18 px**. A ese
+        tamaño no entran doce marcas horarias: entran CUATRO (12, 3, 6, 9) y
+        dos agujas. Con doce se ve un circulito rayado — el mismo error que la
+        skill de armado anota para el vector a 22 px.
+     ⚠️ LAS DOS AGUJAS NO VAN LAS DOS AL 12: superpuestas se leen como UNA
+        SOLA RAYA. Van a las 11:59 —la horaria apenas corrida— que además es
+        exactamente el momento del cuento.
+     ⚠️ El color va horneado (%232A4B72 = ACENTO) porque es un `data:` URI:
+        `dataUri()` del motor no lo toca, y `paleta.js` tampoco. */
   var ADORNO = "data:image/svg+xml;utf8," +
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 44'>" +
     "<g fill='none' stroke='%232A4B72' stroke-width='1.1' stroke-linecap='round'>" +
-    "<line x1='10' y1='22' x2='46' y2='22'/>" +
-    "<line x1='74' y1='22' x2='110' y2='22'/>" +
+    "<line x1='8' y1='22' x2='42' y2='22'/>" +
+    "<line x1='78' y1='22' x2='112' y2='22'/>" +
     "<g transform='translate(60,22)'>" +
-    "<line x1='0' y1='-11' x2='0' y2='11'/>" +
-    "<line x1='-9.5' y1='-5.5' x2='9.5' y2='5.5'/>" +
-    "<line x1='-9.5' y1='5.5' x2='9.5' y2='-5.5'/>" +
-    "<path d='M0 -7.5 l-2.8 -2.8 M0 -7.5 l2.8 -2.8'/>" +
-    "<path d='M0 7.5 l-2.8 2.8 M0 7.5 l2.8 2.8'/>" +
-    "<path d='M-6.5 -3.8 l-3.8 0.5 M-6.5 -3.8 l-0.5 -3.8'/>" +
-    "<path d='M6.5 3.8 l3.8 -0.5 M6.5 3.8 l0.5 3.8'/>" +
-    "<path d='M-6.5 3.8 l-3.8 -0.5 M-6.5 3.8 l-0.5 3.8'/>" +
-    "<path d='M6.5 -3.8 l3.8 0.5 M6.5 -3.8 l0.5 -3.8'/>" +
+    "<circle cx='0' cy='0' r='10'/>" +
+    "<line x1='0' y1='-10' x2='0' y2='-7.4'/>" +
+    "<line x1='0' y1='10' x2='0' y2='7.4'/>" +
+    "<line x1='-10' y1='0' x2='-7.4' y2='0'/>" +
+    "<line x1='10' y1='0' x2='7.4' y2='0'/>" +
+    "<line x1='0' y1='0' x2='0' y2='-6.6'/>" +
+    "<line x1='0' y1='0' x2='-1.9' y2='-4.1'/>" +
+    "<circle cx='0' cy='0' r='0.9' fill='%232A4B72' stroke='none'/>" +
     "</g></g></svg>";
 
   /* ⚠️⚠️ LAS VARIABLES QUE CENICIENTA RECLAMA COMO PROPIAS.
@@ -683,7 +698,7 @@
     '}',
 
     /* ── EL ADORNO DE LOS TÍTULOS ──────────────────────────────────────────
-       Se apaga el SVG de los dos anillos y se pone el cristal de hielo. */
+       Se apaga el SVG de los dos anillos del motor y se pone el reloj. */
     P + '.adorno > svg{ display:none!important; }',
     P + '.adorno{',
     '  background-image:url("' + ADORNO + '")!important;',
