@@ -554,13 +554,21 @@
        repite el tono de la anterior, le cuelga `data-cen-tono` con el contrario.
        No toca clases (`reglas-duras.js` cachea la tinta por elemento y le
        cambiariamos el original); solo pinta el fondo. */
-    P + 'section.sec[data-cen-tono="B"]{',
-    '  background-color:rgba(219,233,247,.28)!important;',
-    '  background-image:none!important;',
-    '}',
-    P + 'section.sec[data-cen-tono="A"]{',
-    '  background-color:rgba(242,247,252,.22)!important;',
-    '}',
+    /* ⚠️ 22/9 · PRIMER INTENTO FALLIDO, ANOTADO PARA NO REPETIRLO:
+       puse las dos recetas como CSS sobre `[data-cen-tono]`. El tono B entraba
+       pero el A NO: el molde pinta `.sec.verde` con algo que le gana igual con
+       `!important` y mas especificidad. Resultado: todas las secciones que yo
+       mandaba a claro se quedaban en color, y de la carta (y 1560) hasta el
+       video (y 8504) — SIETE MIL pixeles — quedo un unico tono plano. Peor que
+       el problema original.
+       ⭐ LA REGLA: si hay que ganarle a una pintura del motor, no se pelea por
+          especificidad — se escribe en el `style` del elemento con `important`,
+          que es lo unico que gana siempre. Y las dos recetas NO se escriben a
+          mano: se le COPIAN al molde en vivo (`recetas()`), asi la coleccion
+          sigue al motor si el motor cambia de tinte.
+       ⭐ Y SE VERIFICA MIRANDO: la primera version pasaba el chequeo igual,
+          porque ninguna de las 8 reglas mira si dos secciones seguidas tienen
+          el mismo fondo. Lo vi en la captura, no en el semaforo. */
 
     /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
        ⚠️ LA TAPA NO ES UN RECTÁNGULO: va transparente, con el iframe en
@@ -888,25 +896,69 @@
     } catch (e) { return null; }
   }
 
+  /* las dos recetas de fondo del molde, copiadas en vivo de una seccion que
+     todavia no tocamos. Se cachean: el molde no las cambia despues de cargar. */
+  var RECETA = null;
+  function recetas() {
+    if (RECETA && RECETA.A && RECETA.B) return RECETA;
+    var A = null, B = null;
+    var secs = document.querySelectorAll('section.sec');
+    for (var i = 0; i < secs.length; i++) {
+      var s = secs[i];
+      if (s.getAttribute('data-cen-tono')) continue;   /* ya la pintamos nosotros */
+      if (s.offsetHeight < 40) continue;
+      var cs = window.getComputedStyle(s);
+      var r = { col: cs.backgroundColor, img: cs.backgroundImage,
+                size: cs.backgroundSize, pos: cs.backgroundPosition, rep: cs.backgroundRepeat };
+      if (s.classList.contains('verde')) { if (!B) B = r; } else { if (!A) A = r; }
+      if (A && B) break;
+    }
+    if (A && B) RECETA = { A: A, B: B };
+    return RECETA;
+  }
+
+  function pintar(s, r) {
+    var st = s.style;
+    st.setProperty('background-color', r.col, 'important');
+    st.setProperty('background-image', r.img, 'important');
+    st.setProperty('background-size', r.size, 'important');
+    st.setProperty('background-position', r.pos, 'important');
+    st.setProperty('background-repeat', r.rep, 'important');
+  }
+  function despintar(s) {
+    var st = s.style;
+    ['background-color', 'background-image', 'background-size', 'background-position', 'background-repeat']
+      .forEach(function (k) { st.removeProperty(k); });
+  }
+
   /* recorre las secciones visibles y le da vuelta el tono a la que repite el
-     de la anterior. Corre dentro de `poner()`, o sea cada 1,2 s junto con el
-     resto: alcanza y no necesita observador. */
+     de la anterior, escribiendo la receta del molde en el `style` del elemento
+     (es lo unico que le gana al motor). Corre dentro de `poner()`, o sea cada
+     1,2 s junto con el resto: alcanza y no necesita observador. */
   function rayar() {
     try {
+      var R = recetas();
+      if (!R) return;
       var secs = [].slice.call(document.querySelectorAll('section.sec'))
         .filter(function (s) { return s.offsetHeight > 40 && s.offsetParent !== null; });
       var previo = null;
       for (var k = 0; k < secs.length; k++) {
         var s = secs[k];
-        var tono = s.classList.contains('verde') ? 'B' : 'A';
-        if (previo === null) { if (s.getAttribute('data-cen-tono')) s.removeAttribute('data-cen-tono'); previo = tono; continue; }
-        if (tono === previo) {
-          var vuelta = (tono === 'A') ? 'B' : 'A';
-          if (s.getAttribute('data-cen-tono') !== vuelta) s.setAttribute('data-cen-tono', vuelta);
+        var base = s.classList.contains('verde') ? 'B' : 'A';
+        if (previo === null) {
+          if (s.getAttribute('data-cen-tono')) { s.removeAttribute('data-cen-tono'); despintar(s); }
+          previo = base; continue;
+        }
+        if (base === previo) {
+          var vuelta = (base === 'A') ? 'B' : 'A';
+          if (s.getAttribute('data-cen-tono') !== vuelta) {
+            s.setAttribute('data-cen-tono', vuelta);
+            pintar(s, R[vuelta]);
+          }
           previo = vuelta;
         } else {
-          if (s.getAttribute('data-cen-tono')) s.removeAttribute('data-cen-tono');
-          previo = tono;
+          if (s.getAttribute('data-cen-tono')) { s.removeAttribute('data-cen-tono'); despintar(s); }
+          previo = base;
         }
       }
     } catch (e) {}
@@ -934,7 +986,8 @@
     if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
     var s = document.getElementById(ID_CSS);
     if (s && s.parentNode) s.parentNode.removeChild(s);
-    [].forEach.call(document.querySelectorAll('[data-cen-tono]'), function (x) { x.removeAttribute('data-cen-tono'); });
+    [].forEach.call(document.querySelectorAll('[data-cen-tono]'), function (x) { despintar(x); x.removeAttribute('data-cen-tono'); });
+    RECETA = null;
   }
 
   /* ⚠️ NADA DE MutationObserver: la invitación muta en bucle (reglas-duras.js
