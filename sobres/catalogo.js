@@ -433,20 +433,25 @@ window.SOBRES_INVITAME = {
      este estilo en su dibujo». El de arriba («cantera») es de FOTO con solapas;
      éste es de VIDEO, como toscana: el sobre quieto, la solapa se levanta y la
      cámara entra hasta llenar la pantalla de papel marfil.
-     Medido cuadro a cuadro a 4 fps sobre el video entregado (720x1280, 8 s):
-       · 0,00 a 3,25 s  quieto (movimiento 1,7 a 4,1)
-       · 3,50 a 4,25 s  se levanta la solapa (brillo baja 186 -> 178: su sombra)
-       · 4,50 s         el movimiento SALTA a 20,7  ->  ahí arranca el zoom  ->  luz
-       · 4,50 a 7,75 s  el brillo sube 188 -> 212 (marfil, no blanco)
+     ★ v2, 22/9/2026: Maki vio la v1 de 8 s y dijo «abre mal». Tenía razón y la
+     causa es de Flow: en 8 segundos estira el movimiento y la apertura se arrastra.
+     Rehecho en 4 s, y la solapa se abre de un solo movimiento.
+     ★★ LA REGLA: un sobre son 4 SEGUNDOS. Más largo, Flow rellena con tiempo muerto.
+     Medido cuadro a cuadro a 6 fps sobre el video entregado (720x1280, 4 s):
+       · 0,00 a 0,67 s  quieto (movimiento 0,7 a 1,0)
+       · 0,83 a 1,33 s  se levanta la solapa (brillo baja 189 -> 178: su sombra)
+       · 1,50 s         pico de movimiento 17,2: la solapa termina de abrirse
+       · 2,20 s         segundo pico 17,0 y el brillo empieza a subir  ->  luz
+       · 2,20 a 3,83 s  el brillo sube 192 -> 208 (marfil, no blanco)
      luzFundido 0.95 porque sobre papel crema el blanco ES el papel: el destello
      tiene que durar más para leerse como destello y no como un parpadeo.
      --------------------------------------------------------------------- */
   'cantera-video': {
     nombre:     "Cantera · papel tallado con olivo, lacre de terracota (video)",
-    video:      "/sobres/sobre-cantera.mp4",
-    poster:     "/sobres/sobre-cantera-poster.jpg",
+    video:      "/sobres/sobre-cantera-v2.mp4",
+    poster:     "/sobres/sobre-cantera-v2-poster.jpg",
     color:      "#E6E0D3",
-    luz:        4.5,
+    luz:        2.2,
     luzFundido: 0.95
   },
 
