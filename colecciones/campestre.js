@@ -238,6 +238,7 @@
            playa (aprobada) ...... percentil 5 = 5,65  (mediana de secciones)
            campestre sin velo .... 3,59   ← no llega
            campestre con velo .... 6,25   ← pasa
+
        ⚠️ NO SE ARREGLA ACLARANDO EL VIDEO. Se probó: subirle las sombras de
           p5=94 a p5=132 lo deja clavado en los números de la playa (p5 137)
           pero lo LAVA — las hojas de olivo pierden el verde y queda el mismo
