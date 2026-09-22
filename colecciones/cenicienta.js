@@ -563,9 +563,9 @@
        el problema original.
        ⭐ LA REGLA: si hay que ganarle a una pintura del motor, no se pelea por
           especificidad — se escribe en el `style` del elemento con `important`,
-          que es lo unico que gana siempre. Y las dos recetas NO se escriben a
-          mano: se le COPIAN al molde en vivo (`recetas()`), asi la coleccion
-          sigue al motor si el motor cambia de tinte.
+          que es lo unico que gana siempre. Y las dos recetas van ESCRITAS
+          (ver `TONO`): leerlas del DOM mientras la pagina se arma es una
+          carrera contra el motor, y se pierde.
        ⭐ Y SE VERIFICA MIRANDO: la primera version pasaba el chequeo igual,
           porque ninguna de las 8 reglas mira si dos secciones seguidas tienen
           el mismo fondo. Lo vi en la captura, no en el semaforo. */
@@ -896,36 +896,25 @@
     } catch (e) { return null; }
   }
 
-  /* las dos recetas de fondo del molde, copiadas en vivo de una seccion que
-     todavia no tocamos. Se cachean: el molde no las cambia despues de cargar. */
-  var RECETA = null;
-  function recetas() {
-    if (RECETA && RECETA.A && RECETA.B) return RECETA;
-    var A = null, B = null;
-    var secs = document.querySelectorAll('section.sec');
-    for (var i = 0; i < secs.length; i++) {
-      var s = secs[i];
-      if (s.getAttribute('data-cen-tono')) continue;   /* ya la pintamos nosotros */
-      if (s.offsetHeight < 40) continue;
-      var cs = window.getComputedStyle(s);
-      var r = { col: cs.backgroundColor, img: cs.backgroundImage,
-                size: cs.backgroundSize, pos: cs.backgroundPosition, rep: cs.backgroundRepeat };
-      if (s.classList.contains('verde')) { if (!B) B = r; } else { if (!A) A = r; }
-      if (A && B) break;
-    }
-    /* ⚠️ 22/9 · EL SEGUNDO ERROR, Y ES EL MISMO DE SIEMPRE: CACHEAR TEMPRANO.
-       `recetas()` corre tambien en la PRIMERA pasada, que sucede apenas carga
-       el script — antes de que el motor haya pintado las secciones. En ese
-       momento las claras y las de color miden el MISMO fondo, asi que quedaban
-       cacheadas dos recetas identicas y `rayar()` repintaba todo del mismo
-       tono: 11 secciones seguidas iguales. Es la misma trampa que
-       `reglas-duras.js` con `data-regla-orig`.
-       ⭐ Se cachea SOLO cuando las dos recetas son distintas de verdad. Si
-          todavia son iguales, se devuelve null y se reintenta en la pasada
-          siguiente (hay una cada 1,2 s). */
-    if (A && B && A.col !== B.col) RECETA = { A: A, B: B };
-    return RECETA;
-  }
+  /* ── LAS DOS RECETAS DE FONDO, ESCRITAS A MANO Y MEDIDAS ───────────────
+     ⚠️ 22/9 · TERCER INTENTO. Los dos primeros fallaron y conviene que quede
+        anotado, porque los dos son errores de manual:
+        1) por CSS sobre `[data-cen-tono]` → el molde le ganaba igual.
+        2) copiandole las recetas al molde en vivo → `getComputedStyle` en la
+           primera pasada devuelve lo que el motor todavia no termino de pintar,
+           y quedaban cacheadas dos recetas casi iguales. Le puse una guarda de
+           «que sean distintas» y tampoco alcanzo: eran distintas, pero la clara
+           venia mal igual (salia sin la textura y con el color de la de color).
+     ⭐ LA LECCION: leer el estado de una pagina que todavia se esta armando es
+        una carrera que se pierde. Las dos recetas son de ESTA coleccion, o sea
+        que las sabemos: se escriben, se miden una vez y listo. Medidas en vivo
+        el 22/9 sobre `#spotify-sec` (clara) y una `.sec.verde` (de color). */
+  var TONO = {
+    A: { col: 'rgba(242,247,252,.22)',
+         img: 'url("/i/tex-acuarela.jpg")', size: 'cover', pos: '50% 50%', rep: 'repeat' },
+    B: { col: 'rgba(219,233,247,.28)',
+         img: 'none',                       size: 'auto',  pos: '0% 0%',   rep: 'repeat' }
+  };
 
   function pintar(s, r) {
     var st = s.style;
@@ -947,8 +936,7 @@
      1,2 s junto con el resto: alcanza y no necesita observador. */
   function rayar() {
     try {
-      var R = recetas();
-      if (!R) return;
+      var R = TONO;
       var secs = [].slice.call(document.querySelectorAll('section.sec'))
         .filter(function (s) { return s.offsetHeight > 40 && s.offsetParent !== null; });
       var previo = null;
@@ -997,7 +985,6 @@
     var s = document.getElementById(ID_CSS);
     if (s && s.parentNode) s.parentNode.removeChild(s);
     [].forEach.call(document.querySelectorAll('[data-cen-tono]'), function (x) { despintar(x); x.removeAttribute('data-cen-tono'); });
-    RECETA = null;
   }
 
   /* ⚠️ NADA DE MutationObserver: la invitación muta en bucle (reglas-duras.js
