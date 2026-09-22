@@ -471,7 +471,19 @@
     '  box-shadow:0 5px 12px rgba(74,53,36,.16), inset 0 1px 0 rgba(255,255,255,.28)!important;',
     '}',
     /* la tinta del botón sólido: sobre Golden Tan da 7,8 */
-    P + '.btn:not(.gh){ color:' + TINTA_BTN + '!important; -webkit-text-fill-color:' + TINTA_BTN + '!important; }',
+    /* ⚠️⚠️ LA COLECCIÓN NO CLAVA LA TINTA DEL BOTÓN. (22/9/2026)
+       Esta línea tenía `TINTA_BTN` con `!important` —calibrada para el botón
+       claro de antes, «sobre Golden Tan da 7,8»—. El día que el botón pasó a
+       `placa` (plato negro con letra de latón) quedó tinta oscura sobre negro:
+       Maki lo vio enseguida («checá los botones que el color del texto está
+       mal») y medía 2,42 de contraste.
+       ⚠️ EL ESTILO DE BOTÓN LO ELIGE JAZMÍN DESDE EL PANEL, así que la colección
+          no puede suponer de qué color es el botón. Los once estilos de
+          `botones.js` declaran su propio `color` con `!important`.
+       → La colección propone su tinta SIN `!important` (gana si no hay estilo
+         de botón) y el relleno sigue al color que gane la cascada
+         (`currentColor`), no a un valor clavado. */
+    P + '.btn:not(.gh){ color:' + TINTA_BTN + '; -webkit-text-fill-color:currentColor; }',
     P + '.btn.gh{',
     '  color:' + TINTA + '!important;',
     '  background-color:transparent!important;',
