@@ -626,6 +626,22 @@
     '}',
     P + '.pase .pasecard *{ color:' + TINTA + '!important; }',
 
+    /* ⭐ LA CHAPITA «SIN USAR» ERA DE OTRA COLECCIÓN. Impreso el árbol real
+       del boleto el 22/9/2026, todo estaba en familia menos una cosa:
+           SPAN.estado → fondo rgb(77,106,79) y tipografía MONTSERRAT
+       Ese verde y esa fuente están CLAVADOS en el motor y vienen de Disco.
+       En un boleto de papel crema con Forum y Lora, cantaba.
+       → chapita de oliva oscuro con tinta crema (16,4 de contraste) y la
+         tipografía de los rótulos del propio boleto.
+       ⚠️ La regla `.pasecard *` de arriba le pone TINTA a TODO lo de adentro,
+          así que el crema de la chapita tiene que ir DESPUÉS y con su propio
+          `-webkit-text-fill-color`, o se pierde contra el oliva. */
+    P + '.pase .pasecard .estado{',
+    '  background-color:' + TINTA + '!important;',
+    '  color:#f7f1e4!important; -webkit-text-fill-color:#f7f1e4!important;',
+    '  font-family:' + CUERPO + '!important; letter-spacing:.12em!important;',
+    '}',
+
     /* ====================================================== LA RASPADITA ======
        ⚠️ SON DOS RAMAS DEL ÁRBOL, NO UNA:
             #scratchcard
