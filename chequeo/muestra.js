@@ -32,7 +32,7 @@
    puedan volver a entregar sin que salte una FALLA.
 
    ══════════════════════════════════════════════════════════════════════════
-   LAS DOS TRAMPAS DE MEDICIÓN QUE YA SE PAGARON Y ESTÁN RESUELTAS ACÁ
+   LAS TRES TRAMPAS DE MEDICIÓN QUE YA SE PAGARON Y ESTÁN RESUELTAS ACÁ
    ══════════════════════════════════════════════════════════════════════════
 
    1. `color(srgb 0.92 0.91 0.94)`. Chrome devuelve los colores así cada vez
@@ -48,6 +48,21 @@
       (Es el error 26 de `reglas-duras.js`.)
       → Si el elemento se está animando, su opacidad real es a la que va a
         llegar: 1.
+
+   3. UN TEXTO SOBRE UNA FOTO NO SE PUEDE MEDIR. `fondoDe()` sólo sabe de
+      COLORES: sube buscando un `background-color` opaco. Arriba de la portada
+      no hay ninguno —lo que hay es `.pbg`, una capa absoluta con la FOTO, y
+      `.pveil`, un degradado— así que la función termina devolviendo el papel
+      de la invitación. Y el papel es crema, igual que la tipografía de la
+      portada: la cuenta da 1,05 y la regla canta ILEGIBLE una portada que en
+      pantalla se lee perfecta.
+      Medido el 22/9/2026: fallaba igual en `camila-y-tomas`, que es LA muestra
+      de referencia. O sea que no era un defecto de una muestra: era la regla.
+      Y una regla que grita con todo bien enseña a ignorarla, que es peor que
+      no tenerla.
+      → `tapaFoto()` reconoce esos textos y los manda a una lista APARTE que
+        dice MIRARLOS. No se dan por buenos ni por malos, y no hacen fallar la
+        regla: el ojo decide. Lo que SÍ se mide sigue fallando como siempre.
    ============================================================================ */
 (function () {
   'use strict';
@@ -163,6 +178,44 @@
     var v = '';
     try { v = getComputedStyle(document.documentElement).getPropertyValue('--lino'); } catch (e) {}
     return aRGB(v) || [255, 255, 255, 1];
+  }
+
+  /* ★ TRAMPA 3: ¿hay una FOTO tapando el fondo de este texto?
+     Se busca una capa POSICIONADA (absoluta o fija) que cubra por completo al
+     texto y que sea una imagen: un <img>, un <video> o un div con
+     `background-image: url(...)`. Eso es `.pbg` en la portada y las capas de
+     foto de las secciones.
+
+     ⚠️ A PROPÓSITO NO SE MIRA EL `background-image` DEL PROPIO ANCESTRO.
+        El papel de la invitación es una textura (`body.tex-lino`, y en Marfil
+        también el marco). Si contara como foto, TODA la invitación quedaría
+        exenta y la regla de contraste se apagaría entera sin avisar. Y además
+        medir contra `--lino` en ese caso es CORRECTO: la textura es del color
+        del papel. Lo que no se puede medir es una fotografía. */
+  function tapaFoto(el) {
+    var marco = document.querySelector('.frame');
+    var r = el.getBoundingClientRect();
+    if (!r.width || !r.height) return false;
+    var n = el;
+    while (n && n !== document.documentElement) {
+      var hijos = n.children || [];
+      for (var i = 0; i < hijos.length; i++) {
+        var h = hijos[i];
+        if (h === el || h.contains(el)) continue;
+        var cs = getComputedStyle(h);
+        if (cs.position !== 'absolute' && cs.position !== 'fixed') continue;
+        if (!visible(h)) continue;
+        var esFoto = h.tagName === 'IMG' || h.tagName === 'VIDEO' ||
+                     /url\(/.test(cs.backgroundImage || '');
+        if (!esFoto) continue;
+        var b = h.getBoundingClientRect();
+        if (b.left <= r.left + 1 && b.right >= r.right - 1 &&
+            b.top <= r.top + 1 && b.bottom >= r.bottom - 1) return true;
+      }
+      if (n === marco) break;
+      n = n.parentElement;
+    }
+    return false;
   }
 
   function textos() {
@@ -360,7 +413,11 @@
        puesta. Una regla que grita con todo bien enseña a ignorarla, que es
        peor que no tenerla.
        ⚠ Lo que hay que comprobar no es CÓMO está hecha la marca: es que NO sea
-         el circulito de fábrica. */
+         el circulito de fábrica.
+       ⚠️⚠️ EL ATRIBUTO TIENE QUE LLEVAR EL NOMBRE DE LA COLECCIÓN, NO ESTAR
+         VACÍO. Acá se lee con `|| ''` y después `if (propia)`: una cadena
+         vacía es FALSA y cae a la rama del circulito. Cantera lo puso vacío el
+         21/9 y la regla falló con el medallón perfectamente puesto. */
     var propia = document.documentElement.getAttribute('data-marca-propia') || '';
     if (propia) {
       var conFoto = /url\(/.test(img);
@@ -408,9 +465,12 @@
 
   /* 7 ························································· CONTRASTE
      El piso no es WCAG, es «se lee»: 5,0 normal y 4,0 grande, un escalón
-     arriba de la norma. Mismo criterio que `reglas-duras.js`. */
+     arriba de la norma. Mismo criterio que `reglas-duras.js`.
+
+     ⚠️ LO QUE ESTÁ SOBRE UNA FOTO NO ENTRA EN LA CUENTA (trampa 3 del
+        encabezado): va a una lista aparte que dice MIRARLOS. */
   regla('contraste', 'Todos los textos se leen', function () {
-    var malos = [];
+    var malos = [], sobreFoto = [];
     textos().forEach(function (el) {
       var cs = getComputedStyle(el);
       var fg = aRGB(cs.webkitTextFillColor) || aRGB(cs.color);
@@ -424,12 +484,20 @@
       var px = parseFloat(cs.fontSize) || 14;
       var grande = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
       var min = grande ? 4.0 : 5.0;
-      if (v < min) malos.push(corto(el, 28) + ' → ' + v.toFixed(2) + ' (piso ' + min + ')');
+      if (v >= min) return;
+      var linea = corto(el, 28) + ' → ' + v.toFixed(2) + ' (piso ' + min + ')';
+      if (tapaFoto(el)) sobreFoto.push(linea);
+      else malos.push(linea);
     });
+    var det = malos.slice(0, 12);
+    if (sobreFoto.length) {
+      det = det.concat(['— SOBRE FOTO: la medición no vale, MIRARLOS —'], sobreFoto.slice(0, 12));
+    }
     return {
       pasa: malos.length === 0,
-      nota: malos.length + ' texto(s) por debajo del piso — MIRARLOS antes de creerles',
-      detalle: malos.slice(0, 12)
+      nota: malos.length + ' texto(s) por debajo del piso — MIRARLOS antes de creerles' +
+            (sobreFoto.length ? ' · ' + sobreFoto.length + ' sobre foto (sin medir: MIRARLOS)' : ''),
+      detalle: det
     };
   });
 
@@ -530,7 +598,7 @@
     return recorrer().then(hacer);
   }
 
-  window.INVCHEQUEO = { correr: correr, reglas: REGLAS, aRGB: aRGB, contraste: contraste };
+  window.INVCHEQUEO = { correr: correr, reglas: REGLAS, aRGB: aRGB, contraste: contraste, tapaFoto: tapaFoto };
 
   /* sólo con ?chequeo=1. Para el invitado este archivo no hace nada. */
   try {
