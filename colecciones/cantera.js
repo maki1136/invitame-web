@@ -523,16 +523,42 @@
     P + '.sec.verde > *{ position:relative!important; z-index:1!important; }',
 
     /* ────────── 11 · LA TINTA DE LAS SEIS BANDAS */
-    P + '.sec.verde h2{',
+    /* ⭐⭐ DOS JUEGOS DE TINTA, SEGÚN HAYA BANDA TEMÁTICA O NO.  (22/9/2026)
+       Maki: las seis bandas marrones pesaban demasiado y pidió aclararlas.
+       `efectos/banda-tematica.js` ya sabe pintarlas en CLARO —papel, objetos
+       de la temática a los costados y el video de fondo asomando—, pero estas
+       reglas clavaban la tinta CREMA con `!important` y, por especificidad
+       (0,3,1 contra 0,2,1), le ganaban: al encender la banda los títulos
+       quedaban crema sobre claro, invisibles. Medido en `regina-y-emiliano`.
+       → La banda ahora firma `data-banda` en el <html>, así que acá hay dos
+         juegos y no se pelean: SIN banda manda el crema de siempre; CON banda
+         manda la tinta. Ninguna invitación cantera sin banda cambia. */
+    'html[' + MARCA + ']:not([data-banda]) ' + '.sec.verde h2{',
     '  color:' + CREMA + '!important;',
     '  background-image:' + VC + '!important;',
     '  text-shadow:0 1px 3px rgba(0,0,0,.35)!important;',
     '}',
-    P + '.sec.verde .kick{ color:' + CREMA2 + '!important; }',
-    P + '.sec.verde p:not(.frase){ color:rgba(244,235,221,.92)!important; }',
-    P + '.sec.verde .frase{ color:' + CREMA + '!important; }',
-    P + '.sec.verde .padres .nm{ color:' + CREMA + '!important; }',
-    P + '.sec.verde .btn.gh{ color:' + CREMA + '!important; border-color:rgba(230,214,188,.55)!important; }',
+    'html[' + MARCA + ']:not([data-banda]) ' + '.sec.verde .kick{ color:' + CREMA2 + '!important; }',
+    'html[' + MARCA + ']:not([data-banda]) ' + '.sec.verde p:not(.frase){ color:rgba(244,235,221,.92)!important; }',
+    'html[' + MARCA + ']:not([data-banda]) ' + '.sec.verde .frase{ color:' + CREMA + '!important; }',
+    'html[' + MARCA + ']:not([data-banda]) ' + '.sec.verde .padres .nm{ color:' + CREMA + '!important; }',
+    'html[' + MARCA + ']:not([data-banda]) ' + '.sec.verde .btn.gh{ color:' + CREMA + '!important; border-color:rgba(230,214,188,.55)!important; }',
+
+    /* el juego CLARO: la misma tinta que el resto de la invitación, sin la
+       sombra negra (sobre papel claro ensucia) y con el filete en latón. */
+    'html[' + MARCA + '][data-banda] ' + '.sec.verde h2{',
+    '  color:' + TINTA + '!important;',
+    '  background-image:none!important;',
+    '  -webkit-text-fill-color:' + TINTA + '!important;',
+    '  text-shadow:none!important;',
+    '}',
+    'html[' + MARCA + '][data-banda] ' + '.sec.verde .kick{ color:' + TINTA2 + '!important; }',
+    'html[' + MARCA + '][data-banda] ' + '.sec.verde p:not(.frase){ color:' + TINTA2 + '!important; }',
+    'html[' + MARCA + '][data-banda] ' + '.sec.verde .frase{ color:' + TINTA + '!important; }',
+    'html[' + MARCA + '][data-banda] ' + '.sec.verde .padres .nm{ color:' + TINTA + '!important; }',
+    'html[' + MARCA + '][data-banda] ' + '.sec.verde .btn.gh{ color:' + TINTA + '!important; border-color:#A8823E!important; }',
+    /* la cenefa dorada se pierde sobre claro: se oscurece a latón. */
+    'html[' + MARCA + '][data-banda] ' + '.sec.verde::after{ opacity:.55!important; }',
     /* ⚠⚠ Los TRES `.btn.gh` de una banda oscura están los tres ADENTRO de una
        tarjeta de PAPEL: ahí la tinta vuelve a ser la oscura. Pintarlos de
        crema dejaba «Agendar» crema sobre crema. */
