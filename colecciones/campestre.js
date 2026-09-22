@@ -238,7 +238,6 @@
            playa (aprobada) ...... percentil 5 = 5,65  (mediana de secciones)
            campestre sin velo .... 3,59   ← no llega
            campestre con velo .... 6,25   ← pasa
-
        ⚠️ NO SE ARREGLA ACLARANDO EL VIDEO. Se probó: subirle las sombras de
           p5=94 a p5=132 lo deja clavado en los números de la playa (p5 137)
           pero lo LAVA — las hojas de olivo pierden el verde y queda el mismo
@@ -260,8 +259,8 @@
           la propiedad se quedaban las cuatro sin velo. Medido antes y
           después: con «background-image» la mediana daba 5,50 y cuatro
           secciones seguían en 3,1; con `url(` da 6,25 y la peor es 5,10. */
-    P + '.sec:not([style*="url("]){ position:relative; }',
-    P + '.sec:not([style*="url("])::before{',
+    P + '.sec{ position:relative; }',
+    P + '.sec::before{',
     '  content:""; position:absolute; z-index:0; inset:0 9%;',
     '  pointer-events:none;',
     '  background:linear-gradient(90deg, rgba(243,233,217,0) 0%,',
@@ -269,51 +268,25 @@
     '    rgba(243,233,217,0) 100%);',
     '  filter:blur(14px);',
     '}',
-    P + '.sec:not([style*="url("]) > *{ position:relative; z-index:1; }',
+    P + '.sec > *{ position:relative; z-index:1; }',
 
-    /* ⭐ Y EL REVÉS DEL MISMO PROBLEMA: LA SECCIÓN CON FOTO DE NOCHE.
-       Visto el 21/9/2026 mirando la muestra entera después de destapar el
-       fondo: «¿Alguna duda?» trae su propia foto —velas, de noche— y el
-       sobretítulo «CORRE LA VOZ» era invisible.
-       MEDIDO contra los píxeles de esa foto (mediana de luminancia 0,013):
-           sobretítulo #55523A .... 2,12  ❌
-           título (lo que dejó reglas-duras) .. 4,02
-       Las secciones con foto propia se resuelven al revés que el resto: en
-       vez de aclarar, se OSCURECE la franja del texto y la tinta va crema.
-       Después del cambio: sobretítulo 15,70 · título 4,25 · bajada 7,30.
-       ⚠️ VA EN `::after`, no en `::before`: el `::before` ya lo usa el velo
-          claro de arriba y `.sec[style*="url("]` es un subconjunto de `.sec`.
-          (No lo es del `:not`, pero conviene no depender de eso.)
-       ⚠️ EL PASE QUEDA AFUERA, y tiene que quedar afuera: su foto es trigo
-          CLARO y su tarjeta es de papel con tinta oscura. Se salva solo
-          porque es `.pase` y no `.sec` — comprobado: el único elemento con
-          este `::after` es `#contacto-sec`.
-       ⚠️⚠️ Y ACÁ HAY UNA LECCIÓN QUE CASI ME COMO: **EL ORDEN IMPORTA MÁS QUE
-          LA ESPECIFICIDAD.** Probando el bloque inyectado DESPUÉS de que la
-          página cargara, el crema le llegaba al sobretítulo pero NO al título
-          ni a la bajada: `reglas-duras.js` ya los había «rescatado» con un
-          color EN LÍNEA y !important (#778151 y #A9A799), y contra un inline
-          !important no gana ninguna hoja — tampoco `-webkit-text-fill-color`.
-          Con el archivo YA DESPLEGADO no pasa: la hoja de la colección está
-          puesta antes de que las reglas duras midan, las reglas duras ven un
-          texto que se lee y no escriben nada. Medido en vivo: los tres en
-          15,69.
-          → De esto se sacan dos cosas. Una: probar un arreglo de color
-            inyectándolo a mano MIENTE, y miente para el lado pesimista.
-            Dos: cuando un color no llega, antes de pelearse con la
-            especificidad conviene mirar QUIÉN llegó primero. */
-    P + '.sec[style*="url("]{ position:relative; }',
-    P + '.sec[style*="url("]::after{',
-    '  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;',
-    '  background:linear-gradient(180deg, rgba(22,19,12,.18) 0%,',
-    '    rgba(22,19,12,.54) 32%, rgba(22,19,12,.54) 68%,',
-    '    rgba(22,19,12,.18) 100%);',
-    '}',
-    P + '.sec[style*="url("] > *{ position:relative; z-index:1; }',
-    P + '.sec[style*="url("] :is(#cp-nada,.kick), ' +
-    P + '.sec[style*="url("] h2, ' + P + '.sec[style*="url("] p{',
-    '  color:#f7f1e4!important; -webkit-text-fill-color:#f7f1e4!important;',
-    '}',
+    /* ⭐ 22/9/2026 — EL VELO OSCURO DE LAS SECCIONES CON FOTO: SE FUE.
+       HISTORIA, porque explica por qué acá había veinte líneas de CSS:
+       «¿Alguna duda?» traía una foto de velas DE NOCHE (mediana de luminancia
+       0,013) y el sobretítulo «CORRE LA VOZ» medía 2,12 encima. La solución
+       de entonces fue oscurecer más la franja y poner la tinta en crema.
+       Maki, 22/9: «cambia la imagen de alguna duda que quedó de fondo, que
+       viene todo claro en la invi y esa imagen oscura no queda bien».
+       → La foto pasó a ser un campo a pleno sol, claro como el resto de la
+         invitación. Con una foto CLARA, oscurecerla y poner tinta crema es
+         exactamente el error al revés: quedaría la única sección oscura de
+         una invitación de papel.
+       ⚠️ POR ESO ESTE BLOQUE SE BORRA ENTERO EN VEZ DE AJUSTARSE. Y por eso
+          también se relaja el filtro del velo claro de arriba: sacándole el
+          `:not([style*="url("])`, `#contacto-sec` recibe el mismo velo crema
+          que las demás secciones y la tinta le vuelve a ser oscura, como en
+          toda la muestra. Un cambio depende del otro: si se despliega uno
+          solo, la sección queda mal. */
 
     /* ------------------------------------------------------------ tipografía
        Si la invitación eligió fuente propia desde el panel, la colección no
@@ -489,10 +462,31 @@
        ⚠️ El motor numera los hijos de `.tl` así: seis `DIV.it` y al final
           `I.tl-prog`. Por eso `nth-child` sobre `.it` es seguro: el relleno de
           progreso no es un `.it` y no corre la cuenta. */
+    /* ⭐ 22/9/2026 — EL PANEL VUELVE, PERO TRANSLÚCIDO.
+       Maki: «el itinerario debe tener un fondo blanco medio translucido para
+       que no se pierda con el fondo». Y tiene razón: el video de fondo es
+       arena con espigas, y las horas del itinerario le caían justo encima.
+       ⚠️ NO ES EL PANEL OSCURO DE ANTES (ver el comentario de arriba). Aquel
+          era una caja #221e14 OPACA que tapaba el video. Éste deja pasar el
+          fondo al 26% y encima lleva un desenfoque de 2px, así que el video
+          se sigue viendo —se lee como papel de calco sobre el campo— pero el
+          texto ya no compite con las espigas.
+       MEDIDO con máscara de glifos sobre `.tl .it *`, con el video PAUSADO en
+       el mismo cuadro, antes y después (tinta idéntica, [47,51,32]):
+           sin panel ... mediana 9,44 · p5 6,68   [18.599 px de glifo]
+           con panel ... mediana 11,48 · p5 11,17 [18.989 px]
+       El p5 —el 5% peor, que es el que decide si algo «se pierde»— sube de
+       6,68 a 11,17: el peor renglón del itinerario pasa a leerse mejor que
+       lo que antes era el promedio. */
     P + '.tl{',
     '  position:relative!important;',
-    '  background-color:transparent!important; background-image:none!important;',
-    '  border-radius:0!important; padding:18px 0 6px!important;',
+    '  background-color:rgba(249,244,234,.74)!important;',
+    '  background-image:none!important;',
+    '  border-radius:16px!important; padding:24px 16px 16px!important;',
+    '  box-shadow:0 10px 26px rgba(40,32,20,.10),',
+    '     0 0 0 1px rgba(122,116,88,.16)!important;',
+    '  backdrop-filter:blur(2px)!important;',
+    '  -webkit-backdrop-filter:blur(2px)!important;',
     '  color:' + TINTA + '!important; overflow:visible!important;',
     '}',
     P + '.tl::after{ content:none!important; }',
