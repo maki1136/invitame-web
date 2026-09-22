@@ -719,6 +719,10 @@
                                           en video, azul hielo y plata, titulos en Forum y una zapatilla
                                           de cristal fotografiada como marca. Trae su propia paleta. */
 
+    '/colecciones/cantera.js',       /* la SEPTIMA familia: boda religiosa tradicional mexicana.
+                                          Cantera rosa, laton y olivo; humo de cirios en video y las
+                                          secciones en ARCO de medio punto. Trae su propia paleta. */
+
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
