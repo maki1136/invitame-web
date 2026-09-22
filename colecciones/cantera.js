@@ -350,16 +350,32 @@
      porque el bloque ya ocupa todo el ancho), pero la R y la última o quedan
      mordidas contra el filo y se lee como si estuviera cortado.
      Así que el tamaño se MIDE: se achica hasta que el texto ocupe como mucho
-     el 86% del ancho de la tarjeta.
+     el 86% del ancho útil de la portada.
+
+     ⚠️⚠️ LA TRAMPA QUE COSTÓ UNA VUELTA (22/9/2026): NO se mide contra
+        `n.parentElement`. El padre (`div.c`) es hijo de un flex y su ancho
+        SALE del texto: se achica cuando el texto se achica. Medir contra él
+        es perseguirse la cola — el bucle baja de 74 a 34 px y los nombres
+        quedan de nene. La referencia estable es `.portada` menos su padding.
+
      ⚠️ Va con `setProperty(..., 'important')`: estilos-servidor.css clava
         #pv-names con !important y un inline sin prioridad NO le gana. */
   var TOPE_NOMBRES = 0.86;
+  function anchoUtil(n) {
+    var por = document.querySelector('.portada');
+    if (por && por.clientWidth) {
+      var cs = getComputedStyle(por);
+      var w = por.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
+      if (w > 60) return w;
+    }
+    var p = n.parentElement;
+    return p ? p.clientWidth : 0;
+  }
   function ajustarNombres() {
     try {
       var n = document.getElementById('pv-names'); if (!n) return;
-      var caja = n.parentElement; if (!caja) return;
-      var ancho = caja.clientWidth; if (!ancho) return;
       n.style.removeProperty('font-size');
+      var ancho = anchoUtil(n); if (!ancho) return;
       var base = parseFloat(getComputedStyle(n).fontSize) || 0; if (!base) return;
       var r = document.createRange();
       function mide() { r.selectNodeContents(n); return r.getBoundingClientRect().width; }
