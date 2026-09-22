@@ -738,6 +738,35 @@
     '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
     '}',
 
+    /* ⚠️⚠️ Y HAY DOS CAMPOS MÁS EN LA INVITACIÓN, FUERA DEL FORMULARIO, QUE
+       ESTABAN IGUAL DE MAL. Aparecieron recorriendo la muestra entera con
+       `document.querySelectorAll('input, select, textarea')` — no alcanza con
+       mirar la sección que uno tocó:
+
+         #tvname (.tv-in) · el nombre de la Trivia
+             caja BLANCA al 92% con radio 10 y filete gris. Al lado de los
+             campos de la carta, ya convertidos en raya, cantaba.
+         #lock-in · la clave de la pantalla de entrada
+             fondo `rgba(255,255,255,.1)` y TINTA BLANCA. Eso está pensado
+             para una colección OSCURA: sobre el papel crema del sello es
+             **texto blanco sobre crema**, o sea invisible. Es la primera
+             pantalla que ve un invitado con clave.
+
+       Los dos van con el mismo tratamiento que el formulario. */
+    P + '.tv-in, ' + P + '#lock-in{',
+    '  background-color:transparent!important; background-image:none!important;',
+    '  border:0!important; border-bottom:1px solid rgba(122,116,88,.55)!important;',
+    '  border-radius:0!important; box-shadow:none!important;',
+    '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
+    '}',
+    P + '.tv-in:focus, ' + P + '#lock-in:focus{',
+    '  outline:none!important; border-bottom-color:' + TERRA + '!important;',
+    '}',
+    P + '.tv-in::placeholder, ' + P + '#lock-in::placeholder{',
+    '  color:' + TINTA3 + '!important; -webkit-text-fill-color:' + TINTA3 + '!important;',
+    '  opacity:1!important;',
+    '}',
+
     /* ===================================================== EL SÍ / NO =========
        ⚠️ El área de toque se mide: mínimo 44 px. La pastilla del motor mide 77
           entera, o sea 38 por mitad — por eso «me costó mucho poner que sí».
