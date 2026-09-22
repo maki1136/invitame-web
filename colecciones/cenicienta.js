@@ -598,16 +598,48 @@
        De los 10 que canto el chequeo, los otros 9 SI eran falsos positivos:
        8 son texto claro sobre foto con velo (el pie y la flecha de la portada)
        y «Reservar» mide tinta casi negra (#141212) sobre una pastilla blanca
-       al 95 % — la regla le leyo el color al padre, no al rotulo. */
+       al 95 % — la regla le leyo el color al padre, no al rotulo.
+
+       ══ 22/9, MAS TARDE · LA FOTO CAMBIO Y EL VELO SE DIO VUELTA ══════════
+       Maki: «cambia la imagen de "alguna duda", esa que esta de fondo, y
+       ponele la carroza que creaste». La calle de Oaxaca de noche medía 82 de
+       luminancia media; la carroza mide 206. **124 puntos de diferencia**: el
+       velo oscuro dejo de tener sentido y el texto —que es tinta OSCURA, no
+       clara como decia arriba— quedo ilegible sobre foto clara.
+
+       Medido bajo los glifos (dos capturas del mismo cuadro, una con
+       `visibility:hidden` SOLO en h2/p/.kick, la resta da la mascara):
+           velo oscuro (el de antes)   p5 1,55   mediana 3,66
+           velo claro .62              p5 8,84   mediana 14,31   ← el que quedo
+           velo claro .74              p5 10,52  mediana 14,64
+           velo claro .93              p5 13,60  mediana 15,03
+       Los cuatro pasan el piso de 5. Se eligio **el mas claro que pasa con
+       margen**, para que la carroza siga viendose detras del texto.
+
+       El velo se da vuelta a CLARO —el mismo papel que el resto de la
+       invitacion— y el `.kick` vuelve a `ACENTO` (#2A4B72, el de papel claro).
+
+       ⚠️ Y OJO CON LA MASCARA: si se esconden TODOS los hijos de la seccion en
+          vez de solo los textos, la resta agarra tambien los dos botones y el
+          numero sale sin sentido (daba 55.577 pixeles de «glifos» y el mismo
+          p5=1,03 para cualquier velo). Con h2/p/.kick da 8.200 pixeles y los
+          numeros se mueven como tienen que moverse.
+
+       ⚠️ Y PROBAR ESTO INYECTANDO CSS NO SIRVE: con la misma especificidad
+          pierde contra la regla ya cargada de la coleccion. Medido: el
+          `::after` calculado seguia dando el gradiente viejo en tres pruebas
+          seguidas. Para simularlo hay que subir la especificidad
+          (`#contacto-sec.sec::after`). Es la misma trampa anotada en
+          `FONDOS-DE-VIDEO-receta.md` para `.frame`. */
     P + '#contacto-sec{ position:relative!important; }',
     P + '#contacto-sec::after{',
     '  content:""!important; position:absolute!important; inset:0!important;',
     '  z-index:0!important; pointer-events:none!important;',
-    '  background:linear-gradient(180deg,rgba(10,18,30,.40) 0%,rgba(10,18,30,.72) 100%)!important;',
+    '  background:linear-gradient(180deg,rgba(242,247,252,.50) 0%,rgba(242,247,252,.62) 52%,rgba(242,247,252,.56) 100%)!important;',
     '}',
     P + '#contacto-sec > *{ position:relative!important; z-index:1!important; }',
     P + '#contacto-sec .kick{',
-    '  color:' + ACENTOCL + '!important; -webkit-text-fill-color:' + ACENTOCL + '!important;',
+    '  color:' + ACENTO + '!important; -webkit-text-fill-color:' + ACENTO + '!important;',
     '}',
 
     /* ── EL POZO BLANCO ENTRE DOS SECCIONES DEL MISMO TONO ────────────────
