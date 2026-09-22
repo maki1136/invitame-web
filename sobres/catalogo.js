@@ -427,6 +427,29 @@ window.SOBRES_INVITAME = {
     eje:      { x: 50.0, y: 57.1 }
   },
 
+  /* ---------------------------------------------------------------------
+     ★ CANTERA EN VIDEO · papel tallado con olivo, lacre de terracota  (22/9/2026)
+     Maki: «para el sobre armá uno nuevo como el de toscana grabada pero con
+     este estilo en su dibujo». El de arriba («cantera») es de FOTO con solapas;
+     éste es de VIDEO, como toscana: el sobre quieto, la solapa se levanta y la
+     cámara entra hasta llenar la pantalla de papel marfil.
+     Medido cuadro a cuadro a 4 fps sobre el video entregado (720x1280, 8 s):
+       · 0,00 a 3,25 s  quieto (movimiento 1,7 a 4,1)
+       · 3,50 a 4,25 s  se levanta la solapa (brillo baja 186 -> 178: su sombra)
+       · 4,50 s         el movimiento SALTA a 20,7  ->  ahí arranca el zoom  ->  luz
+       · 4,50 a 7,75 s  el brillo sube 188 -> 212 (marfil, no blanco)
+     luzFundido 0.95 porque sobre papel crema el blanco ES el papel: el destello
+     tiene que durar más para leerse como destello y no como un parpadeo.
+     --------------------------------------------------------------------- */
+  'cantera-video': {
+    nombre:     "Cantera · papel tallado con olivo, lacre de terracota (video)",
+    video:      "/sobres/sobre-cantera.mp4",
+    poster:     "/sobres/sobre-cantera-poster.jpg",
+    color:      "#E6E0D3",
+    luz:        4.5,
+    luzFundido: 0.95
+  },
+
   /* ---- ★ ONYX · lino negro con lacre de oro grabado  (18/9/2026) ---------
      Maki mandó la muestra de Invitely "luxury": «mirá la textura, el relieve,
      hasta se ve relieve cuando se abre; el que me diste era todo plano».
