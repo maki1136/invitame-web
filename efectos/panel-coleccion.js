@@ -104,7 +104,13 @@
       paleta: null, paletaNombre: null,
       ayuda: 'Cuento de hadas de hielo: nieve y palacio en video, azul hielo y ' +
              'plata, titulos en Forum y el nombre en cursiva grande, con una ' +
-             'zapatilla de cristal fotografiada como marca. Trae su propia paleta.' }
+             'zapatilla de cristal fotografiada como marca. Trae su propia paleta.' },
+    { id: 'cantera', nombre: 'Cantera',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Boda religiosa tradicional mexicana: cantera rosa, laton y olivo. ' +
+             'Las secciones van en ARCO de medio punto y la marca es un medallon ' +
+             'de laton con una rama de olivo. Trae su propia paleta.' }
+
   ];
 
   function borrador() {
