@@ -732,6 +732,25 @@ window.SOBRES_INVITAME = {
            luz no retroceda vale solo DESPUES (ver la nota de la v2).
            Comprobado: retroceso posterior a la campanada = 0,00.
 
+     ⭐ v4 · 22/9, Maki: «creo que no marca las 12 ese reloj». Y tenia razon,
+        aunque los angulos estaban bien (la minutera termina en 1080° ≡ 0 y la
+        horaria en 360° ≡ 0, las dos en XII).
+        EL PROBLEMA ERA EL DIBUJO. Las dos agujas eran LINEAS del mismo grosor,
+        y a las 12 se superponen exactas: se veia UNA sola aguja, corta. Eso no
+        dice «las doce», dice «una aguja apuntando para arriba».
+        Dos arreglos, los dos necesarios:
+          · la minutera llega hasta los numeros (0,84 del radio; estaba en 0,70
+            y ni tocaba el XII)
+          · la horaria pasa a ser una PALA —ancha en el cuerpo, en punta al
+            final— asi que aun superpuestas se leen DOS agujas: una gruesa y
+            corta abajo, una fina y larga encima. Es como las dibuja un reloj
+            de bolsillo de verdad.
+        Y el supersampling del dibujo subio de ×4 a ×6, que a este tamaño se
+        nota en el filo de la pala.
+        📌 La leccion: cuando el dato esta bien y igual «no se lee», el que
+           falla es la FORMA, no el numero. Dos lineas iguales superpuestas son
+           una linea.
+
      Los tramos, medidos sobre el archivo (8,0 s · 720×1280 · 24 fps):
        · 0,0 – 1,9   sale de la oscuridad y del desenfoque (brillo 0,10 → 1,0,
                      blur 15 → 0,4). El mundo del cuento apareciendo.
@@ -748,8 +767,8 @@ window.SOBRES_INVITAME = {
      flashes seguidos.                                                       */
   'cenicienta-film': {
     nombre:  "Cenicienta · la película de llegada, el reloj da las 12 (video)",
-    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v3-22-9.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v3-poster-22-9.jpg",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v4-22-9.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v4-poster-22-9.jpg",
     color:   "#EAF2FA",
     luz:     7.1,
     luzFundido: 0.95
