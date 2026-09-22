@@ -913,7 +913,17 @@
       if (s.classList.contains('verde')) { if (!B) B = r; } else { if (!A) A = r; }
       if (A && B) break;
     }
-    if (A && B) RECETA = { A: A, B: B };
+    /* ⚠️ 22/9 · EL SEGUNDO ERROR, Y ES EL MISMO DE SIEMPRE: CACHEAR TEMPRANO.
+       `recetas()` corre tambien en la PRIMERA pasada, que sucede apenas carga
+       el script — antes de que el motor haya pintado las secciones. En ese
+       momento las claras y las de color miden el MISMO fondo, asi que quedaban
+       cacheadas dos recetas identicas y `rayar()` repintaba todo del mismo
+       tono: 11 secciones seguidas iguales. Es la misma trampa que
+       `reglas-duras.js` con `data-regla-orig`.
+       ⭐ Se cachea SOLO cuando las dos recetas son distintas de verdad. Si
+          todavia son iguales, se devuelve null y se reintenta en la pasada
+          siguiente (hay una cada 1,2 s). */
+    if (A && B && A.col !== B.col) RECETA = { A: A, B: B };
     return RECETA;
   }
 
