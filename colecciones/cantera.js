@@ -166,7 +166,9 @@
     /* ─────────────────────────────────────────────── 2 · LA PORTADA
        Bloque al PIE (nunca centrado: centrado le cae encima de las caras) y
        los nombres en la cursiva del misal.
-       ⚠️ Por ID, que es lo único que le gana a estilos-servidor.css. */
+       ⚠️ Por ID, que es lo único que le gana a estilos-servidor.css.
+       ⚠️ El tamaño de acá es el TECHO: `ajustarNombres()` lo baja cuando la
+          pareja tiene nombres largos. Ver el comentario de esa función. */
     P + '.portada{ justify-content:flex-end!important; }',
     P + '#pv-kick{',
     '  font-size:12px!important; letter-spacing:.34em!important;',
@@ -342,13 +344,48 @@
     } catch (e) {}
   }
 
+  /* ⚠️ LOS NOMBRES DE LA PORTADA NO PUEDEN TOCAR LOS BORDES.
+     Un `clamp()` fijo le queda bien a «Ana & Luis» y deja «Regina & Emiliano»
+     de punta a punta de la tarjeta: no desborda la caja (scrollWidth miente,
+     porque el bloque ya ocupa todo el ancho), pero la R y la última o quedan
+     mordidas contra el filo y se lee como si estuviera cortado.
+     Así que el tamaño se MIDE: se achica hasta que el texto ocupe como mucho
+     el 86% del ancho de la tarjeta.
+     ⚠️ Va con `setProperty(..., 'important')`: estilos-servidor.css clava
+        #pv-names con !important y un inline sin prioridad NO le gana. */
+  var TOPE_NOMBRES = 0.86;
+  function ajustarNombres() {
+    try {
+      var n = document.getElementById('pv-names'); if (!n) return;
+      var caja = n.parentElement; if (!caja) return;
+      var ancho = caja.clientWidth; if (!ancho) return;
+      n.style.removeProperty('font-size');
+      var base = parseFloat(getComputedStyle(n).fontSize) || 0; if (!base) return;
+      var r = document.createRange();
+      function mide() { r.selectNodeContents(n); return r.getBoundingClientRect().width; }
+      var w = mide(); if (!w) return;
+      var i = 0, px = base;
+      while (w > ancho * TOPE_NOMBRES && px > 26 && i++ < 24) {
+        px = Math.max(26, px - Math.max(1, Math.round(px * 0.05)));
+        n.style.setProperty('font-size', px + 'px', 'important');
+        w = mide();
+      }
+    } catch (e) {}
+  }
+
   var puesta = false;
 
   function poner() {
     var raiz = document.documentElement;
     if (!raiz.hasAttribute(MARCA)) raiz.setAttribute(MARCA, '');
-    /* la colección trae su propia marca: que simbolo-tematica.js no pise */
-    if (!raiz.hasAttribute('data-marca-propia')) raiz.setAttribute('data-marca-propia', '');
+    /* La colección trae su propia marca (el medallón de olivo) y por eso
+       `simbolo-tematica.js` no dibuja su SVG genérico.
+       ⚠️⚠️ EL BUG DEL 22/9/2026: esto se ponía VACÍO, y el chequeo lee
+       `data-marca-propia` con `|| ''` y después `if (propia)`. Cadena vacía
+       es falsa: para el chequeo era como no tener marca propia, y la regla
+       `simbolo-tematica` fallaba con el medallón PERFECTAMENTE puesto.
+       El atributo tiene que llevar el NOMBRE de la colección. */
+    if (raiz.getAttribute('data-marca-propia') !== ID) raiz.setAttribute('data-marca-propia', ID);
     window.INVCOLPALETA = PALETA_PROPIA;
     var k;
     for (k in PALETA_PROPIA) {
@@ -358,6 +395,7 @@
     }
     hoja();
     medirVia();
+    ajustarNombres();
     puesta = true;
   }
 
@@ -366,6 +404,8 @@
     var raiz = document.documentElement;
     raiz.removeAttribute(MARCA);
     raiz.removeAttribute('data-marca-propia');
+    var nm = document.getElementById('pv-names');
+    if (nm) nm.style.removeProperty('font-size');
     if (window.INVCOLPALETA === PALETA_PROPIA) {
       try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; }
     }
@@ -393,7 +433,8 @@
       sincronizar();
       if (++n > 40) clearInterval(t);
     }, 400);
-    setInterval(function () { if (puesta) medirVia(); }, 1200);
+    setInterval(function () { if (puesta) { medirVia(); ajustarNombres(); } }, 1200);
+    addEventListener('resize', function () { if (puesta) ajustarNombres(); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
