@@ -829,7 +829,7 @@ window.SOBRES_INVITAME = {
   'cenicienta-film': {
     nombre:  "Cenicienta · la película de llegada, el reloj da las 12 (video)",
     video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v7-22-9.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v7-poster-22-9.jpg",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v7b-poster-22-9.jpg",
     color:   "#EAF2FA",
     luz:     7.1,
     luzFundido: 0.95
