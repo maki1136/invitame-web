@@ -707,6 +707,58 @@
     '  background-repeat:no-repeat!important;',
     '}',
 
+    /* ── EL CIELO DEL AMBIENTE: LA NOCHE DEL BAILE, NO UNA FOTO DE DIA ─────
+       ⭐ 22/9 · `fx.ambiente.tipo = 'nubes'` esta prendido en el itinerario, y
+       ese efecto dibuja SIEMPRE la misma foto —`/i/cielo.jpg`— un cielo DIURNO
+       y blanco. Medido en vivo: una capa de **390x758** tapando el fondo de la
+       seccion entera. Los colores de la tematica no los usa para nada.
+       La skill de armado pide el ambiente prendido CON LOS COLORES DE ESA
+       tematica, asi que la coleccion le da el suyo, dibujado: polvo de hada
+       sobre un degrade de hielo.
+
+       ⚠️ SE MANTIENE CLARO. La tentacion es poner la noche del baile de verdad
+          —azul profundo— y es un error: la seccion del itinerario es de papel
+          claro y su tinta es OSCURA. Un cielo nocturno detras la deja tinta
+          oscura sobre fondo oscuro. Es el mismo error del 22/9 con los tonos
+          de seccion, al reves.
+       ⚠️ `.sky` ya trae la animacion `skyken` (34 s, un escalado lento), asi
+          que el polvo va con ella y no hace falta sumar otra.
+       ⚠️ Y `.ambiente` NO es ancestro del titulo (medido: `contains(h2)` da
+          false), asi que este brillo no le ensucia la cuenta a
+          `reglas-duras.js`. Si algun dia lo fuera, va a un `::after`. */
+    P + '.ambiente .sky{',
+    '  background-image:',
+    '    radial-gradient(1.7px 1.7px at 22% 14%, rgba(255,255,255,.95), rgba(255,255,255,0) 60%),',
+    '    radial-gradient(1.2px 1.2px at 68% 9%,  rgba(169,195,222,.95), rgba(255,255,255,0) 60%),',
+    '    radial-gradient(2.1px 2.1px at 86% 31%, rgba(255,255,255,.90), rgba(255,255,255,0) 62%),',
+    '    radial-gradient(1.3px 1.3px at 38% 39%, rgba(169,195,222,.90), rgba(255,255,255,0) 60%),',
+    '    radial-gradient(1.9px 1.9px at 12% 57%, rgba(255,255,255,.90), rgba(255,255,255,0) 62%),',
+    '    radial-gradient(1.2px 1.2px at 74% 66%, rgba(169,195,222,.90), rgba(255,255,255,0) 60%),',
+    '    radial-gradient(1.8px 1.8px at 47% 82%, rgba(255,255,255,.92), rgba(255,255,255,0) 62%),',
+    '    radial-gradient(1.1px 1.1px at 90% 91%, rgba(169,195,222,.85), rgba(255,255,255,0) 60%),',
+    '    linear-gradient(180deg, rgba(220,232,244,.50) 0%, rgba(242,247,252,.10) 100%)!important;',
+    '  background-size:168px 168px,168px 168px,168px 168px,168px 168px,',
+    '                  168px 168px,168px 168px,168px 168px,168px 168px,100% 100%!important;',
+    '  background-repeat:repeat,repeat,repeat,repeat,repeat,repeat,repeat,repeat,no-repeat!important;',
+    '}',
+
+    /* ── LOS PETALOS ROSAS PASAN A SER POLVO DE HADA ───────────────────────
+       ⭐ 22/9 · `fx.particulas.tipo = 'petalo'` deja caer DIEZ `.fxp.petalo`
+       sobre toda la invitacion, y de fabrica son **rosas**: medido,
+       `rgb(251,231,236)`. Rosa cayendo encima de una coleccion de hielo.
+       Es el mismo caso que Perlas, que los convirtio en perlas fotograficas.
+       Aca pasan a ser el polvo de hada del cuento: un destello chico, blanco
+       al centro y plata en el borde.
+       ⚠️ La animacion `fxfall` del motor NO se toca: ya es continua, que es lo
+          que pide la regla del movimiento. Solo se repinta la particula. */
+    P + '.fxlayer .fxp.petalo{',
+    '  background-image:radial-gradient(circle at 32% 30%,',
+    '    rgba(255,255,255,.98) 0 26%, rgba(226,238,250,.94) 52%,',
+    '    rgba(169,195,222,.55) 78%, rgba(169,195,222,0) 100%)!important;',
+    '  border-radius:50%!important;',
+    '  filter:drop-shadow(0 0 2.5px rgba(255,255,255,.75))!important;',
+    '}',
+
     /* ── FILETES Y ADORNOS ─────────────────────────────────────────────────
        TINTA3 da 1,20 sobre el fondo: es un filete, NUNCA un texto. */
     P + '.frame hr, ' + P + '.frame .linea, ' + P + '.frame .adorno::before, ' + P + '.frame .adorno::after{',
