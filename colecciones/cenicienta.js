@@ -648,6 +648,55 @@
           chequeo mira si dos secciones seguidas tienen el mismo fondo, ni
           cuanto aire muerto hay entre ellas. Las cuatro versiones rotas pasaban
           el chequeo igual. */
+    /* ═══ EL FONDO SE TIENE QUE VER ════════════════════════════════ 22/9/2026
+       Maki: «los fondos claros plenos no me gustan… el mismo video tiene que
+       estar, que se vea como hiciste con la de la playa o boho, y los plenos
+       blancos tenés que ponerle un poco de diseño a los costados respetando
+       la temática».
+
+       Medido: el motor le pinta a `.sec` el papel `i/tex-acuarela.jpg` con
+       `background-size:cover` y `background-blend-mode:multiply`. Un JPEG no
+       tiene alfa, así que esa capa TAPA el video. Bohemia mide
+       `background-image:none` y por eso su fondo se ve; Cenicienta medía
+       `url(tex-acuarela.jpg)` y no se veía NADA fuera de las secciones verdes.
+       Se comprueba en un minuto con la PRUEBA DEL MAGENTA: pintar de #FF00AA
+       el div que contiene el <video> y recorrer la página — donde no sale
+       magenta, el fondo está tapado.
+
+       ⚠️ El filtro es `:not([style*="url("])`, NO «background-image»: las
+          secciones que traen su propia foto la escriben EN LÍNEA y hay que
+          dejarlas en paz. Mismo criterio que campestre y marfil.
+
+       Destapado el video aparece el otro lado: el collage es denso de borde a
+       borde. Medido con el método de los glifos (dos capturas del mismo cuadro,
+       una con `visibility:hidden` en los hijos; la resta da la máscara y se
+       mide el contraste contra lo que hay DEBAJO de cada letra):
+
+           sin velo   mediana 4,97   peor sección 1,06
+           con velo   mediana 9,84   peor sección 1,41      (la playa: 5,65)
+
+       El velo va con los bordes ABIERTOS (`inset:0 16%`): aclara la franja del
+       texto y deja entrar el collage por los costados. Eso ES «el diseño en los
+       costados» — no hace falta dibujar nada encima, el propio video trae la
+       carroza, el zapato de cristal, el reloj y las hortensias.
+
+       ⚠️ `z-index:0` en el velo y `z-index:1` en los hijos. Al revés tapa el
+          texto: el mismo bug que ya pagó `botones.js`.
+       ⚠️ Y `blur`, o se ve el rectángulo.                                    */
+    P + '.sec:not([style*="url("]){',
+    '  background-image:none!important;',
+    '  position:relative!important;',
+    '}',
+    P + '.sec:not([style*="url("])::before{',
+    '  content:""!important; position:absolute!important; z-index:0!important;',
+    '  inset:0 16%!important; pointer-events:none!important;',
+    '  background:linear-gradient(90deg,',
+    '    rgba(242,247,252,0) 0%, rgba(242,247,252,.88) 13%,',
+    '    rgba(242,247,252,.88) 87%, rgba(242,247,252,0) 100%)!important;',
+    '  filter:blur(16px)!important;',
+    '}',
+    P + '.sec:not([style*="url("]) > *{ position:relative!important; z-index:1!important; }',
+
     P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:14px!important; }',
     P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
     P + '.sec.verde + .sec.verde{ padding-top:14px!important; }',
