@@ -755,6 +755,41 @@
     return out;
   }
 
+  /* ⚠️⚠️ ERROR 27 — EL EXTREMO SE ELEGÍA CONTRA EL PAPEL, NO CONTRA EL BOTÓN. (22/9/2026)
+     Maki, mirando Cantera: «checá los botones que el color del texto está mal».
+     Medido: la flecha de «Ver mapa» salía rgb(21,15,9) —negro puro— sobre el
+     plato OSCURO del botón, y «Agendar» salía rgb(255,255,255) —blanco puro—,
+     que no pertenece a ninguna paleta y hace fallar la regla 2 del chequeo
+     («ningún color de texto fuera de la familia»).
+     Las dos salían de la misma rama, por dos motivos encadenados:
+       1) `peor` es el peor fondo de TODA la cadena, hasta el papel de la
+          invitación. Detrás de la letra de un botón NO está el papel: está el
+          botón. Elegir el extremo contra el papel crema da NEGRO — y el botón
+          es negro.
+       2) el extremo era BLANCO o NEGRO PUROS, sin teñir.
+     → Se elige contra `fondos[0]`, que es la capa inmediata (la del propio
+       botón), y se tiñe con la familia de la colección (`window.INVCOLPALETA`).
+     ⚠️ NO SE EMPEORA NUNCA: si el teñido no llega al piso contra ese fondo,
+        se vuelve al puro de siempre. Primero se lee, después se es de la
+        familia. */
+  function extremoDeFamilia(fondo) {
+    var puro = contraste(BLANCO, fondo) >= contraste(NEGRO, fondo) ? BLANCO : NEGRO;
+    var claro = null, oscuro = null, hi = -1, lo = 2;
+    try {
+      var pal = window.INVCOLPALETA || {};
+      for (var k in pal) {
+        var col = aRGB(pal[k]);
+        if (!col) continue;
+        var L = luminancia(col);
+        if (L > hi) { hi = L; claro = col; }
+        if (L < lo) { lo = L; oscuro = col; }
+      }
+    } catch (e) {}
+    if (!claro || !oscuro) return puro;
+    var mejor = contraste(claro, fondo) >= contraste(oscuro, fondo) ? claro : oscuro;
+    return contraste(mejor, fondo) >= 4.5 ? mejor : puro;
+  }
+
   function pintar(el, c, conSombra, fondo, neutralizar) {
     if (neutralizar) apagarOpacidad(el);
     var txt = 'rgb(' + aTexto(c) + ')';
@@ -903,7 +938,7 @@
 
       /* ★ ERRORES 10 y 12: rango amplio o boton con volumen → extremo + sombra */
       if ((fondos.rango || 0) > RANGO_AMPLIO || esBotonConVolumen(el)) {
-        var ext = contraste(BLANCO, peor) >= contraste(NEGRO, peor) ? BLANCO : NEGRO;
+        var ext = extremoDeFamilia(fondos[0] || peor);
         pintar(el, ext, true, fondos[0], true); c.corregidos++; c.conSombra++;
         continue;
       }
