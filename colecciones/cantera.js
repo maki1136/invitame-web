@@ -16,22 +16,32 @@
 
       Y lo que hace buena a Bohemia se puede escribir en una línea:
       **UNA FOTO DE NATURALEZA, CLARA, QUE SE VE POR DETRÁS DE TODO.** No hay
-      paneles macizos, no hay bandas oscuras, no hay filetes de más. Las
-      secciones son VELOS translúcidos sobre esa foto.
+      paneles macizos ni filetes de más: las secciones son VELOS sobre esa foto.
 
-      Las cuatro diferencias que se midieron contra Bohemia, una por una:
+      Lo que se midió contra Bohemia, una cosa por vez:
 
       | | Cantera (mal) | Bohemia | Cantera (ahora) |
       |---|---|---|---|
       | `fx.fondo.donde` | `pantalla` → los costados, un borrón | `marco` | `marco` |
-      | `.sec.verde` | opaco rgb(59,47,38) — SEIS bandas oscuras | rgba(claro,.30) | rgba(231,221,200,.34) |
+      | `fx.fondo` | interior de iglesia, OSCURO | pampas, claro | jardín de hacienda, claro |
       | `.tl` | papel opaco + cuadriculado | rgba(claro,.58), liso | rgba(243,237,227,.58), liso |
       | el arco de las fotos | 999px/46% — estira la foto a lo alto | esquinas suaves | 150px/40px |
+
+   ⚠️⚠️ LO QUE NO SE PUDO COPIAR DE BOHEMIA, Y POR QUÉ — 22/9/2026
+      En Bohemia las seis bandas «de color» del motor son CLARAS
+      (`rgba(239,228,214,.30)`, medido). Intenté lo mismo acá con
+      `.sec.verde{ background-color: rgba(231,221,200,.34)!important }` y NO
+      GANÓ: medido después de subirlo, la sección seguía en
+      `srgb(0.231 0.184 0.149)`. **El motor escribe ese fondo INLINE y con
+      `!important`, y contra un inline `!important` no hay hoja que valga.**
+      Es el intento 3 del punto 0bis.10 de la skill de entrega, otra vez.
+      → El fondo de las secciones es del motor. NO se le disputa. Lo que sí se
+        puede es cambiarle la TINTA, y eso es lo que hace el bloque 10.
 
    ⭐ LOS MATERIALES
       · cantera rosada  → la piedra de Morelia, el papel de la invitación
       · latón envejecido→ los acentos y los filetes
-      · cirio           → la luz cálida
+      · cirio           → la luz cálida y la tinta de las bandas oscuras
       · olivo           → el motivo vegetal: la viñeta, la marca del itinerario
                           y el medallón de la raspadita
 
@@ -54,8 +64,8 @@
 
    ⚠️⚠️ Y LA MEDICIÓN DEL 22/9 QUE CASI ME HACE ROMPER ALGO QUE ANDABA: con el
       fondo en video pesado, a los 5 segundos la colección TODAVÍA NO SE APLICÓ
-      (`data-cantera` vacío, sin hoja). A los 15 ya está. Antes de declarar que
-      una colección «no anda», se mide a los 15 s, no a los 5.
+      (`data-cantera` sin poner, sin hoja). A los 15 ya está. Antes de declarar
+      que una colección «no anda», se mide a los 15 s, no a los 5.
 
    ============================================================================ */
 (function () {
@@ -159,8 +169,9 @@
 
   /* ============================================================== la hoja CSS */
   function armarCSS() {
-    var V = vinieta(LATON);
-    var H = hojita(LATON);
+    var V  = vinieta(LATON);
+    var VC = vinieta(CIRIO);
+    var H  = hojita(LATON);
 
     return [
 
@@ -260,7 +271,9 @@
             halo de papel. El medallón fotografiado a 26 px repetido seis
             veces se leía como una fila de monedas.
        ⚠️ El velo NO puede ser transparente del todo: sobre una foto el texto
-          oscuro se pierde. .58 es el número de Bohemia, medido. */
+          oscuro se pierde. .58 es el número de Bohemia, medido.
+       ⚠️ Y acá el velo SÍ gana: `.tl` no es una sección, así que el motor no
+          le escribe el fondo inline. */
     P + '.tl{',
     '  background-color:rgba(243,237,227,.58)!important;',
     '  background-image:none!important;',
@@ -345,26 +358,39 @@
     P + '.cf-letter{ background-color:' + PAPEL + '!important; color:' + TINTA + '!important; }',
     P + '.cf-letter h3{ font-family:"Cormorant Garamond",serif!important; color:' + TINTA + '!important; }',
 
-    /* ────────── 10 · LAS BANDAS DEL MOTOR (.sec.verde): CLARAS, NO OSCURAS
-       ⭐⭐ EL CAMBIO MÁS GRANDE DE LA VUELTA DEL 22/9 ⭐⭐
-       El motor alterna secciones claras y secciones «de color», y con la
-       paleta de Cantera las de color salían con la TINTA al 82 %: seis
-       bandas MARRÓN OSCURO cortando una invitación de papel claro. Encima el
-       título quedaba tinta oscura sobre fondo oscuro (1,01 de contraste): en
-       la captura directamente NO ESTABA.
-       Bohemia resuelve esto sin pelearse con nadie: su banda es el mismo
-       papel al 30 % de opacidad. Medido en `julia-y-santiago`:
-       `rgba(239,228,214,.30)`. Acá va el papel de las tarjetas al 34 %.
-       ⚠️ Esto es CSS puro, sin JS y sin atributos: es la única familia de
-          solución que no despierta a `reglas-duras.js` (los otros cuatro
-          intentos están documentados en 0bis.10 de la skill de entrega). */
-    P + '.sec.verde{ background-color:rgba(231,221,200,.34)!important; }',
-    P + '.sec.verde h2{ color:' + TINTA + '!important; text-shadow:none!important; }',
-    P + '.sec.verde .kick{ color:' + LATON + '!important; }',
-    P + '.sec.verde p:not(.frase){ color:' + TINTA2 + '!important; }',
-    P + '.sec.verde .frase{ color:' + TINTA + '!important; }',
-    P + '.sec.verde .padres .nm{ color:' + TINTA + '!important; }',
-    P + '.sec.verde .btn.gh{ color:' + TINTA + '!important; border-color:rgba(168,130,62,.45)!important; }',
+    /* ────────── 10 · LAS SEIS BANDAS OSCURAS DEL MOTOR (.sec.verde)
+       ⭐⭐ EL BUG QUE ENCONTRÓ LA CAPTURA, NO LA MEDICIÓN ⭐⭐
+       El motor pinta esas secciones con la TINTA al 82 % — el mismo material
+       con el que esta colección escribe. Resultado: en «Dónde y cuándo»,
+       «Dónde quedarse», «Nuestras personas», «Nuestro Hashtag», «Trivia» y
+       «Una carta para ti» el título quedaba TINTA OSCURA SOBRE FONDO OSCURO:
+       1,01 de contraste, y en la captura directamente NO ESTABA.
+       ⚠️⚠️ Y NO SE ARREGLA ACLARANDO LA BANDA: el 22/9 probé
+          `background-color:rgba(231,221,200,.34)!important` y la sección
+          siguió midiendo `srgb(0.231 0.184 0.149)`. El motor lo escribe
+          INLINE con `!important` y no hay hoja que le gane. El fondo de las
+          secciones es del motor: se le cambia la TINTA, no el fondo. */
+    P + '.sec.verde h2{',
+    '  color:' + CIRIO + '!important;',
+    '  background-image:' + VC + '!important;',
+    '  text-shadow:0 1px 3px rgba(0,0,0,.45)!important;',
+    '}',
+    P + '.sec.verde .kick{ color:' + LATON_C + '!important; }',
+    P + '.sec.verde p:not(.frase){ color:rgba(246,231,204,.90)!important; }',
+    P + '.sec.verde .frase{ color:' + CIRIO + '!important; }',
+    P + '.sec.verde .padres .nm{ color:' + CIRIO + '!important; }',
+    P + '.sec.verde .btn.gh{ color:' + CIRIO + '!important; border-color:rgba(200,164,97,.62)!important; }',
+    /* ⚠⚠ Y MEDIDO ANTES DE SUBIR (punto 0bis.4 de la skill de entrega): los
+       TRES `.btn.gh` que viven en una banda oscura están los tres ADENTRO de
+       una tarjeta de PAPEL. Pintarlos de cirio dejaba «Agendar» crema sobre
+       crema — arreglar un texto rompiendo otro. */
+    P + '.sec.verde :is(.evento, .hotel, .pasecard) :is(h3, p, .sub, .addr, .t, .v){',
+    '  color:' + TINTA + '!important;',
+    '}',
+    P + '.sec.verde :is(.evento, .hotel, .pasecard) .btn.gh{',
+    '  color:' + TINTA + '!important;',
+    '  border-color:rgba(168,130,62,.45)!important;',
+    '}',
 
     /* ───────────── 11 · CONTACTO, QUE VIENE CON FOTO
        `#contacto-sec` trae una FOTO de fondo y el motor le deja la tinta del
@@ -384,7 +410,7 @@
     P + '#contacto-sec > *{ position:relative!important; z-index:1!important; }',
     P + '#contacto-sec h2{',
     '  color:' + CIRIO + '!important;',
-    '  background-image:' + vinieta(CIRIO) + '!important;',
+    '  background-image:' + VC + '!important;',
     '  text-shadow:0 1px 3px rgba(0,0,0,.6)!important;',
     '}',
     P + '#contacto-sec .kick{ color:' + LATON_C + '!important; }',
