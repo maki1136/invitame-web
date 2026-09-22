@@ -817,6 +817,7 @@
        que `reglas-duras` oscurece esas dos cremas y devuelve OLIVA
        (117,101,69 · 124,124,71 · 108,108,62). Aparecieron seis de golpe al
        cambiar las fotos de Instagram y del juego.
+
        Se arregla en el ORIGEN, como en el pase: si la tinta de fábrica ya es
        de la familia, lo que derive el corrector también lo es. Y si en alguna
        invitación esta sección sí queda oscura, `reglas-duras` corrige en las
