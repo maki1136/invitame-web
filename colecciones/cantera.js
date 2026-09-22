@@ -7,9 +7,9 @@
       con cinco colores y dijo: «no me gusta ese marrón que elegiste, cambialo
       por otro tono, te dejo la paleta y cómo deberías armar el estilo».
 
-        Sage Green      #98A086   → el olivo: la viñeta y la marca de cada hora
+        Sage Green      #98A086   → el olivo: la viñeta, la marca de cada hora
         Dusty Rose      #A76D5E   → el acento segundo (la chapita del pase)
-        Golden Tan      #C4A071   → los rellenos: botones, tapas, filetes
+        Golden Tan      #C4A071   → los rellenos: botones, tapas, la cenefa
         Warm Beige      #DFCCB1   → el papel de las tarjetas
         Terracotta Brown#846044   → la familia de los marrones
 
@@ -24,11 +24,49 @@
       → La paleta manda el CLIMA. Los números mandan cuál de esos tonos puede
         llevar una letra encima.
 
+   ⭐⭐⭐ LAS BANDAS NO PUEDEN SER COLOR PLENO — 22/9/2026
+      Maki, después de aceptar el tono: «no me gusta el color pleno marrón,
+      tenés que meterle algo de diseño y textura a esos sectores».
+      Son SEIS bandas plenas: la superficie más grande de toda la invitación.
+      Un color liso ahí se lee barato, por más que el tono sea el correcto.
+
+      Lo que hay ahora, en tres capas y en este orden:
+        1. el color            → `--verde` (#6B4A32, terracota)
+        2. la PIEDRA           → `.sec.verde::before`: una foto propia de
+                                 cantera tallada de Morelia, hecha en Flow,
+                                 al **15% en `soft-light`**, tile de 520 px.
+        3. el remate           → `.sec.verde::after`: una cenefa de olivo en
+                                 dorado, arriba y abajo de cada banda.
+      Más un degradado vertical sutil en la banda misma, para que no sea una
+      pared plana: apenas más oscura en los dos extremos.
+
+      ⚠️ LA TEXTURA VA CON `opacity`, NO CON `background-blend-mode` SOBRE LA
+         SECCIÓN. Probado el 22/9: mezclada directo en `background-image` de
+         `.sec.verde` no hay forma de bajarle la fuerza (no existe opacidad
+         por capa) y queda como PAPEL TAPIZ: el dibujo grita y compite con el
+         texto. En un `::before` propio sí se puede: `opacity:.15` +
+         `mix-blend-mode:soft-light` da relieve de piedra, no estampado.
+      ⚠️ Y el tile chico (300 px) hacía evidente la repetición. 520 px, no.
+      ⚠️ Como el `::before` se pone encima del fondo, los hijos de la sección
+         necesitan `position:relative; z-index:1`, o el texto queda debajo.
+
+      ⭐ CÓMO SE HIZO LA TEXTURA, para repetirlo en la próxima colección:
+         · Flow, Nano Banana 2, 16:9, x2, 0 créditos. Prompt de piedra tallada
+           con «no people, no faces, no text, no letters, no logos».
+         · De las dos, se eligió la que NO tiene moldura ni cornisa: un motivo
+           parejo de punta a punta. Una con marco se nota al repetir.
+         · ⚠️⚠️ LA IMAGEN DE FLOW NO SE PUEDE BAJAR NI CON `fetch` (CORS) NI
+           CON `canvas` desde el `<img>` de la página (queda TEÑIDO). LO QUE
+           SÍ FUNCIONA: cargarla de nuevo en un `new Image()` con
+           `crossOrigin='anonymous'` — ahí el canvas sale LIMPIO y se puede
+           subir a Cloudinary sin descargar nada a mano.
+         · Y se armó un MOSAICO ESPEJADO (la imagen + su espejo horizontal +
+           el vertical + los dos) para que repita SIN COSTURA.
+
    ⭐⭐⭐ EL MARRÓN QUE NO LE GUSTABA A MAKI NO ERA NINGUNO DE LOS MÍOS
-      Y esto es LA lección del 22/9. Yo venía cambiando tonos de la colección
-      y el marrón seguía ahí, porque el marrón que se ve en pantalla —las SEIS
-      bandas plenas, lo más grande de toda la invitación— no salía de mi hoja.
-      Medido en la página, la regla que gana es del motor:
+      Yo venía cambiando tonos de la colección y el marrón seguía ahí, porque
+      el que se ve en pantalla no salía de mi hoja. Medido en la página, la
+      regla que gana es del motor:
 
           .sec.verde { background: var(--sec-col-v, var(--verde)); }
 
@@ -37,64 +75,54 @@
 
       ⚠️ Antes tenía anotado acá que «el motor lo escribe inline con
          !important y no se puede pisar». ERA FALSO, y me costó una vuelta
-         entera: el elemento NO tiene atributo style. Lo que pasaba es que yo
-         peleaba con `background-color` cuando la propiedad que gana es
-         `background`, y sobre todo que no estaba declarando la variable.
+         entera: el elemento NO tiene atributo style.
       → LA FORMA CORRECTA: la colección DECLARA `--verde` (y `--sec-col-v`).
-        Es lo que hace Bohemia. No se pelea con la regla: se le cambia el
-        valor a la variable que la regla lee.
-      → Acá va BANDA (#6B4A32), Terracotta Brown bajado: crema encima da
-        **6,73** y el sobretítulo crema2 **5,57**. Caliente y legible.
+        No se pelea la regla: se le cambia el valor a la variable que lee.
+      → Va BANDA (#6B4A32): crema encima da **6,73**, el sobretítulo **5,57**.
 
-      REGLA GENERAL, para la próxima colección: ANTES de dar por imposible
-      pisar un color del motor, buscar qué REGLA gana y qué VARIABLE lee esa
-      regla. Casi siempre la respuesta es declarar la variable.
+      REGLA GENERAL: ANTES de dar por imposible pisar un color del motor,
+      buscar qué REGLA gana y qué VARIABLE lee esa regla.
 
    ⭐⭐⭐ Y LA OTRA DE LA MISMA FAMILIA: LAS CLASES QUE ESCRIBÍ DE MEMORIA
-      El bloque de la raspadita apuntaba a `.rasp-3 .r3-f` y a la variable
-      `--r3-tapa`. **Ninguna de las dos existe en este motor.** Resultado: las
-      tres tapas quedaron del gris plomo de fábrica —fuera de paleta— y yo lo
-      daba por vestido porque el chequeo automático pasaba en verde.
-      Lo que este motor usa, medido en la página:
+      El bloque de la raspadita apuntaba a `.rasp-3 .r3-f` y a `--r3-tapa`.
+      **Ninguna de las dos existe en este motor.** Las tapas quedaron del gris
+      de fábrica y yo lo daba por vestido porque el chequeo pasaba en verde.
+      Lo que este motor usa, medido:
           .scratchcard        → la caja
-          .scratchcard::after → ⚠️ EL RECUADRO de 1 px (¡el que Maki ya pidió
-                                sacar dos veces! El `border:0` del contenedor
-                                no lo toca: hay que apagar el ::after)
+          .scratchcard::after → ⚠️ EL RECUADRO de 1 px (¡Maki ya lo pidió
+                                sacar dos veces! `border:0` no lo apaga)
           .ivf.ivf-circ       → la fila
           .ivf .c             → LA TAPA que se raspa (70×70)
           .ivf .n             → el número que aparece debajo
-      → REGLA: antes de vestir un bloque, LISTAR SUS CLASES REALES en la
-        página. Una regla que no engancha no falla: queda gris y pasa el
-        chequeo.
+      → REGLA: antes de vestir un bloque, LISTAR SUS CLASES REALES. Una regla
+        que no engancha no falla: queda gris y pasa el chequeo.
 
    ⭐⭐ EL CONCEPTO ES BOHEMIA
       Maki: «mirá la invitación de muestra de Bohemia: es excelente, deberías
       seguir ese concepto». Una FOTO DE NATURALEZA, CLARA, que se ve por
       detrás de todo; sin paneles macizos ni filetes de más.
 
-   ⭐⭐ EL ITINERARIO VA EN UNA SOLA COLUMNA, COMO PERLAS — 22/9/2026
+   ⭐⭐ EL ITINERARIO VA EN UNA SOLA COLUMNA, COMO PERLAS
       Maki: «los círculos del itinerario te quedaron muy desordenados, copiá
-      como te dije las otras muestras».
-      Y tenía razón, y la causa estaba MEDIDA: la muestra tenía
-      `fx.itinerario.estilo = 'centro'`, que alterna las fichas a izquierda y
-      derecha con la vía al medio. Con fichas de alturas distintas las marcas
-      quedan a alturas y a lados distintos: se leen como círculos tirados.
+      como te dije las otras muestras». La causa estaba medida: la muestra
+      tenía `fx.itinerario.estilo = 'centro'`, que alterna las fichas a
+      izquierda y derecha con la vía al medio; con alturas distintas las
+      marcas quedan a alturas y lados distintos.
       Perlas —medida— no alterna: vía a `left:2.5px`, marcas a `left:-28.5px`,
       fichas de ancho completo. **Una línea, todas las marcas encima.**
-      → Acá NO se le toca la posición a la vía. Sólo el MATERIAL y el TAMAÑO
-        de la marca: el motor la deja en 11 px y sobre un panel translúcido
-        una hoja verde de 11 px no se ve. Va a 16 px con un halo de papel.
+      → NO se le toca la posición a la vía. Sólo el MATERIAL y el TAMAÑO de
+        la marca: el motor la deja en 11 px y sobre un panel translúcido una
+        hoja de olivo de 11 px no se ve. Va a 16 px con halo de papel.
 
-   ⭐⭐ EL VELO DE PAPEL DETRÁS DEL TEXTO — 22/9/2026
+   ⭐⭐ EL VELO DE PAPEL DETRÁS DEL TEXTO
       Maki: «Vestimenta quedó que no se lee nada, se pierde con el fondo».
       El fondo de Cantera es un jardín: CLARO pero CARGADO. Bohemia puede
       dejar las secciones casi transparentes porque su fondo es un lino liso.
       Acá hicieron falta las dos cosas:
         · `fx.fondo.paso` 0.85 → **0.34** (el alfa de la sección es 1−paso:
-          de 15% a 66% de papel). El jardín se sigue viendo, el texto ya no
-          pelea con la fuente del patio.
-        · un HALO de papel detrás de cada texto que va sobre la foto — bloque
-          15. Es sombra, no recuadro: Maki no quiere más cajas.
+          de 15% a 66% de papel).
+        · un HALO de papel detrás de cada texto que va sobre la foto —bloque
+          16. Es sombra, no recuadro: Maki no quiere más cajas.
 
    ⚠️ LA COLECCIÓN DISFRAZA EL MOTOR QUE YA EXISTE. No dibuja una invitación
       nueva y NO SACA NINGUNA SECCIÓN. Vestir no es quitar.
@@ -102,9 +130,8 @@
    ⚠️ VIENE APAGADA. Sin `INVEV.fx.coleccion === 'cantera'` no hace nada.
       Para probar sin tocar la base: `?coleccion=cantera`
 
-   ⚠️ NO TOCA NADA GLOBAL AL CARGARSE. Todo lo que escribe afuera
-      (INVCOLPALETA, atributos del <html>, la hoja) va en `poner()` y tiene su
-      línea espejo en `sacar()`.
+   ⚠️ NO TOCA NADA GLOBAL AL CARGARSE. Todo lo que escribe afuera va en
+      `poner()` y tiene su línea espejo en `sacar()`.
 
    ⚠️ LA ESCALA TIPOGRÁFICA ESTÁ REESCRITA ENTERA: el motor calibra sus
       tamaños para una CURSIVA y acá el sobretítulo es una versalita.
@@ -140,45 +167,57 @@
   var TINTA_BTN = '#150F09'; /* sobre Golden Tan: 7,8                        */
   var HALO    = 'rgba(239,227,208,';  /* PAPEL en rgba, para el velo         */
 
-  var MEDALLA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/piezas/cantera-medalla-2.webp';
+  var CDN     = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
+  var MEDALLA = CDN + 'invitame/piezas/cantera-medalla-2.webp';
+  /* la piedra: mosaico espejado, servido chico y optimizado */
+  var PIEDRA  = CDN + 'f_auto,q_auto:eco,w_688/invitame/cantera/cantera-piedra-banda.webp';
 
   /* ⭐ EL ARCO, SUAVE. `999px/46%` se comía media altura de la foto y la
      estiraba: es el «las fotos están como muy largas» del 22/9. */
   var ARCO     = '150px 150px 10px 10px / 40px 40px 10px 10px';
   var ARCO_TOP = '150px 150px 0 0 / 40px 40px 0 0';
 
+  function svgURL(svg) {
+    return 'url("data:image/svg+xml,' + svg.replace(/#/g, '%23').replace(/"/g, "'") + '")';
+  }
+
   /* La viñeta: una hoja de olivo entre dos filetes. VECTOR, no foto. */
   function vinieta(hoja, filete) {
-    var svg =
+    return svgURL(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 16">' +
       '<path d="M4 8h38" stroke="' + filete + '" stroke-width="1" fill="none" opacity=".75"/>' +
       '<path d="M78 8h38" stroke="' + filete + '" stroke-width="1" fill="none" opacity=".75"/>' +
       '<path d="M60 2c-5 2.6-8 5.6-8 8 0 1.6.9 3.1 2.4 4.2C56.6 12.2 60 8.6 60 2z" fill="' + hoja + '"/>' +
       '<path d="M60 2c5 2.6 8 5.6 8 8 0 1.6-.9 3.1-2.4 4.2C63.4 12.2 60 8.6 60 2z" fill="' + hoja + '" opacity=".72"/>' +
       '<path d="M60 4v10" stroke="' + hoja + '" stroke-width=".9"/>' +
-      '</svg>';
-    return 'url("data:image/svg+xml,' + svg.replace(/#/g, '%23').replace(/"/g, "'") + '")';
+      '</svg>');
   }
 
   /* La marca de cada hora: la misma hoja, sola. */
   function hojita(color) {
-    var svg =
+    return svgURL(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
       '<path d="M12 3c-4 2.1-6.4 4.5-6.4 6.4 0 1.3.7 2.5 1.9 3.4C10.1 11.1 12 7.7 12 3z" fill="' + color + '"/>' +
       '<path d="M12 3c4 2.1 6.4 4.5 6.4 6.4 0 1.3-.7 2.5-1.9 3.4C13.9 11.1 12 7.7 12 3z" fill="' + color + '" opacity=".7"/>' +
       '<path d="M12 5v15" stroke="' + color + '" stroke-width="1.1"/>' +
-      '</svg>';
-    return 'url("data:image/svg+xml,' + svg.replace(/#/g, '%23').replace(/"/g, "'") + '")';
+      '</svg>');
+  }
+
+  /* ⭐ LA CENEFA que remata cada banda: un filete con una hoja cada 80 px. */
+  function cenefa(color) {
+    return svgURL(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 10">' +
+      '<path d="M0 5h80" stroke="' + color + '" stroke-width=".7" opacity=".38"/>' +
+      '<path d="M40 1.6c-2.4 1.3-3.8 2.7-3.8 3.8 0 .8.4 1.5 1.1 2C38.8 6.4 40 4.4 40 1.6z" fill="' + color + '" opacity=".55"/>' +
+      '<path d="M40 1.6c2.4 1.3 3.8 2.7 3.8 3.8 0 .8-.4 1.5-1.1 2C41.2 6.4 40 4.4 40 1.6z" fill="' + color + '" opacity=".4"/>' +
+      '</svg>');
   }
 
   /* --------------------------------------------------------- la paleta propia
      ⭐⭐ `--verde` Y `--sec-col-v` SON LAS QUE PINTAN LAS SEIS BANDAS PLENAS.
-        Es la regla `.sec.verde{ background: var(--sec-col-v, var(--verde)) }`
-        del motor. Si la colección no las declara, manda la paleta del evento
-        —que acá traía un marrón frío casi negro— y ninguna otra regla de la
-        colección lo puede tapar. Se DECLARA la variable; no se pelea la regla.
-     ⚠️ `--tinta` es la tinta de cuerpo y NADA MÁS. (Antes tenía BANDA metido
-        acá porque creí que la banda salía de `--tinta`: no era.) */
+        Si la colección no las declara, manda la paleta del evento —que acá
+        traía un marrón frío casi negro— y ninguna otra regla lo puede tapar.
+     ⚠️ `--tinta` es la tinta de cuerpo y NADA MÁS. */
   var PALETA_PROPIA = {
     '--papel':      PAPEL,
     '--lino':       PAPEL,
@@ -214,6 +253,7 @@
     var V  = vinieta(SAGE, TAN_T);      /* sobre papel  */
     var VC = vinieta(SAGE, CREMA2);     /* sobre banda oscura o foto */
     var H  = hojita(SAGE);
+    var C  = cenefa('#C8A461');         /* el dorado claro, para la cenefa */
 
     return [
 
@@ -295,16 +335,10 @@
     P + '.padres .nm{ font-size:18px!important; color:' + TINTA + '!important; font-family:"Cormorant Garamond",serif!important; }',
 
     /* ───────────── 5 · EL ITINERARIO — UNA SOLA COLUMNA, COMO PERLAS
-       ⚠️⚠️ NO SE LE MUEVE LA VÍA DE LUGAR. La versión anterior la ponía en
-          `left:50%` y las fichas alternaban de lado: con alturas distintas,
-          las marcas quedaban desparramadas. Maki: «los círculos te quedaron
-          muy desordenados».
-          Perlas, medida: vía a `left:2.5px`, marca a `left:-28.5px`, fichas
-          de ancho completo. Se respeta esa geometría.
-       ⚠️ LO ÚNICO QUE SÍ SE LE TOCA ES EL TAMAÑO DE LA MARCA: el motor la
-          deja en 11×11 y una hoja de olivo verde de 11 px sobre un panel
-          translúcido, medido, no se ve. Va a 16 px con un halo de papel que
-          la despega del jardín. */
+       ⚠️⚠️ NO SE LE MUEVE LA VÍA DE LUGAR. Ponerla en `left:50%` hacía que las
+          fichas alternaran y las marcas quedaran desparramadas.
+       ⚠️ Lo único que sí se toca es el TAMAÑO de la marca: 11 px del motor no
+          se ve sobre un panel translúcido. 16 px con halo de papel. */
     P + '.tl{',
     '  background-color:rgba(239,227,208,.62)!important;',
     '  background-image:none!important;',
@@ -338,11 +372,8 @@
 
     /* ─────────────────────────────────── 6 · LA RASPADITA
        ⚠️⚠️ LAS CLASES SON LAS QUE SE MIDIERON EN LA PÁGINA, no las que yo
-          recordaba. `.rasp-3 .r3-f` y `--r3-tapa` NO EXISTEN en este motor:
-          por eso las tapas quedaban del gris de fábrica y el chequeo seguía
-          en verde (una regla que no engancha no falla, sólo no hace nada).
-       ⚠️ EL RECUADRO VIVE EN `.scratchcard::after`. Ponerle `border:0` al
-          contenedor no lo apaga. Maki ya lo pidió sacar dos veces. */
+          recordaba. `.rasp-3 .r3-f` y `--r3-tapa` NO EXISTEN en este motor.
+       ⚠️ EL RECUADRO VIVE EN `.scratchcard::after`. `border:0` no lo apaga. */
     P + '.scratchcard{',
     '  background-color:transparent!important;',
     '  background-image:none!important;',
@@ -394,9 +425,43 @@
     P + '.cf-letter{ background-color:' + PAPEL + '!important; color:' + TINTA + '!important; }',
     P + '.cf-letter h3{ font-family:"Cormorant Garamond",serif!important; color:' + TINTA + '!important; }',
 
-    /* ────────── 10 · LA TINTA DE LAS SEIS BANDAS PLENAS
-       El FONDO de la banda ya no se toca acá: lo define `--verde`, arriba,
-       en la paleta propia. Este bloque es sólo lo que va ESCRITO encima. */
+    /* ⭐⭐ 10 · LAS SEIS BANDAS: PIEDRA, PROFUNDIDAD Y CENEFA
+       «No me gusta el color pleno marrón, tenés que meterle algo de diseño y
+       textura a esos sectores» (Maki, 22/9).
+       El COLOR lo define `--verde`. Acá van las tres capas de encima. */
+    P + '.sec.verde{',
+    '  position:relative!important;',
+    /* que no sea una pared plana: apenas más oscura arriba y abajo */
+    '  background-image:linear-gradient(180deg, rgba(0,0,0,.16) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,.16) 100%)!important;',
+    '}',
+    /* la piedra tallada. ⚠️ VA EN ::before CON `opacity`, no mezclada en el
+       background de la sección: ahí no hay forma de bajarle la fuerza y queda
+       como papel tapiz. Y el tile grande (520) esconde la repetición. */
+    P + '.sec.verde::before{',
+    '  content:""!important;',
+    '  position:absolute!important; inset:0!important;',
+    '  z-index:0!important; pointer-events:none!important;',
+    '  background-image:url("' + PIEDRA + '")!important;',
+    '  background-size:520px auto!important;',
+    '  background-repeat:repeat!important;',
+    '  opacity:.15!important;',
+    '  mix-blend-mode:soft-light!important;',
+    '}',
+    /* la cenefa de olivo que remata arriba y abajo */
+    P + '.sec.verde::after{',
+    '  content:""!important;',
+    '  position:absolute!important; left:0!important; right:0!important;',
+    '  top:0!important; height:100%!important;',
+    '  z-index:0!important; pointer-events:none!important;',
+    '  background-image:' + C + ',' + C + '!important;',
+    '  background-size:80px 10px, 80px 10px!important;',
+    '  background-repeat:repeat-x, repeat-x!important;',
+    '  background-position:center top, center bottom!important;',
+    '}',
+    /* ⚠️ sin esto el texto queda DEBAJO de la piedra */
+    P + '.sec.verde > *{ position:relative!important; z-index:1!important; }',
+
+    /* ────────── 11 · LA TINTA DE LAS SEIS BANDAS */
     P + '.sec.verde h2{',
     '  color:' + CREMA + '!important;',
     '  background-image:' + VC + '!important;',
@@ -418,9 +483,10 @@
     '  border-color:rgba(132,96,68,.48)!important;',
     '}',
 
-    /* ───────────── 11 · CONTACTO, QUE VIENE CON FOTO
+    /* ───────────── 12 · CONTACTO, QUE VIENE CON FOTO
        El velo va en `::after` y NO en el `background` de la sección, que es
-       lo que ensuciaría la cuenta del contraste. */
+       lo que ensuciaría la cuenta del contraste.
+       ⚠️ #contacto-sec NO es `.verde` (medido): no choca con la cenefa. */
     P + '#contacto-sec{ position:relative!important; }',
     P + '#contacto-sec::after{',
     '  content:""!important; position:absolute!important; inset:0!important;',
@@ -436,10 +502,17 @@
     P + '#contacto-sec .kick{ color:' + CREMA2 + '!important; }',
     P + '#contacto-sec p{ color:rgba(244,235,221,.90)!important; }',
 
-    /* ───────────── 12 · EL PIE, en terracota (ya no el marrón frío) */
-    P + '.footer{ background-color:#5A4030!important; color:' + CREMA + '!important; }',
+    /* ───────────── 13 · EL PIE, con la misma piedra */
+    P + '.footer{',
+    '  position:relative!important;',
+    '  background-color:#5A4030!important; color:' + CREMA + '!important;',
+    '  background-image:url("' + PIEDRA + '")!important;',
+    '  background-size:520px auto!important;',
+    '  background-repeat:repeat!important;',
+    '  background-blend-mode:soft-light!important;',
+    '}',
 
-    /* ───────────── 13 · LOS CAMPOS Y LOS CONTROLES */
+    /* ───────────── 14 · LOS CAMPOS Y LOS CONTROLES */
     P + ':is(input, select, textarea, .tv-in){',
     '  background-color:' + PAPEL + '!important;',
     '  color:' + TINTA + '!important;',
@@ -449,22 +522,16 @@
     P + '.tv-btn{ background-color:' + TAN + '!important; color:' + TINTA_BTN + '!important; }',
     P + '.ar{ color:' + CREMA + '!important; }',
 
-    /* ───────────── 14 · EL AIRE ENTRE DOS SECCIONES DEL MISMO TONO
-       Se les saca el aire muerto, y NADA MÁS: el filete en cada junta era
-       parte del «muchísimo diseño». */
+    /* ───────────── 15 · EL AIRE ENTRE DOS SECCIONES DEL MISMO TONO */
     P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:14px!important; }',
     P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
     P + '.sec.verde + .sec.verde{ padding-top:14px!important; }',
     P + '.sec.verde:has(+ .sec.verde){ padding-bottom:14px!important; }',
 
-    /* ⭐ 15 · EL VELO DE PAPEL DETRÁS DEL TEXTO QUE VA SOBRE LA FOTO
-       «Vestimenta quedó que no se lee nada, se pierde con el fondo» (Maki,
-       22/9). Las secciones claras dejan pasar el jardín: donde atrás hay una
-       fuente iluminada, una tinta marrón se pierde.
+    /* ⭐ 16 · EL VELO DE PAPEL DETRÁS DEL TEXTO QUE VA SOBRE LA FOTO
        ⚠️ Es una SOMBRA del color del papel, no un recuadro: Maki ya dijo
           «muchísimo diseño» y no quiere otra caja.
-       ⚠️ NO entra adentro de las tarjetas: ahí el papel ya es macizo y el
-          halo no haría nada más que ensuciar. */
+       ⚠️ NO entra adentro de las tarjetas: ahí el papel ya es macizo. */
     P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){',
     '  text-shadow:0 0 7px ' + HALO + '.92), 0 0 16px ' + HALO + '.75)!important;',
     '}'
