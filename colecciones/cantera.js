@@ -20,10 +20,35 @@
          · Terracotta Brown sobre el papel da **4,75**, debajo del piso de 5.
            Va como MATERIAL (bordes, lacre, chapitas), no como tinta de cuerpo.
          · La tinta del cuerpo es `TINTA` (#4A3524), un terracota profundo de
-           la misma familia: **9,7** sobre el papel. Caliente, no el marrón
-           frío de antes (#3A2E28).
+           la misma familia: **9,7** sobre el papel.
       → La paleta manda el CLIMA. Los números mandan cuál de esos tonos puede
         llevar una letra encima.
+
+   ⭐⭐⭐ EL MARRÓN QUE NO LE GUSTABA A MAKI NO ERA NINGUNO DE LOS MÍOS
+      Y esto es LA lección del 22/9. Yo venía cambiando tonos de la colección
+      y el marrón seguía ahí, porque el marrón que se ve en pantalla —las SEIS
+      bandas plenas, lo más grande de toda la invitación— no salía de mi hoja.
+      Medido en la página, la regla que gana es del motor:
+
+          .sec.verde { background: var(--sec-col-v, var(--verde)); }
+
+      y `--verde` valía **#3b2f26**: un marrón FRÍO, casi negro, que viene de
+      la PALETA DEL EVENTO en la base, no de la colección.
+
+      ⚠️ Antes tenía anotado acá que «el motor lo escribe inline con
+         !important y no se puede pisar». ERA FALSO, y me costó una vuelta
+         entera: el elemento NO tiene atributo style. Lo que pasaba es que yo
+         estaba peleando con `background-color` cuando la propiedad que gana
+         es `background`, y sobre todo que no estaba declarando la variable.
+      → LA FORMA CORRECTA: la colección DECLARA `--verde` (y `--sec-col-v`).
+        Es lo que hace Bohemia. No se pelea con la regla: se le cambia el
+        valor a la variable que la regla lee.
+      → Acá va BANDA (#6B4A32), Terracotta Brown bajado: crema encima da
+        **6,73** y el sobretítulo crema2 **5,57**. Caliente y legible.
+
+      REGLA GENERAL, para la próxima colección: ANTES de dar por imposible
+      pisar un color del motor, buscar qué REGLA gana y qué VARIABLE lee esa
+      regla. Casi siempre la respuesta es declarar la variable.
 
    ⭐⭐ EL CONCEPTO ES BOHEMIA
       Maki: «mirá la invitación de muestra de Bohemia: es excelente, deberías
@@ -39,13 +64,20 @@
       quedan a alturas y a lados distintos: se leen como círculos tirados.
       Perlas —medida— no alterna: vía a `left:2.5px`, marcas a `left:-28.5px`,
       fichas de ancho completo. **Una línea, todas las marcas encima.**
-      → Acá NO se le toca la posición a la vía ni a la marca. Sólo el
-        MATERIAL. Mover la vía al centro es lo que desordenó todo.
+      → Acá NO se le toca la posición a la vía. Sólo el MATERIAL y el TAMAÑO
+        de la marca: el motor la deja en 11 px y sobre un panel translúcido
+        una hoja verde de 11 px no se ve. Va a 16 px con un halo de papel.
 
-   ⚠️⚠️ LO QUE NO SE PUEDE: aclarar las bandas del motor desde la colección.
-      Probado el 22/9: `.sec.verde{background-color:…!important}` NO gana. El
-      motor lo escribe INLINE con `!important`. El fondo de las secciones es
-      del motor: se le cambia la TINTA, no el fondo (bloque 10).
+   ⭐⭐ EL VELO DE PAPEL DETRÁS DEL TEXTO — 22/9/2026
+      Maki: «Vestimenta quedó que no se lee nada, se pierde con el fondo».
+      El fondo de Cantera es un jardín: CLARO pero CARGADO. Bohemia puede
+      dejar las secciones casi transparentes porque su fondo es un lino liso.
+      Acá hicieron falta las dos cosas:
+        · `fx.fondo.paso` 0.85 → **0.34** (el alfa de la sección es 1−paso:
+          de 15% a 66% de papel). El jardín se sigue viendo, el texto ya no
+          pelea con la fuente del patio.
+        · un HALO de papel detrás de cada texto que va sobre la foto — bloque
+          15. Es sombra, no recuadro: Maki no quiere más cajas.
 
    ⚠️ LA COLECCIÓN DISFRAZA EL MOTOR QUE YA EXISTE. No dibuja una invitación
       nueva y NO SACA NINGUNA SECCIÓN. Vestir no es quitar.
@@ -73,7 +105,7 @@
   var P = 'html[' + MARCA + '] ';
 
   /* ------------------------------------------------- la paleta de Maki + los
-     dos tonos derivados que hicieron falta para que el texto chico se lea */
+     tonos derivados que hicieron falta para que el texto chico se lea */
   var SAGE    = '#98A086';   /* Sage Green       — el olivo                  */
   var ROSA    = '#A76D5E';   /* Dusty Rose       — el acento segundo         */
   var TAN     = '#C4A071';   /* Golden Tan       — los rellenos              */
@@ -85,10 +117,11 @@
   var TAN_T   = '#7A5B30';   /* Golden Tan bajado, para texto chico: 5,23    */
   var TINTA   = '#4A3524';   /* terracota profundo, tinta de cuerpo: 9,7     */
   var TINTA2  = '#63472F';   /* la secundaria: 5,45 sobre la tarjeta         */
-  var BANDA   = '#6B4A32';   /* lo que el motor usa para las bandas oscuras  */
-  var CREMA   = '#F4EBDD';   /* la tinta sobre banda oscura: 6,7             */
+  var BANDA   = '#6B4A32';   /* ⭐ LAS SEIS BANDAS PLENAS (var --verde)       */
+  var CREMA   = '#F4EBDD';   /* la tinta sobre banda oscura: 6,73            */
   var CREMA2  = '#E6D6BC';   /* el sobretítulo sobre banda oscura: 5,57      */
   var TINTA_BTN = '#150F09'; /* sobre Golden Tan: 7,8                        */
+  var HALO    = 'rgba(239,227,208,';  /* PAPEL en rgba, para el velo         */
 
   var MEDALLA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/piezas/cantera-medalla-2.webp';
 
@@ -122,16 +155,22 @@
   }
 
   /* --------------------------------------------------------- la paleta propia
-     ⚠️ `--tinta` es lo que el motor usa para pintar las bandas «de color». Por
-        eso va BANDA y no TINTA: así la banda queda terracota y no marrón frío.
-        La tinta de verdad se escribe bloque por bloque, más abajo. */
+     ⭐⭐ `--verde` Y `--sec-col-v` SON LAS QUE PINTAN LAS SEIS BANDAS PLENAS.
+        Es la regla `.sec.verde{ background: var(--sec-col-v, var(--verde)) }`
+        del motor. Si la colección no las declara, manda la paleta del evento
+        —que acá traía un marrón frío casi negro— y ninguna otra regla de la
+        colección lo puede tapar. Se DECLARA la variable; no se pelea la regla.
+     ⚠️ `--tinta` es la tinta de cuerpo y NADA MÁS. (Antes tenía BANDA metido
+        acá porque creí que la banda salía de `--tinta`: no era.) */
   var PALETA_PROPIA = {
     '--papel':      PAPEL,
     '--lino':       PAPEL,
     '--lino2':      PAPEL2,
-    '--tinta':      BANDA,
+    '--tinta':      TINTA,
     '--tinta2':     TINTA2,
     '--tinta3':     TINTA2,
+    '--verde':      BANDA,
+    '--sec-col-v':  BANDA,
     '--acento':     TAN,
     '--acento2':    ROSA,
     '--sec-col':    PAPEL,
@@ -240,14 +279,16 @@
     P + '.padres .nm{ font-size:18px!important; color:' + TINTA + '!important; font-family:"Cormorant Garamond",serif!important; }',
 
     /* ───────────── 5 · EL ITINERARIO — UNA SOLA COLUMNA, COMO PERLAS
-       ⚠️⚠️ ACÁ NO SE MUEVE NADA DE LUGAR. La versión anterior ponía la vía en
-          `left:50%` para centrarla y las fichas alternaban de lado: con
-          alturas distintas, las marcas quedaban desparramadas. Maki: «los
-          círculos te quedaron muy desordenados».
+       ⚠️⚠️ NO SE LE MUEVE LA VÍA DE LUGAR. La versión anterior la ponía en
+          `left:50%` y las fichas alternaban de lado: con alturas distintas,
+          las marcas quedaban desparramadas. Maki: «los círculos te quedaron
+          muy desordenados».
           Perlas, medida: vía a `left:2.5px`, marca a `left:-28.5px`, fichas
-          de ancho completo. Se respeta esa geometría y se cambia SÓLO el
-          material: la vía pasa a ser una regleta de cuentas en dorado y la
-          marca, la hoja de olivo. */
+          de ancho completo. Se respeta esa geometría.
+       ⚠️ LO ÚNICO QUE SÍ SE LE TOCA ES EL TAMAÑO DE LA MARCA: el motor la
+          deja en 11×11 y una hoja de olivo verde de 11 px sobre un panel
+          translúcido, medido, no se ve. Va a 16 px con un halo de papel que
+          la despega del jardín. */
     P + '.tl{',
     '  background-color:rgba(239,227,208,.62)!important;',
     '  background-image:none!important;',
@@ -270,10 +311,13 @@
     P + '.tl .it .d{ color:' + TINTA2 + '!important; }',
     P + '.tl > .it::before{',
     '  content:""!important;',
+    '  width:16px!important; height:16px!important; left:-29px!important;',
+    '  border-radius:50%!important;',
     '  background-image:' + H + '!important;',
     '  background-size:contain!important; background-repeat:no-repeat!important;',
     '  background-color:transparent!important;',
-    '  border:0!important; box-shadow:none!important;',
+    '  border:0!important;',
+    '  box-shadow:0 0 0 5px ' + HALO + '.85)!important;',
     '}',
 
     /* ─────────────────────────────────── 6 · LA RASPADITA */
@@ -321,11 +365,9 @@
     P + '.cf-letter{ background-color:' + PAPEL + '!important; color:' + TINTA + '!important; }',
     P + '.cf-letter h3{ font-family:"Cormorant Garamond",serif!important; color:' + TINTA + '!important; }',
 
-    /* ────────── 10 · LAS BANDAS OSCURAS DEL MOTOR (.sec.verde)
-       El motor las pinta con `--tinta` — por eso `--tinta` es BANDA (#6B4A32,
-       terracota) y no la tinta de cuerpo. Acá se les cambia la TINTA, nunca
-       el fondo: aclarar el fondo desde la colección NO gana (lo escribe
-       inline con !important). */
+    /* ────────── 10 · LA TINTA DE LAS SEIS BANDAS PLENAS
+       El FONDO de la banda ya no se toca acá: lo define `--verde`, arriba,
+       en la paleta propia. Este bloque es sólo lo que va ESCRITO encima. */
     P + '.sec.verde h2{',
     '  color:' + CREMA + '!important;',
     '  background-image:' + VC + '!important;',
@@ -384,7 +426,19 @@
     P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:14px!important; }',
     P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
     P + '.sec.verde + .sec.verde{ padding-top:14px!important; }',
-    P + '.sec.verde:has(+ .sec.verde){ padding-bottom:14px!important; }'
+    P + '.sec.verde:has(+ .sec.verde){ padding-bottom:14px!important; }',
+
+    /* ⭐ 15 · EL VELO DE PAPEL DETRÁS DEL TEXTO QUE VA SOBRE LA FOTO
+       «Vestimenta quedó que no se lee nada, se pierde con el fondo» (Maki,
+       22/9). Las secciones claras dejan pasar el jardín: donde atrás hay una
+       fuente iluminada, una tinta marrón se pierde.
+       ⚠️ Es una SOMBRA del color del papel, no un recuadro: Maki ya dijo
+          «muchísimo diseño» y no quiere otra caja.
+       ⚠️ NO entra adentro de las tarjetas: ahí el papel ya es macizo y el
+          halo no haría nada más que ensuciar. */
+    P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){',
+    '  text-shadow:0 0 7px ' + HALO + '.92), 0 0 16px ' + HALO + '.75)!important;',
+    '}'
 
     ].join('\n');
   }
