@@ -803,6 +803,46 @@
     '  background-color:' + TINTA3 + '!important; border-color:' + TINTA3 + '!important;',
     '}',
 
+    /* ── ⭐⭐ LOS CAMPOS DEL FORMULARIO: ESTABAN PINTADOS PARA UNA INVITACIÓN
+       OSCURA ────────────────────────────────────────────────────────────────
+       Maki, 22/9, con una captura: «¿ves dónde está Familia Orozco, y el 2, y
+       "los acompañamos con alegría"? Bueno, ahí te digo que los rectángulos no
+       se ven.»
+
+       MEDIDO, y la causa es de manual:
+
+           input / select / textarea
+               background : rgba(255,255,255,.08)   ← blanco al 8%
+               border     : 1px solid rgba(255,255,255,.25)
+
+       Blanco al 8% y un filete blanco al 25% **sólo se ven sobre un fondo
+       oscuro**. Encima del papel crema de Bohemia —y más todavía sobre la foto
+       de la sección— desaparecen los dos: el campo queda sin caja y el invitado
+       no sabe dónde escribir. No es contraste de TEXTO, así que ninguna regla
+       del chequeo lo mira.
+
+       ⚠️ El mismo bicho en `.av`, el aro de las fotos de Personas: un filete
+          BLANCO al 50% sobre papel claro. Invisible.
+
+       ⭐ LA REGLA: un borde o un fondo declarado en BLANCO con alfa es una pista
+          de que ese estilo se escribió para una colección oscura. En una clara
+          hay que reescribirlo con el papel y el filete de la casa.
+       ⚠️ `.tv-in` (el campo de la trivia) NO entra: ya viene en blanco al 92%
+          con filete gris, o sea visible. Se lo alinea igual, para que los
+          campos de toda la invitación se vean iguales. */
+    P + '.frame input, ' + P + '.frame select, ' + P + '.frame textarea{',
+    '  background-color:rgba(247,241,231,.78)!important;',
+    '  border:1px solid ' + FILETE + '!important;',
+    '  border-radius:10px!important;',
+    '  color:' + TINTA + '!important;',
+    '  box-shadow:inset 0 1px 2px rgba(74,59,46,.07)!important;',
+    '}',
+    P + '.frame input:focus, ' + P + '.frame select:focus, ' + P + '.frame textarea:focus{',
+    '  border-color:' + CAMEL + '!important;',
+    '  outline:0!important;',
+    '}',
+    P + '.padres .av{ border-color:' + FILETE + '!important; }',
+
     /* ⚠️ NO se pinta fondo/borde/sombra de los botones: eso lo hace
        `efectos/botones.js` con el material elegido en `fx.boton.estilo`
        (acá: relieve-seco). Si la colección lo pinta, le pisa el material y
