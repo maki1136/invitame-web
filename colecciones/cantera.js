@@ -358,7 +358,48 @@
 
     /* ─────────────────────────────── 11 · EL PIE
        Que no quede la banda de fábrica: piedra oscura, tinta de cirio. */
-    P + '.footer{ background-color:' + OSCURO + '!important; color:' + CIRIO + '!important; }'
+    P + '.footer{ background-color:' + OSCURO + '!important; color:' + CIRIO + '!important; }',
+
+    /* ───────── 12 · LOS CAMPOS Y LOS CONTROLES (la familia del punto 0bis.5)
+       El molde pinta los campos y algunos botones para OTRO fondo, y quedan
+       fuera de la paleta. Medido en Cantera el 22/9/2026, MIRANDO:
+         · el campo de la trivia venía BLANCO al 92 % con borde gris — un
+           rectángulo blanco en el medio de una banda oscura;
+         · «Reservar» y «Ver en Instagram» tenían tinta casi negra mientras
+           «Ver mapa» la tenía crema: DOS tintas distintas en el mismo botón;
+         · las flechas de la galería, gris 96 sobre el velo.
+       ⭐ La tinta del botón sólido pasa a ser la OSCURA para todos: sobre
+          latón da 5,27 contra 2,96 de la crema, y además queda pareja. */
+    P + '.btn:not(.gh){ color:' + OSCURO + '!important; -webkit-text-fill-color:' + OSCURO + '!important; }',
+    P + ':is(input, select, textarea, .tv-in){',
+    '  background-color:' + PAPEL + '!important;',
+    '  color:' + TINTA + '!important;',
+    '  border:1px solid rgba(168,130,62,.45)!important;',
+    '}',
+    P + ':is(input, textarea)::placeholder{ color:rgba(95,80,70,.72)!important; }',
+    P + '.tv-btn{ background-color:' + LATON + '!important; color:' + OSCURO + '!important; }',
+    P + '.ar{ color:' + CIRIO + '!important; }',
+
+    /* ───────── 13 · LA COSTURA ENTRE DOS SECCIONES DEL MISMO TONO
+       Punto 0bis.9 de la skill de entrega: «mirá el hueco que queda entre las
+       dos secciones». Acá la corrida más larga es de TRES bandas oscuras
+       seguidas —Hashtag, Trivia y Una carta para ti— y sin nada en el medio el
+       ojo no lee tres secciones: lee un pozo.
+       ⚠️ NO se les cambia el fondo (es del motor, y `reglas-duras.js` lo
+          repinta: cuatro intentos fallados están documentados en 0bis.10). Se
+          les saca el aire muerto y se les pone un filete finito, que además es
+          el lenguaje gráfico que la pieza ya tiene.
+       Medido: el documento bajó de 8703 a 8517 px. */
+    P + '.sec:not(.verde) + .sec:not(.verde){',
+    '  padding-top:14px!important;',
+    '  border-top:1px solid rgba(168,130,62,.20)!important;',
+    '}',
+    P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
+    P + '.sec.verde + .sec.verde{',
+    '  padding-top:14px!important;',
+    '  border-top:1px solid rgba(200,164,97,.22)!important;',
+    '}',
+    P + '.sec.verde:has(+ .sec.verde){ padding-bottom:14px!important; }'
 
     ].join('\n');
   }
