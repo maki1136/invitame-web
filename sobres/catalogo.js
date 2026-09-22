@@ -751,6 +751,28 @@ window.SOBRES_INVITAME = {
            falla es la FORMA, no el numero. Dos lineas iguales superpuestas son
            una linea.
 
+     ⭐ v5 · 22/9, Maki: «checa el video y fijate si marca las 12».
+        Lo MEDI sobre el archivo que sirve Cloudinary, no sobre mi intencion:
+        se busca el puntito claro del eje, y desde ahi, para cada angulo, hasta
+        donde llega la mancha oscura PEGADA al eje (asi los numeros romanos, que
+        tambien son oscuros, no ensucian la cuenta: no tocan el eje).
+        Resultado en la v4: 0° en la campanada. O sea que SI marcaba las doce.
+
+        EL PROBLEMA ERA OTRO: llegaba a las doce y enseguida se lo comia el
+        blanco. No habia un solo instante en que se VIERA el reloj en las doce.
+        Marcar no alcanza — hay que dejarlo ver.
+
+        v5: las agujas llegan en LLEGA = 5,35 s y se quedan quietas hasta la
+        campanada (6,20). La noche termina de caer en LLEGA en vez de en la
+        campanada, y la camara casi se detiene en ese tramo.
+        Medido sobre el render: **26 cuadros seguidos (1,08 s) con la aguja a
+        0°±1, largo 0,95 del radio, y el cuadro todavia oscuro** (luminancia
+        72-134). Antes ese numero era practicamente cero.
+
+        📌 El criterio que quedo: un gesto no esta hecho cuando el dato es
+           correcto, sino cuando hay TIEMPO SUFICIENTE para verlo. Se mide en
+           cuadros, no en intencion.
+
      Los tramos, medidos sobre el archivo (8,0 s · 720×1280 · 24 fps):
        · 0,0 – 1,9   sale de la oscuridad y del desenfoque (brillo 0,10 → 1,0,
                      blur 15 → 0,4). El mundo del cuento apareciendo.
@@ -767,8 +789,8 @@ window.SOBRES_INVITAME = {
      flashes seguidos.                                                       */
   'cenicienta-film': {
     nombre:  "Cenicienta · la película de llegada, el reloj da las 12 (video)",
-    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v4-22-9.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v4-poster-22-9.jpg",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v5-22-9.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v5-poster-22-9.jpg",
     color:   "#EAF2FA",
     luz:     7.1,
     luzFundido: 0.95
