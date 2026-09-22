@@ -538,6 +538,35 @@
     '             opacity .3s ease .34s!important;',
     '}',
 
+    /* ── «¿ALGUNA DUDA?» SOBRE LA FOTO, SIN VELO ──────────────────────────
+       ⭐ 22/9 · El chequeo lo canto («¿Alguna duda? → 1,43, piso 4») y esta vez
+       NO era un falso positivo: hay que mirarlos uno por uno, y mirandolo se
+       ve que `#contacto-sec` trae una FOTO de fondo —una calle nevada, con
+       cielo claro— y el texto encima viene claro (#C2D2E5 el titulo, #E0E8F1
+       la bajada). Claro sobre claro: el titulo casi no estaba.
+       El pie de la invitacion resuelve lo mismo con un velo degrade sobre su
+       foto; aca no habia ninguno. Se le pone el mismo recurso.
+       ⚠️ El velo va en `::after`, no en `::before`: medido, la seccion tiene
+          los dos libres, pero `::before` es el que suele usar el molde para
+          los adornos y no conviene ocuparlo desde la coleccion.
+       ⚠️ Y con el velo puesto, el `.kick` («Cualquier duda») queda tinta
+          oscura sobre fondo oscuro — el error de siempre, al reves. Se pasa a
+          `--sage-cl`, que es el acento para fondo OSCURO.
+       De los 10 que canto el chequeo, los otros 9 SI eran falsos positivos:
+       8 son texto claro sobre foto con velo (el pie y la flecha de la portada)
+       y «Reservar» mide tinta casi negra (#141212) sobre una pastilla blanca
+       al 95 % — la regla le leyo el color al padre, no al rotulo. */
+    P + '#contacto-sec{ position:relative!important; }',
+    P + '#contacto-sec::after{',
+    '  content:""!important; position:absolute!important; inset:0!important;',
+    '  z-index:0!important; pointer-events:none!important;',
+    '  background:linear-gradient(180deg,rgba(10,18,30,.40) 0%,rgba(10,18,30,.72) 100%)!important;',
+    '}',
+    P + '#contacto-sec > *{ position:relative!important; z-index:1!important; }',
+    P + '#contacto-sec .kick{',
+    '  color:' + ACENTOCL + '!important; -webkit-text-fill-color:' + ACENTOCL + '!important;',
+    '}',
+
     /* ── EL POZO BLANCO ENTRE DOS SECCIONES DEL MISMO TONO ────────────────
        ⭐ 22/9 · Maki: «mira el hueco que queda blanco entre las dos secciones».
        NO era geometria: medidas las 21 secciones, todas pegadas, cero pixeles
