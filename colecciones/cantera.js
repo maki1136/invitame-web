@@ -1,49 +1,51 @@
 /* ===== COLECCIÓN «CANTERA» ===================================================
 
-   Boda religiosa tradicional mexicana, en Morelia. Nace de una referencia que
-   mandó Maki el 21/9/2026 (una invitación de la competencia): la TEMÁTICA
-   servía, el diseño no.
+   Boda religiosa tradicional mexicana, en Morelia.
 
-   ⭐⭐ EL CONCEPTO ES BOHEMIA, Y ESO SE DECIDIÓ EL 22/9/2026
-      Maki, mirando la primera versión:
+   ⭐⭐ LA PALETA LA ELIGIÓ MAKI — 22/9/2026
+      Mandó una lámina «Nature inspired color palette · soft · warm · timeless»
+      con cinco colores y dijo: «no me gusta ese marrón que elegiste, cambialo
+      por otro tono, te dejo la paleta y cómo deberías armar el estilo».
 
-        «Al arrancar está todo desenfocado. Quise mostrar el fondo y no se ve el
-         video. La carta del sobre parece una viña. El itinerario es horrible.
-         Me gustaría más el estilo de la naturaleza. Las fotos están como muy
-         largas. Muchísimo diseño.
-         Mirá la invitación de muestra de Bohemia: es excelente, deberías seguir
-         ese concepto.»
+        Sage Green      #98A086   → el olivo: la viñeta y la marca de cada hora
+        Dusty Rose      #A76D5E   → el acento segundo (la chapita del pase)
+        Golden Tan      #C4A071   → los rellenos: botones, filetes
+        Warm Beige      #DFCCB1   → el papel de las tarjetas
+        Terracotta Brown#846044   → la familia de los marrones
 
-      Y lo que hace buena a Bohemia se puede escribir en una línea:
-      **UNA FOTO DE NATURALEZA, CLARA, QUE SE VE POR DETRÁS DE TODO.** No hay
-      paneles macizos ni filetes de más: las secciones son VELOS sobre esa foto.
+      ⚠️ NINGUNO DE LOS CINCO SIRVE TAL CUAL PARA TEXTO CHICO, y eso se midió:
+         · Golden Tan sobre el papel da **2,08** → un sobretítulo de 12 px en
+           ese tono no se lee. Va `TAN_T` (#7A5B30), el mismo tono bajado:
+           **5,23**.
+         · Terracotta Brown sobre el papel da **4,75**, debajo del piso de 5.
+           Va como MATERIAL (bordes, lacre, chapitas), no como tinta de cuerpo.
+         · La tinta del cuerpo es `TINTA` (#4A3524), un terracota profundo de
+           la misma familia: **9,7** sobre el papel. Caliente, no el marrón
+           frío de antes (#3A2E28).
+      → La paleta manda el CLIMA. Los números mandan cuál de esos tonos puede
+        llevar una letra encima.
 
-      Lo que se midió contra Bohemia, una cosa por vez:
+   ⭐⭐ EL CONCEPTO ES BOHEMIA
+      Maki: «mirá la invitación de muestra de Bohemia: es excelente, deberías
+      seguir ese concepto». Una FOTO DE NATURALEZA, CLARA, que se ve por
+      detrás de todo; sin paneles macizos ni filetes de más.
 
-      | | Cantera (mal) | Bohemia | Cantera (ahora) |
-      |---|---|---|---|
-      | `fx.fondo.donde` | `pantalla` → los costados, un borrón | `marco` | `marco` |
-      | `fx.fondo` | interior de iglesia, OSCURO | pampas, claro | jardín de hacienda, claro |
-      | `.tl` | papel opaco + cuadriculado | rgba(claro,.58), liso | rgba(243,237,227,.58), liso |
-      | el arco de las fotos | 999px/46% — estira la foto a lo alto | esquinas suaves | 150px/40px |
+   ⭐⭐ EL ITINERARIO VA EN UNA SOLA COLUMNA, COMO PERLAS — 22/9/2026
+      Maki: «los círculos del itinerario te quedaron muy desordenados, copiá
+      como te dije las otras muestras».
+      Y tenía razón, y la causa estaba MEDIDA: la muestra tenía
+      `fx.itinerario.estilo = 'centro'`, que alterna las fichas a izquierda y
+      derecha con la vía al medio. Con fichas de alturas distintas las marcas
+      quedan a alturas y a lados distintos: se leen como círculos tirados.
+      Perlas —medida— no alterna: vía a `left:2.5px`, marcas a `left:-28.5px`,
+      fichas de ancho completo. **Una línea, todas las marcas encima.**
+      → Acá NO se le toca la posición a la vía ni a la marca. Sólo el
+        MATERIAL. Mover la vía al centro es lo que desordenó todo.
 
-   ⚠️⚠️ LO QUE NO SE PUDO COPIAR DE BOHEMIA, Y POR QUÉ — 22/9/2026
-      En Bohemia las seis bandas «de color» del motor son CLARAS
-      (`rgba(239,228,214,.30)`, medido). Intenté lo mismo acá con
-      `.sec.verde{ background-color: rgba(231,221,200,.34)!important }` y NO
-      GANÓ: medido después de subirlo, la sección seguía en
-      `srgb(0.231 0.184 0.149)`. **El motor escribe ese fondo INLINE y con
-      `!important`, y contra un inline `!important` no hay hoja que valga.**
-      Es el intento 3 del punto 0bis.10 de la skill de entrega, otra vez.
-      → El fondo de las secciones es del motor. NO se le disputa. Lo que sí se
-        puede es cambiarle la TINTA, y eso es lo que hace el bloque 10.
-
-   ⭐ LOS MATERIALES
-      · cantera rosada  → la piedra de Morelia, el papel de la invitación
-      · latón envejecido→ los acentos y los filetes
-      · cirio           → la luz cálida y la tinta de las bandas oscuras
-      · olivo           → el motivo vegetal: la viñeta, la marca del itinerario
-                          y el medallón de la raspadita
+   ⚠️⚠️ LO QUE NO SE PUEDE: aclarar las bandas del motor desde la colección.
+      Probado el 22/9: `.sec.verde{background-color:…!important}` NO gana. El
+      motor lo escribe INLINE con `!important`. El fondo de las secciones es
+      del motor: se le cambia la TINTA, no el fondo (bloque 10).
 
    ⚠️ LA COLECCIÓN DISFRAZA EL MOTOR QUE YA EXISTE. No dibuja una invitación
       nueva y NO SACA NINGUNA SECCIÓN. Vestir no es quitar.
@@ -51,21 +53,16 @@
    ⚠️ VIENE APAGADA. Sin `INVEV.fx.coleccion === 'cantera'` no hace nada.
       Para probar sin tocar la base: `?coleccion=cantera`
 
-   ⚠️ NO TOCA NADA GLOBAL AL CARGARSE. Este archivo viaja en el paquete de
-      `efectos/todo.php` y se carga en TODAS las invitaciones. Todo lo que
-      escribe afuera (INVCOLPALETA, atributos del <html>, la hoja de estilo) se
-      escribe en `poner()` y tiene su línea espejo en `sacar()`.
+   ⚠️ NO TOCA NADA GLOBAL AL CARGARSE. Todo lo que escribe afuera
+      (INVCOLPALETA, atributos del <html>, la hoja) va en `poner()` y tiene su
+      línea espejo en `sacar()`.
 
-   ⚠️ LA ESCALA TIPOGRÁFICA ESTÁ REESCRITA ENTERA. `i/estilos-servidor.css`
-      clava los tamaños con `!important` y están calibrados para una CURSIVA
-      (`--fs-cursiva: 34px`). Cantera usa una versalita en el sobretítulo, así
-      que heredaría 34 px y al ojo pesa el doble. Por eso acá el sobretítulo va
-      en 12 px y el título en 21.
+   ⚠️ LA ESCALA TIPOGRÁFICA ESTÁ REESCRITA ENTERA: el motor calibra sus
+      tamaños para una CURSIVA y acá el sobretítulo es una versalita.
 
-   ⚠️⚠️ Y LA MEDICIÓN DEL 22/9 QUE CASI ME HACE ROMPER ALGO QUE ANDABA: con el
-      fondo en video pesado, a los 5 segundos la colección TODAVÍA NO SE APLICÓ
-      (`data-cantera` sin poner, sin hoja). A los 15 ya está. Antes de declarar
-      que una colección «no anda», se mide a los 15 s, no a los 5.
+   ⚠️⚠️ Y LA MEDICIÓN QUE CASI ME HACE ROMPER ALGO QUE ANDABA: con el fondo en
+      video, a los 5 segundos la colección TODAVÍA NO SE APLICÓ. A los 15 ya
+      está. Se mide a los 15 s, no a los 5.
 
    ============================================================================ */
 (function () {
@@ -73,58 +70,47 @@
 
   var ID    = 'cantera';
   var MARCA = 'data-cantera';
-  /* El prefijo gana por especificidad SIN pelear con `!important` de clase:
-     html[data-cantera] .sec h2  → (0,2,2) contra el (0,1,1) del motor.
-     Y para la portada, que el motor clava por ID con !important, hace falta
-     html[data-cantera] #pv-names → (1,1,1) contra (1,0,0). */
   var P = 'html[' + MARCA + '] ';
 
-  /* --------------------------------------------------------------- materiales */
-  var PAPEL   = '#F3EDE3';   /* el papel: cantera muy clara                */
-  var PAPEL2  = '#E7DCCC';   /* el papel de las tarjetas, medio tono abajo */
-  var CANTERA = '#C9A38C';   /* la piedra rosada                            */
-  var LATON   = '#A8823E';   /* el acento                                   */
-  var LATON_C = '#C8A461';   /* latón claro, para realces                   */
-  var TINTA   = '#3A2E28';   /* el texto                                    */
-  var TINTA2  = '#5F5046';   /* el texto secundario                         */
-  var CIRIO   = '#F6E7CC';   /* la luz de la vela                           */
-  var OSCURO  = '#2A2018';   /* el pie                                      */
-  /* La tinta del botón sólido es MÁS oscura que OSCURO a propósito: sobre el
-     latón, OSCURO da 4,50 y no llega al piso de 5. Ésta da 5,41. Medido. */
-  var TINTA_BTN = '#150F09';
+  /* ------------------------------------------------- la paleta de Maki + los
+     dos tonos derivados que hicieron falta para que el texto chico se lea */
+  var SAGE    = '#98A086';   /* Sage Green       — el olivo                  */
+  var ROSA    = '#A76D5E';   /* Dusty Rose       — el acento segundo         */
+  var TAN     = '#C4A071';   /* Golden Tan       — los rellenos              */
+  var BEIGE   = '#DFCCB1';   /* Warm Beige       — el papel de las tarjetas  */
+  var TERRA   = '#846044';   /* Terracotta Brown — el material de los marrones*/
+
+  var PAPEL   = '#EFE3D0';   /* el beige, aclarado, para la hoja entera      */
+  var PAPEL2  = BEIGE;       /* las tarjetas                                 */
+  var TAN_T   = '#7A5B30';   /* Golden Tan bajado, para texto chico: 5,23    */
+  var TINTA   = '#4A3524';   /* terracota profundo, tinta de cuerpo: 9,7     */
+  var TINTA2  = '#63472F';   /* la secundaria: 5,45 sobre la tarjeta         */
+  var BANDA   = '#6B4A32';   /* lo que el motor usa para las bandas oscuras  */
+  var CREMA   = '#F4EBDD';   /* la tinta sobre banda oscura: 6,7             */
+  var CREMA2  = '#E6D6BC';   /* el sobretítulo sobre banda oscura: 5,57      */
+  var TINTA_BTN = '#150F09'; /* sobre Golden Tan: 7,8                        */
 
   var MEDALLA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/piezas/cantera-medalla-2.webp';
 
-  /* ⭐ EL ARCO, AHORA SUAVE.
-     La primera versión era `999px 999px 7px 7px / 46% 46% 7px 7px`: ese 46%
-     vertical hace que el medio punto se coma casi la mitad del alto de la
-     foto, y la foto se lee ESTIRADA. Es el «las fotos están como muy largas»
-     del 22/9. Con 40 px de radio vertical el arco se sigue leyendo como arco
-     y la foto conserva su proporción. */
+  /* ⭐ EL ARCO, SUAVE. `999px/46%` se comía media altura de la foto y la
+     estiraba: es el «las fotos están como muy largas» del 22/9. */
   var ARCO     = '150px 150px 10px 10px / 40px 40px 10px 10px';
   var ARCO_TOP = '150px 150px 0 0 / 40px 40px 0 0';
 
-  /* La viñeta: una hoja de olivo entre dos filetes. VECTOR, no foto: se repite
-     arriba de cada título, y una foto repetida en serie se lee como
-     calcomanía (la lección de Bohemia). */
-  function vinieta(color) {
+  /* La viñeta: una hoja de olivo entre dos filetes. VECTOR, no foto. */
+  function vinieta(hoja, filete) {
     var svg =
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 16">' +
-      '<path d="M4 8h38" stroke="' + color + '" stroke-width="1" fill="none" opacity=".75"/>' +
-      '<path d="M78 8h38" stroke="' + color + '" stroke-width="1" fill="none" opacity=".75"/>' +
-      '<path d="M60 2c-5 2.6-8 5.6-8 8 0 1.6.9 3.1 2.4 4.2C56.6 12.2 60 8.6 60 2z" fill="' + color + '"/>' +
-      '<path d="M60 2c5 2.6 8 5.6 8 8 0 1.6-.9 3.1-2.4 4.2C63.4 12.2 60 8.6 60 2z" fill="' + color + '" opacity=".72"/>' +
-      '<path d="M60 4v10" stroke="' + color + '" stroke-width=".9"/>' +
+      '<path d="M4 8h38" stroke="' + filete + '" stroke-width="1" fill="none" opacity=".75"/>' +
+      '<path d="M78 8h38" stroke="' + filete + '" stroke-width="1" fill="none" opacity=".75"/>' +
+      '<path d="M60 2c-5 2.6-8 5.6-8 8 0 1.6.9 3.1 2.4 4.2C56.6 12.2 60 8.6 60 2z" fill="' + hoja + '"/>' +
+      '<path d="M60 2c5 2.6 8 5.6 8 8 0 1.6-.9 3.1-2.4 4.2C63.4 12.2 60 8.6 60 2z" fill="' + hoja + '" opacity=".72"/>' +
+      '<path d="M60 4v10" stroke="' + hoja + '" stroke-width=".9"/>' +
       '</svg>';
     return 'url("data:image/svg+xml,' + svg.replace(/#/g, '%23').replace(/"/g, "'") + '")';
   }
 
-  /* ⭐ LA MARCA DE CADA HORA DEL ITINERARIO: LA MISMA HOJA, SOLA.
-     Antes era el MEDALLÓN fotografiado a 26 px con un aro de papel de 5 px:
-     repetido seis veces se leía como una fila de MONEDAS pegadas encima del
-     panel. Es exactamente lo que la skill de armado dice que pasa cuando una
-     foto recortada se repite en serie. La foto se queda donde está sola y
-     tiene aire (la tapa de la raspadita); acá va el vector. */
+  /* La marca de cada hora: la misma hoja, sola. */
   function hojita(color) {
     var svg =
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
@@ -136,17 +122,18 @@
   }
 
   /* --------------------------------------------------------- la paleta propia
-     ⚠️ Una colección igual TIENE que reclamar todas las superficies: sin
-     éstas, abajo de la invitación asoma el molde de otra colección. */
+     ⚠️ `--tinta` es lo que el motor usa para pintar las bandas «de color». Por
+        eso va BANDA y no TINTA: así la banda queda terracota y no marrón frío.
+        La tinta de verdad se escribe bloque por bloque, más abajo. */
   var PALETA_PROPIA = {
     '--papel':      PAPEL,
     '--lino':       PAPEL,
     '--lino2':      PAPEL2,
-    '--tinta':      TINTA,
+    '--tinta':      BANDA,
     '--tinta2':     TINTA2,
     '--tinta3':     TINTA2,
-    '--acento':     LATON,
-    '--acento2':    LATON_C,
+    '--acento':     TAN,
+    '--acento2':    ROSA,
     '--sec-col':    PAPEL,
     '--tl-papel':   PAPEL2,
     '--tl-tinta':   TINTA,
@@ -154,7 +141,7 @@
     '--cf-col':     TINTA,
     '--sobre-c':    PAPEL,
     '--flap-base':  PAPEL2,
-    '--seal-c':     LATON,
+    '--seal-c':     TERRA,
     '--r3-tapa':    'url("' + MEDALLA + '")'
   };
 
@@ -169,9 +156,9 @@
 
   /* ============================================================== la hoja CSS */
   function armarCSS() {
-    var V  = vinieta(LATON);
-    var VC = vinieta(CIRIO);
-    var H  = hojita(LATON);
+    var V  = vinieta(SAGE, TAN_T);      /* sobre papel  */
+    var VC = vinieta(SAGE, CREMA2);     /* sobre banda oscura o foto */
+    var H  = hojita(SAGE);
 
     return [
 
@@ -185,11 +172,12 @@
     '  font-family:Karla,system-ui,sans-serif!important;',
     '}',
 
-    /* ⚠️ EL SOBRETÍTULO NUNCA MÁS GRANDE QUE EL TÍTULO. */
+    /* ⚠️ EL SOBRETÍTULO NUNCA MÁS GRANDE QUE EL TÍTULO — y en TAN_T, no en
+       Golden Tan puro, que a 12 px da 2,08. */
     P + '.sec .kick{',
     '  font-size:12px!important; line-height:1.5!important;',
     '  letter-spacing:.24em!important; text-transform:uppercase!important;',
-    '  font-weight:500!important; color:' + LATON + '!important;',
+    '  font-weight:500!important; color:' + TAN_T + '!important;',
     '  margin:0 0 10px 0!important; text-indent:.24em!important;',
     '}',
     P + '.sec h2{',
@@ -204,17 +192,14 @@
     '}',
     P + '.frase{ font-size:18px!important; line-height:1.62!important; font-style:italic!important; color:' + TINTA + '!important; }',
     P + '.sec p:not(.frase){ font-size:16px!important; line-height:1.66!important; color:' + TINTA2 + '!important; }',
+    P + '.evento .sub, ' + P + '.evento .addr{ color:' + TINTA2 + '!important; }',
 
-    /* ─────────────────────────────────────────────── 2 · LA PORTADA
-       Bloque al PIE (centrado le cae encima de las caras).
-       ⚠️ Por ID, que es lo único que le gana a estilos-servidor.css.
-       ⚠️ El tamaño de acá es el TECHO: `ajustarNombres()` lo baja cuando la
-          pareja tiene nombres largos. */
+    /* ─────────────────────────────────────────────── 2 · LA PORTADA */
     P + '.portada{ justify-content:flex-end!important; }',
     P + '#pv-kick{',
     '  font-size:12px!important; letter-spacing:.34em!important;',
     '  text-indent:.34em!important; text-transform:uppercase!important;',
-    '  color:' + CIRIO + '!important; -webkit-text-fill-color:' + CIRIO + '!important;',
+    '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '  font-family:Karla,sans-serif!important; font-weight:400!important;',
     '  margin:0 0 6px 0!important;',
     '}',
@@ -223,36 +208,30 @@
     '  line-height:1.04!important; font-weight:400!important;',
     '  font-style:italic!important; letter-spacing:.005em!important;',
     '  text-transform:none!important;',
-    '  color:' + CIRIO + '!important; -webkit-text-fill-color:' + CIRIO + '!important;',
+    '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '  text-shadow:0 1px 2px rgba(0,0,0,.55), 0 0 26px rgba(0,0,0,.42)!important;',
     '  margin:0!important; padding-bottom:.06em!important;',
     '}',
-    P + '.portada .num{ font-size:34px!important; color:' + CIRIO + '!important; font-family:"Cormorant Garamond",serif!important; }',
+    P + '.portada .num{ font-size:34px!important; color:' + CREMA + '!important; font-family:"Cormorant Garamond",serif!important; }',
 
-    /* ─────────────────────────────────── 3 · EL ARCO, SUAVE
-       ⚠️ `overflow:hidden` va sí o sí: sin eso la foto se sale del arco. */
+    /* ─────────────────────────────────── 3 · EL ARCO, SUAVE */
     P + ':is(.evento, .hotel, .pasecard, .col-vtapa, .gal figure, .gal a, .padres .av){',
     '  border-radius:' + ARCO + '!important;',
     '  overflow:hidden!important;',
     '}',
-    /* ⭐ MENOS DISEÑO: el borde baja de .34 a .18 y la sombra se afina.
-       «Muchísimo diseño» — Maki, 22/9. */
     P + ':is(.evento, .hotel, .pasecard){',
     '  background-color:' + PAPEL2 + '!important;',
-    '  border:1px solid rgba(168,130,62,.18)!important;',
-    '  box-shadow:0 6px 18px rgba(58,46,40,.09)!important;',
+    '  border:1px solid rgba(132,96,68,.20)!important;',
+    '  box-shadow:0 6px 18px rgba(74,53,36,.09)!important;',
     '}',
     P + ':is(.evento, .hotel) img{',
     '  border-radius:' + ARCO_TOP + '!important;',
     '  display:block!important; width:100%!important;',
     '}',
     P + '.gal img{ border-radius:' + ARCO + '!important; display:block!important; }',
-    /* la foto de Personas sigue siendo un círculo: es un retrato */
     P + '.padres .av{ border-radius:50%!important; }',
 
-    /* ─────────────────────── 4 · PERSONAS: LAS TRES EN UNA FILA
-       Es la regla 1 del chequeo automático. El motor pone dos columnas FIJAS
-       de 168 px; no es falta de lugar (el marco mide 500). */
+    /* ─────────────────────── 4 · PERSONAS: LAS TRES EN UNA FILA */
     P + '.padres{',
     '  grid-template-columns:repeat(3,1fr)!important;',
     '  gap:10px 8px!important; background-color:transparent!important;',
@@ -260,56 +239,44 @@
     P + '.padres .av{ width:104px!important; height:104px!important; }',
     P + '.padres .nm{ font-size:18px!important; color:' + TINTA + '!important; font-family:"Cormorant Garamond",serif!important; }',
 
-    /* ─────────────────────────────── 5 · EL ITINERARIO, AL ESTILO BOHEMIA
-       ⭐ TRES COSAS, Y LAS TRES SALIERON DE MIRAR BOHEMIA AL LADO:
-         1. El panel NO es una tabla de papel: es un VELO translúcido, para que
-            el jardín del fondo se siga viendo por detrás.
-         2. Se le saca el CUADRICULADO (el motor le pone un
-            `repeating-linear-gradient` de papel de cuentas). Con la foto
-            detrás, eso es ruido sobre ruido.
-         3. La marca de cada hora es la HOJA DE OLIVO sola, chica, sobre un
-            halo de papel. El medallón fotografiado a 26 px repetido seis
-            veces se leía como una fila de monedas.
-       ⚠️ El velo NO puede ser transparente del todo: sobre una foto el texto
-          oscuro se pierde. .58 es el número de Bohemia, medido.
-       ⚠️ Y acá el velo SÍ gana: `.tl` no es una sección, así que el motor no
-          le escribe el fondo inline. */
+    /* ───────────── 5 · EL ITINERARIO — UNA SOLA COLUMNA, COMO PERLAS
+       ⚠️⚠️ ACÁ NO SE MUEVE NADA DE LUGAR. La versión anterior ponía la vía en
+          `left:50%` para centrarla y las fichas alternaban de lado: con
+          alturas distintas, las marcas quedaban desparramadas. Maki: «los
+          círculos te quedaron muy desordenados».
+          Perlas, medida: vía a `left:2.5px`, marca a `left:-28.5px`, fichas
+          de ancho completo. Se respeta esa geometría y se cambia SÓLO el
+          material: la vía pasa a ser una regleta de cuentas en dorado y la
+          marca, la hoja de olivo. */
     P + '.tl{',
-    '  background-color:rgba(243,237,227,.58)!important;',
+    '  background-color:rgba(239,227,208,.62)!important;',
     '  background-image:none!important;',
     '  border-radius:14px!important;',
     '}',
     P + '.tl::before, ' + P + '.tl > .tl-prog{',
-    '  width:2px!important; left:50%!important; margin-left:-1px!important;',
-    '  background-image:radial-gradient(circle, ' + LATON + ' 0 1px, rgba(0,0,0,0) 1.2px)!important;',
+    '  background-image:radial-gradient(circle, ' + TAN_T + ' 0 1px, rgba(0,0,0,0) 1.2px)!important;',
     '  background-size:2px 8px!important;',
     '  background-repeat:repeat-y!important;',
     '  background-color:transparent!important;',
-    '  opacity:.72!important;',
+    '  opacity:.75!important;',
     '  top:var(--tl-ini,6px)!important; bottom:var(--tl-fin,6px)!important; height:auto!important;',
     '  animation:cantCuentas 2.4s linear infinite!important;',
     '}',
     '@keyframes cantCuentas{ from{background-position:0 0} to{background-position:0 16px} }',
     '@media (prefers-reduced-motion: reduce){ ' + P + '.tl::before{ animation:none!important } }',
-    /* ⚠️ La bajada de cada hora viene en un gris derivado del motor
-       (rgb 107,97,87) que sobre el papel da 4,47 — debajo del piso de 5.
-       Medido el 22/9 con el chequeo. En TINTA2 da 5,79. */
+    /* ⚠️ La bajada de cada hora viene en un gris del motor que sobre el papel
+       da 4,47 — debajo del piso. En TINTA2 da 5,45. */
     P + '.tl .it .h{ color:' + TINTA + '!important; }',
     P + '.tl .it .d{ color:' + TINTA2 + '!important; }',
     P + '.tl > .it::before{',
     '  content:""!important;',
-    '  width:20px!important; height:20px!important; border-radius:50%!important;',
     '  background-image:' + H + '!important;',
     '  background-size:contain!important; background-repeat:no-repeat!important;',
     '  background-color:transparent!important;',
-    '  box-shadow:0 0 0 7px rgba(243,237,227,.92)!important;',
+    '  border:0!important; box-shadow:none!important;',
     '}',
 
-    /* ─────────────────────────────────── 6 · LA RASPADITA
-       Sin recuadro (Maki ya lo pidió dos veces) y con el medallón de tapa:
-       acá la foto SÍ va, porque es UNA sola y tiene aire.
-       ⚠️ La variable --r3-tapa se declara en LAS DOS RAMAS: el lienzo no
-          cuelga de .rasp-3, y una variable sólo baja a los descendientes. */
+    /* ─────────────────────────────────── 6 · LA RASPADITA */
     P + ':is(#dc-nada, .scratchcard, .scratch-sec, .rasp-3, .rasp-zona){',
     '  --r3-tapa:url("' + MEDALLA + '");',
     '}',
@@ -322,123 +289,98 @@
     P + '.rasp-3 .r3-f{ border-radius:999px!important; }',
 
     /* ─────────────────────────────────── 7 · EL PASE
-       Nunca «básico blanco». Los rótulos son .k y .v (NO .lab/.val: esos no
-       existen y escribirlos no da error, da «no pasó nada»). */
+       Los rótulos son .k y .v (NO .lab/.val: esos no existen). */
     P + '.pasecard{ background-color:' + PAPEL2 + '!important; }',
     P + '.pasecard .t{ font-family:"Cormorant Garamond",serif!important; font-size:20px!important; color:' + TINTA + '!important; letter-spacing:.02em!important; }',
-    P + '.pasecard .k{ font-family:Karla,sans-serif!important; font-size:10.5px!important; letter-spacing:.18em!important; text-transform:uppercase!important; color:' + LATON + '!important; }',
+    P + '.pasecard .k{ font-family:Karla,sans-serif!important; font-size:10.5px!important; letter-spacing:.18em!important; text-transform:uppercase!important; color:' + TAN_T + '!important; }',
     P + '.pasecard .v{ font-family:"Cormorant Garamond",serif!important; font-size:16px!important; color:' + TINTA + '!important; }',
-    P + '.pasecard .estado{ background-color:rgba(168,130,62,.16)!important; color:' + TINTA + '!important; border:1px solid rgba(168,130,62,.38)!important; }',
-    /* ⚠️ el cuadrado del QR se deja BLANCO a propósito: un lector necesita el contraste. */
+    /* la chapita, en rosa vieja: es el único lugar donde ese tono manda */
+    P + '.pasecard .estado{ background-color:rgba(167,109,94,.18)!important; color:' + TINTA + '!important; border:1px solid rgba(167,109,94,.45)!important; }',
+    /* ⚠️ el cuadrado del QR se deja BLANCO a propósito: un lector lo necesita. */
 
     /* ─────────────────────────────────── 8 · LOS BOTONES */
     P + '.btn{',
     '  font-family:Karla,sans-serif!important; font-size:12px!important;',
     '  letter-spacing:.14em!important; text-transform:uppercase!important;',
-    '  background-color:' + LATON + '!important;',
+    '  background-color:' + TAN + '!important;',
     '  background-image:linear-gradient(176deg, rgba(255,255,255,.22), rgba(0,0,0,.10))!important;',
-    '  border:1px solid rgba(58,46,40,.18)!important;',
+    '  border:1px solid rgba(74,53,36,.18)!important;',
     '  border-radius:999px!important;',
-    '  box-shadow:0 5px 12px rgba(58,46,40,.16), inset 0 1px 0 rgba(255,255,255,.28)!important;',
+    '  box-shadow:0 5px 12px rgba(74,53,36,.16), inset 0 1px 0 rgba(255,255,255,.28)!important;',
     '}',
-    /* ⭐ La tinta del botón sólido es la oscura para TODOS: sobre latón da
-       5,41; la crema daba 2,96 y encima convivían las dos en la misma
-       invitación («Ver mapa» crema y «Reservar» casi negra). */
+    /* la tinta del botón sólido: sobre Golden Tan da 7,8 */
     P + '.btn:not(.gh){ color:' + TINTA_BTN + '!important; -webkit-text-fill-color:' + TINTA_BTN + '!important; }',
     P + '.btn.gh{',
     '  color:' + TINTA + '!important;',
     '  background-color:transparent!important;',
     '  background-image:none!important;',
-    '  border:1px solid rgba(168,130,62,.45)!important;',
+    '  border:1px solid rgba(132,96,68,.48)!important;',
     '}',
 
-    /* ───────────────── 9 · LA HOJA DE LA CARTA NO ES BLANCA
-       `.cf-letter` trae el papel clavado en el motor y no sale de ninguna
-       variable: quedaría como la única cosa blanca de la invitación. */
+    /* ───────────────── 9 · LA HOJA DE LA CARTA NO ES BLANCA */
     P + '.cf-letter{ background-color:' + PAPEL + '!important; color:' + TINTA + '!important; }',
     P + '.cf-letter h3{ font-family:"Cormorant Garamond",serif!important; color:' + TINTA + '!important; }',
 
-    /* ────────── 10 · LAS SEIS BANDAS OSCURAS DEL MOTOR (.sec.verde)
-       ⭐⭐ EL BUG QUE ENCONTRÓ LA CAPTURA, NO LA MEDICIÓN ⭐⭐
-       El motor pinta esas secciones con la TINTA al 82 % — el mismo material
-       con el que esta colección escribe. Resultado: en «Dónde y cuándo»,
-       «Dónde quedarse», «Nuestras personas», «Nuestro Hashtag», «Trivia» y
-       «Una carta para ti» el título quedaba TINTA OSCURA SOBRE FONDO OSCURO:
-       1,01 de contraste, y en la captura directamente NO ESTABA.
-       ⚠️⚠️ Y NO SE ARREGLA ACLARANDO LA BANDA: el 22/9 probé
-          `background-color:rgba(231,221,200,.34)!important` y la sección
-          siguió midiendo `srgb(0.231 0.184 0.149)`. El motor lo escribe
-          INLINE con `!important` y no hay hoja que le gane. El fondo de las
-          secciones es del motor: se le cambia la TINTA, no el fondo. */
+    /* ────────── 10 · LAS BANDAS OSCURAS DEL MOTOR (.sec.verde)
+       El motor las pinta con `--tinta` — por eso `--tinta` es BANDA (#6B4A32,
+       terracota) y no la tinta de cuerpo. Acá se les cambia la TINTA, nunca
+       el fondo: aclarar el fondo desde la colección NO gana (lo escribe
+       inline con !important). */
     P + '.sec.verde h2{',
-    '  color:' + CIRIO + '!important;',
+    '  color:' + CREMA + '!important;',
     '  background-image:' + VC + '!important;',
-    '  text-shadow:0 1px 3px rgba(0,0,0,.45)!important;',
+    '  text-shadow:0 1px 3px rgba(0,0,0,.35)!important;',
     '}',
-    P + '.sec.verde .kick{ color:' + LATON_C + '!important; }',
-    P + '.sec.verde p:not(.frase){ color:rgba(246,231,204,.90)!important; }',
-    P + '.sec.verde .frase{ color:' + CIRIO + '!important; }',
-    P + '.sec.verde .padres .nm{ color:' + CIRIO + '!important; }',
-    P + '.sec.verde .btn.gh{ color:' + CIRIO + '!important; border-color:rgba(200,164,97,.62)!important; }',
-    /* ⚠⚠ Y MEDIDO ANTES DE SUBIR (punto 0bis.4 de la skill de entrega): los
-       TRES `.btn.gh` que viven en una banda oscura están los tres ADENTRO de
-       una tarjeta de PAPEL. Pintarlos de cirio dejaba «Agendar» crema sobre
-       crema — arreglar un texto rompiendo otro. */
+    P + '.sec.verde .kick{ color:' + CREMA2 + '!important; }',
+    P + '.sec.verde p:not(.frase){ color:rgba(244,235,221,.92)!important; }',
+    P + '.sec.verde .frase{ color:' + CREMA + '!important; }',
+    P + '.sec.verde .padres .nm{ color:' + CREMA + '!important; }',
+    P + '.sec.verde .btn.gh{ color:' + CREMA + '!important; border-color:rgba(230,214,188,.55)!important; }',
+    /* ⚠⚠ Los TRES `.btn.gh` de una banda oscura están los tres ADENTRO de una
+       tarjeta de PAPEL: ahí la tinta vuelve a ser la oscura. Pintarlos de
+       crema dejaba «Agendar» crema sobre crema. */
     P + '.sec.verde :is(.evento, .hotel, .pasecard) :is(h3, p, .sub, .addr, .t, .v){',
     '  color:' + TINTA + '!important;',
     '}',
     P + '.sec.verde :is(.evento, .hotel, .pasecard) .btn.gh{',
     '  color:' + TINTA + '!important;',
-    '  border-color:rgba(168,130,62,.45)!important;',
+    '  border-color:rgba(132,96,68,.48)!important;',
     '}',
 
     /* ───────────── 11 · CONTACTO, QUE VIENE CON FOTO
-       `#contacto-sec` trae una FOTO de fondo y el motor le deja la tinta del
-       papel: el título se come con la piedra. Va en cirio, con un velo
-       degradé propio — el recurso del punto 0bis.11 de la skill de entrega:
-       una foto cambia de claro a oscuro según la franja, y sin velo la
-       legibilidad depende de qué le tocó.
-       ⚠️ El velo va en `::after` (el `::before` lo usa el molde para los
-          adornos) y NO en el `background` de la sección, que es lo que
-          ensuciaría la cuenta del contraste. */
+       El velo va en `::after` y NO en el `background` de la sección, que es
+       lo que ensuciaría la cuenta del contraste. */
     P + '#contacto-sec{ position:relative!important; }',
     P + '#contacto-sec::after{',
     '  content:""!important; position:absolute!important; inset:0!important;',
     '  z-index:0!important; pointer-events:none!important;',
-    '  background:linear-gradient(180deg, rgba(20,14,9,.34) 0%, rgba(20,14,9,.66) 100%)!important;',
+    '  background:linear-gradient(180deg, rgba(40,26,16,.34) 0%, rgba(40,26,16,.66) 100%)!important;',
     '}',
     P + '#contacto-sec > *{ position:relative!important; z-index:1!important; }',
     P + '#contacto-sec h2{',
-    '  color:' + CIRIO + '!important;',
+    '  color:' + CREMA + '!important;',
     '  background-image:' + VC + '!important;',
     '  text-shadow:0 1px 3px rgba(0,0,0,.6)!important;',
     '}',
-    P + '#contacto-sec .kick{ color:' + LATON_C + '!important; }',
-    P + '#contacto-sec p{ color:rgba(246,231,204,.88)!important; }',
+    P + '#contacto-sec .kick{ color:' + CREMA2 + '!important; }',
+    P + '#contacto-sec p{ color:rgba(244,235,221,.90)!important; }',
 
-    /* ───────────── 12 · EL PIE */
-    P + '.footer{ background-color:' + OSCURO + '!important; color:' + CIRIO + '!important; }',
+    /* ───────────── 12 · EL PIE, en terracota (ya no el marrón frío) */
+    P + '.footer{ background-color:#5A4030!important; color:' + CREMA + '!important; }',
 
-    /* ───────────── 13 · LOS CAMPOS Y LOS CONTROLES
-       El molde los pinta para OTRO fondo y quedan fuera de la paleta. Medido
-       el 22/9 MIRANDO: el campo de la trivia venía BLANCO al 92 % con borde
-       gris —un rectángulo blanco en el medio de una banda— y las flechas de
-       la galería en gris 96. */
+    /* ───────────── 13 · LOS CAMPOS Y LOS CONTROLES */
     P + ':is(input, select, textarea, .tv-in){',
     '  background-color:' + PAPEL + '!important;',
     '  color:' + TINTA + '!important;',
-    '  border:1px solid rgba(168,130,62,.40)!important;',
+    '  border:1px solid rgba(132,96,68,.42)!important;',
     '}',
-    P + ':is(input, textarea)::placeholder{ color:rgba(95,80,70,.72)!important; }',
-    P + '.tv-btn{ background-color:' + LATON + '!important; color:' + TINTA_BTN + '!important; }',
-    P + '.ar{ color:' + CIRIO + '!important; }',
+    P + ':is(input, textarea)::placeholder{ color:rgba(99,71,47,.72)!important; }',
+    P + '.tv-btn{ background-color:' + TAN + '!important; color:' + TINTA_BTN + '!important; }',
+    P + '.ar{ color:' + CREMA + '!important; }',
 
     /* ───────────── 14 · EL AIRE ENTRE DOS SECCIONES DEL MISMO TONO
-       Punto 0bis.9 de la skill de entrega: «mirá el hueco que queda entre las
-       dos secciones». Se les saca el aire muerto.
-       ⚠️ Y NADA MÁS: la primera versión les ponía además un filete de latón
-          en la junta. Con seis o siete juntas, eso es parte del «muchísimo
-          diseño». El aire alcanza. */
+       Se les saca el aire muerto, y NADA MÁS: el filete en cada junta era
+       parte del «muchísimo diseño». */
     P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:14px!important; }',
     P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
     P + '.sec.verde + .sec.verde{ padding-top:14px!important; }',
@@ -456,10 +398,9 @@
   }
 
   /* ⚠️ La vía del itinerario empieza donde está la PRIMERA marca y termina
-     donde está la ÚLTIMA. Ese punto depende del texto que cargue Jazmín, así
-     que no se puede resolver sólo con CSS: se MIDE y se pasa por variable.
-     Y son DOS elementos: la vía (.tl::before) y el relleno que avanza con la
-     hora (.tl-prog). Recortar sólo el primero deja el bug vivo. */
+     donde está la ÚLTIMA. Ese punto depende del texto que cargue Jazmín: se
+     MIDE y se pasa por variable. Y son DOS elementos: la vía (.tl::before) y
+     el relleno que avanza con la hora (.tl-prog). */
   function medirVia() {
     try {
       var tl = document.querySelector('.tl'); if (!tl) return;
@@ -475,19 +416,11 @@
   }
 
   /* ⚠️ LOS NOMBRES DE LA PORTADA NO PUEDEN TOCAR LOS BORDES.
-     Un `clamp()` fijo le queda bien a «Ana & Luis» y deja «Regina & Emiliano»
-     de punta a punta de la tarjeta: no desborda la caja (scrollWidth miente,
-     porque el bloque ya ocupa todo el ancho), pero la R y la última o quedan
-     mordidas contra el filo y se lee como si estuviera cortado.
-
-     ⚠️⚠️ LA TRAMPA QUE COSTÓ UNA VUELTA: NO se mide contra `n.parentElement`.
-        El padre (`div.c`) es hijo de un flex y su ancho SALE del texto: se
-        achica cuando el texto se achica. Medir contra él es perseguirse la
-        cola — el bucle baja de 74 a 34 px y los nombres quedan de nene. La
-        referencia estable es `.portada` menos su padding.
-
+     ⚠️⚠️ NO se mide contra `n.parentElement`: ese padre es hijo de un flex y
+        su ancho SALE del texto. La referencia estable es `.portada` menos su
+        padding.
      ⚠️ Va con `setProperty(..., 'important')`: estilos-servidor.css clava
-        #pv-names con !important y un inline sin prioridad NO le gana. */
+        #pv-names con !important. */
   var TOPE_NOMBRES = 0.86;
   function anchoUtil(n) {
     var por = document.querySelector('.portada');
@@ -522,13 +455,9 @@
   function poner() {
     var raiz = document.documentElement;
     if (!raiz.hasAttribute(MARCA)) raiz.setAttribute(MARCA, '');
-    /* La colección trae su propia marca y por eso `simbolo-tematica.js` no
-       dibuja su SVG genérico.
-       ⚠️⚠️ EL BUG DEL 22/9: esto se ponía VACÍO, y el chequeo lee
-       `data-marca-propia` con `|| ''` y después `if (propia)`. Cadena vacía
-       es falsa: para el chequeo era como no tener marca propia, y la regla
-       `simbolo-tematica` fallaba con la marca PERFECTAMENTE puesta.
-       El atributo tiene que llevar el NOMBRE de la colección. */
+    /* ⚠️⚠️ El atributo tiene que llevar el NOMBRE de la colección: el chequeo
+       lo lee con `|| ''` y después `if (propia)`. Vacío es falso y la regla
+       `simbolo-tematica` falla con la marca perfectamente puesta. */
     if (raiz.getAttribute('data-marca-propia') !== ID) raiz.setAttribute('data-marca-propia', ID);
     window.INVCOLPALETA = PALETA_PROPIA;
     var k;
@@ -571,9 +500,7 @@
     if (!document.body) { setTimeout(arrancar, 60); return; }
     sincronizar();
     addEventListener('message', function () { setTimeout(sincronizar, 80); });
-    /* ⚠️ Se repasa durante 24 s, no 16: con el fondo en video el documento
-       tarda, y el 22/9 medí a los 5 s, vi la colección sin aplicar y estuve a
-       punto de "arreglar" algo que no estaba roto. */
+    /* ⚠️ Se repasa durante 24 s: con el fondo en video el documento tarda. */
     var n = 0, t = setInterval(function () {
       sincronizar();
       if (++n > 60) clearInterval(t);
