@@ -699,7 +699,25 @@ window.SOBRES_INVITAME = {
         acá es el script. Si alguna vez se regenera con un modelo de video,
         vuelve a aplicar la regla de Maki y hay que volver a `solapas`.
 
-     Los tres tramos, medidos sobre el archivo (8,0 s · 720×1280 · 24 fps):
+     ⭐ v2 · 22/9, Maki: «hace un zoom hacia el reloj que llega a las 12 pero
+        despues hace un zoom para atras; eso me gustaria cortarlo, y que cuando
+        llegue al reloj en el primer zoom in ahi se vaya a blanco y entre en la
+        invi». La camara ya NO retrocede: empuja, clava en las 12 y entrega.
+
+        ⚠️ Y la campanada y el lavado pasaron a ser UNA SOLA RAMPA. Estaban
+           separados —un halo gaussiano aditivo primero, un fundido a blanco
+           despues— y entre que el halo decaia y el fundido arrancaba quedaba un
+           POZO DE LUZ: medido cuadro por cuadro, 224 → 191 → 244 de luminancia
+           entre 6,3 y 7,3 s. Se ve como un parpadeo justo en el empalme.
+           Apagar el halo de golpe en la campanada fue peor: escalon de −52.
+           La unica forma de garantizar que la luz no retroceda es que haya UN
+           solo brillo, monotono por construccion. Arranca medio segundo antes
+           de la campanada —eso ES el destello— y sigue hasta el papel, con el
+           color yendo de calido (255,250,236) a papel (247,251,255).
+           Comprobado: el peor retroceso de luminancia es de −0,65 puntos, que
+           es ruido del codec.
+
+     Los tramos, medidos sobre el archivo (8,0 s · 720×1280 · 24 fps):
        · 0,0 – 1,9   sale de la oscuridad y del desenfoque (brillo 0,10 → 1,0,
                      blur 15 → 0,4). El mundo del cuento apareciendo.
        · 1,9 – 5,15  la cámara empuja hacia el reloj de bolsillo del collage
@@ -715,8 +733,8 @@ window.SOBRES_INVITAME = {
      flashes seguidos.                                                       */
   'cenicienta-film': {
     nombre:  "Cenicienta · la película de llegada, el reloj da las 12 (video)",
-    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-22-9.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-poster-22-9.jpg",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v2-22-9.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v2-poster-22-9.jpg",
     color:   "#EAF2FA",
     luz:     7.1,
     luzFundido: 0.95
