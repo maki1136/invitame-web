@@ -364,6 +364,16 @@
     P + '.padres .av{ width:104px!important; height:104px!important; }',
     P + '.padres .nm{ font-size:18px!important; color:' + TINTA + '!important; font-family:"Cormorant Garamond",serif!important; }',
 
+    /* ────────────── 4bis · LA FLECHA DE LOS ACORDEONES SIGUE A SU BOTÓN
+       ⚠️⚠️ Medido el 22/9/2026 en `regina-y-emiliano`: `.chev` nacía en
+          rgb(20,18,18) —casi negro— y el botón de «Ver mapa» va oscuro con
+          tinta crema: la flecha daba 2,42 de contraste. Estaba puesta y no se
+          veía. Con el botón `placa` (plato negro, letra de latón) empeora.
+          → La flecha no tiene color propio: HEREDA el del botón. Así sirve
+            para el botón oscuro, para el claro (.btn.lt) y para cualquier
+            estilo que Jazmín elija desde el panel. */
+    P + '.btn .chev, ' + P + '.chev{ color:inherit!important; opacity:.85!important; }',
+
     /* ───────────── 5 · EL ITINERARIO — UNA SOLA COLUMNA, COMO PERLAS
        ⚠️⚠️ NO SE LE MUEVE LA VÍA DE LUGAR. Ponerla en `left:50%` hacía que las
           fichas alternaran y las marcas quedaran desparramadas.
