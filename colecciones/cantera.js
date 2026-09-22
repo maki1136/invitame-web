@@ -374,6 +374,24 @@
             estilo que Jazmín elija desde el panel. */
     P + '.btn .chev, ' + P + '.chev{ color:inherit!important; opacity:.85!important; }',
 
+    /* ────────────── 4ter · LA TAPA DEL VIDEO Y DE LA PLAYLIST NO ES UN PAPEL
+       Maki, 22/9/2026: «en ver video está el rectángulo que no me gusta,
+       anotalo en la skill porque parece que no está. Y la playlist lo mismo.»
+       ⚠️⚠️ LA CLASE ES `.rd-tapa`, LA MISMA para el video y para la playlist.
+          `.tv-tapa` y `.sp-tapa` NO EXISTEN: una regla contra una clase que no
+          existe no da error, no hace nada, y se entrega como arreglada. Ya
+          pasó en Campestre y se descubrió imprimiendo el árbol real.
+       ⭐ SE PUEDE SACAR SIN DESTAPAR EL REPRODUCTOR: medido acá, el iframe de
+          abajo está en `visibility:hidden` y sin `src`. Lo dejó resuelto Disco:
+          «no se tapa un papel con otro papel».
+       ⚠️ Se apaga POR PARTES: el atajo `background:` con !important pisa cosas
+          que no queremos pisar. Queda sólo el medallón sobre el fondo de video. */
+    P + ':is(.rd-tapa, .col-vtapa){',
+    '  background-color:transparent!important;',
+    '  background-image:none!important;',
+    '  border:0!important; box-shadow:none!important;',
+    '}',
+
     /* ───────────── 5 · EL ITINERARIO — UNA SOLA COLUMNA, COMO PERLAS
        ⚠️⚠️ NO SE LE MUEVE LA VÍA DE LUGAR. Ponerla en `left:50%` hacía que las
           fichas alternaran y las marcas quedaran desparramadas.
