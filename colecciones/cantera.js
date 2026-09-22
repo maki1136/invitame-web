@@ -238,6 +238,12 @@
     '}',
     '@keyframes cantCuentas{ from{background-position:0 0} to{background-position:0 18px} }',
     '@media (prefers-reduced-motion: reduce){ ' + P + '.tl::before{ animation:none!important } }',
+    /* ⚠️ LA BAJADA DE CADA HORA VIENE EN UN GRIS DERIVADO DEL MOTOR
+       (rgb 107,97,87) que sobre el papel de la tarjeta da 4,47 — debajo del
+       piso de 5. Medido el 22/9/2026 con el chequeo. Va en TINTA2: 5,79. */
+    P + '.tl .it .h{ color:' + TINTA + '!important; }',
+    P + '.tl .it .d{ color:' + TINTA2 + '!important; }',
+
     P + '.tl > .it::before{',
     '  content:""!important;',
     '  width:26px!important; height:26px!important; border-radius:50%!important;',
@@ -297,6 +303,46 @@
        blanca de la invitación. */
     P + '.cf-letter{ background-color:' + PAPEL + '!important; color:' + TINTA + '!important; }',
     P + '.cf-letter h3{ font-family:"Cormorant Garamond",serif!important; color:' + TINTA + '!important; }',
+
+    /* ------------- 9bis · LAS SEIS BANDAS OSCURAS DEL MOTOR (.sec.verde)
+       ⭐⭐ EL BUG QUE ENCONTRÓ LA CAPTURA, NO LA MEDICIÓN · 22/9/2026 ⭐⭐
+       El motor alterna secciones claras y secciones de color, y las de color
+       las pinta con la TINTA al 82 % — o sea, con el mismo material con el que
+       esta colección escribe. Resultado: en «Dónde y cuándo», «Dónde
+       quedarse», «Nuestras personas», «Nuestro Hashtag», «Trivia» y «Una
+       carta para ti» el título quedó TINTA OSCURA SOBRE FONDO OSCURO: 1,01 de
+       contraste. En la captura directamente NO ESTÁ.
+       Es el mismo error que el intento 4 del punto 0bis.10 de la skill de
+       entrega, dado vuelta.
+       ⚠️ NO SE LE TOCA EL FONDO A LA SECCIÓN: el fondo es del motor y
+          `reglas-duras.js` lo repinta. Se le cambia la TINTA a la de fondo
+          oscuro, que es lo que ya se hacía en #contacto-sec. */
+    P + '.sec.verde h2{',
+    '  color:' + CIRIO + '!important;',
+    '  background-image:' + VC + '!important;',
+    '  text-shadow:0 1px 3px rgba(0,0,0,.45)!important;',
+    '}',
+    P + '.sec.verde .kick{ color:' + LATON_C + '!important; }',
+    P + '.sec.verde p:not(.frase){ color:rgba(246,231,204,.90)!important; }',
+    P + '.sec.verde .frase{ color:' + CIRIO + '!important; }',
+    P + '.sec.verde .padres .nm{ color:' + CIRIO + '!important; }',
+    P + '.sec.verde .btn.gh{',
+    '  color:' + CIRIO + '!important;',
+    '  border-color:rgba(200,164,97,.62)!important;',
+    '}',
+    /* una tarjeta de papel adentro de una banda oscura sigue siendo de papel:
+       ahí adentro la tinta vuelve a ser la oscura */
+    /* ⚠⚠ Y MEDIDO ANTES DE SUBIR (la regla del punto 0bis.4 de la skill de
+       entrega): los TRES `.btn.gh` que viven en una banda oscura están los tres
+       ADENTRO de una tarjeta de papel. Pintarlos de cirio dejaba «Agendar»
+       crema sobre crema — arreglar un texto rompiendo otro. */
+    P + '.sec.verde :is(.evento, .hotel, .pasecard) :is(h3, p, .sub, .addr, .t, .v){',
+    '  color:' + TINTA + '!important;',
+    '}',
+    P + '.sec.verde :is(.evento, .hotel, .pasecard) .btn.gh{',
+    '  color:' + TINTA + '!important;',
+    '  border-color:rgba(168,130,62,.55)!important;',
+    '}',
 
     /* ─────────────────────────────── 10 · LAS SECCIONES OSCURAS
        Contacto viene con foto oscura y el motor le deja la tinta del papel:
