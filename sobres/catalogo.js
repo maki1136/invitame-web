@@ -773,6 +773,17 @@ window.SOBRES_INVITAME = {
            correcto, sino cuando hay TIEMPO SUFICIENTE para verlo. Se mide en
            cuadros, no en intencion.
 
+     ⭐ v6 · 22/9, Maki: «la aguja en las 12 QUE TIENE QUE QUEDAR».
+        El lavado a blanco se comia el reloj: la invitacion entraba desde un
+        blanco vacio y el gesto se perdia justo al final.
+        Ahora, mientras todo se disuelve en luz, LAS AGUJAS SE QUEDAN: se
+        vuelven a dibujar ENCIMA del lavado, en la posicion y el tamaño que les
+        toca en el cuadro (proyectando RCX/RCY/RR con el recorte de ese cuadro),
+        junto con el aro de la esfera en tinta tenue para que no floten solas.
+        Lo ultimo que ve el invitado antes de la invitacion es el reloj en XII.
+        Medido sobre el render, en t = 7,00 · 7,33 · 7,67 y en el ULTIMO cuadro
+        (7,96 s): aguja a 0°. Se queda hasta el final.
+
      Los tramos, medidos sobre el archivo (8,0 s · 720×1280 · 24 fps):
        · 0,0 – 1,9   sale de la oscuridad y del desenfoque (brillo 0,10 → 1,0,
                      blur 15 → 0,4). El mundo del cuento apareciendo.
@@ -789,8 +800,8 @@ window.SOBRES_INVITAME = {
      flashes seguidos.                                                       */
   'cenicienta-film': {
     nombre:  "Cenicienta · la película de llegada, el reloj da las 12 (video)",
-    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v5-22-9.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v5-poster-22-9.jpg",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-v6-22-9.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-v6-poster-22-9.jpg",
     color:   "#EAF2FA",
     luz:     7.1,
     luzFundido: 0.95
