@@ -122,12 +122,14 @@
     "<line x1='12' y1='5.6' x2='12' y2='18.4' stroke='%23C7B5A1' stroke-width='0.8'/>" +
     "</g></svg>";
 
-  /* ⭐ LA TAPA DE «NUESTRO VIDEO»: UN PLAY, NO LA ROSA.
-     Maki, 21/9: «cuando hice nuestro video se quedó muy mal eso, sacalo y
-     ponele algún dibujo que coincida con un play y con el estilo».
-     La rosa cuadrada estirada arriba del iframe no leía como "dale play".
-     Va un play dibujado en el MISMO lenguaje que los filetes: dos aros finos y
-     un triángulo camel. Nada de un botón de reproductor genérico. */
+  /* ⛔ ESTE PLAY QUEDÓ SIN USAR, Y SE DEJA A PROPÓSITO CON EL CARTEL PUESTO.
+     Nació el 21/9 para sacar la rosa estirada de «nuestro video» («ponele algún
+     dibujo que coincida con un play y con el estilo»). Pero pintado como
+     `background-image` del contenedor quedaba ENCIMA del aro que el motor ya
+     dibuja, y Maki lo vio esa misma noche: «está todo superpuesto».
+     → No se vuelve a enchufar. Si algún día hace falta otro play, se le cambia
+       el COLOR al `.rd-aro` del motor, no se dibuja uno nuevo.
+     Se conserva la constante por si sirve de pieza suelta en otro lado. */
   var PLAY = "data:image/svg+xml;utf8," +
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'>" +
     "<circle cx='48' cy='48' r='43' fill='none' stroke='%23C7B5A1' stroke-width='0.9'/>" +
@@ -280,7 +282,13 @@
        y con flex-end queda del 53% al 91%: mismo pie, y la pareja libre.
        ⚠️ El `padding:0 26px 58px` que deja ese 9% de aire abajo YA VIENE DEL
           MOTOR, es idéntico en las dos. Lo único que hay que cambiar es el
-          justify-content: no se agrega padding propio. */
+          justify-content: no se agrega padding propio.
+       ⚠️⚠️ Y SI EL BLOQUE IGUAL LES CAE ENCIMA, NO SE MUEVE EL TEXTO: SE MUEVE
+          EL ENCUADRE DE LA FOTO. Los campos son `cx`/`cy`/`cz` del evento —el
+          control «encuadre» del panel, o sea algo que Jazmín maneja sola—. En
+          `julia-y-santiago` estaba en cy 44 y la pareja caía justo detrás del
+          nombre; con cy 100 las caras quedan arriba del texto. El bloque no se
+          tocó: sigue en flex-end. */
     P + '.portada{ justify-content:flex-end!important; }',
 
     /* el velo. Va en un ::before del BLOQUE, no en el fondo de la portada:
@@ -430,6 +438,19 @@
     '  box-shadow:none!important;',
     '}',
 
+    /* ⚠️ «Las raspaditas te quedaron de diferentes colores» (Maki, 21/9 de
+       noche). NO son tres fotos distintas: es la MISMA rosa. El motor le pone
+       la clase `dormida` a las celdas que todavía no tocan y las apaga con
+       `filter:brightness(.84) saturate(.72)`, para señalar por dónde empezar.
+       A ese nivel deja de leerse como una pista y se lee como tres colores
+       distintos, que es peor que la ayuda que da.
+       Se conserva la señal, pero apenas perceptible.
+       ⚠️ Especificidad: `:is(#bh-nada, .rasp-zona)` vale (1,0,0), así le gana
+          al (0,2,1) del motor sin tener que inventar otro contenedor. */
+    ':is(#bh-nada, .rasp-zona).dormida canvas{',
+    '  filter:brightness(.97) saturate(.95)!important;',
+    '}',
+
     /* ══ EL ITINERARIO ═════════════════════════════════════════════════════
        Rediseñado el 21/9 a pedido de Maki: «la línea va centrada, y quiero más
        movimiento de las palabras: que entren de izquierda a derecha y la
@@ -537,24 +558,41 @@
     P + '.tl .it .d{ font-family:' + SANS + '!important; color:' + TINTA2 + '!important; }',
     P + '.tl .it .t{ font-family:' + DISPLAY + '!important; letter-spacing:.10em!important; }',
 
-    /* ── LA TAPA DE LA PLAYLIST ────────────────────────────────────────────
-       Sigue con la rosa. La del VIDEO cambia al play (abajo).
-       ⚠️ LA TAPA NO ES UN RECTÁNGULO: va transparente, con el iframe en
-          visibility:hidden. */
-    P + '.sp-tapa{',
-    '  background-color:transparent!important;',
-    '  background-image:url("' + ROSA + '")!important;',
-    '  background-size:78px 78px!important;',
-    '  background-position:center!important;',
-    '  background-repeat:no-repeat!important;',
+    /* ── ⭐⭐ LAS TAPAS DE «NUESTRO VIDEO» Y DE LA PLAYLIST ─────────────────
+       Maki, 21/9 de noche: «fijate que está todo superpuesto».
+
+       ⚠️⚠️ ERA MÍO, Y ES LA TRAMPA QUE NO HAY QUE REPETIR: EL MOTOR YA DIBUJA
+          EL PLAY. La tapa que crea el motor es:
+              .rd-tapa > .rd-aro   (62 px: aro de 1 px + triángulo en ::after)
+                       > .rd-txt   (el rótulo, DEBAJO del aro)
+          y las dos piezas se pintan con `currentColor`.
+          Yo, para sacar la foto estirada que Maki había rechazado, le pinté
+          ADEMÁS un play de 86 px como `background-image` DEL CONTENEDOR,
+          centrado. MEDIDO en vivo sobre la playlist: mi play iba de 135 a
+          221 px, el aro del motor de 135 a 197 y el rótulo de 207 a 221.
+          O sea DOS PLAYS, uno encima del otro, con el rótulo atravesado.
+
+       ⭐ LA REGLA: antes de dibujar un adorno nuevo, mirar si el motor YA lo
+          dibuja. Si ya está, la colección le da el COLOR, no otro dibujo.
+       ⚠️ El aro viene con `opacity:.75` y el rótulo con `.65`: hay que subirlas
+          o el camel se lava contra el papel. */
+    P + '.rd-tapa, ' + P + '.sp-tapa{',
+    '  background-color:' + PAPEL2 + '!important;',
+    '  background-image:none!important;',
+    '  color:' + CAMEL + '!important;',
+    '  border:0!important;',
+    '  box-shadow:none!important;',
     '}',
-    /* ⭐ NUESTRO VIDEO: el play dibujado, no la rosa estirada */
-    P + '.rd-tapa{',
-    '  background-color:transparent!important;',
-    '  background-image:url("' + PLAY + '")!important;',
-    '  background-size:86px 86px!important;',
-    '  background-position:center!important;',
-    '  background-repeat:no-repeat!important;',
+    P + '.rd-tapa .rd-aro, ' + P + '.sp-tapa .rd-aro{',
+    '  opacity:1!important;',
+    '  border-color:' + CAMEL + '!important;',
+    '  background-color:rgba(247,241,231,.55)!important;',
+    '}',
+    P + '.rd-tapa .rd-txt, ' + P + '.sp-tapa .rd-txt{',
+    '  font-family:' + SANS + '!important;',
+    '  color:' + TINTA2 + '!important;',
+    '  opacity:1!important;',
+    '  letter-spacing:.18em!important;',
     '}',
 
     /* ── LA PERILLA DEL SÍ / NO ────────────────────────────────────────────
@@ -566,8 +604,34 @@
           (.aro, .pozo, .per)`. `.si .knob` NO EXISTE, aunque lo diga cualquier
           apunte viejo. Y los `.mitad` miden 38 px (bajo el piso de 44): lo que
           salva el toque son los rótulos `.et`, de 73 y 83 px. */
-    P + '.rsvp-sw .pozo{ background-color:' + PAPEL + '!important; }',
-    P + '.rsvp-sw .aro{ border-color:' + TINTA3 + '!important; }',
+    /* ⚠️⚠️ EL GRIS NO SE SACA CON `background-color`, Y ESO ERA EL PARPADEO.
+       Maki, 21/9 de noche: «el botón de confirmación titila», «la de sí
+       asistiré tiene ese problema en todo momento».
+       MEDIDO EN VIVO:
+         · el pozo salía `linear-gradient(215deg, rgb(207,207,203),
+           rgb(185,185,180))` — un gris CLAVADO en el motor;
+         · el aro sale de un degradado que usa `--lino2`, `--cream` y `--muted`,
+           las TRES variables que `efectos/paleta.js` reescribe cada 1,5 s.
+       Poner `background-color` NO alcanza: el degradado es `background-image` y
+       se dibuja ENCIMA del color. Y como el pozo trae `transition:background
+       .3s`, cada reescritura de la paleta lo funde de nuevo — ése es el
+       parpadeo, y por eso pasa «en todo momento».
+       → Se apaga la IMAGEN, se fija el color y se corta la transición: así el
+         control deja de depender de variables que otro módulo reescribe.
+       ⚠️ La perilla sin `data-r` queda en el MEDIO (left 27,25 px) a propósito:
+          es «todavía no respondió». No se toca. */
+    P + '.rsvp-sw .pozo{',
+    '  background-image:none!important;',
+    '  background-color:#DCCEBD!important;',
+    '  transition:none!important;',
+    '}',
+    P + '.rsvp-sw[data-r="si"] .pozo{ background-image:none!important; background-color:' + CAMEL + '!important; }',
+    P + '.rsvp-sw[data-r="no"] .pozo{ background-image:none!important; background-color:' + TINTA3 + '!important; }',
+    P + '.rsvp-sw .aro{',
+    '  background-image:none!important;',
+    '  background-color:' + PAPEL2 + '!important;',
+    '  border-color:' + TINTA3 + '!important;',
+    '}',
     P + '.rsvp-caja .et{ font-family:' + SANS + '!important; letter-spacing:.16em!important; text-transform:uppercase!important; }',
 
     /* ── ⭐ EL PASE ────────────────────────────────────────────────────────
@@ -668,9 +732,9 @@
        invitaciones. Maki ya lo marcó («siempre ponés lo mismo»).
        ⚠️ Acá NO va una foto: el adorno de arriba de cada título es una VIÑETA
           TIPOGRÁFICA y va en vector. La foto es para los OBJETOS reconocibles
-          — en Bohemia, la rosa de la playlist y de la raspadita. Y la marca del
-          itinerario es ESTA MISMA HOJA, a propósito: es lo que hace que la
-          pieza se lea como una sola.
+          — en Bohemia, la rosa de la raspadita. Y la marca del itinerario es
+          ESTA MISMA HOJA, a propósito: es lo que hace que la pieza se lea como
+          una sola.
        ⚠️ Y `simbolo-tematica.js` no lo pisa, porque esta colección firma
           `data-marca-propia` y ese módulo se corre solo. */
     P + '.adorno > svg{ display:none!important; }',
@@ -696,6 +760,17 @@
     '  letter-spacing:.20em!important; text-indent:.20em!important;',
     '  text-transform:uppercase!important;',
     '  font-size:12px!important;',
+    '}',
+
+    /* ⚠️ LA FLECHITA DE LOS DESPLEGABLES («Escuchar la playlist ▾», «Ver mapa
+       ▾»). MEDIDA: salía en rgb(20,18,18), un casi-negro que no pertenece a
+       ninguna paleta de la colección — el mismo bicho que el gris del pase y el
+       verde de la chapita. Es decoración: va en camel y más chica que la
+       palabra. */
+    P + '.btn .chev, ' + P + '.chev{',
+    '  color:' + CAMEL + '!important;',
+    '  font-size:.85em!important;',
+    '  opacity:.9!important;',
     '}',
 
     '@media (prefers-reduced-motion: reduce){',
