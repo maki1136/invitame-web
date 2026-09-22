@@ -683,6 +683,45 @@ window.SOBRES_INVITAME = {
     eje:      { x: 50.0, y: 33.4 }
   },
 
+  /* ---- ★ CENICIENTA · LA PELÍCULA DE LLEGADA  (22/9/2026) ---------------
+     Maki: «dame una opción de video con el que tenés armado pero para que sea
+     en reemplazo al sobre de la presentación, a ver cómo queda, ponele onda».
+
+     ⚠️ NO REEMPLAZA a `cenicienta`: convive con él. El sobre de papel con las
+        solapas queda intacto y se vuelve cambiando `fx.sobre.modelo` de
+        `cenicienta-film` a `cenicienta`. Es una palabra desde el panel.
+
+     ⚠️ Y NO CONTRADICE la regla del sobre de anillos («un video generado con
+        IA hace lo que quiere»): esta película NO la generó una IA. Está armada
+        cuadro por cuadro con ffmpeg sobre el MISMO collage que es el fondo de
+        la invitación, así que el tiempo y el encuadre son exactos y repetibles
+        — es el motor el que manda, igual que en `solapas`, sólo que el motor
+        acá es el script. Si alguna vez se regenera con un modelo de video,
+        vuelve a aplicar la regla de Maki y hay que volver a `solapas`.
+
+     Los tres tramos, medidos sobre el archivo (8,0 s · 720×1280 · 24 fps):
+       · 0,0 – 1,9   sale de la oscuridad y del desenfoque (brillo 0,10 → 1,0,
+                     blur 15 → 0,4). El mundo del cuento apareciendo.
+       · 1,9 – 5,15  la cámara empuja hacia el reloj de bolsillo del collage
+                     mientras las agujas dan dos vueltas.
+       · 5,15        LA CAMPANADA: las agujas clavan en las 12 y florece la luz
+                     cálida (gaussiana σ=0,42).
+       · 6,45 – 8,0  se aleja y se lava en papel. El último cuadro mide
+                     (244,248,252) — el `colorCarta` de Clara es #F7FBFF, así
+                     que el empalme con la invitación no tiene costura.
+
+     `luz` va en 7,1 y no en 5,0 como Bohemia: el destello del motor tiene que
+     montarse sobre MI lavado a papel, no sobre la campanada, o se ven dos
+     flashes seguidos.                                                       */
+  'cenicienta-film': {
+    nombre:  "Cenicienta · la película de llegada, el reloj da las 12 (video)",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_auto/invitame/sobres/sobre-cenicienta-22-9.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-cenicienta-poster-22-9.jpg",
+    color:   "#EAF2FA",
+    luz:     7.1,
+    luzFundido: 0.95
+  },
+
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
