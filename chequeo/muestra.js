@@ -181,17 +181,20 @@
   }
 
   /* ★ TRAMPA 3: ¿hay una FOTO tapando el fondo de este texto?
-     Se busca una capa POSICIONADA (absoluta o fija) que cubra por completo al
-     texto y que sea una imagen: un <img>, un <video> o un div con
-     `background-image: url(...)`. Eso es `.pbg` en la portada y las capas de
-     foto de las secciones.
+     Dos formas, y las dos aparecen en la misma invitación:
 
-     ⚠️ A PROPÓSITO NO SE MIRA EL `background-image` DEL PROPIO ANCESTRO.
-        El papel de la invitación es una textura (`body.tex-lino`, y en Marfil
-        también el marco). Si contara como foto, TODA la invitación quedaría
-        exenta y la regla de contraste se apagaría entera sin avisar. Y además
-        medir contra `--lino` en ese caso es CORRECTO: la textura es del color
-        del papel. Lo que no se puede medir es una fotografía. */
+       a) una CAPA POSICIONADA que cubre al texto por completo y es una imagen:
+          un <img>, un <video> o un div con `background-image: url(...)`.
+          Eso es `.pbg` en la portada.
+       b) la FOTO DE FONDO DE UNA SECCIÓN, puesta como `background-image` del
+          propio <section>. Eso es `#contacto-sec`.
+
+     ⚠️ (b) SE LIMITA A UN `SECTION`, Y ES A PROPÓSITO. El papel de la
+        invitación es una textura y vive en `body.tex-lino` y en `.frame` —los
+        dos son DIV o BODY, así que quedan afuera—. Si contaran, TODA la
+        invitación quedaría exenta y la regla de contraste se apagaría entera
+        sin avisar. Y además medir contra `--lino` en ese caso es CORRECTO: la
+        textura es del color del papel. Lo que no se puede medir es una foto. */
   function tapaFoto(el) {
     var marco = document.querySelector('.frame');
     var r = el.getBoundingClientRect();
@@ -212,6 +215,8 @@
         if (b.left <= r.left + 1 && b.right >= r.right - 1 &&
             b.top <= r.top + 1 && b.bottom >= r.bottom - 1) return true;
       }
+      if (n.tagName === 'SECTION' &&
+          /url\(/.test(getComputedStyle(n).backgroundImage || '')) return true;
       if (n === marco) break;
       n = n.parentElement;
     }
