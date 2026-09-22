@@ -275,13 +275,29 @@
       return { pasa: false, nota: 'hay ' + cont.children.length + ' persona(s) en el DOM y ninguna se pudo medir' };
     }
     if (tar.length < 2) return { pasa: true, nota: tar.length + ' persona(s)' };
-    var tops = tar.map(function (t) { return Math.round(t.getBoundingClientRect().top); });
-    var filas = tops.filter(function (v, i, a) { return a.indexOf(v) === i; }).length;
+    /* ⚠️⚠️ UN PÍXEL DE DIFERENCIA NO ES UNA FILA. Medido el 22/9/2026 en
+       `regina-y-emiliano`: las tres tarjetas estaban perfectamente en línea
+       —izquierdas 438 / 580 / 722, mismo ancho— y sus `top` daban 5557, 5556 y
+       5556. Un redondeo distinto en UNA tarjeta hacía contar DOS filas, y la
+       regla que más le importa a Maki fallaba con la muestra impecable. Una
+       regla que grita con todo bien enseña a ignorarla, que es peor que no
+       tenerla (es la misma lección de la trampa 3 del encabezado).
+       → Se agrupa con TOLERANCIA: dos tarjetas están en la misma fila si sus
+         `top` se llevan menos de la mitad del alto de la tarjeta. */
+    var tops = tar.map(function (t) { return t.getBoundingClientRect().top; });
+    var altoTar = Math.max.apply(null, tar.map(function (t) {
+      return t.getBoundingClientRect().height || 0;
+    }));
+    var tol = Math.max(6, altoTar * 0.5);
+    var filas = 0, ultimo = null;
+    tops.slice().sort(function (a, b) { return a - b; }).forEach(function (v) {
+      if (ultimo === null || v - ultimo > tol) { filas++; ultimo = v; }
+    });
     return {
       pasa: filas === 1,
       nota: tar.length + ' personas en ' + filas + ' fila(s)' +
             (filas === 1 ? '' : ' — grid: ' + getComputedStyle(cont).gridTemplateColumns),
-      detalle: tops
+      detalle: tops.map(function (v) { return Math.round(v); })
     };
   });
 
