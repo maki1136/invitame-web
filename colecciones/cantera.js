@@ -63,6 +63,9 @@
   var TINTA2  = '#5F5046';   /* el texto secundario                         */
   var CIRIO   = '#F6E7CC';   /* la luz de la vela                           */
   var OSCURO  = '#2A2018';   /* las bandas oscuras                          */
+  /* La tinta del botón sólido es MÁS oscura que OSCURO a propósito: sobre el
+     latón, OSCURO da 4,50 y no llega al piso de 5. Ésta da 5,41. Medido. */
+  var TINTA_BTN = '#150F09';
 
   var MEDALLA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/piezas/cantera-medalla-2.webp';
 
@@ -344,10 +347,22 @@
     '  border-color:rgba(168,130,62,.55)!important;',
     '}',
 
-    /* ─────────────────────────────── 10 · LAS SECCIONES OSCURAS
-       Contacto viene con foto oscura y el motor le deja la tinta del papel:
-       el título se come con el fondo. Va en cirio, con una sombra corta que
-       lo despegue de la textura. */
+    /* ─────────────────────────────── 10 · CONTACTO, QUE VIENE CON FOTO
+       `#contacto-sec` trae una FOTO de fondo (el interior del templo) y el
+       motor le deja la tinta del papel: el título se come con la piedra.
+       Va en cirio, y ADEMÁS con un velo degradé propio, que es el recurso del
+       punto 0bis.11 de la skill de entrega: una foto cambia de claro a oscuro
+       según la franja, y sin velo la legibilidad depende de qué tocó.
+       ⚠️ El velo va en `::after`, no en `::before` (el `::before` es el que
+          suele usar el molde para los adornos) y NO en el `background` de la
+          sección, que es lo que ensuciaría la cuenta del contraste. */
+    P + '#contacto-sec{ position:relative!important; }',
+    P + '#contacto-sec::after{',
+    '  content:""!important; position:absolute!important; inset:0!important;',
+    '  z-index:0!important; pointer-events:none!important;',
+    '  background:linear-gradient(180deg, rgba(20,14,9,.34) 0%, rgba(20,14,9,.66) 100%)!important;',
+    '}',
+    P + '#contacto-sec > *{ position:relative!important; z-index:1!important; }',
     P + '#contacto-sec h2{',
     '  color:' + CIRIO + '!important;',
     '  background-image:' + VC + '!important;',
@@ -368,16 +383,17 @@
          · «Reservar» y «Ver en Instagram» tenían tinta casi negra mientras
            «Ver mapa» la tenía crema: DOS tintas distintas en el mismo botón;
          · las flechas de la galería, gris 96 sobre el velo.
-       ⭐ La tinta del botón sólido pasa a ser la OSCURA para todos: sobre
-          latón da 5,27 contra 2,96 de la crema, y además queda pareja. */
-    P + '.btn:not(.gh){ color:' + OSCURO + '!important; -webkit-text-fill-color:' + OSCURO + '!important; }',
+       ⭐ La tinta del botón sólido pasa a ser la oscura para todos, y en el
+          tono TINTA_BTN: con OSCURO daba 4,50 sobre latón y no llegaba al
+          piso; así da 5,41. La crema daba 2,96. */
+    P + '.btn:not(.gh){ color:' + TINTA_BTN + '!important; -webkit-text-fill-color:' + TINTA_BTN + '!important; }',
     P + ':is(input, select, textarea, .tv-in){',
     '  background-color:' + PAPEL + '!important;',
     '  color:' + TINTA + '!important;',
     '  border:1px solid rgba(168,130,62,.45)!important;',
     '}',
     P + ':is(input, textarea)::placeholder{ color:rgba(95,80,70,.72)!important; }',
-    P + '.tv-btn{ background-color:' + LATON + '!important; color:' + OSCURO + '!important; }',
+    P + '.tv-btn{ background-color:' + LATON + '!important; color:' + TINTA_BTN + '!important; }',
     P + '.ar{ color:' + CIRIO + '!important; }',
 
     /* ───────── 13 · LA COSTURA ENTRE DOS SECCIONES DEL MISMO TONO
