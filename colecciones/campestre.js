@@ -11,7 +11,7 @@
      · Marfil   → papel marfil, portada sin foto, NÁCAR,  Cormorant + Parisienne
      · Disco    → noche, plata sobre negro, bola espejos, Montserrat + Rouge
      · Campestre→ campo al atardecer, crema y oliva,      Forum + Sacramento + Lora
-                  botón ARCILLA, marca de OLIVO PRENSADO fotografiado
+                  botón ARCILLA, marca de EUCALIPTO PRENSADO fotografiado
 
    Cero cruce: ni una tipografía, ni un botón, ni un color, ni una foto
    compartida con las otras.
@@ -112,8 +112,26 @@
      Se publica en `poner()` y se BORRA en `sacar()`, como hace Marfil. */
 
   /* --------------------------------------------------------------- la pieza
-     El medallón de papel hecho a mano con una ramita de OLIVO PRENSADA,
+     El medallón de papel hecho a mano con una ramita de EUCALIPTO PRENSADA,
      fotografiado y recortado con alfa.
+
+     ⚠️⚠️ LA PLANTA SE CAMBIÓ DOS VECES, Y LA SEGUNDA ES UNA LECCIÓN DE FORMA.
+        Primero fue una ramita de OLIVO, y Maki la frenó: «esa boquita parece
+        una planta de marihuana». Tenía razón, y la causa es geométrica: seis
+        o siete hojas LANCEOLADAS que salen en abanico desde un mismo punto
+        dibujan exactamente esa silueta. No es cuestión de color ni de
+        tamaño — es el patrón.
+     ⚠️ Después probé un LACRE de terracota, y también lo frenó: «lo quiero
+        igual al que estaba, cambiando la planta nada más». O sea: el
+        medallón de papel se queda; lo único que cambia es lo que hay encima.
+     → El eucalipto lo resuelve porque su hoja es REDONDA y va alternada a lo
+        largo de un tallo curvo: ninguna de las dos cosas que arman la
+        silueta de la marihuana.
+     ⚠️ Y SE PROBÓ TAMBIÉN CON TRIGO, que era lo más obvio para esta boda, y
+        SE DESCARTÓ CON NÚMEROS: dorado pálido sobre papel crema da, a 22 px,
+        media 227 y desvío 21 — contra 214 y 32 del eucalipto. En la vía del
+        itinerario el trigo desaparece. Y encima suma amarillo, justo lo que
+        Maki marcó de más en el fondo.
 
      ⚠️ VA EN **TRES** LUGARES, NO EN CUATRO: la marca de cada momento del
         itinerario, la perilla del interruptor de confirmar y la tapa de la
@@ -138,10 +156,10 @@
         marca del itinerario), 40, 84 (la tapa de la playlist) y 160. A 22 px
         el disco casi se funde con el papel —es crema sobre crema— y lo que
         sostiene la marca es EL VERDE de la hoja. Medido a 22 px sobre
-        #f3e9d9: luminancia media 213 contra 234 del papel, mínimo 130.
+        #f3e9d9: luminancia media 214 contra 234 del papel, mínimo 111.
         Si alguna vez se cambia la pieza, la cuenta se vuelve a hacer: una
         pieza que sólo funcione grande deja el itinerario sin marca. */
-  var PIEZA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790044213/invitame/piezas/olivo-prensado.webp';
+  var PIEZA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790047167/invitame/piezas/eucalipto-prensado.webp';
 
   /* el fondo por defecto de la colección: el campo con viento, en video.
      Medido: 6,83 s de loop, 945 KB, movimiento medio 4,52 con mínimo 2,24
