@@ -694,14 +694,21 @@
     '     0 0 0 6px rgba(150,80,47,.28)!important;',
     '  backdrop-filter:none!important; -webkit-backdrop-filter:none!important;',
     '}',
-    /* ⚠️ MEDIDO DESPUÉS DE SACAR LA TAPA, con máscara de glifos: con TINTA2
-       el rótulo daba mediana 4,81 — por debajo del piso de 5. Sin el papel
-       opaco atrás, este texto pasó a caer sobre el velo de lectura y ya no
-       le alcanza la tinta de las bajadas. Va la TINTA principal. */
-    P + '.rd-tapa .rd-txt{',
-    '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
-    '  text-shadow:0 1px 6px rgba(243,233,217,.9), 0 0 14px rgba(243,233,217,.7)!important;',
-    '}',
+    /* ⭐ Y EL RÓTULO DE LA TAPA SE VA, POR DOS RAZONES.
+       1. REPITE EL TÍTULO. Debajo de «Nuestro video» decía «NUESTRO VIDEO»,
+          y debajo de «Playlist del evento», «LA PLAYLIST». Es la regla 7 de
+          la skill de entrega: el sobretítulo no puede repetir el título.
+          El aro ya dice «tocá acá»; el título ya dice qué es.
+       2. NO HABÍA FORMA DE QUE SE LEYERA. Medido con máscara de glifos:
+          con TINTA2 daba mediana 4,81, por debajo del piso de 5 — sin el
+          papel opaco atrás quedó sobre el velo de lectura. Lo subí a TINTA
+          y **no cambió**: 4,88. La causa es que `reglas-duras.js` le escribe
+          el color EN LÍNEA con !important —`rgb(95,94,79)`, un oliva grisado
+          que no es de ninguna paleta— y contra un inline !important no gana
+          ninguna hoja. O sea que el motor lo estaba dejando PEOR que el
+          color de fábrica: es el error 26 de su propio archivo.
+          Sacando el rótulo se acaban los dos problemas a la vez. */
+    P + '.rd-tapa .rd-txt{ display:none!important; }',
 
     /* ================================================ EL FORMULARIO ==========
        ⭐ LOS CAMPOS SON UNA RAYA, NO UNA CAJA. Maki, 22/9/2026, sobre la
