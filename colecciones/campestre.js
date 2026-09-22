@@ -57,6 +57,12 @@
   /* ------------------------------------------------------------------ colores */
   var PAPEL   = '#f3e9d9';   /* crema cálido: el papel */
   var PAPEL2  = '#efe4d1';   /* el mismo, un punto más tostado */
+  /* El degradado que difumina el canto de arriba de una sección con foto
+     propia. En px, no en %, porque lo que tiene que respetar es la distancia
+     hasta la primera letra (42 px de tinta + 80 px de aire = 122). */
+  var VELO_CANTO = 'linear-gradient(180deg, rgba(0,0,0,0) 0px,' +
+                   ' rgba(0,0,0,.40) 20px, rgba(0,0,0,.80) 46px,' +
+                   ' rgba(0,0,0,1) 76px, rgba(0,0,0,1) 100%)';
   var TINTA   = '#2f3320';   /* oliva muy oscuro: títulos y texto principal */
   var TINTA2  = '#55523a';   /* bajadas y datos */
   var TINTA3  = '#7a7458';   /* ⚠️ SOLO filetes, bordes y separadores */
@@ -288,6 +294,61 @@
           que las demás secciones y la tinta le vuelve a ser oscura, como en
           toda la muestra. Un cambio depende del otro: si se despliega uno
           solo, la sección queda mal. */
+
+    /* ⭐⭐ 22/9/2026 — Y EL BORDE DE ARRIBA DE ESA FOTO, DIFUMINADO.
+       Maki, mirándola ya clara: «me gustó, pero ese corte recto de arriba es
+       durísimo, corta fuerte. ¿No se puede difuminar así el corte no es tan
+       brusco?»
+       Tiene razón y es el precio de que la foto ahora sea CLARA: contra la
+       foto de noche el canto se perdía en el contraste; contra un campo a
+       pleno sol queda una línea horizontal perfecta a lo ancho de la pantalla.
+
+       La foto se desvanece hacia arriba con una MÁSCARA, así que lo que
+       aparece debajo es el propio VIDEO DE FONDO — trigo sobre trigo. No es
+       un degradado de color encima: un degradado plano se vería como una
+       banda de neblina sobre el video, porque atrás no hay un color liso.
+
+       ⚠️⚠️ Y ACÁ CASI ME COMO EL TEXTO, POR UN ERROR QUE ESTÁ ESCRITO EN MI
+          PROPIA SKILL: **medí la geometría de un `.reveal` ANTES DE QUE
+          TERMINARA.** Sin haber bajado hasta la sección, el `h2` declara
+          `top: 72px` y `opacity: 0` — está desplazado por la animación de
+          entrada. Ya revelado, la TINTA del título arranca a **42 px** del
+          borde, no a 72. Con esa medición falsa me había quedado un
+          difuminado de 72 px que le pasaba por encima al título: medido,
+          el p5 caía de 5,50 a 4,66 y el mínimo a 2,63.
+          → La geometría de cualquier cosa con `.reveal` se mide DESPUÉS de
+            scrollear hasta ella y esperar, y lo que importa no es el
+            `getBoundingClientRect` sino dónde empieza la TINTA (máscara de
+            glifos).
+
+       LA SOLUCIÓN NO ES ACORTAR EL DIFUMINADO, ES DARLE LUGAR: la sección
+       pasa de 30 a 80 px de aire arriba, y entonces el degradado puede tomar
+       76 px sin rozar una letra (16 px de sobra). Medido en la misma pasada,
+       con el video pausado en el mismo cuadro:
+
+           sin máscara ............ mediana 6,66 · p5 6,03 · mín 4,92
+           máscara corta de 34 px . mediana 6,77 · p5 6,12 · mín 4,96
+           con aire 64 + 60 px .... mediana 6,83 · p5 6,38 · mín 5,35
+           **con aire 80 + 76 px**  **mediana 6,87 · p5 6,42 · mín 5,59**
+
+       O sea que el borde difuminado no sólo no empeora la lectura: la MEJORA,
+       porque el título deja de caer sobre el canto duro de la foto.
+
+       ⚠️ EL DEGRADADO NO ES LINEAL. Sube rápido al principio y se acuesta al
+          final (.40 a los 20 px, .80 a los 46, 1 a los 76). Un degradado
+          recto deja ver dónde termina; éste no.
+       ⚠️ ABAJO NO SE TOCA, Y ES A PROPÓSITO. Probado: difuminar también el
+          canto de abajo deja una franja de arena entre la foto y la foto del
+          pie, y el corte contra el pie se nota MÁS, no menos. Foto contra
+          foto se lee como un corte de edición; foto contra fondo, no.
+       ⚠️ VAN LAS DOS PROPIEDADES, con `-webkit-` primero: iOS es donde Maki
+          prueba, y ahí la que manda es la prefijada. */
+    P + '.sec[style*="url("]{',
+    '  padding-top:80px!important;',
+    '  -webkit-mask-image:' + VELO_CANTO + '!important;',
+    '  mask-image:' + VELO_CANTO + '!important;',
+    '  -webkit-mask-repeat:no-repeat!important; mask-repeat:no-repeat!important;',
+    '}',
 
     /* ------------------------------------------------------------ tipografía
        Si la invitación eligió fuente propia desde el panel, la colección no
