@@ -93,8 +93,16 @@
      transparencia, así que por todo lo que no es zapato se veía la fecha.
      No se toca el motor por esto: el contrato del módulo es que la colección
      escribe `--r3-tapa` y él obedece. Se le da una imagen que YA es opaca:
-     la misma zapatilla sobre un disco de plata helada, 560x560, sin alfa. */
-  var ZAPA_TAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790017677/invitame/cenicienta/lh912pfu1gekkwwxj0ur.jpg';
+     la misma zapatilla sobre un disco de plata helada, 560x560, sin alfa.
+
+     ⚠️⚠️ Y EL DISCO TIENE QUE SER DEL COLOR DEL PAPEL, NO DE PLATA.
+        Maki, 21/9: «te quedaron de distinto color la raspada». Tenía razón: el
+        disco era plata azulada (#A9C3DE aprox) adentro de una sección de papel
+        casi blanco, así que las tres celdas se leían como tres botones pegados
+        encima de la hoja. Ahora el disco es el PAPEL de la colección (#F2F7FC)
+        con un aro finito de plata al 2 px: la tapa desaparece dentro de la
+        sección y lo único que se ve es la zapatilla. */
+  var ZAPA_TAPA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790042763/invitame/cenicienta/r4xrrssvctkpm1dvwzdw.jpg';
 
   /* y la MARCA DEL ITINERARIO también va sobre un disco, pero CLARO: a 22 px
      el disco de plata de la raspadita se leía como una canica azul. Este es la
@@ -303,7 +311,7 @@
     '  text-transform:uppercase!important;',
     '  color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important;',
     '  line-height:1.4!important;',
-    '  margin:0 0 1.1em 0!important;',
+    '  margin:0 0 .55em 0!important;',
     '  text-shadow:0 1px 3px rgba(6,12,22,.85)!important;',
     '}',
 
@@ -318,7 +326,16 @@
     '  font-family:' + SCRIPT + '!important;',
     '  font-weight:400!important;',
     '  font-style:normal!important;',
-    '  font-size:clamp(46px,13.5vw,84px)!important;',
+    /* ⚠⚠ 84 px TAPABAN LA CARA. Maki, 21/9: «la portada está tapada por los
+       textos, no los acomodaste bien». Medido con la vara de la skill de
+       entrega (§7bis), que toma Campestre de referencia: su bloque va del
+       **56 % al 91 %** de la portada. El mío iba del **46 % al 91 %** — diez
+       puntos más arriba, o sea adentro de la cara.
+       Probados 56 / 52 / 48 / 44 px midiendo el bloque en cada uno:
+           56 px → 54 %   52 px → 55 %   **48 px → 56 %**   44 px → 57 %
+       48 px es el que da EXACTO el número de Campestre. Y el `39 %` que había
+       anotado la ronda anterior estaba mal medido: en esta ventana daba 45 %. */
+    '  font-size:clamp(34px,8.3vw,48px)!important;',
     '  line-height:1!important;',
     '  padding-bottom:.24em!important;',
     '  letter-spacing:.01em!important;',
@@ -356,7 +373,7 @@
     '  margin-top:1.1em!important;',
     '}',
     /* la cuenta regresiva, también grande: suma al % que ocupa el bloque */
-    P + '.portada .cd, ' + P + '.portada .ivf{ margin-top:1.1em!important; }',
+    P + '.portada .cd, ' + P + '.portada .ivf{ margin-top:.55em!important; }',
     P + '.portada .cd .n, ' + P + '.portada .ivf .c .n{',
     '  font-family:' + DISPLAY + '!important;',
     '  font-size:clamp(34px,9vw,52px)!important;',
@@ -537,19 +554,23 @@
     '  background-repeat:no-repeat!important;',
     '}',
 
-    /* ⚠️ LA TAPA DEL VIDEO NO MIDE LO MISMO QUE LA DE LA PLAYLIST.
-       Las dos son la misma clase de pieza —un panel de papel que tapa el
-       reproductor crudo— pero la de la playlist es una teja ANCHA y baja
-       (392 px) y la del video es un panel 9:16: **418 x 747 medidos**. Con los
-       66 px de la playlist la zapatilla quedaba como una mancha chiquita a un
-       costado del play, adentro de medio metro de papel vacío.
-       Acá va grande y CENTRADA ARRIBA del aro (que el motor deja en el 44 %):
-       queda el emblema y abajo su botón, que es la misma idea de la playlist
-       resuelta para el alto que de verdad tiene. */
-    P + '.rd-tapa{',
-    '  background-size:132px 132px!important;',
-    '  background-position:50% 30%!important;',
-    '}',
+    /* ⚠⚠ `.rd-tapa` ES LA TAPA DEL VIDEO **Y** LA DE LA PLAYLIST.
+       No existe `.sp-tapa`: las dos piezas usan la MISMA clase. El 21/9 le puse
+       a `.rd-tapa` una zapatilla de 132 px centrada porque el panel del video
+       medía 418x747 y con 66 px quedaba una mancha chiquita en medio de una
+       hoja vacía — y con eso rompí la playlist, que mide 392x156: la zapatilla
+       se salió de la teja y el play y el rótulo le quedaron encima. Maki lo vio
+       de una: «mirá la playlist».
+
+       ⭐ El panel vacío NO era un problema de tamaño de la pieza: era que el
+          video estaba en 9:16. Con la película en **16:9** el panel pasa a
+          418x239 — la misma proporción que la teja de la playlist— y las dos
+          se resuelven con la MISMA regla de 66 px que Maki ya había aprobado.
+          Medido: 747 px de alto → 239.
+
+       ⚠️ LA LECCIÓN, que ya estaba escrita en la skill de entrega y no la
+          apliqué: **cuando se le agrega una regla a un selector, hay que mirar
+          QUÉ MÁS entra en ese selector.** */
 
     /* ── LA PERILLA DEL SÍ / NO ────────────────────────────────────────────
        ⚠️ El área de toque se mide: mínimo 44 px. La pastilla mide 77, o sea 38
@@ -718,6 +739,37 @@
     P + '#pv-sec .pv-datos dt, ' + P + '#pv-sec .pv-nota dt{',
     '  color:' + TINTA2 + '!important;',
     '  -webkit-text-fill-color:' + TINTA2 + '!important;',
+    '}',
+
+    /* ── EL FORMULARIO DE CONFIRMAR, QUE VENÍA PINTADO PARA FONDO OSCURO ──
+       Maki, 21/9: «no se ven los recuadros». Medido en vivo, `form.rsvpform`
+       sale de fábrica así:
+
+           input / select / textarea   fondo  rgba(255,255,255,.08)
+                                      borde  rgba(255,255,255,.25)
+                                      tinta  #FFFFFF
+           label                       #A9C3DE  (ése es `--sage-cl`, el acento
+                                      para fondo OSCURO)
+
+       O sea: blanco al 25 % sobre un papel casi blanco. El borde no existe y el
+       rótulo apenas se adivina. Es la MISMA familia de error que `.sec.verde`
+       —texto pintado para una sección oscura que acá termina siendo clara— y
+       se arregla igual: en el ORIGEN, no dejando que lo derive el corrector.
+
+       ⚠️ El chequeo no lo canta: su regla de contraste mira TEXTO, y acá lo
+          que no se veía era el BORDE de una caja. **Un borde invisible no es un
+          problema de contraste de texto: hay que mirarlo.** */
+    P + '.rsvpform label{',
+    '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+    '}',
+    P + '.rsvpform input, ' + P + '.rsvpform select, ' + P + '.rsvpform textarea{',
+    '  background-color:rgba(250,252,254,.90)!important;',
+    '  border-color:' + TINTA3 + '!important;',
+    '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
+    '}',
+    P + '.rsvpform ::placeholder{',
+    '  color:' + TINTA3 + '!important; -webkit-text-fill-color:' + TINTA3 + '!important;',
+    '  opacity:1!important;',
     '}',
 
     /* ── LA SECCIÓN «VERDE» QUE ACÁ NO ES OSCURA ──────────────────────────
