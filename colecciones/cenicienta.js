@@ -538,37 +538,48 @@
     '             opacity .3s ease .34s!important;',
     '}',
 
-    /* ── EL HUECO BLANCO ENTRE DOS SECCIONES ──────────────────────────────
+    /* ── EL POZO BLANCO ENTRE DOS SECCIONES DEL MISMO TONO ────────────────
        ⭐ 22/9 · Maki: «mira el hueco que queda blanco entre las dos secciones».
-       NO era un hueco de geometria: medidas las 21 secciones, todas pegadas,
-       cero pixeles de separacion. Era un hueco de COLOR: `#video-sec` y
-       `#spotify-sec` salen las dos con el tono claro, una abajo de la otra.
-       Entre el final del contenido del video y el adorno de la playlist quedan
-       48 px de padding + 48 px de padding + 40 px de adorno = ~140 px de papel
-       identico sin una sola costura. El ojo no lee dos secciones: lee un pozo.
-       Lo mismo pasa al final, donde hay CINCO claras seguidas
+       NO era geometria: medidas las 21 secciones, todas pegadas, cero pixeles
+       entre una y otra. Era ESPACIO MUERTO sobre un fondo sin costura.
+       `#video-sec` y `#spotify-sec` salen las dos con el tono claro, pegadas, y
+       entre el final del contenido del video y el titulo de la playlist quedan
+         48 px de padding-bottom + 48 px de padding-top + 40 px de adorno
+       = unos 140 px de papel identico sin una sola marca. El ojo no lee dos
+       secciones: lee un pozo. Al final pasa lo mismo con CINCO claras seguidas
        (share · filtro · galeria · pase · contacto).
-       El molde alterna claro/color, pero las secciones condicionales —las que
-       aparecen solo si el evento las carga— le rompen la cuenta.
-       Se arregla con `rayar()`: recorre las secciones VISIBLES y, cuando una
-       repite el tono de la anterior, le cuelga `data-cen-tono` con el contrario.
-       No toca clases (`reglas-duras.js` cachea la tinta por elemento y le
-       cambiariamos el original); solo pinta el fondo. */
-    /* ⚠️ 22/9 · PRIMER INTENTO FALLIDO, ANOTADO PARA NO REPETIRLO:
-       puse las dos recetas como CSS sobre `[data-cen-tono]`. El tono B entraba
-       pero el A NO: el molde pinta `.sec.verde` con algo que le gana igual con
-       `!important` y mas especificidad. Resultado: todas las secciones que yo
-       mandaba a claro se quedaban en color, y de la carta (y 1560) hasta el
-       video (y 8504) — SIETE MIL pixeles — quedo un unico tono plano. Peor que
-       el problema original.
-       ⭐ LA REGLA: si hay que ganarle a una pintura del motor, no se pelea por
-          especificidad — se escribe en el `style` del elemento con `important`,
-          que es lo unico que gana siempre. Y las dos recetas van ESCRITAS
-          (ver `TONO`): leerlas del DOM mientras la pagina se arma es una
-          carrera contra el motor, y se pierde.
-       ⭐ Y SE VERIFICA MIRANDO: la primera version pasaba el chequeo igual,
-          porque ninguna de las 8 reglas mira si dos secciones seguidas tienen
-          el mismo fondo. Lo vi en la captura, no en el semaforo. */
+
+       ⚠️⚠️ TRES INTENTOS FALLIDOS ANTES DE ESTE. Todos consistian en cambiarle
+          el TONO a una de las dos, y los tres se rompieron distinto:
+          1) CSS sobre un atributo propio → el molde le ganaba igual.
+          2) copiarle las recetas al molde en vivo con getComputedStyle → en la
+             primera pasada el motor todavia no pinto, salian dos recetas casi
+             iguales y quedaban ONCE secciones del mismo tono. Peor que el
+             problema.
+          3) recetas escritas a mano y aplicadas al `style` con `important` →
+             tocar un atributo de la seccion despierta a `reglas-duras.js`, que
+             repinta el fondo inline por su cuenta y pisa lo nuestro. Medido:
+             las secciones marcadas «A» terminaban con el color de la «B».
+          4) alternar la clase `verde`, que es la que el motor ya entiende →
+             el motor pinta `.sec.verde` con TINTA al 82 %, o sea NAVY OSCURO,
+             y la tinta de esta coleccion es oscura: «UNA CARTA PARA TI» quedo
+             texto oscuro sobre fondo oscuro. Visto en la captura.
+
+       ⭐ LO QUE SI FUNCIONA, y es mas barato: no se toca ni un color. Se le
+          saca el espacio muerto a la junta. Si dos secciones del mismo tono
+          quedan pegadas, las dos aflojan el padding de la junta: 48+48 pasa a
+          14+14. Es CSS puro, por hermano adyacente — sin JS, sin atributos, sin
+          clases, o sea sin nada que despierte al corrector.
+          Medido: el documento bajo de 12233 a 11827 px. 406 px de nada menos.
+
+       ⭐ Y SE VERIFICA MIRANDO, no con el semaforo: ninguna de las 8 reglas del
+          chequeo mira si dos secciones seguidas tienen el mismo fondo, ni
+          cuanto aire muerto hay entre ellas. Las cuatro versiones rotas pasaban
+          el chequeo igual. */
+    P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:14px!important; }',
+    P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
+    P + '.sec.verde + .sec.verde{ padding-top:14px!important; }',
+    P + '.sec.verde:has(+ .sec.verde){ padding-bottom:14px!important; }',
 
     /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
        ⚠️ LA TAPA NO ES UN RECTÁNGULO: va transparente, con el iframe en
@@ -896,72 +907,6 @@
     } catch (e) { return null; }
   }
 
-  /* ── LAS DOS RECETAS DE FONDO, ESCRITAS A MANO Y MEDIDAS ───────────────
-     ⚠️ 22/9 · TERCER INTENTO. Los dos primeros fallaron y conviene que quede
-        anotado, porque los dos son errores de manual:
-        1) por CSS sobre `[data-cen-tono]` → el molde le ganaba igual.
-        2) copiandole las recetas al molde en vivo → `getComputedStyle` en la
-           primera pasada devuelve lo que el motor todavia no termino de pintar,
-           y quedaban cacheadas dos recetas casi iguales. Le puse una guarda de
-           «que sean distintas» y tampoco alcanzo: eran distintas, pero la clara
-           venia mal igual (salia sin la textura y con el color de la de color).
-     ⭐ LA LECCION: leer el estado de una pagina que todavia se esta armando es
-        una carrera que se pierde. Las dos recetas son de ESTA coleccion, o sea
-        que las sabemos: se escriben, se miden una vez y listo. Medidas en vivo
-        el 22/9 sobre `#spotify-sec` (clara) y una `.sec.verde` (de color). */
-  var TONO = {
-    A: { col: 'rgba(242,247,252,.22)',
-         img: 'url("/i/tex-acuarela.jpg")', size: 'cover', pos: '50% 50%', rep: 'repeat' },
-    B: { col: 'rgba(219,233,247,.28)',
-         img: 'none',                       size: 'auto',  pos: '0% 0%',   rep: 'repeat' }
-  };
-
-  function pintar(s, r) {
-    var st = s.style;
-    st.setProperty('background-color', r.col, 'important');
-    st.setProperty('background-image', r.img, 'important');
-    st.setProperty('background-size', r.size, 'important');
-    st.setProperty('background-position', r.pos, 'important');
-    st.setProperty('background-repeat', r.rep, 'important');
-  }
-  function despintar(s) {
-    var st = s.style;
-    ['background-color', 'background-image', 'background-size', 'background-position', 'background-repeat']
-      .forEach(function (k) { st.removeProperty(k); });
-  }
-
-  /* recorre las secciones visibles y le da vuelta el tono a la que repite el
-     de la anterior, escribiendo la receta del molde en el `style` del elemento
-     (es lo unico que le gana al motor). Corre dentro de `poner()`, o sea cada
-     1,2 s junto con el resto: alcanza y no necesita observador. */
-  function rayar() {
-    try {
-      var R = TONO;
-      var secs = [].slice.call(document.querySelectorAll('section.sec'))
-        .filter(function (s) { return s.offsetHeight > 40 && s.offsetParent !== null; });
-      var previo = null;
-      for (var k = 0; k < secs.length; k++) {
-        var s = secs[k];
-        var base = s.classList.contains('verde') ? 'B' : 'A';
-        if (previo === null) {
-          if (s.getAttribute('data-cen-tono')) { s.removeAttribute('data-cen-tono'); despintar(s); }
-          previo = base; continue;
-        }
-        if (base === previo) {
-          var vuelta = (base === 'A') ? 'B' : 'A';
-          if (s.getAttribute('data-cen-tono') !== vuelta) {
-            s.setAttribute('data-cen-tono', vuelta);
-            pintar(s, R[vuelta]);
-          }
-          previo = vuelta;
-        } else {
-          if (s.getAttribute('data-cen-tono')) { s.removeAttribute('data-cen-tono'); despintar(s); }
-          previo = base;
-        }
-      }
-    } catch (e) {}
-  }
-
   function poner() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-col') !== ID) raiz.setAttribute('data-col', ID);
@@ -973,7 +918,6 @@
     fuentes();
     hoja();
     medirVia();
-    rayar();
   }
 
   function sacar() {
@@ -984,7 +928,7 @@
     if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
     var s = document.getElementById(ID_CSS);
     if (s && s.parentNode) s.parentNode.removeChild(s);
-    [].forEach.call(document.querySelectorAll('[data-cen-tono]'), function (x) { despintar(x); x.removeAttribute('data-cen-tono'); });
+    [].forEach.call(document.querySelectorAll('[data-cen-tono]'), function (x) { x.removeAttribute('style'); x.removeAttribute('data-cen-tono'); });
   }
 
   /* ⚠️ NADA DE MutationObserver: la invitación muta en bucle (reglas-duras.js
@@ -1003,5 +947,5 @@
   else arrancar();
 
   /* para prenderla y apagarla a mano desde la consola, al revisar */
-  window.INVCENICIENTA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia, alto: altoPortada, rayar: rayar };
+  window.INVCENICIENTA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia, alto: altoPortada };
 })();
