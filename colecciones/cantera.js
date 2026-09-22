@@ -27,8 +27,9 @@
    ⭐⭐⭐ LAS BANDAS NO PUEDEN SER COLOR PLENO — 22/9/2026
       Maki, después de aceptar el tono: «no me gusta el color pleno marrón,
       tenés que meterle algo de diseño y textura a esos sectores».
-      Son SEIS bandas plenas: la superficie más grande de toda la invitación.
-      Un color liso ahí se lee barato, por más que el tono sea el correcto.
+      Son SEIS bandas plenas más el pie: la superficie más grande de toda la
+      invitación. Un color liso ahí se lee barato, por más que el tono esté
+      bien elegido.
 
       Lo que hay ahora, en tres capas y en este orden:
         1. el color            → `--verde` (#6B4A32, terracota)
@@ -39,27 +40,42 @@
                                  dorado, arriba y abajo de cada banda.
       Más un degradado vertical sutil en la banda misma, para que no sea una
       pared plana: apenas más oscura en los dos extremos.
+      El PIE lleva las mismas capas (bloque 13).
 
-      ⚠️ LA TEXTURA VA CON `opacity`, NO CON `background-blend-mode` SOBRE LA
-         SECCIÓN. Probado el 22/9: mezclada directo en `background-image` de
-         `.sec.verde` no hay forma de bajarle la fuerza (no existe opacidad
-         por capa) y queda como PAPEL TAPIZ: el dibujo grita y compite con el
-         texto. En un `::before` propio sí se puede: `opacity:.15` +
-         `mix-blend-mode:soft-light` da relieve de piedra, no estampado.
+      ⚠️⚠️ LA TEXTURA VA EN UNA CAPA PROPIA CON `opacity`, NUNCA CON
+         `background-blend-mode` SOBRE EL ELEMENTO. Esto lo pagué DOS VECES el
+         mismo día:
+           · primero en `.sec.verde`: mezclada directo en su `background-image`
+             no hay forma de bajarle la fuerza (no existe opacidad por capa) y
+             queda como PAPEL TAPIZ, el dibujo grita y compite con el texto;
+           · y después en `.footer`, donde había dejado justamente un
+             `background-blend-mode: soft-light` y el pie salió con la piedra
+             a PLENA FUERZA. Se veía en la captura, no en ninguna medición.
+         → En un `::before` propio sí se puede: `opacity:.15` +
+           `mix-blend-mode:soft-light` da relieve de piedra, no estampado.
       ⚠️ Y el tile chico (300 px) hacía evidente la repetición. 520 px, no.
-      ⚠️ Como el `::before` se pone encima del fondo, los hijos de la sección
+      ⚠️ Como el `::before` se pone encima del fondo, los hijos del elemento
          necesitan `position:relative; z-index:1`, o el texto queda debajo.
+
+      ⭐ EL CONTRASTE CON LA TEXTURA, MEDIDO (no estimado): se calculó la
+         mezcla soft-light píxel por píxel sobre 4.595 muestras de la piedra y
+         se tomó el PEOR caso, el punto más claro de la talla:
+             crema  #F4EBDD → **6,23**   (promedio 6,64)
+             crema2 #E6D6BC → **5,15**   (promedio 5,49)
+         Los dos por encima del piso de 5. La textura no se come el texto.
+         → Si alguna vez se sube la opacidad de .15, hay que rehacer esta
+           cuenta: a .25 el sobretítulo ya no pasa.
 
       ⭐ CÓMO SE HIZO LA TEXTURA, para repetirlo en la próxima colección:
          · Flow, Nano Banana 2, 16:9, x2, 0 créditos. Prompt de piedra tallada
            con «no people, no faces, no text, no letters, no logos».
          · De las dos, se eligió la que NO tiene moldura ni cornisa: un motivo
            parejo de punta a punta. Una con marco se nota al repetir.
-         · ⚠️⚠️ LA IMAGEN DE FLOW NO SE PUEDE BAJAR NI CON `fetch` (CORS) NI
-           CON `canvas` desde el `<img>` de la página (queda TEÑIDO). LO QUE
-           SÍ FUNCIONA: cargarla de nuevo en un `new Image()` con
-           `crossOrigin='anonymous'` — ahí el canvas sale LIMPIO y se puede
-           subir a Cloudinary sin descargar nada a mano.
+         · ⚠️⚠️ LA IMAGEN DE FLOW NO SE PUEDE BAJAR NI CON `fetch` (el host
+           `flow-content.google` no da CORS) NI CON `canvas` desde el `<img>`
+           de la página (queda TEÑIDO). LO QUE SÍ FUNCIONA: cargarla de nuevo
+           en un `new Image()` con `crossOrigin='anonymous'` — ahí el canvas
+           sale LIMPIO y se puede subir a Cloudinary sin descargar nada a mano.
          · Y se armó un MOSAICO ESPEJADO (la imagen + su espejo horizontal +
            el vertical + los dos) para que repita SIN COSTURA.
 
@@ -162,8 +178,10 @@
   var TINTA   = '#4A3524';   /* terracota profundo, tinta de cuerpo: 9,7     */
   var TINTA2  = '#63472F';   /* la secundaria: 5,45 sobre la tarjeta         */
   var BANDA   = '#6B4A32';   /* ⭐ LAS SEIS BANDAS PLENAS (var --verde)       */
-  var CREMA   = '#F4EBDD';   /* la tinta sobre banda oscura: 6,73            */
-  var CREMA2  = '#E6D6BC';   /* el sobretítulo sobre banda oscura: 5,57      */
+  var PIE     = '#5A4030';   /* el pie                                       */
+  var CREMA   = '#F4EBDD';   /* la tinta sobre banda oscura: 6,73 (6,23 con
+                                la textura en su punto más claro)            */
+  var CREMA2  = '#E6D6BC';   /* el sobretítulo: 5,57 (5,15 con la textura)   */
   var TINTA_BTN = '#150F09'; /* sobre Golden Tan: 7,8                        */
   var HALO    = 'rgba(239,227,208,';  /* PAPEL en rgba, para el velo         */
 
@@ -254,6 +272,18 @@
     var VC = vinieta(SAGE, CREMA2);     /* sobre banda oscura o foto */
     var H  = hojita(SAGE);
     var C  = cenefa('#C8A461');         /* el dorado claro, para la cenefa */
+
+    /* la capa de piedra, igual para las bandas y para el pie */
+    var CAPA_PIEDRA = [
+      '  content:""!important;',
+      '  position:absolute!important; inset:0!important;',
+      '  z-index:0!important; pointer-events:none!important;',
+      '  background-image:url("' + PIEDRA + '")!important;',
+      '  background-size:520px auto!important;',
+      '  background-repeat:repeat!important;',
+      '  opacity:.15!important;',
+      '  mix-blend-mode:soft-light!important;'
+    ].join('\n');
 
     return [
 
@@ -434,18 +464,9 @@
     /* que no sea una pared plana: apenas más oscura arriba y abajo */
     '  background-image:linear-gradient(180deg, rgba(0,0,0,.16) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,.16) 100%)!important;',
     '}',
-    /* la piedra tallada. ⚠️ VA EN ::before CON `opacity`, no mezclada en el
-       background de la sección: ahí no hay forma de bajarle la fuerza y queda
-       como papel tapiz. Y el tile grande (520) esconde la repetición. */
+    /* la piedra tallada. ⚠️ VA EN ::before CON `opacity` (ver el encabezado) */
     P + '.sec.verde::before{',
-    '  content:""!important;',
-    '  position:absolute!important; inset:0!important;',
-    '  z-index:0!important; pointer-events:none!important;',
-    '  background-image:url("' + PIEDRA + '")!important;',
-    '  background-size:520px auto!important;',
-    '  background-repeat:repeat!important;',
-    '  opacity:.15!important;',
-    '  mix-blend-mode:soft-light!important;',
+    CAPA_PIEDRA,
     '}',
     /* la cenefa de olivo que remata arriba y abajo */
     P + '.sec.verde::after{',
@@ -502,15 +523,23 @@
     P + '#contacto-sec .kick{ color:' + CREMA2 + '!important; }',
     P + '#contacto-sec p{ color:rgba(244,235,221,.90)!important; }',
 
-    /* ───────────── 13 · EL PIE, con la misma piedra */
+    /* ⭐ 13 · EL PIE, con la misma piedra y por el mismo camino
+       ⚠️⚠️ ACÁ ES DONDE ME EQUIVOQUÉ: lo había dejado con
+          `background-blend-mode: soft-light` directo sobre `.footer`, y la
+          piedra salió A PLENA FUERZA — un papel tapiz de piedra tallada con
+          «¡Gracias!» encima. Se vio en la captura, no en ninguna medición.
+          La capa va aparte, con `opacity`, igual que en las bandas. */
     P + '.footer{',
     '  position:relative!important;',
-    '  background-color:#5A4030!important; color:' + CREMA + '!important;',
-    '  background-image:url("' + PIEDRA + '")!important;',
-    '  background-size:520px auto!important;',
-    '  background-repeat:repeat!important;',
-    '  background-blend-mode:soft-light!important;',
+    '  background-color:' + PIE + '!important;',
+    '  background-image:none!important;',
+    '  background-blend-mode:normal!important;',
+    '  color:' + CREMA + '!important;',
     '}',
+    P + '.footer::before{',
+    CAPA_PIEDRA,
+    '}',
+    P + '.footer > *{ position:relative!important; z-index:1!important; }',
 
     /* ───────────── 14 · LOS CAMPOS Y LOS CONTROLES */
     P + ':is(input, select, textarea, .tv-in){',
