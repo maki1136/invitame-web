@@ -538,6 +538,30 @@
     '             opacity .3s ease .34s!important;',
     '}',
 
+    /* ── EL HUECO BLANCO ENTRE DOS SECCIONES ──────────────────────────────
+       ⭐ 22/9 · Maki: «mira el hueco que queda blanco entre las dos secciones».
+       NO era un hueco de geometria: medidas las 21 secciones, todas pegadas,
+       cero pixeles de separacion. Era un hueco de COLOR: `#video-sec` y
+       `#spotify-sec` salen las dos con el tono claro, una abajo de la otra.
+       Entre el final del contenido del video y el adorno de la playlist quedan
+       48 px de padding + 48 px de padding + 40 px de adorno = ~140 px de papel
+       identico sin una sola costura. El ojo no lee dos secciones: lee un pozo.
+       Lo mismo pasa al final, donde hay CINCO claras seguidas
+       (share · filtro · galeria · pase · contacto).
+       El molde alterna claro/color, pero las secciones condicionales —las que
+       aparecen solo si el evento las carga— le rompen la cuenta.
+       Se arregla con `rayar()`: recorre las secciones VISIBLES y, cuando una
+       repite el tono de la anterior, le cuelga `data-cen-tono` con el contrario.
+       No toca clases (`reglas-duras.js` cachea la tinta por elemento y le
+       cambiariamos el original); solo pinta el fondo. */
+    P + 'section.sec[data-cen-tono="B"]{',
+    '  background-color:rgba(219,233,247,.28)!important;',
+    '  background-image:none!important;',
+    '}',
+    P + 'section.sec[data-cen-tono="A"]{',
+    '  background-color:rgba(242,247,252,.22)!important;',
+    '}',
+
     /* ── LA TAPA DEL VIDEO Y DE LA PLAYLIST ────────────────────────────────
        ⚠️ LA TAPA NO ES UN RECTÁNGULO: va transparente, con el iframe en
           visibility:hidden (eso lo hace el motor). */
@@ -549,10 +573,24 @@
     P + '.rd-tapa, ' + P + '.sp-tapa{',
     '  background-color:transparent!important;',
     '  background-image:url("' + ZAPA + '")!important;',
-    '  background-size:66px 66px!important;',
-    '  background-position:30% 44%!important;',
+    '  background-size:60px 60px!important;',
+    '  background-position:12px 40%!important;',
     '  background-repeat:no-repeat!important;',
     '}',
+
+    /* ⭐ 22/9 · MEDIDO, no a ojo. Maki, por tercera vez: «el zapato sigue
+       chocando con el play y el texto de la playlist».
+       Las dos tejas, medidas en un telefono de 390 px:
+         playlist  326x156  ·  aro en x 132-194 (y 35-97)  ·  rotulo en y 107
+         video     334x192  ·  aro en x 136-198 (y 53-115) ·  rotulo en y 125
+       Con 66px al 30% el zapato caia en x 78-144: se metia 12 px DENTRO del aro,
+       y abajo llegaba a y 106 con el rotulo arrancando en 107 — pegados.
+       Ahora: 60 px anclado a 12 px del borde izquierdo (pixeles, no porcentaje:
+       el porcentaje se corre solo cuando la teja se angosta).
+         x 12-72   -> al aro le quedan 60 px de aire en la playlist, 64 en el video
+         y (playlist) 38-98  -> 9 px libres antes del rotulo
+         y (video)    53-113 -> 12 px libres antes del rotulo
+       El ancla en pixeles aguanta hasta tejas de 200 px de ancho. */
 
     /* ⚠⚠ `.rd-tapa` ES LA TAPA DEL VIDEO **Y** LA DE LA PLAYLIST.
        No existe `.sp-tapa`: las dos piezas usan la MISMA clase. El 21/9 le puse
@@ -779,7 +817,6 @@
        que `reglas-duras` oscurece esas dos cremas y devuelve OLIVA
        (117,101,69 · 124,124,71 · 108,108,62). Aparecieron seis de golpe al
        cambiar las fotos de Instagram y del juego.
-
        Se arregla en el ORIGEN, como en el pase: si la tinta de fábrica ya es
        de la familia, lo que derive el corrector también lo es. Y si en alguna
        invitación esta sección sí queda oscura, `reglas-duras` corrige en las
@@ -850,6 +887,30 @@
     } catch (e) { return null; }
   }
 
+  /* recorre las secciones visibles y le da vuelta el tono a la que repite el
+     de la anterior. Corre dentro de `poner()`, o sea cada 1,2 s junto con el
+     resto: alcanza y no necesita observador. */
+  function rayar() {
+    try {
+      var secs = [].slice.call(document.querySelectorAll('section.sec'))
+        .filter(function (s) { return s.offsetHeight > 40 && s.offsetParent !== null; });
+      var previo = null;
+      for (var k = 0; k < secs.length; k++) {
+        var s = secs[k];
+        var tono = s.classList.contains('verde') ? 'B' : 'A';
+        if (previo === null) { if (s.getAttribute('data-cen-tono')) s.removeAttribute('data-cen-tono'); previo = tono; continue; }
+        if (tono === previo) {
+          var vuelta = (tono === 'A') ? 'B' : 'A';
+          if (s.getAttribute('data-cen-tono') !== vuelta) s.setAttribute('data-cen-tono', vuelta);
+          previo = vuelta;
+        } else {
+          if (s.getAttribute('data-cen-tono')) s.removeAttribute('data-cen-tono');
+          previo = tono;
+        }
+      }
+    } catch (e) {}
+  }
+
   function poner() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-col') !== ID) raiz.setAttribute('data-col', ID);
@@ -861,6 +922,7 @@
     fuentes();
     hoja();
     medirVia();
+    rayar();
   }
 
   function sacar() {
@@ -871,6 +933,7 @@
     if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
     var s = document.getElementById(ID_CSS);
     if (s && s.parentNode) s.parentNode.removeChild(s);
+    [].forEach.call(document.querySelectorAll('[data-cen-tono]'), function (x) { x.removeAttribute('data-cen-tono'); });
   }
 
   /* ⚠️ NADA DE MutationObserver: la invitación muta en bucle (reglas-duras.js
@@ -889,5 +952,5 @@
   else arrancar();
 
   /* para prenderla y apagarla a mano desde la consola, al revisar */
-  window.INVCENICIENTA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia, alto: altoPortada };
+  window.INVCENICIENTA = { poner: poner, sacar: sacar, css: armarCSS, via: medirVia, alto: altoPortada, rayar: rayar };
 })();
