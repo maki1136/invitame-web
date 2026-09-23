@@ -223,7 +223,13 @@
         P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(28,38,26,.42) 0, rgba(28,38,26,.18) 24%, rgba(28,38,26,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-jardin/jd-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,56,36,.28)!important; }',
         P + '.rd-tapa .rd-aro{ border-color:#E7EDDD!important; background:rgba(30,40,28,.5)!important; box-shadow:0 0 0 1px rgba(231,237,221,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
         P + '.rd-tapa .rd-aro::after{ border-left-color:#F4F7EE!important; }',
-        P + '.rd-tapa .rd-txt{ display:block!important; color:#FAF8F0!important; -webkit-text-fill-color:#FAF8F0!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }'
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FAF8F0!important; -webkit-text-fill-color:#FAF8F0!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        /* el fondo YA SE MUEVE solo (video real): sin el paseo de zoom de la línea Óleo,
+           que es justo lo que Maki no quería («no es la idea un zoom»). */
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        /* el cierre es una foto con cielo claro: halo oscuro para que la letra no dependa de dónde cae */
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
     /* ⭐ NOCTURNO (paulina-y-gerardo, hacienda en Mérida, boda de noche): la PRIMERA
