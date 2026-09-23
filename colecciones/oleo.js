@@ -210,6 +210,13 @@
         /* la tapa del video y de la playlist: transparente, con el aro en tinta oscura → invisible de noche */
         P + '.rd-tapa{ background:radial-gradient(120% 90% at 50% 40%, #26305A, #141B2E)!important; border:1px solid rgba(212,178,110,.45)!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.45)!important; }',
         P + '.rd-aro{ border-color:#D4B26E!important; opacity:1!important; }',
+        /* 23/9 · Maki: «los rectángulos… un dibujo con la temática, así no queda tan vacío». Óleo propio en cada
+           tapa (proyector para el video, gramófono para la playlist), mismo trazo que el fondo, y un claro oscuro
+           detrás del play para que el aro se lea. */
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(10,14,28,.62) 0, rgba(10,14,28,.32) 22%, rgba(10,14,28,0) 42%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-nocturno/oleo-pg-tapa-video-a") center/cover no-repeat!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(10,14,28,.62) 0, rgba(10,14,28,.32) 22%, rgba(10,14,28,0) 42%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-nocturno/oleo-pg-tapa-playlist-b") center/cover no-repeat!important; }',
+        P + '.rd-aro{ background:rgba(12,16,32,.55)!important; box-shadow:0 0 0 1px rgba(212,178,110,.35), 0 6px 18px rgba(0,0,0,.5)!important; }',
+        P + '.rd-txt{ text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
         P + '.rd-aro::after{ border-left-color:#D4B26E!important; }',
         P + '.rd-txt{ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }',
         /* Vestimenta cae sobre la parte iluminada del óleo (la arcada): velo más firme SÓLO ahí */
