@@ -275,6 +275,11 @@
          ⚠️ El número está calibrado para ESTE largo de carta. Si el texto
             crece, se vuelve a medir el solape — no se estima. */
       P + '.cf-letter{ transform:translateY(-50px)!important; }',
+      /* ⚠️ El sobre de la carta seguía saliendo TAUPE aunque `fx.carta.sobreColor`
+         diga #241809: el motor pinta el tinte al 0,88 ENCIMA de una foto de sobre
+         CLARO, y 12 % de papel claro alcanza para levantar el tono entero. Se
+         sube el tinte, que es lo único que hay que tocar: la foto no se cambia. */
+      P + '.cf-back-tint, ' + P + '.cf-front-tint{ opacity:.97!important; }',
 
       /* ---- tipografía ----
          Cinzel para los títulos (romana de capitales, no la usa ninguna otra
