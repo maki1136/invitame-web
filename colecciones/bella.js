@@ -515,8 +515,24 @@
          LO QUE HAY AHORA, y por qué cada cosa:
             · la marca pasa a **26 px** con un halo cálido (`drop-shadow`), así
               el capullo se lee como una cuenta encendida y no como un punto.
-              Se recentra a mano: la vía cae en x=170 y la marca mide 26, así
-              que va en `left:157` (170 − 13). Si cambia el tamaño, se recalcula.
+              ⚠️⚠️ NO SE RECENTRA A MANO. La primera versión clavaba
+              `left:157px` —medido a ojo sobre la columna izquierda— y eso
+              ROMPIÓ LA MITAD DEL ITINERARIO: este itinerario es `.tl-centro`,
+              las fichas van en ZIGZAG (medidas: x=1 y x=196 dentro de una `.tl`
+              de 340) y `.it::before` se posiciona contra SU PROPIA ficha. Con
+              157 fijo, las de la izquierda caían sobre la vía y las de la
+              derecha en x=353 — fuera de la `.tl`, comidas por el
+              `overflow:hidden`. En la captura se veían DOS capullos en vez de
+              CUATRO, y yo no lo había mirado.
+              El motor YA lo tiene resuelto y hay que dejarlo en paz: medido con
+              la hoja de la colección apagada, `.it::before` nace en `left:164`
+              en las impares y `left:-31` en las pares, y las dos caen sobre la
+              vía (centro 169,75). Lo único que cambia acá es el TAMAÑO (11 →
+              26), así que lo único que hay que corregir es el centro:
+              `margin-left/-top:-7.5px` = (26 − 11) / 2. Sirve para cualquier
+              ancho y para cualquier variante de línea de tiempo.
+              ⭐ La lección: si el motor ya calcula una posición, no se la
+                 reemplaza por un número — se la corrige por la diferencia.
             · el panel: esquinas de 22 px, un claro que baja desde arriba y un
               filete de oro. Nada de rectángulo.
             · la vía: 1,5 px y un degradado que se APAGA en las dos puntas, así
@@ -565,7 +581,8 @@
             serie a lo largo de la vía, y una foto recortada repetida se lee
             como calcomanías pegadas (la lección de la rosa de Bohemia). */
       P + '.it::before{',
-      '  width:26px!important; height:26px!important; left:157px!important;',
+      '  width:26px!important; height:26px!important;',
+      '  margin-left:-7.5px!important; margin-top:-7.5px!important;',
       '  border-radius:0!important;',
       '  background-image:url("' + rosaSVG(ORO) + '")!important;',
       '  background-color:transparent!important;',
