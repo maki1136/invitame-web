@@ -163,6 +163,37 @@
         'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-piedra-2.webp'
       }
     },
+    /* ⭐ CHAMPAGNE (fernanda-y-alejandro, hacienda en San Miguel de Allende, hora dorada):
+       la más luminosa de la línea. Rosé pasado a champagne, marfil cálido y oro pálido.
+       Tinta café tostado (#3E3226) sobre el papel #F8F2E7 → 11,9; TINTA2 7,6; ORO_T 5,6.
+       Las tapas del video y la playlist llevan su propio óleo (proyector y gramófono en
+       el cielo de atardecer), como pidió Maki el 23/9 para Nocturno. */
+    champagne: {
+      hex: {
+        '#C98E8A':'#B89A6A', '#E3C2B8':'#E6D5BC', '#D9C3A0':'#D8C7A4', '#B08A4E':'#A8864A',
+        '#F7EFEA':'#F8F2E7', '#FBF6F2':'#FCF8F0', '#4A2E2C':'#3E3226', '#6B4744':'#5F4E3C',
+        '#7A5634':'#7A5E34', '#82504C':'#6E5A40', '#FBF4EF':'#FCF6EC', '#F5E6DF':'#F2E8D6',
+        '#2E1C1B':'#2A2118', '#F2E4DC':'#EFE4D0', '#EAD9B8':'#E8D9B5'
+      },
+      rgb: {
+        '74,46,44':'62,50,38', '201,142,138':'184,154,106', '247,239,234':'248,242,231',
+        '40,20,18':'34,26,18', '60,34,32':'50,40,30', '134,96,58':'134,104,62',
+        '176,138,78':'168,134,74', '217,195,160':'216,199,164', '240,220,211':'239,228,208',
+        '251,246,242':'252,248,240', '255,246,236':'255,249,238', '120,70,60':'110,86,58',
+        '107,71,68':'95,78,60', '251,244,239':'252,246,236'
+      },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-champagne/ch-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-champagne.webp'
+      },
+      css: [
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,30,18,.42) 0, rgba(40,30,18,.18) 24%, rgba(40,30,18,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-champagne/ch-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(60,44,20,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,30,18,.42) 0, rgba(40,30,18,.18) 24%, rgba(40,30,18,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-champagne/ch-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(60,44,20,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#E8D9B5!important; background:rgba(46,34,20,.5)!important; box-shadow:0 0 0 1px rgba(232,217,181,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#F3E6C8!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FCF6EC!important; -webkit-text-fill-color:#FCF6EC!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }'
+      ].join('\n')
+    },
     /* ⭐ NOCTURNO (paulina-y-gerardo, hacienda en Mérida, boda de noche): la PRIMERA
        OSCURA de la línea. Es Rosé dado vuelta: la pared pasa a azul noche, la tinta a
        marfil y el acento a pan de oro. Las sombras (74,46,44 / 40,20,18 / 120,70,60)
