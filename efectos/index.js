@@ -530,6 +530,10 @@
      el catálogo en el momento. Adentro lleva también el bloque del LACRE.
    · `sobre-catalogo.js` va TEMPRANO y ANTES de que el invitado toque nada: es
      lo primero que se ve.
+   · `lacre-sin-ampersand.js` va JUNTO al sobre, por lo mismo: el sello es lo
+     primero que se ve. No depende de nadie —se vuelve a pasar solo cada 1,2 s—
+     pero tiene que correr DESPUÉS de que el motor escriba las siglas, y el
+     motor las escribe cuando llega el evento.
    · `muestra-venta.js` va DESPUÉS de `wa-flotante.js`: le pisa el número al
      flotante.
    · `fondo-invitacion.js` va DESPUÉS de `paleta.js`: el velo se tiñe con el
@@ -626,6 +630,7 @@
        acá, no en el HTML. (20/9/2026: el PLAY del video del fondo.) */
     '/efectos/videos-blindados.js',    /* ningún video es un reproductor, en ninguna versión */
     '/efectos/sobre-catalogo.js',      /* el sobre de entrada: el motor lo ignoraba */
+    '/efectos/lacre-sin-ampersand.js', /* el sello de unos XV decia «M&»: el motor pega el & siempre */
     '/efectos/paleta.js',              /* la paleta: pinta las 12 variables de color de una */
     '/efectos/panel-paleta.js',        /* y el selector de las 20, en el panel */
     '/efectos/botones.js',             /* el material de los botones: lacre, cristal, nácar… */
