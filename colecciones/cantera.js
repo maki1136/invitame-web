@@ -748,6 +748,10 @@
     /* hoteles: el arco de 40px se comía la primera línea del nombre — aire arriba y centrado */
     P + '.hotel{ padding:38px 18px 18px!important; text-align:center!important; }',
     P + '.hotel .btn{ margin:10px auto 0!important; }',
+    /* fondo ADELANTE (fx.fondo donde:'marco', paso .72, como la boho): el patio tiene mucho color y los textos
+       sueltos se perdían. Un claro suave detrás del bloque de texto, que se desvanece hacia los bordes:
+       el patio se sigue viendo alrededor. Maki 23/9. */
+    P + '.frame > section.sec:not(.verde):not(#contacto-sec){ background-image:radial-gradient(ellipse 78% 58% at 50% 42%, rgba(239,227,208,.62) 0%, rgba(239,227,208,.38) 45%, rgba(239,227,208,0) 78%)!important; }',
 
     /* 5c · EL ITINERARIO SE IBA AL COSTADO. Medido: la marca de cada hora
        caía 6 px AFUERA del panel (.it::before en left:-29px con sólo 22 px
