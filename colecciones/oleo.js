@@ -162,6 +162,39 @@
         'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-piedra/oleo-piedra-base.webp',
         'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-piedra-2.webp'
       }
+    },
+    /* ⭐ NOCTURNO (paulina-y-gerardo, hacienda en Mérida, boda de noche): la PRIMERA
+       OSCURA de la línea. Es Rosé dado vuelta: la pared pasa a azul noche, la tinta a
+       marfil y el acento a pan de oro. Las sombras (74,46,44 / 40,20,18 / 120,70,60)
+       van a NEGRO, nunca a la tinta clara, y el halo de papel detrás del texto pasa a
+       ser azul noche. Contrastes medidos: TINTA 14,5 · TINTA2 10,8 · ORO_T 10,1 sobre
+       la pared; CREMA 15,5 sobre la banda; botón 7,3.
+       ⚠️ #FBF4EF es a la vez CREMA (texto de banda) y el arranque del degradé de la
+       carta: el mapa lo manda a marfil y la carta quedaría clara con tinta clara. Por
+       eso la carta se repinta en 'css', que se agrega DESPUÉS de teñir. */
+    nocturno: {
+      hex: {
+        '#C98E8A':'#C9A96A', '#E3C2B8':'#2B3556', '#D9C3A0':'#C9A45C', '#B08A4E':'#D4B26E',
+        '#F7EFEA':'#141B2E', '#FBF6F2':'#1C2440', '#4A2E2C':'#F3EBDD', '#6B4744':'#D6CCBB',
+        '#7A5634':'#E0C48A', '#82504C':'#0E1424', '#FBF4EF':'#F3EBDD', '#F5E6DF':'#E0C48A',
+        '#2E1C1B':'#141B2E', '#F2E4DC':'#1C2440', '#EAD9B8':'#D4B26E'
+      },
+      rgb: {
+        '74,46,44':'0,0,0', '201,142,138':'201,169,106', '247,239,234':'20,27,46',
+        '40,20,18':'0,0,0', '60,34,32':'8,12,22', '134,96,58':'212,178,110',
+        '176,138,78':'212,178,110', '217,195,160':'212,178,110', '240,220,211':'243,235,221',
+        '251,246,242':'28,36,64', '255,246,236':'255,240,205', '120,70,60':'0,0,0',
+        '107,71,68':'214,204,187', '251,244,239':'243,235,221'
+      },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-nocturno/oleo-nocturno-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-nocturno.webp'
+      },
+      css: [
+        P + '.cf-letter{ background:linear-gradient(180deg,#1C2440 0%,#141B2E 100%)!important; color:#F3EBDD!important; box-shadow:0 10px 26px rgba(0,0,0,.45)!important; }',
+        P + '.cf-letter :is(h3, p, div, span){ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
+        P + '.pasecard .estado{ background-color:rgba(212,178,110,.18)!important; color:#F3EBDD!important; border-color:rgba(212,178,110,.55)!important; }'
+      ].join('\n')
     }
   };
   function tono() {
@@ -178,6 +211,7 @@
     for (k in t.url) s = s.split(k).join(t.url[k]);
     for (k in t.hex) { s = s.split(k).join(t.hex[k]); s = s.split('%23' + k.slice(1)).join('%23' + t.hex[k].slice(1)); }
     for (k in t.rgb) s = s.split('rgba(' + k + ',').join('rgba(' + t.rgb[k] + ',');
+    if (t.css && /[{]/.test(s)) s += '\n' + t.css;
     return s;
   }
   var PALETA_VIVA = null;
