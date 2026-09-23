@@ -433,8 +433,32 @@
     /* · LA PORTADA OCUPABA POCO: «Ximena & Andrés» en un renglón quedaba en 37 px y el
          bloque iba del 77 % al 93 % (en 390 px). Los dos <span> del nombre van en
          DOS renglones y el cuerpo sube: medido, del 66 % al 93 %, sin tapar caras. */
-    P + '#pv-names > span{ display:block!important; }',
-    P + '#pv-names{ font-size:clamp(54px,15.5vw,80px)!important; line-height:1.02!important; }'
+    /* ⭐⭐ 23/9, segunda vuelta de Maki: «la portada no quería una foto de ellos: hacé
+       un cuadro al óleo, el fondo que estamos usando pero más lindo, que complete toda
+       la portada; y los nombres MUCHO más chicos, está muy grande, muy grotesco».
+       → La portada es la pintura (cover = oleo-xa-portada-1, Flow, rosas en impasto
+         arriba y marfil calmo abajo). Sobre papel claro la tinta pasa a ser la OSCURA
+         (palo de rosa), con un halo de papel en vez de la sombra negra, y el velo del
+         motor (.pveil) deja de oscurecer: aclara sólo el pie, donde va el texto.
+       → Nombres en UN renglón, 34-38 px (antes 60). */
+    P + '#pv-names{ font-size:clamp(30px,8.6vw,38px)!important; line-height:1.1!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; text-shadow:0 0 10px rgba(247,239,234,.9), 0 0 22px rgba(247,239,234,.7)!important; }',
+    P + '#pv-names > span{ display:inline!important; }',
+    P + '#pv-kick{ color:' + ORO_T + '!important; -webkit-text-fill-color:' + ORO_T + '!important; text-shadow:0 0 8px rgba(247,239,234,.95)!important; }',
+    P + '.portada :is(.num, .lab, .sep, .scrollcue){ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; text-shadow:0 0 8px rgba(247,239,234,.95)!important; }',
+    P + '.portada .num{ font-size:26px!important; }',
+    P + '.portada .pveil{ background:linear-gradient(to top, rgba(247,239,234,.82) 0%, rgba(247,239,234,.45) 24%, rgba(247,239,234,0) 48%)!important; opacity:1!important; }',
+
+    /* ⭐⭐ 23/9: «al fondo le falta movimiento, no se llega a ver». El video tiene la
+       pintura casi quieta. Se le suma un paseo LENTO Y CONTINUO de cámara (escala +
+       desplazamiento, 22 s ida y vuelta, nunca se detiene) — con 'scale'/'translate'
+       sueltos, que se suman al transform del motor sin pisarlo — y una LUZ que recorre
+       el relieve cada 9 s. La portada (#pbg) hace el mismo paseo. */
+    '@keyframes oleoDeriva{ 0%{ scale:1.06; translate:-1.5% 1.2%; } 50%{ scale:1.16; translate:1.8% -1.8%; } 100%{ scale:1.06; translate:-1.5% 1.2%; } }',
+    '@keyframes oleoLuz{ 0%{ translate:-70% 0; } 100%{ translate:70% 0; } }',
+    P + '#inv-fondo{ overflow:hidden!important; }',
+    P + '#inv-fondo video, ' + P + '.portada #pbg{ animation:oleoDeriva 22s ease-in-out infinite!important; transform-origin:50% 50%!important; will-change:scale, translate; }',
+    P + '#inv-fondo::after{ content:""!important; position:absolute!important; inset:-10% -40%!important; pointer-events:none!important; z-index:1!important; background:linear-gradient(105deg, rgba(255,246,236,0) 38%, rgba(255,246,236,.30) 50%, rgba(255,246,236,0) 62%)!important; animation:oleoLuz 9s ease-in-out infinite alternate!important; }',
+    '@media (prefers-reduced-motion: reduce){ ' + P + '#inv-fondo video, ' + P + '.portada #pbg, ' + P + '#inv-fondo::after{ animation:none!important; } }'
 
     ].join('\n');
   }
