@@ -447,6 +447,12 @@
       '  border:1px solid ' + TINTA3 + '!important;',
       '}',
       P + 'input::placeholder, ' + P + 'textarea::placeholder{ color:rgba(30,62,68,.55)!important; }',
+      /* ⚠️ Los rótulos del formulario nacen en el CORAL de la temática
+         —«Déjanos un mensaje (opcional)» salía en coral— y en esta colección el
+         coral NO escribe (ver la cabecera). Van en tinta, como todo rótulo. */
+      P + 'label, ' + P + '.rsvp label, ' + P + '.rsvp .lbl, ' + P + '.form-lbl{',
+      '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+      '}',
 
       /* ---- 🔴🔴 EL ITINERARIO ---------------------------------------------
          Maki: «no me gustan los circulitos», «ponele onda, algo más de diseño»,
@@ -460,6 +466,19 @@
             es el CENTRO: `margin-left/-top:-7.5px` = (26 − 11) / 2.
             ⭐ Si el motor ya calcula una posición, no se la reemplaza por un
                número: se la corrige por la diferencia. */
+      /* ⚠️⚠️⚠️ NI `overflow:hidden` NI `padding`. LOS DOS ROMPEN EL ITINERARIO.
+            Medido el 23/9 en `marisol-mis15`, y es el MISMO error de Bella con
+            otra ropa: le pisé al motor una medida suya en vez de corregirla.
+            · El motor le da a `.tl` `padding:26px 22px` (medido sin mi hoja).
+              Yo le puse `padding:6px 0` y las fichas se fueron contra el borde
+              izquierdo, ENCIMA de la vía: los horarios quedaron montados sobre
+              la línea.
+            · La marca vive en `.it::before` con `left:-26px`, o sea AFUERA de la
+              caja. Con `overflow:hidden` se la come entera: las OCHO vieiras
+              desaparecieron y quedó un itinerario pelado — justo lo único que
+              Maki pidió por nombre («no me gustan los circulitos»).
+            ⭐ La regla, otra vez: si el motor ya calcula una medida, no se la
+               reemplaza — o se la corrige por la diferencia, o se la deja. */
       P + '.tl{',
       '  border-radius:22px!important;',
       '  border:1px solid rgba(143,169,164,.55)!important;',
@@ -468,12 +487,19 @@
       '    rgba(207,224,218,.55) 0%, rgba(207,224,218,0) 62%)!important;',
       '  background-size:100% 100%!important; background-repeat:no-repeat!important;',
       '  box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 14px 34px rgba(14,42,48,.12)!important;',
-      '  overflow:hidden!important; position:relative!important; padding:6px 0!important;',
+      '  overflow:visible!important; position:relative!important;',
       '}',
-      /* ⭐ el movimiento: una luz de agua que BAJA por la vía, sin parar */
+      /* ⭐ el movimiento: una luz de agua que BAJA por la vía, sin parar.
+         ⚠️⚠️ LA VÍA NO ESTÁ SIEMPRE EN EL MISMO LADO. El motor tiene DOS
+            itinerarios: la lista de una columna (vía en `left:6px`, medido) y
+            `.tl-centro` (vía en el medio, fichas en zigzag). Yo puse la luz en
+            `left:50%` para las dos y en `marisol-mis15` bajaba por el MEDIO DEL
+            TEXTO, como una mancha rosa sobre los horarios.
+            → Se la pone donde está la vía, y la variante del medio se corrige
+              aparte. Una regla por variante, no un número para las dos. */
       P + '.tl::after{',
-      '  content:""!important; position:absolute!important; left:50%!important; top:0!important;',
-      '  width:3px!important; height:118px!important; margin-left:-1.5px!important;',
+      '  content:""!important; position:absolute!important; left:6px!important; top:0!important;',
+      '  width:3px!important; height:118px!important; margin-left:-0.5px!important;',
       '  border-radius:3px!important; pointer-events:none!important; z-index:1!important;',
       '  background:linear-gradient(180deg, rgba(184,86,62,0) 0%,',
       '    rgba(184,86,62,.42) 45%, rgba(184,86,62,0) 100%)!important;',
@@ -481,6 +507,7 @@
       '  animation:sirena-hilo 4.6s linear infinite!important;',
       '}',
       '@keyframes sirena-hilo{0%{transform:translateY(-22%)}100%{transform:translateY(122%)}}',
+      P + '.tl.tl-centro::after{ left:50%!important; margin-left:-1.5px!important; }',
       P + '.tl .tl-prog{ display:none!important; }',
       P + '.it::before{',
       '  width:26px!important; height:26px!important;',
@@ -501,7 +528,11 @@
       '    rgba(143,169,164,.9) 9%, rgba(143,169,164,.9) 91%, rgba(143,169,164,0) 100%)!important;',
       '}',
       P + '.it .h{ color:' + TINTA + '!important; font-family:"Italiana",serif!important; }',
-      P + '.it .t{ color:' + TINTA2 + '!important; }',
+      /* ⚠️ EL DETALLE ES `.d`, NO `.t`. Lo escriben así los DOS que arman el
+         itinerario: el motor (`<div class="d">`) y `efectos/itinerario-momentos.js`.
+         Yo había escrito `.it .t`, que no existe: un selector que no existe no
+         da error, da «no pasó nada». Se dejan los dos por las dudas. */
+      P + '.it .d, ' + P + '.it .t{ color:' + TINTA2 + '!important; font-family:"Lora",Georgia,serif!important; }',
 
       /* ---- 🔴 LOS TÍTULOS DE LA GALERÍA LOS PINTA SU PROPIO MÓDULO --------
          Medido acá y ya visto en Bella: `#gal-kick` y `#gal-h2` no siguen al
@@ -544,17 +575,50 @@
       '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
       '}',
       P + '#pv-names span{ padding:0 .10em .17em!important; }',
-      P + '#pv-kick{ font-size:13px!important; color:' + TINTA2 + '!important; letter-spacing:.26em!important; }',
+      /* ⚠️ «MIS XV» son 13 px espaciados SOBRE LA FOTO, arriba del bloque, que es
+         justo donde el claro radial de la portada (centrado en 50% 78%) ya casi
+         no llega: medido por placa daba 2,61. No se sube el velo —la foto es de
+         lo que se trata—: se le da la tinta MÁS OSCURA y un halo de nácar, que
+         es lo que ya hace `.rd-txt` y lo que pide una línea chica sobre foto. */
+      P + '#pv-kick{',
+      '  font-size:13px!important; letter-spacing:.26em!important;',
+      '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
+      '  text-shadow:0 1px 3px rgba(244,237,228,.95), 0 0 10px rgba(244,237,228,.75)!important;',
+      '}',
       P + '.portada h1, ' + P + '#nombre{ font-family:"Parisienne",cursive!important; }',
       P + '.portada .num{ color:' + TINTA + '!important; font-variant-numeric:lining-nums!important; }',
       P + '.portada .u{ color:' + TINTA2 + '!important; }',
+      /* ⚠️ LOS RÓTULOS DE LA CUENTA REGRESIVA NO SON `.u`: son `.count .b .lab`,
+         y el motor se los deja en rgb(231,221,200) —una crema del molde OSCURO—.
+         Sobre la foto clara de la portada medían 1,16. Se los pinta, y como
+         están SOBRE FOTO llevan el halo de nácar, no más velo encima. */
+      P + '.count .lab{',
+      '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+      '  text-shadow:0 1px 3px rgba(244,237,228,.95), 0 0 9px rgba(244,237,228,.75)!important;',
+      '}',
+      P + '.count .n, ' + P + '.count .num, ' + P + '.count b{ color:' + TINTA + '!important; }',
       /* un claro RADIAL abajo de la portada, para que el bloque se lea sobre la
-         foto — pseudo HERMANO, no ancestro, así no entra en `fondosDe()` */
+         foto — pseudo HERMANO, no ancestro, así no entra en `fondosDe()`
+         ⚠️⚠️ EL CLARO TIENE QUE APAGARSE ANTES DEL BORDE DE SU PROPIA CAJA, O
+            DEJA DE SER UN CLARO Y ES UN RECTÁNGULO. Primera versión: caja de
+            `-8%` a `108%` y gradiente `120% 78%`. El radio horizontal era 1,2
+            veces el ancho de la caja, así que al llegar al borde el gradiente
+            todavía iba por alfa ≈ 0,55 y ahí lo cortaba la caja: en la portada
+            se veían DOS COSTURAS VERTICALES sobre la foto, una de cada lado.
+            Es el mismo reclamo de Maki de siempre, con otra ropa: «ese
+            rectángulo que ya te dije que no lo quiero».
+            ⭐ La cuenta: el gradiente llega a 0 al 88 % del radio, así que para
+               que muera adentro hace falta 0,88 × radio ≤ 50 % de la caja, o
+               sea radio ≤ 56 %. Se agranda la CAJA (el doble de ancha, mucho
+               más alta) y se baja el RADIO a 56 %: el claro queda igual de
+               grande en pantalla y no toca ningún borde. */
       P + '.portada > .c::before{',
-      '  content:""!important; position:absolute!important; left:-8%!important; right:-8%!important;',
-      '  bottom:-6%!important; height:150%!important; pointer-events:none!important; z-index:-1!important;',
-      '  background:radial-gradient(120% 78% at 50% 78%,',
-      '    rgba(244,237,228,.80) 0%, rgba(244,237,228,.42) 52%, rgba(244,237,228,0) 86%)!important;',
+      '  content:""!important; position:absolute!important;',
+      '  left:-50%!important; right:-50%!important;',
+      '  bottom:-45%!important; height:190%!important;',
+      '  pointer-events:none!important; z-index:-1!important;',
+      '  background:radial-gradient(56% 56% at 50% 52%,',
+      '    rgba(244,237,228,.82) 0%, rgba(244,237,228,.46) 46%, rgba(244,237,228,0) 88%)!important;',
       '}',
       P + '.portada > .c{ position:relative!important; }',
 
@@ -597,6 +661,34 @@
      la carta. */
   function limpiarInlines() {
     try {
+      /* ⭐⭐ SE BARRE POR `data-regla-orig`, NO POR UNA LISTA DE SELECTORES.
+         Lo aprendí caro el 23/9 con el itinerario de `marisol-mis15`: yo venía
+         nombrando de a uno los elementos que el corrector pisaba (el rótulo de
+         la playlist, la carta, los títulos de la galería, el pie del RSVP) y
+         siempre aparecía uno más. El itinerario fue el que lo dejó claro:
+         apenas se pudo VER desde el primer pintado (antes estaba oculto porque
+         el evento traía imagen), `reglas-duras.js` llegó ANTES que esta hoja,
+         lo vio en la crema del molde (244,231,206 — quedó guardado en
+         `data-regla-orig`) y lo «rescató» a un marrón 118,86,26. Las ocho horas
+         y los ocho detalles salieron marrones, y el `h2` también.
+         ⚠️ Y eso NO se gana por especificidad: el corrector escribe el `color`
+            EN LÍNEA y CON `!important`. No hay hoja que le gane. Sólo se borra.
+         ⭐ `data-regla-orig` es la firma que deja el propio corrector, así que
+            barrer por ese atributo alcanza a TODO lo que tocó, incluso lo que
+            todavía no me pasó. Y no hay parpadeo en bucle: una vez que manda la
+            tinta de la colección el contraste da bien y el corrector no vuelve
+            a rescatarlo.
+         ⚠️ Se barre SÓLO adentro de `.frame` —la invitación— para no tocar el
+            panel ni nada de afuera. */
+      var tocados = document.querySelectorAll('.frame [data-regla-orig]');
+      [].forEach.call(tocados, function (e) {
+        if (e.style) {
+          e.style.removeProperty('color');
+          e.style.removeProperty('-webkit-text-fill-color');
+        }
+        e.removeAttribute('data-regla-orig');
+      });
+      /* y los dos que el corrector pisa SIN dejar firma */
       [].forEach.call(
         document.querySelectorAll('.rd-tapa .rd-txt, .cf-letter, .cf-letter *'),
         function (e) {
@@ -604,7 +696,6 @@
             e.style.removeProperty('color');
             e.style.removeProperty('-webkit-text-fill-color');
           }
-          if (e.hasAttribute('data-regla-orig')) e.removeAttribute('data-regla-orig');
         }
       );
     } catch (e) {}
