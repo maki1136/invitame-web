@@ -160,7 +160,7 @@
       },
       url: {
         'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-piedra/oleo-piedra-base.webp',
-        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-piedra.webp'
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-piedra-2.webp'
       }
     }
   };
