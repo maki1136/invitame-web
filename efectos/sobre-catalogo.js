@@ -766,7 +766,15 @@
       '}',
 
       '#col-sobre-velo{position:fixed;inset:0;z-index:8;pointer-events:none;',
-      '  background:' + luzColor() + ';opacity:0;',
+      /* ★★ EL COLOR DEL DESTELLO SE LEE TARDE.  22/9/2026
+         `luzColor()` mira `armadoModelo`, pero esta hoja de estilo se escribe
+         ANTES de saber qué sobre es, así que siempre se hornea el blanco de
+         fallback. Resultado: el campo `luzColor` del catálogo NUNCA funcionó
+         en ningún sobre — medido en `regina-y-emiliano`: el catálogo decía
+         #E8E3D7 y la regla servía rgb(255,255,255).
+         → Ahora la hoja lee `var(--luz-color)` y el valor se escribe recién
+           cuando se sabe el modelo (ver `armadoModelo = id`). */
+      '  background:var(--luz-color,' + luzColor() + ');opacity:0;',
       '  transition:opacity ' + FLASH + 's ease-out}',
       '#env.carta-video.fundiendo #col-sobre-velo{opacity:1}',
 
@@ -1104,6 +1112,10 @@
     }
     if (env.dataset.apertura === 'solapas') env.classList.add('listo');
     armadoModelo = id;
+    /* ★ recién ahora se conoce el sobre: se le pasa su color de destello. */
+    try {
+      document.documentElement.style.setProperty('--luz-color', luzColor());
+    } catch (e) {}
     return true;
   }
 
@@ -1440,6 +1452,10 @@
     });
 
     armadoModelo = id;
+    /* ★ recién ahora se conoce el sobre: se le pasa su color de destello. */
+    try {
+      document.documentElement.style.setProperty('--luz-color', luzColor());
+    } catch (e) {}
     return true;
   }
 
