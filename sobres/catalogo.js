@@ -910,14 +910,18 @@ window.SOBRES_INVITAME = {
        3,9, antes del último cuadro (4,01). */
   /* ⭐ 23/9/2026 · Óleo PIEDRA (mariana-y-joaquin). PRIMER sobre hecho con la API de
      Higgsfield (Kling 3.0 std, image-to-video, 5 s, ~US$0,42), desde una imagen de Flow
-     (oleo-mj-sobre-cerrado). Medido cuadro por cuadro: la solapa sube entre 1,5 y 2,5 s,
+     (oleo-mj-sobre-cerrado).
+     ⚠️ 23/9, Maki: «el sello se queda abajo y no se va». En la versión -a el lacre quedaba en el
+     centro del sobre cuando la solapa subía. La -b se pidió con el lacre PEGADO a la punta de la
+     solapa y un negative prompt contra el sello que queda: sube con la solapa y sale por arriba.
+     Medido cada 0,25 s. Antes de la -b, medido cuadro por cuadro: la solapa sube entre 1,5 y 2,5 s,
      la luz de adentro crece desde 2,5 y a los 5 s el centro ya es blanco. */
   'oleo-piedra-luz': {
     nombre:     "Óleo Piedra · se abre la solapa y sale luz de adentro (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo-piedra/oleo-mj-sobre-luz-a.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-piedra/oleo-mj-sobre-luz-a.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo-piedra/oleo-mj-sobre-luz-b.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-piedra/oleo-mj-sobre-luz-b.jpg",
     color:      "#B1AFAA",
-    luz:        4.0,
+    luz:        4.2,
     luzColor:   "#FAF8F4",
     luzFundido: 0.9
   },
