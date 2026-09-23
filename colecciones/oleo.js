@@ -193,7 +193,11 @@
       css: [
         P + '.cf-letter{ background:linear-gradient(180deg,#1C2440 0%,#141B2E 100%)!important; color:#F3EBDD!important; box-shadow:0 10px 26px rgba(0,0,0,.45)!important; }',
         P + '.cf-letter :is(h3, p, div, span){ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
-        P + '.pasecard .estado{ background-color:rgba(212,178,110,.18)!important; color:#F3EBDD!important; border-color:rgba(212,178,110,.55)!important; }'
+        P + '.pasecard .estado{ background-color:rgba(212,178,110,.18)!important; color:#F3EBDD!important; border-color:rgba(212,178,110,.55)!important; }',
+        /* 23/9: el body traía el lino claro del motor (#D7CCBD). reglas-duras compone los
+           degradados de cada sección SOBRE el primer fondo opaco de abajo, que era ése:
+           medía «fondo claro» y oscurecía los textos crema → ilegibles sobre la noche. */
+        P + 'body{ background-color:#141B2E!important; }'
       ].join('\n')
     }
   };
