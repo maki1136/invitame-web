@@ -412,6 +412,41 @@
     '  --r3-tapa:url("/sobres/cantera-rasp-tapa.webp");',
     '}',
 
+    /* ────── 4septies · LAS TRES TAPAS, DEL MISMO COLOR
+       Maki, 22/9/2026: «te quedaron de distinto color la raspada».
+       CAUSA MEDIDA, no supuesta: los píxeles de los tres canvas son
+       IDÉNTICOS (promedio 203-143-109 en los tres). Lo que cambia es
+       una regla del motor, en rasp-css:
+         .rasp-zona.dormida canvas{ filter:brightness(.84) saturate(.72) }
+       El motor APAGA las casillas que todavía no se pueden raspar.
+       Con el degradado metálico de fábrica eso se lee como «más oscuro»;
+       con una FOTO de lacre se lee como TRES LACRES DE OTRO COLOR.
+       Se apaga el filtro. El orden lo sigue marcando el `cursor:default`
+       de la misma regla, que no se toca.
+       ⚠️ VA CON EL PREFIJO: `.rasp-zona.dormida canvas` es (0,2,1) y
+       también lleva !important; sin P empata y gana el orden de las
+       hojas, que no controlamos. Con P queda (0,3,2) y gana siempre. */
+    P + '.rasp-zona.dormida canvas{ filter:none!important; }',
+
+    /* ────── 4octies · LA HOJA DE LA CARTA NO PUEDE SER LO ÚNICO BLANCO
+       Medido: `.cf-letter` nacía con un degradado que arranca en
+       rgb(255,254,251) — blanco — adentro de un papel rgb(239,227,208).
+       Es el error 270 de Lupita otra vez, más suave. Se le pone el
+       papel de Cantera. */
+    P + '.cf-letter{ background:linear-gradient(180deg,#F3EADA 0%,#EADFCB 100%)!important; }',
+
+    /* ────── 4nonies · EL POZO DE SECCIONES DEL MISMO TONO
+       Medido con la corrida de 0bis.9 del check de entrega: la peor
+       racha daba 3 secciones claras seguidas (share · filtro · galería).
+       El fondo de las secciones es del MOTOR y no se le disputa — en
+       Bohemia se perdieron cuatro intentos hasta entenderlo. Se le saca
+       el AIRE MUERTO a la junta, por hermano adyacente, sin JS y sin
+       tocar ningún atributo (eso despierta a reglas-duras.js). */
+    P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:16px!important; }',
+    P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:16px!important; }',
+    P + '.sec.verde + .sec.verde{ padding-top:16px!important; }',
+    P + '.sec.verde:has(+ .sec.verde){ padding-bottom:16px!important; }',
+
     /* ────────────── 4ter · LA TAPA DEL VIDEO Y DE LA PLAYLIST NO ES UN PAPEL
        Maki, 22/9/2026: «en ver video está el rectángulo que no me gusta,
        anotalo en la skill porque parece que no está. Y la playlist lo mismo.»
