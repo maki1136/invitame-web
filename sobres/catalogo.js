@@ -473,11 +473,24 @@ window.SOBRES_INVITAME = {
      --------------------------------------------------------------------- */
   'cantera-video-b': {
     nombre:     "Cantera · la tarjeta sale del sobre (video)",
-    video:      "/sobres/sobre-cantera-v3.mp4",
-    poster:     "/sobres/sobre-cantera-v3-poster.jpg",
+    video:      "/sobres/sobre-cantera-v5.mp4",
+    poster:     "/sobres/sobre-cantera-v5-poster.jpg",
     color:      "#E6E0D3",
-    luz:        2.5,
-    luzFundido: 0.95
+    /* ★ Maki, 22/9/2026: «cuando abre queda en blanco ¿puede salir la portada
+       ahí, o qué podemos hacer para que no se vea tan blanco ese papel?»
+       Medido: el blanco eran TRES blancos encimados — 1,2 s de papel quieto al
+       final del video, más el velo `#col-sobre-velo`, más `#env-bloom`.
+       ⚠ `luzColor` ya existía en el motor y Cantera nunca lo llenó: sin ese
+         campo `luzColor()` cae a '#ffffff'. Ese blanco no lo eligió nadie, era
+         el valor de fábrica.
+       → El video se recortó a 3,58 s (v5) y el destello pasa a ser el color
+         MEDIDO del último cuadro (#E8E3D7). Como el velo y el papel son el
+         mismo color, no hay destello blanco: el papel se convierte en la
+         portada. El fundido arranca a 2,95 y dura 0,6 — termina justo con el
+         video, así que no queda ni un cuadro de papel muerto. */
+    luz:        2.95,
+    luzColor:   "#E8E3D7",
+    luzFundido: 0.6
   },
 
   'cantera-video-c': {
