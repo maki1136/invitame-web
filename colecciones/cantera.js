@@ -435,17 +435,14 @@
        papel de Cantera. */
     P + '.cf-letter{ background:linear-gradient(180deg,#F3EADA 0%,#EADFCB 100%)!important; }',
 
-    /* ────── 4nonies · EL POZO DE SECCIONES DEL MISMO TONO
-       Medido con la corrida de 0bis.9 del check de entrega: la peor
-       racha daba 3 secciones claras seguidas (share · filtro · galería).
-       El fondo de las secciones es del MOTOR y no se le disputa — en
-       Bohemia se perdieron cuatro intentos hasta entenderlo. Se le saca
-       el AIRE MUERTO a la junta, por hermano adyacente, sin JS y sin
-       tocar ningún atributo (eso despierta a reglas-duras.js). */
-    P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:16px!important; }',
-    P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:16px!important; }',
-    P + '.sec.verde + .sec.verde{ padding-top:16px!important; }',
-    P + '.sec.verde:has(+ .sec.verde){ padding-bottom:16px!important; }',
+    /* ────── 4nonies · EL POZO DE SECCIONES DEL MISMO TONO — YA ESTABA
+       El 22/9/2026 escribí acá el arreglo del aire entre dos secciones
+       del mismo tono SIN LEER EL ARCHIVO ENTERO: ya existía, en el
+       bloque 15, con 14px. Dos juegos de reglas idénticas, ganando la
+       de más abajo. Se borró el duplicado y queda esta nota.
+       ⚠️ LA REGLA: antes de agregar un bloque, BUSCAR la propiedad en
+       el archivo. Medido en vivo: las juntas entre secciones del mismo
+       tono dan 14px arriba y 14px abajo, que es lo correcto. */
 
     /* ────────────── 4ter · LA TAPA DEL VIDEO Y DE LA PLAYLIST NO ES UN PAPEL
        Maki, 22/9/2026: «en ver video está el rectángulo que no me gusta,
