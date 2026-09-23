@@ -200,7 +200,7 @@
         P + 'body{ background-color:#141B2E!important; }',
         /* el título de los colores y el «Ver más» nacen en el verde oscuro del motor (#3A453D) */
         P + ':is(.col-dc-tit, .iv-plie-btn){ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }',
-        P + '.col-dc-tit{ color:#D6CCBB!important; -webkit-text-fill-color:#D6CCBB!important; }',
+        P + '.col-dc-tit{ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
         /* el pase: el motor le pone un radial blanco al 95% encima del color → salía crema (regla: el pase nunca blanco) */
         P + '.pasecard{ background-image:repeating-linear-gradient(0deg, rgba(212,178,110,.05) 0 1px, transparent 1px 3px), radial-gradient(130% 90% at 50% 0%, #26305A, #151C33)!important; border-color:rgba(212,178,110,.45)!important; box-shadow:0 12px 30px rgba(0,0,0,.5)!important; }',
         P + '.pasecard :is(div,span,p,b,strong,small,label):not(.estado){ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
@@ -211,7 +211,9 @@
         P + '.rd-tapa{ background:radial-gradient(120% 90% at 50% 40%, #26305A, #141B2E)!important; border:1px solid rgba(212,178,110,.45)!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.45)!important; }',
         P + '.rd-aro{ border-color:#D4B26E!important; opacity:1!important; }',
         P + '.rd-aro::after{ border-left-color:#D4B26E!important; }',
-        P + '.rd-txt{ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }'
+        P + '.rd-txt{ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }',
+        /* Vestimenta cae sobre la parte iluminada del óleo (la arcada): velo más firme SÓLO ahí */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec):has(.col-dc){ background-image:radial-gradient(75% 55% at 50% 45%, rgba(20,27,46,.66) 0%, rgba(20,27,46,.4) 50%, rgba(20,27,46,0) 82%)!important; }'
       ].join('\n')
     }
   };
