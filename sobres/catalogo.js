@@ -896,6 +896,28 @@ window.SOBRES_INVITAME = {
      Recortado dura 6,71 s. El papel llena el cuadro a los 6,0 (esquina de
      211 → 227 de luz): ahí arranca el destello, en el color MEDIDO del
      último cuadro (#E3E2DB), y dura 0,6 → termina con el video. */
+  /* ---- ★ ÓLEO ROSÉ · LA LUZ SALE DEL SOBRE  (23/9/2026) ------------------
+     Maki sobre el anterior ('oleo-rose'): «salió una carta blanca, hizo
+     cualquier cosa el sobre. Le diste mucho tiempo: ya habíamos quedado que en
+     Flow va con MENOS segundos, se abre el sobre y listo. Y después que salga
+     una LUZ desde adentro del sobre para ir tapando todo con blanco».
+     → Flow, 4 s (no 8), el mismo cuadro inicial, y en el prompt «nothing comes
+       out of the envelope: no card, no letter».
+     MEDIDO cada 0,25 s: 0-0,75 se suelta el lacre · 1,0 solapa abierta ·
+       1,5-3,0 la luz crece adentro (brillo 190 → 208) · 3,25-3,75 desborda
+       (213 → 232). El video NO llega solo al blanco entero: el destello del
+       motor entra en 3,0 —cuando la luz ya se ve— en marfil claro y termina en
+       3,9, antes del último cuadro (4,01). */
+  'oleo-rose-luz': {
+    nombre:     "Óleo Rosé · se abre la solapa y sale luz de adentro (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre-luz-a.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo/oleo-xa-sobre-luz-a.jpg",
+    color:      "#E6DDD2",
+    luz:        3.0,
+    luzColor:   "#FBF6EE",
+    luzFundido: 0.9
+  },
+
   'oleo-rose': {
     nombre:     "Óleo Rosé · la solapa pintada se abre y sale la tarjeta (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_7.9,q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre.mp4",
