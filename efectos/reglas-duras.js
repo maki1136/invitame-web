@@ -290,6 +290,24 @@
     tapa.appendChild(aro); tapa.appendChild(txt);
     tapa.addEventListener('click', function () {
       caja.setAttribute('data-crudo', 'abierto');   /* queda abierta PARA SIEMPRE */
+      /* ⚠️⚠️ ERROR 29 — LA TAPA SE IBA Y DEJABA EL PREVIEW CRUDO DE YOUTUBE. (23/9/2026)
+         Maki tocó el play de «Nuestro video» y apareció el reproductor de YouTube con su
+         miniatura, el logo de Vevo y SU botón rojo: había que tocar dos veces, y la segunda
+         sobre el preview crudo (la regla de los tres crudos). Este clic sólo sacaba la tapa.
+         → El toque del invitado ES el play: autoplay=1 al iframe de YouTube/Vimeo (Spotify
+           no: no autoplayea) y play() al <video>. */
+      (function darPlay(intentos) {
+        var f = caja.querySelector('iframe');
+        var u = f ? (f.getAttribute('src') || '') : '';
+        if (f && !u && intentos > 0) { setTimeout(function () { darPlay(intentos - 1); }, 150); return; }
+        if (f && /youtube(-nocookie)?\.com\/embed\/|player\.vimeo\.com\//.test(u) && !/[?&]autoplay=1/.test(u)) {
+          var al = f.getAttribute('allow') || '';
+          if (al.indexOf('autoplay') < 0) f.setAttribute('allow', (al ? al + '; ' : '') + 'autoplay; encrypted-media; fullscreen');
+          f.setAttribute('src', u + (u.indexOf('?') > -1 ? '&' : '?') + 'autoplay=1&playsinline=1');
+        }
+        var v = caja.querySelector('video');
+        if (v && v.play) { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+      })(10);
       tapa.classList.add('rd-ida');
       setTimeout(function () { if (tapa.parentNode) tapa.parentNode.removeChild(tapa); }, 500);
     });
