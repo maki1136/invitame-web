@@ -23,11 +23,20 @@
    no llega a NINGUNA invitacion ya entregada; un modulo llega a todas. Es la
    misma razon por la que existe `videos-blindados.js`.
 
+   ⚠️⚠️ LO QUE ESTE ARCHIVO YA ROMPIO UNA VEZ, Y POR QUE AHORA ES MAS CHICO
+   La primera version tambien hacia ganar `fx.sobre.ini` cuando habia DOS
+   nombres. Sonaba bien —«Jazmin manda»— y cambio una muestra APROBADA:
+   `camila-y-tomas` tiene `ini:"C T"` guardado en la base y el motor se lo
+   pisaba con «C&T»; mi modulo le devolvio «C T». O sea que una invitacion ya
+   entregada podia cambiar de aspecto sola, que es justo lo que no se hace.
+   → Con dos nombres NO SE METE. Ni para mejorar. El unico caso que arregla es
+     el que estaba roto: un solo nombre.
+
    QUE HACE
-   · Dos nombres cargados → NO se mete. El motor ya lo arma bien.
+   · Dos nombres cargados → NO se mete, nunca. El motor ya lo arma bien.
    · `fx.sobre.emblema` en 'corazon' o 'anillos' → NO se mete. Son los emblemas
      del panel (❤ y ⚭), y el motor los pone el.
-   · `fx.sobre.ini` cargado desde el panel → gana eso, siempre. Jazmin manda.
+   · Un solo nombre + `fx.sobre.ini` cargado desde el panel → gana el panel.
    · Un solo nombre y sin `ini` → la inicial sola, sin el ampersand colgado.
 
    QUE NO HACE
@@ -47,20 +56,21 @@
   function quiere() {
     try {
       var ev = window.INVEV || {};
-      var so = (ev.fx || {}).sobre || {};
-
-      /* el panel puso un emblema: lo escribe el motor, no yo */
-      if (so.emblema === 'corazon' || so.emblema === 'anillos') return null;
-
-      /* el panel escribio la sigla: manda eso, siempre */
-      var puesta = String(so.ini || '').trim();
-      if (puesta) return puesta.toUpperCase();
 
       var a = String(ev.n1 || '').trim();
       var b = String(ev.n2 || '').trim();
 
       if (!a) return null;   /* todavia no llego el evento */
-      if (b)  return null;   /* dos nombres: el motor ya lo arma bien */
+      if (b)  return null;   /* DOS nombres: no me meto. Ver la nota de arriba. */
+
+      var so = (ev.fx || {}).sobre || {};
+
+      /* el panel puso un emblema: lo escribe el motor, no yo */
+      if (so.emblema === 'corazon' || so.emblema === 'anillos') return null;
+
+      /* el panel escribio la sigla: manda eso */
+      var puesta = String(so.ini || '').trim();
+      if (puesta) return puesta.toUpperCase();
 
       return a[0].toUpperCase();
     } catch (e) { return null; }
