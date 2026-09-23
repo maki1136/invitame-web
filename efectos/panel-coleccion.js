@@ -136,6 +136,15 @@
       ayuda: 'Linea ARTE, la verde: salvia, glicina lila, rubor y oro viejo, un ' +
              'jardín secreto pintado con espátula y con el fondo EN VIDEO (la glicina ' +
              'se mece, corre la fuente). Para bodas de jardín y de día. Trae su propia paleta.' },
+    { id: 'oleo-eucalipto', nombre: 'Botánica · Eucalipto',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Eucalipto real verde plateado sobre lino marfil, con rosas blancas; fotos hiperrealistas y fondo EN VIDEO. Para bodas de bosque, jardín o campo. Trae su propia paleta.' },
+    { id: 'oleo-espatulado', nombre: 'Textura · Espatulado',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro; elegante y clásica, fondo EN VIDEO. Trae su propia paleta.' },
+    { id: 'oleo-marmol', nombre: 'Textura · Mármol',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Mármol blanco con vetas de oro, capillas y lirios; para bodas religiosas, fondo EN VIDEO. Trae su propia paleta.' },
     { id: 'oleo-nocturno', nombre: 'Óleo · Nocturno',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE, la primera OSCURA: azul noche, carbón, marfil y pan de ' +
