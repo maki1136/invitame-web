@@ -722,6 +722,11 @@
     '/colecciones/cantera.js',       /* la SEPTIMA familia: boda religiosa tradicional mexicana.
                                           Cantera rosa, laton y olivo; humo de cirios en video y las
                                           secciones en ARCO de medio punto. Trae su propia paleta. */
+    '/colecciones/bella.js',          /* la OCTAVA familia: «La Bella y la Bestia», la primera OSCURA
+                                         de la linea de princesas. Oro viejo, borgoña y verde botella
+                                         sobre madera; el fondo es la mesa con la rosa y lo que se mueve
+                                         son TRES VELAS. Titulos en Cinzel, nombre en Pinyon Script y un
+                                         capullo de rosa como marca. Trae su propia paleta. */
 
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
