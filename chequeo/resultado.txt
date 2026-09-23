@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 23/09/2026, 04:02
+Fecha: 23/09/2026, 04:04
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 10 PROBLEMAS (y 73 cosas bien)
+HAY 10 PROBLEMAS (y 83 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -23,15 +23,76 @@ HAY 10 PROBLEMAS (y 73 cosas bien)
    BIEN   no se sale nada de la columna
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
-   MAL    se puede raspar y se revela la fecha
-             -> se revelaron 2 de 3
-   MAL    una vez raspada, queda raspada
-             -> volvieron a taparse 1
+   BIEN   se puede raspar y se revela la fecha
+   BIEN   una vez raspada, queda raspada
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Agendar" 1.7/4.5 [#ffffff sobre luminancia 0.03-0.58 · a.btn.gh] · "Ver en Instagram" 3.2/4.5 [#f7e9e6 sobre luminancia 0.03-0.20 · a.btn.lt] · "Camila & Tomás · 06.03" 3.5/4.5 [#e7ddc8 sobre luminancia 0.01-0.17 · div.s] · "Los colores de la boda" 3.6/4.5 [#606763 sobre luminancia 0.60-0.87 · div.col-dc-tit] y 6 más
+             -> "¿Cuántos asistirán?" 1.5/4.5 [#b3cfc5 sobre luminancia 0.05-0.90 · label] · "Agendar" 1.7/4.5 [#ffffff sobre luminancia 0.03-0.58 · a.btn.gh] · "Camila & Tomás · 06.03" 3.5/4.5 [#e7ddc8 sobre luminancia 0.01-0.17 · div.s] · "Los colores de la boda" 3.6/4.5 [#606763 sobre luminancia 0.60-0.87 · div.col-dc-tit] y 9 más
+   BIEN   el boleto del pase se ve entero
+   MAL    al tocar el boleto, el pedazo se corta y baja
+             -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
+   BIEN   los módulos vienen en un solo pedido, no de a sesenta
+   BIEN   ninguna foto viaja sin optimizar
+   BIEN   la invitación no pide un archivo por cada cosa
+   BIEN   no hay ni un emoji a la vista
+   BIEN   el reproductor de Spotify está adentro de la solapa
+   BIEN   la solapa de la música viene ABIERTA
+   BIEN   al tocarla se cierra de verdad
+   BIEN   y se vuelve a abrir
+   MAL    sin errores de JavaScript
+             -> /www.youtube-nocookie.com'. | /www.youtube-nocookie.com'.
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
+   BIEN   al salir, la invitación anota dónde estaba
+   BIEN   en la galería hay botón para volver a la invitación
+   BIEN   al volver NO se repite el sobre
+   BIEN   al volver cae en el mismo lugar
+   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 279.1 s de punta a punta)
+
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   BIEN   no asoma otro sobre al abrir
+   BIEN   la portada no es la de otra invitación
+   BIEN   sin voseo desde el primer pintado
+   BIEN   la raspadita pone una tapa por número
+   BIEN   las tapas caen justo encima de los números
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 5 chequeos y se cayó
+             -> el último que sí corrió: "las tapas caen justo encima de los números"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
+
+
+──────────────────────────────────────────
+  Safari iPad
+──────────────────────────────────────────
+   BIEN   no asoma otro sobre al abrir
+   BIEN   en tablet la invitación ocupa la pantalla
+   BIEN   en tablet no se arma la capa borrosa que traba el scroll
+   BIEN   la portada no es la de otra invitación
+   ----   el sobre no se pudo medir todavía (no es un fallo)
+   BIEN   sin voseo desde el primer pintado
+   BIEN   la columna tiene un ancho normal
+   BIEN   no se sale nada de la columna
+   BIEN   la raspadita pone una tapa por número
+   BIEN   las tapas caen justo encima de los números
+   MAL    se puede raspar y se revela la fecha
+             -> se revelaron 1 de 3
+   MAL    una vez raspada, queda raspada
+             -> volvieron a taparse 2
+   BIEN   está en español de México, sin voseo
+   BIEN   no se ve nada de la boda de ejemplo
+   BIEN   los botones flotantes no se pisan
+   MAL    todos los textos se leen
+             -> "Sugerir una canción" 1.7/4.5 [#ffffff sobre luminancia 0.03-0.57 · a.btn] · "Compartir por WhatsApp" 3.8/4.5 [#ffffff sobre luminancia 0.03-0.22 · a.wsp] · "Los colores de la boda" 3.9/4.5 [#606763 sobre luminancia 0.65-0.78 · div.col-dc-tit] · "Camila & Tomás · 06.03" 4.1/4.5 [#e7ddc8 sobre luminancia 0.01-0.14 · div.s] y 5 más
    BIEN   el boleto del pase se ve entero
    ----   el boleto no se pudo traer a la pantalla: no se midio
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -45,70 +106,20 @@ HAY 10 PROBLEMAS (y 73 cosas bien)
    MAL    sin errores de JavaScript
              -> /www.youtube-nocookie.com'. | /www.youtube-nocookie.com'.
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 240.7 s de punta a punta)
-
-
-──────────────────────────────────────────
-  Safari iPhone
-──────────────────────────────────────────
-   BIEN   no asoma otro sobre al abrir
-   BIEN   la portada no es la de otra invitación
-   BIEN   sin voseo desde el primer pintado
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-   MAL    se puede raspar y se revela la fecha
-             -> se revelaron 0 de 3
-   MAL    una vez raspada, queda raspada
-             -> volvieron a taparse 3
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   ----   1 pantallas no se pudieron recorrer: ahi no se midio el contraste
-   MAL    todos los textos se leen
-             -> "No podré" 1.1/4.5 [#e5ebe8 sobre luminancia 0.90-0.90 · span.et.n] · "Sí, asistiré" 1.1/4.5 [#e5ebe8 sobre luminancia 0.90-0.90 · span.et.s] · "Compartir por WhatsApp" 1.1/4.5 [#ffffff sobre luminancia 0.65-0.90 · a.wsp] · "Entrar a la galería" 1.1/4.5 [#0000ee sobre luminancia 0.05-0.21 · a] y 17 más
-   BIEN   el boleto del pase se ve entero
-   ----   el boleto no se pudo traer a la pantalla: no se midio
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1055.5 s de punta a punta)
-
-  ⚠️ no se pudo preguntar si la invitación existe (fetch failed). Se sigue igual.
-
-──────────────────────────────────────────
-  Safari iPad
-──────────────────────────────────────────
-
-──────────────────────────────────────────
-  Safari iPad
-──────────────────────────────────────────
-   MAL    no se pudo ni abrir el navegador
-             -> page.goto: Operation was cancelled; maybe frame was detached?
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 13681 y volvió a 8846
+   (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 453.5 s de punta a punta)
 
 
 ──────────────────────────────────────────
   Chrome escritorio
 ──────────────────────────────────────────
-   MAL    no asoma otro sobre al abrir
-             -> 4 piezas a la vista: .triflap.tri-t 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-r 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-b 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-l 1440x900 [display:block visibility:visible opacity:1]  |  estado de las piezas a los 150 ms: .triflap:block/visible · .triflap:block/visible · .triflap:block/visible · .triflap:block/visible · #scene:none/visible  |  marca inv-sobre-listo: todavia no
+   BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   la columna ya está encuadrada en el primer pintado
    ----   el sobre no se pudo medir todavía (no es un fallo)
@@ -123,7 +134,7 @@ HAY 10 PROBLEMAS (y 73 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Agendar" 2.3/4.5 [#ffffff sobre luminancia 0.04-0.41 · a.btn.gh] · "Camila & Tomás · 06.03" 3.5/4.5 [#e7ddc8 sobre luminancia 0.01-0.17 · div.s] · "Ver en Instagram" 3.7/4.5 [#f7e9e6 sobre luminancia 0.03-0.19 · a.btn.lt] · "Los colores de la boda" 3.8/4.5 [#606763 sobre luminancia 0.63-0.88 · div.col-dc-tit] y 14 más
+             -> "Agendar" 2.2/4.5 [#ffffff sobre luminancia 0.04-0.44 · a.btn.gh] · "Camila & Tomás · 06.03" 3.5/4.5 [#e7ddc8 sobre luminancia 0.01-0.17 · div.s] · "Ver en Instagram" 3.7/4.5 [#f7e9e6 sobre luminancia 0.03-0.19 · a.btn.lt] · "Los colores de la boda" 3.8/4.5 [#606763 sobre luminancia 0.64-0.87 · div.col-dc-tit] y 11 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
