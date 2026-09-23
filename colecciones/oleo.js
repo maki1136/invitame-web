@@ -395,7 +395,14 @@
     P + '.frame > section.sec:not(.verde):not(#contacto-sec){ background-image:radial-gradient(ellipse 80% 60% at 50% 42%, rgba(247,239,234,.70) 0%, rgba(247,239,234,.42) 46%, rgba(247,239,234,0) 80%)!important; }',
     P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){',
     '  text-shadow:0 0 7px ' + HALO + '.92), 0 0 16px ' + HALO + '.75)!important;',
-    '}'
+    '}',
+
+    /* ─────────────── 16 · LO QUE SALIÓ EN LA PRIMERA RECORRIDA (23/9)
+       · el título del pase («Con cariño, te esperamos») venía en Rouge
+         Script, la cursiva del motor: es '.pase > .t', no '.pasecard .t'.
+       · Personas: con 18 px los nombres completos caían en TRES renglones. */
+    P + '.pase > .t{ font-family:"Bodoni Moda",serif!important; font-style:italic!important; font-weight:400!important; font-size:26px!important; line-height:1.2!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
+    P + '.padres .nm{ font-size:16px!important; line-height:1.25!important; }'
 
     ].join('\n');
   }
