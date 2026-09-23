@@ -272,8 +272,12 @@
          y NO lo alcanza `:is(.btn,#btn-ingresar,.wsp,.tv-btn,.inv-prev-btn)`,
          que es el conjunto que pinta el material. En una colección clara no
          canta; en ésta es una pastilla crema en medio de la madera.
-         (Anotado para el motor: ese botón debería entrar en el conjunto.) */
-      P + '#filtro-abrir{',
+         ⚠️ Y `#gal-entrar` —«Entrar a la galería», el botón de Invítame Live—
+            es el MISMO caso: medido 230×54 en rgb(244,231,206). Apareció recién
+            al prender la galería, o sea que el barrido de superficies claras
+            hay que correrlo DESPUÉS de tener todo cargado, no antes.
+         (Anotado para el motor: los dos deberían entrar en el conjunto.) */
+      P + '#filtro-abrir, ' + P + '#gal-entrar{',
       '  background:linear-gradient(180deg,' + ORO + ' 0%,' + ORO2 + ' 100%)!important;',
       '  color:#2E1F14!important; -webkit-text-fill-color:#2E1F14!important;',
       '  border:0!important;',
