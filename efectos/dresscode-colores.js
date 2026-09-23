@@ -1,7 +1,7 @@
-/* ===== LOS COLORES DE LA BODA, EN CÍRCULOS ===================================
+/* ===== LOS COLORES DE LA FIESTA, EN CÍRCULOS =================================
 
    En la sección de Vestimenta, debajo del dibujo del traje, aparece una fila de
-   círculos con los colores de la boda. Sale de la referencia que mandó Maki:
+   círculos con los colores de la fiesta. Sale de la referencia que mandó Maki:
    ahí el dress code no se explica sólo con palabras, se MUESTRA.
 
    ⚠️ VIENE APAGADO. Se prende de dos maneras:
@@ -25,11 +25,25 @@
          `window.INVPALETAS`. Son dos caminos distintos a propósito.
 
    ⚠️ EL TÍTULO TAMBIÉN LO DECIDE JAZMÍN  →  `fx.dresscode.titulo`
-      · sin definir  → "Los colores de la boda"
+      · sin definir  → "Los colores de la fiesta"
       · con texto    → ese texto
       · vacío ('')   → sin título, sólo los círculos
       Estaba fijo en el código y era justamente lo que no hay que hacer: si no
       se puede tocar desde el panel, para Jazmín no existe.
+
+      ⚠️⚠️ Y EL DEFECTO DECÍA «DE LA BODA», QUE MIENTE EN LA MITAD DE LOS CASOS.
+         Encontrado el 23/9/2026 armando Victoria, que son XV.
+         El motor **no tiene ninguna señal de XV contra boda**: se buscaron
+         `esXV`, `esQuince`, `tipoEvento`, `ev.tipo` y `fx.tipo` en el paquete
+         entero y no existe ninguna. Cada efecto trae su texto clavado — al lado
+         de éste, `fx.neon.bajada` nace en «Mis XV años» — y el que decide
+         siempre es Jazmín desde el panel.
+         Como no hay nada que consultar, el defecto pasa a ser NEUTRO: «Los
+         colores de la fiesta» sirve para una boda y para unos XV. Lo específico
+         sigue estando a un campo de distancia, que es donde tiene que estar.
+         ⭐ La regla: un texto por defecto que sólo sirve para la mitad de los
+            eventos no es un defecto, es un error esperando su turno. Si no hay
+            señal para elegir, el defecto se escribe neutro.
 
    ⚠️ DÓNDE VA: enganchado a `.dc-mono`, que es el dibujo del traje de la
       sección de Vestimenta. Es el único elemento confiable para encontrar esa
@@ -50,7 +64,7 @@
 
   var ID_CSS = 'inv-dc-colores-css';
   var CLASE  = 'col-dc';
-  var TITULO_POR_DEFECTO = 'Los colores de la boda';
+  var TITULO_POR_DEFECTO = 'Los colores de la fiesta';
 
   /* las variables de la paleta que se usan cuando los colores son automáticos:
      tres de color, una neutra y una clara */
