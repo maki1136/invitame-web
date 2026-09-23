@@ -405,7 +405,12 @@
     P + '.padres .nm{ font-size:16px!important; line-height:1.25!important; }',
     /* · «Abrir la cámara», «Entrar a la galería» e «Iniciar sesión» (trivia) salían en
          Montserrat 17 px y en minúscula: los únicos botones de otra invitación. */
-    P + ':is(#filtro-abrir, #gal-entrar, .tv-btn){ font-family:Jost,system-ui,sans-serif!important; font-size:12px!important; font-weight:500!important; letter-spacing:.16em!important; text-transform:uppercase!important; }'
+    P + ':is(#filtro-abrir, #gal-entrar, .tv-btn){ font-family:Jost,system-ui,sans-serif!important; font-size:12px!important; font-weight:500!important; letter-spacing:.16em!important; text-transform:uppercase!important; }',
+    /* · LA PORTADA OCUPABA POCO: «Ximena & Andrés» en un renglón quedaba en 37 px y el
+         bloque iba del 77 % al 93 % (en 390 px). Los dos <span> del nombre van en
+         DOS renglones y el cuerpo sube: medido, del 66 % al 93 %, sin tapar caras. */
+    P + '#pv-names > span{ display:block!important; }',
+    P + '#pv-names{ font-size:clamp(54px,15.5vw,80px)!important; line-height:1.02!important; }'
 
     ].join('\n');
   }
