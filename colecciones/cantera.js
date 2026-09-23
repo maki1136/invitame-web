@@ -838,6 +838,26 @@
 
   var puesta = false;
 
+  /* EL PASE CON EL QR va ABAJO de la raspadita, igual que en Perlas (Maki: «primero descubrís la fecha,
+     y ahí mismo te dan tu pase»). Cantera no lo traía y el pase quedaba pegado a la portada. Mismo
+     movimiento de nodo que perlas.js; se deshace en sacar(). 23/9/2026. */
+  function moverPase() {
+    var pase = document.querySelector('.pase');
+    var rasp = document.querySelector('.sec.scratch-sec');
+    if (!pase || !rasp) return;
+    if (rasp.parentElement !== pase.parentElement) return;
+    if (pase.previousElementSibling === rasp) return;
+    rasp.parentNode.insertBefore(pase, rasp.nextSibling);
+  }
+  function devolverPase() {
+    var pase = document.querySelector('.pase');
+    var port = document.querySelector('.portada');
+    if (!pase || !port) return;
+    if (port.parentElement !== pase.parentElement) return;
+    if (pase.previousElementSibling === port) return;
+    port.parentNode.insertBefore(pase, port.nextSibling);
+  }
+
   function poner() {
     var raiz = document.documentElement;
     if (!raiz.hasAttribute(MARCA)) raiz.setAttribute(MARCA, '');
@@ -855,6 +875,7 @@
     hoja();
     medirVia();
     ajustarNombres();
+    moverPase();
     puesta = true;
   }
 
@@ -863,6 +884,7 @@
     var raiz = document.documentElement;
     raiz.removeAttribute(MARCA);
     raiz.removeAttribute('data-marca-propia');
+    devolverPase();
     var nm = document.getElementById('pv-names');
     if (nm) nm.style.removeProperty('font-size');
     if (window.INVCOLPALETA === PALETA_PROPIA) {
