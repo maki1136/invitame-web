@@ -133,10 +133,65 @@
 
   function ev()  { try { return window.INVEV || {}; } catch (e) { return {}; } }
 
+  /* ⭐⭐ LOS TONOS (23/9/2026). Óleo es UNA línea con varias paletas: Rosé (la de
+     fábrica, ximena-y-andres) y las que se suman acá. Se eligen desde el panel como
+     colecciones hermanas: fx.coleccion 'oleo' = Rosé, 'oleo-piedra' = Piedra, etc.
+     ⚠️ NO se duplica el archivo: la hoja se arma con los colores de Rosé y se TIÑE
+     cambiando cada color por su par (hex, '%23'+hex dentro de los SVG, y cada
+     'rgba(r,g,b,'). Un color nuevo en la hoja de arriba TIENE que sumar su par acá,
+     o queda rosado en Piedra.
+     PIEDRA (mariana-y-joaquin, Valle de Guadalupe): greige, arena, gris cálido,
+     marfil y pan de plata. Contrastes medidos: TINTA 10,6 · TINTA2 6,2 · ORO_T 5,7
+     sobre papel; CREMA 6,6 y CREMA2 5,8 sobre la banda. */
+  var TONOS = {
+    piedra: {
+      hex: {
+        '#C98E8A':'#A99C8C', '#E3C2B8':'#D8CFC3', '#D9C3A0':'#D5D1CA', '#B08A4E':'#8F8A82',
+        '#F7EFEA':'#F4F1EC', '#FBF6F2':'#FAF8F4', '#4A2E2C':'#3A3631', '#6B4744':'#5E5850',
+        '#7A5634':'#645E55', '#82504C':'#5F584F', '#FBF4EF':'#FAF7F2', '#F5E6DF':'#EEE9E1',
+        '#2E1C1B':'#26231F', '#F2E4DC':'#ECE7DF', '#EAD9B8':'#E2DFD9'
+      },
+      rgb: {
+        '74,46,44':'58,54,49', '201,142,138':'169,156,140', '247,239,234':'244,241,236',
+        '40,20,18':'30,28,25', '60,34,32':'44,41,37', '134,96,58':'110,104,96',
+        '176,138,78':'143,138,130', '217,195,160':'213,209,202', '240,220,211':'232,228,220',
+        '251,246,242':'250,248,244', '255,246,236':'250,250,248', '120,70,60':'80,76,70',
+        '107,71,68':'94,88,80', '251,244,239':'250,247,242'
+      },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-piedra/oleo-piedra-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-piedra.webp'
+      }
+    }
+  };
+  function tono() {
+    try {
+      var q = /[?&]coleccion=oleo-([a-z]+)/.exec(location.search);
+      if (q) return TONOS[q[1]] ? q[1] : '';
+      var m = /^oleo-([a-z]+)$/.exec(String((ev().fx || {}).coleccion || '').toLowerCase());
+      return (m && TONOS[m[1]]) ? m[1] : '';
+    } catch (e) { return ''; }
+  }
+  function tenir(s) {
+    var t = TONOS[tono()]; if (!t) return s;
+    var k;
+    for (k in t.url) s = s.split(k).join(t.url[k]);
+    for (k in t.hex) { s = s.split(k).join(t.hex[k]); s = s.split('%23' + k.slice(1)).join('%23' + t.hex[k].slice(1)); }
+    for (k in t.rgb) s = s.split('rgba(' + k + ',').join('rgba(' + t.rgb[k] + ',');
+    return s;
+  }
+  var PALETA_VIVA = null;
+  function paletaViva() {
+    var o = {}, k;
+    for (k in PALETA_PROPIA) if (Object.prototype.hasOwnProperty.call(PALETA_PROPIA, k)) o[k] = tenir(PALETA_PROPIA[k]);
+    return o;
+  }
+
   function activa() {
     try {
       if (/[?&]coleccion=oleo\b/.test(location.search)) return true;
-      return String((ev().fx || {}).coleccion || '').toLowerCase() === ID;
+      var c = String((ev().fx || {}).coleccion || '').toLowerCase();
+      return c === ID || (c.indexOf(ID + '-') === 0 && !!tono());
     } catch (e) { return false; }
   }
 
@@ -475,7 +530,7 @@
   function hoja() {
     var s = document.getElementById('col-' + ID);
     if (!s) { s = document.createElement('style'); s.id = 'col-' + ID; document.head.appendChild(s); }
-    var txt = armarCSS();
+    var txt = tenir(armarCSS());
     if (s.textContent !== txt) s.textContent = txt;
   }
 
@@ -549,11 +604,15 @@
     if (!raiz.hasAttribute(MARCA)) raiz.setAttribute(MARCA, '');
     /* ⚠️ lleva el NOMBRE: vacío es falso para el chequeo simbolo-tematica */
     if (raiz.getAttribute('data-marca-propia') !== ID) raiz.setAttribute('data-marca-propia', ID);
-    window.INVCOLPALETA = PALETA_PROPIA;
-    var k;
+    var tn = tono();
+    if ((raiz.getAttribute('data-oleo-tono') || '') !== tn) { if (tn) raiz.setAttribute('data-oleo-tono', tn); else raiz.removeAttribute('data-oleo-tono'); }
+    if (!PALETA_VIVA || PALETA_VIVA.__tono !== tn) { PALETA_VIVA = paletaViva(); PALETA_VIVA.__tono = tn; }
+    var PV = {}, k;
+    for (k in PALETA_VIVA) if (k !== '__tono') PV[k] = PALETA_VIVA[k];
+    if (!window.INVCOLPALETA || window.INVCOLPALETA.__de !== ID + tn) { PV.__de = ID + tn; window.INVCOLPALETA = PV; }
     for (k in PALETA_PROPIA) {
       if (Object.prototype.hasOwnProperty.call(PALETA_PROPIA, k)) {
-        if (raiz.style.getPropertyValue(k) !== PALETA_PROPIA[k]) raiz.style.setProperty(k, PALETA_PROPIA[k]);
+        if (raiz.style.getPropertyValue(k) !== PALETA_VIVA[k]) raiz.style.setProperty(k, PALETA_VIVA[k]);
       }
     }
     hoja();
@@ -568,10 +627,11 @@
     var raiz = document.documentElement;
     raiz.removeAttribute(MARCA);
     raiz.removeAttribute('data-marca-propia');
+    raiz.removeAttribute('data-oleo-tono');
     devolverPase();
     var nm = document.getElementById('pv-names');
     if (nm) nm.style.removeProperty('font-size');
-    if (window.INVCOLPALETA === PALETA_PROPIA) {
+    if (window.INVCOLPALETA && String(window.INVCOLPALETA.__de || '').indexOf(ID) === 0) {
       try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; }
     }
     var k;
