@@ -232,6 +232,72 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ EUCALIPTO (tanda 2, 23/9/2026): la botánica: eucalipto real verde plateado sobre lino marfil, con rosas blancas. Tinta verde eucalipto (#26352E) sobre papel #F5F3EC.
+       Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
+       una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
+       portada van en VIDEO REAL (cámara quieta), así que acá se apaga la deriva. */
+    eucalipto: {
+      hex: { '#C98E8A':'#7F9C8C', '#E3C2B8':'#D5E0D8', '#D9C3A0':'#C8C3A0', '#B08A4E':'#A08C5B', '#F7EFEA':'#F5F3EC', '#FBF6F2':'#FAF9F4', '#4A2E2C':'#26352E', '#6B4744':'#4A5A52', '#7A5634':'#56593A', '#82504C':'#4F6B5E', '#FBF4EF':'#F8F7F0', '#F5E6DF':'#E3EAE3', '#2E1C1B':'#1B2621', '#F2E4DC':'#EAEFEA', '#EAD9B8':'#D8D4B4' },
+      rgb: { '74,46,44':'38,53,46', '201,142,138':'127,156,140', '247,239,234':'245,243,236', '40,20,18':'22,32,28', '60,34,32':'22,32,28', '134,96,58':'86,89,58', '176,138,78':'160,140,91', '217,195,160':'200,195,160', '240,220,211':'213,224,216', '251,246,242':'250,249,244', '255,246,236':'248,247,240', '120,70,60':'22,32,28', '107,71,68':'74,90,82', '251,244,239':'248,247,240' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/eucalipto/eu-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/eu-medallon.webp'
+      },
+      css: [
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(22,32,28,.42) 0, rgba(22,32,28,.18) 24%, rgba(22,32,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/eucalipto/eu-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(22,32,28,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(22,32,28,.42) 0, rgba(22,32,28,.18) 24%, rgba(22,32,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/eucalipto/eu-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(22,32,28,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#F8F7F0!important; background:rgba(22,32,28,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#F8F7F0!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#F8F7F0!important; -webkit-text-fill-color:#F8F7F0!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
+    /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
+       Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
+       una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
+       portada van en VIDEO REAL (cámara quieta), así que acá se apaga la deriva. */
+    espatulado: {
+      hex: { '#C98E8A':'#B9A58A', '#E3C2B8':'#E8E1D6', '#D9C3A0':'#D6C6A2', '#B08A4E':'#B09260', '#F7EFEA':'#F6F3EE', '#FBF6F2':'#FBFAF7', '#4A2E2C':'#3A342E', '#6B4744':'#5E554C', '#7A5634':'#6E5A38', '#82504C':'#6F6254', '#FBF4EF':'#FAF8F4', '#F5E6DF':'#ECE7DF', '#2E1C1B':'#27231F', '#F2E4DC':'#EFEBE4', '#EAD9B8':'#E2D5B8' },
+      rgb: { '74,46,44':'58,52,46', '201,142,138':'185,165,138', '247,239,234':'246,243,238', '40,20,18':'40,34,28', '60,34,32':'40,34,28', '134,96,58':'110,90,56', '176,138,78':'176,146,96', '217,195,160':'214,198,162', '240,220,211':'232,225,214', '251,246,242':'251,250,247', '255,246,236':'250,248,244', '120,70,60':'40,34,28', '107,71,68':'94,85,76', '251,244,239':'250,248,244' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/espatulado/es-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/es-medallon.webp'
+      },
+      css: [
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,34,28,.42) 0, rgba(40,34,28,.18) 24%, rgba(40,34,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/espatulado/es-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,34,28,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,34,28,.42) 0, rgba(40,34,28,.18) 24%, rgba(40,34,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/espatulado/es-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,34,28,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FAF8F4!important; background:rgba(40,34,28,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FAF8F4!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FAF8F4!important; -webkit-text-fill-color:#FAF8F4!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
+    /* ⭐ MÁRMOL (tanda 2, 23/9/2026): la religiosa: mármol blanco con vetas de oro, capillas y lirios. Tinta carbón (#2E2B28) sobre papel #F7F6F3.
+       Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
+       una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
+       portada van en VIDEO REAL (cámara quieta), así que acá se apaga la deriva. */
+    marmol: {
+      hex: { '#C98E8A':'#C2A56A', '#E3C2B8':'#E6E3DE', '#D9C3A0':'#D9C79A', '#B08A4E':'#B8964F', '#F7EFEA':'#F7F6F3', '#FBF6F2':'#FCFBF9', '#4A2E2C':'#2E2B28', '#6B4744':'#55504A', '#7A5634':'#6B5327', '#82504C':'#7A6236', '#FBF4EF':'#FAF9F6', '#F5E6DF':'#EDEBE6', '#2E1C1B':'#201E1C', '#F2E4DC':'#F0EEEA', '#EAD9B8':'#E3D4AE' },
+      rgb: { '74,46,44':'46,43,40', '201,142,138':'194,165,106', '247,239,234':'247,246,243', '40,20,18':'34,30,24', '60,34,32':'34,30,24', '134,96,58':'107,83,39', '176,138,78':'184,150,79', '217,195,160':'217,199,154', '240,220,211':'230,227,222', '251,246,242':'252,251,249', '255,246,236':'250,249,246', '120,70,60':'34,30,24', '107,71,68':'85,80,74', '251,244,239':'250,249,246' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/marmol/ma-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/ma-medallon.webp'
+      },
+      css: [
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(34,30,24,.42) 0, rgba(34,30,24,.18) 24%, rgba(34,30,24,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/marmol/ma-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(34,30,24,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(34,30,24,.42) 0, rgba(34,30,24,.18) 24%, rgba(34,30,24,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/marmol/ma-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(34,30,24,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FAF9F6!important; background:rgba(34,30,24,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FAF9F6!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FAF9F6!important; -webkit-text-fill-color:#FAF9F6!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ NOCTURNO (paulina-y-gerardo, hacienda en Mérida, boda de noche): la PRIMERA
        OSCURA de la línea. Es Rosé dado vuelta: la pared pasa a azul noche, la tinta a
        marfil y el acento a pan de oro. Las sombras (74,46,44 / 40,20,18 / 120,70,60)
