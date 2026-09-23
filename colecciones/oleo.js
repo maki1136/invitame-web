@@ -402,7 +402,10 @@
          Script, la cursiva del motor: es '.pase > .t', no '.pasecard .t'.
        · Personas: con 18 px los nombres completos caían en TRES renglones. */
     P + '.pase > .t{ font-family:"Bodoni Moda",serif!important; font-style:italic!important; font-weight:400!important; font-size:26px!important; line-height:1.2!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
-    P + '.padres .nm{ font-size:16px!important; line-height:1.25!important; }'
+    P + '.padres .nm{ font-size:16px!important; line-height:1.25!important; }',
+    /* · «Abrir la cámara», «Entrar a la galería» e «Iniciar sesión» (trivia) salían en
+         Montserrat 17 px y en minúscula: los únicos botones de otra invitación. */
+    P + ':is(#filtro-abrir, #gal-entrar, .tv-btn){ font-family:Jost,system-ui,sans-serif!important; font-size:12px!important; font-weight:500!important; letter-spacing:.16em!important; text-transform:uppercase!important; }'
 
     ].join('\n');
   }
