@@ -733,6 +733,13 @@
                                           pintura en video detras de todo, tarjetas como lienzos colgados.
                                           Titulos en Bodoni Moda, ficha en Jost. Trae su propia paleta. */
 
+    '/colecciones/sirena.js',        /* la DECIMA familia y la tercera de la linea de princesas:
+                                          «La Sirenita». Nacar, coral y verde mar; CLARA, con tinta
+                                          oscura. El fondo es la arena del fondo del mar con la red de
+                                          luz del agua EN VIDEO. Titulos en Italiana, nombre en
+                                          Parisienne, cuerpo en Lora, y una VIEIRA como marca del
+                                          itinerario. Trae su propia paleta. */
+
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
