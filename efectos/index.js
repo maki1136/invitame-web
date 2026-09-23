@@ -728,6 +728,11 @@
                                          son TRES VELAS. Titulos en Cinzel, nombre en Pinyon Script y un
                                          capullo de rosa como marca. Trae su propia paleta. */
 
+    '/colecciones/oleo.js',          /* la NOVENA familia y la primera de la linea ARTE: oleo con
+                                          espatula. Rosa empolvado, nude, champaña y hoja de oro; la
+                                          pintura en video detras de todo, tarjetas como lienzos colgados.
+                                          Titulos en Bodoni Moda, ficha en Jost. Trae su propia paleta. */
+
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */

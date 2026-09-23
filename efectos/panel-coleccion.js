@@ -116,6 +116,11 @@
              'verde botella sobre madera, a la luz de tres velas que titilan en ' +
              'el fondo. Titulos en Cinzel, el nombre en Pinyon Script y un capullo ' +
              'de rosa como marca. Trae su propia paleta.' },
+    { id: 'oleo', nombre: 'Óleo',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
+             'Rosa empolvado, nude, champaña y hoja de oro; las tarjetas son lienzos ' +
+             'colgados y la marca es una pincelada. Trae su propia paleta.' },
 
   ];
 
