@@ -956,6 +956,39 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* Eucalipto (lucia-y-sebastian) · Higgsfield/Kling pro 5 s · UN solo lacre verde pegado a la punta de la solapa. 23/9/2026. */
+  'oleo-eucalipto-luz': {
+    nombre:     "Botánica Eucalipto · se abre la solapa y sale luz de adentro (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/eucalipto/eu-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/eucalipto/eu-sobre-luz.jpg",
+    color:      "#A9B8AC",
+    luz:        4.1,
+    luzColor:   "#FAF9F4",
+    luzFundido: 0.8
+  },
+
+  /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
+  'oleo-espatulado-luz': {
+    nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/espatulado/es-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/espatulado/es-sobre-luz.jpg",
+    color:      "#ECE7DF",
+    luz:        4.2,
+    luzColor:   "#FBFAF7",
+    luzFundido: 0.8
+  },
+
+  /* Mármol (ana-paula-y-marcelo) · UN solo lacre dorado que sube con la solapa. 23/9/2026. */
+  'oleo-marmol-luz': {
+    nombre:     "Textura Mármol · se abre la solapa y sale luz de adentro (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/marmol/ma-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/marmol/ma-sobre-luz.jpg",
+    color:      "#E8E6E1",
+    luz:        3.8,
+    luzColor:   "#FCFBF9",
+    luzFundido: 0.8
+  },
+
   'oleo-champagne-luz': {
     nombre:     "Óleo Champagne · se abre la solapa y sale luz de adentro (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo-champagne/ch-sobre-luz-pro.mp4",
