@@ -615,7 +615,18 @@
         for (var q = capas.length - 1; q >= 0; q--) {
           var capa = capas[q];
           var modo = (modos[q % modos.length] || 'normal').trim();
-          var mu = capa.match(/url\(["']?([^"')]+)/);
+          /* ⚠️⚠️ ERROR 28 — EL ADORNO SVG CORTABA LA URL. (23/9/2026)
+             Los adornos de arriba de los títulos son un SVG en data: con comillas
+             SIMPLES adentro (xmlns='…'). El patrón viejo cortaba en la primera
+             comilla → URL rota → la imagen no cargaba → PAPEL=false → fondosDe
+             devolvía null PARA SIEMPRE y el título quedaba congelado con lo que
+             se le hubiera pintado en el arranque. Medido en Óleo Nocturno: «Nuestro
+             Hashtag» y «Nuestras estrellas fijas» en rgb(104,90,67) sobre azul noche
+             — corregidos contra el lino claro del body ANTES de que llegara la
+             colección, y nunca más revisados.
+             → El navegador siempre devuelve url("…") con comillas dobles: se toma
+               todo lo que hay entre ellas. */
+          var mu = capa.match(/url\("([^"]*)"\)/) || capa.match(/url\(["']?([^"')]+)/);
           if (mu) {
             pedirPapel(mu[1]);
             var p = PAPEL[mu[1]];
