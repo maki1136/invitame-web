@@ -433,6 +433,14 @@
        rgb(255,254,251) — blanco — adentro de un papel rgb(239,227,208).
        Es el error 270 de Lupita otra vez, más suave. Se le pone el
        papel de Cantera. */
+    /* ────── 4decies · LOS CÍRCULOS DE «LOS COLORES DE LA BODA»
+       El motor los dibuja como .col-dc-c de 38px con un brillo BLANCO
+       adentro (inset 0 0 0 1px rgba(255,255,255,.30)): está pensado para
+       una sección OSCURA. Sobre el papel de Cantera los dos claros
+       (#C9B79C y #EFE3D0) desaparecen y no se ve que son cinco.
+       Se les cambia el aro a tinta. Medido en vivo: 5 círculos de 38px. */
+    P + '.col-dc-c{ box-shadow:inset 0 0 0 1px rgba(74,53,36,.30), 0 1px 3px rgba(74,53,36,.13)!important; }',
+
     P + '.cf-letter{ background:linear-gradient(180deg,#F3EADA 0%,#EADFCB 100%)!important; }',
 
     /* ────── 4nonies · EL POZO DE SECCIONES DEL MISMO TONO — YA ESTABA
