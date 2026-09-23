@@ -121,6 +121,11 @@
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
              'Rosa empolvado, nude, champaña y hoja de oro; las tarjetas son lienzos ' +
              'colgados y la marca es una pincelada. Trae su propia paleta.' },
+    { id: 'oleo-piedra', nombre: 'Óleo · Piedra',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Linea ARTE, el mismo diseño de Óleo en otro tono: greige, arena, ' +
+             'gris cálido, marfil y pan de plata. Para bodas civiles, viñedo, ' +
+             'haciendas de piedra. Trae su propia paleta.' },
 
   ];
 
