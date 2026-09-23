@@ -197,7 +197,9 @@
         /* 23/9: el body traía el lino claro del motor (#D7CCBD). reglas-duras compone los
            degradados de cada sección SOBRE el primer fondo opaco de abajo, que era ése:
            medía «fondo claro» y oscurecía los textos crema → ilegibles sobre la noche. */
-        P + 'body{ background-color:#141B2E!important; }'
+        P + 'body{ background-color:#141B2E!important; }',
+        /* el título de los colores y el «Ver más» nacen en el verde oscuro del motor (#3A453D) */
+        P + ':is(.col-dc-tit, .iv-plie-btn){ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }'
       ].join('\n')
     }
   };
