@@ -453,6 +453,11 @@
        desplazamiento, 22 s ida y vuelta, nunca se detiene) — con 'scale'/'translate'
        sueltos, que se suman al transform del motor sin pisarlo — y una LUZ que recorre
        el relieve cada 9 s. La portada (#pbg) hace el mismo paseo. */
+    /* la raspadita va sobre la pintura SIN nada encima (Maki): el texto lleva un halo
+       de papel más fuerte y cada tapa un aro marfil, o el lacre rosa se pierde entre
+       las rosas rosas. */
+    P + '.frame > section.scratch-sec :is(.kick, h2, .scratch-hint, .sc-mon){ text-shadow:0 0 6px rgba(251,246,242,1), 0 0 14px rgba(251,246,242,.95), 0 0 28px rgba(251,246,242,.85)!important; }',
+    P + '.rasp-zona{ box-shadow:0 0 0 3px ' + PAPEL2 + ', 0 7px 16px rgba(74,46,44,.32)!important; }',
     '@keyframes oleoDeriva{ 0%{ scale:1.06; translate:-1.5% 1.2%; } 50%{ scale:1.16; translate:1.8% -1.8%; } 100%{ scale:1.06; translate:-1.5% 1.2%; } }',
     '@keyframes oleoLuz{ 0%{ translate:-70% 0; } 100%{ translate:70% 0; } }',
     P + '#inv-fondo{ overflow:hidden!important; }',
