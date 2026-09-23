@@ -140,48 +140,78 @@
          y hay que dejarlas en paz. */
       P + '.sec:not([style*="url("]){',
       '  background-color:transparent!important;',
-      '  background-image:linear-gradient(90deg,',
+      '  background-image:none!important;',
+      '}',
+
+      /* ---- 🔴🔴 EL VELO DE LECTURA: **UNA SOLA CAPA**, SOBRE EL FONDO ------
+         Tercera versión, y las dos anteriores están medidas:
+           1ª · un `::before` absoluto por sección. En Chrome, perfecto.
+                En WebKit, «Target crashed» AL CARGAR. Aislado cambiando una
+                cosa por vez: sin el `filter:blur` → igual crash (no era el
+                blur); sin el velo entero → VIVE. Y con el `inset:0 16%` viejo
+                también crash (no era el ancho). Era LA CAPA: veinte
+                pseudo-elementos absolutos del tamaño de su sección, cada uno
+                abriendo su contexto de apilado. Clara, en el MISMO WebKit,
+                abre sin una queja: el sospechoso era esta colección.
+           2ª · el degradado como `background-image` de cada sección. Safari
+                revive, pero el velo deja de estar ENTRE el fondo y el texto y
+                pasa a estar DETRÁS de todo lo que la sección dibuja encima.
+                Medido escondiendo el texto: de 0 fallas a **20**.
+           3ª · ésta. El velo tapa EL FONDO, así que va sobre el fondo: una
+                sola capa fija en `#inv-fondo::after`, del tamaño de la
+                pantalla, que no scrollea porque el fondo tampoco.
+                Medido: 63 textos, **2** por debajo del piso (y esos dos eran
+                otra cosa: el cielo blanco del ambiente, más abajo).
+         ⚠️ `position:fixed` y no `absolute`: el fondo es fijo; una capa
+            absoluta se quedaría en el primer viewport.
+         ⚠️ No lleva `blur`: el degradado ya llega a 0 en las dos puntas, así
+            que no hay rectángulo que disimular. El collage sigue entrando por
+            los 34 px de cada costado (8 % / 92 %), que es lo medido. */
+      P + '#inv-fondo{ position:fixed!important; }',
+      P + '#inv-fondo::after{',
+      '  content:""!important; position:fixed!important; inset:0!important;',
+      '  pointer-events:none!important; z-index:2!important;',
+      '  background:linear-gradient(90deg,',
       '    rgba(26,16,8,0) 0%, rgba(26,16,8,' + VELO_A + ') 8%,',
       '    rgba(26,16,8,' + VELO_A + ') 92%, rgba(26,16,8,0) 100%)!important;',
-      '  background-size:100% 100%!important;',
-      '  background-repeat:no-repeat!important;',
-      '  background-position:center!important;',
+      '}',
+
+      /* ---- 🔴 EL CIELO DEL AMBIENTE: LA NOCHE, NO UN MEDIODÍA -------------
+         `fx.ambiente.tipo = 'nubes'` está prendido en el itinerario, y ese
+         efecto dibuja SIEMPRE la misma foto —`/i/cielo.jpg`—, un cielo DIURNO
+         y BLANCO que tapa el fondo de la sección entera. Los colores de la
+         temática (acá #3A2A1C y #2E1F14, bien cargados) no los usa para nada.
+         Ya estaba escrito para Cantera y Bella volvió a caer: medido el 23/9,
+         los píxeles del itinerario daban (240,244,248) y los dos únicos textos
+         que fallaban el contraste eran «Itinerario» (1,05) y «El gran día»
+         (1,45) — crema sobre blanco.
+         ⚠️ Y acá va al revés que en Cenicienta: ESA sección es de papel claro
+            con tinta oscura, así que su cielo se mantiene claro. La de Bella
+            es oscura con tinta clara, así que el cielo va de NOCHE.
+            Es el mismo error de siempre, dado vuelta: mirar de qué color es la
+            tinta ANTES de elegir el fondo.
+         ⚠️ `.sky` ya trae la animación `skyken` (34 s): las chispas viajan con
+            ella y no hace falta sumar otra. */
+      P + '.ambiente .sky{',
+      '  background-image:',
+      '    radial-gradient(1.8px 1.8px at 21% 13%, rgba(227,200,138,.95), rgba(227,200,138,0) 60%),',
+      '    radial-gradient(1.2px 1.2px at 67% 8%,  rgba(255,232,178,.90), rgba(255,232,178,0) 60%),',
+      '    radial-gradient(2.2px 2.2px at 85% 30%, rgba(227,200,138,.85), rgba(227,200,138,0) 62%),',
+      '    radial-gradient(1.3px 1.3px at 37% 38%, rgba(255,232,178,.85), rgba(255,232,178,0) 60%),',
+      '    radial-gradient(2.0px 2.0px at 11% 56%, rgba(227,200,138,.88), rgba(227,200,138,0) 62%),',
+      '    radial-gradient(1.2px 1.2px at 73% 65%, rgba(255,232,178,.82), rgba(255,232,178,0) 60%),',
+      '    radial-gradient(1.9px 1.9px at 46% 81%, rgba(227,200,138,.90), rgba(227,200,138,0) 62%),',
+      '    radial-gradient(1.1px 1.1px at 89% 90%, rgba(255,232,178,.80), rgba(255,232,178,0) 60%),',
+      '    linear-gradient(180deg, rgba(26,16,8,.92) 0%, rgba(46,31,20,.86) 100%)!important;',
+      '  background-size:168px 168px,168px 168px,168px 168px,168px 168px,',
+      '                  168px 168px,168px 168px,168px 168px,168px 168px,100% 100%!important;',
+      '  background-repeat:repeat,repeat,repeat,repeat,repeat,repeat,repeat,repeat,no-repeat!important;',
       '}',
       /* ⚠️ MEDIDO EN VIVO: matar sólo `background-image` NO alcanza en una
          colección OSCURA. El motor además pinta varias secciones con un COLOR
          de fondo claro —medido rgb(244,231,206)— y ahí la tinta clara queda
          crema sobre crema y desaparece. En Cenicienta no se nota porque esa
          colección es clara. Hay que matar también `background-color`. */
-
-      /* ---- 🔴🔴 EL VELO DE LECTURA VA EN EL FONDO DE LA SECCIÓN, NO EN UNA
-         CAPA APARTE — Y ESTO LO DECIDIÓ SAFARI, NO EL GUSTO.  (23/9/2026)
-
-         La primera versión ponía el velo en un `::before` absoluto con
-         `inset`, `z-index:0` y los hijos en `z-index:1`. Se veía perfecto en
-         Chrome. **En WebKit la página se CAE**: «Target crashed», y ni siquiera
-         al abrir el sobre — al cargar.
-         Aislado con tres corridas, cambiando UNA cosa por vez:
-             tal cual está          → CRASH
-             sin el `filter:blur`   → CRASH   ← no era el blur
-             sin el velo entero     → VIVE, 20 secciones, colección puesta
-         Y con el velo viejo (`inset:0 16%`) también CRASH: no era el ancho.
-         Era LA CAPA: veinte pseudo-elementos absolutos del tamaño de su
-         sección, cada uno abriendo su contexto de apilado porque los hijos
-         iban a `z-index:1`.
-         ⚠️ Y Clara, en el MISMO WebKit, abre y navega sin una queja. O sea que
-            el sospechoso no era el navegador: era esta colección.
-
-         La cura es más simple que el problema: el velo es un DEGRADADO, y un
-         degradado es un fondo. Va en el `background-image` de la propia
-         sección —que en estas secciones está libre porque el motor no pone
-         ninguno— y desaparecen la capa, el `z-index` y el `position:relative`.
-         · No hace falta `blur`: el degradado ya llega a 0 en las dos puntas.
-         · El collage sigue entrando por los costados, en los 34 px de cada
-           punta (8 % / 92 %), que es lo que se había medido.
-         · Y de yapa, ahora `fondosDe()` del chequeo SÍ ve el velo, porque es
-           un fondo CSS de verdad y no una capa hermana.
-         ⚠️ El filtro sigue siendo `:not([style*="url("])`: las secciones con
-            foto propia la escriben EN LÍNEA y no se les toca el fondo. */
 
       /* ---- tipografía ----
          Cinzel para los títulos (romana de capitales, no la usa ninguna otra
