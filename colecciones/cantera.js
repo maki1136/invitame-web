@@ -762,7 +762,7 @@
     P + '#contacto-sec::after{ display:none!important; }',
     P + '#contacto-sec h2{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
     P + '#contacto-sec .kick, ' + P + '#contacto-sec p{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
-    P + '#contacto-sec p::before{ content:""; display:block; width:210px; height:210px; margin:4px auto 12px; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_440/invitame/cantera/cantera-corazon-relieve") center/contain no-repeat; mix-blend-mode:multiply; }',
+    P + '#contacto-sec p::before{ content:""; display:block; width:132px; height:132px; margin:10px auto 22px; background:url("/sobres/cantera-rasp-tapa.webp") center/112% no-repeat; border-radius:50%; box-shadow:0 8px 18px rgba(74,53,36,.22), 0 2px 4px rgba(74,53,36,.18); }',  /* sello de lacre con olivo (la foto del corazón dejaba un recuadro claro) */
     P + '#contacto-sec .wsp{ background:none!important; box-shadow:none!important; border-radius:0!important; padding:8px 2px 5px!important; border-bottom:1px solid rgba(132,96,68,.5)!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }'
 
     ].join('\n');
