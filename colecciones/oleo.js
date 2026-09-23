@@ -206,7 +206,12 @@
         P + '.pasecard :is(div,span,p,b,strong,small,label):not(.estado){ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
         P + '.pasecard::before{ border-color:rgba(212,178,110,.35)!important; }',
         /* el sobre de la carta: tinte multiply al 88% sobre la foto marfil → quedaba lila grisáceo */
-        P + ':is(.cf-back-tint, .cf-front-tint){ opacity:1!important; }'
+        P + ':is(.cf-back-tint, .cf-front-tint){ opacity:1!important; }',
+        /* la tapa del video y de la playlist: transparente, con el aro en tinta oscura → invisible de noche */
+        P + '.rd-tapa{ background:radial-gradient(120% 90% at 50% 40%, #26305A, #141B2E)!important; border:1px solid rgba(212,178,110,.45)!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.45)!important; }',
+        P + '.rd-aro{ border-color:#D4B26E!important; opacity:1!important; }',
+        P + '.rd-aro::after{ border-left-color:#D4B26E!important; }',
+        P + '.rd-txt{ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }'
       ].join('\n')
     }
   };
