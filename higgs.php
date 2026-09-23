@@ -13,8 +13,8 @@
  *    navegador manda el token de su sesión de Firebase y Google dice de quién es.
  *
  * ⚠️ LA CLAVE NO ESTÁ ACÁ. Vive en 'invitame-higgsfield.php', FUERA de
- *    public_html (al lado de invitame-galeria.php), con dos líneas:
- *        <?php $HF_KEY_ID = '...'; $HF_KEY_SECRET = '...';
+ *    public_html (al lado de invitame-galeria.php), con una línea:
+ *        <?php $HF_KEY = '...';   (lo que copia el botón «Copy API Key»)
  *    La pega Maki desde hPanel. Archivo propio: si se rompe, no se cae nada más.
  *
  * USO (POST JSON):
@@ -74,7 +74,9 @@ foreach ($EQUIPO as $e) { if ($mail !== '' && $mail === strtolower($e)) { $permi
 if (!$permitido) { http_response_code(403); echo json_encode(array('ok' => false, 'error' => 'no-sos-del-equipo')); exit; }
 
 // ---------- 2. la clave ----------
-$HF_KEY_ID = ''; $HF_KEY_SECRET = '';
+// La consola nueva de Higgsfield entrega UNA sola clave ya armada «id:secreto»
+// (botón «Copy API Key»). Se acepta así: <?php $HF_KEY = '...';
+$HF_KEY = ''; $HF_KEY_ID = ''; $HF_KEY_SECRET = '';
 $candidatos = array(); $dir = __DIR__;
 for ($i = 0; $i < 6; $i++) {
   $candidatos[] = $dir . '/invitame-higgsfield.php';
@@ -87,13 +89,15 @@ if (isset($_SERVER['DOCUMENT_ROOT'])) {
 foreach (array_unique($candidatos) as $ruta) {
   if (!is_readable($ruta)) continue;
   include $ruta;
-  if ($HF_KEY_ID !== '' && $HF_KEY_SECRET !== '') break;
+  if ($HF_KEY === '' && $HF_KEY_ID !== '' && $HF_KEY_SECRET !== '') $HF_KEY = $HF_KEY_ID . ':' . $HF_KEY_SECRET;
+  $HF_KEY = trim((string)$HF_KEY);
+  if ($HF_KEY !== '') break;
 }
-if ($HF_KEY_ID === '' || $HF_KEY_SECRET === '') {
+if ($HF_KEY === '') {
   echo json_encode(array('ok' => false, 'error' => 'sin-clave',
-    'detalle' => 'Falta invitame-higgsfield.php con $HF_KEY_ID y $HF_KEY_SECRET')); exit;
+    'detalle' => 'Falta invitame-higgsfield.php con $HF_KEY')); exit;
 }
-$AUTH = array('Authorization: Key ' . $HF_KEY_ID . ':' . $HF_KEY_SECRET);
+$AUTH = array('Authorization: Key ' . $HF_KEY);
 
 if ($accion === 'probar') { echo json_encode(array('ok' => true, 'clave' => 'puesta', 'por' => $mail)); exit; }
 
