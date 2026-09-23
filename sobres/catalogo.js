@@ -940,6 +940,19 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.5
   },
 
+  /* Óleo Champagne (fernanda-y-alejandro), 23/9/2026 · Higgsfield kling v3 PRO: el lacre
+     va pegado a la punta de la solapa y sale con ella por arriba (1,5 a 2,5 s); la luz
+     crece de 2,5 a 5 s y termina en blanco. */
+  'oleo-champagne-luz': {
+    nombre:     "Óleo Champagne · se abre la solapa y sale luz de adentro (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo-champagne/ch-sobre-luz-pro.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-champagne/ch-sobre-luz-pro.jpg",
+    color:      "#CFA173",
+    luz:        4.2,
+    luzColor:   "#FCF6EC",
+    luzFundido: 0.8
+  },
+
   'oleo-rose-luz': {
     nombre:     "Óleo Rosé · se abre la solapa y sale luz de adentro (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre-luz-a.mp4",
