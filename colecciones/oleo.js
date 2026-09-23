@@ -456,9 +456,12 @@
     '@keyframes oleoDeriva{ 0%{ scale:1.06; translate:-1.5% 1.2%; } 50%{ scale:1.16; translate:1.8% -1.8%; } 100%{ scale:1.06; translate:-1.5% 1.2%; } }',
     '@keyframes oleoLuz{ 0%{ translate:-70% 0; } 100%{ translate:70% 0; } }',
     P + '#inv-fondo{ overflow:hidden!important; }',
-    P + '#inv-fondo video, ' + P + '.portada #pbg{ animation:oleoDeriva 22s ease-in-out infinite!important; transform-origin:50% 50%!important; will-change:scale, translate; }',
+    /* ⚠️ el fondo era un VIDEO con el centro vacío (pintura sólo en los bordes): por eso
+       Maki veía «en los costados nada más». Pasa a ser la pintura entera (imagen) y el
+       movimiento lo pone este paseo. Vale para imagen o video: '#inv-fondo > *'. */
+    P + '#inv-fondo > *, ' + P + '.portada #pbg{ animation:oleoDeriva 22s ease-in-out infinite!important; transform-origin:50% 50%!important; will-change:scale, translate; }',
     P + '#inv-fondo::after{ content:""!important; position:absolute!important; inset:-10% -40%!important; pointer-events:none!important; z-index:1!important; background:linear-gradient(105deg, rgba(255,246,236,0) 38%, rgba(255,246,236,.30) 50%, rgba(255,246,236,0) 62%)!important; animation:oleoLuz 9s ease-in-out infinite alternate!important; }',
-    '@media (prefers-reduced-motion: reduce){ ' + P + '#inv-fondo video, ' + P + '.portada #pbg, ' + P + '#inv-fondo::after{ animation:none!important; } }'
+    '@media (prefers-reduced-motion: reduce){ ' + P + '#inv-fondo > *, ' + P + '.portada #pbg, ' + P + '#inv-fondo::after{ animation:none!important; } }'
 
     ].join('\n');
   }
