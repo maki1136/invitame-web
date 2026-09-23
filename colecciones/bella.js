@@ -332,6 +332,31 @@
          papel. En una colección oscura es el parche más visible de todos.
          ⚠️ EL RECUADRO VIVE EN `.scratchcard::after`: `border:0` NO lo apaga.
             (Lección ya escrita en Cantera; acá se repitió igual.) */
+      /* ---- 🔴 LAS TAPAS DE LA RASPADITA: EL LACRE DE LA ROSA ---------------
+         Maki, 23/9/2026: «la raspada, estaría bueno que le pongas algo con la
+         temática de la invitación». Salía el degradado plateado de fábrica, que
+         no dice nada y encima es lo único frío de una invitación de oro viejo.
+         La pieza: el MISMO lacre del sobre, fotografiado de cerca y recortado a
+         su caja (512×512). Así la rosa del lacre aparece en el sobre, en los
+         títulos y en la raspadita: una sola marca, tres veces.
+         ⚠️⚠️ `--r3-tapa` la lee `efectos/raspadita.js` DESDE EL CANVAS, y una
+            variable de CSS sólo baja a los DESCENDIENTES: hay que declararla en
+            TODA la rama (`.scratch-sec`, `.rasp-3`, `.rasp-zona`, `#scratchcard`),
+            no en `.rasp-3` sola. Igual que en Bohemia y en Cantera.
+         ⚠️⚠️ Y VA SIN PREFIJO: el canvas se pinta UNA sola vez al cargar, antes
+            de que la colección alcance a poner `data-col`. Con el prefijo la
+            variable no existe todavía en ese instante y se pinta el plateado.
+         ⚠️ El motor APAGA las casillas que todavía no se pueden raspar
+            (`.rasp-zona.dormida canvas{filter:brightness(.84) saturate(.72)}`).
+            Con un degradado eso se lee como «más oscuro»; con una FOTO de lacre
+            se lee como TRES LACRES DE DISTINTO COLOR, que es lo que Maki ya
+            marcó en Cantera. Se apaga el filtro, con prefijo y todo, porque esa
+            regla es (0,2,1) y también lleva !important. */
+      ':is(.scratch-sec, .rasp-3, .rasp-zona, #scratchcard){',
+      '  --r3-tapa:url("https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790159979/invitame/piezas/bella-rasp-tapa-23-9.webp");',
+      '}',
+      P + '.rasp-zona.dormida canvas{ filter:none!important; }',
+
       P + '.scratchcard, ' + P + '#scratchcard{',
       '  background-color:transparent!important;',
       '  background-image:none!important;',
