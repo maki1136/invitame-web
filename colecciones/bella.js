@@ -392,17 +392,22 @@
       tinta: TINTA, tinta2: TINTA2, tinta3: TINTA3,
       acento: ORO, acentoHondo: ORO2, papel: PAPEL, oscura: true
     };
+    /* ⚠️ `chequeo/muestra.js` decide si la colección es oscura MIRANDO el fondo
+       de `.frame` (`esOscura()`: luminancia < 0,25). Acá la oscuridad no está
+       en el papel: está en el VIDEO y en el velo, y `.frame` mide transparente.
+       Resultado medido el 23/9: la regla 6 «sin-parches-claros» se saltea con
+       «la colección no es oscura» — o sea PASA sin mirar nada.
+       Se deja la marca puesta igual, para el día que el chequeo la lea.
+       (Anotado para Maki: es un cambio de una línea en `esOscura()`.) */
+    document.documentElement.setAttribute('data-col-oscura', '1');
     marcarPadres();
-    /* `.padres` se arma después del primer pintado: se vuelve a mirar. */
-    try {
-      setTimeout(marcarPadres, 400);
-      setTimeout(marcarPadres, 1600);
-      if (!window.__bellaObs && window.MutationObserver) {
-        window.__bellaObs = new MutationObserver(function () { if (activa()) marcarPadres(); });
-        window.__bellaObs.observe(document.body || document.documentElement,
-                                  { childList: true, subtree: true });
-      }
-    } catch (e) {}
+    /* ⚠️ ACÁ HABÍA UN MutationObserver, Y ESTABA MAL. Cenicienta lo tiene
+       escrito con todas las letras: «NADA DE MutationObserver: la invitación
+       muta en bucle (reglas-duras.js corre con cada cambio de clase del marco)
+       y un observador dispararía decenas de veces por segundo».
+       `.padres` se arma después del primer pintado, así que hace falta volver
+       a mirarlo — pero eso ya lo hace el repaso de cada 1,2 s de `arrancar()`,
+       que vuelve a entrar por acá. No hace falta nada más. */
   }
 
   function sacar() {
@@ -411,17 +416,32 @@
     if (document.documentElement.getAttribute('data-col') === ID) {
       document.documentElement.removeAttribute('data-col');
       document.documentElement.removeAttribute('data-coleccion');
+      document.documentElement.removeAttribute('data-col-oscura');
     }
   }
 
   function sincronizar() { if (activa()) poner(); else sacar(); }
 
+  /* ⚠️⚠️ ESTO FALTABA Y LA COLECCIÓN SALÍA APAGADA. Medido el 23/9/2026
+     corriendo `?chequeo=1`: `INVEV.fx.coleccion` decía 'bella', `INVBELLA`
+     estaba cargado… y `data-col` era null, la hoja `col-bella` no existía y
+     `INVCOLPALETA` estaba sin definir. O sea: la invitación se veía SIN la
+     colección, y de forma INTERMITENTE — en las corridas de Playwright sí
+     aplicaba.
+     LA CAUSA: `arrancar()` miraba `activa()` en tres momentos (ya, DOMContentLoaded
+     y load) y `INVEV` puede llegar DESPUÉS de los tres. Si llega tarde, la
+     colección no se prende nunca y no hay ningún error en consola.
+     LA CURA, que es la de Cenicienta y la de Cantera: un repaso cada 1,2 s.
+     Y `arrancar()` mismo espera a que haya documento. */
   function arrancar() {
     sincronizar();
+    setInterval(sincronizar, 1200);
     document.addEventListener('DOMContentLoaded', sincronizar);
     window.addEventListener('load', sincronizar);
   }
-  arrancar();
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
 
   window.INVBELLA = { poner: poner, sacar: sacar, css: armarCSS, rosa: rosaSVG };
 })();
