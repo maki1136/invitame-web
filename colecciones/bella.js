@@ -353,8 +353,46 @@
       P + '.it .h{ color:' + ORO + '!important; font-family:"Cinzel",serif!important; }',
       P + '.it .t{ color:' + TINTA2 + '!important; }',
 
-      /* ---- el nombre de la portada ---- */
+      /* ---- 🔴 LA PORTADA: EL BLOQUE ARRANCA EN EL 56 %, NO EN EL 66 % -----
+         Regla 7bis. El número no se elige: se COPIA de la referencia aprobada.
+         Medido el 23/9/2026 en la ventana de Maki (1280×645), las dos abiertas
+         desde el sobre:
+              Clara (referencia)   arranca 56 %  cierra 91 %  ocupa 35 %
+              Victoria de fábrica  arranca 66 %  cierra 91 %  ocupa 25 %
+         Las dos cierran en 91 —el aire de abajo lo pone el motor y está bien—:
+         lo que faltaba era CUERPO. Pinyon Script a 54 px deja una caja de 59 px;
+         Alex Brush en Clara, a 48 px, deja 84. La cursiva es más chica de lo que
+         dice su número.
+         Probados y anotados, en la ventana de Maki:
+              72 px → 60 %      80 px → 59 %      88 px → 57 %
+              96 px → 55 %     104 px → 54 %
+         Queda 92, que cae en 56. En el teléfono (430×932) el mismo bloque
+         arranca en 70 %: la portada ahí mide 932 px y el bloque pesa menos.
+         Son DOS números y van los dos.
+         ⚠️ Van por ID: `i/estilos-servidor.css` tiene `#pv-names` con
+            `!important`, y un selector de clase no le gana.
+         ⚠️ `line-height:1` + `padding-bottom` y NO un line-height grande: la
+            cola de una cursiva se sale de la caja de línea y se mete en el
+            renglón de abajo, pero abrir el line-height también despega el
+            nombre de lo de arriba. */
+      P + '#pv-names{',
+      '  font-size:92px!important; line-height:1!important;',
+      '  padding-bottom:.26em!important;',
+      '  font-family:"Pinyon Script",cursive!important;',
+      '}',
+      P + '#pv-kick{ font-size:13px!important; }',
       P + '.portada h1, ' + P + '#nombre{ font-family:"Pinyon Script",cursive!important; }',
+
+      /* ---- 🔴 LA CHAPITA «SIN USAR» ERA DE OTRA COLECCIÓN -----------------
+         Medido: `.estado` nace en rgb(77,106,79) — el sage de otra colección,
+         clavado en el motor. Verde militar en una invitación de oro y borgoña.
+         Es el mismo caso que el gris de `.v`: cosas del molde que hay que
+         apagar a propósito, una por una. */
+      P + '.pasecard .estado{',
+      '  background-color:rgba(227,200,138,.16)!important;',
+      '  color:' + ORO + '!important; -webkit-text-fill-color:' + ORO + '!important;',
+      '  border:1px solid rgba(201,167,94,.55)!important;',
+      '}',
 
       ''
     ].join('\n');
@@ -403,6 +441,35 @@
     } catch (e) {}
   }
 
+  /* 🔴 EL PASE CON EL QR VA ABAJO DE LA RASPADITA. Lo pidió Maki y el motor
+     lo deja pegado a la portada; quien lo baja es LA COLECCIÓN. Perlas lo hace
+     con esta misma función y Cantera la copió; Bella salía con el pase arriba.
+     Ninguna de las ocho reglas del chequeo lo mira: se ve con
+        [...document.querySelectorAll('.frame > *')].filter(e=>e.offsetHeight>30)
+     que tiene que dar portada, scratch-sec, pase, …
+     ⚠️ Sólo se mueve si son HERMANOS, y se corta si ya está puesto: esta
+        función la vuelve a llamar el repaso de cada 1,2 s. */
+  function moverPase() {
+    try {
+      var pase = document.querySelector('.pase');
+      var rasp = document.querySelector('.sec.scratch-sec');
+      if (!pase || !rasp) return;
+      if (rasp.parentElement !== pase.parentElement) return;
+      if (pase.previousElementSibling === rasp) return;
+      rasp.parentNode.insertBefore(pase, rasp.nextSibling);
+    } catch (e) {}
+  }
+  function devolverPase() {
+    try {
+      var pase = document.querySelector('.pase');
+      var port = document.querySelector('.portada');
+      if (!pase || !port) return;
+      if (port.parentElement !== pase.parentElement) return;
+      if (pase.previousElementSibling === port) return;
+      port.parentNode.insertBefore(pase, port.nextSibling);
+    } catch (e) {}
+  }
+
   function poner() {
     fuentes();
     hoja().textContent = armarCSS();
@@ -422,6 +489,7 @@
     document.documentElement.setAttribute('data-col-oscura', '1');
     document.documentElement.setAttribute('data-marca-propia', ID);
     marcarPadres();
+    moverPase();
     /* ⚠️ ACÁ HABÍA UN MutationObserver, Y ESTABA MAL. Cenicienta lo tiene
        escrito con todas las letras: «NADA DE MutationObserver: la invitación
        muta en bucle (reglas-duras.js corre con cada cambio de clase del marco)
@@ -434,6 +502,7 @@
   function sacar() {
     var s = document.getElementById(ID_CSS); if (s) s.remove();
     desmarcarPadres();
+    devolverPase();
     if (document.documentElement.getAttribute('data-col') === ID) {
       document.documentElement.removeAttribute('data-col');
       document.documentElement.removeAttribute('data-coleccion');
