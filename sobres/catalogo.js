@@ -883,6 +883,69 @@ window.SOBRES_INVITAME = {
   },
 
 
+  /* ---- ★ EL SOBRE DE LA BELLA Y LA BESTIA  (23/9/2026) ------------------
+     Va con la colección `bella`: papel de algodón OXBLOOD con relieve ciego de
+     rosas, y lacre de cera borgoña con UNA ROSA adentro — la misma marca que
+     la colección usa en los títulos y en el itinerario.
+
+     Es `apertura: 'solapas'` y NO video, igual que el de Cenicienta: la regla
+     de Maki después del sobre de anillos —un video generado con IA hace lo que
+     quiere— sigue en pie. Acá el movimiento lo maneja el motor.
+
+     ⚠️⚠️ LA TRAMPA DE SIEMPRE, Y VOLVIÓ A CAER: pedir «sobre cerrado» devuelve
+        LA X DE CUATRO PUNTAS. La primera tirada dio 4 de 4 inservibles: dos
+        solapas laterales en diagonal y una costura horizontal debajo del lacre.
+        Lo que la arregló es EXACTAMENTE lo que ya estaba escrito para
+        Cenicienta —decirlo en POSITIVO— pero más largo y cerrando los flancos:
+          «UNA sola solapa triangular doblada desde el borde de arriba; sus dos
+           lados bajan desde la esquina de arriba a la izquierda y la de arriba
+           a la derecha y se juntan en un solo punto en el medio. Debajo de ese
+           punto el frente es UNA hoja continua, lisa hasta el borde de abajo,
+           sin doblez, sin costura, sin línea horizontal y sin otra solapa. Los
+           bordes izquierdo y derecho son bordes rectos lisos.»
+        Con eso salieron 4 de 4 usables.
+
+     ⚠️ Y LA OTRA REGLA DE CENICIENTA TAMBIÉN SE COBRÓ: de las cuatro buenas,
+        TRES estaban apoyadas sobre una mesa de madera, con aire alrededor. Sólo
+        sirve la que llega de borde a borde, arriba y abajo: el motor recorta la
+        hoja de abajo con el triángulo (0,0) → (100%,0) → (50%, eje.y) y da por
+        sentado que la solapa arranca en la fila 0 del archivo. Con aire arriba,
+        ese recorte se come el aire y deja un agujero.
+
+     MEDIDO sobre la foto elegida (768×1376 = 0,558, la proporción del marco):
+        · el lacre: centro (375, 518) px = 48,8 % · 37,6 %, radio 76 px = 9,9 %
+        · los dos lados de la solapa se juntan en (≈400, 530). La punta se clava
+          en x = 50 % porque el motor lo da por sentado; el desvío de 16 px
+          queda tapado por el lacre, que mide 152 de ancho.
+        → `eje` = 50,0 % · 38,5 %
+
+     ⚠️⚠️ EL LACRE SE LE BORRA AL PÓSTER, o al abrirse aparecen DOS. El primer
+        parche —disco duro con desenfoque, el del manual— dejó EL DISCO
+        FANTASMA que ya había aparecido en Cenicienta: un aro en relieve
+        perfectamente visible. Dos cosas lo arreglaron, y las dos hacían falta:
+          · el parche tiene que pasar el ARO DEL RELIEVE y su SOMBRA: opaco
+            hasta 1,30 radios y desvaneciéndose hasta 2,0. Con 1,0 el aro
+            sobrevive con 0,59 de opacidad y se ve.
+          · el origen del parche se elige midiendo BRILLO Y TEXTURA (media y
+            desvío del anillo), no sólo brillo: ganó (−190, +120), papel liso a
+            la izquierda, contra el (0, +230) que daba el método viejo.
+        Medido después: disco 45,2 · aro 45,0 · sombra 44,4 · borde del parche
+        44,9, contra papel lejano 45,7. El salto mayor es de 1,3 — ruido.
+
+     ⚠️ El parche borra un pedacito del filete diagonal izquierdo cerca de la
+        punta. Queda ADENTRO del triángulo que el motor recorta, así que no se
+        ve nunca. Anotado por si alguna vez cambia el recorte.               */
+  bella: {
+    nombre:   "La Bella y la Bestia · papel oxblood con rosas, lacre de rosa (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790153582/invitame/sobres/sobre-bella-poster-23-9.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1790153583/invitame/sobres/sobre-bella-solapa-23-9.webp",
+    color:    "#2E1F14",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.0, y: 38.5 }
+  },
+
+
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
