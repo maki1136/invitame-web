@@ -450,32 +450,40 @@
       P + '.padres .nm{ font-size:17px!important; color:' + TINTA2 + '!important; font-family:"Cormorant Garamond",serif!important; }',
       '@media (max-width:360px){' + P + '.padres{ gap:8px 5px!important; }' + P + '.padres .av{ width:86px!important; height:86px!important; }}',
 
-      /* ---- 🔴 LA TAPA DE LA PLAYLIST NO ES UN PAPEL -----------------------
-         Regla vieja de Maki («en ver video está el rectángulo que no me gusta,
-         y la playlist lo mismo») y último parche claro que quedaba en Victoria.
-         Medido el 23/9 con la playlist ya cargada: `.rd-tapa` nace en
-         rgb(244,239,230) —crema— de 366×156, con `.rd-txt` en rgb(90,80,57),
-         un oliva que no pertenece a esta paleta. Lo cantó la regla 2 del
-         chequeo: «1 texto con un color fuera de la familia · La playlist».
-         ⚠️ LA CLASE ES `.rd-tapa`, LA MISMA para el video y para la playlist.
-            `.sp-tapa` y `.tv-tapa` NO EXISTEN. Ya está escrito, y va de nuevo.
-         ⚠️ El aro y el triángulo del play NO se reemplazan por una foto: van
-            en el mismo lenguaje que los filetes, oro sobre papel oscuro. */
+      /* ---- 🔴🔴 LA TAPA DE LA PLAYLIST NO ES UN PAPEL — NI SIQUIERA UNO
+         OSCURO  (23/9/2026, segunda vuelta) ----------------------------------
+         Primera vuelta: la tapa nacía crema (rgb(244,239,230), 366×156) con el
+         rótulo en un oliva de ninguna paleta, y la pinté de papel OSCURO con
+         filete de oro. Maki, mirándolo: «acá cometés el error otra vez en la
+         playlist: estás poniendo un rectángulo que ya te dije que no lo
+         quiero ese rectángulo».
+         Y tiene razón, y la regla ya estaba escrita: **no se tapa un papel con
+         otro papel.** Cambiarle el color al rectángulo no lo saca: sigue
+         habiendo un rectángulo.
+         → La tapa se vuelve TRANSPARENTE del todo. Lo único que queda es la
+           PIEZA: el aro de oro con el triángulo, encendido, flotando sobre el
+           fondo de la sección, y el rótulo con su halo. El iframe de abajo no
+           se destapa: nace en `visibility:hidden` y sin `src` (medido; lo dejó
+           resuelto Disco).
+         ⚠️ La clase es `.rd-tapa`, LA MISMA para el video y para la playlist.
+            `.sp-tapa` y `.tv-tapa` NO EXISTEN.
+         ⚠️ Y `reglas-duras.js` le escribe a `.rd-txt` un `color` INLINE con
+            `!important`, derivado del papel claro de antes: contra un inline no
+            hay hoja que gane, hay que BORRARLO en cada repaso (`limpiarTapa`). */
       P + '.rd-tapa{',
-      '  background-color:' + PAPEL2 + '!important;',
-      '  background-image:url("' + rosaSVG('rgba(227,200,138,.10)') + '")!important;',
-      '  background-size:78px!important; background-repeat:no-repeat!important;',
-      '  background-position:right 16px bottom 12px!important;',
-      '  border:1px solid rgba(169,138,95,.38)!important;',
-      '  box-shadow:inset 0 1px 0 rgba(246,234,210,.07), 0 8px 22px rgba(0,0,0,.34)!important;',
+      '  background:none!important; background-color:transparent!important;',
+      '  background-image:none!important;',
+      '  border:0!important; box-shadow:none!important;',
       '}',
       P + '.rd-tapa .rd-aro{',
       '  border-color:' + ORO + '!important; color:' + ORO + '!important;',
-      '  background:rgba(227,200,138,.07)!important;',
+      '  background:rgba(227,200,138,.10)!important;',
+      '  box-shadow:0 0 0 1px rgba(201,167,94,.35), 0 0 22px rgba(227,200,138,.28)!important;',
       '}',
       P + '.rd-tapa .rd-txt{',
       '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
       '  letter-spacing:.18em!important;',
+      '  text-shadow:0 1px 2px rgba(12,7,3,.90), 0 0 14px rgba(12,7,3,.72)!important;',
       '}',
 
       /* ---- campos de formulario ---- */
