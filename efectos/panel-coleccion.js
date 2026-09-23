@@ -131,6 +131,11 @@
       ayuda: 'Linea ARTE, la más luminosa: champagne, marfil cálido, rubor y oro ' +
              'pálido, pintado con espátula a la hora dorada. Para haciendas coloniales, ' +
              'bodas de tarde y San Miguel de Allende. Trae su propia paleta.' },
+    { id: 'oleo-jardin', nombre: 'Óleo · Jardín',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Linea ARTE, la verde: salvia, glicina lila, rubor y oro viejo, un ' +
+             'jardín secreto pintado con espátula y con el fondo EN VIDEO (la glicina ' +
+             'se mece, corre la fuente). Para bodas de jardín y de día. Trae su propia paleta.' },
     { id: 'oleo-nocturno', nombre: 'Óleo · Nocturno',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE, la primera OSCURA: azul noche, carbón, marfil y pan de ' +
