@@ -130,6 +130,34 @@
       '  --vino:'    + VINO   + '; --tabaco:' + TABACO + ';',
       '  --sage:'    + ORO    + '; --sage-cl:' + ORO2  + ';',
       '  --cream:'   + TINTA  + '; --muted:'  + TINTA2 + ';',
+      /* ---- 🔴🔴 `--verde` ES EL COLOR DE LLAMADA DE LA PLATAFORMA --------
+         Y Bella no lo estaba mapeando. Encontrado el 23/9/2026 persiguiendo
+         por qué `#filtro-abrir` y `#gal-entrar` nacían crema con letra gris.
+         NO era que estuvieran afuera del conjunto de materiales: los dos
+         nacen con un estilo INLINE completo, `background: var(--verde,#6D1233)`
+         con letra blanca, y eso anda bien en todas las demás porque todas
+         mapean `--verde` a un color oscuro. Medido:
+              clara (Cenicienta)  --verde: #14202E   azul noche
+              camila              --verde: #463b52   ciruela
+              julia (Bohemia)     --verde: #4A3B2E   marrón
+              **victoria (Bella)  --verde: #F4E7CE   CREMA**
+         El crema venía heredado del documento clonado, y yo nunca lo pisé.
+         ⚠️ Y NO ERAN SÓLO ESOS DOS BOTONES: `var(--verde)` se lee en **29
+            lugares** del motor. Barrido el antes/después elemento por elemento
+            (556 comparados, 11 cambiaron), aparecieron tres que nadie había
+            visto porque son CHICOS y ninguna regla los mira:
+              · dos discos de 62×62 —las cámaras de «El filtro de los XV» y
+                «Las fotos de la fiesta»— en crema rgb(244,231,206) con el
+                dibujo BLANCO adentro: un parche claro con el ícono invisible.
+                62×62 = 3.844 px², debajo del piso de 12.000 de la regla 6 y
+                del de 7.000 de mi propio barrido. Por eso pasaron.
+              · el botón «Sí, asistiré»: fondo crema con letra CREMA.
+            Verificado que no rompe nada: el interruptor del RSVP y el clima no
+            se ven distintos (el clima mide 0×0, no está dibujado).
+         ⭐ LA REGLA: toda colección mapea `--verde`. Es el color de llamada de
+            la plataforma, no «el verde»: si no se lo mapea, la colección hereda
+            el del documento del que se clonó. */
+      '  --verde:'   + PAPEL  + ';',
       '}',
 
       /* ---- 🔴 DESTAPAR EL FONDO ----------------------------------------
@@ -376,7 +404,17 @@
             es el MISMO caso: medido 230×54 en rgb(244,231,206). Apareció recién
             al prender la galería, o sea que el barrido de superficies claras
             hay que correrlo DESPUÉS de tener todo cargado, no antes.
-         (Anotado para el motor: los dos deberían entrar en el conjunto.) */
+         ⚠️⚠️ 23/9/2026, SEGUNDA VUELTA: **ESTE DIAGNÓSTICO ESTABA MAL** y la
+            anotación «deberían entrar en el conjunto» era una mala idea.
+            Probado: meterlos al conjunto `DONDE` de `botones.js` EMPEORA a
+            Clara —el material `cristal` deja una pastilla casi transparente
+            con letra oscura que se pierde sobre el fondo claro, cuando hoy es
+            una pastilla azul noche que se lee al toque.
+            La causa verdadera es otra y está arriba, en las variables: los dos
+            botones nacen con estilo INLINE `background: var(--verde,#6D1233)`,
+            y Bella no mapeaba `--verde`. Ya está mapeado, así que estas dos
+            reglas de acá abajo son una ELECCIÓN de diseño —oro, para que vayan
+            con el material `oro` del panel—, no un parche. */
       P + '#filtro-abrir, ' + P + '#gal-entrar{',
       '  background:linear-gradient(180deg,' + ORO + ' 0%,' + ORO2 + ' 100%)!important;',
       '  color:#2E1F14!important; -webkit-text-fill-color:#2E1F14!important;',
@@ -405,7 +443,12 @@
          y NINGUNA de esas clases existe acá: las tarjetas de lugar son
          `.evento` y el pase es `section.pase`, que NO es `.sec` y por eso
          tampoco lo destapaba la regla del fondo.
-         ⚠️ `#qr` queda BLANCO A PROPÓSITO: un QR sin zona blanca no escanea. */
+         ⚠️ `#qr` queda BLANCO A PROPÓSITO: un QR sin zona blanca no escanea.
+         ⚠️⚠️ Y ESTE BARRIDO TIENE UN PISO QUE DEJA COSAS AFUERA: con 7.000 px²
+            (y la regla 6 del chequeo con 12.000) los dos discos de 62×62 de
+            las cámaras —3.844 px²— pasaron de largo estando en crema. Los
+            encontró el barrido de `--verde`, no éste. Un parche chico también
+            es un parche. */
       P + ':is(.evento, .hotel, .pasecard, .card, .caja, .ev-card, .tl){',
       '  background-color:' + PAPEL + '!important;',
       '  background-image:none!important;',
