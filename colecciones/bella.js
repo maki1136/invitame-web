@@ -139,9 +139,13 @@
          "background-image": las secciones con foto propia la escriben EN LÍNEA
          y hay que dejarlas en paz. */
       P + '.sec:not([style*="url("]){',
-      '  background-image:none!important;',
       '  background-color:transparent!important;',
-      '  position:relative!important;',
+      '  background-image:linear-gradient(90deg,',
+      '    rgba(26,16,8,0) 0%, rgba(26,16,8,' + VELO_A + ') 8%,',
+      '    rgba(26,16,8,' + VELO_A + ') 92%, rgba(26,16,8,0) 100%)!important;',
+      '  background-size:100% 100%!important;',
+      '  background-repeat:no-repeat!important;',
+      '  background-position:center!important;',
       '}',
       /* ⚠️ MEDIDO EN VIVO: matar sólo `background-image` NO alcanza en una
          colección OSCURA. El motor además pinta varias secciones con un COLOR
@@ -149,37 +153,35 @@
          crema sobre crema y desaparece. En Cenicienta no se nota porque esa
          colección es clara. Hay que matar también `background-color`. */
 
-      /* ---- 🔴 EL VELO DE LECTURA, OSCURO ---------------------------------
-         En Cenicienta el velo ACLARA porque la colección es clara. Acá OSCURECE.
-         Alfa 0,62 medido (ver cabecera): por debajo de 0,55 la crema no llega
-         al piso de 5 sobre el manuscrito iluminado del fondo.
-         Se abre SÓLO en los 34 px de cada punta (8 %/92 %) para que el collage
-         entre por los costados, y con `blur` o se ve el rectángulo. */
-      P + '.sec:not([style*="url("])::before{',
-      '  content:""!important; position:absolute!important; z-index:0!important;',
-      '  inset:0!important; pointer-events:none!important;',
-      '  background:linear-gradient(90deg,',
-      '    rgba(26,16,8,0) 0%, rgba(26,16,8,' + VELO_A + ') 8%,',
-      '    rgba(26,16,8,' + VELO_A + ') 92%, rgba(26,16,8,0) 100%)!important;',
-      '  filter:blur(16px)!important;',
-      '}',
-      /* ⚠️⚠️ MEDIDO EL 23/9/2026, Y ES EL ARREGLO MÁS IMPORTANTE DE LA HOJA.
-         La primera versión abría el velo en `inset:0 16%`, «para que el collage
-         entre por los costados». A 430 px de ancho eso deja 68,8 px SIN VELO a
-         cada lado — y los títulos ocupan casi todo el ancho, así que las dos
-         puntas de cada título caían sobre el video pelado. Medido escondiendo
-         el texto y leyendo la placa: 10 de 33 textos por debajo del piso.
-               'Corre la voz'           1,32      'Dress Code'      1,33
-               'Comparte la invitación' 1,32      'La fecha'        1,51
-               'Raspa para revelar'     1,61      'Una carta...'    3,36
-         El alfa NO era el problema: con 0,62 el peor píxel medido —(232,216,190),
-         el manuscrito iluminado— da 6,12 para la tinta del motor y 5,45 para
-         TINTA. Era la GEOMETRÍA. Con `inset:0` y el desvanecido en 8 %/92 % el
-         velo cubre toda la columna de lectura y sólo se abre en los 34 px de
-         cada punta, donde no hay letra. El collage sigue entrando por los
-         costados: se mide en la captura, no se discute de memoria. */
-      /* ⚠️ z-index 0 en el velo y 1 en los hijos. Al revés tapa el texto. */
-      P + '.sec:not([style*="url("]) > *{ position:relative!important; z-index:1!important; }',
+      /* ---- 🔴🔴 EL VELO DE LECTURA VA EN EL FONDO DE LA SECCIÓN, NO EN UNA
+         CAPA APARTE — Y ESTO LO DECIDIÓ SAFARI, NO EL GUSTO.  (23/9/2026)
+
+         La primera versión ponía el velo en un `::before` absoluto con
+         `inset`, `z-index:0` y los hijos en `z-index:1`. Se veía perfecto en
+         Chrome. **En WebKit la página se CAE**: «Target crashed», y ni siquiera
+         al abrir el sobre — al cargar.
+         Aislado con tres corridas, cambiando UNA cosa por vez:
+             tal cual está          → CRASH
+             sin el `filter:blur`   → CRASH   ← no era el blur
+             sin el velo entero     → VIVE, 20 secciones, colección puesta
+         Y con el velo viejo (`inset:0 16%`) también CRASH: no era el ancho.
+         Era LA CAPA: veinte pseudo-elementos absolutos del tamaño de su
+         sección, cada uno abriendo su contexto de apilado porque los hijos
+         iban a `z-index:1`.
+         ⚠️ Y Clara, en el MISMO WebKit, abre y navega sin una queja. O sea que
+            el sospechoso no era el navegador: era esta colección.
+
+         La cura es más simple que el problema: el velo es un DEGRADADO, y un
+         degradado es un fondo. Va en el `background-image` de la propia
+         sección —que en estas secciones está libre porque el motor no pone
+         ninguno— y desaparecen la capa, el `z-index` y el `position:relative`.
+         · No hace falta `blur`: el degradado ya llega a 0 en las dos puntas.
+         · El collage sigue entrando por los costados, en los 34 px de cada
+           punta (8 % / 92 %), que es lo que se había medido.
+         · Y de yapa, ahora `fondosDe()` del chequeo SÍ ve el velo, porque es
+           un fondo CSS de verdad y no una capa hermana.
+         ⚠️ El filtro sigue siendo `:not([style*="url("])`: las secciones con
+            foto propia la escriben EN LÍNEA y no se les toca el fondo. */
 
       /* ---- tipografía ----
          Cinzel para los títulos (romana de capitales, no la usa ninguna otra
