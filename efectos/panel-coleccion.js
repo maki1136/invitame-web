@@ -109,7 +109,13 @@
       paleta: null, paletaNombre: null,
       ayuda: 'Boda religiosa tradicional mexicana: cantera rosa, laton y olivo. ' +
              'Las secciones van en ARCO de medio punto y la marca es un medallon ' +
-             'de laton con una rama de olivo. Trae su propia paleta.' }
+             'de laton con una rama de olivo. Trae su propia paleta.' },
+    { id: 'bella', nombre: 'La Bella y la Bestia',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La primera OSCURA de la linea de princesas: oro viejo, borgoña y ' +
+             'verde botella sobre madera, a la luz de tres velas que titilan en ' +
+             'el fondo. Titulos en Cinzel, el nombre en Pinyon Script y un capullo ' +
+             'de rosa como marca. Trae su propia paleta.' },
 
   ];
 
