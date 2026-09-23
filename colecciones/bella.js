@@ -128,8 +128,14 @@
          y hay que dejarlas en paz. */
       P + '.sec:not([style*="url("]){',
       '  background-image:none!important;',
+      '  background-color:transparent!important;',
       '  position:relative!important;',
       '}',
+      /* ⚠️ MEDIDO EN VIVO: matar sólo `background-image` NO alcanza en una
+         colección OSCURA. El motor además pinta varias secciones con un COLOR
+         de fondo claro —medido rgb(244,231,206)— y ahí la tinta clara queda
+         crema sobre crema y desaparece. En Cenicienta no se nota porque esa
+         colección es clara. Hay que matar también `background-color`. */
 
       /* ---- 🔴 EL VELO DE LECTURA, OSCURO ---------------------------------
          En Cenicienta el velo ACLARA porque la colección es clara. Acá OSCURECE.
@@ -156,6 +162,7 @@
       '  letter-spacing:.055em!important;',
       '  color:' + TINTA + '!important;',
       '}',
+      P + '.sec, ' + P + '.sec div, ' + P + '.sec span{ color:' + TINTA2 + '; }',
       P + '.sec p, ' + P + '.sec li, ' + P + '.sec .txt{',
       '  font-family:"Cormorant Garamond",serif!important;',
       '  color:' + TINTA2 + '!important;',
