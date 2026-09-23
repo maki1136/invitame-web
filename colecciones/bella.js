@@ -353,6 +353,34 @@
       P + '.padres .nm{ font-size:17px!important; color:' + TINTA2 + '!important; font-family:"Cormorant Garamond",serif!important; }',
       '@media (max-width:360px){' + P + '.padres{ gap:8px 5px!important; }' + P + '.padres .av{ width:86px!important; height:86px!important; }}',
 
+      /* ---- 🔴 LA TAPA DE LA PLAYLIST NO ES UN PAPEL -----------------------
+         Regla vieja de Maki («en ver video está el rectángulo que no me gusta,
+         y la playlist lo mismo») y último parche claro que quedaba en Victoria.
+         Medido el 23/9 con la playlist ya cargada: `.rd-tapa` nace en
+         rgb(244,239,230) —crema— de 366×156, con `.rd-txt` en rgb(90,80,57),
+         un oliva que no pertenece a esta paleta. Lo cantó la regla 2 del
+         chequeo: «1 texto con un color fuera de la familia · La playlist».
+         ⚠️ LA CLASE ES `.rd-tapa`, LA MISMA para el video y para la playlist.
+            `.sp-tapa` y `.tv-tapa` NO EXISTEN. Ya está escrito, y va de nuevo.
+         ⚠️ El aro y el triángulo del play NO se reemplazan por una foto: van
+            en el mismo lenguaje que los filetes, oro sobre papel oscuro. */
+      P + '.rd-tapa{',
+      '  background-color:' + PAPEL2 + '!important;',
+      '  background-image:url("' + rosaSVG('rgba(227,200,138,.10)') + '")!important;',
+      '  background-size:78px!important; background-repeat:no-repeat!important;',
+      '  background-position:right 16px bottom 12px!important;',
+      '  border:1px solid rgba(169,138,95,.38)!important;',
+      '  box-shadow:inset 0 1px 0 rgba(246,234,210,.07), 0 8px 22px rgba(0,0,0,.34)!important;',
+      '}',
+      P + '.rd-tapa .rd-aro{',
+      '  border-color:' + ORO + '!important; color:' + ORO + '!important;',
+      '  background:rgba(227,200,138,.07)!important;',
+      '}',
+      P + '.rd-tapa .rd-txt{',
+      '  color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
+      '  letter-spacing:.18em!important;',
+      '}',
+
       /* ---- campos de formulario ---- */
       P + 'input, ' + P + 'select, ' + P + 'textarea{',
       '  background:rgba(26,16,8,.55)!important; color:' + TINTA + '!important;',
@@ -458,6 +486,24 @@
 
   /* El motor no numera `.padres`; Perlas inventó `data-col-n` y acá se usa
      igual, así la fila sirve para 1, 2, 3 o 4 personas y no sólo para tres. */
+  /* ⚠️ `reglas-duras.js` le escribe a `.rd-txt` un `color` INLINE con
+     `!important`, derivado del papel CLARO que la tapa tenía antes. Contra un
+     inline con `!important` no hay hoja que gane: hay que BORRARLO, y volver a
+     borrarlo en cada repaso porque el corrector lo vuelve a poner cuando la
+     tapa cambia. Se le saca también la marca `data-regla-orig`, que es donde
+     guarda la tinta de fábrica para reusarla siempre. */
+  function limpiarTapa() {
+    try {
+      [].forEach.call(document.querySelectorAll('.rd-tapa .rd-txt'), function (e) {
+        if (e.style && e.style.color) {
+          e.style.removeProperty('color');
+          e.style.removeProperty('-webkit-text-fill-color');
+        }
+        if (e.hasAttribute('data-regla-orig')) e.removeAttribute('data-regla-orig');
+      });
+    } catch (e) {}
+  }
+
   function marcarPadres() {
     try {
       var p = document.querySelector('.padres');
@@ -522,6 +568,7 @@
     document.documentElement.setAttribute('data-marca-propia', ID);
     marcarPadres();
     moverPase();
+    limpiarTapa();
     /* ⚠️ ACÁ HABÍA UN MutationObserver, Y ESTABA MAL. Cenicienta lo tiene
        escrito con todas las letras: «NADA DE MutationObserver: la invitación
        muta en bucle (reglas-duras.js corre con cada cambio de clase del marco)
