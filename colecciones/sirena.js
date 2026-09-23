@@ -16,8 +16,11 @@
         · Es CLARA, al revés que Bella: papel nácar y TINTA OSCURA.
         · La marca del itinerario es una VIEIRA — la valva de la concha, cinco
           nervios y una charnela.
-        · El fondo es la arena del fondo del mar con la red de luz del agua, y
-          el movimiento lo pone un PASEO DE CÁMARA por CSS, continuo.
+        · El fondo es la arena del fondo del mar con la red de luz del agua,
+          EN VIDEO (Kling 3.0 por la API de Higgsfield, 23/9): el mismo collage
+          aprobado, animado a partir de esa misma imagen. Movimiento medido:
+          6,92 (la playa aprobada da 2,85). Si alguna vez vuelve a ser una
+          imagen fija, el PASEO DE CÁMARA por CSS se prende solo.
 
    ⚠️⚠️ LOS COLORES ESTÁN MEDIDOS CONTRA EL FONDO, NO ELEGIDOS DE OJO.
       Medido sobre `sirena-fondo-base-23-9.webp` (1080×1935):
@@ -200,19 +203,24 @@
       '}',
 
       /* ---- 🔴🔴 EL PASEO DE CÁMARA: EL MOVIMIENTO ES CONTINUO O NO EXISTE ---
-         El fondo de esta muestra es una IMAGEN, no un video (ver el documento
-         del proyecto: Higgsfield entró por una cuenta free). La regla de Maki no
-         cambia por eso: «si algo pasa cada tanto, es como que no pasó nada,
-         quedó como una imagen fija».
-         → El movimiento lo pone un PASEO DE CÁMARA por CSS: la imagen se acerca
-           y se corre, ida y vuelta, 26 s, sin detenerse nunca. Es el recurso que
-           ya está escrito en la skill para cuando el video no alcanza.
-         ⚠️ El selector es `#inv-fondo > *` para que sirva con imagen O con
-            video: el día que entre el mp4, el paseo lo acompaña sin tocar nada.
+         Desde el 23/9 esta muestra tiene VIDEO de fondo, así que el paseo queda
+         de reserva. La regla de Maki es la de siempre: «si algo pasa cada tanto,
+         es como que no pasó nada, quedó como una imagen fija».
+         → Cuando el fondo es una IMAGEN, el movimiento lo pone un PASEO DE
+           CÁMARA por CSS: se acerca y se corre, ida y vuelta, 26 s, sin
+           detenerse nunca. Es el recurso de la skill para cuando no hay video.
+         ⚠️⚠️ EL SELECTOR ES `#inv-fondo > img`, NO `> *`. Lo escribí primero con
+            `> *` pensando «así el día que entre el video, el paseo lo acompaña».
+            Estaba mal: el 23/9 entró el video de verdad (Kling 3.0 por la API) y
+            ese clip YA trae su propio movimiento — medido en **6,92** contra el
+            2,85 de la playa aprobada. Sumarle encima el zoom del paseo es
+            movimiento sobre movimiento, y el fondo pasa de «respira» a «marea».
+            ⭐ El paseo existe PARA CUANDO NO HAY VIDEO. Con `> img` se prende
+               solo con fondo de imagen y se aparta solo cuando hay mp4.
          ⚠️ `will-change:transform` y nada de `filter`: en WebKit un filtro sobre
             una capa de pantalla completa es caro y ya sabemos cómo termina.
          ⚠️ Y `@media (prefers-reduced-motion: reduce)` lo apaga. */
-      P + '#inv-fondo > *{',
+      P + '#inv-fondo > img{',
       '  animation:sirena-paseo 26s ease-in-out infinite alternate!important;',
       '  will-change:transform!important;',
       '  transform-origin:50% 42%!important;',
@@ -232,7 +240,7 @@
       '}',
       '@keyframes sirena-luz{0%{background-position:170% 0}100%{background-position:-170% 0}}',
       '@media (prefers-reduced-motion: reduce){',
-      P + '#inv-fondo > *{ animation:none!important; }',
+      P + '#inv-fondo > img{ animation:none!important; }',
       P + '#inv-fondo::after{ animation:none!important; }',
       '}',
       /* ⚠️ La portada lleva el MISMO paseo, o el fondo se mueve y la tapa no. */
