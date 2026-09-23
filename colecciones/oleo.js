@@ -194,6 +194,38 @@
         P + '.rd-tapa .rd-txt{ display:block!important; color:#FCF6EC!important; -webkit-text-fill-color:#FCF6EC!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }'
       ].join('\n')
     },
+    /* ⭐ JARDÍN (daniela-y-rodrigo, jardín en Cuernavaca, boda de mediodía en primavera):
+       la verde de la línea. Rosé pasado a salvia, glicina lila y oro viejo. Tinta verde
+       bosque (#2F3A2C) sobre el papel #F4F2EA; TINTA2 #4E5A47; ORO_T #5C5B30.
+       ⭐ Es la PRIMERA Óleo con fondo EN VIDEO REAL (Maki, 23/9: «no es la idea un zoom,
+       la idea es un video real»): la glicina se mece, la fuente corre, pasan mariposas y
+       nubes, con la cámara quieta. Se pone en fx.fondo (tipo 'video'), no acá. */
+    jardin: {
+      hex: {
+        '#C98E8A':'#8FA47E', '#E3C2B8':'#D6DFC9', '#D9C3A0':'#C9B98E', '#B08A4E':'#9C8A55',
+        '#F7EFEA':'#F4F2EA', '#FBF6F2':'#FAF9F3', '#4A2E2C':'#2F3A2C', '#6B4744':'#4E5A47',
+        '#7A5634':'#5C5B30', '#82504C':'#5E7152', '#FBF4EF':'#FAF8F0', '#F5E6DF':'#E7EDDD',
+        '#2E1C1B':'#1F271D', '#F2E4DC':'#E9EEDF', '#EAD9B8':'#DCD3A8'
+      },
+      rgb: {
+        '74,46,44':'47,58,44', '201,142,138':'143,164,126', '247,239,234':'244,242,234',
+        '40,20,18':'24,32,22', '60,34,32':'36,46,34', '134,96,58':'108,112,70',
+        '176,138,78':'156,138,85', '217,195,160':'201,185,142', '240,220,211':'226,234,214',
+        '251,246,242':'250,249,243', '255,246,236':'252,252,242', '120,70,60':'70,90,62',
+        '107,71,68':'78,90,71', '251,244,239':'250,248,240'
+      },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-jardin/jd-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-jardin.webp'
+      },
+      css: [
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(28,38,26,.42) 0, rgba(28,38,26,.18) 24%, rgba(28,38,26,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-jardin/jd-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,56,36,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(28,38,26,.42) 0, rgba(28,38,26,.18) 24%, rgba(28,38,26,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-jardin/jd-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,56,36,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#E7EDDD!important; background:rgba(30,40,28,.5)!important; box-shadow:0 0 0 1px rgba(231,237,221,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#F4F7EE!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FAF8F0!important; -webkit-text-fill-color:#FAF8F0!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }'
+      ].join('\n')
+    },
     /* ⭐ NOCTURNO (paulina-y-gerardo, hacienda en Mérida, boda de noche): la PRIMERA
        OSCURA de la línea. Es Rosé dado vuelta: la pared pasa a azul noche, la tinta a
        marfil y el acento a pan de oro. Las sombras (74,46,44 / 40,20,18 / 120,70,60)
