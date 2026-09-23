@@ -743,8 +743,11 @@
        estiradas, con el mismo arco. Perlas: 318 px sobre un marco de 580
        (55%), arco 50%/34px, 38 px entre una y otra. Cantera tenía 524 px,
        arco 150px/40px y 16 px entre tarjetas. */
-    P + '.evento{ width:66%!important; max-width:340px!important; margin:0 auto 34px!important; border-radius:50% 50% 12px 12px / 36px 36px 12px 12px!important; }',
-    P + '.evento .ph{ height:200px!important; }',
+    P + '.evento{ width:auto!important; max-width:none!important; margin:0 0 30px!important; border-radius:50% 50% 14px 14px / 44px 44px 14px 14px!important; }',  /* ancho normal (Maki 23/9: angostas no), el arco se queda */
+    P + '.evento .ph{ height:230px!important; }',
+    /* hoteles: el arco de 40px se comía la primera línea del nombre — aire arriba y centrado */
+    P + '.hotel{ padding:38px 18px 18px!important; text-align:center!important; }',
+    P + '.hotel .btn{ margin:10px auto 0!important; }',
 
     /* 5c · EL ITINERARIO SE IBA AL COSTADO. Medido: la marca de cada hora
        caía 6 px AFUERA del panel (.it::before en left:-29px con sólo 22 px
