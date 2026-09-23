@@ -184,7 +184,7 @@
       },
       url: {
         'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-champagne/ch-base.webp',
-        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-champagne.webp'
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/oleo-medallon-champagne-2.webp'
       },
       css: [
         P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,30,18,.42) 0, rgba(40,30,18,.18) 24%, rgba(40,30,18,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/oleo-champagne/ch-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(60,44,20,.28)!important; }',
