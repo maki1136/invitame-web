@@ -126,6 +126,11 @@
       ayuda: 'Linea ARTE, el mismo diseño de Óleo en otro tono: greige, arena, ' +
              'gris cálido, marfil y pan de plata. Para bodas civiles, viñedo, ' +
              'haciendas de piedra. Trae su propia paleta.' },
+    { id: 'oleo-champagne', nombre: 'Óleo · Champagne',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Linea ARTE, la más luminosa: champagne, marfil cálido, rubor y oro ' +
+             'pálido, pintado con espátula a la hora dorada. Para haciendas coloniales, ' +
+             'bodas de tarde y San Miguel de Allende. Trae su propia paleta.' },
     { id: 'oleo-nocturno', nombre: 'Óleo · Nocturno',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE, la primera OSCURA: azul noche, carbón, marfil y pan de ' +
