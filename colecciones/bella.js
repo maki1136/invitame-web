@@ -140,7 +140,11 @@
          y hay que dejarlas en paz. */
       P + '.sec:not([style*="url("]){',
       '  background-color:transparent!important;',
-      '  background-image:none!important;',
+      /* ⭐⭐ EL CLARO OSCURO DETRÁS DEL TEXTO. Ver la nota grande de abajo. */
+      '  background-image:radial-gradient(118% 76% at 50% 50%,',
+      '    rgba(12,7,3,.66) 0%, rgba(12,7,3,.50) 44%, rgba(12,7,3,0) 90%)!important;',
+      '  background-size:100% 100%!important;',
+      '  background-repeat:no-repeat!important;',
       '}',
 
       /* ---- 🔴🔴 EL VELO DE LECTURA: **UNA SOLA CAPA**, SOBRE EL FONDO ------
@@ -212,6 +216,47 @@
          de fondo claro —medido rgb(244,231,206)— y ahí la tinta clara queda
          crema sobre crema y desaparece. En Cenicienta no se nota porque esa
          colección es clara. Hay que matar también `background-color`. */
+
+      /* ---- 🔴🔴🔴 LOS TEXTOS QUE SE PIERDEN CON EL FONDO  (23/9/2026) ------
+         Maki: «los textos no se llegan a leer. "Con el corazón lleno", "Una
+         carta para ti", por ejemplo, y así con todos: se pierde con el fondo».
+         Y también: «el "Para tu comodidad" no lo veo, no se lee nada».
+
+         ⚠️⚠️ YO LOS HABÍA DADO POR BUENOS MIDIENDO. El barrido escondiendo el
+            texto daba **64 textos, 0 por debajo del piso**, con el peor en 5,09.
+            Y ella los mira y no se leen. **Manda el ojo.**
+
+         POR QUÉ MENTÍA EL NÚMERO, y esto vale para cualquier colección sobre
+         foto: la razón de contraste compara DOS luminancias planas. Acá el
+         problema no es la luminancia media — es que un TRAZO FINO DE CURSIVA
+         (Pinyon Script a 34 px, un pelo de grosor) cae sobre una foto de mucho
+         DETALLE —el manuscrito, los pétalos, la llama— y el ojo pierde el
+         borde de la letra aunque el promedio dé 6. **Una letra no compite con
+         un fondo por brillo: compite por FRECUENCIA.**
+
+         LO QUE SE PROBÓ, mirando las capturas a 100 % en los tres lugares que
+         ella nombró, no midiendo:
+            base       · la cursiva se come el fondo, tal cual lo dijo
+            sólo halo  · mejora, pero en el manuscrito todavía cuesta
+            radial fuerte (.78) · se lee perfecto y APAGA demasiado el collage
+            **radial .66 + halo** · se lee limpio y el collage sigue entrando
+                         por los costados: se ven la rosa, la vela y los arcos
+         ⚠️ El radial va en el `background-image` de la sección, **sin
+            `position:relative` ni `z-index`**: probado en WebKit, vive. La
+            versión con z-index se ve igual y no hace falta — y ya sabemos a
+            qué huele esa familia de reglas acá.
+         ⚠️ Y es RADIAL, nunca una banda recta: deja el fondo a la vista en los
+            bordes, que es de lo que se trata. */
+      P + '.sec .kick, ' + P + '.sec h2, ' + P + '.sec .h2{',
+      '  text-shadow:0 1px 2px rgba(12,7,3,.90), 0 0 16px rgba(12,7,3,.72)!important;',
+      '}',
+      P + '.sec p, ' + P + '.sec .txt, ' + P + '.sec li{',
+      '  text-shadow:0 1px 2px rgba(12,7,3,.82)!important;',
+      '}',
+      /* ⚠️ La hoja de la carta es papel CLARO con tinta oscura: ahí el halo
+         oscuro ensucia en vez de ayudar. Se le saca. */
+      P + '.cf-letter p, ' + P + '.cf-letter h3, ' + P + '.cf-letter *{ text-shadow:none!important; }',
+      P + ':is(.evento, .hotel, .pasecard) *{ text-shadow:none!important; }',
 
       /* ---- tipografía ----
          Cinzel para los títulos (romana de capitales, no la usa ninguna otra
