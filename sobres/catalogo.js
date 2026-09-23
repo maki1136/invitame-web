@@ -473,7 +473,7 @@ window.SOBRES_INVITAME = {
      --------------------------------------------------------------------- */
   'cantera-video-b': {
     nombre:     "Cantera · la tarjeta sale del sobre (video)",
-    video:      "/sobres/sobre-cantera-v5.mp4",
+    video:      "/sobres/sobre-cantera-v6.mp4",
     poster:     "/sobres/sobre-cantera-v5-poster.jpg",
     color:      "#E6E0D3",
     /* ★ Maki, 22/9/2026: «cuando abre queda en blanco ¿puede salir la portada
