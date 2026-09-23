@@ -256,6 +256,38 @@
       /* ⚠️ La hoja de la carta es papel CLARO con tinta oscura: ahí el halo
          oscuro ensucia en vez de ayudar. Se le saca. */
       P + '.cf-letter p, ' + P + '.cf-letter h3, ' + P + '.cf-letter *{ text-shadow:none!important; }',
+
+      /* ---- 🔴🔴 LA TINTA DE LA CARTA LA ESTABA INVENTANDO `reglas-duras.js`
+         (23/9/2026, encontrado por el chequeo) ------------------------------
+         La regla «familia-de-color» falló con DOS textos:
+              «A los que quiero cerca»      rgb(101,85,56)
+              «Mi abuela tenía un rosal…»   rgb(96,84,60)
+         Un oliva apagado que no está en ninguna paleta de esta colección — el
+         mismo caso que el rótulo de la playlist, y por la misma causa.
+
+         QUÉ PASABA, medido: la hoja de la carta es papel CASI BLANCO
+         (`linear-gradient(rgb(255,254,251)…)`) y la colección le estaba
+         bajando la tinta CREMA por herencia (`.sec p` → TINTA2). Crema sobre
+         blanco no se lee, así que `reglas-duras.js` salía al rescate y
+         escribía un color INLINE CON `!important` —verificado:
+         `style.getPropertyPriority('color') === 'important'`— oscureciendo la
+         crema hasta ese oliva. O sea: el corrector me estaba tapando un error
+         mío, y con un color de nadie.
+
+         LA CURA es darle a la carta SU tinta, de esta paleta: `PAPEL`
+         (#2E1F14), que sobre el papel casi blanco mide ~14,8 de contraste.
+         ⚠️ Y HAY QUE NOMBRAR CADA ELEMENTO: probado, `.cf-letter *` NO le gana
+            a `.sec p` (las dos valen (0,3,1) y `*` no suma nada, así que gana
+            la última). Con `.cf-letter *` sólo el `h4` cambiaba y el párrafo
+            seguía crema. Van los selectores uno por uno.
+         ⚠️ Y hay que BORRAR el inline que el corrector ya escribió, en cada
+            repaso, igual que en la tapa de la playlist: contra un inline con
+            `!important` no hay hoja que gane. Lo hace `limpiarInlines()`. */
+      P + '.cf-letter, ' + P + '.cf-letter p, ' + P + '.cf-letter h3, ' +
+      P + '.cf-letter h4, ' + P + '.cf-letter li, ' + P + '.cf-letter span, ' +
+      P + '.cf-letter em, ' + P + '.cf-letter strong, ' + P + '.cf-letter *{',
+      '  color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important;',
+      '}',
       P + ':is(.evento, .hotel, .pasecard) *{ text-shadow:none!important; }',
 
       /* ---- 🔴 LA HOJA DE LA CARTA TIENE QUE SALIR DEL SOBRE --------------
@@ -469,7 +501,7 @@
             `.sp-tapa` y `.tv-tapa` NO EXISTEN.
          ⚠️ Y `reglas-duras.js` le escribe a `.rd-txt` un `color` INLINE con
             `!important`, derivado del papel claro de antes: contra un inline no
-            hay hoja que gane, hay que BORRARLO en cada repaso (`limpiarTapa`). */
+            hay hoja que gane, hay que BORRARLO en cada repaso (`limpiarInlines`). */
       P + '.rd-tapa{',
       '  background:none!important; background-color:transparent!important;',
       '  background-image:none!important;',
@@ -680,15 +712,23 @@
      borrarlo en cada repaso porque el corrector lo vuelve a poner cuando la
      tapa cambia. Se le saca también la marca `data-regla-orig`, que es donde
      guarda la tinta de fábrica para reusarla siempre. */
-  function limpiarTapa() {
+  /* ⚠️ Y lo mismo con la CARTA: el corrector le escribía a `.cf-letter h4` y
+     `.cf-letter p` un oliva inventado (rgb(101,85,56) / rgb(96,84,60)) porque
+     la colección les bajaba la tinta crema sobre papel casi blanco. Ahora la
+     tinta se la da la colección, pero el inline que ya escribió hay que
+     sacárselo igual, y en cada repaso. Ver la nota grande del CSS. */
+  function limpiarInlines() {
     try {
-      [].forEach.call(document.querySelectorAll('.rd-tapa .rd-txt'), function (e) {
-        if (e.style && e.style.color) {
-          e.style.removeProperty('color');
-          e.style.removeProperty('-webkit-text-fill-color');
+      [].forEach.call(
+        document.querySelectorAll('.rd-tapa .rd-txt, .cf-letter, .cf-letter *'),
+        function (e) {
+          if (e.style && e.style.color) {
+            e.style.removeProperty('color');
+            e.style.removeProperty('-webkit-text-fill-color');
+          }
+          if (e.hasAttribute('data-regla-orig')) e.removeAttribute('data-regla-orig');
         }
-        if (e.hasAttribute('data-regla-orig')) e.removeAttribute('data-regla-orig');
-      });
+      );
     } catch (e) {}
   }
 
@@ -756,7 +796,7 @@
     document.documentElement.setAttribute('data-marca-propia', ID);
     marcarPadres();
     moverPase();
-    limpiarTapa();
+    limpiarInlines();
     /* ⚠️ ACÁ HABÍA UN MutationObserver, Y ESTABA MAL. Cenicienta lo tiene
        escrito con todas las letras: «NADA DE MutationObserver: la invitación
        muta en bucle (reglas-duras.js corre con cada cambio de clase del marco)
