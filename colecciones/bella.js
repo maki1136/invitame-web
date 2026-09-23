@@ -258,6 +258,24 @@
       P + '.cf-letter p, ' + P + '.cf-letter h3, ' + P + '.cf-letter *{ text-shadow:none!important; }',
       P + ':is(.evento, .hotel, .pasecard) *{ text-shadow:none!important; }',
 
+      /* ---- 🔴 LA HOJA DE LA CARTA TIENE QUE SALIR DEL SOBRE --------------
+         Maki, 23/9: «la carta está muy larga, tiene que ser la mitad». Se
+         cortó a la mitad (437 → 225 caracteres, 51 %) y ahí apareció lo de
+         abajo, que estaba tapado por el largo: **la solapa de adelante se come
+         las últimas líneas**.
+         Medido dentro de `.cartafx` (340×490):
+              .cf-letter   92 → 318      el párrafo  148 → 297
+              .cf-front   258 → 490      ← y su tinte va al 0,88, casi opaco
+              o sea: 39 px de TEXTO detrás de la solapa
+         Probados, con el solape del texto medido en cada uno:
+              0 px → +39 (tapado) · −40 → −1 · **−50 → −11** · −60 → −21
+         Queda −50: el texto entero por arriba de la solapa y la hoja todavía
+         metida 10 px adentro del sobre, que es lo que la hace leer como que
+         SALE de ahí. Con −60 el solape es 0 y la hoja flota suelta.
+         ⚠️ El número está calibrado para ESTE largo de carta. Si el texto
+            crece, se vuelve a medir el solape — no se estima. */
+      P + '.cf-letter{ transform:translateY(-50px)!important; }',
+
       /* ---- tipografía ----
          Cinzel para los títulos (romana de capitales, no la usa ninguna otra
          colección) y Cormorant Garamond para el cuerpo. */
