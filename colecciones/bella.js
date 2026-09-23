@@ -485,6 +485,64 @@
       '}',
       P + 'input::placeholder, ' + P + 'textarea::placeholder{ color:rgba(234,220,189,.55)!important; }',
 
+      /* ---- 🔴🔴 EL ITINERARIO, CON DISEÑO  (23/9/2026) ---------------------
+         Maki: «el itinerario, me gustaría que le pongas un poco más de onda.
+         Acordate de los movimientos y los puntitos esos. Que sea otra cosa.
+         Algo, ponele onda, algo más de diseño».
+
+         LO QUE HABÍA, medido y no recordado:
+            · `.tl` = un rectángulo marrón PLANO, `border-radius:0`, con un
+              filete de 1 px. Un cuadrado, que es justo lo que ella no quiere.
+            · la vía = una barra de 2 px de color liso, de punta a punta
+            · la marca = `.it::before` de **11×11 px**. Yo le había puesto el
+              capullo y la regla del chequeo decía «marca propia — foto puesta»,
+              pero a 11 px un capullo es UN PUNTITO. La regla mira que haya un
+              `url(`, no que se VEA. Es exactamente «los puntitos esos».
+            · movimiento: ninguno.
+
+         ⭐ LA LECCIÓN, otra vez la misma: se dibuja para el TAMAÑO REAL. Poner
+            la pieza correcta no alcanza si entra a un tamaño donde no se lee.
+            El chequeo no lo puede ver; la captura sí.
+
+         LO QUE HAY AHORA, y por qué cada cosa:
+            · la marca pasa a **26 px** con un halo cálido (`drop-shadow`), así
+              el capullo se lee como una cuenta encendida y no como un punto.
+              Se recentra a mano: la vía cae en x=170 y la marca mide 26, así
+              que va en `left:157` (170 − 13). Si cambia el tamaño, se recalcula.
+            · el panel: esquinas de 22 px, un claro que baja desde arriba y un
+              filete de oro. Nada de rectángulo.
+            · la vía: 1,5 px y un degradado que se APAGA en las dos puntas, así
+              no arranca ni termina en un corte seco.
+            · ⭐ EL MOVIMIENTO: una luz cálida que BAJA por la vía, sin parar,
+              una pasada cada 4,2 s. Es la regla de Maki — «si algo pasa cada
+              tanto, es como que no pasó nada, quedó como una imagen fija»: el
+              movimiento de un fondo es CONTINUO o no existe. Va en UN solo
+              `::after` de `.tl` (uno, no uno por ficha: ya sabemos qué pasa en
+              WebKit con veinte capas).
+            · `.tl-prog` se esconde: es la barra CREMA que el motor usa para
+              marcar la hora, y en una colección oscura es una viga clara. */
+      P + '.tl{',
+      '  border-radius:22px!important;',
+      '  border:1px solid rgba(201,167,94,.42)!important;',
+      '  background-color:' + PAPEL + '!important;',
+      '  background-image:radial-gradient(130% 82% at 50% 0%,',
+      '    rgba(227,200,138,.10) 0%, rgba(227,200,138,0) 62%)!important;',
+      '  background-size:100% 100%!important; background-repeat:no-repeat!important;',
+      '  box-shadow:inset 0 1px 0 rgba(246,234,210,.08), 0 14px 34px rgba(0,0,0,.42)!important;',
+      '  overflow:hidden!important; position:relative!important; padding:6px 0!important;',
+      '}',
+      P + '.tl::after{',
+      '  content:""!important; position:absolute!important; left:50%!important; top:0!important;',
+      '  width:3px!important; height:118px!important; margin-left:-1.5px!important;',
+      '  border-radius:3px!important; pointer-events:none!important; z-index:1!important;',
+      '  background:linear-gradient(180deg, rgba(255,232,178,0) 0%,',
+      '    rgba(255,232,178,.55) 45%, rgba(255,232,178,0) 100%)!important;',
+      '  filter:blur(1.5px)!important;',
+      '  animation:bella-hilo 4.2s linear infinite!important;',
+      '}',
+      '@keyframes bella-hilo{0%{transform:translateY(-22%)}100%{transform:translateY(122%)}}',
+      P + '.tl .tl-prog{ display:none!important; }',
+
       /* ---- 🔴 LA MARCA DEL ITINERARIO: EL CAPULLO, NO EL CIRCULITO --------
          Maki, de siempre: «no me gustan los circulitos». Es la regla 5 del
          chequeo, y Bella la estaba FALLANDO: medido el 23/9/2026,
@@ -499,14 +557,22 @@
             serie a lo largo de la vía, y una foto recortada repetida se lee
             como calcomanías pegadas (la lección de la rosa de Bohemia). */
       P + '.it::before{',
+      '  width:26px!important; height:26px!important; left:157px!important;',
+      '  border-radius:0!important;',
       '  background-image:url("' + rosaSVG(ORO) + '")!important;',
       '  background-color:transparent!important;',
       '  background-size:contain!important; background-repeat:no-repeat!important;',
       '  background-position:center!important;',
       '  border:0!important; box-shadow:none!important; opacity:1!important;',
+      '  filter:drop-shadow(0 0 7px rgba(227,200,138,.55))!important;',
+      '  z-index:2!important;',
       '}',
-      /* la vía, en filete: TINTA3, que nunca se usa para texto */
-      P + '.tl::before{ background:' + TINTA3 + '!important; opacity:.6!important; }',
+      /* la vía: fina y apagándose en las dos puntas, nunca un corte seco */
+      P + '.tl::before{',
+      '  width:1.5px!important; opacity:1!important;',
+      '  background:linear-gradient(180deg, rgba(169,138,95,0) 0%,',
+      '    rgba(169,138,95,.85) 9%, rgba(169,138,95,.85) 91%, rgba(169,138,95,0) 100%)!important;',
+      '}',
       P + '.it .h{ color:' + ORO + '!important; font-family:"Cinzel",serif!important; }',
       P + '.it .t{ color:' + TINTA2 + '!important; }',
 
