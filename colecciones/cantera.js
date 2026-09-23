@@ -397,6 +397,21 @@
        Se leían pegados de otra invitación. */
     P + '.wsp{ font-family:"Karla",sans-serif!important; text-transform:uppercase!important; letter-spacing:1.68px!important; font-size:12px!important; }',
 
+    /* ────────────── 4sexies · LAS TAPAS DE LA RASPADITA, EN CANTERA
+       Maki, 22/9/2026: «las raspadas plateadas no van con este estilo,
+       ponele otra cosa como hiciste con las demás».
+       ⚠️ RECTIFICO EL COMENTARIO DE ARRIBA: `--r3-tapa` SÍ existe en este
+       motor — 16 apariciones en /efectos/todo.php, más `__tapaFoto`.
+       Lo que NO existe es `.rasp-3 .r3-f`. Medido, no recordado.
+       La variable la lee `efectos/raspadita.js` DESDE EL CANVAS, y una
+       variable de CSS sólo baja a los DESCENDIENTES: por eso se declara
+       en toda la rama, igual que en Bohemia.
+       La pieza: medallón de lacre terracota con ramita de olivo, generado
+       en Flow y recortado a la caja del lacre (512x512, 52.422 bytes). */
+    ':is(.scratch-sec, .rasp-3, .rasp-zona, #scratchcard){',
+    '  --r3-tapa:url("/sobres/cantera-rasp-tapa.webp");',
+    '}',
+
     /* ────────────── 4ter · LA TAPA DEL VIDEO Y DE LA PLAYLIST NO ES UN PAPEL
        Maki, 22/9/2026: «en ver video está el rectángulo que no me gusta,
        anotalo en la skill porque parece que no está. Y la playlist lo mismo.»
