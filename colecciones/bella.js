@@ -15,8 +15,10 @@
           LAS TRES VELAS: cada una late con su propio ritmo y su luz respira
           sobre el bronce. Movimiento medido 3,62 (playa aprobado = 2,85).
         · La marca del itinerario es una ROSA HERÁLDICA de cinco pétalos.
-        · El botón va en ORO BRUÑIDO. Cenicienta cristal, Perlas lacre, Marfil
-          nácar, Campestre arcilla, Bohemia relieve seco.
+        · El botón va en ORO CEPILLADO, elegido DESDE EL PANEL
+          (`fx.boton.estilo = 'oro'`). Cenicienta cristal, Perlas lacre,
+          Marfil nácar, Campestre arcilla, Bohemia relieve seco.
+          ⚠️ La colección NO pinta el botón: el material lo elige Jazmín.
 
    ⚠️⚠️ LOS COLORES ESTÁN MEDIDOS CONTRA EL VIDEO, NO ELEGIDOS DE OJO.
       El fondo tiene un rango enorme: p5 = 3 (terciopelo casi negro) y
@@ -37,6 +39,16 @@
              TINTA  #F6EAD2 → 6,23     TINTA2 #EADCBD → 5,44
              ORO    #E3C88A → 4,56  ← títulos y adorno, NO texto chico
              TINTA3 #A98A5F → 2,29  ← SÓLO filetes y bordes, NUNCA texto
+
+   ⚠️⚠️ LO QUE SE ARREGLÓ EL 23/9/2026, MIRANDO LAS OCHO PANTALLAS A 100 %
+        (la hoja de contactos sirve para ENCONTRAR sospechosos; el veredicto
+         se da a tamaño real, y estos seis salieron de ahí):
+          1. el velo abría 16 % a cada lado y los títulos caían fuera → `inset:0`
+          2. `section.pase` seguía crema — no es `.sec`, no la destapaba la regla
+          3. las tarjetas de lugar son `.evento`, no `.card` → seguían crema
+          4. `#scratchcard` traía su recuadro blanco (vive en el `::after`)
+          5. `.padres` es grilla de DOS columnas → los tres padrinos caían 2+1
+          6. `.btn` clavado con `!important` peleaba con el material del panel
 
    ⭐ SE PRENDE con `INVEV.fx.coleccion = 'bella'`.
    ============================================================================ */
@@ -141,16 +153,31 @@
          En Cenicienta el velo ACLARA porque la colección es clara. Acá OSCURECE.
          Alfa 0,62 medido (ver cabecera): por debajo de 0,55 la crema no llega
          al piso de 5 sobre el manuscrito iluminado del fondo.
-         Bordes abiertos (`inset:0 16%`) para que el collage entre por los
-         costados, y `blur` o se ve el rectángulo. */
+         Se abre SÓLO en los 34 px de cada punta (8 %/92 %) para que el collage
+         entre por los costados, y con `blur` o se ve el rectángulo. */
       P + '.sec:not([style*="url("])::before{',
       '  content:""!important; position:absolute!important; z-index:0!important;',
-      '  inset:0 16%!important; pointer-events:none!important;',
+      '  inset:0!important; pointer-events:none!important;',
       '  background:linear-gradient(90deg,',
-      '    rgba(26,16,8,0) 0%, rgba(26,16,8,' + VELO_A + ') 13%,',
-      '    rgba(26,16,8,' + VELO_A + ') 87%, rgba(26,16,8,0) 100%)!important;',
+      '    rgba(26,16,8,0) 0%, rgba(26,16,8,' + VELO_A + ') 8%,',
+      '    rgba(26,16,8,' + VELO_A + ') 92%, rgba(26,16,8,0) 100%)!important;',
       '  filter:blur(16px)!important;',
       '}',
+      /* ⚠️⚠️ MEDIDO EL 23/9/2026, Y ES EL ARREGLO MÁS IMPORTANTE DE LA HOJA.
+         La primera versión abría el velo en `inset:0 16%`, «para que el collage
+         entre por los costados». A 430 px de ancho eso deja 68,8 px SIN VELO a
+         cada lado — y los títulos ocupan casi todo el ancho, así que las dos
+         puntas de cada título caían sobre el video pelado. Medido escondiendo
+         el texto y leyendo la placa: 10 de 33 textos por debajo del piso.
+               'Corre la voz'           1,32      'Dress Code'      1,33
+               'Comparte la invitación' 1,32      'La fecha'        1,51
+               'Raspa para revelar'     1,61      'Una carta...'    3,36
+         El alfa NO era el problema: con 0,62 el peor píxel medido —(232,216,190),
+         el manuscrito iluminado— da 6,12 para la tinta del motor y 5,45 para
+         TINTA. Era la GEOMETRÍA. Con `inset:0` y el desvanecido en 8 %/92 % el
+         velo cubre toda la columna de lectura y sólo se abre en los 34 px de
+         cada punta, donde no hay letra. El collage sigue entrando por los
+         costados: se mide en la captura, no se discute de memoria. */
       /* ⚠️ z-index 0 en el velo y 1 en los hijos. Al revés tapa el texto. */
       P + '.sec:not([style*="url("]) > *{ position:relative!important; z-index:1!important; }',
 
@@ -187,18 +214,38 @@
       '}',
       P + '.adorno svg, ' + P + '.adorno img{ display:none!important; }',
 
-      /* ---- botón ORO BRUÑIDO ---- */
-      P + '.btn, ' + P + 'button.btn, ' + P + 'a.btn{',
-      '  background:linear-gradient(180deg,' + ORO + ' 0%,' + ORO2 + ' 100%)!important;',
-      '  color:#241809!important; -webkit-text-fill-color:#241809!important;',
-      '  border:1px solid rgba(36,24,9,.35)!important;',
-      '  box-shadow:0 1px 0 rgba(255,240,205,.45) inset, 0 6px 16px rgba(0,0,0,.35)!important;',
-      '  letter-spacing:.12em!important;',
-      '}',
-      P + '.btn.ghost, ' + P + 'a.btn.ghost{',
-      '  background:rgba(246,234,210,.06)!important;',
+      /* ---- 🔴 EL BOTÓN: LA COLECCIÓN NO LO CLAVA -------------------------
+         La primera versión pintaba `.btn` de oro con `!important`. NO GANABA,
+         y además estaba mal de raíz. Medido el 23/9: los botones de Victoria
+         salían `cristal` —pastilla blanca— porque el MATERIAL del botón lo
+         elige Jazmín desde el panel (`fx.boton.estilo`, once estilos en
+         `efectos/botones.js`) y cada estilo declara su `color` y su
+         `background` con `!important`. Es la misma lección ya escrita en
+         Cantera: «LA COLECCIÓN NO CLAVA LA TINTA DEL BOTÓN».
+         → El material se elige DESDE EL PANEL: para Bella va `oro` (Oro
+           cepillado), que lee `var(--oro)` y ahí toma el oro de esta paleta.
+         → La colección sólo PROPONE, sin `!important`, y el relleno sigue a
+           `currentColor` para no pelearse con el material elegido. */
+      P + '.btn:not(.gh):not(.ghost){ letter-spacing:.12em; -webkit-text-fill-color:currentColor; }',
+      P + '.btn.gh, ' + P + '.btn.ghost, ' + P + 'a.btn.ghost{',
+      '  background-color:transparent!important; background-image:none!important;',
       '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
-      '  border:1px solid ' + TINTA3 + '!important; box-shadow:none!important;',
+      '  border:1px solid rgba(169,138,95,.55)!important; box-shadow:none!important;',
+      '}',
+      /* la flecha del acordeón no tiene color propio: hereda el del botón */
+      P + '.btn .chev, ' + P + '.chev{ color:inherit!important; opacity:.85!important; }',
+
+      /* ---- 🔴 EL BOTÓN DEL FILTRO NO ESTÁ EN `botones.js` ------------------
+         Medido: `#filtro-abrir` nace rgb(244,231,206) con letra rgb(96,96,96)
+         y NO lo alcanza `:is(.btn,#btn-ingresar,.wsp,.tv-btn,.inv-prev-btn)`,
+         que es el conjunto que pinta el material. En una colección clara no
+         canta; en ésta es una pastilla crema en medio de la madera.
+         (Anotado para el motor: ese botón debería entrar en el conjunto.) */
+      P + '#filtro-abrir{',
+      '  background:linear-gradient(180deg,' + ORO + ' 0%,' + ORO2 + ' 100%)!important;',
+      '  color:#2E1F14!important; -webkit-text-fill-color:#2E1F14!important;',
+      '  border:0!important;',
+      '  box-shadow:inset 0 1px 0 rgba(255,240,205,.55), 0 4px 12px rgba(0,0,0,.38)!important;',
       '}',
 
       /* ---- tarjetas y cajas: papel oscuro, no blanco ----
@@ -210,6 +257,69 @@
       '  color:' + TINTA2 + '!important;',
       '}',
       P + '.card h3, ' + P + '.ev-card h3{ color:' + TINTA + '!important; font-family:"Cinzel",serif!important; }',
+
+      /* ---- 🔴 LAS TRES TARJETAS QUE SEGUÍAN CLARAS ------------------------
+         Medido el 23/9 barriendo la página entera por superficies claras
+         (área > 7.000 px², luminancia > 150). Quedaban once, y tres eran
+         de la invitación —las otras son el sobre y el propio QR—:
+            section.pase           430x303  rgb(244,231,206)
+            .evento  (Misa)        374x359  rgb(250,247,241)
+            .evento  (Recepción)   374x339  rgb(250,247,241)
+         Mi regla de tarjetas apuntaba a `.card/.caja/.ev-card/.hotel/.tl`
+         y NINGUNA de esas clases existe acá: las tarjetas de lugar son
+         `.evento` y el pase es `section.pase`, que NO es `.sec` y por eso
+         tampoco lo destapaba la regla del fondo.
+         ⚠️ `#qr` queda BLANCO A PROPÓSITO: un QR sin zona blanca no escanea. */
+      P + ':is(.evento, .hotel, .pasecard, .card, .caja, .ev-card, .tl){',
+      '  background-color:' + PAPEL + '!important;',
+      '  background-image:none!important;',
+      '  border:1px solid rgba(169,138,95,.40)!important;',
+      '  box-shadow:0 8px 22px rgba(0,0,0,.34)!important;',
+      '}',
+      P + ':is(.evento, .hotel, .pasecard) :is(h3, p, .sub, .addr, .t, .v, .k){',
+      '  color:' + TINTA2 + '!important;',
+      '}',
+      P + ':is(.evento, .hotel) h3, ' + P + '.pasecard .v{',
+      '  color:' + TINTA + '!important; font-family:"Cinzel",serif!important;',
+      '}',
+      P + '.frame .pase, ' + P + 'section.pase{',
+      '  background-color:transparent!important;',
+      '  background-image:none!important;',
+      '  position:relative!important;',
+      '}',
+      P + '.pase > *{ position:relative!important; z-index:1!important; }',
+      P + '.pasecard .estado{ color:' + ORO + '!important; border-color:' + TINTA3 + '!important; }',
+
+      /* ---- 🔴 LA RASPADITA VA SIN RECUADRO --------------------------------
+         Regla vieja de Maki, y estaba incumplida: `#scratchcard` traía su
+         propia tarjeta blanca —medida rgb(250,247,241)— apoyada sobre el
+         papel. En una colección oscura es el parche más visible de todos.
+         ⚠️ EL RECUADRO VIVE EN `.scratchcard::after`: `border:0` NO lo apaga.
+            (Lección ya escrita en Cantera; acá se repitió igual.) */
+      P + '.scratchcard, ' + P + '#scratchcard{',
+      '  background-color:transparent!important;',
+      '  background-image:none!important;',
+      '  border:0!important;',
+      '  box-shadow:none!important;',
+      '}',
+      P + '.scratchcard::after, ' + P + '#scratchcard::after{ display:none!important; }',
+
+      /* ---- 🔴 LAS PERSONAS, EN UNA SOLA FILA ------------------------------
+         Regla de la skill de armado, y estaba incumplida: medido, `.padres`
+         nace `display:grid` con `grid-template-columns:168px 168px` — DOS
+         columnas fijas—, así que los tres padrinos caían 2 + 1.
+         Se hace como en Cantera: tres columnas iguales y el avatar más chico
+         para que entren en 430 px. */
+      P + '.padres{',
+      '  grid-template-columns:repeat(3,1fr)!important;',
+      '  gap:10px 8px!important; background-color:transparent!important;',
+      '}',
+      P + '.padres[data-col-n="1"]{ grid-template-columns:minmax(0,220px)!important; justify-content:center!important; }',
+      P + '.padres[data-col-n="2"]{ grid-template-columns:repeat(2,1fr)!important; }',
+      P + '.padres[data-col-n="4"]{ grid-template-columns:repeat(4,1fr)!important; gap:8px 6px!important; }',
+      P + '.padres .av{ width:100px!important; height:100px!important; border-radius:50%!important; border:1px solid ' + TINTA3 + '!important; }',
+      P + '.padres .nm{ font-size:17px!important; color:' + TINTA2 + '!important; font-family:"Cormorant Garamond",serif!important; }',
+      '@media (max-width:360px){' + P + '.padres{ gap:8px 5px!important; }' + P + '.padres .av{ width:86px!important; height:86px!important; }}',
 
       /* ---- campos de formulario ---- */
       P + 'input, ' + P + 'select, ' + P + 'textarea{',
@@ -256,6 +366,23 @@
     return s;
   }
 
+  /* El motor no numera `.padres`; Perlas inventó `data-col-n` y acá se usa
+     igual, así la fila sirve para 1, 2, 3 o 4 personas y no sólo para tres. */
+  function marcarPadres() {
+    try {
+      var p = document.querySelector('.padres');
+      if (!p) return;
+      var n = String(p.children.length);
+      if (p.getAttribute('data-col-n') !== n) p.setAttribute('data-col-n', n);
+    } catch (e) {}
+  }
+  function desmarcarPadres() {
+    try {
+      var p = document.querySelector('.padres');
+      if (p) p.removeAttribute('data-col-n');
+    } catch (e) {}
+  }
+
   function poner() {
     fuentes();
     hoja().textContent = armarCSS();
@@ -265,10 +392,22 @@
       tinta: TINTA, tinta2: TINTA2, tinta3: TINTA3,
       acento: ORO, acentoHondo: ORO2, papel: PAPEL, oscura: true
     };
+    marcarPadres();
+    /* `.padres` se arma después del primer pintado: se vuelve a mirar. */
+    try {
+      setTimeout(marcarPadres, 400);
+      setTimeout(marcarPadres, 1600);
+      if (!window.__bellaObs && window.MutationObserver) {
+        window.__bellaObs = new MutationObserver(function () { if (activa()) marcarPadres(); });
+        window.__bellaObs.observe(document.body || document.documentElement,
+                                  { childList: true, subtree: true });
+      }
+    } catch (e) {}
   }
 
   function sacar() {
     var s = document.getElementById(ID_CSS); if (s) s.remove();
+    desmarcarPadres();
     if (document.documentElement.getAttribute('data-col') === ID) {
       document.documentElement.removeAttribute('data-col');
       document.documentElement.removeAttribute('data-coleccion');
