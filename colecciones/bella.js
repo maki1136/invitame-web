@@ -328,8 +328,28 @@
       '}',
       P + 'input::placeholder, ' + P + 'textarea::placeholder{ color:rgba(234,220,189,.55)!important; }',
 
-      /* ---- la línea del itinerario ---- */
-      P + '.tl::before, ' + P + '.it::before{ background:' + TINTA3 + '!important; opacity:.6!important; }',
+      /* ---- 🔴 LA MARCA DEL ITINERARIO: EL CAPULLO, NO EL CIRCULITO --------
+         Maki, de siempre: «no me gustan los circulitos». Es la regla 5 del
+         chequeo, y Bella la estaba FALLANDO: medido el 23/9/2026,
+         «no hay símbolo: la marca es el circulito de fábrica».
+         ⚠️ SON DOS COSAS Y HACEN FALTA LAS DOS:
+            · la foto o el dibujo en `.it::before` (la regla pide un `url(`)
+            · `data-marca-propia` en el <html> CON EL NOMBRE DE LA COLECCIÓN.
+              Vacío no sirve: la regla lo lee con `|| ''` y una cadena vacía
+              cae a la rama del circulito. Cantera lo puso vacío el 21/9 y la
+              regla falló con el medallón perfectamente puesto.
+         ⚠️ Y va el CAPULLO VECTORIAL, no una foto: acá la marca se repite en
+            serie a lo largo de la vía, y una foto recortada repetida se lee
+            como calcomanías pegadas (la lección de la rosa de Bohemia). */
+      P + '.it::before{',
+      '  background-image:url("' + rosaSVG(ORO) + '")!important;',
+      '  background-color:transparent!important;',
+      '  background-size:contain!important; background-repeat:no-repeat!important;',
+      '  background-position:center!important;',
+      '  border:0!important; box-shadow:none!important; opacity:1!important;',
+      '}',
+      /* la vía, en filete: TINTA3, que nunca se usa para texto */
+      P + '.tl::before{ background:' + TINTA3 + '!important; opacity:.6!important; }',
       P + '.it .h{ color:' + ORO + '!important; font-family:"Cinzel",serif!important; }',
       P + '.it .t{ color:' + TINTA2 + '!important; }',
 
@@ -400,6 +420,7 @@
        Se deja la marca puesta igual, para el día que el chequeo la lea.
        (Anotado para Maki: es un cambio de una línea en `esOscura()`.) */
     document.documentElement.setAttribute('data-col-oscura', '1');
+    document.documentElement.setAttribute('data-marca-propia', ID);
     marcarPadres();
     /* ⚠️ ACÁ HABÍA UN MutationObserver, Y ESTABA MAL. Cenicienta lo tiene
        escrito con todas las letras: «NADA DE MutationObserver: la invitación
@@ -417,6 +438,9 @@
       document.documentElement.removeAttribute('data-col');
       document.documentElement.removeAttribute('data-coleccion');
       document.documentElement.removeAttribute('data-col-oscura');
+      if (document.documentElement.getAttribute('data-marca-propia') === ID) {
+        document.documentElement.removeAttribute('data-marca-propia');
+      }
     }
   }
 
