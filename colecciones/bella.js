@@ -678,8 +678,13 @@
   function sacar() {
     var s = document.getElementById(ID_CSS); if (s) s.remove();
     desmarcarPadres();
-    devolverPase();
     if (document.documentElement.getAttribute('data-col') === ID) {
+      /* ⚠️⚠️ 23/9/2026: devolverPase() estaba AFUERA de este if y corría cada 1,2 s en
+         TODAS las invitaciones que no son Bella: le devolvía el pase a la portada
+         mientras la colección propia (Perlas, Cantera, Óleo) lo volvía a bajar
+         abajo de la raspadita. La raspadita saltaba 300 px cada segundo (medido con
+         layout-shift en ximena-y-andres). Sólo devuelve el pase si Bella estaba puesta. */
+      devolverPase();
       document.documentElement.removeAttribute('data-col');
       document.documentElement.removeAttribute('data-coleccion');
       document.documentElement.removeAttribute('data-col-oscura');
