@@ -39,13 +39,25 @@
 
       Calculado el alfa del claro para que TINTA2 pase el piso de 5:
              0,35 → 6,43      0,45 → 6,90      0,55 → 7,39
-         Se usa **0,45**, que deja el compuesto peor en (189,204,194):
-             TINTA  #0E2A30 → 9,05    ← títulos, nombres, datos
-             TINTA2 #1E3E44 → 6,90    ← bajadas y cuerpo
-             CORAL2 #8C3A2B → 4,57    ← SÓLO títulos grandes (piso 4)
-             CORAL  #B8563E → 2,84    ← SÓLO adorno, NUNCA texto
-             TINTA3 #8FA9A4 → 1,08    ← SÓLO filetes y bordes, NUNCA texto
-      Y con 0,45 el collage sigue entrando por los costados, que es de lo que se
+         Se usa **0,58**, que deja el compuesto peor en (198,211,202):
+             TINTA  #0E2A30 → 9,88    ← títulos, nombres, datos
+             TINTA2 #1E3E44 → 7,53    ← bajadas y cuerpo
+             CORAL2 #8C3A2B → 4,99    ← NI ASÍ. Ver abajo: el coral NO escribe
+             CORAL  #B8563E → 3,10    ← SÓLO adorno, NUNCA texto
+             TINTA3 #8FA9A4 → 1,18    ← SÓLO filetes y bordes, NUNCA texto
+
+      ⚠️⚠️ POR QUÉ 0,58 Y NO 0,45, Y POR QUÉ ESO NO ARREGLA NADA SOLO.
+         Se renderizó la sección de la carta a 0,45 / 0,58 / 0,70 una al lado de
+         la otra y **las tres se ven casi iguales**: el claro es radial y el
+         collage entra por los costados en los tres casos, así que la regla de
+         Maki («me sacaste mucho del fondo, y el fondo estaba buenísimo») no se
+         rompe en ninguno. Se toma el del medio.
+         ⭐ Y lo que eso deja dicho es lo importante: **el alfa NO era la causa
+            de que no se leyera**. Las tres fallas grandes del barrido por placa
+            —«Mis XV» 1,73 · «Con el corazón lleno» 2,35 · «Antes del baile»
+            2,91— eran CORAL2 USADO COMO TINTA. Ni a 0,70 llegan al piso 5.
+            La cura no es lavar más el fondo: es no escribir en coral.
+      Y con 0,58 el collage sigue entrando por los costados, que es de lo que se
       trata: el claro es RADIAL y llega a 0 en los bordes.
 
    ⚠️⚠️ `--verde` SE MAPEA. Es el color de llamada de la plataforma y se lee en
@@ -76,7 +88,7 @@
   var CORAL2 = '#8C3A2B';   /* el coral hondo: títulos grandes y sellos */
   var ESPUMA = '#CFE0DA';   /* el verde espuma, para fondos suaves */
 
-  var CLARO_A = 0.45;       /* MEDIDO. Ver la cabecera. No bajarlo. */
+  var CLARO_A = 0.58;       /* MEDIDO. Ver la cabecera. No bajarlo. */
 
   /* ⚠️⚠️ LA TABLA QUE LA COLECCIÓN RECLAMA COMO PROPIA.
      Es el contrato de `efectos/paleta.js` (el mismo de Marfil desde el 17/9 y
@@ -245,10 +257,19 @@
       '  letter-spacing:.075em!important;',
       '  color:' + TINTA + '!important;',
       '}',
+      /* ⚠️⚠️ EL SOBRETÍTULO NO VA EN CORAL. Primera versión: `.kick` en CORAL2.
+         El barrido por placa lo cazó: «Con el corazón lleno» daba **2,35** y
+         «Mis XV» en la portada **1,73**. Y es coherente con la cabecera: CORAL2
+         mide 4,57 contra el compuesto peor, o sea que sirve para un título
+         GRANDE (piso 4) y para nada más — el `.kick` de 31 px cae justo del
+         otro lado, y el `#pv-kick` de 13 px pide piso 5.
+         ⭐ En esta colección SÓLO TINTA Y TINTA2 SON TINTA. El coral es el aro,
+            el adorno y el lacre; TINTA3 es el filete. Ninguno de los dos
+            escribe. */
       P + '.frame .kick, ' + P + '.frame .sec .kick{',
       '  font-family:"Parisienne",cursive!important;',
       '  font-size:31px!important;',
-      '  color:' + CORAL2 + '!important;',
+      '  color:' + TINTA2 + '!important;',
       '  letter-spacing:.01em!important;',
       '}',
       P + '.sec, ' + P + '.sec div, ' + P + '.sec span{ color:' + TINTA2 + '; }',
@@ -339,10 +360,15 @@
       '  position:relative!important;',
       '}',
       P + '.pase > *{ position:relative!important; z-index:1!important; }',
-      P + '.pasecard .k{ color:' + TINTA3 + '!important; letter-spacing:.14em!important; }',
+      /* ⚠️ Primera versión: `.k` en TINTA3. La regla `familia-de-color` la cazó
+         —«Nombre», «Personas», «Mesa» y «Estado del pase» salían en
+         rgb(80,104,100)— porque `reglas-duras.js` los oscureció al rescate:
+         TINTA3 sobre nácar mide 1,08. Está escrito arriba y lo rompí igual:
+         TINTA3 es FILETE, nunca texto. */
+      P + '.pasecard .k{ color:' + TINTA2 + '!important; letter-spacing:.14em!important; }',
       P + '.pase > .t{',
       '  font-family:"Parisienne",cursive!important; font-size:30px!important;',
-      '  color:' + CORAL2 + '!important;',
+      '  color:' + TINTA2 + '!important;',
       '}',
       P + '.pasecard .estado{',
       '  background-color:rgba(184,86,62,.14)!important;',
@@ -474,8 +500,16 @@
       '  background:linear-gradient(180deg, rgba(143,169,164,0) 0%,',
       '    rgba(143,169,164,.9) 9%, rgba(143,169,164,.9) 91%, rgba(143,169,164,0) 100%)!important;',
       '}',
-      P + '.it .h{ color:' + CORAL2 + '!important; font-family:"Italiana",serif!important; }',
+      P + '.it .h{ color:' + TINTA + '!important; font-family:"Italiana",serif!important; }',
       P + '.it .t{ color:' + TINTA2 + '!important; }',
+
+      /* ---- 🔴 LOS TÍTULOS DE LA GALERÍA LOS PINTA SU PROPIO MÓDULO --------
+         Medido acá y ya visto en Bella: `#gal-kick` y `#gal-h2` no siguen al
+         `.kick`/`h2` de la colección — `efectos/galeria.js` les escribe su
+         propio color. El barrido por placa cazó «Antes del baile» en
+         rgb(79,68,45), que no es de ninguna paleta de ésta. Se los pinta. */
+      P + '#gal-kick, ' + P + '.gal-kick{ color:' + TINTA2 + '!important; font-family:"Parisienne",cursive!important; }',
+      P + '#gal-h2, ' + P + '.gal-h2{ color:' + TINTA + '!important; font-family:"Italiana",serif!important; }',
 
       /* ---- 🔴 LA CARTA: PAPEL CLARO, TINTA DE LA COLECCIÓN ----------------
          Lección de Bella, 23/9: la hoja de la carta es papel CASI BLANCO y si
@@ -510,7 +544,7 @@
       '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
       '}',
       P + '#pv-names span{ padding:0 .10em .17em!important; }',
-      P + '#pv-kick{ font-size:13px!important; color:' + CORAL2 + '!important; letter-spacing:.26em!important; }',
+      P + '#pv-kick{ font-size:13px!important; color:' + TINTA2 + '!important; letter-spacing:.26em!important; }',
       P + '.portada h1, ' + P + '#nombre{ font-family:"Parisienne",cursive!important; }',
       P + '.portada .num{ color:' + TINTA + '!important; font-variant-numeric:lining-nums!important; }',
       P + '.portada .u{ color:' + TINTA2 + '!important; }',
