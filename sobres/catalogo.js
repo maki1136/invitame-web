@@ -883,6 +883,29 @@ window.SOBRES_INVITAME = {
   },
 
 
+  /* ---- ★ EL SOBRE DE ÓLEO ROSÉ  (23/9/2026) -----------------------------
+     Colección 'oleo', la primera de la línea ARTE. Sobre cuadrado de algodón
+     marfil con la solapa PINTADA al óleo con espátula (flor abstracta en rosa
+     empolvado y nude, con hoja de oro) y lacre rosa. Flow, Omni 1.1 Flash,
+     9:16, 8 s, cuadro inicial = el poster.
+     MEDIDO cuadro por cuadro (hoja de contacto cada 0,5 s):
+       · 0 – 1,2   quieto            → se recorta con so_1.2 (Cloudinary)
+       · 1,5 – 3,0 se suelta el lacre y se abre la solapa
+       · 4,5 – 7,3 la tarjeta sale y la cámara empuja hasta llenar el cuadro
+       · 7,3 – 7,9 papel marfil liso  → se corta con eo_7.9
+     Recortado dura 6,71 s. El papel llena el cuadro a los 6,0 (esquina de
+     211 → 227 de luz): ahí arranca el destello, en el color MEDIDO del
+     último cuadro (#E3E2DB), y dura 0,6 → termina con el video. */
+  'oleo-rose': {
+    nombre:     "Óleo Rosé · la solapa pintada se abre y sale la tarjeta (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_7.9,q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto,f_jpg/invitame/oleo/oleo-xa-sobre.jpg",
+    color:      "#E6DDD2",
+    luz:        6.0,
+    luzColor:   "#E3E2DB",
+    luzFundido: 0.6
+  },
+
   /* ---- ★ EL SOBRE DE LA BELLA Y LA BESTIA  (23/9/2026) ------------------
      Va con la colección `bella`: papel de algodón OXBLOOD con relieve ciego de
      rosas, y lacre de cera borgoña con UNA ROSA adentro — la misma marca que
