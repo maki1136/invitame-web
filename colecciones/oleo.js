@@ -81,6 +81,26 @@
       '</svg>');
   }
 
+  /* ⭐ 23/9, Maki: «¿qué es ese coso rosa abajo de 'estamos para ayudarte'? No me
+     gusta, cambialo». Era la pincelada rosa de arriba de cada título. Va un FILETE
+     de hoja de oro, fino y afinado en las puntas, con un punto al medio. */
+  function filete(color) {
+    return svgURL(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 10">' +
+      '<path d="M8 5.2C30 4.4 48 4.3 56 5c-8 .6-26 .7-48 .2z" fill="' + color + '" opacity=".85"/>' +
+      '<path d="M112 5.2C90 4.4 72 4.3 64 5c8 .6 26 .7 48 .2z" fill="' + color + '" opacity=".85"/>' +
+      '<circle cx="60" cy="5" r="1.7" fill="' + color + '"/>' +
+      '</svg>');
+  }
+  /* y la marca de cada hora deja de ser una gota rosa: un aro de oro */
+  function aro(color) {
+    return svgURL(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
+      '<circle cx="12" cy="12" r="7" fill="#FBF6F2" stroke="' + color + '" stroke-width="1.6"/>' +
+      '<circle cx="12" cy="12" r="2.4" fill="' + color + '"/>' +
+      '</svg>');
+  }
+
   /* El toque de pintura de cada hora: una gota de óleo con brillo. */
   function toque(color, brillo) {
     return svgURL(
@@ -122,9 +142,9 @@
 
   /* ============================================================== la hoja CSS */
   function armarCSS() {
-    var PZ  = pincelada(ROSA, '#F3DCD6');   /* sobre papel */
-    var PZC = pincelada(NUDE, '#FFFFFF');   /* sobre banda */
-    var TQ  = toque(ROSA, '#FBEAE6');
+    var PZ  = filete(ORO);                 /* sobre papel */
+    var PZC = filete('#EAD9B8');           /* sobre banda */
+    var TQ  = aro(ORO);
 
     /* la pintura, en capa propia con opacidad (bandas y pie) */
     var CAPA_PINTURA = [
@@ -161,11 +181,11 @@
     '  font-size:23px!important; line-height:1.22!important;',
     '  font-weight:400!important; letter-spacing:.01em!important;',
     '  color:' + TINTA + '!important;',
-    '  padding-top:30px!important; margin:0 0 12px 0!important;',
+    '  padding-top:20px!important; margin:0 0 12px 0!important;',
     '  background-image:' + PZ + '!important;',
     '  background-repeat:no-repeat!important;',
     '  background-position:center top!important;',
-    '  background-size:92px auto!important;',
+    '  background-size:84px auto!important;',
     '}',
     P + '.frase{ font-size:19px!important; line-height:1.6!important; font-style:italic!important; font-weight:400!important; color:' + TINTA + '!important; }',
     P + '.sec p:not(.frase){ font-size:15.5px!important; line-height:1.7!important; font-weight:300!important; color:' + TINTA2 + '!important; }',
@@ -392,7 +412,11 @@
     /* ─────────────── 15 · EL FONDO VA ADELANTE (como la boho): un claro suave
        detrás de cada bloque de texto, que se desvanece hacia los bordes, y
        un halo de papel (sombra, no recuadro) en el texto suelto. */
-    P + '.frame > section.sec:not(.verde):not(#contacto-sec){ background-image:radial-gradient(ellipse 80% 60% at 50% 42%, rgba(247,239,234,.70) 0%, rgba(247,239,234,.42) 46%, rgba(247,239,234,0) 80%)!important; }',
+    /* ⭐ 23/9, Maki: «que el fondo se vea más, está muy tapado; en la fecha y el raspa
+       para revelar dejá el original». El claro baja de .70 a .40 y se achica, y la
+       raspadita y el pase van SIN nada encima: se ve la pintura entera. */
+    P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 70% 50% at 50% 42%, rgba(247,239,234,.40) 0%, rgba(247,239,234,.20) 46%, rgba(247,239,234,0) 78%)!important; }',
+    P + '.frame > section.scratch-sec, ' + P + '.frame > .pase{ background-color:transparent!important; }',
     P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){',
     '  text-shadow:0 0 7px ' + HALO + '.92), 0 0 16px ' + HALO + '.75)!important;',
     '}',
