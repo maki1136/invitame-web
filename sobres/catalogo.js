@@ -926,6 +926,20 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.9
   },
 
+  /* Óleo Nocturno (paulina-y-gerardo), 23/9/2026 · API de Higgsfield, kling v3 PRO.
+     El lacre va pegado a la PUNTA de la solapa y se va con ella (1,5 a 2,4 s): la
+     versión std lo dejaba abajo, en el centro del sobre, y se descartó (luz-a).
+     La luz crece de 2,5 a 5 s. Invitación oscura: fundido corto. */
+  'oleo-nocturno-luz': {
+    nombre:     "Óleo Nocturno · se abre la solapa y sale luz de adentro (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo-nocturno/oleo-pg-sobre-luz-b.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-nocturno/oleo-pg-sobre-luz-b.jpg",
+    color:      "#3D3E43",
+    luz:        4.4,
+    luzColor:   "#F6EEDD",
+    luzFundido: 0.5
+  },
+
   'oleo-rose-luz': {
     nombre:     "Óleo Rosé · se abre la solapa y sale luz de adentro (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre-luz-a.mp4",
