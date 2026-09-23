@@ -721,7 +721,49 @@
        ⚠️ NO entra adentro de las tarjetas: ahí el papel ya es macizo. */
     P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){',
     '  text-shadow:0 0 7px ' + HALO + '.92), 0 0 16px ' + HALO + '.75)!important;',
-    '}'
+    '}',
+
+    /* ────── 5 · LO QUE MAKI PIDIÓ MIRANDO PERLAS — 23/9/2026
+       Va AL FINAL del arreglo a propósito: los bloques de contacto y del
+       arco (3) tienen la misma especificidad y están más arriba; a igual
+       especificidad gana el que viene después.
+
+       5a · MEDIO CÍRCULO ARRIBA en todas las bandas (.sec.verde): Dónde y
+       cuándo, Dónde quedarse, Personas, Trivia, Hashtag y «Te esperamos».
+       Medido en Perlas: border-radius 50% 50% 0 0 / 90px 90px 0 0 y 104px
+       de aire arriba. Las esquinas quedan transparentes y se ve el fondo.
+       La piedra (::before) sigue el arco; la cenefa de olivo (::after)
+       pierde la tira de ARRIBA —una línea recta cortada por la curva—
+       y conserva la de abajo. */
+    P + '.sec.verde{ border-radius:50% 50% 0 0 / 90px 90px 0 0!important; padding-top:96px!important; }',
+    P + '.sec.verde::before{ border-radius:inherit!important; }',
+    P + '.sec.verde::after{ border-radius:inherit!important; background-size:0 0, 80px 10px!important; }',
+
+    /* 5b · DÓNDE Y CUÁNDO: las tres tarjetas como en Perlas, angostas y
+       estiradas, con el mismo arco. Perlas: 318 px sobre un marco de 580
+       (55%), arco 50%/34px, 38 px entre una y otra. Cantera tenía 524 px,
+       arco 150px/40px y 16 px entre tarjetas. */
+    P + '.evento{ width:66%!important; max-width:340px!important; margin:0 auto 34px!important; border-radius:50% 50% 12px 12px / 36px 36px 12px 12px!important; }',
+    P + '.evento .ph{ height:200px!important; }',
+
+    /* 5c · EL ITINERARIO SE IBA AL COSTADO. Medido: la marca de cada hora
+       caía 6 px AFUERA del panel (.it::before en left:-29px con sólo 22 px
+       de relleno). Ahora el relleno izquierdo es 56 px y la vía punteada se
+       corre a 34 px: marca y vía quedan centradas, adentro del panel. */
+    P + '.tl{ padding:26px 24px 26px 56px!important; }',
+    P + '.tl::before, ' + P + '.tl > .tl-prog{ left:34px!important; }',
+
+    /* 5d · ¿ALGUNA DUDA?, CON LA ONDA DE PERLAS: papel claro en vez de foto
+       con velo oscuro, la pieza dibujada al medio (el corazón de olivo en
+       relieve, el mismo que aparece al abrir el sobre) y los WhatsApp como
+       enlaces con filete, no como píldoras. El corazón va en multiply para
+       que su papel se funda con el de la sección. */
+    P + '#contacto-sec{ background-image:none!important; background-color:rgba(239,227,208,.92)!important; }',
+    P + '#contacto-sec::after{ display:none!important; }',
+    P + '#contacto-sec h2{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
+    P + '#contacto-sec .kick, ' + P + '#contacto-sec p{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
+    P + '#contacto-sec p::before{ content:""; display:block; width:210px; height:210px; margin:4px auto 12px; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_440/invitame/cantera/cantera-corazon-relieve") center/contain no-repeat; mix-blend-mode:multiply; }',
+    P + '#contacto-sec .wsp{ background:none!important; box-shadow:none!important; border-radius:0!important; padding:8px 2px 5px!important; border-bottom:1px solid rgba(132,96,68,.5)!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }'
 
     ].join('\n');
   }
