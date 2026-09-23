@@ -199,7 +199,14 @@
            medía «fondo claro» y oscurecía los textos crema → ilegibles sobre la noche. */
         P + 'body{ background-color:#141B2E!important; }',
         /* el título de los colores y el «Ver más» nacen en el verde oscuro del motor (#3A453D) */
-        P + ':is(.col-dc-tit, .iv-plie-btn){ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }'
+        P + ':is(.col-dc-tit, .iv-plie-btn){ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }',
+        P + '.col-dc-tit{ color:#D6CCBB!important; -webkit-text-fill-color:#D6CCBB!important; }',
+        /* el pase: el motor le pone un radial blanco al 95% encima del color → salía crema (regla: el pase nunca blanco) */
+        P + '.pasecard{ background-image:repeating-linear-gradient(0deg, rgba(212,178,110,.05) 0 1px, transparent 1px 3px), radial-gradient(130% 90% at 50% 0%, #26305A, #151C33)!important; border-color:rgba(212,178,110,.45)!important; box-shadow:0 12px 30px rgba(0,0,0,.5)!important; }',
+        P + '.pasecard :is(div,span,p,b,strong,small,label):not(.estado){ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
+        P + '.pasecard::before{ border-color:rgba(212,178,110,.35)!important; }',
+        /* el sobre de la carta: tinte multiply al 88% sobre la foto marfil → quedaba lila grisáceo */
+        P + ':is(.cf-back-tint, .cf-front-tint){ opacity:1!important; }'
       ].join('\n')
     }
   };
