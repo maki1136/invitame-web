@@ -116,6 +116,13 @@
              'verde botella sobre madera, a la luz de tres velas que titilan en ' +
              'el fondo. Titulos en Cinzel, el nombre en Pinyon Script y un capullo ' +
              'de rosa como marca. Trae su propia paleta.' },
+    { id: 'sirena', nombre: 'La Sirenita',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La tercera de la linea de princesas, y la unica en NACAR, CORAL y ' +
+             'VERDE MAR: el fondo del mar con la red de luz del agua EN VIDEO, ' +
+             'papel nacar y tinta verde abisal. Titulos en Italiana, el nombre en ' +
+             'Parisienne y una VIEIRA (la valva de la concha) como marca del ' +
+             'itinerario y adorno de los titulos. Trae su propia paleta.' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
