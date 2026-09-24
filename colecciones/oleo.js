@@ -292,7 +292,7 @@
       rgb: { '74,46,44':'46,43,40', '201,142,138':'194,165,106', '247,239,234':'247,246,243', '40,20,18':'34,30,24', '60,34,32':'34,30,24', '134,96,58':'107,83,39', '176,138,78':'184,150,79', '217,195,160':'217,199,154', '240,220,211':'230,227,222', '251,246,242':'252,251,249', '255,246,236':'250,249,246', '120,70,60':'34,30,24', '107,71,68':'85,80,74', '251,244,239':'250,249,246' },
       url: {
         'invitame/oleo/oleo-rose-base.webp':'invitame/marmol/ma-base.webp',
-        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/ma-medallon.webp'
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/ma-medallon2.webp'
       },
       css: [
         /* 24/9, Maki: «el nos casamos blanco sobre blanco» y «que esté más centrado, es fondo blanco» */
