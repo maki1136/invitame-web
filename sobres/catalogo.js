@@ -967,6 +967,17 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* Acuarela (elena-y-julian) · sobre blanco con UN lacre de oro que se va con la solapa (Flow, toma 2 de 2; la 1 dejaba un lacre fantasma en la punta). 24/9/2026. */
+  'oleo-acuarela-luz': {
+    nombre:     "Botánica Eucalipto en acuarela · se abre la solapa y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/acuarela/ac-sobre-v2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/acuarela/ac-sobre-v2.jpg",
+    color:      "#DCE5DA",
+    luz:        3.4,
+    luzColor:   "#FDFCF8",
+    luzFundido: 0.8
+  },
+
   /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
   'oleo-espatulado-luz': {
     nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
