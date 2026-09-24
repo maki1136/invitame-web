@@ -411,10 +411,37 @@
       '  box-shadow:0 2px 9px rgba(14,42,48,.22), 0 0 0 1px rgba(143,169,164,.55)!important;',
       '  pointer-events:none!important; z-index:2!important;',
       '}',
-      P + ':is(.evento, .hotel, .pasecard) :is(h3, p, .sub, .addr, .t, .v, .k){',
+      /* ⚠️⚠️ EL NOMBRE DEL HOTEL ES UN `h4`, NO UN `h3`. VISTO, NO MEDIDO.
+            24/9, y es EXACTAMENTE el error que este archivo ya tenía escrito
+            dos veces —«un selector que no existe no da error, da no pasó
+            nada»— y que igual volví a cometer:
+            · `.evento` titula con `h3` (su `.bd` arranca con `<h3>`),
+            · `.hotel` titula con `h4` (sus hijos son `H4` + `A.btn`).
+            Nombré sólo `h3`, así que los TRES nombres de hotel se quedaron con
+            la tinta del molde: **blanco puro 255,255,255 sobre nácar
+            244,237,228 = contraste 1,16**, ilegibles, y en `Forum`, que es la
+            tipografía de OTRA colección.
+            ⚠️ La regla 7 del chequeo lo había cantado y yo lo había anotado
+               como «mirarlo al 100 %». Lo miré: era de verdad, y era mío.
+
+         ⚠️⚠️⚠️ Y AL ARREGLARLO APARECIÓ QUE LA REGLA DE LOS TÍTULOS NUNCA HABÍA
+            GANADO. Las dos reglas competían y la de CUERPO le ganaba a la de
+            TÍTULO, por una clase de diferencia:
+              cuerpo  `:is(.evento,.hotel,.pasecard) :is(h3,p,…)`  → (0,4,1)
+              título  `:is(.evento,.hotel) h3`                     → (0,3,2)
+            `:is()` vale lo que su argumento MÁS específico, así que el `:is()`
+            del descendiente sumaba una CLASE y el `h3` suelto sólo un elemento.
+            Resultado: los títulos de las tarjetas y el `.v` del pase venían en
+            TINTA2 aunque acá dijera TINTA. Se leía bien, así que ninguna regla
+            lo iba a cantar nunca — pero el archivo decía una cosa y la pantalla
+            hacía otra.
+            ⭐ La cura NO es subir `!important` (ya lo tienen los dos): es que
+               cada elemento esté en UNA sola lista. Los títulos salen de la
+               lista de cuerpo. */
+      P + ':is(.evento, .hotel, .pasecard) :is(p, .sub, .addr, .t, .k){',
       '  color:' + TINTA2 + '!important;',
       '}',
-      P + ':is(.evento, .hotel) h3, ' + P + '.pasecard .v{',
+      P + ':is(.evento, .hotel) :is(h3, h4), ' + P + '.pasecard .v{',
       '  color:' + TINTA + '!important; font-family:"Italiana",serif!important;',
       '}',
 
