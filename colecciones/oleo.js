@@ -282,6 +282,8 @@
         P + '.rd-tapa .rd-txt{ display:block!important; color:#FBFAF5!important; -webkit-text-fill-color:#FBFAF5!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
         P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        /* chequeo 24/9: la línea «nombres · fecha» del cierre daba 4.66 sobre la foto → crema clara */
+        P + '.footer .s{ color:#FBFAF5!important; -webkit-text-fill-color:#FBFAF5!important; }',
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
