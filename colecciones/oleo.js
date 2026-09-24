@@ -746,6 +746,9 @@
     P + '.evento .bd::before{ content:""!important; display:block!important; width:60px!important; height:60px!important; margin:-46px auto 6px!important; position:relative!important; z-index:5!important; border-radius:50%!important; background:' + PAPEL2 + ' url("' + MEDALLON + '") center/88% no-repeat!important; box-shadow:0 0 0 3px ' + PAPEL2 + ', 0 0 0 4px rgba(176,138,78,.6), 0 6px 14px rgba(40,20,18,.18)!important; }',
     P + '.hotel{ position:relative!important; }',
     P + '.hotel::after{ content:""!important; position:absolute!important; inset:6px!important; border:1px solid rgba(176,138,78,.45)!important; border-radius:4px!important; pointer-events:none!important; }',
+    /* 24/9, Maki: «en el no podré… es como que titila». El rótulo nacía crema (238,230,214) sobre papel:
+       reglas-duras lo repintaba inline y el repaso lo borraba cada 1,2 s → parpadeo. Se le da su tinta. */
+    P + '.rsvp-caja .et{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
     '@media (prefers-reduced-motion: reduce){ ' + P + '#inv-fondo > *, ' + P + '.portada #pbg, ' + P + '#inv-fondo::after{ animation:none!important; } }'
 
     ].join('\n');
