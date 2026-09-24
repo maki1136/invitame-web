@@ -244,6 +244,9 @@
         'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/eu-medallon.webp'
       },
       css: [
+        /* 24/9, Maki: «los textos no se llegan a leer bien»: el eucalipto tiene mucho detalle → claro más firme y halo */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 80% 60% at 50% 45%, rgba(248,247,240,.84) 0%, rgba(248,247,240,.58) 50%, rgba(248,247,240,0) 84%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(248,247,240,1), 0 0 14px rgba(248,247,240,.95), 0 0 26px rgba(248,247,240,.8)!important; }',
         P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(22,32,28,.42) 0, rgba(22,32,28,.18) 24%, rgba(22,32,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/eucalipto/eu-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(22,32,28,.28)!important; }',
         P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(22,32,28,.42) 0, rgba(22,32,28,.18) 24%, rgba(22,32,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/eucalipto/eu-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(22,32,28,.28)!important; }',
         P + '.rd-tapa .rd-aro{ border-color:#F8F7F0!important; background:rgba(22,32,28,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
@@ -266,6 +269,10 @@
         'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/es-medallon.webp'
       },
       css: [
+        /* 24/9, Maki: «el nos casamos blanco sobre blanco» y «que esté más centrado, es fondo blanco» */
+        P + '.portada{ justify-content:center!important; }',
+        P + '.portada > .c{ background:radial-gradient(closest-side, rgba(250,249,246,.80), rgba(250,249,246,.5) 62%, rgba(250,249,246,0))!important; padding:36px 22px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#3A342E!important; -webkit-text-fill-color:#3A342E!important; text-shadow:0 0 10px rgba(250,249,246,.95)!important; }',
         P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,34,28,.42) 0, rgba(40,34,28,.18) 24%, rgba(40,34,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/espatulado/es-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,34,28,.28)!important; }',
         P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,34,28,.42) 0, rgba(40,34,28,.18) 24%, rgba(40,34,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/espatulado/es-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,34,28,.28)!important; }',
         P + '.rd-tapa .rd-aro{ border-color:#FAF8F4!important; background:rgba(40,34,28,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
@@ -288,6 +295,10 @@
         'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/ma-medallon.webp'
       },
       css: [
+        /* 24/9, Maki: «el nos casamos blanco sobre blanco» y «que esté más centrado, es fondo blanco» */
+        P + '.portada{ justify-content:center!important; }',
+        P + '.portada > .c{ background:radial-gradient(closest-side, rgba(250,249,246,.80), rgba(250,249,246,.5) 62%, rgba(250,249,246,0))!important; padding:36px 22px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#2E2B28!important; -webkit-text-fill-color:#2E2B28!important; text-shadow:0 0 10px rgba(250,249,246,.95)!important; }',
         P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(34,30,24,.42) 0, rgba(34,30,24,.18) 24%, rgba(34,30,24,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/marmol/ma-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(34,30,24,.28)!important; }',
         P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(34,30,24,.42) 0, rgba(34,30,24,.18) 24%, rgba(34,30,24,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/marmol/ma-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(34,30,24,.28)!important; }',
         P + '.rd-tapa .rd-aro{ border-color:#FAF9F6!important; background:rgba(34,30,24,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
@@ -337,7 +348,7 @@
         P + ':is(.col-dc-tit, .iv-plie-btn){ color:#E0C48A!important; -webkit-text-fill-color:#E0C48A!important; }',
         P + '.col-dc-tit{ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
         /* el pase: el motor le pone un radial blanco al 95% encima del color → salía crema (regla: el pase nunca blanco) */
-        P + '.pasecard{ background-image:repeating-linear-gradient(0deg, rgba(212,178,110,.05) 0 1px, transparent 1px 3px), radial-gradient(130% 90% at 50% 0%, #26305A, #151C33)!important; border-color:rgba(212,178,110,.45)!important; box-shadow:0 12px 30px rgba(0,0,0,.5)!important; }',
+        P + '.pasecard{ background-image:radial-gradient(130% 90% at 50% 0%, #26305A, #151C33)!important; border-color:rgba(212,178,110,.45)!important; box-shadow:0 12px 30px rgba(0,0,0,.5)!important; }',
         P + '.pasecard :is(div,span,p,b,strong,small,label):not(.estado){ color:#F3EBDD!important; -webkit-text-fill-color:#F3EBDD!important; }',
         P + '.pasecard::before{ border-color:rgba(212,178,110,.35)!important; }',
         /* el sobre de la carta: tinte multiply al 88% sobre la foto marfil → quedaba lila grisáceo */
@@ -717,6 +728,24 @@
        movimiento lo pone este paseo. Vale para imagen o video: '#inv-fondo > *'. */
     P + '#inv-fondo > *, ' + P + '.portada #pbg{ animation:oleoDeriva 22s ease-in-out infinite!important; transform-origin:50% 50%!important; will-change:scale, translate; }',
     P + '#inv-fondo::after{ content:""!important; position:absolute!important; inset:-10% -40%!important; pointer-events:none!important; z-index:1!important; background:linear-gradient(105deg, rgba(255,246,236,0) 38%, rgba(255,246,236,.30) 50%, rgba(255,246,236,0) 62%)!important; animation:oleoLuz 9s ease-in-out infinite alternate!important; }',
+    /* ─────────────── 17 · 24/9, Maki: «el fondo de cuadriculado blanco es horrible». Lo pinta
+       efectos/vestido-basico.js (trama cruzada 0deg+90deg en .pasecard/.tl/.scratchcard cuando
+       <html> no tiene data-coleccion). El pase va con la PINTURA detrás, velada con el papel. */
+    P + '.pase .pasecard{ background-color:' + PAPEL2 + '!important; background-image:linear-gradient(rgba(251,246,242,.86), rgba(251,246,242,.86)), url("' + PINTURA + '")!important; background-size:cover!important; background-position:center!important; background-repeat:no-repeat!important; }',
+    P + '.tl, ' + P + '.scratchcard{ background-image:none!important; }',
+    P + '.tl{ background-color:' + PAPEL2 + '!important; }',
+    /* 24/9, Maki: «la línea del itinerario te cruza el circulito»: aro del mismo papel del panel */
+    P + '.tl::before{ z-index:0!important; }',
+    P + '.tl > .it::before{ z-index:3!important; background-color:' + PAPEL2 + '!important; box-shadow:0 0 0 7px ' + PAPEL2 + '!important; }',
+    /* ─────────────── 18 · 24/9, Maki: «los recuadros de ceremonia, civil, cóctel están demasiado
+       básicos, demasiado cuadrados». Arco arriba (el cuadro colgado), filete de oro adentro y el
+       medallón pintado montado entre la foto y el título. */
+    P + '.evento{ position:relative!important; border-radius:170px 170px 8px 8px / 120px 120px 8px 8px!important; }',
+    P + '.evento::after{ content:""!important; position:absolute!important; inset:8px!important; border:1px solid rgba(176,138,78,.55)!important; border-radius:162px 162px 4px 4px / 114px 114px 4px 4px!important; pointer-events:none!important; z-index:4!important; }',
+    P + '.evento .bd{ position:relative!important; }',
+    P + '.evento .bd::before{ content:""!important; display:block!important; width:60px!important; height:60px!important; margin:-46px auto 6px!important; position:relative!important; z-index:5!important; border-radius:50%!important; background:' + PAPEL2 + ' url("' + MEDALLON + '") center/88% no-repeat!important; box-shadow:0 0 0 3px ' + PAPEL2 + ', 0 0 0 4px rgba(176,138,78,.6), 0 6px 14px rgba(40,20,18,.18)!important; }',
+    P + '.hotel{ position:relative!important; }',
+    P + '.hotel::after{ content:""!important; position:absolute!important; inset:6px!important; border:1px solid rgba(176,138,78,.45)!important; border-radius:4px!important; pointer-events:none!important; }',
     '@media (prefers-reduced-motion: reduce){ ' + P + '#inv-fondo > *, ' + P + '.portada #pbg, ' + P + '#inv-fondo::after{ animation:none!important; } }'
 
     ].join('\n');
