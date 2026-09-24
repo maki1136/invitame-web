@@ -346,6 +346,71 @@
       P + '.hotel{ padding:38px 18px 18px!important; text-align:center!important; }',
       P + '.hotel .btn{ margin:10px auto 0!important; }',
       P + '.evento .ph{ height:230px!important; }',
+
+      /* ---- 🔴 §32 · LAS TARJETAS DE LUGAR, VESTIDAS DE SIRENA -------------
+         Maki, 24/9: las tarjetas de «Dónde y cuándo» y «Dónde quedarse» tenían
+         la forma de la colección (la cúpula, el filete verde agua, el nácar)
+         pero NINGUNA marca suya: eran la tarjeta del molde pintada de crema.
+         Medido en vivo antes de escribir una línea (regla 0bis.4: contar a
+         cuántos le pega y mirarlos a TODOS):
+           · el grupo `:is(.evento,.hotel,.pasecard,.card,.caja,.ev-card)` son
+             SIETE elementos: 1 `.pasecard`, 3 `.evento`, 3 `.hotel`.
+             → acá se tocan SÓLO `.evento` y `.hotel`. El pase tiene el QR y su
+               propio módulo; `.tl` está en ese grupo en la regla de arriba y su
+               `::before` ES LA VÍA DEL ITINERARIO. Meter `.tl` en una regla de
+               `::before` sería borrar la vía.
+           · `::before` y `::after` de los siete dan `content:none`: están libres.
+           · ningún hijo es `position:absolute` → poner `position:relative` en la
+             tarjeta no le mueve nada a nadie (chequeado, 0 absolutos).
+           · `.evento`: foto `.ph` de 1 a 231, `.bd` desde 231 con padding 18 y el
+             H3 arrancando en y 249 → el medallón va centrado en y 226, o sea de
+             212 a 240: NUEVE px de aire antes del título. `.bd` es text-align
+             center, así que el choque posible era vertical y está medido.
+           · `.hotel`: el H4 arranca en y 39 (padding 38 + filete) → la vieira va
+             de 9 a 31: OCHO px de aire. Y `.hotel` tiene overflow visible, así
+             que no hay nada que recorte.
+         ⚠️ El `background-image:none!important` del grupo de arriba se pisa acá
+            a propósito: misma especificidad, y esta regla va DESPUÉS. */
+      P + '.evento, ' + P + '.hotel{ position:relative!important; }',
+      /* la luz de nácar que baja de la cúpula — la MISMA del panel del
+         itinerario, para que las tres piezas se lean de la misma familia */
+      P + '.hotel{',
+      '  background-image:radial-gradient(130% 82% at 50% 0%,',
+      '    rgba(207,224,218,.55) 0%, rgba(207,224,218,0) 62%)!important;',
+      '  background-size:100% 100%!important; background-repeat:no-repeat!important;',
+      '}',
+      /* en `.evento` la cúpula la tapa la foto, así que la luz arranca donde
+         arranca el texto */
+      P + '.evento .bd{',
+      '  background-image:radial-gradient(120% 70% at 50% 0%,',
+      '    rgba(207,224,218,.50) 0%, rgba(207,224,218,0) 58%)!important;',
+      '  background-size:100% 100%!important; background-repeat:no-repeat!important;',
+      '}',
+      /* la vieira en la cúpula del hotel: chica, en el aire que ya existía */
+      P + '.hotel::after{',
+      '  content:""!important; position:absolute!important;',
+      '  top:9px!important; left:50%!important; margin-left:-11px!important;',
+      '  width:22px!important; height:22px!important;',
+      '  background-image:url("' + vieiraSVG(CORAL) + '")!important;',
+      '  background-size:contain!important; background-repeat:no-repeat!important;',
+      '  background-position:center!important;',
+      '  opacity:.92!important; pointer-events:none!important; z-index:1!important;',
+      '}',
+      /* y en `.evento`, un medallón sobre el filo de la foto: el sello que
+         sujeta la tarjeta. Lleva disco de papel porque va sobre la foto y sin
+         él el coral se pierde contra cualquier imagen. */
+      P + '.evento::after{',
+      '  content:""!important; position:absolute!important;',
+      '  top:226px!important; left:50%!important;',
+      '  margin:-14px 0 0 -14px!important; width:28px!important; height:28px!important;',
+      '  border-radius:50%!important;',
+      '  background-color:' + PAPEL + '!important;',
+      '  background-image:url("' + vieiraSVG(CORAL) + '")!important;',
+      '  background-size:18px 18px!important; background-repeat:no-repeat!important;',
+      '  background-position:center!important;',
+      '  box-shadow:0 2px 9px rgba(14,42,48,.22), 0 0 0 1px rgba(143,169,164,.55)!important;',
+      '  pointer-events:none!important; z-index:2!important;',
+      '}',
       P + ':is(.evento, .hotel, .pasecard) :is(h3, p, .sub, .addr, .t, .v, .k){',
       '  color:' + TINTA2 + '!important;',
       '}',
@@ -525,10 +590,25 @@
       '  background-color:transparent!important;',
       '  background-size:contain!important; background-repeat:no-repeat!important;',
       '  background-position:center!important;',
-      '  border:0!important; box-shadow:none!important; opacity:1!important;',
+      '  border:0!important; box-shadow:none!important;',
+      '  transform-origin:50% 50%!important;',
       '  filter:drop-shadow(0 1px 2px rgba(14,42,48,.28))!important;',
       '  z-index:2!important;',
       '}',
+      /* ⚠️⚠️ LA OPACIDAD NO SE FUERZA: LA MANEJA EL REVELADO DEL MOTOR.
+         Medido el 24/9 en `marisol-mis15`. El motor tiene DOS reglas sobre esta
+         misma marca:
+           `.tl.tl-anim > .it::before      { transform:scale(.2); opacity:0 }`
+           `.tl.tl-anim > .it.on::before   { transform:scale(1);  opacity:1 }`
+         y la clase `.on` se la pone el observador cuando la ficha entra en
+         pantalla. Yo tenía `opacity:1!important` a secas: eso encendía la
+         vieira MIENTRAS seguía en `scale(.2)`, o sea un PUNTITO CORAL de 5 px
+         antes de cada revelado — justo el «circulito» que Maki rechazó por
+         nombre. El tamaño sí se pisa (11 → 26); la opacidad NO.
+         ⭐ La misma regla de siempre: si el motor ya maneja un estado, no se lo
+            reemplaza. Se lo acompaña. */
+      P + '.tl.tl-anim > .it:not(.on)::before{ opacity:0!important; }',
+      P + '.tl.tl-anim > .it.on::before{ opacity:1!important; }',
       /* la vía: fina y apagándose en las dos puntas, nunca un corte seco */
       P + '.tl::before{',
       '  width:1.5px!important; opacity:1!important;',
