@@ -257,6 +257,34 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ ACUARELA (tanda 2 · D, 24/9/2026): «eucalipto mezclado con acuarela» (referencia R|J de Maki).
+       Papel de algodón blanco con aguadas de salvia, eucalipto real y rosas blancas en las esquinas, arco dorado.
+       Tinta verde bosque (#2F3B32) sobre papel #FAF8F2. Fotos de Flow, fondo y portada EN VIDEO REAL (cámara quieta). */
+    acuarela: {
+      hex: { '#C98E8A':'#8FA68E', '#E3C2B8':'#DCE5DA', '#D9C3A0':'#D9C9A0', '#B08A4E':'#B8995A', '#F7EFEA':'#FAF8F2', '#FBF6F2':'#FDFCF8', '#4A2E2C':'#2F3B32', '#6B4744':'#56625A', '#7A5634':'#6F5E33', '#82504C':'#4E6651', '#FBF4EF':'#FBFAF5', '#F5E6DF':'#E4EBE2', '#2E1C1B':'#1F2A22', '#F2E4DC':'#EFF3EC', '#EAD9B8':'#E6DAB8' },
+      rgb: { '74,46,44':'47,59,50', '201,142,138':'143,166,142', '247,239,234':'250,248,242', '40,20,18':'31,42,34', '60,34,32':'31,42,34', '134,96,58':'111,94,51', '176,138,78':'184,153,90', '217,195,160':'217,201,160', '240,220,211':'220,229,218', '251,246,242':'253,252,248', '255,246,236':'251,250,245', '120,70,60':'31,42,34', '107,71,68':'86,98,90', '251,244,239':'251,250,245' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/acuarela/ac-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/ac-medallon.webp'
+      },
+      css: [
+        /* portada: centrada y con tinta oscura (regla del 24/9: nada claro sobre claro) */
+        P + '.portada{ justify-content:center!important; }',
+        P + '.portada > .c{ background:radial-gradient(closest-side, rgba(250,248,242,.84), rgba(250,248,242,.55) 62%, rgba(250,248,242,0))!important; padding:36px 22px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#2F3B32!important; -webkit-text-fill-color:#2F3B32!important; text-shadow:0 0 10px rgba(250,248,242,.95)!important; }',
+        /* las ramas de las esquinas tienen detalle: claro firme detrás del texto */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 80% 60% at 50% 45%, rgba(250,248,242,.84) 0%, rgba(250,248,242,.58) 50%, rgba(250,248,242,0) 84%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(250,248,242,1), 0 0 14px rgba(250,248,242,.95), 0 0 26px rgba(250,248,242,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(31,42,34,.42) 0, rgba(31,42,34,.18) 24%, rgba(31,42,34,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/acuarela/ac-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(31,42,34,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(31,42,34,.42) 0, rgba(31,42,34,.18) 24%, rgba(31,42,34,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/acuarela/ac-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(31,42,34,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FBFAF5!important; background:rgba(31,42,34,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FBFAF5!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FBFAF5!important; -webkit-text-fill-color:#FBFAF5!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
