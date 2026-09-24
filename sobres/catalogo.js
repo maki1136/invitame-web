@@ -980,11 +980,11 @@ window.SOBRES_INVITAME = {
 
   /* Mármol (ana-paula-y-marcelo) · UN solo lacre dorado que sube con la solapa. 23/9/2026. */
   'oleo-marmol-luz': {
-    nombre:     "Textura Mármol · se abre la solapa y sale luz de adentro (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/marmol/ma-sobre-luz.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/marmol/ma-sobre-luz.jpg",
+    nombre:     "Textura Mármol · la cinta con el lacre se desata y sale luz (video, Flow)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/marmol/ma-sobre-luz2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/marmol/ma-sobre-luz2.jpg",
     color:      "#E8E6E1",
-    luz:        3.8,
+    luz:        3.2,
     luzColor:   "#FCFBF9",
     luzFundido: 0.8
   },
