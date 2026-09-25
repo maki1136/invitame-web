@@ -745,6 +745,14 @@
                                           Parisienne, cuerpo en Lora, y una VIEIRA como marca del
                                           itinerario. Trae su propia paleta. */
 
+    '/colecciones/sapo.js',          /* la ONCEAVA familia y la CUARTA de la linea de princesas:
+                                          «La princesa y el sapo», el cuento de los Grimm y no la
+                                          pelicula: la BOLA DE ORO que cae al pozo. OSCURA (la
+                                          segunda, despues de Bella): agua verde honda, piedra con
+                                          musgo y oro viejo. Titulos en Cormorant Garamond, nombre
+                                          en Parisienne, cuerpo en Lora, y una HOJA DE TILO como
+                                          marca del itinerario. Trae su propia paleta. */
+
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
