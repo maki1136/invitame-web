@@ -37,6 +37,20 @@
    la portada. Y `loop:false` excluye el video del sobre, que lo maneja
    sobre-catalogo.js con su propio tiempo y NO hay que volver a arrancar
    cuando termina.
+
+   ⭐ 25/9/2026 · LA PORTADA CORRE PERO NO SE VE (medido en sofia-y-emilio,
+   elena-y-julian y lupita-mis15, en Chromium)
+   Después de abrir el sobre, el video de la portada queda paused:false,
+   readyState 4, entregando cuadros (requestVideoFrameCallback cuenta ~24/s)…
+   y en pantalla no aparece: se ve el color del papel. No lo tapa nada
+   (elementsFromPoint limpio), no es el códec (pasa con VP9 y con H.264), y
+   `play()` o un `translateZ` no lo despiertan. Lo ÚNICO que lo despierta es
+   recargar la fuente: `load()` + `play()`. La capa del video quedó armada
+   mientras el sobre (z 100, fijo, pantalla completa) la tapaba, y el
+   compositor no la vuelve a pintar.
+   → Cuando el sobre ya se fue, a cada video decorativo de la PORTADA se le
+     hace UNA recarga. Una sola vez por video (WeakSet), así no machaca. El
+     video es un loop con el mismo poster que la foto: el reinicio no se nota.
    ============================================================================ */
 (function () {
   'use strict';
@@ -77,6 +91,35 @@
     return quedan;
   }
 
+  /* ⭐ 25/9 · la recarga única de la portada cuando el sobre ya se fue */
+  var repintados = (typeof WeakSet === 'function') ? new WeakSet() : null;
+
+  function sobreSeFue() {
+    var env = document.getElementById('env');
+    if (!env) return true;
+    if (env.classList.contains('gone')) return true;
+    var s = getComputedStyle(env);
+    return s.display === 'none' || s.visibility === 'hidden' || s.opacity === '0';
+  }
+
+  function repintarPortada() {
+    if (!repintados || !sobreSeFue()) return false;
+    var vs = document.querySelectorAll('.portada video');
+    var hizo = false;
+    for (var i = 0; i < vs.length; i++) {
+      var v = vs[i];
+      if (!esDecorativo(v) || repintados.has(v)) continue;
+      repintados.add(v);
+      hizo = true;
+      try {
+        v.load();
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } catch (e) {}
+    }
+    return hizo;
+  }
+
   /* ⚠️⚠️ UN MutationObserver ACÁ ROMPE TODO. PROBADO Y MEDIDO EL 19/9/2026.
      Se colgó un MutationObserver del documento para arrancar cualquier video
      nuevo sin depender del reloj. Resultado: dejó de arrancar TAMBIÉN el fondo,
@@ -96,9 +139,15 @@
     yaPaso = true;
     arrancar();
     var desde = Date.now();
+    var portadaLista = false;
     var reloj = setInterval(function () {
       var quedan = arrancar();
-      if (!quedan || Date.now() - desde > PACIENCIA) clearInterval(reloj);
+      if (!portadaLista && sobreSeFue()) {
+        /* medio segundo más, para que el fundido del sobre termine */
+        portadaLista = true;
+        setTimeout(repintarPortada, 500);
+      }
+      if ((!quedan && portadaLista) || Date.now() - desde > PACIENCIA) clearInterval(reloj);
     }, REPASO);
   }
 
