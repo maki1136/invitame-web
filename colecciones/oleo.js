@@ -289,6 +289,36 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ MEXICANA (25/9/2026): «las referencias no me gustan, hacelas a nuestro estilo» (mexicana-tradicional y Fernando & Cinthya).
+       Lo dibujado pasa a objetos REALES: muro de cal, corazón de hojalata, pajaritos de barro de Oaxaca, guirnalda de
+       cempasúchil y bugambilia, papel picado que se mueve. Tinta café profundo (#3A1E1C) sobre cal #F8F2E8, acento rosa mexicano. */
+    mexicana: {
+      hex: { '#C98E8A':'#C73866', '#E3C2B8':'#F6D3DC', '#D9C3A0':'#F2C572', '#B08A4E':'#D98A1E', '#F7EFEA':'#F8F2E8', '#FBF6F2':'#FCF8F1', '#4A2E2C':'#3A1E1C', '#6B4744':'#5E3A34', '#7A5634':'#8A5A12', '#82504C':'#A8244F', '#FBF4EF':'#FCF8F1', '#F5E6DF':'#F5E6DA', '#2E1C1B':'#2A1412', '#F2E4DC':'#F3E7DB', '#EAD9B8':'#F5D9A0' },
+      rgb: { '74,46,44':'58,30,28', '201,142,138':'199,56,102', '247,239,234':'248,242,232', '40,20,18':'42,20,18', '60,34,32':'42,20,18', '134,96,58':'138,90,18', '176,138,78':'217,138,30', '217,195,160':'242,197,114', '240,220,211':'246,211,220', '251,246,242':'252,248,241', '255,246,236':'252,248,241', '120,70,60':'42,20,18', '107,71,68':'94,58,52', '251,244,239':'252,248,241' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/mexicana/mx2-muro-a.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/mx-medallon.webp'
+      },
+      css: [
+        /* portada con los novios abajo: el texto va arriba, sobre el muro liso (regla §35) */
+        P + '.portada{ justify-content:flex-start!important; }',
+        P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(251,246,238,.35) 0%, rgba(251,246,238,0) 38%)!important; }',
+        P + '.portada > .c{ margin-top:9vh!important; background:radial-gradient(closest-side, rgba(251,246,238,.66), rgba(251,246,238,.32) 65%, rgba(251,246,238,0))!important; padding:22px 26px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#3A1E1C!important; -webkit-text-fill-color:#3A1E1C!important; text-shadow:0 0 10px rgba(251,246,238,.95)!important; }',
+        /* la guirnalda y el papel picado tienen mucho color: claro firme detrás del texto */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 80% 60% at 50% 45%, rgba(251,246,238,.86) 0%, rgba(251,246,238,.6) 50%, rgba(251,246,238,0) 84%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(251,246,238,1), 0 0 14px rgba(251,246,238,.95), 0 0 26px rgba(251,246,238,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(42,20,18,.42) 0, rgba(42,20,18,.18) 24%, rgba(42,20,18,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mexicana/mx-tapavideo-a") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(42,20,18,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(42,20,18,.42) 0, rgba(42,20,18,.18) 24%, rgba(42,20,18,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mexicana/mx-tapaplaylist-a") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(42,20,18,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FCF8F1!important; background:rgba(42,20,18,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FCF8F1!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FCF8F1!important; -webkit-text-fill-color:#FCF8F1!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FCF8F1!important; -webkit-text-fill-color:#FCF8F1!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
