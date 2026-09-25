@@ -102,6 +102,21 @@
      Cada muestra que se arma se lleva SU sobre. Si la temática no tiene uno,
      se genera en Flow con la misma tanda de imágenes de esa temática, para que
      el papel, la luz y el color sean los mismos que los del resto.
+
+   ★★★ TODOS LOS SOBRES VIVEN ACÁ  (25/9/2026)
+     Maki: «quiero que todos los sobres estén en el mismo lugar del catálogo
+     como corresponde y que se puedan usar sin problemas de peso».
+     Tenía razón y hay que dejarlo escrito, porque la tentación de registrar un
+     sobre desde un módulo suelto vuelve cada vez que este archivo crece:
+       · el PESO no es el que asusta. El archivo pesa 76 KB en crudo, pero el
+         servidor lo manda con Brotli: **24,5 KB viajan de verdad** (medido con
+         `content-encoding: br`). No hay problema de peso que justifique
+         partirlo ni esconder fichas afuera.
+       · el RIESGO de escribirlo entero se resuelve con RED, no mudando la
+         ficha: se sube primero a una rama, se verifica que el blob que devuelve
+         GitHub sea idéntico al local (mismo `git hash-object`) y recién ahí se
+         mergea a main. Si la subida se corta, main ni se entera.
+     ⭐ O sea: un sobre nuevo se agrega ACÁ, siempre, y se sube con rama.
    ============================================================================ */
 window.SOBRES_INVITAME = {
 
@@ -239,6 +254,52 @@ window.SOBRES_INVITAME = {
     poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-playa-poster.jpg",
     color:   "#e7e6df",
     empalme: "blanco"
+  },
+
+  /* ---- ★ EL SOBRE DE SIRENA  (25/9/2026) --------------------------------
+     El sobre propio de la Colección La Sirenita (los XV de Marisol, Campeche).
+     Hecho en Flow —donde la IMAGEN no gasta créditos, sólo el video de Veo— con
+     el papel, la luz y la paleta de la colección: papel nácar hecho a mano con
+     borde deckled sobre arena clara, vidrio de mar verde y caracolitos en las
+     esquinas.
+
+     ⚠️⚠️ NACE DE UN RECLAMO DE MAKI, TEXTUAL: «el sobre quedó mal, el lacre
+        tiene que ser REDONDO y la imagen ADENTRO, porque quedó mal, ¿no lo
+        ves?». El anterior era un borrón más alto que ancho, con la caracola
+        desbordando el borde. Éste se MIDIÓ antes de subirlo, y ésa es la
+        lección: al lacre no alcanza con mirarle el color, hay que medirle la
+        FORMA. Se aísla la mancha coral más grande de la foto y se la compara
+        contra un círculo:
+          relación ancho/alto   1,000   (1,000 = círculo perfecto)
+          llena el              98,1 %  de un círculo de radio 95 px
+          centro del lacre      50,4 % · 50,0 % de la foto
+        Por eso NO lleva `eje`: el 50/50 por defecto le queda exacto.
+        La vieira va ADENTRO del disco, con cera a la vista todo alrededor, y
+        DERECHA —charnela abajo, abanico hacia arriba— igual que la vieira de
+        `colecciones/sirena.js`. De las dos tomas que dio Flow se eligió la que
+        tenía esa orientación, no la que tenía la concha acostada.
+
+     ⚠️ VA POR `solapas`, NO por video, y por eso no gastó un crédito: la foto
+        se parte en cuatro triángulos desde el centro y el lacre se corta al
+        medio. Las cuatro solapas del sobre confluyen justo en el lacre, que es
+        la geometría que ese modo espera.
+        El precedente es `anillos`: solapas con SÓLO póster. La imagen `solapa`
+        aparte —y borrarle el lacre al póster— hace falta cuando el lacre viaja
+        pegado a UNA sola solapa (cantera, cenicienta, bella); acá se parte, así
+        que no hay dos lacres y no hay nada que borrar.
+
+     ⚠️ En apertura `solapas` el empalme va SIEMPRE 'foto': el sobre queda
+        abierto y se funde sobre la portada real.
+
+     ⚠️ `color` MEDIDO, no estimado: promedio del papel en la franja central,
+        salteando el disco del lacre → #E8E1D9 (34.579 px muestreados).
+     ---------------------------------------------------------------------- */
+  sirena: {
+    nombre:   "Sirena · papel nácar sobre arena, lacre coral con vieira (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-sirena-25-9.jpg",
+    color:    "#E8E1D9",
+    apertura: "solapas",
+    empalme:  "foto"
   },
 
   /* ---- ★ EL SOBRE CAMPESTRE  (21/9/2026) --------------------------------
