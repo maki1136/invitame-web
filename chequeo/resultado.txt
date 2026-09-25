@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 25/09/2026, 16:06
+Fecha: 25/09/2026, 16:07
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 8 PROBLEMAS (y 103 cosas bien)
+HAY 11 PROBLEMAS (y 102 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,9 +29,10 @@ HAY 8 PROBLEMAS (y 103 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Camila & Tomás · 06.03" 3.5/4.5 [#e7ddc8 sobre luminancia 0.01-0.17 · div.s] · "Los colores de la fies" 3.6/4.5 [#606763 sobre luminancia 0.60-0.86 · div.col-dc-tit] · "Ver más" 3.7/4.5 [#616864 sobre luminancia 0.64-0.71 · button.iv-plie-btn] · "Tómate una foto con el" 3.9/4.5 [#576560 sobre luminancia 0.61-0.89 · p] y 6 más
+             -> "Entrar a la galería" 1.2/4.5 [#0000ee sobre luminancia 0.04-0.41 · a] · "Agendar" 1.7/4.5 [#ffffff sobre luminancia 0.03-0.58 · a.btn.gh] · "Camila & Tomás · 06.03" 3.5/4.5 [#e7ddc8 sobre luminancia 0.01-0.17 · div.s] · "Los colores de la fies" 3.6/4.5 [#606763 sobre luminancia 0.60-0.86 · div.col-dc-tit] y 7 más
    BIEN   el boleto del pase se ve entero
-   ----   el boleto no se pudo traer a la pantalla: no se midio
+   MAL    al tocar el boleto, el pedazo se corta y baja
+             -> quedo 50x204 (tiene que quedar acostada) · a -216 px del boleto
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
@@ -43,15 +44,13 @@ HAY 8 PROBLEMAS (y 103 cosas bien)
    MAL    sin errores de JavaScript
              -> /www.youtube-nocookie.com'. | /www.youtube-nocookie.com'.
    (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Timeout 30000ms exceeded.
-Call log:
-  - tak)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 13477 y volvió a 6313
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 512.2 s de punta a punta)
+   (tardó 446.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -68,7 +67,7 @@ Call log:
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Entrar a la galería" 1.1/4.5 [#0000ee sobre luminancia 0.05-0.21 · a] · "Agendar" 1.6/4.5 [#ffffff sobre luminancia 0.04-0.60 · a.btn.gh] · "Dónde y cuándo" 2.0/3 [#ffffff sobre luminancia 0.05-0.48 · h2.reveal.in] · "Compartir por WhatsApp" 2.1/4.5 [#f7e9e6 sobre luminancia 0.03-0.37 · a.wsp] y 9 más
+             -> "¿Cuántos asistirán?" 1.3/4.5 [#b3cfc5 sobre luminancia 0.05-0.78 · label] · "Agendar" 1.6/4.5 [#ffffff sobre luminancia 0.04-0.60 · a.btn.gh] · "Compartir por WhatsApp" 2.1/4.5 [#f8ebe8 sobre luminancia 0.03-0.37 · a.wsp] · "Nos casamos frente al " 2.7/4.5 [#e7ddc8 sobre luminancia 0.00-0.24 · div.kicker] y 9 más
    BIEN   el boleto del pase se ve entero
    MAL    al tocar el boleto, el pedazo se corta y baja
              -> quedo 50x200 (tiene que quedar acostada) · a -212 px del boleto
@@ -78,18 +77,18 @@ Call log:
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   MAL    sin errores de JavaScript
+             -> Context is stopped
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 12479 y volvió a 11280
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 360.0 s de punta a punta)
+   (tardó 597.7 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -111,7 +110,7 @@ Call log:
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Sugerir una canción" 1.7/4.5 [#ffffff sobre luminancia 0.03-0.56 · a.btn] · "Abrir la cámara" 3.6/4.5 [#000000 sobre luminancia 0.46-0.94 · button] · "Compartir por WhatsApp" 3.8/4.5 [#ffffff sobre luminancia 0.03-0.22 · a.wsp] · "Los colores de la fies" 3.9/4.5 [#606763 sobre luminancia 0.65-0.82 · div.col-dc-tit] y 6 más
+             -> "Sugerir una canción" 1.7/4.5 [#ffffff sobre luminancia 0.03-0.57 · a.btn] · "Compartir por WhatsApp" 3.8/4.5 [#ffffff sobre luminancia 0.03-0.22 · a.wsp] · "Los colores de la fies" 3.9/4.5 [#606763 sobre luminancia 0.65-0.82 · div.col-dc-tit] · "Camila & Tomás · 06.03" 4.1/4.5 [#e7ddc8 sobre luminancia 0.01-0.14 · div.s] y 3 más
    BIEN   el boleto del pase se ve entero
    ----   el boleto no se pudo traer a la pantalla: no se midio
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -129,9 +128,10 @@ Call log:
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
    BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 13226 y volvió a 6423
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1145.6 s de punta a punta)
+   (tardó 838.7 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -152,7 +152,7 @@ Call log:
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Sí, asistiré" 1.0/4.5 [#e5ebe8 sobre luminancia 0.72-0.78 · span.et.s] · "No podré" 1.1/4.5 [#e5ebe8 sobre luminancia 0.73-0.74 · span.et.n] · "Agendar" 2.2/4.5 [#ffffff sobre luminancia 0.04-0.42 · a.btn.gh] · "Toca tu respuesta" 3.0/4.5 [#b9b3b4 sobre luminancia 0.12-0.12 · p.rsvp-pie] y 15 más
+             -> "Agendar" 2.3/4.5 [#ffffff sobre luminancia 0.04-0.40 · a.btn.gh] · "Camila & Tomás · 06.03" 3.5/4.5 [#e7ddc8 sobre luminancia 0.01-0.17 · div.s] · "Ver en Instagram" 3.7/4.5 [#f7e9e6 sobre luminancia 0.03-0.19 · a.btn.lt] · "Los colores de la fies" 3.8/4.5 [#606763 sobre luminancia 0.63-0.87 · div.col-dc-tit] y 12 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -169,5 +169,5 @@ Call log:
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 92.9 s de punta a punta)
+   (tardó 91.7 s de punta a punta)
 
