@@ -350,6 +350,35 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ VAQUERA (25/9/2026, XV años): portada SIN personas — botas rosas bordadas, sombrero, peonías y pampas sobre heno, contra madera blanca (video).
+       Tinta café cuero (#4A3226) sobre crema #F8F2EC, acento rosa viejo #B96F6C, camel #B98A5A. */
+    vaquera: {
+      hex: { '#C98E8A':'#B96F6C', '#E3C2B8':'#F1DCD6', '#D9C3A0':'#E3C9A6', '#B08A4E':'#B98A5A', '#F7EFEA':'#F8F2EC', '#FBF6F2':'#FCF8F4', '#4A2E2C':'#4A3226', '#6B4744':'#6E5040', '#82504C':'#8E4E4B', '#FBF4EF':'#FCF8F4', '#F5E6DF':'#F4E7E0', '#2E1C1B':'#2E1F17', '#F2E4DC':'#F4E9E2', '#EAD9B8':'#EBD8BC' },
+      rgb: { '74,46,44':'74,50,38', '201,142,138':'185,111,108', '247,239,234':'248,242,236', '40,20,18':'46,31,23', '60,34,32':'46,31,23', '176,138,78':'185,138,90', '217,195,160':'227,201,166', '240,220,211':'241,220,214', '251,246,242':'252,248,244', '255,246,236':'252,248,244', '120,70,60':'46,31,23', '107,71,68':'110,80,64', '251,244,239':'252,248,244' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/vaquera/vq-fondo-1.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/vq-medallon-herradura.webp'
+      },
+      css: [
+        /* portada SIN personas: el texto va arriba, sobre la madera clara; las botas quedan abajo */
+        P + '.portada{ justify-content:flex-start!important; }',
+        P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(252,248,244,.25) 0%, rgba(252,248,244,0) 45%)!important; }',
+        P + '.portada > .c{ margin-top:11vh!important; background:radial-gradient(closest-side, rgba(252,248,244,.6), rgba(252,248,244,.22) 70%, rgba(252,248,244,0))!important; padding:18px 24px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#4A3226!important; -webkit-text-fill-color:#4A3226!important; text-shadow:0 0 10px rgba(252,248,244,.95)!important; }',
+        /* el fondo va ADELANTE: claro chico y liviano */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 64% 40% at 50% 45%, rgba(252,248,244,.5) 0%, rgba(252,248,244,.2) 55%, rgba(252,248,244,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(252,248,244,1), 0 0 14px rgba(252,248,244,.95), 0 0 26px rgba(252,248,244,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(46,31,23,.42) 0, rgba(46,31,23,.18) 24%, rgba(46,31,23,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/vaquera/vq-tapavid-2") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(46,31,23,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(46,31,23,.42) 0, rgba(46,31,23,.18) 24%, rgba(46,31,23,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/vaquera/vq-tapaplay-3") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(46,31,23,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FCF8F4!important; background:rgba(46,31,23,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FCF8F4!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FCF8F4!important; -webkit-text-fill-color:#FCF8F4!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FCF8F4!important; -webkit-text-fill-color:#FCF8F4!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
