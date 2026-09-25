@@ -443,6 +443,42 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ CEREZO (25/9/2026, XV años, referencia «Greta» de bloomdate): portada SIN personas — fondo rosa liso con ramas de cerezo en las esquinas y pétalos que caen (video, cámara quieta); el nombre al MEDIO, en oro.
+       Tinta rosa ciruela (#5A2D3A) sobre rosa papel #FDF4F4, acento rosa cerezo (#D08A98), oro #C6A15B. */
+    cerezo: {
+      hex: { '#C98E8A':'#D08A98', '#E3C2B8':'#F6D9DE', '#D9C3A0':'#E8CFA8', '#B08A4E':'#C6A15B', '#F7EFEA':'#FDF4F4', '#FBF6F2':'#FDF8F7', '#4A2E2C':'#5A2D3A', '#6B4744':'#86566A', '#82504C':'#9C4A5E', '#FBF4EF':'#FDF8F7', '#F5E6DF':'#F6E4E4', '#2E1C1B':'#2E1820', '#F2E4DC':'#F5E6E6', '#EAD9B8':'#EED8B6' },
+      rgb: { '74,46,44':'90,45,58', '201,142,138':'208,138,152', '247,239,234':'253,244,244', '40,20,18':'58,26,38', '60,34,32':'58,26,38', '176,138,78':'198,161,91', '217,195,160':'232,207,168', '240,220,211':'243,214,214', '251,246,242':'253,244,244', '255,246,236':'253,244,244', '120,70,60':'58,26,38', '107,71,68':'134,86,106', '251,244,239':'253,244,244' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/cerezo/cz-fondo.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/cz-medallon-cerezo.webp'
+      },
+      css: [
+        /* portada SIN personas: fondo rosa liso sin personas: el bloque va AL MEDIO (§34), el nombre en oro */
+        P + '.portada{ justify-content:center!important; }',
+                P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(253,244,244,.35) 0%, rgba(253,244,244,0) 45%)!important; }',
+        P + '.portada > .c{ margin-top:0!important; background:radial-gradient(closest-side, rgba(253,244,244,.8), rgba(253,244,244,.4) 70%, rgba(253,244,244,0))!important; padding:18px 24px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#5A2D3A!important; -webkit-text-fill-color:#5A2D3A!important; text-shadow:0 0 10px rgba(253,244,244,.95)!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ color:#B8913F!important; -webkit-text-fill-color:#B8913F!important; text-shadow:0 1px 0 rgba(255,255,255,.6), 0 0 14px rgba(253,244,244,.9)!important; }',
+        /* el fondo va ADELANTE: claro chico y liviano */
+        /* 25/9 (Maki: «al fondo le falta fuerza, se tapa demasiado y queda apagado»): fuera las tres capas que lo lavaban —
+                   el papel al 10-50 % de cada sección (y de las .verde), la copia QUIETA de la imagen base encima de las .verde
+                   (.inv-banda-deco, multiply .26) y el brillo diagonal de #inv-fondo::after—. El claro queda SÓLO chico detrás del texto. */
+                P + '.frame > section.sec{ background-color:transparent!important; }',
+                P + '.inv-banda-deco{ display:none!important; }',
+                P + '#inv-fondo::after{ background:none!important; }',
+                P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 50% 30% at 50% 50%, rgba(253,244,244,.62) 0%, rgba(253,244,244,.28) 55%, rgba(253,244,244,0) 78%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(253,244,244,1), 0 0 14px rgba(253,244,244,.95), 0 0 26px rgba(253,244,244,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(58,26,38,.42) 0, rgba(58,26,38,.18) 24%, rgba(58,26,38,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/cerezo/cz-tapavid\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(58,26,38,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(58,26,38,.42) 0, rgba(58,26,38,.18) 24%, rgba(58,26,38,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/cerezo/cz-tapaplay\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(58,26,38,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FDF8F7!important; background:rgba(58,26,38,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FDF8F7!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
