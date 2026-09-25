@@ -74,62 +74,6 @@
    ⚠️ Los dos repasos van con `setInterval` cada 1,2 s y NADA de
       MutationObserver: `INVEV` puede llegar despues de `load` y la invitacion
       muta en bucle.
-
-   ───────────────────────────────────────────────────────────────────────────
-   3 · EL SOBRE DE SIRENA, REGISTRADO ACA POR SEGURIDAD      (25/9/2026)
-   ───────────────────────────────────────────────────────────────────────────
-   ⚠️⚠️ ESTA PARTE NO ES DEL TEMA DEL ARCHIVO Y ESTA ACA A PROPOSITO. Se deja
-      dicho para que el que la encuentre no piense que fue por comodidad.
-
-      La ficha del sobre `sirena` va en `window.SOBRES_INVITAME`, o sea adentro
-      de `sobres/catalogo.js`. Ese archivo pesa **76 KB** y la unica forma que
-      tengo de escribirlo es MANDARLO ENTERO. Si esa subida se corta por el
-      camino, el archivo queda truncado — y `catalogo.js` lo carga TODA
-      invitacion entregada, asi que un truncamiento no rompe una muestra:
-      rompe el sobre de la plataforma entera. Agregarle seis lineas a un
-      monolito de 76 KB no vale ese riesgo.
-
-      ⭐ CUANDO `sobres/catalogo.js` SE PARTA EN DOS (la lista por un lado, la
-         puesta en pantalla por el otro), esta ficha se muda adentro y esta
-         parte 3 se borra. Es lo mismo que le esta pasando a la skill de
-         entrega: un archivo que crecio hasta que tocarlo es caro.
-
-   ⚠️ EL ORDEN NO ES PROBLEMA, Y ESTA MEDIDO. `efectos/sobre-catalogo.js` no
-      arma el sobre al evaluarse: corre `revisar()` con un `setInterval` de
-      60 ms hasta 120 veces (7,2 s) y recien actua cuando llego `INVEV`, que
-      viene de Firestore. Lee `window.SOBRES_INVITAME` en cada pasada. O sea
-      que alcanza con que la ficha exista en los primeros segundos, y esta
-      parte la escribe al evaluarse el paquete.
-      Y `sobres/catalogo.js` engancha `/efectos/index.js` al FINAL de si mismo,
-      asi que todo el paquete corre DESPUES de que el objeto existe.
-
-   EL SOBRE, EN CORTO
-   Papel nacar hecho a mano con borde deckled sobre arena clara, vidrio de mar
-   verde y caracolitos; lacre CORAL REDONDO con la VIEIRA adentro. Hecho en
-   Flow, donde la imagen no gasta creditos (solo el video de Veo).
-
-   ⚠️⚠️ NACE DE UN RECLAMO DE MAKI, TEXTUAL: «el sobre quedo mal, el lacre tiene
-      que ser REDONDO y la imagen ADENTRO, porque quedo mal, ¿no lo ves?». El
-      anterior era un borron mas alto que ancho con la caracola desbordando el
-      borde. Este se MIDIO antes de subirlo, que es la leccion: al lacre no
-      alcanza con mirarle el color, hay que medirle la FORMA.
-        relacion ancho/alto   1,000   (1,000 = circulo perfecto)
-        llena el              98,1 %  de un circulo de radio 95 px
-        centro del lacre      50,4 % · 50,0 % de la foto
-      Por eso NO lleva `eje`: el 50/50 por defecto le queda exacto.
-
-   ⚠️ VA POR `solapas`, NO por video, y por eso no gasto un credito: la foto se
-      parte en cuatro triangulos desde el centro y el lacre se corta al medio.
-      Las cuatro solapas del sobre confluyen justo en el lacre, que es la
-      geometria que ese modo espera. El precedente es `anillos`: solapas con
-      SOLO poster, sin imagen de solapa aparte. La `solapa` separada hace falta
-      cuando el lacre viaja pegado a UNA sola solapa (cantera, cenicienta,
-      bella), no cuando se parte.
-
-   ⚠️ En apertura `solapas` el empalme va SIEMPRE 'foto': el sobre queda abierto.
-
-   ⚠️ `color` MEDIDO, no estimado: promedio del papel en la franja central,
-      salteando el disco del lacre → #E8E1D9 (34.579 px muestreados).
    ============================================================================ */
 (function () {
 
@@ -202,31 +146,9 @@
     } catch (e) {}
   }
 
-  /* --------------------------------------------- 3 · el sobre de Sirena */
-
-  var SOBRE_ID = 'sirena';
-
-  var SOBRE_SIRENA = {
-    nombre:   'Sirena · papel nacar sobre arena, lacre coral con vieira (foto)',
-    poster:   'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobre-sirena-25-9.jpg',
-    color:    '#E8E1D9',
-    apertura: 'solapas',
-    empalme:  'foto'
-  };
-
-  /* ⚠️ Si alguien reasigna el objeto entero (`window.SOBRES_INVITAME = {...}`)
-     la ficha se perderia en silencio. El repaso de 1,2 s la repone. */
-  function pasarSobre() {
-    try {
-      var c = window.SOBRES_INVITAME;
-      if (!c || typeof c !== 'object') return;
-      if (c[SOBRE_ID] !== SOBRE_SIRENA) c[SOBRE_ID] = SOBRE_SIRENA;
-    } catch (e) {}
-  }
-
   /* ------------------------------------------------------------- el repaso */
 
-  function pasar() { pasarLacre(); pasarTinta(); pasarSobre(); }
+  function pasar() { pasarLacre(); pasarTinta(); }
 
   pasar();
   setInterval(pasar, 1200);
@@ -235,6 +157,5 @@
     window.addEventListener('load', pasar);
   } catch (e) {}
 
-  window.INVLACRE1 = { pasar: pasar, quiere: inicialQueVa, tinta: pasarTinta,
-                       sobre: pasarSobre, ficha: SOBRE_SIRENA };
+  window.INVLACRE1 = { pasar: pasar, quiere: inicialQueVa, tinta: pasarTinta };
 })();
