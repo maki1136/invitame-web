@@ -1061,6 +1061,17 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* Vaquera XV (ivanna-mis15) · sobre crema sobre madera blanca, UN lacre rosa palo y ramito de pampas con dos botones de rosa atado con hilo; se abre y sale luz. Luz medida por brillo de cuadros (sube desde 6,3 s). 25/9/2026. */
+  'oleo-vaquera-luz': {
+    nombre:     "XV Vaquera · lacre rosa palo, se abre y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/vaquera/vq-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/vaquera/vq-sobre-v1.jpg",
+    color:      "#E4DDD5",
+    luz:        6.3,
+    luzColor:   "#FCF8F4",
+    luzFundido: 0.8
+  },
+
   /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
   'oleo-espatulado-luz': {
     nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
