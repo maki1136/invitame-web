@@ -1083,6 +1083,17 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* Mascarada rosé XV (aitana-mis15) · sobre rosa sobre satén champaña, atado con cinta oro rosé que se desata sola, dije de antifaz dorado; se abre y sale luz. Sin lacre (§27). Luz medida por brillo de cuadros (sube desde 4,1 s). Higgsfield kling v3 pro 5 s. 25/9/2026. */
+  'oleo-mascarada-luz': {
+    nombre:     "XV Mascarada · cinta oro rosé que se desata, sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/mascarada/mk-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/mascarada/mk-sobre-v1.jpg",
+    color:      "#E3D2BE",
+    luz:        4.1,
+    luzColor:   "#FDF8F7",
+    luzFundido: 0.6
+  },
+
   /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
   'oleo-espatulado-luz': {
     nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
