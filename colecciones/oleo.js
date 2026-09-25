@@ -414,7 +414,7 @@
       hex: { '#C98E8A':'#B76E79', '#E3C2B8':'#F3D6D6', '#D9C3A0':'#E8CFA8', '#B08A4E':'#C9A45C', '#F7EFEA':'#FBF3F1', '#FBF6F2':'#FDF8F7', '#4A2E2C':'#4E2A36', '#6B4744':'#7A4E5C', '#82504C':'#8E4A5A', '#FBF4EF':'#FDF8F7', '#F5E6DF':'#F6E4E4', '#2E1C1B':'#2E1820', '#F2E4DC':'#F5E6E6', '#EAD9B8':'#EED8B6' },
       rgb: { '74,46,44':'78,42,54', '201,142,138':'183,110,121', '247,239,234':'251,243,241', '40,20,18':'46,24,32', '60,34,32':'46,24,32', '176,138,78':'201,164,92', '217,195,160':'232,207,168', '240,220,211':'243,214,214', '251,246,242':'253,248,247', '255,246,236':'253,248,247', '120,70,60':'46,24,32', '107,71,68':'122,78,92', '251,244,239':'253,248,247' },
       url: {
-        'invitame/oleo/oleo-rose-base.webp':'invitame/mascarada/mk-fondo.webp',
+        'invitame/oleo/oleo-rose-base.webp':'invitame/mascarada/mk-fondo2-2.webp',
         'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/mk-medallon-antifaz.webp'
       },
       css: [
