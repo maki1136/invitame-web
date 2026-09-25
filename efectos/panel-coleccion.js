@@ -123,6 +123,15 @@
              'papel nacar y tinta verde abisal. Titulos en Italiana, el nombre en ' +
              'Parisienne y una VIEIRA (la valva de la concha) como marca del ' +
              'itinerario y adorno de los titulos. Trae su propia paleta.' },
+    { id: 'sapo', nombre: 'La princesa y el sapo',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La cuarta de la linea de princesas y la SEGUNDA OSCURA, despues de ' +
+             'Bella. Es el cuento de los Grimm: la BOLA DE ORO que se le cae a la ' +
+             'princesa en el pozo. Agua verde honda, piedra con musgo, hojas de ' +
+             'tilo y oro viejo, con el pozo EN VIDEO. Titulos en Cormorant, el ' +
+             'nombre en Parisienne y una HOJA DE TILO como marca del itinerario. ' +
+             'La bola de oro fotografiada es la tapa de la raspadita y de la ' +
+             'playlist. Trae su propia paleta.' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
