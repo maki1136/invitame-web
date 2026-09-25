@@ -306,7 +306,8 @@
         P + '.portada > .c{ margin-top:9vh!important; background:radial-gradient(closest-side, rgba(251,246,238,.66), rgba(251,246,238,.32) 65%, rgba(251,246,238,0))!important; padding:22px 26px!important; }',
         P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#3A1E1C!important; -webkit-text-fill-color:#3A1E1C!important; text-shadow:0 0 10px rgba(251,246,238,.95)!important; }',
         /* la guirnalda y el papel picado tienen mucho color: claro firme detrás del texto */
-        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 80% 60% at 50% 45%, rgba(251,246,238,.86) 0%, rgba(251,246,238,.6) 50%, rgba(251,246,238,0) 84%)!important; }',
+        /* 25/9, Maki: «que los fondos se vean más adelante, lo tapa mucho lo de arriba y pierde fuerza»: el claro se achica y se aclara; la legibilidad la sostiene el halo del texto */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 66% 42% at 50% 45%, rgba(251,246,238,.5) 0%, rgba(251,246,238,.22) 55%, rgba(251,246,238,0) 80%)!important; }',
         P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(251,246,238,1), 0 0 14px rgba(251,246,238,.95), 0 0 26px rgba(251,246,238,.8)!important; }',
         P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(42,20,18,.42) 0, rgba(42,20,18,.18) 24%, rgba(42,20,18,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mexicana/mx-tapavideo-a") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(42,20,18,.24)!important; }',
         P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(42,20,18,.42) 0, rgba(42,20,18,.18) 24%, rgba(42,20,18,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mexicana/mx-tapaplaylist-a") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(42,20,18,.24)!important; }',
@@ -602,12 +603,12 @@
     P + '.scratchcard::after{ display:none!important; }',
     P + '.ivf .c{',
     '  background-color:' + NUDE + '!important;',
-    '  background-image:url("' + MEDALLON + '")!important;',
+    '  background-image:none!important;', /* 25/9, Maki: «la raspada no tiene la fecha atrás»: abajo iba el MISMO medallón que la tapa y el número se perdía encima. Abajo va papel liso. */
     '  background-size:cover!important; background-position:center!important;',
     '  border-radius:50%!important;',
     '  box-shadow:0 4px 10px rgba(74,46,44,.22)!important;',
     '}',
-    P + '.ivf .n{ color:' + TINTA + '!important; }',
+    P + '.ivf .n{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; font-size:26px!important; font-weight:500!important; }',
 
     /* los círculos de «los colores de la boda»: aro de tinta, no blanco */
     P + '.col-dc-c{ box-shadow:inset 0 0 0 1px rgba(74,46,44,.28), 0 1px 3px rgba(74,46,44,.14)!important; }',
