@@ -379,6 +379,35 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ MONARCA (25/9/2026, XV años): portada SIN personas — bosque de oyameles de Michoacán con monarcas (video, cámara quieta).
+       Tinta café tostado (#3B2A1E) sobre crema #FBF6EE, acento naranja monarca (#C1611F), oro #C79A3E. */
+    monarca: {
+      hex: { '#C98E8A':'#C1611F', '#E3C2B8':'#F3D9C2', '#D9C3A0':'#E6CFA3', '#B08A4E':'#C79A3E', '#F7EFEA':'#FBF6EE', '#FBF6F2':'#FDFAF4', '#4A2E2C':'#3B2A1E', '#6B4744':'#6A5140', '#82504C':'#9E4A17', '#FBF4EF':'#FDFAF4', '#F5E6DF':'#F6EADB', '#2E1C1B':'#26190F', '#F2E4DC':'#F5EBDD', '#EAD9B8':'#EDD9B2' },
+      rgb: { '74,46,44':'59,42,30', '201,142,138':'193,97,31', '247,239,234':'251,246,238', '40,20,18':'38,25,15', '60,34,32':'38,25,15', '176,138,78':'199,154,62', '217,195,160':'230,207,163', '240,220,211':'243,217,194', '251,246,242':'253,250,244', '255,246,236':'253,250,244', '120,70,60':'38,25,15', '107,71,68':'106,81,64', '251,244,239':'253,250,244' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/monarca/mo-fondo-1.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/mo-medallon-monarca-2.webp'
+      },
+      css: [
+        /* portada SIN personas: el texto va arriba, sobre la neblina dorada; las monarcas y las ramas quedan abajo */
+        P + '.portada{ justify-content:flex-start!important; }',
+        P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(253,250,244,.35) 0%, rgba(253,250,244,0) 45%)!important; }',
+        P + '.portada > .c{ margin-top:10vh!important; background:radial-gradient(closest-side, rgba(253,250,244,.66), rgba(253,250,244,.26) 70%, rgba(253,250,244,0))!important; padding:18px 24px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#3B2A1E!important; -webkit-text-fill-color:#3B2A1E!important; text-shadow:0 0 10px rgba(253,250,244,.95)!important; }',
+        /* el fondo va ADELANTE: claro chico y liviano */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 64% 40% at 50% 45%, rgba(253,250,244,.5) 0%, rgba(253,250,244,.2) 55%, rgba(253,250,244,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(253,250,244,1), 0 0 14px rgba(253,250,244,.95), 0 0 26px rgba(253,250,244,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(38,25,15,.42) 0, rgba(38,25,15,.18) 24%, rgba(38,25,15,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/monarca/mo-tapavid-2\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(38,25,15,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(38,25,15,.42) 0, rgba(38,25,15,.18) 24%, rgba(38,25,15,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/monarca/mo-tapaplay-1\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(38,25,15,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FDFAF4!important; background:rgba(38,25,15,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FDFAF4!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FDFAF4!important; -webkit-text-fill-color:#FDFAF4!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FDFAF4!important; -webkit-text-fill-color:#FDFAF4!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
