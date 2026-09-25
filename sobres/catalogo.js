@@ -1094,6 +1094,17 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.6
   },
 
+  /* Flor de cerezo XV (emilia-mis15) · sobre rosa sobre lino rosado con una ramita de cerezo bajo la solapa; la ramita se desliza, se abre la solapa y sale luz. Sin lacre ni cinta. El video no llega a blanco solo: lo termina el destello del motor (luz 3,6 + 1,0 < 5,04 s). Higgsfield kling v3 pro 5 s. 25/9/2026. */
+  'oleo-cerezo-luz': {
+    nombre:     "XV Flor de cerezo · ramita de cerezo, se abre y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/cerezo/cz-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/cerezo/cz-sobre-v1.jpg",
+    color:      "#EDE3E1",
+    luz:        3.6,
+    luzColor:   "#FDF4F4",
+    luzFundido: 1.0
+  },
+
   /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
   'oleo-espatulado-luz': {
     nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
