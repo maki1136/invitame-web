@@ -424,7 +424,13 @@
         P + '.portada > .c{ margin-top:8vh!important; background:radial-gradient(closest-side, rgba(253,248,247,.8), rgba(253,248,247,.4) 70%, rgba(253,248,247,0))!important; padding:18px 24px!important; }',
         P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#4E2A36!important; -webkit-text-fill-color:#4E2A36!important; text-shadow:0 0 10px rgba(253,248,247,.95)!important; }',
         /* el fondo va ADELANTE: claro chico y liviano */
-        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 64% 40% at 50% 45%, rgba(253,248,247,.5) 0%, rgba(253,248,247,.2) 55%, rgba(253,248,247,0) 80%)!important; }',
+        /* 25/9 (Maki: «al fondo le falta fuerza, se tapa demasiado y queda apagado»): fuera las tres capas que lo lavaban —
+                   el papel al 10-50 % de cada sección (y de las .verde), la copia QUIETA de la imagen base encima de las .verde
+                   (.inv-banda-deco, multiply .26) y el brillo diagonal de #inv-fondo::after—. El claro queda SÓLO chico detrás del texto. */
+                P + '.frame > section.sec{ background-color:transparent!important; }',
+                P + '.inv-banda-deco{ display:none!important; }',
+                P + '#inv-fondo::after{ background:none!important; }',
+                P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 50% 30% at 50% 50%, rgba(253,248,247,.62) 0%, rgba(253,248,247,.28) 55%, rgba(253,248,247,0) 78%)!important; }',
         P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(253,248,247,1), 0 0 14px rgba(253,248,247,.95), 0 0 26px rgba(253,248,247,.8)!important; }',
         P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(46,24,32,.42) 0, rgba(46,24,32,.18) 24%, rgba(46,24,32,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mascarada/mk-tapavid\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(46,24,32,.24)!important; }',
         P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(46,24,32,.42) 0, rgba(46,24,32,.18) 24%, rgba(46,24,32,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mascarada/mk-tapaplay\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(46,24,32,.24)!important; }',
