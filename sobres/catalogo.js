@@ -1072,6 +1072,17 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* Mariposa monarca XV (daniela-mis15) · sobre crema sobre lino, lacre naranja con mariposa, ramita de oyamel y cempasúchil; la monarca se va volando, se abre y sale luz. Luz medida por brillo de cuadros (sube desde 5,8 s). 25/9/2026. */
+  'oleo-monarca-luz': {
+    nombre:     "XV Mariposa monarca · lacre naranja, la mariposa se va y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/monarca/mo-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/monarca/mo-sobre-v1.jpg",
+    color:      "#E7E1D8",
+    luz:        5.8,
+    luzColor:   "#FDFAF4",
+    luzFundido: 0.8
+  },
+
   /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
   'oleo-espatulado-luz': {
     nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
