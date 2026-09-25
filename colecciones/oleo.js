@@ -458,7 +458,8 @@
                 P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(253,244,244,.35) 0%, rgba(253,244,244,0) 45%)!important; }',
         P + '.portada > .c{ margin-top:0!important; background:radial-gradient(closest-side, rgba(253,244,244,.8), rgba(253,244,244,.4) 70%, rgba(253,244,244,0))!important; padding:18px 24px!important; }',
         P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#5A2D3A!important; -webkit-text-fill-color:#5A2D3A!important; text-shadow:0 0 10px rgba(253,244,244,.95)!important; }',
-        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ color:#B8913F!important; -webkit-text-fill-color:#B8913F!important; text-shadow:0 1px 0 rgba(255,255,255,.6), 0 0 14px rgba(253,244,244,.9)!important; }',
+        /* el nombre en oro VIEJO: el dorado claro de la referencia sobre este rosa da contraste 2,2 y reglas-duras lo pisaba a negro (medido 25/9). #8C6A28 pasa el piso y se sigue leyendo dorado. Grande, como la referencia. */
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ color:#8C6A28!important; -webkit-text-fill-color:#8C6A28!important; font-size:clamp(54px, 15vw, 76px)!important; line-height:1.05!important; text-shadow:0 1px 0 rgba(255,255,255,.7), 0 0 18px rgba(253,244,244,.95)!important; }',
         /* el fondo va ADELANTE: claro chico y liviano */
         /* 25/9 (Maki: «al fondo le falta fuerza, se tapa demasiado y queda apagado»): fuera las tres capas que lo lavaban —
                    el papel al 10-50 % de cada sección (y de las .verde), la copia QUIETA de la imagen base encima de las .verde
