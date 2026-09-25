@@ -120,6 +120,37 @@
     return hizo;
   }
 
+  /* ⭐ 25/9 (2) · la portada queda frenada en el primer cuadro.
+     Medido en ivanna-mis15 y daniela-mis15: 10 s después de abrir el sobre, la
+     portada seguía en paused:true, t=0. El load() de repintarPortada corta el
+     play() anterior y el nuevo play() a veces no prende; como el reloj ya se
+     había apagado, nadie lo volvía a intentar. Y al volver scrolleando arriba
+     tampoco. Arreglo: mientras dure la PACIENCIA, y después en cada scroll
+     (con freno de 1 s), si la portada está a la vista y parada, play() de nuevo
+     —sin load(), que es lo que la corta. */
+  function mantenerPortada() {
+    if (!sobreSeFue()) return 0;
+    var vs = document.querySelectorAll('.portada video');
+    var paradas = 0;
+    for (var i = 0; i < vs.length; i++) {
+      var v = vs[i];
+      if (!esDecorativo(v) || !v.paused) continue;
+      var r = v.getBoundingClientRect();
+      if (r.bottom <= 0 || r.top >= (window.innerHeight || 800)) continue;
+      paradas++;
+      try { v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    }
+    return paradas;
+  }
+  var ultimoScroll = 0;
+  window.addEventListener('scroll', function () {
+    if (!yaPaso) return;
+    var ahora = Date.now();
+    if (ahora - ultimoScroll < 1000) return;
+    ultimoScroll = ahora;
+    setTimeout(mantenerPortada, 300);
+  }, { passive: true });
+
   /* ⚠️⚠️ UN MutationObserver ACÁ ROMPE TODO. PROBADO Y MEDIDO EL 19/9/2026.
      Se colgó un MutationObserver del documento para arrancar cualquier video
      nuevo sin depender del reloj. Resultado: dejó de arrancar TAMBIÉN el fondo,
@@ -147,7 +178,9 @@
         portadaLista = true;
         setTimeout(repintarPortada, 500);
       }
-      if ((!quedan && portadaLista) || Date.now() - desde > PACIENCIA) clearInterval(reloj);
+      if (portadaLista) mantenerPortada();
+      /* se sigue mirando toda la PACIENCIA: la recarga de la portada llega 0,5 s después */
+      if (Date.now() - desde > PACIENCIA) clearInterval(reloj);
     }, REPASO);
   }
 
