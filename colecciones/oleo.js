@@ -408,6 +408,35 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ MASCARADA (25/9/2026, XV años, referencia xv-mariakarol): portada SIN personas — mesa de terciopelo rosa en un salón de baile con antifaz dorado, champaña y arañas de cristal (video, cámara quieta).
+       Tinta malva profundo (#4E2A36) sobre rosa papel #FBF3F1, acento oro rosé (#B76E79), oro #C9A45C. */
+    mascarada: {
+      hex: { '#C98E8A':'#B76E79', '#E3C2B8':'#F3D6D6', '#D9C3A0':'#E8CFA8', '#B08A4E':'#C9A45C', '#F7EFEA':'#FBF3F1', '#FBF6F2':'#FDF8F7', '#4A2E2C':'#4E2A36', '#6B4744':'#7A4E5C', '#82504C':'#8E4A5A', '#FBF4EF':'#FDF8F7', '#F5E6DF':'#F6E4E4', '#2E1C1B':'#2E1820', '#F2E4DC':'#F5E6E6', '#EAD9B8':'#EED8B6' },
+      rgb: { '74,46,44':'78,42,54', '201,142,138':'183,110,121', '247,239,234':'251,243,241', '40,20,18':'46,24,32', '60,34,32':'46,24,32', '176,138,78':'201,164,92', '217,195,160':'232,207,168', '240,220,211':'243,214,214', '251,246,242':'253,248,247', '255,246,236':'253,248,247', '120,70,60':'46,24,32', '107,71,68':'122,78,92', '251,244,239':'253,248,247' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/mascarada/mk-fondo.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/mk-medallon-antifaz.webp'
+      },
+      css: [
+        /* portada SIN personas: el texto va arriba, sobre las arañas de cristal con un claro firme; el antifaz y la mesa quedan abajo */
+        P + '.portada{ justify-content:flex-start!important; }',
+        P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(253,248,247,.35) 0%, rgba(253,248,247,0) 45%)!important; }',
+        P + '.portada > .c{ margin-top:8vh!important; background:radial-gradient(closest-side, rgba(253,248,247,.8), rgba(253,248,247,.4) 70%, rgba(253,248,247,0))!important; padding:18px 24px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#4E2A36!important; -webkit-text-fill-color:#4E2A36!important; text-shadow:0 0 10px rgba(253,248,247,.95)!important; }',
+        /* el fondo va ADELANTE: claro chico y liviano */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 64% 40% at 50% 45%, rgba(253,248,247,.5) 0%, rgba(253,248,247,.2) 55%, rgba(253,248,247,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(253,248,247,1), 0 0 14px rgba(253,248,247,.95), 0 0 26px rgba(253,248,247,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(46,24,32,.42) 0, rgba(46,24,32,.18) 24%, rgba(46,24,32,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mascarada/mk-tapavid\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(46,24,32,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(46,24,32,.42) 0, rgba(46,24,32,.18) 24%, rgba(46,24,32,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/mascarada/mk-tapaplay\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(46,24,32,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FDF8F7!important; background:rgba(46,24,32,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FDF8F7!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
