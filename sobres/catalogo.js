@@ -1039,6 +1039,17 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* Mexicana (sofia-y-emilio) · sobre crema con UN lacre rojo con corazón; el lacre se va con la solapa (Flow, toma 1 de 2: la 2 duplicaba el lacre). 25/9/2026. */
+  'oleo-mexicana-luz': {
+    nombre:     "Tradición Mexicana · se abre la solapa y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264/invitame/mexicana/mx-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/mexicana/mx-sobre-v1.jpg",
+    color:      "#F5E6DA",
+    luz:        3.2,
+    luzColor:   "#FCF8F1",
+    luzFundido: 0.8
+  },
+
   /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
   'oleo-espatulado-luz': {
     nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
