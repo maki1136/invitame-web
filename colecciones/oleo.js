@@ -269,8 +269,10 @@
       },
       css: [
         /* portada: centrada y con tinta oscura (regla del 24/9: nada claro sobre claro) */
-        P + '.portada{ justify-content:center!important; }',
-        P + '.portada > .c{ background:radial-gradient(closest-side, rgba(250,248,242,.84), rgba(250,248,242,.55) 62%, rgba(250,248,242,0))!important; padding:36px 22px!important; }',
+        /* 25/9, Maki: «agregale los novios en la portada y que los textos no los tapen» → portada = foto de los novios (el cielo arriba); el texto sube al cielo */
+        P + '.portada{ justify-content:flex-start!important; }',
+        P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(250,248,242,.35) 0%, rgba(250,248,242,0) 38%)!important; }',
+        P + '.portada > .c{ margin-top:9vh!important; background:radial-gradient(closest-side, rgba(250,248,242,.62), rgba(250,248,242,.3) 65%, rgba(250,248,242,0))!important; padding:22px 26px!important; }',
         P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#2F3B32!important; -webkit-text-fill-color:#2F3B32!important; text-shadow:0 0 10px rgba(250,248,242,.95)!important; }',
         /* las ramas de las esquinas tienen detalle: claro firme detrás del texto */
         P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 80% 60% at 50% 45%, rgba(250,248,242,.84) 0%, rgba(250,248,242,.58) 50%, rgba(250,248,242,0) 84%)!important; }',
