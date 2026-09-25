@@ -1050,6 +1050,17 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* Talavera (mariana-y-rodrigo) · sobre crema sobre cal, UN lacre azul cobalto y ramita de limonero; la solapa se abre y sale luz. Luz medida por brillo de cuadros (sube desde 5,5 s). 25/9/2026. */
+  'oleo-talavera-luz': {
+    nombre:     "Tradición Talavera · lacre cobalto, se abre y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/mexicana2/m2-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/mexicana2/m2-sobre-v1.jpg",
+    color:      "#ECE9E2",
+    luz:        5.6,
+    luzColor:   "#FCFAF4",
+    luzFundido: 0.8
+  },
+
   /* Espatulado (isabel-y-gonzalo) · sin lacre a propósito: con lacre al medio Kling lo duplicaba (2 tomas). Cinta de seda que se desata. 23/9/2026. */
   'oleo-espatulado-luz': {
     nombre:     "Textura Espatulado · se desata la cinta y sale luz (video)",
