@@ -15,16 +15,18 @@
           usa ninguna: Sirena nácar y coral · Bella oro viejo y borgoña sobre
           oscuro · Sapo verde agua oscuro · Cenicienta azul hielo · Perlas
           violeta · Marfil blanco y gris.
-        · Títulos en IM FELL ENGLISH (la tipografía de los libros victorianos,
-          la época del cuento). Sobretítulo en PETIT FORMAL SCRIPT. Cuerpo en
-          CRIMSON PRO.
+        · Títulos en FRAUNCES (SOFT 100, WONK 1: la serif «de cuento») y
+          sobretítulos y nombre en ALLURA. Cuerpo en CRIMSON PRO. (28/9: fuera IM
+          Fell English y Petit Formal Script — «no me gustó para nada».)
         · CLARA, como Sirena: papel porcelana y TINTA OSCURA (té negro).
         · La marca del itinerario y el adorno de los títulos es el CORAZÓN de
-          naipe —la Reina de Corazones—: a 18 px se lee sin dudas.
-        · La pieza FOTOGRAFIADA es el RELOJ DE BOLSILLO del Conejo Blanco
-          (`invitame/piezas/alicia-reloj-28-9.webp`): va donde hay UNA sola y
-          tiene aire (la tapa de la raspadita). En serie y en controles va el
-          corazón vectorial.
+          naipe —la Reina de Corazones—, FOTOGRAFIADO: porcelana roja laqueada
+          con filo de oro (`invitame/piezas/alicia-corazon-28-9.webp`).
+        · La tapa de la raspadita es un PLATITO de porcelana con corona de rosas
+          y un corazón al centro (`invitame/piezas/alicia-plato-28-9.webp`).
+          (28/9: fuera el reloj de bolsillo — «muy malos, muy feos».)
+        · Los arcos (`.sec.verde`) van en PAPEL TOILE de la temática, no crema liso.
+        · Video, playlist, filtro y fotos de la fiesta llevan FOTO PROPIA.
         · El fondo es la merienda del jardín EN VIDEO (Kling por la API de
           Higgsfield, 28/9), con vapor del té y pétalos.
 
@@ -52,11 +54,24 @@
   var CORAL  = '#A51E2B';   /* el rojo de la rosa pintada. Adorno, NUNCA texto chico */
   var CORAL2 = '#76141F';   /* el rojo hondo: sellos */
   var ESPUMA = '#F2DCD6';   /* rosa té, para luces suaves */
+  /* ⭐ ALICIA 28/9 (Maki: «los corazones… más real todo, con más volumen»): el
+     corazón deja de ser el SVG plano y pasa a ser una PIEZA FOTOGRAFIADA — porcelana
+     roja laqueada con filo de oro y una filigrana arriba (Flow, recortada con alfa).
+     `corazonSVG()` queda sólo para quien lo pida desde `window.INVALICIA`. */
+  var CORAZON_FOTO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/piezas/alicia-corazon-28-9.webp';
+  /* ⭐ ALICIA 28/9 (Maki: «no le agregaste ninguna imagen… hacé alguna nueva, más
+     personalizada»): cada sección que era la del molde lleva su propia foto de la
+     temática (Flow, 0 créditos). Ninguna se repite con otra muestra. */
+  var TAPA_VIDEO  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/alicia/flow/alicia-video-op2-28-9';    /* el espejo: A través del espejo */
+  var TAPA_PLAY   = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/alicia/flow/alicia-playlist-op2-28-9'; /* la caja de música de porcelana */
+  var FOTO_FILTRO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/alicia/flow/alicia-filtro-op2-28-9';   /* el marco dorado vacío en el seto */
+  var FOTO_FIESTA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/alicia/flow/alicia-fiesta-op3-28-9';   /* las fotos de la fiesta sobre el mantel */
+  var TOILE       = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/alicia/alicia-toile-tile-28-9'; /* papel toile: teteras, naipes, rosas, conejos */
 
-  var CLARO_A = 0.80;       /* ALICIA 28/9: 0,58 era el de Sirena, cuyo fondo es arena
-                               calma. La merienda está LLENA (rosas, teteras, tazas):
-                               con 0,58 el cuerpo sobre las rosas no se leía (captura
-                               de «Dónde quedarse»). No bajarlo. */
+  var CLARO_A = 0.66;       /* ALICIA 28/9: 0,58 era el de Sirena; lo subí a 0,80 porque la
+                               merienda está LLENA y Maki dijo «el fondo está casi todo
+                               tapado». Quedó en 0,66: el texto se sostiene con el HALO de
+                               porcelana (ver abajo), no tapando el fondo. */
 
   /* ⚠️⚠️ LA TABLA QUE LA COLECCIÓN RECLAMA COMO PROPIA.
      Es el contrato de `efectos/paleta.js` (el mismo de Marfil desde el 17/9 y
@@ -198,9 +213,14 @@
          ⚠️ Se gana por especificidad, nunca tocando `--fs-*`: paleta.js las
             reescribe cada 1,5 s. */
       P + '.frame .sec h2, ' + P + '.frame .sec .h2, ' + P + '.frame .stitle, ' + P + '.frame .dq-h2{',
-      '  font-family:"IM Fell English",serif!important;',
+      /* ⚠️ ALICIA 28/9 (Maki: «la tipografía no me gustó para nada»): fuera IM Fell
+         English y Petit Formal Script. Títulos en FRAUNCES con los ejes SOFT 100 y
+         WONK 1 (la serif «de cuento», blanda y con las cursivas torcidas) a 600, y
+         sobretítulos en ALLURA. Ninguna de las dos la usa otra colección. */
+      '  font-family:"Fraunces",Georgia,serif!important;',
+      '  font-weight:600!important; font-variation-settings:"SOFT" 100, "WONK" 1!important;',
       '  font-size:33px!important;',
-      '  letter-spacing:.075em!important;',
+      '  letter-spacing:.01em!important;',
       '  color:' + TINTA + '!important;',
       '}',
       /* ⚠️⚠️ EL SOBRETÍTULO NO VA EN CORAL. Primera versión: `.kick` en CORAL2.
@@ -213,8 +233,8 @@
             el adorno y el lacre; TINTA3 es el filete. Ninguno de los dos
             escribe. */
       P + '.frame .kick, ' + P + '.frame .sec .kick{',
-      '  font-family:"Petit Formal Script",cursive!important;',
-      '  font-size:31px!important;',
+      '  font-family:"Allura",cursive!important;',
+      '  font-size:40px!important; line-height:1.05!important;',
       '  color:' + TINTA2 + '!important;',
       '  letter-spacing:.01em!important;',
       '}',
@@ -236,6 +256,23 @@
       '  color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important;',
       '  text-shadow:0 1px 4px rgba(18,12,10,.9), 0 0 14px rgba(18,12,10,.6)!important;',
       '}',
+      /* ⭐ 28/9 (Maki: «el filtro de los 15 y las fotos de la fiesta, que siempre es
+         igual… hacele alguna imagen, jugátela»): las dos secciones llevan foto propia
+         con un velo oscuro, y la tinta va al revés, como en contacto. */
+      P + '#filtro-sec{ background:linear-gradient(180deg, rgba(18,12,10,.50), rgba(18,12,10,.30) 45%, rgba(18,12,10,.58)), url("' + FOTO_FILTRO + '") center/cover no-repeat!important; }',
+      P + '#gal-seccion{ background:linear-gradient(180deg, rgba(18,12,10,.58), rgba(18,12,10,.40) 45%, rgba(18,12,10,.62)), url("' + FOTO_FIESTA + '") center/cover no-repeat!important; }',
+      P + ':is(#filtro-sec, #gal-seccion) :is(h2, .kick, p, .txt, .sub){',
+      '  color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important;',
+      '  text-shadow:0 1px 4px rgba(18,12,10,.9), 0 0 14px rgba(18,12,10,.6)!important;',
+      '}',
+      P + ':is(#filtro-sec, #gal-seccion) .adorno, ' + P + ':is(#filtro-sec, #gal-seccion) [class*="ico"]{ filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))!important; }',
+      /* con formulario (la confirmación) el toile va más apagado: los rótulos son
+         chicos y en cursiva, y sobre el grabado no se leían (captura 28/9) */
+      P + '.sec.verde:has(.rsvpform){ background-image:radial-gradient(120% 90% at 50% 50%, rgba(246,240,228,.95) 0%, rgba(246,240,228,.90) 60%, rgba(246,240,228,.62) 100%), url("' + TOILE + '")!important; }',
+      /* «Entrar a la galería» es un <a>: en WebKit salía con el azul de enlace (123,123,255) */
+      P + '#gal-entrar, ' + P + '#filtro-abrir{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; }',
+      /* los rótulos del formulario sobre el toile: halo de papel, como el resto */
+      P + '.sec.verde :is(label, .lbl, .form-lbl, .rsvp-sw span, small){ text-shadow:0 0 5px rgba(246,240,228,.95), 0 0 12px rgba(246,240,228,.85)!important; }',
       /* el rótulo chico del hotel nace en rgb(205,191,174) — 1,59 sobre el papel */
       P + '.hotel .d{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
       /* «AGENDAR» (`.btn.gh`) quedaba con `-webkit-text-fill-color` TINTA sobre el
@@ -262,7 +299,7 @@
 
       /* ---- el adorno del título: la vieira ---- */
       P + '.adorno{',
-      '  background-image:url("' + corazonSVG(CORAL) + '")!important;',
+      '  background-image:url("' + CORAZON_FOTO + '")!important;',
       '  background-size:contain!important; background-repeat:no-repeat!important;',
       '  background-position:center!important;',
       '}',
@@ -293,10 +330,19 @@
             66 % «para que vayan juntas» ya se marcó como angostas.
          ⚠️ `.hotel` comparte el grupo y se lleva el arco: con padding chico el
             arco se come la primera línea del nombre del hotel. Va 38 px arriba. */
+      /* ⭐ 28/9 (Maki: «un fondo cremita, liso, muy básico, no me gusta ni un
+         poco»): el arco deja de ser crema liso y pasa a ser PAPEL TOILE de la
+         temática —teteras, naipes, rosas, conejos grabados en rojo rosa—, con un
+         claro radial encima para que el texto se lea. El toile está espejado 2×2,
+         así que repite sin costura. */
       P + '.sec.verde{',
       '  border-radius:50% 50% 0 0 / 90px 90px 0 0!important;',
       '  padding-top:96px!important;',
-      '  background-color:' + PAPEL2 + '!important;',
+      '  background-color:' + PAPEL + '!important;',
+      '  background-image:radial-gradient(115% 82% at 50% 46%, rgba(246,240,228,.92) 0%, rgba(246,240,228,.80) 55%, rgba(246,240,228,.42) 100%), url("' + TOILE + '")!important;',
+      '  background-size:100% 100%, 520px auto!important;',
+      '  background-repeat:no-repeat, repeat!important;',
+      '  background-position:center, center top!important;',
       '}',
       P + '.sec.verde::before, ' + P + '.sec.verde::after{ border-radius:inherit!important; }',
 
@@ -357,7 +403,7 @@
       '  content:""!important; position:absolute!important;',
       '  top:9px!important; left:50%!important; margin-left:-11px!important;',
       '  width:22px!important; height:22px!important;',
-      '  background-image:url("' + corazonSVG(CORAL) + '")!important;',
+      '  background-image:url("' + CORAZON_FOTO + '")!important;',
       '  background-size:contain!important; background-repeat:no-repeat!important;',
       '  background-position:center!important;',
       '  opacity:.92!important; pointer-events:none!important; z-index:1!important;',
@@ -371,8 +417,8 @@
       '  margin:-14px 0 0 -14px!important; width:28px!important; height:28px!important;',
       '  border-radius:50%!important;',
       '  background-color:' + PAPEL + '!important;',
-      '  background-image:url("' + corazonSVG(CORAL) + '")!important;',
-      '  background-size:18px 18px!important; background-repeat:no-repeat!important;',
+      '  background-image:url("' + CORAZON_FOTO + '")!important;',
+      '  background-size:20px 20px!important; background-repeat:no-repeat!important;',
       '  background-position:center!important;',
       '  box-shadow:0 2px 9px rgba(31,21,18,.22), 0 0 0 1px rgba(196,168,116,.55)!important;',
       '  pointer-events:none!important; z-index:2!important;',
@@ -408,7 +454,7 @@
       '  color:' + TINTA2 + '!important;',
       '}',
       P + ':is(.evento, .hotel) :is(h3, h4), ' + P + '.pasecard .v{',
-      '  color:' + TINTA + '!important; font-family:"IM Fell English",serif!important;',
+      '  color:' + TINTA + '!important; font-family:"Fraunces",Georgia,serif!important;',
       '}',
 
       /* ---- 🔴 EL PASE: NUNCA «BÁSICO BLANCO» -----------------------------
@@ -440,7 +486,7 @@
          TINTA3 es FILETE, nunca texto. */
       P + '.pasecard .k{ color:' + TINTA2 + '!important; letter-spacing:.14em!important; }',
       P + '.pase > .t{',
-      '  font-family:"Petit Formal Script",cursive!important; font-size:30px!important;',
+      '  font-family:"Allura",cursive!important; font-size:38px!important;',
       '  color:' + TINTA2 + '!important;',
       '  text-shadow:0 0 6px rgba(246,240,228,.95), 0 0 16px rgba(246,240,228,.85), 0 0 30px rgba(246,240,228,.6)!important;',
       '}',
@@ -461,7 +507,7 @@
          ⚠️ El motor APAGA las casillas dormidas con un `filter`; con una FOTO
             eso se lee como tres piezas de distinto color. Se apaga. */
       ':is(.scratch-sec, .rasp-3, .rasp-zona, #scratchcard){',
-      '  --r3-tapa:url("https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/piezas/alicia-reloj-28-9.webp");',
+      '  --r3-tapa:url("https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/piezas/alicia-plato-28-9.webp");',
       '}',
       P + '.rasp-zona.dormida canvas{ filter:none!important; }',
       P + '.scratchcard, ' + P + '#scratchcard{',
@@ -504,6 +550,12 @@
       '  background-image:none!important;',
       '  border:0!important; box-shadow:none!important;',
       '}',
+      /* ⭐ 28/9: la tapa del video y la de la playlist llevan CADA UNA su foto
+         (separadas por la SECCIÓN, porque la clase es la misma). Un oscuro radial
+         chico en el centro, donde va el play, y la foto a la vista en los bordes. */
+      P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(18,12,10,.40) 0, rgba(18,12,10,.16) 26%, rgba(18,12,10,0) 46%), url("' + TAPA_VIDEO + '") center 42%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(31,21,18,.30), 0 0 0 1px rgba(196,168,116,.6)!important; }',
+      P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(18,12,10,.40) 0, rgba(18,12,10,.16) 26%, rgba(18,12,10,0) 46%), url("' + TAPA_PLAY + '") 30% 55%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(31,21,18,.30), 0 0 0 1px rgba(196,168,116,.6)!important; }',
+      P + ':is(#video-sec, #spotify-sec) .rd-tapa .rd-txt{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:0 1px 4px rgba(18,12,10,.95), 0 0 12px rgba(18,12,10,.7)!important; }',
       P + '.rd-tapa .rd-aro{',
       '  border-color:' + CORAL + '!important; color:' + CORAL2 + '!important;',
       '  background:rgba(246,240,228,.80)!important;',
@@ -584,10 +636,11 @@
       P + '.tl.tl-centro::after{ left:50%!important; margin-left:-1.5px!important; }',
       P + '.tl .tl-prog{ display:none!important; }',
       P + '.it::before{',
-      '  width:26px!important; height:26px!important;',
-      '  margin-left:-7.5px!important; margin-top:-7.5px!important;',
+      '  width:30px!important; height:30px!important;',
+      '  margin-left:-9.5px!important; margin-top:-9.5px!important;',
+      '  filter:drop-shadow(0 2px 3px rgba(31,21,18,.35))!important;',
       '  border-radius:0!important;',
-      '  background-image:url("' + corazonSVG(CORAL) + '")!important;',
+      '  background-image:url("' + CORAZON_FOTO + '")!important;',
       '  background-color:transparent!important;',
       '  background-size:contain!important; background-repeat:no-repeat!important;',
       '  background-position:center!important;',
@@ -616,7 +669,7 @@
       '  background:linear-gradient(180deg, rgba(196,168,116,0) 0%,',
       '    rgba(196,168,116,.9) 9%, rgba(196,168,116,.9) 91%, rgba(196,168,116,0) 100%)!important;',
       '}',
-      P + '.it .h{ color:' + TINTA + '!important; font-family:"IM Fell English",serif!important; }',
+      P + '.it .h{ color:' + TINTA + '!important; font-family:"Fraunces",Georgia,serif!important; }',
       /* ⚠️ EL DETALLE ES `.d`, NO `.t`. Lo escriben así los DOS que arman el
          itinerario: el motor (`<div class="d">`) y `efectos/itinerario-momentos.js`.
          Yo había escrito `.it .t`, que no existe: un selector que no existe no
@@ -628,8 +681,8 @@
          `.kick`/`h2` de la colección — `efectos/galeria.js` les escribe su
          propio color. El barrido por placa cazó «Antes del baile» en
          rgb(79,68,45), que no es de ninguna paleta de ésta. Se los pinta. */
-      P + '#gal-kick, ' + P + '.gal-kick{ color:' + TINTA2 + '!important; font-family:"Petit Formal Script",cursive!important; }',
-      P + '#gal-h2, ' + P + '.gal-h2{ color:' + TINTA + '!important; font-family:"IM Fell English",serif!important; }',
+      P + '#gal-kick, ' + P + '.gal-kick{ color:' + TINTA2 + '!important; font-family:"Allura",cursive!important; }',
+      P + '#gal-h2, ' + P + '.gal-h2{ color:' + TINTA + '!important; font-family:"Fraunces",Georgia,serif!important; }',
 
       /* ---- 🔴 LA CARTA: PAPEL CLARO, TINTA DE LA COLECCIÓN ----------------
          Lección de Bella, 23/9: la hoja de la carta es papel CASI BLANCO y si
@@ -645,7 +698,7 @@
       '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
       '  text-shadow:none!important;',
       '}',
-      P + '.cf-letter h4{ font-family:"IM Fell English",serif!important; }',
+      P + '.cf-letter h4{ font-family:"Fraunces",Georgia,serif!important; }',
 
       /* ---- 🔴 LA PORTADA --------------------------------------------------
          ⚠️ ALICIA ES LA EXCEPCIÓN A LA REGLA 7bis (bloque al pie), y a propósito:
@@ -660,11 +713,15 @@
             con `!important`, y un selector de clase no le gana.
          ⚠️ `line-height:1` + `padding-bottom`: la cola de una cursiva se sale de
             la caja de línea. */
-      P + '.portada{ justify-content:flex-start!important; padding-top:max(7vh,44px)!important; }',
+      /* ⚠️ 28/9, portada NUEVA (Paloma entre los setos, con naipes que caen): el cielo
+         va del 0 al 25 % y es CLARO (luminancia ≈200) — el marfil ahí no se lee. El seto
+         oscuro (≈35–56) va del 27 % al 62 % y la cara está en ≈57 %. El bloque se baja
+         al seto: arranca en 25vh. */
+      P + '.portada{ justify-content:flex-start!important; padding-top:25vh!important; }',
       P + '#pv-names{',
-      '  font-size:78px!important; line-height:1!important;',
+      '  font-size:96px!important; line-height:1!important;',
       '  padding-bottom:.24em!important;',
-      '  font-family:"Petit Formal Script",cursive!important;',
+      '  font-family:"Allura",cursive!important;',
       '  color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important;',
       '  text-shadow:0 2px 6px rgba(18,12,10,.85), 0 0 22px rgba(18,12,10,.55)!important;',
       '}',
@@ -674,7 +731,7 @@
       '  color:' + ESPUMA + '!important; -webkit-text-fill-color:' + ESPUMA + '!important;',
       '  text-shadow:0 1px 3px rgba(18,12,10,.95), 0 0 10px rgba(18,12,10,.75)!important;',
       '}',
-      P + '.portada h1, ' + P + '#nombre{ font-family:"Petit Formal Script",cursive!important; }',
+      P + '.portada h1, ' + P + '#nombre{ font-family:"Allura",cursive!important; }',
       P + '.portada .num{ color:' + PAPEL + '!important; font-variant-numeric:lining-nums!important;',
       '  text-shadow:0 1px 4px rgba(18,12,10,.9)!important; }',
       P + '.portada .u{ color:' + ESPUMA + '!important; text-shadow:0 1px 3px rgba(18,12,10,.9)!important; }',
@@ -709,9 +766,9 @@
        ("'Parisienne',cursive") Google Fonts devuelve 400 y la fuente no carga.
        Eso está medido en la invitación de Clara. */
     var href = 'https://fonts.googleapis.com/css2' +
-      '?family=IM+Fell+English:ital@0;1' +
+      '?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,100,1;1,9..144,400..600,100,1' +
       '&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400' +
-      '&family=Petit+Formal+Script' +
+      '&family=Allura' +
       '&display=swap';
     if (document.querySelector('link[data-col-fuentes="' + ID + '"]')) return;
     var l = document.createElement('link');
