@@ -132,6 +132,14 @@
              'nombre en Parisienne y una HOJA DE TILO como marca del itinerario. ' +
              'La bola de oro fotografiada es la tapa de la raspadita y de la ' +
              'playlist. Trae su propia paleta.' },
+    { id: 'alicia', nombre: 'Alicia en el país de las maravillas',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La quinta de la linea de princesas, CLARA. Es el libro de Carroll: ' +
+             'la merienda en el jardin de las rosas, con la mesa del te EN VIDEO. ' +
+             'Porcelana, rojo rosa, verde seto y oro de reloj. Titulos en IM Fell ' +
+             'English, el nombre en Petit Formal Script y un CORAZON de naipe como ' +
+             'marca del itinerario. El reloj de bolsillo fotografiado es la tapa de ' +
+             'la raspadita y de la playlist. Trae su propia paleta.' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +

@@ -754,6 +754,14 @@
                                           en Parisienne, cuerpo en Lora, y una HOJA DE TILO como
                                           marca del itinerario. Trae su propia paleta. */
 
+    '/colecciones/alicia.js',        /* la DOCEAVA familia y la QUINTA de la linea de princesas:
+                                          «Alicia en el pais de las maravillas», el libro de Carroll
+                                          y no la pelicula: la merienda en el jardin de las rosas.
+                                          CLARA: porcelana, rojo rosa, verde seto y oro de reloj; la
+                                          mesa del te EN VIDEO. Titulos en IM Fell English, nombre en
+                                          Petit Formal Script, cuerpo en Crimson Pro, y un CORAZON de
+                                          naipe como marca del itinerario. Trae su propia paleta. */
+
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */

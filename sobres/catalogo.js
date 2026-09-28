@@ -1269,6 +1269,27 @@ window.SOBRES_INVITAME = {
   },
 
 
+  /* ---- ALICIA · 28/9/2026 ------------------------------------------------
+     Va con la colección `alicia` (el libro de Carroll, no la película).
+     Papel porcelana con rositas rojas y corazones de naipe en oro, cuatro
+     solapas que se cruzan en X y un lacre ROJO con un corazón en relieve.
+     Lo hizo Higgsfield Soul (Flow tenía la sesión vencida).
+
+     ⚠️ Va por `solapas` con SÓLO póster, igual que `sirena`: las cuatro
+        solapas confluyen en el lacre y el lacre se parte al medio, así que no
+        hace falta `solapa` aparte ni `eje`.
+        Medido el lacre: centro 50,0 % · 50,4 % de la foto, redondo.
+     ⚠️ `color` MEDIDO: promedio del papel en la franja central salteando el
+        lacre → #CAC29D.
+     ---------------------------------------------------------------------- */
+  alicia: {
+    nombre:   "Alicia · papel porcelana con rositas y corazones de naipe, lacre rojo con corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-alicia-28-9.jpg",
+    color:    "#CAC29D",
+    apertura: "solapas",
+    empalme:  "foto"
+  },
+
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
