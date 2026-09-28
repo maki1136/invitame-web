@@ -143,6 +143,22 @@ if (isset($u['users'][0]['email'])) $mail = strtolower(trim($u['users'][0]['emai
 
 $permitido = false;
 foreach ($EQUIPO as $e) { if ($mail !== '' && $mail === strtolower($e)) { $permitido = true; break; } }
+/* 28/9/2026 · Además de la lista fija, vale quien esté ACTIVA en la caja Equipo
+   del panel (Firestore inv_equipo, id = correo en minúscula). Se lee con el token
+   de la propia persona: si las reglas la dejan leer y el documento dice activo,
+   es del equipo. Así Maki suma gente desde el panel sin tocar este archivo. */
+if (!$permitido && $mail !== '') {
+  list($rf, $cf) = pedir(
+    'https://firestore.googleapis.com/v1/projects/invitame-9b51f/databases/(default)/documents/inv_equipo/' . rawurlencode($mail),
+    'GET', null, array('Authorization: Bearer ' . $idToken)
+  );
+  if ($cf === 200) {
+    $doc = json_decode($rf, true);
+    if (is_array($doc) && isset($doc['fields']['activo']['booleanValue']) && $doc['fields']['activo']['booleanValue'] === true) {
+      $permitido = true;
+    }
+  }
+}
 if (!$permitido) {
   http_response_code(403);
   echo json_encode(array('ok' => false, 'error' => 'no-sos-del-equipo'));
