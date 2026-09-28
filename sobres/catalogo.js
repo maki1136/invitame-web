@@ -200,6 +200,16 @@ window.SOBRES_INVITAME = {
     luzColor:   "#EEF1F8",
     luzFundido: 0.5
   },
+  /* ---- ROSA DISCO (28/9/2026, XV, referencia xv-marian21): sobre rosa claro sobre fondo rosa con bolas de espejo y peonías en las esquinas; la solapa sube con el sello de espejo y sale luz rosada. Kling v3 pro 5 s, horneado vc_h264 SIN baseline. ---- */
+  'rosa-disco': {
+    nombre:     "Rosa disco · sobre rosa con sello de espejo, bolas y peonías (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/rosadisco/rd-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rosadisco/rd-sobre-v1.jpg",
+    color:      "#F2DCE1",
+    luz:        4.2,
+    luzColor:   "#FFF4F6",
+    luzFundido: 0.8
+  },
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
     video:  "/sobres/sobre-perlas.mp4",
