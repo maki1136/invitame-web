@@ -180,6 +180,26 @@ window.SOBRES_INVITAME = {
     luzColor:   "#EEF1F8",
     luzFundido: 0.5
   },
+  /* ----------------------------------------------------------------------
+     DISCO NOCHE — la segunda opción del sobre disco (28/9/2026). Maki: «agregá
+     otra opción más de noche: fondo negro, más bolas, más luces». Sobre negro
+     satinado con el filo de teselas de espejo y lacre de bola de espejos,
+     sobre terciopelo negro con cuatro bolas de espejos y puntos de luz.
+     Higgsfield Soul + Kling 3.0 pro 5 s, cámara quieta. MEDIDO (0,25 s):
+       0 a 1,5 s  quieto, sólo destellos         brillo 28
+       1,8 a 2,8 s se levanta la solapa
+       4,25 a 5,0 s sale la luz                  brillo 54 → 105
+     Dura 5,04 s. Invitación oscura → fogonazo corto (4,45 → 4,95).
+     ---------------------------------------------------------------------- */
+  'disco-noche': {
+    nombre:     "Disco noche · sobre negro, muchas bolas de espejos y luces (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/disco/dn-sobre-v2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/disco/dn-sobre-v2.jpg",
+    color:      "#1C1C1E",
+    luz:        4.45,
+    luzColor:   "#EEF1F8",
+    luzFundido: 0.5
+  },
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
     video:  "/sobres/sobre-perlas.mp4",
