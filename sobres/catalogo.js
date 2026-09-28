@@ -1219,6 +1219,54 @@ window.SOBRES_INVITAME = {
     eje:      { x: 50.0, y: 38.5 }
   },
 
+  /* ---- ★ EL SOBRE DE LA PRINCESA Y EL SAPO  (28/9/2026) ----------------
+     Va con la colección `sapo`. Papel de algodón verde bosque; la SOLAPA trae
+     la textura del agua del pozo —el arranque del cuento— y el cuerpo es papel
+     liso. Lacre de cera en oro viejo con una HOJA DE TILO, que es la misma
+     marca que la colección usa en los títulos y en el itinerario.
+
+     `apertura: 'solapas'` y NO video, como Cenicienta y Bella: la regla de Maki
+     —un video generado con IA hace lo que quiere— sigue en pie. El movimiento
+     lo maneja el motor.
+
+     ⚠️ LA TRAMPA DE LAS CUATRO PUNTAS: se pidió con el texto EN POSITIVO que ya
+        estaba escrito para Bella («UNA sola solapa triangular… debajo de ese
+        punto el frente es UNA hoja continua…»). De 4 tiradas, 1 sirvió entera:
+        de las otras tres, una puso el lacre arriba a la izquierda, otra dejó
+        margen blanco a los costados y la cuarta trajo costuras laterales.
+
+     ⚠️ Y LA REGLA DEL BORDE A BORDE SE COBRÓ DE NUEVO: la foto elegida traía
+        8 px de blanco arriba y 9 a la derecha y abajo. Se recortó a la caja
+        real del sobre (0,8)-(950,1687) y ADEMÁS 35 px más de arriba, para que
+        el pliegue izquierdo arranque exactamente en la fila 0 — que es lo que
+        el motor da por sentado al recortar con el triángulo
+        (0,0) → (100%,0) → (50%, eje.y). Recién después se llevó a 768×1376.
+
+     MEDIDO sobre la foto final (768×1376):
+        · el pliegue izquierdo, ajustado por mínimos cuadrados con 56 puntos:
+          y = 0,18 % en x = 0  y  y = 38,42 % en x = 50 %  → `eje` 50,0 · 38,4
+        · el lacre: centro (386, 490) px = 50,26 % · 35,65 %, radio 67 px
+        · la solapa se recorta con el triángulo + un disco de 78 px en el lacre,
+          para que entre también su sombra
+
+     ⚠️ EL LACRE BORRADO DEL PÓSTER: el primer parche salió de arriba a la
+        izquierda (−230, −160) y quedó bien de brillo pero DUPLICÓ EL PLIEGUE
+        —traía un pedazo de la diagonal izquierda y se veía una V partida—.
+        El bueno se eligió pidiendo además que el origen no tenga NINGUNA línea
+        (gradiente máximo sobre la imagen desenfocada), y ganó (618, 644), papel
+        liso del cuerpo. Medido después: disco 85,5 · aro 85,0 · sombra 84,9 ·
+        borde del parche 85,9, contra papel lejano 86,5. El salto mayor es de
+        1,6 — ruido. Sin disco fantasma y sin aro.                          */
+  sapo: {
+    nombre:   "La princesa y el sapo · papel verde bosque, el agua del pozo en la solapa, lacre de oro con hoja de tilo (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-sapo-poster-28-9.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-sapo-solapa-28-9.webp",
+    color:    "#3B5540",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.0, y: 38.4 }
+  },
+
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
