@@ -480,6 +480,42 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ ROSA DISCO (28/9/2026, XV, referencia xv-marian21 de Maki): rosa pastel con BOLAS DE ESPEJO grandes y peonías en dos esquinas cruzadas; portada SIN personas, en video (cámara quieta, pétalos que caen). Tinta magenta profunda (#6E1D45) sobre rosa papel #FCEFF2, acento rosa fuerte (#D4478A), plata #B8BCC6. El nombre en MAGENTA con brillo, como la referencia. Clonado de cerezo (misma estructura). */
+    rosadisco: {
+      hex: { '#C98E8A':'#D4478A', '#E3C2B8':'#F8D6E2', '#D9C3A0':'#E4E6EC', '#B08A4E':'#B8BCC6', '#F7EFEA':'#FCEFF2', '#FBF6F2':'#FDF8F7', '#4A2E2C':'#6E1D45', '#6B4744':'#8E3A63', '#82504C':'#B0306E', '#FBF4EF':'#FDF8F7', '#F5E6DF':'#F6E4E4', '#2E1C1B':'#2E1820', '#F2E4DC':'#F5E6E6', '#EAD9B8':'#E4E6EC' },
+      rgb: { '74,46,44':'110,29,69', '201,142,138':'212,71,138', '247,239,234':'252,239,242', '40,20,18':'70,18,44', '60,34,32':'70,18,44', '176,138,78':'184,188,198', '217,195,160':'228,230,236', '240,220,211':'243,214,214', '251,246,242':'252,239,242', '255,246,236':'252,239,242', '120,70,60':'70,18,44', '107,71,68':'142,58,99', '251,244,239':'252,239,242' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/rosadisco/rd-lv1.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/rosadisco/rd-bola-2.webp'
+      },
+      css: [
+        /* portada SIN personas: fondo rosa liso sin personas: el bloque va AL MEDIO (§34), el nombre en magenta */
+        P + '.portada{ justify-content:center!important; }',
+                P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(252,239,242,.35) 0%, rgba(252,239,242,0) 45%)!important; }',
+        P + '.portada > .c{ margin-top:0!important; background:radial-gradient(closest-side, rgba(252,239,242,.8), rgba(252,239,242,.4) 70%, rgba(252,239,242,0))!important; padding:18px 24px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#6E1D45!important; -webkit-text-fill-color:#6E1D45!important; text-shadow:0 0 10px rgba(252,239,242,.95)!important; }',
+        /* el nombre en ORO DE HOJA, como la referencia: degradado recortado al texto. Con un color plano a media luz reglas-duras lo pisaba (primero a negro, después a blanco: en foto copia el extremo del bloque). Con el relleno transparente no hay tinta que corregir y se queda el dorado. Medido y visto 25/9. */
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ color:transparent!important; -webkit-text-fill-color:transparent!important; background:linear-gradient(100deg,#8E1F55 0%,#C2306F 30%,#E86AA3 48%,#B42B6C 66%,#7A1848 100%)!important; -webkit-background-clip:text!important; background-clip:text!important; text-shadow:none!important; filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 0 10px rgba(252,239,242,.95))!important; font-size:clamp(54px, 15vw, 76px)!important; line-height:1.1!important; }',
+        /* el fondo va ADELANTE: claro chico y liviano */
+        /* 25/9 (Maki: «al fondo le falta fuerza, se tapa demasiado y queda apagado»): fuera las tres capas que lo lavaban —
+                   el papel al 10-50 % de cada sección (y de las .verde), la copia QUIETA de la imagen base encima de las .verde
+                   (.inv-banda-deco, multiply .26) y el brillo diagonal de #inv-fondo::after—. El claro queda SÓLO chico detrás del texto. */
+                P + '.frame > section.sec{ background-color:transparent!important; }',
+                P + '.inv-banda-deco{ display:none!important; }',
+                P + '#inv-fondo::after{ background:none!important; }',
+                P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 50% 30% at 50% 50%, rgba(252,239,242,.62) 0%, rgba(252,239,242,.28) 55%, rgba(252,239,242,0) 78%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(252,239,242,1), 0 0 14px rgba(252,239,242,.95), 0 0 26px rgba(252,239,242,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(70,18,44,.42) 0, rgba(70,18,44,.18) 24%, rgba(70,18,44,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/rosadisco/rd-fiesta-3\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(70,18,44,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(70,18,44,.42) 0, rgba(70,18,44,.18) 24%, rgba(70,18,44,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/rosadisco/rd-champan-2\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(70,18,44,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FDF8F7!important; background:rgba(70,18,44,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FDF8F7!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
