@@ -972,6 +972,15 @@
     /* 24/9, Maki: «en el no podré… es como que titila». El rótulo nacía crema (238,230,214) sobre papel:
        reglas-duras lo repintaba inline y el repaso lo borraba cada 1,2 s → parpadeo. Se le da su tinta. */
     P + '.rsvp-caja .et{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
+    /* ─────────────── 19 · 28/9, Maki: «al fondo le falta fuerza, se tapa demasiado y queda apagado».
+       Lo que se probó en mascarada y cerezo pasa a TODAS las Óleo: fuera el papel de cada sección,
+       la copia QUIETA de la pintura encima de las bandas (.inv-banda-deco) y el brillo diagonal de
+       #inv-fondo::after. El claro queda chico y liviano detrás del texto (se tiñe solo por tono;
+       los tonos que traen su propio claro para las secciones de texto lo siguen usando). */
+    P + '.frame > section.sec{ background-color:transparent!important; }',
+    P + '.inv-banda-deco{ display:none!important; }',
+    P + '#inv-fondo::after{ background:none!important; }',
+    P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 50% 30% at 50% 50%, rgba(251,246,242,.62) 0%, rgba(251,246,242,.28) 55%, rgba(251,246,242,0) 78%)!important; }',
     '@media (prefers-reduced-motion: reduce){ ' + P + '#inv-fondo > *, ' + P + '.portada #pbg, ' + P + '#inv-fondo::after{ animation:none!important; } }'
 
     ].join('\n');
