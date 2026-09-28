@@ -679,6 +679,7 @@
     '/efectos/acordeon.js',            /* los "Ver mapa" abrían en blanco: recarga los iframes */
     '/efectos/galeria.js',             /* la galería de fotos de invitados (fx.galeria) */
     '/efectos/panel-galeria.js',       /* y sus campos en el panel (prender, código, QR) */
+    '/efectos/fotos-impresas.js',      /* la galería como fotos impresas y dobladas (fx.fotos.estilo) + su bloque en el panel */
     '/efectos/filtro-marcos.js',       /* los SEIS marcos, vestidos con la temática */
     '/efectos/filtro.js',              /* la cámara con el marco de la boda (fx.filtro) */
     '/efectos/panel-filtro.js',        /* y su bloque en el panel, con el subidor del marco */
