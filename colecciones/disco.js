@@ -887,12 +887,32 @@
     hoja();
     lineaItinerario();
     cabezalLaser();
+    moverPase();
     if (!estabaPuesta) {
       estabaPuesta = true;
       /* un respiro para que la paleta ya haya repintado las variables */
       setTimeout(despintarUnaVez, 1800);
       setTimeout(despintarUnaVez, 4000);
     }
+  }
+
+  /* 28/9: el pase con el QR va ABAJO de la raspadita (regla de armado §5 · pase).
+     Perlas lo baja con su propio JS y el motor no: Disco lo dejaba pegado a la portada. */
+  function moverPase() {
+    var pase = document.querySelector('.pase');
+    var rasp = document.querySelector('.sec.scratch-sec');
+    if (!pase || !rasp) return;
+    if (rasp.parentElement !== pase.parentElement) return;
+    if (pase.previousElementSibling === rasp) return;
+    rasp.parentNode.insertBefore(pase, rasp.nextSibling);
+  }
+  function devolverPase() {
+    var pase = document.querySelector('.pase');
+    var port = document.querySelector('.portada');
+    if (!pase || !port) return;
+    if (port.parentElement !== pase.parentElement) return;
+    if (pase.previousElementSibling === port) return;
+    port.parentNode.insertBefore(pase, port.nextSibling);
   }
 
   function sacar() {
@@ -904,6 +924,7 @@
     }
     if (window.INVCOLPALETA === PALETA_PROPIA) { window.INVCOLPALETA = null; }
     estabaPuesta = false;
+    devolverPase();
     sacarHoja();
   }
 
