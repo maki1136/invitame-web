@@ -190,15 +190,35 @@
        La vía empieza y termina DONDE ESTÁ LA COSA (ver recortarVia), y son
        DOS elementos: `.tl::before` (la vía) y `.tl > .tl-prog` (el avance). */
     A.push(
-      P + '.tl{ background-color:' + MUSGO + '!important; border:1px solid rgba(201,164,78,.24)!important; border-radius:16px!important; padding-left:56px!important; }',
-      P + '.tl::before, ' + P + '.tl > .tl-prog{ left:34px!important; top:var(--tl-ini,6px)!important; bottom:var(--tl-fin,6px)!important; height:auto!important; }',
+      /* ⚠️⚠️ 28/9/2026 · LA MISMA TRAMPA QUE BELLA, Y LA PISÉ IGUAL.
+         La primera versión clavaba la vía y la marca en `left:34px`. Sirve
+         para el itinerario a la izquierda y PARTE EN DOS el de zigzag
+         (`.tl-centro`): ahí `.it::before` se posiciona contra SU PROPIA ficha,
+         así que 34 px caían ENCIMA del texto — en la captura de 390 px se leía
+         «jun🍃l lago», «21:1🍃Cena», «sor🍃sa». Y el `padding-left:56px` con
+         !important le ganaba al `padding-left:0` que el motor le pone al
+         zigzag, y corría todas las fichas.
+         La regla de Bella, que ya estaba escrita: «si el motor ya calcula una
+         posición, no se la reemplaza por un número — se la corrige por la
+         diferencia». El motor dibuja la marca de 11 px; ésta mide 26, así que
+         se corre (26 − 11) / 2 = 7,5 px y listo. Sirve para los dos estilos,
+         que Jazmín elige desde el panel. */
+      P + '.tl{ background-color:' + MUSGO + '!important; border:1px solid rgba(201,164,78,.24)!important; border-radius:16px!important; }',
+      P + '.tl:not(.tl-centro){ padding-left:44px!important; }',
+      P + '.tl:not(.tl-centro)::before, ' + P + '.tl:not(.tl-centro) > .tl-prog{ left:23px!important; }',
+      P + '.tl::before, ' + P + '.tl > .tl-prog{ top:var(--tl-ini,6px)!important; bottom:var(--tl-fin,6px)!important; height:auto!important; }',
       P + '.tl::before{ background-image:radial-gradient(circle, ' + TINTA3 + ' 1.1px, rgba(0,0,0,0) 1.2px)!important; background-size:2px 9px!important; background-repeat:repeat-y!important; background-color:transparent!important; width:2px!important; }',
       P + '.tl > .tl-prog{ background-color:' + ORO + '!important; width:2px!important; opacity:.85!important; }',
       /* la marca: la hoja de tilo sobre un disco de papel que tapa la vía */
-      P + '.tl > .it::before{ width:26px!important; height:26px!important; left:34px!important; margin-left:-13px!important; border-radius:50%!important; background-color:' + MUSGO + '!important; background-image:url("' + hojaSVG(ORO) + '")!important; background-size:18px 18px!important; background-repeat:no-repeat!important; background-position:center!important; box-shadow:0 0 0 1px rgba(201,164,78,.35)!important; border:0!important; }',
+      P + '.tl > .it::before{ width:26px!important; height:26px!important; margin-left:-7.5px!important; margin-top:-7.5px!important; border-radius:50%!important; background-color:' + MUSGO + '!important; background-image:url("' + hojaSVG(ORO) + '")!important; background-size:18px 18px!important; background-repeat:no-repeat!important; background-position:center!important; box-shadow:0 0 0 1px rgba(201,164,78,.35)!important; border:0!important; }',
       /* ⚠️ el motor maneja la marca con DOS reglas: reposo y revelado. Si se
          pisa sólo la opacidad, la marca se enciende a scale(.2) y se ve un
          puntito — el «circulito» que Maki ya rechazó. Va atada a `.on`. */
+      /* en el zigzag el motor la centra en alto con margin-top:-5,5 (la mitad
+         de 11) y a la IZQUIERDA de las impares la ancla por `right`: por eso
+         la corrección va por el lado que el motor usa. */
+      P + '.tl.tl-centro > .it::before{ margin-top:-13px!important; }',
+      P + '.tl.tl-centro > .it:nth-child(odd)::before{ margin-left:0!important; margin-right:-7.5px!important; }',
       P + '.tl.tl-anim > .it:not(.on)::before{ opacity:0!important; }',
       P + '.tl.tl-anim > .it.on::before{ opacity:1!important; }',
       P + '.tl .hora{ color:' + ORO + '!important; font-family:"Cormorant Garamond",serif!important; }',
@@ -240,7 +260,10 @@
           ese contraste. Es la excepción de la regla del papel. */
     A.push(
       P + '.pasecard{ border-radius:14px!important; }',
-      P + '.pasecard .k{ color:' + TINTA3 + '!important; letter-spacing:.14em!important; text-transform:uppercase!important; font-size:10px!important; }',
+      /* ⚠️ 28/9 · estaban en TINTA3 —«SÓLO filetes. NUNCA texto», escrito
+         arriba de todo en este mismo archivo— y medían 2,17 de contraste:
+         «Nombre», «Personas», «Mesa», «Estado del pase» casi no se veían. */
+      P + '.pasecard .k{ color:' + TINTA2 + '!important; letter-spacing:.14em!important; text-transform:uppercase!important; font-size:10px!important; }',
       P + '.pasecard .v{ color:' + TINTA + '!important; font-size:15px!important; }',
       P + '.pasecard .t{ font-family:"Cormorant Garamond",serif!important; font-size:19px!important; color:' + ORO_CL + '!important; }',
       P + '.pasecard .estado{ background-color:rgba(201,164,78,.18)!important; color:' + ORO_CL + '!important; border:1px solid rgba(201,164,78,.45)!important; }'
@@ -256,7 +279,45 @@
       /* el formulario nace pintado para fondo OSCURO y acá justamente lo es:
          se le sube el borde para que se vea contra el musgo */
       P + 'form.rsvpform :is(input,select,textarea){ background-color:rgba(255,255,255,.06)!important; border-color:rgba(201,164,78,.40)!important; color:' + TINTA + '!important; }',
-      P + 'form.rsvpform label{ color:' + TINTA2 + '!important; }'
+      P + 'form.rsvpform label{ color:' + TINTA2 + '!important; }',
+      /* ⚠️ 28/9 · la mesa de regalos NO son `.btn`: son `.reg-btns a`, y el
+         molde los pinta con letra BLANCA. Sobre el oro medían 2,36 —
+         «Liverpool», «Amazon», «Palacio de Hierro» casi no se leían—. Y el
+         «Copiar» de los datos de transferencia es `.banco .copy` (el motor lo
+         clava en #7d5f34 !important), marrón sobre musgo: 3,03.
+         ⚠️ La primera vez puse `.rb-cbu .copy` porque el chequeo informaba ese
+            padre, y NO agarró: el que se ve cuelga de `.banco .val`. Antes de
+            escribir un selector, `el.matches(selector)` sobre el elemento real. */
+      P + '.reg-btns a{ color:' + PAPEL2 + '!important; -webkit-text-fill-color:' + PAPEL2 + '!important; }',
+      P + ':is(.banco, .rb-cbu) .copy{ color:' + ORO_CL + '!important; -webkit-text-fill-color:' + ORO_CL + '!important; }'
+    );
+
+    /* ---- 12 bis · EL CIELO DEL AMBIENTE: DE NOCHE, CON LUCIÉRNAGAS -------
+       `fx.ambiente.tipo = 'nubes'` pinta SIEMPRE `/i/cielo.jpg`, un cielo
+       DIURNO y BLANCO que tapa la sección entera; los colores de la temática
+       no los usa. Ya estaba escrito en Cantera y en Bella, y acá se volvió a
+       caer: el 28/9 el itinerario de Zoé salió BLANCO con el título crema
+       encima, ilegible. Y la regla 6 del chequeo NO lo cantó (0 parches
+       claros): mira `background-color`, y esto es una FOTO de fondo.
+       Colección oscura con tinta clara → el cielo va de noche. Las chispas
+       son luciérnagas, las mismas del fondo del pozo. */
+    A.push(
+      P + '.ambiente .sky{',
+      '  background-image:',
+      '    radial-gradient(1.8px 1.8px at 21% 13%, rgba(224,197,122,.95), rgba(224,197,122,0) 60%),',
+      '    radial-gradient(1.2px 1.2px at 67% 8%,  rgba(240,220,160,.85), rgba(240,220,160,0) 60%),',
+      '    radial-gradient(2.2px 2.2px at 85% 30%, rgba(224,197,122,.80), rgba(224,197,122,0) 62%),',
+      '    radial-gradient(1.3px 1.3px at 37% 38%, rgba(240,220,160,.80), rgba(240,220,160,0) 60%),',
+      '    radial-gradient(2.0px 2.0px at 11% 56%, rgba(224,197,122,.85), rgba(224,197,122,0) 62%),',
+      '    radial-gradient(1.2px 1.2px at 73% 65%, rgba(240,220,160,.78), rgba(240,220,160,0) 60%),',
+      '    radial-gradient(1.9px 1.9px at 46% 81%, rgba(224,197,122,.88), rgba(224,197,122,0) 62%),',
+      '    radial-gradient(1.1px 1.1px at 89% 90%, rgba(240,220,160,.75), rgba(240,220,160,0) 60%),',
+      '    linear-gradient(180deg, rgba(13,26,19,.94) 0%, rgba(20,37,28,.88) 100%)!important;',
+      '  background-size:168px 168px,168px 168px,168px 168px,168px 168px,',
+      '                  168px 168px,168px 168px,168px 168px,168px 168px,100% 100%!important;',
+      '  background-repeat:repeat,repeat,repeat,repeat,repeat,repeat,repeat,repeat,no-repeat!important;',
+      '  background-color:' + PAPEL2 + '!important;',
+      '}'
     );
 
     /* ---- 13 · LA CARTA Y EL CONTACTO ------------------------------------
