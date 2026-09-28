@@ -25,7 +25,8 @@
         · La tapa de la raspadita es un PLATITO de porcelana con corona de rosas
           y un corazón al centro (`invitame/piezas/alicia-plato-28-9.webp`).
           (28/9: fuera el reloj de bolsillo — «muy malos, muy feos».)
-        · Los arcos (`.sec.verde`) van en PAPEL TOILE de la temática, no crema liso.
+        · Los arcos (`.sec.verde`) van en papel de algodón con damasco en relieve y
+          corazoncitos de naipe (no crema liso, y no el toile cargado de la 1ra vuelta).
         · Video, playlist, filtro y fotos de la fiesta llevan FOTO PROPIA.
         · El fondo es la merienda del jardín EN VIDEO (Kling por la API de
           Higgsfield, 28/9), con vapor del té y pétalos.
@@ -66,7 +67,11 @@
   var TAPA_PLAY   = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/alicia/flow/alicia-playlist-op2-28-9'; /* la caja de música de porcelana */
   var FOTO_FILTRO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/alicia/flow/alicia-filtro-op2-28-9';   /* el marco dorado vacío en el seto */
   var FOTO_FIESTA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/alicia/flow/alicia-fiesta-op3-28-9';   /* las fotos de la fiesta sobre el mantel */
-  var TOILE       = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/alicia/alicia-toile-tile-28-9'; /* papel toile: teteras, naipes, rosas, conejos */
+  /* 28/9, 2da vuelta (Maki: «ese fondo está muy cargado»): el toile de teteras,
+     naipes y conejos era demasiado. Va un PAPEL DE ALGODÓN con damasco en relieve
+     tono sobre tono y corazoncitos de naipe rosa viejo, bien espaciados (Flow).
+     Corregido de luz (flat-field) y espejado horizontal, así repite sin costura. */
+  var TOILE       = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/alicia/alicia-papel-damasco-tile-28-9';
 
   var CLARO_A = 0.66;       /* ALICIA 28/9: 0,58 era el de Sirena; lo subí a 0,80 porque la
                                merienda está LLENA y Maki dijo «el fondo está casi todo
@@ -268,7 +273,7 @@
       P + ':is(#filtro-sec, #gal-seccion) .adorno, ' + P + ':is(#filtro-sec, #gal-seccion) [class*="ico"]{ filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))!important; }',
       /* con formulario (la confirmación) el toile va más apagado: los rótulos son
          chicos y en cursiva, y sobre el grabado no se leían (captura 28/9) */
-      P + '.sec.verde:has(.rsvpform){ background-image:radial-gradient(120% 90% at 50% 50%, rgba(246,240,228,.95) 0%, rgba(246,240,228,.90) 60%, rgba(246,240,228,.62) 100%), url("' + TOILE + '")!important; }',
+      P + '.sec.verde:has(.rsvpform){ background-image:radial-gradient(120% 90% at 50% 50%, rgba(246,240,228,.72) 0%, rgba(246,240,228,.55) 60%, rgba(246,240,228,.25) 100%), url("' + TOILE + '")!important; }',
       /* «Entrar a la galería» es un <a>: en WebKit salía con el azul de enlace (123,123,255) */
       P + '#gal-entrar, ' + P + '#filtro-abrir{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; }',
       /* los rótulos del formulario sobre el toile: halo de papel, como el resto */
@@ -332,15 +337,14 @@
             arco se come la primera línea del nombre del hotel. Va 38 px arriba. */
       /* ⭐ 28/9 (Maki: «un fondo cremita, liso, muy básico, no me gusta ni un
          poco»): el arco deja de ser crema liso y pasa a ser PAPEL TOILE de la
-         temática —teteras, naipes, rosas, conejos grabados en rojo rosa—, con un
-         claro radial encima para que el texto se lea. El toile está espejado 2×2,
-         así que repite sin costura. */
+         temática (desde la 2da vuelta: damasco en relieve con corazoncitos, porque
+         el toile de teteras y conejos quedó «muy cargado»), con un claro radial suave. */
       P + '.sec.verde{',
       '  border-radius:50% 50% 0 0 / 90px 90px 0 0!important;',
       '  padding-top:96px!important;',
       '  background-color:' + PAPEL + '!important;',
-      '  background-image:radial-gradient(115% 82% at 50% 46%, rgba(246,240,228,.92) 0%, rgba(246,240,228,.80) 55%, rgba(246,240,228,.42) 100%), url("' + TOILE + '")!important;',
-      '  background-size:100% 100%, 520px auto!important;',
+      '  background-image:radial-gradient(115% 82% at 50% 46%, rgba(246,240,228,.55) 0%, rgba(246,240,228,.30) 60%, rgba(246,240,228,0) 100%), url("' + TOILE + '")!important;',
+      '  background-size:100% 100%, 900px auto!important;',
       '  background-repeat:no-repeat, repeat!important;',
       '  background-position:center, center top!important;',
       '}',
