@@ -157,47 +157,28 @@ window.SOBRES_INVITAME = {
         que asume solapas triangulares.
      ---------------------------------------------------------------------- */
   /* ----------------------------------------------------------------------
-     DISCO — el sobre de la muestra de XV de Lupita. Papel plata sobre raso
-     negro con destellos de bola de espejos, y un lacre redondo con la bola.
-     Generado en Flow el 19/9/2026 y MEDIDO cuadro por cuadro (ver `luz`).
+     DISCO — el sobre de la muestra de XV de Lupita. REHECHO el 28/9/2026
+     (Maki: «el sobre de disco quedó muy básico, muy mal»). El viejo era un
+     sobre gris liso sobre raso. Ahora: sobre de terciopelo azul noche con el
+     filo de la solapa en teselas de espejo, lacre fundido como una bola de
+     espejos, bola de espejos real girando en la esquina y reflejos que se
+     mueven. Imagen: Higgsfield Soul · video: Kling 3.0 pro 5 s, cámara quieta.
+     MEDIDO cuadro por cuadro (cada 0,25 s, brillo medio / movimiento):
+       0,0 a 2,0 s  quieto, sólo los reflejos     brillo 37   mov 3
+       2,25 a 3,5 s se levanta la solapa          brillo 38→52 mov 5→12
+       4,25 a 5,0 s sale la luz de adentro        brillo 72→107
+     Dura 5,04 s. El fogonazo entra en 4,4 y termina en 4,9 (antes del final).
+     ⚠️ Sobre una invitación OSCURA el blanco largo se lee como página rota
+        (lección del 21/9): por eso el fundido es corto.
      ---------------------------------------------------------------------- */
   disco: {
-    nombre: "Disco · plata con lacre de bola de espejos (video)",
-    video:  "/sobres/sobre-disco.mp4",
-    poster: "/sobres/sobre-disco-poster.jpg",
-    color:  "#FBFBFA",
-    /* MEDIDO EL 19/9/2026 sobre los 24 cuadros (3 por segundo), brillo medio:
-         0,0 a 3,0 s  quieto, cerrado            brillo 80
-         3,3 a 3,7 s  la solapa se levanta       brillo baja a 68
-         4,0 s        abierto, entra la luz      brillo 83
-         4,3 a 7,7 s  zoom, se llena de blanco   brillo 102 -> 251
-       El destello entra cuando ARRANCA el zoom: 4,0. */
-    luz: 4.0,
-    /* ⚠️ DOS SEGUNDOS DE BLANCO SOBRE NEGRO SE LEEN COMO PÁGINA ROTA.
-       Medido el 21/9/2026 mirando la apertura cuadro por cuadro: el destello
-       entraba bien, pero después la pantalla se quedaba en blanco pleno casi
-       dos segundos. Sobre papel marfil no molesta —el blanco ES el papel—;
-       sobre una invitación negra tapa la escena. Acá va corto: el fogonazo se
-       ve y se va. */
-    /* ⭐⭐ POR QUÉ 0,42 Y POR QUÉ LA PRIMERA VEZ LO SAQUÉ MAL. 21/9/2026.
-       `luzFundido` NO es sólo cuánto dura el desvanecido: es también cuánto
-       ESPERA el motor, quieto y a opacidad 1, antes de empezarlo. Medido en
-       vivo, con el valor de fábrica (1 s):
-         4,16 s  entra `fundiendo`  — opacidad 1
-         5,04 s  recién ahí entra `gone` y arranca el desvanecido
-       O sea: casi un segundo entero mirándole al video del sobre el tramo en
-       que se llena de blanco (brillo 102 → 251). Eso es la pantalla en blanco
-       que veía Maki. Con 0,42 el corte pasa a los 4,58, cuando el blanco
-       recién empieza: se lee como fogonazo y no como página rota.
-       ⚠⚠ EL ERROR DE LA PRIMERA VUELTA, para no repetirlo: lo saqué porque
-          «dejaba la portada gris clara». NO era cierto: yo estaba mirando un
-          cuadro DE LA MITAD DEL FUNDIDO. Medido de nuevo cuadro por cuadro,
-          medio segundo después la portada está negra y los textos en plata,
-          exactamente igual que con 1 s.
-       ⚠ LA REGLA: un cuadro tomado durante una transición no dice cómo queda
-         la pantalla. Antes de culpar a un cambio, esperar a que la animación
-         TERMINE y recién ahí mirar. */
-    luzFundido: 0.42
+    nombre:     "Disco · terciopelo azul noche con teselas de espejo y lacre de bola de espejos (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/disco/ds-sobre-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/disco/ds-sobre-v1.jpg",
+    color:      "#1A2035",
+    luz:        4.4,
+    luzColor:   "#EEF1F8",
+    luzFundido: 0.5
   },
   perlas: {
     nombre: "Perlas · moño de perlas, se abre al medio (video)",
