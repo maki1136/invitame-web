@@ -227,7 +227,15 @@
 
     /* ---- 8 · EL ADORNO DE LOS TÍTULOS ----------------------------------- */
     A.push(
-      P + '.sec h2 .adorno, ' + P + '.adorno{ background-image:url("' + hojaSVG(ORO) + '")!important; background-repeat:no-repeat!important; background-position:center!important; background-size:contain!important; }'
+      P + '.sec h2 .adorno, ' + P + '.adorno{ background-image:url("' + hojaSVG(ORO) + '")!important; background-repeat:no-repeat!important; background-position:center!important; background-size:contain!important; }',
+      /* ⚠️⚠️ 28/9 · EL ADORNO DEL MOTOR TRAE LOS ANILLOS DE BODA.
+         Es un <svg> con dos filetes y, en el medio, DOS CÍRCULOS ENTRELAZADOS
+         (`<circle cx=55>` y `<circle cx=66>`). Se dibujaba ENCIMA de la hoja
+         de tilo en las 15 secciones — en un XV. Bella y Sirenita lo esconden
+         entero (`.adorno svg{display:none}`); Sapo no lo había traído.
+         Acá se esconde SÓLO el grupo de los anillos: los filetes de los
+         costados quedan, y la hoja va en el hueco del medio (40 a 80). */
+      P + '.adorno svg g:nth-of-type(2), ' + P + '.adorno svg circle{ display:none!important; }'
     );
 
     /* ---- 9 · LA RASPADITA: SIN RECUADRO, Y LA TAPA ES LA BOLA -----------
@@ -289,7 +297,13 @@
             padre, y NO agarró: el que se ve cuelga de `.banco .val`. Antes de
             escribir un selector, `el.matches(selector)` sobre el elemento real. */
       P + '.reg-btns a{ color:' + PAPEL2 + '!important; -webkit-text-fill-color:' + PAPEL2 + '!important; }',
-      P + ':is(.banco, .rb-cbu) .copy{ color:' + ORO_CL + '!important; -webkit-text-fill-color:' + ORO_CL + '!important; }'
+      P + ':is(.banco, .rb-cbu) .copy{ color:' + ORO_CL + '!important; -webkit-text-fill-color:' + ORO_CL + '!important; }',
+      /* ⚠️ 28/9 · el nombre de la TRIVIA (`.tv-in`) nace blanco al 92 %: una
+         barra blanca en medio de la noche. Bella lo tiene oscuro; Sapo no lo
+         había traído. Va SÓLO a `.tv-in` — una regla de `input` suelta le
+         pegaría también al formulario de confirmación, que ya está bien. */
+      P + '.tv-in{ background-color:rgba(13,26,19,.55)!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; border:1px solid rgba(201,164,78,.40)!important; }',
+      P + '.tv-in::placeholder{ color:rgba(232,223,200,.55)!important; -webkit-text-fill-color:rgba(232,223,200,.55)!important; }'
     );
 
     /* ---- 12 bis · EL CIELO DEL AMBIENTE: DE NOCHE, CON LUCIÉRNAGAS -------
