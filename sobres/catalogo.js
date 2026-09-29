@@ -625,31 +625,31 @@ window.SOBRES_INVITAME = {
            el archivo viejo en caché hasta 30 días. Un id nuevo es el único
            corte limpio.
 
-        ⚠️ PESA 244 KB servidos, no 4 MB, y eso no es capricho: el invitado toca
-           entre los 3 y los 6 s, y un sobre liviano arranca antes SIEMPRE. El de
-           Invitely, en la misma red, tarda 24 s en estar listo. (El motor ya no
-           exige el video entero para arrancar —mide si la descarga le gana a la
-           aguja— pero eso no cambia la regla del peso.)
+     ⚠️ PESA 244 KB servidos, no 4 MB, y eso no es capricho: el invitado toca
+        entre los 3 y los 6 s, y un sobre liviano arranca antes SIEMPRE. El de
+        Invitely, en la misma red, tarda 24 s en estar listo. (El motor ya no
+        exige el video entero para arrancar —mide si la descarga le gana a la
+        aguja— pero eso no cambia la regla del peso.)
 
-        ⚠️ VIVE EN CLOUDINARY, NO EN /sobres/  (18/9/2026)
-           Igual que `playa`, y por la misma razón práctica: el catálogo acepta
-           una URL completa lo mismo que una ruta del repo.
+     ⚠️ VIVE EN CLOUDINARY, NO EN /sobres/  (18/9/2026)
+        Igual que `playa`, y por la misma razón práctica: el catálogo acepta
+        una URL completa lo mismo que una ruta del repo.
 
-           La transformación NO es la de `playa`. `vc_auto` devuelve perfil HIGH,
-           y los sobres se renderizan en **Constrained Baseline** a propósito, que
-           es lo que decodifica cualquier teléfono viejo. Con
-           `vc_h264:baseline:3.1` Cloudinary respeta el perfil y entrega 244 KB.
+        La transformación NO es la de `playa`. `vc_auto` devuelve perfil HIGH,
+        y los sobres se renderizan en **Constrained Baseline** a propósito, que
+        es lo que decodifica cualquier teléfono viejo. Con
+        `vc_h264:baseline:3.1` Cloudinary respeta el perfil y entrega 244 KB.
 
-           Comparado cuadro por cuadro contra el original (128 cuadros):
-           PSNR mínimo 41,6 dB, medio 43,5 dB — arriba de 40 dB no se distingue.
-           Mismo 540×960, 24 fps, 128 cuadros, 5,333 s, moov al principio, y la
-           zona plana de la tarjeta NO tomó bandas (escalón máximo entre filas
-           10,5 contra 11,7 del original). El póster sale en webp de 26 KB.
+        Comparado cuadro por cuadro contra el original (128 cuadros):
+        PSNR mínimo 41,6 dB, medio 43,5 dB — arriba de 40 dB no se distingue.
+        Mismo 540×960, 24 fps, 128 cuadros, 5,333 s, moov al principio, y la
+        zona plana de la tarjeta NO tomó bandas (escalón máximo entre filas
+        10,5 contra 11,7 del original). El póster sale en webp de 26 KB.
 
-           ⚠️ El .mp4 y el .jpg NO están en el repo: no hay forma de subir un
-              binario por la API de GitHub. Si hay que regenerarlos, el video
-              está embebido en base64 en el artefacto «Sobre Onyx» y las fuentes
-              del relieve en ONYX-relieve-y-fluidez.md.
+        ⚠️ El .mp4 y el .jpg NO están en el repo: no hay forma de subir un
+           binario por la API de GitHub. Si hay que regenerarlos, el video
+           está embebido en base64 en el artefacto «Sobre Onyx» y las fuentes
+           del relieve en ONYX-relieve-y-fluidez.md.
 
      empalme 'foto': el video termina con una tarjeta marfil lisa subiendo, y
      el motor la funde encima de la portada real que ya está dibujada debajo.
