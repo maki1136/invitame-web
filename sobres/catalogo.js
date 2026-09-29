@@ -1552,6 +1552,62 @@ window.SOBRES_INVITAME = {
     eje:      { x: 50.4, y: 56.5 }
   },
 
+  /* Tanda Degradé (30/9): cinco sobres grandes -cae. */
+  "onix-cae": {
+    nombre:   "Ónix · negro con filetes de oro y lacre dorado, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-onix-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-onix-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-onix-cuerpo.webp",
+    color:    "#232224",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.5, y: 40.8 }
+  },
+
+  "terracota-cae": {
+    nombre:   "Terracota · papel terracota con hilo de yute y lacre, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-terracota-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-terracota-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-terracota-cuerpo.webp",
+    color:    "#be5e42",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.8, y: 34.8 }
+  },
+
+  "oliva-cae": {
+    nombre:   "Oliva · lino oliva con rama dorada y lacre, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-oliva-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-oliva-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-oliva-cuerpo.webp",
+    color:    "#5c5928",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 56.9, y: 50.6 }
+  },
+
+  "lavanda-cae": {
+    nombre:   "Lavanda · encaje plata y lacre con corona, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-lavanda-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-lavanda-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-lavanda-cuerpo.webp",
+    color:    "#8e8294",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 51.6, y: 56.1 }
+  },
+
+  "rosa-cae": {
+    nombre:   "Rosa · moño de satén y lacre dorado, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-rosa-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-rosa-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-rosa-cuerpo.webp",
+    color:    "#c47470",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.8, y: 48.9 }
+  },
+
   "damasco-salvia": {
     nombre:   "Damasco · marfil con damasco en relieve, lacre salvia con corazón (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-poster.jpg",
