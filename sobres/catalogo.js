@@ -1550,6 +1550,19 @@ window.SOBRES_INVITAME = {
     ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
   },
 
+  /* ★ 29/9/2026 · mismo sobre que perla-salvia, SIN ficha y con empalme "foto":
+     la solapa sube, la mitad de abajo CAE y aparece la portada (pedido de Maki). */
+  "perla-salvia-cae": {
+    nombre:   "Perla · verde salvia, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/perla-salvia-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/perla-salvia-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/perla-salvia-cuerpo.webp",
+    color:    "#909d86",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.0, y: 60.2 }
+  },
+
   "encaje-celeste": {
     nombre:   "Encaje · celeste con borde de encaje en la solapa y perla (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-celeste-poster.jpg",
