@@ -1268,6 +1268,8 @@ window.SOBRES_INVITAME = {
         liso del cuerpo. Medido después: disco 85,5 · aro 85,0 · sombra 84,9 ·
         borde del parche 85,9, contra papel lejano 86,5. El salto mayor es de
         1,6 — ruido. Sin disco fantasma y sin aro.                          */
+  /* 28/9/2026 · La princesa y el sapo EN VIDEO (Maki: «el sobre hacelo con video»). Flow (sobre verde, lacre de oro con nenúfar) + kling v3 std 5 s: la solapa sube con el lacre, sale luz dorada. */
+  'sapo-video': { nombre:"La princesa y el sapo · sobre verde con lacre de nenúfar (video)", video:"https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/sapo/sp-sobre-std.mp4", poster:"https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sapo/sp-sobre-std.jpg", color:"#10201A", luz:3.6, luzColor:"#FFF1D6", luzFundido:0.5 },
   sapo: {
     nombre:   "La princesa y el sapo · papel verde bosque, el agua del pozo en la solapa, lacre de oro con hoja de tilo (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-sapo-poster-28-9.jpg",
