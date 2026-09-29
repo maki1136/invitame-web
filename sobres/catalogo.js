@@ -1428,6 +1428,106 @@ window.SOBRES_INVITAME = {
     }
   },
 
+  /* ---- ★ LOS CINCO SOBRES DE LA FICHA DE TIEMPOS  (29/9/2026) --------------
+     Maki mandó como referencia 9 aperturas de sobre de otra cuenta y pidió
+     «diseños similares y aperturas similares: ocupan toda la pantalla, se abren
+     bien, tienen elegancia y estilo… acordate los segundos, es clave». Se
+     miraron cuadro por cuadro (nota `INVITEATELIER-ficha-de-tiempos-29-9`) y se
+     eligieron cinco DISEÑOS PROPIOS, uno por tipo de apertura:
+
+       ramitas-lila     · papel perlado lila, dos ramas grabadas en X, lacre corazón
+       damasco-salvia   · marfil con damasco en relieve, lacre salvia con corazón
+       perla-salvia     · verde salvia, solapa REDONDA con una perla
+       encaje-celeste   · celeste, borde de encaje en la solapa y perla
+       rosado-flor-seca · algodón rosa de borde rústico, lacre con flor seca
+
+     Todos salieron de Flow (Nano Banana 2, 0 créditos) y NO tienen video: van por
+     `solapas`, con tres archivos de 768×1376 armados de LA MISMA FOTO:
+       poster = la foto del sobre cerrado (opaca)
+       solapa = la solapa (más lacre / perla / encaje) con transparencia
+       cuerpo = el resto del sobre, con el hueco de la solapa ya adentro
+                (borde blando de ~22 px) y el lacre BORRADO del papel
+     O sea que el relieve de la solapa es el de la foto, no una capa pegada.
+     La línea del doblez se MIDIÓ sobre la foto (gradiente máximo columna por
+     columna + ajuste robusto; error < 1 px) y el círculo de la perla, con un
+     ajuste de círculo sobre 57 puntos.
+
+     ⭐ LA FICHA (medida en los reels, contada desde el toque):
+          0,0 – 2,6 s   la solapa se abre lenta, arranque suave
+          2,7 s         arranca el destello (rampa de 0,45 s)
+          3,7 s         se corta al blanco (`luzFundido` 1,0) y nace la invitación
+          ≈ 4,8 s       el blanco terminó de irse
+        `ficha.destello` = 2,7 · `ficha.solapa` = 2,6 · `luzFundido` = 1,0.
+        ⚠️ La CURVA de la solapa no se pudo medir (celular en la mano): es
+           `cubic-bezier(.5,0,.75,.5)`, decisión propia, no dato.
+     ⚠️ `empalme:'blanco'` A PROPÓSITO: la referencia termina en luz. Es la regla
+        de Maki del 28/9 (algo sale del sobre y se vuelve la luz que tapa todo).
+     ---------------------------------------------------------------------- */
+  "ramitas-lila": {
+    nombre:   "Ramitas · papel perlado lila, ramas grabadas en X, lacre de corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/ramitas-lila-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/ramitas-lila-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/ramitas-lila-cuerpo.webp",
+    color:    "#c9c0c5",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.4, y: 56.5 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "damasco-salvia": {
+    nombre:   "Damasco · marfil con damasco en relieve, lacre salvia con corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-cuerpo.webp",
+    color:    "#e5e1da",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.1, y: 56.2 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "perla-salvia": {
+    nombre:   "Perla · verde salvia, solapa redonda con una perla (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/perla-salvia-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/perla-salvia-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/perla-salvia-cuerpo.webp",
+    color:    "#909d86",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.0, y: 60.2 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "encaje-celeste": {
+    nombre:   "Encaje · celeste con borde de encaje en la solapa y perla (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-celeste-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-celeste-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-celeste-cuerpo.webp",
+    color:    "#90a6b3",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 51.8, y: 54.3 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "rosado-flor-seca": {
+    nombre:   "Rústico rosa · algodón de borde suelto, lacre con flor seca (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-cuerpo.webp",
+    color:    "#ddc6bb",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 48.6, y: 55.7 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
   marfil: {
     nombre: "Marfil en relieve",
     img:    "/sobres/sobre-marfil.jpg",
