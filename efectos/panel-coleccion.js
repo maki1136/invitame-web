@@ -148,6 +148,13 @@
              'hiedra y azul campanula. Titulos en Young Serif, el nombre en Mea Culpa ' +
              'y una FLOR DE RAPONCHIGO fotografiada como marca del itinerario. La ' +
              'trenza enrollada es la tapa de la raspadita. Trae su propia paleta.' },
+    { id: 'acuarela-rosa', nombre: 'Acuarela rosa',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La de Martina. TODA la invitacion va sobre el mismo fondo: rosas en ' +
+             'acuarela con mariposas doradas (el de Mesa de regalos). No hay bandas ' +
+             'rosas: la letra va en rosa hondo sobre las flores. El pase con el QR va ' +
+             'abajo de la raspadita, que se raspa una rosa. Usa la paleta del evento ' +
+             '(el rosa de los botones sale del color principal).' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
