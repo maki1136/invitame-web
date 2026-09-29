@@ -1439,7 +1439,7 @@ window.SOBRES_INVITAME = {
   'julieta-luz': { nombre: "Julieta (Boho) · sobre kraft CERRADO con lacre terracota e hilo; se abre y sale luz dorada con flores secas (video)",
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/xv29/ju/ju-sobre-luz.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/xv29/ju/ju-sobre-luz.jpg",
-    color: "#C5B7A7", luz: 4.0, luzColor: "#FFF6E6", luzFundido: 0.65 },
+    color: "#DACCB9", luz: 4.0, luzColor: "#FFF6E6", luzFundido: 0.65 },
   'alexa-luz': { nombre: "Alexa (Globos rosa) · sobre rosa chicle CERRADO con lacre rosa; se abre y salen corazones y luz (video)",
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/xv29/fe/fe-sobre-luz.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/xv29/fe/fe-sobre-luz.jpg",
@@ -1447,7 +1447,7 @@ window.SOBRES_INVITAME = {
   'bianca-luz': { nombre: "Bianca (Brillos) · sobre rosa palo CERRADO con lacre champán; se abre y sale luz con brillo rosa (video)",
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/xv29/bi/bi-sobre-luz.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/xv29/bi/bi-sobre-luz.jpg",
-    color: "#CFAFAA", luz: 4.0, luzColor: "#FFF6F2", luzFundido: 0.65 },
+    color: "#D8B7B1", luz: 4.0, luzColor: "#FFF6F2", luzFundido: 0.65 },
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
