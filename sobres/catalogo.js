@@ -1424,6 +1424,10 @@ window.SOBRES_INVITAME = {
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/perlas/ct-sobre-luz-29-9.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/perlas/ct-sobre-luz-29-9.jpg",
     color: "#A09884", luz: 4.35, luzColor: "#FBF8F1", luzFundido: 0.7 },
+  'danna-luz': { nombre: "Danna (Glow party) · sobre violeta CERRADO con lacre rosa neón; se abre y sale luz de neón rosa y verde (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/xv29/xi/xi-sobre-luz2.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/xv29/xi/xi-sobre-luz2.jpg",
+    color: "#212623", luz: 4.0, luzColor: "#FFF4FB", luzFundido: 0.5 },
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
