@@ -1420,6 +1420,10 @@ window.SOBRES_INVITAME = {
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/vaquera/vq-sobre-luz-29-9.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/vaquera/vq-sobre-luz-29-9.jpg",
     color: "#ABABA4", luz: 4.4, luzColor: "#FFF6EC", luzFundido: 0.6 },
+  'camila-luz': { nombre: "Camila y Tomás (Perlas) · sobre marfil CERRADO con lacre ciruela y perla; se abre y sale luz perlada con perlas (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/perlas/ct-sobre-luz-29-9.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/perlas/ct-sobre-luz-29-9.jpg",
+    color: "#A09884", luz: 4.35, luzColor: "#FBF8F1", luzFundido: 0.7 },
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
