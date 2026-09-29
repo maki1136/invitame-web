@@ -1395,6 +1395,10 @@ window.SOBRES_INVITAME = {
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/cenicienta/cla-sobre-luz-29-9.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/cenicienta/cla-sobre-luz-29-9.jpg",
     color: "#607277", luz: 4.35, luzColor: "#F6F9FD", luzFundido: 0.6 },
+  'mia-luz': { nombre: "Disco (Mía) · sobre negro mate con lacre de plata de bola de espejos; la solapa se lleva el lacre y sale luz plateada con destellos (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/mia/mia-sobre-luz-29-9.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/mia/mia-sobre-luz-29-9.jpg",
+    color: "#0B0B0B", luz: 4.4, luzColor: "#F7F6FA", luzFundido: 0.5 },
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
