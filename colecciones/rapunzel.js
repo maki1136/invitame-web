@@ -230,8 +230,8 @@
             el adorno y el lacre; TINTA3 es el filete. Ninguno de los dos
             escribe. */
       P + '.frame .kick, ' + P + '.frame .sec .kick{',
-      '  font-family:"Mea Culpa",cursive!important;',
-      '  font-size:36px!important; line-height:1.1!important;',
+      '  font-family:"Corinthia",cursive!important; font-weight:700!important;',
+      '  font-size:40px!important; line-height:1.1!important;',
       '  color:' + TINTA2 + '!important;',
       '  letter-spacing:.01em!important;',
       '}',
@@ -279,7 +279,14 @@
       /* «AGENDAR» (`.btn.gh`) quedaba con `-webkit-text-fill-color` TINTA sobre el
          esmalte rojo: la letra oscura se leía apenas (captura 28/9). El color
          decía blanco; el que pinta en WebKit/Chrome es el fill. */
-      P + '.frame .btnrow .btn.gh, ' + P + '.frame .btn.gh{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',   /* RAPUNZEL: sobre el oro va tinta de nogal, no papel */
+      /* ⭐ 29/9 · LA LETRA DE «AGENDAR» SIGUE AL MATERIAL QUE ELIGE JAZMÍN.
+         Con «Oro cepillado» iba tinta de nogal; Maki: «los textos en los botones
+         no se leen bien» (el cepillado cruza la letra con rayas claras y
+         oscuras). La muestra pasó a «Esmalte» (azul campánula con canto de oro,
+         letra blanca) y con la tinta clavada «AGENDAR» salía NOGAL SOBRE AZUL.
+         → papel por defecto, nogal SÓLO con `data-boton="oro"`. */
+      P + '.frame .btnrow .btn.gh, ' + P + '.frame .btn.gh{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; }',
+      P.replace('html[', 'html[data-boton="oro"][') + '.frame .btnrow .btn.gh, ' + P.replace('html[', 'html[data-boton="oro"][') + '.frame .btn.gh{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
       /* «Copiar» de los datos de transferencia nace en oro rgb(125,95,52) — 4,59 */
       P + '.val .copy{ color:' + CORAL2 + '!important; -webkit-text-fill-color:' + CORAL2 + '!important; }',
       /* «Abrir la cámara» nace NEGRO sobre el botón TINTA — 1,17 */
@@ -356,6 +363,25 @@
       '  border-radius:50% 50% 14px 14px / 44px 44px 14px 14px!important;',
       '}',
       P + '.hotel{ padding:38px 18px 18px!important; text-align:center!important; }',
+      /* ⭐ 29/9 · EL PASE SIN MEDIO CÍRCULO. Maki: «el semicírculo del QR no me
+         gusta así». El arco del grupo le quedaba ancho y chato sobre una tarjeta
+         apaisada, con el «Nombre» metido en la curva. Ahora es un rectángulo de
+         papel con un FILETE DE ORO INTERIOR (como el pase de Montserrat, la
+         aprobada) y la flor de rapónchigo como medallón arriba, al centro.
+         ⚠️ El filete va con `box-shadow inset`, NO con `::after` ni borde:
+            el QR y los datos no se mueven ni un píxel. */
+      P + '.pasecard{',
+      '  border-radius:16px!important; position:relative!important; overflow:visible!important;',
+      '  padding-top:34px!important;',   /* aire para el medallón: sin esto la flor pisaba «Nombre» */
+      '  box-shadow:inset 0 0 0 7px ' + PAPEL + ', inset 0 0 0 8px rgba(201,162,78,.60), 0 10px 24px rgba(42,32,22,.12)!important;',
+      '}',
+      P + '.pasecard::before{',
+      '  content:""!important; position:absolute!important; top:-18px!important; left:50%!important;',
+      '  width:36px!important; height:36px!important; margin-left:-18px!important;',
+      '  background:url("' + FLOR_FOTO + '") center / contain no-repeat!important;',
+      '  filter:drop-shadow(0 2px 3px rgba(42,32,22,.30))!important;',
+      '  z-index:3!important; pointer-events:none!important;',
+      '}',
       P + '.hotel .btn{ margin:10px auto 0!important; }',
       P + '.evento .ph{ height:230px!important; }',
 
@@ -486,7 +512,7 @@
          TINTA3 es FILETE, nunca texto. */
       P + '.pasecard .k{ color:' + TINTA2 + '!important; letter-spacing:.14em!important; }',
       P + '.pase > .t{',
-      '  font-family:"Mea Culpa",cursive!important; font-size:36px!important;',
+      '  font-family:"Corinthia",cursive!important; font-weight:700!important; font-size:40px!important;',
       '  color:' + TINTA2 + '!important;',
       '  text-shadow:0 0 6px rgba(248,240,220,.95), 0 0 16px rgba(248,240,220,.85), 0 0 30px rgba(248,240,220,.6)!important;',
       '}',
@@ -614,6 +640,10 @@
       '  background-size:100% 100%!important; background-repeat:no-repeat!important;',
       '  box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 14px 34px rgba(42,32,22,.12)!important;',
       '  overflow:visible!important; position:relative!important;',
+      /* ⭐ 29/9: el `.tl` medía `padding:0` en vivo (lo pisa el molde, no el
+         motor) y las fichas se salían 13 px de la caja: el «18:00» quedaba
+         montado sobre el borde. Aire de Montserrat, la aprobada (30 × 18). */
+      '  padding:40px 12px 34px!important;',
       '}',
       /* ⭐ el movimiento: una luz de agua que BAJA por la vía, sin parar.
          ⚠️⚠️ LA VÍA NO ESTÁ SIEMPRE EN EL MISMO LADO. El motor tiene DOS
@@ -661,13 +691,30 @@
          nombre. El tamaño sí se pisa (11 → 26); la opacidad NO.
          ⭐ La misma regla de siempre: si el motor ya maneja un estado, no se lo
             reemplaza. Se lo acompaña. */
+      /* ⭐ 29/9 · LAS FLORES DE LA IZQUIERDA NO CAÍAN SOBRE LA VÍA. Medido en
+         píxeles sobre la captura (centro de la mancha azul contra el centro de
+         la trenza): las pares, 0; las impares, 11 px corridas a la izquierda.
+         El motor pone la impar con `right:-31px` y la par con `left:-31px` +
+         el `margin-left` de la corrección de tamaño, que en la impar NO actúa
+         (con `left:auto` el margen izquierdo no mueve nada). Se corrige por la
+         diferencia: −31 − 11 = −42. */
+      P + '.tl.tl-centro > .it:nth-child(odd)::before{ right:-42px!important; }',
       P + '.tl.tl-anim > .it:not(.on)::before{ opacity:0!important; }',
       P + '.tl.tl-anim > .it.on::before{ opacity:1!important; }',
       /* la vía: fina y apagándose en las dos puntas, nunca un corte seco */
+      /* ⭐ 29/9 · LA VÍA ES UNA TRENZA. Maki: «el itinerario está muy justo, el
+         18:00 con el rectángulo está feo y la línea también». La hebra de oro de
+         1,5 px no decía nada: ahora es la TRENZA DORADA, hecha con dos mitades de
+         rayas en diagonal opuesta (chevrón = trenza) y apagada en las puntas.
+         ⚠️ Se ensancha de 1,5 a 7 px: el centro se corrige por la diferencia
+            (`margin-left:-2.75px`), no se clava un `left`. */
       P + '.tl::before{',
-      '  width:1.5px!important; opacity:1!important;',
-      '  background:linear-gradient(180deg, rgba(201,162,78,0) 0%,',
-      '    rgba(201,162,78,.9) 9%, rgba(201,162,78,.9) 91%, rgba(201,162,78,0) 100%)!important;',
+      '  width:7px!important; margin-left:-2.75px!important; opacity:1!important; border-radius:4px!important;',
+      '  background:repeating-linear-gradient(-58deg, #9C7A34 0 1.2px, #EBD49C 1.2px 3.6px, #C9A24E 3.6px 6px) left top / 50% 100% no-repeat,',
+      '    repeating-linear-gradient(58deg, #9C7A34 0 1.2px, #EBD49C 1.2px 3.6px, #C9A24E 3.6px 6px) right top / 50% 100% no-repeat!important;',
+      '  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%)!important;',
+      '          mask-image:linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%)!important;',
+      '  box-shadow:0 0 0 .5px rgba(120,90,36,.35)!important;',
       '}',
       P + '.it .h{ color:' + TINTA + '!important; font-family:"Young Serif",Georgia,serif!important; }',
       /* ⚠️ EL DETALLE ES `.d`, NO `.t`. Lo escriben así los DOS que arman el
@@ -681,7 +728,7 @@
          `.kick`/`h2` de la colección — `efectos/galeria.js` les escribe su
          propio color. El barrido por placa cazó «Antes del baile» en
          rgb(79,68,45), que no es de ninguna paleta de ésta. Se los pinta. */
-      P + '#gal-kick, ' + P + '.gal-kick{ color:' + TINTA2 + '!important; font-family:"Mea Culpa",cursive!important; }',
+      P + '#gal-kick, ' + P + '.gal-kick{ color:' + TINTA2 + '!important; font-family:"Corinthia",cursive!important; font-weight:700!important; }',
       P + '#gal-h2, ' + P + '.gal-h2{ color:' + TINTA + '!important; font-family:"Young Serif",Georgia,serif!important; }',
 
       /* ---- 🔴 LA CARTA: PAPEL CLARO, TINTA DE LA COLECCIÓN ----------------
@@ -712,9 +759,9 @@
             la caja de línea. */
       P + '.portada{ justify-content:flex-end!important; }',
       P + '#pv-names{',
-      '  font-size:84px!important; line-height:1.05!important;',
+      '  font-size:96px!important; line-height:1.05!important;',
       '  padding-bottom:.24em!important;',
-      '  font-family:"Mea Culpa",cursive!important;',
+      '  font-family:"Corinthia",cursive!important; font-weight:700!important;',
       '  color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important;',
       '  text-shadow:0 2px 6px rgba(22,16,10,.85), 0 0 22px rgba(22,16,10,.55)!important;',
       '}',
@@ -724,7 +771,7 @@
       '  color:' + ESPUMA + '!important; -webkit-text-fill-color:' + ESPUMA + '!important;',
       '  text-shadow:0 1px 3px rgba(22,16,10,.95), 0 0 10px rgba(22,16,10,.75)!important;',
       '}',
-      P + '.portada h1, ' + P + '#nombre{ font-family:"Mea Culpa",cursive!important; }',
+      P + '.portada h1, ' + P + '#nombre{ font-family:"Corinthia",cursive!important; font-weight:700!important; }',
       P + '.portada .num{ color:' + PAPEL + '!important; font-variant-numeric:lining-nums!important;',
       '  text-shadow:0 1px 4px rgba(22,16,10,.9)!important; }',
       P + '.portada .u{ color:' + ESPUMA + '!important; text-shadow:0 1px 3px rgba(22,16,10,.9)!important; }',
@@ -761,7 +808,7 @@
     var href = 'https://fonts.googleapis.com/css2' +
       '?family=Young+Serif' +
       '&family=Spectral:ital,wght@0,400;0,500;0,600;1,400' +
-      '&family=Mea+Culpa' +
+      '&family=Corinthia:wght@400;700' +
       '&display=swap';
     if (document.querySelector('link[data-col-fuentes="' + ID + '"]')) return;
     var l = document.createElement('link');
