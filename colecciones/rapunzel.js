@@ -66,8 +66,13 @@
   var CORAZON_FOTO = FLOR_FOTO;   /* el nombre viejo queda: lo usan las reglas copiadas de Alicia */
   /* ⭐ Cada sección del molde lleva su propia foto de la temática (armado §42.5).
      Ninguna se repite con otra muestra. */
-  var TAPA_VIDEO  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/rapunzel/flow/rap-tapa-video-op3-28-9';    /* la ventana de la torre con la trenza enrollada */
-  var TAPA_PLAY   = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/rapunzel/flow/rap-tapa-playlist-op3-28-9'; /* el petirrojo que canta en la ventana (en el cuento, el príncipe la encuentra por su canto) */
+  /* ⚠️ Las tapas DICEN QUÉ SON (armado lo-que-falta-2 §48, Maki: «pusiste imágenes
+     que no tienen que ver con lo que tiene su función»): video = un proyector antiguo
+     con su haz, en la ventana de la torre; playlist = un tocadiscos de valija con el
+     vinilo y los auriculares. La primera versión (la ventana con la trenza y el
+     petirrojo) era linda pero no decía «video» ni «música». */
+  var TAPA_VIDEO  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/rapunzel/flow/rap-tv-proy-op2-28-9';        /* el proyector en la ventana de la torre */
+  var TAPA_PLAY   = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,q_auto,f_auto/invitame/rapunzel/flow/rap-sp-disco-op2-28-9'; /* el tocadiscos de valija con campanitas */
   var FOTO_FILTRO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/rapunzel/flow/rap-filtro-op3-28-9';   /* la ventana abierta enmarcando el cielo */
   var FOTO_FIESTA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/rapunzel/flow/rap-fiesta-op2-28-9';   /* las fotos impresas sobre el lino */
   /* El papel de los arcos: algodón con campanitas en relieve TONO SOBRE TONO,
@@ -545,7 +550,7 @@
          (separadas por la SECCIÓN, porque la clase es la misma). Un oscuro radial
          chico en el centro, donde va el play, y la foto a la vista en los bordes. */
       P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(22,16,10,.40) 0, rgba(22,16,10,.16) 26%, rgba(22,16,10,0) 46%), url("' + TAPA_VIDEO + '") center 42%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(42,32,22,.30), 0 0 0 1px rgba(201,162,78,.6)!important; }',
-      P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(22,16,10,.40) 0, rgba(22,16,10,.16) 26%, rgba(22,16,10,0) 46%), url("' + TAPA_PLAY + '") 30% 55%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(42,32,22,.30), 0 0 0 1px rgba(201,162,78,.6)!important; }',
+      P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(22,16,10,.40) 0, rgba(22,16,10,.16) 26%, rgba(22,16,10,0) 46%), url("' + TAPA_PLAY + '") center 45%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(42,32,22,.30), 0 0 0 1px rgba(201,162,78,.6)!important; }',
       P + ':is(#video-sec, #spotify-sec) .rd-tapa .rd-txt{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:0 1px 4px rgba(22,16,10,.95), 0 0 12px rgba(22,16,10,.7)!important; }',
       P + '.rd-tapa .rd-aro{',
       '  border-color:' + CORAL + '!important; color:' + CORAL2 + '!important;',
