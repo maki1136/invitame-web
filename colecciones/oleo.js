@@ -1147,6 +1147,19 @@
     puesta = false;
   }
 
+  /* Rosa disco: los rótulos de Personas y del formulario nacen en un dorado del molde;
+     reglas-duras los oscurece a un marrón fuera de la familia. Se les da su tinta y se
+     borra el inline que dejó el corrector. */
+  function tintaRosaDisco() {
+    if (tono() !== 'rosadisco') return;
+    var ns = document.querySelectorAll('.padres .rl, .rsvpform label');
+    for (var i = 0; i < ns.length; i++) {
+      var n = ns[i];
+      if (n.getAttribute('data-regla-orig')) { n.style.removeProperty('color'); n.removeAttribute('data-regla-orig'); }
+      if (n.style.color !== 'rgb(176, 48, 110)') n.style.setProperty('color', '#B0306E', 'important');
+    }
+  }
+
   function sincronizar() {
     if (activa()) poner();
     else sacar();
@@ -1160,7 +1173,7 @@
       sincronizar();
       if (++n > 60) clearInterval(t);
     }, 400);
-    setInterval(function () { if (puesta) { medirVia(); ajustarNombres(); } }, 1200);
+    setInterval(function () { if (puesta) { medirVia(); ajustarNombres(); tintaRosaDisco(); } }, 1200);
     addEventListener('resize', function () { if (puesta) ajustarNombres(); });
   }
 
