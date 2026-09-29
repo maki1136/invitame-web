@@ -1300,6 +1300,26 @@ window.SOBRES_INVITAME = {
     empalme:  "foto"
   },
 
+  /* ---- RAPUNZEL · 28/9/2026 ----------------------------------------------
+     Va con la colección `rapunzel` (el cuento de los Grimm, no la película).
+     Papel de algodón con campanitas azules (rapónchigos) y ramitas de oro,
+     cuatro solapas que se cruzan en X y un lacre AZUL con una campanilla en
+     relieve. Lo hizo Flow (Nano Banana 2, 0 créditos), de borde a borde.
+
+     ⚠️ Va por `solapas` con SÓLO póster, igual que `alicia` y `sirena`: las
+        cuatro solapas confluyen en el lacre, así que no hace falta `solapa`
+        aparte ni `eje`. Medido el lacre: centro 50,6 % · 50,1 % de la foto.
+     ⚠️ `color` MEDIDO: promedio del papel en la franja central (40–60 %)
+        salteando el lacre → #DAD5C9.
+     ---------------------------------------------------------------------- */
+  rapunzel: {
+    nombre:   "Rapunzel · papel de algodón con campanitas azules y ramitas de oro, lacre azul con campanilla (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-rapunzel-28-9.jpg",
+    color:    "#DAD5C9",
+    apertura: "solapas",
+    empalme:  "foto"
+  },
+
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
