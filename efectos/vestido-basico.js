@@ -87,12 +87,15 @@
   var ID = 'inv-vestido-basico';
   var NO_COL = 'html:not([data-coleccion]) ';
 
-  /* el papel de respaldo, cuando el evento todavía no declaró su temática */
+  /* el papel de respaldo, cuando el evento todavía no declaró su temática
+     ⚠️ 29/9/2026: SIN CUADRICULADO. Maki, 24/9: «donde está el QR y a veces en el
+     itinerario estás poniendo un fondo de cuadriculado blanco que es horrible. Lo
+     vamos a sacar de todas las invitaciones». Eran dos repeating-linear-gradient
+     cruzados (0deg y 90deg) sobre el radial; volvió a aparecer en martina-mis15
+     (sin colección) y se sacó acá, en el origen. Queda el papel liso con su luz. */
   var PAPEL_CSS = [
     '  background-color:#faf7f1;',
     '  background-image:',
-    '    repeating-linear-gradient(0deg, rgba(120,104,86,.055) 0 1px, rgba(0,0,0,0) 1px 3px),',
-    '    repeating-linear-gradient(90deg, rgba(120,104,86,.04) 0 1px, rgba(0,0,0,0) 1px 4px),',
     '    radial-gradient(130% 90% at 50% 0%, rgba(255,255,255,.95), rgba(244,238,229,.95));'
   ].join('\n');
 
