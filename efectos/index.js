@@ -775,6 +775,13 @@
                                           cuerpo en Spectral, y una FLOR DE RAPONCHIGO fotografiada
                                           como marca del itinerario. Trae su propia paleta. */
 
+    '/colecciones/acuarela-rosa.js', /* 29/9: la de Martina. Toda la invitacion sobre el fondo de
+                                          rosas en acuarela con mariposas doradas (el de «Mesa de
+                                          regalos»), la letra blanca de las bandas rosas pasa a
+                                          tinta, el pase abajo de la raspadita, tapas con foto.
+                                          Escribe SOLO data-col (no data-coleccion): los defaults
+                                          claros del motor siguen andando. */
+
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
