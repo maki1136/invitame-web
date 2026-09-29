@@ -263,6 +263,10 @@
       '  text-shadow:0 1px 4px rgba(22,16,10,.9), 0 0 14px rgba(22,16,10,.6)!important;',
       '}',
       P + ':is(#filtro-sec, #gal-seccion) .adorno, ' + P + ':is(#filtro-sec, #gal-seccion) [class*="ico"]{ filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))!important; }',
+      /* 28/9 (noche): la solapa «Cómo funciona» (efectos/secciones-imagen.js, tarjeta oscura
+         `.si-como.si-osc`) salía con las bajadas de cada paso en la tinta del papel — la
+         regla `.sec span` de acá abajo les ganaba y quedaban oscuras sobre el vidrio oscuro. */
+      P + '.si-como.si-osc .si-card span{ color:rgba(248,240,220,.86)!important; -webkit-text-fill-color:rgba(248,240,220,.86)!important; }',
       /* con formulario (la confirmación) el toile va más apagado: los rótulos son
          chicos y en cursiva, y sobre el grabado no se leían (captura 28/9) */
       P + '.sec.verde:has(.rsvpform){ background-image:radial-gradient(120% 90% at 50% 50%, rgba(248,240,220,.72) 0%, rgba(248,240,220,.55) 60%, rgba(248,240,220,.25) 100%), url("' + TOILE + '")!important; }',
