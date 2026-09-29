@@ -216,7 +216,7 @@
          sobretítulos en ALLURA. Ninguna de las dos la usa otra colección. */
       '  font-family:"Young Serif",Georgia,serif!important;',
       '  font-weight:400!important;',
-      '  font-size:30px!important;',
+      '  font-size:28px!important;',   /* RAPUNZEL: a 30 px «Comparte la invitación» partía en dos renglones en 390 px */
       '  letter-spacing:.01em!important;',
       '  color:' + TINTA + '!important;',
       '}',
