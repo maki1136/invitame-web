@@ -898,7 +898,7 @@ window.SOBRES_INVITAME = {
            falla es la FORMA, no el numero. Dos lineas iguales superpuestas son
            una linea.
 
-     ⭐ v5 · 22/9, Maki: «checalo el video y fijate si marca las 12».
+     ⭐ v5 · 22/9, Maki: «checka el video y fijate si marca las 12».
         Lo MEDI sobre el archivo que sirve Cloudinary, no sobre mi intencion:
         se busca el puntito claro del eje, y desde ahi, para cada angulo, hasta
         donde llega la mancha oscura PEGADA al eje (asi los numeros romanos, que
