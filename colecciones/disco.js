@@ -47,6 +47,9 @@
   var PLATA2  = '#A8A5B6';   /* bajadas y datos */
   var PLATA3  = '#6E6B7C';   /* filetes y bordes */
   var BRILLO  = '#F7F6FA';   /* el destello de las facetas */
+  /* §48 · tapas de video y playlist con foto (29/9) */
+  var TAPA_VIDEO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/mia/mia-tv-proy-29-9';
+  var TAPA_PLAY  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,q_auto,f_auto/invitame/mia/mia-sp-disco-29-9';
 
   /* ⚠️ LOS ACENTOS TAMBIÉN SON DE LA COLECCIÓN.
      Marfil ya pagó esta: si se le dejan `--sage`, `--sage-cl` y `--oro` a la
@@ -709,7 +712,43 @@
     '  box-shadow:inset 0 0 0 1px rgba(230,228,238,.18)!important;',
     '}',
 
-    'html[data-col="' + ID + '"] body{ background-color:' + PAPEL + '!important; }'
+    'html[data-col="' + ID + '"] body{ background-color:' + PAPEL + '!important; }',
+
+    /* ==== ★ REPASO §49 (29/9/2026) — lo de la 2ª vuelta de Rapunzel, pasado a Disco (Mía) ====
+       ---- LA LETRA (§59): el nombre y los sobretítulos no los ponía la colección:
+            salían con la Rouge Script del molde, a 54 px y fina sobre negro. Se
+            probaron nueve letras sobre la portada real: Limelight (deco, de
+            boliche, y no la usa ninguna otra colección) para el nombre, y la
+            cursiva de DM Serif Display para los sobretítulos. */
+    P + '#pv-names, ' + P + '#pv-names *{ font-family:"Limelight", Georgia, serif!important; font-weight:400!important; font-style:normal!important; }',
+    P + '#pv-names{ font-size:clamp(58px,17vw,76px)!important; line-height:1!important; padding-bottom:.12em!important; letter-spacing:.02em!important; }',
+    P + '.frame .kick, ' + P + '.frame .sec .kick, ' + P + '#gal-kick, ' + P + '.pase > .t{ font-family:"DM Serif Display", Georgia, serif!important; font-style:italic!important; font-weight:400!important; font-size:22px!important; letter-spacing:.01em!important; }',
+
+    /* ---- EL ADORNO DE LOS TÍTULOS (§51): `fx.diseno.adorno` estaba vacío y no había
+            ninguno. El documento pasa a `estrella` y acá se repinta con LA BOLA
+            fotografiada. */
+    P + '.adorno{ background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/v1789953744/invitame/piezas/bola-espejos.webp") center / contain no-repeat!important; filter:drop-shadow(0 0 6px rgba(230,228,238,.35))!important; }',
+    P + '.adorno svg, ' + P + '.adorno img{ display:none!important; }',
+
+    /* ---- LA VÍA (§61): de la raya punteada a la CADENITA DE BOLITAS de la que
+            cuelgan las bolas de espejos. Centrada en el 50 % como la marca
+            (22 px con `right:-36.5px`). */
+    P + ':is(#dc-nada, .tl)::before{',
+    '  width:6px!important; left:50%!important; margin-left:-3px!important;',
+    '  background-image:radial-gradient(circle at 38% 34%, #FFFFFF 0 .7px, #D9D7E2 1.3px, #8E8BA0 2.4px, rgba(0,0,0,0) 2.8px)!important;',
+    '  background-size:6px 7px!important; background-repeat:repeat-y!important; background-position:center top!important;',
+    '  box-shadow:none!important; animation:none!important; opacity:1!important;',
+    '}',
+
+    /* ---- EL PASE (§62): la bola de medallón arriba al centro. */
+    P + ':is(#dc-nada, .pasecard){ position:relative!important; overflow:visible!important; padding-top:34px!important; }',
+    P + ':is(#dc-nada, .pasecard)::before{ content:""!important; position:absolute!important; top:-18px!important; left:50%!important; width:36px!important; height:36px!important; margin-left:-18px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/v1789953744/invitame/piezas/bola-espejos.webp") center / contain no-repeat!important; filter:drop-shadow(0 2px 6px rgba(0,0,0,.7))!important; z-index:3!important; pointer-events:none!important; }',
+
+    /* ---- LAS TAPAS CON FOTO (§48): «Nuestro video» era un play suelto sobre un
+            panel negro de 448 px. Se separan POR SECCIÓN. */
+    P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.40) 0, rgba(0,0,0,.14) 26%, rgba(0,0,0,0) 46%), url("' + TAPA_VIDEO + '") center 45%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(0,0,0,.55), 0 0 0 1px rgba(230,228,238,.35)!important; }',
+    P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.40) 0, rgba(0,0,0,.14) 26%, rgba(0,0,0,0) 46%), url("' + TAPA_PLAY + '") center 50%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(0,0,0,.55), 0 0 0 1px rgba(230,228,238,.35)!important; }',
+    P + ':is(#video-sec, #spotify-sec) .rd-tapa .rd-txt{ color:' + BRILLO + '!important; -webkit-text-fill-color:' + BRILLO + '!important; text-shadow:0 1px 4px rgba(0,0,0,.95), 0 0 12px rgba(0,0,0,.7)!important; }'
   ].join('\n');
 
     return CSS;
@@ -728,6 +767,17 @@
       var c = String((ev.fx || {}).coleccion || '').toLowerCase();
       return !!(ev.fx && (c === ID || c === ID + '-neon'));
     } catch (e) { return false; }
+  }
+
+  /* §59 · las fuentes del nombre y los sobretítulos (29/9). Se pide SÓLO el nombre
+     de la familia (con una pila CSS entera Google Fonts devuelve 400). */
+  function fuentes() {
+    if (document.querySelector('link[data-col-fuentes="' + ID + '"]')) return;
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Limelight&family=DM+Serif+Display:ital@1&display=swap';
+    l.setAttribute('data-col-fuentes', ID);
+    document.head.appendChild(l);
   }
 
   function hoja() {
@@ -884,6 +934,7 @@
        asi `efectos/simbolo-tematica.js` no le pinta encima su dibujo. */
     if (raiz.getAttribute('data-marca-propia') !== ID) raiz.setAttribute('data-marca-propia', ID);
     if (window.INVCOLPALETA !== PALETA_PROPIA) window.INVCOLPALETA = PALETA_PROPIA;
+    fuentes();
     hoja();
     lineaItinerario();
     cabezalLaser();
