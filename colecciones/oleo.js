@@ -586,7 +586,7 @@
       css: [
         /* 24/9, Maki: «el nos casamos blanco sobre blanco» y «que esté más centrado, es fondo blanco» */
         P + '.portada{ justify-content:center!important; }',
-        P + '.portada > .c{ background:radial-gradient(closest-side, rgba(250,249,246,.80), rgba(250,249,246,.5) 62%, rgba(250,249,246,0))!important; padding:36px 22px!important; }',
+        P + '.portada > .c{ background:radial-gradient(closest-side, rgba(250,249,246,.80), rgba(250,249,246,.5) 62%, rgba(250,249,246,0))!important; padding:36px 22px!important; margin-top:16vh!important; }',
         P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#3A342E!important; -webkit-text-fill-color:#3A342E!important; text-shadow:0 0 10px rgba(250,249,246,.95)!important; }',
         P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,34,28,.42) 0, rgba(40,34,28,.18) 24%, rgba(40,34,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/espatulado/es-tapa-video") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,34,28,.28)!important; }',
         P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(40,34,28,.42) 0, rgba(40,34,28,.18) 24%, rgba(40,34,28,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/espatulado/es-tapa-playlist") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(40,34,28,.28)!important; }',
