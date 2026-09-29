@@ -246,6 +246,68 @@
     } catch (e) {}
     return FUNDIDO;
   }
+
+  /* ★★★ LA FICHA DE APERTURA DE UN SOBRE POR SOLAPAS  (29/9/2026)
+     Maki mandó como referencia 9 aperturas de sobre y dijo: «acordate los
+     segundos, es clave, para que no haga cualquiera después». Se MIDIERON
+     cuadro por cuadro (ver la nota `INVITEATELIER-ficha-de-tiempos-29-9` del
+     proyecto): contando desde el toque, la solapa se abre lento (~2,6 s, arranque
+     suave), el destello arranca a los ~2,7 s, tapa todo, y a los ~3,9 s corta a la
+     invitación.
+     Hasta acá esos tiempos eran constantes del motor (SOL_DUR 1,5 · ESPERA 1,25 ·
+     CAIDA 2,3), pensadas para la referencia de @inviteness: la solapa se va y el
+     cuerpo cae. Este bloque los vuelve DATO POR SOBRE, sin tocar ninguno de los
+     que ya existen: un sobre SIN `ficha` se abre exactamente como antes.
+
+       ficha: {
+         solapa : lo que tarda la solapa en abrirse, en s      (por defecto SOL_DUR)
+         ease   : la curva de esa apertura                     (por defecto EASE_SOL)
+         giro   : grados que gira la solapa                    (por defecto GIRO)
+         destello: segundos DESDE EL TOQUE en que arranca el destello. Es el dato
+                  que activa la ficha. Con `empalme:'blanco'` el blanco tapa todo
+                  y después nace la portada (ver fundir/entrar/soltarLuz).
+       }
+     `luzFundido` (que ya existía) sigue diciendo cuánto pasa entre que arranca el
+     destello y que se corta al blanco: destello + luzFundido = el corte.
+     Con ficha el CUERPO del sobre NO cae: en las referencias el sobre se queda y
+     sólo se abre la solapa. */
+  function fichaDe() {
+    try {
+      var c = window.SOBRES_INVITAME || {};
+      var f = (c[armadoModelo] || {}).ficha;
+      if (f && Number(f.destello) > 0) return f;
+    } catch (e) {}
+    return null;
+  }
+  function aplicarFicha(m, env) {
+    var st = document.getElementById('col-sobre-ficha-css');
+    var f = (m && m.apertura === 'solapas' && m.ficha && Number(m.ficha.destello) > 0) ? m.ficha : null;
+    if (!f) {
+      if (st) st.textContent = '';
+      if (env && env.dataset && env.dataset.ficha) env.removeAttribute('data-ficha');
+      return;
+    }
+    if (!st) {
+      st = document.createElement('style');
+      st.id = 'col-sobre-ficha-css';
+      document.head.appendChild(st);
+    }
+    var d = Number(f.solapa) > 0 ? Number(f.solapa) : SOL_DUR;
+    var e = f.ease || EASE_SOL;
+    var g = Number(f.giro) > 0 ? Number(f.giro) : GIRO;
+    var F = '#env.carta-video[data-ficha="1"]';
+    st.textContent = [
+      F + ' #col-sobre-solapa .h-arriba{',
+      '  transition:transform ' + d + 's ' + e + ',filter ' + d + 's ease}',
+      F + '.abriendo #col-sobre-solapa .h-arriba{',
+      '  transform:rotateX(' + g + 'deg);filter:brightness(1.05)}',
+      F + ' #col-sobre-carta .h-fondo{',
+      '  transition:filter ' + d + 's ease,transform ' + d + 's ease}',
+      F + '[data-solapa="1"].abriendo #col-sobre-foto{',
+      '  transform:translate(-50%,-50%)}'
+    ].join('\n');
+    if (env) env.dataset.ficha = '1';
+  }
   var ANTES    = 1.4;   /* en modo video: cuánto antes del final arranca */
   /* ⭐⭐ CUANDO ARRANCA EL DESTELLO  (18/9/2026, tercera vuelta)
      Maki, despues de dos intentos:
@@ -1063,6 +1125,7 @@
 
     if (m.eje && typeof m.eje.x === 'number') { EJE = { x: m.eje.x, y: m.eje.y }; }
     estilo(m.color || '#f4f2ee');
+    aplicarFicha(m, env);
 
     /* ⭐ EL SOBRE VERDE. Maki, 20/9/2026: «antes de abrir el sobre, cuando carga,
        carga primero el sobre verde. Eso como siempre».
@@ -1127,6 +1190,7 @@
     var color = m.color || '#f4f2ee';
     if (m.eje && typeof m.eje.x === 'number') { EJE = { x: m.eje.x, y: m.eje.y }; }
     estilo(color);
+    aplicarFicha(m, env);
 
     env.className = 'carta-video';
     env.dataset.empalme = (m.empalme === 'foto') ? 'foto' : 'blanco';
@@ -1414,8 +1478,9 @@
       env.classList.add('abriendo');
 
       if (esSolapas()) {
-        var esperaFin = (env.dataset.solapa === '1')
-          ? (ESPERA + CAIDA + 0.10) : SOLAPAS;
+        var _fi = fichaDe();
+        var esperaFin = _fi ? Number(_fi.destello)
+          : ((env.dataset.solapa === '1') ? (ESPERA + CAIDA + 0.10) : SOLAPAS);
         setTimeout(fundir, esperaFin * 1000);
         return;
       }
