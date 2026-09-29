@@ -1323,24 +1323,30 @@ window.SOBRES_INVITAME = {
   },
 
   /* ---- RAPUNZEL EN VIDEO · 29/9/2026 --------------------------------------
-     Maki: «el sobre cambialo por un video». Sobre de algodón crema cerrado con
-     una CINTA DE SEDA CELESTE en moño (sin lacre: con el lacre al medio Kling
-     lo duplica, armado §27), sobre el alféizar de piedra de la torre, con
-     campanillas azules y la punta de la trenza dorada. La cinta se desata
-     sola y se va, las solapas se abren en X y sale luz cálida.
-     Imagen: Higgsfield Soul (9:16) · video: Kling 3.0 pro, 5 s, cfg 0,8.
-     MEDIDO cada 0,25 s (brillo del centro): quieto 0–1 s, la cinta se va
-     1–2,5 s, las solapas se abren 2,5–4 s, la luz crece 4–5 s. Dura 5,04 s.
-     `color` = esquina del cuadro 0. Invitación CLARA → fundido largo (0,8).
+     Maki: «el sobre cambialo por un video». Y la regla del 28/9 (armado-2 §58):
+     «tiene que salir algo del sobre para después convertirse en la luz que tapa
+     todo». Sobre de algodón crema cerrado con una CINTA DE SEDA CELESTE en moño
+     (sin lacre: con el lacre al medio Kling lo duplica o lo deja, armado §27),
+     sobre el alféizar de piedra de la torre, con campanillas y la punta de la
+     trenza. La cinta se desata sola y se va, las solapas se abren, aparece la
+     tarjeta, SUBEN pétalos de campanilla y la tarjeta se enciende hasta que la
+     luz crema tapa todo (el último 0,9 s es un fundido a #FFF4DE hecho con
+     ffmpeg sobre la toma de Kling, para que la luz llegue a llenar el cuadro).
+     Imagen: Higgsfield Soul 9:16 · video: Kling 3.0 std, 5 s, cfg 0,8.
+     MEDIDO (brillo medio cada 0,25 s): 142 quieto → la cinta se va 0,5–1,5 s →
+     solapas 1,5–2,5 s → tarjeta y pétalos 2,5–4 s → 168 (4,25) · 202 (4,5) ·
+     232 (4,75). Dura 5,04 s. `color` = esquina del cuadro 0.
+     (La v1 de la misma mañana —`rap-sobre-v1-29-9`— se abría y salía luz sin
+     que saliera nada: no cumplía la regla y se reemplazó.)
      ---------------------------------------------------------------------- */
   'rapunzel-video': {
-    nombre:     "Rapunzel · sobre de algodón con cinta celeste que se desata, campanillas y la trenza (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/rapunzel/rap-sobre-v1-29-9.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rapunzel/rap-sobre-v1-29-9.jpg",
+    nombre:     "Rapunzel · sobre de algodón con cinta celeste que se desata, sale la tarjeta con pétalos y se hace luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/rapunzel/rap-sobre-v2-29-9.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rapunzel/rap-sobre-v2-29-9.jpg",
     color:      "#CCBC99",
-    luz:        4.2,
-    luzColor:   "#FFF3D6",
-    luzFundido: 0.8
+    luz:        4.4,
+    luzColor:   "#FFF4DE",
+    luzFundido: 0.6
   },
 
   'carta-toscana': {
