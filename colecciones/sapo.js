@@ -46,8 +46,15 @@
   var MUSGO  = '#1E3A2B';   /* el verde musgo de los paneles */
 
   var BOLA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/piezas/bola-oro.webp';
-  var TAPA_VIDEO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/sapo/sp-proy-1';
-  var TAPA_PLAY  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/sapo/sp-disco-3';
+  /* EL SAPO TIENE QUE APARECER (Maki, 29/9: «parece que no tiene temática»). El sapito de oro
+     con corona sobre un nenúfar, FOTOGRAFIADO (Higgsfield): marca del itinerario y tapa de la
+     raspadita. La pelota de oro del cuento, de medallón en el pase. Recortes en píxeles sobre
+     el original de 2048 (los relativos con desplazamiento no respetan el centro). */
+  var SAPITO    = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_crop,w_1300,h_1300,x_374,y_400/w_300,q_auto,f_auto/invitame/sapo/sp-sapito-nenufar-1';
+  var SAPITO_CH = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_crop,w_820,h_820,x_614,y_520/w_120,q_auto,f_auto/invitame/sapo/sp-sapito-nenufar-1';
+  var PELOTA    = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_crop,w_560,h_560,x_744,y_690/w_160,q_auto,f_auto/invitame/sapo/sp-pelota-oro-1';
+  var TAPA_VIDEO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/sapo/sp-proy-sapito-1';
+  var TAPA_PLAY  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/sapo/sp-disco-sapito-1';
 
   /* ⚠️ LA TABLA QUE LA COLECCIÓN RECLAMA COMO PROPIA. Es el contrato de
      `efectos/paleta.js`: van NOMBRES DE VARIABLE CSS, no claves inventadas.
@@ -210,7 +217,7 @@
       P + '.tl::before{ background-image:radial-gradient(circle, ' + TINTA3 + ' 1.1px, rgba(0,0,0,0) 1.2px)!important; background-size:2px 9px!important; background-repeat:repeat-y!important; background-color:transparent!important; width:2px!important; }',
       P + '.tl > .tl-prog{ background-color:' + ORO + '!important; width:2px!important; opacity:.85!important; }',
       /* la marca: la hoja de tilo sobre un disco de papel que tapa la vía */
-      P + '.tl > .it::before{ width:26px!important; height:26px!important; margin-left:-7.5px!important; margin-top:-7.5px!important; border-radius:50%!important; background-color:' + MUSGO + '!important; background-image:url("' + hojaSVG(ORO) + '")!important; background-size:18px 18px!important; background-repeat:no-repeat!important; background-position:center!important; box-shadow:0 0 0 1px rgba(201,164,78,.35)!important; border:0!important; }',
+      P + '.tl > .it::before{ width:26px!important; height:26px!important; margin-left:-7.5px!important; margin-top:-7.5px!important; border-radius:50%!important; background-color:' + MUSGO + '!important; background-image:url("' + SAPITO_CH + '")!important; background-size:cover!important; background-repeat:no-repeat!important; background-position:center!important; box-shadow:0 0 0 1px rgba(201,164,78,.55), 0 2px 6px rgba(0,0,0,.35)!important; border:0!important; }',
       /* ⚠️ el motor maneja la marca con DOS reglas: reposo y revelado. Si se
          pisa sólo la opacidad, la marca se enciende a scale(.2) y se ve un
          puntito — el «circulito» que Maki ya rechazó. Va atada a `.on`. */
@@ -238,6 +245,12 @@
       P + '.adorno svg g:nth-of-type(2), ' + P + '.adorno svg circle{ display:none!important; }'
     );
 
+    /* ---- 8b · LA PELOTA DE ORO: medallón del pase (el cuento arranca con ella) */
+    A.push(
+      P + '.pasecard{ position:relative!important; overflow:visible!important; padding-top:34px!important; }',
+      P + '.pasecard::before{ content:""!important; display:block!important; position:absolute!important; left:50%!important; top:-18px!important; width:36px!important; height:36px!important; margin-left:-18px!important; border-radius:50%!important; background:url("' + PELOTA + '") center/cover no-repeat!important; box-shadow:0 0 0 2px ' + MUSGO + ', 0 0 0 3px rgba(201,164,78,.6), 0 4px 10px rgba(0,0,0,.4)!important; z-index:2!important; }'
+    );
+
     /* ---- 9 · LA RASPADITA: SIN RECUADRO, Y LA TAPA ES LA BOLA -----------
        ⚠️ Son DOS ramas: `.rasp-3 > .r3-f` (lo que se revela) y
           `.rasp-zona > canvas` (la tapa). La variable la lee el CANVAS, así
@@ -245,7 +258,7 @@
        ⚠️ Y el motor APAGA las casillas dormidas con un filter: con una foto de
           tapa eso se lee como «tres bolas de otro color». */
     A.push(
-      ':is(#dc-nada, ' + P.trim() + ' .scratch-sec, ' + P.trim() + ' .rasp-3, ' + P.trim() + ' .rasp-zona, ' + P.trim() + ' #scratchcard){ --r3-tapa:url("' + BOLA + '"); }',
+      ':is(#dc-nada, ' + P.trim() + ' .scratch-sec, ' + P.trim() + ' .rasp-3, ' + P.trim() + ' .rasp-zona, ' + P.trim() + ' #scratchcard){ --r3-tapa:url("' + SAPITO + '"); }',
       P + ':is(#scratchcard, .scratchcard){ background-color:transparent!important; background-image:none!important; border:0!important; box-shadow:none!important; }',
       P + '.rasp-zona.dormida canvas{ filter:none!important; }'
     );
