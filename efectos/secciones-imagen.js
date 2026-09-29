@@ -100,6 +100,16 @@
     }
     var cuerpo = box.querySelector(':scope > div');
     if (cuerpo.textContent !== t) cuerpo.textContent = t;
+    /* la letra y la tinta son las de la bajada de la sección (no las del motor) */
+    var pb = box.previousElementSibling;
+    if (pb && pb.tagName === 'P') {
+      var cs = getComputedStyle(pb);
+      [box.querySelector(':scope > button'), cuerpo].forEach(function (el) {
+        if (el.style.fontFamily !== cs.fontFamily) el.style.fontFamily = cs.fontFamily;
+        if (el.style.textShadow !== cs.textShadow) el.style.textShadow = cs.textShadow;
+      });
+      if (cuerpo.style.color !== cs.color) cuerpo.style.color = cs.color;
+    }
   }
 
   function sincronizar() {
