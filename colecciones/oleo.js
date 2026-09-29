@@ -376,7 +376,13 @@
         P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.footer .s{ color:#FCF8F4!important; -webkit-text-fill-color:#FCF8F4!important; }',
-        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }',
+        /* ★ repaso §49 (29/9): la marca del itinerario es la PIEZA de la temática a 28 px (antes un circulito de 18 px) y la vía es un hilo de cuentas de oro, no una raya.
+           Medido: la ficha arranca en x 57 del .tl y la marca de fábrica va en left:-30 (18 px) → centro 36; la vía estaba en left:34 (2 px) → centro 35. Se conserva el centro. */
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/piezas/vq-medallon-herradura.webp") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #B98A5A 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        /* ★ repaso §49 (29/9): el nombre de la portada medía 34 px en el teléfono y no se leía (Maki, en Rapunzel: «no se entiende»). */
+        P + '.portada #pv-names{ font-size:clamp(50px,14vw,64px)!important; line-height:1.05!important; }'
       ].join('\n')
     },
     /* ⭐ MONARCA (25/9/2026, XV años): portada SIN personas — bosque de oyameles de Michoacán con monarcas (video, cámara quieta).
@@ -405,7 +411,13 @@
         P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.footer .s{ color:#FDFAF4!important; -webkit-text-fill-color:#FDFAF4!important; }',
-        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }',
+        /* ★ repaso §49 (29/9): la marca del itinerario es la PIEZA de la temática a 28 px (antes un circulito de 18 px) y la vía es un hilo de cuentas de oro, no una raya.
+           Medido: la ficha arranca en x 57 del .tl y la marca de fábrica va en left:-30 (18 px) → centro 36; la vía estaba en left:34 (2 px) → centro 35. Se conserva el centro. */
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/piezas/mo-medallon-monarca-2.webp") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #C79A3E 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        /* ★ repaso §49 (29/9): el nombre de la portada medía 34 px en el teléfono y no se leía (Maki, en Rapunzel: «no se entiende»). */
+        P + '.portada #pv-names{ font-size:clamp(50px,14vw,64px)!important; line-height:1.05!important; }'
       ].join('\n')
     },
     /* ⭐ MASCARADA (25/9/2026, XV años, referencia xv-mariakarol): portada SIN personas — mesa de terciopelo rosa en un salón de baile con antifaz dorado, champaña y arañas de cristal (video, cámara quieta).
@@ -440,7 +452,13 @@
         P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.footer .s{ color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; }',
-        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }',
+        /* ★ repaso §49 (29/9): la marca del itinerario es la PIEZA de la temática a 28 px (antes un circulito de 18 px) y la vía es un hilo de cuentas de oro, no una raya.
+           Medido: la ficha arranca en x 57 del .tl y la marca de fábrica va en left:-30 (18 px) → centro 36; la vía estaba en left:34 (2 px) → centro 35. Se conserva el centro. */
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/piezas/mk-medallon-antifaz.webp") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #C9A45C 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        /* ★ repaso §49 (29/9): el nombre de la portada medía 34 px en el teléfono y no se leía (Maki, en Rapunzel: «no se entiende»). */
+        P + '.portada #pv-names{ font-size:clamp(50px,14vw,64px)!important; line-height:1.05!important; }'
       ].join('\n')
     },
     /* ⭐ CEREZO (25/9/2026, XV años, referencia «Greta» de bloomdate): portada SIN personas — fondo rosa liso con ramas de cerezo en las esquinas y pétalos que caen (video, cámara quieta); el nombre al MEDIO, en oro.
@@ -477,7 +495,11 @@
         P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.footer .s{ color:#FDF8F7!important; -webkit-text-fill-color:#FDF8F7!important; }',
-        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }',
+        /* ★ repaso §49 (29/9): la marca del itinerario es la PIEZA de la temática a 28 px (antes un circulito de 18 px) y la vía es un hilo de cuentas de oro, no una raya.
+           Medido: la ficha arranca en x 57 del .tl y la marca de fábrica va en left:-30 (18 px) → centro 36; la vía estaba en left:34 (2 px) → centro 35. Se conserva el centro. */
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/piezas/cz-medallon-cerezo.webp") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #C6A15B 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }'
       ].join('\n')
     },
     /* ⭐ ROSA DISCO (28/9/2026, XV, referencia xv-marian21 de Maki): rosa pastel con BOLAS DE ESPEJO grandes y peonías en dos esquinas cruzadas; portada SIN personas, en video (cámara quieta, pétalos que caen). Tinta magenta profunda (#6E1D45) sobre rosa papel #FCEFF2, acento rosa fuerte (#D4478A), plata #B8BCC6. El nombre en MAGENTA con brillo, como la referencia. Clonado de cerezo (misma estructura). */
