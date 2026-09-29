@@ -672,6 +672,8 @@
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
     '/efectos/musica.js',              /* completa la sección «Playlist del evento» del motor */
+    '/efectos/musica-al-toque.js',     /* 29/9: YouTube PRECARGADO (suena al toque del sobre) y arranca
+                                          cuando CANTA (primer verso de la letra sincronizada en LRCLIB) */
     '/efectos/panel-musica.js',        /* y lleva sus dos campos a la pestaña MUSIC_PASES */
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/muestra-venta.js',       /* la muestra vende: teléfonos de Invítame y el llamado */
