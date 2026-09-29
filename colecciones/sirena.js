@@ -90,6 +90,9 @@
   var CORAL  = '#B8563E';   /* el acento. Adorno, NUNCA texto chico */
   var CORAL2 = '#8C3A2B';   /* el coral hondo: títulos grandes y sellos */
   var ESPUMA = '#CFE0DA';   /* el verde espuma, para fondos suaves */
+  /* §48 · tapas de video y playlist (29/9) */
+  var TAPA_VIDEO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/sirena/mar-tv-proy-29-9';
+  var TAPA_PLAY  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_south,w_800,h_730,q_auto,f_auto/invitame/sirena/mar-sp-disco-29-9';
 
   var CLARO_A = 0.58;       /* MEDIDO. Ver la cabecera. No bajarlo. */
 
@@ -251,7 +254,8 @@
 
       /* ---- tipografía ----
          Italiana para los títulos (romana finísima de capitales anchas, no la
-         usa ninguna otra), Parisienne para el sobretítulo y Lora para el cuerpo.
+         usa ninguna otra), Bodoni Moda cursiva para el nombre y el sobretítulo
+         (desde el 29/9; Parisienne no se leía, armado-2 §59) y Lora para el cuerpo.
          ⚠️ Se mantiene una CURSIVA en el `.kick`, así que la escala de
             `i/estilos-servidor.css` —calibrada para cursiva— sigue sirviendo y
             NO hay que reescribirla entera. Lo único que se corrige es que
@@ -275,8 +279,8 @@
             el adorno y el lacre; TINTA3 es el filete. Ninguno de los dos
             escribe. */
       P + '.frame .kick, ' + P + '.frame .sec .kick{',
-      '  font-family:"Parisienne",cursive!important;',
-      '  font-size:31px!important;',
+      '  font-family:"Bodoni Moda",Georgia,serif!important; font-style:italic!important; font-weight:400!important;',
+      '  font-size:23px!important;',
       '  color:' + TINTA2 + '!important;',
       '  letter-spacing:.01em!important;',
       '}',
@@ -467,7 +471,7 @@
          TINTA3 es FILETE, nunca texto. */
       P + '.pasecard .k{ color:' + TINTA2 + '!important; letter-spacing:.14em!important; }',
       P + '.pase > .t{',
-      '  font-family:"Parisienne",cursive!important; font-size:30px!important;',
+      '  font-family:"Bodoni Moda",Georgia,serif!important; font-style:italic!important; font-size:22px!important;',
       '  color:' + TINTA2 + '!important;',
       '}',
       P + '.pasecard .estado{',
@@ -654,7 +658,7 @@
          `.kick`/`h2` de la colección — `efectos/galeria.js` les escribe su
          propio color. El barrido por placa cazó «Antes del baile» en
          rgb(79,68,45), que no es de ninguna paleta de ésta. Se los pinta. */
-      P + '#gal-kick, ' + P + '.gal-kick{ color:' + TINTA2 + '!important; font-family:"Parisienne",cursive!important; }',
+      P + '#gal-kick, ' + P + '.gal-kick{ color:' + TINTA2 + '!important; font-family:"Bodoni Moda",Georgia,serif!important; font-style:italic!important; font-weight:400!important; font-size:23px!important; }',
       P + '#gal-h2, ' + P + '.gal-h2{ color:' + TINTA + '!important; font-family:"Italiana",serif!important; }',
 
       /* ---- 🔴 LA CARTA: PAPEL CLARO, TINTA DE LA COLECCIÓN ----------------
@@ -684,9 +688,13 @@
             cortada con un filo recto (la L de Lupita, la p de Lupita). */
       P + '.portada{ justify-content:flex-end!important; }',
       P + '#pv-names{',
-      '  font-size:84px!important; line-height:1!important;',
+      '  font-size:80px!important; line-height:1!important;',
       '  padding-bottom:.24em!important;',
-      '  font-family:"Parisienne",cursive!important;',
+      '  font-family:"Bodoni Moda",Georgia,serif!important; font-style:italic!important; font-weight:500!important;',
+      /* ⚠️ Bodoni Moda trae eje óptico: a 80 px elige «opsz 96» y los perfiles
+         finos desaparecen sobre la foto (la pata izquierda de la M no se veía).
+         Se clava el tamaño óptico de texto: trazo más parejo, se lee. */
+      '  font-optical-sizing:none!important; font-variation-settings:"opsz" 11!important;',
       '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
       '}',
       P + '#pv-names span{ padding:0 .10em .17em!important; }',
@@ -700,7 +708,7 @@
       '  color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important;',
       '  text-shadow:0 1px 3px rgba(244,237,228,.95), 0 0 10px rgba(244,237,228,.75)!important;',
       '}',
-      P + '.portada h1, ' + P + '#nombre{ font-family:"Parisienne",cursive!important; }',
+      P + '.portada h1, ' + P + '#nombre, ' + P + '#pv-names *{ font-family:"Bodoni Moda",Georgia,serif!important; font-style:italic!important; font-weight:500!important; font-optical-sizing:none!important; font-variation-settings:"opsz" 11!important; }',
       P + '.portada .num{ color:' + TINTA + '!important; font-variant-numeric:lining-nums!important; }',
       P + '.portada .u{ color:' + TINTA2 + '!important; }',
       /* ⚠️ LOS RÓTULOS DE LA CUENTA REGRESIVA NO SON `.u`: son `.count .b .lab`,
@@ -737,6 +745,64 @@
       '}',
       P + '.portada > .c{ position:relative!important; }',
 
+      /* ==== ★ REPASO §49 (29/9/2026) — la 2ª vuelta de Rapunzel, pasada a Sirena ====
+         Lo que Maki marcó en Rapunzel vale para todas (armado-2 §59-§66):
+         nombre legible, pase sin medio círculo, itinerario con aire y vía de la
+         temática, tapas con foto, botones que se leen. */
+
+      /* ---- el pase: RECTÁNGULO con filete interior y la vieira de medallón (§62)
+         ⚠️ El grupo de tarjetas de arriba le da la cúpula `50% 50% … / 44px`:
+            sobre una tarjeta apaisada «Nombre» quedaba metido en la curva.
+            Misma especificidad y va DESPUÉS: gana sin subir el peso. */
+      P + '.pasecard{',
+      '  border-radius:16px!important; position:relative!important; overflow:visible!important;',
+      '  padding-top:34px!important;',
+      '  box-shadow:inset 0 0 0 7px ' + PAPEL + ', inset 0 0 0 8px rgba(184,86,62,.45), 0 10px 24px rgba(14,42,48,.12)!important;',
+      '}',
+      P + '.pasecard::before{',
+      '  content:""!important; position:absolute!important; top:-18px!important; left:50%!important;',
+      '  width:36px!important; height:36px!important; margin-left:-18px!important; border-radius:50%!important;',
+      '  background:url("' + vieiraSVG(CORAL) + '") center 46% / 24px no-repeat, ' + PAPEL + '!important;',
+      '  box-shadow:0 0 0 1px rgba(143,169,164,.85), 0 4px 10px rgba(14,42,48,.16)!important;',
+      '  z-index:3!important; pointer-events:none!important;',
+      '}',
+
+      /* ---- el itinerario: AIRE y la vía de PERLAS (§61) ----
+         Medido en vivo el 29/9: `.tl` con `padding:0 0 0 26px` —el molde pisa
+         el del motor— y el primer horario pegado al techo de la caja, las
+         vieiras montadas sobre el borde izquierdo. Se abre la caja y la vía
+         viaja con la marca: la marca vive en `.it::before` (`left:-26px` de la
+         ficha, 26 px con `margin-left:-7.5px`), o sea que su centro queda en
+         `padding-left − 26 − 7,5 + 13` = 31,5 px con 52 de padding. La vía de
+         7 px va en `left:29px`: medido en la captura, la vieira cae en 32,75 y
+         la vía en 28 caía en 31,75 — se corrige por la diferencia. */
+      P + '.tl:not(.tl-centro){ padding:34px 18px 28px 52px!important; }',
+      P + '.tl:not(.tl-centro)::before{',
+      '  left:29px!important; width:7px!important; margin-left:0!important; opacity:1!important;',
+      '  background:radial-gradient(circle at 40% 36%, #FFFFFF 0 .9px, #F3EADF 1.5px, #D9C8B4 2.5px, #9FB3AE 3px, transparent 3.4px) center top / 7px 8px repeat-y!important;',
+      '  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important;',
+      '  mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important;',
+      '}',
+      P + '.tl:not(.tl-centro)::after{ left:31px!important; }',
+
+      /* ---- las tapas de video y playlist, CON FOTO de la temática (§48) ----
+         Antes eran transparentes (sólo el aro): «Nuestro video» quedaba como un
+         play suelto sobre el agua. Se separan POR SECCIÓN (`.rd-tapa` es la
+         misma clase en las dos). */
+      P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(14,42,48,.34) 0, rgba(14,42,48,.12) 26%, rgba(14,42,48,0) 46%), url("' + TAPA_VIDEO + '") center 45%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(14,42,48,.22), 0 0 0 1px rgba(143,169,164,.8)!important; }',
+      P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(14,42,48,.34) 0, rgba(14,42,48,.12) 26%, rgba(14,42,48,0) 46%), url("' + TAPA_PLAY + '") center 50%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(14,42,48,.22), 0 0 0 1px rgba(143,169,164,.8)!important; }',
+      P + ':is(#video-sec, #spotify-sec) .rd-tapa .rd-txt{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:0 1px 4px rgba(14,42,48,.95), 0 0 12px rgba(14,42,48,.7)!important; }',
+
+      /* ---- «Abrir la cámara»: letra NEGRA sobre el verde abisal (1,39) ----
+         `#filtro-abrir` nace con `background:var(--verde)` inline pero sin
+         `color` (el de `#gal-entrar` sí lo trae). */
+      P + '#filtro-abrir{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; }',
+
+      /* ---- «¿Alguna duda?» va sobre el terciopelo VERDE OSCURO de su foto ----
+         y la colección le bajaba la tinta de papel claro: título y bajada no se
+         leían. Adentro de esa sección la tinta es el nácar. */
+      P + '#contacto-sec :is(h2, .kick, p, .txt){ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:0 1px 3px rgba(4,14,16,.85), 0 0 14px rgba(4,14,16,.55)!important; }',
+
       ''
     ].join('\n');
   }
@@ -750,7 +816,7 @@
     var href = 'https://fonts.googleapis.com/css2' +
       '?family=Italiana' +
       '&family=Lora:ital,wght@0,400;0,500;0,600;1,400' +
-      '&family=Parisienne' +
+      '&family=Bodoni+Moda:ital,opsz,wght@1,6..96,400;1,6..96,500' +
       '&display=swap';
     if (document.querySelector('link[data-col-fuentes="' + ID + '"]')) return;
     var l = document.createElement('link');
