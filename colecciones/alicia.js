@@ -364,6 +364,22 @@
       '  border-radius:50% 50% 14px 14px / 44px 44px 14px 14px!important;',
       '}',
       P + '.hotel{ padding:38px 18px 18px!important; text-align:center!important; }',
+      /* ⭐ 29/9 · EL PASE SIN MEDIO CÍRCULO (Maki, en Rapunzel: «el semicírculo
+         del QR no me gusta así»). Rectángulo de porcelana con filete de oro
+         interior y el corazón de medallón arriba al centro. El filete va con
+         `box-shadow inset`: el QR y los datos no se mueven. */
+      P + '.pasecard{',
+      '  border-radius:16px!important; position:relative!important; overflow:visible!important;',
+      '  padding-top:34px!important;',
+      '  box-shadow:inset 0 0 0 7px ' + PAPEL + ', inset 0 0 0 8px rgba(196,168,116,.70), 0 10px 24px rgba(31,21,18,.12)!important;',
+      '}',
+      P + '.pasecard::before{',
+      '  content:""!important; position:absolute!important; top:-18px!important; left:50%!important;',
+      '  width:36px!important; height:36px!important; margin-left:-18px!important;',
+      '  background:url("' + CORAZON_FOTO + '") center / contain no-repeat!important;',
+      '  filter:drop-shadow(0 2px 3px rgba(31,21,18,.30))!important;',
+      '  z-index:3!important; pointer-events:none!important;',
+      '}',
       P + '.hotel .btn{ margin:10px auto 0!important; }',
       P + '.evento .ph{ height:230px!important; }',
 
@@ -622,6 +638,9 @@
       '  background-size:100% 100%!important; background-repeat:no-repeat!important;',
       '  box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 14px 34px rgba(31,21,18,.12)!important;',
       '  overflow:visible!important; position:relative!important;',
+      /* ⭐ 29/9: el `.tl` medía `padding:0` en vivo y las fichas se salían 13 px
+         de la caja (el «18:00» y «Últimas fotos» montados sobre el borde). */
+      '  padding:40px 12px 34px!important;',
       '}',
       /* ⭐ el movimiento: una luz de agua que BAJA por la vía, sin parar.
          ⚠️⚠️ LA VÍA NO ESTÁ SIEMPRE EN EL MISMO LADO. El motor tiene DOS
@@ -669,13 +688,26 @@
          nombre. El tamaño sí se pisa (11 → 26); la opacidad NO.
          ⭐ La misma regla de siempre: si el motor ya maneja un estado, no se lo
             reemplaza. Se lo acompaña. */
+      /* ⭐ 29/9 · las marcas de la izquierda caían 11 px corridas de la vía
+         (la impar va con `right:-31px` y el `margin-left` no la mueve).
+         Medido en Rapunzel, que sale de este archivo: −31 − 11 = −42. */
+      P + '.tl.tl-centro > .it:nth-child(odd)::before{ right:-42px!important; }',
       P + '.tl.tl-anim > .it:not(.on)::before{ opacity:0!important; }',
       P + '.tl.tl-anim > .it.on::before{ opacity:1!important; }',
       /* la vía: fina y apagándose en las dos puntas, nunca un corte seco */
+      /* ⭐ 29/9 · LA VÍA ES UN TABLERO DE AJEDREZ (el de «A través del espejo»).
+         Maki marcó en Rapunzel —que sale de este archivo— «el itinerario está muy
+         justo, el 18:00 con el rectángulo está feo y la línea también», y acá
+         estaba igual. La hebra de oro de 1,5 px pasa a ser una tira de casillas
+         nogal y porcelana de 6 px, apagada en las puntas.
+         ⚠️ Se ensancha de 1,5 a 6 px: el centro se corrige por la diferencia
+            (`margin-left:-2.25px`), no se clava un `left`. */
       P + '.tl::before{',
-      '  width:1.5px!important; opacity:1!important;',
-      '  background:linear-gradient(180deg, rgba(196,168,116,0) 0%,',
-      '    rgba(196,168,116,.9) 9%, rgba(196,168,116,.9) 91%, rgba(196,168,116,0) 100%)!important;',
+      '  width:6px!important; margin-left:-2.25px!important; opacity:1!important;',
+      '  background:repeating-conic-gradient(' + TINTA + ' 0 25%, ' + PAPEL + ' 0 50%) 0 0 / 6px 6px!important;',
+      '  box-shadow:0 0 0 .75px rgba(196,168,116,.85)!important;',
+      '  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%)!important;',
+      '          mask-image:linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%)!important;',
       '}',
       P + '.it .h{ color:' + TINTA + '!important; font-family:"Fraunces",Georgia,serif!important; }',
       /* ⚠️ EL DETALLE ES `.d`, NO `.t`. Lo escriben así los DOS que arman el
