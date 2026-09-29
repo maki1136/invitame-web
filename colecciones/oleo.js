@@ -524,6 +524,50 @@
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
     },
+    /* ⭐ COLORAMA (boda, 29/9/2026, referencias de Maki: humo de colores y fuegos en arcoíris). Clonado de rosadisco: papel blanco cálido #FDFBF8, tinta ciruela-grafito #2E2A3A, acento coral #E0567E, turquesa #8FCFC8; el nombre en ARCOÍRIS; portada CON la pareja (bloque al pie). Piezas: la esfera de humo arcoíris (cr-pieza) en itinerario y raspadita; tapas proyector y tocadiscos con humo de colores. */
+    colorama: {
+      hex: { '#C98E8A':'#E0567E', '#E3C2B8':'#FBE3D6', '#D9C3A0':'#D9F1EE', '#B08A4E':'#8FCFC8', '#F7EFEA':'#FDFBF8', '#FBF6F2':'#FFFFFF', '#4A2E2C':'#2E2A3A', '#6B4744':'#4F4863', '#82504C':'#C2436B', '#FBF4EF':'#FFFFFF', '#F5E6DF':'#F2EEF6', '#2E1C1B':'#1E1A26', '#F2E4DC':'#F3EFF7', '#EAD9B8':'#D9F1EE' },
+      rgb: { '74,46,44':'46,42,58', '201,142,138':'224,86,126', '247,239,234':'253,251,248', '40,20,18':'30,26,38', '60,34,32':'30,26,38', '176,138,78':'143,207,200', '217,195,160':'217,241,238', '240,220,211':'242,238,246', '251,246,242':'253,251,248', '255,246,236':'253,251,248', '120,70,60':'30,26,38', '107,71,68':'79,72,99', '251,244,239':'253,251,248' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/colorama/cr-fondo-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/colorama/cr-pieza.webp'
+      },
+      css: [
+        /* portada SIN personas: fondo rosa liso sin personas: el bloque va AL MEDIO (§34), el nombre en magenta */
+        P + '.portada{ justify-content:flex-end!important; }',
+                P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(253,251,248,.35) 0%, rgba(253,251,248,0) 45%)!important; }',
+        P + '.portada > .c{ margin-top:0!important; background:radial-gradient(closest-side, rgba(253,251,248,.8), rgba(253,251,248,.4) 70%, rgba(253,251,248,0))!important; padding:18px 24px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#2E2A3A!important; -webkit-text-fill-color:#2E2A3A!important; text-shadow:0 0 10px rgba(253,251,248,.95)!important; }',
+        /* el nombre en ORO DE HOJA, como la referencia: degradado recortado al texto. Con un color plano a media luz reglas-duras lo pisaba (primero a negro, después a blanco: en foto copia el extremo del bloque). Con el relleno transparente no hay tinta que corregir y se queda el dorado. Medido y visto 25/9. */
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ color:transparent!important; -webkit-text-fill-color:transparent!important; background:linear-gradient(100deg,#F07A3A 0%,#E8508A 24%,#9A62D6 48%,#2FA8A8 72%,#E8A93A 100%)!important; -webkit-background-clip:text!important; background-clip:text!important; text-shadow:none!important; filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 0 10px rgba(253,251,248,.95))!important; font-size:clamp(54px, 15vw, 76px)!important; line-height:1.1!important; }',
+        /* el fondo va ADELANTE: claro chico y liviano */
+        /* 25/9 (Maki: «al fondo le falta fuerza, se tapa demasiado y queda apagado»): fuera las tres capas que lo lavaban —
+                   el papel al 10-50 % de cada sección (y de las .verde), la copia QUIETA de la imagen base encima de las .verde
+                   (.inv-banda-deco, multiply .26) y el brillo diagonal de #inv-fondo::after—. El claro queda SÓLO chico detrás del texto. */
+                P + '.frame > section.sec{ background-color:transparent!important; }',
+                P + '.inv-banda-deco{ display:none!important; }',
+                P + '#inv-fondo::after{ background:none!important; }',
+                P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 50% 30% at 50% 50%, rgba(253,251,248,.62) 0%, rgba(253,251,248,.28) 55%, rgba(253,251,248,0) 78%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(253,251,248,1), 0 0 14px rgba(253,251,248,.95), 0 0 26px rgba(253,251,248,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(30,26,38,.42) 0, rgba(30,26,38,.18) 24%, rgba(30,26,38,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/colorama/cr-proy\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(30,26,38,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(30,26,38,.42) 0, rgba(30,26,38,.18) 24%, rgba(30,26,38,0) 44%), url(\"https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/colorama/cr-disco\") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(30,26,38,.24)!important; }',
+        /* 28/9: el itinerario AL MEDIO de verdad (la tela de Óleo lo clavaba a la izquierda), sobre satén rosa, con bolas de espejo que brillan como marcas */
+        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro{ padding:30px 18px!important; background-color:#FBF8F4!important; background-image:radial-gradient(ellipse 70% 40% at 50% 0%, rgba(224,86,126,.16), rgba(224,86,126,0) 70%), radial-gradient(ellipse 70% 40% at 50% 100%, rgba(143,207,200,.3), rgba(143,207,200,0) 70%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/w_600,o_25,q_auto,f_auto/invitame/colorama/cr-telas")!important; background-size:auto,auto,cover!important; background-position:center!important; border:1px solid rgba(224,86,126,.22)!important; box-shadow:0 14px 34px rgba(46,42,58,.14)!important; }',
+        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro::before, html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > .tl-prog{ left:50%!important; margin-left:-1px!important; opacity:.7!important; }',
+        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > .it::before{ width:28px!important; height:28px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_crop,g_center,w_0.64,h_0.64/r_max/w_96,f_png/invitame/colorama/cr-pieza.png") center/contain no-repeat!important; box-shadow:0 0 0 5px #FBF8F4, 0 0 14px rgba(224,86,126,.45)!important; animation:crBrillo 2.6s ease-in-out infinite!important; top:50%!important; margin-top:-14px!important; }',
+        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > div.it:nth-of-type(odd)::before{ left:auto!important; right:-40px!important; }',
+        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > div.it:nth-of-type(even)::before{ right:auto!important; left:-40px!important; }',
+        '@keyframes crBrillo{ 0%,100%{ filter:brightness(1); } 50%{ filter:brightness(1.3) drop-shadow(0 0 6px rgba(255,210,230,.95)); } }',
+        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > .it .h{ color:#C2436B!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(30,26,38,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
        Viaja en la tela de Óleo (misma estructura, arcos y tipografías) pero NO es
        una pintura: las piezas son fotos hiperrealistas de Higgsfield. El fondo y la
@@ -1151,14 +1195,15 @@
      reglas-duras los oscurece a un marrón fuera de la familia. Se les da su tinta y se
      borra el inline que dejó el corrector. */
   function tintaRosaDisco() {
-    if (tono() !== 'rosadisco') return;
+    if (tono() !== 'rosadisco' && tono() !== 'colorama') return;
+    var TC = tono() === 'colorama' ? ['#C2436B','rgb(194, 67, 107)'] : ['#B0306E','rgb(176, 48, 110)'];
     var ns = document.querySelectorAll('.padres .rl, .rsvpform label');
     for (var i = 0; i < ns.length; i++) {
       var n = ns[i];
       if (n.getAttribute('data-regla-orig')) { n.style.removeProperty('color'); n.removeAttribute('data-regla-orig'); }
       /* reglas-duras escribe también -webkit-text-fill-color, que manda sobre color */
-      if (n.style.color !== 'rgb(176, 48, 110)') n.style.setProperty('color', '#B0306E', 'important');
-      if (n.style.webkitTextFillColor !== 'rgb(176, 48, 110)') n.style.setProperty('-webkit-text-fill-color', '#B0306E', 'important');
+      if (n.style.color !== TC[1]) n.style.setProperty('color', TC[0], 'important');
+      if (n.style.webkitTextFillColor !== TC[1]) n.style.setProperty('-webkit-text-fill-color', TC[0], 'important');
     }
   }
 
