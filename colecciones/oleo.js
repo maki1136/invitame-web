@@ -1156,7 +1156,9 @@
     for (var i = 0; i < ns.length; i++) {
       var n = ns[i];
       if (n.getAttribute('data-regla-orig')) { n.style.removeProperty('color'); n.removeAttribute('data-regla-orig'); }
+      /* reglas-duras escribe también -webkit-text-fill-color, que manda sobre color */
       if (n.style.color !== 'rgb(176, 48, 110)') n.style.setProperty('color', '#B0306E', 'important');
+      if (n.style.webkitTextFillColor !== 'rgb(176, 48, 110)') n.style.setProperty('-webkit-text-fill-color', '#B0306E', 'important');
     }
   }
 
