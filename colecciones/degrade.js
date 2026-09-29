@@ -65,7 +65,11 @@
     ciruela:   ['38,20,44','26,13,31','16,8,19','#3A2244','#6E5A76'],
     petroleo:  ['12,38,42','8,26,29','5,16,18','#15393E','#4F6E70'],
     onix:      ['22,22,24','14,14,16','8,8,9','#26262A','#5E5E62'],
-    magenta:   ['58,16,44','40,10,30','24,6,18','#5A1A45','#8E5A7E']
+    magenta:   ['58,16,44','40,10,30','24,6,18','#5A1A45','#8E5A7E'],
+    terracota: ['62,26,16','44,18,11','26,10,6','#5E2A1A','#9A6A58'],
+    oliva:     ['38,40,20','26,28,13','15,16,7','#3C3E1E','#7A7C58'],
+    mocha:     ['52,34,26','36,23,17','21,13,9','#4E3428','#8E7466'],
+    lavanda:   ['40,30,62','27,20,44','16,12,27','#3C2E5E','#7C6E9A']
   };
   /* ⭐⭐ 29/9 · CADA TONO CON SU PROPIO DISEÑO. Maki, al ver Natalia, Elena y Sofía:
      «ponele un poco más de onda a los diseños, están copiadas». El color solo no
@@ -86,8 +90,20 @@
     /* petróleo: tonos joya y maximalismo tropical (bodas de dos novios, 2027) */
     petroleo:  { disp:'Gilda Display',      scr:'Italianno',     txt:'Libre Baskerville', pieza:'c_crop,w_0.5,h_0.5,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-petroleo', adorno:'pluma', forma:'ventana', port:'italica' },
     /* magenta: «color drenching» magenta con salvia y ORO ROSA (bodas de dos novias, 2027) */
-    magenta:   { disp:'Italiana',           scr:'Alex Brush',    txt:'Cardo',       pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-magenta', adorno:'bugambilia', forma:'pastilla', port:'fina', metal:'rosa' }
+    magenta:   { disp:'Italiana',           scr:'Alex Brush',    txt:'Cardo',       pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-magenta', adorno:'bugambilia', forma:'pastilla', port:'fina', metal:'rosa' },
+    /* 29/9 · tanda de 5 «fondos comunes»: cada una con letra, pieza, adorno, forma y metal propios */
+    /* onix: gala negro y oro · boletos troquelados, rombo art déco */
+    onix:      { disp:'Cinzel',             scr:'Monsieur La Doulaise', txt:'Spectral', pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-onix', adorno:'rombo', forma:'boleto', port:'deco' },
+    /* terracota: hacienda tequilera · marco corrido de papelería, agave, COBRE */
+    terracota: { disp:'Fraunces',           scr:'Birthstone',    txt:'Newsreader',  pieza:'c_crop,w_0.48,h_0.48,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-terracota', adorno:'agave', forma:'doble', port:'italica', metal:'cobre' },
+    /* oliva: viñedo · camafeos ovalados, rama de olivo, BRONCE */
+    oliva:     { disp:'Prata',              scr:'Petit Formal Script', txt:'Alegreya', pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-oliva2', adorno:'olivo', forma:'oval', port:'fina', metal:'bronce' },
+    /* mocha: XV chocolate y champagne · festón, moño, CHAMPAGNE */
+    mocha:     { disp:'Libre Caslon Display', scr:'Great Vibes', txt:'Libre Caslon Text', pieza:'c_crop,w_0.34,h_0.34,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-mocha', adorno:'lazo', forma:'feston', port:'script', metal:'champagne' },
+    /* lavanda: XV San Miguel · ojivas neogóticas como la Parroquia, corona, PLATA */
+    lavanda:   { disp:'Forum',              scr:'Ballet',        txt:'Castoro',     pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-lavanda', adorno:'corona', forma:'ojiva', port:'versal', metal:'plata' }
   };
+  var METALES = { cobre:['#C58B5E','#E6B48E','197,139,94'], bronce:['#B08D57','#D6B98A','176,141,87'], champagne:['#D8C3A0','#F0E3CC','216,195,160'] };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
   function tono() {
@@ -100,7 +116,9 @@
     var T = TONOS[tono()];
     PAPEL = hex(T[0]); PAPEL2 = hex(T[1]); MUSGO = T[3]; TINTA3 = T[4];
     var pz = estilo().pieza;
-    if (estilo().metal === 'plata') { ORO = '#B9C0CA'; ORO_CL = '#E3E7EC'; }
+    var MT = METALES[estilo().metal];
+    if (MT) { ORO = MT[0]; ORO_CL = MT[1]; }
+    else if (estilo().metal === 'plata') { ORO = '#B9C0CA'; ORO_CL = '#E3E7EC'; }
     else if (estilo().metal === 'rosa') { ORO = '#D9A6AE'; ORO_CL = '#F2CDD2'; } else { ORO = '#C9A44E'; ORO_CL = '#E0C57A'; }
     SAPITO = CL + pz.replace('SZ', '300'); SAPITO_CH = CL + pz.replace('SZ', '120'); PELOTA = CL + pz.replace('SZ', '160');
   }
@@ -179,6 +197,24 @@
       return "data:image/svg+xml;utf8," + encodeURIComponent(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><g fill="' + color + '">' + p + '</g><circle cx="24" cy="24" r="6" fill="' + PAPEL + '"/><circle cx="24" cy="24" r="3" fill="' + color + '"/></svg>');
     }
+    if (a === 'rombo') return "data:image/svg+xml;utf8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M24 4 L38 24 L24 44 L10 24 Z"/><path fill="' + PAPEL + '" d="M24 11 L33 24 L24 37 L15 24 Z"/><path fill="' + color + '" d="M24 16.5 L29 24 L24 31.5 L19 24 Z"/><circle cx="4" cy="24" r="2" fill="' + color + '"/><circle cx="44" cy="24" r="2" fill="' + color + '"/></svg>');
+    if (a === 'agave') {
+      var hj = '', an = [-62, -38, -14, 14, 38, 62];
+      for (var q = 0; q < an.length; q++) hj += '<path transform="rotate(' + an[q] + ' 24 42)" d="M24 42 C22.2 33 22 24 24 ' + (Math.abs(an[q]) > 50 ? 20 : 12) + ' C26 24 25.8 33 24 42 Z"/>';
+      return "data:image/svg+xml;utf8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><g fill="' + color + '">' + hj + '<path d="M24 42 C22 30 22 16 24 3 C26 16 26 30 24 42 Z"/></g></svg>');
+    }
+    if (a === 'olivo') {
+      var ho = '', pt = [[14, 33, -30], [19, 27, 40], [22, 25, -35], [27, 19, 45], [30, 17, -30], [35, 12, 40]];
+      for (var o = 0; o < pt.length; o++) ho += '<ellipse cx="' + pt[o][0] + '" cy="' + pt[o][1] + '" rx="2.6" ry="6.2" transform="rotate(' + pt[o][2] + ' ' + pt[o][0] + ' ' + pt[o][1] + ')"/>';
+      return "data:image/svg+xml;utf8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M8 42 C18 32 29 21 41 7" stroke="' + color + '" stroke-width="1.6" fill="none" stroke-linecap="round"/><g fill="' + color + '">' + ho + '<circle cx="17" cy="37" r="2.6"/><circle cx="31" cy="24" r="2.3"/></g></svg>');
+    }
+    if (a === 'lazo') return "data:image/svg+xml;utf8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><g fill="' + color + '"><path d="M24 22 C15 10 4 12 5 21 C6 29 15 28 24 24 Z"/><path d="M24 22 C33 10 44 12 43 21 C42 29 33 28 24 24 Z"/><path d="M22.5 25 L15 43 L19.5 41 L21.5 45 L25.5 26 Z"/><path d="M25.5 25 L33 43 L28.5 41 L26.5 45 L22.5 26 Z"/></g><path d="M24 21 C18 14 10 14 10 20" stroke="' + PAPEL + '" stroke-width="1.2" fill="none"/><path d="M24 21 C30 14 38 14 38 20" stroke="' + PAPEL + '" stroke-width="1.2" fill="none"/><circle cx="24" cy="23" r="3.6" fill="' + color + '" stroke="' + PAPEL + '" stroke-width="1"/></svg>');
+    if (a === 'corona') return "data:image/svg+xml;utf8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><g fill="' + color + '"><path d="M9 35 L6 15 L16 25 L24 9 L32 25 L42 15 L39 35 Z"/><rect x="9" y="37" width="30" height="4" rx="1"/><circle cx="6" cy="13" r="2.4"/><circle cx="24" cy="7" r="2.6"/><circle cx="42" cy="13" r="2.4"/></g><circle cx="24" cy="29" r="2.4" fill="' + PAPEL + '"/><circle cx="15.5" cy="31" r="1.6" fill="' + PAPEL + '"/><circle cx="32.5" cy="31" r="1.6" fill="' + PAPEL + '"/></svg>');
     return hojaSVG(color);
   }
 
@@ -227,6 +263,47 @@
       P + '.padres .av{ border-radius:38%!important; border:2px solid ' + ORO + '!important; }',
       P + '.pasecard{ border-radius:30px!important; }'
     );
+    if (E.forma === 'boleto') {
+      var NT = 'radial-gradient(circle 15px at 0 0,#0000 97%,#000) top left,radial-gradient(circle 15px at 100% 0,#0000 97%,#000) top right,radial-gradient(circle 15px at 0 100%,#0000 97%,#000) bottom left,radial-gradient(circle 15px at 100% 100%,#0000 97%,#000) bottom right';
+      A.push(
+        P + ':is(.evento,.hotel,.pasecard){ border-radius:0!important; border:0!important; -webkit-mask:' + NT + '!important; -webkit-mask-size:51% 51%!important; -webkit-mask-repeat:no-repeat!important; mask:' + NT + '!important; mask-size:51% 51%!important; mask-repeat:no-repeat!important; box-shadow:inset 0 0 0 8px ' + MUSGO + ', inset 0 0 0 9px rgba(201,164,78,.6)!important; }',
+        P + '.evento .ph{ border-radius:0!important; margin:12px 12px 0!important; width:auto!important; }',
+        P + '.tl{ border-radius:4px!important; outline:1px dashed rgba(201,164,78,.45)!important; outline-offset:-9px!important; }',
+        P + '.padres .av{ border:0!important; box-shadow:0 0 0 3px ' + PAPEL + ', 0 0 0 4px ' + ORO + ', 0 0 0 7px ' + PAPEL + ', 0 0 0 8px rgba(201,164,78,.5)!important; }'
+      );
+    }
+    if (E.forma === 'doble') A.push(
+      P + ':is(.evento,.hotel){ border-radius:2px!important; border:1px solid ' + ORO + '!important; box-shadow:9px 9px 0 -1px ' + PAPEL2 + ', 9px 9px 0 0 rgba(201,164,78,.75), 0 16px 28px rgba(0,0,0,.35)!important; margin-right:16px!important; }',
+      P + '.evento .ph{ border-radius:0!important; }',
+      P + '.tl{ border-radius:2px!important; border:1px solid rgba(201,164,78,.7)!important; box-shadow:8px 8px 0 -1px ' + PAPEL2 + ', 8px 8px 0 0 rgba(201,164,78,.55)!important; }',
+      P + '.padres .av{ border-radius:4px!important; border:1px solid ' + ORO + '!important; box-shadow:5px 5px 0 -1px ' + PAPEL + ', 5px 5px 0 0 ' + ORO + '!important; }',
+      P + '.pasecard{ border-radius:2px!important; }'
+    );
+    if (E.forma === 'oval') A.push(
+      P + ':is(.evento,.hotel){ border-radius:24px!important; border:1px solid rgba(201,164,78,.55)!important; padding-top:16px!important; }',
+      P + '.evento .ph{ border-radius:50%!important; width:auto!important; margin:0 24px!important; height:210px!important; box-shadow:0 0 0 1px ' + ORO + ', 0 0 0 6px ' + PAPEL + ', 0 0 0 7px rgba(201,164,78,.45)!important; }',
+      P + '.tl{ border-radius:24px!important; border:1px solid rgba(201,164,78,.45)!important; }',
+      P + '.padres .av{ border-radius:50%!important; height:126px!important; border:1px solid ' + ORO + '!important; box-shadow:0 0 0 4px ' + PAPEL + ', 0 0 0 5px rgba(201,164,78,.4)!important; }',
+      P + '.pasecard{ border-radius:24px!important; }'
+    );
+    if (E.forma === 'feston') {
+      var SC = 'radial-gradient(circle 9px at 50% 100%,#0000 96%,#000 100%) bottom/18px 100% repeat-x';
+      A.push(
+        P + ':is(.evento,.hotel){ border-radius:26px 26px 0 0!important; border:0!important; -webkit-mask:' + SC + '!important; mask:' + SC + '!important; padding-bottom:28px!important; box-shadow:inset 0 0 0 1px rgba(201,164,78,.5)!important; }',
+        P + '.evento .ph{ border-radius:25px 25px 0 0!important; }',
+        P + '.tl{ border-radius:26px!important; border:1px solid rgba(201,164,78,.45)!important; }',
+        P + '.padres .av{ border:0!important; box-shadow:0 0 0 3px ' + PAPEL + ', 0 0 0 5px ' + ORO + ', 0 0 0 9px ' + PAPEL + ', 0 0 0 10px rgba(201,164,78,.4)!important; }',
+        P + '.pasecard{ border-radius:24px!important; }'
+      );
+    }
+    if (E.forma === 'ojiva') A.push(
+      P + ':is(.evento,.hotel){ clip-path:' + ojiva(74) + '!important; border-radius:0 0 18px 18px!important; border:0!important; }',
+      P + '.evento .ph{ border-radius:0!important; height:240px!important; }',
+      P + '.hotel{ padding-top:84px!important; }',
+      P + '.tl{ clip-path:' + ojiva(64) + '!important; border-radius:0 0 18px 18px!important; padding-top:74px!important; }',
+      P + '.padres .av{ clip-path:' + ojiva(36) + '!important; border-radius:0 0 8px 8px!important; height:126px!important; border:0!important; }',
+      P + '.pasecard{ border-radius:18px!important; }'
+    );
     if (E.port === 'fina') A.push(
       P + '#pv-names{ font-family:"' + E.disp + '",serif!important; font-weight:400!important; letter-spacing:.06em!important; font-size:clamp(40px,11vw,60px)!important; line-height:1.15!important; }',
       P + '#pv-kick{ font-family:"' + E.scr + '",cursive!important; text-transform:none!important; letter-spacing:0!important; text-indent:0!important; font-size:34px!important; }',
@@ -259,10 +336,20 @@
     );
     return A.join('\n');
   }
+  /* arco apuntado (ojiva) como polygon: vertical en los costados, en punta arriba */
+  function ojiva(h) {
+    var n = 10, a1 = 1.15, L = [];
+    for (var i = 0; i <= n; i++) { var a = a1 * i / n; L.push([((1 - Math.cos(a)) / (1 - Math.cos(a1)) * 50), h * (1 - Math.sin(a) / Math.sin(a1))]); }
+    var izq = L.map(function (p) { return p[0].toFixed(2) + '% ' + p[1].toFixed(1) + 'px'; });
+    var der = L.slice(0, -1).reverse().map(function (p) { return (100 - p[0]).toFixed(2) + '% ' + p[1].toFixed(1) + 'px'; });
+    return 'polygon(0 100%,' + izq.join(',') + ',' + der.join(',') + ',100% 100%)';
+  }
   function conLetra(s) {
     var E = estilo();
     if (E.metal === 'plata') s = s.split('#C9A44E').join('#B9C0CA').split('#E0C57A').join('#E3E7EC').split('201,164,78').join('185,192,202');
     if (E.metal === 'rosa') s = s.split('#C9A44E').join('#D9A6AE').split('#E0C57A').join('#F2CDD2').split('201,164,78').join('217,166,174');
+    var MM = METALES[E.metal];
+    if (MM) s = s.split('#C9A44E').join(MM[0]).split('#E0C57A').join(MM[1]).split('201,164,78').join(MM[2]);
     return s.split('"Cormorant Garamond"').join('"' + E.disp + '"').split('"Parisienne"').join('"' + E.scr + '"').split('"Lora"').join('"' + E.txt + '"');
   }
 
