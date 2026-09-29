@@ -66,6 +66,22 @@
     petroleo:  ['12,38,42','8,26,29','5,16,18','#15393E','#4F6E70'],
     onix:      ['22,22,24','14,14,16','8,8,9','#26262A','#5E5E62']
   };
+  /* ⭐⭐ 29/9 · CADA TONO CON SU PROPIO DISEÑO. Maki, al ver Natalia, Elena y Sofía:
+     «ponele un poco más de onda a los diseños, están copiadas». El color solo no
+     alcanzaba: las tres tenían la misma letra, el mismo medallón, la misma hoja y
+     las mismas tarjetas con arco. Ahora cada tono trae:
+       disp/scr/txt → la tipografía (títulos · cursiva · cuerpo)
+       pieza        → la pieza FOTOGRAFIADA (raspadita, itinerario, pase)
+       adorno       → la viñeta de arriba de cada título
+       forma        → la forma de tarjetas, itinerario y retratos
+       port         → el armado del nombre en la portada
+     Un tono que no esté acá usa el de esmeralda. */
+  var ESTILOS = {
+    esmeralda: { disp:'Cormorant Garamond', scr:'Parisienne',    txt:'Lora',        pieza:'w_SZ,q_auto,f_auto/invitame/degrade/dg-medallon-c.png', adorno:'hoja',     forma:'arco',  port:'serif'  },
+    ciruela:   { disp:'Bodoni Moda',        scr:'Pinyon Script', txt:'EB Garamond', pieza:'c_crop,w_0.56,h_0.56,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-ciruela', adorno:'estrella', forma:'marco', port:'script' },
+    borgona:   { disp:'Playfair Display',   scr:'Allura',        txt:'Cormorant',   pieza:'c_crop,w_0.64,h_0.64,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-borgona', adorno:'flor',     forma:'filete', port:'versal' }
+  };
+  function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
   function tono() {
     var c = '';
@@ -76,6 +92,8 @@
   function aplicarTono() {
     var T = TONOS[tono()];
     PAPEL = hex(T[0]); PAPEL2 = hex(T[1]); MUSGO = T[3]; TINTA3 = T[4];
+    var pz = estilo().pieza;
+    SAPITO = CL + pz.replace('SZ', '300'); SAPITO_CH = CL + pz.replace('SZ', '120'); PELOTA = CL + pz.replace('SZ', '160');
   }
   function recolor(s) {
     var T = TONOS[tono()], B = TONOS.esmeralda;
@@ -123,6 +141,56 @@
       '<path d="M24 24.6 L16.2 17.8"/><path d="M24 24.6 L31.8 17.8"/>' +
       '</g>' +
       '</svg>');
+  }
+
+  /* LA VIÑETA DE CADA TONO — dibujada para 18 px, como la hoja de tilo. */
+  function adornoSVG(color) {
+    var a = estilo().adorno;
+    if (a === 'estrella') return "data:image/svg+xml;utf8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M24 3 L27.6 17.2 L40.3 9.7 L32.8 22.4 L45 24 L32.8 25.6 L40.3 38.3 L27.6 30.8 L24 45 L20.4 30.8 L7.7 38.3 L15.2 25.6 L3 24 L15.2 22.4 L7.7 9.7 L20.4 17.2 Z"/><circle cx="24" cy="24" r="3.4" fill="' + PAPEL + '"/></svg>');
+    if (a === 'flor') {
+      var p = '';
+      for (var i = 0; i < 6; i++) p += '<ellipse cx="24" cy="13.5" rx="6.6" ry="10" transform="rotate(' + (i * 60) + ' 24 24)"/>';
+      return "data:image/svg+xml;utf8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><g fill="' + color + '">' + p + '</g><circle cx="24" cy="24" r="6" fill="' + PAPEL + '"/><circle cx="24" cy="24" r="3" fill="' + color + '"/></svg>');
+    }
+    return hojaSVG(color);
+  }
+
+  /* LO QUE CAMBIA DE FORMA SEGÚN EL TONO (va AL FINAL: le gana a lo de arriba) */
+  function cssEstilo() {
+    var E = estilo(), A = [];
+    if (E.forma === 'marco') A.push(
+      P + ':is(.evento,.hotel){ border-radius:3px!important; box-shadow:inset 0 0 0 7px ' + MUSGO + ', inset 0 0 0 8px rgba(201,164,78,.6), 0 12px 28px rgba(0,0,0,.4)!important; }',
+      P + '.evento .ph{ border-radius:0!important; margin:8px 8px 0!important; width:auto!important; }',
+      P + '.tl{ border-radius:3px!important; box-shadow:inset 0 0 0 6px ' + MUSGO + ', inset 0 0 0 7px rgba(201,164,78,.5)!important; }',
+      P + '.padres .av{ border-radius:6px!important; border:0!important; box-shadow:0 0 0 3px ' + PAPEL + ', 0 0 0 4px ' + ORO + '!important; }',
+      P + '.pasecard{ border-radius:3px!important; }'
+    );
+    if (E.forma === 'filete') A.push(
+      P + ':is(.evento,.hotel){ border-radius:26px!important; border:1px solid rgba(201,164,78,.7)!important; outline:1px solid rgba(201,164,78,.32)!important; outline-offset:5px!important; margin-left:6px!important; margin-right:6px!important; }',
+      P + '.evento .ph{ border-radius:25px 25px 0 0!important; }',
+      P + '.tl{ border-radius:26px!important; outline:1px solid rgba(201,164,78,.28)!important; outline-offset:5px!important; }',
+      P + '.padres .av{ border:1px solid ' + ORO + '!important; box-shadow:0 0 0 4px ' + PAPEL + ', 0 0 0 5px rgba(201,164,78,.45)!important; }',
+      P + '.pasecard{ border-radius:22px!important; }'
+    );
+    if (E.port === 'script') A.push(
+      P + '#pv-names{ font-family:"' + E.scr + '",cursive!important; font-weight:400!important; letter-spacing:0!important; font-size:clamp(56px,15vw,82px)!important; line-height:1.2!important; padding-bottom:.14em!important; }',
+      P + '#pv-kick{ font-family:"' + E.disp + '",serif!important; letter-spacing:.42em!important; text-indent:.42em!important; }',
+      P + '.sec h2{ text-transform:uppercase!important; letter-spacing:.16em!important; font-size:17px!important; }',
+      P + '.sec .kick{ font-size:21px!important; }'
+    );
+    if (E.port === 'versal') A.push(
+      P + '#pv-names{ font-family:"' + E.disp + '",serif!important; font-weight:400!important; text-transform:uppercase!important; letter-spacing:.14em!important; text-indent:.14em!important; font-size:clamp(30px,8.4vw,44px)!important; line-height:1.3!important; }',
+      P + '#pv-kick{ font-family:"' + E.scr + '",cursive!important; text-transform:none!important; letter-spacing:0!important; text-indent:0!important; font-size:26px!important; }',
+      P + '.sec h2{ font-style:italic!important; letter-spacing:.02em!important; font-size:23px!important; }',
+      P + '.sec .kick{ font-size:22px!important; }'
+    );
+    return A.join('\n');
+  }
+  function conLetra(s) {
+    var E = estilo();
+    return s.split('"Cormorant Garamond"').join('"' + E.disp + '"').split('"Parisienne"').join('"' + E.scr + '"').split('"Lora"').join('"' + E.txt + '"');
   }
 
   /* ------------------------------------------------------------------- CSS */
@@ -245,7 +313,7 @@
 
     /* ---- 8 · EL ADORNO DE LOS TÍTULOS ----------------------------------- */
     A.push(
-      P + '.sec h2 .adorno, ' + P + '.adorno{ background-image:url("' + hojaSVG(ORO) + '")!important; background-repeat:no-repeat!important; background-position:center!important; background-size:contain!important; }',
+      P + '.sec h2 .adorno, ' + P + '.adorno{ background-image:url("' + adornoSVG(ORO) + '")!important; background-repeat:no-repeat!important; background-position:center!important; background-size:contain!important; }',
       /* ⚠️⚠️ 28/9 · EL ADORNO DEL MOTOR TRAE LOS ANILLOS DE BODA.
          Es un <svg> con dos filetes y, en el medio, DOS CÍRCULOS ENTRELAZADOS
          (`<circle cx=55>` y `<circle cx=66>`). Se dibujaba ENCIMA de la hoja
@@ -369,7 +437,8 @@
       P + '.footer :is(h1,h2,h3,p,span,div){ color:' + TINTA2 + '!important; text-shadow:0 1px 3px rgba(0,0,0,.8)!important; }'
     );
 
-    return recolor(A.join('\n'));
+    A.push(cssEstilo());
+    return recolor(conLetra(A.join('\n')));
   }
 
   /* ---------------------------------------------------------------- fuentes */
@@ -377,15 +446,17 @@
   function fuentes() {
     /* ⚠️ Se pide SÓLO el nombre de la familia. Con una pila CSS entera
        ("'Lora',serif") Google Fonts devuelve 400 y la fuente no carga. */
+    var E = estilo(), f = function (n) { return n.replace(/ /g, '+'); };
     var href = 'https://fonts.googleapis.com/css2' +
-      '?family=Cormorant+Garamond:wght@400;500;600' +
-      '&family=Lora:ital,wght@0,400;0,500;1,400' +
-      '&family=Parisienne' +
+      '?family=' + f(E.disp) + ':ital,wght@0,400;0,500;0,600;1,400' +
+      '&family=' + f(E.txt) + ':ital,wght@0,400;0,500;1,400' +
+      '&family=' + f(E.scr) +
       '&display=swap';
-    if (document.querySelector('link[data-col-fuentes="' + ID + '"]')) return;
+    var marca = ID + '-' + tono();
+    if (document.querySelector('link[data-col-fuentes="' + marca + '"]')) return;
     var l = document.createElement('link');
     l.rel = 'stylesheet'; l.href = href;
-    l.setAttribute('data-col-fuentes', ID);
+    l.setAttribute('data-col-fuentes', marca);
     document.head.appendChild(l);
   }
 
