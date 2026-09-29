@@ -923,8 +923,11 @@
       document.documentElement.removeAttribute('data-marca-propia');
     }
     if (window.INVCOLPALETA === PALETA_PROPIA) { window.INVCOLPALETA = null; }
+    /* ⚠️ 28/9/2026: devolverPase() corría SIEMPRE, cada 1,2 s, en TODAS las invitaciones que no son disco,
+       y peleaba con la colección activa (el pase y la raspadita se turnaban el segundo lugar: «va y viene»
+       en el iPhone). Sólo se devuelve el pase si ESTA colección lo había movido. */
+    if (estabaPuesta) devolverPase();
     estabaPuesta = false;
-    devolverPase();
     sacarHoja();
   }
 
