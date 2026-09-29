@@ -171,6 +171,8 @@
     var E = estilo(), A = [];
     /* 29/9 · el título del pase va en una pastilla oscura: sobre una tela clara
        (el rosa de Sofía) la crema no se leía. Sirve para cualquier fondo de QR. */
+    /* el pase del motor toma --verde (el metal): con plata queda un parche claro */
+    A.push(P + '.pase{ background-color:' + PAPEL2 + '!important; }');
     A.push(P + '.pase > .t{ display:inline-block!important; background-color:rgba(12,6,10,.62)!important; padding:6px 18px!important; border-radius:999px!important; text-shadow:none!important; }');
     if (E.forma === 'marco') A.push(
       P + ':is(.evento,.hotel){ border-radius:3px!important; box-shadow:inset 0 0 0 7px ' + MUSGO + ', inset 0 0 0 8px rgba(201,164,78,.6), 0 12px 28px rgba(0,0,0,.4)!important; }',
@@ -196,7 +198,7 @@
       );
     }
     if (E.port === 'deco') A.push(
-      P + '#pv-names{ font-family:"' + E.disp + '",serif!important; font-weight:400!important; text-transform:uppercase!important; letter-spacing:.22em!important; text-indent:.22em!important; font-size:clamp(28px,7.6vw,40px)!important; line-height:1.35!important; }',
+      P + '#pv-names{ font-family:"' + E.disp + '",serif!important; font-weight:400!important; text-transform:uppercase!important; letter-spacing:.14em!important; text-indent:.14em!important; font-size:clamp(22px,6.2vw,32px)!important; line-height:1.35!important; white-space:normal!important; }',
       P + '#pv-kick{ font-family:"' + E.scr + '",cursive!important; text-transform:none!important; letter-spacing:0!important; text-indent:0!important; font-size:34px!important; }',
       P + '.sec h2{ text-transform:uppercase!important; letter-spacing:.2em!important; font-size:16px!important; }',
       P + '.sec .kick{ font-size:27px!important; }'
