@@ -1367,6 +1367,26 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.7
   },
 
+  /* ---- BELLA EN VIDEO · 29/9/2026 --------------------------------------------
+     Para `victoria-mis15` (repaso §49). Parte del póster del sobre `bella` (papel
+     oxblood con rosas en relieve, lacre de rosa en la punta de la solapa). La
+     solapa sube con el lacre, de adentro salen rayos de luz dorada con pétalos
+     rojos y todo va a blanco. Nada sólido sale del sobre (armado-2 §58).
+     Kling 3.0 pro, cfg 0,9 (de tres tomas: std 1 dejó el hueco del lacre en el
+     cuerpo, std 0,9 torció la luz) + fundido a la luz con ffmpeg en el último
+     0,8 s porque sobre papel oscuro Kling no llega a blanco.
+     MEDIDO: 41 quieto → 56 (4,0) · 95 (4,25) · 170 (4,5) · 225 (4,75).
+     ---------------------------------------------------------------------- */
+  'bella-luz': {
+    nombre:     "La Bella y la Bestia · sobre oxblood con lacre de rosa; se abre y sale luz dorada con pétalos (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/bella/vic-sobre-luz-29-9.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/bella/vic-sobre-luz-29-9.jpg",
+    color:      "#2E1F14",
+    luz:        4.35,
+    luzColor:   "#FFF1D6",
+    luzFundido: 0.5
+  },
+
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
