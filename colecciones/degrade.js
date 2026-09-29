@@ -97,13 +97,13 @@
     /* terracota: hacienda tequilera · marco corrido de papelería, agave, COBRE */
     terracota: { disp:'Fraunces',           scr:'Birthstone',    txt:'Newsreader',  pieza:'c_crop,w_0.48,h_0.48,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-terracota', adorno:'agave', forma:'doble', port:'italica', metal:'cobre' },
     /* oliva: viñedo · camafeos ovalados, rama de olivo, BRONCE */
-    oliva:     { disp:'Prata',              scr:'Petit Formal Script', txt:'Alegreya', pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-oliva2', adorno:'olivo', forma:'oval', port:'fina', metal:'bronce' },
+    oliva:     { disp:'Prata',              scr:'Petit Formal Script', txt:'Alegreya', pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-oliva2', adorno:'olivo', forma:'oval', port:'fina', metal:'bronce', nombre:'clamp(30px,8.4vw,46px)' },
     /* mocha: XV chocolate y champagne · festón, moño, CHAMPAGNE */
     mocha:     { disp:'Libre Caslon Display', scr:'Great Vibes', txt:'Libre Caslon Text', pieza:'c_crop,w_0.34,h_0.34,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-mocha', adorno:'lazo', forma:'feston', port:'script', metal:'champagne' },
     /* lavanda: XV San Miguel · ojivas neogóticas como la Parroquia, corona, PLATA */
-    lavanda:   { disp:'Forum',              scr:'Ballet',        txt:'Castoro',     pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-lavanda', adorno:'corona', forma:'ojiva', port:'versal', metal:'plata' }
+    lavanda:   { disp:'Forum',              scr:'Luxurious Script', txt:'Castoro',     pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-lavanda', adorno:'corona', forma:'ojiva', port:'versal', metal:'plata' }
   };
-  var METALES = { cobre:['#C58B5E','#E6B48E','197,139,94'], bronce:['#B08D57','#D6B98A','176,141,87'], champagne:['#D8C3A0','#F0E3CC','216,195,160'] };
+  var METALES = { cobre:['#C58B5E','#E6B48E','197,139,94'], bronce:['#CFAE74','#EAD3A6','207,174,116'], champagne:['#D8C3A0','#F0E3CC','216,195,160'] };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
   function tono() {
@@ -264,7 +264,7 @@
       P + '.pasecard{ border-radius:30px!important; }'
     );
     if (E.forma === 'boleto') {
-      var NT = 'radial-gradient(circle 15px at 0 0,#0000 97%,#000) top left,radial-gradient(circle 15px at 100% 0,#0000 97%,#000) top right,radial-gradient(circle 15px at 0 100%,#0000 97%,#000) bottom left,radial-gradient(circle 15px at 100% 100%,#0000 97%,#000) bottom right';
+      var NT = 'radial-gradient(circle 21px at 0 0,#0000 97%,#000) top left,radial-gradient(circle 21px at 100% 0,#0000 97%,#000) top right,radial-gradient(circle 21px at 0 100%,#0000 97%,#000) bottom left,radial-gradient(circle 21px at 100% 100%,#0000 97%,#000) bottom right';
       A.push(
         P + ':is(.evento,.hotel,.pasecard){ border-radius:0!important; border:0!important; -webkit-mask:' + NT + '!important; -webkit-mask-size:51% 51%!important; -webkit-mask-repeat:no-repeat!important; mask:' + NT + '!important; mask-size:51% 51%!important; mask-repeat:no-repeat!important; box-shadow:inset 0 0 0 8px ' + MUSGO + ', inset 0 0 0 9px rgba(201,164,78,.6)!important; }',
         P + '.evento .ph{ border-radius:0!important; margin:12px 12px 0!important; width:auto!important; }',
@@ -334,6 +334,7 @@
       P + '.sec h2{ font-style:italic!important; letter-spacing:.02em!important; font-size:23px!important; }',
       P + '.sec .kick{ font-size:22px!important; }'
     );
+    if (E.nombre) A.push(P + '#pv-names{ font-size:' + E.nombre + '!important; }');
     return A.join('\n');
   }
   /* arco apuntado (ojiva) como polygon: vertical en los costados, en punta arriba */
