@@ -46,8 +46,8 @@
   var MUSGO  = '#1E3A2B';   /* el verde musgo de los paneles */
 
   var BOLA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/piezas/bola-oro.webp';
-  var TAPA_VIDEO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/sapo/sapo-tapa-video-25-9';
-  var TAPA_PLAY  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/sapo/sapo-tapa-playlist-25-9';
+  var TAPA_VIDEO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/sapo/sp-proy-1';
+  var TAPA_PLAY  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/sapo/sp-disco-3';
 
   /* ⚠️ LA TABLA QUE LA COLECCIÓN RECLAMA COMO PROPIA. Es el contrato de
      `efectos/paleta.js`: van NOMBRES DE VARIABLE CSS, no claves inventadas.
@@ -154,7 +154,7 @@
     A.push(
       P + '.portada{ justify-content:flex-end!important; }',
       P + '#pv-kick{ font-family:"Lora",serif!important; font-size:12px!important; letter-spacing:.34em!important; text-indent:.34em!important; text-transform:uppercase!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
-      P + '#pv-names{ font-family:"Parisienne",cursive!important; font-size:clamp(44px,12vw,62px)!important; line-height:1.24!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; padding-bottom:.06em!important; }',
+      P + '#pv-names{ font-family:"Cormorant Garamond",serif!important; font-weight:500!important; letter-spacing:.04em!important; font-size:clamp(48px,13vw,68px)!important; line-height:1.12!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; padding-bottom:.06em!important; }',
       P + '.portada :is(.num,.lab,.sep,.fecha){ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
       P + '.portada .num{ font-family:"Cormorant Garamond",serif!important; }',
       /* el velo de la portada: radial y suave, nunca una banda recta */
