@@ -705,6 +705,228 @@
         /* Vestimenta cae sobre la parte iluminada del óleo (la arcada): velo más firme SÓLO ahí */
         P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec):has(.col-dc){ background-image:radial-gradient(75% 55% at 50% 45%, rgba(20,27,46,.66) 0%, rgba(20,27,46,.4) 50%, rgba(20,27,46,0) 82%)!important; }'
       ].join('\n')
+    },
+    /* ⭐ GLOW PARTY (29/9/2026, XV, referencia glow-party de Maki): violeta noche con marcos de neón rosa y verde lima, fiesta con luz negra. OSCURA, como nocturno. Tinta lila casi blanca #F7F0FF sobre violeta #1A0B2E, acento rosa neón #FF3FA4, filetes verde lima #B8FF3C. El nombre en Tilt Neon con resplandor rosa. */
+    glow: {
+      hex: {'#C98E8A': '#FF3FA4', '#E3C2B8': '#3A1D5E', '#D9C3A0': '#FF3FA4', '#B08A4E': '#B8FF3C', '#F7EFEA': '#1A0B2E', '#FBF6F2': '#24103F', '#4A2E2C': '#F7F0FF', '#6B4744': '#D9C8F0', '#7A5634': '#C8FF6A', '#82504C': '#12071F', '#FBF4EF': '#F7F0FF', '#F5E6DF': '#FF8FCB', '#2E1C1B': '#1A0B2E', '#F2E4DC': '#24103F', '#EAD9B8': '#B8FF3C'},
+      rgb: {'74,46,44': '0,0,0', '201,142,138': '255,63,164', '247,239,234': '26,11,46', '40,20,18': '0,0,0', '60,34,32': '13,5,23', '134,96,58': '184,255,60', '176,138,78': '184,255,60', '217,195,160': '184,255,60', '240,220,211': '247,240,255', '251,246,242': '36,16,63', '255,246,236': '247,240,255', '120,70,60': '0,0,0', '107,71,68': '217,200,240', '251,244,239': '247,240,255'},
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/xv29/xi/xi-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/xv29/xi/xi-pieza.webp',
+        'family=Jost:wght@300;400;500&display=swap':'family=Jost:wght@300;400;500&family=Tilt+Neon&display=swap'
+      },
+      css: [
+        P + 'body{ background-color:#1A0B2E!important; }',
+        P + '.cf-letter{ background:linear-gradient(180deg,#24103F 0%,#1A0B2E 100%)!important; color:#F7F0FF!important; box-shadow:0 10px 26px rgba(0,0,0,.5)!important; }',
+        P + '.cf-letter :is(h3, p, div, span){ color:#F7F0FF!important; -webkit-text-fill-color:#F7F0FF!important; }',
+        P + ':is(.cf-back-tint, .cf-front-tint){ opacity:1!important; }',
+        P + '.pasecard{ background-image:radial-gradient(130% 90% at 50% 0%, #24103F, #1A0B2E)!important; border-color:rgba(184,255,60,.5)!important; box-shadow:0 12px 30px rgba(0,0,0,.55), 0 0 18px rgba(255,63,164,.25)!important; }',
+        P + '.pasecard :is(div,span,p,b,strong,small,label):not(.estado){ color:#F7F0FF!important; -webkit-text-fill-color:#F7F0FF!important; }',
+        P + '.pasecard .estado{ background-color:rgba(255,63,164,.18)!important; color:#F7F0FF!important; border-color:rgba(255,63,164,.55)!important; }',
+        P + '.pasecard::before{ border-color:rgba(184,255,60,.4)!important; }',
+        P + ':is(.col-dc-tit, .iv-plie-btn){ color:#C8FF6A!important; -webkit-text-fill-color:#C8FF6A!important; }',
+        P + '.col-dc-tit{ color:#F7F0FF!important; -webkit-text-fill-color:#F7F0FF!important; }',
+        P + '.frame > section.sec{ background-color:transparent!important; }',
+        P + '.inv-banda-deco{ display:none!important; }',
+        P + '#inv-fondo::after{ background:none!important; }',
+        P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 60% 36% at 50% 50%, rgba(26,11,46,.72) 0%, rgba(26,11,46,.4) 55%, rgba(26,11,46,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(26,11,46,1), 0 0 16px rgba(26,11,46,.9)!important; }',
+        P + '.sec h2{ font-family:"Tilt Neon",cursive!important; font-style:normal!important; font-weight:400!important; color:#F7F0FF!important; -webkit-text-fill-color:#F7F0FF!important; text-shadow:0 0 6px #FF3FA4, 0 0 16px rgba(255,63,164,.85), 0 0 34px rgba(255,63,164,.55)!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ font-family:"Tilt Neon",cursive!important; font-style:normal!important; font-weight:400!important; color:#F7F0FF!important; -webkit-text-fill-color:#F7F0FF!important; text-shadow:0 0 6px #FF3FA4, 0 0 16px rgba(255,63,164,.85), 0 0 34px rgba(255,63,164,.55)!important; font-size:clamp(54px,15vw,76px)!important; line-height:1.1!important; }',
+        P + '#pv-kick, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#F7F0FF!important; -webkit-text-fill-color:#F7F0FF!important; text-shadow:0 1px 3px rgba(0,0,0,.9), 0 0 6px #B8FF3C, 0 0 18px rgba(184,255,60,.6)!important; }',
+        P + '.rsvpform :is(input, select, textarea){ background:rgba(255,255,255,.06)!important; border-color:rgba(184,255,60,.5)!important; color:#F7F0FF!important; }',
+        P + '.rsvpform label{ color:#D9C8F0!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.46) 0, rgba(0,0,0,.2) 24%, rgba(0,0,0,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/xv29/xi/xi-tapavid") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.46) 0, rgba(0,0,0,.2) 24%, rgba(0,0,0,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/xv29/xi/xi-tapaplay") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(0,0,0,.45)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/xv29/xi/xi-pieza") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFFFFF 0 .8px, #B8FF3C 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        'html[data-oleo][data-oleo-tono] body :is(.btn, #btn-ingresar){ background:linear-gradient(180deg,#FF3FA4 0%,#9E2765 100%)!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; border:1px solid rgba(255,255,255,.35)!important; box-shadow:0 6px 16px rgba(0,0,0,.28), 0 0 14px rgba(255,63,164,.55)!important; text-shadow:0 1px 2px rgba(0,0,0,.35)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
+    /* ⭐ CORAZÓN NEÓN (29/9/2026, XV, referencia misxv-jaz de Maki): noche estrellada negra con un corazón con alas de neón rosa y cian. OSCURA. Tinta rosada casi blanca #FDF2F8 sobre noche #0A0A14, acento rosa neón #FF4FB8, filetes cian #4FE3FF. El nombre en Parisienne con resplandor de neón. */
+    estrellas: {
+      hex: {'#C98E8A': '#FF4FB8', '#E3C2B8': '#2A1E3A', '#D9C3A0': '#FF4FB8', '#B08A4E': '#4FE3FF', '#F7EFEA': '#0A0A14', '#FBF6F2': '#15152B', '#4A2E2C': '#FDF2F8', '#6B4744': '#D6D3E6', '#7A5634': '#8BEBFF', '#82504C': '#05050C', '#FBF4EF': '#FDF2F8', '#F5E6DF': '#FF9AD5', '#2E1C1B': '#0A0A14', '#F2E4DC': '#15152B', '#EAD9B8': '#4FE3FF'},
+      rgb: {'74,46,44': '0,0,0', '201,142,138': '255,79,184', '247,239,234': '10,10,20', '40,20,18': '0,0,0', '60,34,32': '5,5,10', '134,96,58': '79,227,255', '176,138,78': '79,227,255', '217,195,160': '79,227,255', '240,220,211': '253,242,248', '251,246,242': '21,21,43', '255,246,236': '253,242,248', '120,70,60': '0,0,0', '107,71,68': '214,211,230', '251,244,239': '253,242,248'},
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/xv29/lu/lu-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/xv29/lu/lu-pieza.webp',
+        'family=Jost:wght@300;400;500&display=swap':'family=Jost:wght@300;400;500&family=Parisienne&display=swap'
+      },
+      css: [
+        P + 'body{ background-color:#0A0A14!important; }',
+        P + '.cf-letter{ background:linear-gradient(180deg,#15152B 0%,#0A0A14 100%)!important; color:#FDF2F8!important; box-shadow:0 10px 26px rgba(0,0,0,.5)!important; }',
+        P + '.cf-letter :is(h3, p, div, span){ color:#FDF2F8!important; -webkit-text-fill-color:#FDF2F8!important; }',
+        P + ':is(.cf-back-tint, .cf-front-tint){ opacity:1!important; }',
+        P + '.pasecard{ background-image:radial-gradient(130% 90% at 50% 0%, #15152B, #0A0A14)!important; border-color:rgba(79,227,255,.5)!important; box-shadow:0 12px 30px rgba(0,0,0,.55), 0 0 18px rgba(255,79,184,.25)!important; }',
+        P + '.pasecard :is(div,span,p,b,strong,small,label):not(.estado){ color:#FDF2F8!important; -webkit-text-fill-color:#FDF2F8!important; }',
+        P + '.pasecard .estado{ background-color:rgba(255,79,184,.18)!important; color:#FDF2F8!important; border-color:rgba(255,79,184,.55)!important; }',
+        P + '.pasecard::before{ border-color:rgba(79,227,255,.4)!important; }',
+        P + ':is(.col-dc-tit, .iv-plie-btn){ color:#8BEBFF!important; -webkit-text-fill-color:#8BEBFF!important; }',
+        P + '.col-dc-tit{ color:#FDF2F8!important; -webkit-text-fill-color:#FDF2F8!important; }',
+        P + '.frame > section.sec{ background-color:transparent!important; }',
+        P + '.inv-banda-deco{ display:none!important; }',
+        P + '#inv-fondo::after{ background:none!important; }',
+        P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 60% 36% at 50% 50%, rgba(10,10,20,.72) 0%, rgba(10,10,20,.4) 55%, rgba(10,10,20,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(10,10,20,1), 0 0 16px rgba(10,10,20,.9)!important; }',
+        P + '.sec h2{ font-family:"Parisienne",cursive!important; font-style:normal!important; font-weight:400!important; color:#FDF2F8!important; -webkit-text-fill-color:#FDF2F8!important; text-shadow:0 0 5px #FF4FB8, 0 0 14px rgba(255,79,184,.85), 0 0 30px rgba(79,227,255,.45)!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ font-family:"Parisienne",cursive!important; font-style:normal!important; font-weight:400!important; color:#FDF2F8!important; -webkit-text-fill-color:#FDF2F8!important; text-shadow:0 0 5px #FF4FB8, 0 0 14px rgba(255,79,184,.85), 0 0 30px rgba(79,227,255,.45)!important; font-size:clamp(54px,15vw,76px)!important; line-height:1.1!important; }',
+        P + '#pv-kick, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#FDF2F8!important; -webkit-text-fill-color:#FDF2F8!important; text-shadow:0 1px 3px rgba(0,0,0,.9), 0 0 6px #4FE3FF, 0 0 16px rgba(79,227,255,.55)!important; }',
+        P + '.rsvpform :is(input, select, textarea){ background:rgba(255,255,255,.06)!important; border-color:rgba(79,227,255,.5)!important; color:#FDF2F8!important; }',
+        P + '.rsvpform label{ color:#D6D3E6!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.46) 0, rgba(0,0,0,.2) 24%, rgba(0,0,0,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/xv29/lu/lu-tapavid") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.46) 0, rgba(0,0,0,.2) 24%, rgba(0,0,0,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/xv29/lu/lu-tapaplay") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(0,0,0,.45)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/xv29/lu/lu-pieza") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFFFFF 0 .8px, #4FE3FF 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        'html[data-oleo][data-oleo-tono] body :is(.btn, #btn-ingresar){ background:linear-gradient(180deg,#FF4FB8 0%,#9E3072 100%)!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; border:1px solid rgba(255,255,255,.35)!important; box-shadow:0 6px 16px rgba(0,0,0,.28), 0 0 14px rgba(255,79,184,.55)!important; text-shadow:0 1px 2px rgba(0,0,0,.35)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
+    /* ⭐ GLAM (29/9/2026, XV, referencia glam-chic de Maki): negro con brillantina magenta y bokeh, toques de rojo, ciudad de noche. OSCURA. Tinta rosada #FBEFF5 sobre negro #0B0709, acento magenta #E0218A, filetes rosa plata #F2A7CF. El nombre en Pinyon Script con brillo magenta. */
+    glam: {
+      hex: {'#C98E8A': '#E0218A', '#E3C2B8': '#3A1426', '#D9C3A0': '#E0218A', '#B08A4E': '#F2A7CF', '#F7EFEA': '#0B0709', '#FBF6F2': '#181015', '#4A2E2C': '#FBEFF5', '#6B4744': '#E0CCD6', '#7A5634': '#F5B8D9', '#82504C': '#050304', '#FBF4EF': '#FBEFF5', '#F5E6DF': '#F28FC2', '#2E1C1B': '#FBEFF5', '#F2E4DC': '#181015', '#EAD9B8': '#F2A7CF'},
+      rgb: {'74,46,44': '0,0,0', '201,142,138': '224,33,138', '247,239,234': '11,7,9', '40,20,18': '0,0,0', '60,34,32': '5,3,4', '134,96,58': '242,167,207', '176,138,78': '242,167,207', '217,195,160': '242,167,207', '240,220,211': '251,239,245', '251,246,242': '24,16,21', '255,246,236': '251,239,245', '120,70,60': '0,0,0', '107,71,68': '224,204,214', '251,244,239': '251,239,245'},
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/xv29/ba/ba-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/xv29/ba/ba-pieza.webp',
+        'family=Jost:wght@300;400;500&display=swap':'family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap'
+      },
+      css: [
+        P + 'body{ background-color:#0B0709!important; }',
+        P + '.cf-letter{ background:linear-gradient(180deg,#181015 0%,#0B0709 100%)!important; color:#FBEFF5!important; box-shadow:0 10px 26px rgba(0,0,0,.5)!important; }',
+        P + '.cf-letter :is(h3, p, div, span){ color:#FBEFF5!important; -webkit-text-fill-color:#FBEFF5!important; }',
+        P + ':is(.cf-back-tint, .cf-front-tint){ opacity:1!important; }',
+        P + '.pasecard{ background-image:radial-gradient(130% 90% at 50% 0%, #181015, #0B0709)!important; border-color:rgba(242,167,207,.5)!important; box-shadow:0 12px 30px rgba(0,0,0,.55), 0 0 18px rgba(224,33,138,.25)!important; }',
+        P + '.pasecard :is(div,span,p,b,strong,small,label):not(.estado){ color:#FBEFF5!important; -webkit-text-fill-color:#FBEFF5!important; }',
+        P + '.pasecard .estado{ background-color:rgba(224,33,138,.18)!important; color:#FBEFF5!important; border-color:rgba(224,33,138,.55)!important; }',
+        P + '.pasecard::before{ border-color:rgba(242,167,207,.4)!important; }',
+        P + ':is(.col-dc-tit, .iv-plie-btn){ color:#F5B8D9!important; -webkit-text-fill-color:#F5B8D9!important; }',
+        P + '.col-dc-tit{ color:#FBEFF5!important; -webkit-text-fill-color:#FBEFF5!important; }',
+        P + '.frame > section.sec{ background-color:transparent!important; }',
+        P + '.inv-banda-deco{ display:none!important; }',
+        P + '#inv-fondo::after{ background:none!important; }',
+        P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 60% 36% at 50% 50%, rgba(11,7,9,.72) 0%, rgba(11,7,9,.4) 55%, rgba(11,7,9,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(11,7,9,1), 0 0 16px rgba(11,7,9,.9)!important; }',
+        P + '.sec h2{ font-family:"Pinyon Script",cursive!important; font-style:normal!important; font-weight:400!important; color:#FBEFF5!important; -webkit-text-fill-color:#FBEFF5!important; text-shadow:0 0 8px rgba(224,33,138,.9), 0 0 22px rgba(224,33,138,.5)!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ font-family:"Pinyon Script",cursive!important; font-style:normal!important; font-weight:400!important; color:#FBEFF5!important; -webkit-text-fill-color:#FBEFF5!important; text-shadow:0 0 8px rgba(224,33,138,.9), 0 0 22px rgba(224,33,138,.5)!important; font-size:clamp(54px,15vw,76px)!important; line-height:1.1!important; }',
+        P + '#pv-kick, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#FBEFF5!important; -webkit-text-fill-color:#FBEFF5!important; text-shadow:0 1px 3px rgba(0,0,0,.9), 0 0 8px rgba(242,167,207,.6)!important; }',
+        P + '.rsvpform :is(input, select, textarea){ background:rgba(255,255,255,.06)!important; border-color:rgba(242,167,207,.5)!important; color:#FBEFF5!important; }',
+        P + '.rsvpform label{ color:#E0CCD6!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.46) 0, rgba(0,0,0,.2) 24%, rgba(0,0,0,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/xv29/ba/ba-tapavid") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.46) 0, rgba(0,0,0,.2) 24%, rgba(0,0,0,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/xv29/ba/ba-tapaplay") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(0,0,0,.45)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/xv29/ba/ba-pieza") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFFFFF 0 .8px, #F2A7CF 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        'html[data-oleo][data-oleo-tono] body :is(.btn, #btn-ingresar){ background:linear-gradient(180deg,#E0218A 0%,#8A1455 100%)!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; border:1px solid rgba(255,255,255,.35)!important; box-shadow:0 6px 16px rgba(0,0,0,.28), 0 0 14px rgba(224,33,138,.55)!important; text-shadow:0 1px 2px rgba(0,0,0,.35)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
+    /* ⭐ BOHO (29/9/2026, XV, referencia xvbohemia-bohochic de Maki): papel kraft, pampas, plumas y flores secas en terracota y rosa viejo; la quinceañera con sombrero en un camino de campo. CLARA. Tinta café #4A3526 sobre kraft #EFE3CF, acento terracota #C0694A, bronce #A8804F. El nombre en Kaushan Script. */
+    boho: {
+      hex: {'#C98E8A': '#C0694A', '#E3C2B8': '#E9C9B8', '#D9C3A0': '#D9B99B', '#B08A4E': '#A8804F', '#F7EFEA': '#EFE3CF', '#FBF6F2': '#F7EEDF', '#4A2E2C': '#4A3526', '#6B4744': '#6E5443', '#7A5634': '#7C5A38', '#82504C': '#8C4F36', '#FBF4EF': '#FBF4EA', '#F5E6DF': '#F2DCCB', '#2E1C1B': '#2E1F15', '#F2E4DC': '#F1E6D6', '#EAD9B8': '#E3CFB0'},
+      rgb: {'74,46,44': '74,53,38', '201,142,138': '192,105,74', '247,239,234': '239,227,207', '40,20,18': '44,31,22', '60,34,32': '44,31,22', '134,96,58': '124,90,56', '176,138,78': '168,128,79', '217,195,160': '217,185,155', '240,220,211': '233,201,184', '251,246,242': '239,227,207', '255,246,236': '247,238,223', '120,70,60': '44,31,22', '107,71,68': '110,84,67', '251,244,239': '247,238,223'},
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/xv29/ju/ju-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/xv29/ju/ju-pieza.webp',
+        'family=Jost:wght@300;400;500&display=swap':'family=Jost:wght@300;400;500&family=Kaushan+Script&display=swap'
+      },
+      css: [
+        P + '.frame > section.sec{ background-color:transparent!important; }',
+        P + '.inv-banda-deco{ display:none!important; }',
+        P + '#inv-fondo::after{ background:none!important; }',
+        P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 55% 32% at 50% 50%, rgba(239,227,207,.7) 0%, rgba(239,227,207,.34) 55%, rgba(239,227,207,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(239,227,207,1), 0 0 14px rgba(239,227,207,.95), 0 0 26px rgba(239,227,207,.8)!important; }',
+        P + '.sec h2{ font-family:"Kaushan Script",cursive!important; font-style:normal!important; font-weight:400!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ font-family:"Kaushan Script",cursive!important; font-style:normal!important; font-weight:400!important; color:#4A3526!important; -webkit-text-fill-color:#4A3526!important; text-shadow:0 0 10px rgba(239,227,207,.95), 0 0 22px rgba(239,227,207,.8)!important; font-size:clamp(54px,15vw,76px)!important; line-height:1.1!important; }',
+        P + '#pv-kick, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#4A3526!important; -webkit-text-fill-color:#4A3526!important; text-shadow:0 0 8px rgba(239,227,207,.95), 0 0 18px rgba(239,227,207,.85)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(44,31,22,.46) 0, rgba(44,31,22,.2) 24%, rgba(44,31,22,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/xv29/ju/ju-tapavid") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(44,31,22,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(44,31,22,.46) 0, rgba(44,31,22,.2) 24%, rgba(44,31,22,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/xv29/ju/ju-tapaplay") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(44,31,22,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(0,0,0,.45)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/xv29/ju/ju-pieza") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #A8804F 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        'html[data-oleo][data-oleo-tono] body :is(.btn, #btn-ingresar){ background:linear-gradient(180deg,#9D563C 0%,#77412D 100%)!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; border:1px solid rgba(255,255,255,.35)!important; box-shadow:0 6px 16px rgba(0,0,0,.28)!important; text-shadow:0 1px 2px rgba(0,0,0,.35)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
+    /* ⭐ GLOBOS (29/9/2026, XV, referencia xv-sofia de Maki, «la fiesta más linda del mundo»): rosa fuerte y rosa chicle, globos brillantes y cielo rosa con nubes y cerezos. CLARA. Tinta magenta profunda #7A1850 sobre rosa #FDEFF5, acento #E7358E. El nombre en Bagel Fat One, inflado como globo. */
+    globos: {
+      hex: {'#C98E8A': '#E7358E', '#E3C2B8': '#FBD3E4', '#D9C3A0': '#F7B8D3', '#B08A4E': '#D94C8F', '#F7EFEA': '#FDEFF5', '#FBF6F2': '#FFF7FA', '#4A2E2C': '#7A1850', '#6B4744': '#9C3A6E', '#7A5634': '#A02A66', '#82504C': '#C2256F', '#FBF4EF': '#FFF4F9', '#F5E6DF': '#FFD6EA', '#2E1C1B': '#5A0E3A', '#F2E4DC': '#FCE4EF', '#EAD9B8': '#BFE3F7'},
+      rgb: {'74,46,44': '122,24,80', '201,142,138': '231,53,142', '247,239,234': '253,239,245', '40,20,18': '73,14,48', '60,34,32': '73,14,48', '134,96,58': '160,42,102', '176,138,78': '217,76,143', '217,195,160': '247,184,211', '240,220,211': '251,211,228', '251,246,242': '253,239,245', '255,246,236': '255,247,250', '120,70,60': '73,14,48', '107,71,68': '156,58,110', '251,244,239': '255,247,250'},
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/xv29/fe/fe-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/xv29/fe/fe-pieza.webp',
+        'family=Jost:wght@300;400;500&display=swap':'family=Jost:wght@300;400;500&family=Bagel+Fat+One&display=swap'
+      },
+      css: [
+        P + '.frame > section.sec{ background-color:transparent!important; }',
+        P + '.inv-banda-deco{ display:none!important; }',
+        P + '#inv-fondo::after{ background:none!important; }',
+        P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 55% 32% at 50% 50%, rgba(253,239,245,.7) 0%, rgba(253,239,245,.34) 55%, rgba(253,239,245,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(253,239,245,1), 0 0 14px rgba(253,239,245,.95), 0 0 26px rgba(253,239,245,.8)!important; }',
+        P + '.sec h2{ font-family:"Bagel Fat One",cursive!important; font-style:normal!important; font-weight:400!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ font-family:"Bagel Fat One",cursive!important; font-style:normal!important; font-weight:400!important; color:#7A1850!important; -webkit-text-fill-color:#7A1850!important; text-shadow:0 0 10px rgba(253,239,245,.95), 0 0 22px rgba(253,239,245,.8)!important; font-size:clamp(54px,15vw,76px)!important; line-height:1.1!important; }',
+        P + '#pv-kick, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#7A1850!important; -webkit-text-fill-color:#7A1850!important; text-shadow:0 0 8px rgba(253,239,245,.95), 0 0 18px rgba(253,239,245,.85)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(73,14,48,.46) 0, rgba(73,14,48,.2) 24%, rgba(73,14,48,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/xv29/fe/fe-tapavid") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(73,14,48,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(73,14,48,.46) 0, rgba(73,14,48,.2) 24%, rgba(73,14,48,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/xv29/fe/fe-tapaplay") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(73,14,48,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(0,0,0,.45)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/xv29/fe/fe-pieza") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #D94C8F 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        'html[data-oleo][data-oleo-tono] body :is(.btn, #btn-ingresar){ background:linear-gradient(180deg,#BD2B74 0%,#8F2058 100%)!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; border:1px solid rgba(255,255,255,.35)!important; box-shadow:0 6px 16px rgba(0,0,0,.28)!important; text-shadow:0 1px 2px rgba(0,0,0,.35)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
+    },
+    /* ⭐ BRILLOS (29/9/2026, XV, referencia xv-pia de Maki): brillantina rosa rubor y oro champaña, terraza al atardecer en San Miguel de Allende, globos rosa pálido. CLARA. Tinta vino rosado #7A3246 sobre #FBEFF0, acento #E59AAE, oro champaña #C9A06A. El nombre en Great Vibes. */
+    brillos: {
+      hex: {'#C98E8A': '#E59AAE', '#E3C2B8': '#F6D5DC', '#D9C3A0': '#E4CBA0', '#B08A4E': '#C9A06A', '#F7EFEA': '#FBEFF0', '#FBF6F2': '#FFF8F8', '#4A2E2C': '#7A3246', '#6B4744': '#92505F', '#7A5634': '#8A6232', '#82504C': '#A45468', '#FBF4EF': '#FFF6F7', '#F5E6DF': '#F9DDE3', '#2E1C1B': '#3E1824', '#F2E4DC': '#F8E4E8', '#EAD9B8': '#EAD2A8'},
+      rgb: {'74,46,44': '122,50,70', '201,142,138': '229,154,174', '247,239,234': '251,239,240', '40,20,18': '73,30,42', '60,34,32': '73,30,42', '134,96,58': '138,98,50', '176,138,78': '201,160,106', '217,195,160': '228,203,160', '240,220,211': '246,213,220', '251,246,242': '251,239,240', '255,246,236': '255,248,248', '120,70,60': '73,30,42', '107,71,68': '146,80,95', '251,244,239': '255,248,248'},
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/xv29/bi/bi-base.webp',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/xv29/bi/bi-pieza.webp',
+        'family=Jost:wght@300;400;500&display=swap':'family=Jost:wght@300;400;500&family=Great+Vibes&display=swap'
+      },
+      css: [
+        P + '.frame > section.sec{ background-color:transparent!important; }',
+        P + '.inv-banda-deco{ display:none!important; }',
+        P + '#inv-fondo::after{ background:none!important; }',
+        P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 55% 32% at 50% 50%, rgba(251,239,240,.7) 0%, rgba(251,239,240,.34) 55%, rgba(251,239,240,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(251,239,240,1), 0 0 14px rgba(251,239,240,.95), 0 0 26px rgba(251,239,240,.8)!important; }',
+        P + '.sec h2{ font-family:"Great Vibes",cursive!important; font-style:normal!important; font-weight:400!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ font-family:"Great Vibes",cursive!important; font-style:normal!important; font-weight:400!important; color:#7A3246!important; -webkit-text-fill-color:#7A3246!important; text-shadow:0 0 10px rgba(251,239,240,.95), 0 0 22px rgba(251,239,240,.8)!important; font-size:clamp(54px,15vw,76px)!important; line-height:1.1!important; }',
+        P + '#pv-kick, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#7A3246!important; -webkit-text-fill-color:#7A3246!important; text-shadow:0 0 8px rgba(251,239,240,.95), 0 0 18px rgba(251,239,240,.85)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(73,30,42,.46) 0, rgba(73,30,42,.2) 24%, rgba(73,30,42,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/xv29/bi/bi-tapavid") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(73,30,42,.28)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(73,30,42,.46) 0, rgba(73,30,42,.2) 24%, rgba(73,30,42,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/xv29/bi/bi-tapaplay") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(73,30,42,.28)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(0,0,0,.45)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/xv29/bi/bi-pieza") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #C9A06A 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        'html[data-oleo][data-oleo-tono] body :is(.btn, #btn-ingresar){ background:linear-gradient(180deg,#BB7E8E 0%,#8D5F6B 100%)!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; border:1px solid rgba(255,255,255,.35)!important; box-shadow:0 6px 16px rgba(0,0,0,.28)!important; text-shadow:0 1px 2px rgba(0,0,0,.35)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ].join('\n')
     }
   };
   function tono() {
