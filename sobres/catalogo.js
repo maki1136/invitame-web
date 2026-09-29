@@ -1322,6 +1322,27 @@ window.SOBRES_INVITAME = {
     empalme:  "foto"
   },
 
+  /* ---- RAPUNZEL EN VIDEO · 29/9/2026 --------------------------------------
+     Maki: «el sobre cambialo por un video». Sobre de algodón crema cerrado con
+     una CINTA DE SEDA CELESTE en moño (sin lacre: con el lacre al medio Kling
+     lo duplica, armado §27), sobre el alféizar de piedra de la torre, con
+     campanillas azules y la punta de la trenza dorada. La cinta se desata
+     sola y se va, las solapas se abren en X y sale luz cálida.
+     Imagen: Higgsfield Soul (9:16) · video: Kling 3.0 pro, 5 s, cfg 0,8.
+     MEDIDO cada 0,25 s (brillo del centro): quieto 0–1 s, la cinta se va
+     1–2,5 s, las solapas se abren 2,5–4 s, la luz crece 4–5 s. Dura 5,04 s.
+     `color` = esquina del cuadro 0. Invitación CLARA → fundido largo (0,8).
+     ---------------------------------------------------------------------- */
+  'rapunzel-video': {
+    nombre:     "Rapunzel · sobre de algodón con cinta celeste que se desata, campanillas y la trenza (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/rapunzel/rap-sobre-v1-29-9.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rapunzel/rap-sobre-v1-29-9.jpg",
+    color:      "#CCBC99",
+    luz:        4.2,
+    luzColor:   "#FFF3D6",
+    luzFundido: 0.8
+  },
+
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
