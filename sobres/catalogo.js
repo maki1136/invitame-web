@@ -1537,6 +1537,19 @@ window.SOBRES_INVITAME = {
     ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
   },
 
+  /* ★ 29/9/2026 · mismo sobre que damasco-salvia, SIN ficha y con empalme "foto":
+     la solapa sube, la mitad de abajo CAE y aparece la portada (pedido de Maki). */
+  "damasco-salvia-cae": {
+    nombre:   "Damasco · marfil con lacre salvia, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-cuerpo.webp",
+    color:    "#e5e1da",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.1, y: 56.2 }
+  },
+
   "perla-salvia": {
     nombre:   "Perla · verde salvia, solapa redonda con una perla (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/perla-salvia-poster.jpg",
