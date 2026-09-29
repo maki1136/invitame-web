@@ -77,6 +77,10 @@
       '.si-nota{ margin:10px 0 0; padding-top:10px; text-align:center; font-size:12px; font-style:italic; color:var(--si-t); opacity:.8;',
       '  border-top:1px solid color-mix(in srgb, var(--si-t) 12%, transparent); }',
       '.si-libre{ font-size:14px; line-height:1.55; color:var(--si-t); text-align:center; }',
+      '.si-como.si-osc > button{ background:rgba(10,14,12,.34); border-color:color-mix(in srgb, var(--si-t) 45%, transparent); box-shadow:0 6px 18px rgba(0,0,0,.25); }',
+      '.si-como.si-osc > button:hover{ background:rgba(10,14,12,.5); }',
+      '.si-como.si-osc .si-card{ background:rgba(10,14,12,.46); box-shadow:0 10px 26px rgba(0,0,0,.3); }',
+      '.si-como.si-osc .si-num{ color:#15120e; box-shadow:0 0 0 3px rgba(0,0,0,.35), 0 0 0 4px color-mix(in srgb, var(--si-t) 40%, transparent); }',
       '@media (prefers-reduced-motion: reduce){ .si-como > div, .si-como > button i{ transition:none; } }'
     ].join('\n');
     (document.head || document.documentElement).appendChild(s);
@@ -154,6 +158,10 @@
       if (box.style.fontFamily !== cs.fontFamily) box.style.fontFamily = cs.fontFamily;
       var tinta = cs.webkitTextFillColor && cs.webkitTextFillColor !== 'rgba(0, 0, 0, 0)' ? cs.webkitTextFillColor : cs.color;
       if (box.style.getPropertyValue('--si-t') !== tinta) box.style.setProperty('--si-t', tinta);
+      /* en una sección OSCURA (tinta clara) el vidrio va oscuro, si no el texto claro queda sobre blanco */
+      var m = String(tinta).match(/\d+(\.\d+)?/g) || [0, 0, 0];
+      var lum = (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255;
+      box.classList.toggle('si-osc', lum > 0.6);
     }
   }
 
