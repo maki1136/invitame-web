@@ -83,7 +83,7 @@
     /* azul: art déco, y PLATA en lugar de oro (la plata reemplaza al oro en 2027) */
     azul:      { disp:'Marcellus',          scr:'Mrs Saint Delafield', txt:'Crimson Pro', pieza:'c_crop,w_0.52,h_0.52,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-azul', adorno:'abanico', forma:'deco', port:'deco', metal:'plata' },
     /* petróleo: tonos joya y maximalismo tropical (bodas de dos novios, 2027) */
-    petroleo:  { disp:'Gilda Display',      scr:'Italianno',     txt:'Libre Baskerville', pieza:'c_crop,w_0.5,h_0.5,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-petroleo', adorno:'pluma', forma:'ventana', port:'italica' }
+    petroleo:  { disp:'Gilda Display',      scr:'Italianno',     txt:'Libre Baskerville', pieza:'c_crop,w_0.28,h_0.28,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-petroleo', adorno:'pluma', forma:'ventana', port:'italica' }
   };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
