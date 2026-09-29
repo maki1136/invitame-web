@@ -550,6 +550,11 @@
       '  background-image:none!important;',
       '  border:0!important; box-shadow:none!important;',
       '}',
+      /* ⭐ 29/9 (armado-2 §48): las tapas dicen su función con un OBJETO de la
+         temática. Video = proyector antiguo con el haz de luz entre rosas y velas
+         en la biblioteca; playlist = tocadiscos de valija en el sillón de terciopelo. */
+      P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(12,7,3,.45) 0, rgba(12,7,3,.18) 26%, rgba(12,7,3,0) 46%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/bella/vic-tv-proy-29-9") center 45%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(0,0,0,.45), 0 0 0 1px rgba(201,167,94,.55)!important; }',
+      P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(12,7,3,.45) 0, rgba(12,7,3,.18) 26%, rgba(12,7,3,0) 46%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,q_auto,f_auto/invitame/bella/vic-sp-disco-29-9") center 45%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(0,0,0,.45), 0 0 0 1px rgba(201,167,94,.55)!important; }',
       P + '.rd-tapa .rd-aro{',
       '  border-color:' + ORO + '!important; color:' + ORO + '!important;',
       '  background:rgba(227,200,138,.10)!important;',
@@ -628,7 +633,10 @@
       '    rgba(227,200,138,.10) 0%, rgba(227,200,138,0) 62%)!important;',
       '  background-size:100% 100%!important; background-repeat:no-repeat!important;',
       '  box-shadow:inset 0 1px 0 rgba(246,234,210,.08), 0 14px 34px rgba(0,0,0,.42)!important;',
-      '  overflow:hidden!important; position:relative!important; padding:6px 0!important;',
+      /* ⭐ 29/9 (repaso §49): `padding:6px 0` dejaba las fichas 13 px AFUERA de la
+         caja («el 18:00 con el rectángulo está feo», marcado en Rapunzel) y el
+         `overflow:hidden` recortaba la última. Aire como Montserrat, y visible. */
+      '  overflow:visible!important; position:relative!important; padding:40px 12px 34px!important;',
       '}',
       P + '.tl::after{',
       '  content:""!important; position:absolute!important; left:50%!important; top:0!important;',
@@ -668,11 +676,19 @@
       '  z-index:2!important;',
       '}',
       /* la vía: fina y apagándose en las dos puntas, nunca un corte seco */
+      /* ⭐ 29/9 · la vía deja de ser una hebra de 1,5 px («la línea también está
+         fea»): es un FILETE DOBLE de oro, como el de un marco de biblioteca. 5 px,
+         el centro corregido por la diferencia (−1,75 px), apagado en las puntas. */
       P + '.tl::before{',
-      '  width:1.5px!important; opacity:1!important;',
-      '  background:linear-gradient(180deg, rgba(169,138,95,0) 0%,',
-      '    rgba(169,138,95,.85) 9%, rgba(169,138,95,.85) 91%, rgba(169,138,95,0) 100%)!important;',
+      '  width:5px!important; margin-left:-1.75px!important; opacity:1!important;',
+      '  background:linear-gradient(90deg, ' + ORO + ' 0 1px, transparent 1px 4px, ' + ORO + ' 4px 5px)!important;',
+      '  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%)!important;',
+      '          mask-image:linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%)!important;',
       '}',
+      /* ⭐ 29/9 · las rosas de la izquierda caían ~9 px corridas de la vía: la
+         impar va con `right:-31px` y el `margin-left` de la corrección de tamaño
+         no la mueve. Se corrige por la diferencia (medido en captura). */
+      P + '.tl.tl-centro > .it:nth-child(odd)::before{ right:-40px!important; }',
       P + '.it .h{ color:' + ORO + '!important; font-family:"Cinzel",serif!important; }',
       P + '.it .t{ color:' + TINTA2 + '!important; }',
 
