@@ -1269,10 +1269,10 @@ window.SOBRES_INVITAME = {
         borde del parche 85,9, contra papel lejano 86,5. El salto mayor es de
         1,6 — ruido. Sin disco fantasma y sin aro.                          */
   /* 28/9/2026 · La princesa y el sapo EN VIDEO (Maki: «el sobre hacelo con video»). Flow (sobre verde, lacre de oro con nenúfar) + kling v3 std 5 s: la solapa sube con el lacre, sale luz dorada. */
-  /* SOBRES «SALE ALGO Y SE HACE LUZ» (Maki, 28/9/2026): se abre la solapa con el sello, sale la tarjeta y se convierte en la luz que tapa todo. */
-  'disco-sale': { nombre: "Disco · sale la tarjeta con confeti de espejos y se hace luz (video)", video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/disco/lupita-sobre-sale2-std.mp4", poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/disco/lupita-sobre-sale2-std.jpg", color: "#1A2035", luz: 4.4, luzColor: "#EEF1F8", luzFundido: 0.5 },
-  'rosa-disco-sale': { nombre: "Rosa disco · sale la tarjeta con pétalos y se hace luz (video)", video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/rosadisco/montserrat-sobre-sale2-std.mp4", poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rosadisco/montserrat-sobre-sale2-std.jpg", color: "#F2DCE1", luz: 4.3, luzColor: "#FFF4F6", luzFundido: 0.7 },
-  'sapo-sale': { nombre: "La princesa y el sapo · sale la tarjeta con luciérnagas y se hace luz (video)", video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/sapo/isabella-sobre-sale3-std2.mp4", poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sapo/isabella-sobre-sale3-std2.jpg", color: "#10201A", luz: 4.4, luzColor: "#FFF1D6", luzFundido: 0.5 },
+  /* SOBRES «SALE ALGO Y SE HACE LUZ» (Maki, 28/9/2026): se abre la solapa con el sello, sale LUZ de adentro y va a blanco en toda la pantalla (sin tarjeta vacía). */
+  'disco-sale': { nombre: "Disco · se abre y sale luz hasta blanco (video)", video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/disco/lupita-sobre-luz-std09.mp4", poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/disco/lupita-sobre-luz-std09.jpg", color: "#1A2035", luz: 4.5, luzColor: "#EEF1F8", luzFundido: 0.5 },
+  'rosa-disco-sale': { nombre: "Rosa disco · se abre y sale luz rosada hasta blanco (video)", video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/rosadisco/montserrat-sobre-luz-pro09.mp4", poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rosadisco/montserrat-sobre-luz-pro09.jpg", color: "#F2DCE1", luz: 4.3, luzColor: "#FFF4F6", luzFundido: 0.7 },
+  'sapo-sale': { nombre: "La princesa y el sapo · se abre y sale luz dorada con luciérnagas hasta blanco (video)", video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/sapo/isabella-sobre-luz-std1.mp4", poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sapo/isabella-sobre-luz-std1.jpg", color: "#10201A", luz: 4.5, luzColor: "#FFF1D6", luzFundido: 0.5 },
   'sapo-video': { nombre:"La princesa y el sapo · sobre verde con lacre de nenúfar (video)", video:"https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto/invitame/sapo/sp-sobre-std.mp4", poster:"https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sapo/sp-sobre-std.jpg", color:"#10201A", luz:3.6, luzColor:"#FFF1D6", luzFundido:0.5 },
   sapo: {
     nombre:   "La princesa y el sapo · papel verde bosque, el agua del pozo en la solapa, lacre de oro con hoja de tilo (foto)",
@@ -1344,7 +1344,7 @@ window.SOBRES_INVITAME = {
      que saliera nada: no cumplía la regla y se reemplazó.)
      ---------------------------------------------------------------------- */
   'rapunzel-video': {
-    nombre:     "Rapunzel · sobre de algodón con cinta celeste que se desata, sale la tarjeta con pétalos y se hace luz (video)",
+    nombre:     "Rapunzel · sobre de algodón con cinta celeste que se desata, se abre y sale luz rosada hasta blanco (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/rapunzel/rap-sobre-v2-29-9.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rapunzel/rap-sobre-v2-29-9.jpg",
     color:      "#CCBC99",
