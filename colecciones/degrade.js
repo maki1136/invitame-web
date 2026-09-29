@@ -79,7 +79,9 @@
   var ESTILOS = {
     esmeralda: { disp:'Cormorant Garamond', scr:'Parisienne',    txt:'Lora',        pieza:'w_SZ,q_auto,f_auto/invitame/degrade/dg-medallon-c.png', adorno:'hoja',     forma:'arco',  port:'serif'  },
     ciruela:   { disp:'Bodoni Moda',        scr:'Pinyon Script', txt:'EB Garamond', pieza:'c_crop,w_0.42,h_0.42,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-ciruela', adorno:'estrella', forma:'marco', port:'script' },
-    borgona:   { disp:'Playfair Display',   scr:'Allura',        txt:'Cormorant',   pieza:'c_crop,w_0.45,h_0.45,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-borgona', adorno:'flor',     forma:'filete', port:'versal' }
+    borgona:   { disp:'Playfair Display',   scr:'Allura',        txt:'Cormorant',   pieza:'c_crop,w_0.45,h_0.45,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-borgona', adorno:'flor',     forma:'filete', port:'versal' },
+    /* azul: art déco, y PLATA en lugar de oro (la plata reemplaza al oro en 2027) */
+    azul:      { disp:'Marcellus',          scr:'Mrs Saint Delafield', txt:'Crimson Pro', pieza:'c_crop,w_0.52,h_0.52,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-azul', adorno:'abanico', forma:'deco', port:'deco', metal:'plata' }
   };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
@@ -93,6 +95,7 @@
     var T = TONOS[tono()];
     PAPEL = hex(T[0]); PAPEL2 = hex(T[1]); MUSGO = T[3]; TINTA3 = T[4];
     var pz = estilo().pieza;
+    if (estilo().metal === 'plata') { ORO = '#B9C0CA'; ORO_CL = '#E3E7EC'; } else { ORO = '#C9A44E'; ORO_CL = '#E0C57A'; }
     SAPITO = CL + pz.replace('SZ', '300'); SAPITO_CH = CL + pz.replace('SZ', '120'); PELOTA = CL + pz.replace('SZ', '160');
   }
   function recolor(s) {
@@ -148,6 +151,12 @@
     var a = estilo().adorno;
     if (a === 'estrella') return "data:image/svg+xml;utf8," + encodeURIComponent(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M24 3 L27.6 17.2 L40.3 9.7 L32.8 22.4 L45 24 L32.8 25.6 L40.3 38.3 L27.6 30.8 L24 45 L20.4 30.8 L7.7 38.3 L15.2 25.6 L3 24 L15.2 22.4 L7.7 9.7 L20.4 17.2 Z"/><circle cx="24" cy="24" r="3.4" fill="' + PAPEL + '"/></svg>');
+    if (a === 'abanico') {
+      var ry = '';
+      for (var k = 1; k < 6; k++) { var an = Math.PI - k * Math.PI / 6; ry += '<path d="M24 36 L' + (24 + 20 * Math.cos(an)).toFixed(1) + ' ' + (36 - 20 * Math.sin(an)).toFixed(1) + '"/>'; }
+      return "data:image/svg+xml;utf8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M3 36 A21 21 0 0 1 45 36 Z"/><g stroke="' + PAPEL + '" stroke-width="1.6" fill="none">' + ry + '<path d="M11 36 A13 13 0 0 1 37 36"/></g><rect x="3" y="38.5" width="42" height="2" fill="' + color + '"/></svg>');
+    }
     if (a === 'flor') {
       var p = '';
       for (var i = 0; i < 6; i++) p += '<ellipse cx="24" cy="13.5" rx="6.6" ry="10" transform="rotate(' + (i * 60) + ' 24 24)"/>';
@@ -177,6 +186,21 @@
       P + '.padres .av{ border:1px solid ' + ORO + '!important; box-shadow:0 0 0 4px ' + PAPEL + ', 0 0 0 5px rgba(201,164,78,.45)!important; }',
       P + '.pasecard{ border-radius:22px!important; }'
     );
+    if (E.forma === 'deco') {
+      var CH = 'polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px)';
+      A.push(
+        P + ':is(.evento,.hotel,.tl,.pasecard){ border-radius:0!important; border:0!important; clip-path:' + CH + '!important; box-shadow:inset 0 0 0 5px ' + MUSGO + ', inset 0 0 0 6px rgba(201,164,78,.55)!important; }',
+        P + '.evento .ph{ border-radius:0!important; }',
+        P + '.padres .av{ border:1px solid ' + ORO + '!important; box-shadow:0 0 0 4px ' + PAPEL + ', 0 0 0 5px ' + ORO + '!important; }',
+        P + '.pasecard{ overflow:hidden!important; }'
+      );
+    }
+    if (E.port === 'deco') A.push(
+      P + '#pv-names{ font-family:"' + E.disp + '",serif!important; font-weight:400!important; text-transform:uppercase!important; letter-spacing:.22em!important; text-indent:.22em!important; font-size:clamp(28px,7.6vw,40px)!important; line-height:1.35!important; }',
+      P + '#pv-kick{ font-family:"' + E.scr + '",cursive!important; text-transform:none!important; letter-spacing:0!important; text-indent:0!important; font-size:34px!important; }',
+      P + '.sec h2{ text-transform:uppercase!important; letter-spacing:.2em!important; font-size:16px!important; }',
+      P + '.sec .kick{ font-size:27px!important; }'
+    );
     if (E.port === 'script') A.push(
       P + '#pv-names{ font-family:"' + E.scr + '",cursive!important; font-weight:400!important; letter-spacing:0!important; font-size:clamp(56px,15vw,82px)!important; line-height:1.2!important; padding-bottom:.14em!important; }',
       P + '#pv-kick{ font-family:"' + E.disp + '",serif!important; letter-spacing:.42em!important; text-indent:.42em!important; }',
@@ -193,6 +217,7 @@
   }
   function conLetra(s) {
     var E = estilo();
+    if (E.metal === 'plata') s = s.split('#C9A44E').join('#B9C0CA').split('#E0C57A').join('#E3E7EC').split('201,164,78').join('185,192,202');
     return s.split('"Cormorant Garamond"').join('"' + E.disp + '"').split('"Parisienne"').join('"' + E.scr + '"').split('"Lora"').join('"' + E.txt + '"');
   }
 
