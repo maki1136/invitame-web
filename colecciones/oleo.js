@@ -526,7 +526,7 @@
     },
     /* ⭐ COLORAMA (boda, 29/9/2026, referencias de Maki: humo de colores y fuegos en arcoíris). Clonado de rosadisco: papel blanco cálido #FDFBF8, tinta ciruela-grafito #2E2A3A, acento coral #E0567E, turquesa #8FCFC8; el nombre en ARCOÍRIS; portada CON la pareja (bloque al pie). Piezas: la esfera de humo arcoíris (cr-pieza) en itinerario y raspadita; tapas proyector y tocadiscos con humo de colores. */
     colorama: {
-      hex: { '#C98E8A':'#E0567E', '#E3C2B8':'#FBE3D6', '#D9C3A0':'#D9F1EE', '#B08A4E':'#8FCFC8', '#F7EFEA':'#FDFBF8', '#FBF6F2':'#FFFFFF', '#4A2E2C':'#2E2A3A', '#6B4744':'#4F4863', '#82504C':'#C2436B', '#FBF4EF':'#FFFFFF', '#F5E6DF':'#F2EEF6', '#2E1C1B':'#1E1A26', '#F2E4DC':'#F3EFF7', '#EAD9B8':'#D9F1EE' },
+      hex: { '#C98E8A':'#E0567E', '#E3C2B8':'#FBE3D6', '#D9C3A0':'#D9F1EE', '#B08A4E':'#8FCFC8', '#F7EFEA':'#FDFBF8', '#FBF6F2':'#FFFFFF', '#4A2E2C':'#2E2A3A', '#6B4744':'#4F4863', '#82504C':'#AE3760', '#FBF4EF':'#FFFFFF', '#F5E6DF':'#F2EEF6', '#2E1C1B':'#1E1A26', '#F2E4DC':'#F3EFF7', '#EAD9B8':'#D9F1EE' },
       rgb: { '74,46,44':'46,42,58', '201,142,138':'224,86,126', '247,239,234':'253,251,248', '40,20,18':'30,26,38', '60,34,32':'30,26,38', '176,138,78':'143,207,200', '217,195,160':'217,241,238', '240,220,211':'242,238,246', '251,246,242':'253,251,248', '255,246,236':'253,251,248', '120,70,60':'30,26,38', '107,71,68':'79,72,99', '251,244,239':'253,251,248' },
       url: {
         'invitame/oleo/oleo-rose-base.webp':'invitame/colorama/cr-fondo-base.webp',
@@ -539,7 +539,7 @@
         P + '.portada > .c{ margin-top:0!important; background:radial-gradient(closest-side, rgba(253,251,248,.8), rgba(253,251,248,.4) 70%, rgba(253,251,248,0))!important; padding:18px 24px!important; }',
         P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#2E2A3A!important; -webkit-text-fill-color:#2E2A3A!important; text-shadow:0 0 10px rgba(253,251,248,.95)!important; }',
         /* el nombre en ORO DE HOJA, como la referencia: degradado recortado al texto. Con un color plano a media luz reglas-duras lo pisaba (primero a negro, después a blanco: en foto copia el extremo del bloque). Con el relleno transparente no hay tinta que corregir y se queda el dorado. Medido y visto 25/9. */
-        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ color:transparent!important; -webkit-text-fill-color:transparent!important; background:linear-gradient(100deg,#F07A3A 0%,#E8508A 24%,#9A62D6 48%,#2FA8A8 72%,#E8A93A 100%)!important; -webkit-background-clip:text!important; background-clip:text!important; text-shadow:none!important; filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 0 10px rgba(253,251,248,.95))!important; font-size:clamp(54px, 15vw, 76px)!important; line-height:1.1!important; }',
+        P + '.portada #pv-names, ' + P + '.portada #pv-names span{ color:transparent!important; -webkit-text-fill-color:transparent!important; background:linear-gradient(100deg,#F07A3A 0%,#E8508A 24%,#9A62D6 48%,#2FA8A8 72%,#E8A93A 100%)!important; -webkit-background-clip:text!important; background-clip:text!important; text-shadow:none!important; filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 0 10px rgba(253,251,248,.95))!important; font-size:clamp(36px, 10vw, 54px)!important; line-height:1.12!important; white-space:normal!important; }',
         /* el fondo va ADELANTE: claro chico y liviano */
         /* 25/9 (Maki: «al fondo le falta fuerza, se tapa demasiado y queda apagado»): fuera las tres capas que lo lavaban —
                    el papel al 10-50 % de cada sección (y de las .verde), la copia QUIETA de la imagen base encima de las .verde
@@ -558,7 +558,7 @@
         'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > div.it:nth-of-type(odd)::before{ left:auto!important; right:-40px!important; }',
         'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > div.it:nth-of-type(even)::before{ right:auto!important; left:-40px!important; }',
         '@keyframes crBrillo{ 0%,100%{ filter:brightness(1); } 50%{ filter:brightness(1.3) drop-shadow(0 0 6px rgba(255,210,230,.95)); } }',
-        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > .it .h{ color:#C2436B!important; }',
+        'html[data-oleo][data-oleo-tono="colorama"] .tl.tl-centro > .it .h{ color:#AE3760!important; }',
         P + '.rd-tapa .rd-aro{ border-color:#FFFFFF!important; background:rgba(30,26,38,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
         P + '.rd-tapa .rd-aro::after{ border-left-color:#FFFFFF!important; }',
         P + '.rd-tapa .rd-txt{ display:block!important; color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
@@ -566,6 +566,8 @@
         P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.footer .s{ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; }',
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
+      ,
+        P + '.val .copy{ color:#AE3760!important; -webkit-text-fill-color:#AE3760!important; }'
       ].join('\n')
     },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
@@ -1196,7 +1198,7 @@
      borra el inline que dejó el corrector. */
   function tintaRosaDisco() {
     if (tono() !== 'rosadisco' && tono() !== 'colorama') return;
-    var TC = tono() === 'colorama' ? ['#C2436B','rgb(194, 67, 107)'] : ['#B0306E','rgb(176, 48, 110)'];
+    var TC = tono() === 'colorama' ? ['#AE3760','rgb(174, 55, 96)'] : ['#B0306E','rgb(176, 48, 110)'];
     var ns = document.querySelectorAll('.padres .rl, .rsvpform label');
     for (var i = 0; i < ns.length; i++) {
       var n = ns[i];
