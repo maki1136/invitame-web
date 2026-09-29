@@ -81,7 +81,9 @@
     ciruela:   { disp:'Bodoni Moda',        scr:'Pinyon Script', txt:'EB Garamond', pieza:'c_crop,w_0.42,h_0.42,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-ciruela', adorno:'estrella', forma:'marco', port:'script' },
     borgona:   { disp:'Playfair Display',   scr:'Allura',        txt:'Cormorant',   pieza:'c_crop,w_0.45,h_0.45,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-borgona', adorno:'flor',     forma:'filete', port:'versal' },
     /* azul: art déco, y PLATA en lugar de oro (la plata reemplaza al oro en 2027) */
-    azul:      { disp:'Marcellus',          scr:'Mrs Saint Delafield', txt:'Crimson Pro', pieza:'c_crop,w_0.52,h_0.52,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-azul', adorno:'abanico', forma:'deco', port:'deco', metal:'plata' }
+    azul:      { disp:'Marcellus',          scr:'Mrs Saint Delafield', txt:'Crimson Pro', pieza:'c_crop,w_0.52,h_0.52,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-azul', adorno:'abanico', forma:'deco', port:'deco', metal:'plata' },
+    /* petróleo: tonos joya y maximalismo tropical (bodas de dos novios, 2027) */
+    petroleo:  { disp:'Gilda Display',      scr:'Italianno',     txt:'Libre Baskerville', pieza:'c_crop,w_0.5,h_0.5,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-petroleo', adorno:'pluma', forma:'ventana', port:'italica' }
   };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
@@ -151,6 +153,10 @@
     var a = estilo().adorno;
     if (a === 'estrella') return "data:image/svg+xml;utf8," + encodeURIComponent(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M24 3 L27.6 17.2 L40.3 9.7 L32.8 22.4 L45 24 L32.8 25.6 L40.3 38.3 L27.6 30.8 L24 45 L20.4 30.8 L7.7 38.3 L15.2 25.6 L3 24 L15.2 22.4 L7.7 9.7 L20.4 17.2 Z"/><circle cx="24" cy="24" r="3.4" fill="' + PAPEL + '"/></svg>');
+    if (a === 'pluma') {
+      return "data:image/svg+xml;utf8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M24 3 C34 9 37 19 24 33 C11 19 14 9 24 3 Z"/><ellipse cx="24" cy="16" rx="6" ry="7.5" fill="' + PAPEL + '"/><ellipse cx="24" cy="16.5" rx="3.2" ry="4" fill="' + color + '"/><path d="M24 33 L24 46" stroke="' + color + '" stroke-width="2" stroke-linecap="round"/></svg>');
+    }
     if (a === 'abanico') {
       var ry = '';
       for (var k = 1; k < 6; k++) { var an = Math.PI - k * Math.PI / 6; ry += '<path d="M24 36 L' + (24 + 20 * Math.cos(an)).toFixed(1) + ' ' + (36 - 20 * Math.sin(an)).toFixed(1) + '"/>'; }
@@ -197,6 +203,19 @@
         P + '.pasecard{ overflow:hidden!important; }'
       );
     }
+    if (E.forma === 'ventana') A.push(
+      P + ':is(.evento,.hotel){ border-radius:999px 999px 18px 18px / 150px 150px 18px 18px!important; border:1px solid rgba(201,164,78,.55)!important; overflow:hidden!important; }',
+      P + '.evento .ph{ height:250px!important; }',
+      P + '.hotel{ padding-top:70px!important; }',
+      P + '.tl{ border-radius:120px 120px 18px 18px / 80px 80px 18px 18px!important; padding-top:34px!important; }',
+      P + '.padres .av{ border-radius:999px 999px 10px 10px!important; height:118px!important; border:1px solid ' + ORO + '!important; }'
+    );
+    if (E.port === 'italica') A.push(
+      P + '#pv-names{ font-family:"' + E.txt + '",serif!important; font-style:italic!important; font-weight:400!important; letter-spacing:.01em!important; font-size:clamp(34px,9.5vw,52px)!important; line-height:1.2!important; }',
+      P + '#pv-kick{ font-family:"' + E.scr + '",cursive!important; text-transform:none!important; letter-spacing:0!important; text-indent:0!important; font-size:36px!important; }',
+      P + '.sec h2{ letter-spacing:.04em!important; font-size:24px!important; }',
+      P + '.sec .kick{ font-size:30px!important; }'
+    );
     if (E.port === 'deco') A.push(
       P + '#pv-names{ font-family:"' + E.disp + '",serif!important; font-weight:400!important; text-transform:uppercase!important; letter-spacing:.14em!important; text-indent:.14em!important; font-size:clamp(22px,6.2vw,32px)!important; line-height:1.35!important; white-space:normal!important; }',
       P + '#pv-kick{ font-family:"' + E.scr + '",cursive!important; text-transform:none!important; letter-spacing:0!important; text-indent:0!important; font-size:34px!important; }',
@@ -479,7 +498,7 @@
     var E = estilo(), f = function (n) { return n.replace(/ /g, '+'); };
     var href = 'https://fonts.googleapis.com/css2' +
       '?family=' + f(E.disp) + ':ital,wght@0,400;0,500;0,600;1,400' +
-      '&family=' + f(E.txt) + ':ital,wght@0,400;0,500;1,400' +
+      '&family=' + f(E.txt) + ':ital,wght@0,400;1,400' +
       '&family=' + f(E.scr) +
       '&display=swap';
     var marca = ID + '-' + tono();
