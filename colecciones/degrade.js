@@ -33,9 +33,9 @@
      raspadita. La pelota de oro del cuento, de medallón en el pase. Recortes en píxeles sobre
      el original de 2048 (los relativos con desplazamiento no respetan el centro). */
   var CL = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
-  var SAPITO    = CL + 'w_300,q_auto,f_auto/invitame/degrade/dg-medallon.png';
-  var SAPITO_CH = CL + 'w_120,q_auto,f_auto/invitame/degrade/dg-medallon.png';
-  var PELOTA    = CL + 'w_160,q_auto,f_auto/invitame/degrade/dg-medallon.png';
+  var SAPITO    = CL + 'w_300,q_auto,f_auto/invitame/degrade/dg-medallon-c.png';
+  var SAPITO_CH = CL + 'w_120,q_auto,f_auto/invitame/degrade/dg-medallon-c.png';
+  var PELOTA    = CL + 'w_160,q_auto,f_auto/invitame/degrade/dg-medallon-c.png';
   var TAPA_VIDEO = CL + 'c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/degrade/dg-tapa-video';
   var TAPA_PLAY  = CL + 'c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/degrade/dg-tapa-play';
 
