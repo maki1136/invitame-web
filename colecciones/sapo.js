@@ -158,7 +158,7 @@
       P + '.portada :is(.num,.lab,.sep,.fecha){ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
       P + '.portada .num{ font-family:"Cormorant Garamond",serif!important; }',
       /* el velo de la portada: radial y suave, nunca una banda recta */
-      P + '.portada > .c::before{ content:""!important; position:absolute!important; left:0!important; right:0!important; bottom:-16vh!important; height:82vh!important; pointer-events:none!important; z-index:-1!important; background:radial-gradient(ellipse 120% 70% at 50% 86%, rgba(8,18,13,.72) 0%, rgba(8,18,13,.40) 46%, rgba(8,18,13,0) 78%)!important; }'
+      P + '.portada > .c::before{ content:""!important; position:absolute!important; left:-45%!important; right:-45%!important; bottom:-16vh!important; height:82vh!important; pointer-events:none!important; z-index:-1!important; background:radial-gradient(ellipse 52% 70% at 50% 86%, rgba(8,18,13,.72) 0%, rgba(8,18,13,.40) 46%, rgba(8,18,13,0) 78%)!important; }'
     );
 
     /* ---- 5 · LAS TARJETAS DE LUGAR, CON ARCO ---------------------------
