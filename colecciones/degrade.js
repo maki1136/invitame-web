@@ -78,8 +78,8 @@
      Un tono que no esté acá usa el de esmeralda. */
   var ESTILOS = {
     esmeralda: { disp:'Cormorant Garamond', scr:'Parisienne',    txt:'Lora',        pieza:'w_SZ,q_auto,f_auto/invitame/degrade/dg-medallon-c.png', adorno:'hoja',     forma:'arco',  port:'serif'  },
-    ciruela:   { disp:'Bodoni Moda',        scr:'Pinyon Script', txt:'EB Garamond', pieza:'c_crop,w_0.56,h_0.56,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-ciruela', adorno:'estrella', forma:'marco', port:'script' },
-    borgona:   { disp:'Playfair Display',   scr:'Allura',        txt:'Cormorant',   pieza:'c_crop,w_0.64,h_0.64,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-borgona', adorno:'flor',     forma:'filete', port:'versal' }
+    ciruela:   { disp:'Bodoni Moda',        scr:'Pinyon Script', txt:'EB Garamond', pieza:'c_crop,w_0.42,h_0.42,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-ciruela', adorno:'estrella', forma:'marco', port:'script' },
+    borgona:   { disp:'Playfair Display',   scr:'Allura',        txt:'Cormorant',   pieza:'c_crop,w_0.45,h_0.45,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-borgona', adorno:'flor',     forma:'filete', port:'versal' }
   };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
@@ -160,6 +160,9 @@
   /* LO QUE CAMBIA DE FORMA SEGÚN EL TONO (va AL FINAL: le gana a lo de arriba) */
   function cssEstilo() {
     var E = estilo(), A = [];
+    /* 29/9 · el título del pase va en una pastilla oscura: sobre una tela clara
+       (el rosa de Sofía) la crema no se leía. Sirve para cualquier fondo de QR. */
+    A.push(P + '.pase > .t{ display:inline-block!important; background-color:rgba(12,6,10,.62)!important; padding:6px 18px!important; border-radius:999px!important; text-shadow:none!important; }');
     if (E.forma === 'marco') A.push(
       P + ':is(.evento,.hotel){ border-radius:3px!important; box-shadow:inset 0 0 0 7px ' + MUSGO + ', inset 0 0 0 8px rgba(201,164,78,.6), 0 12px 28px rgba(0,0,0,.4)!important; }',
       P + '.evento .ph{ border-radius:0!important; margin:8px 8px 0!important; width:auto!important; }',
