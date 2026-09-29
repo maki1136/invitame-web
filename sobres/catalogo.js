@@ -1560,6 +1560,19 @@ window.SOBRES_INVITAME = {
     ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
   },
 
+  /* ★ 29/9/2026 · mismo sobre que rosado-flor-seca, SIN ficha y con empalme "foto":
+     la solapa sube, la mitad de abajo CAE y aparece la portada (pedido de Maki). */
+  "rosado-flor-seca-cae": {
+    nombre:   "Rústico rosa · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-cuerpo.webp",
+    color:    "#ddc6bb",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 48.6, y: 55.7 }
+  },
+
   marfil: {
     nombre: "Marfil en relieve",
     img:    "/sobres/sobre-marfil.jpg",
