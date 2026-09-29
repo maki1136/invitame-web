@@ -108,6 +108,9 @@
      el disco de plata de la raspadita se leía como una canica azul. Este es la
      misma zapatilla sobre papel helado, con el aro de plata puesto por CSS. */
   var ZAPA_MARCA = 'https://res.cloudinary.com/oc8cgqt4/image/upload/v1790018745/invitame/cenicienta/i4ibdbc6f96mzztf6clq.jpg';
+  /* §48 · tapas de video y playlist con foto (29/9) */
+  var TAPA_VIDEO = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/cenicienta/cla-tv-proy-29-9';
+  var TAPA_PLAY  = 'https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_south,w_800,h_730,q_auto,f_auto/invitame/cenicienta/cla-sp-disco-29-9';
 
   /* ⚠️ Y LA ZAPATILLA VA GRANDE ADENTRO DEL DISCO (86% del lado). La primera
      versión la puso al 62% y en pantalla se veía chiquita: `raspadita.js`
@@ -197,9 +200,13 @@
   /* ------------------------------------------------------------- tipografía */
 
   var DISPLAY = '"Forum", "Cormorant Garamond", Didot, Georgia, serif';
-  var SCRIPT  = '"Alex Brush", "Pinyon Script", cursive';
+  /* ⚠️ 29/9 (repaso §49): era Alex Brush a 34 px en el teléfono y Maki marcó en
+     Rapunzel «cambiá la tipografía del nombre, no se entiende». Se probaron
+     nueve letras sobre la portada real de Clara: la cursiva de Playfair se lee
+     de una y no es la misma que ninguna otra colección. */
+  var SCRIPT  = '"Playfair Display", "Cormorant Garamond", Georgia, serif';
   var SANS    = '"Josefin Sans", "Jost", system-ui, sans-serif';
-  var FUENTES = 'https://fonts.googleapis.com/css2?family=Forum&family=Alex+Brush&family=Josefin+Sans:wght@300;400;600&display=swap';
+  var FUENTES = 'https://fonts.googleapis.com/css2?family=Forum&family=Playfair+Display:ital,wght@1,400;1,500&family=Josefin+Sans:wght@300;400;600&display=swap';
 
   function ev()  { try { return window.INVEV || {}; } catch (e) { return {}; } }
 
@@ -252,8 +259,8 @@
        nombre de la portada —igual que Perlas, que usa Great Vibes— y el
        título es la romana espaciada. */
     P + '.sec .kick, ' + P + '.frame .kick{',
-    '  font-family:' + SCRIPT + '!important;',
-    '  font-size:clamp(20px,5.4vw,26px)!important;',
+    '  font-family:' + SCRIPT + '!important; font-style:italic!important;',
+    '  font-size:clamp(17px,4.6vw,21px)!important;',
     '  font-weight:400!important;',
     '  letter-spacing:0!important; text-indent:0!important;',
     '  text-transform:none!important;',
@@ -368,7 +375,7 @@
     P + '.portada #pv-names{',
     '  font-family:' + SCRIPT + '!important;',
     '  font-weight:400!important;',
-    '  font-style:normal!important;',
+    '  font-style:italic!important;',
     /* ⚠⚠ 84 px TAPABAN LA CARA. Maki, 21/9: «la portada está tapada por los
        textos, no los acomodaste bien». Medido con la vara de la skill de
        entrega (§7bis), que toma Campestre de referencia: su bloque va del
@@ -378,7 +385,7 @@
            56 px → 54 %   52 px → 55 %   **48 px → 56 %**   44 px → 57 %
        48 px es el que da EXACTO el número de Campestre. Y el `39 %` que había
        anotado la ronda anterior estaba mal medido: en esta ventana daba 45 %. */
-    '  font-size:clamp(34px,8.3vw,48px)!important;',
+    '  font-size:clamp(50px,13.5vw,60px)!important;',
     '  line-height:1!important;',
     '  padding-bottom:.24em!important;',
     '  letter-spacing:.01em!important;',
@@ -925,6 +932,7 @@
     /* el sobretítulo en cursiva va sobre el velo, en tinta: 6,82 medido */
     P + '.pase .t{',
     '  color:' + TINTA + '!important;',
+    '  font-family:' + SCRIPT + '!important; font-style:italic!important; font-size:22px!important;',
     '}',
 
     /* ⚠️ Y EL COLOR DE FONDO DE LA SECCIÓN SE DECLARA POR LO QUE SE VE.
@@ -1058,7 +1066,27 @@
     P + '.tl.tl-centro > .it:nth-child(odd), ' + P + '.tl.tl-centro > .it:nth-child(even){',
     '  transform:none!important;',
     '}',
-    '}'
+    '}',
+
+    /* ==== ★ REPASO §49 (29/9/2026) — la 2ª vuelta de Rapunzel, pasada a Cenicienta ====
+       ---- el itinerario con AIRE (§61): el `.tl` medía `padding:0` y el
+            «18:00» arrancaba pegado al título. El padding es simétrico, así
+            que el centro de la vía no se mueve: las zapatillas siguen sobre
+            las cuentas (medido después). */
+    P + '.tl{ padding:34px 0 28px!important; }',
+
+    /* ---- las tapas de video y playlist CON FOTO (§48): hasta hoy eran la
+            zapatilla de 60 px en la esquina sobre la teja vacía. Se separan
+            POR SECCIÓN (`.rd-tapa` es la misma clase en las dos) y el atajo
+            `background` con ID le gana a los longhands de arriba. */
+    P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(20,32,46,.34) 0, rgba(20,32,46,.12) 26%, rgba(20,32,46,0) 46%), url("' + TAPA_VIDEO + '") center 45%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(20,32,46,.22), 0 0 0 1px rgba(143,179,217,.9)!important; }',
+    P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(20,32,46,.34) 0, rgba(20,32,46,.12) 26%, rgba(20,32,46,0) 46%), url("' + TAPA_PLAY + '") center 50%/cover no-repeat!important; border-radius:18px!important; box-shadow:0 12px 28px rgba(20,32,46,.22), 0 0 0 1px rgba(143,179,217,.9)!important; }',
+    P + ':is(#video-sec, #spotify-sec) .rd-tapa .rd-txt{ color:' + CREMA + '!important; -webkit-text-fill-color:' + CREMA + '!important; text-shadow:0 1px 4px rgba(6,12,22,.95), 0 0 12px rgba(6,12,22,.7)!important; }',
+
+    /* ---- el pase: la zapatilla de medallón arriba al centro (§62). Ya era
+            rectángulo; le faltaba la marca de la temática y aire para ella. */
+    P + '.pasecard{ position:relative!important; overflow:visible!important; padding-top:34px!important; box-shadow:inset 0 0 0 7px ' + PAPEL2 + ', inset 0 0 0 8px rgba(143,179,217,.75), 0 10px 26px rgba(20,32,46,.14)!important; }',
+    P + '.pasecard::before{ content:""!important; position:absolute!important; top:-18px!important; left:50%!important; width:36px!important; height:36px!important; margin-left:-18px!important; border-radius:50%!important; background:url("' + ZAPA_MARCA + '") center/cover no-repeat!important; box-shadow:0 0 0 1px rgba(143,179,217,.9), 0 4px 10px rgba(20,32,46,.18)!important; z-index:3!important; pointer-events:none!important; }'
 
     ].join('\n');
   }
@@ -1112,6 +1140,32 @@
     } catch (e) { return null; }
   }
 
+  /* 🔴 EL PASE CON EL QR VA ABAJO DE LA RASPADITA (decisión 12 de Maki). Esta
+     colección no lo movía: en Clara el pase quedaba pegado a la portada, ARRIBA
+     de la raspadita (medido el 29/9 en el orden de `.frame`). Es la misma
+     función de Perlas y Sirena; se corta sola si ya está puesto, y
+     `devolverPase()` corre sólo cuando la colección SE SACA. */
+  function moverPase() {
+    try {
+      var pase = document.querySelector('.pase');
+      var rasp = document.querySelector('.sec.scratch-sec');
+      if (!pase || !rasp) return;
+      if (rasp.parentElement !== pase.parentElement) return;
+      if (pase.previousElementSibling === rasp) return;
+      rasp.parentNode.insertBefore(pase, rasp.nextSibling);
+    } catch (e) {}
+  }
+  function devolverPase() {
+    try {
+      var pase = document.querySelector('.pase');
+      var port = document.querySelector('.portada');
+      if (!pase || !port) return;
+      if (port.parentElement !== pase.parentElement) return;
+      if (pase.previousElementSibling === port) return;
+      port.parentNode.insertBefore(pase, port.nextSibling);
+    } catch (e) {}
+  }
+
   function poner() {
     var raiz = document.documentElement;
     if (raiz.getAttribute('data-col') !== ID) raiz.setAttribute('data-col', ID);
@@ -1123,11 +1177,12 @@
     fuentes();
     hoja();
     medirVia();
+    moverPase();
   }
 
   function sacar() {
     var raiz = document.documentElement;
-    if (raiz.getAttribute('data-col') === ID) raiz.removeAttribute('data-col');
+    if (raiz.getAttribute('data-col') === ID) { devolverPase(); raiz.removeAttribute('data-col'); }
     if (raiz.getAttribute('data-coleccion') === ID) raiz.removeAttribute('data-coleccion');
     if (raiz.getAttribute('data-marca-propia') === ID) raiz.removeAttribute('data-marca-propia');
     if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }

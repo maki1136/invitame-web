@@ -1391,6 +1391,10 @@ window.SOBRES_INVITAME = {
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sirena/mar-sobre-luz-29-9.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sirena/mar-sobre-luz-29-9.jpg",
     color: "#BCB4A6", luz: 4.3, luzColor: "#FFF6EC", luzFundido: 0.7 },
+  'cenicienta-luz': { nombre: "Cenicienta · sobre celeste con zapatilla de cristal dibujada y lacre de plata; se abre y sale luz helada con mariposas (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/cenicienta/cla-sobre-luz-29-9.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/cenicienta/cla-sobre-luz-29-9.jpg",
+    color: "#607277", luz: 4.35, luzColor: "#F6F9FD", luzFundido: 0.6 },
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
