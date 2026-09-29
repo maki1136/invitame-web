@@ -222,6 +222,11 @@
     '  margin-top:12px!important;',
     '}',
 
+    /* LAS TAPAS DEL VIDEO Y DE LA PLAYLIST DICEN QUÉ SON (Maki, 28/9): proyector
+       para «Nuestro video», tocadiscos para la playlist. Fotos de Flow de la
+       temática disco. .frame suma especificidad sobre la tapa transparente de disco.js. */
+    P + '.frame #video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(10,9,14,.42) 0, rgba(10,9,14,.18) 24%, rgba(10,9,14,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/lupita/lp-tv-proy-1") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.45)!important; }',
+    P + '.frame #spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(10,9,14,.42) 0, rgba(10,9,14,.18) 24%, rgba(10,9,14,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/lupita/lp-sp-disco-1") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(0,0,0,.45)!important; }',
     /* ⚠ EL LATIDO ES DE TUBO, NO DE CARTEL ROTO. Un neón sano respira: baja
        apenas y vuelve. Nada de parpadeos — eso se lee como error, no como
        diseño, y encima marea. */
