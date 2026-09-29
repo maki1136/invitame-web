@@ -747,6 +747,9 @@
                                           Parisienne, cuerpo en Lora, y una VIEIRA como marca del
                                           itinerario. Trae su propia paleta. */
 
+    '/colecciones/degrade.js',       /* fondos de COLOR FIJOS (nace del Sapo, 29/9): 6 tonos oscuros,
+                                          fx.coleccion 'degrade-<tono>'. Trae su propia paleta. */
+
     '/colecciones/sapo.js',          /* la ONCEAVA familia y la CUARTA de la linea de princesas:
                                           «La princesa y el sapo», el cuento de los Grimm y no la
                                           pelicula: la BOLA DE ORO que cae al pozo. OSCURA (la
