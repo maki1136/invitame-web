@@ -538,3 +538,9 @@ video:not([data-video-tocable]){ -webkit-appearance: none !important; }
   text-shadow: 0 1px 2px rgba(0,0,0,.92), 0 0 10px rgba(0,0,0,.70), 0 0 24px rgba(0,0,0,.50) !important;
   animation-name: invPulsoPista !important;
 }
+
+
+/* foto de gracias (30/9/2026, Maki: «las fotos de gracias siempre salen cortadas»).
+   El cierre es casi siempre un retrato vertical 9:16 y el pie mide ~1:1:
+   con center/cover se comía la cabeza. Se ancla arriba (10%), la capa 1 es el velo. */
+.footer{ background-position: 0 0, 50% 10% !important; }
