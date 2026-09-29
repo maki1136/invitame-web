@@ -1563,6 +1563,19 @@ window.SOBRES_INVITAME = {
     ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
   },
 
+  /* ★ 29/9/2026 · mismo sobre que encaje-celeste, SIN ficha y con empalme "foto":
+     la solapa sube, la mitad de abajo CAE y aparece la portada (pedido de Maki). */
+  "encaje-celeste-cae": {
+    nombre:   "Encaje · celeste, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-celeste-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-celeste-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-celeste-cuerpo.webp",
+    color:    "#90a6b3",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 51.8, y: 54.3 }
+  },
+
   "rosado-flor-seca": {
     nombre:   "Rústico rosa · algodón de borde suelto, lacre con flor seca (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-poster.jpg",
