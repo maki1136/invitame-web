@@ -1326,31 +1326,45 @@ window.SOBRES_INVITAME = {
     empalme:  "foto"
   },
 
-  /* ---- RAPUNZEL EN VIDEO · 29/9/2026 --------------------------------------
-     Maki: «el sobre cambialo por un video». Y la regla del 28/9 (armado-2 §58):
-     «tiene que salir algo del sobre para después convertirse en la luz que tapa
-     todo». Sobre de algodón crema cerrado con una CINTA DE SEDA CELESTE en moño
-     (sin lacre: con el lacre al medio Kling lo duplica o lo deja, armado §27),
-     sobre el alféizar de piedra de la torre, con campanillas y la punta de la
-     trenza. La cinta se desata sola y se va, las solapas se abren, aparece la
-     tarjeta, SUBEN pétalos de campanilla y la tarjeta se enciende hasta que la
-     luz crema tapa todo (el último 0,9 s es un fundido a #FFF4DE hecho con
-     ffmpeg sobre la toma de Kling, para que la luz llegue a llenar el cuadro).
-     Imagen: Higgsfield Soul 9:16 · video: Kling 3.0 std, 5 s, cfg 0,8.
-     MEDIDO (brillo medio cada 0,25 s): 142 quieto → la cinta se va 0,5–1,5 s →
-     solapas 1,5–2,5 s → tarjeta y pétalos 2,5–4 s → 168 (4,25) · 202 (4,5) ·
-     232 (4,75). Dura 5,04 s. `color` = esquina del cuadro 0.
-     (La v1 de la misma mañana —`rap-sobre-v1-29-9`— se abría y salía luz sin
-     que saliera nada: no cumplía la regla y se reemplazó.)
+  /* ---- RAPUNZEL EN VIDEO · 29/9/2026 (v3) ---------------------------------
+     La regla del sobre que manda (armado-2 §58, Maki 29/9): se abre y de adentro
+     SALE LUZ que va a blanco en toda la pantalla; NADA de tarjeta vacía saliendo
+     («hay una capa que está vacía, no tiene sentido»). La v2 de esta misma mañana
+     sacaba una tarjeta en blanco: se reemplazó.
+     Sobre de algodón con cinta celeste (sin lacre: con el lacre al medio Kling lo
+     duplica o lo deja, armado §27), alféizar de piedra, campanillas y la trenza.
+     La cinta se desata, se abren las solapas, salen rayos de luz con pétalos de
+     campanilla y la luz tapa todo. Higgsfield Soul 9:16 + Kling 3.0 std, cfg 1.
+     MEDIDO (brillo medio cada 0,25 s): 143 hasta 3,25 s → 169 (3,75) · 182 (4,0)
+     · 201 · 224 · 240 (4,75). Llega a blanco solo. `color` = esquina del cuadro 0.
      ---------------------------------------------------------------------- */
   'rapunzel-video': {
-    nombre:     "Rapunzel · sobre de algodón con cinta celeste que se desata, se abre y sale luz rosada hasta blanco (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/rapunzel/rap-sobre-v2-29-9.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rapunzel/rap-sobre-v2-29-9.jpg",
+    nombre:     "Rapunzel · sobre de algodón con cinta celeste; se abre y sale luz con pétalos de campanilla (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/rapunzel/rap-sobre-v3-29-9.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/rapunzel/rap-sobre-v3-29-9.jpg",
     color:      "#CCBC99",
-    luz:        4.4,
-    luzColor:   "#FFF4DE",
-    luzFundido: 0.6
+    luz:        4.0,
+    luzColor:   "#FFF6E6",
+    luzFundido: 0.7
+  },
+
+  /* ---- ALICIA EN VIDEO · 29/9/2026 -------------------------------------------
+     Para `paloma-mis15` (repaso §49). Sobre de porcelana con rositas en relieve y
+     una cinta de raso roja en moño, sobre mantel de encaje, con la taza de rosas,
+     el reloj de bolsillo, naipes de corazones y pétalos. Se abre la solapa, salen
+     rayos de luz con pétalos rojos y todo va a blanco. Nada sólido sale del sobre.
+     Higgsfield Soul 9:16 + Kling 3.0 pro, cfg 0,9 (de tres tomas: std 0,9 sacó una
+     especie de naipe, std 1 no llegó a blanco).
+     MEDIDO: 125 quieto → 150 (3,75) · 161 (4,0) · 182 (4,25) · 211 · 235 (4,75).
+     ---------------------------------------------------------------------- */
+  'alicia-luz': {
+    nombre:     "Alicia · sobre de porcelana con cinta roja; se abre y sale luz con pétalos de rosa (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/alicia/pal-sobre-luz-29-9.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/alicia/pal-sobre-luz-29-9.jpg",
+    color:      "#D3B58C",
+    luz:        4.2,
+    luzColor:   "#FFF6EE",
+    luzFundido: 0.7
   },
 
   'carta-toscana': {
