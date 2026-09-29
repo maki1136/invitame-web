@@ -1387,6 +1387,10 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFF1D6",
     luzFundido: 0.5
   },
+  'sirena-luz': { nombre: "Sirena · sobre nácar sobre arena con lacre coral de vieira; el lacre se parte, se abre y sale luz perlada con burbujas (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sirena/mar-sobre-luz-29-9.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sirena/mar-sobre-luz-29-9.jpg",
+    color: "#BCB4A6", luz: 4.3, luzColor: "#FFF6EC", luzFundido: 0.7 },
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
