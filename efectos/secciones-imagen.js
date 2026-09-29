@@ -30,9 +30,14 @@
 (function () {
   'use strict';
 
-  var DETALLE = 'El día de la fiesta, todas las fotos y videos que suban los invitados aparecen en vivo en la pantalla del salón. ' +
-    'Sólo tienes que tocar el botón, sacar la foto desde tu celular y listo: en segundos se ve en la pantalla y queda guardada en la galería. ' +
-    'Antes de la fiesta la galería está cerrada; se abre ese día.';
+  /* Maki, 28/9: el primer diseño (un link subrayado con texto corrido) era «feo, así de básico».
+     Ahora: píldora de vidrio + tarjeta con tres pasos numerados. */
+  var PASOS = [
+    ['Toca el botón', 'Se abre la cámara de tu celular, sin descargar nada.'],
+    ['Sale en la pantalla del salón', 'Tu foto o video aparece en vivo, en segundos, para que todos lo vean.'],
+    ['Queda en la galería', 'Todas las fotos de la noche quedan guardadas para verlas después.']
+  ];
+  var NOTA = 'La galería se abre el día de la fiesta.';
 
   function ev() { try { return window.INVEV || null; } catch (e) { return null; } }
   function cfg(k) { var e = ev(); return (e && e.fx && e.fx[k]) || {}; }
@@ -45,14 +50,34 @@
     s.textContent = [
       '.si-foto{ width:min(78%,300px); aspect-ratio:1/1; margin:0 auto 20px; border-radius:150px 150px 18px 18px; overflow:hidden;',
       '  background:center/cover no-repeat; box-shadow:0 14px 30px rgba(0,0,0,.16), 0 0 0 6px rgba(255,255,255,.75), 0 0 0 7px var(--verde,#6D1233); }',
-      '.si-como{ max-width:34ch; margin:-8px auto 22px; text-align:center; }',
-      '.si-como > button{ background:none; border:0; padding:6px 10px; cursor:pointer; font:inherit; font-size:.86rem; letter-spacing:.06em;',
-      '  color:var(--verde,#6D1233); text-decoration:underline; text-underline-offset:4px; opacity:.9; }',
-      '.si-como > button::after{ content:"  +"; }',
-      '.si-como.abierto > button::after{ content:"  –"; }',
-      '.si-como > div{ max-height:0; overflow:hidden; transition:max-height .45s ease, opacity .35s ease; opacity:0; font-size:.92rem; line-height:1.55; }',
-      '.si-como.abierto > div{ max-height:320px; opacity:1; margin-top:8px; }',
-      '@media (prefers-reduced-motion: reduce){ .si-como > div{ transition:none; } }'
+      /* la píldora: letra de la bajada, tinta de la sección (--si-t), vidrio claro */
+      '.si-como{ --si-t:#6D1233; max-width:340px; margin:-4px auto 24px; text-align:center; }',
+      '.si-como > button{ display:inline-flex; align-items:center; gap:9px; cursor:pointer; font:inherit; font-size:11px; font-weight:600;',
+      '  letter-spacing:.2em; text-transform:uppercase; color:var(--si-t); padding:9px 16px 9px 18px; border-radius:999px;',
+      '  background:rgba(255,255,255,.58); border:1px solid color-mix(in srgb, var(--si-t) 32%, transparent);',
+      '  box-shadow:0 6px 18px color-mix(in srgb, var(--si-t) 14%, transparent); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);',
+      '  transition:background .25s ease, box-shadow .25s ease; }',
+      '.si-como > button:hover{ background:rgba(255,255,255,.8); }',
+      '.si-como > button i{ width:18px; height:18px; border-radius:50%; flex:none; position:relative;',
+      '  border:1px solid color-mix(in srgb, var(--si-t) 45%, transparent); transition:transform .35s ease; }',
+      '.si-como > button i::before{ content:""; position:absolute; left:50%; top:45%; width:5px; height:5px; margin:-3px 0 0 -3px;',
+      '  border-right:1.4px solid var(--si-t); border-bottom:1.4px solid var(--si-t); transform:rotate(45deg); }',
+      '.si-como.abierto > button i{ transform:rotate(180deg); }',
+      '.si-como > div{ max-height:0; overflow:hidden; opacity:0; transition:max-height .5s ease, opacity .35s ease, margin .35s ease; }',
+      '.si-como.abierto > div{ max-height:520px; opacity:1; margin-top:14px; }',
+      '.si-card{ text-align:left; padding:18px 18px 14px; border-radius:20px; background:rgba(255,255,255,.66);',
+      '  border:1px solid color-mix(in srgb, var(--si-t) 18%, transparent); box-shadow:0 10px 26px color-mix(in srgb, var(--si-t) 12%, transparent);',
+      '  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }',
+      '.si-paso{ display:flex; gap:12px; align-items:flex-start; padding:8px 0; }',
+      '.si-paso + .si-paso{ border-top:1px solid color-mix(in srgb, var(--si-t) 12%, transparent); }',
+      '.si-num{ flex:none; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center;',
+      '  font-size:12px; font-weight:600; color:#fff; background:var(--si-t); box-shadow:0 0 0 3px rgba(255,255,255,.8), 0 0 0 4px color-mix(in srgb, var(--si-t) 30%, transparent); }',
+      '.si-paso b{ display:block; font-size:13px; letter-spacing:.04em; color:var(--si-t); margin:3px 0 2px; }',
+      '.si-paso span{ display:block; font-size:13px; line-height:1.45; color:var(--si-t); opacity:.85; }',
+      '.si-nota{ margin:10px 0 0; padding-top:10px; text-align:center; font-size:12px; font-style:italic; color:var(--si-t); opacity:.8;',
+      '  border-top:1px solid color-mix(in srgb, var(--si-t) 12%, transparent); }',
+      '.si-libre{ font-size:14px; line-height:1.55; color:var(--si-t); text-align:center; }',
+      '@media (prefers-reduced-motion: reduce){ .si-como > div, .si-como > button i{ transition:none; } }'
     ].join('\n');
     (document.head || document.documentElement).appendChild(s);
   }
@@ -84,11 +109,13 @@
   function ponerComo(sec, texto) {
     var box = sec.querySelector('.si-como');
     if (texto === '-') { if (box) box.remove(); return; }
-    var t = texto || DETALLE;
+    var t = texto || '';
     if (!box) {
       var p = sec.querySelector('p'); if (!p) return;
       box = document.createElement('div'); box.className = 'si-como'; box.setAttribute('data-si', '1');
-      var b = document.createElement('button'); b.type = 'button'; b.textContent = '¿Cómo funciona?';
+      var b = document.createElement('button'); b.type = 'button';
+      b.appendChild(document.createTextNode('Cómo funciona'));
+      b.appendChild(document.createElement('i'));
       b.setAttribute('aria-expanded', 'false');
       var d = document.createElement('div');
       b.addEventListener('click', function () {
@@ -99,16 +126,34 @@
       p.parentNode.insertBefore(box, p.nextSibling);
     }
     var cuerpo = box.querySelector(':scope > div');
-    if (cuerpo.textContent !== t) cuerpo.textContent = t;
+    /* el contenido: los tres pasos de siempre, o el texto propio si lo cargaron */
+    var firma = t ? 'libre:' + t : 'pasos';
+    if (cuerpo.getAttribute('data-firma') !== firma) {
+      cuerpo.setAttribute('data-firma', firma);
+      cuerpo.innerHTML = '';
+      var card = document.createElement('div'); card.className = 'si-card';
+      if (t) {
+        var pl = document.createElement('p'); pl.className = 'si-libre'; pl.textContent = t; card.appendChild(pl);
+      } else {
+        PASOS.forEach(function (ps, i) {
+          var row = document.createElement('div'); row.className = 'si-paso';
+          var n = document.createElement('div'); n.className = 'si-num'; n.textContent = String(i + 1);
+          var tx = document.createElement('div');
+          var bb = document.createElement('b'); bb.textContent = ps[0];
+          var sp = document.createElement('span'); sp.textContent = ps[1];
+          tx.appendChild(bb); tx.appendChild(sp); row.appendChild(n); row.appendChild(tx); card.appendChild(row);
+        });
+        var nota = document.createElement('p'); nota.className = 'si-nota'; nota.textContent = NOTA; card.appendChild(nota);
+      }
+      cuerpo.appendChild(card);
+    }
     /* la letra y la tinta son las de la bajada de la sección (no las del motor) */
     var pb = box.previousElementSibling;
     if (pb && pb.tagName === 'P') {
       var cs = getComputedStyle(pb);
-      [box.querySelector(':scope > button'), cuerpo].forEach(function (el) {
-        if (el.style.fontFamily !== cs.fontFamily) el.style.fontFamily = cs.fontFamily;
-        if (el.style.textShadow !== cs.textShadow) el.style.textShadow = cs.textShadow;
-      });
-      if (cuerpo.style.color !== cs.color) cuerpo.style.color = cs.color;
+      if (box.style.fontFamily !== cs.fontFamily) box.style.fontFamily = cs.fontFamily;
+      var tinta = cs.webkitTextFillColor && cs.webkitTextFillColor !== 'rgba(0, 0, 0, 0)' ? cs.webkitTextFillColor : cs.color;
+      if (box.style.getPropertyValue('--si-t') !== tinta) box.style.setProperty('--si-t', tinta);
     }
   }
 
@@ -150,7 +195,7 @@
       function () { return obj(d, 'galeria').imagen; }, function (v) { obj(d, 'galeria').imagen = v; });
     campo(caja, 'Imagen de «El filtro» (link)', 'Una foto cuadrada que muestre el marco en una selfie (ej.: un celular con el marco de flores).',
       function () { return obj(d, 'filtro').imagen; }, function (v) { obj(d, 'filtro').imagen = v; });
-    campo(caja, 'Texto de «¿Cómo funciona?» (fotos de la fiesta)', 'Queda escondido en una solapa. Vacío = el texto de siempre (pantalla del salón, se abre el día de la fiesta). Un guion «-» la apaga.',
+    campo(caja, 'Texto de «¿Cómo funciona?» (fotos de la fiesta)', 'Queda escondido en una solapa. Vacío = los tres pasos de siempre (tocar el botón, sale en la pantalla del salón, queda en la galería; se abre el día de la fiesta). Un guion «-» la apaga.',
       function () { return obj(d, 'galeria').detalle; }, function (v) { obj(d, 'galeria').detalle = v; }, true);
     return caja;
   }
