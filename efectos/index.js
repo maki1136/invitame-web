@@ -759,9 +759,18 @@
                                           «Alicia en el pais de las maravillas», el libro de Carroll
                                           y no la pelicula: la merienda en el jardin de las rosas.
                                           CLARA: porcelana, rojo rosa, verde seto y oro de reloj; la
-                                          mesa del te EN VIDEO. Titulos en IM Fell English, nombre en
-                                          Petit Formal Script, cuerpo en Crimson Pro, y un CORAZON de
-                                          naipe como marca del itinerario. Trae su propia paleta. */
+                                          mesa del te EN VIDEO. Titulos en Fraunces, nombre en
+                                          Allura, cuerpo en Crimson Pro, y un CORAZON de naipe
+                                          FOTOGRAFIADO como marca del itinerario. Trae su propia paleta. */
+
+    '/colecciones/rapunzel.js',      /* la TRECEAVA familia y la SEXTA de la linea de princesas:
+                                          «Rapunzel», el cuento de los Grimm y no la pelicula: la
+                                          torre sin puerta, la trenza dorada y el jardin de los
+                                          raponchigos. CLARA: miel, piedra caliza, hiedra y azul
+                                          campanula; el jardin EN VIDEO y la torre EN VIDEO en la
+                                          portada. Titulos en Young Serif, nombre en Mea Culpa,
+                                          cuerpo en Spectral, y una FLOR DE RAPONCHIGO fotografiada
+                                          como marca del itinerario. Trae su propia paleta. */
 
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 

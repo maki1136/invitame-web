@@ -136,10 +136,18 @@
       paleta: null, paletaNombre: null,
       ayuda: 'La quinta de la linea de princesas, CLARA. Es el libro de Carroll: ' +
              'la merienda en el jardin de las rosas, con la mesa del te EN VIDEO. ' +
-             'Porcelana, rojo rosa, verde seto y oro de reloj. Titulos en IM Fell ' +
-             'English, el nombre en Petit Formal Script y un CORAZON de naipe como ' +
-             'marca del itinerario. El reloj de bolsillo fotografiado es la tapa de ' +
-             'la raspadita y de la playlist. Trae su propia paleta.' },
+             'Porcelana, rojo rosa, verde seto y oro de reloj. Titulos en Fraunces, ' +
+             'el nombre en Allura y un CORAZON de naipe fotografiado como marca del ' +
+             'itinerario. Un platito de porcelana con rosas es la tapa de la ' +
+             'raspadita. Trae su propia paleta.' },
+    { id: 'rapunzel', nombre: 'Rapunzel',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La sexta de la linea de princesas, CLARA. Es el cuento de los Grimm: ' +
+             'la torre sin puerta con la trenza dorada (la portada, EN VIDEO) y el ' +
+             'jardin de los raponchigos (el fondo, EN VIDEO). Miel, piedra caliza, ' +
+             'hiedra y azul campanula. Titulos en Young Serif, el nombre en Mea Culpa ' +
+             'y una FLOR DE RAPONCHIGO fotografiada como marca del itinerario. La ' +
+             'trenza enrollada es la tapa de la raspadita. Trae su propia paleta.' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
