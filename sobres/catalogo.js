@@ -625,31 +625,31 @@ window.SOBRES_INVITAME = {
            el archivo viejo en caché hasta 30 días. Un id nuevo es el único
            corte limpio.
 
-     ⚠️ PESA 244 KB servidos, no 4 MB, y eso no es capricho: el invitado toca
-        entre los 3 y los 6 s, y un sobre liviano arranca antes SIEMPRE. El de
-        Invitely, en la misma red, tarda 24 s en estar listo. (El motor ya no
-        exige el video entero para arrancar —mide si la descarga le gana a la
-        aguja— pero eso no cambia la regla del peso.)
+        ⚠️ PESA 244 KB servidos, no 4 MB, y eso no es capricho: el invitado toca
+           entre los 3 y los 6 s, y un sobre liviano arranca antes SIEMPRE. El de
+           Invitely, en la misma red, tarda 24 s en estar listo. (El motor ya no
+           exige el video entero para arrancar —mide si la descarga le gana a la
+           aguja— pero eso no cambia la regla del peso.)
 
-     ⚠️ VIVE EN CLOUDINARY, NO EN /sobres/  (18/9/2026)
-        Igual que `playa`, y por la misma razón práctica: el catálogo acepta
-        una URL completa lo mismo que una ruta del repo.
+        ⚠️ VIVE EN CLOUDINARY, NO EN /sobres/  (18/9/2026)
+           Igual que `playa`, y por la misma razón práctica: el catálogo acepta
+           una URL completa lo mismo que una ruta del repo.
 
-        La transformación NO es la de `playa`. `vc_auto` devuelve perfil HIGH,
-        y los sobres se renderizan en **Constrained Baseline** a propósito, que
-        es lo que decodifica cualquier teléfono viejo. Con
-        `vc_h264:baseline:3.1` Cloudinary respeta el perfil y entrega 244 KB.
+           La transformación NO es la de `playa`. `vc_auto` devuelve perfil HIGH,
+           y los sobres se renderizan en **Constrained Baseline** a propósito, que
+           es lo que decodifica cualquier teléfono viejo. Con
+           `vc_h264:baseline:3.1` Cloudinary respeta el perfil y entrega 244 KB.
 
-        Comparado cuadro por cuadro contra el original (128 cuadros):
-        PSNR mínimo 41,6 dB, medio 43,5 dB — arriba de 40 dB no se distingue.
-        Mismo 540×960, 24 fps, 128 cuadros, 5,333 s, moov al principio, y la
-        zona plana de la tarjeta NO tomó bandas (escalón máximo entre filas
-        10,5 contra 11,7 del original). El póster sale en webp de 26 KB.
+           Comparado cuadro por cuadro contra el original (128 cuadros):
+           PSNR mínimo 41,6 dB, medio 43,5 dB — arriba de 40 dB no se distingue.
+           Mismo 540×960, 24 fps, 128 cuadros, 5,333 s, moov al principio, y la
+           zona plana de la tarjeta NO tomó bandas (escalón máximo entre filas
+           10,5 contra 11,7 del original). El póster sale en webp de 26 KB.
 
-        ⚠️ El .mp4 y el .jpg NO están en el repo: no hay forma de subir un
-           binario por la API de GitHub. Si hay que regenerarlos, el video
-           está embebido en base64 en el artefacto «Sobre Onyx» y las fuentes
-           del relieve en ONYX-relieve-y-fluidez.md.
+           ⚠️ El .mp4 y el .jpg NO están en el repo: no hay forma de subir un
+              binario por la API de GitHub. Si hay que regenerarlos, el video
+              está embebido en base64 en el artefacto «Sobre Onyx» y las fuentes
+              del relieve en ONYX-relieve-y-fluidez.md.
 
      empalme 'foto': el video termina con una tarjeta marfil lisa subiendo, y
      el motor la funde encima de la portada real que ya está dibujada debajo.
@@ -1630,6 +1630,256 @@ window.SOBRES_INVITAME = {
     apertura: "solapas",
     empalme:  "foto",
     eje:      { x: 48.6, y: 55.7 }
+  },
+
+  /* ---- ★ DIEZ SOBRES MÁS, MISMO MÉTODO Y MISMA FICHA  (29/9/2026) -----------
+     Maki: «seguí armando sobres como estos, dale unos 10 más». Mismos tres
+     archivos de 768×1376 por sobre (poster · solapa · cuerpo), armados de LA
+     MISMA FOTO de Flow (Nano Banana 2, 0 créditos), mismo motor y misma `ficha`
+     (solapa 2,6 s · destello 2,7 s · luzFundido 1,0). Cada uno tiene también su
+     variante `-cae` (sin ficha, empalme "foto": la solapa sube y el sobre CAE).
+     Sin siglas en ningún lacre. Doblez medido sobre la foto (rectas y ajuste de
+     círculo); en terracota el borde rústico se siguió columna por columna, y en
+     encaje-blanco-perla la solapa lleva una franja de papel liso bajo el encaje.
+     ---------------------------------------------------------------------- */
+  "azul-marino-damasco": {
+    nombre:   "Azul marino · papel con damasco en relieve, lacre azul con corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/azul-marino-damasco-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/azul-marino-damasco-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/azul-marino-damasco-cuerpo.webp",
+    color:    "#3a516a",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.2, y: 56.1 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "azul-marino-damasco-cae": {
+    nombre:   "Azul marino · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/azul-marino-damasco-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/azul-marino-damasco-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/azul-marino-damasco-cuerpo.webp",
+    color:    "#3a516a",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.2, y: 56.1 }
+  },
+
+  "lavanda-peonias": {
+    nombre:   "Lavanda · peonías grabadas en relieve, lacre lila con ramita seca (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/lavanda-peonias-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/lavanda-peonias-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/lavanda-peonias-cuerpo.webp",
+    color:    "#c8b6cd",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 49.8, y: 56.4 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "lavanda-peonias-cae": {
+    nombre:   "Lavanda · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/lavanda-peonias-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/lavanda-peonias-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/lavanda-peonias-cuerpo.webp",
+    color:    "#c8b6cd",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 49.8, y: 56.4 }
+  },
+
+  "vino-oro": {
+    nombre:   "Vino · burdeos con damasco en relieve, lacre dorado con corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-cuerpo.webp",
+    color:    "#4b1920",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.1, y: 56.2 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "vino-oro-cae": {
+    nombre:   "Vino · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-cuerpo.webp",
+    color:    "#4b1920",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.1, y: 56.2 }
+  },
+
+  "terracota-flor-seca": {
+    nombre:   "Terracota · algodón de borde rústico con damasco, lacre con flores secas (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/terracota-flor-seca-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/terracota-flor-seca-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/terracota-flor-seca-cuerpo.webp",
+    color:    "#ad5b3b",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.2, y: 56.1 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "terracota-flor-seca-cae": {
+    nombre:   "Terracota · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/terracota-flor-seca-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/terracota-flor-seca-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/terracota-flor-seca-cuerpo.webp",
+    color:    "#ad5b3b",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.2, y: 56.1 }
+  },
+
+  "negro-oro": {
+    nombre:   "Negro · papel mate con damasco en relieve, lacre dorado con corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/negro-oro-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/negro-oro-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/negro-oro-cuerpo.webp",
+    color:    "#1a1a1d",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.1, y: 56.2 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "negro-oro-cae": {
+    nombre:   "Negro · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/negro-oro-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/negro-oro-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/negro-oro-cuerpo.webp",
+    color:    "#1a1a1d",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.1, y: 56.2 }
+  },
+
+  "oliva-oro": {
+    nombre:   "Oliva · verde oliva con damasco en relieve, lacre dorado con corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/oliva-oro-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/oliva-oro-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/oliva-oro-cuerpo.webp",
+    color:    "#424629",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.1, y: 56.1 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "oliva-oro-cae": {
+    nombre:   "Oliva · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/oliva-oro-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/oliva-oro-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/oliva-oro-cuerpo.webp",
+    color:    "#424629",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.1, y: 56.1 }
+  },
+
+  "rosa-perla-redonda": {
+    nombre:   "Rosa perla · lino rosa empolvado, solapa REDONDA con una perla (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosa-perla-redonda-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosa-perla-redonda-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosa-perla-redonda-cuerpo.webp",
+    color:    "#d7bdb1",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 48.8, y: 60.3 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "rosa-perla-redonda-cae": {
+    nombre:   "Rosa perla · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosa-perla-redonda-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosa-perla-redonda-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosa-perla-redonda-cuerpo.webp",
+    color:    "#d7bdb1",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 48.8, y: 60.3 }
+  },
+
+  "gris-perla-x": {
+    nombre:   "Gris perla · papel nacarado, cuatro solapas en X con enredadera grabada, lacre plata (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/gris-perla-x-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/gris-perla-x-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/gris-perla-x-cuerpo.webp",
+    color:    "#9c958e",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.3, y: 56.4 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "gris-perla-x-cae": {
+    nombre:   "Gris perla · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/gris-perla-x-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/gris-perla-x-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/gris-perla-x-cuerpo.webp",
+    color:    "#9c958e",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.3, y: 56.4 }
+  },
+
+  "encaje-blanco-perla": {
+    nombre:   "Encaje blanco · solapa con borde de encaje y perla (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-blanco-perla-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-blanco-perla-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-blanco-perla-cuerpo.webp",
+    color:    "#e1e0e2",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 51.0, y: 54.0 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "encaje-blanco-perla-cae": {
+    nombre:   "Encaje blanco · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-blanco-perla-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-blanco-perla-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/encaje-blanco-perla-cuerpo.webp",
+    color:    "#e1e0e2",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 51.0, y: 54.0 }
+  },
+
+  "marfil-lacre-crema": {
+    nombre:   "Marfil · damasco en relieve, lacre crema con corazón (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/marfil-lacre-crema-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/marfil-lacre-crema-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/marfil-lacre-crema-cuerpo.webp",
+    color:    "#e3ded7",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.2, y: 56.2 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "marfil-lacre-crema-cae": {
+    nombre:   "Marfil · la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/marfil-lacre-crema-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/marfil-lacre-crema-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/marfil-lacre-crema-cuerpo.webp",
+    color:    "#e3ded7",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.2, y: 56.2 }
   },
 
   marfil: {
