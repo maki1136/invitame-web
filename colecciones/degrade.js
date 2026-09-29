@@ -83,7 +83,7 @@
     /* azul: art déco, y PLATA en lugar de oro (la plata reemplaza al oro en 2027) */
     azul:      { disp:'Marcellus',          scr:'Mrs Saint Delafield', txt:'Crimson Pro', pieza:'c_crop,w_0.52,h_0.52,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-azul', adorno:'abanico', forma:'deco', port:'deco', metal:'plata' },
     /* petróleo: tonos joya y maximalismo tropical (bodas de dos novios, 2027) */
-    petroleo:  { disp:'Gilda Display',      scr:'Italianno',     txt:'Libre Baskerville', pieza:'c_crop,w_0.28,h_0.28,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-petroleo', adorno:'pluma', forma:'ventana', port:'italica' }
+    petroleo:  { disp:'Gilda Display',      scr:'Italianno',     txt:'Libre Baskerville', pieza:'c_crop,w_0.5,h_0.5,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-petroleo', adorno:'pluma', forma:'ventana', port:'italica' }
   };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
   function hex(rgb) { return '#' + rgb.split(',').map(function (n) { return ('0' + (+n).toString(16)).slice(-2); }).join('').toUpperCase(); }
@@ -153,13 +153,9 @@
     var a = estilo().adorno;
     if (a === 'estrella') return "data:image/svg+xml;utf8," + encodeURIComponent(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M24 3 L27.6 17.2 L40.3 9.7 L32.8 22.4 L45 24 L32.8 25.6 L40.3 38.3 L27.6 30.8 L24 45 L20.4 30.8 L7.7 38.3 L15.2 25.6 L3 24 L15.2 22.4 L7.7 9.7 L20.4 17.2 Z"/><circle cx="24" cy="24" r="3.4" fill="' + PAPEL + '"/></svg>');
-    /* la palma: a 18 px la pluma se leía como un pin de mapa (Maki no lo vio,
-       lo vi yo en la captura). Un abanico de frondas se lee como palmera. */
     if (a === 'pluma') {
-      var fr = [[5,22],[8,12],[15,5],[24,3],[33,5],[40,12],[43,22]], pp = '';
-      fr.forEach(function (q) { pp += '<path d="M24 30 Q' + ((24 + q[0]) / 2) + ' ' + (q[1] + 2) + ' ' + q[0] + ' ' + q[1] + '"/>'; });
       return "data:image/svg+xml;utf8," + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><g fill="none" stroke="' + color + '" stroke-width="3.2" stroke-linecap="round">' + pp + '<path d="M24 30 L24 46" stroke-width="2.4"/></g></svg>');
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="' + color + '" d="M24 3 C34 9 37 19 24 33 C11 19 14 9 24 3 Z"/><ellipse cx="24" cy="16" rx="6" ry="7.5" fill="' + PAPEL + '"/><ellipse cx="24" cy="16.5" rx="3.2" ry="4" fill="' + color + '"/><path d="M24 33 L24 46" stroke="' + color + '" stroke-width="2" stroke-linecap="round"/></svg>');
     }
     if (a === 'abanico') {
       var ry = '';
@@ -630,8 +626,11 @@
 
   function sacar() {
     var s = document.getElementById(ID_CSS); if (s) s.remove();
-    desmarcarPadres();
+    /* ⚠️ 29/9/2026: desmarcarPadres() estaba AFUERA de este if y corría cada 1,2 s en TODAS las
+       invitaciones: le borraba `data-col-n` a Perlas, que deja de reponerlo a los 16 s, y las
+       3 personas de camila-y-tomas quedaban 2 + 1. Sólo se desmarca si ESTA colección estaba puesta. */
     if (document.documentElement.getAttribute('data-col') === ID) {
+      desmarcarPadres();
       devolverPase();
       soltarVia();
       document.documentElement.removeAttribute('data-col');

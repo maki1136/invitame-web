@@ -867,8 +867,11 @@
 
   function sacar() {
     var s = document.getElementById(ID_CSS); if (s) s.remove();
-    desmarcarPadres();
+    /* ⚠️ 29/9/2026: desmarcarPadres() estaba AFUERA de este if y corría cada 1,2 s en TODAS las
+       invitaciones: le borraba `data-col-n` a Perlas, que deja de reponerlo a los 16 s, y las
+       3 personas de camila-y-tomas quedaban 2 + 1. Sólo se desmarca si ESTA colección estaba puesta. */
     if (document.documentElement.getAttribute('data-col') === ID) {
+      desmarcarPadres();
       /* ⚠️⚠️ 23/9/2026: devolverPase() estaba AFUERA de este if y corría cada 1,2 s en
          TODAS las invitaciones que no son Bella: le devolvía el pase a la portada
          mientras la colección propia (Perlas, Cantera, Óleo) lo volvía a bajar
