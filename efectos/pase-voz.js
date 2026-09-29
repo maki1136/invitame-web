@@ -134,6 +134,58 @@
      evento antes que dibujar 26 rayitas planas (es decoracion, no es dato).
      Como huella() se arma con lo que devuelve esta funcion, cambiar de audio
      ya dispara el re-montado solo: no hay que avisarle a nadie.               */
+  /* ---- LAS TEXTURAS DEL BOLETO (29/9/2026) ------------------------------
+     Maki: «el ticket que está armado es muy pero muy malo… la forma puede ser
+     siempre la misma pero que cambien las texturas y los diseños de adentro».
+
+     ⭐ LA IA HACE SÓLO LA TEXTURA, NUNCA EL TICKET. Si se le pide «un ticket»,
+        cada imagen sale con otra forma y con letras inventadas. Acá se genera
+        un rectángulo de papel/tela SIN texto (Higgsfield Soul, 16:9), con los
+        objetos en los bordes y el centro limpio. El troquel, la perforación y
+        los textos los sigue poniendo este módulo, siempre iguales.
+
+     `fx.pasevoz.textura` acepta el ID de este catálogo o una URL propia.
+     Cada ID trae su papel, tinta y acento MEDIDOS contra la imagen: si la
+     diseñadora no eligió colores, se usan éstos y el texto se lee solo.
+     Los colores que ella elija en el panel siguen ganando.
+
+     ⚠️ Se entrega por Cloudinary con f_auto,q_auto,w_1100 (el boleto mide
+        352 px de ancho: 1100 alcanza para una pantalla 3x). Nunca el PNG crudo:
+        pesa 2-3 MB.
+     ⚠️ `velo` es el claro que va DETRÁS del texto (0 a 1). Deja la textura a
+        la vista en los bordes, que es donde están los objetos.            */
+  var CLD = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
+  var TEXTURAS = {
+    'arena-caracoles':  { nombre: 'Arena con caracoles y perlas', tema: 'playa',
+      img: 'v1790664882/invitame/pases/pase-arena-caracoles.png',
+      papel: '#eee6d8', tinta: '#4a3826', acento: '#a4552c', velo: 0.66 },
+    'acuarela-lavanda': { nombre: 'Acuarela lavanda y oro', tema: 'romántico',
+      img: 'v1790664652/invitame/pases/pase-acuarela-lavanda.png',
+      papel: '#f3e6e8', tinta: '#463b52', acento: '#9a7430', velo: 0.60 },
+    'seda-champagne':   { nombre: 'Seda champagne con perlas', tema: 'elegante',
+      img: 'v1790664655/invitame/pases/pase-seda-champagne.png',
+      papel: '#ece5d8', tinta: '#3e3428', acento: '#97732f', velo: 0.66 },
+    'lino-flores':      { nombre: 'Lino con flores secas', tema: 'boho',
+      img: 'v1790664657/invitame/pases/pase-lino-flores.png',
+      papel: '#ebe6da', tinta: '#3f3a2e', acento: '#7d6a3f', velo: 0.60 },
+    'nacar':            { nombre: 'Nácar', tema: 'perlas',
+      img: 'v1790664659/invitame/pases/pase-nacar.png',
+      papel: '#eee6ea', tinta: '#3c3342', acento: '#8c6a86', velo: 0.74 }
+  };
+  function textura(f) {
+    var v = String((f && f.textura) || '').trim();
+    if (!v) return null;
+    var t = TEXTURAS[v];
+    if (t) return { url: CLD + 'f_auto,q_auto,w_1100/' + t.img, papel: t.papel,
+                    tinta: t.tinta, acento: t.acento, velo: t.velo };
+    if (/^https?:\/\//.test(v)) {
+      var u = v.indexOf('/image/upload/') > 0 && !/\/image\/upload\/[^/]*[fqw]_/.test(v)
+        ? v.replace('/image/upload/', '/image/upload/f_auto,q_auto,w_1100/') : v;
+      return { url: u, velo: 0.62 };
+    }
+    return null;
+  }
+
   function fx() {
     var e = window.INVEV || {};
     var f = (e.fx && e.fx.pasevoz) || {};
@@ -318,7 +370,33 @@
          clientWidth 15, y el padre tiene overflow:hidden). 1.25 da 18,75 px y la
          columna mide 51, así que sobra lugar. */
       '#pv-sec .pv-talon span{font-size:15px!important;line-height:1.25!important;' +
-        'font-family:var(--pv-tit)!important}'
+        'font-family:var(--pv-tit)!important}',
+
+      /* ---- CON TEXTURA (ver TEXTURAS arriba) ----
+         Una sola imagen para TODO el boleto, puesta en .pv-tk: talón y cuerpo
+         son el mismo papel, con la línea punteada encima. La pieza que se
+         arranca lleva el MISMO papel, tomado del borde derecho, que es de donde
+         sale. El claro va detrás del texto, no encima de la textura entera. */
+      '#pv-sec.pv-con-tex .pv-tk{background:var(--pv-papel) var(--pv-tex) center/cover no-repeat}',
+      '#pv-sec.pv-con-tex .pv-talon,#pv-sec.pv-con-tex .pv-cuerpo{background:transparent}',
+      '#pv-sec.pv-con-tex .pv-cuerpo{background:radial-gradient(ellipse 78% 72% at 44% 52%,',
+      '  color-mix(in srgb,var(--pv-papel) var(--pv-velo),transparent) 0%,',
+      '  color-mix(in srgb,var(--pv-papel) calc(var(--pv-velo) * .55),transparent) 62%,transparent 100%)}',
+      '#pv-sec.pv-con-tex .pv-talon{background:linear-gradient(90deg,transparent,',
+      '  color-mix(in srgb,var(--pv-papel) calc(var(--pv-velo) * .8),transparent) 30%,',
+      '  color-mix(in srgb,var(--pv-papel) calc(var(--pv-velo) * .8),transparent) 70%,transparent)}',
+      '#pv-sec.pv-con-tex .pv-talon::before,#pv-sec.pv-con-tex .pv-cuerpo::before{',
+      '  border-color:color-mix(in srgb,var(--pv-acento) 55%,transparent)}',
+      '#pv-sec.pv-con-tex .pv-talon{border-right-color:color-mix(in srgb,var(--pv-acento) 70%,transparent)}',
+      '#pv-sec.pv-con-tex .pv-msg{background:',
+      '  linear-gradient(color-mix(in srgb,var(--pv-papel) calc(var(--pv-velo) * .7),transparent),',
+      '  color-mix(in srgb,var(--pv-papel) calc(var(--pv-velo) * .7),transparent)),',
+      '  var(--pv-papel) var(--pv-tex) 100% 50%/auto 240px no-repeat}',
+      '#pv-sec.pv-con-tex .pv-play{background:color-mix(in srgb,var(--pv-papel) 80%,transparent);',
+      '  border-color:var(--pv-acento)}',
+      '#pv-sec.pv-con-tex .pv-onda i{background:color-mix(in srgb,var(--pv-tinta) 78%,transparent)}',
+      '#pv-sec.pv-con-tex .pv-titulo,#pv-sec.pv-con-tex .pv-talon span,#pv-sec.pv-con-tex .pv-datos dd{',
+      '  text-shadow:0 0 10px color-mix(in srgb,var(--pv-papel) 90%,transparent)}'
     ].join('\n');
     document.head.appendChild(s);
   }
@@ -335,10 +413,16 @@
     sec.id = 'pv-sec';
     sec.className = 'sec';
 
-    var st = sec.style;
-    st.setProperty('--pv-papel',  txt(f.papel,  'color-mix(in srgb,var(--sage-cl) 34%,#fff)'));
-    st.setProperty('--pv-tinta',  txt(f.tinta,  'var(--verde)'));
-    st.setProperty('--pv-acento', txt(f.acento, f.metalico ? 'var(--oro)' : 'var(--sage)'));
+    var st = sec.style, tx = textura(f) || {};
+    st.setProperty('--pv-papel',  txt(f.papel,  tx.papel  || 'color-mix(in srgb,var(--sage-cl) 34%,#fff)'));
+    st.setProperty('--pv-tinta',  txt(f.tinta,  tx.tinta  || 'var(--verde)'));
+    st.setProperty('--pv-acento', txt(f.acento, tx.acento || (f.metalico ? 'var(--oro)' : 'var(--sage)')));
+    if (tx.url) {
+      sec.classList.add('pv-con-tex');
+      st.setProperty('--pv-tex', 'url("' + tx.url.replace(/"/g, '%22') + '")');
+      var velo = (f.velo === '' || f.velo == null || isNaN(+f.velo)) ? tx.velo : +f.velo;
+      st.setProperty('--pv-velo', Math.round(Math.max(0, Math.min(1, velo)) * 100) + '%');
+    }
     st.setProperty('--pv-tit', txt(f.letraTitulo, '"Cormorant Garamond",Georgia,serif'));
     st.setProperty('--pv-dat', txt(f.letraDatos,  '"Jost",system-ui,sans-serif'));
     st.setProperty('--pv-cur', txt(f.letraMano,   '"Dancing Script",cursive'));
@@ -516,7 +600,8 @@
       f.departe || '', f.nota || '', f.fecha || '', f.hora || '',
       f.rotuloFecha || '', f.rotuloHora || '',
       f.papel || '', f.tinta || '', f.acento || '', f.metalico ? 1 : 0,
-      f.letraTitulo || '', f.letraDatos || '', f.letraMano || ''
+      f.letraTitulo || '', f.letraDatos || '', f.letraMano || '',
+      f.textura || '', (f.velo == null ? '' : f.velo)
     ].join('|');
   }
 
@@ -538,5 +623,7 @@
   setInterval(revisar, 400);
 
   window.PV_montar = montar;                    /* el panel lo llama al previsualizar */
-  window.PV_liviana = liviana;                  /* para que el banco la pueda medir */
+  window.PV_liviana = liviana;
+  window.PV_TEXTURAS = TEXTURAS;                /* el panel arma el selector con esto */
+  window.PV_textura = textura;                  /* para que el banco la pueda medir */
 })();

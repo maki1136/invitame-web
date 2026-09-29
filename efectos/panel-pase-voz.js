@@ -373,6 +373,75 @@
     cuerpo.appendChild(tres);
     cuerpo.appendChild(ayudita('Vacios toman los colores de la paleta de la invitacion.'));
 
+    /* ---- LA TEXTURA DEL BOLETO (29/9/2026) ----
+       El catalogo vive en pase-voz.js (window.PV_TEXTURAS), con su papel, tinta
+       y acento medidos: aca solo se elige. Elegir una textura NO pisa los colores
+       que Jaz ya haya puesto a mano; si estan vacios se usan los de la textura.
+       Tambien acepta una URL propia (una textura generada para esa boda). */
+    var fTex = chico(document.createElement('div'), 'margin:10px 0 8px');
+    fTex.appendChild(rotulo('Textura del boleto'));
+    var grilla = chico(document.createElement('div'),
+      'display:grid;grid-template-columns:repeat(3,1fr);gap:6px');
+    var botonesTex = [];
+    function marcarTex() {
+      var v = datos(borrador() || d).textura || '';
+      for (var k = 0; k < botonesTex.length; k++) {
+        var on = botonesTex[k].__id === v;
+        botonesTex[k].style.outline = on ? '2px solid #5b4a6b' : '1px solid rgba(0,0,0,.15)';
+        botonesTex[k].style.outlineOffset = on ? '1px' : '0';
+      }
+      if (iTexUrl.value !== (/^https?:/.test(v) ? v : '')) iTexUrl.value = /^https?:/.test(v) ? v : '';
+    }
+    function botonTex(id, nombre, img) {
+      var bt = chico(document.createElement('button'),
+        'cursor:pointer;padding:0;border:0;border-radius:6px;overflow:hidden;background:#f3efe8;' +
+        'height:58px;position:relative;font:600 10px system-ui;color:#222;text-align:left');
+      bt.type = 'button'; bt.__id = id; bt.title = nombre;
+      if (img) {
+        bt.style.backgroundImage = 'url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_220/' +
+          img.replace(/^v\d+\//, '') + '")';
+        bt.style.backgroundSize = 'cover'; bt.style.backgroundPosition = 'center';
+      }
+      var et = chico(document.createElement('span'),
+        'position:absolute;left:0;right:0;bottom:0;padding:2px 5px;background:rgba(255,255,255,.82);' +
+        'white-space:nowrap;overflow:hidden;text-overflow:ellipsis');
+      et.textContent = nombre; bt.appendChild(et);
+      bt.onclick = function () { datos(borrador() || d).textura = id; marcarTex(); refrescar(); };
+      botonesTex.push(bt); grilla.appendChild(bt);
+    }
+    botonTex('', 'Sin textura (liso)', '');
+    var CAT = window.PV_TEXTURAS || {};
+    for (var idTex in CAT) if (Object.prototype.hasOwnProperty.call(CAT, idTex)) {
+      botonTex(idTex, CAT[idTex].nombre, CAT[idTex].img);
+    }
+    fTex.appendChild(grilla);
+    var iTexUrl = document.createElement('input');
+    iTexUrl.type = 'text'; iTexUrl.placeholder = 'o pegar la URL de una textura propia (Cloudinary)';
+    iTexUrl.style.cssText = 'width:100%;margin-top:6px;box-sizing:border-box';
+    iTexUrl.oninput = function () {
+      var v = iTexUrl.value.trim();
+      datos(borrador() || d).textura = v; marcarTex(); refrescar();
+    };
+    fTex.appendChild(iTexUrl);
+    fTex.appendChild(ayudita('La forma del boleto es siempre la misma: cambia el papel. ' +
+      'Con textura, los colores vacios toman los de la textura.'));
+    /* el claro detras del texto */
+    var filaVelo = chico(document.createElement('div'), 'display:flex;align-items:center;gap:8px;margin-top:6px');
+    filaVelo.appendChild(chico(document.createElement('span'), 'font-size:12px;font-weight:600'));
+    filaVelo.firstChild.textContent = 'Claro detras del texto';
+    var iVelo = document.createElement('input');
+    iVelo.type = 'range'; iVelo.min = '0'; iVelo.max = '100'; iVelo.style.flex = '1';
+    var vv = datos(d).velo; iVelo.value = (vv === '' || vv == null) ? '62' : String(Math.round(vv * 100));
+    iVelo.oninput = function () { datos(borrador() || d).velo = (+iVelo.value) / 100; refrescar(); };
+    var bVelo = chico(document.createElement('button'), 'cursor:pointer;padding:4px 8px;font-size:11.5px');
+    bVelo.type = 'button'; bVelo.textContent = 'Auto';
+    bVelo.title = 'Volver al valor medido de la textura';
+    bVelo.onclick = function () { datos(borrador() || d).velo = ''; iVelo.value = '62'; refrescar(); };
+    filaVelo.appendChild(iVelo); filaVelo.appendChild(bVelo);
+    fTex.appendChild(filaVelo);
+    cuerpo.appendChild(fTex);
+    marcarTex();
+
     function acomodar() {
       var dd = datos(borrador() || d);
       var prendido = !!dd.encendido;
@@ -405,6 +474,7 @@
       if (p.papel  && cPapel.value  !== p.papel)  cPapel.value  = p.papel;
       if (p.tinta  && cTinta.value  !== p.tinta)  cTinta.value  = p.tinta;
       if (p.acento && cAcento.value !== p.acento) cAcento.value = p.acento;
+      marcarTex();
       if ((p.audio || '').trim() && bSubir.textContent.indexOf('cargado') < 0) {
         bSubir.textContent = 'Audio cargado — cambiar';
       }
