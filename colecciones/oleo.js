@@ -567,7 +567,8 @@
         P + '.footer .s{ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; }',
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ,
-        P + '.val .copy{ color:#AE3760!important; -webkit-text-fill-color:#AE3760!important; }'
+        P + '.val .copy{ color:#AE3760!important; -webkit-text-fill-color:#AE3760!important; }',
+      P + '.rd-tapa .rd-txt{ background-color:rgba(46,42,58,.66)!important; padding:4px 12px!important; border-radius:999px!important; }'
       ].join('\n')
     },
     /* ⭐ ESPATULADO (tanda 2, 23/9/2026): la textura: yeso blanco trabajado con espátula en relieve, con ramitas de hoja de oro. Tinta grafito cálido (#3A342E) sobre papel #F6F3EE.
