@@ -69,7 +69,8 @@
     terracota: ['62,26,16','44,18,11','26,10,6','#5E2A1A','#9A6A58'],
     oliva:     ['38,40,20','26,28,13','15,16,7','#3C3E1E','#7A7C58'],
     mocha:     ['52,34,26','36,23,17','21,13,9','#4E3428','#8E7466'],
-    lavanda:   ['40,30,62','27,20,44','16,12,27','#3C2E5E','#7C6E9A']
+    lavanda:   ['40,30,62','27,20,44','16,12,27','#3C2E5E','#7C6E9A'],
+    rosa:      ['92,34,58','66,22,42','40,12,26','#6B2A48','#A8778F']
   };
   /* ⭐⭐ 29/9 · CADA TONO CON SU PROPIO DISEÑO. Maki, al ver Natalia, Elena y Sofía:
      «ponele un poco más de onda a los diseños, están copiadas». El color solo no
@@ -101,7 +102,9 @@
     /* mocha: XV chocolate y champagne · festón, moño, CHAMPAGNE */
     mocha:     { disp:'Libre Caslon Display', scr:'Great Vibes', txt:'Libre Caslon Text', pieza:'c_crop,w_0.34,h_0.34,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-mocha', adorno:'lazo', forma:'feston', port:'script', metal:'champagne' },
     /* lavanda: XV San Miguel · ojivas neogóticas como la Parroquia, corona, PLATA */
-    lavanda:   { disp:'Forum',              scr:'Luxurious Script', txt:'Castoro',     pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-lavanda', adorno:'corona', forma:'ojiva', port:'versal', metal:'plata' }
+    lavanda:   { disp:'Forum',              scr:'Luxurious Script', txt:'Castoro', kick:'versal',     pieza:'c_crop,w_0.3,h_0.3,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-lavanda', adorno:'corona', forma:'ojiva', port:'versal', metal:'plata' },
+    /* rosa: XV rosa (30/9, Maki: «la de XV marrón hacela rosa, más de XV») · moño, festón, ORO ROSA */
+    rosa:      { disp:'Libre Caslon Display', scr:'Great Vibes', txt:'Libre Caslon Text', pieza:'c_crop,w_0.34,h_0.34,g_center/w_SZ,q_auto,f_auto/invitame/degrade/dg-pieza-rosa', adorno:'lazo', forma:'feston', port:'script', metal:'rosa' }
   };
   var METALES = { cobre:['#C58B5E','#E6B48E','197,139,94'], bronce:['#CFAE74','#EAD3A6','207,174,116'], champagne:['#D8C3A0','#F0E3CC','216,195,160'] };
   function estilo() { return ESTILOS[tono()] || ESTILOS.esmeralda; }
@@ -334,6 +337,8 @@
       P + '.sec h2{ font-style:italic!important; letter-spacing:.02em!important; font-size:23px!important; }',
       P + '.sec .kick{ font-size:22px!important; }'
     );
+    /* 30/9 · Maki: «mis xv no se lee bien». El sobretítulo de portada va en la letra de títulos, en versal espaciada. */
+    if (E.kick === 'versal') A.push(P + '#pv-kick{ font-family:"' + E.disp + '",serif!important; text-transform:uppercase!important; letter-spacing:.36em!important; text-indent:.36em!important; font-size:15px!important; font-weight:400!important; }');
     if (E.nombre) A.push(P + '#pv-names{ font-size:' + E.nombre + '!important; }');
     return A.join('\n');
   }
