@@ -1493,6 +1493,21 @@ window.SOBRES_INVITAME = {
     ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
   },
 
+  /* ★ 29/9/2026 · Maki: «que la mitad del sobre de abajo, cuando se está separando
+     de la solapa de arriba, baje así desaparece y aparece la portada».
+     Mismo sobre que ramitas-lila, SIN ficha (sin ficha el cuerpo CAE) y con
+     empalme "foto": nada de fundido a blanco, abajo ya está la portada. */
+  "ramitas-lila-cae": {
+    nombre:   "Ramitas · lila, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/ramitas-lila-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/ramitas-lila-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/ramitas-lila-cuerpo.webp",
+    color:    "#c9c0c5",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.4, y: 56.5 }
+  },
+
   "damasco-salvia": {
     nombre:   "Damasco · marfil con damasco en relieve, lacre salvia con corazón (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/damasco-salvia-poster.jpg",
