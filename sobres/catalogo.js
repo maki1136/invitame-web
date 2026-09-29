@@ -1400,10 +1400,10 @@ window.SOBRES_INVITAME = {
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/mia/mia-sobre-luz-29-9.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/mia/mia-sobre-luz-29-9.jpg",
     color: "#0B0B0B", luz: 4.4, luzColor: "#F7F6FA", luzFundido: 0.5 },
-  'martina-luz': { nombre: "Martina · sobre rosa empolvado con lacre de flor de cerezo; se abre y sale luz dorada con pétalos (video)",
-    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/martina/mt-sobre-luz-29-9.mp4",
-    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/martina/mt-sobre-luz-29-9.jpg",
-    color: "#B4B29E", luz: 4.35, luzColor: "#FFF4EE", luzFundido: 0.65 },
+  'martina-luz': { nombre: "Martina · sobre rosa empolvado CERRADO con lacre de cerezas; se abre la solapa y sale luz dorada con pétalos (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/martina/mt-sobre-luz-v2-29-9.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/martina/mt-sobre-luz-v2-29-9.jpg",
+    color: "#B3937C", luz: 4.4, luzColor: "#FFF4EE", luzFundido: 0.6 },
 
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
