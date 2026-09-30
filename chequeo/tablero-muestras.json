@@ -1,9 +1,9 @@
 {
- "cuando": "2026-09-30T19:30:32.478Z",
+ "cuando": "2026-09-30T19:52:29.952Z",
  "total": 54,
- "verde": 51,
- "rojo": 1,
- "gris": 2,
+ "verde": 54,
+ "rojo": 0,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
@@ -266,10 +266,10 @@
   },
   {
    "slug": "micumple-caro-copia",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "montserrat-mis15",
@@ -343,18 +343,16 @@
   },
   {
    "slug": "sofia-y-martin",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "valentina-y-emiliano",
    "ver": "2026-09-07",
-   "estado": "rojo",
-   "dif": [
-    "sección confirmacion: previa «color(srgb 0.180392 0.262745 0.235294)/rgb(238, 230, 214)» · publicada «rgb(46, 67, 60)/rgb(238, 230, 214)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
