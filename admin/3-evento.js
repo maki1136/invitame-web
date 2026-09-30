@@ -63,7 +63,8 @@
   }
   function addPersona(){if(!Array.isArray(D.personas))D.personas=[];if(D.personas.length>=12)return;D.personas.push({nombre:'',rel:'',foto:''});renderPersonas();}
   function delPersona(i){D.personas.splice(i,1);renderPersonas();}
-  function setPersona(i,k,v){if(D.personas[i]){D.personas[i][k]=v;}}
+  // ⚠️ Sin postPreview la miniatura no se enteraba (lo encontró el banco del panel, 30/9/2026)
+  function setPersona(i,k,v){if(D.personas[i]){D.personas[i][k]=v;} postPreview();}
   async function subirImgPersona(input,i){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
@@ -264,7 +265,7 @@
   function renderPanel(){
     if(cur==='INVITADOS'){el('panel').innerHTML=invitadosHtml();renderGuests();return;}
     if(cur==='EFECTOS'){el('panel').innerHTML=efectosHtml();return;}
-    let h=(cur==='PRINCIPAL'?mejorasHtml():cur==='TRIVIA'?triviaHtml():cur==='GALERIA_INSTA_VID'?galeriaHtml():cur==='PERSONAS'?personasHtml():'');
+    let h=(cur==='PRINCIPAL'?mejorasHtml():cur==='TRIVIA'?triviaHtml():cur==='GALERIA_INSTA_VID'?galeriaHtml():cur==='PERSONAS'?personasHtml():cur==='REGALOS'?regalosExtraHtml():'');
     h+=FIELDS[cur].map(fieldHtml).join('');
     el('panel').innerHTML=h;
     if(cur==='PRINCIPAL'){buildTemas();el('mf-nfont').value=D.nfont;sincronizarVersionPreview();render();}
@@ -541,7 +542,8 @@
   function restosDemo(){
     const av=[];
     const P=((D.n1||'')+' y '+(D.n2||'')).trim();
-    if(/Mar[íi]a/.test(D.n1||'')||/Diego/.test(D.n2||'')) av.push('Los nombres siguen siendo los del ejemplo («'+P+'»)');
+    // los del ejemplo son EXACTAMENTE «María» y «Diego»: una María Paz o un Diego de verdad no son ejemplo
+    if(/^Mar[íi]a$/.test((D.n1||'').trim())&&/^Diego$/.test((D.n2||'').trim())) av.push('Los nombres siguen siendo los del ejemplo («'+P+'»)');
     if((D.slug||'')==='maria-y-diego') av.push('La dirección del link sigue siendo «maria-y-diego»');
     if(String(D.fecha||'').indexOf('2026-11-28')===0) av.push('La fecha sigue siendo la del ejemplo (28/11/2026)');
     if(/Hay un instante en la vida/.test(D.frase||'')) av.push('La frase principal es la del ejemplo');

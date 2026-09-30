@@ -43,7 +43,14 @@
   // la que se publico: index.php sirve i/v/{VERSION}/index.html si esa carpeta existe.
   // Asi, cuando cambiamos el motor, las invitaciones ya entregadas NO se enteran.
   // AL SUBIR ESTE NUMERO HAY QUE CREAR LA CARPETA i/v/{nueva-version}/index.html.
-  const VERSION='2026-09-07';
+  /* ⚠️⚠️ ESTABA EN 2026-09-07 MIENTRAS index.php SERVÍA 2026-09-14. (30/9/2026)
+     Medido en aitana-mis15: la invitación publicada (sin versión clavada) salía
+     con el motor 2026-09-14, y la MINIATURA del panel con el 2026-09-07. En el
+     viejo el cielo de ejemplo del itinerario queda pegado: la miniatura
+     mostraba nubes que la invitación no tiene. Y cada «Guardar y publicar»
+     clavaba la invitación a un motor VIEJO. Este número va SIEMPRE igual a
+     $BASE_VER de i/index.php. */
+  const VERSION='2026-09-14';
   // Primera version del motor que sabe pedirle al servidor un evento privado.
   // Una invitacion clavada a una version anterior NO entiende el candado nuevo, asi que
   // al ponerle clave se la sube a esta (con aviso). Ver "invitacion privada" mas abajo.

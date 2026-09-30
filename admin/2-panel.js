@@ -41,9 +41,10 @@
       '<div class="hint" style="margin-bottom:10px">Cada invitado responde y suma puntos. Se muestran en la sección "¡Pregúntame!" de la invitación.</div>'+
       qs+'<button class="addbtn" onclick="tqAdd()">+ Agregar pregunta</button></div>';
   }
-  function tqSet(i,v){D.trivia[i].q=v;}
-  function tqOpt(i,j,v){D.trivia[i].o[j]=v;}
-  function tqCorrect(i,j){D.trivia[i].c=j;}
+  // las cuatro sin postPreview: la miniatura no se enteraba de la trivia (banco del panel, 30/9/2026)
+  function tqSet(i,v){D.trivia[i].q=v;postPreview();}
+  function tqOpt(i,j,v){D.trivia[i].o[j]=v;postPreview();}
+  function tqCorrect(i,j){D.trivia[i].c=j;postPreview();}
   function tqAddOpt(i){if(D.trivia[i].o.length<4){D.trivia[i].o.push('');renderPanel();}}
   function tqDelOpt(i,j){if(D.trivia[i].o.length>2){D.trivia[i].o.splice(j,1);if(D.trivia[i].c>=D.trivia[i].o.length)D.trivia[i].c=0;renderPanel();}}
   function tqAdd(){D.trivia.push({q:'',o:['',''],c:0});renderPanel();}
@@ -126,23 +127,23 @@
     '<div class="mejoras"><div class="h">'+ICO.camara+' Hashtag de Instagram</div>'+inp('igHashtag','#MariaYDiego2026')+'</div>'+
     '<div class="mejoras"><div class="h">'+ICO.lista+' Playlist de Spotify</div>'+
      '<div class="hint" style="margin-bottom:8px">En Spotify: Compartir y después Copiar enlace de la playlist, y pegalo acá.</div>'+inp('spotifyUrl','https://open.spotify.com/playlist/...')+'<div class="hint" style="margin-top:10px">El reproductor aparece adentro de una solapa. Por defecto viene ABIERTA para que se vea; tildá esto sólo si el cliente prefiere que arranque plegada.</div>'+chk('musica','cerrada','La playlist arranca cerrada')+'</div>'+
-    '<div class="mejoras"><div class="h">'+ICO.regalo+' Mesa de Regalos (botones)</div>'+
-     '<div class="hint" style="margin-bottom:8px">Pegá el link de cada mesa. Los que dejes vacíos no aparecen.</div>'+
-     '<label>Liverpool</label>'+inp('reg_liverpool','link Liverpool')+
-     '<label>Amazon</label>'+inp('reg_amazon','link Amazon')+
-     '<label>Sears</label>'+inp('reg_sears','link Sears')+
-     '<label>Mercado Libre</label>'+inp('reg_mercadolibre','link Mercado Libre')+
-     '<label>Palacio de Hierro</label>'+inp('reg_palacio','link Palacio de Hierro')+
-     '<label>Venmo</label>'+inp('reg_venmo','link o usuario Venmo')+
-     '<label>PayPal</label>'+inp('reg_paypal','link PayPal')+
-     '<div class="two"><div class="grp"><label>Otra (nombre)</label>'+inp('reg_otro_n','Ej: Amazon US')+'</div><div class="grp"><label>Otra (link)</label>'+inp('reg_otro_u','https://...')+'</div></div></div>'+
-    '<div class="mejoras"><div class="h">'+ICO.banco+' Datos para transferencia (opcional)</div>'+
-     '<label>CLABE / Cuenta</label>'+inp('regClabe','CLABE (18 dígitos) o número de cuenta')+
-     '<label>Titular</label>'+inp('regTitular','Nombre del titular')+
-     '<label>Banco</label>'+inp('regBanco','Banco')+'</div>'+
+    /* «Mesa de Regalos» y «Datos para transferencia» estaban ACÁ y TAMBIÉN en la
+       pestaña REGALOS: los mismos datos, dos lugares (lo encontró el banco del
+       panel, 30/9/2026). Lo que sólo estaba acá (Venmo, PayPal, titular y banco)
+       se mudó a REGALOS: regalosExtraHtml(). */
     '<div class="mejoras"><div class="h">'+ICO.clima+' Clima del día del evento</div>'+
      '<label style="display:flex;align-items:center;gap:8px;font-weight:700"><input type="checkbox" '+(D.climaOff?'':'checked')+' onchange="setB(\'climaOff\',!this.checked)" style="width:auto"> Mostrar el clima</label>'+
      '<div class="hint">Se activa si cargaste las coordenadas del lugar en "Dónde y cuándo". Muestra el clima típico de esa fecha y, cuando falta poco, el pronóstico real.</div></div>';
+  }
+  // Lo de regalos que no tiene campo propio en REGALOS (antes vivía, repetido, en GALERIA_INSTA_VID)
+  function regalosExtraHtml(){
+    const inp=(k,ph)=>'<input value="'+String(D[k]||'').replace(/"/g,'&quot;')+'" oninput="setB(\''+k+'\',this.value)" placeholder="'+ph+'">';
+    return '<div class="mejoras"><div class="h">'+ICO.regalo+' Más formas de regalar</div>'+
+     '<div class="hint" style="margin-bottom:8px">Las tiendas (Liverpool, Amazon…) y la CLABE van más abajo, en esta misma pestaña. Los que dejes vacíos no aparecen.</div>'+
+     '<label>Venmo</label>'+inp('reg_venmo','link o usuario Venmo')+
+     '<label>PayPal</label>'+inp('reg_paypal','link PayPal')+
+     '<div class="two"><div class="grp"><label>Titular de la cuenta</label>'+inp('regTitular','Nombre del titular')+'</div>'+
+     '<div class="grp"><label>Banco</label>'+inp('regBanco','Banco')+'</div></div></div>';
   }
   async function subirAudio(input){
     const f=input.files&&input.files[0]; if(!f)return;
@@ -281,15 +282,15 @@
         '<div class="grp">'+chk('particulas','on','Mostrar el efecto')+'</div>'+
         '<div class="two"><div class="grp"><label>Forma</label>'+sel('particulas','tipo',[['hoja','Hojitas'],['petalo','Pétalos'],['perla','Perlas'],['flor','Flores secas'],['corazon','Corazones'],['nieve','Copos de nieve'],['luz','Lucecitas'],['ninguno','Ninguno']])+'</div>'+
         '<div class="grp"><label>Densidad</label>'+sel('particulas','densidad',[['suave','Suave'],['normal','Normal'],['intenso','Intenso']])+'</div></div>'+
-        '<div class="grp"><label class="chk"><input type="checkbox" id="fx-pauto" '+(pauto?'checked':'')+' onchange="D.fx.particulas.color=this.checked?\'auto\':(el(\'fx-pcolor\').value)"> Color automático (combina con el tema)</label></div>'+
-        '<div class="grp"><label>…o elegí un color</label><input type="color" id="fx-pcolor" value="'+(pauto?'#a9b8a0':D.fx.particulas.color)+'" oninput="if(!el(\'fx-pauto\').checked)D.fx.particulas.color=this.value"></div>'+
+        '<div class="grp"><label class="chk"><input type="checkbox" id="fx-pauto" '+(pauto?'checked':'')+' onchange="D.fx.particulas.color=this.checked?\'auto\':(el(\'fx-pcolor\').value);postPreview()"> Color automático (combina con el tema)</label></div>'+
+        '<div class="grp"><label>…o elegí un color</label><input type="color" id="fx-pcolor" value="'+(pauto?'#a9b8a0':D.fx.particulas.color)+'" oninput="var a=el(\'fx-pauto\');if(a&&a.checked){a.checked=false;}D.fx.particulas.color=this.value;postPreview()"></div>'+
       '</div>'+
       '<div class="mejoras"><div class="h efx">'+ICO.destello+' Efectos — carta que sale del sobre</div>'+
         '<div class="hint" style="margin-bottom:10px">Una sección donde un sobre de color se abre y sale una cartita con tu mensaje.</div>'+
         '<div class="grp">'+chk('carta','on','Mostrar la sección de la carta')+'</div>'+
         '<div class="grp"><label>Color del sobre — elegí un preset o un color libre</label>'+
-          '<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:9px">'+[['','Marfil','#efe6d2'],['#6d7f68','Verde','#6d7f68'],['#6d3a52','Uva','#6d3a52'],['#8fa9bd','Celeste','#8fa9bd'],['#d8a68a','Durazno','#d8a68a'],['#c98b96','Rosa','#c98b96']].map(p=>'<button type="button" title="'+p[1]+'" onclick="D.fx.carta.sobreColor=\''+p[0]+'\';var i=document.getElementById(\'cf-col-inp\');if(i)i.value=\''+(p[0]||'#efe6d2')+'\'" style="width:32px;height:32px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);background:'+p[2]+';cursor:pointer"></button>').join('')+'</div>'+
-          '<input type="color" id="cf-col-inp" value="'+(D.fx.carta.sobreColor||'#efe6d2')+'" oninput="D.fx.carta.sobreColor=this.value"><div class="hint">El color se aplica al sobre manteniendo el relieve.</div></div>'+
+          '<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:9px">'+[['','Marfil','#efe6d2'],['#6d7f68','Verde','#6d7f68'],['#6d3a52','Uva','#6d3a52'],['#8fa9bd','Celeste','#8fa9bd'],['#d8a68a','Durazno','#d8a68a'],['#c98b96','Rosa','#c98b96']].map(p=>'<button type="button" title="'+p[1]+'" onclick="D.fx.carta.sobreColor=\''+p[0]+'\';var i=document.getElementById(\'cf-col-inp\');if(i)i.value=\''+(p[0]||'#efe6d2')+'\';postPreview()" style="width:32px;height:32px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);background:'+p[2]+';cursor:pointer"></button>').join('')+'</div>'+
+          '<input type="color" id="cf-col-inp" value="'+(D.fx.carta.sobreColor||'#efe6d2')+'" oninput="D.fx.carta.sobreColor=this.value;postPreview()"><div class="hint">El color se aplica al sobre manteniendo el relieve.</div></div>'+
         '<div class="grp"><label>Bajada (arriba del título)</label>'+txt('carta','kicker','Con cariño')+'</div>'+
         '<div class="grp"><label>Título de la carta</label>'+txt('carta','titulo','Queridos amigos y familia')+'</div>'+
         '<div class="grp"><label>Texto de la carta</label>'+area('carta','texto')+'</div>'+
