@@ -1,9 +1,9 @@
 {
- "cuando": "2026-09-30T19:50:56.826Z",
+ "cuando": "2026-09-30T20:06:12.844Z",
  "slug": "camila-y-tomas",
  "total": 352,
- "verde": 349,
- "amarillo": 3,
+ "verde": 350,
+ "amarillo": 2,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -271,8 +271,9 @@
    "guarda": true,
    "dato": "fecha",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "PRINCIPAL",
@@ -304,9 +305,8 @@
    "guarda": true,
    "dato": "c_posicion-cuentra-regresiva-y-nombres",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
@@ -316,9 +316,8 @@
    "guarda": true,
    "dato": "kickColor",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
