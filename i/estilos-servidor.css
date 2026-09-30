@@ -548,3 +548,22 @@ video:not([data-video-tocable]){ -webkit-appearance: none !important; }
    El cierre es casi siempre un retrato vertical 9:16 y el pie mide ~1:1:
    con center/cover se comía la cabeza. Se ancla arriba (10%), la capa 1 es el velo. */
 .footer{ background-position: 0 0, 50% 10% !important; }
+
+/* ======================================================================
+   LA LISTA «¿CUÁNTOS ASISTIRÁN?» EN SAFARI. 30/9/2026.
+   Safari dibuja el <select> con su caja nativa gris clara y NO le hace caso
+   al fondo que le pone la colección, pero SÍ al color de la letra: en Perlas
+   la letra es blanca, así que el número quedaba blanco sobre gris claro —no
+   se veía—. Visto en la captura del banco en el iPhone. Con appearance:none
+   Safari respeta el fondo de la colección, igual que el resto de los campos;
+   la flechita se dibuja aparte, en un gris que se ve sobre claro y oscuro.
+   ====================================================================== */
+.rsvpform select{
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23999' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px 8px;
+  padding-right: 36px;
+}
