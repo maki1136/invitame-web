@@ -557,6 +557,11 @@
     'h[c] #video-sec .col-vtapa{background:radial-gradient(circle at 50% 50%,rgba(40,30,44,.36) 0,rgba(40,30,44,.14) 26%,rgba(40,30,44,0) 46%),url("https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_1100/invitame/perlas/pl-tv-proy-29-9") center 55%/cover no-repeat!important;border-radius:16px!important;border:0!important;box-shadow:0 12px 28px rgba(40,30,44,.22),0 0 0 1px rgba(200,190,170,.7)!important}',
     'h[c] #spotify-sec .col-vtapa{background:radial-gradient(circle at 50% 50%,rgba(40,30,44,.36) 0,rgba(40,30,44,.14) 26%,rgba(40,30,44,0) 46%),url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_800,h_730,q_auto,f_auto/invitame/perlas/pl-sp-disco-29-9") center 50%/cover no-repeat!important;border-radius:16px!important;border:0!important;box-shadow:0 12px 28px rgba(40,30,44,.22),0 0 0 1px rgba(200,190,170,.7)!important}',
     'h[c] :is(#video-sec,#spotify-sec) .col-vtapa :is(.rd-txt,.txt,small,span:not(.aro)){color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 1px 4px rgba(20,14,24,.95),0 0 12px rgba(20,14,24,.7)!important}',
+    /* ★ 30/9/2026 — el rótulo es de 9 px y va sobre la foto: la sombra sola no
+       alcanzaba (banco: «Ver el video» 1,8 y «La playlist» 2,5 en el iPhone,
+       donde la letra cae sobre la parte clara). Una píldora oscura y
+       translúcida detrás, como un subtítulo, y sin la opacidad .75. */
+    'h[c] :is(#video-sec,#spotify-sec) .col-vtapa .txt{opacity:1!important;background:rgba(20,14,24,.74);padding:5px 11px 5px calc(11px + .26em);border-radius:99px}',
     'h[c] :is(#video-sec,#spotify-sec) .col-vtapa .aro{background:rgba(250,248,242,.82)!important}'
 
   ].join('')
