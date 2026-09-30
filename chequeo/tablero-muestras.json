@@ -1,9 +1,9 @@
 {
- "cuando": "2026-09-30T19:15:02.408Z",
+ "cuando": "2026-09-30T19:30:32.478Z",
  "total": 54,
- "verde": 52,
- "rojo": 2,
- "gris": 0,
+ "verde": 51,
+ "rojo": 1,
+ "gris": 2,
  "items": [
   {
    "slug": "abril-mis15",
@@ -71,10 +71,8 @@
   {
    "slug": "clara-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección regalos: previa «color(srgb 0.94902 0.968628 0.988235 / 0.15)/rgb(58, 69, 61)» · publicada «color(srgb 0.94902 0.968627 0.988235 / 0.55)/rgb(58, 69, 61) ~velo»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -268,10 +266,10 @@
   },
   {
    "slug": "micumple-caro-copia",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "montserrat-mis15",
@@ -345,10 +343,10 @@
   },
   {
    "slug": "sofia-y-martin",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "valentina-y-emiliano",
