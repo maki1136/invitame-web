@@ -58,7 +58,7 @@
     listo = false; sonando = false;
     frame = document.createElement('iframe');
     frame.title = 'Música de fondo';
-    frame.setAttribute('allow', 'autoplay');
+    frame.setAttribute('allow', 'autoplay; encrypted-media; fullscreen');
     frame.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;border:0;pointer-events:none';
     frame.addEventListener('load', function () {
       try { frame.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), '*'); } catch (e) {}

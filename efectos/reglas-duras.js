@@ -551,8 +551,16 @@
     return false;
   }
 
+  /* ⚠️⚠️ ERROR 30 — LAS TAPAS DEL VIDEO Y LA PLAYLIST SON FOTO. (30/9/2026)
+     En Perlas, «Ver el video» y «La playlist» van en blanco con sombra sobre
+     la foto de la tapa (`.col-vtapa`, con la foto de fondo). Esto las medía
+     como papel: `fondosDe` promedia TODA la foto —sábanas claras alrededor del
+     tocadiscos— y concluía «fondo claro»; pintaba la letra en rgb(7,7,6) con
+     !important, NEGRO sobre el centro oscuro donde va la letra. El banco lo
+     midió: 1,8 y 1,6. Una tapa es una foto como la portada: se copia el
+     extremo que ya trae (blanco), no se mide contra el promedio. */
   function elBloqueFoto(el) {
-    var b = el.closest ? el.closest('.portada, .footer') : null;
+    var b = el.closest ? el.closest('.portada, .footer, .col-vtapa, .rd-tapa, .scratch-sec') : null;
     return hayFotoEn(b) ? b : null;
   }
 
@@ -604,9 +612,24 @@
      → La búsqueda se CORTA en el marco. Lo que hay detrás del texto es el
        papel: la foto de fondo si se puede medir, y si no el `--lino` de la
        colección. */
+  /* ⚠️⚠️ ERROR 33 — CUANDO EL PAPEL ES UN VIDEO, NO SE MEDÍA NADA. (30/9/2026)
+     Esto buscaba sólo `#inv-fondo img`. Pero cuando el fondo es un video y el
+     navegador lo puede reproducir —Safari, iPhone, Chrome de verdad—
+     `fondo-invitacion.js` pone un <video>, no una <img>. No había imagen, así
+     que caía al `--lino` (rgb 241,245,243, casi blanco) y corregía todos los
+     textos contra un papel que no existe: el mármol de camila-y-tomas es
+     rgb 224,215,201. Resultado medido por el banco en los tres Safari:
+     «Mesa» 3,8, «Familia Rivera» 3,9, «Con cariño, te esperamos» 2,5.
+     El Chromium de las pruebas no reproduce ese video, pone la <img>, y por eso
+     ahí todo daba bien: el error sólo existía donde lo ven los invitados.
+     → Si es un video, se mide su póster (el mismo cuadro, en foto). */
   function elPapel() {
     var im = document.querySelector('#inv-fondo img');
     var u = im && (im.currentSrc || im.src);
+    if (!u) {
+      var vi = document.querySelector('#inv-fondo video');
+      u = vi && (vi.poster || vi.getAttribute('poster'));
+    }
     if (u) {
       pedirPapel(u);
       var p = PAPEL[u];
@@ -617,13 +640,36 @@
     return aRGB(v) || null;
   }
 
+  /* ⚠️⚠️ ERROR 34 — LOS VELOS SEMITRANSPARENTES NO CONTABAN. (30/9/2026)
+     Subiendo por los padres sólo se miraba el primer fondo OPACO. Un fondo
+     con alfa 0,2 se salteaba como si no existiera. Pero la sección del pase
+     de Perlas lleva rgba(102,92,80,.2): un velo marrón que OSCURECE el papel.
+     El módulo calculaba contra el papel limpio (L 0,68) y en pantalla la letra
+     iba sobre L 0,47–0,57: «Familia Rivera» 3,7 y «Mesa» 3,8, medido por el
+     banco. → Los velos que se cruzan en el camino se juntan y, al encontrar
+     la base, se componen encima, del de más afuera al de más adentro. */
   function fondosDe(el) {
+    var velos = [];
+    var r0 = fondosDeCrudo(el, velos);
+    if (!r0 || !velos.length) return r0;
+    var out = [];
+    for (var i = 0; i < r0.length; i++) {
+      var c = r0[i];
+      for (var j = velos.length - 1; j >= 0; j--) c = mezcla(velos[j], c);
+      out.push(c);
+    }
+    out.rango = r0.rango;
+    return out;
+  }
+
+  function fondosDeCrudo(el, velos) {
     var n = el, tope = elMarco();
     while (n && n !== document.documentElement) {
       var cs = getComputedStyle(n);
       var propio = aRGB(cs.backgroundColor);
       var opaco  = propio && propio[3] >= 0.85 ? propio : null;
       var bi     = cs.backgroundImage;
+      if (propio && !opaco && propio[3] >= 0.03 && (!bi || bi === 'none')) velos.push(propio);
 
       if (bi && bi !== 'none') {
         var capas = capasDe(bi);
@@ -752,6 +798,28 @@
     if (cs.animationName && cs.animationName !== 'none') return true;
     return /opacity|all/.test(cs.transitionProperty || '') &&
            (parseFloat(cs.transitionDuration) || 0) > 0;
+  }
+
+  /* ⚠️⚠️ ERROR 31 — «SE ANIMA» ERA «TIENE TRANSICIÓN», PARA SIEMPRE. (30/9/2026)
+     `seAnima` mira el CSS: un `.reveal` tiene transición de opacidad aunque ya
+     haya terminado de aparecer. Así que en TODOS los reveal se medía como si
+     la opacidad final fuera 1. Pero hay textos que terminan en 0,72 a
+     propósito (el `.kick` de Perlas): «La fecha» se corregía contra 1 y en
+     pantalla quedaba más clara: 2,9 sobre 3, medido por el banco.
+     → Para MEDIR se pregunta si hay una animación corriendo AHORA
+       (`getAnimations`). Si terminó, la opacidad que se ve es la real.
+       `seAnima` queda para no congelar opacidades (errores 20 y 25). */
+  function animandoAhora(el) {
+    try {
+      if (el.getAnimations) {
+        var an = el.getAnimations();
+        for (var i = 0; i < an.length; i++) {
+          if (an[i].playState === 'running' || an[i].playState === 'pending') return true;
+        }
+        return false;
+      }
+    } catch (e) {}
+    return seAnima(el);
   }
 
   function apagarOpacidad(el) {
@@ -893,7 +961,7 @@
          → Si el elemento se está animando, su opacidad REAL es a la que va a
            llegar: 1. Es la misma regla del error 25, aplicada también al
            MEDIR, no sólo al corregir. */
-      if (seAnima(el)) opa = 1;
+      if (animandoAhora(el)) opa = 1;
       if (opa < 0.08) continue;
       var conOpa = function (col) {
         if (opa >= 1 || !col) return col;
@@ -911,7 +979,32 @@
         var t = tintaDe(cs);
         if (!t) { c.fotoEnCamino++; continue; }
         var L = luminancia(t);
-        if (L > CLARO || L < OSCURO) { el.setAttribute('data-regla-luz', 'foto'); continue; }
+        if (L > CLARO || L < OSCURO) {
+          /* ⚠️ ERROR 32 — UN EXTREMO SIN SOMBRA SOBRE FOTO NO ALCANZA. (30/9/2026)
+             «Camila & Tomás · 06.03» (crema, 11 px) sobre la foto del cierre
+             daba 4,1: los otros textos del pie llevan sombra y éste no. Sobre
+             una foto el fondo cambia punto a punto; la sombra es lo que asegura
+             el piso. Se le pone la MISMA que ya usa esta rama. */
+          /* un halo, no sólo una sombra: en letra chica una sombra de 3 px no
+             alcanza a separar la letra de la foto (medido: 4,1 con ella). Y en
+             letra CHICA (menos de 18 px) el halo se pone aunque la colección
+             traiga el suyo: «Nos casamos frente al mar» traía un brillo suave
+             de 8 px y en el iPhone, donde la foto de atrás es más clara, daba
+             2,6. En letra grande el trazo ya se separa solo. */
+          var chica = (parseFloat(cs.fontSize) || 16) < 18;
+          /* y la letra CLARA y chica va en blanco: un crema de 10 px sobre la
+             foto (L 0,73) no llega al piso aunque tenga halo; el blanco sí. */
+          if (chica && L > CLARO && L < 0.95) {
+            el.style.setProperty('color', '#fff', 'important');
+            el.style.setProperty('-webkit-text-fill-color', '#fff', 'important');
+          }
+          if (!cs.textShadow || cs.textShadow === 'none' || chica) {
+            el.style.setProperty('text-shadow',
+              L > CLARO ? 'rgba(0,0,0,.8) 0 1px 3px, rgba(0,0,0,.6) 0 0 14px'
+                        : 'rgba(255,255,255,.85) 0 1px 3px, rgba(255,255,255,.6) 0 0 14px', 'important');
+          }
+          el.setAttribute('data-regla-luz', 'foto'); continue;
+        }
         var ext2 = extremoDelBloque(bloqueFoto);
         if (!ext2) { c.fotoEnCamino++; continue; }
         var txt2 = 'rgb(' + aTexto(ext2) + ')';
@@ -931,7 +1024,11 @@
       /* ★★★ ERROR 13: la marca NO es definitiva. */
       var marca   = el.getAttribute('data-regla-luz');
       var antes   = deTexto(el.getAttribute('data-regla-fondo'));
-      var cambio  = marca && lejos(antes, fondos[0]);
+      /* ★ error 31: si se midió a mitad de una aparición y ahora la opacidad
+         quedó en otro valor, se vuelve a mirar. */
+      var opaAntes = parseFloat(el.getAttribute('data-regla-opa'));
+      var cambio  = marca && (lejos(antes, fondos[0]) ||
+                              (isFinite(opaAntes) && Math.abs(opaAntes - opa) > 0.05));
       if (marca && !cambio) {
         c.resueltos++; if (marca === 'ok') c.ok++; else c.corregidos++;
         continue;
@@ -964,6 +1061,7 @@
       }
 
       c.resueltos++;
+      el.setAttribute('data-regla-opa', String(Math.round(opa * 100) / 100));
 
       /* ★ ERRORES 10 y 12: rango amplio o boton con volumen → extremo + sombra */
       if ((fondos.rango || 0) > RANGO_AMPLIO || esBotonConVolumen(el)) {
@@ -1028,7 +1126,7 @@
          Si el elemento se esta animando, su opacidad REAL es a la que va a
          llegar: 1. Se calcula contra 1 y no se le toca la opacidad. */
       var aReal = parseFloat(getComputedStyle(el).opacity);
-      if (seAnima(el)) aReal = 1;
+      if (animandoAhora(el)) aReal = 1;
       if (!isFinite(aReal) || aReal > 1) aReal = 1;
       var color = res.c;
       if (aReal < 1) {
@@ -1082,6 +1180,10 @@
                           attributeFilter: ['style', 'class'] });
     }
 
+    /* ★ error 31: cuando termina una aparición, la opacidad ya es la final:
+       se vuelve a mirar en ese momento y no recién con el próximo scroll. */
+    marco.addEventListener('transitionend', pasada);
+    marco.addEventListener('animationend', pasada);
     window.addEventListener('scroll', pasada, { passive: true });
     window.addEventListener('resize', pasada);
     window.addEventListener('message', pasada);
@@ -1115,6 +1217,7 @@
       el.removeAttribute('data-regla-luz');
       el.removeAttribute('data-regla-fondo');
       el.removeAttribute('data-regla-orig');
+      el.removeAttribute('data-regla-opa');
     }
   }
 
