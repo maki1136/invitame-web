@@ -35,7 +35,11 @@ async function uno(s){let p,q;try{
  Object.assign(pre,pre2);
  const dif=[];for(const k of ['col','fondo','nombres','nubes'])if(pre[k]!==pub[k])dif.push(k+': previa «'+pre[k]+'» · publicada «'+pub[k]+'»');
  /* si el velo adaptable tocó la sección en cualquiera de las dos, se compara sin transparencia */
- const norm=(v,velo)=>velo?String(v).replace(' ~velo','').replace(/rgba\(([^,]+),([^,]+),([^,]+),[^)]+\)/g,'rgb($1,$2,$3)').replace(/color\(srgb ([^/)]+?)( \/ [^)]+)?\)/g,'color(srgb $1)').replace(/rgba\(0, 0, 0, 0\)|rgb\(0, 0, 0\)/g,'transp'):v;
+ /* los colores se escriben de dos maneras según quién los calcula (rgb() y
+    color(srgb …) con decimales): se pasan todos a la misma antes de comparar */
+ const unaForma=v=>String(v).replace(/color\(srgb ([\d.]+) ([\d.]+) ([\d.]+)(?: \/ ([\d.]+))?\)/g,(m,r,g,b,a)=>'rgba('+Math.round(r*255)+', '+Math.round(g*255)+', '+Math.round(b*255)+', '+(a===undefined?1:(+a).toFixed(2))+')')
+   .replace(/rgb\((\d+), (\d+), (\d+)\)/g,'rgba($1, $2, $3, 1)').replace(/rgba\((\d+), (\d+), (\d+), ([\d.]+)\)/g,(m,r,g,b,a)=>'rgba('+r+', '+g+', '+b+', '+(+a).toFixed(2)+')');
+ const norm=(v,velo)=>{v=unaForma(String(v).replace(' ~velo',''));return velo?v.replace(/rgba\((\d+), (\d+), (\d+), [\d.]+\)/g,'rgb($1, $2, $3)').replace(/rgb\(0, 0, 0\)/g,'transp'):v;};
  for(const k of new Set([...Object.keys(pre.secs),...Object.keys(pub.secs)])){const velo=/~velo/.test(pre.secs[k]||'')||/~velo/.test(pub.secs[k]||'');if(norm(pre.secs[k],velo)===norm(pub.secs[k],velo))continue;dif.push('sección '+k+': previa «'+(pre.secs[k]||'—')+'» · publicada «'+(pub.secs[k]||'—')+'»');}
  out[s]={ver,dif};}catch(e){out[s]={error:String(e.message).split('\n')[0].slice(0,90)}}
  try{p&&await p.close();q&&await q.close();}catch(e){}}
