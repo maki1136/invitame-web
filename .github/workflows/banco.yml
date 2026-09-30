@@ -62,6 +62,9 @@ on:
       - 'sobres/**'
       - '.github/workflows/banco.yml'
       - 'chequeo/probar.mjs'
+      - 'chequeo/panel.cjs'
+      - 'chequeo/comparar.cjs'
+      - 'chequeo/muestras.txt'
   schedule:
     - cron: '0 15 * * *'
   workflow_dispatch:
@@ -212,4 +215,49 @@ jobs:
           cp /tmp/r.txt chequeo/resultado.txt
           git add chequeo/resultado.txt
           git diff --staged --quiet || git commit -m "Resultado del banco [skip ci]"
+          git push || true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EL TABLERO DE LA PLATAFORMA (30/9/2026)
+  # Maki: «una lista de check con cada detalle y que esté verde… si algo deja de
+  # funcionar debe saltar, con cada cosa que agreguemos».
+  #   panel.cjs    → cada control del panel, uno por uno (¿se guarda? ¿llega a la
+  #                  miniatura? ¿se ve? ¿está repetido en otra pestaña?)
+  #   comparar.cjs → en cada invitación de chequeo/muestras.txt, la miniatura del
+  #                  panel tiene que ser IGUAL a la invitación publicada
+  # Deja chequeo/tablero-panel.json y chequeo/tablero-muestras.json, que se ven en
+  # https://invitame.littlemomentsok.com/admin/tablero.html
+  # Corre en su propia máquina (no le saca memoria al banco de Safari).
+  # ═══════════════════════════════════════════════════════════════════════════════
+  tablero:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.62.1-noble
+    timeout-minutes: 120
+    steps:
+      - name: Traer el repo
+        uses: actions/checkout@v4
+
+      - name: Instalar Playwright
+        run: npm init -y && npm i -D playwright@1.62.1
+
+      - name: Probar el panel, control por control
+        run: node chequeo/panel.cjs || true
+
+      - name: Comparar miniatura y publicada en todas las invitaciones
+        env:
+          PAR: '2'
+        run: node chequeo/comparar.cjs || true
+
+      - name: Dejar el tablero en el repo
+        if: always()
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name  "banco-de-pruebas"
+          git config user.email "banco@invitame.local"
+          mkdir -p /tmp/t && cp chequeo/tablero-*.json /tmp/t/ 2>/dev/null || true
+          git fetch origin main
+          git reset --hard origin/main
+          cp /tmp/t/tablero-*.json chequeo/ 2>/dev/null || true
+          git add chequeo/tablero-*.json
+          git diff --staged --quiet || git commit -m "Tablero de la plataforma [skip ci]"
           git push || true
