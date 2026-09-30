@@ -100,6 +100,9 @@ async function escenario(nombre, tipo, opciones, esTablet){
   try {
   const ctx = await br.newContext(opciones);
   const page = await ctx.newPage();
+  /* para probar archivos locales ANTES de subirlos: el hook reemplaza en el
+     navegador los archivos del sitio por los de la compu (igual que panel.cjs) */
+  if (process.env.INV_HOOK) await (await import(process.env.INV_HOOK)).default(page);
 
   const erroresJS = [];
   /* ⚠️ EL CANAL DE FIRESTORE NO ES UN ERROR DE LA INVITACIÓN (9/9/2026).
@@ -130,6 +133,21 @@ async function escenario(nombre, tipo, opciones, esTablet){
     const ajeno = host && !/littlemomentsok\.com$/.test(host);
     const deRed = /access control checks|Failed to load|Load failed|network error|ERR_/i.test(m);
     if (ajeno && deRed) { ruidoAjeno.push(host); return; }
+    /* Firebase avisa así cuando la red del celular se corta en el medio: es la
+       red, no el código (30/9/2026, iPhone con red lenta, volviendo de la galería) */
+    if (/FirebaseError.*network-request-failed/.test(m)) { ruidoAjeno.push('firebase (red)'); return; }
+    /* ⚠️ UN ERROR QUE TIRA EL CÓDIGO DE OTRO NO ES NUESTRO (30/9/2026).
+       Salía «Minified React error #418» en Chrome: la invitación no usa React.
+       Mirando la pila, venía de embed-cdn.spotifycdn.com, o sea del reproductor
+       de Spotify adentro de su propio cuadro. El mensaje no nombra el dominio
+       —la pila sí—. Regla: si TODAS las líneas de la pila con dirección son de
+       un dominio ajeno, se anota aparte. Si aparece aunque sea una línea
+       nuestra, sigue siendo rojo. */
+    const pila = String(e.stack || '');
+    const hostsPila = [...pila.matchAll(/https?:\/\/([^\/\s):]+)/g)].map(x => x[1]);
+    if (hostsPila.length && hostsPila.every(h => !/littlemomentsok\.com$/.test(h))) {
+      ruidoAjeno.push(hostsPila[0]); return;
+    }
     erroresJS.push(m.slice(0,140));
   });
 
@@ -157,7 +175,8 @@ async function escenario(nombre, tipo, opciones, esTablet){
       const u = r.request().url();
       const pesado = /\.(mp4|mov|webm|jpg|jpeg|png|webp)(\?|$)/i.test(u);
       await new Promise(x => setTimeout(x, pesado ? DEMORA_PESADOS : DEMORA));
-      await r.continue();
+      /* fallback y no continue: si hay INV_HOOK, el pedido sigue hasta él */
+      await r.fallback();
     });
   }
 
@@ -691,6 +710,21 @@ async function escenario(nombre, tipo, opciones, esTablet){
           if (r.bottom <= 0 || r.top >= innerHeight) return;      /* fuera de pantalla */
           const vis = cajaVisible(el);
           if (!vis) return;                       /* esta adentro de algo cerrado */
+          /* ⚠️ SE MIDE DETRÁS DE LAS LETRAS, NO EN TODA LA CAJA (30/9/2026).
+             En un botón la caja incluye el relleno, las esquinas redondeadas
+             —por donde asoma el papel claro de la página— y la sombra. Eso
+             subía el percentil 90 y daba «Agendar 3.5/4.5» a un blanco sobre
+             morado que se lee perfecto. La caja de las letras la da un Range
+             sobre el contenido. */
+          try {
+            const rg = document.createRange(); rg.selectNodeContents(el);
+            const tr = rg.getBoundingClientRect();
+            if (tr.width > 2 && tr.height > 2) {
+              vis.left = Math.max(vis.left, tr.left); vis.top = Math.max(vis.top, tr.top);
+              vis.right = Math.min(vis.right, tr.right); vis.bottom = Math.min(vis.bottom, tr.bottom);
+              if (vis.right - vis.left < 2 || vis.bottom - vis.top < 2) return;
+            }
+          } catch (e) {}
           if (opacidadReal(el) < 0.5) return;
           const cf = col(cs.color); if (!cf || cf.a < 0.15) return;
           /* ⚠️⚠️ EL FONDO QUE DECLARA EL CSS, COMO SEGUNDA OPINION (14/9/2026).
@@ -740,6 +774,9 @@ async function escenario(nombre, tipo, opciones, esTablet){
          `-webkit-text-fill-color` va aparte: en WebKit le gana a `color`. */
       await page.evaluate(() => document.querySelectorAll('[data-cq]')
         .forEach(e => {
+          /* ⚠️⚠️ SE GUARDA EL COLOR QUE TENÍA EN LÍNEA (30/9/2026). Ver el paso 4. */
+          e.__cqAntes = ['color', '-webkit-text-fill-color'].map(p =>
+            [p, e.style.getPropertyValue(p), e.style.getPropertyPriority(p)]);
           e.style.setProperty('color', 'transparent', 'important');
           e.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
           /* ⚠️⚠️ LA SOMBRA NO SE BORRA, Y ES A PROPOSITO (15/9/2026).
@@ -761,8 +798,18 @@ async function escenario(nombre, tipo, opciones, esTablet){
       /* 4 · se les devuelve la tinta */
       await page.evaluate(() => document.querySelectorAll('[data-cq]')
         .forEach(e => {
-          e.style.removeProperty('color');
-          e.style.removeProperty('-webkit-text-fill-color');
+          /* ⚠️⚠️ SE DEVUELVE EL COLOR ORIGINAL, NO SE BORRA (30/9/2026).
+             Antes hacía removeProperty('color'), y eso borraba TAMBIÉN el color
+             que la invitación había puesto en línea (botones.js, la frase final,
+             el pie). La pantalla siguiente volvía a medir ese mismo texto —las
+             pantallas se pisan 80 px— y lo encontraba con el color de fábrica:
+             «Abrir la cámara» salía NEGRO sobre morado (2.0) y el pie verde
+             grisáceo (2.8), cuando en la invitación son blancos. El banco
+             fabricaba los rojos que después reportaba. */
+          (e.__cqAntes || [['color', '', ''], ['-webkit-text-fill-color', '', '']]).forEach(([p, v, pr]) => {
+            if (v) e.style.setProperty(p, v, pr); else e.style.removeProperty(p);
+          });
+          delete e.__cqAntes;
           e.removeAttribute('data-cq');
         }));
 
@@ -899,6 +946,17 @@ async function escenario(nombre, tipo, opciones, esTablet){
         await page.waitForTimeout(250 * k);
         const yReal = await page.evaluate(() => Math.round(window.scrollY || 0));
         if (Math.abs(yReal - y) > paso) { movidas++; continue; }
+        /* ⚠️ SE ESPERA A QUE TERMINEN LAS APARICIONES (30/9/2026). Las secciones
+           entran con un fundido; medir en el medio es medir la letra con el
+           papel asomando a través: «Ver el video» daba 1,6 en el iPhone y en
+           pantalla es blanco sobre una píldora oscura. Se esperan las animaciones
+           que terminan (no las infinitas), hasta 2 s. */
+        await page.evaluate(() => Promise.race([
+          Promise.all(document.getAnimations()
+            .filter(a => a.effect && isFinite(a.effect.getComputedTiming().endTime))
+            .map(a => a.finished.catch(() => {}))),
+          new Promise(r => setTimeout(r, 2000))
+        ])).catch(() => {});
         await unaPantalla();
       } catch (e) {
         cortado = 'a la altura ' + y + ' de ' + alto + ': ' +
@@ -1044,6 +1102,18 @@ async function escenario(nombre, tipo, opciones, esTablet){
       }
       let tras2 = tras1;
       if (tras1.pegada && !tras1.roto) { m.click(); await esperar(1600); tras2 = foto(); }
+      /* ⚠️ SE MIDE CUANDO TERMINÓ DE GIRAR, NO EN EL MEDIO (30/9/2026).
+         Daba «quedo 50x204 (tiene que quedar acostada)» con pv-pegada YA sacada:
+         la rotura había corrido, pero en la máquina de GitHub (cuatro escenarios
+         a la vez) los dos requestAnimationFrame tardan y la clase se sacaba justo
+         antes de medir: la caja todavía estaba vertical, a mitad del giro.
+         Reproducido en WebKit local: a los 800 ms queda 206x59, acostada.
+         Ahora, si ya no está pegada, se espera a que no quede ninguna animación
+         corriendo (hasta 3 s) antes de medir. */
+      if (!tras2.pegada) {
+        for (let i = 0; i < 15 && m.getAnimations().length; i++) await esperar(200);
+        await esperar(300);
+      }
 
       const tk = document.querySelector('#pv-sec .pv-tk').getBoundingClientRect();
       const r  = m.getBoundingClientRect();
@@ -1453,7 +1523,23 @@ async function escenario(nombre, tipo, opciones, esTablet){
           page.waitForNavigation({ waitUntil: 'load', timeout: 20000 }).catch(() => {}),
           page.click('#volver-inv')
         ]);
-        await page.waitForTimeout(3500);
+        /* ⚠️ SE ESPERA LO QUE LA INVITACIÓN SE DA PARA LLEGAR, NO 3,5 s (30/9/2026).
+           En Safari escritorio y iPad daba «anotó 13413 y volvió a 6313». En
+           WebKit local, con la misma red lenta, vuelve a 13614 (anotó 13842).
+           La diferencia: en GitHub corren cuatro escenarios a la vez y los
+           módulos (galería, pase) todavía no se montaron a los 3,5 s; la página
+           mide 7000 px y no se puede bajar más. `volviendo()` en galeria.js
+           insiste hasta 12 s justamente por eso. Ahora el banco mira cada medio
+           segundo hasta 14 s, corta apenas llega, y anota cuánto tardó: si tarda
+           mucho se ve en el informe, y si no llega en 14 s sigue siendo MAL. */
+        const tVuelta = Date.now();
+        await page.waitForTimeout(1500);
+        for (let i = 0; i < 25 && salida.y !== null; i++) {
+          const yy = await page.evaluate(() => Math.round(window.pageYOffset)).catch(() => null);
+          if (yy !== null && Math.abs(yy - salida.y) < 900) break;
+          await page.waitForTimeout(500);
+        }
+        log('   (volvió a su lugar en ' + ((Date.now() - tVuelta) / 1000).toFixed(1) + ' s)');
         const vuelta = await page.evaluate(() => {
           const env = document.getElementById('env');
           return {

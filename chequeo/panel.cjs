@@ -33,17 +33,41 @@ const SALIDA = path.join(__dirname, 'tablero-panel.json');
 const INTERNOS = /N[úu]mero de orden|Usuario asignado|Direcci[óo]n del evento|Email para confirmaciones|T[ÍI]TULO DEL CORREO|Habilitar aviso por mail|Contrase[ñn]a para el evento|Clave del panel de los novios|Pedido especial|ES DEMO|NOMBRE DE LA DEMO|Tipo de evento|Deshabilitar invitaci[óo]n|Bloquear control|C[óo]digo del evento|Titulo al compartir|Descripci[óo]n al compartir|Imágen miniatura al compartir|Paquete|Pases personalizados|Detectar el del celular|Deshabilitar publicidad/i;
 
 function firmaVisual() {
-  /* lo que se ve de la invitación, resumido: textos, colores, tipografías, qué se muestra */
-  const d = document, h = [];
-  h.push([...d.documentElement.attributes].map(a => a.name + '=' + a.value).join(' '));
-  d.querySelectorAll('.frame section, .frame .footer, #pv-names, #pv-kick, .btn, .wsp, h2, .kick, img, .rsvpform, .pase, .ambiente, #inv-fondo, #env').forEach(e => {
+  /* lo que se ve de la invitación, pieza por pieza: textos, colores, tipografías,
+     tamaños, alineación, qué se muestra.
+     ⚠️ (30/9/2026) Antes era un solo número y miraba pocas cosas: «Posición
+     cuenta regresiva» (justify-content de .portada), «Color de la frase
+     principal» (#pv-kick con color en línea) y «Tamaño de la sección final»
+     (#fin-frase) salían AMARILLOS aunque funcionaban, porque la firma no miraba
+     alineación ni la frase final. Ahora se mira también todo elemento que el
+     motor tocó en línea (atributo style) y la alineación; y devuelve pieza por
+     pieza, para poder descontar lo que se mueve solo (ver `distinto`). */
+  const d = document, h = {};
+  h.html = [...d.documentElement.attributes].map(a => a.name + '=' + a.value).join(' ');
+  const vistos = new Set();
+  const sel = '.frame section, .frame .footer, #pv-names, #pv-kick, #ep-kick, .btn, .wsp, h2, .kick, .kicker, img, .rsvpform, .pase, .ambiente, #inv-fondo, #env, .portada, .count, .frase, #fin-frase, #fin-texto, [style]';
+  let n = 0;
+  d.querySelectorAll(sel).forEach(e => {
+    if (vistos.has(e) || e.closest('canvas')) return; vistos.add(e);
     const c = getComputedStyle(e);
-    h.push(e.tagName + (e.id || '') + '|' + c.display + '|' + c.backgroundColor + '|' + c.backgroundImage.slice(0, 80) + '|' + c.color + '|' + c.fontFamily + '|' + c.fontSize + '|' + (e.currentSrc || e.src || '').slice(-60) + '|' + c.opacity);
+    const k = (n++) + ':' + e.tagName + (e.id ? '#' + e.id : '');
+    h[k] = [c.display, c.backgroundColor, c.backgroundImage.slice(0, 80), c.color, c.fontFamily, c.fontSize,
+      c.justifyContent, c.alignItems, c.textAlign, (e.currentSrc || e.src || '').slice(-60), c.opacity,
+      e.getAttribute('style') || ''].join('|');
   });
-  h.push(d.body.innerText);
-  const s = h.join('\n'); let x = 0;
-  for (let i = 0; i < s.length; i++) x = (x * 31 + s.charCodeAt(i)) | 0;
-  return x;
+  h.texto = d.body.innerText;
+  return h;
+}
+
+/* ¿cambió algo que no se mueve solo? `ruido` son las piezas que cambiaron
+   entre dos fotos tomadas SIN tocar nada (una animación, un reloj): esas no
+   cuentan, así un control no sale verde por algo que igual se iba a mover. */
+function distinto(a, b, ruido) {
+  for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+    if (ruido.has(k)) continue;
+    if (a[k] !== b[k]) return true;
+  }
+  return false;
 }
 
 (async () => {
@@ -130,7 +154,10 @@ function firmaVisual() {
       const it = { tab, bloque: c.bloque, control: c.lab || '(sin rótulo)', tipo: c.tipo };
       try {
         const antes = await page.evaluate(() => { const { invitados, ...x } = D; return JSON.stringify(x); });
+        const vis00 = await previa().evaluate(firmaVisual);
+        await page.waitForTimeout(1100);
         const vis0 = await previa().evaluate(firmaVisual);
+        const ruido = new Set(Object.keys(vis0).filter(k => vis0[k] !== vis00[k]));
         /* si el panel se redibujó, se vuelve a etiquetar en el mismo orden */
         if (!(await page.evaluate(i => [...document.querySelectorAll('[data-banco]')].some(e => e.getAttribute('data-banco') === i), c.i))) await etiquetar();
         const hecho = await page.evaluate(({ i, tipo }) => {
@@ -187,7 +214,7 @@ function firmaVisual() {
         it.guarda = r.cambios.length > 0;
         it.dato = r.cambios.slice(0, 4).join(', ');
         it.llega = it.guarda ? r.llega : false;
-        it.seVe = vis0 !== vis1;
+        it.seVe = distinto(vis0, vis1, ruido);
         const interno = INTERNOS.test(it.control);
         if (!it.guarda && !c.reintento) {
           /* antes de marcar rojo, se prueba otra vez desde la pestaña recién abierta:
