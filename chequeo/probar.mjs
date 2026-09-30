@@ -1556,6 +1556,40 @@ try {
    instalación del navegador cuando en realidad se murió raspando la raspadita.
    Ahora se cuenta cuánto había pasado antes de la caída y se dice cuál fue el
    último chequeo que sí llegó a correr. */
+/* ⭐⭐ LA REGLA DEL PANEL, CHEQUEADA (30/9/2026)
+   Maki: «todo se debe armar desde el panel, no por código. Prohibido armar algo
+   que Jazmín no pueda armar después». Estaba escrita en las skills y no alcanzó:
+   las muestras se siguieron escribiendo en la base a mano. Ahora el banco lo MIDE.
+   El panel deja `guardadoPanel` (la hora) en cada «Guardar y publicar». Si la
+   base se escribió después de esa hora —o nunca tuvo la marca— la última
+   versión no salió del panel, y eso es MAL, aunque la invitación se vea bien.
+   Corre en una sola de las cuatro máquinas (la de Chrome) para no contarlo 4 veces. */
+if (MOTORES.map(function (x) { return x.trim(); }).indexOf('chrome-escritorio') >= 0 && !process.env.INV_URL) {
+  log('\n──────────────────────────────────────────');
+  log('  REGLA DEL PANEL — ¿la última versión salió del panel?');
+  log('──────────────────────────────────────────');
+  try {
+    const r = await fetch('https://firestore.googleapis.com/v1/projects/invitame-9b51f/databases/(default)/documents/inv_eventos/' + encodeURIComponent(SLUG));
+    if (r.status === 403) log('  (es privada: la base no la deja leer sin login, no se puede chequear)');
+    else {
+      const j = await r.json();
+      const sello = j.fields && j.fields.guardadoPanel && j.fields.guardadoPanel.stringValue;
+      if (!sello) {
+        chequear('la última versión la guardó el panel', false,
+          'no tiene la marca del panel: nunca se publicó con «Guardar y publicar» desde el 30/9/2026, o se escribió por código. ' +
+          'Abrirla en admin.html?e=' + SLUG + ', revisarla como Jazmín y publicarla desde ahí.');
+      } else {
+        const dif = (Date.parse(j.updateTime) - Date.parse(sello)) / 1000;
+        chequear('la última versión la guardó el panel', dif < 180,
+          'la base cambió ' + Math.round(dif / 60) + ' min DESPUÉS de la última publicación del panel (' + sello + '): ' +
+          'alguien la escribió por código. Prohibido. Rehacer el cambio desde el panel y publicar.');
+      }
+    }
+  } catch (err) {
+    log('  ⚠️ no se pudo leer la base (' + String(err.message).split('\n')[0] + '). No se chequeó.');
+  }
+}
+
 for (const clave of MOTORES) {
   const e = TODOS[clave.trim()];
   if (!e) continue;
