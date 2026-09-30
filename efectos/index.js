@@ -641,6 +641,7 @@
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
     '/efectos/compartir.js',           /* «Compartí la invitación»: textos y sacarla */
+    '/efectos/trivia-apagada.js',      /* la trivia sólo si «Habilitar trivia» está prendida */
     '/efectos/panel-compartir.js',     /* y su bloque, en CONFIRMACIÓN */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
