@@ -1,0 +1,391 @@
+{
+ "cuando": "2026-09-30T19:15:02.408Z",
+ "total": 54,
+ "verde": 52,
+ "rojo": 2,
+ "gris": 0,
+ "items": [
+  {
+   "slug": "abril-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "aitana-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "alexa-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "ana-paula-y-marcelo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "andrea-y-felipe",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "barbara-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "bianca-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "camila-y-tomas",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "carolina-y-diego",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "clara-mis15",
+   "ver": "2026-09-14",
+   "estado": "rojo",
+   "dif": [
+    "sección regalos: previa «color(srgb 0.94902 0.968628 0.988235 / 0.15)/rgb(58, 69, 61)» · publicada «color(srgb 0.94902 0.968627 0.988235 / 0.55)/rgb(58, 69, 61) ~velo»"
+   ],
+   "error": ""
+  },
+  {
+   "slug": "daniela-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "daniela-y-joaquin",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "daniela-y-rodrigo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "danna-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "elena-y-julian",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "elena-y-rodrigo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "emilia-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "fernanda-y-alejandro",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "isabel-y-gonzalo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "isabella",
+   "ver": "2026-09-07",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "ivanna-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "julia-y-santiago",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "julieta-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "lucia-y-sebastian",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "luciana-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "luciana-y-sebastian",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "lupita-mis15",
+   "ver": "(sin)",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "maria-jose-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "maria-paz-y-joaquin",
+   "ver": "2026-09-21",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "maria-paz-y-santiago",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "mariana-y-joaquin",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "mariana-y-lucas",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "mariana-y-rodrigo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "marisol-mis15",
+   "ver": "(sin)",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "martina-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "mateo-y-adrian",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "mia-mis15",
+   "ver": "(sin)",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "micumple-caro-copia",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "montserrat-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "natalia-y-pablo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "noche-dorada",
+   "ver": "2026-09-07",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "paloma-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "paula-e-ines",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "paulina-y-gerardo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "regina-y-emiliano",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "renata-y-patricio",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "romina-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "sofia-y-emilio",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "sofia-y-martin",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "valentina-y-emiliano",
+   "ver": "2026-09-07",
+   "estado": "rojo",
+   "dif": [
+    "sección confirmacion: previa «color(srgb 0.180392 0.262745 0.235294)/rgb(238, 230, 214)» · publicada «rgb(46, 67, 60)/rgb(238, 230, 214)»"
+   ],
+   "error": ""
+  },
+  {
+   "slug": "valeria-y-emiliano",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "victoria-mis15",
+   "ver": "(sin)",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "ximena-y-andres",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "zoe-mis15",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  }
+ ]
+}
