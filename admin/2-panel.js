@@ -228,7 +228,7 @@
         '<div class="grp"><label>Iniciales (ej: M&D)</label>'+txt('sobre','ini','M&D')+'</div></div>'+
       '</div>'+
         (function(){ D.fx=D.fx||{}; D.fx.calendario=D.fx.calendario||{}; return ''; })()+
-        '<div class="h efx">'+ICO.destello+' Efectos — calendario de la fecha</div>'+
+        '<div class="h efx" data-ve="#ivcal-sec">'+ICO.destello+' Efectos — calendario de la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">La grilla del mes se arma sola con la fecha del evento. Si la fecha cambia, el calendario se acomoda y el día nunca queda en la columna equivocada. No es una imagen.</div>'+
         '<div class="grp">'+chk('calendario','encendido','Mostrar el calendario')+'</div>'+
         '<div class="two"><div class="grp"><label>Tipo de número</label>'+sel('calendario','fuente',[['forum','Forum — serif clásica'],['marcellus','Marcellus — serif fina'],['prata','Prata — serif marcada'],['montserrat','Montserrat — sin serif']])+'</div>'+
@@ -246,10 +246,10 @@
           var R=D.fx.raspadita; if(R.polvillo===undefined)R.polvillo=true;
           if(R.destello===undefined)R.destello=true; if(R.vibrar===undefined)R.vibrar=true;
           return ''; })()+
-        '<div class="h efx">'+ICO.destello+' Efectos — itinerario</div>'+
+        '<div class="h efx" data-ve="[data-sec=itinerario]">'+ICO.destello+' Efectos — itinerario</div>'+
         '<div class="hint" style="margin-bottom:10px">La línea se dibuja sola a medida que el invitado baja, y cada momento aparece cuando le toca. Sólo funciona si el itinerario está cargado como LISTA (con su hora, título y descripción); si subiste una imagen, no hay nada que animar.</div>'+
         '<div class="grp"><label>Cómo se ve la línea</label>'+sel('itinerario','estilo',[['izquierda','A la izquierda — todo el texto a la derecha'],['centro','Al medio — los momentos alternando en zigzag']])+'</div>'+
-        '<div class="h efx">'+ICO.destello+' Efectos — cómo se muestra la fecha</div>'+
+        '<div class="h efx" data-ve=".scratch-sec, .rasp-zona, #pv-fecha">'+ICO.destello+' Efectos — cómo se muestra la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">Nueve maneras de mostrar la fecha. Se arma sola con la fecha del evento. Las de FOTOS necesitan tres imágenes.</div>'+
         '<div class="grp"><label>Disposición</label>'+sel('fecha','disposicion',[['','Como siempre'],['fotos','Tres fotos — un número sobre cada una'],['circulos','Tres círculos con foto'],['barras','Barras — 28 | 11 | 26'],['apilada','Apilada — una debajo de la otra'],['filetes','Con filetes — NOV — 28 — 2026'],['semana','Con día de la semana y hora'],['monograma','Monograma arriba y la fecha abajo'],['grande','El día grande y el mes al costado'],['manuscrita','Manuscrita — Save the date en cursiva']])+'</div>'+
         '<div class="two"><div class="grp"><label>Color del texto</label>'+col('fecha','color')+'</div>'+
@@ -261,7 +261,7 @@
         '<div class="grp"><label>Foto 1 — va con el día</label>'+txt('fecha','foto1','pegá el link de la imagen')+'</div>'+
         '<div class="two"><div class="grp"><label>Foto 2 — el mes</label>'+txt('fecha','foto2','link')+'</div>'+
         '<div class="grp"><label>Foto 3 — el año</label>'+txt('fecha','foto3','link')+'</div></div>'+
-        '<div class="h efx">'+ICO.destello+' Efectos — raspadita de la fecha</div>'+
+        '<div class="h efx" data-ve=".scratch-sec, .rasp-zona, #pv-fecha">'+ICO.destello+' Efectos — raspadita de la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">Tapa la fecha con una capa que el invitado rasca con el dedo. Se monta sobre la disposición que hayas elegido arriba: si elegiste una de fotos, va apareciendo una foto por vez.</div>'+
         '<div class="grp">'+chk('raspadita','encendido','Tapar la fecha para rascar')+'</div>'+
         '<div class="two"><div class="grp"><label>Cómo se rasca</label>'+sel('raspadita','modo',[['simple','Todo junto'],['partes','Por partes — el día, el mes y el año']])+'</div>'+

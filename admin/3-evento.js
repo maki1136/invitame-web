@@ -92,17 +92,28 @@
       setTimeout(function(){
         try{
           if(!sec){ scr.scrollTop=0; return; }
-          const target=[].slice.call(doc.querySelectorAll('[data-sec="'+sec+'"]'))
-                        .find(function(e){return e.querySelector('h2,h3');}) || doc.querySelector('[data-sec="'+sec+'"]');
+          // `sec` es el nombre de una sección (data-sec) o, para los bloques de
+          // EFECTOS, un selector de lo que ese bloque dibuja (ver VE_DE_CAJA).
+          const esSel=/^[#.\[]/.test(sec);
+          const target=esSel
+            ? [].slice.call(doc.querySelectorAll(sec)).find(function(e){return e.offsetHeight>0;})
+            : ([].slice.call(doc.querySelectorAll('[data-sec="'+sec+'"]'))
+                .find(function(e){return e.querySelector('h2,h3');}) || doc.querySelector('[data-sec="'+sec+'"]'));
+          _faltoAncla=!target;
           if(target){
-            const rt=target.getBoundingClientRect(), rs=scr.getBoundingClientRect();
-            scr.scrollTop = scr.scrollTop + (rt.top - rs.top) - 6;
+            // La posición se mide ADENTRO de la invitación y se pasa a la escala del
+            // celular (el iframe está achicado con scale). Antes se sumaba al scroll
+            // que ya había: desde la portada andaba, pero desde cualquier otra parte
+            // se pasaba de largo y la vista previa quedaba clavada abajo de todo.
+            const esc=fr.getBoundingClientRect().height/(fr.offsetHeight||1);
+            const y=target.getBoundingClientRect().top+(doc.defaultView.scrollY||0);
+            scr.scrollTop = Math.max(0, y*esc - 6);
           }
         }catch(e){}
       },140);
     }catch(e){}
   }
-  function go(t){cur=t;buildTabs();renderPanel(); setTimeout(function(){ scrollPreviewTo(TAB2SEC[t]); },250);}
+  function go(t){cur=t;_ultimaSec=null;buildTabs();renderPanel(); setTimeout(function(){ scrollPreviewTo(TAB2SEC[t]); },250);}
 
   // La previsualización sigue al CAMPO, no sólo a la pestaña.
   // Antes, en LUGAR_VEST la vista previa quedaba clavada en "Los eventos": si la
@@ -123,7 +134,49 @@
     [/frase larga/i,               'frase'],
     [/carta/i,                     'carta']
   ];
+  // Los bloques de EFECTOS no se pueden adivinar por el rótulo («Color», «Tipo»,
+  // «Tamaño» no dicen de qué parte son): cada bloque dice QUÉ dibuja en la
+  // invitación. Los de /efectos/panel-*.js se reconocen por el id de su caja; los
+  // que arma 2-panel.js llevan `data-ve` en su encabezado. Sin entrada = el
+  // bloque cambia la invitación entera (colección, paleta, botones, fondo) o algo
+  // que la vista previa no muestra (el sobre), y la vista previa no se mueve.
+  // ⚠️ Un bloque nuevo de EFECTOS que se ve en una parte de la invitación se
+  //    anota acá el mismo día, o Jazmín lo toca y «no pasa nada».
+  const VE_DE_CAJA={
+    'fecha-selector':'.scratch-sec, .rasp-zona, #pv-fecha',
+    'itinerario-selector':'[data-sec=itinerario]',
+    'carta-selector':'#carta-sec',
+    'dresscode-selector':'[data-sec=dresscode]',
+    'rsvp-selector':'[data-sec=confirmacion]',
+    'muestra-selector':'[data-sec=confirmacion]',
+    'pasevoz-selector':'#pv-sec',
+    'galeria-ajustes':'#gal-seccion',
+    'fotos-estilo-ajustes':'#gal-seccion',
+    'secciones-imagen-ajustes':'#filtro-sec',
+    'filtro-ajustes':'#filtro-sec',
+    'filtro-frase-novios':'#filtro-sec',
+    'regalos-tiendas':'[data-sec=regalos]',
+    'personas-bajada':'[data-sec=padres]',
+    'inv-musica-panel':'#spotify-sec',
+    'cierre-ajustes':'.footer'
+  };
+  function veDeCampo(nodo){
+    if(!nodo||!nodo.closest) return null;
+    for(var id in VE_DE_CAJA){ if(nodo.closest('#'+id)) return VE_DE_CAJA[id]; }
+    if(cur!=='EFECTOS') return null;
+    // Si no, manda el encabezado de bloque más cercano ARRIBA del campo: si ese
+    // encabezado trae data-ve, es eso; si no trae, el campo es de otro bloque.
+    var hs=document.querySelectorAll('#panel .h.efx'), ult=null;
+    for(var i=0;i<hs.length;i++){
+      if(hs[i].compareDocumentPosition(nodo) & Node.DOCUMENT_POSITION_FOLLOWING) ult=hs[i];
+    }
+    return ult ? ult.getAttribute('data-ve') : null;
+  }
   function secDeCampo(nodo){
+    if(cur==='EFECTOS' || (nodo&&nodo.closest&&nodo.closest('[id$="-selector"],[id$="-ajustes"]'))){
+      var ve=veDeCampo(nodo); if(ve) return ve;
+      if(cur==='EFECTOS') return null;
+    }
     var grp=nodo&&nodo.closest?nodo.closest('.grp,.campo,label'):null;
     var txt='';
     if(grp){ var lb=grp.querySelector('label'); txt=(lb?lb.textContent:grp.textContent)||''; }
@@ -132,13 +185,17 @@
     return null;
   }
   let _ultimaSec=null;
+  // Si la parte todavía no estaba en la invitación (una galería apagada que se
+  // acaba de prender), se vuelve a buscar en el cambio siguiente.
+  let _faltoAncla=false;
   function seguirCampo(e){
     var s=secDeCampo(e.target);
-    if(!s || s===_ultimaSec) return;
+    if(!s || (s===_ultimaSec && !_faltoAncla)) return;
     _ultimaSec=s; scrollPreviewTo(s);
   }
   document.addEventListener('focusin', seguirCampo);
   document.addEventListener('input', function(e){ setTimeout(function(){ seguirCampo(e); }, 350); });
+  document.addEventListener('change', function(e){ setTimeout(function(){ seguirCampo(e); }, 600); });
   function renderPanel(){
     if(cur==='INVITADOS'){el('panel').innerHTML=invitadosHtml();renderGuests();return;}
     if(cur==='EFECTOS'){el('panel').innerHTML=efectosHtml();return;}
