@@ -246,9 +246,8 @@
           var R=D.fx.raspadita; if(R.polvillo===undefined)R.polvillo=true;
           if(R.destello===undefined)R.destello=true; if(R.vibrar===undefined)R.vibrar=true;
           return ''; })()+
-        '<div class="h efx" data-ve="[data-sec=itinerario]">'+ICO.destello+' Efectos — itinerario</div>'+
-        '<div class="hint" style="margin-bottom:10px">La línea se dibuja sola a medida que el invitado baja, y cada momento aparece cuando le toca. Sólo funciona si el itinerario está cargado como LISTA (con su hora, título y descripción); si subiste una imagen, no hay nada que animar.</div>'+
-        '<div class="grp"><label>Cómo se ve la línea</label>'+sel('itinerario','estilo',[['izquierda','A la izquierda — todo el texto a la derecha'],['centro','Al medio — los momentos alternando en zigzag']])+'</div>'+
+        /* El estilo de la línea del itinerario se mudó a LUGAR_VEST, junto con los
+           momentos (panel-itinerario.js). Estaba acá Y allá: dos controles para lo mismo. */
         '<div class="h efx" data-ve=".scratch-sec, .rasp-zona, #pv-fecha">'+ICO.destello+' Efectos — cómo se muestra la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">Nueve maneras de mostrar la fecha. Se arma sola con la fecha del evento. Las de FOTOS necesitan tres imágenes.</div>'+
         '<div class="grp"><label>Disposición</label>'+sel('fecha','disposicion',[['','Como siempre'],['fotos','Tres fotos — un número sobre cada una'],['circulos','Tres círculos con foto'],['barras','Barras — 28 | 11 | 26'],['apilada','Apilada — una debajo de la otra'],['filetes','Con filetes — NOV — 28 — 2026'],['semana','Con día de la semana y hora'],['monograma','Monograma arriba y la fecha abajo'],['grande','El día grande y el mes al costado'],['manuscrita','Manuscrita — Save the date en cursiva']])+'</div>'+

@@ -50,7 +50,22 @@
   const VER_CANDADO_SERVIDOR='2026-08-11b';
   const ORDER=["PRINCIPAL","LUGAR_VEST","GALERIA_INSTA_VID","PERSONAS","REGALOS","CONFIRMACIÓN","MUSIC_PASES","AVANZADO","TRIVIA","EFECTOS","INVITADOS"];
   /* Lista CURADA: solo fuentes que la invitación carga sí o sí (ver <link> en i/index.html). Menos, pero TODAS funcionan. */
-  const FONTS=[["'Great Vibes',cursive","Great Vibes"],["'Rouge Script',cursive","Rouge Script"],["'Dancing Script',cursive","Dancing Script"],["'Parisienne',cursive","Parisienne"],["'Tangerine',cursive","Tangerine"],["'Sacramento',cursive","Sacramento"],["'Cormorant Garamond',serif","Cormorant"],["'Playfair Display',serif","Playfair Display"],["'Forum',serif","Forum"],["'Marcellus',serif","Marcellus"],["'EB Garamond',serif","EB Garamond"],["'Lora',serif","Lora"],["'Cinzel',serif","Cinzel"],["'Prata',serif","Prata"],["'Montserrat',sans-serif","Montserrat"],["'Poppins',sans-serif","Poppins"],["'Jost',sans-serif","Jost"]];
+  const FONTS=[["'Great Vibes',cursive","Great Vibes"],["'Rouge Script',cursive","Rouge Script"],["'Dancing Script',cursive","Dancing Script"],["'Parisienne',cursive","Parisienne"],["'Tangerine',cursive","Tangerine"],["'Sacramento',cursive","Sacramento"],["'Cormorant Garamond',serif","Cormorant"],["'Playfair Display',serif","Playfair Display"],["'Forum',serif","Forum"],["'Marcellus',serif","Marcellus"],["'EB Garamond',serif","EB Garamond"],["'Lora',serif","Lora"],["'Cinzel',serif","Cinzel"],["'Prata',serif","Prata"],["'Montserrat',sans-serif","Montserrat"],["'Poppins',sans-serif","Poppins"],["'Jost',sans-serif","Jost"],
+    /* sumadas a pedido de Jazmín (29/9/2026). No están en el <link> del motor:
+       las pide /efectos/fuentes-extra.js cuando se eligen. */
+    ["'Mea Culpa',cursive","Mea Culpa"],["'Pinyon Script',cursive","Pinyon Script"],["'Allura',cursive","Allura"],["'Alex Brush',cursive","Alex Brush"],
+    ["'Libre Baskerville',serif","Baskerville"],["'Bodoni Moda',serif","Bodoni Moda"],["'Italiana',serif","Italiana"]];
+  /* La última opción de toda lista de tipografías: pegar un link o un nombre de
+     Google Fonts (Jazmín: «no podemos colocar links de Fonts»). La atiende
+     otraFuente() en 3-evento.js. */
+  const OTRA_FUENTE='<option value="__otra__">+ Otra de Google Fonts (pegar link o nombre)…</option>';
+  function opcionesFuente(guardada){
+    var hay=FONTS.some(function(f){return f[0]===guardada;});
+    var o=FONTS.map(function(f){return '<option value="'+f[0].replace(/"/g,'&quot;')+'"'+(f[0]===guardada?' selected':'')+'>'+f[1]+'</option>';});
+    if(guardada&&!hay){ var fam=String(guardada).split(',')[0].replace(/["']/g,'').trim();
+      o.push('<option value="'+String(guardada).replace(/"/g,'&quot;')+'" selected>'+fam+' (de Google Fonts)</option>'); }
+    return o.join('')+OTRA_FUENTE;
+  }
   const TEMAS={rustica:{n:"Rústica",v:"#2e433c",v2:"#26372f",lino:"#f4efe6",sage:"#7f9079",fD:"'Forum',serif",fS:"'Rouge Script',cursive",sw:"#2e433c"},uva:{n:"Uva",v:"#5b2a4e",v2:"#43203a",lino:"#f6efe8",sage:"#a06d92",fD:"'Cormorant Garamond',serif",fS:"'Great Vibes',cursive",sw:"#5b2a4e"},blanco:{n:"Blanco",v:"#5f574d",v2:"#463f37",lino:"#efece7",sage:"#b7ad9e",fD:"'Playfair Display',serif",fS:"'Cormorant Garamond',serif",sw:"#5f574d"},xv:{n:"XV Rosa",v:"#b06a7e",v2:"#8a4f60",lino:"#f7eef0",sage:"#c9a0b0",fD:"'Cormorant Garamond',serif",fS:"'Great Vibes',cursive",sw:"#b06a7e"},boho:{n:"Boho",v:"#a5674f",v2:"#8a5240",lino:"#f4ebde",sage:"#b98c6a",fD:"'Cormorant Garamond',serif",fS:"'Tangerine',cursive",sw:"#a5674f"}};
   const D={n1:"María",n2:"Diego",layout:"apilados",kick:"Nuestra Boda",fecha:"2026-11-28T12:00",frase:"Hay un instante en la vida en que se decide caminar juntos para siempre.",cer:"Basílica de Santa María",pnom:"Hugo y Lucía",tema:"rustica",tpl:"Rústica Campestre",slug:"maria-y-diego",color:"#2e433c",ncolor:"#fbf7ef",nsize:"52",nfont:"'Rouge Script',cursive",fTit:"'Forum',serif",cover:"https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80",cx:50,cy:45,cz:100,invitados:[]};
   D.trivia=[{q:'¿Dónde se conocieron?',o:['En un viaje','En la facultad','En el trabajo'],c:0},{q:'¿Primer viaje juntos?',o:['Brasil','Bariloche','Europa'],c:1},{q:'¿Quién dijo te amo primero?',o:['Ella','Él'],c:1}];
@@ -112,19 +127,60 @@
   // Los que no tienen una asignada a mano reciben una automática y estable,
   // derivada de su propia etiqueta. Así NINGÚN campo queda sin guardar.
   function claveDe(l){ return BIND[l] || ('c_'+slug(l)); }
+  /* La foto cargada, con su botón para SACARLA (Jazmín, 29/9/2026: «no se
+     entiende cómo eliminar una foto, sí o sí tengo que reemplazarla»). */
+  function fotoCargadaHtml(url,key,id){
+    return '<div style="display:flex;align-items:center;gap:10px;margin-top:6px">'+
+      '<img src="'+String(url).replace(/"/g,'&quot;')+'" style="max-height:60px;border-radius:8px">'+
+      '<button type="button" class="addbtn" style="padding:6px 12px;font-size:12px" onclick="sacarImg(\''+key+'\',\''+id+'\')">Quitar foto</button></div>';
+  }
+  /* Qué medida tiene que tener cada foto (Jazmín: «no me dice en qué
+     dimensiones se deben subir»). Si el rótulo ya la dice, no se repite. */
+  function medidaSugerida(l){
+    if(/m[uú]sica|galer[ií]a de fotos|estilo de la galer|titulo para fotos/i.test(l)) return '';
+    if(/\d+\s*[x×]\s*\d+|px/i.test(l)) return 'JPG o PNG, que pese menos de 1 MB.';
+    if(/miniatura al compartir/i.test(l)) return 'Medida: 1200 × 630 px (horizontal). Es la foto que aparece al mandar el link por WhatsApp.';
+    if(/frase larga/i.test(l)) return 'Medida: 1600 × 900 px (horizontal).';
+    if(/fondo|itinerario imagen/i.test(l)) return 'Medida: 1080 × 1920 px (vertical, como la pantalla del celular). JPG, menos de 1 MB.';
+    if(/fin de p|final/i.test(l)) return 'Medida: 1080 × 1350 px (vertical).';
+    if(/hotel|ceremonia|decorativa|inspiraci/i.test(l)) return 'Medida: 1200 × 800 px (horizontal).';
+    return 'Medida: mínimo 1080 px de ancho. JPG, menos de 1 MB.';
+  }
+  /* ⚠️ LA FECHA, DÍA PRIMERO (Jazmín, 29/9/2026: «el calendario está en
+     versión EE. UU., los meses primero y los días después»).
+     El <input type="datetime-local"> se dibuja con el idioma de la COMPU, no de
+     la página: en una Mac en inglés sale mm/dd/aaaa y AM/PM, y no hay forma de
+     cambiarlo desde acá. Por eso son cinco listas: día · mes · año · hora ·
+     minutos. Se guarda igual que antes («2026-11-28T12:00»).
+     Y de paso: el campo viejo no mostraba la fecha guardada (siempre el 28/11
+     de ejemplo); éste muestra la que tiene la invitación. */
+  function fechaHtml(id,bind){
+    var v=String((bind&&D[bind])||(bind==='fecha'?'2026-11-28T12:00':'')), m=v.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/)||[];
+    var y0=new Date().getFullYear(), anios=[]; for(var y=y0-1;y<=y0+4;y++) anios.push(String(y)); if(m[1]&&anios.indexOf(m[1])<0) anios.push(m[1]);
+    var MES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    function lista(nom,ops,val,ph){ return '<select data-f="'+nom+'" onchange="fechaCambio(this)" style="flex:1 1 0;min-width:0">'+
+      '<option value="">'+ph+'</option>'+ops.map(function(o){ return '<option value="'+o[0]+'"'+(o[0]===val?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select>'; }
+    var dd=[],hh=[],mm=[]; for(var i=1;i<=31;i++){var x=('0'+i).slice(-2);dd.push([x,String(i)]);}
+    for(var h=0;h<24;h++){var z=('0'+h).slice(-2);hh.push([z,z+' h']);} for(var k=0;k<60;k+=5){var w=('0'+k).slice(-2);mm.push([w,w]);}
+    if(m[5]&&!mm.some(function(o){return o[0]===m[5];})) mm.push([m[5],m[5]]);
+    return '<div id="'+id+'" data-bind="'+(bind||'')+'" style="display:flex;gap:6px;flex-wrap:wrap">'+
+      lista('d',dd,m[3],'Día')+lista('m',MES.map(function(n,i){return [('0'+(i+1)).slice(-2),n];}),m[2],'Mes')+lista('a',anios.map(function(a){return [a,a];}),m[1],'Año')+
+      lista('h',hh,m[4]||(m[1]?'00':''),'Hora')+lista('i',mm,m[5]||(m[1]?'00':''),'Min')+'</div>';
+  }
   function fieldHtml(l){
     const t=typeFor(l),id='f-'+slug(l),bind=claveDe(l);
     const oi=bind?(' oninput="setB(\''+bind+'\',this.value)"'):'';
     let inp;
     if(t==='c')inp='<input type="color" id="'+id+'"'+oi+' value="'+((bind&&D[bind])?D[bind]:'#2e433c')+'">';
-    else if(t==='f'){const _k=bind?('img_'+bind):('img_'+id);inp='<div class="file" onclick="this.nextElementSibling.click()">'+ICO.subir+' Subir imagen · '+l.replace(/\(.*?\)/,'').trim()+'</div><input type="file" accept="image/*" style="display:none" onchange="subirImg(this,\''+_k+'\',\''+id+'\')"><div id="prev-'+id+'">'+(D[_k]?'<img src="'+D[_k]+'" style="max-height:60px;border-radius:8px;margin-top:6px">':'')+'</div>';}
+    else if(t==='f'){const _k=bind?('img_'+bind):('img_'+id);inp='<div class="file" onclick="this.nextElementSibling.click()">'+ICO.subir+' Subir imagen · '+l.replace(/\(.*?\)/,'').trim()+'</div><input type="file" accept="image/*" style="display:none" onchange="subirImg(this,\''+_k+'\',\''+id+'\')"><div id="prev-'+id+'">'+(D[_k]?fotoCargadaHtml(D[_k],_k,id):'')+'</div>'+
+      '<div class="hint">'+medidaSugerida(l)+'</div>';}
     else if(t==='font-custom'){const _tg=/secundaria/i.test(l)?'fTit':'nfont';inp='<input type="text" id="'+id+'" placeholder="Nombre o link de Google Fonts (ej: Great Vibes)" oninput="cargarFontCustom(this.value,\''+_tg+'\')">';}
     else if(t==='k'){const _b=claveDe(l);   // antes usaba solo BIND: las casillas sin BIND no guardaban
       inp='<label class="chk"><input type="checkbox"'+(_b?(' onchange="setB(\''+_b+'\',this.checked)"'):'')+((_b&&D[_b])?' checked':'')+'> Activar</label>';}
     else if(t==='r'){const _v=(bind&&D[bind]!=null)?D[bind]:50;
       inp='<input type="range" min="0" max="100" value="'+_v+'"'+(bind?(' oninput="setB(\''+bind+'\',this.value)"'):'')+'>';}
     else if(t==='a')inp='<textarea id="'+id+'"'+oi+'>'+((bind&&D[bind]!=null)?D[bind]:'')+'</textarea>';
-    else if(t==='d')inp='<input type="datetime-local" id="'+id+'"'+oi+(bind==='fecha'?' value="2026-11-28T12:00"':'')+'>';
+    else if(t==='d')inp=fechaHtml(id,bind);
     else if(t.startsWith('sel')){
       let o=[];
       if(t==='sel-font')o=FONTS.map(f=>'<option value="'+f[0]+'">'+f[1]+'</option>');
@@ -137,7 +193,8 @@
       const _sv=(bind&&D[bind]!=null)?String(D[bind]):null;
       if(_sv!=null) o=o.map(function(op){
         const m=op.match(/>([^<]*)</); return (m&&m[1]===_sv)? op.replace('<option','<option selected') : op; });
-      inp='<select id="'+id+'"'+oi+'>'+o.join('')+'</select>';
+      if(t==='sel-font') inp='<select id="'+id+'"'+oi+'>'+opcionesFuente(_sv)+'</select>';
+      else inp='<select id="'+id+'"'+oi+'>'+o.join('')+'</select>';
     }
     else {let _v=(bind&&D[bind]!=null)?D[bind]:(bind==='n1'?'María':bind==='n2'?'Diego':bind==='kick'?'Nuestra Boda':'');inp='<input type="text" id="'+id+'" value="'+String(_v).replace(/"/g,'&quot;')+'"'+oi+'>';}
     const _h=HINTS[l]?'<div class="hint">'+HINTS[l]+'</div>':'';
@@ -240,8 +297,9 @@
           +'<button class="addbtn" onclick="actualizarVersion()">'+ICO.actualizar+' Actualizar al diseño más nuevo</button></div>'
         : '')+
       '<div class="grp"><label>Orden de las secciones</label><button class="addbtn" onclick="verOrden()">'+ICO.ordenar+' Reordenar secciones</button></div>'+
-      '<div class="grp"><label>Plantilla base</label><div class="temas" id="temas"></div></div>'+
-      '<div class="two"><div class="grp"><label>Tipografía de los nombres</label><select id="mf-nfont" onchange="setB(\'nfont\',this.value)">'+FONTS.map(f=>'<option value="'+f[0]+'">'+f[1]+'</option>').join('')+'</select></div>'+
+      /* «Plantilla base» (Rústica, Uva, Blanco…) sacada a pedido de Jazmín, 29/9/2026:
+         repetía la paleta de la invitación, que está en su propio bloque. */
+      '<div class="two"><div class="grp"><label>Tipografía de los nombres</label><select id="mf-nfont" onchange="setB(\'nfont\',this.value)">'+opcionesFuente(D.nfont)+'</select></div>'+
       /* el select ahora muestra lo que está guardado (antes volvía siempre a "apilados") */
       '<div class="grp"><label>Disposición nombres</label><select onchange="setB(\'layout\',this.value)">'+
       '<option value="apilados"'+((D.layout!=='juntos')?' selected':'')+'>Uno debajo del otro</option>'+
@@ -249,7 +307,7 @@
       '</select><div class="hint">Con nombres largos, "juntos" achica la letra para que entren en una sola línea.</div></div></div>'+
       '<div class="two"><div class="grp"><label>Color nombres</label><input type="color" value="#fbf7ef" oninput="setB(\'ncolor\',this.value)"></div>'+
       '<div class="grp"><label>Tamaño nombres</label><input type="range" min="30" max="90" value="52" oninput="setB(\'nsize\',this.value)"></div></div>'+
-      '<div class="grp"><label>Foto de portada</label><select onchange="setB(\'cover\',this.value)"><option value="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80">Campo</option><option value="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=80">Elegante</option><option value="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1000&q=80">Rosas</option></select><div class="file" style="margin-top:6px" id="coverbtn" onclick="document.getElementById(\'coverfile\').click()">'+ICO.subir+' Subir tu propia foto</div><input type="file" id="coverfile" accept="image/*" style="display:none" onchange="subirFoto(this,\'cover\')"></div>'+
+      '<div class="grp"><label>Foto de portada</label><select onchange="setB(\'cover\',this.value)"><option value="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80">Campo</option><option value="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=80">Elegante</option><option value="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1000&q=80">Rosas</option></select><div class="file" style="margin-top:6px" id="coverbtn" onclick="document.getElementById(\'coverfile\').click()">'+ICO.subir+' Subir tu propia foto</div><div class="hint">Medida: 1080 × 1920 px (vertical, como la pantalla del celular). Las caras, en el centro: es lo que queda siempre a la vista.</div><input type="file" id="coverfile" accept="image/*" style="display:none" onchange="subirFoto(this,\'cover\')"></div>'+
       '<div class="grp"><label>Acomodá la foto — arrastrala para centrar</label>'+
       '<div id="imgedit" class="imgedit" onmousedown="edStart(event)" ontouchstart="edStart(event)"><span class="edtag">Arrastrá para mover</span></div>'+
       '<div class="zoomrow"><span>Zoom</span><input type="range" min="100" max="260" value="'+D.cz+'" oninput="setB(\'cz\',this.value)"></div></div>'+'<div class="grp"><label>Video de portada (opcional) — se reproduce al abrir</label>'+'<div class="file" id="vidbtn" onclick="document.getElementById(\'coverviddile\').click()">'+ICO.subir+' Subir video (.mp4)</div>'+'<input type="file" id="coverviddile" accept="video/*" style="display:none" onchange="subirVideo(this)">'+'<input type="text" value="'+(D.coverVideo||'')+'" oninput="setB(\'coverVideo\',this.value)" placeholder="…o pegá el link del video (.mp4)" style="margin-top:6px">'+'<div class="hint">Si tu Cloudinary no reproduce el video subido, pegá acá un link .mp4.</div>'+'<div class="aviso">'+ICO.alerta+' Dejá este campo <b>vacío</b> si no vas a poner video (queda solo la foto). <b>No dejes el video de ejemplo (la flor)</b>: subí el de la pareja o borralo.</div></div>'+'</div>';

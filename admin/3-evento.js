@@ -142,6 +142,70 @@
   // que la vista previa no muestra (el sobre), y la vista previa no se mueve.
   // ⚠️ Un bloque nuevo de EFECTOS que se ve en una parte de la invitación se
   //    anota acá el mismo día, o Jazmín lo toca y «no pasa nada».
+  // ⭐⭐ DÓNDE VIVE CADA BLOQUE DE /efectos/panel-*.js (29/9/2026)
+  // Cada módulo se colgaba del PRIMER «.mejoras» que encontraba. Eso era la
+  // pestaña EFECTOS… hasta que PRINCIPAL, GALERIA, PERSONAS, MUSIC_PASES y
+  // TRIVIA también tuvieron un «.mejoras», y entonces la colección, la paleta,
+  // los botones, el fondo, la confirmación, el pase y la foto del cierre
+  // aparecían en TODAS esas pestañas (Jazmín: «eliminar paleta de GALERIA,
+  // MUSIC_PASES, TRIVIA y EFECTOS», «textura del boleto en PERSONAS…»).
+  // Ahora cada bloque tiene UNA casa: pestaña + lugar dentro de la pestaña.
+  // Sin entrada acá = no se muestra en ninguna (fecha y carta: eran copias de
+  // los bloques de EFECTOS que escriben lo mismo).
+  // ⚠️ Un panel-*.js nuevo se anota acá el mismo día, o no aparece.
+  const CASA_DE_MODULO={
+    'coleccion-selector':['PRINCIPAL','diseno'],
+    'paleta-selector':['PRINCIPAL','diseno'],
+    'boton-selector':['PRINCIPAL','diseno'],
+    'fondo-selector':['PRINCIPAL','diseno'],
+    'motivo-selector':['PRINCIPAL','diseno'],
+    'cierre-ajustes':['PRINCIPAL','cierre'],
+    'dresscode-selector':['LUGAR_VEST','vestimenta'],
+    'itinerario-selector':['LUGAR_VEST','itinerario'],
+    'rsvp-selector':['CONFIRMACIÓN','confirmacion'],
+    'muestra-selector':['CONFIRMACIÓN','confirmacion'],
+    'pasevoz-selector':['MUSIC_PASES','pase'],
+    'compartir-selector':['CONFIRMACIÓN','compartir']
+  };
+  // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
+  // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
+  const LUGAR_DE_CASA={
+    diseno:{despuesDe:'.mejoras'},
+    cierre:{antesDe:'#f-frase-final'},
+    vestimenta:{antesDe:'#f-vestimenta-titulo'},
+    itinerario:{antesDe:'#f-titulo-itinerario'},
+    confirmacion:{arriba:true},
+    pase:{abajo:true},
+    compartir:{abajo:true}
+  };
+  // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
+  // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
+  function ordenarCasa(caja){
+    var orden=Object.keys(CASA_DE_MODULO), hijos=[].slice.call(caja.children);
+    var pos=function(e){ var i=orden.indexOf(e.id); return i<0?999:i; };
+    for(var i=1;i<hijos.length;i++){ if(pos(hijos[i-1])>pos(hijos[i])){
+      hijos.sort(function(a,b){return pos(a)-pos(b);}).forEach(function(h){caja.appendChild(h);}); return; } }
+  }
+  function invCasa(id){
+    var c=CASA_DE_MODULO[id]; if(!c||cur!==c[0]) return null;
+    var p=el('panel'); if(!p) return null;
+    var caja=document.getElementById('casa-'+c[1]);
+    if(caja){ ordenarCasa(caja); return caja; }
+    if(!document.getElementById('casa-css')){
+      var st=document.createElement('style'); st.id='casa-css';
+      st.textContent='.casa-modulos{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:20px;box-shadow:0 8px 22px -18px rgba(109,18,51,.55)}.casa-modulos:empty{display:none}.casa-modulos>div:last-child{border-bottom:0!important;margin-bottom:0!important;padding-bottom:0!important}';
+      document.head.appendChild(st);
+    }
+    caja=document.createElement('div'); caja.id='casa-'+c[1]; caja.className='casa-modulos';
+    var L=LUGAR_DE_CASA[c[1]]||{abajo:true}, ref=null;
+    if(L.antesDe){ var f=p.querySelector(L.antesDe); ref=f&&(f.closest('.grp')||f); }
+    if(ref&&ref.parentNode){ ref.parentNode.insertBefore(caja,ref); return caja; }
+    if(L.despuesDe){ var b=p.querySelector(L.despuesDe); if(b&&b.parentNode){ b.parentNode.insertBefore(caja,b.nextSibling); return caja; } }
+    if(L.arriba){ p.insertBefore(caja,p.firstChild); return caja; }
+    p.appendChild(caja); return caja;
+  }
+  window.invCasa=invCasa;
+
   const VE_DE_CAJA={
     'fecha-selector':'.scratch-sec, .rasp-zona, #pv-fecha',
     'itinerario-selector':'[data-sec=itinerario]',
@@ -158,7 +222,8 @@
     'regalos-tiendas':'[data-sec=regalos]',
     'personas-bajada':'[data-sec=padres]',
     'inv-musica-panel':'#spotify-sec',
-    'cierre-ajustes':'.footer'
+    'cierre-ajustes':'.footer',
+    'compartir-selector':'#share-sec'
   };
   function veDeCampo(nodo){
     if(!nodo||!nodo.closest) return null;
@@ -213,7 +278,12 @@
   }
   function buildTemas(){const c=el('temas');if(!c)return;c.innerHTML=Object.entries(TEMAS).map(([k,t])=>'<div class="tema '+(k===D.tema?'on':'')+'" onclick="setTema(\''+k+'\')"><div class="sw" style="background:'+t.sw+'"></div><div class="nm">'+t.n+'</div></div>').join('');}
   function setTema(k){D.tema=k;const t=TEMAS[k];D.color=t.v;D.nfont=t.fS;D.fTit=t.fD;buildTemas();const mf=el('mf-nfont');if(mf)mf.value=t.fS;render();}
-  function setB(k,v){D[k]=v;render();}
+  // La tipografía de los nombres que elige Jazmín tiene que ganarle a la de la
+  // colección (Sapo, por ejemplo, clava Cormorant con !important y la elegida
+  // no se veía). Se anota que fue ELEGIDA, así las invitaciones viejas, que
+  // tienen la de fábrica, siguen con la de su colección. Lo aplica
+  // /efectos/fuentes-extra.js.
+  function setB(k,v){D[k]=v; if(k==='nfont'){D.fx=D.fx||{}; D.fx.nfontElegida=true;} render();}
 
   // ==== Editor de foto: arrastrar para mover + zoom (tipo Instagram) ====
   let edOn=false,edX=0,edY=0;
@@ -260,6 +330,20 @@
     };
     img.src=url;
   }
+  function fechaCambio(sel){
+    var c=sel.parentElement, b=c&&c.getAttribute('data-bind'); if(!b) return;
+    var g=function(k){ var e=c.querySelector('[data-f="'+k+'"]'); return e?e.value:''; };
+    var d=g('d'),m=g('m'),a=g('a');
+    if(!d||!m||!a){ if(!d&&!m&&!a) setB(b,''); return; }   // a medio elegir: todavía no se guarda
+    setB(b, a+'-'+m+'-'+d+'T'+(g('h')||'00')+':'+(g('i')||'00'));
+  }
+  function sacarImg(key,id){
+    if(!confirm('¿Sacamos esta foto? La sección queda sin foto.')) return;
+    D[key]='';
+    const p=el('prev-'+id); if(p)p.innerHTML='';
+    const b=p&&p.parentElement&&p.parentElement.querySelector('.file'); if(b) b.innerHTML=ICO.subir+' Subir imagen';
+    if(typeof postPreview==='function') postPreview();
+  }
   async function subirImg(input,key,id){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
@@ -267,7 +351,7 @@
     if(box)box.textContent='Subiendo…';
     try{const url=await INV.uploadImage(f); D[key]=url;
       if(box)box.innerHTML=ICO.tilde+' Imagen subida (tocá para cambiar)';
-      const p=el('prev-'+id); if(p)p.innerHTML='<img src="'+url+'" style="max-height:60px;border-radius:8px;margin-top:6px">';
+      const p=el('prev-'+id); if(p)p.innerHTML=fotoCargadaHtml(url,key,id);
       if(/fondo/i.test(key)) avisarFotoFondo(url,id);
       // La vista previa NO se refrescaba al subir una foto: la diseñadora cargaba la
       // imagen y seguía viendo la de antes ("elijo la foto y no se aplica").
@@ -275,6 +359,31 @@
     }catch(e){console.error(e); if(box)box.innerHTML=prev||(ICO.subir+' Subir imagen'); alert('No se pudo subir: '+(e.message||e));}
     input.value='';
   }
+  // «+ Otra de Google Fonts…» en cualquier lista de tipografías (29/9/2026).
+  // Se ataja ANTES de que llegue al oninput/onchange del select (fase de
+  // captura), así nunca se guarda «__otra__» como tipografía.
+  function nombreDeFuente(v){
+    v=String(v||'').trim(); if(!v) return '';
+    var m=v.match(/family=([^:&]+)/i)||v.match(/specimen\/([^?#\/]+)/i); if(m) v=decodeURIComponent(m[1].replace(/\+/g,' '));
+    v=v.replace(/["'<>]/g,'').split(',')[0].trim();
+    return /^[A-Za-z0-9 ]{2,60}$/.test(v) ? v : '';
+  }
+  function otraFuente(e){
+    var s=e.target; if(!s||s.tagName!=='SELECT'||s.value!=='__otra__') return;
+    e.stopPropagation(); e.preventDefault();
+    if(e.type!=='input' && s.__otraHecha){ s.__otraHecha=false; return; }
+    var fam=nombreDeFuente(prompt('Pegá el link de Google Fonts o escribí el nombre de la tipografía\n(ej: https://fonts.google.com/specimen/Mea+Culpa  ó  Mea Culpa)'));
+    var previo=s.__previo||s.options[0].value;
+    if(!fam){ s.value=previo; return; }
+    var val="'"+fam+"',"+(/script|brush|vibes|culpa|allura|hand|cursive/i.test(fam)?'cursive':'serif');
+    var o=[].find.call(s.options,function(x){return x.value===val;});
+    if(!o){ o=document.createElement('option'); o.value=val; o.textContent=fam+' (de Google Fonts)'; s.insertBefore(o,s.lastElementChild); }
+    s.value=val; s.__otraHecha=(e.type==='input');
+    s.dispatchEvent(new Event('input',{bubbles:true})); s.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  document.addEventListener('focusin',function(e){ var s=e.target; if(s&&s.tagName==='SELECT') s.__previo=s.value; },true);
+  document.addEventListener('input',otraFuente,true);
+  document.addEventListener('change',otraFuente,true);
   function cargarFontCustom(val,target){
     val=(val||'').trim(); if(!val)return;
     let fam=val; const m=val.match(/family=([^:&]+)/i); if(m)fam=decodeURIComponent(m[1].replace(/\+/g,' '));
@@ -589,6 +698,13 @@
           cfg.ver=VER_CANDADO_SERVIDOR; D.ver=cfg.ver;
         }
       }
+      /* ⭐ LA MARCA DEL PANEL (REGLA CERO, 30/9/2026). Maki: «prohibido armar algo
+         que Jazmín no pueda armar después». Cada «Guardar y publicar» deja la
+         hora en el documento; el banco de pruebas compara esa hora con la de la
+         última escritura de la base. Si la base cambió DESPUÉS, alguien la
+         escribió por código y el banco lo marca MAL. Va en el documento público
+         porque el banco no tiene login (es sólo una hora, no dice quién). */
+      cfg.guardadoPanel = new Date().toISOString();
       await INV.saveEvento(slug, cfg);
       /* ===== QUIÉN LA ARMÓ Y QUIÉN LA TOCÓ ÚLTIMO ==========================
          El 7/9/2026 nadie pudo decir dónde estaba la invitación que había hecho
