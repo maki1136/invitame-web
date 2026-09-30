@@ -135,6 +135,8 @@
 
   var raiz = document.documentElement;
   var firma = null;
+  var repintes = 0;
+  var esPrevia = /[?&]preview=1/.test(location.search);
 
   function sacar() {
     [ID, IDF].forEach(function (i) {
@@ -142,6 +144,7 @@
       if (v) v.remove();
     });
     raiz.removeAttribute('data-fondo');
+    despintar();
     raiz.style.removeProperty('--inv-paso');
     raiz.style.removeProperty('--inv-oscuras');
     raiz.style.removeProperty('--inv-fuerza');
@@ -203,9 +206,84 @@
     return p;
   }
 
+  /* ⚠️⚠️ UN GIF CARGADO COMO VIDEO NO ES UN VIDEO. (29/9/2026)
+     Medido en isabella: el panel guardó
+         tipo:'video', url: …/image/upload/v…/j1g8expap7aacg1ag7xg.gif
+     Un <video> no reproduce un GIF: se quedaba en readyState 0, el vigía
+     se rendía y ponía el GIF como foto — 6,2 MB para el celular del invitado.
+     Cloudinary sirve el MISMO archivo como mp4 con sólo cambiar la
+     extensión (medido: 75 KB, video/mp4), y como .jpg da el primer cuadro.
+     Así que un GIF de Cloudinary se usa como video, siempre; y un GIF de
+     otro lado, como foto (nunca en un <video>). */
+  function sinGif(f) {
+    var u = f.url || '';
+    if (!/\.gif(\?|$)/i.test(u)) return f;
+    var g = {}; for (var k in f) g[k] = f[k];
+    if (u.indexOf('res.cloudinary.com') >= 0) {
+      g.tipo = 'video';
+      g.url = u.replace(/\.gif(\?|$)/i, '.mp4$1');
+      if (!g.poster || /\.gif(\?|$)/i.test(g.poster)) g.poster = u.replace(/\.gif(\?|$)/i, '.jpg$1');
+    } else {
+      g.tipo = 'imagen';
+    }
+    return g;
+  }
+
+  /* ⚠️⚠️ LAS COLECCIONES TAPABAN EL FONDO. (29/9/2026)
+     Jazmín: «no se guardan los fondos». Sí se guardaban y sí se ponían:
+     medido en isabella (Sapo), el video estaba detrás, pero Sapo pinta cada
+     sección con `html[data-col][data-coleccion] section.sec{background-color:
+     …!important}` y le gana a la regla de acá. Sólo Campestre y Marfil lo
+     tenían resuelto a mano; las otras veinte, no.
+     Arreglo de una vez para todas: cuando hay fondo, se MIDE el color que la
+     colección le da a cada sección (sin el fondo puesto) y se le escribe en
+     la propia sección, ya abierto según «cuánto lo dejan pasar». Un estilo
+     escrito en el elemento con !important le gana a cualquier hoja, así que
+     ninguna colección puede volver a taparlo, y sin fondo no se toca nada. */
+  function rgba(c) {
+    var m = String(c || '').match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    var p = m[1].split(/[ ,\/]+/).filter(Boolean).map(parseFloat);
+    return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+  }
+  function despintar() {
+    [].forEach.call(document.querySelectorAll('[data-fondo-pinta]'), function (el) {
+      el.style.removeProperty('background-color');
+      if (el.getAttribute('data-fondo-pinta') === 'marco') el.style.removeProperty('background');
+      el.removeAttribute('data-fondo-pinta');
+    });
+  }
+  function pintar() {
+    var tipo = raiz.getAttribute('data-fondo');
+    if (!tipo) return;
+    var paso = parseFloat(raiz.style.getPropertyValue('--inv-paso')) || 0;
+    var osc  = parseFloat(raiz.style.getPropertyValue('--inv-oscuras')) || 0;
+    var secs = [].slice.call(document.querySelectorAll('.frame .sec, .frame > section'));
+    var marco = document.querySelector('.frame');
+    /* medir sin el fondo: se saca un instante (no llega a pintarse) */
+    despintar();
+    raiz.removeAttribute('data-fondo');
+    var cols = secs.map(function (el) { return getComputedStyle(el).backgroundColor; });
+    raiz.setAttribute('data-fondo', tipo);
+    secs.forEach(function (el, i) {
+      var c = rgba(cols[i]);
+      if (!c || c.a === 0) return;
+      var abre = el.classList.contains('verde') ? osc : paso;
+      var a = Math.max(0, Math.min(1, c.a * (1 - abre)));
+      el.style.setProperty('background-color',
+        'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + a.toFixed(3) + ')', 'important');
+      el.setAttribute('data-fondo-pinta', 'sec');
+    });
+    if (marco) {
+      marco.style.setProperty('background', 'transparent', 'important');
+      marco.setAttribute('data-fondo-pinta', 'marco');
+    }
+  }
+
   function poner(f) {
     hoja();
     sacar();
+    f = sinGif(f);
 
     var a = (typeof f.velo === 'number') ? f.velo : 0.3;
     f.poster = posterSano(f);
@@ -334,12 +412,19 @@
       Math.max(0, Math.min(0.6, (typeof f.oscuras === 'number') ? f.oscuras : 0))));
 
     alinear(caja);
+    pintar();
+    repintes = 0;
   }
 
   function sincronizar() {
     var f = conf();
     var nueva = JSON.stringify([f.tipo, f.url, f.poster, f.fuerza, f.velo, f.paso, f.oscuras, f.donde]);
-    if (nueva === firma) return;
+    if (nueva === firma) {
+      /* la colección puede llegar después, o cambiarse en el panel:
+         en la previa se repinta siempre; en la invitación, los primeros 12 s */
+      if (raiz.getAttribute('data-fondo') && (esPrevia || repintes++ < 8)) pintar();
+      return;
+    }
     firma = nueva;
     if (!f || !f.tipo || !(f.url || f.poster)) { sacar(); return; }
     poner(f);
@@ -363,6 +448,5 @@
   addEventListener('resize', reAlinear, { passive: true });
   setInterval(reAlinear, 1200);
 
-  var esPrevia = /[?&]preview=1/.test(location.search);
   setInterval(sincronizar, esPrevia ? 500 : 1600);
 })();
