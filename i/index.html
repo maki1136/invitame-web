@@ -1121,7 +1121,7 @@
     ytOir();
     ytFrame=document.createElement('iframe');
     ytFrame.title='Música de fondo';
-    ytFrame.setAttribute('allow','autoplay');
+    ytFrame.setAttribute('allow','autoplay; encrypted-media; fullscreen');
     ytFrame.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;border:0;pointer-events:none';
     ytFrame.addEventListener('load', function(){
       /* el saludo que hace que YouTube mande sus avisos a esta página */

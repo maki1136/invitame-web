@@ -178,11 +178,15 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* 30/9/2026: la franja del medio subió (.16/.22 → .28/.38). Ahí cae la
+     bajada de la portada en el celular («Nos casamos frente al mar», 10 px) y
+     el pie del cierre; sobre una foto clara —un vestido blanco— daban 2,7 y
+     3,5 en el banco del iPhone. Sigue siendo un velo: la foto se ve igual. */
   background: linear-gradient(180deg,
               rgba(35, 26, 18, .46) 0%,
-              rgba(35, 26, 18, .16) 42%,
-              rgba(35, 26, 18, .22) 62%,
-              rgba(35, 26, 18, .52) 100%);
+              rgba(35, 26, 18, .28) 42%,
+              rgba(35, 26, 18, .38) 62%,
+              rgba(35, 26, 18, .56) 100%);
 }
 
 /* La raspadita tiene la foto en la sección misma, que SÍ contiene texto: ahí no
