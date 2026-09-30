@@ -223,7 +223,9 @@
     var d = borrador();
     if (!d) return;
     if (document.getElementById(ID)) return;
-    var m = document.querySelector('.mejoras');
+    /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
+       antes se colgaba del primer «.mejoras» y salía en cinco pestañas */
+    var m = window.invCasa ? window.invCasa(ID) : document.querySelector('.mejoras');
     if (!m) return;
 
     var ancla = document.getElementById('muestra-selector') ||

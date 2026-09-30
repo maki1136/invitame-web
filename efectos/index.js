@@ -631,6 +631,7 @@
     '/efectos/videos-blindados.js',    /* ningún video es un reproductor, en ninguna versión */
     '/efectos/sobre-catalogo.js',      /* el sobre de entrada: el motor lo ignoraba */
     '/efectos/lacre-sin-ampersand.js', /* el sello de unos XV decia «M&»: el motor pega el & siempre */
+    '/efectos/fuentes-extra.js',       /* las tipografías que no vienen precargadas (y las pegadas de Google Fonts) */
     '/efectos/paleta.js',              /* la paleta: pinta las 12 variables de color de una */
     '/efectos/panel-paleta.js',        /* y el selector de las 20, en el panel */
     '/efectos/botones.js',             /* el material de los botones: lacre, cristal, nácar… */
@@ -639,6 +640,8 @@
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
+    '/efectos/compartir.js',           /* «Compartí la invitación»: textos y sacarla */
+    '/efectos/panel-compartir.js',     /* y su bloque, en CONFIRMACIÓN */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/videos-arrancan.js',      /* los videos decorativos arrancan al primer toque del invitado */

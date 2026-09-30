@@ -136,6 +136,7 @@
   var raiz = document.documentElement;
   var firma = null;
   var repintes = 0;
+  var pasoElegido = false;
   var esPrevia = /[?&]preview=1/.test(location.search);
 
   function sacar() {
@@ -269,6 +270,12 @@
       var c = rgba(cols[i]);
       if (!c || c.a === 0) return;
       var abre = el.classList.contains('verde') ? osc : paso;
+      /* ⚠️ Una sección OSCURA con letra clara (Sapo, los Óleos nocturnos) abierta
+         al 85 % sobre un fondo claro queda letra blanca sobre papel claro: no
+         se lee (medido en isabella, 30/9/2026). Si nadie movió la perilla, a
+         las oscuras se las abre menos. Si la movieron, manda la perilla. */
+      if (!pasoElegido && !el.classList.contains('verde') &&
+          (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255 < 0.35) abre = Math.min(abre, 0.45);
       var a = Math.max(0, Math.min(1, c.a * (1 - abre)));
       el.style.setProperty('background-color',
         'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + a.toFixed(3) + ')', 'important');
@@ -406,6 +413,7 @@
 
     document.body.insertBefore(caja, document.body.firstChild);
     raiz.setAttribute('data-fondo', f.tipo === 'video' ? 'video' : 'imagen');
+    pasoElegido = (typeof f.paso === 'number');
     raiz.style.setProperty('--inv-paso', String(
       Math.max(0, Math.min(1, (typeof f.paso === 'number') ? f.paso : 0.85))));
     raiz.style.setProperty('--inv-oscuras', String(

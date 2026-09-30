@@ -192,6 +192,12 @@
     ayuda.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(ayuda);
 
+    /* ⚠️ el aviso de la colección que manda sobre la paleta (ver avisar()) */
+    var aviso = document.createElement('div');
+    aviso.setAttribute('data-aviso-col', '1');
+    aviso.style.cssText = 'display:none;background:#fff3cd;border:1px solid #ffe08a;border-radius:10px;padding:8px 10px;margin:0 0 10px;font-size:12px;color:#7a5c00;line-height:1.4';
+    caja.appendChild(aviso);
+
     /* Sin tope de alto a propósito: se elige MIRANDO, y una grilla que corta la
        última fila por la mitad obliga a descubrir que hay más abajo. Son cuatro
        renglones, entran. */
@@ -208,20 +214,50 @@
     return caja;
   }
 
+  /* ⚠️⚠️ LA COLECCIÓN TAPA LA PALETA, Y NO SE AVISABA. (29/9/2026)
+     Jazmín: «se muestra la misma miniatura para diferentes paletas».
+     Medido en el panel, colección por colección, eligiendo tres paletas y
+     comparando los colores de la miniatura: sólo «Sin colección», Perlas y
+     Bohemia cambian con la paleta. Las demás (Sapo, Cenicienta, los Óleos,
+     los Degradé…) traen sus propios colores y la paleta no hace nada.
+     No se fuerza: esas colecciones son un dibujo con colores pensados.
+     Se AVISA y se apaga la grilla, así nadie elige una paleta que no se ve.
+     ⚠️ Si una colección aprende a tomar la paleta, se suma a esta lista. */
+  var TOMAN_PALETA = { '': 1, 'perlas': 1, 'bohemia': 1 };
+  function avisar(d) {
+    var caja = document.getElementById(ID); if (!caja) return;
+    var av = caja.querySelector('[data-aviso-col]'), gr = caja.querySelector('[data-grilla]');
+    var col = String((d.fx && d.fx.coleccion) || '');
+    var tapa = !TOMAN_PALETA[col];
+    if (av) {
+      av.style.display = tapa ? 'block' : 'none';
+      if (tapa) {
+        var s = document.querySelector('#coleccion-selector select'), nom = col;
+        if (s) { var o = [].find.call(s.options, function (x) { return x.value === col; }); if (o) nom = o.textContent; }
+        av.textContent = 'La colección «' + nom + '» trae sus propios colores: mientras esté puesta, ' +
+          'la paleta no cambia nada. Para usar una paleta elegí «Sin colección», Perlas o Bohemia.';
+      }
+    }
+    if (gr) { gr.style.opacity = tapa ? '.4' : ''; gr.style.pointerEvents = tapa ? 'none' : ''; }
+  }
+
   /* ---- engancharse al panel --------------------------------------------- */
 
   function revisar() {
     var d = borrador();
     if (!d || !window.INVPALETAS) return;
-    if (document.getElementById(ID)) return;      /* ya está puesto */
+    if (document.getElementById(ID)) { avisar(d); return; }   /* ya está puesto */
 
-    var m = document.querySelector('.mejoras');
+    /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
+       antes se colgaba del primer «.mejoras» y salía en cinco pestañas */
+    var m = window.invCasa ? window.invCasa(ID) : document.querySelector('.mejoras');
     if (!m) return;                               /* la pestaña no está abierta */
 
     /* Va PRIMERO: es la decisión más grande del bloque, y todo lo que viene
        abajo (los colores sueltos) queda supeditado a ella. */
     m.insertBefore(construir(d), m.firstChild);
     pintarGrilla(d);
+    avisar(d);
   }
 
   /* El panel se redibuja entero cada vez que se toca algo y se lleva puesto lo

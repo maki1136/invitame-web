@@ -200,7 +200,9 @@
       return;
     }
 
-    var m = document.querySelector('.mejoras');
+    /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
+       antes se colgaba del primer «.mejoras» y salía en cinco pestañas */
+    var m = window.invCasa ? window.invCasa(ID) : document.querySelector('.mejoras');
     if (!m) return;
     asegurarBase();
     /* la tela del terciopelo, para que esa muestra se vea con el pelo y no

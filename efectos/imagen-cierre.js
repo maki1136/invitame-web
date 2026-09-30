@@ -156,7 +156,8 @@
   }
 
   function anclaje() {
-    return document.querySelector('.mejoras');
+    /* su casa es PRINCIPAL, junto a la frase final (invCasa en admin/3-evento.js) */
+    return window.invCasa ? window.invCasa(ID) : document.querySelector('.mejoras');
   }
 
   function revisarPanel() {

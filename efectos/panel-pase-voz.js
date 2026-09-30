@@ -491,7 +491,9 @@
     var ya = document.getElementById(ID);
     if (ya) { if (ya.__sync) ya.__sync(); return; }
 
-    var m = document.querySelector('.mejoras');
+    /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
+       antes se colgaba del primer «.mejoras» y salía en cinco pestañas */
+    var m = window.invCasa ? window.invCasa(ID) : document.querySelector('.mejoras');
     if (!m) return;
 
     /* al final, que es donde se ve en la invitacion */
