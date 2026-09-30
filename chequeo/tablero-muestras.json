@@ -1,8 +1,8 @@
 {
- "cuando": "2026-09-30T22:40:32.479Z",
+ "cuando": "2026-09-30T22:44:10.907Z",
  "total": 54,
- "verde": 54,
- "rojo": 0,
+ "verde": 53,
+ "rojo": 1,
  "gris": 0,
  "items": [
   {
@@ -302,8 +302,31 @@
   {
    "slug": "paula-e-ines",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "col: previa «degrade» · publicada «»",
+    "fondo: previa «imagen» · publicada «»",
+    "nombres: previa «Italiana, serif 42.9px rgb(232, 223, 200)» · publicada «\"Rouge Script\", cursive 54px rgb(251, 247, 239)»",
+    "sección #1: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «oculta»",
+    "sección #2: previa «rgba(40, 10, 30, 0.28)/rgb(58, 16, 44)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección carta: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección frase: previa «oculta» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección eventos: previa «rgb(90, 26, 69)/rgb(198, 192, 168)» · publicada «rgb(24, 6, 18)/rgb(238, 230, 214)»",
+    "sección itinerario: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección hospedaje: previa «rgb(90, 26, 69)/rgb(198, 192, 168)» · publicada «rgb(24, 6, 18)/rgb(238, 230, 214)»",
+    "sección dresscode: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección padres: previa «rgb(90, 26, 69)/rgb(198, 192, 168)» · publicada «rgb(24, 6, 18)/rgb(238, 230, 214)»",
+    "sección galeria: previa «rgb(58, 16, 44)/rgb(198, 192, 168)» · publicada «rgb(40, 10, 30)/rgb(58, 69, 61)»",
+    "sección trivia: previa «rgb(90, 26, 69)/rgb(198, 192, 168)» · publicada «rgb(24, 6, 18)/rgb(238, 230, 214)»",
+    "sección regalos: previa «rgb(58, 16, 44)/rgb(198, 192, 168)» · publicada «rgb(40, 10, 30)/rgb(58, 69, 61)»",
+    "sección hashtag: previa «rgb(90, 26, 69)/rgb(198, 192, 168)» · publicada «rgb(24, 6, 18)/rgb(246, 228, 234)»",
+    "sección spotify: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección confirmacion: previa «rgb(90, 26, 69)/rgb(198, 192, 168)» · publicada «rgb(58, 16, 44)/rgb(238, 230, 214)»",
+    "sección share-sec: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección filtro-sec: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «—»",
+    "sección gal-seccion: previa «rgba(58, 16, 44, 0.28)/rgb(198, 192, 168)» · publicada «—»",
+    "sección contacto-sec: previa «rgba(40, 10, 30, 0.28)/rgb(198, 192, 168)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»"
+   ],
    "error": ""
   },
   {
