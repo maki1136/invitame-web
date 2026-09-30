@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tablero de la plataforma · Invítame</title>
+<meta name="robots" content="noindex">
+<!--
+  EL TABLERO DE LA PLATAFORMA (Maki, 30/9/2026)
+  «un panel de control con todo el detalle para saber si está funcionando, y si
+  algo deja de funcionar debe saltar, con cada cosa que agreguemos».
+  Lee lo que deja el banco de pruebas en /chequeo/ (lo corre GitHub solo, después
+  de cada cambio y todos los días):
+    · tablero-panel.json    cada control del panel, uno por uno (chequeo/panel.cjs)
+    · tablero-muestras.json la miniatura contra la publicada, en cada invitación (chequeo/comparar.cjs)
+    · resultado.txt         el banco de la invitación en Safari, iPhone, iPad y Chrome (chequeo/probar.mjs)
+  No guarda nada ni necesita login: sólo muestra.
+-->
+<style>
+  :root{--fondo:#fbf6f4;--papel:#fff;--tinta:#3b2a2f;--suave:#8a7a7e;--linea:#eadfdc;
+        --verde:#1f8a4c;--verde-f:#e5f5ea;--amarillo:#a86b00;--amarillo-f:#fff4d6;--rojo:#c0392b;--rojo-f:#fde8e6;--gris:#7c7c7c;--gris-f:#efefef}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+  header{padding:22px 20px 8px;max-width:1100px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--suave);font-size:13px}
+  main{max-width:1100px;margin:0 auto;padding:8px 16px 60px}
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0 22px}
+  .t{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:14px 16px;cursor:pointer}
+  .t h2{font-size:14px;margin:0 0 6px;font-weight:600}
+  .t .num{font-size:28px;font-weight:700}
+  .t .det{font-size:12.5px;color:var(--suave)}
+  .t.ok{border-left:6px solid var(--verde)} .t.mal{border-left:6px solid var(--rojo)} .t.medio{border-left:6px solid var(--amarillo)} .t.nada{border-left:6px solid var(--gris)}
+  section{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:14px 16px;margin-bottom:18px}
+  section h2{font-size:16px;margin:0 0 8px}
+  .filtros{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+  .filtros button{border:1px solid var(--linea);background:#fff;border-radius:99px;padding:5px 12px;font-size:13px;cursor:pointer}
+  .filtros button.on{background:var(--tinta);color:#fff;border-color:var(--tinta)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:7px 6px;border-top:1px solid var(--linea);vertical-align:top}
+  th{font-size:12px;color:var(--suave);font-weight:600}
+  .e{display:inline-block;min-width:74px;text-align:center;border-radius:99px;padding:2px 8px;font-size:12px;font-weight:600}
+  .e.verde{background:var(--verde-f);color:var(--verde)} .e.rojo{background:var(--rojo-f);color:var(--rojo)}
+  .e.amarillo{background:var(--amarillo-f);color:var(--amarillo)} .e.gris{background:var(--gris-f);color:var(--gris)}
+  .nota{color:var(--suave);font-size:12.5px}
+  pre{white-space:pre-wrap;font-size:12.5px;background:#faf7f6;border-radius:10px;padding:10px;max-height:460px;overflow:auto}
+  .tabla{overflow-x:auto}
+  @media (max-width:600px){td:nth-child(3),th:nth-child(3){display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Tablero de la plataforma</h1>
+  <div class="sub" id="cuando">Cargando…</div>
+</header>
+<main>
+  <div class="tarjetas" id="tarjetas"></div>
+
+  <section id="s-panel">
+    <h2>El panel, control por control</h2>
+    <div class="nota">A cada control se le cambia el valor como lo haría Jazmín. Verde: se guarda, le llega a la miniatura y se ve. Amarillo: se guarda y llega, pero la miniatura no cambió (revisar a mano). Rojo: no se guarda, no llega, o el mismo dato se toca desde dos pestañas.</div>
+    <div class="filtros" id="f-panel"></div>
+    <div class="tabla"><table id="t-panel"></table></div>
+  </section>
+
+  <section id="s-muestras">
+    <h2>Miniatura del panel = invitación publicada</h2>
+    <div class="nota">En cada invitación, lo que muestra la miniatura del panel tiene que ser igual a lo publicado. Rojo = el panel muestra otra cosa.</div>
+    <div class="filtros" id="f-muestras"></div>
+    <div class="tabla"><table id="t-muestras"></table></div>
+  </section>
+
+  <section id="s-banco">
+    <h2>La invitación en Safari, iPhone, iPad y Chrome</h2>
+    <div class="nota">El banco de pruebas de siempre, sobre la muestra oficial. Incluye la regla del panel: si la última versión no salió del panel, sale MAL.</div>
+    <pre id="banco">Cargando…</pre>
+  </section>
+</main>
+<script>
+(function(){
+  var B='/chequeo/', cb='?cb='+Date.now();
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function fecha(iso){try{return new Date(iso).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'});}catch(e){return iso||'—';}}
+  function leer(n,json){return fetch(B+n+cb,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return json?r.json():r.text();}).catch(function(){return null;});}
+  function tarjeta(t,num,det,clase,ancla){return '<div class="t '+clase+'" onclick="document.getElementById(\''+ancla+'\').scrollIntoView({behavior:\'smooth\'})"><h2>'+t+'</h2><div class="num">'+num+'</div><div class="det">'+det+'</div></div>';}
+  function filtros(id,items,pintar){
+    var f=document.getElementById(id), est=['todos','rojo','amarillo','gris','verde'].filter(function(e){return e==='todos'||items.some(function(x){return x.estado===e;});});
+    f.innerHTML=est.map(function(e,i){var n=e==='todos'?items.length:items.filter(function(x){return x.estado===e;}).length;return '<button data-e="'+e+'" class="'+(i===0?'on':'')+'">'+e+' ('+n+')</button>';}).join('');
+    f.onclick=function(ev){var b=ev.target.closest('button');if(!b)return;[].forEach.call(f.children,function(x){x.classList.toggle('on',x===b);});pintar(b.dataset.e);};
+    pintar('todos');
+  }
+  var orden={rojo:0,amarillo:1,gris:2,verde:3};
+  Promise.all([leer('tablero-panel.json',1),leer('tablero-muestras.json',1),leer('resultado.txt',0)]).then(function(r){
+    var P=r[0],M=r[1],T=r[2],h='';
+    if(P){h+=tarjeta('Panel: controles',P.verde+' / '+P.total,(P.rojo?P.rojo+' rojos · ':'')+(P.amarillo?P.amarillo+' para revisar · ':'')+'probado '+fecha(P.cuando),P.rojo?'mal':(P.amarillo?'medio':'ok'),'s-panel');}
+    else h+=tarjeta('Panel: controles','—','todavía no corrió','nada','s-panel');
+    if(M){h+=tarjeta('Miniatura = publicada',M.verde+' / '+M.total,(M.rojo?M.rojo+' distintas · ':'')+'probado '+fecha(M.cuando),M.rojo?'mal':'ok','s-muestras');}
+    else h+=tarjeta('Miniatura = publicada','—','todavía no corrió','nada','s-muestras');
+    if(T){var m=T.match(/HAY (\d+) PROBLEMAS/),tb=/TODO BIEN/.test(T),fe=(T.match(/Fecha: ([^\n]+)/)||[])[1]||'';
+      h+=tarjeta('Banco de la invitación',tb?'Todo bien':(m?m[1]+' problemas':'—'),fe,tb?'ok':'mal','s-banco');
+      document.getElementById('banco').textContent=T;}
+    document.getElementById('tarjetas').innerHTML=h;
+    document.getElementById('cuando').textContent='Se actualiza solo después de cada cambio en la plataforma y una vez por día.';
+    if(P){var it=P.items.slice().sort(function(a,b){return orden[a.estado]-orden[b.estado];});
+      filtros('f-panel',it,function(e){document.getElementById('t-panel').innerHTML='<tr><th>Estado</th><th>Pestaña · control</th><th>Dato</th><th>Qué pasa</th></tr>'+
+        it.filter(function(x){return e==='todos'||x.estado===e;}).map(function(x){return '<tr><td><span class="e '+x.estado+'">'+x.estado+'</span></td><td><b>'+esc(x.tab)+'</b> · '+esc(x.control)+(x.bloque?'<div class="nota">'+esc(x.bloque)+'</div>':'')+'</td><td class="nota">'+esc(x.dato||'')+'</td><td class="nota">'+esc(x.nota||'')+(x.duplicado?'<br>'+esc(x.duplicado):'')+'</td></tr>';}).join('');});}
+    if(M){var im=M.items.slice().sort(function(a,b){return orden[a.estado]-orden[b.estado];});
+      filtros('f-muestras',im,function(e){document.getElementById('t-muestras').innerHTML='<tr><th>Estado</th><th>Invitación</th><th>Motor</th><th>Diferencias</th></tr>'+
+        im.filter(function(x){return e==='todos'||x.estado===e;}).map(function(x){return '<tr><td><span class="e '+x.estado+'">'+x.estado+'</span></td><td><a href="/i/?e='+esc(x.slug)+'" target="_blank">'+esc(x.slug)+'</a> · <a href="/admin.html?e='+esc(x.slug)+'" target="_blank">panel</a></td><td class="nota">'+esc(x.ver)+'</td><td class="nota">'+(x.error?'no se pudo abrir: '+esc(x.error):x.dif.map(esc).join('<br>'))+'</td></tr>';}).join('');});}
+  });
+})();
+</script>
+</body>
+</html>
