@@ -440,6 +440,13 @@
   /* --- el papel, CON SU ALFA ---------------------------------------------- */
 
   var PAPEL = {};
+  /* ⚠️ ERROR 35 — EL PAPEL NO ES UN SOLO COLOR. (30/9/2026)
+     Se medía la foto del papel en UN píxel: el promedio. Pero un mármol tiene
+     vetas: en el iPhone «Corre la voz» quedaba bien contra el promedio (L 0,68)
+     y en 3,3 sobre la veta (L 0,42). Ahora se mide en 12×12 y se guardan
+     también la zona oscura y la clara (percentiles 15 y 85): el texto se
+     corrige contra la peor de las tres. Sólo para el papel de la invitación. */
+  var PAPEL_EXT = {}, ultimoPapel = '';
 
   function esCloudinary(u) { return u.indexOf('res.cloudinary.com') >= 0; }
 
@@ -456,7 +463,7 @@
     if (i < 0) return url;
     var cola = url.slice(i + 8);
     if (!/^v\d+\//.test(cola)) cola = cola.replace(/^[^/]*\//, '');
-    return url.slice(0, i + 8) + 'w_1,h_1,c_fill,f_png/' + cola;
+    return url.slice(0, i + 8) + 'w_24,h_24,c_fill,f_png/' + cola;
   }
 
   function pedirPapel(url) {
@@ -467,12 +474,21 @@
     im.crossOrigin = 'anonymous';
     im.onload = function () {
       try {
-        var c = document.createElement('canvas'); c.width = 1; c.height = 1;
+        var N = 12;
+        var c = document.createElement('canvas'); c.width = N; c.height = N;
         var x = c.getContext('2d');
-        x.clearRect(0, 0, 1, 1);
-        x.drawImage(im, 0, 0, 1, 1);
-        var d = x.getImageData(0, 0, 1, 1).data;
-        PAPEL[url] = [d[0], d[1], d[2], d[3] / 255];
+        x.clearRect(0, 0, N, N);
+        x.drawImage(im, 0, 0, N, N);
+        var d = x.getImageData(0, 0, N, N).data;
+        var sr = 0, sg = 0, sb = 0, sa = 0, px = [];
+        for (var q = 0; q < d.length; q += 4) {
+          sr += d[q]; sg += d[q + 1]; sb += d[q + 2]; sa += d[q + 3];
+          px.push([d[q], d[q + 1], d[q + 2], 1]);
+        }
+        var nn = d.length / 4;
+        PAPEL[url] = [sr / nn, sg / nn, sb / nn, sa / nn / 255];
+        px.sort(function (a, b) { return luminancia(a) - luminancia(b); });
+        PAPEL_EXT[url] = [px[Math.floor(nn * 0.15)], px[Math.floor(nn * 0.85)]];
         pasada();
       } catch (e) { PAPEL[url] = false; }
     };
@@ -630,6 +646,7 @@
       var vi = document.querySelector('#inv-fondo video');
       u = vi && (vi.poster || vi.getAttribute('poster'));
     }
+    ultimoPapel = u || '';
     if (u) {
       pedirPapel(u);
       var p = PAPEL[u];
@@ -722,7 +739,12 @@
       n = n.parentElement;
     }
     var pap = elPapel();
-    if (pap) { var r3 = [pap]; r3.rango = 0; return r3; }
+    if (pap) {
+      var r3 = [pap];
+      var ext = PAPEL_EXT[ultimoPapel];
+      if (ext && pap === PAPEL[ultimoPapel]) r3 = r3.concat(ext);
+      r3.rango = 0; return r3;
+    }
     return null;
   }
 
