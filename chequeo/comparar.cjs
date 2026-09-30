@@ -44,6 +44,8 @@ async function uno(s){let p,q;try{
  out[s]={ver,dif};}catch(e){out[s]={error:String(e.message).split('\n')[0].slice(0,90)}}
  try{p&&await p.close();q&&await q.close();}catch(e){}}
 const cola=[...slugs];await Promise.all([...Array(+(process.env.PAR||3)).keys()].map(async()=>{while(cola.length)await uno(cola.shift());}));
+/* las que no abrieron por lentitud del servidor se prueban una vez más, de a una */
+for(const s of slugs){if(out[s]&&out[s].error){delete out[s];await uno(s);}}
 const lista=slugs.map(s=>({slug:s,ver:(out[s]||{}).ver||'',estado:(out[s]||{}).error?'gris':((out[s].dif||[]).length?'rojo':'verde'),dif:(out[s]||{}).dif||[],error:(out[s]||{}).error||''}));
 fs.writeFileSync(path.join(__dirname,'tablero-muestras.json'),JSON.stringify({cuando:new Date().toISOString(),total:lista.length,verde:lista.filter(x=>x.estado==='verde').length,rojo:lista.filter(x=>x.estado==='rojo').length,gris:lista.filter(x=>x.estado==='gris').length,items:lista},null,1));
 let igual=0;for(const s of slugs){const o=out[s];if(o.dif&&!o.dif.length)igual++;console.log(s.padEnd(22),o.error?('ERROR '+o.error):(o.ver+'  '+(o.dif.length?o.dif.length+' diferencias':'IGUAL')));}
