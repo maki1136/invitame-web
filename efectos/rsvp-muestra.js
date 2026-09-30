@@ -64,13 +64,12 @@
 
   /* Prendido desde el panel, o a mano con ?muestra=1 para probar sin guardar */
   function encendida() {
-    /* ⚠️ EN LA MINIATURA DEL PANEL, SIEMPRE. (29/9/2026)
-       Jazmín cambiaba «Cómo se confirma la asistencia» (botones / interruptor)
-       y la miniatura no cambiaba: sin link de invitado la sección muestra el
-       cartel de vidriera y el formulario —que es lo que cambia— no está.
-       En la vista previa se muestra como lo va a ver un invitado. La
-       invitación publicada no cambia: ahí sigue mandando el interruptor. */
-    if (/[?&]preview=1/.test(location.search)) return true;
+    /* ⚠️ La miniatura NO fuerza el formulario (30/9/2026). Se probó el 29/9 y
+       rompía la regla de oro: la miniatura mostraba el pase con QR y el
+       formulario, y la invitación publicada sin link de invitado no. Lo
+       detectó el comparador miniatura-vs-publicada. Para ver el estilo en una
+       muestra se prende «Mostrar la confirmación…» (Sector de muestras); el
+       panel lo avisa en el bloque «Cómo se confirma la asistencia». */
     try {
       var u = new URLSearchParams(location.search).get('muestra');
       if (u !== null) return u !== '0';

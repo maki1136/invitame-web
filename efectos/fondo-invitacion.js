@@ -138,6 +138,13 @@
   var repintes = 0;
   var pasoElegido = false;
   var esPrevia = /[?&]preview=1/.test(location.search);
+  /* cuando velo-legible.js cambia una sección, se repinta (también en la publicada,
+     donde el repintado periódico se corta a los 12 s) */
+  try {
+    new MutationObserver(function (m) {
+      if (raiz.getAttribute('data-fondo') && m.some(function (x) { return x.attributeName === 'data-velo-auto'; })) setTimeout(pintar, 0);
+    }).observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['data-velo-auto'] });
+  } catch (e) {}
 
   function sacar() {
     [ID, IDF].forEach(function (i) {
@@ -247,8 +254,22 @@
     var p = m[1].split(/[ ,\/]+/).filter(Boolean).map(parseFloat);
     return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
   }
+  /* ⚠️⚠️ SÓLO SE BORRA LO QUE ESCRIBIÓ ESTE MÓDULO. (30/9/2026)
+     banda-tematica.js también escribe el color de las `.sec.verde` en el propio
+     elemento. Los dos se pisaban según quién corría último, y la miniatura y la
+     invitación publicada salían DISTINTAS (medido en regina-y-emiliano, ivanna,
+     julieta, luciana: bandas claras en una, oscuras en la otra). Ahora se
+     guarda el valor escrito y sólo se borra si sigue siendo ése; si otro módulo
+     lo cambió, la sección es de él y acá no se toca más. */
   function despintar() {
     [].forEach.call(document.querySelectorAll('[data-fondo-pinta]'), function (el) {
+      var mio = el.getAttribute('data-fondo-valor');
+      if (el.getAttribute('data-fondo-pinta') === 'sec' && mio && el.style.getPropertyValue('background-color') !== mio) {
+        el.removeAttribute('data-fondo-pinta'); el.removeAttribute('data-fondo-valor');
+        el.setAttribute('data-fondo-ajena', '1');
+        return;
+      }
+      el.removeAttribute('data-fondo-valor');
       el.style.removeProperty('background-color');
       if (el.getAttribute('data-fondo-pinta') === 'marco') el.style.removeProperty('background');
       el.removeAttribute('data-fondo-pinta');
@@ -264,12 +285,22 @@
     /* medir sin el fondo: se saca un instante (no llega a pintarse) */
     despintar();
     raiz.removeAttribute('data-fondo');
+    /* si el otro módulo soltó la sección (se apagó la banda), vuelve a ser de acá */
+    secs.forEach(function (el) { if (el.getAttribute('data-fondo-ajena') && !el.style.getPropertyValue('background-color')) el.removeAttribute('data-fondo-ajena'); });
     var cols = secs.map(function (el) { return getComputedStyle(el).backgroundColor; });
     raiz.setAttribute('data-fondo', tipo);
     secs.forEach(function (el, i) {
+      /* el color ya lo escribió otro módulo en el elemento (la banda temática): es suyo */
+      if (el.getAttribute('data-fondo-ajena') || (el.style.getPropertyValue('background-color') && !el.getAttribute('data-fondo-pinta'))) return;
       var c = rgba(cols[i]);
       if (!c || c.a === 0) return;
       var abre = el.classList.contains('verde') ? osc : paso;
+      /* ⚠️ velo-legible.js tapa de más, sección por sección, donde el texto no se
+         lee: lo escribe como `--inv-paso` / `--inv-oscuras` EN la sección. Se
+         respeta (sólo puede cerrar, nunca abrir). Sin esto, la miniatura —que
+         repinta seguido— le borraba el velo y salía distinta de la publicada. */
+      var propio = parseFloat(el.style.getPropertyValue(el.classList.contains('verde') ? '--inv-oscuras' : '--inv-paso'));
+      if (!isNaN(propio)) abre = Math.min(abre, propio);
       /* ⚠️ Una sección OSCURA con letra clara (Sapo, los Óleos nocturnos) abierta
          al 85 % sobre un fondo claro queda letra blanca sobre papel claro: no
          se lee (medido en isabella, 30/9/2026). Si nadie movió la perilla, a
@@ -277,9 +308,10 @@
       if (!pasoElegido && !el.classList.contains('verde') &&
           (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255 < 0.35) abre = Math.min(abre, 0.45);
       var a = Math.max(0, Math.min(1, c.a * (1 - abre)));
-      el.style.setProperty('background-color',
-        'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + a.toFixed(3) + ')', 'important');
+      var val = 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', ' + a.toFixed(3) + ')';
+      el.style.setProperty('background-color', val, 'important');
       el.setAttribute('data-fondo-pinta', 'sec');
+      el.setAttribute('data-fondo-valor', el.style.getPropertyValue('background-color'));
     });
     if (marco) {
       marco.style.setProperty('background', 'transparent', 'important');

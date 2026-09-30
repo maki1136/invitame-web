@@ -49,7 +49,9 @@
     caja.appendChild(t);
 
     var a = document.createElement('div');
-    a.textContent = 'Sólo cambia cómo se ve. Las dos opciones confirman igual.';
+    a.textContent = 'Sólo cambia cómo se ve. Las dos opciones confirman igual. Se ve con el link de cada invitado; ' +
+      'sin link (la miniatura y la invitación abierta sin link) aparece el cartel de muestra. Para verlo en una muestra, ' +
+      'prendé «Mostrar la confirmación y el pase…» en el Sector de muestras, acá abajo.';
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(a);
 

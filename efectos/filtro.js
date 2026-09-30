@@ -589,6 +589,21 @@
     colgar(seccion());
   }
 
+  /* ⚠️ LA MINIATURA DEL PANEL (30/9/2026). Sólo arrancaba una vez, al cargar:
+     en el panel, prender «Mostrar … en la invitación» no la hacía aparecer, y
+     apagarla no la sacaba, hasta recargar. Lo encontró el comparador
+     miniatura-vs-publicada. Ahora cada evento que manda el panel se vuelve a
+     mirar: si está prendida y no está, se arma; si está apagada, se saca. */
+  addEventListener('message', function (e) {
+    var d = e && e.data; if (!d || d.type !== 'inv-preview') return;
+    setTimeout(function () {
+      var sec = document.getElementById(ID_SEC);
+      var c = cfg() || {};
+      var prendida = on(c.encendido);
+      if (!prendida && sec) sec.remove();
+      else if (prendida && !sec) arrancar();
+    }, 120);
+  });
   if (window.INVEV) arrancar();
   else {
     var intentos = 0;

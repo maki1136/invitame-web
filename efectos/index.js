@@ -638,6 +638,7 @@
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
+    '/efectos/previa-vidriera.js',     /* la miniatura esconde el pase y el formulario, como la publicada sin link */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
     '/efectos/compartir.js',           /* «Compartí la invitación»: textos y sacarla */
