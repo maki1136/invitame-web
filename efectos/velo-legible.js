@@ -121,7 +121,7 @@
   /* la direccion de un cuadro del video, sacado por Cloudinary */
   function cuadroDe(url) {
     if (typeof url !== 'string' || url.indexOf('res.cloudinary.com') < 0) return '';
-    var m = url.match(/^(https?:\/\/res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*\/)?(v\d+\/.+?)\.[a-z0-9]+$/i);
+    var m = url.match(/^(https?:\/\/(?:galeria\.littlemomentsok\.workers\.dev\/)?res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*\/)?(v\d+\/.+?)\.[a-z0-9]+$/i);
     if (!m) return '';
     return m[1] + '/video/upload/so_1.5,f_auto,q_auto:good,w_1200,c_limit/' + m[2] + '.jpg';
   }
@@ -152,7 +152,7 @@
 
   function idDeVideo(url) {
     if (typeof url !== 'string' || url.indexOf('res.cloudinary.com') < 0) return null;
-    var m = url.match(/^(https?:\/\/res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*\/)?(v\d+\/.+?)\.[a-z0-9]+$/i);
+    var m = url.match(/^(https?:\/\/(?:galeria\.littlemomentsok\.workers\.dev\/)?res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*\/)?(v\d+\/.+?)\.[a-z0-9]+$/i);
     return m ? { base: m[1], id: m[2] } : null;
   }
 
