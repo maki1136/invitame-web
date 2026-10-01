@@ -1304,7 +1304,7 @@ async function escenario(nombre, tipo, opciones, esTablet){
        camino. Se espera a que la altura DEJE DE CAMBIAR (tres lecturas
        iguales separadas 120 ms), con techo de 4 s. Eso mide lo que termina
        viendo una persona, no un fotograma del medio. */
-    const estable = async () => {
+    const estable = async (cerrando) => {
       /* ⚠️ PISO DE 600 ms ANTES DE ACEPTAR QUE ESTÁ QUIETA. Sin esto el bucle
          leía tres veces el valor VIEJO —la transición tarda un cuadro en
          arrancar— y lo daba por final. Eso produjo el absurdo del 9/9:
@@ -1316,7 +1316,11 @@ async function escenario(nombre, tipo, opciones, esTablet){
         const h = alto();
         iguales = (h === previo) ? iguales + 1 : 0;
         previo = h;
-        if (i >= 5 && iguales >= 2) break;
+        /* ⚠️ 1/10/2026: al CERRAR, quieta no alcanza: con la máquina cargada
+           Safari congela la transición un momento y tres lecturas iguales a
+           mitad de camino («cerrada mide 153px») se daban por finales. Al
+           cerrar se sigue mirando hasta llegar a 0 o hasta 3,6 s. */
+        if (i >= 5 && iguales >= 2 && (!cerrando || previo <= 4 || i >= 30)) break;
       }
       return previo;
     };
@@ -1346,7 +1350,7 @@ async function escenario(nombre, tipo, opciones, esTablet){
        ni se saca, el click no llegó. Sin esto el rojo dice «186 y 186» y no
        se puede arreglar nada. */
     const claseAlCerrar = panelAbierto();
-    const alCerrar = await estable();
+    const alCerrar = await estable(true);
     btn.click();
     const claseAlAbrir = panelAbierto();
     const alVolverAAbrir = await estable();
@@ -1468,10 +1472,20 @@ async function escenario(nombre, tipo, opciones, esTablet){
          quedaba rojo. No es que el botón no funcione: es que con la red
          frenada la sección todavía está entrando con animación y Playwright
          espera —bien— a que el elemento se quede quieto. Se le da el doble. */
-      await Promise.all([
-        page.waitForNavigation({ waitUntil: 'load', timeout: 20000 }).catch(() => {}),
-        gal.click({ timeout: 60000 })     /* el dedo de verdad: dispara pointerdown */
-      ]);
+      /* ⚠️ 1/10/2026: con la máquina muy cargada Playwright espera que el botón
+         esté «quieto» y la página no llega a pintar: 60 s y rojo, aunque el
+         botón anda (probado: primer toque, a la galería). Si en 20 s no pudo,
+         se toca con el mouse en el centro del botón: el mismo pointerdown de
+         una persona, sin la espera de Playwright. */
+      const nav = page.waitForNavigation({ waitUntil: 'load', timeout: 40000 }).catch(() => {});
+      try { await gal.click({ timeout: 20000 }); }
+      catch (e) {
+        const bb = await gal.boundingBox();
+        if (!bb) throw e;
+        await page.mouse.click(bb.x + bb.width / 2, bb.y + bb.height / 2);
+        log('   (el botón de la galería se tocó con el mouse: la página estaba muy cargada)');
+      }
+      await nav;
 
       /* ⚠️ LA ALTURA DE SALIDA SE LA PREGUNTO AL PRODUCTO, NO LA MIDO YO.
          Primero la medía con `pageYOffset` justo antes del click y comparaba
