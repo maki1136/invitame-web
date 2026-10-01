@@ -567,3 +567,29 @@ video:not([data-video-tocable]){ -webkit-appearance: none !important; }
   background-size: 12px 8px;
   padding-right: 36px;
 }
+
+/* ======================================================================
+   EL SOBRE VIEJO QUE ASOMA AL ABRIR. 1/10/2026 — se rehace lo del 8/9.
+   Medido en las 54 muestras: el motor prende el sobre de triángulos
+   (`tri-mode`) al arrancar, ANTES de saber qué sobre compró la pareja, y
+   recién cuando llega el paquete de módulos `sobre-catalogo.js` lo tapa y
+   pone el de verdad. Entre una cosa y otra, las cuatro solapas viejas a
+   pantalla completa: el «sobre raro» que Maki reportó tres veces. El banco
+   lo marcaba en Chrome («no asoma otro sobre al abrir»).
+   El 8/9 se puso esta misma regla y se sacó el mismo día por precaución
+   (reportaron botones que no andaban y era lo único nuevo). Ahora se rehace
+   probada en el banco, con dos diferencias:
+     · la marca `inv-sobre-listo` (la pone `efectos/todo.php`) llega en TODAS
+       las muestras, también las de sobre de triángulos de verdad, porque
+       `sobre-catalogo.js` avisa con `sobre-decidido` cuando termina;
+     · el rescate a los 8 s (con 3 s no alcanzaba: en el iPad con red lenta el
+       paquete llega después y el sobre viejo volvía a asomar): si el paquete
+       de módulos no llega, se destapa
+       igual. Prefiero un sobre viejo a una pantalla muerta.
+   Sólo se esconde lo que cuelga de #env, con visibility (no se mueve nada).
+   ====================================================================== */
+@keyframes inv-rescate-sobre { to { visibility: visible; } }
+#env:not(.inv-sobre-listo) > *{
+  visibility: hidden;
+  animation: inv-rescate-sobre 0s linear 8s forwards;
+}
