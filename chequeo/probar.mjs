@@ -31,6 +31,24 @@ const SLUG = process.argv[2] || 'camila-y-tomas';   /* la muestra oficial: regin
    espejo local antes de entregarlo. En la Mac no hace falta tocarlas: sin
    ellas apunta a la invitación de verdad y corre los tres escenarios. */
 const URL_BASE = process.env.INV_URL || ('https://invitame.littlemomentsok.com/i/?e=' + SLUG);
+/* ⚠️ 1/10/2026 — ¿EL SOBRE DE TRIÁNGULOS ES EL SUYO? «No asoma otro sobre»
+   cuenta las solapas de triángulos como sobre VIEJO. Pero una invitación que
+   no eligió sobre del catálogo (una nueva de Bohemia, isabella, noche-dorada)
+   TIENE ese sobre: ahí las solapas son su sobre de verdad. Se averigua una vez,
+   leyendo el documento público. Si no se puede leer, se sigue como siempre. */
+const SLUG_URL = (URL_BASE.match(/[?&]e=([^&]+)/) || [])[1] || SLUG;
+let SOBRE_PROPIO_TRI = false;
+try {
+  const rr = await fetch('https://firestore.googleapis.com/v1/projects/invitame-9b51f/databases/(default)/documents/inv_eventos/' + encodeURIComponent(decodeURIComponent(SLUG_URL)));
+  if (rr.ok) {
+    const jj = await rr.json();
+    const so = ((((jj.fields || {}).fx || {}).mapValue || {}).fields || {}).sobre;
+    const sf = (so && so.mapValue && so.mapValue.fields) || {};
+    const tipo = (sf.tipo || {}).stringValue || '';
+    const modelo = (sf.modelo || {}).stringValue || '';
+    SOBRE_PROPIO_TRI = !(tipo === 'carta' && modelo);
+  }
+} catch (e) {}
 const MOTORES  = (process.env.INV_MOTORES || 'safari-escritorio,safari-iphone,safari-ipad,chrome-escritorio').split(',');
 const AQUI = path.dirname(new URL(import.meta.url).pathname);
 
@@ -260,6 +278,9 @@ async function escenario(nombre, tipo, opciones, esTablet){
     };
   });
 
+  if (SOBRE_PROPIO_TRI && inicio.sobresViejos && inicio.piezas.every(p => /^\.triflap/.test(p))) {
+    log('   ----   las solapas de triángulos son el sobre de esta invitación (no eligió sobre del catálogo): no es «otro sobre»');
+  } else
   chequear('no asoma otro sobre al abrir', inicio.sobresViejos === 0,
     inicio.sobresViejos + ' piezas a la vista: ' + inicio.piezas.join(' · ') +
     '  |  estado de las piezas a los 150 ms: ' + inicio.piezasEstado.join(' · ') +
