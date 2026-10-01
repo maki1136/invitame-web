@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 01/10/2026, 11:52
+Fecha: 01/10/2026, 13:06
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 3 PROBLEMAS (y 110 cosas bien)
+HAY 4 PROBLEMAS (y 90 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,7 +29,7 @@ HAY 3 PROBLEMAS (y 110 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Contamos las sillas an" 3.0/4.5 [#d7cebb sobre luminancia 0.05-0.17 · p.reveal.in]
+             -> "Contamos las sillas an" 3.0/4.5 [#e6dfce sobre luminancia 0.05-0.21 · p.reveal.in]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -41,14 +41,14 @@ HAY 3 PROBLEMAS (y 110 cosas bien)
    BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 3 fallas de servicios ajenos — firebase (red), www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.7 s)
+   (volvió a su lugar en 8.7 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 331.8 s de punta a punta)
+   (tardó 614.1 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -59,34 +59,15 @@ HAY 3 PROBLEMAS (y 110 cosas bien)
    BIEN   sin voseo desde el primer pintado
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   MAL    todos los textos se leen
-             -> "Para verlo juntos" 3.6/4.5 [#524838 sobre luminancia 0.37-0.85 · div.kick.reveal] · "Escríbenos por WhatsAp" 4.2/4.5 [#fbf7ef sobre luminancia 0.02-0.18 · a.col-mvta-b]
-   BIEN   el boleto del pase se ve entero
-   BIEN   al tocar el boleto, el pedazo se corta y baja
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — firebase (red), www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   (el botón de la galería se tocó con el mouse: la página estaba muy cargada)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 15.5 s)
-   BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1492.4 s de punta a punta)
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 5 chequeos y se cayó
+             -> el último que sí corrió: "las tapas caen justo encima de los números"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
 
 
 ──────────────────────────────────────────
@@ -108,27 +89,27 @@ HAY 3 PROBLEMAS (y 110 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Escucha la música de l" 1.9/4.5 [#434f4b sobre luminancia 0.19-0.80 · p.reveal.in] · "Con mucha alegría" 2.6/3 [#496c61 sobre luminancia 0.42-0.79 · div.kick.reveal] · "Un ratito de nuestra h" 3.3/4.5 [#434f4b sobre luminancia 0.35-0.78 · p.reveal.in]
+             -> "La banda sonora" 1.9/3 [#496c61 sobre luminancia 0.28-0.80 · div.kick.reveal] · "Para verlo juntos" 2.2/3 [#496c61 sobre luminancia 0.34-0.81 · div.kick.reveal] · "Corre la voz" 2.5/3 [#496c61 sobre luminancia 0.41-0.78 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
-   ----   el boleto no se pudo traer a la pantalla: no se midio
+   BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
+   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 3.9 s)
+   (volvió a su lugar en 8.7 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 949.0 s de punta a punta)
+   (tardó 909.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -153,7 +134,8 @@ HAY 3 PROBLEMAS (y 110 cosas bien)
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
-   BIEN   todos los textos se leen
+   MAL    todos los textos se leen
+             -> "Min" 4.5/4.5 [#ffffff sobre luminancia 0.04-0.19 · div.lab]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -171,5 +153,5 @@ HAY 3 PROBLEMAS (y 110 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 129.0 s de punta a punta)
+   (tardó 129.8 s de punta a punta)
 
