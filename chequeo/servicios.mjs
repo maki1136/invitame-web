@@ -94,6 +94,22 @@ try {
   }
 } catch (e) { linea('MAL', 'Servidor: no contestó (' + e.message + ')'); }
 
+/* 4 bis — La caché de fotos y videos (1/10/2026). Si está PRENDIDA en
+   i/index.php y el Worker no la tiene, ninguna invitación muestra fotos:
+   eso es MAL. Si está apagada, sólo se informa si el Worker ya la tiene. */
+try {
+  const html = await (await traer(SITIO + '/i/?e=prueba-desde-cero')).text();
+  const prendida = html.indexOf('INV_CACHE_MEDIOS') >= 0;
+  const prueba = WORKER + '/res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1784262787/invitame/pmqhmccpaibs8bsn78ce.png';
+  const r = await traer(prueba);
+  const anda = r.ok && /^image\//.test(r.headers.get('content-type') || '');
+  const de = r.headers.get('x-cache-invitame') || '';
+  if (prendida && !anda) linea('MAL', 'Caché de fotos: está PRENDIDA pero el Worker no la entrega (' + r.status + '). Las invitaciones se quedan sin fotos: apagarla en i/index.php ($CACHE_MEDIOS) o MEDIA_CACHE=no en Cloudflare.');
+  else if (prendida) linea('BIEN', 'Caché de fotos: prendida y entregando (' + (de || 'ok') + ')');
+  else if (anda) linea('OJO', 'Caché de fotos: el Worker ya la tiene, pero está APAGADA en i/index.php. Probar con &cache=1 y prenderla.');
+  else linea('BIEN', 'Caché de fotos: apagada (el Worker nuevo todavía no está pegado en Cloudflare)');
+} catch (e) { linea('MAL', 'Caché de fotos: no se pudo chequear (' + e.message + ')'); }
+
 /* 5 — La foto de prueba */
 try {
   const ev = await (await traer(FS + '/gal_eventos/' + GID_CHEQUEO)).json();
@@ -115,7 +131,7 @@ try {
   const j = await r.json().catch(() => ({}));
   if (!r.ok || !j.ok) linea('MAL', 'Foto de prueba: la galería NO la aceptó (' + r.status + ' ' + (j.error || '') + ')');
   else {
-    let aprobada = false;
+    let aprobada = false, motorUsado = '';
     for (let i = 0; i < 6 && !aprobada; i++) {
       await new Promise((ok) => setTimeout(ok, 3000));
       const q = await traer(FS + '/gal_fotos/' + GID_CHEQUEO + ':runQuery', {
@@ -127,10 +143,10 @@ try {
       for (const f of (Array.isArray(filasQ) ? filasQ : [])) {
         const d = f.document && f.document.fields; if (!d) continue;
         const ts = parseInt((d.tsms || {}).integerValue || '0', 10);
-        if (ts >= antes - 60000) { aprobada = true; break; }
+        if (ts >= antes - 60000) { aprobada = true; motorUsado = ((((d.mod || {}).mapValue || {}).fields || {}).motor || {}).stringValue; break; }
       }
     }
-    if (aprobada) linea('BIEN', 'Foto de prueba: subió, pasó el filtro y quedó APROBADA (Sightengine y la galería andan)');
+    if (aprobada) linea('BIEN', 'Foto de prueba: subió, pasó el filtro (' + (motorUsado || 'sightengine') + ') y quedó APROBADA');
     else linea('MAL', 'Foto de prueba: subió pero NO quedó aprobada. Lo más probable: Sightengine no contesta o se acabó su plan → las fotos de las fiestas quedan pendientes y no se ven. Mirar moderar.html.');
   }
 } catch (e) { linea('MAL', 'Foto de prueba: no se pudo hacer (' + e.message + ')'); }
