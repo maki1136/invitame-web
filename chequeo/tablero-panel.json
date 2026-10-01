@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-01T22:25:51.897Z",
+ "cuando": "2026-10-01T22:24:44.930Z",
  "slug": "camila-y-tomas",
  "total": 354,
- "verde": 354,
- "amarillo": 0,
+ "verde": 353,
+ "amarillo": 1,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -1714,8 +1714,9 @@
    "guarda": true,
    "dato": "reg_otro_u",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "REGALOS",
