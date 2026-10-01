@@ -462,7 +462,13 @@
     var i = url.indexOf('/upload/');
     if (i < 0) return url;
     var cola = url.slice(i + 8);
-    if (!/^v\d+\//.test(cola)) cola = cola.replace(/^[^/]*\//, '');
+    /* ⚠️ (1/10/2026) Antes se sacaba SIEMPRE el primer tramo si no era `v123/`,
+       creyendo que era una receta. Con una dirección sin receta ni versión
+       (`.../upload/invitame/eucalipto/eu-base.webp`) se comía la CARPETA
+       `invitame/`, Cloudinary contestaba 404 y el papel no se podía medir:
+       el corrector no veía el fondo de eucalipto ni el del pozo del sapo.
+       Ahora sólo se sacan tramos que SON receta (`q_auto,f_auto`, `w_900`…). */
+    while (/^[a-z]{1,4}_[^\/]*\//.test(cola) && !/^v\d+\//.test(cola)) cola = cola.replace(/^[^\/]*\//, '');
     return url.slice(0, i + 8) + 'w_48,h_48,c_fill,f_png/' + cola;
   }
 

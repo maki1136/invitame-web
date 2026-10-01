@@ -62,6 +62,33 @@
 
   var RECETA = 'f_auto,q_auto:good,w_1200,c_limit/';
 
+  /* ═══ LA CACHÉ (1/10/2026) ═══════════════════════════════════════════════
+     Si `i/index.php` puso `window.INV_CACHE_MEDIOS` (la dirección del Worker de
+     la galería), cada foto, video y audio de Cloudinary se pide a través del
+     Worker, que guarda una copia en R2 y la entrega sin que Cloudinary cobre la
+     entrega. La dirección queda IGUAL con el Worker adelante:
+         https://res.cloudinary.com/oc8cgqt4/...
+         https://galeria.littlemomentsok.workers.dev/res.cloudinary.com/oc8cgqt4/...
+     ⚠️ Sólo se cambia lo que el NAVEGADOR va a pedir, en el último momento. Los
+        datos de la fiesta no se tocan: el panel y la base siguen con Cloudinary.
+     ⚠️ Sin `INV_CACHE_MEDIOS` esto no hace NADA: `alCache` devuelve lo mismo
+        que recibe y todo funciona exactamente como antes. */
+  var BASE_CACHE = '';
+  try {
+    var bc = window.INV_CACHE_MEDIOS;
+    if (typeof bc === 'string' && /^https:\/\/[a-z0-9.-]+\/$/.test(bc)) BASE_CACHE = bc;
+  } catch (e) {}
+  var CLD = 'res.cloudinary.com/oc8cgqt4/';
+  function alCache(u) {
+    if (!BASE_CACHE || typeof u !== 'string') return u;
+    if (u.indexOf('https://' + CLD) === 0) return BASE_CACHE + u.slice(8);
+    if (u.indexOf('http://' + CLD) === 0) return BASE_CACHE + u.slice(7);
+    if (u.indexOf('//' + CLD) === 0) return BASE_CACHE + u.slice(2);
+    return u;
+  }
+  /* La dirección final de una FOTO: primero liviana, después por la caché. */
+  function fin(u) { return alCache(liviana(u) || u); }
+
   /* La dirección liviana, o '' si no hay que tocarla. */
   function liviana(url) {
     if (typeof url !== 'string' || url.indexOf('res.cloudinary.com') < 0) return '';
@@ -94,8 +121,8 @@
     if (typeof txt !== 'string' || txt.indexOf('res.cloudinary.com') < 0) return '';
     var cambio = false;
     var salida = txt.replace(/url\((['"]?)([^'")]+)\1\)/g, function (todo, comilla, u) {
-      var n = liviana(u);
-      if (!n) return todo;
+      var n = fin(u);
+      if (n === u) return todo;
       cambio = true;
       return 'url("' + n + '")';
     });
@@ -108,8 +135,8 @@
     if (typeof txt !== 'string' || txt.indexOf('res.cloudinary.com') < 0) return '';
     var cambio = false;
     var salida = txt.replace(/https?:\/\/res\.cloudinary\.com\/[^\s"'<>()]+/g, function (u) {
-      var n = liviana(u);
-      if (!n) return u;
+      var n = fin(u);
+      if (n === u) return u;
       cambio = true;
       return n;
     });
@@ -124,7 +151,7 @@
         configurable: true,
         enumerable: descSrc.enumerable,
         get: descSrc.get,
-        set: function (v) { descSrc.set.call(this, liviana(v) || v); }
+        set: function (v) { descSrc.set.call(this, fin(v)); }
       });
     }
 
@@ -135,7 +162,7 @@
         configurable: true,
         enumerable: descPoster.enumerable,
         get: descPoster.get,
-        set: function (v) { descPoster.set.call(this, liviana(v) || v); }
+        set: function (v) { descPoster.set.call(this, fin(v)); }
       });
     }
 
@@ -145,10 +172,12 @@
       try {
         var n = String(nombre).toLowerCase();
         if ((n === 'src' || n === 'data-src') && this.tagName === 'IMG') {
-          valor = liviana(valor) || valor;
+          valor = fin(valor);
+        } else if (n === 'src' && /^(VIDEO|AUDIO|SOURCE)$/.test(this.tagName)) {
+          valor = alCache(valor);
         } else if (n === 'poster') {
           /* el <video> del fondo y el del sobre ponen su foto fija por acá */
-          valor = liviana(valor) || valor;
+          valor = fin(valor);
         } else if (n === 'style') {
           valor = livianaCss(valor) || valor;
         }
@@ -214,14 +243,47 @@
       try {
         var imgs = document.querySelectorAll('img[src*="res.cloudinary.com"]');
         for (var i = 0; i < imgs.length; i++) {
-          var n = liviana(imgs[i].getAttribute('src') || '');
-          if (n) imgs[i].setAttribute('src', n);
+          var a0 = imgs[i].getAttribute('src') || '';
+          var n = fin(a0);
+          if (n !== a0) imgs[i].setAttribute('src', n);
         }
       } catch (e) {}
     };
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', repasar, { once: true });
     } else { repasar(); }
+
+    /* 6. (1/10/2026, caché) video.src / audio.src / <source src> por propiedad,
+          y los que ya vinieran escritos en el HTML. Sólo existe para la caché:
+          sin INV_CACHE_MEDIOS no se instala nada. Va en su propio `try` para
+          que un navegador raro no se lleve puesto lo de arriba. */
+    if (BASE_CACHE) {
+      try {
+        [window.HTMLMediaElement, window.HTMLSourceElement].forEach(function (C) {
+          if (!C) return;
+          var d = Object.getOwnPropertyDescriptor(C.prototype, 'src');
+          if (!d || !d.set) return;
+          Object.defineProperty(C.prototype, 'src', {
+            configurable: true, enumerable: d.enumerable, get: d.get,
+            set: function (v) { d.set.call(this, alCache(v)); }
+          });
+        });
+      } catch (e) {}
+      var repasarMedios = function () {
+        try {
+          var ms = document.querySelectorAll('video[src*="res.cloudinary.com"],audio[src*="res.cloudinary.com"],source[src*="res.cloudinary.com"],video[poster*="res.cloudinary.com"]');
+          for (var i = 0; i < ms.length; i++) {
+            var s0 = ms[i].getAttribute('src');
+            if (s0 && alCache(s0) !== s0) ms[i].setAttribute('src', alCache(s0));
+            var p0 = ms[i].getAttribute('poster');
+            if (p0 && fin(p0) !== p0) ms[i].setAttribute('poster', fin(p0));
+          }
+        } catch (e) {}
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', repasarMedios, { once: true });
+      } else { repasarMedios(); }
+    }
 
   } catch (e) {
     /* Si algo de esto no se puede hacer en este navegador, no pasa nada:
