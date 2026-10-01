@@ -261,3 +261,34 @@ jobs:
           git add chequeo/tablero-*.json
           git diff --staged --quiet || git commit -m "Tablero de la plataforma [skip ci]"
           git push || true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # LOS SERVICIOS QUE SE PAGAN (1/10/2026) — chequeo/servicios.mjs
+  # Maki: «que las cosas pagas estén pagas… que jamás caiga por un error de esos».
+  # Cloudinary %, galería %, Firebase y servidor contestan, y UNA FOTO DE PRUEBA de
+  # verdad que tiene que quedar aprobada (prueba que Sightengine anda).
+  # ⚠️ SÓLO en la corrida diaria o a mano, NUNCA en cada push: cada corrida sube
+  #    una foto y gasta 2 operaciones de Sightengine.
+  # ═══════════════════════════════════════════════════════════════════════════════
+  servicios:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Traer el repo
+        uses: actions/checkout@v4
+
+      - name: Chequear los servicios
+        run: node chequeo/servicios.mjs || true
+
+      - name: Dejar el resultado en el repo
+        if: always()
+        run: |
+          git config user.name  "banco-de-pruebas"
+          git config user.email "banco@invitame.local"
+          cp chequeo/servicios.txt /tmp/s.txt 2>/dev/null || true
+          git fetch origin main
+          git reset --hard origin/main
+          cp /tmp/s.txt chequeo/servicios.txt 2>/dev/null || true
+          git add chequeo/servicios.txt
+          git diff --staged --quiet || git commit -m "Chequeo de servicios [skip ci]"
+          git push || true
