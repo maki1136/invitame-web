@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-01T07:09:56.377Z",
+ "cuando": "2026-10-01T07:10:00.796Z",
  "total": 54,
- "verde": 54,
- "rojo": 0,
+ "verde": 53,
+ "rojo": 1,
  "gris": 0,
  "items": [
   {
@@ -358,8 +358,31 @@
   {
    "slug": "valeria-y-emiliano",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "fondo: previa «video» · publicada «»",
+    "sección #1: previa «rgba(29, 91, 104, 0.1)/rgb(230, 236, 240)» · publicada «oculta»",
+    "sección #2: previa «rgba(230, 236, 240, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección carta: previa «rgba(230, 236, 240, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección frase: previa «oculta» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección eventos: previa «rgba(220, 236, 242, 0.3)/rgb(230, 236, 240)» · publicada «rgb(29, 91, 104)/rgb(238, 230, 214)»",
+    "sección itinerario: previa «rgba(230, 236, 240, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección hospedaje: previa «rgba(220, 236, 242, 0.3)/rgb(230, 236, 240)» · publicada «rgb(29, 91, 104)/rgb(238, 230, 214)»",
+    "sección dresscode: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección padres: previa «rgba(220, 236, 242, 0.3)/rgb(230, 236, 240)» · publicada «rgb(29, 91, 104)/rgb(238, 230, 214)»",
+    "sección galeria: previa «color(srgb 0.901961 0.92549 0.941176 / 0.1)/rgb(58, 69, 61)» · publicada «rgb(234, 242, 242)/rgb(58, 69, 61)»",
+    "sección trivia: previa «rgba(220, 236, 242, 0.3)/rgb(230, 236, 240)» · publicada «rgb(29, 91, 104)/rgb(238, 230, 214)»",
+    "sección regalos: previa «color(srgb 0.901961 0.92549 0.941176 / 0.1)/rgb(58, 69, 61)» · publicada «rgb(230, 240, 239)/rgb(58, 69, 61)»",
+    "sección hashtag: previa «rgba(220, 236, 242, 0.3)/rgb(247, 247, 241)» · publicada «rgb(29, 91, 104)/rgb(247, 247, 241)»",
+    "sección video: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección spotify: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección confirmacion: previa «rgba(220, 236, 242, 0.3)/rgb(230, 236, 240)» · publicada «rgb(46, 109, 120)/rgb(238, 230, 214)»",
+    "sección share-sec: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»",
+    "sección filtro-sec: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «—»",
+    "sección gal-seccion: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «—»",
+    "sección pv-sec: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «—»",
+    "sección contacto-sec: previa «rgba(230, 236, 240, 0.1)/rgb(58, 69, 61)» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»"
+   ],
    "error": ""
   },
   {
