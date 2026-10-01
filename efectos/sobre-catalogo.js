@@ -739,6 +739,14 @@
   function sacarTapa() {
     if (tapa && tapa.parentNode) tapa.parentNode.removeChild(tapa);
     tapa = null;
+    /* ⚠️ 1/10/2026 — EL AVISO DE «YA DECIDÍ». El paquete de módulos pone
+       `inv-sobre-listo` cuando #env gana una clase que no sea de las tres que
+       pone el motor al arrancar. Un sobre del catálogo pone `carta-video`; pero
+       las invitaciones con el sobre de triángulos de verdad (isabella,
+       noche-dorada) nunca ganaban ninguna y la marca no llegaba. Con esto, la
+       hoja del servidor puede tapar el sobre desde el primer pintado sin
+       dejarle tapado el suyo a nadie. */
+    try { var e = document.getElementById('env'); if (e) e.classList.add('sobre-decidido'); } catch (x) {}
   }
 
   /* el agujero del cuerpo: el triángulo de la solapa encogido hacia su

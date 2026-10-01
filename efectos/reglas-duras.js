@@ -909,6 +909,30 @@
     return contraste(mejor, fondo) >= 4.5 ? mejor : puro;
   }
 
+  /* ⚠️ ERROR 36 — UNA SOMBRA DEL MISMO LADO QUE LA LETRA RESTA. (1/10/2026)
+     `estilos-servidor.css` le pone a la bajada de la raspadita una sombra
+     NEGRA de 14 px, pensada para cuando la raspadita lleva foto. En Perlas no
+     hay foto: es papel, la letra se corrige a oscura y la sombra negra queda
+     detrás de una letra negra — un halo gris sucio que BAJA el contraste
+     (banco: «La fecha» 2,2 en el iPhone). Sobre papel, si la sombra va del
+     mismo lado que la letra (oscura con oscura, clara con clara), se saca. */
+  function sombraContraria(el, tinta) {
+    if (!tinta) return;
+    var sh = getComputedStyle(el).textShadow;
+    if (!sh || sh === 'none') return;
+    var cols = coloresDe(sh);
+    if (!cols.length) return;
+    var Lt = luminancia(tinta);
+    for (var i = 0; i < cols.length; i++) {
+      if ((cols[i][3] === undefined ? 1 : cols[i][3]) < 0.35) continue;   /* las sombritas de diseño (suaves) se respetan */
+      var Ls = luminancia(cols[i]);
+      if ((Lt < 0.3 && Ls < 0.3) || (Lt > 0.6 && Ls > 0.6)) {
+        el.style.setProperty('text-shadow', 'none', 'important');
+        return;
+      }
+    }
+  }
+
   function pintar(el, c, conSombra, fondo, neutralizar) {
     if (neutralizar) apagarOpacidad(el);
     var txt = 'rgb(' + aTexto(c) + ')';
@@ -921,6 +945,7 @@
         'important');
     } else {
       el.style.removeProperty('text-shadow');
+      sombraContraria(el, c);
     }
     el.setAttribute('data-regla-luz', 'corregido');
     el.setAttribute('data-regla-fondo', aTexto(fondo));   /* ★ error 13 */
@@ -1107,6 +1132,7 @@
              Si lo habíamos pintado, se repone `crudo`, que es el color original
              guardado en `data-regla-orig`. */
         if (marca) pintar(el, crudo, false, fondos[0]);
+        else sombraContraria(el, crudo);
         el.setAttribute('data-regla-luz', 'ok');
         el.setAttribute('data-regla-fondo', aTexto(fondos[0]));
         c.ok++;
@@ -1115,6 +1141,24 @@
 
       var frente = mezcla(conOpa(crudo), peor);
       var res = corregir(frente, peor, peorMin, mismoTono(frente, peor));
+      /* ⚠️ ERROR 37 — EL PEOR FONDO DEPENDE DEL COLOR QUE QUEDA. (1/10/2026)
+         `peor` se elige con el color ORIGINAL: para una letra blanca, el peor
+         fondo es el papel claro, y se la oscurece hasta pasar contra ESE. Pero
+         ya oscura, el peor pasa a ser la veta oscura del mármol, y nadie lo
+         volvía a mirar: «Familia Rivera» quedaba en 4,0 contra la veta
+         (banco: 4,2 en Chrome, 4,3 «Sin usar» en el iPhone). Se vuelve a
+         buscar el peor fondo PARA EL COLOR ELEGIDO y, si no alcanza, se corrige
+         contra ése (hasta tres vueltas). */
+      for (var vuelta = 0; vuelta < 3 && res && res.c; vuelta++) {
+        var pe2 = null, pv2 = Infinity;
+        for (var k2 = 0; k2 < fondos.length; k2++) {
+          var v2 = contraste(res.c, fondos[k2]);
+          if (v2 < pv2) { pv2 = v2; pe2 = fondos[k2]; }
+        }
+        if (!pe2 || pv2 >= peorMin) break;
+        peor = pe2;
+        res = corregir(res.c, peor, peorMin, mismoTono(res.c, peor));
+      }
       /* ★ error 24: primero se intenta apagar la opacidad; lo que quede, se despeja. */
 
       /* ★ ERROR 26, RED DE SEGURIDAD — UNA CORRECCIÓN QUE DEJA EL TEXTO PEOR
