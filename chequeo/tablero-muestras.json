@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-01T19:39:35.433Z",
+ "cuando": "2026-10-01T20:45:53.880Z",
  "total": 55,
  "verde": 55,
  "rojo": 0,
@@ -189,7 +189,7 @@
   },
   {
    "slug": "lupita-mis15",
-   "ver": "(sin)",
+   "ver": "2026-09-14",
    "estado": "verde",
    "dif": [],
    "error": ""
@@ -238,7 +238,7 @@
   },
   {
    "slug": "marisol-mis15",
-   "ver": "(sin)",
+   "ver": "2026-09-14",
    "estado": "verde",
    "dif": [],
    "error": ""
@@ -259,7 +259,7 @@
   },
   {
    "slug": "mia-mis15",
-   "ver": "(sin)",
+   "ver": "2026-09-14",
    "estado": "verde",
    "dif": [],
    "error": ""
@@ -371,7 +371,7 @@
   },
   {
    "slug": "victoria-mis15",
-   "ver": "(sin)",
+   "ver": "2026-09-14",
    "estado": "verde",
    "dif": [],
    "error": ""
