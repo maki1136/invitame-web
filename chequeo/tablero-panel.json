@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-01T19:11:38.680Z",
+ "cuando": "2026-10-01T19:12:16.839Z",
  "slug": "camila-y-tomas",
  "total": 354,
- "verde": 353,
- "amarillo": 1,
+ "verde": 352,
+ "amarillo": 2,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -2024,9 +2024,8 @@
    "guarda": true,
    "dato": "c_texto-corto-boton-wsp-2",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2646,8 +2645,9 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
@@ -2753,8 +2753,9 @@
    "guarda": true,
    "dato": "c_texto-puntos",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
