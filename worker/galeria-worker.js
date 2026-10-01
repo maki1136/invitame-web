@@ -119,7 +119,29 @@ export default {
       Worker manda cada pedido directo a Cloudinary (como antes).
    ═══════════════════════════════════════════════════════════════════════════ */
 const CACHE_PREFIJO = '/res.cloudinary.com/oc8cgqt4/';
-const CACHE_MAX = 40 * 1024 * 1024;          // más grande que esto no se guarda: pasa directo
+const CACHE_MAX = 15 * 1024 * 1024;          // más grande que esto no se guarda: pasa directo (memoria del Worker: 128 MB)
+/* Redirección a Cloudinary CON permiso CORS: sin esto, las fotos que se leen
+   con crossOrigin (el medidor del papel, el velo, las máscaras del sobre)
+   fallan en la redirección. */
+function aCloudinary(arriba) {
+  return new Response(null, { status: 302, headers: { Location: arriba, 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' } });
+}
+/* Lee la respuesta con tope: si Cloudinary no dice el tamaño, igual se corta
+   al pasar CACHE_MAX en vez de llenar la memoria. null = se pasó. */
+async function leerConTope(resp) {
+  const lector = resp.body.getReader();
+  const partes = []; let total = 0;
+  for (;;) {
+    const { done, value } = await lector.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > CACHE_MAX) { try { await lector.cancel(); } catch (e) {} return null; }
+    partes.push(value);
+  }
+  const out = new Uint8Array(total); let k = 0;
+  for (const p of partes) { out.set(p, k); k += p.byteLength; }
+  return out.buffer;
+}
 function familiaCliente(req) {
   const ua = req.headers.get('User-Agent') || '';
   const ac = req.headers.get('Accept') || '';
@@ -151,12 +173,14 @@ function cabecerasMedio(tipo, cc, total, vary) {
   return h;
 }
 async function medio(req, env, ctx, url) {
-  const resto = url.pathname.slice(CACHE_PREFIJO.length) + (url.search || '');
+  /* Sin «?…»: Cloudinary no los usa y así nadie puede llenar R2 pidiendo
+     la misma foto con ?x=1, ?x=2… */
+  const resto = url.pathname.slice(CACHE_PREFIJO.length);
   const arriba = 'https://res.cloudinary.com/oc8cgqt4/' + resto;
   if (!/^(image|video|raw)\/upload\//.test(resto) || resto.length > 1500)
     return respuesta({ error: 'no' }, 400);
   if (String(env.MEDIA_CACHE || '').toLowerCase() === 'no' || !env.BUCKET)
-    return Response.redirect(arriba, 302);
+    return aCloudinary(arriba);
 
   const fam = familiaCliente(req);
   const auto = /(^|[,\/])(f_auto|vc_auto)([,:\/]|$)/.test(resto);
@@ -202,19 +226,19 @@ async function medio(req, env, ctx, url) {
   if (auto) pedir['User-Agent'] = req.headers.get('User-Agent') || '';
   let up;
   try { up = await fetch(arriba, { headers: pedir }); }
-  catch (e) { return Response.redirect(arriba, 302); }     // que lo pida el teléfono directo
+  catch (e) { return aCloudinary(arriba); }     // que lo pida el teléfono directo
   const largo = parseInt(up.headers.get('Content-Length') || '0', 10);
   if (up.status !== 200 || largo > CACHE_MAX) {
     /* Error de Cloudinary (un video todavía procesándose, un 404) o archivo
        gigante: no se guarda nada; se le devuelve al teléfono lo que dijo
        Cloudinary, o se lo manda directo si pidió un pedazo. */
-    if (rango && up.status === 200) return Response.redirect(arriba, 302);
+    if (rango && up.status === 200) { try { await up.body.cancel(); } catch (e) {} return aCloudinary(arriba); }
     const h = new Headers(up.headers); h.set('Access-Control-Allow-Origin', '*'); h.set('X-Cache-Invitame', 'directo');
     if (up.status !== 200) h.set('Cache-Control', 'no-store');
     return new Response(up.body, { status: up.status, headers: h });
   }
-  const buf = await up.arrayBuffer();
-  if (buf.byteLength > CACHE_MAX) return Response.redirect(arriba, 302);
+  const buf = await leerConTope(up);
+  if (!buf) return aCloudinary(arriba);
   const tipo = up.headers.get('Content-Type') || 'application/octet-stream';
   const cc = up.headers.get('Cache-Control') || 'public, max-age=2592000';
   ctx.waitUntil(env.BUCKET.put(key, buf, {
@@ -230,7 +254,11 @@ async function medio(req, env, ctx, url) {
   const h = cabecerasMedio(tipo, cc, r ? (r.fin - r.ini + 1) : total, vary);
   h.set('X-Cache-Invitame', 'cloudinary');
   if (req.method === 'HEAD') return new Response(null, { status: 200, headers: h });
-  if (r) { h.set('Content-Range', 'bytes ' + r.ini + '-' + r.fin + '/' + total); return new Response(buf.slice(r.ini, r.fin + 1), { status: 206, headers: h }); }
+  if (r) {
+    h.set('Content-Range', 'bytes ' + r.ini + '-' + r.fin + '/' + total);
+    /* subarray: la misma memoria, sin copiar el video otra vez */
+    return new Response(new Uint8Array(buf).subarray(r.ini, r.fin + 1), { status: 206, headers: h });
+  }
   return new Response(buf, { status: 200, headers: h });
 }
 
@@ -274,6 +302,18 @@ async function limpiezaDiaria(env) {
     if (!isFinite(base)) continue;
     if (ahora > base + DIAS_GUARDADO * 86400000) vencidas.push(gid);
   }
+  /* Copias de la caché (c/…) que nadie renovó en 400 días: se borran de a
+     1000 por día, para que R2 no crezca para siempre con invitaciones que ya
+     pasaron. Una copia en uso se renueva sola (ver medio()). */
+  try {
+    const desde = 'c/' + Math.floor(Math.random() * 256).toString(16).padStart(2, '0');   /* cada día un tramo distinto */
+    const lista = await env.BUCKET.list({ prefix: 'c/', startAfter: desde, limit: 1000, include: ['customMetadata'] });
+    const viejas = (lista.objects || []).filter((o) => {
+      const t = parseInt((o.customMetadata && o.customMetadata.t) || '0', 10);
+      return t && ahora - t > 400 * 86400000;
+    }).map((o) => o.key);
+    if (viejas.length) await env.BUCKET.delete(viejas);
+  } catch (e) {}
   const hechas = [];
   for (const gid of vencidas.slice(0, 3)) {
     await borrarFiesta(env, gid);
