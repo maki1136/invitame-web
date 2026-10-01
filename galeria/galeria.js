@@ -863,14 +863,16 @@ function ventanaAbierta(ev) {
   return ahora >= d && ahora <= h;
 }
 function pintarVentana(ev) {
-  const abierta = ventanaAbierta(ev) && ev.estado !== 'cerrada';
+  const abierta = ventanaAbierta(ev) && ev.estado !== 'cerrada' && ev.estado !== 'archivada';
   $('botonera').hidden = !abierta;
   const c = $('gal-cerrada');
   if (!abierta) {
     /* 1/10/2026: cuando ya había pasado la fecha de cierre decía «la subida
        abre el día del evento». Ahora distingue antes y después. */
     const h = (ev.ventana && ev.ventana.hasta) ? new Date(ev.ventana.hasta).getTime() : Infinity;
-    c.textContent = (ev.estado === 'cerrada' || Date.now() > h)
+    c.textContent = ev.estado === 'archivada'
+      ? 'Las fotos de esta fiesta se guardaron 3 meses y ya no están disponibles.'
+      : (ev.estado === 'cerrada' || Date.now() > h)
       ? 'La subida de fotos ya cerró. ¡Gracias por ser parte! Puedes ver y descargar todas las fotos aquí abajo.'
       : 'La subida abre el día del evento. Mientras tanto puedes ver la galería.';
     c.hidden = false;
