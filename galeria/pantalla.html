@@ -679,7 +679,10 @@ function preparar() {
 
   $('arranque-btn').onclick = async () => {
     $('arranque').hidden = true;
-    try { await document.documentElement.requestFullscreen(); } catch (e) {}
+    /* 1/10/2026: no se ESPERA la pantalla completa. Hay navegadores en los que
+       esa promesa no se resuelve nunca (medido en WebKit) y entonces las fotos
+       no arrancaban. Se pide y se sigue. */
+    try { const pc = document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); if (pc && pc.catch) pc.catch(() => {}); } catch (e) {}
     noApagar();
     siguiente();
   };

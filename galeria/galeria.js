@@ -103,6 +103,12 @@ function esInApp() {
       'font-size:13px;font-weight:600;color:#6D1233;text-decoration:none;' +
       '-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)';
     document.body.appendChild(a);
+    /* ⚠️ 1/10/2026: el botón fijo tapaba la parte de arriba del nombre de la
+       fiesta («Lucía & Andrés» cortado, medido en un iPhone 13). Se le hace
+       lugar arriba a las dos pantallas mientras el botón exista. */
+    const st = document.createElement('style');
+    st.textContent = '#gal-main,#gal-nombre{padding-top:calc(44px + env(safe-area-inset-top))!important}';
+    document.head.appendChild(st);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', poner);
   else poner();
@@ -368,6 +374,10 @@ function marcarCelda(id, comoQuedo) {
   b.classList.remove('subiendo');
   if (comoQuedo === 'lista') {
     b.classList.add('ok');
+    b.dataset.listaTs = String(Date.now());
+    /* si la aprobada ya llegó antes que la respuesta del servidor, se va ya */
+    if (propiasSinPar.length) { propiasSinPar.shift(); b.remove(); delete celdasLocales[id]; return; }
+    subidasSinPar.push(id);
     if (EV && EV.modo === 'previa') toast('¡Listo! Aparece en cuanto la aprueben', 3600);
   } else if (comoQuedo === 'falló') {
     b.classList.add('error');
@@ -378,6 +388,35 @@ function marcarCelda(id, comoQuedo) {
 
 /* ---------- la grilla en vivo ---------- */
 const yaEnGrilla = {};
+/* ⚠️ LA FOTO SALÍA DOS VECES. (1/10/2026, medido en prueba-desde-cero)
+   Mientras sube, la foto se muestra en una celda provisoria («tuya»). Cuando
+   la fiesta está en modo «auto», la foto aprobada llega enseguida por la base
+   y se pintaba OTRA celda: el invitado veía su foto repetida, y el contador
+   decía «1 foto». El servidor no devuelve el id de la foto, así que se
+   empareja por orden: cada foto propia que llega reemplaza a la celda
+   provisoria más vieja que ya terminó de subir. */
+const subidasSinPar = [];
+const propiasSinPar = [];
+const ABRIO = Date.now();
+function sacarProvisoria(f) {
+  if (!AUTOR || !f.autor || f.autor.nombre !== AUTOR.nombre) return;
+  if (!subidasSinPar.length) {
+    /* llegó antes de que termine la subida: se anota, si hay algo subiendo */
+    if ((f.tsms || 0) >= ABRIO - 5000 && Object.keys(celdasLocales).length) propiasSinPar.push(f.id);
+    return;
+  }
+  while (subidasSinPar.length) {
+    const id = subidasSinPar[0];
+    const c = celdasLocales[id];
+    if (!c) { subidasSinPar.shift(); continue; }
+    /* una foto propia VIEJA (de otra visita) no reemplaza a una de ahora */
+    if ((f.tsms || 0) < Number(c.dataset.listaTs || 0) - 120000) return;
+    subidasSinPar.shift();
+    c.remove();
+    delete celdasLocales[id];
+    return;
+  }
+}
 function escucharFotos() {
   const q = query(collection(db, 'gal_fotos', GID, 'items'), where('estado', '==', 'aprobada'));
   onSnapshot(q, (snap) => {
@@ -388,6 +427,7 @@ function escucharFotos() {
     docs.forEach((f) => {
       if (yaEnGrilla[f.id]) return;
       yaEnGrilla[f.id] = true;
+      sacarProvisoria(f);
       const b = document.createElement('button');
       b.className = 'celda';
       b.type = 'button';
