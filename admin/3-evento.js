@@ -396,8 +396,16 @@
   async function subirVideo(input){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadVideo){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
+    if(f.size>95*1048576){alert('El video pesa '+Math.round(f.size/1048576)+' MB y el máximo es 95 MB. Recortalo (con 10 a 20 segundos alcanza) y subilo de nuevo.');input.value='';return;}
     const b=el('vidbtn'); if(b)b.textContent='Subiendo video…';
-    try{const url=await INV.uploadVideo(f); setB('coverVideo',url); renderPanel();}
+    /* Se sube tal cual; si es pesado se guarda la dirección con la receta de
+       Cloudinary (ancho 1080, sin audio, tope 2 Mbps y 30 s), y se la pide una
+       vez para que ya esté fabricada cuando entre el primer invitado. Mismo
+       criterio que el fondo (ver efectos/panel-fondo.js, 1/10/2026). */
+    try{let url=await INV.uploadVideo(f);
+      const m=String(url).match(/^(.*\/video\/upload\/)(v\d+\/.*)$/);
+      if(m&&f.size>2*1048576){ url=m[1]+'q_auto,vc_auto,w_1080,c_limit,ac_none,br_2m,du_30/'+m[2]; try{fetch(url,{mode:'no-cors'}).catch(()=>{});}catch(_){} }
+      setB('coverVideo',url); renderPanel();}
     catch(e){console.error(e); if(b)b.innerHTML=ICO.subir+' Subir video (.mp4)'; alert('No se pudo subir: '+(e.message||e));}
     input.value='';
   }
