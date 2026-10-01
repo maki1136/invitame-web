@@ -271,6 +271,7 @@
       }
       el.removeAttribute('data-fondo-valor');
       el.style.removeProperty('background-color');
+      if (el.getAttribute('data-fondo-tex')) { el.style.removeProperty('background-image'); el.removeAttribute('data-fondo-tex'); }
       if (el.getAttribute('data-fondo-pinta') === 'marco') el.style.removeProperty('background');
       el.removeAttribute('data-fondo-pinta');
     });
@@ -288,6 +289,7 @@
     /* si el otro módulo soltó la sección (se apagó la banda), vuelve a ser de acá */
     secs.forEach(function (el) { if (el.getAttribute('data-fondo-ajena') && !el.style.getPropertyValue('background-color')) el.removeAttribute('data-fondo-ajena'); });
     var cols = secs.map(function (el) { return getComputedStyle(el).backgroundColor; });
+    var texs = secs.map(function (el) { return getComputedStyle(el).backgroundImage || ''; });
     raiz.setAttribute('data-fondo', tipo);
     secs.forEach(function (el, i) {
       /* el color ya lo escribió otro módulo en el elemento (la banda temática): es suyo */
@@ -310,6 +312,19 @@
       var a = Math.max(0, Math.min(1, c.a * (1 - abre)));
       var val = 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', ' + a.toFixed(3) + ')';
       el.style.setProperty('background-color', val, 'important');
+      /* ⚠️ 1/10/2026 — EL PAPEL CON TEXTURA TAPABA EL FONDO. Probado armando una
+         invitación NUEVA desde el panel (Bohemia + «Una imagen»): el color de
+         las secciones se abría bien, pero el motor les pone además la textura
+         del tema (`--sec-tex`: lino, kraft, mármol…) como imagen, y esa imagen
+         es opaca: la foto elegida no se veía en ninguna sección. El panel dice
+         «Qué reemplaza el papel»: si la perilla abre la sección (más de la
+         mitad), la textura del papel se va con el color. Sólo la textura del
+         motor (`/i/tex-…`): los degradés y dibujos de las colecciones quedan. */
+      if (abre > 0.5 && /\/i\/tex-[a-z]+\.jpg/.test(texs[i]) && texs[i].indexOf('gradient') < 0 &&
+          (!el.style.getPropertyValue('background-image') || el.getAttribute('data-fondo-tex'))) {   /* lo puesto en línea por otro módulo, no se toca */
+        el.style.setProperty('background-image', 'none', 'important');
+        el.setAttribute('data-fondo-tex', '1');
+      }
       el.setAttribute('data-fondo-pinta', 'sec');
       el.setAttribute('data-fondo-valor', el.style.getPropertyValue('background-color'));
     });
