@@ -53,6 +53,7 @@ try {
   else {
     const c = j.credits || {};
     const usado = c.usage || 0, limite = c.limit || 0, p = limite ? usado / limite : 0;
+    if (!limite) throw new Error('Cloudinary no informó el límite de créditos');
     const txt = 'Cloudinary (plan ' + j.plan + '): ' + usado.toFixed(1) + ' de ' + limite + ' créditos = ' + pct(p);
     if (p >= 1) linea('MAL', txt + ' → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.');
     else if (p >= AVISO) linea('OJO', txt + ' → cerca del tope, subir de plan antes de fin de mes.');
@@ -62,8 +63,10 @@ try {
 
 /* 2 — Worker de la galería */
 try {
-  const j = await (await traer(WORKER + '/uso')).json();
-  const p = (j.porcentaje || 0) / 100;
+  const rw = await traer(WORKER + '/uso');
+  const j = await rw.json();
+  if (!rw.ok || typeof j.porcentaje !== 'number') throw new Error('contestó ' + rw.status + ' ' + JSON.stringify(j).slice(0, 80));
+  const p = j.porcentaje / 100;
   const txt = 'Galería en vivo: ' + j.usadoGB + ' GB de ' + j.topeGB + ' GB este mes = ' + pct(p);
   if (p >= 1) linea('MAL', txt + ' → LLENO: ninguna fiesta puede subir fotos. Subir TOPE_GB en Cloudflare.');
   else if (p >= AVISO) linea('OJO', txt + ' → subir TOPE_GB en Cloudflare antes de que se llene.');
@@ -85,7 +88,8 @@ try {
   if (!r.ok || t.indexOf('INVEFECTOS_JUNTOS') < 0) linea('MAL', 'Servidor: el paquete de módulos llegó roto (' + r.status + ', ' + t.length + ' bytes)');
   else {
     const r2 = await traer(SITIO + '/i/?e=prueba-desde-cero');
-    if (!r2.ok) linea('MAL', 'Servidor: la invitación de prueba contestó ' + r2.status);
+    const h2 = await r2.text();
+    if (!r2.ok || h2.indexOf('firebase-inv.js') < 0) linea('MAL', 'Servidor: la invitación de prueba contestó ' + r2.status + ' y no trae el motor');
     else linea('BIEN', 'Servidor: la invitación y el paquete de módulos llegan enteros (' + Math.round(t.length / 1024) + ' KB)');
   }
 } catch (e) { linea('MAL', 'Servidor: no contestó (' + e.message + ')'); }
