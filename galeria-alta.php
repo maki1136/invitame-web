@@ -197,9 +197,25 @@ if ($GALERIA_CLAVE_ALTA === '') {
 }
 
 // ---------- 3. el alta, por la puerta que NO gasta crédito ----------
+/* ⚠️⚠️ LA GALERÍA SE CERRABA ANTES DE LA FIESTA. (1/10/2026)
+   El Worker abre la subida desde que se crea y, si no le dicen hasta cuándo,
+   la deja abierta 30 DÍAS. Jazmín crea la galería cuando arma la invitación,
+   meses antes: una boda de febrero creada en octubre llegaba al día de la
+   fiesta con la subida cerrada («la subida está cerrada ahora») y nadie se
+   enteraba hasta que los invitados no podían subir nada.
+   Ahora se manda `hasta`: el más tardío entre 30 días desde hoy y 7 días
+   después de la fiesta (para las fotos que llegan al otro día). */
+$alta = array('nombre' => $nombre, 'fecha' => $fecha, 'modo' => $modo, 'audios' => $audios);
+$hasta = time() + 30 * 86400;
+if ($fecha !== '') {
+  $tf = strtotime($fecha . ' 23:59:59 UTC');
+  if ($tf !== false && $tf + 7 * 86400 > $hasta) $hasta = $tf + 7 * 86400;
+}
+$alta['hasta'] = gmdate('Y-m-d\TH:i:s\Z', $hasta);
+
 list($rc, $cc) = pedir(
   $WORKER . '/crear', 'POST',
-  json_encode(array('nombre' => $nombre, 'fecha' => $fecha, 'modo' => $modo, 'audios' => $audios)),
+  json_encode($alta),
   array('X-Clave: ' . $GALERIA_CLAVE_ALTA)
 );
 $j = json_decode((string)$rc, true);

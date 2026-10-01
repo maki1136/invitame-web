@@ -281,7 +281,20 @@ const INV = {
     };
     const m = (mensaje == null) ? '' : String(mensaje).slice(0, 500).trim();
     if (m) payload.rsvpMensaje = m;
-    await updateDoc(doc(db, GU, gid(slug, token)), payload);
+    /* ⚠️⚠️ 1/10/2026 — CON MENSAJE, LA CONFIRMACIÓN NO SE GUARDABA.
+       Las reglas de Firestore sólo dejan tocar rsvp, rsvpPersonas y rsvpAt:
+       `rsvpMensaje` no está en la lista, así que el invitado que escribía
+       «¡Nos vemos!» recibía «Missing or insufficient permissions» y SU
+       CONFIRMACIÓN ENTERA se perdía en silencio (medido en prueba-desde-cero).
+       Mientras la regla no sume `rsvpMensaje`, si falla con mensaje se vuelve
+       a guardar SIN él: lo que no se puede perder es el sí o el no. */
+    try {
+      await updateDoc(doc(db, GU, gid(slug, token)), payload);
+    } catch (e) {
+      if (!m) throw e;
+      delete payload.rsvpMensaje;
+      await updateDoc(doc(db, GU, gid(slug, token)), payload);
+    }
     return true;
   },
 
