@@ -211,6 +211,9 @@ if ($fecha !== '') {
   $tf = strtotime($fecha . ' 23:59:59 UTC');
   if ($tf !== false && $tf + 7 * 86400 > $hasta) $hasta = $tf + 7 * 86400;
 }
+/* Una MUESTRA queda abierta siempre: la gente que la mira tiene que poder
+   probar subir una foto cualquier día (Maki, 1/10/2026). */
+if (!empty($in['muestra'])) $hasta = gmmktime(23, 59, 59, 12, 31, 2099);
 $alta['hasta'] = gmdate('Y-m-d\TH:i:s\Z', $hasta);
 
 list($rc, $cc) = pedir(
