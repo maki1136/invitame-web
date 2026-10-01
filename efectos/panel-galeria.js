@@ -159,6 +159,26 @@
 
     tarjeta.appendChild(col);
     caja.appendChild(tarjeta);
+
+    /* Hasta cuándo se pueden subir fotos: lo dice la galería misma. Así Jazmín
+       ve de un vistazo si una galería vieja ya cerró (y la rehace con el botón). */
+    var plazo = document.createElement('div');
+    plazo.className = 'hint';
+    plazo.style.marginBottom = '10px';
+    caja.appendChild(plazo);
+    fetch('https://firestore.googleapis.com/v1/projects/invitame-9b51f/databases/(default)/documents/gal_eventos/' + encodeURIComponent(g))
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var v = j && j.fields && j.fields.ventana && j.fields.ventana.mapValue.fields;
+        var h = v && v.hasta && v.hasta.stringValue;
+        if (!j || !j.fields) { plazo.style.color = '#a3242f'; plazo.textContent = 'Esa galería no existe. Hacé una nueva con el botón de abajo.'; return; }
+        if (!h) { plazo.textContent = 'Se pueden subir fotos siempre.'; return; }
+        var t = new Date(h);
+        if (t.getFullYear() >= 2090) { plazo.textContent = 'Muestra: se pueden subir fotos siempre.'; return; }
+        var f = t.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
+        if (t.getTime() < Date.now()) { plazo.style.color = '#a3242f'; plazo.textContent = 'La subida de fotos CERRÓ el ' + f + '. Para reabrirla, hacé una galería nueva con el botón de abajo.'; }
+        else plazo.textContent = 'Se pueden subir fotos hasta el ' + f + '.';
+      })['catch'](function () {});
   }
 
   function enlace(txt, href) {
@@ -212,6 +232,14 @@
     caja.appendChild(ayuda);
 
     caja.appendChild(grupo('', tilde(d, 'encendido', 'Mostrar la galería en la invitación')));
+    /* 1/10/2026, Maki: «en las muestras la gente va a poder probar todo normal».
+       · «Es una muestra»: al crear la galería queda abierta para subir SIEMPRE
+         (una fiesta de verdad cierra 7 días después de la fecha).
+       · «Sólo mostrarla»: se ve la sección pero el botón no entra. Antes esto
+         existía sólo en los datos, sin control: 18 muestras lo tenían prendido
+         y nadie podía probar la galería, ni había forma de apagarlo. */
+    caja.appendChild(grupo('', tilde(d, 'muestra', 'Es una muestra: la galería queda abierta siempre para que la prueben')));
+    caja.appendChild(grupo('', tilde(d, 'vidriera', 'Sólo mostrar la sección, sin dejar entrar')));
 
     var links = document.createElement('div');
 
@@ -234,20 +262,24 @@
     function acomodarAlta() {
       var dd = borrador() || d;
       var ya = FORMA_GID.test(String(cfg(dd).gid || '').trim());
-      cajaAlta.style.display = ya ? 'none' : '';
+      /* Con galería ya puesta, el botón sigue, pero para hacer una NUEVA: es la
+         forma de reabrir una que ya cerró (o de pasar una muestra vieja, que
+         cerraba a los 30 días, a una que no cierra). */
+      btnAlta.innerHTML = ya ? ico('destello') + ' Hacer una galería nueva (reemplaza a la de ahora)'
+                             : ico('destello') + ' Crear la galería de esta fiesta';
     }
     acomodarAlta();
 
     btnAlta.onclick = function () {
       var dd = borrador(); if (!dd) return;
       /* el freno: crear dos veces deja huérfana la primera */
-      if (FORMA_GID.test(String(cfg(dd).gid || '').trim())) {
-        alert('Esta invitación ya tiene su galería.'); acomodarAlta(); return;
-      }
+      var reemplaza = FORMA_GID.test(String(cfg(dd).gid || '').trim());
       var u = (window.INV && window.INV.user) ? window.INV.user : null;
       if (!u) { alert('No hay sesión abierta en el panel.'); return; }
       var quienes = [dd.n1, dd.n2].filter(Boolean).join(' & ') || String(dd.slug || 'la fiesta');
-      if (!confirm('Creo la galería de "' + quienes + '"?')) return;
+      if (!confirm(reemplaza
+          ? 'Hago una galería NUEVA para "' + quienes + '"? Las fotos de la galería de ahora no pasan a la nueva.'
+          : 'Creo la galería de "' + quienes + '"?')) return;
       var antes = btnAlta.innerHTML;
       btnAlta.disabled = true; btnAlta.textContent = 'Creando…';
       u.getIdToken(true).then(function (tok) {
@@ -257,7 +289,7 @@
              después en /galeria/moderar.html si prefieren revisarlas antes. */
           body: JSON.stringify({ idToken: tok, nombre: quienes,
                                  fecha: String(dd.fecha || '').slice(0, 10),
-                                 modo: 'auto', audios: true })
+                                 modo: 'auto', audios: true, muestra: !!cfg(dd).muestra })
         }).then(function (r) { return r.json()['catch'](function () { return {}; }); });
       }).then(function (j) {
         btnAlta.disabled = false; btnAlta.innerHTML = antes;
