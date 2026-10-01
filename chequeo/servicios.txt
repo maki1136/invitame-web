@@ -1,0 +1,8 @@
+CHEQUEO DE SERVICIOS — 2026-10-01 22:01 UTC
+🔴 HAY 1 COSA(S) MAL
+
+MAL    Cloudinary (plan Free): 60.4 de 25 créditos = 241% → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.
+BIEN   Galería en vivo: 0.003 GB de 8 GB este mes = 0%
+BIEN   Firebase: contesta bien
+BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (1912 KB)
+BIEN   Foto de prueba: subió, pasó el filtro y quedó APROBADA (Sightengine y la galería andan)
