@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-01T14:43:02.390Z",
+ "cuando": "2026-10-01T16:46:19.710Z",
  "total": 54,
- "verde": 52,
+ "verde": 54,
  "rojo": 0,
- "gris": 2,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
@@ -231,10 +231,10 @@
   },
   {
    "slug": "mariana-y-rodrigo",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "marisol-mis15",
@@ -343,10 +343,10 @@
   },
   {
    "slug": "sofia-y-martin",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "valentina-y-emiliano",
