@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 30/09/2026, 17:45
+Fecha: 30/09/2026, 22:51
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 6 PROBLEMAS (y 88 cosas bien)
+HAY 2 PROBLEMAS (y 111 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -23,15 +23,34 @@ HAY 6 PROBLEMAS (y 88 cosas bien)
    BIEN   no se sale nada de la columna
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
-
-──────────────────────────────────────────
-  Safari escritorio
-──────────────────────────────────────────
-   MAL    el escenario se cortó a la mitad
-             -> alcanzó a correr 8 chequeos y se cayó
-             -> el último que sí corrió: "las tapas caen justo encima de los números"
-             -> page.evaluate: Target page, context or browser has been closed
-             -> (los chequeos que faltan NO se probaron: este verde no vale)
+   BIEN   se puede raspar y se revela la fecha
+   BIEN   una vez raspada, queda raspada
+   BIEN   está en español de México, sin voseo
+   BIEN   no se ve nada de la boda de ejemplo
+   BIEN   los botones flotantes no se pisan
+   BIEN   todos los textos se leen
+   BIEN   el boleto del pase se ve entero
+   BIEN   al tocar el boleto, el pedazo se corta y baja
+   BIEN   los módulos vienen en un solo pedido, no de a sesenta
+   BIEN   ninguna foto viaja sin optimizar
+   BIEN   la invitación no pide un archivo por cada cosa
+   BIEN   no hay ni un emoji a la vista
+   BIEN   el reproductor de Spotify está adentro de la solapa
+   BIEN   la solapa de la música viene ABIERTA
+   BIEN   al tocarla se cierra de verdad
+   BIEN   y se vuelve a abrir
+   BIEN   sin errores de JavaScript
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no se pudo sacar la captura entera: page.screenshot: Timeout 30000ms exceeded.
+Call log:
+  - tak)
+   BIEN   al salir, la invitación anota dónde estaba
+   BIEN   en la galería hay botón para volver a la invitación
+   (volvió a su lugar en 15.2 s)
+   BIEN   al volver NO se repite el sobre
+   BIEN   al volver cae en el mismo lugar
+   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 832.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -48,7 +67,7 @@ HAY 6 PROBLEMAS (y 88 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Contamos las sillas an" 1.5/4.5 [#d7cebb sobre luminancia 0.05-0.40 · p.reveal.in] · "La fecha" 2.2/4.5 [#39564d sobre luminancia 0.24-0.68 · div.kick.reveal] · "Con mucha alegría" 2.8/4.5 [#3f5d53 sobre luminancia 0.36-0.83 · div.kick.reveal] · "Su presencia es nuestr" 4.2/4.5 [#333d3a sobre luminancia 0.34-0.87 · p.reveal.in] y 1 más
+             -> "La banda sonora" 3.9/4.5 [#433a2e sobre luminancia 0.32-0.84 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -64,12 +83,11 @@ HAY 6 PROBLEMAS (y 88 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 97.0 s)
+   (volvió a su lugar en 7.3 s)
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 12381 y volvió a 11437
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1502.5 s de punta a punta)
+   (tardó 900.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -79,7 +97,7 @@ HAY 6 PROBLEMAS (y 88 cosas bien)
    BIEN   en tablet la invitación ocupa la pantalla
    BIEN   en tablet no se arma la capa borrosa que traba el scroll
    BIEN   la portada no es la de otra invitación
-   BIEN   el sobre está encuadrado, no a pantalla completa
+   ----   el sobre no se pudo medir todavía (no es un fallo)
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -91,28 +109,27 @@ HAY 6 PROBLEMAS (y 88 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "La banda sonora" 2.4/3 [#44655a sobre luminancia 0.34-0.75 · div.kick.reveal] · "Para verlo juntos" 2.9/3 [#44655a sobre luminancia 0.43-0.77 · div.kick.reveal] · "Ver el video" 3.1/4.5 [#ffffff sobre luminancia 0.01-0.29 · span.txt]
+             -> "La fecha" 2.3/3 [#44655a sobre luminancia 0.33-0.77 · div.kick.reveal] · "Corre la voz" 2.6/3 [#44655a sobre luminancia 0.38-0.75 · div.kick.reveal] · "PASE DE INVITADO" 4.4/4.5 [#4e7468 sobre luminancia 0.84-0.84 · p.pv-over]
    BIEN   el boleto del pase se ve entero
-   BIEN   al tocar el boleto, el pedazo se corta y baja
+   ----   el boleto no se pudo traer a la pantalla: no se midio
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 3 fallas de servicios ajenos — firebase (red), www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 91.3 s)
+   (volvió a su lugar en 5.1 s)
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 13592 y volvió a 14984
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 964.3 s de punta a punta)
+   (tardó 1161.1 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -123,8 +140,7 @@ HAY 6 PROBLEMAS (y 88 cosas bien)
 ──────────────────────────────────────────
   Chrome escritorio
 ──────────────────────────────────────────
-   MAL    no asoma otro sobre al abrir
-             -> 4 piezas a la vista: .triflap.tri-t 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-r 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-b 1440x900 [display:block visibility:visible opacity:1] · .triflap.tri-l 1440x900 [display:block visibility:visible opacity:1]  |  estado de las piezas a los 150 ms: .triflap:block/visible · .triflap:block/visible · .triflap:block/visible · .triflap:block/visible · #scene:none/visible  |  marca inv-sobre-listo: todavia no
+   BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   la columna ya está encuadrada en el primer pintado
    ----   el sobre no se pudo medir todavía (no es un fallo)
@@ -152,9 +168,9 @@ HAY 6 PROBLEMAS (y 88 cosas bien)
    BIEN   sin errores de JavaScript
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.6 s)
+   (volvió a su lugar en 1.5 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 130.3 s de punta a punta)
+   (tardó 130.9 s de punta a punta)
 
