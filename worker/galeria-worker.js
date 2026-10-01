@@ -1033,7 +1033,25 @@ function qr(url) {
    pero 'gore' NO. Escribir 'gore-2.1' hace que Sightengine conteste
    "Unknown model" y NINGUNA foto se modere — sin ruido, sin error visible.
    Ya nos pasó una vez; está contado en worker/PARCHE-modelo-gore.md. */
+/* REINTENTO (1/10/2026): Sightengine tiene un tope de pedidos POR SEGUNDO
+   (1 por segundo en el plan gratis y en Starter, 10 en Pro). En el momento
+   del vals, 20 invitados suben a la vez → los que pasan del tope vuelven con
+   «rate limit» y antes quedaban PENDIENTES para siempre (en automático nadie
+   las aprueba). Ahora, si el motivo es el tope por segundo, se espera un
+   poquito y se prueba de nuevo (hasta 4 veces, ~7 s en total). El tope del
+   MES no se reintenta: eso se arregla subiendo de plan. */
 async function moderar(env, blob) {
+  const esperas = [900, 1500, 2200, 2600];
+  let v;
+  for (let i = 0; i <= esperas.length; i++) {
+    v = await moderarUnaVez(env, blob);
+    if (!v.porSegundo || i === esperas.length) break;
+    await new Promise((ok) => setTimeout(ok, esperas[i] + Math.floor(Math.random() * 400)));
+  }
+  delete v.porSegundo;
+  return v;
+}
+async function moderarUnaVez(env, blob) {
   if (!env.SIGHTENGINE_USER || !env.SIGHTENGINE_SECRET)
     return { falla: 'sin claves de Sightengine' };
   const fd = new FormData();
@@ -1052,9 +1070,16 @@ async function moderar(env, blob) {
     return { falla: 'no contestó a tiempo (' + String(e && e.name || e) + ')' };
   } finally { clearTimeout(timer); }
   let j;
-  try { j = await r.json(); } catch (e) { return { falla: 'respuesta ilegible ' + r.status }; }
-  if (j.status !== 'success')
-    return { falla: 'rechazó: ' + String((j.error && (j.error.message || j.error.type)) || j.status).slice(0, 90) };
+  try { j = await r.json(); } catch (e) {
+    return r.status === 429 ? { falla: 'tope por segundo (429)', porSegundo: true }
+                            : { falla: 'respuesta ilegible ' + r.status };
+  }
+  if (j.status !== 'success') {
+    const tipo = String((j.error && j.error.type) || '');
+    const txt = String((j.error && (j.error.message || j.error.type)) || j.status);
+    const porSegundo = r.status === 429 || /rate|concurren|per second|too many/i.test(tipo + ' ' + txt);
+    return { falla: 'rechazó: ' + txt.slice(0, 90), porSegundo: porSegundo && !/month|usage|quota/i.test(txt) };
+  }
   const n = j.nudity || {};
   const peor = Math.max(n.sexual_activity || 0, n.sexual_display || 0, n.erotica || 0,
                         (j.gore && j.gore.prob) || 0);
