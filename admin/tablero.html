@@ -56,6 +56,12 @@
 <main>
   <div class="tarjetas" id="tarjetas"></div>
 
+  <section id="s-servicios">
+    <h2>Los servicios que se pagan (Cloudinary, galería, Firebase, servidor)</h2>
+    <div class="nota">Todos los días: cuánto se usó de cada plan (avisa al 80%), que Firebase y el servidor contesten, y una foto de prueba de verdad a la galería del chequeo que tiene que quedar APROBADA (si no, el filtro de fotos se cayó y las fotos de las fiestas no se ven).</div>
+    <pre id="servicios">Cargando…</pre>
+  </section>
+
   <section id="s-panel">
     <h2>El panel, control por control</h2>
     <div class="nota">A cada control se le cambia el valor como lo haría Jazmín. Verde: se guarda, le llega a la miniatura y se ve. Amarillo: se guarda y llega, pero la miniatura no cambió (revisar a mano). Rojo: no se guarda, no llega, o el mismo dato se toca desde dos pestañas.</div>
@@ -90,8 +96,12 @@
     pintar('todos');
   }
   var orden={rojo:0,amarillo:1,gris:2,verde:3};
-  Promise.all([leer('tablero-panel.json',1),leer('tablero-muestras.json',1),leer('resultado.txt',0)]).then(function(r){
-    var P=r[0],M=r[1],T=r[2],h='';
+  Promise.all([leer('tablero-panel.json',1),leer('tablero-muestras.json',1),leer('resultado.txt',0),leer('servicios.txt',0)]).then(function(r){
+    var P=r[0],M=r[1],T=r[2],S=r[3],h='';
+    if(S){var sm=S.match(/HAY (\d+) COSA/),so=/TODO BIEN/.test(S),sf=(S.match(/SERVICIOS — ([^\n]+)/)||[])[1]||'';
+      h+=tarjeta('Servicios pagos',so?'Todo bien':(sm?sm[1]+' mal':'Avisos'),sf,so?'ok':(sm?'mal':'medio'),'s-servicios');
+      document.getElementById('servicios').textContent=S;}
+    else h+=tarjeta('Servicios pagos','—','todavía no corrió','nada','s-servicios');
     if(P){h+=tarjeta('Panel: controles',P.verde+' / '+P.total,(P.rojo?P.rojo+' rojos · ':'')+(P.amarillo?P.amarillo+' para revisar · ':'')+'probado '+fecha(P.cuando),P.rojo?'mal':(P.amarillo?'medio':'ok'),'s-panel');}
     else h+=tarjeta('Panel: controles','—','todavía no corrió','nada','s-panel');
     if(M){h+=tarjeta('Miniatura = publicada',M.verde+' / '+M.total,(M.rojo?M.rojo+' distintas · ':'')+'probado '+fecha(M.cuando),M.rojo?'mal':'ok','s-muestras');}
