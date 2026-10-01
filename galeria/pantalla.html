@@ -329,6 +329,8 @@ const GID = (params.get('g') || '').trim();
 /* Cuánto dura cada foto y cada cuántas entra la placa del QR.
    Se pueden cambiar desde la URL para probar: ?seg=4&cada=3 */
 const SEG = Math.max(2, parseInt(params.get('seg') || '7', 10) || 7) * 1000;
+let ultimoNombre = '';
+const frescas = [];   /* ids de las fotos que llegaron y todavía no salieron: van primero */
 const CADA = Math.max(3, parseInt(params.get('cada') || '9', 10) || 9);
 /* Y cada cuantas fotos entra un mensaje del libro de firmas. Mas seguido que
    el QR: el mensaje es lo que la gente vino a ver, el QR es una instruccion. */
@@ -626,6 +628,35 @@ function preparar() {
     }
     ocultarMensaje();
 
+    /* ⭐ LAS RECIÉN LLEGADAS PRIMERO. (1/10/2026)
+       Antes la pantalla seguía la ronda en orden: con 200 fotos a 7 s, el que
+       acababa de subir la suya esperaba más de 20 minutos para verla. En una
+       fiesta la gracia es sacarla y mirar la pantalla. Así que cada foto que
+       llega se pone en la fila de «frescas» y sale en la próxima vuelta;
+       recién cuando no quedan frescas sigue la ronda de siempre. */
+    /* Y si llegan muchas juntas (medido: 10 invitados, 30 fotos en 40 s →
+       la última salía 3 minutos después), dos arreglos: va UNA de cada
+       persona por turno —el que subió tres no hace esperar a los demás— y
+       mientras la fila es larga cada foto dura la mitad. */
+    while (frescas.length) {
+      let k = frescas.findIndex((id) => {
+        const x = fotos.find((y) => y.id === id);
+        return x && x.nombre !== ultimoNombre;
+      });
+      if (k < 0) k = 0;
+      const id = frescas.splice(k, 1)[0];
+      const f = fotos.find((x) => x.id === id);
+      if (!f || !vivas[f.id] || f.id === enPantalla) continue;
+      if (await pintar(f)) {
+        ultimoNombre = f.nombre;
+        vueltas++;
+        desdeMensaje++;
+        adelantar();
+        reloj = setTimeout(siguiente, frescas.length > 4 ? Math.max(3500, SEG / 2) : SEG);
+        return;
+      }
+    }
+
     /* La próxima que siga aprobada y se pueda pintar. */
     let intentos = 0;
     let listo = false;
@@ -753,7 +784,10 @@ function preparar() {
         if (enPantalla && !vivas[enPantalla]) { siguiente(); return; }
         if (antes === 0 && fotos.length > 0 && !enPantalla) { siguiente(); return; }
 
-        const sumadas = nuevas.filter((f) => !eran[f.id]).length;
+        const llegaron = nuevas.filter((f) => !eran[f.id]);
+        const sumadas = llegaron.length;
+        if (antes > 0) llegaron.forEach((f) => { if (frescas.indexOf(f.id) < 0) frescas.push(f.id); });
+        if (frescas.length > 40) frescas.splice(0, frescas.length - 40);   /* una avalancha no frena la ronda para siempre */
         if (antes > 0 && sumadas > 0) {
           avisar(sumadas === 1 ? 'Llegó una foto nueva' : 'Llegaron ' + sumadas + ' fotos nuevas');
         }

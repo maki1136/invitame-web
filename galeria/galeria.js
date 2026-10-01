@@ -325,6 +325,12 @@ async function subirUno(t, autor) {
 
 /* ---------- entrada de archivos ---------- */
 let EV = null, AUTOR = null;
+const sinLeer = [];
+window.addEventListener('online', () => {
+  if (!sinLeer.length) return;
+  const otra = sinLeer.splice(0, sinLeer.length);
+  setTimeout(() => entraron(otra), 800);
+});
 async function entraron(files) {
   if (!files || !files.length) return;
   let lista = [...files];
@@ -335,6 +341,11 @@ async function entraron(files) {
     try {
       listo = await comprimir(f);
     } catch (e) {
+      /* ⚠️ 1/10/2026: sin señal, en Safari, leer la foto puede fallar aunque
+         la foto esté bien (medido en WebKit con la red cortada: «error
+         reading the Blob»). No es una foto rota: se guarda y se reintenta
+         sola apenas vuelve la señal, en vez de decirle que no se puede. */
+      if (navigator.onLine === false) { sinLeer.push(f); avisar('Sin señal: tu foto se sube sola apenas vuelva', false); continue; }
       /* HEIC del iPhone que este navegador no puede abrir, o archivo raro. */
       avisar('Esa foto no se pudo leer en este teléfono. Intenta con «Tomar una foto»', true);
       continue;
