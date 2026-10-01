@@ -1452,6 +1452,8 @@
   var _fontsCargadas={};
   function cargarFont(f){ if(!f)return; f=String(f).trim(); if(!f)return;
     if(/^https?:\/\//.test(f)){ if(_fontsCargadas[f])return; _fontsCargadas[f]=1; var l=document.createElement('link'); l.rel='stylesheet'; l.href=f; document.head.appendChild(l); return; }
+    /* 1/10/2026: el panel guarda la tipografía como la pide el CSS —«'Rouge Script',cursive»— y eso se mandaba entero a Google, que contesta 400 (medido en prueba-desde-cero). Se veía igual sólo porque la fuente ya venía en la lista grande de arriba: una que no estuviera en esa lista no cargaba nunca. A Google se le pide sólo el nombre. */
+    f=f.split(',')[0].replace(/["']/g,'').trim(); if(!f||/^(serif|sans-serif|cursive|monospace|fantasy|system-ui)$/i.test(f))return;
     var key=f.toLowerCase(); if(_fontsCargadas[key])return; _fontsCargadas[key]=1;
     var l2=document.createElement('link'); l2.rel='stylesheet';
     l2.href='https://fonts.googleapis.com/css2?family='+f.replace(/\s+/g,'+')+':ital,wght@0,400;0,600;1,400&display=swap';
