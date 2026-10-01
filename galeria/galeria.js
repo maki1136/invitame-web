@@ -434,6 +434,7 @@ function escucharFotos() {
     const docs = [];
     snap.forEach((d) => docs.push(Object.assign({ id: d.id }, d.data())));
     docs.sort((a, b) => (b.tsms || 0) - (a.tsms || 0));
+    TODAS.fotos = docs; pintarDescargas();
     const g = $('grilla');
     docs.forEach((f) => {
       if (yaEnGrilla[f.id]) return;
@@ -730,6 +731,7 @@ function escucharFirmas() {
     const filas = [];
     snap.forEach((d) => filas.push(Object.assign({ id: d.id }, d.data())));
     filas.sort((a, b) => (b.tsms || 0) - (a.tsms || 0));
+    TODAS.firmas = filas; pintarDescargas();
     $('firmas-titulo').hidden = !filas.length;
     $('firmas-cuenta').textContent = filas.length
       ? (filas.length === 1 ? '1 mensaje' : filas.length + ' mensajes') : '';
@@ -746,6 +748,113 @@ function escucharFirmas() {
   }, () => {});
 }
 
+/* ---------- descargar todo de una vez (1/10/2026) ----------
+   Maki: «¿las fotos los clientes se las descargan? ¿avisamos?». Antes sólo se
+   podía bajar de a una, desde el visor. Ahora un botón arma un .zip con:
+     fotos/      todas las fotos aprobadas, en tamaño completo
+     audios/     los saludos de voz
+     mensajes.txt  el libro de firmas, con el nombre de quien escribió
+   Se arma en el propio teléfono o compu (JSZip), sin servidor de por medio.
+   Y a partir del día de la fiesta se avisa hasta cuándo descargarlas: a los
+   novios se les dice 7 días (las fotos quedan guardadas 3 meses). */
+const TODAS = { fotos: [], firmas: [] };
+function fechaLarga(t) {
+  return new Date(t).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' });
+}
+function pintarDescargas() {
+  const caja = $('descargas');
+  if (!caja) return;
+  const hay = TODAS.fotos.length + TODAS.firmas.length;
+  caja.hidden = !hay;
+  const est = $('descargas-estado');
+  if (!est || est.dataset.ocupado) return;
+  let txt = '';
+  const ev = EV || {};
+  const hasta = (ev.ventana && ev.ventana.hasta) ? new Date(ev.ventana.hasta).getTime() : 0;
+  const muestra = hasta && new Date(hasta).getFullYear() >= 2090;
+  if (!muestra && ev.fecha) {
+    const dia = new Date(ev.fecha + 'T12:00:00').getTime();
+    if (Date.now() >= dia - 12 * 3600 * 1000) {
+      txt = 'Descárgalas antes del ' + fechaLarga(dia + 7 * 86400000) + '.';
+    }
+  }
+  est.textContent = txt;
+}
+function cargarJSZip() {
+  if (window.JSZip) return Promise.resolve(window.JSZip);
+  return new Promise((ok, mal) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    s.onload = () => window.JSZip ? ok(window.JSZip) : mal(new Error('jszip'));
+    s.onerror = () => mal(new Error('jszip'));
+    document.head.appendChild(s);
+  });
+}
+function limpio(n) {
+  return String(n || 'invitado').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30) || 'invitado';
+}
+async function descargarTodo() {
+  const btn = $('btn-descargar-todo'), est = $('descargas-estado');
+  const fotos = TODAS.fotos.slice().reverse();          /* de la primera a la última */
+  const firmas = TODAS.firmas.slice().reverse();
+  const audios = firmas.filter((f) => f.tipo === 'audio' && f.r2 && f.r2.key);
+  const total = fotos.length + audios.length;
+  btn.disabled = true; est.dataset.ocupado = '1';
+  try {
+    est.textContent = 'Preparando…';
+    const JSZip = await cargarJSZip();
+    const zip = new JSZip();
+    let n = 0, fallan = 0;
+    const traer = async (key) => {
+      for (let i = 0; i < 3; i++) {
+        try { const r = await fetch(WORKER + '/f/' + key, { mode: 'cors' }); if (r.ok) return await r.blob(); } catch (e) {}
+        await new Promise((r) => setTimeout(r, 800));
+      }
+      return null;
+    };
+    /* de a 4 por vez: rápido sin ahogar el teléfono */
+    const tareas = [];
+    fotos.forEach((f, i) => tareas.push(async () => {
+      const b = f.r2 && f.r2.key ? await traer(f.r2.key) : null;
+      if (b) zip.file('fotos/' + String(i + 1).padStart(3, '0') + '-' + limpio(f.autor && f.autor.nombre) +
+        (/png$/i.test(f.r2.key) ? '.png' : /webp$/i.test(f.r2.key) ? '.webp' : '.jpg'), b);
+      else fallan++;
+      est.textContent = 'Bajando ' + (++n) + ' de ' + total + '…';
+    }));
+    audios.forEach((f, i) => tareas.push(async () => {
+      const b = await traer(f.r2.key);
+      const ext = (f.r2.key.match(/\.([a-z0-9]+)$/i) || [0, 'm4a'])[1];
+      if (b) zip.file('audios/' + String(i + 1).padStart(2, '0') + '-' + limpio(f.autor && f.autor.nombre) + '.' + ext, b);
+      else fallan++;
+      est.textContent = 'Bajando ' + (++n) + ' de ' + total + '…';
+    }));
+    const corredores = Array.from({ length: 4 }, async () => { while (tareas.length) await tareas.shift()(); });
+    await Promise.all(corredores);
+    const textos = firmas.filter((f) => f.tipo !== 'audio' && String(f.texto || '').trim());
+    if (textos.length) {
+      zip.file('mensajes.txt', '\ufeff' + (EV && EV.nombre ? EV.nombre + ' · Libro de firmas\r\n\r\n' : '') +
+        textos.map((f) => ((f.autor && f.autor.nombre) || 'Un invitado') + ':\r\n' + f.texto + '\r\n').join('\r\n'));
+    }
+    est.textContent = 'Armando el archivo…';
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'STORE' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = limpio(EV && EV.nombre) + '-fotos.zip';
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 60000);
+    est.textContent = 'Listo: ' + fotos.length + ' fotos' + (audios.length ? ', ' + audios.length + ' saludos' : '') +
+      (textos.length ? ' y ' + textos.length + ' mensajes' : '') + '.' + (fallan ? ' (' + fallan + ' no se pudieron bajar: prueba de nuevo)' : '');
+  } catch (e) {
+    est.textContent = 'No se pudo armar la descarga. Prueba de nuevo con buena señal.';
+  } finally {
+    btn.disabled = false; delete est.dataset.ocupado;
+  }
+}
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'btn-descargar-todo') descargarTodo();
+});
+
 /* ---------- ventana horaria ---------- */
 function ventanaAbierta(ev) {
   const ahora = Date.now();
@@ -758,8 +867,11 @@ function pintarVentana(ev) {
   $('botonera').hidden = !abierta;
   const c = $('gal-cerrada');
   if (!abierta) {
-    c.textContent = ev.estado === 'cerrada'
-      ? 'La subida de fotos ya cerró. ¡Gracias por ser parte!'
+    /* 1/10/2026: cuando ya había pasado la fecha de cierre decía «la subida
+       abre el día del evento». Ahora distingue antes y después. */
+    const h = (ev.ventana && ev.ventana.hasta) ? new Date(ev.ventana.hasta).getTime() : Infinity;
+    c.textContent = (ev.estado === 'cerrada' || Date.now() > h)
+      ? 'La subida de fotos ya cerró. ¡Gracias por ser parte! Puedes ver y descargar todas las fotos aquí abajo.'
       : 'La subida abre el día del evento. Mientras tanto puedes ver la galería.';
     c.hidden = false;
   } else { c.hidden = true; }
