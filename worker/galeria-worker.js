@@ -78,8 +78,96 @@ export default {
     } catch (e) {
       return respuesta({ error: 'error interno', detalle: String(e && e.message || e) }, 500);
     }
+  },
+
+  /* La limpieza de todos los días (ver «LAS FOTOS SE GUARDAN 3 MESES», abajo).
+     Para que corra hay que agregarle al Worker un Cron Trigger (Settings →
+     Triggers → Cron Triggers → «0 7 * * *», o sea 4 de la mañana de Argentina). */
+  async scheduled(evento, env, ctx) {
+    ctx.waitUntil(limpiezaDiaria(env).catch(() => {}));
   }
 };
+
+/* ---------------- LAS FOTOS SE GUARDAN 3 MESES (1/10/2026) ----------------
+   Decisión de Maki: «3 meses, pero a los novios les decimos que se las bajen
+   en 7 días». La galería les muestra hasta cuándo descargarlas y tiene el
+   botón «Descargar todas las fotos y mensajes».
+   Esto borra, de las fiestas que pasaron hace más de 90 días:
+     · los archivos de R2 (fotos, miniaturas y saludos de voz: 'g/<gid>/…')
+     · las fichas de gal_fotos y gal_firmas
+   y deja la fiesta en estado 'archivada' (la galería avisa que ya no están).
+   NO toca:
+     · las MUESTRAS (su subida dura hasta 2099: se usan para mostrar);
+     · una fiesta sin fecha ni fecha de creación (no se adivina).
+   Freno: como mucho 3 fiestas por día, para no pasarse de los límites de una
+   corrida del Worker; si quedan más, siguen al día siguiente.
+   Y para apagarlo sin tocar código: variable LIMPIEZA = 'no'. */
+const DIAS_GUARDADO = 90;
+async function limpiezaDiaria(env) {
+  if (String(env.LIMPIEZA || '').toLowerCase() === 'no') return { apagada: true };
+  const t = await tokenGoogle(env);
+  const q = await fetch(FS + ':runQuery', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ structuredQuery: {
+      from: [{ collectionId: 'gal_eventos' }],
+      where: { fieldFilter: { field: { fieldPath: 'estado' }, op: 'EQUAL', value: { stringValue: 'activa' } } },
+      limit: 400
+    } })
+  });
+  if (!q.ok) return { error: q.status };
+  const filas = (await q.json()).filter((x) => x.document);
+  const ahora = Date.now();
+  const vencidas = [];
+  for (const f of filas) {
+    const ev = desdeFirestore(f.document.fields || {});
+    const gid = f.document.name.split('/').pop();
+    const hasta = ev.ventana && ev.ventana.hasta ? Date.parse(ev.ventana.hasta) : 0;
+    if (hasta && new Date(hasta).getUTCFullYear() >= 2090) continue;      /* muestra */
+    const base = ev.fecha ? Date.parse(ev.fecha + 'T23:59:59Z') : (ev.creado ? Date.parse(ev.creado) : NaN);
+    if (!isFinite(base)) continue;
+    if (ahora > base + DIAS_GUARDADO * 86400000) vencidas.push(gid);
+  }
+  const hechas = [];
+  for (const gid of vencidas.slice(0, 3)) {
+    await borrarFiesta(env, gid);
+    hechas.push(gid);
+  }
+  return { vencidas: vencidas.length, borradas: hechas };
+}
+async function borrarFiesta(env, gid) {
+  /* 1 · los archivos */
+  let cursor;
+  do {
+    const l = await env.BUCKET.list({ prefix: 'g/' + gid + '/', cursor, limit: 1000 });
+    const claves = l.objects.map((o) => o.key);
+    if (claves.length) await env.BUCKET.delete(claves);
+    cursor = l.truncated ? l.cursor : undefined;
+  } while (cursor);
+  /* 2 · las fichas (de a 300, borradas en un solo pedido cada tanda) */
+  const t = await tokenGoogle(env);
+  for (const col of ['gal_fotos', 'gal_firmas']) {
+    for (let vuelta = 0; vuelta < 20; vuelta++) {
+      const r = await fetch(FS + '/' + col + '/' + gid + '/items?pageSize=300&mask.fieldPaths=estado',
+        { headers: { Authorization: 'Bearer ' + t } });
+      if (!r.ok) break;
+      const docs = ((await r.json()).documents || []).map((d) => d.name);
+      if (!docs.length) break;
+      await fetch('https://firestore.googleapis.com/v1/' + DOCS + ':commit', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ writes: docs.map((n) => ({ delete: n })) })
+      });
+      if (docs.length < 300) break;
+    }
+  }
+  /* 3 · la fiesta queda anotada como archivada (no se borra: se sabe qué fue) */
+  await fetch(FS + '/gal_eventos/' + gid + '?updateMask.fieldPaths=estado&updateMask.fieldPaths=archivada', {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: aFirestore({ estado: 'archivada', archivada: new Date().toISOString() }) })
+  });
+}
 
 function respuesta(cuerpo, status, extra) {
   const h = Object.assign({
