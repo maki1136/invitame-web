@@ -462,7 +462,26 @@ $preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin
    Por eso va acá, en la cabeza del documento y SIN `defer`: son 5 KB que corren
    antes de que el navegador lea una sola etiqueta del cuerpo.
    ============================================================================ */
-$fotosLivianas = '<script src="/efectos/imagenes-livianas.js"></' . 'script>';
+/* ===== LA CACHÉ DE FOTOS Y VIDEOS (1/10/2026) =================================
+   Pone `window.INV_CACHE_MEDIOS` ANTES de imagenes-livianas.js: con eso, cada
+   foto, video y audio de Cloudinary se pide por el Worker de la galería, que
+   guarda una copia en R2 y la entrega gratis (ver «LA CACHÉ DE FOTOS Y VIDEOS»
+   en worker/galeria-worker.js). Con 1000 invitaciones activas, Cloudinary pasa
+   de ~600 GB entregados por mes a lo que se pide por primera vez.
+
+   $CACHE_MEDIOS:
+     'apagada'  → como siempre: todo directo a Cloudinary.
+     'prendida' → todas las invitaciones por la caché.
+   Para PROBAR en una sola invitación sin prender nada: agregar &cache=1 al link.
+   Para ver una invitación SIN caché con todo prendido: &cache=0.
+   ⚠️ Sólo se prende cuando el Worker nuevo (con la ruta /res.cloudinary.com/)
+      está pegado en Cloudflare. Si se prende antes, las fotos no cargan.
+   ============================================================================ */
+$CACHE_MEDIOS = 'apagada';
+$cacheQ = isset($_GET['cache']) ? (string)$_GET['cache'] : '';
+$conCache = ($cacheQ === '1') || ($CACHE_MEDIOS === 'prendida' && $cacheQ !== '0');
+$fotosLivianas = ($conCache ? '<script>window.INV_CACHE_MEDIOS="https://galeria.littlemomentsok.workers.dev/";</' . 'script>' : '')
+               . '<script src="/efectos/imagenes-livianas.js"></' . 'script>';
 
 /* ⚠️ Antes acá se listaban los 63 módulos, uno por uno, leyendo la lista de
    `efectos/index.js`. Ya no hace falta: los 63 vienen en UN solo pedido
@@ -642,6 +661,17 @@ function setMeta($tpl, $attr, $key, $val) {
       dibujar la tarjetita del link, no un navegador, y ahí conviene la grande
       y en su formato de siempre. */
 $tpl = iv_fotos_livianas($tpl);
+/* La caché (ver $CACHE_MEDIOS más arriba): lo que sale escrito de acá —la
+   portada del primer cuadro, el póster del sobre, las fotos del molde— también
+   se pide por el Worker. Sólo direcciones de archivo completas de la cuenta
+   oc8cgqt4; la de og:image se pone DESPUÉS y queda directa a Cloudinary. */
+if ($conCache) {
+  $tpl = preg_replace(
+    '~https?://(res\.cloudinary\.com/oc8cgqt4/(?:image|video|raw)/upload/[^\s"\'<>()\x5c]+)~',
+    'https://galeria.littlemomentsok.workers.dev/$1',
+    $tpl
+  );
+}
 
 if ($img !== '') {
   if (strpos($img, 'http') !== 0) { $img = $SITE . ($img[0] === '/' ? '' : '/i/') . $img; }
