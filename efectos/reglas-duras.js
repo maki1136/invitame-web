@@ -463,7 +463,7 @@
     if (i < 0) return url;
     var cola = url.slice(i + 8);
     if (!/^v\d+\//.test(cola)) cola = cola.replace(/^[^/]*\//, '');
-    return url.slice(0, i + 8) + 'w_24,h_24,c_fill,f_png/' + cola;
+    return url.slice(0, i + 8) + 'w_48,h_48,c_fill,f_png/' + cola;
   }
 
   function pedirPapel(url) {
@@ -474,7 +474,7 @@
     im.crossOrigin = 'anonymous';
     im.onload = function () {
       try {
-        var N = 12;
+        var N = 24;   /* ★ error 39: 12×12 promediaba las manchas chicas de una foto cargada */
         var c = document.createElement('canvas'); c.width = N; c.height = N;
         var x = c.getContext('2d');
         x.clearRect(0, 0, N, N);
@@ -488,7 +488,7 @@
         var nn = d.length / 4;
         PAPEL[url] = [sr / nn, sg / nn, sb / nn, sa / nn / 255];
         px.sort(function (a, b) { return luminancia(a) - luminancia(b); });
-        PAPEL_EXT[url] = [px[Math.floor(nn * 0.15)], px[Math.floor(nn * 0.85)]];
+        PAPEL_EXT[url] = [px[Math.floor(nn * 0.08)], px[Math.floor(nn * 0.92)]];
         pasada();
       } catch (e) { PAPEL[url] = false; }
     };
@@ -657,6 +657,38 @@
     return aRGB(v) || null;
   }
 
+  /* ⚠️⚠️ ERROR 39 — LA FOTO DE FONDO SE MEDÍA CRUDA, SIN SU VELO. (1/10/2026)
+     El fondo que sube Jazmín se ve detrás de una capa del color del papel
+     («Cuánto se apaga el fondo», `#inv-fondo > .velo`) y con la «fuerza» de
+     contraste puesta. Acá se medía la foto TAL CUAL, sin esa capa: con el
+     fondo apagado a la mitad, la parte oscura de la foto se calculaba casi
+     negra cuando en pantalla es gris claro. Resultado medido en
+     prueba-desde-cero (iPhone, 2 de 3 corridas): «Con cariño», «La fecha»,
+     «Una carta para ti» pintados en BLANCO sobre un fondo que en pantalla es
+     L 0,33–0,79 → contraste 1,2 a 1,6. Es decir: invisibles.
+     → La muestra se ve como se ve en pantalla: primero la fuerza, después el
+       velo encima. */
+  function comoSeVeElPapel(lista) {
+    var caja = document.getElementById('inv-fondo');
+    if (!caja || !document.documentElement.hasAttribute('data-fondo')) return lista;
+    var k = 1, velo = null;
+    try {
+      k = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--inv-fuerza')) || 1;
+      var v = caja.querySelector(':scope > .velo');
+      if (v) velo = aRGB(getComputedStyle(v).backgroundColor);
+    } catch (e) {}
+    var out = [];
+    for (var i = 0; i < lista.length; i++) {
+      var c = lista[i];
+      if (k !== 1) c = [0, 1, 2].map(function (j) {
+        return Math.max(0, Math.min(255, (c[j] - 127.5) * k + 127.5));
+      }).concat([c[3] === undefined ? 1 : c[3]]);
+      if (velo && velo[3] > 0.01) c = mezcla(velo, c);
+      out.push(c);
+    }
+    return out;
+  }
+
   /* ⚠️⚠️ ERROR 34 — LOS VELOS SEMITRANSPARENTES NO CONTABAN. (30/9/2026)
      Subiendo por los padres sólo se miraba el primer fondo OPACO. Un fondo
      con alfa 0,2 se salteaba como si no existiera. Pero la sección del pase
@@ -743,6 +775,7 @@
       var r3 = [pap];
       var ext = PAPEL_EXT[ultimoPapel];
       if (ext && pap === PAPEL[ultimoPapel]) r3 = r3.concat(ext);
+      r3 = comoSeVeElPapel(r3);
       r3.rango = 0; return r3;
     }
     return null;
@@ -958,7 +991,24 @@
 
     var c = { mirados: 0, resueltos: 0, corregidos: 0, ok: 0,
               foto: 0, fotoArreglados: 0, fotoEnCamino: 0,
-              sinFondo: 0, papelEnCamino: 0, conSombra: 0, rehechos: 0 };
+              sinFondo: 0, papelEnCamino: 0, conSombra: 0, rehechos: 0,
+              flojos: 0, flojosTxt: [] };
+    /* ★ ERROR 38 — LO QUE NO SE PUEDE ARREGLAR, SE AVISA. (1/10/2026)
+       Maki: «que Jazmín no se venga a quejar de que no se ven las cosas».
+       Sobre un fondo muy cargado (foto con claros y oscuros) ningún color de
+       letra alcanza contra TODO el fondo: se pone el extremo con sombra y
+       queda «legible con esfuerzo» (medido en prueba-desde-cero con el fondo
+       apagado 0,30: 3,0 a 3,4 en el iPhone, piso 4,5). Eso el corrector no
+       lo puede resolver; lo resuelve Jazmín apagando más el fondo. Así que
+       se cuenta acá y el panel se lo muestra (efectos/panel-fondo.js). */
+    function flojo(el, v) {
+      el.setAttribute('data-regla-flojo', '1');
+      c.flojos++;
+      if (c.flojosTxt.length < 4) {
+        var t = (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40);
+        if (t && c.flojosTxt.indexOf(t) < 0) c.flojosTxt.push(t);
+      }
+    }
 
     var nodos = marco.querySelectorAll('*');
     for (var i = 0; i < nodos.length; i++) {
@@ -1078,9 +1128,11 @@
                               (isFinite(opaAntes) && Math.abs(opaAntes - opa) > 0.05));
       if (marca && !cambio) {
         c.resueltos++; if (marca === 'ok') c.ok++; else c.corregidos++;
+        if (el.getAttribute('data-regla-flojo')) flojo(el);
         continue;
       }
       if (cambio) c.rehechos++;
+      el.removeAttribute('data-regla-flojo');
 
       var orig = deTexto(el.getAttribute('data-regla-orig'));
       var crudo;
@@ -1114,6 +1166,11 @@
       if ((fondos.rango || 0) > RANGO_AMPLIO || esBotonConVolumen(el)) {
         var ext = extremoDeFamilia(fondos[0] || peor);
         pintar(el, ext, true, fondos[0], true); c.corregidos++; c.conSombra++;
+        if (!esBotonConVolumen(el) && el.getAttribute('data-regla-luz') !== 'foto') {
+          var peorExt = Infinity;
+          for (var k3 = 0; k3 < fondos.length; k3++) peorExt = Math.min(peorExt, contraste(ext, fondos[k3]));
+          if (peorExt < (grande ? 3.0 : 4.5)) flojo(el, peorExt);
+        }
         continue;
       }
 
@@ -1206,7 +1263,7 @@
       }
       pintar(el, color, !res.alcanzo, fondos[0], false);
       c.corregidos++;
-      if (!res.alcanzo) c.conSombra++;
+      if (!res.alcanzo) { c.conSombra++; flojo(el); }
     }
 
     window.__REGLA4 = c;
@@ -1284,6 +1341,7 @@
       el.removeAttribute('data-regla-fondo');
       el.removeAttribute('data-regla-orig');
       el.removeAttribute('data-regla-opa');
+      el.removeAttribute('data-regla-flojo');
     }
   }
 

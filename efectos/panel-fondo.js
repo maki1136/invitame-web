@@ -63,6 +63,41 @@
     return g;
   }
 
+  /* ⚠️⚠️ EL ARCHIVO SE SUBE TAL CUAL, PERO AL INVITADO LE LLEGA LIVIANO. (1/10/2026)
+     Maki: «¿pueden subir cualquier fondo con calidad o el sistema acomoda la
+     calidad para que no sea todo súper pesado?». Medido: NO lo acomodaba.
+     Cloudinary guarda lo que se sube, y el fondo se pedía con la dirección
+     cruda: cantera 4 MB, cenicienta 2,5 MB; un video de celular de 25 s,
+     79 MB, le habría llegado entero a cada invitado.
+     Ahora, al subir, si el archivo es pesado se guarda la dirección CON la
+     receta de Cloudinary (que se aplica sola, del lado de ellos):
+       video: ancho 900, calidad automática, SIN audio, tope 1 Mbps y 20 s.
+              Medido: 4 MB → 0,9 MB (cantera, a la vista idénticos),
+                      79 MB → 2,5 MB (celular 25 s).
+       foto:  ancho 1600, formato y calidad automáticos.
+     Sólo cuando conviene: a un video que ya viene chico (menos de 1,2 MB)
+     la receta lo puede AGRANDAR (medido: rapunzel 0,58 → 1,07 MB), así que
+     ése se deja como está. La dirección guardada es la misma para la
+     miniatura del panel y para la invitación de verdad: lo que ve Jazmín es
+     lo que ve el invitado. */
+  var RECETA_VIDEO = 'q_auto,vc_auto,w_900,c_limit,ac_none,br_1m,du_20';
+  var RECETA_FOTO  = 'f_auto,q_auto,w_1600,c_limit';
+  function liviana(url, bytes) {
+    if (url.indexOf('res.cloudinary.com/') < 0) return url;
+    var m = url.match(/^(.*\/(video|image)\/upload\/)(v\d+\/.*)$/);
+    if (!m) return url;                         /* ya trae receta: no se toca */
+    if (/\.gif$/i.test(url)) return url;        /* el GIF lo resuelve fondo-invitacion */
+    if (m[2] === 'video') return bytes > 1.2 * 1048576 ? m[1] + RECETA_VIDEO + '/' + m[3] : url;
+    return bytes > 600 * 1024 ? m[1] + RECETA_FOTO + '/' + m[3] : url;
+  }
+  /* La primera vez que alguien pide la versión liviana, Cloudinary la fabrica
+     (medido: 3 a 9 s). Si ese primero fuera un invitado, el fondo tardaría y
+     se vería la foto de respaldo. Se la pide acá, apenas se sube, así ya
+     está hecha cuando entra el primero. */
+  function calentar(url) {
+    try { fetch(url, { mode: 'no-cors' }).catch(function () {}); } catch (e) {}
+  }
+
   function subidor(d, texto, acepta, cual, pie) {
     var caja = document.createElement('div');
 
@@ -82,10 +117,20 @@
     inp.onchange = function () {
       var f = inp.files && inp.files[0];
       if (!f) return;
-      estado.textContent = 'Subiendo… (' + Math.round(f.size / 1024) + ' KB)';
-      var subir = (cual === 'url' && /video/.test(f.type)) ? INV.uploadVideo : INV.uploadImage;
+      var esVideo = /video/.test(f.type);
+      var mb = f.size / 1048576;
+      if (mb > 95) {
+        estado.textContent = 'Ese archivo pesa ' + Math.round(mb) + ' MB y el máximo es 95 MB. Recortalo (con 10 a 20 segundos alcanza) y subilo de nuevo.';
+        inp.value = '';
+        return;
+      }
+      estado.textContent = 'Subiendo… (' + (mb >= 1 ? mb.toFixed(1) + ' MB' : Math.round(f.size / 1024) + ' KB') + ')' +
+        (mb > 15 ? ' — es pesado, puede tardar un par de minutos. No cierres el panel.' : '');
+      var subir = (cual === 'url' && esVideo) ? INV.uploadVideo : INV.uploadImage;
       Promise.resolve(subir.call(INV, f)).then(function (url) {
         if (!url || typeof url !== 'string') { estado.textContent = 'No se pudo subir. Probá de nuevo.'; return; }
+        url = liviana(url, f.size);
+        if (url.indexOf('/video/upload/') >= 0) calentar(url);
         fondo(d)[cual] = url;
         if (cual === 'url' && !fondo(d).tipo) fondo(d).tipo = /video/.test(f.type) ? 'video' : 'imagen';
         mostrar(); refrescar(); pintar(d);
@@ -172,8 +217,8 @@
       f.tipo === 'video' ? 'El video (.mp4)' : 'La imagen',
       f.tipo === 'video' ? 'video/mp4,video/*' : 'image/*',
       'url',
-      f.tipo === 'video' ? 'Corto y en loop, vertical. Con 100 KB alcanza: va velado detrás del texto.'
-                         : 'Vertical, como el teléfono. Mejor algo suave que algo con mucho dibujo.'));
+      f.tipo === 'video' ? 'Vertical y en loop. Subilo como lo tengas: el sistema lo achica solo para que cargue rápido (hasta 95 MB; se usan los primeros 20 segundos).'
+                         : 'Vertical, como el teléfono. Mejor algo suave que algo con mucho dibujo. Subila en buena calidad: el sistema la achica sola.'));
 
     if (f.tipo === 'video') {
       cuerpo.appendChild(subidor(d, 'Foto de respaldo', 'image/*', 'poster',
@@ -188,12 +233,49 @@
 
     cuerpo.appendChild(perilla(d, 'velo', 'Cuánto se apaga el fondo', 0, 0.85, 0.30,
       'Si el fondo tiene dibujo, subilo. Es lo que deja que el texto se lea encima.'));
+    cuerpo.appendChild(avisoLectura());
 
     cuerpo.appendChild(perilla(d, 'paso', 'Cuánto lo dejan pasar las secciones claras', 0, 1, 0.85,
       'Es la perilla principal: en 0 el papel sigue crudo y no cambia nada. En 85% el fondo ES el papel.'));
 
     cuerpo.appendChild(perilla(d, 'oscuras', 'Y las secciones de color', 0, 0.6, 0,
       'Dejalas en 0 salvo que quieras perder el contraste entre secciones. Son las que le dan el ritmo a la invitación.'));
+  }
+
+  /* ⚠️⚠️ EL AVISO DE «NO SE LEE», A LA VISTA DE JAZMÍN. (1/10/2026)
+     El corrector de colores (reglas-duras.js) arregla casi todo solo, pero
+     sobre una foto muy cargada —con claros y oscuros a la vez— no hay color
+     de letra que alcance: ahí lo único que sirve es apagar más el fondo, y
+     eso lo decide Jazmín. El corrector cuenta esos textos en
+     `__REGLA4.flojos`; acá se lee de la miniatura (que ES la invitación de
+     verdad, mismo motor, mismo fondo) y se le dice en palabras, justo debajo
+     de la perilla que lo arregla. Se vuelve a mirar cada segundo y medio
+     mientras el panel del fondo esté abierto. */
+  function avisoLectura() {
+    var a = document.createElement('div');
+    a.setAttribute('data-aviso-lectura', '1');
+    a.style.cssText = 'font-size:12px;line-height:1.4;margin:-4px 0 12px;padding:8px 10px;border-radius:8px;display:none';
+    function mirar() {
+      if (!a.isConnected) return;
+      var r = null;
+      try { r = document.getElementById('pv-frame').contentWindow.__REGLA4; } catch (e) {}
+      var f = (borrador() && borrador().fx && borrador().fx.fondo) || {};
+      if (!r || !f.tipo || !f.url) { a.style.display = 'none'; }
+      else if (r.flojos > 0) {
+        a.style.display = 'block';
+        a.style.background = '#fff4e5'; a.style.color = '#7a3d00';
+        a.innerHTML = '<b>Con este fondo hay ' + (r.flojos === 1 ? 'un texto que cuesta' : r.flojos + ' textos que cuestan') +
+          ' leerse</b>' + (r.flojosTxt && r.flojosTxt.length ? ' (por ejemplo «' + r.flojosTxt[0].replace(/</g, '&lt;') + '»)' : '') +
+          '. Subí «Cuánto se apaga el fondo» hasta que este aviso se vaya, o elegí un fondo más liso.';
+      } else {
+        a.style.display = 'block';
+        a.style.background = '#e9f6ee'; a.style.color = '#1f5c3a';
+        a.innerHTML = ico('tilde') + ' Con este fondo todos los textos se leen.';
+      }
+      setTimeout(mirar, 1500);
+    }
+    setTimeout(mirar, 800);
+    return a;
   }
 
   function construir(d) {
