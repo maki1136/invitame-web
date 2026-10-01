@@ -27,7 +27,7 @@ const path = require('path');
 
 const SLUG = process.argv[2] || 'camila-y-tomas';
 const BASE = process.env.INV_BASE || 'https://invitame.littlemomentsok.com';
-const SALIDA = path.join(__dirname, 'tablero-panel.json');
+const SALIDA = path.join(__dirname, SLUG === '__nueva' ? 'tablero-panel-nueva.json' : 'tablero-panel.json');
 
 /* controles que por diseño no cambian nada a la vista (datos internos) */
 const INTERNOS = /N[úu]mero de orden|Usuario asignado|Direcci[óo]n del evento|Email para confirmaciones|T[ÍI]TULO DEL CORREO|Habilitar aviso por mail|Contrase[ñn]a para el evento|Clave del panel de los novios|Pedido especial|ES DEMO|NOMBRE DE LA DEMO|Tipo de evento|Deshabilitar invitaci[óo]n|Bloquear control|C[óo]digo del evento|Titulo al compartir|Descripci[óo]n al compartir|Imágen miniatura al compartir|Paquete|Pases personalizados|Detectar el del celular|Deshabilitar publicidad/i;
@@ -81,8 +81,9 @@ function distinto(a, b, ruido) {
     catch (e) { if (intento) throw e; await page.waitForTimeout(5000); await abrir(1); }   /* una lentitud del servidor no tira la corrida entera */
   }
   async function abrirUnaVez() {
-    await page.goto(BASE + '/admin.html?e=' + SLUG + '&cb=' + Date.now(), { waitUntil: 'load', timeout: 90000 });
-    await page.waitForFunction(s => { try { const f = document.getElementById('pv-frame'); return D.slug === s && f.contentWindow.INVEV && f.contentWindow.INVEV.slug === s; } catch (e) { return false; } }, SLUG, { timeout: 90000, polling: 500 });
+    /* `__nueva` (1/10/2026): una invitación NUEVA, sin `?e=`, como la abre Jazmín para empezar de cero */
+    await page.goto(BASE + (SLUG === '__nueva' ? '/admin.html?' : '/admin.html?e=' + SLUG) + '&cb=' + Date.now(), { waitUntil: 'load', timeout: 90000 });
+    await page.waitForFunction(s => { try { const f = document.getElementById('pv-frame'); const e = s === '__nueva' ? 'maria-y-diego' : s; return D.slug === e && f.contentWindow.INVEV && f.contentWindow.INVEV.slug === e; } catch (e) { return false; } }, SLUG, { timeout: 90000, polling: 500 });
     await page.addStyleTag({ content: '#gate{display:none!important}' });
     await page.waitForTimeout(6000);
   }
