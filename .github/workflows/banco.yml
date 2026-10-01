@@ -277,8 +277,11 @@ jobs:
       - name: Traer el repo
         uses: actions/checkout@v4
 
+      # Sin `|| true` A PROPÓSITO: si algo está MAL la corrida queda en ROJO y
+      # GitHub le manda el mail de aviso a Maki. El paso de abajo igual guarda
+      # el informe (if: always()).
       - name: Chequear los servicios
-        run: node chequeo/servicios.mjs || true
+        run: node chequeo/servicios.mjs
 
       - name: Dejar el resultado en el repo
         if: always()
@@ -286,9 +289,15 @@ jobs:
           git config user.name  "banco-de-pruebas"
           git config user.email "banco@invitame.local"
           cp chequeo/servicios.txt /tmp/s.txt 2>/dev/null || true
-          git fetch origin main
-          git reset --hard origin/main
-          cp /tmp/s.txt chequeo/servicios.txt 2>/dev/null || true
-          git add chequeo/servicios.txt
-          git diff --staged --quiet || git commit -m "Chequeo de servicios [skip ci]"
-          git push || true
+          # Corre a la misma hora que el banco y el tablero, que también empujan:
+          # si el push choca, se reintenta sobre lo último (hasta 4 veces).
+          for i in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/s.txt chequeo/servicios.txt 2>/dev/null || true
+            git add chequeo/servicios.txt
+            git diff --staged --quiet && break
+            git commit -m "Chequeo de servicios [skip ci]"
+            git push && break
+            sleep $((i * 7))
+          done
