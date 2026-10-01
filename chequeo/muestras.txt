@@ -1,6 +1,7 @@
 # Las invitaciones que el banco compara (miniatura del panel vs publicada).
 # Una por renglón. ⚠️ Cada muestra nueva se agrega acá el mismo día: la base no deja listar sin login.
 # Sale de INV.exportAll() en admin.html (30/9/2026: 55 eventos; hilorojo no tiene evento público).
+# prueba-desde-cero (1/10/2026): la invitación de PRUEBA, armada desde cero en el panel como la arma Jazmín. Fondo de foto cargada a propósito y galería en vivo. No es una muestra para clientas: no borrarla, es la que usa el banco.
 abril-mis15
 aitana-mis15
 alexa-mis15
@@ -45,6 +46,7 @@ noche-dorada
 paloma-mis15
 paula-e-ines
 paulina-y-gerardo
+prueba-desde-cero
 regina-y-emiliano
 renata-y-patricio
 romina-mis15

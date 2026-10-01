@@ -904,6 +904,8 @@ async function escenario(nombre, tipo, opciones, esTablet){
             Math.round(v).toString(16).padStart(2, '0')).join('');
           const clave = c.t + '|' + c.quien;
           const anterior = juntados.get(clave);
+          if (process.env.INV_RECORTES && (!anterior || peor < anterior.peor))
+            (unaPantalla.recortes = unaPantalla.recortes || []).push([x0, y0, x1, y1, c.t, peor]);
           if (!anterior || peor < anterior.peor) {
             juntados.set(clave, { peor, texto:
               '"' + c.t + '" ' + peor.toFixed(1) + '/' + min +
@@ -911,6 +913,23 @@ async function escenario(nombre, tipo, opciones, esTablet){
               ' · ' + c.quien + ']' });
           }
         }
+      }
+      /* INV_RECORTES=carpeta (1/10/2026): un recorte de cada texto que no se
+         lee, CON la letra puesta, para mirarlo antes de decidir qué arreglar. */
+      if (unaPantalla.recortes && unaPantalla.recortes.length) {
+        try {
+          const img2 = PNG.sync.read(await page.screenshot({ caret: 'hide', scale: 'css' }));
+          fs.mkdirSync(process.env.INV_RECORTES, { recursive: true });
+          for (const [a0, b0, a1, b1, t, pr] of unaPantalla.recortes) {
+            const m = 24, rx0 = Math.max(0, a0 - m), ry0 = Math.max(0, b0 - m);
+            const rx1 = Math.min(img2.width - 1, a1 + m), ry1 = Math.min(img2.height - 1, b1 + m);
+            const out = new PNG({ width: rx1 - rx0, height: ry1 - ry0 });
+            PNG.bitblt(img2, out, rx0, ry0, rx1 - rx0, ry1 - ry0, 0, 0);
+            fs.writeFileSync(path.join(process.env.INV_RECORTES,
+              pr.toFixed(1) + '-' + String(t || 'x').replace(/[^A-Za-z0-9]+/g, '-').slice(0, 28) + '.png'), PNG.sync.write(out));
+          }
+        } catch (e) {}
+        unaPantalla.recortes = [];
       }
     };
 
