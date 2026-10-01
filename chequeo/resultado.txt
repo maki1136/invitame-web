@@ -7,7 +7,7 @@ Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 2 PROBLEMAS (y 109 cosas bien)
+HAY 3 PROBLEMAS (y 110 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,7 +29,7 @@ HAY 2 PROBLEMAS (y 109 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Contamos las sillas an" 4.1/4.5 [#fdf8ea sobre luminancia 0.05-0.19 · p.reveal.in] · "Ayúdanos a que no falt" 4.5/4.5 [#050f0d sobre luminancia 0.19-0.89 · p.reveal.in]
+             -> "La banda sonora" 1.9/3 [#44655a sobre luminancia 0.26-0.77 · div.kick.reveal] · "Para verlo juntos" 2.5/3 [#44655a sobre luminancia 0.36-0.91 · div.kick.reveal] · "Con cariño" 2.8/3 [#44655a sobre luminancia 0.41-0.83 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
    ----   el boleto no se pudo traer a la pantalla: no se midio
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -44,11 +44,11 @@ HAY 2 PROBLEMAS (y 109 cosas bien)
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.6 s)
+   (volvió a su lugar en 2.4 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 440.0 s de punta a punta)
+   (tardó 615.3 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -65,7 +65,7 @@ HAY 2 PROBLEMAS (y 109 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Un ratito de nuestra h" 2.9/4.5 [#45504c sobre luminancia 0.32-0.86 · p.reveal.in] · "Con mucha alegría" 3.2/4.5 [#39564d sobre luminancia 0.36-0.84 · div.kick.reveal] · "La banda sonora" 3.2/4.5 [#39564d sobre luminancia 0.37-0.85 · div.kick.reveal] · "Escríbenos por WhatsAp" 4.2/4.5 [#fbf7ef sobre luminancia 0.02-0.18 · a.col-mvta-b] y 1 más
+             -> "Escucha la música de l" 2.3/4.5 [#576560 sobre luminancia 0.34-0.88 · p.reveal.in] · "Para verlo juntos" 3.5/4.5 [#39564d sobre luminancia 0.41-0.85 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
    ----   el boleto no se pudo traer a la pantalla: no se midio
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -74,21 +74,19 @@ HAY 2 PROBLEMAS (y 109 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Timeout 30000ms exceeded.
-Call log:
-  - tak)
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
+   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    (el botón de la galería se tocó con el mouse: la página estaba muy cargada)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 5.8 s)
+   (volvió a su lugar en 1.6 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1435.9 s de punta a punta)
+   (tardó 1412.9 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -109,7 +107,8 @@ Call log:
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
-   BIEN   todos los textos se leen
+   MAL    todos los textos se leen
+             -> "La banda sonora" 2.1/3 [#44655a sobre luminancia 0.29-0.80 · div.kick.reveal] · "Para verlo juntos" 2.4/3 [#44655a sobre luminancia 0.34-0.81 · div.kick.reveal] · "Con mucha alegría" 2.5/3 [#496c61 sobre luminancia 0.41-0.80 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -118,19 +117,18 @@ Call log:
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   (el botón de la galería se tocó con el mouse: la página estaba muy cargada)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 6.3 s)
+   (volvió a su lugar en 21.3 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 1147.1 s de punta a punta)
+   (tardó 966.9 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -173,5 +171,5 @@ Call log:
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 131.3 s de punta a punta)
+   (tardó 130.4 s de punta a punta)
 
