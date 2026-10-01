@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-01T16:56:44.909Z",
+ "cuando": "2026-10-01T18:00:49.104Z",
  "total": 55,
- "verde": 54,
+ "verde": 55,
  "rojo": 0,
- "gris": 1,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
@@ -126,10 +126,10 @@
   },
   {
    "slug": "fernanda-y-alejandro",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "isabel-y-gonzalo",
