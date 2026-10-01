@@ -1,7 +1,7 @@
 {
- "cuando": "2026-10-01T16:46:19.710Z",
- "total": 54,
- "verde": 54,
+ "cuando": "2026-10-01T16:48:01.901Z",
+ "total": 55,
+ "verde": 55,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -308,6 +308,13 @@
   },
   {
    "slug": "paulina-y-gerardo",
+   "ver": "2026-09-14",
+   "estado": "verde",
+   "dif": [],
+   "error": ""
+  },
+  {
+   "slug": "prueba-desde-cero",
    "ver": "2026-09-14",
    "estado": "verde",
    "dif": [],
