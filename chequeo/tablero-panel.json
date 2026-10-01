@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-01T17:47:12.514Z",
+ "cuando": "2026-10-01T19:11:38.680Z",
  "slug": "camila-y-tomas",
- "total": 352,
- "verde": 352,
- "amarillo": 0,
+ "total": 354,
+ "verde": 353,
+ "amarillo": 1,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -2024,8 +2024,9 @@
    "guarda": true,
    "dato": "c_texto-corto-boton-wsp-2",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -3765,6 +3766,28 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.galeria.encendido",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "galeria-ajustes",
+   "control": "Es una muestra: la galería queda abierta siempre para que la prueben",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.galeria.muestra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "galeria-ajustes",
+   "control": "Sólo mostrar la sección, sin dejar entrar",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.galeria.vidriera",
    "llega": true,
    "seVe": true,
    "estado": "verde"
