@@ -57,10 +57,15 @@ if (!preg_match_all("~'(/(?:efectos|muestras|colecciones)/[A-Za-z0-9._-]+\.js)'~
   exit;
 }
 
-echo "/* Invitame - los modulos del front, pegados en el servidor. La lista vive en efectos/index.js */\n";
-
+/* ═══ ETAG (1/10/2026) — «salir a vender»: 100 invitaciones nuevas por mes.
+   Sigue SIN cachearse a ciegas (no-cache = el navegador pregunta SIEMPRE), pero
+   si nada cambió el servidor contesta «304, el que tenés sirve» en vez de
+   mandar los 850 KB de nuevo. Un invitado que abre la invitación 4 veces baja
+   el paquete una sola vez. Un arreglo subido hoy cambia la fecha del archivo →
+   cambia la etiqueta → llega en la próxima apertura, igual que antes.
+   La etiqueta se arma con la fecha y el tamaño de cada módulo + este archivo. */
+$lista = array();
 $puestos = array();
-$cuantos = 0;
 foreach ($mm[1] as $url) {
   if (isset($puestos[$url])) continue;
   $puestos[$url] = 1;
@@ -75,7 +80,29 @@ foreach ($mm[1] as $url) {
     $base = realpath($raiz . $carpeta);
     if ($base !== false && $real !== false && strpos($real, $base . DIRECTORY_SEPARATOR) === 0) { $ok = true; break; }
   }
-  if (!$ok || !is_readable($real)) {
+  $lista[] = array($url, ($ok && is_readable($real)) ? $real : false);
+}
+
+$huella = filemtime(__FILE__) . ':' . filesize(__FILE__) . ':' . md5($indice);
+foreach ($lista as $par) {
+  $huella .= '|' . $par[0] . ':' . ($par[1] ? (filemtime($par[1]) . ':' . filesize($par[1])) : 'falta');
+}
+$etag = 'W/"' . md5($huella) . '"';
+header('ETag: ' . $etag);
+$pregunta = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : '';
+/* LiteSpeed a veces le agrega «-br»/«-gzip» o «;;;» a la etiqueta: se compara
+   sólo el código del medio. */
+if ($pregunta !== '' && preg_match('~[0-9a-f]{32}~', $pregunta, $pm) && $pm[0] === md5($huella)) {
+  http_response_code(304);
+  exit;
+}
+
+echo "/* Invitame - los modulos del front, pegados en el servidor. La lista vive en efectos/index.js */\n";
+
+$cuantos = 0;
+foreach ($lista as $par) {
+  $url = $par[0]; $real = $par[1];
+  if (!$real) {
     echo "\n/* falta: " . str_replace('*/', '', $url) . " */\n";
     continue;
   }
