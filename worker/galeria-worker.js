@@ -13,8 +13,13 @@
                                deja de aceptar fotos: la cuenta NUNCA se
                                dispara aunque falle todo lo demás.
      · Variables (secretos):
-         SIGHTENGINE_USER    → api_user de Sightengine
-         SIGHTENGINE_SECRET  → api_secret de Sightengine
+         OPENAI_KEY          → (1/10/2026) clave de OpenAI. Se usa SÓLO para el
+                               filtro de fotos «omni-moderation», que OpenAI no
+                               cobra. Si está, es el filtro principal y
+                               Sightengine queda de respaldo; si falta, todo
+                               sigue como antes (sólo Sightengine).
+         SIGHTENGINE_USER    → api_user de Sightengine (respaldo)
+         SIGHTENGINE_SECRET  → api_secret de Sightengine (respaldo)
          SA_JSON             → el archivo JSON del service account de
                                Firebase, pegado ENTERO tal cual se descarga
                                (o, si se prefiere, SA_EMAIL y SA_KEY sueltos)
@@ -74,6 +79,8 @@ export default {
       if (ruta.startsWith('/f/') && req.method === 'GET') return await servir(req, env, ctx, ruta.slice(3), url);
       if (ruta === '/qr' && req.method === 'GET') return qr(url);
       if (ruta === '/uso' && req.method === 'GET') return await uso(env);
+      if (ruta.startsWith(CACHE_PREFIJO) && (req.method === 'GET' || req.method === 'HEAD'))
+        return await medio(req, env, ctx, url);
       return respuesta({ error: 'no existe' }, 404);
     } catch (e) {
       return respuesta({ error: 'error interno', detalle: String(e && e.message || e) }, 500);
@@ -87,6 +94,145 @@ export default {
     ctx.waitUntil(limpiezaDiaria(env).catch(() => {}));
   }
 };
+
+/* ═══════════════ LA CACHÉ DE FOTOS Y VIDEOS DE LAS INVITACIONES (1/10/2026) ═══
+   Maki: «con 1000 invitaciones activas, ¿cuánto gasto?». Lo que más cuesta es
+   Cloudinary ENTREGANDO cada foto y cada video a cada teléfono: ~600 GB por mes.
+   Acá se hace de intermediario:
+     · la PRIMERA vez que alguien pide una dirección, se le pide a Cloudinary y
+       se guarda una copia en R2 (que no cobra por entregar);
+     · todas las demás veces se entrega la copia de R2. Cloudinary no se entera.
+   La dirección es la MISMA de Cloudinary con este Worker adelante:
+       https://res.cloudinary.com/oc8cgqt4/image/upload/...
+       https://galeria.littlemomentsok.workers.dev/res.cloudinary.com/oc8cgqt4/image/upload/...
+   Así cualquier módulo que busque «res.cloudinary.com» en la dirección la sigue
+   reconociendo. Quien la cambia es efectos/imagenes-livianas.js, SOLO en la
+   invitación (nunca en el panel: lo que se guarda en la base sigue siendo la
+   dirección de Cloudinary). Se prende y se apaga desde i/index.php.
+
+   ⚠️ VIDEOS: Safari pide los videos «de a pedazos» (Range: bytes=0-1, después
+      el resto). Si no se contesta 206 con Content-Range exacto, en el iPhone el
+      video NO arranca. Está hecho y probado abajo.
+   ⚠️ f_auto / vc_auto: Cloudinary manda AVIF, WebP o JPG según el teléfono. Por
+      eso esas direcciones se guardan en una copia por tipo de teléfono.
+   ⚠️ APAGADO DE EMERGENCIA sin tocar código: variable MEDIA_CACHE = 'no' → este
+      Worker manda cada pedido directo a Cloudinary (como antes).
+   ═══════════════════════════════════════════════════════════════════════════ */
+const CACHE_PREFIJO = '/res.cloudinary.com/oc8cgqt4/';
+const CACHE_MAX = 40 * 1024 * 1024;          // más grande que esto no se guarda: pasa directo
+function familiaCliente(req) {
+  const ua = req.headers.get('User-Agent') || '';
+  const ac = req.headers.get('Accept') || '';
+  const nav = /Firefox\//.test(ua) ? 'ff' : (/(Chrome|CriOS|Chromium|Edg)\//.test(ua) ? 'cr' : (/AppleWebKit/.test(ua) ? 'wk' : 'otro'));
+  const img = /image\/avif/.test(ac) ? 'avif' : (/image\/webp/.test(ac) ? 'webp' : 'std');
+  return { nav, img, acceptNormal: img === 'avif' ? 'image/avif,image/webp,image/*,*/*;q=0.8'
+                                  : (img === 'webp' ? 'image/webp,image/*,*/*;q=0.8' : 'image/*,*/*;q=0.8') };
+}
+function leerRango(h, total) {
+  const m = /^bytes=(\d*)-(\d*)$/.exec(String(h || '').trim());
+  if (!m || (m[1] === '' && m[2] === '')) return null;
+  let ini, fin;
+  if (m[1] === '') { const n = parseInt(m[2], 10); ini = Math.max(0, total - n); fin = total - 1; }
+  else { ini = parseInt(m[1], 10); fin = m[2] === '' ? total - 1 : Math.min(parseInt(m[2], 10), total - 1); }
+  if (ini >= total || fin < ini) return { mal: true };
+  return { ini, fin };
+}
+function cabecerasMedio(tipo, cc, total, vary) {
+  const h = new Headers({
+    'Content-Type': tipo || 'application/octet-stream',
+    'Cache-Control': cc || 'public, max-age=2592000',
+    'Accept-Ranges': 'bytes',
+    'Access-Control-Allow-Origin': '*',
+    'Timing-Allow-Origin': '*',
+    'X-Cache-Invitame': ''
+  });
+  if (vary) h.set('Vary', vary);
+  if (total != null) h.set('Content-Length', String(total));
+  return h;
+}
+async function medio(req, env, ctx, url) {
+  const resto = url.pathname.slice(CACHE_PREFIJO.length) + (url.search || '');
+  const arriba = 'https://res.cloudinary.com/oc8cgqt4/' + resto;
+  if (!/^(image|video|raw)\/upload\//.test(resto) || resto.length > 1500)
+    return respuesta({ error: 'no' }, 400);
+  if (String(env.MEDIA_CACHE || '').toLowerCase() === 'no' || !env.BUCKET)
+    return Response.redirect(arriba, 302);
+
+  const fam = familiaCliente(req);
+  const auto = /(^|[,\/])(f_auto|vc_auto)([,:\/]|$)/.test(resto);
+  const variante = auto ? (resto.startsWith('video/') ? fam.nav : fam.img + '-' + fam.nav) : 'unica';
+  const key = 'c/' + (await hash(resto + '|' + variante));
+  const versionada = /\/v\d+\//.test('/' + resto);
+  const vence = (versionada ? 365 : 7) * 86400000;
+  const vary = auto ? (resto.startsWith('video/') ? 'User-Agent' : 'Accept') : null;
+  const rango = req.headers.get('Range');
+
+  /* 1. ¿Ya está la copia? */
+  let obj = null;
+  try { obj = await env.BUCKET.head(key); } catch (e) { obj = null; }
+  if (obj) {
+    const t = parseInt((obj.customMetadata && obj.customMetadata.t) || '0', 10);
+    if (Date.now() - t > vence) obj = null;              // vieja: se vuelve a pedir
+  }
+  if (obj) {
+    const total = obj.size, tipo = obj.httpMetadata && obj.httpMetadata.contentType;
+    const cc = obj.customMetadata && obj.customMetadata.cc;
+    const r = rango ? leerRango(rango, total) : null;
+    if (r && r.mal) {
+      const h = cabecerasMedio(tipo, cc, null, vary); h.set('Content-Range', 'bytes */' + total);
+      return new Response(null, { status: 416, headers: h });
+    }
+    if (req.method === 'HEAD') {
+      const h = cabecerasMedio(tipo, cc, total, vary); h.set('X-Cache-Invitame', 'r2');
+      return new Response(null, { status: 200, headers: h });
+    }
+    const cuerpo = r ? await env.BUCKET.get(key, { range: { offset: r.ini, length: r.fin - r.ini + 1 } })
+                     : await env.BUCKET.get(key);
+    if (cuerpo) {
+      const h = cabecerasMedio(tipo, cc, r ? (r.fin - r.ini + 1) : total, vary);
+      h.set('X-Cache-Invitame', 'r2');
+      if (cuerpo.httpEtag) h.set('ETag', cuerpo.httpEtag);
+      if (r) { h.set('Content-Range', 'bytes ' + r.ini + '-' + r.fin + '/' + total); return new Response(cuerpo.body, { status: 206, headers: h }); }
+      return new Response(cuerpo.body, { status: 200, headers: h });
+    }
+  }
+
+  /* 2. No está: se pide a Cloudinary ENTERO (sin Range) y se guarda. */
+  const pedir = { 'Accept': auto && !resto.startsWith('video/') ? fam.acceptNormal : (req.headers.get('Accept') || '*/*') };
+  if (auto) pedir['User-Agent'] = req.headers.get('User-Agent') || '';
+  let up;
+  try { up = await fetch(arriba, { headers: pedir }); }
+  catch (e) { return Response.redirect(arriba, 302); }     // que lo pida el teléfono directo
+  const largo = parseInt(up.headers.get('Content-Length') || '0', 10);
+  if (up.status !== 200 || largo > CACHE_MAX) {
+    /* Error de Cloudinary (un video todavía procesándose, un 404) o archivo
+       gigante: no se guarda nada; se le devuelve al teléfono lo que dijo
+       Cloudinary, o se lo manda directo si pidió un pedazo. */
+    if (rango && up.status === 200) return Response.redirect(arriba, 302);
+    const h = new Headers(up.headers); h.set('Access-Control-Allow-Origin', '*'); h.set('X-Cache-Invitame', 'directo');
+    if (up.status !== 200) h.set('Cache-Control', 'no-store');
+    return new Response(up.body, { status: up.status, headers: h });
+  }
+  const buf = await up.arrayBuffer();
+  if (buf.byteLength > CACHE_MAX) return Response.redirect(arriba, 302);
+  const tipo = up.headers.get('Content-Type') || 'application/octet-stream';
+  const cc = up.headers.get('Cache-Control') || 'public, max-age=2592000';
+  ctx.waitUntil(env.BUCKET.put(key, buf, {
+    httpMetadata: { contentType: tipo },
+    customMetadata: { t: String(Date.now()), cc, u: resto.slice(0, 900), v: variante }
+  }).catch(() => {}));
+  const total = buf.byteLength;
+  const r = rango ? leerRango(rango, total) : null;
+  if (r && r.mal) {
+    const h = cabecerasMedio(tipo, cc, null, vary); h.set('Content-Range', 'bytes */' + total);
+    return new Response(null, { status: 416, headers: h });
+  }
+  const h = cabecerasMedio(tipo, cc, r ? (r.fin - r.ini + 1) : total, vary);
+  h.set('X-Cache-Invitame', 'cloudinary');
+  if (req.method === 'HEAD') return new Response(null, { status: 200, headers: h });
+  if (r) { h.set('Content-Range', 'bytes ' + r.ini + '-' + r.fin + '/' + total); return new Response(buf.slice(r.ini, r.fin + 1), { status: 206, headers: h }); }
+  return new Response(buf, { status: 200, headers: h });
+}
 
 /* ---------------- LAS FOTOS SE GUARDAN 3 MESES (1/10/2026) ----------------
    Decisión de Maki: «3 meses, pero a los novios les decimos que se las bajen
@@ -247,9 +393,9 @@ async function subir(req, env, ctx) {
   let estado = 'pendiente', mod = null;
   const veredicto = await moderar(env, thumb).catch((e) => ({ falla: String(e && e.message || e).slice(0, 90) }));
   if (veredicto && veredicto.falla) {
-    mod = { motor: 'sightengine', falla: veredicto.falla };   // queda visible en el panel
+    mod = { motor: veredicto.motor || 'sightengine', falla: veredicto.falla };   // queda visible en el panel
   } else if (veredicto) {
-    mod = { motor: 'sightengine', score: veredicto.score };
+    mod = { motor: veredicto.motor || 'sightengine', score: veredicto.score };
     if (veredicto.malo) estado = 'rechazada';
     else estado = (ev.modo === 'auto') ? 'aprobada' : 'pendiente';
   }
@@ -1040,16 +1186,69 @@ function qr(url) {
    las aprueba). Ahora, si el motivo es el tope por segundo, se espera un
    poquito y se prueba de nuevo (hasta 4 veces, ~7 s en total). El tope del
    MES no se reintenta: eso se arregla subiendo de plan. */
+/* FILTRO GRATIS PRIMERO (1/10/2026). Maki: «el filtro de fotos es lo más caro,
+   buscá algo más barato». Con 1000 invitaciones activas Sightengine costaba
+   USD 220–420 por mes. El filtro de OpenAI (omni-moderation) mira lo mismo
+   en fotos —desnudos («sexual») y sangre («violence/graphic»)— y OpenAI no lo
+   cobra («The moderation endpoint is free to use»).
+   Orden: OpenAI → si no contesta, Sightengine → si tampoco, PENDIENTE.
+   O sea, un filtro caído nunca aprueba solo, igual que antes. */
 async function moderar(env, blob) {
+  let primero = null;
+  if (env.OPENAI_KEY) {
+    primero = await conReintento(() => moderarOpenAI(env, blob));
+    if (!primero.falla) return primero;
+    if (!env.SIGHTENGINE_USER || !env.SIGHTENGINE_SECRET) return primero;
+  }
+  const v = await conReintento(() => moderarUnaVez(env, blob));
+  if (v.falla && primero) v.falla = ('openai: ' + primero.falla + ' · sightengine: ' + v.falla).slice(0, 160);
+  return v;
+}
+async function conReintento(fn) {
   const esperas = [900, 1500, 2200, 2600];
   let v;
   for (let i = 0; i <= esperas.length; i++) {
-    v = await moderarUnaVez(env, blob);
+    v = await fn();
     if (!v.porSegundo || i === esperas.length) break;
     await new Promise((ok) => setTimeout(ok, esperas[i] + Math.floor(Math.random() * 400)));
   }
   delete v.porSegundo;
   return v;
+}
+/* Mismo criterio que Sightengine: malo si la probabilidad pasa de 0,5.
+   Sólo se miran las categorías que OpenAI evalúa en IMÁGENES (las demás
+   son de texto y siempre vienen en 0). */
+async function moderarOpenAI(env, blob) {
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  const tipo = blob.type && /^image\//.test(blob.type) ? blob.type : 'image/webp';
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 9000);
+  let r;
+  try {
+    r = await fetch('https://api.openai.com/v1/moderations', {
+      method: 'POST', signal: ctl.signal,
+      headers: { Authorization: 'Bearer ' + String(env.OPENAI_KEY).trim(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'omni-moderation-latest',
+        input: [{ type: 'image_url', image_url: { url: 'data:' + tipo + ';base64,' + btoa(bin) } }] })
+    });
+  } catch (e) {
+    return { motor: 'openai', falla: 'no contestó a tiempo (' + String(e && e.name || e) + ')' };
+  } finally { clearTimeout(timer); }
+  let j;
+  try { j = await r.json(); } catch (e) {
+    return { motor: 'openai', falla: 'respuesta ilegible ' + r.status, porSegundo: r.status === 429 };
+  }
+  if (!r.ok || !j.results || !j.results[0]) {
+    const msg = String((j.error && (j.error.message || j.error.code)) || r.status);
+    /* 429 por velocidad se reintenta; 429 por falta de saldo/cuota no. */
+    const porSegundo = r.status === 429 && !/quota|billing|insufficient/i.test(msg);
+    return { motor: 'openai', falla: 'rechazó: ' + msg.slice(0, 90), porSegundo };
+  }
+  const sc = j.results[0].category_scores || {};
+  const peor = Math.max(sc['sexual'] || 0, sc['violence/graphic'] || 0);
+  return { motor: 'openai', malo: peor > 0.5, score: Math.round(peor * 100) / 100 };
 }
 async function moderarUnaVez(env, blob) {
   if (!env.SIGHTENGINE_USER || !env.SIGHTENGINE_SECRET)
