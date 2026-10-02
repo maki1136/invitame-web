@@ -477,7 +477,7 @@ $preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin
    ⚠️ Sólo se prende cuando el Worker nuevo (con la ruta /res.cloudinary.com/)
       está pegado en Cloudflare. Si se prende antes, las fotos no cargan.
    ============================================================================ */
-$CACHE_MEDIOS = 'apagada';
+$CACHE_MEDIOS = 'prendida';   // 2/10/2026: Worker publicado y probado en vivo con &cache=1 (camila, lucia, zoe)
 $cacheQ = isset($_GET['cache']) ? (string)$_GET['cache'] : '';
 $conCache = ($cacheQ === '1') || ($CACHE_MEDIOS === 'prendida' && $cacheQ !== '0');
 $fotosLivianas = ($conCache ? '<script>window.INV_CACHE_MEDIOS="https://galeria.littlemomentsok.workers.dev/";</' . 'script>' : '')
