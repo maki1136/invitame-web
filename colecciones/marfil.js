@@ -576,13 +576,14 @@
     /* ---- LAS FOTOS, TIPO POLAROID -------------------------------------
        ⚠️ Sólo a la imagen que es HIJA DIRECTA de una sección. Si esto
           agarrara cualquier <img> le pondría marco a los iconos. */
-    'h[c] .frame .sec > img {',
+    /* ★ 3/10: el regalo de «Mesa de regalos» es un PNG con alfa: sin marco */
+    'h[c] .frame .sec > img:not(#reg-adorno) {',
     '  background:#fdfcfa; padding:11px 11px 32px;',
     '  border-radius:2px;',
     '  box-shadow:0 10px 24px rgba(42,35,30,.20), 0 1px 3px rgba(42,35,30,.14);',
     '  transform:rotate(-1.4deg);',
     '}',
-    'h[c] .frame .sec:nth-of-type(even) > img { transform:rotate(1.6deg) }',
+    'h[c] .frame .sec:nth-of-type(even) > img:not(#reg-adorno) { transform:rotate(1.6deg) }',
 
     /* ---- LA FRASE: NI BANDA NEGRA NI GLOBITOS -------------------------
        Maki, 15/9: «donde están los globitos rojos esos que está la frase. Es
