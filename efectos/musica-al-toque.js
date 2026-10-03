@@ -190,6 +190,36 @@
     }
   }, true);
 
+  /* ---------- 3 · SE CALLA CUANDO SUENA OTRA VOZ (3/10/2026) ----------
+     El pase con voz (efectos/pase-voz.js) pausa la música buscando los
+     <audio> y <video> de la página. Pero la música de fondo es YouTube, en un
+     iframe: no es un <audio>, así que seguía sonando DEBAJO del mensaje
+     grabado. Se arregla acá, donde vive la música, y sirve para cualquier
+     audio que se ponga a sonar (pase con voz, libro de firmas, lo que venga):
+     `play` no burbujea pero se puede escuchar en captura desde el documento.
+     ⚠️ Los videos de fondo y de portada van MUDOS y en loop: no cuentan. */
+  var calladaPorOtro = false;
+  function ajenoSonando() {
+    var ms = document.querySelectorAll('audio,video');
+    for (var k = 0; k < ms.length; k++) if (!ms[k].paused && !ms[k].muted && !ms[k].ended) return true;
+    return false;
+  }
+  document.addEventListener('play', function (e) {
+    var m = e.target;
+    if (!m || !/^(AUDIO|VIDEO)$/.test(m.tagName) || m.muted) return;
+    if (sonando && !pausada) { calladaPorOtro = true; cmd('pauseVideo'); }
+  }, true);
+  function quizasVolver() {
+    if (!calladaPorOtro) return;
+    setTimeout(function () {
+      if (!calladaPorOtro || ajenoSonando()) return;
+      calladaPorOtro = false;
+      if (!pausada) cmd('playVideo');
+    }, 250);
+  }
+  document.addEventListener('pause', quizasVolver, true);
+  document.addEventListener('ended', quizasVolver, true);
+
   /* ---------- se engancha con lo que dejó el motor ---------- */
   function mirar() {
     var id = window.__musicaYT;
