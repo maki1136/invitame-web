@@ -225,6 +225,28 @@
       });
     }
     var setPropOriginal = CSSStyleDeclaration.prototype.setProperty;
+    /* ★ 3/10/2026 — EL AGUJERO DE CHROME (Android). Chromium NO tiene
+       `backgroundImage` ni `background` como accesorio en el prototipo (los
+       resuelve por dentro), así que el gancho de arriba no se instalaba y no
+       avisaba. Medido en camila-y-tomas: las fotos de «Dónde y cuándo» (el motor
+       las pone con `e.style.backgroundImage=`) viajaban a 1440 px y directo a
+       Cloudinary, sin la caché. Safari sí tiene el accesorio (va por arriba).
+       Probado: si se DEFINE el accesorio en el prototipo, Chromium lo usa.
+       ⚠️ Se probó también corregir con un observador del atributo `style`: llega
+          tarde (la foto ya se empezó a bajar) y termina en DOBLE descarga. */
+    [['backgroundImage', 'background-image'], ['background', 'background']].forEach(function (par) {
+      try {
+        if (Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype, par[0])) return;
+        Object.defineProperty(CSSStyleDeclaration.prototype, par[0], {
+          configurable: true, enumerable: false,
+          get: function () { return this.getPropertyValue(par[1]); },
+          set: function (v) {
+            var val = (v == null) ? '' : String(v);
+            setPropOriginal.call(this, par[1], (val.indexOf('res.cloudinary.com') > -1 ? (livianaCss(val) || val) : val));
+          }
+        });
+      } catch (e) {}
+    });
     CSSStyleDeclaration.prototype.setProperty = function (prop, valor, prioridad) {
       try {
         if (typeof valor === 'string' && valor.indexOf('res.cloudinary.com') > -1) {
