@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-03T10:20:25.474Z",
+ "cuando": "2026-10-03T11:04:06.417Z",
  "total": 55,
- "verde": 54,
- "rojo": 1,
+ "verde": 55,
+ "rojo": 0,
  "gris": 0,
  "items": [
   {
@@ -99,33 +99,8 @@
   {
    "slug": "danna-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "fondo: previa «video» · publicada «»",
-    "nombres: previa «\"Tilt Neon\", cursive 58.5px rgb(247, 240, 255)» · publicada «\"Rouge Script\", cursive 54px rgb(251, 247, 239)»",
-    "sección #1: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «oculta»",
-    "sección pv-sec: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «—»",
-    "sección #3: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «—»",
-    "sección carta: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección frase: previa «oculta» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección eventos: previa «rgba(26, 11, 46, 0.5)/rgb(238, 230, 214)» · publicada «rgb(255, 63, 164)/rgb(238, 230, 214)»",
-    "sección itinerario: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección hospedaje: previa «rgba(26, 11, 46, 0.5)/rgb(238, 230, 214)» · publicada «rgb(255, 63, 164)/rgb(238, 230, 214)»",
-    "sección dresscode: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección padres: previa «rgba(26, 11, 46, 0.5)/rgb(238, 230, 214)» · publicada «rgb(255, 63, 164)/rgb(238, 230, 214)»",
-    "sección galeria: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(26, 11, 46)/rgb(58, 69, 61)»",
-    "sección trivia: previa «rgba(26, 11, 46, 0.5)/rgb(238, 230, 214)» · publicada «rgb(255, 63, 164)/rgb(238, 230, 214)»",
-    "sección regalos: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(36, 16, 63)/rgb(58, 69, 61)»",
-    "sección hashtag: previa «rgba(26, 11, 46, 0.5)/rgb(247, 240, 255)» · publicada «rgb(255, 63, 164)/rgb(247, 240, 255)»",
-    "sección video: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección spotify: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección confirmacion: previa «rgba(26, 11, 46, 0.5)/rgb(238, 230, 214)» · publicada «rgb(255, 63, 164)/rgb(238, 230, 214)»",
-    "sección share-sec: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección filtro-sec: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «—»",
-    "sección gal-seccion: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «—»",
-    "sección contacto-sec: previa «rgba(26, 11, 46, 0.094)/rgb(58, 69, 61)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección #2: previa «—» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
