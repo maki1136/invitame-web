@@ -162,6 +162,14 @@
   }
 
   var CSS = [
+    /* ⚠️ LA RASPADITA VA SIN RECUADRO, EN TODAS (3/10/2026). Maki: «para raspar,
+       para revelar, se ven los bordes. No está bueno eso». El motor le da a la
+       tarjeta fondo de lino, esquinas y sombra, y varias colecciones le
+       sumaban un filete (borde o ::after). Se apaga acá, con el id, para todas;
+       los círculos/fichas de abajo y la tapa que se raspa no se tocan. */
+    '#scratchcard.scratchcard{background-color:transparent!important;background-image:none!important;',
+    '  border:0!important;box-shadow:none!important;outline:0!important}',
+    '#scratchcard.scratchcard::after,#scratchcard.scratchcard::before{content:none!important;display:none!important}',
     '.rasp-zona{position:absolute;overflow:hidden}',
     '.rasp-zona canvas{position:absolute;inset:0;width:100%;height:100%;',
     '  touch-action:none;cursor:grab;transition:opacity .55s ease,filter .45s ease}',

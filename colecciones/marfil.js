@@ -1100,18 +1100,17 @@
     'h[c] .evento .addr { color:' + TINTA2 + ' !important; }',
     'h[c] .evento .btnrow { justify-content:center !important; }',
 
+    /* ⚠️ 3/10/2026 · LA RASPADITA VA SIN RECUADRO. Maki, en renata-y-patricio:
+       «para raspar, para revelar, se ven los bordes. No está bueno eso».
+       Era una tarjeta con doble filete dorado (borde + ::after a 6 px) alrededor
+       de los círculos: la regla de la skill de armado (§5ter) ya lo prohibía. */
     'h[c] .scratchcard {',
-    '  border-radius:2px !important;',
-    '  border:1px solid ' + ORO + ' !important;',
-    '  background:#f3efe6 !important;',
-    '  box-shadow:0 1px 0 rgba(255,255,255,.75) inset,',
-    '             0 12px 30px rgba(58,52,43,.16) !important;',
+    '  border:0 !important; border-radius:0 !important;',
+    '  background-color:transparent !important; background-image:none !important;',
+    '  box-shadow:none !important;',
     '  width:min(86%,320px) !important; height:176px !important;',
     '}',
-    'h[c] .scratchcard::after {',
-    '  content:""; position:absolute; inset:6px;',
-    '  border:1px solid ' + ORO_CL + '; pointer-events:none; z-index:6;',
-    '}',
+    'h[c] .scratchcard::after { content:none !important; }',
     'h[c] .scratchcard .ivf-circ .c {',
     '  box-shadow:0 0 0 1px ' + ORO + ', 0 3px 8px rgba(58,52,43,.22) !important;',
     '}',
