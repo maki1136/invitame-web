@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T02:29:56.759Z",
+ "cuando": "2026-10-03T02:33:30.031Z",
  "total": 55,
- "verde": 55,
+ "verde": 52,
  "rojo": 0,
- "gris": 0,
+ "gris": 3,
  "items": [
   {
    "slug": "abril-mis15",
@@ -105,10 +105,10 @@
   },
   {
    "slug": "elena-y-julian",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "elena-y-rodrigo",
@@ -196,10 +196,10 @@
   },
   {
    "slug": "maria-jose-mis15",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "maria-paz-y-joaquin",
@@ -231,10 +231,10 @@
   },
   {
    "slug": "mariana-y-rodrigo",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "marisol-mis15",
