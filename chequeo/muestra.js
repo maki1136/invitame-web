@@ -564,6 +564,115 @@
     return { pasa: malos.length === 0, nota: malos.length + ' control(es) muerto(s)', detalle: malos.slice(0, 10) };
   });
 
+  /* 9 ······················································ EL ORDEN  ★ 3/10/2026 ★
+     «el ticket tiene que estar después de la raspada y después viene el QR …
+      para que la gente lo vea rápido». Se mira el DOM: raspadita, ticket con
+     voz y pase con QR, pegados y en ese orden. */
+  regla('orden-ticket', 'Raspadita → ticket con voz → QR', function () {
+    var pv = document.getElementById('pv-sec');
+    if (!pv) return { pasa: true, nota: 'esta invitación no tiene ticket con voz' };
+    var pase = document.querySelector('.pase');
+    var rasp = document.querySelector('.sec.scratch-sec');
+    var sig = function (el) { var n = el && el.nextElementSibling; return n; };
+    var nom = function (el) { return el ? (el.id || String(el.className).split(' ')[0] || el.tagName) : 'nada'; };
+    if (rasp) {
+      var ok1 = sig(rasp) === pv, ok2 = !pase || sig(pv) === pase;
+      return {
+        pasa: ok1 && ok2,
+        nota: ok1 && ok2 ? 'raspadita → ticket → QR'
+          : 'después de la raspadita viene «' + nom(sig(rasp)) + '» y después del ticket «' + nom(sig(pv)) + '»'
+      };
+    }
+    if (pase) {
+      var ok = sig(pv) === pase;
+      return { pasa: ok, nota: ok ? 'sin raspadita: ticket → QR' : 'sin raspadita, y el ticket no va pegado arriba del QR' };
+    }
+    return { pasa: true, nota: 'sin raspadita ni QR' };
+  });
+
+  /* 10 ································· LA LÍNEA DEL ITINERARIO  ★ 3/10/2026 ★
+     «la línea esa que cruza se va hasta el fondo y sigue pasando el último
+      circulito … tiene que terminar en el circulito». La vía (`.tl::before`)
+     tiene que terminar en el CENTRO de la marca de la última ficha (y empezar
+     en el de la primera), ±2 px. El centro se mide igual que efectos/itinerario.js. */
+  function marcaY(el) {
+    var r = el.getBoundingClientRect();
+    try {
+      var c = getComputedStyle(el, '::before');
+      var t = parseFloat(c.top), m = parseFloat(c.marginTop) || 0, h = parseFloat(c.height);
+      if (c.content !== 'none' && isFinite(t) && isFinite(h) && h > 0) return r.top + t + m + h / 2;
+    } catch (e) {}
+    return r.top + r.height / 2;
+  }
+  regla('itinerario-termina', 'La línea del itinerario termina en la última marca', function () {
+    var tls = [].slice.call(document.querySelectorAll('.tl')).filter(ubicable);
+    if (!tls.length) return { pasa: true, nota: 'esta invitación no tiene itinerario' };
+    var malos = [], medidos = 0;
+    tls.forEach(function (tl) {
+      var its = [].slice.call(tl.children).filter(function (e) { return e.classList.contains('it') && ubicable(e); });
+      if (!its.length) return;
+      var v = getComputedStyle(tl, '::before');
+      if (v.content === 'none' || v.display === 'none') { malos.push('la vía no es .tl::before (no se pudo medir)'); return; }
+      var R = tl.getBoundingClientRect();
+      var top = parseFloat(v.top), bot = parseFloat(v.bottom);
+      if (!isFinite(top) || !isFinite(bot)) { malos.push('la vía no tiene top/bottom medibles'); return; }
+      medidos++;
+      var ini = R.top + top, fin = R.bottom - bot;
+      var m0 = marcaY(its[0]), m1 = marcaY(its[its.length - 1]);
+      if (Math.abs(fin - m1) > 2) malos.push('termina ' + Math.round(fin - m1) + ' px ' + (fin > m1 ? 'DESPUÉS' : 'antes') + ' de la última marca');
+      if (Math.abs(ini - m0) > 2) malos.push('empieza ' + Math.round(m0 - ini) + ' px ' + (ini < m0 ? 'ANTES' : 'después') + ' de la primera marca');
+    });
+    return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' problema(s)' : medidos + ' itinerario(s): la vía va de marca a marca', detalle: malos };
+  });
+
+  /* 11 ······································· RASPADITA SIN RECUADRO  ★ 3/10/2026 ★
+     «para raspar, para revelar, se ven los bordes. No está bueno eso.»
+     El contenedor `#scratchcard` no lleva fondo, borde, sombra ni filete. */
+  regla('raspadita-sin-recuadro', 'La raspadita no tiene recuadro', function () {
+    var sc = document.getElementById('scratchcard');
+    if (!sc) return { pasa: true, nota: 'esta invitación no tiene raspadita' };
+    var c = getComputedStyle(sc), a = getComputedStyle(sc, '::after'), b = getComputedStyle(sc, '::before');
+    var malos = [];
+    ['Top', 'Right', 'Bottom', 'Left'].forEach(function (k) {
+      if (parseFloat(c['border' + k + 'Width']) > 0 && c['border' + k + 'Style'] !== 'none') malos.push('borde ' + k);
+    });
+    if (c.boxShadow && c.boxShadow !== 'none') malos.push('sombra');
+    if (c.backgroundImage && c.backgroundImage !== 'none') malos.push('imagen de fondo');
+    var bg = aRGB(c.backgroundColor);
+    if (bg && bg[3] > 0.02) malos.push('fondo ' + c.backgroundColor);
+    if (c.outlineStyle !== 'none' && parseFloat(c.outlineWidth) > 0) malos.push('filete (outline)');
+    [a, b].forEach(function (p, i) { if (p.content && p.content !== 'none' && p.display !== 'none') malos.push((i ? '::before' : '::after') + ' dibujado'); });
+    return { pasa: malos.length === 0, nota: malos.length ? malos.join(', ') : 'sin recuadro', detalle: malos };
+  });
+
+  /* 12 ············································· MÚSICA EN MP3  ★ 3/10/2026 ★
+     «en iPhone … poné todo en mp3 así funciona», «la idea es que suene cuando
+      tocan el sobre». Con YouTube el iPhone no arranca con el toque del sobre;
+     con un archivo de audio el motor usa #audio-bg y arranca en el toque. */
+  regla('musica-mp3', 'La música es un archivo de audio (arranca con el sobre)', function () {
+    var url = String((window.INVEV || {}).musicaUrl || '').trim();
+    if (!url) return { pasa: true, nota: 'esta invitación no tiene música' };
+    var esAudio = /\.(mp3|m4a|aac|ogg|wav)(\?|#|$)/i.test(url);
+    if (!esAudio) return { pasa: false, nota: 'la música no es mp3 (' + url.slice(0, 40) + '): en iPhone no arranca al tocar el sobre' };
+    var a = document.getElementById('audio-bg');
+    var cargada = !!(a && a.getAttribute('src'));
+    var nota = 'mp3' + (cargada ? ' cargado en #audio-bg' : ' — pero #audio-bg NO lo tiene');
+    if (cargada && a.currentTime > 0) nota += ' · sonando (' + a.currentTime.toFixed(1) + ' s)';
+    return { pasa: cargada, nota: nota };
+  });
+
+  /* 13 ······································· EL SOBRE ESTÁ GUARDADO  ★ 3/10/2026 ★
+     renata-y-patricio abría vacía y cambiaba de sobre: el modelo no estaba
+     guardado y la colección lo inyectaba en memoria (`fx.__mfSobre`), en
+     carrera con el sobre clásico. El sobre tiene que estar elegido en el panel. */
+  regla('sobre-guardado', 'El sobre está guardado en el panel (no lo pone la colección)', function () {
+    var fx = ((window.INVEV || {}).fx) || {};
+    var inyectado = Object.keys(fx).filter(function (k) { return /^__.*sobre/i.test(k) && fx[k]; });
+    if (inyectado.length) return { pasa: false, nota: 'el sobre lo puso la colección en memoria (' + inyectado.join(', ') + '): elegir el modelo en EFECTOS y «Guardar y publicar»' };
+    var m = fx.sobre && fx.sobre.modelo;
+    return { pasa: true, nota: m ? 'modelo guardado: ' + m : 'sobre de fábrica' };
+  });
+
   /* ---- el corredor -------------------------------------------------------- */
 
   /* Las secciones entran con `.reveal` al hacer scroll. Si se mide sin haber
