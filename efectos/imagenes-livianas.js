@@ -125,6 +125,13 @@
     var i = url.indexOf('/upload/') + 8;
     var cola = url.slice(i);
     if (/^v\d+\//.test(cola)) return url.slice(0, i) + RECETA + cola;
+    /* ★ 3/10/2026 — y las que se suben sin número de versión
+       (`/upload/invitame/sapo/…`): pasaban enteras. Medido en zoe-mis15: la banda
+       de Sapo viajaba en 1,6 MB. Sólo las de NUESTRA carpeta `invitame/`, así
+       nunca se confunde una carpeta con una instrucción. */
+    /* ⚠️ Las .webp/.svg/.gif de las piezas ya están preparadas a mano (medida y
+       calidad justas): ésas no se tocan. */
+    if (/^invitame\//.test(cola) && !/\.(webp|avif|svg|gif)(\?|$)/i.test(cola)) return url.slice(0, i) + RECETA + cola;
 
     /* ⚠️ LA FOTO FIJA DEL VIDEO DE FONDO TAMBIÉN CUENTA. (14/9/2026)
        Cuando la clienta pone un VIDEO de fondo, la foto de respaldo es un
