@@ -473,9 +473,14 @@
 
     var firma = document.documentElement.getAttribute('data-simbolo') || '';
     if (!firma) return { pasa: false, nota: 'no hay símbolo: la marca es el circulito de fábrica' };
+    /* ★ 3/10/2026 — Perlas cambia el símbolo dibujado por la PERLA FOTOGRAFIADA
+       (data:image/webp) cuando la tiene: también es la marca de la temática. La
+       regla daba FALLA según el segundo en que midiera. Lo que importa es que
+       haya una imagen y no el circulito de fábrica (que no tiene ninguna). */
+    var hay = /url\(/.test(img);
     return {
-      pasa: /svg/.test(img),
-      nota: firma + (/svg/.test(img) ? ' — dibujado' : ' — declarado pero NO dibujado')
+      pasa: hay,
+      nota: firma + (/svg/.test(img) ? ' — dibujado' : hay ? ' — pieza fotografiada' : ' — declarado pero NO dibujado')
     };
   });
 
@@ -748,6 +753,25 @@
     var borde = frente.getBoundingClientRect().top;
     var sobra = Math.round(borde - fin);
     return { pasa: sobra >= 4, nota: sobra >= 4 ? 'el último renglón queda ' + sobra + ' px arriba del bolsillo' : 'el último renglón queda ' + (-sobra) + ' px DETRÁS del bolsillo', detalle: sobra >= 4 ? [] : ['tapado ' + (-sobra) + ' px'] };
+  });
+
+  /* ★ 3/10/2026 — valentina tenía los cuatro padres con nombre y SIN foto:
+     cuatro círculos vacíos. Ninguna regla lo veía (la de «una fila» sólo mira
+     la posición). Cada persona visible tiene que tener su foto. */
+  regla('personas-con-foto', 'Cada persona de «Nuestras personas» tiene su foto', function () {
+    var cont = document.querySelector('.padres');
+    if (!cont || !ubicable(cont)) return { pasa: true, nota: 'esta invitación no muestra personas' };
+    var malos = [];
+    [].forEach.call(cont.children, function (c) {
+      if (!visible(c)) return;
+      var av = c.querySelector('.av');
+      var nom = ((c.querySelector('.nm') || {}).textContent || '?').trim().slice(0, 24);
+      var bg = av ? getComputedStyle(av).backgroundImage : 'none';
+      var im = av && av.querySelector('img');
+      var hay = /url\(/.test(bg) || (im && im.naturalWidth > 0);
+      if (!hay) malos.push(nom + ': sin foto');
+    });
+    return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' persona(s) sin foto' : 'todas con foto', detalle: malos };
   });
 
   /* ---- el corredor -------------------------------------------------------- */

@@ -120,7 +120,7 @@ if ($pregunta !== '' && preg_match('~[0-9a-f]{32}~', $pregunta, $pm) && $pm[0] =
       para buscar marcas de un cambio: el liviano no tiene comentarios).
    ⚠️ Se manda YA comprimido con gzip nivel 9: la compresión automática del
       servidor (LiteSpeed) daba 856 KB; ésta, ~245 KB. */
-$LIVIANO_POR_DEFECTO = false;   /* ← se prende después de probarlo en vivo con ?liviano=1 */
+$LIVIANO_POR_DEFECTO = true;    /* prendido el 3/10/2026, probado en vivo en las 51 con ?liviano=1 */
 if (!$CLI && !isset($_GET['crudo']) && ($LIVIANO_POR_DEFECTO || isset($_GET['liviano']))) {
   $min = __DIR__ . '/todo.min.js';
   $fh = @fopen($min, 'rb');
