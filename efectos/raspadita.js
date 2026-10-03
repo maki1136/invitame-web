@@ -244,7 +244,22 @@
         si alguno ya es transparente, se deja como está. */
   var fotosTapa = {};
 
+  /* ⭐ Y LA FOTO TAMBIÉN SE ELIGE EN EL PANEL — `fx.raspadita.tapa`  ★ 3/10/2026 ★
+     «Las raspaditas de las primeras quedaron medias pobres»: las colecciones
+     sin pieza propia (Perlas, Marfil, sin colección) dejaban la tapa gris.
+     Ahora Jazmín sube la foto en EFECTOS → raspadita → «Foto de la tapa», y
+     GANA sobre la de la colección. Sin foto en el panel, todo sigue igual. */
+  function tapaPanel() {
+    try {
+      var r = window.INVEV && window.INVEV.fx && window.INVEV.fx.raspadita;
+      var u = r && String(r.tapa || '').trim();
+      return u && /^https?:\/\//i.test(u) ? u : '';
+    } catch (e) { return ''; }
+  }
+
   function tapaDe(cv) {
+    var pan = tapaPanel();
+    if (pan) return pan;
     try {
       var el = cv.parentElement || cv;
       var v = (getComputedStyle(el).getPropertyValue('--r3-tapa') || '').trim();

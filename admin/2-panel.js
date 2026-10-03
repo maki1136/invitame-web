@@ -184,6 +184,10 @@
   // hacen aparecer o desaparecer otros campos (ej: elegir "Carta" muestra el catalogo).
   function selR(grp,key,opts){ensureFX();return '<select onchange="D.fx.'+grp+'.'+key+'=this.value;postPreview();renderPanel()">'+opts.map(o=>'<option value="'+o[0]+'" '+(D.fx[grp][key]===o[0]?'selected':'')+'>'+o[1]+'</option>').join('')+'</select>';}
   function setAdorno(id){ ensureFX(); D.fx.diseno.adorno=id; D.fx.diseno.adornoCustom=''; renderPanel(); }
+  async function subirTapaRasp(input){ const f=input.files&&input.files[0]; if(!f)return;
+    if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
+    try{ const url=await INV.uploadImage(f); ensureFX(); D.fx.raspadita.tapa=url; renderPanel(); postPreview(); }
+    catch(e){ console.error(e); alert('No se pudo subir: '+(e.message||e)); } }
   async function subirAdorno(input){ const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     try{ const url=await INV.uploadImage(f); ensureFX(); D.fx.diseno.adornoCustom=url; D.fx.diseno.adorno=''; renderPanel(); }
@@ -272,6 +276,11 @@
         '<div class="grp"><label>Color de los números</label>'+col('raspadita','num')+'</div></div>'+
         '<div class="two"><div class="grp"><label>Relleno de la ficha</label>'+col('raspadita','fondo')+'</div>'+
         '<div class="grp"><label>Color del filete</label>'+col('raspadita','linea')+'</div></div>'+
+        '<div class="grp"><label>Foto de la tapa (lo que se raspa)</label>'+
+          '<div class="file" onclick="document.getElementById(\'rasptapafile\').click()">'+ICO.subir+' Subir la foto de la tapa</div>'+
+          '<input type="file" id="rasptapafile" accept="image/*" style="display:none" onchange="subirTapaRasp(this)">'+
+          (D.fx.raspadita.tapa?'<div style="margin-top:8px;display:flex;align-items:center;gap:10px"><img src="'+D.fx.raspadita.tapa+'" style="width:40px;height:40px;object-fit:cover;border-radius:50%"><button class="lnk" onclick="D.fx.raspadita.tapa=\'\';renderPanel();postPreview()">Quitar la foto</button></div>':'')+
+          '<div class="hint">Una pieza de la temática (una perla, una caracola, una flor). Si no subís nada, va la de la colección o el plateado.</div></div>'+
         '<div class="grp">'+chk('raspadita','polvillo','Polvillo mientras se rasca')+'</div>'+
         '<div class="grp">'+chk('raspadita','destello','Destello al terminar')+'</div>'+
         '<div class="grp">'+chk('raspadita','vibrar','Vibración al completar cada parte')+'</div>'+
