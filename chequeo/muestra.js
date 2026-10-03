@@ -685,6 +685,22 @@
     return { pasa: true, nota: m ? 'modelo guardado: ' + m : 'sobre de fábrica' };
   });
 
+  /* 14 ································· LA CARTA SIN RELLENO  ★ 3/10/2026 ★
+     «hay algunas que decían algo genérico». La hoja no repite el título de la
+     sección, no trae el texto de fábrica y no es de una sola línea. */
+  regla('carta-propia', 'Nuestra carta tiene encabezado y texto propios', function () {
+    var sec = document.getElementById('carta-sec');
+    if (!sec || !ubicable(sec)) return { pasa: true, nota: 'esta invitación no tiene carta' };
+    var h2 = document.getElementById('cf-h2c'), h4 = document.getElementById('cf-titulo'), p = document.getElementById('cf-texto');
+    var t = function (e) { return e ? (e.textContent || '').trim().replace(/\s+/g, ' ') : ''; };
+    var malos = [];
+    if (h4 && visible(h4) && h2 && t(h4).toLowerCase() === t(h2).toLowerCase()) malos.push('la hoja repite el título «' + t(h2) + '»');
+    var cuerpo = t(p);
+    if (/^Queridos amigos y familia|Hoy queremos compartir con ustedes uno de los d[ií]as m[aá]s felices/i.test(cuerpo)) malos.push('texto de fábrica');
+    if (cuerpo && cuerpo.length < 80) malos.push('texto de una línea (' + cuerpo.length + ' letras)');
+    return { pasa: malos.length === 0, nota: malos.length ? malos.join(' · ') : 'propia (' + cuerpo.length + ' letras)', detalle: malos };
+  });
+
   /* ---- el corredor -------------------------------------------------------- */
 
   /* Las secciones entran con `.reveal` al hacer scroll. Si se mide sin haber
