@@ -954,8 +954,11 @@
     var rasp = document.querySelector('.sec.scratch-sec');
     if (!pase || !rasp) return;
     if (rasp.parentElement !== pase.parentElement) return;
-    if (pase.previousElementSibling === rasp) return;
-    rasp.parentNode.insertBefore(pase, rasp.nextSibling);
+    var ant = pase.previousElementSibling;                   /* el ticket con voz va en el medio (3/10) */
+    if (ant && ant.id === 'pv-sec') ant = ant.previousElementSibling;
+    if (ant === rasp) return;
+    var tras = rasp.nextSibling && rasp.nextSibling.id === 'pv-sec' ? rasp.nextSibling : rasp;
+    rasp.parentNode.insertBefore(pase, tras.nextSibling);
   }
   function devolverPase() {
     var pase = document.querySelector('.pase');

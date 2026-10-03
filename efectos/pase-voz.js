@@ -535,12 +535,11 @@
       onda.appendChild(b); barras.push(b);
     }
 
-    /* dónde va: SIEMPRE dentro de .frame */
+    /* dónde va: SIEMPRE dentro de .frame — y ARRIBA (ver ubicar()) */
     var marco = document.querySelector('.frame');
     if (!marco) return;
-    var antes = document.getElementById('contacto-sec') || document.getElementById('share-sec');
-    if (antes && antes.parentNode === marco) marco.insertBefore(sec, antes);
-    else marco.appendChild(sec);
+    marco.appendChild(sec);
+    ubicar(sec);
 
     audio(sec, barras, f);
     [60, 400, 1500].forEach(function (ms) { setTimeout(function () { encajar(sec); }, ms); });
@@ -700,6 +699,36 @@
     ].join('|');
   }
 
+  /* ---- EL LUGAR: RASPADITA → TICKET CON VOZ → PASE CON EL QR  (3/10/2026) ----
+     Maki: «el ticket tiene que estar después de la raspada y después viene el
+     QR. Es importante que esté después de la raspada para que la gente lo vea
+     rápido». Antes iba al final, antes de «¿Alguna duda?».
+     · Hay raspadita → justo debajo de ella.
+     · No hay raspadita → justo arriba del pase con el QR.
+     · Ninguna de las dos → donde iba antes (antes de contacto/compartir).
+     Las colecciones bajan el QR abajo de la raspadita cada 1,2 s (moverPase);
+     las doce aceptan que el ticket quede en el medio. Se repasa cada 400 ms
+     porque la raspadita y el QR los arma el motor y pueden llegar después. */
+  function ubicar(sec) {
+    sec = sec || document.getElementById('pv-sec');
+    var marco = document.querySelector('.frame');
+    if (!sec || !marco || sec.parentNode !== marco) return;
+    var rasp = marco.querySelector(':scope > .sec.scratch-sec');
+    var pase = marco.querySelector(':scope > .pase');
+    if (rasp) {
+      if (sec.previousElementSibling !== rasp) marco.insertBefore(sec, rasp.nextSibling);
+      if (pase && pase.previousElementSibling !== sec &&
+          pase.compareDocumentPosition(sec) & Node.DOCUMENT_POSITION_FOLLOWING) {
+        /* el QR quedó arriba del ticket: va debajo */
+        marco.insertBefore(pase, sec.nextSibling);
+      }
+      return;
+    }
+    if (pase) { if (sec.nextElementSibling !== pase) marco.insertBefore(sec, pase); return; }
+    var antes = document.getElementById('contacto-sec') || document.getElementById('share-sec');
+    if (antes && antes.parentNode === marco && sec.nextElementSibling !== antes) marco.insertBefore(sec, antes);
+  }
+
   var ultima = null;
   function revisar() {
     var h = huella();
@@ -710,6 +739,7 @@
       ultima = h;
       try { montar(); } catch (e) {}
     }
+    try { ubicar(); } catch (e) {}
   }
 
   if (document.readyState === 'loading') {
