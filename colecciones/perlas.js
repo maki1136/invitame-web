@@ -444,7 +444,13 @@
 
     'h[c] .padres[data-col-n="3"]{grid-template-columns:repeat(3,1fr)!important;gap:12px!important}',
     'h[c] .padres[data-col-n="1"]{grid-template-columns:minmax(0,220px)!important;justify-content:center!important}',
-    '@media (max-width:360px){h[c] .padres[data-col-n="3"]{gap:8px!important}}',
+    /* ★ 3/10/2026 — con 4 personas (valentina) Perlas no tenía regla y quedaba la
+       grilla de fábrica de 2 columnas: 2 + 2. «Todas en la misma línea», siempre. */
+    'h[c] .padres[data-col-n="2"]{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}',
+    'h[c] .padres[data-col-n="4"]{grid-template-columns:repeat(4,1fr)!important;gap:8px 6px!important}',
+    'h[c] .padres[data-col-n="4"] .av{width:82px!important;height:82px!important}',
+    'h[c] .padres[data-col-n="4"] .nm{font-size:15px!important}',
+    '@media (max-width:360px){h[c] .padres[data-col-n="3"]{gap:8px!important}h[c] .padres[data-col-n="4"] .av{width:70px!important;height:70px!important}}',
 
     'h[p] .tl::before{' +
       'width:11px!important;left:1.5px!important;opacity:1!important;' +

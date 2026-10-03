@@ -60,7 +60,36 @@
    ============================================================================ */
 (function () {
 
-  var RECETA = 'f_auto,q_auto:good,w_1200,c_limit/';
+  /* ★ 3/10/2026 — EL ANCHO JUSTO PARA ESTE TELÉFONO. Maki: «que cargue lo más
+     rápido posible sin perder calidad». Medido en camila-y-tomas: las fotos de la
+     galería viajaban a 1440 px y los fondos a 1680 px a un teléfono de 390 px de
+     ancho (780 px reales en pantalla x2). Se piden al ancho de la pantalla real,
+     redondeado a DOS escalones (800 y 1200) para que Cloudinary arme pocas
+     versiones y la caché las reuse. En la compu (más de 1300 px reales) no se
+     toca nada. Nunca se agranda: sólo se achica lo que venía más grande. */
+  var ANCHO = 0;
+  try {
+    var real = Math.max(screen.width || 0, window.innerWidth || 0) * (window.devicePixelRatio || 1);
+    var corto = Math.min(screen.width || 9999, screen.height || 9999);
+    if (corto <= 600) ANCHO = real <= 900 ? 800 : 1200;      /* teléfonos */
+  } catch (e) {}
+  var RECETA = 'f_auto,q_auto:good,w_' + (ANCHO || 1200) + ',c_limit/';
+
+  /* Achica el ÚLTIMO paso de la receta (`c_fill,w_1440,h_960,...`) manteniendo la
+     proporción, así el recorte queda idéntico. Los pasos anteriores (un c_crop
+     con coordenadas) no se tocan. */
+  function alAncho(url) {
+    if (!ANCHO || typeof url !== 'string' || url.indexOf('/image/upload/') < 0) return url;
+    var i = url.indexOf('/upload/') + 8;
+    var cola = url.slice(i);
+    var m = cola.match(/^((?:[^\/]+\/)*?)([^\/]*\bw_(\d+)[^\/]*)\/(v\d+\/.*|invitame\/.*)$/);
+    if (!m) return url;
+    var paso = m[2], w = +m[3];
+    if (!(w > ANCHO) || /\bc_crop\b/.test(paso) || /\bx_|\by_/.test(paso)) return url;
+    var k = ANCHO / w;
+    paso = paso.replace(/\bw_\d+/, 'w_' + ANCHO).replace(/\bh_(\d+)/, function (x, h) { return 'h_' + Math.round(+h * k); });
+    return url.slice(0, i) + m[1] + paso + '/' + m[4];
+  }
 
   /* ═══ LA CACHÉ (1/10/2026) ═══════════════════════════════════════════════
      Si `i/index.php` puso `window.INV_CACHE_MEDIOS` (la dirección del Worker de
@@ -87,7 +116,7 @@
     return u;
   }
   /* La dirección final de una FOTO: primero liviana, después por la caché. */
-  function fin(u) { return alCache(liviana(u) || u); }
+  function fin(u) { return alCache(alAncho(liviana(u) || u)); }
 
   /* La dirección liviana, o '' si no hay que tocarla. */
   function liviana(url) {

@@ -83,10 +83,15 @@ foreach ($mm[1] as $url) {
   $lista[] = array($url, ($ok && is_readable($real)) ? $real : false);
 }
 
-$huella = filemtime(__FILE__) . ':' . filesize(__FILE__) . ':' . md5($indice);
+/* ★ 3/10/2026 — la huella sale del CONTENIDO (md5 de cada archivo), no de la
+   fecha: así la máquina que arma el paquete liviano (GitHub) y el servidor
+   (Hostinger) calculan exactamente la misma, aunque cada uno tenga sus fechas. */
+$huella = md5_file(__FILE__) . ':' . md5($indice);
 foreach ($lista as $par) {
-  $huella .= '|' . $par[0] . ':' . ($par[1] ? (filemtime($par[1]) . ':' . filesize($par[1])) : 'falta');
+  $huella .= '|' . $par[0] . ':' . ($par[1] ? md5_file($par[1]) : 'falta');
 }
+$CLI = (PHP_SAPI === 'cli');
+if ($CLI && isset($argv) && in_array('--huella', $argv, true)) { echo md5($huella); exit; }
 $etag = 'W/"' . md5($huella) . '"';
 header('ETag: ' . $etag);
 $pregunta = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : '';
@@ -96,6 +101,56 @@ if ($pregunta !== '' && preg_match('~[0-9a-f]{32}~', $pregunta, $pm) && $pm[0] =
   http_response_code(304);
   exit;
 }
+
+/* ═══ EL PAQUETE LIVIANO (3/10/2026) ══════════════════════════════════════════
+   Maki: «achicá todo lo que puedas sin perder calidad y que cargue lo más rápido
+   posible». Medido en un 4G: este paquete eran 2 MB (856 KB por la red) y el
+   sobre recién estaba listo a los 8,3 s. El 42 % eran comentarios como éste.
+
+   `efectos/todo.min.js` es ESTA MISMA salida, sin comentarios ni espacios (terser,
+   sin cambiar ni renombrar nada del código). La arma SOLA una acción de GitHub
+   (`.github/workflows/paquete.yml`) cada vez que se sube algo a efectos/,
+   colecciones/ o muestras/. Nadie tiene que acordarse de correr nada.
+
+   ⚠️ LA RED DE SEGURIDAD: su primera línea trae la huella de los archivos con los
+      que se armó. Si no coincide con la de AHORA (alguien subió un arreglo y la
+      acción todavía no rearmó), se sirve el paquete crudo de siempre. Nunca se
+      sirve un paquete viejo: en el peor caso, uno más pesado.
+   ⚠️ `?crudo=1` fuerza el crudo (para probar archivos locales con Playwright y
+      para buscar marcas de un cambio: el liviano no tiene comentarios).
+   ⚠️ Se manda YA comprimido con gzip nivel 9: la compresión automática del
+      servidor (LiteSpeed) daba 856 KB; ésta, ~245 KB. */
+$LIVIANO_POR_DEFECTO = false;   /* ← se prende después de probarlo en vivo con ?liviano=1 */
+if (!$CLI && !isset($_GET['crudo']) && ($LIVIANO_POR_DEFECTO || isset($_GET['liviano']))) {
+  $min = __DIR__ . '/todo.min.js';
+  $fh = @fopen($min, 'rb');
+  if ($fh) {
+    $primera = fgets($fh);
+    fclose($fh);
+    if (trim((string)$primera) === '/*huella:' . md5($huella) . '*/') {
+      header('X-Invitame-Paquete: liviano');
+      header('Vary: Accept-Encoding');
+      $acepta = isset($_SERVER['HTTP_ACCEPT_ENCODING']) ? $_SERVER['HTTP_ACCEPT_ENCODING'] : '';
+      if (stripos($acepta, 'gzip') !== false && function_exists('gzencode')) {
+        $guardado = rtrim(sys_get_temp_dir(), '/\\') . '/invitame-todo-' . md5($huella) . '.gz';
+        $gz = @file_get_contents($guardado);
+        if ($gz === false || $gz === '') {
+          $gz = gzencode(file_get_contents($min), 9);
+          @file_put_contents($guardado, $gz, LOCK_EX);
+        }
+        if (function_exists('apache_setenv')) { @apache_setenv('no-gzip', '1'); }
+        @ini_set('zlib.output_compression', '0');
+        header('Content-Encoding: gzip');
+        header('Content-Length: ' . strlen($gz));
+        echo $gz;
+        exit;
+      }
+      readfile($min);
+      exit;
+    }
+  }
+}
+header('X-Invitame-Paquete: crudo');
 
 echo "/* Invitame - los modulos del front, pegados en el servidor. La lista vive en efectos/index.js */\n";
 

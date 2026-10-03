@@ -1,0 +1,66 @@
+# ===== EL PAQUETE LIVIANO DE LOS EFECTOS, ARMADO SOLO (3/10/2026) =============
+#
+# Maki: «achicá todo lo que puedas sin perder calidad y que cargue lo más rápido
+# posible».
+#
+# efectos/todo.php pega los ~100 módulos del front en un solo pedido. Pesaba 2 MB
+# (856 KB por la red) y casi la mitad eran comentarios. Esta acción arma
+# efectos/todo.min.js —la MISMA salida, sin comentarios ni espacios— cada vez que
+# se sube algo a efectos/, colecciones/ o muestras/. Nadie tiene que acordarse de
+# correr nada.
+#
+# LA RED DE SEGURIDAD (está en todo.php): el liviano lleva en la primera línea la
+# huella de los archivos con los que se armó. Si no coincide con la de ahora
+# (todavía no corrió esta acción después de un cambio), el servidor sirve el
+# crudo de siempre. Nunca se sirve un paquete viejo.
+#
+# ATENCION — el commit lleva [skip ci]: si no, dispararía esta misma acción (y el
+# banco) otra vez, en bucle.
+# ==============================================================================
+name: Paquete liviano
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'efectos/**'
+      - 'colecciones/**'
+      - 'muestras/**'
+      - 'herramientas/armar-paquete.mjs'
+      - '.github/workflows/paquete.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paquete-liviano
+  cancel-in-progress: true
+
+jobs:
+  armar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP (para pedirle a todo.php la salida cruda)
+        run: php -v
+
+      - name: Armar el liviano
+        run: |
+          npm init -y >/dev/null
+          npm i terser@5 --no-audit --no-fund
+          node herramientas/armar-paquete.mjs
+
+      - name: Guardar
+        run: |
+          git config user.name  "invitame-paquete"
+          git config user.email "invitame-paquete@users.noreply.github.com"
+          git add efectos/todo.min.js
+          git diff --staged --quiet && exit 0
+          git commit -m "Paquete liviano de efectos [skip ci]"
+          for i in 1 2 3 4; do
+            git pull --rebase -q && git push && exit 0
+            sleep $((i * 7))
+          done
+          exit 1

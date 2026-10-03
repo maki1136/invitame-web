@@ -62,6 +62,47 @@
     el.textContent = texto;
   }
 
+  /* ★ 3/10/2026 — «LA CARTA LARGA QUEDA DETRÁS DEL BOLSILLO».
+     Medido: la hoja se apoya a 172 px del piso de la escena y el bolsillo
+     (`.cf-front`) mide 232: los últimos 60 px de la hoja están SIEMPRE metidos en
+     el bolsillo. Con 20 px de margen abajo, los dos últimos renglones quedaban
+     detrás del frente del sobre (camila: 70 px de texto tapado; paula: 65).
+     Y el motor elegía el tamaño de letra (`cf-largo` / `cf-xlargo`) mirando
+     `FX.carta.texto`, el campo viejo, no el texto que de verdad se muestra.
+     Arreglo, sin tocar el motor congelado:
+       1. el tamaño de letra sale del texto que SE VE (título + cuerpo);
+       2. el margen de abajo de la hoja = lo que entra en el bolsillo + 14 px,
+          medido en vivo (si una colección mueve la hoja o el bolsillo, se adapta).
+          La hoja sigue «metida» en el sobre: lo que queda adentro es papel liso;
+       3. la escena crece si la hoja ya no entra (como hacía el motor). */
+  function acomodarHoja() {
+    var hoja = document.querySelector('.cf-letter');
+    var caja = document.getElementById('cartafx');
+    if (!hoja || !caja) return;
+    var h = document.getElementById('cf-titulo'), p = document.getElementById('cf-texto');
+    var vis = function (e) { return e && getComputedStyle(e).display !== 'none'; };
+    var largo = (vis(h) ? txt(h.textContent).length : 0) + (p ? txt(p.textContent).length : 0);
+    hoja.classList.toggle('cf-largo', largo > 210 && largo <= 340);
+    hoja.classList.toggle('cf-xlargo', largo > 340);
+
+    var cs = getComputedStyle(hoja);
+    if (hoja.__padBase == null) hoja.__padBase = parseFloat(cs.paddingBottom) || 0;
+    var frente = caja.querySelector('.cf-front');
+    var meter = 0;
+    if (frente && getComputedStyle(frente).display !== 'none' && caja.offsetHeight) {
+      var cr = caja.getBoundingClientRect(), fr = frente.getBoundingClientRect();
+      var arribaFrente = cr.bottom - fr.top;                 /* alto del bolsillo */
+      var apoyo = parseFloat(cs.bottom) || 0;                /* dónde se apoya la hoja */
+      meter = Math.max(0, arribaFrente - apoyo);
+    }
+    var pad = Math.max(hoja.__padBase, meter ? meter + 14 : 0);
+    if (Math.abs((parseFloat(hoja.style.paddingBottom) || 0) - pad) > 0.5) {
+      hoja.style.setProperty('padding-bottom', pad + 'px', 'important');
+    }
+    var necesita = hoja.offsetHeight + (parseFloat(cs.bottom) || 0) + 30;
+    if (necesita > caja.offsetHeight + 1) caja.style.height = Math.ceil(necesita) + 'px';
+  }
+
   function repasar() {
     var e = ev();
 
@@ -84,6 +125,8 @@
       if (igual) h.style.setProperty('display', 'none', 'important');
       else h.style.removeProperty('display');
     }
+
+    acomodarHoja();
 
     /* el papel de la hoja. `background-color`, nunca el atajo `background`:
        el atajo borraría la textura que pueda poner una colección. */

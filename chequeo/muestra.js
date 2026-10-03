@@ -730,6 +730,26 @@
     return { pasa: true, nota: 'foto ' + ((ad.currentSrc || ad.src || '').split('/').pop().slice(0, 40)) };
   });
 
+  /* ★ 3/10/2026 — «con textos largos los últimos renglones de la carta quedan
+     detrás del bolsillo del sobre». Se mide con la hoja en su posición final
+     (sin el desplazamiento de la animación de salida): el último renglón tiene
+     que terminar por lo menos 4 px arriba del borde del bolsillo (`.cf-front`). */
+  regla('carta-fuera-del-bolsillo', 'El último renglón de la carta queda afuera del bolsillo del sobre', function () {
+    var sec = document.getElementById('carta-sec');
+    if (!sec || !ubicable(sec)) return { pasa: true, nota: 'esta invitación no tiene carta' };
+    var hoja = sec.querySelector('.cf-letter'), frente = sec.querySelector('.cf-front'), p = document.getElementById('cf-texto');
+    if (!hoja || !p) return { pasa: false, nota: 'no encontré la hoja de la carta', detalle: ['sin .cf-letter'] };
+    if (!frente || getComputedStyle(frente).display === 'none') return { pasa: true, nota: 'sin bolsillo' };
+    var ty = 0;
+    try { ty = new DOMMatrixReadOnly(getComputedStyle(hoja).transform).m42 || 0; } catch (e) {}
+    var rg = document.createRange(); rg.selectNodeContents(p);
+    var rs = rg.getClientRects(); if (!rs.length) return { pasa: false, nota: 'la carta no tiene texto visible', detalle: ['sin texto'] };
+    var fin = rs[rs.length - 1].bottom - ty;
+    var borde = frente.getBoundingClientRect().top;
+    var sobra = Math.round(borde - fin);
+    return { pasa: sobra >= 4, nota: sobra >= 4 ? 'el último renglón queda ' + sobra + ' px arriba del bolsillo' : 'el último renglón queda ' + (-sobra) + ' px DETRÁS del bolsillo', detalle: sobra >= 4 ? [] : ['tapado ' + (-sobra) + ' px'] };
+  });
+
   /* ---- el corredor -------------------------------------------------------- */
 
   /* Las secciones entran con `.reveal` al hacer scroll. Si se mide sin haber
