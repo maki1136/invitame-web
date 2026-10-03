@@ -389,6 +389,15 @@
          `--pv-tit`. Por eso cada línea de acá abajo fija también su familia.
          Las tres variables (`--pv-tit`, `--pv-dat`, `--pv-cur`) las elige
          Jazmín desde el panel, así que esto no le clava una fuente a nadie. */
+      /* ⚠️ Y EL COLOR, CUANDO JAZMÍN LO ELIGE (3/10/2026). Las colecciones oscuras
+         (degrade, cantera, óleo, sapo) pintan `.sec p:not(.frase)` en crema con
+         `!important`, y el sobretítulo, el título y el «de parte de» del boleto
+         son `<p>`: con una textura clara, la tinta oscura que ella elegía en el
+         panel no llegaba y el boleto quedaba crema sobre crema (medido en
+         andrea-y-felipe: 1:1). Sólo se fuerza si ELLA eligió el color
+         (clases pv-tinta-propia / pv-acento-propio); sin elegir, nada cambia. */
+      '#pv-sec.pv-tinta-propia .pv-titulo{color:var(--pv-tinta)!important}',
+      '#pv-sec.pv-acento-propio .pv-over,#pv-sec.pv-acento-propio .pv-departe{color:var(--pv-acento)!important}',
       '#pv-sec .pv-over{font-size:8px!important;line-height:1.35!important;' +
         'font-family:var(--pv-dat)!important;letter-spacing:.16em!important}',
       '#pv-sec .pv-titulo{font-size:clamp(18px,5.2vw,23px)!important;line-height:1.08!important;' +
@@ -458,6 +467,8 @@
     st.setProperty('--pv-papel',  txt(f.papel,  tx.papel  || 'color-mix(in srgb,var(--sage-cl) 34%,#fff)'));
     st.setProperty('--pv-tinta',  txt(f.tinta,  tx.tinta  || 'var(--verde)'));
     st.setProperty('--pv-acento', txt(f.acento, tx.acento || (f.metalico ? 'var(--oro)' : 'var(--sage)')));
+    if (txt(f.tinta))  sec.classList.add('pv-tinta-propia');   /* ver «Y EL COLOR» en estilo() */
+    if (txt(f.acento)) sec.classList.add('pv-acento-propio');
     if (tx.url) {
       sec.classList.add('pv-con-tex');
       /* ⚠️ --pv-tex se escribe más abajo, en .pv-escena, y NO en la sección: las
