@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T18:55:01.558Z",
+ "cuando": "2026-10-03T19:00:53.325Z",
  "slug": "camila-y-tomas",
  "total": 356,
- "verde": 354,
- "amarillo": 2,
+ "verde": 353,
+ "amarillo": 3,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -1505,9 +1505,8 @@
    "guarda": true,
    "dato": "personas",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "PERSONAS",
@@ -1583,8 +1582,9 @@
    "guarda": true,
    "dato": "c_color-para-la-seccion-personas",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "REGALOS",
@@ -2300,8 +2300,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.rotuloFecha",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -2841,9 +2842,8 @@
    "guarda": true,
    "dato": "c_texto-boton-comenzar-trivia",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "TRIVIA",
@@ -3669,8 +3669,9 @@
    "guarda": true,
    "dato": "fx.sobre.relieve",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "EFECTOS",
