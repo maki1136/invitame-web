@@ -28,12 +28,12 @@ window.INVREGALOS = {
   },
   {
    "id": "d04",
-   "nombre": "Sombrerera",
+   "nombre": "Sombrerera con cintas",
    "url": "/piezas/regalos/d04.png"
   },
   {
    "id": "d05",
-   "nombre": "Cintas largas",
+   "nombre": "Trazo suelto",
    "url": "/piezas/regalos/d05.png"
   },
   {
@@ -43,12 +43,12 @@ window.INVREGALOS = {
   },
   {
    "id": "d07",
-   "nombre": "Con flores",
+   "nombre": "Con flores silvestres",
    "url": "/piezas/regalos/d07.png"
   },
   {
    "id": "d08",
-   "nombre": "Bolsita",
+   "nombre": "Bolsita de regalo",
    "url": "/piezas/regalos/d08.png"
   },
   {
