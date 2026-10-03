@@ -318,7 +318,15 @@
 
     /* ── VESTIMENTA: EL TRAJE Y EL VESTIDO ───────────────────────────── */
     'h[c] #dc-mono{display:none!important}',
-    'h[c] #dress-img{display:none!important}',
+    /* ★ 3/10/2026 — Maki: «en vestimenta en perlas también agregá una foto».
+       Antes la foto se escondía SIEMPRE y quedaban sólo las siluetas. Ahora,
+       si Jazmín sube «Dresscode Imagen» en el panel, gana la foto y se
+       esconden las siluetas; sin foto, todo queda como estaba. */
+    'h[c] #dress-img:not([src]){display:none!important}',
+    'h[c] #dress-img[src]{display:block!important;width:100%!important;max-width:300px!important;' +
+      'border-radius:14px!important;margin:18px auto 4px!important;' +
+      'box-shadow:0 10px 26px rgba(80,65,45,.16)!important;border:0!important;padding:0!important;background:none!important}',
+    'h[c] .sec:has(#dress-img[src]) .col-vest{display:none!important}',
     'h[c] .col-vest{' +
       'display:flex;align-items:flex-end;justify-content:center;gap:8px;' +
       'margin:10px auto 34px;color:var(--verde,#44513f)}',
