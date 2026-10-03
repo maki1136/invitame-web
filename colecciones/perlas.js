@@ -286,12 +286,13 @@
       'opacity:.5!important;' +
       'filter:drop-shadow(0 1px 1px rgba(60,50,40,.25))!important}',
 
-    'h[c] .sec > img{' +
+    /* ★ 3/10: el regalo de «Mesa de regalos» es un PNG con alfa: sin marco polaroid */
+    'h[c] .sec > img:not(#reg-adorno){' +
       'background:#fff;padding:9px;border-radius:2px;' +
       'box-shadow:0 1px 2px rgba(60,50,40,.14),0 10px 24px rgba(60,50,40,.13);' +
       'max-width:min(100%,340px);height:auto;display:block;margin:26px auto}',
-    'h[c] .sec > img:not(.reveal):nth-of-type(odd){transform:rotate(-1.4deg)}',
-    'h[c] .sec > img:not(.reveal):nth-of-type(even){transform:rotate(1.1deg)}',
+    'h[c] .sec > img:not(.reveal):not(#reg-adorno):nth-of-type(odd){transform:rotate(-1.4deg)}',
+    'h[c] .sec > img:not(.reveal):not(#reg-adorno):nth-of-type(even){transform:rotate(1.1deg)}',
 
     /* ── "DÓNDE Y CUÁNDO": LA FOTO DEL LUGAR, CON RECUADRO ─────────────── */
     'h[c] .sec .evento{' +
