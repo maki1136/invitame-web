@@ -480,6 +480,43 @@ $preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin
 $CACHE_MEDIOS = 'prendida';   // 2/10/2026: Worker publicado y probado en vivo con &cache=1 (camila, lucia, zoe)
 $cacheQ = isset($_GET['cache']) ? (string)$_GET['cache'] : '';
 $conCache = ($cacheQ === '1') || ($CACHE_MEDIOS === 'prendida' && $cacheQ !== '0');
+
+/* ★ 3/10/2026 — «EN EL IPAD SE QUEDA TODA TRABADA, NO CARGA».
+   Medido esa noche: el Worker contestaba `429 · error code: 1027` a TODO. Es el
+   tope del plan gratis de Cloudflare Workers: 100.000 pedidos por día (se
+   reinicia a las 00:00 UTC = 21:00 de Argentina). Una invitación abierta pide
+   entre 75 y 125 cosas al Worker, así que con ~1000 aperturas en un día se
+   acaba, y desde ese momento NO CARGA NINGUNA FOTO, NI EL VIDEO DEL SOBRE, NI
+   LA MÚSICA, en ninguna invitación. Eso es lo que se vio en el iPad.
+   Arreglo: antes de mandar a nadie por la caché, el servidor le pregunta al
+   Worker si está atendiendo (una foto de 8 px). La respuesta se guarda 60 s,
+   así que la pregunta es una por minuto, no una por visita. Si no contesta
+   200, esta invitación sale DIRECTA a Cloudinary, como antes de la caché.
+   `&cache=1` fuerza la caché igual (para probar el Worker a propósito).
+   ⚠️ Esto evita la caída, no el tope: con el plan pago de Workers (USD 5/mes,
+      10 millones de pedidos) el tope deja de ser un problema. Decisión de Maki. */
+function iv_cache_atiende() {
+  $f = rtrim(sys_get_temp_dir(), '/') . '/invitame-cache-medios.txt';
+  $h = @file_get_contents($f);
+  if ($h !== false && preg_match('/^(\d+) (ok|no)$/', trim($h), $m) && (time() - (int)$m[1]) < 60) return $m[2] === 'ok';
+  $ok = false;
+  $u = 'https://galeria.littlemomentsok.workers.dev/res.cloudinary.com/oc8cgqt4/image/upload/w_8,q_1,f_jpg/invitame/x4q8skckyryvodav1iwe.webp';
+  if (function_exists('curl_init')) {
+    $c = curl_init($u);
+    curl_setopt_array($c, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 2, CURLOPT_CONNECTTIMEOUT => 2, CURLOPT_NOBODY => false]);
+    curl_exec($c);
+    $ok = ((int)curl_getinfo($c, CURLINFO_HTTP_CODE) === 200);
+    curl_close($c);
+  } else {
+    $ctx = stream_context_create(['http' => ['timeout' => 2, 'ignore_errors' => true]]);
+    @file_get_contents($u, false, $ctx);
+    $ok = isset($http_response_header[0]) && strpos($http_response_header[0], ' 200') !== false;
+  }
+  @file_put_contents($f, time() . ' ' . ($ok ? 'ok' : 'no'));
+  return $ok;
+}
+if ($conCache && $cacheQ !== '1' && !iv_cache_atiende()) $conCache = false;
+header('X-Invitame-Cache: ' . ($conCache ? 'worker' : 'directa'));
 $fotosLivianas = ($conCache ? '<script>window.INV_CACHE_MEDIOS="https://galeria.littlemomentsok.workers.dev/";</' . 'script>' : '')
                . '<script src="/efectos/imagenes-livianas.js"></' . 'script>';
 
