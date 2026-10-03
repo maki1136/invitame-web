@@ -701,6 +701,35 @@
     return { pasa: malos.length === 0, nota: malos.length ? malos.join(' · ') : 'propia (' + cuerpo.length + ' letras)', detalle: malos };
   });
 
+  /* ★ 3/10/2026 — Maki: «esos regalos están perfectos… dale check verde».
+     «Mesa de regalos» lleva SU regalo arriba del título: el dibujo elegido en el
+     panel (fx.regalo.dibujo, pintado por máscara) o la foto de «Imagen decorativa».
+     Falla si la sección está y no hay ninguno, si el dibujo elegido no se pintó
+     (máscara vacía, color transparente, catálogo sin cargar) o si se ven los dos. */
+  regla('regalo-visible', 'Mesa de regalos tiene su regalo (dibujo o foto) arriba del título', function () {
+    var sec = document.querySelector('[data-sec=regalos]');
+    if (!sec || !ubicable(sec)) return { pasa: true, nota: 'esta invitación no muestra Mesa de regalos' };
+    var r = ((window.INVEV || {}).fx || {}).regalo || {};
+    var dib = document.getElementById('reg-dibujo');
+    var ad = document.getElementById('reg-adorno');
+    var adVis = ad && visible(ad) && ad.tagName === 'IMG' && ad.naturalWidth > 0;
+    var malos = [];
+    if (r.dibujo) {
+      if (!dib) malos.push('eligió el dibujo «' + r.dibujo + '» y no se pintó');
+      else {
+        var cs = getComputedStyle(dib);
+        var mk = cs.webkitMaskImage || cs.maskImage || '';
+        if (!/url\(/.test(mk)) malos.push('el dibujo no tiene máscara');
+        if (/rgba\(0, 0, 0, 0\)|transparent/.test(cs.backgroundColor)) malos.push('el dibujo no tiene color');
+        if (dib.getBoundingClientRect().width < 40) malos.push('el dibujo mide menos de 40 px');
+        if (adVis) malos.push('se ven el dibujo y la foto a la vez');
+      }
+      return { pasa: malos.length === 0, nota: malos.length ? malos.join(' · ') : 'dibujo ' + r.dibujo + ' en ' + (dib ? getComputedStyle(dib).backgroundColor : '?'), detalle: malos };
+    }
+    if (!adVis) return { pasa: false, nota: 'la sección no tiene regalo (ni dibujo ni foto cargada)', detalle: ['sin regalo'] };
+    return { pasa: true, nota: 'foto ' + ((ad.currentSrc || ad.src || '').split('/').pop().slice(0, 40)) };
+  });
+
   /* ---- el corredor -------------------------------------------------------- */
 
   /* Las secciones entran con `.reveal` al hacer scroll. Si se mide sin haber
