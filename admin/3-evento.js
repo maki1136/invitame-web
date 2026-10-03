@@ -166,7 +166,8 @@
     'rsvp-selector':['CONFIRMACIÓN','confirmacion'],
     'muestra-selector':['CONFIRMACIÓN','confirmacion'],
     'pasevoz-selector':['MUSIC_PASES','pase'],
-    'compartir-selector':['CONFIRMACIÓN','compartir']
+    'compartir-selector':['CONFIRMACIÓN','compartir'],
+    'regalo-selector':['REGALOS','regalo']
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -177,7 +178,8 @@
     itinerario:{antesDe:'#f-titulo-itinerario'},
     confirmacion:{arriba:true},
     pase:{abajo:true},
-    compartir:{abajo:true}
+    compartir:{abajo:true},
+    regalo:{arriba:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
@@ -224,7 +226,8 @@
     'personas-bajada':'[data-sec=padres]',
     'inv-musica-panel':'#spotify-sec',
     'cierre-ajustes':'.footer',
-    'compartir-selector':'#share-sec'
+    'compartir-selector':'#share-sec',
+    'regalo-selector':'[data-sec=regalos]'
   };
   function veDeCampo(nodo){
     if(!nodo||!nodo.closest) return null;

@@ -791,6 +791,10 @@
 
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
+    '/efectos/regalos-catalogo.js',  /* 3/10: los 10 regalos dibujados y los 51 fotografiados */
+    '/efectos/regalo-dibujo.js',     /* el regalo dibujado de «Mesa de regalos», del color que se elija */
+    '/efectos/panel-regalo.js',      /* y su selector en la pestaña REGALOS del panel */
+
     '/efectos/clima-iconos.js',      /* el ultimo emoji a la vista vivia en el clima */
     '/efectos/dresscode-colores.js',   /* los colores de la boda, en círculos, en Vestimenta */
     '/efectos/panel-dresscode.js',     /* y el editor para elegirlos a mano */
