@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T13:20:55.007Z",
+ "cuando": "2026-10-03T17:45:57.482Z",
  "slug": "camila-y-tomas",
- "total": 355,
+ "total": 356,
  "verde": 354,
- "amarillo": 1,
+ "amarillo": 2,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -1587,6 +1587,17 @@
   },
   {
    "tab": "REGALOS",
+   "bloque": "regalo-selector",
+   "control": "Color del dibujo",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.regalo.color",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
    "bloque": "Más formas de regalar",
    "control": "Venmo",
    "tipo": "text",
@@ -2623,8 +2634,9 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
@@ -2730,9 +2742,8 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "TRIVIA",
@@ -2874,8 +2885,9 @@
    "guarda": true,
    "dato": "c_texto-tabla-de-posiciones",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
