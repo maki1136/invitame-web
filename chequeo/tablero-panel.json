@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-03T03:29:05.089Z",
+ "cuando": "2026-10-03T06:01:28.190Z",
  "slug": "camila-y-tomas",
- "total": 354,
- "verde": 354,
+ "total": 355,
+ "verde": 355,
  "amarillo": 0,
  "rojo": 0,
  "gris": 0,
@@ -204,6 +204,17 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.fondo.oscuras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "fondo-selector",
+   "control": "Qué reemplaza el papel",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.fondo.suave.modo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
