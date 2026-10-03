@@ -279,12 +279,103 @@
     } catch (e) {}
     return null;
   }
+  /* ★★★ APERTURA «REAL»  (3/10/2026)
+     Referencia: la demo de Bridgerton de thedigitalyes (medida cuadro a cuadro, nota
+     SOBRES-ficha-thedigitalyes-3-10). La solapa NO se desliza: GIRA sobre una bisagra
+     casi en el borde de arriba, a velocidad angular constante (≈2,5 s hasta ~82°, perspectiva
+     ≈2,27 anchos). El lacre es un objeto aparte (sin collar de papel) que proyecta una
+     sombra suave; el cuerpo no se mueve; atrás de la solapa se ve el INTERIOR liso del sobre
+     y recién después hay un fundido a blanco de 1,0 s y el corte a la invitación.
+     Se activa SÓLO con real en el catálogo; un sobre sin real no cambia nada.
+       real: { interior, sello (URLs), bisagra (% alto), giro (grados), lejos (perspective en
+               anchos), dur (s), fundido (s), sombra {dx,dy,blur,a} } */
+  function cssReal(m, env) {
+    var st = document.getElementById('col-sobre-real-css');
+    var r = (m && m.apertura === 'solapas' && m.real && m.ficha && Number(m.ficha.destello) > 0) ? m.real : null;
+    if (!r) {
+      if (st) st.textContent = '';
+      if (env && env.dataset && env.dataset.real) env.removeAttribute('data-real');
+      return;
+    }
+    if (!st) {
+      st = document.createElement('style');
+      st.id = 'col-sobre-real-css';
+      document.head.appendChild(st);
+    }
+    var bis = (r.bisagra != null ? Number(r.bisagra) : 6.5);
+    var gi  = (r.giro    != null ? Number(r.giro)    : 82);
+    var le  = (r.lejos   != null ? Number(r.lejos)   : 2.27);
+    var du  = (r.dur     != null ? Number(r.dur)     : 2.5);
+    var fu  = (r.fundido != null ? Number(r.fundido) : 1.0);
+    var so  = r.sombra || {};
+    var dx = (so.dx != null ? so.dx : 12), dy = (so.dy != null ? so.dy : 8);
+    var bl = (so.blur != null ? so.blur : 10), al = (so.a != null ? so.a : .36);
+    var dAncho    = 'calc(min(84vh, 843px) * 9 / 16)';
+    var R = '#env.carta-video[data-ficha="1"][data-real="1"]';
+    /* A PANTALLA COMPLETA: la caja de las capas llena TODO el celular (cover). En pantalla grande sigue la tarjeta redondeada. */
+    var cAlto = 'max(100vh, calc(100vw * 16 / 9))', cAncho = 'max(100vw, calc(100vh * 9 / 16))';
+    st.textContent = [
+      R + ' #col-sobre-foto,' + R + ' #col-sobre-solapa,' + R + ' #col-sobre-carta{',
+      '  height:' + cAlto + ';width:' + cAncho + '}',
+      R + ' #col-sobre-solapa{perspective:calc(' + cAncho + ' * ' + le + ');',
+      '  perspective-origin:50% ' + bis + '%}',
+      R + ' #col-sobre-solapa .h-arriba{top:0;height:100%;',
+      '  background-size:100% 100%;background-position:0 0;',
+      '  transform-origin:50% ' + bis + '%;backface-visibility:hidden;',
+      '  transition:transform ' + du + 's linear,filter ' + du + 's linear}',
+      R + '.abriendo #col-sobre-solapa .h-arriba{',
+      '  transform:rotateX(-' + gi + 'deg);filter:brightness(.96)}',
+      R + ' #col-sobre-solapa .h-sello{position:absolute;inset:0;pointer-events:none;',
+      '  background-size:100% 100%;background-position:0 0;background-repeat:no-repeat;',
+      '  filter:drop-shadow(0 2px 3px rgba(35,25,15,.38))}',
+      R + ' #col-sobre-solapa .h-sombra{position:absolute;inset:0;pointer-events:none;',
+      '  background-size:100% 100%;background-position:0 0;background-repeat:no-repeat;',
+      '  filter:brightness(0) blur(' + bl + 'px);opacity:' + al + ';',
+      '  transform-origin:50% ' + bis + '%;',
+      '  transform:perspective(90000px) translate(.5%,.4%) rotateX(0deg);',
+      '  transition:transform ' + du + 's linear,opacity ' + du + 's linear}',
+      R + '.abriendo #col-sobre-solapa .h-sombra{',
+      '  transform:perspective(90000px) translate(' + dx + '%,' + dy + '%) rotateX(-' + gi + 'deg);',
+      '  opacity:' + (al * 0.35).toFixed(3) + '}',
+      R + ' #col-sobre-carta .h-fondo{display:none}',
+      R + ' #col-sobre-carta .h-interior{position:absolute;inset:0;',
+      '  background-size:100% 100%;background-position:center;background-repeat:no-repeat}',
+      R + ' #col-sobre-velo{transition:opacity ' + fu + 's cubic-bezier(.45,0,.55,1)}',
+      '@media (min-width:680px){',
+      '  ' + R + ' #col-sobre-foto,' + R + ' #col-sobre-solapa,' + R + ' #col-sobre-carta{',
+      '    height:min(84vh, 843px);width:' + dAncho + '}',
+      '  ' + R + ' #col-sobre-solapa{perspective:calc(' + dAncho + ' * ' + le + ')}',
+      '}'
+    ].join('\n');
+    if (env) env.dataset.real = '1';
+  }
+  /* las capas extra de un sobre real (lacre, sombra, interior). Sin real se desarman. */
+  function montarReal(env, real) {
+    var capaSol = document.getElementById('col-sobre-solapa');
+    var carta = document.getElementById('col-sobre-carta');
+    var arriba = capaSol && capaSol.querySelector('.h-arriba');
+    var sello = arriba && arriba.querySelector('.h-sello');
+    var sombra = capaSol && capaSol.querySelector('.h-sombra');
+    var inte = carta && carta.querySelector('.h-interior');
+    if (!real || !arriba || !capaSol) {
+      [sello, sombra, inte].forEach(function (n) { if (n && n.parentNode) n.parentNode.removeChild(n); });
+      return;
+    }
+    function u(x) { return 'url("' + String(x).replace(/"/g, '%22') + '")'; }
+    if (!sello) { sello = document.createElement('div'); sello.className = 'h-sello'; arriba.appendChild(sello); }
+    if (!sombra) { sombra = document.createElement('div'); sombra.className = 'h-sombra'; capaSol.insertBefore(sombra, arriba); }
+    if (carta && !inte) { inte = document.createElement('div'); inte.className = 'h-interior'; carta.appendChild(inte); }
+    if (real.sello) { var cs = u(real.sello); if (sello.style.backgroundImage !== cs) sello.style.backgroundImage = cs; if (sombra.style.backgroundImage !== cs) sombra.style.backgroundImage = cs; }
+    if (inte && real.interior) { var ci = u(real.interior); if (inte.style.backgroundImage !== ci) inte.style.backgroundImage = ci; }
+  }
+
   function aplicarFicha(m, env) {
     var st = document.getElementById('col-sobre-ficha-css');
     var f = (m && m.apertura === 'solapas' && m.ficha && Number(m.ficha.destello) > 0) ? m.ficha : null;
     if (!f) {
       if (st) st.textContent = '';
       if (env && env.dataset && env.dataset.ficha) env.removeAttribute('data-ficha');
+      cssReal(null, env);
       return;
     }
     if (!st) {
@@ -307,6 +398,7 @@
       '  transform:translate(-50%,-50%)}'
     ].join('\n');
     if (env) env.dataset.ficha = '1';
+    cssReal(m, env);
   }
   var ANTES    = 1.4;   /* en modo video: cuánto antes del final arranca */
   /* ⭐⭐ CUANDO ARRANCA EL DESTELLO  (18/9/2026, tercera vuelta)
@@ -1062,7 +1154,7 @@
    la imagen el borde tiene 34 px de degradé y lo que asoma entra en penumbra.
    `poster` sigue siendo la foto del sobre CERRADO (opaca) porque se usa como
    miniatura en el admin y como `poster` del <video>. */
-  function montarSolapas(env, url, solapaUrl, cuerpoPropio) {
+  function montarSolapas(env, url, solapaUrl, cuerpoPropio, real) {
     var caja = document.getElementById('col-sobre-foto');
     if (!caja) {
       caja = document.createElement('div');
@@ -1109,11 +1201,13 @@
       }
       ponerFondo();
       env.dataset.solapa = '1';
+      montarReal(env, real);
       if (cuerpoPropio) { env.dataset.cuerpo = '1'; }
       else if (env.dataset.cuerpo) { env.removeAttribute('data-cuerpo'); }
     } else {
       if (env.dataset.solapa) env.removeAttribute('data-solapa');
       if (env.dataset.cuerpo) env.removeAttribute('data-cuerpo');
+      montarReal(env, null);
       var vieja = document.getElementById('col-sobre-carta');
       if (vieja && vieja.parentNode) vieja.parentNode.removeChild(vieja);
       var vsol = document.getElementById('col-sobre-solapa');
@@ -1158,7 +1252,7 @@
     env.dataset.apertura = (m.apertura === 'solapas') ? 'solapas' : 'video';
 
     if (env.dataset.apertura === 'solapas') {
-      montarSolapas(env, m.cuerpo || m.poster || '', m.solapa || '', !!m.cuerpo);
+      montarSolapas(env, m.cuerpo || m.poster || '', m.solapa || '', !!m.cuerpo, m.real || null);
     } else {
       /* ★★ AL PASAR A UN SOBRE DE VIDEO HAY QUE DESARMAR EL DE SOLAPAS.  22/9/2026
          Medido en `regina-y-emiliano` al cambiar el modelo `cantera` (foto, solapas)
@@ -1221,7 +1315,7 @@
 
     if (porSolapas) {
       try { vid.pause(); vid.removeAttribute('src'); vid.load(); } catch (e) {}
-      montarSolapas(env, m.cuerpo || m.poster || '', m.solapa || '', !!m.cuerpo);
+      montarSolapas(env, m.cuerpo || m.poster || '', m.solapa || '', !!m.cuerpo, m.real || null);
     } else {
       vid.style.display = '';
       vid.setAttribute('poster', m.poster || '');
