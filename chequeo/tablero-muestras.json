@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T20:09:20.469Z",
+ "cuando": "2026-10-03T20:12:43.634Z",
  "total": 55,
- "verde": 55,
+ "verde": 53,
  "rojo": 0,
- "gris": 0,
+ "gris": 2,
  "items": [
   {
    "slug": "abril-mis15",
@@ -161,10 +161,10 @@
   },
   {
    "slug": "julieta-mis15",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "lucia-y-sebastian",
@@ -385,10 +385,10 @@
   },
   {
    "slug": "zoe-mis15",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   }
  ]
 }
