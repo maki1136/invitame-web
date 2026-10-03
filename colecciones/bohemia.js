@@ -545,12 +545,12 @@
     P + '.tl > .it[data-bh-lado="izq"]{',
     '  margin-left:0!important; margin-right:auto!important;',
     '  text-align:right!important; padding-right:6px!important;',
-    '  transform:translateX(-24px);',
+    '  transform:translateX(-52px);',
     '}',
     P + '.tl > .it[data-bh-lado="der"]{',
     '  margin-left:calc(50% + 26px)!important;',
     '  text-align:left!important; padding-left:6px!important;',
-    '  transform:translateX(24px);',
+    '  transform:translateX(52px);',
     '}',
     P + '.tl > .it.bh-visto{ opacity:1!important; transform:translateX(0)!important; }',
     /* ⭐ LA MARCA: LA HOJA DE LOS TÍTULOS, no la rosa recortada.
@@ -937,12 +937,19 @@
 
       if (!tl.__bhRed) {
         tl.__bhRed = true;
-        setTimeout(function () {
+        /* ★ 3/10/2026: la red mostraba TODAS a los 6 s de cargar — con el sobre
+           de por medio, cuando el invitado llegaba al itinerario ya estaban
+           quietas y no se veía ninguna entrada. Ahora la red sólo destapa las
+           que YA están a la vista o pasaron (por si el observador no disparó). */
+        setInterval(function () {
           try {
-            var todas = tl.querySelectorAll(':scope > .it');
-            for (var m = 0; m < todas.length; m++) todas[m].classList.add('bh-visto');
+            var todas = tl.querySelectorAll(':scope > .it:not(.bh-visto)');
+            var h = window.innerHeight || 800;
+            for (var m = 0; m < todas.length; m++) {
+              if (todas[m].getBoundingClientRect().top < h * 0.9) todas[m].classList.add('bh-visto');
+            }
           } catch (e) {}
-        }, 6000);
+        }, 1500);
       }
     } catch (e) {}
   }

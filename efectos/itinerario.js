@@ -184,7 +184,12 @@
     '.tl.tl-anim .tl-prog{position:absolute;top:var(--tl-ini,6px);bottom:var(--tl-fin,6px);width:1.5px;',
     '  background:var(--tl-tinta);transform-origin:top center;transform:scaleY(0);',
     '  transition:transform .18s linear;border-radius:2px;opacity:.55}',
-    '.tl.tl-anim > .it{opacity:0;transition:opacity .8s ease,transform .8s cubic-bezier(.22,.72,.28,1)}',
+    /* ★ 3/10/2026 — Maki: «que entren las palabras de derecha a izquierda o al revés,
+       que tenga ese ingreso que le da vida». Antes era 14 px (no se notaba) y en una
+       columna sólo subían. Ahora todas entran de costado, 52 px, como Cenicienta.
+       `overflow-x:clip` para que el corrimiento no abra scroll horizontal. */
+    '.tl.tl-anim{overflow-x:clip}',
+    '.tl.tl-anim > .it{opacity:0;transition:opacity .7s ease,transform .9s cubic-bezier(.22,.72,.28,1)}',
     '.tl.tl-anim > .it.on{opacity:1}',
 
     /* ---------- LA MARCA: un anillo, no un puntito lleno ---------- */
@@ -200,7 +205,8 @@
 
     /* ---------- estilo 1: la línea a la izquierda ---------- */
     '.tl.tl-anim:not(.tl-centro) .tl-prog{left:6px}',
-    '.tl.tl-anim:not(.tl-centro) > .it{transform:translateY(26px)}',
+    '.tl.tl-anim:not(.tl-centro) > .it:nth-child(odd){transform:translate(-52px,0)}',
+    '.tl.tl-anim:not(.tl-centro) > .it:nth-child(even){transform:translate(52px,0)}',
     '.tl.tl-anim:not(.tl-centro) > .it.on{transform:none}',
 
     /* ---------- estilo 2: la línea al medio, en zigzag ----------
@@ -212,14 +218,16 @@
     '.tl.tl-centro > .it{width:calc(50% - 26px);margin-bottom:20px;',
     '  min-height:46px;display:flex;flex-direction:column;justify-content:center}',
     '.tl.tl-centro > .it:last-child{margin-bottom:0}',
+    /* una palabra larga («Recibimiento») en media columna se corta en sílabas, no se sale */
+    '.tl.tl-centro > .it{min-width:0;overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto}',
 
     '.tl.tl-centro > .it:nth-child(odd){margin-right:auto;text-align:right;',
-    '  align-items:flex-end;transform:translate(-14px,26px)}',
+    '  align-items:flex-end;transform:translate(-52px,0)}',
     '.tl.tl-centro > .it:nth-child(odd).on{transform:translate(0,0)}',
     '.tl.tl-centro > .it:nth-child(odd)::before{left:auto;right:-31px;top:50%;margin-top:-5.5px}',
 
     '.tl.tl-centro > .it:nth-child(even){margin-left:auto;text-align:left;',
-    '  align-items:flex-start;transform:translate(14px,26px)}',
+    '  align-items:flex-start;transform:translate(52px,0)}',
     '.tl.tl-centro > .it:nth-child(even).on{transform:translate(0,0)}',
     '.tl.tl-centro > .it:nth-child(even)::before{left:-31px;top:50%;margin-top:-5.5px}',
 

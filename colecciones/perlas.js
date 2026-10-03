@@ -458,9 +458,10 @@
 
     'h[c] .col-pza{pointer-events:none;display:block}',
 
-    'h[c] .tl .col-broche{' +
-      'position:absolute;width:22px;height:auto;left:-4px;bottom:-11px;' +
-      'filter:drop-shadow(0 1px 2px rgba(60,50,40,.24))}',
+    /* ★ 3/10/2026 — el broche colgaba del FONDO de .tl, 40 px abajo de la última
+       perla: el hilo «seguía pasando el último circulito». La línea termina en
+       la última marca (armado-3 §87), así que el broche no va. */
+    'h[c] .tl .col-broche{display:none!important}',
 
     /* ── EL COLLAR: CRUZA LA INVITACIÓN, A SANGRE ───────────────────────
        Los márgenes negativos tienen que ser IGUALES al padding lateral. */

@@ -155,7 +155,7 @@
     var hebra =
       'display:block!important;' +
       'transform:none!important;' +                 /* nada de scaleY: deforma */
-      'position:absolute!important;top:6px!important;bottom:6px!important;' +
+      'position:absolute!important;top:var(--tl-ini,6px)!important;bottom:var(--tl-fin,6px)!important;' +   /* ★ 3/10: de marca a marca, no hasta el fondo */
       'border-radius:0!important;' +
       'background:transparent url("' + url + '") repeat-y center top!important;' +
       fino +

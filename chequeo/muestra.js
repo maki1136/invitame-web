@@ -621,6 +621,18 @@
       var m0 = marcaY(its[0]), m1 = marcaY(its[its.length - 1]);
       if (Math.abs(fin - m1) > 2) malos.push('termina ' + Math.round(fin - m1) + ' px ' + (fin > m1 ? 'DESPUÉS' : 'antes') + ' de la última marca');
       if (Math.abs(ini - m0) > 2) malos.push('empieza ' + Math.round(m0 - ini) + ' px ' + (ini < m0 ? 'ANTES' : 'después') + ' de la primera marca');
+      /* ⚠ la hebra encendida (`.tl-prog`) también es línea: en Perlas iba de 6 px
+         a 6 px del fondo y seguía 30 px abajo de la última perla con la vía bien. */
+      var pg = tl.querySelector('.tl-prog');
+      if (pg) {
+        var cp = getComputedStyle(pg), rp = pg.getBoundingClientRect();
+        if (cp.display !== 'none' && cp.visibility !== 'hidden' && rp.height > 4) {
+          var finP = rp.top + rp.height;   /* sin escala: el bottom real del elemento */
+          var bp = parseFloat(cp.bottom);
+          if (isFinite(bp)) finP = R.bottom - bp;
+          if (finP - m1 > 2) malos.push('la línea de avance (.tl-prog) sigue ' + Math.round(finP - m1) + ' px DESPUÉS de la última marca');
+        }
+      }
     });
     return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' problema(s)' : medidos + ' itinerario(s): la vía va de marca a marca', detalle: malos };
   });
