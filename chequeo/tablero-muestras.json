@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T09:04:51.342Z",
+ "cuando": "2026-10-03T09:20:22.710Z",
  "total": 55,
- "verde": 55,
+ "verde": 54,
  "rojo": 0,
- "gris": 0,
+ "gris": 1,
  "items": [
   {
    "slug": "abril-mis15",
@@ -252,10 +252,10 @@
   },
   {
    "slug": "mateo-y-adrian",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "mia-mis15",
