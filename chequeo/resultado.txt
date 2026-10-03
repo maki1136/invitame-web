@@ -1,6 +1,6 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 03/10/2026, 13:29
+Fecha: 03/10/2026, 13:42
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
@@ -17,7 +17,7 @@ HAY 4 PROBLEMAS (y 92 cosas bien)
    BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   la columna ya está encuadrada en el primer pintado
-   BIEN   el sobre está encuadrado, no a pantalla completa
+   ----   el sobre no se pudo medir todavía (no es un fallo)
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -29,7 +29,7 @@ HAY 4 PROBLEMAS (y 92 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "La banda sonora" 2.4/3 [#496c61 sobre luminancia 0.37-0.83 · div.kick.reveal] · "Para verlo juntos" 2.5/3 [#496c61 sobre luminancia 0.40-0.93 · div.kick.reveal] · "Contamos las sillas an" 3.9/4.5 [#fffcee sobre luminancia 0.05-0.21 · p.reveal.in] · "Ayúdanos a que no falt" 4.2/4.5 [#192421 sobre luminancia 0.23-0.92 · p.reveal.in]
+             -> "Para verlo juntos" 2.0/3 [#496c61 sobre luminancia 0.31-0.76 · div.kick.reveal] · "Con mucha alegría" 2.5/3 [#496c61 sobre luminancia 0.40-0.82 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -44,12 +44,11 @@ HAY 4 PROBLEMAS (y 92 cosas bien)
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 14.7 s)
+   (volvió a su lugar en 1.7 s)
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 14140 y volvió a 6303
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 284.7 s de punta a punta)
+   (tardó 324.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -60,14 +59,37 @@ HAY 4 PROBLEMAS (y 92 cosas bien)
    BIEN   sin voseo desde el primer pintado
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 5 chequeos y se cayó
+             -> el último que sí corrió: "las tapas caen justo encima de los números"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
+
+
+──────────────────────────────────────────
+  Safari iPad
+──────────────────────────────────────────
+   BIEN   no asoma otro sobre al abrir
+   BIEN   en tablet la invitación ocupa la pantalla
+   BIEN   en tablet no se arma la capa borrosa que traba el scroll
+   BIEN   la portada no es la de otra invitación
+   BIEN   el sobre está encuadrado, no a pantalla completa
+   BIEN   sin voseo desde el primer pintado
+   BIEN   la columna tiene un ancho normal
+   BIEN   no se sale nada de la columna
+   BIEN   la raspadita pone una tapa por número
+   BIEN   las tapas caen justo encima de los números
    BIEN   se puede raspar y se revela la fecha
    BIEN   una vez raspada, queda raspada
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
-   ----   1 pantallas no se pudieron recorrer: ahi no se midio el contraste
    MAL    todos los textos se leen
-             -> "Un ratito de nuestra h" 2.2/4.5 [#515e59 sobre luminancia 0.29-0.80 · p.reveal.in] · "La banda sonora" 2.8/4.5 [#3f5d53 sobre luminancia 0.36-0.81 · div.kick.reveal]
+             -> "La fecha" 2.4/3 [#496c61 sobre luminancia 0.37-0.86 · div.kick.reveal] · "Ayúdanos a que no falt" 2.6/4.5 [#3b4643 sobre luminancia 0.22-0.89 · p.reveal.in]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -83,35 +105,12 @@ HAY 4 PROBLEMAS (y 92 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 9.5 s)
+   (volvió a su lugar en 14.1 s)
    BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 492.3 s de punta a punta)
-
-
-──────────────────────────────────────────
-  Safari iPad
-──────────────────────────────────────────
-   BIEN   no asoma otro sobre al abrir
-   BIEN   en tablet la invitación ocupa la pantalla
-   BIEN   en tablet no se arma la capa borrosa que traba el scroll
-   BIEN   la portada no es la de otra invitación
-   ----   el sobre no se pudo medir todavía (no es un fallo)
-   BIEN   sin voseo desde el primer pintado
-   BIEN   la columna tiene un ancho normal
-   BIEN   no se sale nada de la columna
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-
-──────────────────────────────────────────
-  Safari iPad
-──────────────────────────────────────────
-   MAL    el escenario se cortó a la mitad
-             -> alcanzó a correr 9 chequeos y se cayó
-             -> el último que sí corrió: "las tapas caen justo encima de los números"
-             -> page.evaluate: Target page, context or browser has been closed
-             -> (los chequeos que faltan NO se probaron: este verde no vale)
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 14329 y volvió a 6413
+   (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 447.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -154,5 +153,5 @@ HAY 4 PROBLEMAS (y 92 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 131.3 s de punta a punta)
+   (tardó 132.8 s de punta a punta)
 
