@@ -341,7 +341,8 @@
       '  mask:radial-gradient(circle 5px at 50% 0,transparent 95%,#000 100%);',
       '  mask-size:15px 100%;mask-repeat:repeat-x}',
       /* ⚠️ ESTE es el estado inicial: pegada al boleto y vertical */
-      '#pv-sec .pv-msg.pv-pegada{translate:' + DX + '% -' + DY + '%;rotate:-90deg}',
+      /* --pv-dx / --pv-dy los mide encajar() (3/10/2026): ver ahí */
+      '#pv-sec .pv-msg.pv-pegada{translate:calc(' + DX + '% + var(--pv-dx,0px)) calc(-' + DY + '% + var(--pv-dy,0px));rotate:calc(-90deg + var(--pv-rot,0deg))}',
 
       '#pv-sec .pv-play{width:26px;height:26px;flex:none;border-radius:50%;display:flex;',
       '  align-items:center;justify-content:center;',
@@ -531,7 +532,45 @@
     else marco.appendChild(sec);
 
     audio(sec, barras, f);
+    [60, 400, 1500].forEach(function (ms) { setTimeout(function () { encajar(sec); }, ms); });
+    try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { encajar(sec); }); } catch (e) {}
   }
+
+  /* ---- EL TROQUEL DEL MISMO ALTO QUE EL BOLETO (3/10/2026) ------------------
+     Maki: «el troquelado queda más chico que el ticket». Medido en las tres
+     muestras (camila-y-tomas, aitana-mis15, abril-mis15): el boleto 228 px de
+     alto y la pieza que se arranca 194–198, con 18–22 px de hueco arriba y
+     10–12 abajo. La pieza es una tira ACOSTADA y girada -90°: su alto en
+     pantalla es su ANCHO, que era un 58% del ancho de la escena, y el alto del
+     boleto depende del texto que lleve. Un número fijo nunca iba a coincidir.
+     → Se mide: el ancho de la tira = el alto del boleto, y el corrimiento que
+       falta para que quede al ras arriba y a la derecha va en --pv-dx/--pv-dy,
+       que sólo usa el estado «pegada». Al arrancarla no cambia nada más. */
+  function encajar(sec) {
+    var tk = sec && sec.querySelector('.pv-tk'), msg = sec && sec.querySelector('.pv-msg');
+    if (!tk || !msg || !msg.classList.contains('pv-pegada')) return;
+    try { if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; } catch (e) {}
+    /* el boleto va inclinado (-1,4°): la tira, pegada a él, con la misma
+       inclinación; y su largo es el alto del boleto SIN girar (offsetHeight) */
+    var H = tk.offsetHeight;
+    if (!H) return;
+    var rot = 0;
+    try {
+      var m = getComputedStyle(tk).transform.match(/matrix\(([^,]+),\s*([^,]+)/);
+      if (m) rot = Math.atan2(parseFloat(m[2]), parseFloat(m[1])) * 180 / Math.PI;
+    } catch (e) {}
+    msg.style.transition = 'none';
+    msg.style.setProperty('--pv-rot', rot.toFixed(2) + 'deg');
+    if (Math.abs(msg.offsetWidth - H) > 1) msg.style.width = Math.round(H) + 'px';
+    msg.style.setProperty('--pv-dx', '0px');
+    msg.style.setProperty('--pv-dy', '0px');
+    var a = tk.getBoundingClientRect(), b = msg.getBoundingClientRect();
+    msg.style.setProperty('--pv-dx', (a.right - b.right).toFixed(1) + 'px');
+    msg.style.setProperty('--pv-dy', (a.top - b.top).toFixed(1) + 'px');
+    void msg.offsetWidth;
+    msg.style.transition = '';
+  }
+  addEventListener('resize', function () { encajar(document.getElementById('pv-sec')); }, { passive: true });
 
   /* ---- LA ROTURA -----------------------------------------------------------
      LA DISPARA EL DEDO, NO EL SCROLL. Ver la nota del click, más abajo.
