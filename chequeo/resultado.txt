@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 03/10/2026, 01:52
+Fecha: 03/10/2026, 02:39
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 3 PROBLEMAS (y 113 cosas bien)
+HAY 3 PROBLEMAS (y 64 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,7 +29,7 @@ HAY 3 PROBLEMAS (y 113 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "Contamos las sillas an" 2.6/4.5 [#d7cebb sobre luminancia 0.05-0.21 · p.reveal.in] · "Corre la voz" 2.7/3 [#496c61 sobre luminancia 0.44-0.93 · div.kick.reveal]
+             -> "La banda sonora" 2.2/3 [#496c61 sobre luminancia 0.34-0.82 · div.kick.reveal] · "La playlist" 2.5/4.5 [#ffffff sobre luminancia 0.01-0.37 · span.txt] · "Corre la voz" 2.5/3 [#496c61 sobre luminancia 0.40-0.83 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -48,7 +48,7 @@ HAY 3 PROBLEMAS (y 113 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 330.7 s de punta a punta)
+   (tardó 258.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -59,33 +59,15 @@ HAY 3 PROBLEMAS (y 113 cosas bien)
    BIEN   sin voseo desde el primer pintado
    BIEN   la raspadita pone una tapa por número
    BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   MAL    todos los textos se leen
-             -> "Agendar" 1.4/4.5 [#ffffff sobre luminancia 0.03-0.72 · a.btn.gh] · "La banda sonora" 2.9/4.5 [#3f5d53 sobre luminancia 0.37-0.85 · div.kick.reveal] · "Con mucha alegría" 3.0/4.5 [#3f5d53 sobre luminancia 0.38-0.84 · div.kick.reveal] · "¿Cuántos asistirán?" 4.2/4.5 [#b3cfc5 sobre luminancia 0.05-0.10 · label] y 2 más
-   BIEN   el boleto del pase se ve entero
-   BIEN   al tocar el boleto, el pedazo se corta y baja
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 6.9 s)
-   BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 449.8 s de punta a punta)
+
+──────────────────────────────────────────
+  Safari iPhone
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 5 chequeos y se cayó
+             -> el último que sí corrió: "las tapas caen justo encima de los números"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
 
 
 ──────────────────────────────────────────
@@ -106,52 +88,6 @@ HAY 3 PROBLEMAS (y 113 cosas bien)
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
-   MAL    todos los textos se leen
-             -> "Con mucha alegría" 2.5/3 [#496c61 sobre luminancia 0.40-0.80 · div.kick.reveal]
-   BIEN   el boleto del pase se ve entero
-   BIEN   al tocar el boleto, el pedazo se corta y baja
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 10.7 s)
-   BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 506.9 s de punta a punta)
-
-
-──────────────────────────────────────────
-  REGLA DEL PANEL — ¿la última versión salió del panel?
-──────────────────────────────────────────
-   BIEN   la última versión la guardó el panel
-
-──────────────────────────────────────────
-  Chrome escritorio
-──────────────────────────────────────────
-   BIEN   no asoma otro sobre al abrir
-   BIEN   la portada no es la de otra invitación
-   BIEN   la columna ya está encuadrada en el primer pintado
-   ----   el sobre no se pudo medir todavía (no es un fallo)
-   BIEN   sin voseo desde el primer pintado
-   BIEN   la columna tiene un ancho normal
-   BIEN   no se sale nada de la columna
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
    BIEN   todos los textos se leen
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
@@ -161,14 +97,33 @@ HAY 3 PROBLEMAS (y 113 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
+   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.5 s)
+   (volvió a su lugar en 37.1 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
-   (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 128.2 s de punta a punta)
+   (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 550.7 s de punta a punta)
+
+  ⚠️ no se pudo preguntar si la invitación existe (fetch failed). Se sigue igual.
+
+──────────────────────────────────────────
+  REGLA DEL PANEL — ¿la última versión salió del panel?
+──────────────────────────────────────────
+   BIEN   la última versión la guardó el panel
+
+──────────────────────────────────────────
+  Chrome escritorio
+──────────────────────────────────────────
+
+──────────────────────────────────────────
+  Chrome escritorio
+──────────────────────────────────────────
+   MAL    no se pudo ni abrir el navegador
+             -> page.goto: Timeout 90000ms exceeded.
 
