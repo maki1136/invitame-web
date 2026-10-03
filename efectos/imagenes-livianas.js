@@ -217,7 +217,13 @@
       if (!d || !d.set) return;
       Object.defineProperty(Element.prototype, prop, {
         configurable: true, enumerable: d.enumerable, get: d.get,
-        set: function (v) { d.set.call(this, livianaTexto(v) || v); }
+        set: function (v) {
+          var n = livianaTexto(v) || v;
+          /* misma nota que en textContent, más abajo: una hoja que ya dice
+             exactamente eso no se vuelve a escribir */
+          if (prop === 'innerHTML' && this.tagName === 'STYLE' && d.get && d.get.call(this) === n) return;
+          d.set.call(this, n);
+        }
       });
     });
     var insertarOriginal = Element.prototype.insertAdjacentHTML;
@@ -230,7 +236,22 @@
       Object.defineProperty(Node.prototype, 'textContent', {
         configurable: true, enumerable: dTexto.enumerable, get: dTexto.get,
         set: function (v) {
-          if (this.tagName === 'STYLE') v = livianaTexto(v) || v;
+          if (this.tagName === 'STYLE') {
+            v = livianaTexto(v) || v;
+            /* ⚠️⚠️ 2/10/2026 — EL PARPADEO DE SAFARI. Las colecciones escriben
+               su hoja con «si no dice lo mismo, reescribirla» (óleo cada 400 ms
+               y cada 1,2 s). Pero acá le cambiamos las direcciones de las fotos,
+               así que la hoja NUNCA dice lo mismo que lo que la colección
+               quiere escribir, y se reescribía para siempre. Chrome no se
+               entera; Safari (iPhone) a veces recalcula la página justo en el
+               medio, sin esa hoja, y se queda con el color de fábrica hasta la
+               próxima vuelta. Medido en lucia-y-sebastian: «Con cariño, te
+               esperamos» saltaba de verde oscuro a crema (invisible sobre el
+               papel) varias veces por segundo, y en la portada de elena-y-julian
+               los rótulos pasaban de oscuros a blancos sobre la foto clara.
+               → Si la hoja ya dice exactamente esto, no se toca. */
+            if (dTexto.get && dTexto.get.call(this) === v) return;
+          }
           dTexto.set.call(this, v);
         }
       });
