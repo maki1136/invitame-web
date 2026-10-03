@@ -116,6 +116,9 @@
     '#' + IDF + ' > img{filter:blur(22px) saturate(.88) contrast(var(--inv-fuerza,1));' +
       'transform:scale(1.12)}' +
     '#' + ID + ' > .velo, #' + IDF + ' > .velo{position:absolute;inset:0}' +
+    /* el suavizado (fx.fondo.suave): una banda clara y difusa en el medio,
+       donde va el texto; los costados quedan con la foto entera */
+    '#' + ID + ' > .suave{position:absolute;top:-20px;bottom:-20px;left:9%;right:9%;filter:blur(12px)}' +
     'html[data-fondo] .frame{position:relative;z-index:1;background:transparent !important}' +
     /* las claras se abren para que se vea el fondo */
     'html[data-fondo] .sec{background-color:color-mix(in srgb, var(--sec-col,transparent)' +
@@ -152,6 +155,8 @@
       if (v) v.remove();
     });
     raiz.removeAttribute('data-fondo');
+    var hs = document.getElementById('inv-suave-halo');
+    if (hs) hs.remove();
     despintar();
     raiz.style.removeProperty('--inv-paso');
     raiz.style.removeProperty('--inv-oscuras');
@@ -175,6 +180,73 @@
     velo.style.background = 'color-mix(in srgb, var(--lino,#f4efe6) ' +
       Math.round(Math.min(1, a) * 100) + '%, transparent)';
     caja.appendChild(velo);
+  }
+
+  /* ⭐ EL SUAVIZADO DETRÁS DE LOS TEXTOS. (3/10/2026)
+     Maki: «ponés una sombra… como un suavizado del fondo, en la muestra de
+     renata y patricio lo hiciste en el medio en toda la invitación… y que
+     Jazmín lo tenga como opción en la plataforma cambiando de color e
+     intensidad». En Marfil era CSS de la colección; acá es un DATO del panel
+     (`fx.fondo.suave = {modo, color, fuerza, donde}`) que sirve con cualquier
+     colección y cualquier foto o video de fondo.
+       · modo 'banda': una franja clara y difusa en el centro, detrás de TODO
+         (vive en #inv-fondo, debajo de las secciones: no se pelea con el
+         z-index de ninguna colección). Los costados siguen mostrando la foto.
+       · modo 'halo': un resplandor del color elegido pegado a la forma de
+         cada letra (`filter: drop-shadow`). No toca `color` ni `text-shadow`,
+         que son del corrector (reglas-duras.js) y de las colecciones.
+       · 'ambos'.
+     `donde` (sólo para el halo) elige sobre qué textos: todos, títulos o los
+     textos chicos. */
+  function hexA(hex, a) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(String(hex || '').trim());
+    var h = m ? m[1] : 'fcfbf8';
+    return 'rgba(' + parseInt(h.slice(0, 2), 16) + ',' + parseInt(h.slice(2, 4), 16) + ',' +
+      parseInt(h.slice(4, 6), 16) + ',' + Math.max(0, Math.min(1, a)).toFixed(3) + ')';
+  }
+  function suaveDe(f) {
+    var s = (f && f.suave) || {};
+    var modo = s.modo || '';
+    var fuerza = (typeof s.fuerza === 'number') ? Math.max(0, Math.min(1, s.fuerza)) : 0.6;
+    return { modo: modo, color: s.color || '#fcfbf8', fuerza: fuerza, donde: s.donde || 'todos' };
+  }
+  function bandaSuave(caja, f) {
+    var s = suaveDe(f);
+    if (!(s.modo === 'banda' || s.modo === 'ambos') || s.fuerza <= 0) return;
+    var b = document.createElement('div');
+    b.className = 'suave';
+    var k = s.fuerza * 0.95;
+    b.style.background = 'linear-gradient(90deg,' + hexA(s.color, 0) + ' 0%,' +
+      hexA(s.color, k * 0.85) + ' 16%,' + hexA(s.color, k) + ' 50%,' +
+      hexA(s.color, k * 0.85) + ' 84%,' + hexA(s.color, 0) + ' 100%)';
+    /* el corrector (reglas-duras.js) lo lee: el texto va sobre la foto CON esto encima */
+    b.setAttribute('data-pico', hexA(s.color, k));
+    caja.appendChild(b);
+  }
+  var QUE_TEXTOS = {
+    titulos: 'h1,h2,h3,h4,.kick,.kicker,.names,#pv-names,.n1,.n2',
+    chicos:  'p,.t,.d,.lab,.num,.lbl,.kick,.kicker,li,label,small',
+    todos:   'h1,h2,h3,h4,p,.kick,.kicker,.t,.d,.lab,.num,.lbl,li,label,small,.names,#pv-names'
+  };
+  function haloSuave(f) {
+    var st = document.getElementById('inv-suave-halo');
+    var s = suaveDe(f);
+    if (!(s.modo === 'halo' || s.modo === 'ambos') || s.fuerza <= 0 || !raiz.getAttribute('data-fondo')) {
+      if (st) st.remove();
+      return;
+    }
+    var sel = (QUE_TEXTOS[s.donde] || QUE_TEXTOS.todos).split(',').map(function (x) {
+      return 'html[data-fondo] .frame :is(.sec,.pase,.footer,.portada) :is(' + x.trim() + '):not(.btn,button,a.wsp,.tv-btn)';
+    }).join(',');
+    var k = s.fuerza;
+    var css = sel + '{filter:drop-shadow(0 0 1px ' + hexA(s.color, k) + ') drop-shadow(0 0 4px ' +
+      hexA(s.color, k * 0.85) + ') drop-shadow(0 0 10px ' + hexA(s.color, k * 0.7) + ') !important}';
+    if (!st) {
+      st = document.createElement('style');
+      st.id = 'inv-suave-halo';
+      (document.head || document.documentElement).appendChild(st);
+    }
+    if (st.textContent !== css) st.textContent = css;
   }
 
   function foto(caja, src) {
@@ -457,6 +529,7 @@
     }
 
     velar(caja, a);
+    bandaSuave(caja, f);
 
     document.body.insertBefore(caja, document.body.firstChild);
     raiz.setAttribute('data-fondo', f.tipo === 'video' ? 'video' : 'imagen');
@@ -468,12 +541,13 @@
 
     alinear(caja);
     pintar();
+    haloSuave(f);
     repintes = 0;
   }
 
   function sincronizar() {
     var f = conf();
-    var nueva = JSON.stringify([f.tipo, f.url, f.poster, f.fuerza, f.velo, f.paso, f.oscuras, f.donde]);
+    var nueva = JSON.stringify([f.tipo, f.url, f.poster, f.fuerza, f.velo, f.paso, f.oscuras, f.donde, f.suave || null]);
     if (nueva === firma) {
       /* la colección puede llegar después, o cambiarse en el panel:
          en la previa se repinta siempre; en la invitación, los primeros 12 s */

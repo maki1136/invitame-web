@@ -240,6 +240,78 @@
 
     cuerpo.appendChild(perilla(d, 'oscuras', 'Y las secciones de color', 0, 0.6, 0,
       'Dejalas en 0 salvo que quieras perder el contraste entre secciones. Son las que le dan el ritmo a la invitación.'));
+
+    cuerpo.appendChild(bloqueSuave(d));
+  }
+
+  /* ⭐ SUAVIZADO DETRÁS DE LOS TEXTOS (3/10/2026). Lo pinta fondo-invitacion.js
+     con `fx.fondo.suave = {modo, color, fuerza, donde}`. Pedido de Maki: «que
+     Jazmín lo tenga como opción cambiando de color e intensidad sobre las
+     palabras que necesite». Es la otra salida cuando un texto no se lee: en
+     vez de apagar TODO el fondo, se aclara sólo detrás de la letra. */
+  function suave(d) {
+    var f = fondo(d);
+    if (!f.suave || typeof f.suave !== 'object') f.suave = {};
+    return f.suave;
+  }
+  function bloqueSuave(d) {
+    var caja = document.createElement('div');
+    caja.setAttribute('data-suave', '1');
+    caja.style.cssText = 'margin:6px 0 0;padding:10px 0 0;border-top:1px dashed rgba(0,0,0,.12)';
+    var t = document.createElement('div');
+    t.textContent = 'Suavizado detrás de los textos';
+    t.style.cssText = 'font-size:12.5px;font-weight:700;margin:0 0 2px';
+    caja.appendChild(t);
+    var a = document.createElement('div');
+    a.textContent = 'Para que las letras se lean sin apagar todo el fondo: aclara (u oscurece) sólo donde va el texto.';
+    a.style.cssText = 'font-size:11px;opacity:.6;margin:0 0 8px;line-height:1.35';
+    caja.appendChild(a);
+
+    var sv = suave(d);
+    var modo = document.createElement('select');
+    modo.style.cssText = 'width:100%';
+    [['', 'Apagado'],
+     ['banda', 'Una banda suave en el centro, en toda la invitación'],
+     ['halo', 'Un resplandor pegado a cada letra'],
+     ['ambos', 'Las dos cosas']].forEach(function (o) {
+      var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; modo.appendChild(op);
+    });
+    modo.value = sv.modo || '';
+    modo.onchange = function () { suave(d).modo = modo.value; refrescar(); pintar(d); };
+    caja.appendChild(fila('Cómo', modo,
+      'La banda es como la de Renata y Patricio: los costados siguen mostrando la foto. El resplandor sirve sobre fotos muy cargadas.'));
+    if (!sv.modo) return caja;
+
+    var col = document.createElement('input');
+    col.type = 'color';
+    col.value = /^#[0-9a-f]{6}$/i.test(sv.color || '') ? sv.color : '#fcfbf8';
+    col.style.cssText = 'width:64px;height:30px;padding:0;border:1px solid #ddd;border-radius:6px';
+    col.oninput = function () { suave(d).color = col.value; refrescar(); };
+    caja.appendChild(fila('Color', col, 'Claro detrás de letra oscura; oscuro detrás de letra clara.'));
+
+    var r = document.createElement('input');
+    r.type = 'range'; r.min = '0'; r.max = '100'; r.step = '2';
+    r.value = String(Math.round(((typeof sv.fuerza === 'number') ? sv.fuerza : 0.6) * 100));
+    r.style.cssText = 'flex:1';
+    var num = document.createElement('span');
+    num.style.cssText = 'font-size:11.5px;font-weight:700;min-width:34px;text-align:right';
+    num.textContent = r.value + '%';
+    r.oninput = function () { suave(d).fuerza = parseInt(r.value, 10) / 100; num.textContent = r.value + '%'; refrescar(); };
+    var fl = document.createElement('div');
+    fl.style.cssText = 'display:flex;align-items:center;gap:9px';
+    fl.appendChild(r); fl.appendChild(num);
+    caja.appendChild(fila('Intensidad', fl));
+
+    if (sv.modo === 'halo' || sv.modo === 'ambos') {
+      var dn = document.createElement('select');
+      dn.style.cssText = 'width:100%';
+      [['todos', 'Todos los textos'], ['titulos', 'Sólo los títulos y los nombres'], ['chicos', 'Sólo los textos chicos (párrafos y rótulos)']]
+        .forEach(function (o) { var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; dn.appendChild(op); });
+      dn.value = sv.donde || 'todos';
+      dn.onchange = function () { suave(d).donde = dn.value; refrescar(); };
+      caja.appendChild(fila('Sobre qué textos va el resplandor', dn));
+    }
+    return caja;
   }
 
   /* ⚠️⚠️ EL AVISO DE «NO SE LEE», A LA VISTA DE JAZMÍN. (1/10/2026)

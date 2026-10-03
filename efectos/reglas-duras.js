@@ -677,11 +677,15 @@
   function comoSeVeElPapel(lista) {
     var caja = document.getElementById('inv-fondo');
     if (!caja || !document.documentElement.hasAttribute('data-fondo')) return lista;
-    var k = 1, velo = null;
+    var k = 1, velo = null, banda = null;
     try {
       k = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--inv-fuerza')) || 1;
       var v = caja.querySelector(':scope > .velo');
       if (v) velo = aRGB(getComputedStyle(v).backgroundColor);
+      /* (3/10/2026) el suavizado en banda del panel (fx.fondo.suave) también
+         va entre la foto y el texto: se compone encima del velo */
+      var sv = caja.querySelector(':scope > .suave');
+      if (sv) banda = aRGB(sv.getAttribute('data-pico') || '');
     } catch (e) {}
     var out = [];
     for (var i = 0; i < lista.length; i++) {
@@ -690,6 +694,7 @@
         return Math.max(0, Math.min(255, (c[j] - 127.5) * k + 127.5));
       }).concat([c[3] === undefined ? 1 : c[3]]);
       if (velo && velo[3] > 0.01) c = mezcla(velo, c);
+      if (banda && banda[3] > 0.01) c = mezcla(banda, c);
       out.push(c);
     }
     return out;
