@@ -72,9 +72,17 @@
     }
 
     var titulo = txt(e.cartaTitulo);
+    var h = document.getElementById('cf-titulo');
     if (titulo) {
-      var h = document.getElementById('cf-titulo');
-      if (h) escribirTitulo(h, titulo);
+      if (h) { escribirTitulo(h, titulo); h.style.removeProperty('display'); }
+    } else if (h) {
+      /* ★ 3/10/2026 — sin encabezado propio, la hoja repetía el título de la
+         sección: «Una carta para ti / Una carta para ti». Si dicen lo mismo,
+         el de la hoja no se muestra. */
+      var h2 = document.getElementById('cf-h2c');
+      var igual = h2 && txt(h2.textContent).toLowerCase() === txt(h.textContent).toLowerCase();
+      if (igual) h.style.setProperty('display', 'none', 'important');
+      else h.style.removeProperty('display');
     }
 
     /* el papel de la hoja. `background-color`, nunca el atajo `background`:
