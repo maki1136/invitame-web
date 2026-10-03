@@ -1113,6 +1113,22 @@
      de la primera ficha depende de cuánto mide su texto, y ese texto lo carga
      Jazmín. Se MIDE y se pasa por variable, y se vuelve a medir en cada repaso:
      así sigue bien cuando gira el teléfono o cambia un texto. */
+
+  /* ⚠️ LA VÍA TERMINA EN EL CENTRO DE LA MARCA, NO EN EL MEDIO DE LA FICHA (3/10/2026).
+     Maki: «la línea se va hasta el fondo y sigue pasando el último circulito;
+     tiene que terminar en el circulito». En el zigzag la marca va ARRIBA de la
+     ficha (top ~27 px), no a la mitad: con una ficha de tres renglones el medio
+     cae 10-20 px más abajo y la vía asomaba por debajo de la última marca.
+     Se mide la marca (`::before`) y, si no se puede, el medio de la ficha. */
+  function marcaY(el) {
+    var r = el.getBoundingClientRect();
+    try {
+      var c = getComputedStyle(el, '::before');
+      var t = parseFloat(c.top), m = parseFloat(c.marginTop) || 0, h = parseFloat(c.height);
+      if (c.content !== 'none' && isFinite(t) && isFinite(h) && h > 0) return r.top + t + m + h / 2;
+    } catch (e) {}
+    return r.top + r.height / 2;
+  }
   function medirVia() {
     try {
       var tl = document.querySelector('.tl');
@@ -1122,8 +1138,8 @@
       var R = tl.getBoundingClientRect();
       var a = its[0].getBoundingClientRect();
       var b = its[its.length - 1].getBoundingClientRect();
-      var ini = Math.round(a.top + a.height / 2 - R.top);
-      var fin = Math.round(R.bottom - (b.top + b.height / 2));
+      var ini = Math.round(marcaY(its[0]) - R.top);
+      var fin = Math.round(R.bottom - (marcaY(its[its.length - 1])));
       if (ini > 0) tl.style.setProperty('--cen-tl-ini', ini + 'px');
       if (fin > 0) tl.style.setProperty('--cen-tl-fin', fin + 'px');
     } catch (e) {}

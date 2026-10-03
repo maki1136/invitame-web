@@ -172,7 +172,16 @@
   var CSS = [
     /* ---------- común a los dos estilos ---------- */
     '.tl.tl-anim::before{opacity:.18;background:var(--tl-tinta)}',
-    '.tl.tl-anim .tl-prog{position:absolute;top:6px;bottom:6px;width:1.5px;',
+    /* ⚠️ LA VÍA EMPIEZA Y TERMINA EN EL CENTRO DE LAS MARCAS (3/10/2026).
+       Maki: «la línea se va hasta el fondo y sigue pasando el último
+       circulito; tiene que terminar en el circulito». --tl-ini / --tl-fin los
+       mide `medirVia()` acá abajo (las colecciones que ya los miden usan la
+       misma cuenta), y las marcas van ARRIBA de la vía (z-index): la línea
+       entra al círculo y no se ve cruzándolo. */
+    '.tl.tl-anim::before{top:var(--tl-ini,6px);bottom:var(--tl-fin,6px);height:auto}',
+    '.tl.tl-anim > .it{z-index:1}',
+    '.tl.tl-anim .tl-prog{z-index:0}',
+    '.tl.tl-anim .tl-prog{position:absolute;top:var(--tl-ini,6px);bottom:var(--tl-fin,6px);width:1.5px;',
     '  background:var(--tl-tinta);transform-origin:top center;transform:scaleY(0);',
     '  transition:transform .18s linear;border-radius:2px;opacity:.55}',
     '.tl.tl-anim > .it{opacity:0;transition:opacity .8s ease,transform .8s cubic-bezier(.22,.72,.28,1)}',
@@ -309,10 +318,33 @@
     dibujar();
   }
 
+  /* el centro de la marca de un momento, medido sobre su `::before` */
+  function marcaY(el) {
+    var r = el.getBoundingClientRect();
+    try {
+      var c = getComputedStyle(el, '::before');
+      var t = parseFloat(c.top), m = parseFloat(c.marginTop) || 0, h = parseFloat(c.height);
+      if (c.content !== 'none' && isFinite(t) && isFinite(h) && h > 0) return r.top + t + m + h / 2;
+    } catch (e) {}
+    return r.top + r.height / 2;
+  }
+  function medirVia(a) {
+    try {
+      var its = a.items; if (its.length < 1 || !a.tl.isConnected) return;
+      var R = a.tl.getBoundingClientRect(); if (!R.height) return;
+      var ini = Math.round(marcaY(its[0]) - R.top);
+      var fin = Math.round(R.bottom - marcaY(its[its.length - 1]));
+      if (!(ini >= 0 && fin >= 0)) return;
+      if (a.tl.style.getPropertyValue('--tl-ini') !== ini + 'px') a.tl.style.setProperty('--tl-ini', ini + 'px');
+      if (a.tl.style.getPropertyValue('--tl-fin') !== fin + 'px') a.tl.style.setProperty('--tl-fin', fin + 'px');
+    } catch (e) {}
+  }
+
   function dibujar() {
     var h = window.innerHeight || 800;
     armados.forEach(function (a) {
       if (!a.prog.isConnected) return;
+      medirVia(a);
       var r = a.tl.getBoundingClientRect();
       var p = (h * 0.82 - r.top) / (r.height + h * 0.30);
       p = p < 0 ? 0 : (p > 1 ? 1 : p);
@@ -360,6 +392,10 @@
 
     /* ⚠️ la temática llega DESPUÉS: se repasa unos segundos */
     var k = 0, tk = setInterval(function () { ponerTinta(); if (++k > 24) clearInterval(tk); }, 250);
+
+    /* la vía se vuelve a medir aunque nadie scrollee: fuentes, fotos y textos
+       cambian la altura de los momentos después de armarlos */
+    setInterval(function () { armados.forEach(medirVia); }, 1000);
 
     if (ES_PREVIEW) {
       setInterval(buscar, 700);
