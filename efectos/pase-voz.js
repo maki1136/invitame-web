@@ -459,7 +459,11 @@
     st.setProperty('--pv-acento', txt(f.acento, tx.acento || (f.metalico ? 'var(--oro)' : 'var(--sage)')));
     if (tx.url) {
       sec.classList.add('pv-con-tex');
-      st.setProperty('--pv-tex', 'url("' + tx.url.replace(/"/g, '%22') + '")');
+      /* ⚠️ --pv-tex se escribe más abajo, en .pv-escena, y NO en la sección: las
+         colecciones tratan `.sec[style*="url("]` como «sección sobre foto» y le
+         ponen el texto en crema con !important (medido en Rapunzel 3/10: el título
+         del boleto salía crema sobre el pergamino). */
+      sec.__pvTex = 'url("' + tx.url.replace(/"/g, '%22') + '")';
       var velo = (f.velo === '' || f.velo == null || isNaN(+f.velo)) ? tx.velo : +f.velo;
       st.setProperty('--pv-velo', Math.round(Math.max(0, Math.min(1, velo)) * 100) + '%');
     }
@@ -496,6 +500,7 @@
         '</button>' +
       '</div>';
 
+    if (sec.__pvTex) sec.querySelector('.pv-escena').style.setProperty('--pv-tex', sec.__pvTex);
     sec.querySelector('.pv-talon span').textContent = txt(f.talon, 'Admite dos');
     sec.querySelector('.pv-over').textContent       = txt(f.over);
     sec.querySelector('.pv-titulo').textContent     = txt(f.titulo);
