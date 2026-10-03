@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T11:15:40.466Z",
+ "cuando": "2026-10-03T11:37:40.137Z",
  "total": 55,
- "verde": 55,
+ "verde": 54,
  "rojo": 0,
- "gris": 0,
+ "gris": 1,
  "items": [
   {
    "slug": "abril-mis15",
@@ -343,10 +343,10 @@
   },
   {
    "slug": "sofia-y-emilio",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "sofia-y-martin",
