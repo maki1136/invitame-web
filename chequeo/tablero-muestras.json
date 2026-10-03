@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T11:44:37.686Z",
+ "cuando": "2026-10-03T13:27:57.034Z",
  "total": 55,
- "verde": 53,
+ "verde": 55,
  "rojo": 0,
- "gris": 2,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
@@ -210,10 +210,10 @@
   },
   {
    "slug": "maria-paz-y-santiago",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "mariana-y-joaquin",
@@ -329,10 +329,10 @@
   },
   {
    "slug": "renata-y-patricio",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "romina-mis15",

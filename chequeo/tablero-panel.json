@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-03T11:22:04.358Z",
+ "cuando": "2026-10-03T13:13:16.608Z",
  "slug": "camila-y-tomas",
  "total": 355,
- "verde": 354,
- "amarillo": 1,
+ "verde": 351,
+ "amarillo": 4,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -1285,8 +1285,9 @@
    "guarda": true,
    "dato": "c_itinerario-descripcion",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "LUGAR_VEST",
@@ -2013,8 +2014,9 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp-2",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2557,8 +2559,9 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
@@ -2752,8 +2755,9 @@
    "guarda": true,
    "dato": "c_texto-sobre-titulo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
@@ -2807,9 +2811,8 @@
    "guarda": true,
    "dato": "c_texto-boton-iniciar-sesion",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "TRIVIA",
