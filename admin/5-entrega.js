@@ -94,7 +94,11 @@
          + '<div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap">'
          + '<a class="btn-c" href="' + esc(linkRev) + '" target="_blank" style="text-decoration:none">Ver cómo quedó</a>'
          + '<button class="btn-g" onclick="entregarInvitacion()">Entregar al cliente</button>'
-         + '</div>';
+         + '</div>'
+         /* (2/10/2026) la clave a la vista también antes de entregar: Jazmín
+            la necesita para probar el panel de los novios ella misma */
+         + (clave ? campo('Clave del panel de los novios', clave)
+                  : '<div style="margin-top:8px;font-size:12px;color:#7a6a55">La clave del panel de los novios se crea sola al tocar «Guardar y publicar».</div>');
     } else {
       caja.style.background = '#F1F8F1';
       caja.style.border = '1px solid #CBE3CB';

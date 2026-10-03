@@ -660,6 +660,35 @@
     }catch(e){ console.error('panel novios',e); }
   }
 
+  /* ⭐ LA CLAVE DEL PANEL DE LOS NOVIOS SE PONE SOLA. (2/10/2026)
+     Jazmín, probando como clienta: «ya pude confirmar asistencia pero no sé cuál
+     es la clave». La clave la tenía que inventar ella en AVANZADO, y si quedaba
+     vacía los novios se quedaban sin panel, sin que nadie se diera cuenta.
+     → Al publicar, si no hay clave, se inventa una fácil de dictar (nombre +
+       4 números) y se muestra arriba, en la caja de entrega.
+     ⚠️⚠️ NUNCA SE PISA UNA CLAVE QUE YA EXISTA. El panel de los novios se
+       guarda bajo «slug__clave»: cambiarla les deja huérfano todo lo que
+       cargaron (mesas, itinerario). Por eso, en una invitación ya publicada,
+       antes de inventar se relee la clave guardada; si esa lectura FALLA no se
+       inventa nada (no se puede saber si había una). */
+  const K_CLAVE='c_clave-del-panel-de-los-novios';
+  async function asegurarClavePanel(slug){
+    if(String(D[K_CLAVE]||'').trim()) return;
+    if(D.ver){                                   // ya publicada antes: confirmar que de verdad no tiene
+      try{
+        const m=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const s=await m.getDoc(m.doc(window.INV.db,'inv_privado',slug));
+        const k=s.exists()?String((s.data()||{})[K_CLAVE]||'').trim():'';
+        if(k){ D[K_CLAVE]=k; return; }
+      }catch(e){ console.error('clave panel: no se pudo releer, no se inventa',e); return; }
+    }
+    const base=String(D.n1||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
+      .replace(/[^a-z]/g,' ').trim().split(/\s+/)[0].slice(0,10) || 'invitame';
+    const n=new Uint16Array(1); crypto.getRandomValues(n);
+    D[K_CLAVE]=base+String(1000+(n[0]%9000));
+    try{ if(cur==='AVANZADO') go('AVANZADO'); }catch(e){}
+  }
+
   async function publicar(){
     if(!window.INV||!window.INV.ok){alert("Todavía no se conectó la base de datos. Esperá 2 segundos y probá de nuevo.");return;}
     /* ⚠️ ESTE AVISO ES LO ÚLTIMO QUE SEPARA AL CLIENTE DE VER LA BODA DE OTRO.
@@ -688,6 +717,7 @@
     }
     const btn=document.querySelector('.btn-g');const txt=btn?btn.textContent:'';if(btn){btn.textContent='Guardando…';btn.disabled=true;}
     try{
+      await asegurarClavePanel(slug);
       // 1) guarda la config del evento (todo el objeto de diseño)
       const _primeraVez = !D.ver;            // ¿es la primera vez que se publica?
       if(_primeraVez) D.ver=VERSION;         // queda clavada a esta versión
