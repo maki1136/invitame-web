@@ -774,6 +774,27 @@
     return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' persona(s) sin foto' : 'todas con foto', detalle: malos };
   });
 
+  /* ★ 3/10/2026 — «En el iPad se queda toda trabada, no carga». El Worker de la
+     caché había llegado al tope del día (429 · error 1027) y NINGUNA foto, ni el
+     video del sobre, ni la música cargaban. Ninguna regla lo vio: todas miden
+     el diseño, ninguna miraba si las cosas LLEGAN. */
+  regla('medios-cargan', 'Las fotos llegan (y la caché de fotos atiende)', function () {
+    var malos = [];
+    [].forEach.call(document.querySelectorAll('img[src]'), function (im) {
+      if (!im.complete || !visible(im)) return;
+      if (im.naturalWidth === 0) malos.push('foto rota: ' + String(im.currentSrc || im.src).slice(-70));
+    });
+    var base = window.INV_CACHE_MEDIOS;
+    var probar = (typeof base === 'string' && base)
+      ? fetch(base + 'res.cloudinary.com/oc8cgqt4/image/upload/w_8,q_1,f_jpg/invitame/x4q8skckyryvodav1iwe.webp', { cache: 'no-store' })
+          .then(function (r) { if (r.status !== 200) malos.unshift('la caché de fotos contesta ' + r.status + ' (¿tope del día de Cloudflare?)'); })
+          .catch(function () { malos.unshift('la caché de fotos no contesta'); })
+      : Promise.resolve();
+    return probar.then(function () {
+      return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' problema(s) de carga' : 'todo llega', detalle: malos };
+    });
+  });
+
   /* ---- el corredor -------------------------------------------------------- */
 
   /* Las secciones entran con `.reveal` al hacer scroll. Si se mide sin haber
@@ -828,12 +849,14 @@
     }
 
     var hacer = function () {
-      var detalle = REGLAS.map(function (r) {
+      /* ★ 3/10/2026 — una regla puede devolver una promesa (medios-cargan). */
+      return Promise.all(REGLAS.map(function (r) {
         var res;
         try { res = r.fn(); }
         catch (e) { res = { pasa: false, nota: 'la regla se rompió: ' + e.message }; }
-        return { regla: r.id, titulo: r.titulo, pasa: !!res.pasa, nota: res.nota || '', detalle: res.detalle || null };
-      });
+        return Promise.resolve(res).catch(function (e) { return { pasa: false, nota: 'la regla se rompió: ' + (e && e.message) }; })
+          .then(function (res) { return { regla: r.id, titulo: r.titulo, pasa: !!res.pasa, nota: res.nota || '', detalle: res.detalle || null }; });
+      })).then(function (detalle) {
       var fallas = detalle.filter(function (d) { return !d.pasa; });
       var out = { pasa: fallas.length === 0, fallas: fallas.map(function (f) { return f.regla; }), detalle: detalle };
       try {
@@ -846,8 +869,9 @@
       } catch (e) {}
       window.__CHEQUEO = out;
       return out;
+      });
     };
-    if (opts.sinRecorrer) return Promise.resolve(hacer());
+    if (opts.sinRecorrer) return hacer();
     return recorrer().then(hacer);
   }
 
