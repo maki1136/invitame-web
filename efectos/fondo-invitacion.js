@@ -419,7 +419,13 @@
       Math.max(0.5, Math.min(2.2, (typeof f.fuerza === 'number' && f.fuerza) ? f.fuerza : 1))));
 
     /* ---- la de AFUERA, sólo si se pidió que ocupe toda la pantalla ---- */
-    if (f.donde === 'pantalla') {
+    /* ★ 3/10/2026 — y sólo si HAY afuera. En un celular o una tablet la
+       invitación va a todo el ancho (ver `encuadre-monitor.js`): esta capa
+       quedaba entera tapada, pero igual se armaba, fija y con `blur(22px)` en
+       vivo, a pantalla completa. En el iPad Pro es justo lo que lo traba. */
+    var hayAfuera = false;
+    try { hayAfuera = innerWidth >= 680 && !matchMedia('(any-pointer: coarse)').matches; } catch (e) {}
+    if (f.donde === 'pantalla' && hayAfuera) {
       var fu = document.createElement('div');
       fu.id = IDF;
       foto(fu, fija);                /* siempre fija: desenfocada, moverse no aporta */

@@ -2029,9 +2029,10 @@ window.SOBRES_INVITAME = {
     '@media (min-width:680px){',
     '  #env.carta-video{background:#cfc4b4}',
 
+    /* ★ 3/10/2026 — SIN `filter:blur()` EN VIVO. Ver «EL IPAD SE TRABA» abajo. */
     '  #sobre-fondo{display:block;position:absolute;inset:0;z-index:0;',
-    '    background-size:cover;background-position:center;',
-    '    filter:blur(64px) saturate(.7) brightness(.94);transform:scale(1.35)}',
+    '    background-color:#cfc4b4;background-size:cover;background-position:center}',
+    '  #env.gone #sobre-fondo,#env.gone #sobre-vinieta{display:none!important}',
 
     '  #sobre-vinieta{display:block;position:absolute;inset:0;z-index:1;',
     '    pointer-events:none;background:radial-gradient(120% 85% at 50% 50%,',
@@ -2098,8 +2099,61 @@ window.SOBRES_INVITAME = {
       env.insertBefore(fondo, env.firstChild);
       env.insertBefore(vin, fondo.nextSibling);
     }
-    var url = 'url("' + poster.replace(/"/g, '%22') + '")';
+    var borroso = fondoBorroso(poster);
+    if (!borroso) return;                       /* todavía armándose (canvas) */
+    var url = 'url("' + borroso.replace(/"/g, '%22') + '")';
     if (fondo.style.backgroundImage !== url) fondo.style.backgroundImage = url;
+  }
+
+  /* ★★★ 3/10/2026 — «EN EL IPAD SE TRABA TODO, NO CARGA» (y en el iPhone anda).
+     Medido en un Safari de iPad Pro (1024 × 1366, ×2): el iPad pasa el
+     `min-width:680px`, así que se llevaba el fondo de escritorio del sobre: una
+     capa de pantalla completa con `filter:blur(64px)` y `scale(1.35)` EN VIVO
+     —unos 14 millones de píxeles del aparato desenfocados en cada cuadro—
+     detrás de un video que se está reproduciendo. Y al abrir el sobre la capa NO
+     se iba: `#env` queda `visibility:hidden` pero sigue en la página.
+     Es el mismo error que ya se había pagado el 4/9 con `#inv-lienzo` (ver
+     `efectos/encuadre-monitor.js`): una Mac lo absorbe, Safari de iPad no.
+
+     El arreglo, para TODOS (Mac incluida, que también va más liviana):
+       · el desenfoque se hace UNA vez, no en cada cuadro: si el póster es de
+         Cloudinary, lo hace Cloudinary (`w_120,e_blur:400` → ~1,5 KB); si es un
+         archivo nuestro (`/sobres/...`), un canvas de 48 px lo achica una vez.
+         Una imagen chiquita estirada a pantalla completa YA se ve desenfocada;
+       · sin `filter` y sin `transform` en la capa;
+       · al abrir el sobre (`#env.gone`) la capa sale de la página. */
+  var cacheBorroso = {};
+  function fondoBorroso(poster) {
+    if (cacheBorroso[poster] !== undefined) return cacheBorroso[poster];
+    var m = poster.match(/^(.*?res\.cloudinary\.com\/[^\/]+\/(image|video)\/upload\/)(.*)$/);
+    if (m) {
+      var cola = m[3], partes = cola.split('/'), so = '';
+      /* el primer tramo es de instrucciones si tiene `x_` y no es versión ni carpeta */
+      if (/^[a-z]{1,3}_/.test(partes[0]) && !/^v\d+$/.test(partes[0])) {
+        var t = partes.shift().match(/(?:^|,)(so_[^,]+)/);
+        if (t) so = t[1] + ',';
+      }
+      if (m[2] === 'video' && !so) so = 'so_0,';
+      cacheBorroso[poster] = m[1] + so + 'w_120,e_blur:400,q_auto:low,f_jpg/' + partes.join('/');
+      return cacheBorroso[poster];
+    }
+    /* un archivo nuestro: se achica UNA vez en un canvas (mismo origen, no se tiñe) */
+    var mismo = poster.charAt(0) === '/' || poster.indexOf(location.origin + '/') === 0;
+    if (!mismo) { cacheBorroso[poster] = ''; return ''; }
+    cacheBorroso[poster] = null;                /* en camino */
+    var im = new Image();
+    im.onload = function () {
+      try {
+        var w = 48, h = Math.max(1, Math.round(48 * im.naturalHeight / Math.max(1, im.naturalWidth)));
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(im, 0, 0, w, h);
+        cacheBorroso[poster] = c.toDataURL('image/jpeg', 0.7);
+      } catch (e) { cacheBorroso[poster] = ''; }
+      pintarFondo();
+    };
+    im.onerror = function () { cacheBorroso[poster] = ''; };
+    im.src = poster;
+    return null;
   }
 
   /* ⚠️ RED DE SEGURIDAD: si el video quedara a pantalla completa, se corrige. */
