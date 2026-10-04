@@ -795,6 +795,24 @@
     });
   });
 
+  /* ★ 3/10/2026 — «En el iPad se traba todo». Una capa de pantalla completa con
+     `filter:blur()` EN VIVO traba Safari de iPad (ya pasó el 4/9 con
+     `#inv-lienzo` y volvió con `#sobre-fondo`). En celulares y tablets no tiene
+     que haber ninguna; en la Mac se toleran (los costados del encuadre). */
+  regla('sin-desenfoque-gigante', 'Ninguna capa grande con desenfoque en vivo (traba el iPad)', function () {
+    var tactil = false;
+    try { tactil = matchMedia('(any-pointer: coarse)').matches; } catch (e) {}
+    if (!tactil) return { pasa: true, nota: 'pantalla sin táctil: no aplica' };
+    var vp = innerWidth * innerHeight, malos = [];
+    [].forEach.call(document.querySelectorAll('body *'), function (e) {
+      var cs = getComputedStyle(e);
+      if (!/blur\(/.test(cs.filter) || cs.display === 'none') return;
+      var r = e.getBoundingClientRect();
+      if (r.width * r.height > vp * 0.5) malos.push((e.id ? '#' + e.id : String(e.className).slice(0, 30)) + ' ' + cs.filter + ' (' + Math.round(r.width) + '×' + Math.round(r.height) + ')');
+    });
+    return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' capa(s) desenfocadas en vivo' : 'ninguna', detalle: malos };
+  });
+
   /* ---- el corredor -------------------------------------------------------- */
 
   /* Las secciones entran con `.reveal` al hacer scroll. Si se mide sin haber
