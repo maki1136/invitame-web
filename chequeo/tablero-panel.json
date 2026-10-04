@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-04T00:57:03.941Z",
+ "cuando": "2026-10-04T01:07:32.153Z",
  "slug": "camila-y-tomas",
  "total": 356,
- "verde": 352,
- "amarillo": 4,
+ "verde": 353,
+ "amarillo": 3,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -1373,8 +1373,9 @@
    "guarda": true,
    "dato": "c_frase-seccion-instagram",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -1648,9 +1649,8 @@
    "guarda": true,
    "dato": "c_color-fondo-regalos",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "REGALOS",
@@ -2602,8 +2602,9 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
@@ -2808,9 +2809,8 @@
    "guarda": true,
    "dato": "c_texto-tabla-de-resultados",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "TRIVIA",
@@ -3591,9 +3591,8 @@
    "guarda": true,
    "dato": "fx.filtro.frase",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
@@ -3636,8 +3635,9 @@
    "guarda": true,
    "dato": "fx.filtro.boton",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "EFECTOS",
@@ -3858,9 +3858,8 @@
    "guarda": true,
    "dato": "fx.paquete.extras",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
