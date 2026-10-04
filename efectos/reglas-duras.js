@@ -339,8 +339,23 @@
     return LIENZO;
   }
 
+  /* ★ 3/10/2026 — CADA COLOR SE LEE UNA VEZ. Leer un píxel del lienzo
+     (`getImageData`) obliga a Safari a traer la imagen de la placa de video:
+     en un iPad con Safari 16 cuesta milisegundos CADA vez, y una pasada lee
+     cientos de colores — que son casi siempre los mismos diez. Se guarda el
+     resultado por texto. (Se devuelve una copia: hay quien modifica el arreglo.) */
+  var MEMO_RGB = {}, MEMO_N = 0;
   function aRGB(txt) {
     if (!txt) return null;
+    var k = String(txt);
+    var m = MEMO_RGB[k];
+    if (m !== undefined) return m ? m.slice() : null;
+    var r = aRGBLeer(k);
+    if (MEMO_N > 2000) { MEMO_RGB = {}; MEMO_N = 0; }
+    MEMO_RGB[k] = r ? r.slice() : null; MEMO_N++;
+    return r;
+  }
+  function aRGBLeer(txt) {
     var s = String(txt).trim();
     if (!s || s === 'none' || s === 'transparent' || s === 'currentcolor') return null;
     var x = elLienzo();
@@ -1283,23 +1298,63 @@
 
   /* ── el ciclo: SIN FECHA DE VENCIMIENTO ───────────────────────────────── */
 
-  var pendiente = null;
+  /* ★★★ 3/10/2026 — «EN EL IPAD TARDA 100 AÑOS Y SE TRABA».
+     Medido EN EL iPad de Maki (Safari 16.6, con `&diag=1`): la página cargaba
+     en 1,2 s y después el hilo principal se congelaba ~10 s, dos veces
+     seguidas. El culpable era este ciclo:
+       · la pasada recorre TODA la invitación (getComputedStyle de cada texto,
+         fondos, fotos) — en una máquina rápida ~100 ms, en un iPad viejo segundos;
+       · se disparaba con CADA cambio del marco: la cuenta regresiva cambia
+         cada segundo, las animaciones tocan `style`, el scroll…;
+       · y la propia pasada escribe `style` en los textos que corrige, que el
+         observador ve como un cambio nuevo → otra pasada. Un bucle.
+     Arreglo, sin tocar lo que corrige:
+       1. LA ESPERA SE ADAPTA AL APARATO: entre una pasada y la siguiente hay
+          por lo menos 1,2 s, o 6 veces lo que tardó la última. Si en un iPad
+          viejo una pasada cuesta 1,5 s, la próxima espera 9 s: la página
+          queda libre el 85 % del tiempo en vez del 0 %;
+       2. el observador IGNORA los cambios que hicimos nosotros (el `style` de
+          un texto que ya pintamos) y los de la cuenta regresiva;
+       3. el observador se instala UNA sola vez (antes se instalaba dos). */
+  var pendiente = null, finUltima = 0, costoUltima = 0;
   function pasada() {
     if (pendiente) return;
+    var espera = Math.max(60, finUltima + Math.max(1200, costoUltima * 6) - Date.now());
+    if (!finUltima) espera = 60;
     pendiente = setTimeout(function () {
       pendiente = null;
       if (!elMarco()) return;
       if (!hayDatos()) return;
-      sacarLaFrase();
-      subirLaCarta();
-      taparCrudos();
-      legibles();
-    }, 60);
+      var a = (window.performance && performance.now) ? performance.now() : Date.now();
+      try {
+        sacarLaFrase();
+        subirLaCarta();
+        taparCrudos();
+        legibles();
+      } finally {
+        costoUltima = ((window.performance && performance.now) ? performance.now() : Date.now()) - a;
+        finUltima = Date.now();
+      }
+    }, espera);
   }
 
+  /* ¿El cambio lo hicimos nosotros, o es sólo la cuenta regresiva? */
+  function cambioPropio(recs) {
+    for (var i = 0; i < recs.length; i++) {
+      var r = recs[i], t = r.target;
+      if (r.type === 'attributes' && r.attributeName === 'style' && t.getAttribute && t.hasAttribute('data-regla-luz')) continue;
+      var el = (t.nodeType === 1) ? t : t.parentElement;
+      if (el && el.closest && el.closest('.count, .countdown, #countdown, .cuenta')) continue;
+      return false;
+    }
+    return true;
+  }
+
+  var observando = false;
   function observar() {
     var marco = elMarco();
-    if (!marco) return;
+    if (!marco || observando) return;
+    observando = true;
 
     if (window.IntersectionObserver) {
       var io = new IntersectionObserver(function (es) {
@@ -1309,7 +1364,7 @@
     }
 
     if (window.MutationObserver) {
-      new MutationObserver(function () { pasada(); })
+      new MutationObserver(function (recs) { if (!cambioPropio(recs)) pasada(); })
         .observe(marco, { childList: true, subtree: true, attributes: true,
                           attributeFilter: ['style', 'class'] });
     }

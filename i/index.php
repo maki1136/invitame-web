@@ -628,7 +628,7 @@ function iv_sin_ejemplo($html) {
 if ($leyoEvento) { $tpl = iv_sin_ejemplo($tpl); }
 
 /* ★ 3/10/2026 — `&diag=1`: el diagnóstico en un aparato real (ver /diag.php). Va PRIMERO. */
-$diagJs = (isset($_GET['diag']) && $_GET['diag'] === '1') ? '<script src="/efectos/diag.js?v=1"></' . 'script>' : '';
+$diagJs = (isset($_GET['diag']) && $_GET['diag'] === '1') ? '<script src="/efectos/diag.js?v=2"></' . 'script>' : '';
 $aInyectar = $diagJs . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 $aInyectar = iv_fotos_livianas($aInyectar);

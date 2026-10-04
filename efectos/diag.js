@@ -3,6 +3,55 @@
 (function () {
   'use strict';
   var T0 = Date.now(), id = Math.random().toString(36).slice(2, 8);
+  /* ★ v2 — QUIÉN congela la página. Cada tarea (reloj, observador, cuadro,
+     evento) se cronometra; si tarda más de 150 ms se anota DÓNDE se programó
+     (archivo:línea:columna de la pila) y el principio de la función. */
+  var lentas = {};
+  function origen() {
+    var st = (new Error().stack || '').split('\n').filter(function (l) { return !/diag\.js/.test(l) && /https?:/.test(l); });
+    return (st[0] || '?').replace(/^.*?(https?:\/\/[^\/]+)/, '').slice(0, 120);
+  }
+  function envolver(fn, tipo, donde) {
+    if (typeof fn !== 'function' || fn.__diag) return fn;
+    var w = function () {
+      var a = performance.now();
+      try { return fn.apply(this, arguments); }
+      finally {
+        var d = performance.now() - a;
+        if (d > 150) {
+          var k = tipo + ' ' + donde + ' | ' + String(fn).slice(0, 70).replace(/\s+/g, ' ');
+          var e = lentas[k] || (lentas[k] = { n: 0, ms: 0, max: 0 });
+          e.n++; e.ms += d; if (d > e.max) e.max = d;
+        }
+      }
+    };
+    w.__diag = 1; return w;
+  }
+  ['setTimeout', 'setInterval'].forEach(function (nom) {
+    var o = window[nom];
+    window[nom] = function (fn, ms) { var a = [].slice.call(arguments); a[0] = envolver(fn, nom + '(' + ms + ')', origen()); return o.apply(window, a); };
+  });
+  var rafO = window.requestAnimationFrame;
+  window.requestAnimationFrame = function (fn) { return rafO.call(window, envolver(fn, 'raf', origen())); };
+  ['MutationObserver', 'ResizeObserver', 'IntersectionObserver'].forEach(function (nom) {
+    var O = window[nom]; if (!O) return;
+    var N = function (cb, op) { return new O(envolver(cb, nom, origen()), op); };
+    N.prototype = O.prototype; window[nom] = N;
+  });
+  var addO = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function (t, fn, op) {
+    if (typeof fn === 'function' && /^(scroll|resize|load|DOMContentLoaded|touchmove|touchstart|click|timeupdate)$/.test(t)) {
+      var w = fn.__dw || (fn.__dw = envolver(fn, 'ev:' + t, origen()));
+      return addO.call(this, t, w, op);
+    }
+    return addO.call(this, t, fn, op);
+  };
+  var remO = EventTarget.prototype.removeEventListener;
+  EventTarget.prototype.removeEventListener = function (t, fn, op) { return remO.call(this, t, (fn && fn.__dw) || fn, op); };
+  function topLentas() {
+    return Object.keys(lentas).map(function (k) { return [Math.round(lentas[k].ms), lentas[k].n, Math.round(lentas[k].max), k]; })
+      .sort(function (a, b) { return b[0] - a[0]; }).slice(0, 15).map(function (x) { return x[0] + 'ms/' + x[1] + 'x max' + x[2] + ' ' + x[3]; });
+  }
   var ev = [], errs = [], lag = [], peor = 0, cuadros = 0, trabas = 0;
   function t() { return Date.now() - T0; }
   function marca(n) { ev.push(n + '@' + t()); }
@@ -49,7 +98,7 @@
       tactil: matchMedia('(any-pointer: coarse)').matches, cache: !!window.INV_CACHE_MEDIOS,
       html_ms: Math.round(nav.responseEnd || 0), pedidos: res.length, MB: +(bytes / 1048576).toFixed(2),
       cuadros: cuadros, peorCuadro: Math.round(peor), trabas: trabas, lag: lag.slice(-30), ev: ev, errs: errs.slice(0, 20),
-      videos: vids, iframes: document.querySelectorAll('iframe').length, lentos: lentos, scroll: Math.round(scrollY)
+      lentas: topLentas(), videos: vids, iframes: document.querySelectorAll('iframe').length, lentos: lentos, scroll: Math.round(scrollY)
     };
   }
   function mandar(cuando) {
