@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-04T02:29:13.208Z",
+ "cuando": "2026-10-04T18:54:06.028Z",
  "slug": "camila-y-tomas",
  "total": 356,
- "verde": 354,
- "amarillo": 2,
+ "verde": 355,
+ "amarillo": 1,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -1428,9 +1428,8 @@
    "guarda": true,
    "dato": "galTextColor",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -1891,9 +1890,8 @@
    "guarda": true,
    "dato": "cfColor",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2279,8 +2277,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.fecha",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
