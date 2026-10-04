@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-03T19:23:26.157Z",
+ "cuando": "2026-10-04T00:20:27.309Z",
  "slug": "camila-y-tomas",
  "total": 356,
  "verde": 355,
@@ -1758,8 +1758,9 @@
    "guarda": true,
    "dato": "c_frase-para-seccion-regalos-mesa",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "REGALOS",
@@ -2656,9 +2657,8 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "TRIVIA",
