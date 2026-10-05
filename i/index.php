@@ -629,7 +629,20 @@ if ($leyoEvento) { $tpl = iv_sin_ejemplo($tpl); }
 
 /* ★ 3/10/2026 — `&diag=1`: el diagnóstico en un aparato real (ver /diag.php). Va PRIMERO. */
 $diagJs = (isset($_GET['diag']) && $_GET['diag'] === '1') ? '<script src="/efectos/diag.js?v=2"></' . 'script>' : '';
-$aInyectar = $diagJs . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
+/* ★ 5/10/2026 — MODO LIVIANO PARA SAFARI VIEJO (16 o menos).
+   Medido en el iPad de Maki (Safari 16.6): el video de fondo fijo detrás de
+   toda la invitación y las animaciones gigantes de la portada (el «ken burns»
+   de #pbg mide 8,6 millones de píxeles en un iPad) traban la página entera.
+   En esos aparatos: el fondo de video va como foto fija y esas dos animaciones
+   se frenan. Nada más cambia. En Safari 17+ y en Chrome/Android no hace nada.
+   `&liviano-aparato=1` lo fuerza (para probar), `=0` lo apaga. */
+$lvQ = isset($_GET['liviano-aparato']) ? (string)$_GET['liviano-aparato'] : '';
+$aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=navigator.userAgent,v=0,m;'
+  . 'if(/AppleWebKit/.test(u)&&!/Chrome\/|Android/.test(u)){'
+  . 'm=u.match(/Version\/(\d+)/)||u.match(/ OS (\d+)_/);if(m)v=+m[1];}'
+  . 'if(q==="1"||(q!=="0"&&v&&v<17))document.documentElement.classList.add("aparato-liviano");}catch(e){}})();</'
+  . 'script><style>html.aparato-liviano #pbg,html.aparato-liviano .sky{animation:none!important}</style>';
+$aInyectar = $diagJs . $aparatoLiviano . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 $aInyectar = iv_fotos_livianas($aInyectar);
 if ($aInyectar !== '') {

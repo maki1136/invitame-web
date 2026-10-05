@@ -92,6 +92,8 @@
 
   function videoConviene() {
     try {
+      /* ★ 5/10/2026 — Safari 16 o menos (ver «MODO LIVIANO» en i/index.php) */
+      if (document.documentElement.classList.contains('aparato-liviano')) return false;
       if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
       var c = navigator.connection || {};
       if (c.saveData) return false;
@@ -111,6 +113,8 @@
        cuando uno reemplaza al otro */
     '#' + ID + ' > video, #' + ID + ' > img{filter:contrast(var(--inv-fuerza,1))' +
       ' saturate(calc(1 + (var(--inv-fuerza,1) - 1) * .7))}' +
+    /* ★ 5/10/2026 — horneado en Cloudinary: sin filtro en vivo (ver horneado()) */
+    '#' + ID + '.horneado > video, #' + ID + '.horneado > img{filter:none}' +
     /* afuera: desenfocado y un poco agrandado, para que el desenfoque no deje
        borde transparente contra los cantos de la pantalla */
     '#' + IDF + ' > img{filter:blur(22px) saturate(.88) contrast(var(--inv-fuerza,1));' +
@@ -249,9 +253,41 @@
     if (st.textContent !== css) st.textContent = css;
   }
 
+  /* ★★★ 5/10/2026 — LA «FUERZA» SE HORNEA EN CLOUDINARY, NO EN EL NAVEGADOR.
+     Medido en el iPad de Maki (Safari 16.6): el fondo de video ocupa toda la
+     pantalla, fijo, y llevaba `filter: contrast() saturate()` EN VIVO. Con las
+     secciones abiertas al 80 %, Safari tenía que re-filtrar cada cuadro del
+     video debajo de toda la invitación; en un iPad viejo eso va por el
+     procesador y traba la página entera. Un iPhone nuevo lo hace por hardware.
+     Si la foto o el video son de Cloudinary, Cloudinary aplica el mismo ajuste
+     una sola vez (`e_contrast` / `e_saturation`) y la capa queda SIN filtro.
+     Si no son de Cloudinary, queda el filtro de siempre. */
+  function fuerzaActual() {
+    var x = parseFloat(raiz.style.getPropertyValue('--inv-fuerza'));
+    return isFinite(x) && x > 0 ? x : 1;
+  }
+  function horneado(url) {
+    var k = fuerzaActual();
+    if (typeof url !== 'string' || url.indexOf('res.cloudinary.com/') < 0 || url.indexOf('/upload/') < 0) return '';
+    if (Math.abs(k - 1) < 0.005) return url;                 /* sin ajuste: tal cual */
+    var con = Math.round((k - 1) * 100);                      /* contrast(1.12) → e_contrast:12 */
+    var sat = Math.round((k - 1) * 0.7 * 100);                /* saturate(1 + (k-1)·0,7) */
+    var paso = 'e_contrast:' + Math.max(-100, Math.min(100, con)) +
+               (sat ? ',e_saturation:' + Math.max(-100, Math.min(100, sat)) : '');
+    /* el ajuste va DESPUÉS de las instrucciones que ya trae (so_1.5, w_…), justo
+       antes de la versión o del nombre */
+    var i = url.indexOf('/upload/') + 8, cola = url.slice(i), pre = '';
+    while (/^[a-z]{1,4}_[^\/]*\//.test(cola) && !/^v\d+\//.test(cola)) {
+      var t = cola.indexOf('/') + 1; pre += cola.slice(0, t); cola = cola.slice(t);
+    }
+    return url.slice(0, i) + pre + paso + '/' + cola;
+  }
+
   function foto(caja, src) {
     var im = document.createElement('img');
-    im.src = src; im.alt = '';
+    var h = (caja.id === ID) ? horneado(src) : '';
+    if (h) caja.classList.add('horneado');
+    im.src = h || src; im.alt = '';
     caja.insertBefore(im, caja.firstChild);
   }
 
@@ -342,11 +378,41 @@
         return;
       }
       el.removeAttribute('data-fondo-valor');
+      el.removeAttribute('data-fondo-v');
       el.style.removeProperty('background-color');
       if (el.getAttribute('data-fondo-tex')) { el.style.removeProperty('background-image'); el.removeAttribute('data-fondo-tex'); }
       if (el.getAttribute('data-fondo-pinta') === 'marco') el.style.removeProperty('background');
       el.removeAttribute('data-fondo-pinta');
     });
+  }
+  /* ★★★ 5/10/2026 — «EN EL IPAD SE TRABA». Medido apagando los 100 módulos de a
+     mitades en un Safari de iPad: sin ESTE archivo el peor congelamiento bajaba
+     de 3–5 s a 1,4 s. La causa era `pintar()`:
+       · para medir el color «de fábrica» de cada sección le SACABA el fondo a la
+         página entera (`html[data-fondo]` fuera y vuelta a poner). Cambiar un
+         atributo del <html> obliga a recalcular el estilo de TODA la invitación,
+         dos veces, y leer `getComputedStyle` en el medio lo hace en el acto;
+       · y se llamaba cada 1,6 s, con cada mensaje de YouTube/Spotify (que mandan
+         muchos) y con cada cambio de velo, aunque no hubiera cambiado nada;
+       · además reescribía el `style` de cada sección siempre, y eso despertaba
+         al corrector de legibilidad (reglas-duras.js) otra vez.
+     Ahora:
+       1. el color y la textura de fábrica de cada sección se MIDEN UNA VEZ y se
+          guardan en la sección (`data-fondo-c0` / `data-fondo-t0`). Se vuelve a
+          medir sólo si cambió la «firma» de estilos (llegó la hoja de una
+          colección, cambió la clase del <html>/<body> o aparecieron secciones);
+       2. se escribe sólo lo que cambió;
+       3. en la invitación publicada no se escuchan los mensajes de los iframes
+          de terceros (abajo, en el `message`). */
+  var firmaEstilo = null;
+  function firmaDeEstilos(secs) {
+    /* el largo de las hojas <style>: si una colección reescribe la suya con
+       otros colores, la firma cambia y se vuelve a medir */
+    var largo = 0, hs = document.getElementsByTagName('style');
+    for (var k = 0; k < hs.length; k++) largo += (hs[k].textContent || '').length;
+    return document.styleSheets.length + '|' + largo + '|' + raiz.className + '|' +
+      (document.body ? document.body.className : '') + '|' + secs.length + '|' +
+      (raiz.getAttribute('data-coleccion') || '') + '|' + (raiz.getAttribute('data-paleta') || '');
   }
   function pintar() {
     var tipo = raiz.getAttribute('data-fondo');
@@ -355,18 +421,28 @@
     var osc  = parseFloat(raiz.style.getPropertyValue('--inv-oscuras')) || 0;
     var secs = [].slice.call(document.querySelectorAll('.frame .sec, .frame > section'));
     var marco = document.querySelector('.frame');
-    /* medir sin el fondo: se saca un instante (no llega a pintarse) */
-    despintar();
-    raiz.removeAttribute('data-fondo');
-    /* si el otro módulo soltó la sección (se apagó la banda), vuelve a ser de acá */
-    secs.forEach(function (el) { if (el.getAttribute('data-fondo-ajena') && !el.style.getPropertyValue('background-color')) el.removeAttribute('data-fondo-ajena'); });
-    var cols = secs.map(function (el) { return getComputedStyle(el).backgroundColor; });
-    var texs = secs.map(function (el) { return getComputedStyle(el).backgroundImage || ''; });
-    raiz.setAttribute('data-fondo', tipo);
-    secs.forEach(function (el, i) {
+
+    var fe = firmaDeEstilos(secs);
+    var falta = fe !== firmaEstilo;
+    if (!falta) for (var q = 0; q < secs.length; q++) if (!secs[q].hasAttribute('data-fondo-c0')) { falta = true; break; }
+    if (falta) {
+      /* medir sin el fondo: se saca un instante (no llega a pintarse) — UNA vez */
+      despintar();
+      raiz.removeAttribute('data-fondo');
+      /* si el otro módulo soltó la sección (se apagó la banda), vuelve a ser de acá */
+      secs.forEach(function (el) { if (el.getAttribute('data-fondo-ajena') && !el.style.getPropertyValue('background-color')) el.removeAttribute('data-fondo-ajena'); });
+      var cols = secs.map(function (el) { return getComputedStyle(el).backgroundColor; });
+      var texs = secs.map(function (el) { return getComputedStyle(el).backgroundImage || ''; });
+      raiz.setAttribute('data-fondo', tipo);
+      secs.forEach(function (el, i) { el.setAttribute('data-fondo-c0', cols[i]); el.setAttribute('data-fondo-t0', texs[i]); });
+      firmaEstilo = firmaDeEstilos(secs);
+    }
+
+    secs.forEach(function (el) {
       /* el color ya lo escribió otro módulo en el elemento (la banda temática): es suyo */
       if (el.getAttribute('data-fondo-ajena') || (el.style.getPropertyValue('background-color') && !el.getAttribute('data-fondo-pinta'))) return;
-      var c = rgba(cols[i]);
+      var c = rgba(el.getAttribute('data-fondo-c0'));
+      var tex = el.getAttribute('data-fondo-t0') || '';
       if (!c || c.a === 0) return;
       var abre = el.classList.contains('verde') ? osc : paso;
       /* ⚠️ velo-legible.js tapa de más, sección por sección, donde el texto no se
@@ -383,7 +459,10 @@
           (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255 < 0.35) abre = Math.min(abre, 0.45);
       var a = Math.max(0, Math.min(1, c.a * (1 - abre)));
       var val = 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', ' + a.toFixed(3) + ')';
-      el.style.setProperty('background-color', val, 'important');
+      if (el.getAttribute('data-fondo-v') !== val || el.style.getPropertyPriority('background-color') !== 'important') {
+        el.style.setProperty('background-color', val, 'important');
+        el.setAttribute('data-fondo-v', val);
+      }
       /* ⚠️ 1/10/2026 — EL PAPEL CON TEXTURA TAPABA EL FONDO. Probado armando una
          invitación NUEVA desde el panel (Bohemia + «Una imagen»): el color de
          las secciones se abría bien, pero el motor les pone además la textura
@@ -392,15 +471,20 @@
          «Qué reemplaza el papel»: si la perilla abre la sección (más de la
          mitad), la textura del papel se va con el color. Sólo la textura del
          motor (`/i/tex-…`): los degradés y dibujos de las colecciones quedan. */
-      if (abre > 0.5 && /\/i\/tex-[a-z]+\.jpg/.test(texs[i]) && texs[i].indexOf('gradient') < 0 &&
-          (!el.style.getPropertyValue('background-image') || el.getAttribute('data-fondo-tex'))) {   /* lo puesto en línea por otro módulo, no se toca */
+      var sacaTex = abre > 0.5 && /\/i\/tex-[a-z]+\.jpg/.test(tex) && tex.indexOf('gradient') < 0 &&
+          (!el.style.getPropertyValue('background-image') || el.getAttribute('data-fondo-tex'));   /* lo puesto en línea por otro módulo, no se toca */
+      if (sacaTex && !el.getAttribute('data-fondo-tex')) {
         el.style.setProperty('background-image', 'none', 'important');
         el.setAttribute('data-fondo-tex', '1');
+      } else if (!sacaTex && el.getAttribute('data-fondo-tex')) {
+        el.style.removeProperty('background-image');
+        el.removeAttribute('data-fondo-tex');
       }
-      el.setAttribute('data-fondo-pinta', 'sec');
-      el.setAttribute('data-fondo-valor', el.style.getPropertyValue('background-color'));
+      if (el.getAttribute('data-fondo-pinta') !== 'sec') el.setAttribute('data-fondo-pinta', 'sec');
+      var guardado = el.style.getPropertyValue('background-color');
+      if (el.getAttribute('data-fondo-valor') !== guardado) el.setAttribute('data-fondo-valor', guardado);
     });
-    if (marco) {
+    if (marco && marco.getAttribute('data-fondo-pinta') !== 'marco') {
       marco.style.setProperty('background', 'transparent', 'important');
       marco.setAttribute('data-fondo-pinta', 'marco');
     }
@@ -441,8 +525,10 @@
     var usaVideo = f.tipo === 'video' && videoConviene();
     if (usaVideo) {
       var v = document.createElement('video');
-      v.src = f.url;
-      if (f.poster) v.poster = f.poster;
+      var hv = horneado(f.url), hp = f.poster ? horneado(f.poster) : '';
+      if (hv && (!f.poster || hp)) caja.classList.add('horneado');
+      v.src = hv || f.url;
+      if (f.poster) v.poster = hp || f.poster;
       v.autoplay = true; v.loop = true; v.muted = true;
       v.setAttribute('muted', '');
       v.setAttribute('playsinline', '');
@@ -573,7 +659,13 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', arrancar, { once: true });
   }
-  window.addEventListener('message', function () { setTimeout(sincronizar, 0); }, false);
+  /* ★ 5/10/2026 — los mensajes que importan son los del PANEL (la miniatura
+     vive en un iframe del admin). En la invitación publicada los únicos que
+     llegan son de YouTube y Spotify, muchos por segundo: no se escuchan. */
+  window.addEventListener('message', function (e) {
+    if (window.parent === window && !esPrevia) return;
+    setTimeout(sincronizar, 0);
+  }, false);
 
   /* el marco puede cambiar de ancho cuando se abre el sobre o gira el teléfono */
   function reAlinear() {
