@@ -6,7 +6,7 @@
   /* ★ v2 — QUIÉN congela la página. Cada tarea (reloj, observador, cuadro,
      evento) se cronometra; si tarda más de 150 ms se anota DÓNDE se programó
      (archivo:línea:columna de la pila) y el principio de la función. */
-  var lentas = {};
+  var lentas = {}, jsTotal = 0, porOrigen = {};
   function origen() {
     var st = (new Error().stack || '').split('\n').filter(function (l) { return !/diag\.js/.test(l) && /https?:/.test(l); });
     return (st[0] || '?').replace(/^.*?(https?:\/\/[^\/]+)/, '').slice(0, 120);
@@ -18,6 +18,9 @@
       try { return fn.apply(this, arguments); }
       finally {
         var d = performance.now() - a;
+        jsTotal += d;
+        var ko = tipo.split('(')[0] + ' ' + donde;
+        porOrigen[ko] = (porOrigen[ko] || 0) + d;
         if (d > 150) {
           var k = tipo + ' ' + donde + ' | ' + String(fn).slice(0, 70).replace(/\s+/g, ' ');
           var e = lentas[k] || (lentas[k] = { n: 0, ms: 0, max: 0 });
@@ -98,7 +101,7 @@
       tactil: matchMedia('(any-pointer: coarse)').matches, cache: !!window.INV_CACHE_MEDIOS,
       html_ms: Math.round(nav.responseEnd || 0), pedidos: res.length, MB: +(bytes / 1048576).toFixed(2),
       cuadros: cuadros, peorCuadro: Math.round(peor), trabas: trabas, lag: lag.slice(-30), ev: ev, errs: errs.slice(0, 20),
-      lentas: topLentas(), videos: vids, iframes: document.querySelectorAll('iframe').length, lentos: lentos, scroll: Math.round(scrollY)
+      lentas: topLentas(), jsTotal: Math.round(jsTotal), jsPorOrigen: Object.keys(porOrigen).map(function (k) { return [Math.round(porOrigen[k]), k]; }).sort(function (a, b) { return b[0] - a[0]; }).slice(0, 12).map(function (x) { return x[0] + 'ms ' + x[1]; }), videos: vids, iframes: document.querySelectorAll('iframe').length, lentos: lentos, scroll: Math.round(scrollY)
     };
   }
   function mandar(cuando) {

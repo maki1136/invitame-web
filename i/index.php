@@ -641,7 +641,14 @@ $aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=nav
   . 'if(/AppleWebKit/.test(u)&&!/Chrome\/|Android/.test(u)){'
   . 'm=u.match(/Version\/(\d+)/)||u.match(/ OS (\d+)_/);if(m)v=+m[1];}'
   . 'if(q==="1"||(q!=="0"&&v&&v<17))document.documentElement.classList.add("aparato-liviano");}catch(e){}})();</'
-  . 'script><style>html.aparato-liviano #pbg,html.aparato-liviano .sky{animation:none!important}</style>';
+  . 'script><style>html.aparato-liviano #pbg,html.aparato-liviano .sky{animation:none!important}'
+  /* ★ 5/10/2026 — medido en el motor de Safari 16.4 (Playwright 1.32, como el
+     iPad de Maki): sacar las sombras con `filter: drop-shadow()` llevó el peor
+     congelamiento de 27 s a 1,7 s. Safari 16 recalcula esos filtros con el
+     procesador en cada repintado. En aparatos viejos van sin filtro; la
+     portada conserva su blanco y negro (#pbg) y los SVG (lacre) los suyos. */
+  . 'html.aparato-liviano *:not(#pbg):not(svg):not(svg *),html.aparato-liviano *::before,html.aparato-liviano *::after'
+  . '{filter:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}</style>';
 $aInyectar = $diagJs . $aparatoLiviano . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 $aInyectar = iv_fotos_livianas($aInyectar);
