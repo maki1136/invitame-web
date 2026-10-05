@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-05T22:16:52.100Z",
+ "cuando": "2026-10-05T22:25:49.371Z",
  "total": 55,
- "verde": 44,
+ "verde": 46,
  "rojo": 9,
- "gris": 2,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
@@ -75,7 +75,7 @@
    "ver": "2026-09-14",
    "estado": "rojo",
    "dif": [
-    "sección #1: previa «rgba(229, 235, 232, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
+    "sección #1: previa «rgba(229, 235, 232, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección pv-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»",
     "sección carta: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección itinerario: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
@@ -184,10 +184,10 @@
   },
   {
    "slug": "lucia-y-sebastian",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "luciana-mis15",
@@ -247,10 +247,10 @@
   },
   {
    "slug": "mariana-y-joaquin",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "mariana-y-lucas",
