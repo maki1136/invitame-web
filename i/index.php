@@ -640,7 +640,19 @@ $lvQ = isset($_GET['liviano-aparato']) ? (string)$_GET['liviano-aparato'] : '';
 $aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=navigator.userAgent,v=0,m;'
   . 'if(/AppleWebKit/.test(u)&&!/Chrome\/|Android/.test(u)){'
   . 'm=u.match(/Version\/(\d+)/)||u.match(/ OS (\d+)_/);if(m)v=+m[1];}'
-  . 'if(q==="1"||(q!=="0"&&v&&v<17))document.documentElement.classList.add("aparato-liviano");}catch(e){}})();</'
+  . 'if(q==="1"||(q!=="0"&&v&&v<17))document.documentElement.classList.add("aparato-liviano");'
+  /* ★ 5/10/2026 — y POR VELOCIDAD, para los Android viejos (Chrome actualizado
+     en un teléfono lento). Un segundo después de cargar se cuentan los cuadros
+     durante 2 s, sólo con la pestaña a la vista. Si dibuja menos de 12 por
+     segundo en promedio, pasa a liviano (una sola trabada suelta no alcanza) y lo recuerda
+     en esta pestaña. Un aparato normal dibuja 50-60: el umbral está muy lejos.
+     No baja nada ni cambia nada si el aparato anda bien. */
+  . 'var R=document.documentElement;try{if(q!=="0"&&sessionStorage.getItem("invLiviano")==="1")R.classList.add("aparato-liviano")}catch(e){}'
+  . 'if(q===""&&!R.classList.contains("aparato-liviano"))addEventListener("load",function(){setTimeout(function(){'
+  . 'if(document.visibilityState!=="visible")return;var n=0,t0=0,u=0,peor=0;function f(t){if(!t0){t0=u=t}else{peor=Math.max(peor,t-u);u=t;n++}'
+  . 'if(t-t0<2000)requestAnimationFrame(f);else if(document.visibilityState==="visible"&&n<24){R.classList.add("aparato-liviano");'
+  . 'try{sessionStorage.setItem("invLiviano","1")}catch(e){}}}requestAnimationFrame(f)},1000)});'
+  . '}catch(e){}})();</'
   . 'script><style>html.aparato-liviano #pbg,html.aparato-liviano .sky{animation:none!important}'
   /* ★ 5/10/2026 — medido en el motor de Safari 16.4 (Playwright 1.32, como el
      iPad de Maki): sacar las sombras con `filter: drop-shadow()` llevó el peor

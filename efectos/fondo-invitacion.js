@@ -637,8 +637,18 @@
     repintes = 0;
   }
 
+  /* ★ 5/10/2026 — EN APARATOS VIEJOS, SIN FONDO DETRÁS DE LAS SECCIONES.
+     Medido en el motor de Safari 16.4: la foto/video fijo detrás de toda la
+     invitación, con las secciones transparentes encima, obliga a mezclar la
+     pantalla entera en cada cuadro; sin eso la invitación va el doble de fluida
+     (3 → 6,3 cuadros/s). Con `html.aparato-liviano` (Safari ≤16 o un aparato
+     que medimos lento, ver i/index.php) las secciones quedan con su papel de
+     siempre. En los aparatos normales esta línea no hace nada. */
+  function liviano() { return raiz.classList.contains('aparato-liviano'); }
+
   function sincronizar() {
     var f = conf();
+    if (liviano()) { if (firma !== 'liviano') { firma = 'liviano'; sacar(); } return; }
     var nueva = JSON.stringify([f.tipo, f.url, f.poster, f.fuerza, f.velo, f.paso, f.oscuras, f.donde, f.suave || null]);
     if (nueva === firma) {
       /* la colección puede llegar después, o cambiarse en el panel:
