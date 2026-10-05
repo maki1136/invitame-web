@@ -1988,8 +1988,8 @@ window.SOBRES_INVITAME = {
   // es la foto de la invitación de Perlas (camila-y-tomas), sin textos.
   marfil3dPerlas: {
     nombre:  "Marfil 3D · Perlas (la foto de la invitación detrás)",
-    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/sobres/sobre-marfil-3d-v3.mp4",
-    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-marfil-3d-v1-poster.jpg",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/sobres/sobre-marfil-3d-v4.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-marfil-3d-v4-poster.jpg",
     color:   "#f4f0e8",
     empalme: "foto"
   }
