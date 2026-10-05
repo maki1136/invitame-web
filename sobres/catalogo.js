@@ -1973,6 +1973,15 @@ window.SOBRES_INVITAME = {
     nombre: "Floral en relieve (marfil)",
     img:    "/sobres/sobre-floral.jpg",
     color:  "#d9a7ae"
+  },
+
+  /* ---- MARFIL 3D (5/10/2026): sobre RENDERIZADO EN 3D (Blender/Cycles), no capas CSS. La solapa con el lacre viene hacia el espectador, el relieve toma luz rasante real, y a los 4 s el cuerpo del sobre baja suave dejando a la vista una tarjeta crema (sin nombres). Termina en la tarjeta: empalme foto. 720x1280, 30 fps, 5,7 s, H.264 High 4.0, 620 KB. Se sirve SIN transformacion para que Cloudinary no lo recomprima (md5 igual al master). ---- */
+  marfil3d: {
+    nombre:  "Marfil 3D · la solapa viene hacia vos y el sobre baja (video)",
+    video:   "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/sobres/sobre-marfil-3d-v1.mp4",
+    poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-marfil-3d-v1-poster.jpg",
+    color:   "#f4f0e8",
+    empalme: "foto"
   }
 
 };
