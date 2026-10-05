@@ -649,9 +649,14 @@ $aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=nav
      No baja nada ni cambia nada si el aparato anda bien. */
   . 'var R=document.documentElement;try{if(q!=="0"&&sessionStorage.getItem("invLiviano")==="1")R.classList.add("aparato-liviano")}catch(e){}'
   . 'if(q===""&&!R.classList.contains("aparato-liviano"))addEventListener("load",function(){setTimeout(function(){'
-  . 'if(document.visibilityState!=="visible")return;var n=0,t0=0,u=0,peor=0;function f(t){if(!t0){t0=u=t}else{peor=Math.max(peor,t-u);u=t;n++}'
-  . 'if(t-t0<2000)requestAnimationFrame(f);else if(document.visibilityState==="visible"&&n<24){R.classList.add("aparato-liviano");'
-  . 'try{sessionStorage.setItem("invLiviano","1")}catch(e){}}}requestAnimationFrame(f)},1000)});'
+  . 'if(document.visibilityState!=="visible")return;function L(){if(document.visibilityState!=="visible"||R.classList.contains("aparato-liviano"))return;R.classList.add("aparato-liviano");try{sessionStorage.setItem("invLiviano","1")}catch(e){}}var n=0,t0=0,u=0,peor=0;function f(t){if(!t0){t0=u=t}else{peor=Math.max(peor,t-u);u=t;n++}'
+  . 'if(t-t0<2000)requestAnimationFrame(f);else if(n<24)L()}requestAnimationFrame(f);'
+  /* y la otra vara: cuánto se traba en los primeros 8 s (un reloj cada 200 ms;
+     sólo cuentan las demoras de más de 100 ms). Más de 2,5 s trabada en total
+     = aparato lento. Uno rápido suma casi cero. */
+  . 'var esp=Date.now()+200,tr=0,k=0,iv=setInterval(function(){var d=Date.now()-esp;esp=Date.now()+200;'
+  . 'if(document.visibilityState!=="visible"){clearInterval(iv);return}if(d>100)tr+=d;if(tr>2500){clearInterval(iv);L()}if(++k>40)clearInterval(iv)},200)'
+  . '},1000)});'
   . '}catch(e){}})();</'
   . 'script><style>html.aparato-liviano #pbg,html.aparato-liviano .sky{animation:none!important}'
   /* ★ 5/10/2026 — medido en el motor de Safari 16.4 (Playwright 1.32, como el
