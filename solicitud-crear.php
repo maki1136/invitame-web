@@ -90,6 +90,16 @@ if (!$ev || $solicId === '') {
   exit;
 }
 
+/* ANTI-ROBOTS (6/10/2026): campo trampa, tiempo mínimo y Turnstile si está
+   configurado. Ver /anti-robot-lib.php. */
+require_once __DIR__ . '/anti-robot-lib.php';
+$robot = iv_anti_robot($in);
+if ($robot !== '') {
+  http_response_code(403);
+  echo json_encode(array('ok' => false, 'error' => 'anti-robot', 'motivo' => $robot));
+  exit;
+}
+
 /* ---------------------------------------------------------------------------
    LO QUE EL CLIENTE NO PUEDE MANDAR, PASE LO QUE PASE.
    Se borra de lo que llegó y lo pone el servidor más abajo.

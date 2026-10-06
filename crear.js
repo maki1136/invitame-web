@@ -374,6 +374,27 @@
   /* lo que este archivo le presta a /crear-diseno.js (la solapa de diseños) */
   window.CREAR = { leerFormulario: leerFormulario };
 
+  /* ===== ANTI-ROBOTS (6/10/2026) — ver /anti-robot-lib.php =====
+     El casillero trampa y el tiempo andan siempre. Turnstile se carga sólo si
+     el servidor tiene sus claves. */
+  const AR = { t0: Date.now(), token: '', activo: false };
+  fetch('/anti-robot.php', { cache: 'no-store' }).then(r => r.json()).then(j => {
+    if (!j || !j.sitekey) return;
+    AR.activo = true;
+    window.__ivTurnstile = function () {
+      try {
+        window.turnstile.render('#robot', { sitekey: j.sitekey, language: 'es',
+          callback: function (tk) { AR.token = tk; },
+          'expired-callback': function () { AR.token = ''; },
+          'error-callback': function () { AR.token = ''; } });
+      } catch (e) { AR.activo = false; }
+    };
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__ivTurnstile';
+    s.async = true; s.onerror = function () { AR.activo = false; };
+    document.head.appendChild(s);
+  }).catch(() => {});
+
   window.enviar=async function(){
     $('err').style.display='none';
     const n1=$('n1').value.trim(), fecha=$('fecha').value, cnom=$('cnom').value.trim(), cwsp=$('cwsp').value.trim(), cmail=$('cmail').value.trim();
@@ -381,6 +402,15 @@
     if(!fecha){ return showErr('Pon la fecha del evento.'); }
     if(!cnom||!cwsp||!cmail){ return showErr('Déjanos tu nombre, WhatsApp y correo para poder avisarte.'); }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cmail)){ return showErr('Revisa el correo, parece que tiene un error.'); }
+    if(AR.activo && !AR.token){ return showErr('Un segundo: estamos comprobando que no seas un robot. Vuelve a tocar «Enviar» en unos segundos.'); }
+    const trampa = (($('sitio_web')||{}).value||'').trim();
+    const segundos = (Date.now()-AR.t0)/1000;
+    if(trampa || segundos < 4){
+      /* Un programa: se le muestra el «¡Gracias!» y no se guarda nada, así no
+         se entera de que lo frenamos ni le llena la cola a Jazmín. */
+      $('wrap').style.display='none'; document.querySelector('.top .sub').textContent='¡Gracias!';
+      $('done').style.display='block'; window.scrollTo(0,0); return;
+    }
     const data = leerFormulario();
     $('loading').style.display='flex'; $('send').disabled=true;
     try{
@@ -408,7 +438,7 @@
           if(window.CREAR_DISENO) window.CREAR_DISENO.vestirLoQueSeManda(evento, data);
           const r = await fetch('/solicitud-crear.php', {
             method:'POST', headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({ evento, solicId: ref.id, marca: (new URLSearchParams(location.search).get('marca')||'invitame') })
+            body: JSON.stringify({ evento, solicId: ref.id, antiRobot: { trampa: trampa, segundos: segundos, turnstile: AR.token }, marca: (new URLSearchParams(location.search).get('marca')||'invitame') })
           });
           const j = await r.json().catch(()=>({}));
           if(!j.ok) console.warn('no se pudo crear la invitacion sola:', j.error||r.status);
