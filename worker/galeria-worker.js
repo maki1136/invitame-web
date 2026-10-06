@@ -368,6 +368,24 @@ function respuesta(cuerpo, status, extra) {
   return new Response(null, { status, headers: h });
 }
 
+/* ---------------- tope POR CONEXIÓN (6/10/2026) ----------------
+   El tope por invitado se arma con el NOMBRE que escribe la persona: un
+   programa que cambia de nombre en cada envío lo esquivaba y podía llenar el
+   tope del mes de toda la cuenta. Éste cuenta por la conexión (la IP, guardada
+   como hash, nunca en claro), por fiesta y por día.
+   ⚠️ Es GENEROSO a propósito: en un salón, todos los invitados conectados al
+   mismo Wi-Fi salen con la misma IP. Por eso 400 fotos y 150 firmas por día y
+   por fiesta, y se puede subir por fiesta con ev.limites.porConexion. */
+async function frenoConexion(req, env, ctx, gid, clase, tope) {
+  const ip = req.headers.get('CF-Connecting-IP') || '';
+  if (!ip) return null;
+  const k = 'c' + clase + ':' + (await hash(gid + '|' + ip + '|' + new Date().toISOString().slice(0, 10)));
+  const n = parseInt(await env.LIMITES.get(k) || '0', 10);
+  if (n >= tope) return respuesta({ error: 'Desde esta conexión ya se subió muchísimo hoy. Si es un error, escríbenos 💛' }, 429);
+  ctx.waitUntil(env.LIMITES.put(k, String(n + 1), { expirationTtl: 60 * 60 * 26 }));
+  return null;
+}
+
 /* ---------------- /subir ---------------- */
 async function subir(req, env, ctx) {
   const fd = await req.formData();
@@ -404,6 +422,8 @@ async function subir(req, env, ctx) {
   const nT = parseInt(await env.LIMITES.get(kT) || '0', 10);
   if (nR >= rafaga) return respuesta({ error: 'Ya subiste muchas seguidas, espera un momento 😉' }, 429);
   if (nT >= total) return respuesta({ error: 'Llegaste al máximo de fotos de este evento 💛' }, 429);
+  const frenoF = await frenoConexion(req, env, ctx, gid, 'f', (ev.limites && ev.limites.porConexion) || 400);
+  if (frenoF) return frenoF;
   ctx.waitUntil(env.LIMITES.put(kR, String(nR + 1), { expirationTtl: 300 }));
   ctx.waitUntil(env.LIMITES.put(kT, String(nT + 1), { expirationTtl: 60 * 60 * 24 * 3 }));
 
@@ -866,6 +886,8 @@ async function firmar(req, env, ctx) {
       ? 'Ya dejaste todos tus saludos de voz 💛'
       : 'Ya dejaste todos tus mensajes 💛' }, 429);
   }
+  const frenoM = await frenoConexion(req, env, ctx, gid, 'm', (ev.limites && ev.limites.firmasPorConexion) || 150);
+  if (frenoM) return frenoM;
   ctx.waitUntil(env.LIMITES.put(kT, String(n + 1), { expirationTtl: 60 * 60 * 24 * 3 }));
 
   /* El tope duro de la cuenta vale igual: un audio pesa como una foto. */
