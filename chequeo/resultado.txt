@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
-Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 05/10/2026, 23:06
+Invitación: https://invitameok.net/i/?e=camila-y-tomas
+Fecha: 06/10/2026, 13:40
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 1 PROBLEMAS (y 116 cosas bien)
+TODO BIEN — 92 chequeos pasaron
 ══════════════════════════════════════════
 
 
@@ -43,50 +43,22 @@ HAY 1 PROBLEMAS (y 116 cosas bien)
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 14.4 s)
-   BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 14140 y volvió a 13231
-   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 172.1 s de punta a punta)
-
-
-──────────────────────────────────────────
-  Safari iPhone
-──────────────────────────────────────────
-   BIEN   no asoma otro sobre al abrir
-   BIEN   la portada no es la de otra invitación
-   BIEN   sin voseo desde el primer pintado
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
-   BIEN   está en español de México, sin voseo
-   BIEN   no se ve nada de la boda de ejemplo
-   BIEN   los botones flotantes no se pisan
-   ----   1 pantallas no se pudieron recorrer: ahi no se midio el contraste
-   BIEN   todos los textos se leen
-   BIEN   el boleto del pase se ve entero
-   BIEN   al tocar el boleto, el pedazo se corta y baja
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
-   BIEN   la invitación no pide un archivo por cada cosa
-   BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
-   BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
-   (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.6 s)
+   (volvió a su lugar en 1.7 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
-   (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 165.6 s de punta a punta)
+   (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
+   (tardó 158.0 s de punta a punta)
 
+
+  ESA INVITACIÓN NO EXISTE
+  Pedimos:  https://invitameok.net/i/?e=camila-y-tomas
+  Vino:     la boda de ejemplo (sin título)
+
+  No se probó nada. Si se probaba, todo iba a dar MAL por el
+  ejemplo, no por la invitación.
+
+  Probá con una que exista, por ejemplo:
+      ./probar.command camila-y-tomas
 
 ──────────────────────────────────────────
   Safari iPad
@@ -122,11 +94,11 @@ HAY 1 PROBLEMAS (y 116 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.8 s)
+   (volvió a su lugar en 5.8 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 146.0 s de punta a punta)
+   (tardó 159.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -140,7 +112,7 @@ HAY 1 PROBLEMAS (y 116 cosas bien)
    BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   la columna ya está encuadrada en el primer pintado
-   ----   el sobre no se pudo medir todavía (no es un fallo)
+   BIEN   el sobre está encuadrado, no a pantalla completa
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -169,5 +141,5 @@ HAY 1 PROBLEMAS (y 116 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 131.9 s de punta a punta)
+   (tardó 156.5 s de punta a punta)
 
