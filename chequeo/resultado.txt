@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 05/10/2026, 15:55
+Fecha: 05/10/2026, 22:04
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-TODO BIEN — 105 chequeos pasaron
+TODO BIEN — 115 chequeos pasaron
 ══════════════════════════════════════════
 
 
@@ -43,11 +43,11 @@ TODO BIEN — 105 chequeos pasaron
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.1 s)
+   (volvió a su lugar en 2.9 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 148.5 s de punta a punta)
+   (tardó 146.6 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -56,6 +56,10 @@ TODO BIEN — 105 chequeos pasaron
    BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   sin voseo desde el primer pintado
+   BIEN   la raspadita pone una tapa por número
+   BIEN   las tapas caen justo encima de los números
+   BIEN   se puede raspar y se revela la fecha
+   BIEN   una vez raspada, queda raspada
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
@@ -67,10 +71,20 @@ TODO BIEN — 105 chequeos pasaron
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
+   BIEN   el reproductor de Spotify está adentro de la solapa
+   BIEN   la solapa de la música viene ABIERTA
+   BIEN   al tocarla se cierra de verdad
+   BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
+   BIEN   al salir, la invitación anota dónde estaba
+   BIEN   en la galería hay botón para volver a la invitación
+   (volvió a su lugar en 1.6 s)
+   BIEN   al volver NO se repite el sobre
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 53.5 s de punta a punta)
+   (tardó 145.9 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -80,7 +94,7 @@ TODO BIEN — 105 chequeos pasaron
    BIEN   en tablet la invitación ocupa la pantalla
    BIEN   en tablet no se arma la capa borrosa que traba el scroll
    BIEN   la portada no es la de otra invitación
-   BIEN   el sobre está encuadrado, no a pantalla completa
+   ----   el sobre no se pudo medir todavía (no es un fallo)
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -107,11 +121,11 @@ TODO BIEN — 105 chequeos pasaron
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.6 s)
+   (volvió a su lugar en 2.8 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 116.0 s de punta a punta)
+   (tardó 139.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -125,7 +139,7 @@ TODO BIEN — 105 chequeos pasaron
    BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   la columna ya está encuadrada en el primer pintado
-   BIEN   el sobre está encuadrado, no a pantalla completa
+   ----   el sobre no se pudo medir todavía (no es un fallo)
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -154,5 +168,5 @@ TODO BIEN — 105 chequeos pasaron
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 133.6 s de punta a punta)
+   (tardó 132.4 s de punta a punta)
 
