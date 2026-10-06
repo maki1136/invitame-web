@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
-Fecha: 05/10/2026, 22:04
+Fecha: 05/10/2026, 23:06
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-TODO BIEN — 115 chequeos pasaron
+HAY 1 PROBLEMAS (y 116 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -17,7 +17,7 @@ TODO BIEN — 115 chequeos pasaron
    BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   la columna ya está encuadrada en el primer pintado
-   ----   el sobre no se pudo medir todavía (no es un fallo)
+   BIEN   el sobre está encuadrado, no a pantalla completa
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -43,11 +43,12 @@ TODO BIEN — 115 chequeos pasaron
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.9 s)
+   (volvió a su lugar en 14.4 s)
    BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 14140 y volvió a 13231
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 146.6 s de punta a punta)
+   (tardó 172.1 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -80,11 +81,11 @@ TODO BIEN — 115 chequeos pasaron
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.6 s)
+   (volvió a su lugar en 2.6 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 145.9 s de punta a punta)
+   (tardó 165.6 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -94,7 +95,7 @@ TODO BIEN — 115 chequeos pasaron
    BIEN   en tablet la invitación ocupa la pantalla
    BIEN   en tablet no se arma la capa borrosa que traba el scroll
    BIEN   la portada no es la de otra invitación
-   ----   el sobre no se pudo medir todavía (no es un fallo)
+   BIEN   el sobre está encuadrado, no a pantalla completa
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -121,11 +122,11 @@ TODO BIEN — 115 chequeos pasaron
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.8 s)
+   (volvió a su lugar en 1.8 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 139.4 s de punta a punta)
+   (tardó 146.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -168,5 +169,5 @@ TODO BIEN — 115 chequeos pasaron
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 132.4 s de punta a punta)
+   (tardó 131.9 s de punta a punta)
 
