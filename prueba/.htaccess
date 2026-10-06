@@ -1,3 +1,12 @@
+# ⭐ DISTRIBUIDOR (6/10/2026): esta carpeta tiene sus propias reglas, así que
+#    no hereda las de la raíz. Repite el reenvío a invitameok.net (ver /.htaccess).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^invitame\.littlemomentsok\.com$ [NC]
+  RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+  RewriteRule ^ https://invitameok.net%{REQUEST_URI} [R=301,L]
+</IfModule>
+
 # La portada la sirve index.php (arma la vista previa por evento para WhatsApp)
 DirectoryIndex index.php index.html
 
