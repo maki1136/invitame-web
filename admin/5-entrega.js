@@ -29,7 +29,7 @@
    ============================================================================ */
 (function () {
 
-  var BASE = 'https://invitame.littlemomentsok.com';
+  var BASE = 'https://invitameok.net';
 
   /* ⚠️⚠️ `D` ES UN `let` DE 1-campos.js: NO EXISTE COLGADO DE `window`.
      La primera versión de esta caja lo pedía por ahí, recibía undefined siempre,

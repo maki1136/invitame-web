@@ -296,7 +296,7 @@
       '<div class="grp"><label>Usuario asignado</label><select onchange="setB(\'c_usuario-asignado\',this.value)">'+_usuarios.map(function(u){return '<option'+((D['c_usuario-asignado']===u)?' selected':'')+'>'+u+'</option>';}).join('')+'</select></div></div>'+
       '<div class="two"><div class="grp"><label>Protagonista 1 (nombre)</label><input type="text" value="'+String(D.n1||'').replace(/"/g,'&quot;')+'" oninput="setB(\'n1\',this.value)" placeholder="María"></div>'+
       '<div class="grp"><label>Protagonista 2 (nombre)</label><input type="text" value="'+String(D.n2||'').replace(/"/g,'&quot;')+'" oninput="setB(\'n2\',this.value)" placeholder="Diego"></div></div>'+
-      '<div class="grp"><label>Dirección del evento (la clave del link) — minúsculas, sin espacios</label><input type="text" value="'+D.slug+'" oninput="D.slug=this.value.toLowerCase().replace(/[^a-z0-9-]+/g,\'-\')" placeholder="maria-y-diego"><div class="hint">Link: invitame.littlemomentsok.com/i/?e='+D.slug+'&g=TOKEN</div></div>'+
+      '<div class="grp"><label>Dirección del evento (la clave del link) — minúsculas, sin espacios</label><input type="text" value="'+D.slug+'" oninput="D.slug=this.value.toLowerCase().replace(/[^a-z0-9-]+/g,\'-\')" placeholder="maria-y-diego"><div class="hint">Link: invitameok.net/i/?e='+D.slug+'&g=TOKEN</div></div>'+
       (D.ver && D.ver!==VERSION
         ? '<div class="grp" style="background:#fff6e5;border:1px solid #f0d9a8;border-radius:10px;padding:12px">'
           +'<label style="color:#8a6d3b">Esta invitación usa el diseño del '+D.ver+'</label>'

@@ -24,7 +24,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 }
 
 $PROJECT = 'invitame-9b51f';
-$SITE    = 'https://invitame.littlemomentsok.com';
+$SITE    = 'https://invitameok.net';
 
 // ---------- entrada ----------
 $raw = file_get_contents('php://input');

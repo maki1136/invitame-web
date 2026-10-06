@@ -559,7 +559,7 @@ async function crear(req, env) {
 
   return respuesta({
     ok: true, gid,
-    url: 'https://invitame.littlemomentsok.com/galeria/?g=' + gid,
+    url: 'https://invitameok.net/galeria/?g=' + gid,
     saldo: cobro ? cobro.saldo : null
   }, 200);
 }
@@ -1225,7 +1225,7 @@ async function uso(env) {
 function qr(url) {
   const g = url.searchParams.get('g') || '';
   if (!/^[A-Za-z0-9_-]{16,64}$/.test(g)) return respuesta({ error: 'no' }, 400);
-  const destino = 'https://invitame.littlemomentsok.com/galeria/?g=' + g;
+  const destino = 'https://invitameok.net/galeria/?g=' + g;
   return Response.redirect(
     'https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=2&data=' + encodeURIComponent(destino), 302);
 }

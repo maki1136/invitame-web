@@ -547,7 +547,7 @@
       '<a class="lnk" href="'+url+'" target="_blank" style="text-decoration:none;color:#6D1233">'+ICO.ojo+' ver</a>'+
       '<span class="x" onclick="delGuest('+i+')">'+ICO.equis+'</span></div>';}).join('')||'<div class="hint">Todavía no cargaste invitados. (Los links quedan activos después de \'Guardar y publicar\'.)</div>';}
   // ==== GUARDAR/PUBLICAR EN FIREBASE (de verdad) ====
-  const BASEURL="https://invitame.littlemomentsok.com/i/";
+  const BASEURL="https://invitameok.net/i/";
   // ¿Quedó algo del ejemplo sin cambiar? El panel arranca con la demo cargada,
   // así que lo que no se toca se publica tal cual. Esto avisa ANTES de publicar.
   function restosDemo(){

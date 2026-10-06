@@ -22,12 +22,12 @@ const medir=()=>{const d=document;const n=d.getElementById('pv-names');const c=n
 (async()=>{const b=await chromium.launch();const out={};
 async function uno(s){let p,q;try{
  p=await b.newPage({viewport:{width:1440,height:900}});if(inj)await inj(p);
- await p.goto(''+(process.env.INV_BASE||'https://invitame.littlemomentsok.com')+'/admin.html?e='+s+'&cb='+Date.now(),{waitUntil:'load',timeout:90000});
+ await p.goto(''+(process.env.INV_BASE||'https://invitameok.net')+'/admin.html?e='+s+'&cb='+Date.now(),{waitUntil:'load',timeout:90000});
  await p.waitForFunction(s=>{try{const f=document.getElementById('pv-frame');return D.slug===s&&f&&f.contentWindow.INVEV&&f.contentWindow.INVEV.slug===s}catch(e){return false}},s,{timeout:90000,polling:500});
  await p.waitForTimeout(12000);
  const pre=await p.frame({url:/preview=1/}).evaluate(medir);const ver=await p.evaluate(()=>D.ver||'(sin)');
  q=await b.newPage({viewport:{width:390,height:844}});if(inj)await inj(q);
- await q.goto(''+(process.env.INV_BASE||'https://invitame.littlemomentsok.com')+'/i/?e='+s+'&cb='+Date.now(),{waitUntil:'load',timeout:90000});
+ await q.goto(''+(process.env.INV_BASE||'https://invitameok.net')+'/i/?e='+s+'&cb='+Date.now(),{waitUntil:'load',timeout:90000});
  await q.waitForFunction(()=>window.INVEV&&document.querySelector('.frame'),null,{timeout:90000});await q.waitForTimeout(12000);
  const pub=await q.evaluate(medir);
  let pre2=pre;

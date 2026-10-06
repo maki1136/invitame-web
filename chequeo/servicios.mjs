@@ -29,7 +29,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const SITIO = 'https://invitame.littlemomentsok.com';
+const SITIO = 'https://invitameok.net';
 const WORKER = 'https://galeria.littlemomentsok.workers.dev';
 const FS = 'https://firestore.googleapis.com/v1/projects/invitame-9b51f/databases/(default)/documents';
 const GID_CHEQUEO = 'gJTnVrquHdvDXAndh9Yt9kB9';

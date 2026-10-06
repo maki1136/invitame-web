@@ -243,7 +243,7 @@
       .then(function (r) { lc.querySelector('i').className = 'sem ' + (r.ok ? 'v' : 'r'); lc.lastChild.textContent = r.ok ? 'atiende' : 'NO atiende (las fotos salen directo)'; })
       .catch(function () { lc.querySelector('i').className = 'sem r'; lc.lastChild.textContent = 'no contesta'; });
     var li2 = fila('Invitaciones', 'g', 'midiendo…');
-    fetch('https://invitame.littlemomentsok.com/efectos/todo.php?t=' + Date.now(), { method: 'HEAD', mode: 'no-cors', cache: 'no-store' })
+    fetch('https://invitameok.net/efectos/todo.php?t=' + Date.now(), { method: 'HEAD', mode: 'no-cors', cache: 'no-store' })
       .then(function () { li2.querySelector('i').className = 'sem v'; li2.lastChild.textContent = 'el servidor responde'; })
       .catch(function () { li2.querySelector('i').className = 'sem r'; li2.lastChild.textContent = 'el servidor NO responde'; });
     c.appendChild(bs);
@@ -298,8 +298,8 @@
     fs.forEach(function (e) {
       var tr = el('tr'); tr.appendChild(el('td', null, e.nombre));
       tr.appendChild(el('td', null, e.muestra ? 'muestra' : 'cliente'));
-      var td = el('td'); var a = el('a', null, 'abrir'); a.href = 'https://invitame.littlemomentsok.com/i/?e=' + encodeURIComponent(e.id); a.target = '_blank'; td.appendChild(a); tr.appendChild(td);
-      var td2 = el('td'); var a2 = el('a', null, 'panel'); a2.href = 'https://invitame.littlemomentsok.com/admin.html?e=' + encodeURIComponent(e.id); a2.target = '_blank'; td2.appendChild(a2); tr.appendChild(td2);
+      var td = el('td'); var a = el('a', null, 'abrir'); a.href = 'https://invitameok.net/i/?e=' + encodeURIComponent(e.id); a.target = '_blank'; td.appendChild(a); tr.appendChild(td);
+      var td2 = el('td'); var a2 = el('a', null, 'panel'); a2.href = 'https://invitameok.net/admin.html?e=' + encodeURIComponent(e.id); a2.target = '_blank'; td2.appendChild(a2); tr.appendChild(td2);
       tb.appendChild(tr);
     });
     det.appendChild(t);

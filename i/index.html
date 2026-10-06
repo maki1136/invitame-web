@@ -10,9 +10,9 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="María & Diego — Nuestra Boda">
 <meta property="og:description" content="¡Te invitamos! Tocá para abrir la invitación.">
-<meta property="og:image" content="https://invitame.littlemomentsok.com/i/novios-poster.jpg">
+<meta property="og:image" content="https://invitameok.net/i/novios-poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://invitame.littlemomentsok.com/i/novios-poster.jpg">
+<meta name="twitter:image" content="https://invitameok.net/i/novios-poster.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Rouge+Script&family=Dancing+Script:wght@400;600&family=Parisienne&family=Tangerine:wght@400;700&family=Sacramento&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;600;700&family=Forum&family=Marcellus&family=EB+Garamond:ital@0;1&family=Lora:ital@0;1&family=Cinzel:wght@400;600&family=Prata&family=Montserrat:wght@300;400;500&family=Poppins:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -794,7 +794,7 @@
 <script>
   const el=i=>document.getElementById(i);
   /* ADMIN: cada función es un interruptor on/off + su dato */
-  const CONFIG={ compartir:true, musica:true, contadorRSVP:true, mapaEmbebido:true, musicaUrl:'', mostrarFecha:false, mostrarCountdown:true, sobreVideo:'https://invitame.littlemomentsok.com/i/sobre-marfil-kf.mp4', sobrePoster:'https://invitame.littlemomentsok.com/i/sobre-marfil-poster.jpg', selloEnVideo:true, sobreBurst:2.2, sobreW:720, sobreH:1280, sobreScale:1.04, selloFx:0.497, selloFy:0.501, sobreTriangulos:true, triImgW:768, triImgH:1376, triSelloFx:0.496, triSelloFy:0.503, triSelloPx:360 };
+  const CONFIG={ compartir:true, musica:true, contadorRSVP:true, mapaEmbebido:true, musicaUrl:'', mostrarFecha:false, mostrarCountdown:true, sobreVideo:'https://invitameok.net/i/sobre-marfil-kf.mp4', sobrePoster:'https://invitameok.net/i/sobre-marfil-poster.jpg', selloEnVideo:true, sobreBurst:2.2, sobreW:720, sobreH:1280, sobreScale:1.04, selloFx:0.497, selloFy:0.501, sobreTriangulos:true, triImgW:768, triImgH:1376, triSelloFx:0.496, triSelloFy:0.503, triSelloPx:360 };
 
   /* ===== MOTOR DE EFECTOS — todo personalizable (on/off, color, texto, tipografía) =====
      El admin escribe ev.fx en Firebase; acá se fusiona sobre estos valores por defecto. */
@@ -1161,7 +1161,7 @@
   aplicarFX();
 
   function pintarQR(txt){ el('qr').innerHTML=''; if(window.QRCode) new QRCode(el('qr'),{text:txt,width:92,height:92,colorDark:'#2e433c',colorLight:'#ffffff'}); }
-  pintarQR('https://invitame.littlemomentsok.com/i/?e=maria-y-diego&g=demo');
+  pintarQR('https://invitameok.net/i/?e=maria-y-diego&g=demo');
 
   let F=new Date('2026-11-28T12:00:00');
   function tick(){const x=F-new Date();if(x<=0)return;

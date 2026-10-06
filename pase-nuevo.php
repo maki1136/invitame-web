@@ -204,5 +204,5 @@ pedir($FS . 'inv_paneles/' . rawurlencode($idPanel) . '?updateMask.fieldPaths=to
 echo json_encode(array(
   'ok'    => true,
   'token' => $token,
-  'link'  => 'https://invitame.littlemomentsok.com/i/?e=' . rawurlencode($slug) . '&g=' . $token,
+  'link'  => 'https://invitameok.net/i/?e=' . rawurlencode($slug) . '&g=' . $token,
 ));
