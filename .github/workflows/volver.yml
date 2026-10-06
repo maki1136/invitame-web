@@ -1,6 +1,6 @@
 # ============================================================================
 #  VOLVER A UNA VERSIÓN — si algo salió mal en el sitio de verdad
-#  Pone `produccion` exactamente como estaba en una etiqueta `vivo-…`.
+#  Pone el sitio de verdad (`main`) exactamente como estaba en una etiqueta `vivo-…`.
 #  Sin etiqueta: vuelve a la última guardada (la de antes de la última publicación).
 #  Este botón SÍ anda en fin de semana: volver atrás siempre es más seguro.
 # ============================================================================
@@ -39,8 +39,8 @@ jobs:
           git config user.name  "invitame-publicar"
           git config user.email "invitame-publicar@users.noreply.github.com"
           ahora="vivo-$(TZ=America/Argentina/Buenos_Aires date +%Y%m%d-%H%M)-antes-de-volver"
-          git tag -a "$ahora" origin/produccion -m "Lo que estaba en vivo antes de volver a $ET"
+          git tag -a "$ahora" origin/main -m "Lo que estaba en vivo antes de volver a $ET"
           git push origin "$ahora"
-          git push --force origin "refs/tags/$ET^{commit}:refs/heads/produccion"
+          git push --force origin "refs/tags/$ET^{commit}:refs/heads/main"
           echo "### Vuelto a **$ET**" >> $GITHUB_STEP_SUMMARY
           echo "Lo que estaba quedó guardado como $ahora" >> $GITHUB_STEP_SUMMARY

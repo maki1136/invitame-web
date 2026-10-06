@@ -2,9 +2,10 @@
 #  PUBLICAR — pasa lo probado en el sitio de prueba al sitio de verdad
 #  (6/10/2026, reglas 1 a 5 de «Agregar cosas después de vender»)
 #
-#  · `main`        → el SITIO DE PRUEBA (se publica solo, como siempre).
-#  · `produccion`  → el SITIO DE VERDAD, el que ven los clientes. Nadie hace
-#                    push ahí a mano: sólo este botón.
+#  · `prueba` → el SITIO DE PRUEBA (Hostinger lo publica solo).
+#  · `main`   → el SITIO DE VERDAD, el que ven los clientes (Hostinger lo
+#               publica solo). Una vez que exista el sitio de prueba, nadie
+#               hace push a `main` a mano: sólo este botón.
 #
 #  Qué hace este botón:
 #   1. Se NIEGA de viernes 20:00 a domingo 23:59 (hora de Argentina): son los
@@ -12,7 +13,8 @@
 #   2. Corre el chequeo de sintaxis de los .js y .php que cambiaron.
 #   3. Guarda la versión que está en vivo con una etiqueta `vivo-AAAAMMDD-HHMM`
 #      (la «versión buena» a la que se puede volver).
-#   4. Lleva `produccion` a lo que hay en `main`.
+#   4. Junta `prueba` en `main` (si chocan, gana lo de `prueba`) y deja las
+#      dos ramas iguales.
 #  Para volver atrás: el botón «Volver a una versión» (volver.yml).
 # ============================================================================
 name: Publicar al sitio de verdad
@@ -60,8 +62,8 @@ jobs:
 
       - name: Chequeo de sintaxis de lo que cambia
         run: |
-          git fetch origin produccion
-          cambios=$(git diff --name-only origin/produccion origin/main || true)
+          git fetch origin main prueba
+          cambios=$(git diff --name-only origin/main origin/prueba || true)
           echo "$cambios" | sed 's/^/  · /'
           mal=0
           for f in $cambios; do
@@ -80,9 +82,12 @@ jobs:
           git config user.name  "invitame-publicar"
           git config user.email "invitame-publicar@users.noreply.github.com"
           etiqueta="vivo-$(TZ=America/Argentina/Buenos_Aires date +%Y%m%d-%H%M)"
-          git tag -a "$etiqueta" origin/produccion -m "Lo que estaba en vivo antes de: $MOTIVO"
+          git tag -a "$etiqueta" origin/main -m "Lo que estaba en vivo antes de: $MOTIVO"
           git push origin "$etiqueta"
-          git push origin origin/main:refs/heads/produccion
+          git checkout -B main origin/main
+          git merge --no-edit -X theirs origin/prueba -m "Publicar: $MOTIVO"
+          git push origin main
+          git push origin main:prueba
           echo "### Publicado" >> $GITHUB_STEP_SUMMARY
           echo "- Motivo: $MOTIVO" >> $GITHUB_STEP_SUMMARY
           echo "- Versión anterior guardada como **$etiqueta** (para volver: «Volver a una versión»)" >> $GITHUB_STEP_SUMMARY

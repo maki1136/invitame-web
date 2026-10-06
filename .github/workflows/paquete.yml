@@ -21,7 +21,7 @@ name: Paquete liviano
 
 on:
   push:
-    branches: [main]
+    branches: [main, prueba]
     paths:
       - 'efectos/**'
       - 'colecciones/**'
