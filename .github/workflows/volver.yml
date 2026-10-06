@@ -1,0 +1,46 @@
+# ============================================================================
+#  VOLVER A UNA VERSIÓN — si algo salió mal en el sitio de verdad
+#  Pone `produccion` exactamente como estaba en una etiqueta `vivo-…`.
+#  Sin etiqueta: vuelve a la última guardada (la de antes de la última publicación).
+#  Este botón SÍ anda en fin de semana: volver atrás siempre es más seguro.
+# ============================================================================
+name: Volver a una versión
+
+on:
+  workflow_dispatch:
+    inputs:
+      etiqueta:
+        description: "Etiqueta vivo-AAAAMMDD-HHMM (vacío = la última)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
+jobs:
+  volver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Volver
+        env:
+          ET: ${{ github.event.inputs.etiqueta }}
+        run: |
+          git fetch --tags origin
+          if [ -z "$ET" ]; then ET=$(git tag -l 'vivo-*' | sort | tail -1); fi
+          if [ -z "$ET" ] || ! git rev-parse -q --verify "refs/tags/$ET" >/dev/null; then
+            echo "::error::No encuentro la etiqueta «$ET»"; exit 1; fi
+          git config user.name  "invitame-publicar"
+          git config user.email "invitame-publicar@users.noreply.github.com"
+          ahora="vivo-$(TZ=America/Argentina/Buenos_Aires date +%Y%m%d-%H%M)-antes-de-volver"
+          git tag -a "$ahora" origin/produccion -m "Lo que estaba en vivo antes de volver a $ET"
+          git push origin "$ahora"
+          git push --force origin "refs/tags/$ET^{commit}:refs/heads/produccion"
+          echo "### Vuelto a **$ET**" >> $GITHUB_STEP_SUMMARY
+          echo "Lo que estaba quedó guardado como $ahora" >> $GITHUB_STEP_SUMMARY

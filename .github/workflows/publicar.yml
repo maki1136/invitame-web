@@ -1,0 +1,88 @@
+# ============================================================================
+#  PUBLICAR — pasa lo probado en el sitio de prueba al sitio de verdad
+#  (6/10/2026, reglas 1 a 5 de «Agregar cosas después de vender»)
+#
+#  · `main`        → el SITIO DE PRUEBA (se publica solo, como siempre).
+#  · `produccion`  → el SITIO DE VERDAD, el que ven los clientes. Nadie hace
+#                    push ahí a mano: sólo este botón.
+#
+#  Qué hace este botón:
+#   1. Se NIEGA de viernes 20:00 a domingo 23:59 (hora de Argentina): son los
+#      días de fiesta. Para una urgencia real: `urgencia: si` y queda anotado.
+#   2. Corre el chequeo de sintaxis de los .js y .php que cambiaron.
+#   3. Guarda la versión que está en vivo con una etiqueta `vivo-AAAAMMDD-HHMM`
+#      (la «versión buena» a la que se puede volver).
+#   4. Lleva `produccion` a lo que hay en `main`.
+#  Para volver atrás: el botón «Volver a una versión» (volver.yml).
+# ============================================================================
+name: Publicar al sitio de verdad
+
+on:
+  workflow_dispatch:
+    inputs:
+      motivo:
+        description: "Qué se publica (una línea)"
+        required: true
+      urgencia:
+        description: "¿Es una urgencia de fin de semana? (si / no)"
+        required: false
+        default: "no"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ventana de fin de semana
+        env:
+          URG: ${{ github.event.inputs.urgencia }}
+        run: |
+          dia=$(TZ=America/Argentina/Buenos_Aires date +%u)   # 1=lun … 5=vie 6=sab 7=dom
+          hora=$(TZ=America/Argentina/Buenos_Aires date +%H)
+          bloqueado=no
+          if [ "$dia" = "5" ] && [ "$hora" -ge 20 ]; then bloqueado=si; fi
+          if [ "$dia" = "6" ] || [ "$dia" = "7" ]; then bloqueado=si; fi
+          if [ "$bloqueado" = "si" ] && [ "$URG" != "si" ]; then
+            echo "::error::Fin de semana de fiestas: no se publica de viernes 20:00 a domingo. Si es una urgencia, volvé a correrlo con urgencia = si."
+            exit 1
+          fi
+          echo "dia=$dia hora=$hora bloqueado=$bloqueado urgencia=$URG"
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Chequeo de sintaxis de lo que cambia
+        run: |
+          git fetch origin produccion
+          cambios=$(git diff --name-only origin/produccion origin/main || true)
+          echo "$cambios" | sed 's/^/  · /'
+          mal=0
+          for f in $cambios; do
+            [ -f "$f" ] || continue
+            case "$f" in
+              *.php) php -l "$f" >/dev/null || { echo "::error file=$f::PHP con error"; mal=1; } ;;
+              *.js)  case "$f" in worker/*|*.mjs) ;; *) node --input-type=commonjs --check < "$f" 2>/dev/null || node --input-type=module --check < "$f" || { echo "::error file=$f::JS con error"; mal=1; } ;; esac ;;
+            esac
+          done
+          exit $mal
+
+      - name: Etiqueta de la versión que está en vivo y publicación
+        env:
+          MOTIVO: ${{ github.event.inputs.motivo }}
+        run: |
+          git config user.name  "invitame-publicar"
+          git config user.email "invitame-publicar@users.noreply.github.com"
+          etiqueta="vivo-$(TZ=America/Argentina/Buenos_Aires date +%Y%m%d-%H%M)"
+          git tag -a "$etiqueta" origin/produccion -m "Lo que estaba en vivo antes de: $MOTIVO"
+          git push origin "$etiqueta"
+          git push origin origin/main:refs/heads/produccion
+          echo "### Publicado" >> $GITHUB_STEP_SUMMARY
+          echo "- Motivo: $MOTIVO" >> $GITHUB_STEP_SUMMARY
+          echo "- Versión anterior guardada como **$etiqueta** (para volver: «Volver a una versión»)" >> $GITHUB_STEP_SUMMARY
