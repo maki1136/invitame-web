@@ -1,15 +1,17 @@
 {
- "cuando": "2026-10-06T20:38:10.875Z",
+ "cuando": "2026-10-06T20:50:57.244Z",
  "total": 55,
- "verde": 45,
- "rojo": 10,
+ "verde": 43,
+ "rojo": 12,
  "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(74, 58, 40)» · publicada «rgba(248, 240, 220, 0.28)/rgb(74, 58, 40)»"
+   ],
    "error": ""
   },
   {
@@ -43,8 +45,15 @@
   {
    "slug": "barbara-mis15",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección eventos: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(11, 7, 9, 0.5)/rgb(238, 230, 214)»",
+    "sección hospedaje: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(11, 7, 9, 0.5)/rgb(238, 230, 214)»",
+    "sección padres: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(11, 7, 9, 0.5)/rgb(238, 230, 214)»",
+    "sección trivia: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(11, 7, 9, 0.5)/rgb(238, 230, 214)»",
+    "sección hashtag: previa «rgba(0, 0, 0, 0)/rgb(251, 239, 245)» · publicada «rgba(11, 7, 9, 0.5)/rgb(251, 239, 245)»",
+    "sección confirmacion: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(11, 7, 9, 0.5)/rgb(238, 230, 214)»"
+   ],
    "error": ""
   },
   {
@@ -76,8 +85,8 @@
     "sección #1: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección pv-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»",
     "sección carta: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
-    "sección itinerario: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
-    "sección dresscode: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
+    "sección itinerario: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
+    "sección dresscode: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»",
     "sección video: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección spotify: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección share-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
@@ -90,8 +99,15 @@
   {
    "slug": "daniela-mis15",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección eventos: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(251, 246, 238, 0.5)/rgb(238, 230, 214)»",
+    "sección hospedaje: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(251, 246, 238, 0.5)/rgb(238, 230, 214)»",
+    "sección padres: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(251, 246, 238, 0.5)/rgb(238, 230, 214)»",
+    "sección trivia: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(251, 246, 238, 0.5)/rgb(238, 230, 214)»",
+    "sección hashtag: previa «rgba(0, 0, 0, 0)/rgb(59, 42, 30)» · publicada «rgba(251, 246, 238, 0.5)/rgb(59, 42, 30)»",
+    "sección confirmacion: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(251, 246, 238, 0.5)/rgb(238, 230, 214)»"
+   ],
    "error": ""
   },
   {
@@ -160,15 +176,8 @@
   {
    "slug": "ivanna-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección eventos: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(248, 242, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección hospedaje: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(248, 242, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección padres: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(248, 242, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección trivia: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(248, 242, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección hashtag: previa «rgba(0, 0, 0, 0)/rgb(74, 50, 38)» · publicada «rgba(248, 242, 236, 0.5)/rgb(74, 50, 38)»",
-    "sección confirmacion: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(248, 242, 236, 0.5)/rgb(238, 230, 214)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -190,15 +199,8 @@
   {
    "slug": "lucia-y-sebastian",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección eventos: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(245, 243, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección hospedaje: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(245, 243, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección padres: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(245, 243, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección trivia: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(245, 243, 236, 0.5)/rgb(238, 230, 214)»",
-    "sección hashtag: previa «rgba(0, 0, 0, 0)/rgb(38, 53, 46)» · publicada «rgba(245, 243, 236, 0.5)/rgb(38, 53, 46)»",
-    "sección confirmacion: previa «rgba(0, 0, 0, 0)/rgb(238, 230, 214)» · publicada «rgba(245, 243, 236, 0.5)/rgb(238, 230, 214)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -315,7 +317,7 @@
     "sección regalos: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección share-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección filtro-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
-    "sección gal-seccion: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.55)/rgb(58, 69, 61) ~velo»"
+    "sección gal-seccion: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»"
    ],
    "error": ""
   },
@@ -432,8 +434,15 @@
   {
    "slug": "victoria-mis15",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección eventos: previa «rgba(0, 0, 0, 0)/rgb(234, 220, 189)» · publicada «rgba(46, 31, 20, 0.28)/rgb(234, 220, 189)»",
+    "sección hospedaje: previa «rgba(0, 0, 0, 0)/rgb(234, 220, 189)» · publicada «rgba(46, 31, 20, 0.28)/rgb(234, 220, 189)»",
+    "sección padres: previa «rgba(0, 0, 0, 0)/rgb(234, 220, 189)» · publicada «rgba(46, 31, 20, 0.28)/rgb(234, 220, 189)»",
+    "sección trivia: previa «rgba(0, 0, 0, 0)/rgb(234, 220, 189)» · publicada «rgba(46, 31, 20, 0.28)/rgb(234, 220, 189)»",
+    "sección hashtag: previa «rgba(0, 0, 0, 0)/rgb(234, 220, 189)» · publicada «rgba(46, 31, 20, 0.28)/rgb(234, 220, 189)»",
+    "sección confirmacion: previa «rgba(0, 0, 0, 0)/rgb(234, 220, 189)» · publicada «rgba(46, 31, 20, 0.28)/rgb(234, 220, 189)»"
+   ],
    "error": ""
   },
   {
