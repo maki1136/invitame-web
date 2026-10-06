@@ -2,7 +2,7 @@
 
    POR QUÉ ESTO CORRE ACÁ Y NO EN EL SERVIDOR DE CLAUDE
    Porque probar una copia no sirve. El sandbox de Claude no alcanza
-   invitame.littlemomentsok.com (la red se lo bloquea) y tampoco puede correr el
+   invitameok.net (la red se lo bloquea) y tampoco puede correr el
    motor de Safari. Entonces probaría un espejo local con un navegador parecido,
    y eso es exactamente lo que falló antes: "andaba" en un lado y en la realidad
    estaba roto.
@@ -30,7 +30,7 @@ const SLUG = process.argv[2] || 'camila-y-tomas';   /* la muestra oficial: regin
 /* `INV_URL` e `INV_MOTORES` existen para poder probar EL PROBADOR contra un
    espejo local antes de entregarlo. En la Mac no hace falta tocarlas: sin
    ellas apunta a la invitación de verdad y corre los tres escenarios. */
-const URL_BASE = process.env.INV_URL || ('https://invitame.littlemomentsok.com/i/?e=' + SLUG);
+const URL_BASE = process.env.INV_URL || ('https://invitameok.net/i/?e=' + SLUG);
 /* ⚠️ 1/10/2026 — ¿EL SOBRE DE TRIÁNGULOS ES EL SUYO? «No asoma otro sobre»
    cuenta las solapas de triángulos como sobre VIEJO. Pero una invitación que
    no eligió sobre del catálogo (una nueva de Bohemia, isabella, noche-dorada)

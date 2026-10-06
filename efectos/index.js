@@ -367,7 +367,7 @@
       /admin.html no lo cargaba. Trabajo hecho dos veces.
 
       Entonces:
-      · el admin es  https://invitame.littlemomentsok.com/admin.html
+      · el admin es  https://invitameok.net/admin.html
       · la muestra es `camila-y-tomas`
       · /prueba/ NO se usa para dar nada por verificado.
 
@@ -408,7 +408,7 @@
       · /panel.html  → el tablero de métricas.
 
    ★★ LA MUESTRA OFICIAL ES `camila-y-tomas` — Y ES MEXICANA ★★
-      https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
+      https://invitameok.net/i/?e=camila-y-tomas
       Todo lo nuevo se prueba y se mira AHÍ antes de mostrárselo a Maki.
       ⚠️ Es la PRIMERA muestra real del sistema nuevo: se la va a ver gente que
          todavía no compró. Todo en español de México y con lugares de México.
@@ -841,7 +841,7 @@
      a pasar nunca más». Las skills describían las reglas y nada las medía: por
      eso Personas en dos filas salió tres veces. `chequeo/muestra.js` las
      convierte en pruebas que fallan.
-       https://invitame.littlemomentsok.com/i/?e=<id>&chequeo=1
+       https://invitameok.net/i/?e=<id>&chequeo=1
      ⚠️ Va ACÁ y no en MODULOS a propósito: así no viaja adentro del paquete
         y el invitado no lo descarga nunca. */
   try {

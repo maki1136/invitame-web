@@ -460,13 +460,13 @@ echo json_encode(array(
   'fallados'  => $fallados,
   /* El link para ver la invitación. En modo control de calidad lleva el código
      de revisión: es el que usa el equipo para mirarla antes de entregarla. */
-  'link'      => 'https://invitame.littlemomentsok.com/i/?e=' . rawurlencode($slug) .
+  'link'      => 'https://invitameok.net/i/?e=' . rawurlencode($slug) .
                  ($estado === 'por-revisar' ? '&rev=' . $revision : ''),
   /* La clave del panel SÓLO se devuelve en modo automático, que es cuando el
      cliente se lleva todo de una. En modo control de calidad se la pasa el
      equipo al entregar. */
   'panel'     => $ENTREGA_AUTOMATICA
-                   ? array('url' => 'https://invitame.littlemomentsok.com/mi-panel.html?e=' . rawurlencode($slug),
+                   ? array('url' => 'https://invitameok.net/mi-panel.html?e=' . rawurlencode($slug),
                            'clave' => $clave)
                    : null,
 ));

@@ -329,7 +329,7 @@ const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
 const GID = (params.get('g') || '').trim();
 const MODO = params.get('modo') === 'tarjetas' ? 'tarjetas' : 'cartel';
-const BASE = 'https://invitame.littlemomentsok.com';
+const BASE = 'https://invitameok.net';
 
 if (!/^[A-Za-z0-9_-]{16,64}$/.test(GID)) {
   $('hoja').hidden = true;

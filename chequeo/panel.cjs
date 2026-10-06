@@ -26,7 +26,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SLUG = process.argv[2] || 'camila-y-tomas';
-const BASE = process.env.INV_BASE || 'https://invitame.littlemomentsok.com';
+const BASE = process.env.INV_BASE || 'https://invitameok.net';
 const SALIDA = path.join(__dirname, SLUG === '__nueva' ? 'tablero-panel-nueva.json' : 'tablero-panel.json');
 
 /* controles que por diseño no cambian nada a la vista (datos internos) */

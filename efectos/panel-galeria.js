@@ -50,7 +50,7 @@
 (function () {
 
   var ID = 'galeria-ajustes';
-  var BASE = 'https://invitame.littlemomentsok.com';
+  var BASE = 'https://invitameok.net';
   var WORKER = 'https://galeria.littlemomentsok.workers.dev';
   var FORMA_GID = /^[A-Za-z0-9_-]{16,64}$/;
 

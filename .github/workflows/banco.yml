@@ -177,7 +177,7 @@ jobs:
           BIEN=$(grep -c '   BIEN ' /tmp/limpio.txt || true)
           {
             echo 'BANCO DE PRUEBAS DE INVÍTAME'
-            echo "Invitación: https://invitame.littlemomentsok.com/i/?e=${{ github.event.inputs.slug || 'camila-y-tomas' }}"
+            echo "Invitación: https://invitameok.net/i/?e=${{ github.event.inputs.slug || 'camila-y-tomas' }}"
             echo "Fecha: $(TZ=America/Mexico_City date '+%d/%m/%Y, %H:%M')"
             echo 'Red: lenta, como un celular con 4G (+220 ms por pedido)'
             echo 'Caché: vacía, como un invitado que entra por primera vez'
@@ -226,7 +226,7 @@ jobs:
   #   comparar.cjs → en cada invitación de chequeo/muestras.txt, la miniatura del
   #                  panel tiene que ser IGUAL a la invitación publicada
   # Deja chequeo/tablero-panel.json y chequeo/tablero-muestras.json, que se ven en
-  # https://invitame.littlemomentsok.com/admin/tablero.html
+  # https://invitameok.net/admin/tablero.html
   # Corre en su propia máquina (no le saca memoria al banco de Safari).
   # ═══════════════════════════════════════════════════════════════════════════════
   tablero:

@@ -28,7 +28,7 @@ const CSS={anim:'*,*::before,*::after{animation:none!important;transition:none!i
  mascaras:'*,*::before,*::after{-webkit-mask:none!important;mask:none!important;clip-path:none!important}'};
 const sacar=(process.env.SACAR||'').split(',').filter(Boolean);
 if(sacar.length) await ctx.addInitScript((css)=>{const f=()=>{const s=document.createElement('style');s.textContent=css;(document.head||document.documentElement).appendChild(s)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',f);else f();setTimeout(f,3000);},sacar.map(k=>CSS[k]).join('\n'));
-await p.goto('https://invitame.littlemomentsok.com/i/?e='+slug+'&diag=1'+q+'&cb='+Date.now(),{waitUntil:'load',timeout:120000});
+await p.goto('https://invitameok.net/i/?e='+slug+'&diag=1'+q+'&cb='+Date.now(),{waitUntil:'load',timeout:120000});
 console.log('cargó',Date.now());await p.waitForTimeout(8000);
 await p.evaluate(()=>{const x=document.getElementById('btn-ingresar');x&&x.click()});console.log('tocó');await p.waitForTimeout(6000);
 await p.evaluate(async()=>{const se=document.scrollingElement;for(let y=0;y<4500;y+=225){se.scrollTop=y;await new Promise(r=>setTimeout(r,400))}});

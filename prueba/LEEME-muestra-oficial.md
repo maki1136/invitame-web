@@ -2,7 +2,7 @@
 
 **Antes de probar cualquier cosa nueva, usar esta:**
 
-    https://invitame.littlemomentsok.com/i/?e=camila-y-tomas
+    https://invitameok.net/i/?e=camila-y-tomas
 
 Es la invitación de referencia de Invítame. Todo lo nuevo —una paleta, un
 material de botón, un fondo, una sección— se prueba acá primero y se mira acá

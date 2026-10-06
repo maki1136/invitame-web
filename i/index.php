@@ -6,7 +6,7 @@
  * Si algo falla, cae en los valores por defecto que ya trae index.html (nunca rompe).
  */
 
-$SITE = 'https://invitame.littlemomentsok.com';
+$SITE = 'https://invitameok.net';
 $PROJECT = 'invitame-9b51f';
 // Versión base: la que estaba viva cuando arrancó el versionado.
 $BASE_VER = '2026-09-14';

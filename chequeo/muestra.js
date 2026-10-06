@@ -17,7 +17,7 @@
    adentro de la invitación.
 
    CÓMO SE CORRE
-     https://invitame.littlemomentsok.com/i/?e=<id>&chequeo=1
+     https://invitameok.net/i/?e=<id>&chequeo=1
      o, con la invitación abierta, en la consola:  INVCHEQUEO.correr()
 
    Devuelve `{ pasa, fallas[], detalle[] }` y lo imprime en una tabla.

@@ -1,3 +1,15 @@
+# ⭐ DISTRIBUIDOR (6/10/2026): la plataforma se mudó a invitameok.net.
+#    Todo link viejo (invitame.littlemomentsok.com/lo-que-sea) reenvía al mismo
+#    camino en invitameok.net, con los mismos parámetros. Así ningún link ya
+#    mandado (invitaciones, QR de Invítame Live, paneles) se rompe.
+#    Sólo GET/HEAD: un formulario viejo que mande datos (POST) sigue funcionando acá.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^invitame\.littlemomentsok\.com$ [NC]
+  RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+  RewriteRule ^ https://invitameok.net%{REQUEST_URI} [R=301,L]
+</IfModule>
+
 # No cachear los HTML (para que el formulario/catálogo/admin salgan siempre actualizados)
 <IfModule mod_headers.c>
   <FilesMatch "\.html$">
