@@ -78,3 +78,13 @@
 <FilesMatch "^\.">
   Require all denied
 </FilesMatch>
+
+
+# ★ 6/10/2026 — SEGURIDAD (auditoría antes de vender): los documentos internos, el
+# código del Worker y las herramientas de prueba no se sirven por la web. El repo es
+# público igual, pero la web no tiene por qué publicarlos en el dominio de la marca.
+# (chequeo/*.json y *.txt quedan: los lee admin/tablero.html; chequeo/muestra.js lo
+# usa la invitación con &chequeo=1.)
+RedirectMatch 404 \.md$
+RedirectMatch 404 ^/(worker|herramientas)/
+RedirectMatch 404 ^/chequeo/.*\.(mjs|cjs)$

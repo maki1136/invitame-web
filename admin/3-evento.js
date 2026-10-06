@@ -687,8 +687,12 @@
     }
     const base=String(D.n1||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
       .replace(/[^a-z]/g,' ').trim().split(/\s+/)[0].slice(0,10) || 'invitame';
-    const n=new Uint16Array(1); crypto.getRandomValues(n);
-    D[K_CLAVE]=base+String(1000+(n[0]%9000));
+    /* ★ 6/10/2026 — SEGURIDAD: «nombre + 4 números» eran 9.000 claves posibles,
+       y el nombre se ve en la invitación: un programa la adivinaba en minutos.
+       Ahora: el nombre (para que los novios la recuerden) + 6 caracteres al azar
+       sin letras que se confunden → ~1.000 millones de combinaciones. */
+    const AB='abcdefghjkmnpqrstuvwxyz23456789', r=new Uint32Array(6); crypto.getRandomValues(r);
+    D[K_CLAVE]=base+'-'+Array.from(r,x=>AB[x%AB.length]).join('');
     try{ if(cur==='AVANZADO') go('AVANZADO'); }catch(e){}
   }
 

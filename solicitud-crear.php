@@ -110,6 +110,12 @@ $PROHIBIDOS = array(
   'c_clave-del-panel-de-los-novios', 'c_contrasena-para-el-evento',
 );
 foreach ($PROHIBIDOS as $k) { unset($ev[$k]); }
+/* ★ 6/10/2026 — SEGURIDAD: la portada sólo puede ser una foto de NUESTRA cuenta de
+   Cloudinary (es lo único que sube el formulario). Ver la nota en i/index.php. */
+if (isset($ev['cover']) && !(is_string($ev['cover']) &&
+    preg_match('~^https://res\.cloudinary\.com/oc8cgqt4/[^\s"\'<>()\\\\]+$~', $ev['cover']))) {
+  unset($ev['cover']);
+}
 if (isset($ev['fx']) && is_array($ev['fx'])) {
   /* los interruptores de VENTA de las muestras: los teléfonos de Invítame y el
      llamado «¿quieres la tuya?». En la invitación de un cliente no van nunca. */

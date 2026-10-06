@@ -93,6 +93,13 @@ if ($slug !== '') {
       'img_f-imagen-miniatura-al-compartir'
     ));
     $coverReal = $sv('cover');
+    /* ★ 6/10/2026 — SEGURIDAD (auditoría antes de vender). La portada se escribe
+       adentro de un <style> y de los meta tags. Llega de la base, y la base la
+       puede llenar el formulario público (solicitud-crear.php): con un texto como
+       `</style><script>…` se ejecutaba código en la página que abre Jazmín, con
+       su sesión. Ahora sólo pasa una dirección https limpia, sin < > ( ) comillas,
+       espacios ni barras invertidas. Cualquier otra cosa se descarta. */
+    if ($coverReal !== '' && !preg_match('~^https://[A-Za-z0-9.-]+/[^\s"\'<>()\\\\]*$~', $coverReal)) $coverReal = '';
     if ($img === '') $img = $coverReal;
 
     // 2) titulo al compartir, o los nombres de la pareja
