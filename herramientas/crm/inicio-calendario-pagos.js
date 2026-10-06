@@ -220,7 +220,7 @@
     var h = hoy0(), man = sumDias(h, 1);
     var fh = fiestasDel(h), fm = fiestasDel(man);
     var semana = 0; for (var i = 0; i < 7; i++) semana += fiestasDel(sumDias(h, i)).length;
-    var bf = bloque(fh.length || fm.length ? 'amar' : '', 'Fiestas');
+    var bf = bloque(fh.length || fm.length ? 'amar' : '', 'Fiestas en vivo');
     bf.appendChild(el('div', 'big', String(fh.length)));
     bf.appendChild(el('div', 'det', 'hoy · ' + fm.length + ' mañana · ' + semana + ' en los próximos 7 días'));
     var ul2 = el('ul');
@@ -253,7 +253,7 @@
   function pintarCalendario() {
     var s = secCal; var cab = s.querySelector('.cal-cab');
     if (!cab) {
-      s.appendChild(el('p', 'sub', 'Por día: las fiestas (círculo) y cuántas invitaciones están activas. Tocá un día para ver cuáles.'));
+      s.appendChild(el('p', 'sub', 'Por día: «en vivo» son las fiestas que se hacen ese día; «activas», las invitaciones abiertas ese día. Tocá un día para ver cuáles.'));
       cab = el('div', 'cal-cab');
       var ant = el('button', null, '‹'), sig = el('button', null, '›'), hoyB = el('button', null, 'Hoy');
       var mes = el('span', 'mes'); mes.id = 'cal-mes';
@@ -281,7 +281,7 @@
         var c = el('div', 'd' + (dd.getMonth() !== mesVisto.getMonth() ? ' fuera' : '') + (isoD(dd) === hk ? ' hoy' : ''));
         c.appendChild(el('span', 'n', String(dd.getDate())));
         var fs = fiestasDel(dd);
-        if (fs.length) c.appendChild(el('span', 'f', String(fs.length)));
+        if (fs.length) c.appendChild(el('span', 'f', fs.length + ' en vivo'));
         fs.slice(0, 2).forEach(function (e) { c.appendChild(el('span', 'nom', e.nombre)); });
         var ac = activasEl(dd); if (ac) c.appendChild(el('span', 'ac', ac + ' activas'));
         (function (dia) { c.onclick = function () { detalleDia(dia); }; })(dd);
@@ -292,7 +292,7 @@
   function detalleDia(d) {
     var det = $('#cal-det'); det.innerHTML = '';
     var fs = fiestasDel(d);
-    det.appendChild(el('h3', null, pad(d.getDate()) + ' de ' + MESES[d.getMonth()] + ': ' + fs.length + ' fiesta' + (fs.length === 1 ? '' : 's') + ' · ' + activasEl(d) + ' invitaciones activas'));
+    det.appendChild(el('h3', null, pad(d.getDate()) + ' de ' + MESES[d.getMonth()] + ': ' + fs.length + ' en vivo (fiesta' + (fs.length === 1 ? '' : 's') + ' ese día) · ' + activasEl(d) + ' invitaciones activas'));
     if (!fs.length) return;
     var t = el('table'); var tb = el('tbody'); t.appendChild(tb);
     fs.forEach(function (e) {
