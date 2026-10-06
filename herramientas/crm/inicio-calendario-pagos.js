@@ -283,7 +283,7 @@
         var fs = fiestasDel(dd);
         if (fs.length) c.appendChild(el('span', 'f', fs.length + ' en vivo'));
         fs.slice(0, 2).forEach(function (e) { c.appendChild(el('span', 'nom', e.nombre)); });
-        var ac = activasEl(dd); if (ac) c.appendChild(el('span', 'ac', ac + ' activas'));
+        var ac = activasEl(dd); if (ac) c.appendChild(el('span', 'ac', ac + (ac === 1 ? ' activa' : ' activas')));
         (function (dia) { c.onclick = function () { detalleDia(dia); }; })(dd);
         g2.appendChild(c);
       }
