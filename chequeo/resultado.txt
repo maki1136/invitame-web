@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitameok.net/i/?e=camila-y-tomas
-Fecha: 07/10/2026, 14:00
+Fecha: 07/10/2026, 14:29
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 1 PROBLEMAS (y 115 cosas bien)
+TODO BIEN — 116 chequeos pasaron
 ══════════════════════════════════════════
 
 
@@ -43,12 +43,11 @@ HAY 1 PROBLEMAS (y 115 cosas bien)
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 14.8 s)
+   (volvió a su lugar en 1.6 s)
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 14201 y volvió a 12723
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 136.7 s de punta a punta)
+   (tardó 144.2 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -80,11 +79,11 @@ HAY 1 PROBLEMAS (y 115 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 4.8 s)
+   (volvió a su lugar en 1.7 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 159.1 s de punta a punta)
+   (tardó 135.9 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -121,11 +120,11 @@ HAY 1 PROBLEMAS (y 115 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.4 s)
+   (volvió a su lugar en 2.1 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 132.0 s de punta a punta)
+   (tardó 108.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -168,5 +167,5 @@ HAY 1 PROBLEMAS (y 115 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 132.1 s de punta a punta)
+   (tardó 132.0 s de punta a punta)
 
