@@ -34,6 +34,25 @@ jobs:
           { printf '<IfModule mod_headers.c>\n  Header always set X-Robots-Tag "noindex, nofollow"\n</IfModule>\n\n'; cat .htaccess; } > .htaccess.nuevo
           mv .htaccess.nuevo .htaccess
 
+      - name: Anti-robots (Turnstile) SOLO en el sitio de prueba
+        # Si existe el secreto TURNSTILE_SECRETA, se arma el archivo de claves adentro
+        # de la carpeta del sitio de prueba. El sitio de verdad (public_html) no lo ve:
+        # anti-robot-lib.php busca el archivo subiendo carpetas desde la suya.
+        # Sin el secreto no se arma nada y el formulario anda como siempre.
+        env:
+          SECRETA: ${{ secrets.TURNSTILE_SECRETA }}
+        run: |
+          if [ -n "$SECRETA" ]; then
+            python3 - <<'PY'
+          import os
+          s=os.environ['SECRETA'].strip().replace("\\","").replace("'","")
+          open('invitame-turnstile.php','w').write("<?php\n$TURNSTILE_SITE   = '0x4AAAAAAFQ9Ytfhhym2ka5-';\n$TURNSTILE_SECRET = '"+s+"';\n")
+          PY
+            echo "Turnstile: archivo de claves armado para el sitio de prueba"
+          else
+            echo "Turnstile: sin secreto, queda apagado"
+          fi
+
       - name: Subir por FTP a la carpeta del sitio de prueba
         env:
           CLAVE: ${{ secrets.PRUEBA_FTP_CLAVE }}
