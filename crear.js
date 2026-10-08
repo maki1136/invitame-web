@@ -383,7 +383,7 @@
     AR.activo = true;
     window.__ivTurnstile = function () {
       try {
-        window.turnstile.render('#robot', { sitekey: j.sitekey, language: 'es',
+        window.turnstile.render('#robot', { sitekey: j.sitekey, language: 'es', theme: 'light',
           callback: function (tk) { AR.token = tk; },
           'expired-callback': function () { AR.token = ''; },
           'error-callback': function () { AR.token = ''; } });
