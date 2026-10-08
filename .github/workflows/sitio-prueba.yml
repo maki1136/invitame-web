@@ -40,12 +40,16 @@ jobs:
         run: |
           if [ -z "$CLAVE" ]; then echo "Falta el secreto PRUEBA_FTP_CLAVE"; exit 1; fi
           sudo apt-get -qq update && sudo apt-get -qq install -y lftp
-          lftp -u "u395354963.sitioprueba,$CLAVE" -e "
-            set ftp:ssl-allow yes; set ssl:verify-certificate no; set net:max-retries 3;
-            mirror -R --delete --parallel=8 --verbose=1 \
-              --exclude-glob .git* --exclude ^\.git/ --exclude ^\.github/ \
-              --exclude ^worker/ --exclude ^herramientas/ --exclude ^chequeo/capturas/ \
-              ./ ./ ; quit" 82.25.67.148
+          cat > subir.lftp <<'LFTP'
+          set ftp:ssl-allow yes
+          set ssl:verify-certificate no
+          set net:max-retries 3
+          set net:timeout 30
+          open --env-password -u u395354963.sitioprueba ftp://82.25.67.148
+          mirror -R --delete --parallel=8 --verbose=1 --exclude-glob .git* --exclude ^\.git/ --exclude ^\.github/ --exclude ^worker/ --exclude ^herramientas/ --exclude ^chequeo/capturas/ --exclude ^subir\.lftp$ ./ ./
+          bye
+          LFTP
+          LFTP_PASSWORD="$CLAVE" lftp -f subir.lftp
 
       - name: Comprobar que el sitio de prueba responde
         run: |
