@@ -14,12 +14,11 @@
 (function () {
   if (window.INVFINANZAS) return; window.INVFINANZAS = 1;
 
-  var URL = {
-    A: 'https://docs.google.com/spreadsheets/d/1OJLT46k4pJrCzG8fG6Qekk5drsfxwkAnIciIzNwiuos/export?format=csv',
-    S: 'https://docs.google.com/spreadsheets/d/1ri_gl6zHuFw8v0I9SxSWGkNW5edxlKeiXilsRyOoZv4/export?format=csv',
-    R: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQa8C3ZitN_nkTh9UmqZZ4BXfXewJAdH4bUoMhLMnZmmXbAlVlUjQ4-Leg0RmxR2kwuCtD5oznQaPUC/pub?gid=536069291&single=true&output=csv',
-    C: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlo7Jp7vGS5JH2V9JSzV-lQz9w1SqqJihAdgLrYTYx82zKBetHwXcrlBvW8f3LUtJ4Sb74T2BTNPtb/pub?gid=0&single=true&output=csv'
-  };
+  /* Las planillas YA NO se leen por link público (8/10/2026): estaban abiertas
+     a cualquiera, con teléfonos y deudas. Las copia cada hora el Apps Script
+     «Invitame CRM - Finanzas privadas» (cuenta de Maki, ver
+     herramientas/crm/finanzas-apps-script.gs) a Firestore crm_finanzas/{A,S,R,C},
+     y la regla de Firestore deja leerlas sólo a littlemomentsok@gmail.com. */
   var VER = {
     A: 'https://docs.google.com/spreadsheets/d/1OJLT46k4pJrCzG8fG6Qekk5drsfxwkAnIciIzNwiuos/edit',
     S: 'https://docs.google.com/spreadsheets/d/1ri_gl6zHuFw8v0I9SxSWGkNW5edxlKeiXilsRyOoZv4/edit',
@@ -123,15 +122,24 @@
 
   /* ---------- datos ---------- */
   var D = null, cargando = null, mesSel = null;
-  function traer(u) { return fetch(u + (u.indexOf('?') < 0 ? '?' : '&') + 't=' + Date.now(), { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }); }
+  var copiaDe = null;
+  function traer(k) {
+    return db.collection('crm_finanzas').doc(k).get({ source: 'server' }).then(function (d) {
+      if (!d.exists) throw new Error('falta la copia ' + k);
+      var x = d.data(), f = x.actualizado && x.actualizado.toDate ? x.actualizado.toDate() : null;
+      if (f && (!copiaDe || f < copiaDe)) copiaDe = f;
+      return x.csv || '';
+    });
+  }
   function cargar(forzar) {
     if (D && !forzar) return Promise.resolve(D);
     if (cargando && !forzar) return cargando;
-    cargando = Promise.all([traer(URL.A), traer(URL.S), traer(URL.R), traer(URL.C)]).then(function (t) {
+    copiaDe = null;
+    cargando = Promise.all([traer('A'), traer('S'), traer('R'), traer('C')]).then(function (t) {
       var A = tabla(t[0]).filter(function (o) { return mesIdx(o) >= 0 && num(o['FACTURACION_BRUTA_TOTAL_EQUIVALENTE_USD']) > 0; });
       A.sort(function (x, y) { return (+x['ANO'] - +y['ANO']) || (mesIdx(x) - mesIdx(y)); });
       var idx = function (arr) { var m = {}; arr.forEach(function (o) { m[clave(o)] = o; }); return m; };
-      D = { A: A, S: idx(tabla(t[1])), R: idx(tabla(t[2])), C: tabla(t[3]), cuando: new Date() };
+      D = { A: A, S: idx(tabla(t[1])), R: idx(tabla(t[2])), C: tabla(t[3]), cuando: copiaDe || new Date() };
       cargando = null; return D;
     }).catch(function (e) { cargando = null; throw e; });
     return cargando;
@@ -179,7 +187,7 @@
     sel.onchange = function () { mesSel = sel.value; pintar(); };
     var b = el('button', 'fz-btn', 'Actualizar datos'); b.onclick = function () { b.textContent = 'Actualizando…'; cargar(true).then(pintar).catch(function (e) { b.textContent = 'No se pudo: ' + e.message; }); };
     top.appendChild(sel); top.appendChild(b);
-    top.appendChild(el('span', 'fz-sub', 'Datos leídos ' + D.cuando.toLocaleString('es-AR')));
+    top.appendChild(el('span', 'fz-sub', 'Planillas copiadas ' + D.cuando.toLocaleString('es-AR') + ' (se actualiza sola cada hora)'));
     c.appendChild(top);
 
     /* A · finanzas */
