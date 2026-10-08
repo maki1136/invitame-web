@@ -63,7 +63,7 @@ jobs:
             for intento in 1 2 3; do
               cuerpo=$(curl -s -L --max-time 25 -w '\n__CODIGO__%{http_code}' "$url" || true)
               codigo=$(printf '%s' "$cuerpo" | tail -n1 | sed 's/__CODIGO__//')
-              if [ "$codigo" = "200" ] && printf '%s' "$cuerpo" | grep -qF "$marca"; then ok=1; break; fi
+              if [ "$codigo" = "200" ] && grep -qF -- "$marca" <<< "$cuerpo"; then ok=1; break; fi
               sleep 20
             done
             if [ $ok = 1 ]; then echo "OK    $nombre"; else echo "FALLA $nombre ($codigo)"; fallas="${fallas}- **${nombre}** — ${url} (respuesta ${codigo:-sin respuesta})"$'\n'; fi
