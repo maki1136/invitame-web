@@ -99,4 +99,6 @@
 # usa la invitación con &chequeo=1.)
 RedirectMatch 404 \.md$
 RedirectMatch 404 ^/(worker|herramientas)/
+# La carpeta del sitio de prueba vive adentro de este sitio: desde invitameok.net no se ve.
+RedirectMatch 404 ^/sitio-prueba/
 RedirectMatch 404 ^/chequeo/.*\.(mjs|cjs)$

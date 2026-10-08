@@ -1,0 +1,54 @@
+# ============================================================================
+#  SITIO DE PRUEBA — prueba.invitameok.net (8/10/2026)
+#
+#  Cada vez que se sube algo a la rama `prueba`, este workflow lo publica SOLO
+#  en el sitio de prueba, por FTP, con una cuenta que únicamente puede entrar a
+#  la carpeta public_html/sitio-prueba. No puede tocar el sitio de verdad.
+#
+#  · Usuario FTP: u395354963.sitioprueba   (carpeta: public_html/sitio-prueba)
+#  · La contraseña la pegó Maki en GitHub → Settings → Secrets → PRUEBA_FTP_CLAVE
+#  · El sitio de prueba usa la MISMA base de datos: se prueba sólo con muestras.
+#  · Se marca «noindex» para que Google no lo muestre.
+#  Para pasar lo probado al sitio de verdad: el botón «Publicar al sitio de verdad».
+# ============================================================================
+name: Sitio de prueba
+
+on:
+  push:
+    branches: [prueba]
+  workflow_dispatch:
+
+concurrency:
+  group: sitio-prueba
+  cancel-in-progress: true
+
+jobs:
+  subir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Marcar como sitio de prueba (que Google no lo indexe)
+        run: |
+          printf 'User-agent: *\nDisallow: /\n' > robots.txt
+          { printf '<IfModule mod_headers.c>\n  Header always set X-Robots-Tag "noindex, nofollow"\n</IfModule>\n\n'; cat .htaccess; } > .htaccess.nuevo
+          mv .htaccess.nuevo .htaccess
+
+      - name: Subir por FTP a la carpeta del sitio de prueba
+        env:
+          CLAVE: ${{ secrets.PRUEBA_FTP_CLAVE }}
+        run: |
+          if [ -z "$CLAVE" ]; then echo "Falta el secreto PRUEBA_FTP_CLAVE"; exit 1; fi
+          sudo apt-get -qq update && sudo apt-get -qq install -y lftp
+          lftp -u "u395354963.sitioprueba,$CLAVE" -e "
+            set ftp:ssl-allow yes; set ssl:verify-certificate no; set net:max-retries 3;
+            mirror -R --delete --parallel=8 --verbose=1 \
+              --exclude-glob .git* --exclude ^\.git/ --exclude ^\.github/ \
+              --exclude ^worker/ --exclude ^herramientas/ --exclude ^chequeo/capturas/ \
+              ./ ./ ; quit" 82.25.67.148
+
+      - name: Comprobar que el sitio de prueba responde
+        run: |
+          sleep 5
+          c=$(curl -s -o /dev/null -w '%{http_code}' "https://prueba.invitameok.net/i/?e=camila-y-tomas&cb=$RANDOM" || true)
+          echo "prueba.invitameok.net → $c"
