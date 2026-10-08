@@ -1,0 +1,113 @@
+# ===== EL VIGÍA: AVISA SI ALGO SE CAE (8/10/2026) ==============================
+#
+# Maki: «aviso automático si el sitio se cae, así no me entero por un cliente».
+#
+# Cada 10 minutos prueba las piezas que usan los clientes. Si alguna falla 3
+# veces seguidas (con 20 s entre intento e intento, para no avisar por un
+# parpadeo), abre un aviso («issue») en este repo con la etiqueta «caido».
+# GitHub le manda el mail a Maki (y la notificación al celular si tiene la app).
+# Cuando todo vuelve a andar, cierra el aviso solo con un comentario.
+# Si ya hay un aviso abierto, no abre otro: agrega un comentario sólo si cambió
+# lo que falla.
+#
+# Sólo le avisa a Maki. No le escribe a ningún cliente (REGLA CERO).
+# Para agregar algo a vigilar: una línea más en CHEQUEOS.
+# ==============================================================================
+name: Vigía (aviso si algo se cae)
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      simular_caida:
+        description: 'Prueba: hacer como si algo se cayera (para ver que llega el aviso)'
+        type: boolean
+        default: false
+
+permissions:
+  issues: write
+  contents: read
+
+concurrency:
+  group: vigia
+  cancel-in-progress: false
+
+jobs:
+  vigilar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Probar el sitio, el CRM, la web y la galería
+        id: probar
+        shell: bash
+        run: |
+          # nombre | dirección | texto que tiene que aparecer
+          CHEQUEOS=$(cat <<'LISTA'
+          Inicio de invitameok.net|https://invitameok.net/|<title>
+          Una invitación (lee la base)|https://invitameok.net/i/?e=camila-y-tomas|Camila &amp; Tom
+          Formulario de pedido|https://invitameok.net/crear.html|<title>
+          Anti-robot|https://invitameok.net/anti-robot.php|sitekey
+          Motor de efectos|https://invitameok.net/efectos/todo.php|function
+          Panel del equipo|https://invitameok.net/admin.html|<title>
+          CRM|https://littlemomentsok.com/invitamecrm/|CRM Inv
+          Web de ventas|https://invitameweb.littlemomentsok.com/mx/|<title>
+          Invítame Live (galería)|https://galeria.littlemomentsok.workers.dev/uso|quedanFotos
+          LISTA
+          )
+          fallas=""
+          while IFS='|' read -r nombre url marca; do
+            [ -z "$nombre" ] && continue
+            nombre=$(echo "$nombre" | sed 's/^ *//')
+            ok=0
+            for intento in 1 2 3; do
+              cuerpo=$(curl -s -L --max-time 25 -w '\n__CODIGO__%{http_code}' "$url" || true)
+              codigo=$(printf '%s' "$cuerpo" | tail -n1 | sed 's/__CODIGO__//')
+              if [ "$codigo" = "200" ] && printf '%s' "$cuerpo" | grep -qF "$marca"; then ok=1; break; fi
+              sleep 20
+            done
+            if [ $ok = 1 ]; then echo "OK    $nombre"; else echo "FALLA $nombre ($codigo)"; fallas="${fallas}- **${nombre}** — ${url} (respuesta ${codigo:-sin respuesta})"$'\n'; fi
+          done <<< "$CHEQUEOS"
+          if [ "${{ inputs.simular_caida }}" = "true" ]; then
+            fallas="${fallas}- **PRUEBA DEL VIGÍA** — esto es una caída simulada, no pasó nada de verdad"$'\n'
+          fi
+          {
+            echo 'fallas<<FIN'
+            printf '%s' "$fallas"
+            echo 'FIN'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Avisar o cerrar el aviso
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FALLAS: ${{ steps.probar.outputs.fallas }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          api() { curl -s -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$@"; }
+          abierto=$(api "https://api.github.com/repos/$REPO/issues?state=open&labels=caido&per_page=1" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["number"] if d else "")')
+          hora=$(TZ=America/Argentina/Buenos_Aires date '+%d/%m %H:%M')
+          if [ -n "$FALLAS" ]; then
+            texto=$(printf '⚠️ **Algo no responde** (%s, hora Argentina). Lo probé 3 veces seguidas.\n\n%s\n\nCuando vuelva a andar, este aviso se cierra solo.' "$hora" "$FALLAS")
+            if [ -z "$abierto" ]; then
+              python3 -c 'import json,os,sys; print(json.dumps({"title":"⚠️ Invítame: algo se cayó","body":sys.argv[1],"labels":["caido"]}))' "$texto" > cuerpo.json
+              api -X POST "https://api.github.com/repos/$REPO/issues" -d @cuerpo.json > /dev/null
+              echo "Aviso abierto."
+            else
+              previo=$( { api "https://api.github.com/repos/$REPO/issues/$abierto/comments?per_page=100"; echo '|||'; api "https://api.github.com/repos/$REPO/issues/$abierto"; } | python3 -c 'import sys,json; c,i=sys.stdin.read().split("|||"); c=json.loads(c); print(c[-1]["body"] if c else (json.loads(i)["body"] or ""))')
+              if ! PREVIO="$previo" python3 -c 'import os,sys; sys.exit(0 if os.environ["FALLAS"].strip() in os.environ["PREVIO"] else 1)'; then
+                python3 -c 'import json,sys; print(json.dumps({"body":sys.argv[1]}))' "$texto" > cuerpo.json
+                api -X POST "https://api.github.com/repos/$REPO/issues/$abierto/comments" -d @cuerpo.json > /dev/null
+                echo "Cambió lo que falla: comentario agregado."
+              else
+                echo "Sigue igual, aviso ya abierto (#$abierto)."
+              fi
+            fi
+          elif [ -n "$abierto" ]; then
+            python3 -c 'import json,sys; print(json.dumps({"body":sys.argv[1]}))' "✅ Volvió todo a andar ($hora, hora Argentina)." > cuerpo.json
+            api -X POST "https://api.github.com/repos/$REPO/issues/$abierto/comments" -d @cuerpo.json > /dev/null
+            api -X PATCH "https://api.github.com/repos/$REPO/issues/$abierto" -d '{"state":"closed"}' > /dev/null
+            echo "Aviso cerrado."
+          else
+            echo "Todo anda."
+          fi
