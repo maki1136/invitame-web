@@ -233,12 +233,13 @@ $cuerpo .= "-- \nInvítame · aviso automático\n";
 //    tiene MX/SPF/DKIM configurados; si no, Gmail lo descarta en silencio.
 // ============================================================
 $MAIL_KEY = ''; $MAIL_FROM = ''; $MAIL_API = '';
-$cfgArriba = dirname(dirname(__FILE__)) . '/invitame-config.php';
-$cfgHome   = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-config.php';
-$cfgLado   = __DIR__ . '/invitame-config.php';
-if      (is_readable($cfgArriba)) { include $cfgArriba; }
-elseif  (is_readable($cfgHome))   { include $cfgHome; }
-elseif  (is_readable($cfgLado))   { include $cfgLado; }
+// La config vive FUERA de la carpeta pública. Se busca subiendo carpetas (hasta 6),
+// igual que el resto de los PHP: así anda en el sitio de verdad (public_html) y en
+// el de prueba (public_html/sitio-prueba) sin tocar nada.
+for ($ivDir = __DIR__, $ivI = 0; $ivI < 6; $ivI++) {
+  if (is_readable($ivDir . '/invitame-config.php')) { include $ivDir . '/invitame-config.php'; break; }
+  $ivPadre = dirname($ivDir); if ($ivPadre === $ivDir) break; $ivDir = $ivPadre;
+}
 
 $deDominio = parse_url($SITE, PHP_URL_HOST);
 $de = ($MAIL_FROM !== '' && filter_var($MAIL_FROM, FILTER_VALIDATE_EMAIL))
