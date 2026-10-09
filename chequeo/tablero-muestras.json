@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-08T21:05:56.083Z",
+ "cuando": "2026-10-09T20:35:23.620Z",
  "total": 55,
- "verde": 46,
- "rojo": 9,
+ "verde": 47,
+ "rojo": 8,
  "gris": 0,
  "items": [
   {
@@ -79,7 +79,7 @@
     "sección pv-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»",
     "sección carta: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección itinerario: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
-    "sección dresscode: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
+    "sección dresscode: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
     "sección video: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección spotify: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección share-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
@@ -303,7 +303,7 @@
     "sección regalos: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección share-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección filtro-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
-    "sección gal-seccion: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»"
+    "sección gal-seccion: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.55)/rgb(58, 69, 61) ~velo»"
    ],
    "error": ""
   },
@@ -338,10 +338,8 @@
   {
    "slug": "paloma-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(62, 44, 37)» · publicada «rgba(246, 240, 228, 0.28)/rgb(62, 44, 37)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {

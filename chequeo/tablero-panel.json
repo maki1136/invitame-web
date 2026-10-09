@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-08T20:52:46.739Z",
+ "cuando": "2026-10-09T20:21:26.604Z",
  "slug": "camila-y-tomas",
  "total": 356,
- "verde": 356,
- "amarillo": 0,
+ "verde": 355,
+ "amarillo": 1,
  "rojo": 0,
  "gris": 0,
  "items": [
@@ -2678,8 +2678,9 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
@@ -3644,7 +3645,7 @@
    "guarda": true,
    "dato": "fx.paquete.plan",
    "llega": true,
-   "seVe": true,
+   "seVe": false,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
   },
