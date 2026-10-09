@@ -167,7 +167,8 @@
     'muestra-selector':['CONFIRMACIÓN','confirmacion'],
     'pasevoz-selector':['MUSIC_PASES','pase'],
     'compartir-selector':['CONFIRMACIÓN','compartir'],
-    'regalo-selector':['REGALOS','regalo']
+    'regalo-selector':['REGALOS','regalo'],
+    'std-selector':['EFECTOS','savethedate']
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -179,7 +180,8 @@
     confirmacion:{arriba:true},
     pase:{abajo:true},
     compartir:{abajo:true},
-    regalo:{arriba:true}
+    regalo:{arriba:true},
+    savethedate:{abajo:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
