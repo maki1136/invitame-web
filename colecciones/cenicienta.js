@@ -734,7 +734,7 @@
     '    rgba(242,247,252,.88) 87%, rgba(242,247,252,0) 100%)!important;',
     '  filter:blur(16px)!important;',
     '}',
-    P + '.sec:not([style*="url("]) > *{ position:relative!important; z-index:1!important; }',
+    P + '.sec:not([style*="url("]) > *:not(.inv-banda-deco){ position:relative!important; z-index:1!important; }',   /* 9/10: la capa de la banda no (hacía caer Safari) */
 
     P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:14px!important; }',
     P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
