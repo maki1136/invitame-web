@@ -153,12 +153,24 @@
       secs[i].style.setProperty('background-color', color, 'important');
       secs[i].style.setProperty('background-image', 'none', 'important');
       /* una capa de objetos por banda, ni mas ni menos */
-      if (!secs[i].querySelector(':scope > .inv-banda-deco')) {
-        var c = document.createElement('span');
+      var c = secs[i].querySelector(':scope > .inv-banda-deco');
+      if (!c) {
+        c = document.createElement('span');
         c.className = 'inv-banda-deco';
         c.setAttribute('aria-hidden', 'true');
         secs[i].insertBefore(c, secs[i].firstChild);
       }
+      /* ⚠️⚠️ 9/10/2026 — LA CAPA VA SIEMPRE SUPERPUESTA, CON PRIORIDAD.
+         Cantera (`.sec.verde > *`) y Cenicienta (`.sec > *`) ponían TODO lo de
+         adentro de la sección en `position:relative; z-index:1`, la capa
+         incluida. Una capa con `mix-blend-mode:multiply` sacada de su lugar
+         hacía CAER la página en Safari (WebKit), siempre, a los pocos segundos
+         de aparecer: clara-mis15 y regina-y-emiliano; en el iPhone de Maki,
+         Safari la recargaba y quedaba el sobre de repuesto. Inline con
+         !important le gana a cualquier hoja de colección. */
+      c.style.setProperty('position', 'absolute', 'important');
+      c.style.setProperty('inset', '0', 'important');
+      c.style.setProperty('z-index', '0', 'important');
     }
   }
 

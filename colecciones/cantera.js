@@ -598,7 +598,7 @@
     '  background-position:center top, center bottom!important;',
     '}',
     /* ⚠️ sin esto el texto queda DEBAJO de la piedra */
-    P + '.sec.verde > *{ position:relative!important; z-index:1!important; }',
+    P + '.sec.verde > *:not(.inv-banda-deco){ position:relative!important; z-index:1!important; }',   /* 9/10: la capa de la banda no (hacía caer Safari) */
 
     /* ────────── 11 · LA TINTA DE LAS SEIS BANDAS */
     /* ⭐⭐ DOS JUEGOS DE TINTA, SEGÚN HAYA BANDA TEMÁTICA O NO.  (22/9/2026)
