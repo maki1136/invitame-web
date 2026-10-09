@@ -52,19 +52,16 @@
 name: Banco de pruebas
 
 on:
-  push:
-    paths:
-      - 'efectos/**'
-      - 'colecciones/**'
-      - 'i/**'
-      - 'galeria/**'
-      - 'admin/**'
-      - 'sobres/**'
-      - '.github/workflows/banco.yml'
-      - 'chequeo/probar.mjs'
-      - 'chequeo/panel.cjs'
-      - 'chequeo/comparar.cjs'
-      - 'chequeo/muestras.txt'
+  # ⭐ 9/10/2026 — ANTES corría en CADA cambio subido (y cada cambio va primero a
+  #    la rama prueba). Pero el banco prueba el sitio DE VERDAD (invitameok.net),
+  #    así que en esos casos probaba lo mismo de siempre y gastaba igual.
+  #    Ahora corre: UNA vez por día, a mano, y DESPUÉS DE CADA PUBLICACIÓN al
+  #    sitio de verdad (que es cuando de verdad cambia lo que ven los clientes).
+  # ⚠️ No se usa `push` a main: el botón Publicar empuja con el permiso propio de
+  #    GitHub, y esos empujones NO disparan otros workflows. Por eso workflow_run.
+  workflow_run:
+    workflows: ['Publicar al sitio de verdad']
+    types: [completed]
   schedule:
     - cron: '0 15 * * *'
   workflow_dispatch:
@@ -81,6 +78,8 @@ jobs:
 
   # ── UNA MAQUINA POR ESCENARIO ────────────────────────────────────────────────
   probar:
+    # Si la publicación falló, no hay nada nuevo que probar.
+    if: (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     # La imagen oficial de Playwright ya trae WebKit y Chromium con TODAS sus
     # librerias. Es justo lo que en el sandbox de Claude no se puede instalar.
@@ -96,6 +95,11 @@ jobs:
     steps:
       - name: Traer el repo
         uses: actions/checkout@v4
+
+      - name: Esperar que Hostinger termine de publicar
+        # Después de Publicar, Hostinger tarda un poco en copiar main al sitio.
+        if: github.event_name == 'workflow_run'
+        run: sleep 180
 
       - name: Instalar Playwright
         # pngjs: el chequeo de contraste lee los pixeles de una captura para
@@ -139,7 +143,7 @@ jobs:
   # ── Y UNA SOLA QUE JUNTA TODO Y ESCRIBE EL INFORME ───────────────────────────
   juntar:
     needs: probar
-    if: always()          # aunque algun escenario se haya caido
+    if: always() && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')          # aunque algun escenario se haya caido
     runs-on: ubuntu-latest
     steps:
       - name: Traer el repo
@@ -230,12 +234,18 @@ jobs:
   # Corre en su propia máquina (no le saca memoria al banco de Safari).
   # ═══════════════════════════════════════════════════════════════════════════════
   tablero:
+    if: (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.62.1-noble
     timeout-minutes: 120
     steps:
       - name: Traer el repo
         uses: actions/checkout@v4
+
+      - name: Esperar que Hostinger termine de publicar
+        # Después de Publicar, Hostinger tarda un poco en copiar main al sitio.
+        if: github.event_name == 'workflow_run'
+        run: sleep 180
 
       - name: Instalar Playwright
         run: npm init -y && npm i -D playwright@1.62.1
@@ -271,7 +281,7 @@ jobs:
   #    una foto y gasta 2 operaciones de Sightengine.
   # ═══════════════════════════════════════════════════════════════════════════════
   servicios:
-    if: github.event_name != 'push'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Traer el repo
