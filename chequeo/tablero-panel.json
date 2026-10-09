@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-09T20:10:47.395Z",
+ "cuando": "2026-10-09T21:23:02.841Z",
  "slug": "camila-y-tomas",
  "total": 356,
  "verde": 355,
@@ -2123,9 +2123,8 @@
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2366,8 +2365,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.velo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
