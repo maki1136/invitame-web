@@ -1,7 +1,7 @@
-CHEQUEO DE SERVICIOS — 2026-10-08 20:32 UTC
+CHEQUEO DE SERVICIOS — 2026-10-09 20:00 UTC
 🔴 HAY 1 COSA(S) MAL
 
-MAL    Cloudinary (plan Small PAYG): 65.5 de 60 créditos = 109% → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.
+MAL    Cloudinary (plan Small PAYG): 65.8 de 60 créditos = 110% → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.
 BIEN   Galería en vivo: 0.003 GB de 8 GB este mes = 0%
 BIEN   Firebase: contesta bien
 BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (945 KB)
