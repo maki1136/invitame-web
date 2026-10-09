@@ -380,6 +380,25 @@
     return aRGB(cs.color);
   }
 
+  /* ⚠️⚠️ ERROR 40 — LA LETRA EN DEGRADÉ NO TIENE TINTA QUE CORREGIR. (9/10/2026)
+     Los nombres de Colorama, Rosa disco, Cerezo… son un degradé recortado a la
+     letra: `-webkit-text-fill-color: transparent` + `background-clip: text`.
+     La tinta transparente se medía como NEGRO (luminancia 0) y sobre la foto
+     de portada se le ponía un halo blanco con !important. Con la letra
+     transparente ese halo se ve A TRAVÉS de la letra y lava el degradé:
+     «Luciana & Sebastián» y «Montserrat» salían en pastel casi invisible.
+     La colección ya le pone su propia sombra; acá no se toca. */
+  function esLetraDegrade(el, cs) {
+    var f = aRGB(cs.webkitTextFillColor);
+    if (!f || f[3] > 0.02) return false;
+    for (var e = el, i = 0; e && i < 3; e = e.parentElement, i++) {
+      var s = i === 0 ? cs : getComputedStyle(e);
+      var clip = s.webkitBackgroundClip || s.backgroundClip;
+      if (clip === 'text' && s.backgroundImage && s.backgroundImage !== 'none') return true;
+    }
+    return false;
+  }
+
   function luminancia(c) {
     var r = [c[0], c[1], c[2]].map(function (v) {
       v /= 255;
@@ -1051,6 +1070,7 @@
 
       var r = el.getBoundingClientRect();
       if (r.width < 4 || r.height < 4) continue;
+      if (esLetraDegrade(el, cs)) continue;          /* ★ error 40 */
 
       /* ⚠️⚠️ ERROR 20 — LA REGLA NO MIRABA LA OPACIDAD. (17/9/2026)
          Medía `color` y nada más. Un rótulo con `opacity:.45` sobre el papel
