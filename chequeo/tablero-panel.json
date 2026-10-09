@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-09T20:21:26.604Z",
+ "cuando": "2026-10-09T20:10:47.395Z",
  "slug": "camila-y-tomas",
  "total": 356,
  "verde": 355,
@@ -2123,8 +2123,9 @@
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2678,9 +2679,8 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "TRIVIA",
@@ -3645,7 +3645,7 @@
    "guarda": true,
    "dato": "fx.paquete.plan",
    "llega": true,
-   "seVe": false,
+   "seVe": true,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
   },

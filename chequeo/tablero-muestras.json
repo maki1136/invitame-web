@@ -1,18 +1,16 @@
 {
- "cuando": "2026-10-09T20:35:23.620Z",
+ "cuando": "2026-10-09T20:39:47.270Z",
  "total": 55,
- "verde": 47,
+ "verde": 43,
  "rojo": 8,
- "gris": 0,
+ "gris": 4,
  "items": [
   {
    "slug": "abril-mis15",
-   "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(74, 58, 40)» · publicada «rgba(248, 240, 220, 0.28)/rgb(74, 58, 40)»"
-   ],
-   "error": ""
+   "ver": "",
+   "estado": "gris",
+   "dif": [],
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "aitana-mis15",
@@ -177,10 +175,10 @@
   },
   {
    "slug": "julieta-mis15",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "lucia-y-sebastian",
@@ -261,10 +259,10 @@
   },
   {
    "slug": "mariana-y-rodrigo",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "marisol-mis15",
@@ -303,7 +301,7 @@
     "sección regalos: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección share-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección filtro-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
-    "sección gal-seccion: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.55)/rgb(58, 69, 61) ~velo»"
+    "sección gal-seccion: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»"
    ],
    "error": ""
   },
@@ -338,8 +336,10 @@
   {
    "slug": "paloma-mis15",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(62, 44, 37)» · publicada «rgba(246, 240, 228, 0.28)/rgb(62, 44, 37)»"
+   ],
    "error": ""
   },
   {
@@ -389,10 +389,10 @@
   },
   {
    "slug": "sofia-y-emilio",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "sofia-y-martin",
