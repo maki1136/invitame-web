@@ -1,4 +1,4 @@
-CHEQUEO DE SERVICIOS — 2026-10-09 20:00 UTC
+CHEQUEO DE SERVICIOS — 2026-10-10 19:09 UTC
 🔴 HAY 1 COSA(S) MAL
 
 MAL    Cloudinary (plan Small PAYG): 65.8 de 60 créditos = 110% → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.
