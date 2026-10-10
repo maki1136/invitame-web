@@ -83,6 +83,15 @@
     todas.forEach(function (s) { if (s !== el) s.style.setProperty('display', 'none', 'important'); });
     window.scrollTo(0, 0);
     await u.esperar(350);
+    /* Al volver a mostrarse, una sección arranca de cero sus animaciones de
+       entrada (opacidad 0): en Cantera salían los títulos y las tarjetas en
+       blanco. Se las lleva al final; las que no terminan nunca, se dejan. */
+    try {
+      (document.getAnimations ? document.getAnimations() : []).forEach(function (a) {
+        try { var ef = a.effect && a.effect.getComputedTiming && a.effect.getComputedTiming(); if (ef && ef.iterations !== Infinity) a.finish(); } catch (e) {}
+      });
+    } catch (e) {}
+    await u.esperar(120);
     var r = el.getBoundingClientRect(), top = Math.max(0, r.top + scrollY), alto = Math.ceil(r.height);
     /* el fondo fijo mide una pantalla: para una sección más alta se estira, como se ve al pasar con el dedo */
     var altos = fijos.map(function (f) { var v = f.style.getPropertyValue('height'), p = f.style.getPropertyPriority('height'); f.style.setProperty('height', Math.max(innerHeight, alto + top) + 'px', 'important'); return [v, p]; });
@@ -175,10 +184,19 @@
 
     var frame = document.querySelector('.frame');
     var todas = frame ? [].filter.call(frame.children, function (e) { return e.offsetHeight > 40 && getComputedStyle(e).display !== 'none'; }) : [];
-    var fijos = [].filter.call(document.body.querySelectorAll('*'), function (e) {
-      var c = getComputedStyle(e); if (c.position !== 'fixed' || c.display === 'none' || c.visibility === 'hidden') return false;
-      var r = e.getBoundingClientRect(); return r.width * r.height >= 160 * 160 && e.id !== 'env' && !e.closest('#env');
-    });
+    var buscarFijos = function () {
+      return [].filter.call(document.body.querySelectorAll('*'), function (e) {
+        var c = getComputedStyle(e); if (c.position !== 'fixed' || c.display === 'none' || c.visibility === 'hidden') return false;
+        var r = e.getBoundingClientRect(); return r.width * r.height >= 160 * 160 && e.id !== 'env' && !e.closest('#env');
+      });
+    };
+    /* el fondo «adelante» puede ser un VIDEO fijo: se congela antes, si no queda gris (regina, 10/10) */
+    var fijos = buscarFijos();
+    for (var f = 0; f < fijos.length; f++) {
+      if (fijos[f].tagName === 'VIDEO') { var cont = document.createElement('div'); fijos[f].parentNode.insertBefore(cont, fijos[f]); cont.appendChild(fijos[f]); await u.congelarEn(cont); cont.replaceWith.apply(cont, [].slice.call(cont.childNodes)); }
+      else await u.congelarEn(fijos[f]);
+    }
+    fijos = buscarFijos();
     for (var i = 0; i < todas.length; i++) {
       avisar('Sección ' + (i + 1) + ' de ' + todas.length + '…');
       todas[i].scrollIntoView({ block: 'start' }); await u.esperar(700);
