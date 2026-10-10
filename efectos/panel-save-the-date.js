@@ -40,7 +40,7 @@
   }
   function cargarMarco() {
     if (window.INVSTD_MARCO) return Promise.resolve();
-    return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = '/efectos/std-marco.js?v=1'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+    return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = '/efectos/std-marco.js?v=2'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
   }
 
   function construir() {
@@ -48,7 +48,7 @@
     caja.id = ID;
     caja.style.cssText = 'margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(0,0,0,.10)';
     var t = document.createElement('div');
-    t.textContent = 'Save the date (regalo para los novios)';
+    t.textContent = 'Save the date y recuerdo (regalos para los novios)';
     t.style.cssText = 'font-size:13px;font-weight:600;margin-bottom:2px';
     caja.appendChild(t);
     var a = document.createElement('div');
@@ -91,6 +91,22 @@
     [bVer, bBajar].forEach(function (b) { b.style.cssText = 'border:0;border-radius:20px;padding:8px 14px;font-weight:700;cursor:pointer;background:#efe7de;color:#49111A'; botones.appendChild(b); });
     campos.appendChild(botones);
     var nota = document.createElement('div'); nota.style.cssText = 'font-size:11px;opacity:.7;margin-top:8px;line-height:1.35'; campos.appendChild(nota);
+
+    /* el recuerdo: la invitación entera (efectos/recuerdo.js), con el mismo botón que los novios */
+    var rec = document.createElement('div'); rec.style.cssText = 'margin-top:14px;padding-top:12px;border-top:1px dashed rgba(0,0,0,.12)';
+    var rt = document.createElement('div'); rt.textContent = 'Recuerdo (la invitación entera)'; rt.style.cssText = 'font-size:12px;font-weight:600;margin-bottom:2px';
+    var ra = document.createElement('div'); ra.textContent = 'Del sobre cerrado al «¡Gracias!»: una hoja con todo y la larga en partes. Sale de la invitación publicada; tarda un par de minutos.'; ra.style.cssText = 'font-size:11px;opacity:.65;margin-bottom:8px;line-height:1.35';
+    var rb = document.createElement('button'); rb.type = 'button'; rb.textContent = 'Descargar el recuerdo';
+    rb.style.cssText = 'border:0;border-radius:20px;padding:8px 14px;font-weight:700;cursor:pointer;background:#efe7de;color:#49111A';
+    var rn = document.createElement('div'); rn.style.cssText = 'font-size:11px;opacity:.7;margin-top:8px;line-height:1.35';
+    rec.appendChild(rt); rec.appendChild(ra); rec.appendChild(rb); rec.appendChild(rn); campos.appendChild(rec);
+    cargarMarco().then(function () {
+      window.INVSTD_MARCO.botonRecuerdo(rb, rn, function () {
+        var s = (borrador().slug || '').trim();
+        if (!s || s === 'maria-y-diego') { rn.textContent = 'Primero poné la dirección del link y tocá «Guardar y publicar».'; return ''; }
+        return s;
+      });
+    });
 
     vista.innerHTML = '<div style="width:180px;height:320px;border-radius:12px;background:#f3eff4;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;font-size:11.5px;color:#6b5f6f;line-height:1.4">Tocá «Ver el save the date» para armarlo con la portada publicada.</div>';
 

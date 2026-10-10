@@ -306,10 +306,29 @@
       return n === port || port.contains(n) || n.contains(port) || fijos.some(function (f) { return f === n || f.contains(n) || n.contains(f); });
     };
     return await window.modernScreenshot.domToBlob(document.body, {
-      width: 360, height: 640, scale: 3, type: 'image/jpeg', quality: 0.93,
+      width: 360, height: 640, scale: 3, type: 'image/jpeg', quality: 0.93, style: { margin: '0', padding: '0' },
       timeout: 15000, font: { cssText: css }, filter: vale
     });
   }
 
-  window.INVSTD = { preparar: preparar, armar: function (d) { armar(d); }, capturar: capturar, auto: function () { return AUTO && Object.assign({}, AUTO); } };
+  /* congela los videos de adentro de `raiz` (para el recuerdo, sección por sección):
+     el cuadro actual, o el póster si el video todavía no cargó */
+  async function congelarEn(raiz) {
+    var vids = [].slice.call(raiz.querySelectorAll('video'));
+    for (var i = 0; i < vids.length; i++) {
+      var v = vids[i], url = null;
+      try { if (v.videoWidth) url = await cuadro(v); } catch (e) {}
+      if (!url && v.poster) url = v.poster;
+      if (!url) continue;
+      var im = new Image(); im.crossOrigin = 'anonymous'; im.src = url; im.className = v.className; im.style.cssText = v.style.cssText;
+      var cs = getComputedStyle(v);
+      ['position', 'inset', 'top', 'left', 'right', 'bottom', 'width', 'height', 'object-fit', 'object-position', 'transform', 'filter', 'opacity', 'z-index', 'border-radius', 'display'].forEach(function (p) { im.style.setProperty(p, cs.getPropertyValue(p)); });
+      try { await im.decode(); } catch (e) {}
+      v.replaceWith(im);
+    }
+  }
+
+  window.INVSTD = { preparar: preparar, armar: function (d) { armar(d); }, capturar: capturar, auto: function () { return AUTO && Object.assign({}, AUTO); },
+    /* lo usa efectos/recuerdo.js (la invitación entera): mismas trampas, un solo lugar */
+    util: { silenciar: silenciar, abrirSobre: abrirSobre, quieta: quieta, cargarLib: cargarLib, letras: letras, congelarEn: congelarEn, esperar: esperar } };
 })();

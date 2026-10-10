@@ -23,7 +23,7 @@
    ============================================================================ */
 (function () {
   if (window.INVSTD_MARCO) return;
-  var VER = '1';
+  var VER = '2';
 
   function crear(caja, slug) {
     caja.innerHTML = '';
@@ -70,18 +70,7 @@
       listo.then(function () { fr.contentWindow.INVSTD.armar(d); });
       clearTimeout(timer); timer = setTimeout(function () { sacar().catch(function () {}); }, 2000);
     }
-    function entregar(b, nombre) {
-      var file = null;
-      try { file = new File([b], nombre, { type: 'image/jpeg' }); } catch (e) {}
-      var tactil = matchMedia('(pointer:coarse)').matches;
-      if (file && tactil && navigator.canShare && navigator.canShare({ files: [file] })) {
-        return navigator.share({ files: [file] }).then(function () { return true; }, function (e) { if (e && e.name === 'AbortError') return true; throw e; });
-      }
-      var a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = nombre;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function () { URL.revokeObjectURL(a.href); }, 60000);
-      return Promise.resolve(true);
-    }
+    function entregar(b, nombre) { return entregarArchivos([[b, nombre]]); }
     /* devuelve 'listo' (entregada) o 'otra-vez' (la armó, pero hace falta un toque más) */
     function descargar(nombre) {
       var k = clave();
@@ -91,5 +80,86 @@
     return { listo: listo, armar: armar, descargar: descargar };
   }
 
-  window.INVSTD_MARCO = { crear: crear };
+  /* Entrega una o varias imágenes: en el celular, la hoja de compartir («Guardar
+     en Fotos»); en la compu, una descarga por archivo. Si el celular dice que no
+     (pasó mucho tiempo desde el toque), la promesa falla y el panel pide otro toque. */
+  function entregarArchivos(lista) {
+    var files = [];
+    try { files = lista.map(function (x) { return new File([x[0]], x[1], { type: 'image/jpeg' }); }); } catch (e) { files = []; }
+    var tactil = matchMedia('(pointer:coarse)').matches;
+    if (files.length && tactil && navigator.canShare && navigator.canShare({ files: files })) {
+      return navigator.share({ files: files }).then(function () { return true; }, function (e) { if (e && e.name === 'AbortError') return true; throw e; });
+    }
+    lista.forEach(function (x, i) {
+      setTimeout(function () {
+        var a = document.createElement('a'); a.href = URL.createObjectURL(x[0]); a.download = x[1];
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 60000);
+      }, i * 600);
+    });
+    return Promise.resolve(true);
+  }
+
+  /* EL RECUERDO (la invitación entera, efectos/recuerdo.js). Se arma en un iframe
+     aparte de 390 × 844, fuera de la vista, y tarda: ~2 minutos. Devuelve
+     {descargar()} cuando está listo; `avisar(texto)` cuenta por dónde va. */
+  function recuerdo(slug, avisar) {
+    avisar = avisar || function () {};
+    var fr = document.createElement('iframe');
+    fr.setAttribute('aria-hidden', 'true'); fr.setAttribute('tabindex', '-1');
+    fr.style.cssText = 'position:fixed;left:-10000px;top:0;width:390px;height:844px;border:0;opacity:0;pointer-events:none';
+    document.body.appendChild(fr);
+    var hecho = new Promise(function (ok, no) {
+      fr.onload = function () {
+        try {
+          var w = fr.contentWindow, d = fr.contentDocument;
+          var s1 = d.createElement('script'); s1.src = '/efectos/save-the-date.js?v=' + VER;
+          s1.onload = function () {
+            var s2 = d.createElement('script'); s2.src = '/efectos/recuerdo.js?v=' + VER;
+            s2.onload = function () { w.INVREC.armar(avisar).then(ok, no); };
+            s2.onerror = function () { no(new Error('No cargó el armado del recuerdo.')); };
+            d.head.appendChild(s2);
+          };
+          s1.onerror = function () { no(new Error('No cargó el armado del recuerdo.')); };
+          d.head.appendChild(s1);
+        } catch (e) { no(e); }
+      };
+      fr.src = '/i/?e=' + encodeURIComponent(slug) + '&recuerdo=1&cb=' + Date.now();
+    });
+    return hecho.then(function (r) {
+      fr.remove();
+      var lista = [[r.hoja, 'recuerdo-' + slug + '-en-una-hoja.jpg']];
+      r.partes.forEach(function (b, i) { lista.push([b, 'recuerdo-' + slug + '-parte-' + (i + 1) + '-de-' + r.partes.length + '.jpg']); });
+      return { cuantas: lista.length, descargar: function () { return entregarArchivos(lista).then(function () { return 'listo'; }, function () { return 'otra-vez'; }); } };
+    }, function (e) { fr.remove(); throw e; });
+  }
+
+  /* El botón del recuerdo, igual en los dos paneles. `b` es un <button> ya
+     estilado por cada panel; `nota` un elemento donde se cuenta el avance. */
+  function botonRecuerdo(b, nota, slugDe) {
+    var listo = null, base = b.textContent;
+    b.onclick = function () {
+      var slug = slugDe(); if (!slug) return;
+      if (listo) {
+        b.disabled = true;
+        listo.descargar().then(function (r) {
+          b.disabled = false;
+          if (r === 'listo') { b.textContent = base; nota.textContent = 'Listo: ' + listo.cuantas + ' imágenes (la hoja con todo y la invitación larga en partes).'; listo = null; }
+        });
+        return;
+      }
+      b.disabled = true; b.textContent = 'Armando el recuerdo…';
+      nota.textContent = 'Tarda un par de minutos: recorre la invitación entera. No cierres esta pantalla.';
+      recuerdo(slug, function (txt) { nota.textContent = txt + ' (no cierres esta pantalla)'; }).then(function (r) {
+        listo = r;
+        return r.descargar().then(function (res) {
+          b.disabled = false;
+          if (res === 'otra-vez') { b.textContent = 'Guardar el recuerdo'; nota.textContent = 'Ya está listo: tocá el botón para guardarlo.'; }
+          else { b.textContent = base; nota.textContent = 'Listo: ' + r.cuantas + ' imágenes (la hoja con todo y la invitación larga en partes).'; listo = null; }
+        });
+      }).catch(function () { b.disabled = false; b.textContent = base; nota.textContent = 'No se pudo armar el recuerdo. ¿Está publicada la invitación? Probá de nuevo.'; });
+    };
+  }
+
+  window.INVSTD_MARCO = { crear: crear, recuerdo: recuerdo, botonRecuerdo: botonRecuerdo };
 })();

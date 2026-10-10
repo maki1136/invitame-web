@@ -27,7 +27,7 @@
 
   function cargarMarco() {
     if (window.INVSTD_MARCO) return Promise.resolve();
-    return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = '/efectos/std-marco.js?v=1'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+    return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = '/efectos/std-marco.js?v=2'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
   }
 
   function pintar(vista, ctx) {
@@ -47,6 +47,12 @@
             '<p id="std-nota" style="font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.45"></p>' +
           '</div>' +
         '</div>' +
+      '</div>' +
+      '<div class="card" style="max-width:760px">' +
+        '<h3>El recuerdo de tu invitación</h3>' +
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.5">Tu invitación entera, del sobre cerrado al «¡Gracias!», para que te quede para siempre: una imagen con todo en una hoja y la invitación larga en partes, para mirar en el celular.</p>' +
+        '<button class="btn" id="rec-bajar" style="max-width:280px">Descargar el recuerdo</button>' +
+        '<p id="rec-nota" style="font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.45"></p>' +
       '</div>';
 
     var $ = function (id) { return document.getElementById(id); };
@@ -70,6 +76,7 @@
       if (m) m.armar(juntar());
       clearTimeout(tg); tg = setTimeout(function () { ctx.guardar(Object.assign({}, mios)); }, 1200);
     };
+    cargarMarco().then(function () { window.INVSTD_MARCO.botonRecuerdo($('rec-bajar'), $('rec-nota'), function () { return ctx.slug; }); });
     $('std-bajar').onclick = function () {
       if (!m) return;
       var b = $('std-bajar'), txt = 'Descargar imagen';
