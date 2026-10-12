@@ -23,7 +23,7 @@
    ============================================================================ */
 (function () {
   if (window.INVSTD_MARCO) return;
-  var VER = '2';
+  var VER = '3';
 
   function crear(caja, slug) {
     caja.innerHTML = '';
@@ -107,7 +107,10 @@
     avisar = avisar || function () {};
     var fr = document.createElement('iframe');
     fr.setAttribute('aria-hidden', 'true'); fr.setAttribute('tabindex', '-1');
-    fr.style.cssText = 'position:fixed;left:-10000px;top:0;width:390px;height:844px;border:0;opacity:0;pointer-events:none';
+    /* ⚠️ ADENTRO de la pantalla, achicado y casi transparente: fuera de la pantalla
+       las secciones nunca «aparecen» (sus animaciones de entrada esperan a verse)
+       y el recuerdo salía con títulos, fotos y tarjetas en blanco (regina, 11/10). */
+    fr.style.cssText = 'position:fixed;left:0;top:0;width:390px;height:844px;border:0;opacity:.01;pointer-events:none;transform:scale(.25);transform-origin:0 0;z-index:-1';
     document.body.appendChild(fr);
     var hecho = new Promise(function (ok, no) {
       fr.onload = function () {

@@ -27,7 +27,7 @@
 
   function cargarMarco() {
     if (window.INVSTD_MARCO) return Promise.resolve();
-    return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = '/efectos/std-marco.js?v=2'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+    return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = '/efectos/std-marco.js?v=3'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
   }
 
   function pintar(vista, ctx) {
