@@ -275,14 +275,18 @@
   /* La librería pierde el apóstrofo de un texto puesto con `content` («LET'S» de
      Lupita salía «LETS»): se cambia por el tipográfico, que pasa bien. */
   function apostrofos() {
+    /* el texto con apóstrofo pasa a ser un <span> de verdad con el mismo estilo:
+       cambiar el apóstrofo dentro de `content` no alcanzó («LETS» seguía igual) */
     var reglas = '';
     [].forEach.call(E.port.querySelectorAll('*'), function (e, i) {
       ['::before', '::after'].forEach(function (ps) {
-        var c = getComputedStyle(e, ps).content;
-        if (c && c !== 'none' && c.indexOf("'") >= 0 && /^".*"$/.test(c)) {
-          e.setAttribute('data-std-ap', i);
-          reglas += '[data-std-ap="' + i + '"]' + ps + '{content:' + c.replace(/'/g, '’') + '!important}';
-        }
+        var c = getComputedStyle(e, ps), txt = c.content;
+        if (!txt || txt === 'none' || txt.indexOf("'") < 0 || !/^".*"$/.test(txt) || c.display === 'none') return;
+        var s = document.createElement('span'); s.setAttribute('aria-hidden', 'true');
+        for (var k = 0; k < c.length; k++) { var p = c[k]; if (p === 'content' || /^(animation|transition)/.test(p)) continue; try { s.style.setProperty(p, c.getPropertyValue(p)); } catch (x) {} }
+        s.textContent = JSON.parse(txt);
+        if (ps === '::before') e.insertBefore(s, e.firstChild); else e.appendChild(s);
+        reglas += apagarPseudo(e, ps);
       });
     });
     if (reglas) { var s = document.createElement('style'); s.textContent = reglas; document.head.appendChild(s); }
@@ -293,6 +297,7 @@
     await cargarLib();
     await congelarVideos();
     apostrofos();
+    await pseudosReales(E.port);
     window.scrollTo(0, 0);
     var port = E.port;
     var fijos = [].filter.call(document.body.querySelectorAll('*'), function (e) {
@@ -309,6 +314,70 @@
       width: 360, height: 640, scale: 3, type: 'image/jpeg', quality: 0.93, style: { margin: '0', padding: '0' },
       timeout: 15000, font: { cssText: css }, filter: vale
     });
+  }
+
+  /* Los adornos hechos con ::before / ::after y una imagen de fondo (el lacre de
+     «¿Alguna duda?», el papel del pase de Cantera con su borde esfumado) salían
+     rotos en la copia: una media luna, una franja lisa. Se cambian por un
+     <span> de verdad con TODO su estilo ya calculado, y el adorno original se
+     apaga. Sólo los decorativos (content vacío): los de texto quedan como están. */
+  var PS_N = 0;
+  /* apaga un ::before/::after con un selector que le gane a cualquier colección
+     (un id repetido tres veces pesa más que las reglas de las colecciones) */
+  function apagarPseudo(e, ps) {
+    if (!e.id) e.id = 'std-ps-' + (PS_N++);
+    var q = '#' + CSS.escape(e.id);
+    return q + q + q + ps + '{display:none!important;content:none!important}';
+  }
+  /* el papel con borde esfumado (mask-image con un degradé de arriba abajo): se
+     pinta en un lienzo con el esfumado ya aplicado, porque la copia lo perdía */
+  async function horneado(c, w, h) {
+    var m = c.webkitMaskImage || c.maskImage, u = (c.backgroundImage.match(/url\("?([^")]+)"?\)/) || [])[1];
+    if (!u || !/^linear-gradient\(/.test(m) || /deg|to (left|right|top)/.test(m) || c.backgroundImage.split('url(').length > 2) return null;
+    var stops = []; m.replace(/rgba?\(([^)]+)\)\s*([\d.]+)%/g, function (_, rgb, pct) { var x = rgb.split(',').map(Number); stops.push([+pct / 100, x.length > 3 ? x[3] : 1]); });
+    if (stops.length < 2) return null;
+    var im = new Image(); im.crossOrigin = 'anonymous'; im.src = u; await im.decode();
+    var k = 2, cv = document.createElement('canvas'); cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+    var x = cv.getContext('2d');
+    var esc = Math.max(cv.width / im.naturalWidth, cv.height / im.naturalHeight);   /* cover, centrado */
+    var iw = im.naturalWidth * esc, ih = im.naturalHeight * esc;
+    x.drawImage(im, (cv.width - iw) / 2, (cv.height - ih) / 2, iw, ih);
+    var g = x.createLinearGradient(0, 0, 0, cv.height);
+    stops.forEach(function (s) { g.addColorStop(Math.min(1, Math.max(0, s[0])), 'rgba(0,0,0,' + s[1] + ')'); });
+    x.globalCompositeOperation = 'destination-in'; x.fillStyle = g; x.fillRect(0, 0, cv.width, cv.height);
+    return cv.toDataURL('image/png');
+  }
+  async function pseudosReales(raiz) {
+    var reglas = '', lista = [];
+    [raiz].concat([].slice.call(raiz.querySelectorAll('*'))).forEach(function (e) {
+      if (e.hasAttribute('data-std-ps')) return;
+      ['::before', '::after'].forEach(function (ps) {
+        var c = getComputedStyle(e, ps);
+        if (!c || c.display === 'none' || (c.content !== '""' && c.content !== "''")) return;
+        if (!/url\(/.test(c.backgroundImage || '')) return;
+        var m = c.webkitMaskImage || c.maskImage, conMascara = m && m !== 'none';
+        var suelto = c.position === 'static' || c.position === 'relative';
+        if (!conMascara && !suelto) return;   /* los absolutos sin máscara salen bien: no se tocan */
+        lista.push([e, ps, c]);
+      });
+    });
+    for (var j = 0; j < lista.length; j++) {
+      var e = lista[j][0], ps = lista[j][1], c = lista[j][2];
+      var conMascara = (c.webkitMaskImage || c.maskImage || 'none') !== 'none', dato = null;
+      if (conMascara) {
+        try { dato = await horneado(c, parseFloat(c.width), parseFloat(c.height)); } catch (x) { dato = null; }
+        if (!dato) continue;
+      }
+      var s = document.createElement('span'); s.setAttribute('data-std-ps', '1'); s.setAttribute('aria-hidden', 'true');
+      for (var i = 0; i < c.length; i++) { var p = c[i]; if (p === 'content' || /^(animation|transition)/.test(p)) continue; try { s.style.setProperty(p, c.getPropertyValue(p)); } catch (x) {} }
+      if (dato) {
+        ['mask-image', '-webkit-mask-image', 'mask', '-webkit-mask'].forEach(function (p) { s.style.setProperty(p, 'none'); });
+        s.style.setProperty('background-image', 'url("' + dato + '")'); s.style.setProperty('background-size', '100% 100%');
+      }
+      if (ps === '::before') e.insertBefore(s, e.firstChild); else e.appendChild(s);
+      reglas += apagarPseudo(e, ps);
+    }
+    if (reglas) { var st = document.createElement('style'); st.textContent = reglas; document.head.appendChild(st); }
   }
 
   /* congela los videos de adentro de `raiz` (para el recuerdo, sección por sección):
@@ -330,5 +399,5 @@
 
   window.INVSTD = { preparar: preparar, armar: function (d) { armar(d); }, capturar: capturar, auto: function () { return AUTO && Object.assign({}, AUTO); },
     /* lo usa efectos/recuerdo.js (la invitación entera): mismas trampas, un solo lugar */
-    util: { silenciar: silenciar, abrirSobre: abrirSobre, quieta: quieta, cargarLib: cargarLib, letras: letras, congelarEn: congelarEn, esperar: esperar } };
+    util: { silenciar: silenciar, abrirSobre: abrirSobre, pseudosReales: pseudosReales, quieta: quieta, cargarLib: cargarLib, letras: letras, congelarEn: congelarEn, esperar: esperar } };
 })();

@@ -67,10 +67,29 @@
     document.querySelectorAll('.rasp-zona canvas, #scratchcard canvas').forEach(function (c) { c.style.setProperty('opacity', '0', 'important'); });
   }
 
+  /* Maki, 11/10: en un recuerdo no van botones ni formularios, y la cuenta
+     regresiva congelada («376 días») no tiene sentido: va la fecha. */
+  function limpiarParaRecuerdo() {
+    var st = document.createElement('style');
+    st.textContent = '.frame button,.frame input,.frame select,.frame textarea,.frame label,.frame form,' +
+      '.frame .btn,.frame a.wsp,.frame a[href],.footer a,.footer button,.frame .rsvp-caja{display:none!important}';   /* .rsvp-caja = el sí/no con su «Toca tu respuesta» */
+    document.head.appendChild(st);
+    var count = document.querySelector('.portada .count'), ev = window.INVEV || {}, d = ev.fecha ? new Date(ev.fecha) : null;
+    if (!count || !d || isNaN(d)) return;
+    var num = count.querySelector('.num') || count, c = getComputedStyle(num);
+    var f = document.createElement('div');
+    ['color', '-webkit-text-fill-color', 'text-shadow', 'font-family', 'font-weight', 'font-style'].forEach(function (p) { f.style.setProperty(p, c.getPropertyValue(p), 'important'); });
+    f.style.cssText += ';font-size:30px;line-height:1.1;letter-spacing:4px;text-align:center;margin-top:14px;position:relative;z-index:3';
+    f.textContent = String(d.getDate()).padStart(2, '0') + ' · ' + String(d.getMonth() + 1).padStart(2, '0') + ' · ' + d.getFullYear();
+    count.style.setProperty('display', 'none', 'important');
+    count.after(f);
+  }
+
   async function sacarPantalla(css) {
     var u = window.INVSTD.util;
     /* sólo el sobre: congelar los videos de toda la página tardaba más de 3 minutos */
     await u.congelarEn(document.getElementById('env') || document.body);
+    await u.pseudosReales(document.getElementById('env') || document.body);
     var c = await window.modernScreenshot.domToCanvas(document.body, { width: innerWidth, height: innerHeight, scale: ESC, style: SIN_MARGEN, timeout: 15000, font: { cssText: css },
       /* sólo el sobre: copiar la página entera (todas las fotos) tardaba minutos */
       filter: function (n) { if (n.nodeType !== 1) return true; if (n.tagName === 'IFRAME' || n.tagName === 'VIDEO') return false; var env = document.getElementById('env'); return !env || n === env || env.contains(n) || n.contains(env); } });
@@ -92,6 +111,7 @@
       });
     } catch (e) {}
     await u.esperar(120);
+    await u.pseudosReales(el);
     var r = el.getBoundingClientRect(), top = Math.max(0, r.top + scrollY), alto = Math.ceil(r.height);
     /* el fondo fijo mide una pantalla: para una sección más alta se estira, como se ve al pasar con el dedo */
     var altos = fijos.map(function (f) { var v = f.style.getPropertyValue('height'), p = f.style.getPropertyPriority('height'); f.style.setProperty('height', Math.max(innerHeight, alto + top) + 'px', 'important'); return [v, p]; });
@@ -180,6 +200,8 @@
     for (var y = 0; y < document.documentElement.scrollHeight; y += 400) { window.scrollTo(0, y); await u.esperar(160); }
     await u.esperar(2500);
     ocultarFlotantes();
+    limpiarParaRecuerdo();
+    await u.esperar(400);
     css = await u.letras([document.body]);
 
     var frame = document.querySelector('.frame');
