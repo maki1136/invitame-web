@@ -1,9 +1,9 @@
-CHEQUEO DE SERVICIOS — 2026-10-12 22:24 UTC
-🔴 HAY 3 COSA(S) MAL
+CHEQUEO DE SERVICIOS — 2026-10-13 20:32 UTC
+🔴 HAY 1 COSA(S) MAL
 
-MAL    Cloudinary: el servidor no contestó uso.php (fetch failed)
+MAL    Cloudinary (plan Small PAYG): 65.7 de 60 créditos = 110% → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.
 BIEN   Galería en vivo: 0.003 GB de 8 GB este mes = 0%
 BIEN   Firebase: contesta bien
-MAL    Servidor: no contestó (fetch failed)
-MAL    Caché de fotos: no se pudo chequear (fetch failed)
+BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (945 KB)
+BIEN   Caché de fotos: prendida y entregando (r2)
 BIEN   Foto de prueba: subió, pasó el filtro (sightengine) y quedó APROBADA
