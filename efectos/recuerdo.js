@@ -74,6 +74,16 @@
     st.textContent = '.frame button,.frame input,.frame select,.frame textarea,.frame label,.frame form,' +
       '.frame .btn,.frame a.wsp,.frame a[href],.footer a,.footer button,.frame .rsvp-caja{display:none!important}';   /* .rsvp-caja = el sí/no con su «Toca tu respuesta» */
     document.head.appendChild(st);
+    /* «Nuestro video» y «Playlist» sin imagen de tapa quedan como una caja vacía
+       (en la invitación se tocan; en una imagen no): esas dos se sacan del recuerdo */
+    document.querySelectorAll('.frame [data-sec="video"], .frame [data-sec="spotify"], .frame #spotify-sec').forEach(function (s) {
+      var conImagen = [].some.call(s.querySelectorAll('*'), function (e) {
+        var r = e.getBoundingClientRect(); if (r.width < 100 || r.height < 80) return false;
+        if (e.tagName === 'IMG' || e.tagName === 'VIDEO' || e.tagName === 'CANVAS') return true;
+        return /url\(/.test(getComputedStyle(e).backgroundImage) && !/data:image\/svg/.test(getComputedStyle(e).backgroundImage);
+      });
+      if (!conImagen) s.style.setProperty('display', 'none', 'important');
+    });
     var count = document.querySelector('.portada .count'), ev = window.INVEV || {}, d = ev.fecha ? new Date(ev.fecha) : null;
     if (!count || !d || isNaN(d)) return;
     var num = count.querySelector('.num') || count, c = getComputedStyle(num);
@@ -214,18 +224,29 @@
     };
     /* el fondo «adelante» puede ser un VIDEO fijo: se congela antes, si no queda gris (regina, 10/10) */
     var fijos = buscarFijos();
+    /* que el video del fondo haya cargado antes de congelarlo: si no, a veces salía
+       el patio de regina y a veces el papel liso, según cuánto tardara la red */
+    var vf = [];
+    fijos.forEach(function (f) { if (f.tagName === 'VIDEO') vf.push(f); [].forEach.call(f.querySelectorAll('video'), function (v) { vf.push(v); }); });
+    await Promise.all(vf.map(function (v) {
+      if (v.readyState >= 2 && v.videoWidth) return null;
+      v.muted = true; v.preload = 'auto';
+      try { var pp = v.play(); if (pp && pp.catch) pp.catch(function () {}); } catch (e) {}
+      return new Promise(function (ok) { v.addEventListener('loadeddata', ok, { once: true }); setTimeout(ok, 10000); });
+    }));
     for (var f = 0; f < fijos.length; f++) {
       if (fijos[f].tagName === 'VIDEO') { var cont = document.createElement('div'); fijos[f].parentNode.insertBefore(cont, fijos[f]); cont.appendChild(fijos[f]); await u.congelarEn(cont); cont.replaceWith.apply(cont, [].slice.call(cont.childNodes)); }
       else await u.congelarEn(fijos[f]);
     }
     fijos = buscarFijos();
+    if (window.INVREC_DEBUG) console.log('[recuerdo] fijos ' + JSON.stringify(fijos.map(function (f) { var c = getComputedStyle(f); return [f.tagName, f.id, c.opacity, c.display, [].map.call(f.children, function (h) { return h.tagName + ':' + getComputedStyle(h).opacity + ':' + getComputedStyle(h).display + ':' + (h.videoWidth || h.naturalWidth || ''); }).join(' ')]; })));
     for (var i = 0; i < todas.length; i++) {
       avisar('Sección ' + (i + 1) + ' de ' + todas.length + '…');
       todas[i].scrollIntoView({ block: 'start' }); await u.esperar(700);
       await u.congelarEn(todas[i]);
       var t0 = performance.now();
       try { piezas.push(await sacarSeccion(todas[i], todas, fijos, css)); } catch (e) { console.warn('[recuerdo] sección', i, e); }
-      if (window.INVREC_DEBUG) console.log('[recuerdo] sección ' + i + ' ' + Math.round(performance.now() - t0) + ' ms');
+      if (window.INVREC_DEBUG) console.log('[recuerdo] sección ' + i + ' ' + Math.round(performance.now() - t0) + ' ms ' + getComputedStyle(todas[i]).backgroundColor + ' fondo=' + document.documentElement.getAttribute('data-fondo'));
     }
     window.scrollTo(0, 0);
     avisar('Armando las imágenes…');
