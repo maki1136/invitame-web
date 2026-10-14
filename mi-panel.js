@@ -191,11 +191,11 @@
     $('ttNombres').textContent = PANEL.nombres || SLUG;
     $('ttFecha').textContent   = PANEL.fechaTexto || '';
     $('topSub').textContent    = ({resumen:'Panel de control', invitados:'Personas y pases',
-      mesas:'Mesas', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', opciones:'Opciones'})[VISTA] || 'Mi panel';
+      mesas:'Mesas', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', std:'Save the date', opciones:'Opciones'})[VISTA] || 'Mi panel';
     document.querySelectorAll('.lat a[data-vista]').forEach(a=>
       a.classList.toggle('on', a.dataset.vista===VISTA));
     ({resumen:vResumen, invitados:vInvitados, mesas:vMesas, itinerario:vItinerario,
-      mensajes:vMensajes, qr:vQR, opciones:vOpciones}[VISTA] || vResumen)();
+      mensajes:vMensajes, qr:vQR, std:vSTD, opciones:vOpciones}[VISTA] || vResumen)();
   }
 
   function bloqueNumeros(){
@@ -530,6 +530,14 @@
   }
 
   // ---------- 6. OPCIONES ----------
+  // ---------- SAVE THE DATE (regalo) ----------
+  // La vista entera vive en /efectos/std-novios.js; acá sólo se le pasa lo suyo.
+  function vSTD(){
+    if(!window.INVSTD_NOVIOS){ $('vista').innerHTML='<div class="card">Cargando…</div>'; setTimeout(()=>{ if(VISTA==='std') vSTD(); }, 400); return; }
+    window.INVSTD_NOVIOS.pintar($('vista'), { slug:SLUG, std:PANEL.std||{},
+      guardar: std => { PANEL.std=std; return guardarPanel({std}); } });
+  }
+
   function vOpciones(){
     const msj = PANEL.msjCompartir || 'Te esperamos en nuestro gran día. Aquí está tu invitación:';
     $('vista').innerHTML =

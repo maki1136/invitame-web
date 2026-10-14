@@ -129,7 +129,11 @@
         new MutationObserver(function (cambios) {
           for (var i = 0; i < cambios.length; i++) {
             var t = cambios[i].target;
-            if (t && t.tagName === 'IFRAME' && t.getAttribute('src')) dormir(t);
+            /* ⚠️ (9/10/2026) Sólo los de SEL: son los únicos que el despertador
+               de abajo vuelve a despertar. Antes dormía CUALQUIER iframe al que
+               le cambiaran el src, y uno de afuera de SEL quedaba dormido para
+               siempre: la vista previa del save the date en el panel nunca cargaba. */
+            if (t && t.tagName === 'IFRAME' && t.getAttribute('src') && t.matches && t.matches(SEL)) dormir(t);
           }
         }).observe(document.documentElement,
                    { subtree: true, attributes: true, attributeFilter: ['src'] });

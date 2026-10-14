@@ -30,7 +30,7 @@ const BASE = process.env.INV_BASE || 'https://invitameok.net';
 const SALIDA = path.join(__dirname, SLUG === '__nueva' ? 'tablero-panel-nueva.json' : 'tablero-panel.json');
 
 /* controles que por diseño no cambian nada a la vista (datos internos) */
-const INTERNOS = /N[úu]mero de orden|Usuario asignado|Direcci[óo]n del evento|Email para confirmaciones|T[ÍI]TULO DEL CORREO|Habilitar aviso por mail|Contrase[ñn]a para el evento|Clave del panel de los novios|Pedido especial|ES DEMO|NOMBRE DE LA DEMO|Tipo de evento|Deshabilitar invitaci[óo]n|Bloquear control|C[óo]digo del evento|Titulo al compartir|Descripci[óo]n al compartir|Imágen miniatura al compartir|Paquete|Pases personalizados|Detectar el del celular|Deshabilitar publicidad/i;
+const INTERNOS = /N[úu]mero de orden|Usuario asignado|Direcci[óo]n del evento|Email para confirmaciones|T[ÍI]TULO DEL CORREO|Habilitar aviso por mail|Contrase[ñn]a para el evento|Clave del panel de los novios|Pedido especial|ES DEMO|NOMBRE DE LA DEMO|Tipo de evento|Deshabilitar invitaci[óo]n|Bloquear control|C[óo]digo del evento|Titulo al compartir|Descripci[óo]n al compartir|Imágen miniatura al compartir|Paquete|Pases personalizados|Detectar el del celular|Deshabilitar publicidad|Save the date ·/i;
 
 function firmaVisual() {
   /* lo que se ve de la invitación, pieza por pieza: textos, colores, tipografías,

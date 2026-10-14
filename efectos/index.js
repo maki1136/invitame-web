@@ -645,6 +645,7 @@
     '/efectos/compartir.js',           /* «Compartí la invitación»: textos y sacarla */
     '/efectos/trivia-apagada.js',      /* la trivia sólo si «Habilitar trivia» está prendida */
     '/efectos/panel-compartir.js',     /* y su bloque, en CONFIRMACIÓN */
+    '/efectos/panel-save-the-date.js', /* el save the date de regalo: su bloque en EFECTOS (lo arma save-the-date.js, que NO va en esta lista) */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/videos-arrancan.js',      /* los videos decorativos arrancan al primer toque del invitado */
