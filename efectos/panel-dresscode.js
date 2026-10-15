@@ -88,6 +88,19 @@
     dc.colores = arr;          /* ⚠️ [] para volver a automático, NO delete */
     refrescar();
   }
+  /* ★ 15/10/2026 — los colores A EVITAR (fx.dresscode.evitar). Los dibuja
+     /efectos/dresscode-colores.js con una raya cruzada. Lista vacía = no se
+     muestra la fila (y se guarda [] por lo mismo de arriba: merge). */
+  function listaE() {
+    var dc = datos() || {};
+    var c = dc.evitar;
+    return (Object.prototype.toString.call(c) === '[object Array]') ? c.slice() : [];
+  }
+  function guardarE(arr) {
+    var dc = datos(); if (!dc) return;
+    dc.evitar = arr;
+    refrescar();
+  }
 
   /* ⚠️ `fx.paleta` es `{id:"..."}`. Ver la nota grande de arriba. */
   function idDePaleta() {
@@ -263,8 +276,69 @@
           'cuando hay una colección puesta. Si querés otros, cargalos acá.';
     }
 
-    caja.pintar = pintar;
-    pintar();
+    /* ---- ★ los colores a evitar ---- */
+    var tE = document.createElement('div');
+    tE.textContent = 'Colores a evitar';
+    tE.style.cssText = 'font-size:13px;font-weight:600;margin:16px 0 2px';
+    caja.appendChild(tE);
+    var aE = document.createElement('div');
+    aE.textContent = 'Salen en otra fila, tachados. Ej: el blanco en una boda.';
+    aE.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:8px;line-height:1.35';
+    caja.appendChild(aE);
+    var inpTE = document.createElement('input');
+    inpTE.type = 'text';
+    inpTE.placeholder = 'Colores a evitar';
+    inpTE.style.cssText = 'width:100%;margin-bottom:8px';
+    inpTE.oninput = function () {
+      var dc = datos(); if (!dc) return;
+      dc.tituloEvitar = inpTE.value;
+      refrescar();
+    };
+    caja.appendChild(inpTE);
+    var filaE = document.createElement('div');
+    filaE.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px';
+    caja.appendChild(filaE);
+    var pieE = document.createElement('div');
+    pieE.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;align-items:center';
+    caja.appendChild(pieE);
+
+    function pintarE() {
+      var dc = datos() || {};
+      var arr = listaE();
+      if (document.activeElement !== inpTE) {
+        inpTE.value = (typeof dc.tituloEvitar === 'string') ? dc.tituloEvitar : 'Colores a evitar';
+      }
+      filaE.textContent = '';
+      arr.forEach(function (c, i) {
+        var env = document.createElement('span');
+        env.style.cssText = 'position:relative;display:inline-block;line-height:0';
+        var inp = document.createElement('input');
+        inp.type = 'color';
+        inp.value = c;
+        inp.title = 'Color a evitar ' + (i + 1);
+        inp.style.cssText = 'width:38px;height:38px;padding:0;border:1px solid rgba(0,0,0,.18);' +
+          'border-radius:50%;background:none;cursor:pointer;overflow:hidden';
+        inp.oninput = function () { var l = listaE(); l[i] = inp.value; guardarE(l); };
+        var x = document.createElement('button');
+        x.type = 'button';
+        x.textContent = '×';
+        x.title = 'Quitar este color';
+        x.style.cssText = 'position:absolute;top:-6px;right:-6px;width:17px;height:17px;' +
+          'line-height:15px;padding:0;border-radius:50%;border:1px solid rgba(0,0,0,.2);' +
+          'background:#fff;font-size:12px;cursor:pointer';
+        x.onclick = function (ev) { ev.preventDefault(); var l = listaE(); l.splice(i, 1); guardarE(l); pintarE(); };
+        env.appendChild(inp); env.appendChild(x); filaE.appendChild(env);
+      });
+      pieE.textContent = '';
+      if (arr.length < MAX) {
+        pieE.appendChild(boton('+ Agregar color a evitar', function () {
+          var l = listaE(); l.push(l.length ? '#000000' : '#ffffff'); guardarE(l); pintarE();
+        }));
+      }
+    }
+
+    caja.pintar = function () { pintar(); pintarE(); };
+    pintar(); pintarE();
     return caja;
   }
 

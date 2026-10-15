@@ -56,11 +56,13 @@
   .done h1{font-family:'Cormorant Garamond',serif;color:var(--uva);font-size:30px;margin:10px 0 6px}
   .done p{color:var(--ink);font-size:15px;line-height:1.6}
   /* la imagen de ayuda: UNA por sector, de una invitación real */
-  .ayuda{display:flex;gap:12px;align-items:flex-start;margin:4px 0 6px}
-  .ayuda .ph{flex:none;width:118px;border-radius:11px;overflow:hidden;border:1px solid var(--line);background:#fdf8f4;cursor:zoom-in;position:relative}
+  /* ★ 15/10 (Jazmín): «que las imágenes de los sectores aparezcan centradas y
+     más grandes». La imagen va arriba, centrada, y el texto debajo. */
+  .ayuda{display:flex;flex-direction:column;align-items:center;gap:10px;margin:6px 0 10px;text-align:center}
+  .ayuda .ph{width:min(240px,72%);border-radius:13px;overflow:hidden;border:1px solid var(--line);background:#fdf8f4;cursor:zoom-in;position:relative;box-shadow:0 6px 18px rgba(73,17,26,.10)}
   .ayuda .ph img{width:100%;height:auto;display:block}
-  .ayuda .ph span{position:absolute;left:0;right:0;bottom:0;background:rgba(73,17,26,.78);color:#fff;font-size:10px;font-weight:800;text-align:center;padding:3px 0}
-  .ayuda .tx{font-size:12.5px;line-height:1.55;color:var(--ink)}
+  .ayuda .ph span{position:absolute;left:0;right:0;bottom:0;background:rgba(73,17,26,.78);color:#fff;font-size:11px;font-weight:800;text-align:center;padding:4px 0}
+  .ayuda .tx{font-size:13px;line-height:1.55;color:var(--ink);max-width:420px}
   .ayuda .tx b{color:var(--uva)}
   .lbox{position:fixed;inset:0;background:rgba(30,8,14,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:14px;cursor:zoom-out}
   .lbox.open{display:flex}
@@ -92,6 +94,26 @@
   .sino input{display:none}
   .sino input:checked+span{color:var(--uva)}
   .sino label:has(input:checked){border-color:var(--uva);background:#fbf3f6}
+  /* los colores del código de vestimenta */
+  .colores{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 2px}
+  .colores .cc{position:relative;width:40px;height:40px}
+  .colores .cc input{width:40px;height:40px;padding:0;border:1px solid var(--line);border-radius:50%;cursor:pointer;background:none;overflow:hidden;-webkit-appearance:none;appearance:none}
+  .colores .cc input::-webkit-color-swatch-wrapper{padding:0}
+  .colores .cc input::-webkit-color-swatch{border:0;border-radius:50%}
+  .colores .cc input::-moz-color-swatch{border:0;border-radius:50%}
+  .colores .cc button{position:absolute;top:-6px;right:-6px;width:19px;height:19px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--uva);font-size:12px;line-height:16px;padding:0;cursor:pointer}
+  .colores .mas-col{border:1.5px dashed #d9c7bd;background:#fdf8f4;color:var(--uva);border-radius:20px;padding:8px 13px;font-weight:800;font-size:12.5px;cursor:pointer;font-family:'Nunito'}
+  #col-no .cc::after{content:"";position:absolute;left:4px;right:4px;top:50%;height:2px;background:#b0334a;transform:rotate(-45deg);pointer-events:none}
+  /* «Ver opciones» de títulos y frases */
+  .opc-btn{display:inline-block;margin:6px 0 0;border:0;background:none;color:var(--rosa);font-weight:800;font-size:12.5px;cursor:pointer;padding:0;font-family:'Nunito'}
+  .opc-lista{display:none;margin:7px 0 2px;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff}
+  .opc-lista.open{display:block}
+  .opc-lista button{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:#fff;padding:10px 12px;font-size:13.5px;line-height:1.45;color:var(--ink);cursor:pointer;font-family:'Nunito'}
+  .opc-lista button:first-child{border-top:0}
+  .opc-lista button:hover{background:#fbf3f6}
+  /* el paquete que compró, arriba de todo */
+  .paq{background:#fbf3f6;border:1px solid #e6cdd7;border-radius:12px;padding:11px 14px;font-size:13.5px;color:var(--ink);margin-bottom:14px}
+  .paq b{color:var(--uva)}
   details.mas{margin-top:4px}
   details.mas>summary{cursor:pointer;font-weight:800;color:var(--uva);font-size:14px;list-style:none;padding:4px 0}
   details.mas>summary::-webkit-details-marker{display:none}
@@ -102,6 +124,7 @@
 <body>
   <div class="top"><div class="brand">invítame!</div><div class="sub">Completa tus datos y armamos tu invitación</div></div>
   <div class="wrap" id="wrap">
+    <div class="paq" id="paq" style="display:none"></div>
 
     <!-- HOJA 1 -->
     <div class="card avisos">
@@ -245,13 +268,25 @@
       <h2>Código de vestimenta</h2>
       <p class="desc">Cómo tienen que ir vestidos tus invitados.</p>
       <div data-ayuda="vestimenta"></div>
-      <textarea id="dress" rows="2" placeholder="Ej: Formal. Evitar el color blanco."></textarea>
+      <label>Título de la sección</label><input type="text" id="dressTitulo" placeholder="Código de vestimenta">
+      <label>Frase o indicaciones</label><textarea id="dress" rows="2" placeholder="Ej: Formal. Te pedimos reservar el blanco para la novia."></textarea>
+      <label>Colores sugeridos (opcional)</label>
+      <div class="colores" id="col-si"></div>
+      <label>Colores a evitar (opcional)</label>
+      <div class="colores" id="col-no"></div>
+      <div class="hint">Toca el círculo para elegir el color. Aparecen como circulitos en la invitación.</div>
+      <label>Imágenes de inspiración (opcional)</label>
+      <div class="up small" id="up-dressinsp">Subir imágenes de inspiración</div>
+      <input type="file" id="f-dressinsp" accept="image/*" multiple style="display:none">
+      <div id="prev-dressinsp"></div>
+      <div class="hint">Hasta 6. Aparecen en el botón «Ver inspiración».</div>
     </div>
 
     <div class="card">
       <h2>Mesa de regalos (opcional)</h2>
       <p class="desc">Pega el link de cada mesa de regalos que tengas, de la tienda que sea.</p>
       <div data-ayuda="regalos"></div>
+      <label>Título de la sección</label><input type="text" id="regTitulo" placeholder="Mesa de regalos">
       <label>Frase de la sección</label><input type="text" id="regalos" placeholder="Tu presencia es nuestro mejor regalo…">
       <div id="mesas" style="margin-top:12px"></div>
       <button class="addg" type="button" id="reg-add">+ Agregar otra mesa</button>
@@ -295,7 +330,14 @@
       <h2>Galería (opcional)</h2>
       <p class="desc">Fotos que quieras mostrar en la invitación.</p>
       <div data-ayuda="galeria"></div>
-      <div class="up small" id="up-gal">Subir fotos de la galería</div>
+      <label>Título de la sección</label><input type="text" id="galTitulo" placeholder="Nuestra galería">
+      <label>Frase (opcional)</label><input type="text" id="galFrase" placeholder="Algunos momentos que nos trajeron hasta aquí">
+      <label>¿Cómo quieres ver las fotos?</label>
+      <div class="sino">
+        <label><input type="radio" name="galEstilo" value="Slider" checked><span>Carrusel<br><small style="font-weight:600;color:var(--muted)">una tras otra, se deslizan</small></span></label>
+        <label><input type="radio" name="galEstilo" value="Mosaico"><span>Mosaico<br><small style="font-weight:600;color:var(--muted)">todas a la vista, en cuadrícula</small></span></label>
+      </div>
+      <div class="up small" id="up-gal" style="margin-top:12px">Subir fotos de la galería</div>
       <input type="file" id="f-gal" accept="image/*" multiple style="display:none">
       <div id="prev-gal"></div>
     </div>
@@ -314,12 +356,12 @@
       <h2>Más cosas (opcional)</h2>
       <p class="desc">Todo esto es opcional. Ábrelo solo si lo quieres.</p>
 
-      <details class="mas"><summary>Música de fondo</summary>
+      <details class="mas" data-funcion="musica"><summary>Música de fondo</summary>
         <input type="text" id="musica" placeholder="Pega el link de YouTube de la canción">
         <div class="hint">Si lo dejas vacío, elegimos una acorde al diseño.</div>
       </details>
 
-      <details class="mas"><summary>El pase con voz: un mensaje grabado por ustedes</summary>
+      <details class="mas" data-funcion="paseVoz"><summary>El pase con voz: un mensaje grabado por ustedes</summary>
         <div class="hint" style="margin-bottom:8px">El invitado ve un boleto y lo toca para escucharlos. Digan sus nombres y una frase corta.</div>
         <div id="pv-caja" style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px">
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -339,7 +381,7 @@
         <label>Playlist de Spotify</label><input type="text" id="spotifyUrl" placeholder="Link de la playlist de Spotify">
       </details>
 
-      <details class="mas"><summary>Lista de invitados</summary>
+      <details class="mas" data-funcion="pases"><summary>Lista de invitados</summary>
         <div class="hint" style="margin-bottom:8px">Cada uno recibe su link y su QR. También la puedes cargar después, desde tu panel.</div>
         <div style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px;margin-bottom:12px">
           <b style="color:var(--uva);font-size:13px">¿Tienes muchos invitados? Sube un Excel</b>
@@ -380,9 +422,11 @@
 <script type="module" src="firebase-inv.js?v=24"></script>
 <script src="/muestras/catalogo.js?v=2"></script>
 <script src="/efectos/paleta.js?v=1"></script>
-<script src="/vestir.js?v=2"></script>
-<script src="/solicitud-a-evento.js?v=2"></script>
-<script type="module" src="/crear.js?v=2"></script>
+<script src="/vestir.js?v=3"></script>
+<script src="/paquetes.js?v=2"></script>
+<script src="/solicitud-a-evento.js?v=3"></script>
+<script type="module" src="/crear.js?v=3"></script>
 <script src="/crear-diseno.js?v=2"></script>
+<script src="/crear-opciones.js?v=1"></script>
 </body>
 </html>

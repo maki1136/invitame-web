@@ -83,6 +83,7 @@
     "Título itinerario:": "itTitulo",
     "vestimenta titulo:": "dressTitulo",
     "Titulo para fotos y menú:": "galTitulo",
+    "Frase de la galería (debajo del título):": "galFrase",
     "Color - Personas importantes:": "padresColor",
     "Color de texto \"Galería\":": "galTextColor",
     "TITULO SECCIÓN \"REGALOS\" Y MENÚ:": "regTitulo",

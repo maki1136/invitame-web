@@ -134,7 +134,9 @@ if (iData > 0) {
   const bloque = crear.slice(iData, crear.indexOf('origen:', iData) + 40);
   const delCliente = new Set();
   for (const m of bloque.matchAll(/(?:^|[{,\s])([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g)) delCliente.add(m[1]);
-  ['n1', 'fecha', 'invitados', 'pasevozOnda', 'tpl'].forEach(k => delCliente.add(k));
+  ['n1', 'fecha', 'invitados', 'pasevozOnda', 'tpl',
+   /* el código del link del CRM: no va a la invitación, lo lee /solicitud-crear.php */
+   'formToken'].forEach(k => delCliente.add(k));
   /* estos son del pedido, no de la invitación: no tienen que viajar */
   const INTERNOS = ['estado', 'creado', 'origen', 'tplNombre', 'id',
                     'contactoNombre', 'contactoWsp', 'contactoEmail'];

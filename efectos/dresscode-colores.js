@@ -62,6 +62,13 @@
 (function () {
   'use strict';
 
+  /* ★ 15/10/2026 — LOS COLORES A EVITAR (pedido de Jazmín).
+     `fx.dresscode.evitar` = lista de colores. Se dibujan en una segunda fila,
+     con una raya cruzada, debajo de los sugeridos. Título en
+     `fx.dresscode.tituloEvitar` (mismo criterio: sin definir = «Colores a
+     evitar», '' = sin título). Se carga desde el formulario del cliente y
+     desde el panel (efectos/panel-dresscode.js). Sin lista, no aparece. */
+  var TITULO_EVITAR = 'Colores a evitar';
   var ID_CSS = 'inv-dc-colores-css';
   var CLASE  = 'col-dc';
   var TITULO_POR_DEFECTO = 'Los colores de la fiesta';
@@ -105,6 +112,19 @@
     return out.length ? out : null;
   }
 
+  function evitar() {
+    var d = fx().dresscode || {};
+    var c = d.evitar;
+    if (Object.prototype.toString.call(c) !== '[object Array]') return null;
+    c = c.filter(function (x) { return x && String(x).trim(); });
+    return c.length ? c : null;
+  }
+  function tituloEvitar() {
+    var d = fx().dresscode || {};
+    if (typeof d.tituloEvitar === 'string') return d.tituloEvitar;
+    return TITULO_EVITAR;
+  }
+
   var CSS =
     '.' + CLASE + '{margin:22px auto 4px;text-align:center;pointer-events:none}' +
     '.' + CLASE + ' .col-dc-tit{' +
@@ -117,6 +137,11 @@
       'width:38px;height:38px;border-radius:50%;display:block;' +
       'box-shadow:inset 0 0 0 1px rgba(255,255,255,.30),' +
         '0 1px 2px rgba(60,50,40,.16),0 5px 12px rgba(60,50,40,.13)}' +
+    '.' + CLASE + ' .col-dc-no{margin-top:16px}' +
+    '.' + CLASE + ' .col-dc-x{position:relative}' +
+    '.' + CLASE + ' .col-dc-x::after{content:"";position:absolute;left:3px;right:3px;top:50%;' +
+      'height:2px;margin-top:-1px;background:#b0334a;transform:rotate(-45deg);' +
+      'box-shadow:0 0 0 1px rgba(255,255,255,.55)}' +
     '@media (max-width:420px){.' + CLASE + ' .col-dc-c{width:33px;height:33px}' +
       '.' + CLASE + ' .col-dc-fila{gap:9px}}';
 
@@ -134,12 +159,34 @@
     [].forEach.call(document.querySelectorAll('.' + CLASE), function (e) { e.remove(); });
   }
 
-  function poner(lista, tit) {
+  function fila(caja, lista, tit, tachados) {
+    if (!lista || !lista.length) return;
+    var bloque = document.createElement('div');
+    if (tachados) bloque.className = 'col-dc-no';
+    if (tit) {                                  /* vacío = sin título */
+      var t = document.createElement('div');
+      t.className = 'col-dc-tit';
+      t.textContent = tit;
+      bloque.appendChild(t);
+    }
+    var f = document.createElement('div');
+    f.className = 'col-dc-fila';
+    lista.forEach(function (c) {
+      var e = document.createElement('span');
+      e.className = 'col-dc-c' + (tachados ? ' col-dc-x' : '');
+      e.style.background = c;
+      f.appendChild(e);
+    });
+    bloque.appendChild(f);
+    caja.appendChild(bloque);
+  }
+
+  function poner(lista, tit, ev, titEv) {
     var ancla = document.querySelector('.dc-mono');
     if (!ancla) return;
 
     /* si ya está puesto igual, no se toca nada */
-    var firma = tit + '§' + lista.join('|');
+    var firma = tit + '§' + (lista || []).join('|') + '§' + titEv + '§' + (ev || []).join('|');
     var ya = ancla.parentNode.querySelector('.' + CLASE);
     if (ya && ya.dataset.firma === firma) return;
     if (ya) ya.remove();
@@ -148,31 +195,17 @@
     caja.className = CLASE;
     caja.dataset.firma = firma;
 
-    if (tit) {                                  /* vacío = sin título */
-      var t = document.createElement('div');
-      t.className = 'col-dc-tit';
-      t.textContent = tit;
-      caja.appendChild(t);
-    }
-
-    var fila = document.createElement('div');
-    fila.className = 'col-dc-fila';
-    lista.forEach(function (c) {
-      var e = document.createElement('span');
-      e.className = 'col-dc-c';
-      e.style.background = c;
-      fila.appendChild(e);
-    });
-    caja.appendChild(fila);
+    fila(caja, lista, tit, false);
+    fila(caja, ev, titEv, true);
 
     ancla.parentNode.insertBefore(caja, ancla.nextSibling);
   }
 
   function sincronizar() {
-    var lista = colores();
-    if (!lista) { sacar(); return; }
+    var lista = colores(), ev = evitar();
+    if (!lista && !ev) { sacar(); return; }
     hoja();
-    poner(lista, titulo());
+    poner(lista, titulo(), ev, tituloEvitar());
   }
 
   function arrancar() {

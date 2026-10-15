@@ -153,6 +153,8 @@
        .restricciones) vienen del formulario, y `fx` se copia ENTERO de la
        muestra: sin esto se pisaban en silencio. Se guardan y se reponen. */
     var rsvpCliente = (d.fx && d.fx.rsvp) ? copia(d.fx.rsvp) : null;
+    /* ★ y los colores de Vestimenta que eligió el cliente (fx.dresscode) */
+    var dressCliente = (d.fx && d.fx.dresscode) ? copia(d.fx.dresscode) : null;
 
     Object.keys(muestra).forEach(function (k) {
       if (!esDeDiseno(k)) return;
@@ -187,6 +189,16 @@
         delete d.fx.galeria.muestra;
         if (/fotos-fiesta\//.test(String(d.fx.galeria.imagen || ''))) delete d.fx.galeria.imagen;
       }
+    }
+
+    if (dressCliente && ((dressCliente.colores || []).length || (dressCliente.evitar || []).length)) {
+      d.fx = d.fx || {};
+      d.fx.dresscode = d.fx.dresscode || {};
+      if ((dressCliente.colores || []).length) {
+        d.fx.dresscode.colores = dressCliente.colores;
+        if (typeof dressCliente.titulo === 'string') d.fx.dresscode.titulo = dressCliente.titulo;
+      }
+      if ((dressCliente.evitar || []).length) d.fx.dresscode.evitar = dressCliente.evitar;
     }
 
     if (rsvpCliente) {

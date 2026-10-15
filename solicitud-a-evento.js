@@ -91,7 +91,10 @@
 
   /* Los que se llaman igual en los dos lados. */
   var IGUALES = ['orden', 'videoUrl', 'fraseFinal', 'musica', 'musicaUrl',
-                 'fraseFx', 'igHashtag', 'spotifyUrl', 'tipoEvento', 'cfTitulo'];
+                 'fraseFx', 'igHashtag', 'spotifyUrl', 'tipoEvento', 'cfTitulo',
+                 /* ★ 15/10/2026 (Jazmín): títulos de Vestimenta, Regalos y Galería,
+                    y la frase de la galería (la dibuja /efectos/galeria-frase.js) */
+                 'dressTitulo', 'regTitulo', 'galTitulo', 'galFrase'];
 
   /* ★ 15/10/2026 — LAS FOTOS SUELTAS DEL FORMULARIO NUEVO.
      Izquierda: como viene en la solicitud. Derecha: la clave de imagen EXACTA
@@ -208,6 +211,24 @@
       d.fx.rsvp = d.fx.rsvp || {};
       if (/^\d{4}-\d{2}-\d{2}$/.test(String(s.rsvpLimite || ''))) d.fx.rsvp.limite = s.rsvpLimite;
       if (s.rsvpRestricciones) d.fx.rsvp.restricciones = true;
+    }
+
+    /* ---- ★ 15/10/2026 — Vestimenta: inspiración y colores ----
+       La inspiración va al campo del panel «Fotos de inspiración dress code»
+       (una dirección por renglón). Los colores van a `fx.dresscode`, igual que
+       la fecha límite: `fx` lo pisa la muestra, y /vestir.js los repone. */
+    if (Object.prototype.toString.call(s.dressInsp) === '[object Array]' && s.dressInsp.length)
+      d['c_fotos-de-inspiracion-dress-code'] = s.dressInsp.slice(0, 6).join('\n');
+    var col = function (a) {
+      return (Object.prototype.toString.call(a) === '[object Array]' ? a : [])
+        .filter(function (c) { return /^#[0-9a-f]{6}$/i.test(String(c)); }).slice(0, 6);
+    };
+    var cSi = col(s.dressColores), cNo = col(s.dressEvitar);
+    if (cSi.length || cNo.length) {
+      d.fx = d.fx || {};
+      d.fx.dresscode = d.fx.dresscode || {};
+      if (cSi.length) { d.fx.dresscode.colores = cSi; d.fx.dresscode.titulo = 'Colores sugeridos'; }
+      if (cNo.length) d.fx.dresscode.evitar = cNo;
     }
 
     /* ---- las personas importantes (hasta 12) ---- */

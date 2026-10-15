@@ -449,6 +449,95 @@ foreach ($interruptoresPagos as $ruta) {
   unset($ref);
 }
 
+/* ---------- 3e. ⭐ EL PAQUETE QUE COMPRÓ — el link del CRM (15/10/2026) ----------
+   Maki: «el formulario se achica, depende de lo contratado». Jazmín copia
+   desde la venta en el CRM un link `crear.html?f=<código>`. El código apunta a
+   `inv_formularios/<código>` = { paquete, extras, clave, … }, que crea el CRM.
+
+   ⚠️ EL CÓDIGO SE LEE DE LA SOLICITUD GUARDADA (`$campos`), no del evento que
+      manda el navegador. Y el paquete se lee de `inv_formularios`, que sólo
+      escribe el equipo: el cliente no puede subirse de paquete tocando nada.
+   ⚠️ LA TABLA NO SE COPIA: qué trae cada paquete se lee de `/paquetes.js`
+      (BASE, DE_PREMIUM, DE_PLATINUM) igual que la lista de funciones pagas.
+      Si no se puede leer, no se prende nada y se avisa en el pedido especial.
+   ⚠️ DOS FUNCIONES NO SE PRENDEN SOLAS, a propósito:
+      · la galería de los invitados (Invítame Live): sin el alta de la
+        galería (el botón «Crear la galería» del panel) no anda, y prenderla
+        vacía le mentiría al panel. Se avisa a Jazmín.
+      · el pase con voz: sólo si el cliente grabó su mensaje. Un pase mudo
+        prendido no muestra nada. */
+function listaJs($s) {
+  preg_match_all("~'([A-Za-z0-9_]+)'~", $s, $m);
+  return $m[1];
+}
+function paquetesIncluye($js, $plan, $extras) {
+  if (!is_string($js) || $js === '') return null;
+  if (!preg_match('~var BASE = \[([^\]]*)\]~s', $js, $mb)) return null;
+  if (!preg_match('~var DE_PREMIUM = BASE\.concat\(\[([^\]]*)\]\)~s', $js, $mp)) return null;
+  if (!preg_match('~var DE_PLATINUM = DE_PREMIUM\.concat\(\[([^\]]*)\]\)~s', $js, $ml)) return null;
+  $base = listaJs($mb[1]); $pre = array_merge($base, listaJs($mp[1])); $pla = array_merge($pre, listaJs($ml[1]));
+  $planes = array('estandar' => $base, 'premium' => $pre, 'platinum' => $pla);
+  if (!isset($planes[$plan])) return null;
+  return array_values(array_unique(array_merge($planes[$plan], $extras)));
+}
+$avisoPaquete = array();
+$formToken = isset($campos['formToken']['stringValue']) ? trim($campos['formToken']['stringValue']) : '';
+if (preg_match('/^[a-z0-9]{12,40}$/i', $formToken)) {
+  list($rf, $cf) = pedir($FS . 'inv_formularios/' . rawurlencode($formToken), 'GET', null, $auth);
+  if ($cf == 200) {
+    $df = json_decode($rf, true);
+    $ff = isset($df['fields']) ? $df['fields'] : array();
+    $plan = isset($ff['paquete']['stringValue']) ? $ff['paquete']['stringValue'] : '';
+    $extras = array();
+    if (isset($ff['extras']['arrayValue']['values'])) {
+      foreach ($ff['extras']['arrayValue']['values'] as $x) {
+        if (isset($x['stringValue']) && preg_match('/^[A-Za-z0-9_]+$/', $x['stringValue'])) $extras[] = $x['stringValue'];
+      }
+    }
+    $incluye = paquetesIncluye($tablaPaquetes, $plan, $extras);
+    if ($incluye === null) {
+      $avisoPaquete[] = 'No se pudo leer el paquete del link (' . $plan . '): revisarlo y prender las funciones a mano.';
+    } else {
+      if (!isset($ev['fx']) || !is_array($ev['fx'])) $ev['fx'] = array();
+      $ev['fx']['paquete'] = array('plan' => $plan, 'extras' => $extras);
+      $NOMBRES = array('estandar' => 'Estándar', 'premium' => 'Premium', 'platinum' => 'Platinum');
+      $avisoPaquete[] = 'PAQUETE: ' . (isset($NOMBRES[$plan]) ? $NOMBRES[$plan] : $plan) .
+                        (count($extras) ? ' + extras: ' . implode(', ', $extras) : '') . ' (del link del CRM).';
+      /* las funciones pagas con interruptor: [nombre, ruta] desde paquetes.js */
+      preg_match_all("~(\w+):\s*\{\s*nombre:\s*'[^']*',\s*clase:\s*'(?:leader|killer)',\s*interruptor:\s*'([A-Za-z0-9_.]+)'~", $tablaPaquetes, $mf, PREG_SET_ORDER);
+      foreach ($mf as $f) {
+        $func = $f[1]; $ruta = $f[2];
+        if (!in_array($func, $incluye, true)) continue;
+        if ($func === 'galeriaInvitados') {
+          $avisoPaquete[] = 'Incluye Invítame Live: falta crear la galería desde el panel («Crear la galería») y Guardar y publicar.';
+          continue;
+        }
+        if ($func === 'paseVoz' && empty($ev['fx']['pasevoz']['audio'])) {
+          $avisoPaquete[] = 'Incluye pase con voz pero el cliente no grabó su mensaje: queda apagado hasta que lo mande.';
+          continue;
+        }
+        $partes = explode('.', $ruta);
+        if (count($partes) < 2) continue;
+        $ref = &$ev;
+        for ($k = 0; $k < count($partes) - 1; $k++) {
+          $p = $partes[$k];
+          if (!isset($ref[$p]) || !is_array($ref[$p])) $ref[$p] = array();
+          $ref = &$ref[$p];
+        }
+        $ref[$partes[count($partes) - 1]] = true;
+        unset($ref);
+      }
+      if (in_array('accesoQR', $incluye, true)) $avisoPaquete[] = 'Incluye control de acceso QR.';
+    }
+  } else {
+    $avisoPaquete[] = 'El link del formulario traía un código de paquete que no existe: revisar con ventas qué compró.';
+  }
+}
+if (count($avisoPaquete)) {
+  $prev = isset($ev['c_pedido-especial-del-cliente']) ? trim((string)$ev['c_pedido-especial-del-cliente']) : '';
+  $ev['c_pedido-especial-del-cliente'] = implode("\n", $avisoPaquete) . ($prev !== '' ? "\n\n" . $prev : '');
+}
+
 // ---------- 4. lo que pone el SERVIDOR, no el cliente ----------
 $ahora    = gmdate('Y-m-d\TH:i:s\Z');
 $clave    = codigo(8);          // la del panel de los novios
@@ -529,6 +618,13 @@ pedir($FS . 'inv_privado/' . rawurlencode($slug), 'PATCH', json_encode(docDe(arr
 pedir($FS . 'inv_solicitudes/' . rawurlencode($solicId) .
       '?updateMask.fieldPaths=slugCreado&updateMask.fieldPaths=creadaEl',
       'PATCH', json_encode(docDe(array('slugCreado' => $slug, 'creadaEl' => $ahora))), $auth);
+
+/* el link del CRM queda marcado con la invitación que creó */
+if (preg_match('/^[a-z0-9]{12,40}$/i', $formToken)) {
+  pedir($FS . 'inv_formularios/' . rawurlencode($formToken) .
+        '?updateMask.fieldPaths=slugCreado&updateMask.fieldPaths=usadoEl&updateMask.fieldPaths=solicitud',
+        'PATCH', json_encode(docDe(array('slugCreado' => $slug, 'usadoEl' => $ahora, 'solicitud' => $solicId))), $auth);
+}
 
 echo json_encode(array(
   'ok'        => true,
