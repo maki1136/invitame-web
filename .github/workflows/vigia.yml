@@ -12,6 +12,10 @@
 #
 # Sólo le avisa a Maki. No le escribe a ningún cliente (REGLA CERO).
 #
+# ⚠️ GitHub NO cumple el «cada 10 minutos»: medido, corre cada 3 a 7 horas.
+#    El control de verdad cada 10 minutos (con WhatsApp) está en el Worker
+#    «galeria» de Cloudflare (función vigia). Éste queda para el aviso por mail.
+#
 # ★ 15/10/2026 — TAMBIÉN POR WHATSAPP, con CallMeBot (gratis, uso personal): le
 #   escribe SÓLO al número de Maki, desde el número de CallMeBot (no pasa por
 #   Pía ni por los números de Invítame). Avisa al caerse, si cambia lo que
@@ -95,9 +99,14 @@ jobs:
           REPO: ${{ github.repository }}
           CMB_TEL: ${{ secrets.CALLMEBOT_TEL }}
           CMB_CLAVE: ${{ secrets.CALLMEBOT_CLAVE }}
+          WA_GITHUB: ${{ vars.VIGIA_WHATSAPP_GITHUB }}
         shell: bash
         run: |
           whatsapp() {
+            # 15/10: el WhatsApp lo manda el Vigía de Cloudflare (cada 10 min de verdad).
+            # Acá queda apagado para no mandar dos veces el mismo aviso. Para volver
+            # a prenderlo: VIGIA_WHATSAPP_GITHUB=si en las variables del repo.
+            if [ "$WA_GITHUB" != "si" ]; then echo "WhatsApp: lo manda el Vigía de Cloudflare."; return 0; fi
             if [ -z "$CMB_TEL" ] || [ -z "$CMB_CLAVE" ]; then echo "WhatsApp: sin secretos, sólo mail."; return 0; fi
             resp=$(curl -s -G --max-time 30 "https://api.callmebot.com/whatsapp.php" \
               --data-urlencode "phone=$CMB_TEL" --data-urlencode "text=$1" --data-urlencode "apikey=$CMB_CLAVE" 2>/dev/null || true)
