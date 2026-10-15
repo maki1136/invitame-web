@@ -79,6 +79,10 @@ export default {
       if (ruta.startsWith('/f/') && req.method === 'GET') return await servir(req, env, ctx, ruta.slice(3), url);
       if (ruta === '/qr' && req.method === 'GET') return qr(url);
       if (ruta === '/uso' && req.method === 'GET') return await uso(env);
+      if (ruta === '/vigia' && req.method === 'GET') {
+        let e = null; try { e = JSON.parse(await env.LIMITES.get('vigia:estado') || 'null'); } catch (x) {}
+        return respuesta({ ultimo: e, avisoPrendido: !!(env.CALLMEBOT_TEL && env.CALLMEBOT_CLAVE) });
+      }
       if (ruta.startsWith(CACHE_PREFIJO) && (req.method === 'GET' || req.method === 'HEAD'))
         return await medio(req, env, ctx, url);
       return respuesta({ error: 'no existe' }, 404);
@@ -91,9 +95,80 @@ export default {
      Para que corra hay que agregarle al Worker un Cron Trigger (Settings →
      Triggers → Cron Triggers → «0 7 * * *», o sea 4 de la mañana de Argentina). */
   async scheduled(evento, env, ctx) {
-    ctx.waitUntil(limpiezaDiaria(env).catch(() => {}));
+    /* ★ 15/10/2026 — dos relojes: «0 7 * * *» = la limpieza de siempre;
+       «cada 10 minutos» = el Vigía (ver abajo). Ojo: antes cualquier reloj
+       corría la limpieza; ahora sólo el de las 7. */
+    if (evento && evento.cron === '*/10 * * * *') ctx.waitUntil(vigia(env).catch(() => {}));
+    else ctx.waitUntil(limpiezaDiaria(env).catch(() => {}));
   }
 };
+
+/* ═══════════════ EL VIGÍA, DESDE CLOUDFLARE (15/10/2026) ═══════════════════════
+   El de GitHub (.github/workflows/vigia.yml) dice «cada 10 minutos», pero GitHub
+   corre las tareas programadas cuando le sobra lugar: medido, cada 3 a 7 HORAS.
+   El reloj de Cloudflare sí se cumple. Cada 10 minutos prueba las piezas que
+   usan los clientes y, si cambia el estado (se cae algo / cambia lo que falla /
+   vuelve todo), le manda un WhatsApp a Maki con CallMeBot.
+   · Secretos del Worker: CALLMEBOT_TEL y CALLMEBOT_CLAVE (los pega Maki). Sin
+     ellos prueba igual pero no avisa.
+   · El estado queda en KV (LIMITES, clave «vigia:estado»): se escribe sólo
+     cuando cambia, así no se gastan escrituras.
+   · Sólo le escribe a Maki. No le escribe a ningún cliente (REGLA CERO).
+   · ⚠️ CallMeBot sólo acepta la clave en la dirección (GET). Va de Cloudflare a
+     CallMeBot por HTTPS; nunca se imprime ni se guarda la dirección.
+   · GET /vigia muestra el último estado (sin datos privados). */
+const VIGIA_CHEQUEOS = [
+  ['Inicio de invitameok.net', 'https://invitameok.net/', '<title>'],
+  ['Una invitación (lee la base)', 'https://invitameok.net/i/?e=camila-y-tomas', 'Camila &amp; Tom'],
+  ['Formulario de pedido', 'https://invitameok.net/crear.html', '<title>'],
+  ['Anti-robot', 'https://invitameok.net/anti-robot.php', 'sitekey'],
+  ['Motor de efectos', 'https://invitameok.net/efectos/todo.php', 'function'],
+  ['Panel del equipo', 'https://invitameok.net/admin.html', '<title>'],
+  ['CRM', 'https://littlemomentsok.com/invitamecrm/', 'CRM Inv'],
+  ['Web de ventas', 'https://invitameweb.littlemomentsok.com/mx/', '<title>']
+];
+const espera = ms => new Promise(r => setTimeout(r, ms));
+async function vigiaProbar(nombre, url, marca) {
+  let codigo = 0;
+  for (let intento = 1; intento <= 3; intento++) {
+    try {
+      const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'vigia=' + Date.now(),
+        { headers: { 'User-Agent': 'InvitameVigia/1.0' }, redirect: 'follow', signal: AbortSignal.timeout(25000) });
+      codigo = r.status;
+      const txt = await r.text();
+      if (r.status === 200 && txt.includes(marca)) return null;
+    } catch (e) { codigo = 0; }
+    if (intento < 3) await espera(15000);
+  }
+  return nombre + ' (' + (codigo || 'sin respuesta') + ')';
+}
+async function whatsappMaki(env, texto) {
+  if (!env.CALLMEBOT_TEL || !env.CALLMEBOT_CLAVE) return false;
+  const q = new URLSearchParams({ phone: String(env.CALLMEBOT_TEL), text: texto, apikey: String(env.CALLMEBOT_CLAVE) });
+  try {
+    const r = await fetch('https://api.callmebot.com/whatsapp.php?' + q.toString(), { signal: AbortSignal.timeout(30000) });
+    const t = await r.text();
+    return /queued|sent|enviado/i.test(t);
+  } catch (e) { return false; }
+}
+async function vigia(env) {
+  const fallas = (await Promise.all(VIGIA_CHEQUEOS.map(c => vigiaProbar(c[0], c[1], c[2])))).filter(Boolean);
+  const ahora = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  let previo = null;
+  try { previo = JSON.parse(await env.LIMITES.get('vigia:estado') || 'null'); } catch (e) { previo = null; }
+  const antes = previo ? previo.fallas.join('|') : null;
+  const hoy = fallas.join('|');
+  if (antes === hoy) return;                                   // nada cambió: no se avisa ni se escribe
+  let texto;
+  if (antes === null && !fallas.length) texto = '✅ Vigía de Invítame prendido en Cloudflare (' + ahora + '). Reviso cada 10 minutos y te escribo sólo si algo se cae o vuelve.';
+  else if (fallas.length && !antes) texto = '⚠️ Invítame: algo no responde (' + ahora + ')\n- ' + fallas.join('\n- ') + '\nLo probé 3 veces seguidas.';
+  else if (fallas.length) texto = '⚠️ Invítame: cambió lo que falla (' + ahora + ')\n- ' + fallas.join('\n- ');
+  else texto = '✅ Invítame: volvió todo a andar (' + ahora + ').';
+  const enviado = await whatsappMaki(env, texto);
+  /* si el WhatsApp no salió, NO se guarda el estado: se reintenta en 10 minutos */
+  if (enviado || !env.CALLMEBOT_TEL || !env.CALLMEBOT_CLAVE)
+    await env.LIMITES.put('vigia:estado', JSON.stringify({ fallas, t: Date.now(), avisado: enviado }));
+}
 
 /* ═══════════════ LA CACHÉ DE FOTOS Y VIDEOS DE LAS INVITACIONES (1/10/2026) ═══
    Maki: «con 1000 invitaciones activas, ¿cuánto gasto?». Lo que más cuesta es
