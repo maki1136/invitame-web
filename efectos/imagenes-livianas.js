@@ -221,29 +221,47 @@
       return setAttrOriginal.call(this, nombre, valor);
     };
 
-    /* 3. elemento.style.backgroundImage = 'url(...)' y setProperty(...) */
-    var descBg = Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype, 'backgroundImage');
-    if (descBg && descBg.set) {
-      Object.defineProperty(CSSStyleDeclaration.prototype, 'backgroundImage', {
-        configurable: true,
-        enumerable: descBg.enumerable,
-        get: descBg.get,
-        set: function (v) { descBg.set.call(this, livianaCss(v) || v); }
-      });
-    }
+    /* 3. elemento.style.backgroundImage = 'url(...)', .background, .cssText
+          y setProperty(...)
+       ⚠️⚠️ 15/10/2026 — EL AGUJERO DE SAFARI 26 (iPhone con iOS 26). WebKit 26
+       sacó los accesorios de cada propiedad a una clase NUEVA,
+       `CSSStyleProperties`, que hereda de `CSSStyleDeclaration`. El gancho se
+       instalaba en `CSSStyleDeclaration` y el de la clase hija lo tapaba: todas
+       las fotos puestas con `e.style.backgroundImage=` (Dónde y cuándo, la
+       banda de Perlas, ¿Alguna duda?, el filtro) iban DIRECTO a Cloudinary,
+       sin la caché. Medido en camila-y-tomas: 11 fotos, 0,43 MB por visita.
+       (Chromium no tiene el accesorio en ningún lado: se DEFINE, ver 3/10.)
+       → Se instala en la clase que de verdad tiene el accesorio, buscándola
+         desde un `style` real, y si no lo tiene nadie se define en la de arriba. */
+    var protoCon = function (k) {
+      var pr = Object.getPrototypeOf(document.createElement('div').style);
+      while (pr && pr !== Object.prototype) {
+        var d = Object.getOwnPropertyDescriptor(pr, k);
+        if (d) return { pr: pr, d: d };
+        pr = Object.getPrototypeOf(pr);
+      }
+      return null;
+    };
     var setPropOriginal = CSSStyleDeclaration.prototype.setProperty;
-    /* ★ 3/10/2026 — EL AGUJERO DE CHROME (Android). Chromium NO tiene
-       `backgroundImage` ni `background` como accesorio en el prototipo (los
-       resuelve por dentro), así que el gancho de arriba no se instalaba y no
-       avisaba. Medido en camila-y-tomas: las fotos de «Dónde y cuándo» (el motor
-       las pone con `e.style.backgroundImage=`) viajaban a 1440 px y directo a
-       Cloudinary, sin la caché. Safari sí tiene el accesorio (va por arriba).
-       Probado: si se DEFINE el accesorio en el prototipo, Chromium lo usa.
-       ⚠️ Se probó también corregir con un observador del atributo `style`: llega
-          tarde (la foto ya se empezó a bajar) y termina en DOBLE descarga. */
     [['backgroundImage', 'background-image'], ['background', 'background']].forEach(function (par) {
       try {
-        if (Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype, par[0])) return;
+        var hay = protoCon(par[0]);
+        if (hay && hay.d.set) {
+          Object.defineProperty(hay.pr, par[0], {
+            configurable: true, enumerable: hay.d.enumerable, get: hay.d.get,
+            set: function (v) {
+              var val = (v == null) ? '' : String(v);
+              hay.d.set.call(this, val.indexOf('res.cloudinary.com') > -1 ? (livianaCss(val) || val) : val);
+            }
+          });
+          return;
+        }
+        if (hay) return;               /* existe pero sin set: no se toca */
+        /* ★ 3/10/2026 — EL AGUJERO DE CHROME (Android): Chromium no tiene el
+           accesorio en el prototipo (lo resuelve por dentro), así que se
+           DEFINE. Probado: si existe en el prototipo, Chromium lo usa.
+           ⚠️ Corregir con un observador del atributo `style` llega tarde (la
+              foto ya se empezó a bajar) y termina en DOBLE descarga. */
         Object.defineProperty(CSSStyleDeclaration.prototype, par[0], {
           configurable: true, enumerable: false,
           get: function () { return this.getPropertyValue(par[1]); },
@@ -254,6 +272,15 @@
         });
       } catch (e) {}
     });
+    try {
+      var hayCss = protoCon('cssText');
+      if (hayCss && hayCss.d.set) {
+        Object.defineProperty(hayCss.pr, 'cssText', {
+          configurable: true, enumerable: hayCss.d.enumerable, get: hayCss.d.get,
+          set: function (v) { hayCss.d.set.call(this, livianaCss(v) || v); }
+        });
+      }
+    } catch (e) {}
     CSSStyleDeclaration.prototype.setProperty = function (prop, valor, prioridad) {
       try {
         if (typeof valor === 'string' && valor.indexOf('res.cloudinary.com') > -1) {
