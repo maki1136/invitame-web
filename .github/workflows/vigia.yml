@@ -11,6 +11,17 @@
 # lo que falla.
 #
 # Sólo le avisa a Maki. No le escribe a ningún cliente (REGLA CERO).
+#
+# ★ 15/10/2026 — TAMBIÉN POR WHATSAPP, con CallMeBot (gratis, uso personal): le
+#   escribe SÓLO al número de Maki, desde el número de CallMeBot (no pasa por
+#   Pía ni por los números de Invítame). Avisa al caerse, si cambia lo que
+#   falla y cuando vuelve. Necesita dos secretos del repo:
+#     CALLMEBOT_TEL    el número de Maki con código de país (ej. 549...)
+#     CALLMEBOT_CLAVE  la clave que manda CallMeBot al activarlo
+#   Sin los secretos, sigue andando como antes (sólo mail).
+#   ⚠️ La API de CallMeBot sólo acepta la clave en la dirección (GET). Viaja de
+#      GitHub a CallMeBot por HTTPS, nunca pasa por un navegador, y GitHub tapa
+#      los secretos en los registros. Acá NUNCA se imprime la dirección.
 # Para agregar algo a vigilar: una línea más en CHEQUEOS.
 # ==============================================================================
 name: Vigía (aviso si algo se cae)
@@ -82,8 +93,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FALLAS: ${{ steps.probar.outputs.fallas }}
           REPO: ${{ github.repository }}
+          CMB_TEL: ${{ secrets.CALLMEBOT_TEL }}
+          CMB_CLAVE: ${{ secrets.CALLMEBOT_CLAVE }}
         shell: bash
         run: |
+          whatsapp() {
+            if [ -z "$CMB_TEL" ] || [ -z "$CMB_CLAVE" ]; then echo "WhatsApp: sin secretos, sólo mail."; return 0; fi
+            resp=$(curl -s -G --max-time 30 "https://api.callmebot.com/whatsapp.php" \
+              --data-urlencode "phone=$CMB_TEL" --data-urlencode "text=$1" --data-urlencode "apikey=$CMB_CLAVE" 2>/dev/null || true)
+            if grep -qiE 'queued|sent|enviado' <<< "$resp"; then echo "WhatsApp enviado."; else echo "WhatsApp: CallMeBot no confirmó (sigue el mail)."; fi
+          }
+          sinMarcas() { printf '%s' "$1" | sed -e 's/\*\*//g' -e 's/ — https\?:[^ ]*//'; }
           api() { curl -s -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$@"; }
           abierto=$(api "https://api.github.com/repos/$REPO/issues?state=open&labels=caido&per_page=1" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["number"] if d else "")')
           hora=$(TZ=America/Argentina/Buenos_Aires date '+%d/%m %H:%M')
@@ -93,12 +113,14 @@ jobs:
               python3 -c 'import json,os,sys; print(json.dumps({"title":"⚠️ Invítame: algo se cayó","body":sys.argv[1],"labels":["caido"]}))' "$texto" > cuerpo.json
               api -X POST "https://api.github.com/repos/$REPO/issues" -d @cuerpo.json > /dev/null
               echo "Aviso abierto."
+              whatsapp "$(printf '⚠️ Invítame: algo no responde (%s)\n%s\nTe mandé el detalle por mail.' "$hora" "$(sinMarcas "$FALLAS")")"
             else
               previo=$( { api "https://api.github.com/repos/$REPO/issues/$abierto/comments?per_page=100"; echo '|||'; api "https://api.github.com/repos/$REPO/issues/$abierto"; } | python3 -c 'import sys,json; c,i=sys.stdin.read().split("|||"); c=json.loads(c); print(c[-1]["body"] if c else (json.loads(i)["body"] or ""))')
               if ! PREVIO="$previo" python3 -c 'import os,sys; sys.exit(0 if os.environ["FALLAS"].strip() in os.environ["PREVIO"] else 1)'; then
                 python3 -c 'import json,sys; print(json.dumps({"body":sys.argv[1]}))' "$texto" > cuerpo.json
                 api -X POST "https://api.github.com/repos/$REPO/issues/$abierto/comments" -d @cuerpo.json > /dev/null
                 echo "Cambió lo que falla: comentario agregado."
+                whatsapp "$(printf '⚠️ Invítame: cambió lo que falla (%s)\n%s' "$hora" "$(sinMarcas "$FALLAS")")"
               else
                 echo "Sigue igual, aviso ya abierto (#$abierto)."
               fi
@@ -108,6 +130,7 @@ jobs:
             api -X POST "https://api.github.com/repos/$REPO/issues/$abierto/comments" -d @cuerpo.json > /dev/null
             api -X PATCH "https://api.github.com/repos/$REPO/issues/$abierto" -d '{"state":"closed"}' > /dev/null
             echo "Aviso cerrado."
+            whatsapp "✅ Invítame: volvió todo a andar ($hora)."
           else
             echo "Todo anda."
           fi
