@@ -27,9 +27,12 @@
     $('caja-n2').style.display=solo1?'none':'';
     if(solo1) $('n2').value='';
     $('l-n1').firstChild.textContent = solo1 ? 'Nombre ' : 'Nombre 1 ';
-    if(window.CREAR_DISENO) window.CREAR_DISENO.filtrar(t);
+    /* las filas de diseños se filtran SÓLO si la persona eligió el tipo a mano:
+       el selector viene en «Boda» de entrada y una quinceañera, que ve los
+       modelos ANTES que esta pregunta, se quedaría sin ver los de XV */
+    if(window.CREAR_DISENO && $('tipo').dataset.tocado) window.CREAR_DISENO.filtrar(t);
   }
-  $('tipo').addEventListener('change',aplicarTipo);
+  $('tipo').addEventListener('change',()=>{ $('tipo').dataset.tocado='1'; aplicarTipo(); });
   $('kick').addEventListener('input',()=>{$('kick').dataset.touched='1';});
   window.CREAR_TIPO = function(t){ if(t && $('tipo').value!==t){ $('tipo').value=t; aplicarTipo(); guardarBorrador(); } };
 

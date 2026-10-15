@@ -436,7 +436,7 @@
       if (t === 'personalizado' || (window.MUESTRAS_INVITAME[t] && !window.MUESTRAS_INVITAME[t].oculto)) elegido = t;
     }
     if (elegido && elegido !== 'personalizado' && !(window.MUESTRAS_INVITAME[elegido])) elegido = null;
-    TIPO = ($('tipo') && $('tipo').value) || '';
+    TIPO = '';   /* de entrada se ven las dos filas: ver la nota en crear.js (aplicarTipo) */
     tarjetasModelos(caja);
     if ($('dis-paletas')) tarjetasPaletas($('dis-paletas'));
     if ($('dis-letras')) botonesLetra($('dis-letras'));
