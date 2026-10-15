@@ -20,10 +20,18 @@
      · el formulario del cliente (crear.html), que los manda ya puestos.
 
    ⚠️ ESTO TOCA LA CONFIRMACIÓN, QUE ES POR DONDE ENTRA LA PLATA.
-      Este módulo NO guarda nada ni cambia los botones: sólo agrega una línea
-      de texto y un casillero. El guardado lo hace la función de siempre
-      (`rsvp()` del motor), que lee el casillero `#rrestric` si está visible.
+      Este módulo no cambia los botones ni el camino de guardado: agrega una
+      línea de texto, un casillero, y le pasa el casillero a `INV.saveRSVP`
+      (firebase-inv.js), que lo guarda junto con la respuesta.
       Si este archivo falla, la confirmación sigue andando igual que antes.
+
+   ⚠️⚠️ NO SE TOCA EL MOTOR (i/index.html), Y NO ES CAPRICHO.
+      Las invitaciones se sirven desde versiones CONGELADAS (i/v/<versión>/),
+      y la de cada una la trae el vestido de su muestra (`ver`). Un cambio en
+      `rsvp()` del motor no llegaba a ninguna: medido el 15/10 en la primera
+      invitación creada por el formulario nuevo, la restricción no viajaba.
+      Por eso el casillero se lee ACÁ, envolviendo `INV.saveRSVP`, que sí es el
+      mismo archivo para todas las versiones.
 
    ⚠️ LA FECHA NO CIERRA LA CONFIRMACIÓN. Pasado el día, el invitado puede
       confirmar igual: a los anfitriones les sirve más un «sí» tarde que
@@ -104,9 +112,26 @@
     });
   }
 
+  /* le pasa la restricción a INV.saveRSVP cuando el motor no la manda */
+  function envolverGuardado() {
+    var I = window.INV;
+    if (!I || typeof I.saveRSVP !== 'function' || I.saveRSVP.__conRestriccion) return;
+    var original = I.saveRSVP;
+    var envuelto = function (slug, token, estado, personas, mensaje, restriccion) {
+      if (restriccion == null || restriccion === '') {
+        var r = document.getElementById('rrestric');
+        restriccion = (r && r.offsetParent !== null && r.value) ? r.value : '';
+      }
+      return original.call(this, slug, token, estado, personas, mensaje, restriccion);
+    };
+    envuelto.__conRestriccion = true;
+    I.saveRSVP = envuelto;
+  }
+
   function poner() {
     try { lineaLimite(); } catch (e) {}
     try { preguntaRestricciones(); } catch (e) {}
+    try { envolverGuardado(); } catch (e) {}
   }
 
   function arrancar() {
