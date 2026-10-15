@@ -124,7 +124,7 @@ const VIGIA_CHEQUEOS = [
   ['Anti-robot', 'https://invitameok.net/anti-robot.php', 'sitekey'],
   ['Motor de efectos', 'https://invitameok.net/efectos/todo.php', 'function'],
   ['Panel del equipo', 'https://invitameok.net/admin.html', '<title>'],
-  ['CRM', 'https://littlemomentsok.com/invitamecrm/', 'CRM Inv'],
+  ['CRM', 'https://crm.invitameok.net/', 'CRM Inv'],
   ['Web de ventas', 'https://invitameweb.littlemomentsok.com/mx/', '<title>']
 ];
 const espera = ms => new Promise(r => setTimeout(r, ms));
