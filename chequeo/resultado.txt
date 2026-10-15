@@ -1,6 +1,6 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitameok.net/i/?e=camila-y-tomas
-Fecha: 15/10/2026, 01:54
+Fecha: 15/10/2026, 02:36
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
@@ -43,11 +43,11 @@ TODO BIEN — 116 chequeos pasaron
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.4 s)
+   (volvió a su lugar en 1.7 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 143.1 s de punta a punta)
+   (tardó 131.3 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -79,11 +79,11 @@ TODO BIEN — 116 chequeos pasaron
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.3 s)
+   (volvió a su lugar en 1.8 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 157.8 s de punta a punta)
+   (tardó 140.8 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -120,11 +120,11 @@ TODO BIEN — 116 chequeos pasaron
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.5 s)
+   (volvió a su lugar en 2.3 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 105.8 s de punta a punta)
+   (tardó 126.1 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -167,5 +167,5 @@ TODO BIEN — 116 chequeos pasaron
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 133.3 s de punta a punta)
+   (tardó 130.0 s de punta a punta)
 
