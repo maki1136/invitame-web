@@ -230,8 +230,48 @@ function codigo($largo) {
   return $s;
 }
 
+// ---------- 3. credenciales del sistema ----------
+$PANEL_USER = ''; $PANEL_PASS = '';
+$candidatos = array();
+$dir = __DIR__;
+for ($i = 0; $i < 6; $i++) {
+  $candidatos[] = $dir . '/invitame-panel.php';
+  $candidatos[] = $dir . '/invitame-config.php';
+  $padre = dirname($dir);
+  if ($padre === $dir) break;
+  $dir = $padre;
+}
+if (isset($_SERVER['DOCUMENT_ROOT'])) {
+  $candidatos[] = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-panel.php';
+  $candidatos[] = dirname(dirname($_SERVER['DOCUMENT_ROOT'])) . '/invitame-panel.php';
+}
+foreach (array_unique($candidatos) as $ruta) {
+  if (!is_readable($ruta)) continue;
+  include $ruta;
+  if ($PANEL_USER !== '' && $PANEL_PASS !== '') break;
+}
+if ($PANEL_USER === '' || $PANEL_PASS === '') {
+  echo json_encode(array('ok' => false, 'error' => 'sin-config'));
+  exit;
+}
+list($ra, $ca) = pedir(
+  'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' . $APIKEY,
+  'POST',
+  json_encode(array('email' => $PANEL_USER, 'password' => $PANEL_PASS, 'returnSecureToken' => true))
+);
+if ($ca != 200) { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
+$sesion  = json_decode($ra, true);
+$idToken = isset($sesion['idToken']) ? $sesion['idToken'] : '';
+if ($idToken === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
+$auth = array('Authorization: Bearer ' . $idToken);
+
 // ---------- 1. ⚠️ ¿la dirección está libre? EL CONTROL MÁS IMPORTANTE ----------
-/* Una invitación existente NO se pisa jamás.
+/* ⚠️ SE PREGUNTA CON LA SESIÓN DEL SISTEMA, NO CON LA apiKey.  (15/10/2026)
+   Con las reglas de «sólo el equipo», una dirección que NO existe contesta 403
+   a un pedido anónimo (la regla mira `resource.data` y no hay documento), y una
+   invitación PRIVADA que sí existe también contesta 403. Con la sesión, 404 es
+   «libre» y 200 es «ocupada», sin ambigüedad.
+   Una invitación existente NO se pisa jamás.
    ★ 15/10/2026: antes, si la dirección estaba ocupada (dos «Camila y Tomás»
    en el mismo año es de lo más normal), se cortaba acá y la invitación NO se
    creaba — en silencio para el cliente, y Jazmín la tenía que armar a mano.
@@ -241,7 +281,7 @@ $base = $slug;
 $libre = false;
 for ($n = 1; $n <= 30; $n++) {
   $cand = ($n === 1) ? $base : ($base . '-' . $n);
-  list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($cand) . '?key=' . $APIKEY);
+  list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($cand), 'GET', null, $auth);
   if ($ce == 404) { $slug = $cand; $libre = true; break; }
   if ($ce != 200) break;   /* Firestore no contestó bien: no se arriesga */
 }
@@ -313,41 +353,6 @@ for ($i = 1; $i <= 3; $i++) {
   if ($climaCoords === '' && $g['rank'] >= 12) $climaCoords = $par;
 }
 if ($climaCoords !== '' && empty($ev['climaCoords'])) $ev['climaCoords'] = $climaCoords;
-
-// ---------- 3. credenciales del sistema ----------
-$PANEL_USER = ''; $PANEL_PASS = '';
-$candidatos = array();
-$dir = __DIR__;
-for ($i = 0; $i < 6; $i++) {
-  $candidatos[] = $dir . '/invitame-panel.php';
-  $candidatos[] = $dir . '/invitame-config.php';
-  $padre = dirname($dir);
-  if ($padre === $dir) break;
-  $dir = $padre;
-}
-if (isset($_SERVER['DOCUMENT_ROOT'])) {
-  $candidatos[] = dirname($_SERVER['DOCUMENT_ROOT']) . '/invitame-panel.php';
-  $candidatos[] = dirname(dirname($_SERVER['DOCUMENT_ROOT'])) . '/invitame-panel.php';
-}
-foreach (array_unique($candidatos) as $ruta) {
-  if (!is_readable($ruta)) continue;
-  include $ruta;
-  if ($PANEL_USER !== '' && $PANEL_PASS !== '') break;
-}
-if ($PANEL_USER === '' || $PANEL_PASS === '') {
-  echo json_encode(array('ok' => false, 'error' => 'sin-config'));
-  exit;
-}
-list($ra, $ca) = pedir(
-  'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' . $APIKEY,
-  'POST',
-  json_encode(array('email' => $PANEL_USER, 'password' => $PANEL_PASS, 'returnSecureToken' => true))
-);
-if ($ca != 200) { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
-$sesion  = json_decode($ra, true);
-$idToken = isset($sesion['idToken']) ? $sesion['idToken'] : '';
-if ($idToken === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
-$auth = array('Authorization: Bearer ' . $idToken);
 
 // ---------- 3b. ¿la solicitud existe y es ésta? ----------
 /* ⚠️ ESTO VA DESPUÉS DEL LOGIN, Y NO ES CAPRICHO. La primera versión lo leía
