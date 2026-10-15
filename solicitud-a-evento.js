@@ -91,7 +91,41 @@
 
   /* Los que se llaman igual en los dos lados. */
   var IGUALES = ['orden', 'videoUrl', 'fraseFinal', 'musica', 'musicaUrl',
-                 'fraseFx', 'igHashtag', 'spotifyUrl', 'tipoEvento'];
+                 'fraseFx', 'igHashtag', 'spotifyUrl', 'tipoEvento', 'cfTitulo'];
+
+  /* ★ 15/10/2026 — LAS FOTOS SUELTAS DEL FORMULARIO NUEVO.
+     Izquierda: como viene en la solicitud. Derecha: la clave de imagen EXACTA
+     que guarda el panel ('img_' + la clave de /admin/0-claves.js) y que lee la
+     invitación. */
+  var FOTOS = {
+    'ev1img':    'img_c_ceremonia-1-imagen-jpg-480x320',
+    'ev2img':    'img_c_ceremonia-2-imagen-jpg-480x320',
+    'ev3img':    'img_c_ceremonia-3-imagen-jpg-480x320',
+    'hotelImg':  'img_c_imagen-hoteles',
+    'cierreImg': 'img_c_foto-para-el-fin-de-pagina'
+  };
+
+  /* ★ 15/10/2026 — LA MESA DE REGALOS GENÉRICA. El cliente pega el link de su
+     mesa, de la tienda que sea. Si es una de las tiendas que la invitación ya
+     conoce, va a su botón con su nombre; la primera que no conoce va al botón
+     libre (reg_otro_n / reg_otro_u). Si hubiera más de una desconocida, las que
+     sobran quedan en el pedido especial para que Jazmín las vea: no se pierde
+     ninguna en silencio. */
+  var TIENDAS = [
+    [/liverpool\./i,                 'reg_liverpool'],
+    [/amazon\./i,                    'reg_amazon'],
+    [/sears\./i,                     'reg_sears'],
+    [/mercadoli[bv]re\./i,           'reg_mercadolibre'],
+    [/elpalaciodehierro|palacio/i,    'reg_palacio'],
+    [/venmo\./i,                     'reg_venmo'],
+    [/paypal\.|paypal\.me/i,         'reg_paypal']
+  ];
+  function conHttp(u) {
+    u = String(u || '').trim();
+    if (!u) return '';
+    if (!/^https?:\/\//i.test(u)) u = 'https://' + u.replace(/^\/+/, '');
+    return u;
+  }
 
   /* La mesa de regalos: son muchos y todos se llaman igual. */
   var REGALOS = ['reg_liverpool', 'reg_amazon', 'reg_sears', 'reg_mercadolibre',
@@ -147,6 +181,35 @@
       if (s[k]) d[DIRECTOS[k]] = s[k];
     }
 
+    /* ---- las fotos sueltas: cada lugar, el hotel y el cierre ---- */
+    for (var kf in FOTOS) {
+      if (s[kf]) d[FOTOS[kf]] = s[kf];
+    }
+
+    /* ---- la mesa de regalos genérica ---- */
+    var extraRegalos = [];
+    if (Object.prototype.toString.call(s.regLinks) === '[object Array]') {
+      s.regLinks.forEach(function (m) {
+        var u = conHttp(m && m.u), n = String((m && m.n) || '').trim();
+        if (!u) return;
+        for (var ti = 0; ti < TIENDAS.length; ti++) {
+          if (TIENDAS[ti][0].test(u) && !d[TIENDAS[ti][1]]) { d[TIENDAS[ti][1]] = u; return; }
+        }
+        if (!d.reg_otro_u) { d.reg_otro_u = u; d.reg_otro_n = n || 'Mesa de regalos'; return; }
+        extraRegalos.push((n ? n + ': ' : '') + u);
+      });
+    }
+
+    /* ---- la confirmación: fecha límite y restricciones (fx.rsvp) ----
+       ⚠️ Van dentro de `fx`, y `fx` lo REEMPLAZA el vestido de la muestra.
+          Por eso /vestir.js los vuelve a poner después de vestir. */
+    if (s.rsvpLimite || s.rsvpRestricciones) {
+      d.fx = d.fx || {};
+      d.fx.rsvp = d.fx.rsvp || {};
+      if (/^\d{4}-\d{2}-\d{2}$/.test(String(s.rsvpLimite || ''))) d.fx.rsvp.limite = s.rsvpLimite;
+      if (s.rsvpRestricciones) d.fx.rsvp.restricciones = true;
+    }
+
     /* ---- las personas importantes (hasta 12) ---- */
     if (Object.prototype.toString.call(s.personas) === '[object Array]' && s.personas.length) {
       d.personas = s.personas.slice(0, 12).map(function (p) {
@@ -159,7 +222,15 @@
        de la invitación: son cosas que el cliente PIDIÓ. Van al pedido especial,
        que es lo primero que se lee al abrir la invitación en el panel. */
     var notas = [];
+    /* ★ 15/10/2026 — el DISEÑO PERSONALIZADO va primero: es lo que Jazmín
+       tiene que diseñar. La invitación nace con el vestido de Perlas de base. */
+    if (s.tpl === 'personalizado' || s.personalizado) {
+      notas.push('DISEÑO PERSONALIZADO: ' + (s.personalizado || '(sin descripción)'));
+      if (Object.prototype.toString.call(s.inspiracion) === '[object Array]' && s.inspiracion.length)
+        notas.push('Imágenes de inspiración:\n' + s.inspiracion.join('\n'));
+    }
     if (s.observaciones) notas.push(s.observaciones);
+    if (extraRegalos.length) notas.push('Otras mesas de regalos (no entraron en los botones):\n' + extraRegalos.join('\n'));
     if (s.colorSug)      notas.push('Colores que pidió: ' + s.colorSug);
     if (s.tipoSug)       notas.push('Estilo de letra que pidió: ' + s.tipoSug);
     if (s.musica)        notas.push('Música que pidió: ' + s.musica);

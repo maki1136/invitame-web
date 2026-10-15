@@ -230,16 +230,6 @@ function codigo($largo) {
   return $s;
 }
 
-// ---------- 1. ⚠️ ¿la dirección está libre? EL CONTROL MÁS IMPORTANTE ----------
-list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($slug) . '?key=' . $APIKEY);
-if ($ce == 200) {
-  /* Ya hay una invitación con esa dirección. NO se pisa jamás: se avisa y el
-     equipo decide. Dos «Camila y Tomás» en el mismo año es de lo más normal. */
-  http_response_code(409);
-  echo json_encode(array('ok' => false, 'error' => 'direccion-ocupada', 'slug' => $slug));
-  exit;
-}
-
 // ---------- 3. credenciales del sistema ----------
 $PANEL_USER = ''; $PANEL_PASS = '';
 $candidatos = array();
@@ -274,6 +264,95 @@ $sesion  = json_decode($ra, true);
 $idToken = isset($sesion['idToken']) ? $sesion['idToken'] : '';
 if ($idToken === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
 $auth = array('Authorization: Bearer ' . $idToken);
+
+// ---------- 1. ⚠️ ¿la dirección está libre? EL CONTROL MÁS IMPORTANTE ----------
+/* ⚠️ SE PREGUNTA CON LA SESIÓN DEL SISTEMA, NO CON LA apiKey.  (15/10/2026)
+   Con las reglas de «sólo el equipo», una dirección que NO existe contesta 403
+   a un pedido anónimo (la regla mira `resource.data` y no hay documento), y una
+   invitación PRIVADA que sí existe también contesta 403. Con la sesión, 404 es
+   «libre» y 200 es «ocupada», sin ambigüedad.
+   Una invitación existente NO se pisa jamás.
+   ★ 15/10/2026: antes, si la dirección estaba ocupada (dos «Camila y Tomás»
+   en el mismo año es de lo más normal), se cortaba acá y la invitación NO se
+   creaba — en silencio para el cliente, y Jazmín la tenía que armar a mano.
+   Ahora se busca la siguiente libre: camila-y-tomas-2, -3… Sigue sin pisarse
+   nada: cada una se pregunta antes de usarla. */
+$base = $slug;
+$libre = false;
+for ($n = 1; $n <= 30; $n++) {
+  $cand = ($n === 1) ? $base : ($base . '-' . $n);
+  list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($cand), 'GET', null, $auth);
+  if ($ce == 404) { $slug = $cand; $libre = true; break; }
+  if ($ce != 200) break;   /* Firestore no contestó bien: no se arriesga */
+}
+if (!$libre) {
+  http_response_code(409);
+  echo json_encode(array('ok' => false, 'error' => 'direccion-ocupada', 'slug' => $base));
+  exit;
+}
+$ev['slug'] = $slug;
+
+// ---------- 1b. ★ EL MAPA Y EL CLIMA, SOLOS (15/10/2026) ----------
+/* Maki: «en el Google Maps tiene que poner la dirección, y las coordenadas se
+   tienen que hacer solas». El cliente escribe la dirección y nada más.
+     · Si pegó un link de Google Maps (también los cortos maps.app.goo.gl), se
+       sigue el link y se sacan las coordenadas de adentro.
+     · Si no, se busca la dirección en OpenStreetMap (Nominatim).
+   Sólo un resultado PRECISO (calle o más fino) va al mapa: un punto en el
+   centro de la ciudad sería peor que la búsqueda de Google por la dirección
+   escrita, que es lo que la invitación usa si `evNmaps` queda vacío.
+   Para el CLIMA alcanza con la ciudad: va a `climaCoords`.
+   ⚠️ Si nada contesta, no pasa nada: queda como antes (mapa por la dirección
+      escrita, sin clima). Nunca frena la creación de la invitación. */
+function coordsDeTexto($s) {
+  $s = (string)$s;
+  if (preg_match('~(-?\d{1,3}\.\d{3,})\s*,\s*(-?\d{1,3}\.\d{3,})~', $s, $m)) return array($m[1], $m[2]);
+  if (preg_match('~@(-?\d+\.\d+),(-?\d+\.\d+)~', $s, $m)) return array($m[1], $m[2]);
+  if (preg_match('~!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)~', $s, $m)) return array($m[1], $m[2]);
+  return null;
+}
+function seguirLink($url) {
+  if (!preg_match('~^https?://(maps\.app\.goo\.gl|goo\.gl/maps|(www\.)?google\.[a-z.]+/maps|maps\.google\.[a-z.]+)~i', $url)) return '';
+  $ch = curl_init($url);
+  curl_setopt_array($ch, array(CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_MAXREDIRS => 6,
+    CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_TIMEOUT => 8, CURLOPT_USERAGENT => 'Mozilla/5.0 (Invitame)', CURLOPT_RANGE => '0-60000'));
+  $cuerpo = (string)curl_exec($ch);
+  $fin = (string)curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+  curl_close($ch);
+  return $fin . ' ' . substr($cuerpo, 0, 60000);
+}
+function buscarDireccion($q) {
+  $ch = curl_init('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=0&q=' . rawurlencode($q));
+  curl_setopt_array($ch, array(CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_TIMEOUT => 8,
+    CURLOPT_USERAGENT => 'Invitame/1.0 (info@invitameok.com)', CURLOPT_HTTPHEADER => array('Accept-Language: es')));
+  $r = curl_exec($ch); curl_close($ch);
+  $j = json_decode((string)$r, true);
+  if (!is_array($j) || !isset($j[0]['lat'])) return null;
+  return array('lat' => $j[0]['lat'], 'lon' => $j[0]['lon'], 'rank' => (int)($j[0]['place_rank'] ?? 0));
+}
+$climaCoords = '';
+$busquedas = 0;
+for ($i = 1; $i <= 3; $i++) {
+  $kM = 'ev' . $i . 'maps';
+  $link = trim((string)($ev[$kM] ?? ''));
+  $dir  = trim((string)($ev['ev' . $i . 'dir'] ?? ''));
+  $c = $link !== '' ? coordsDeTexto($link) : null;
+  if (!$c && $link !== '' && preg_match('~^https?://~i', $link)) $c = coordsDeTexto(seguirLink($link));
+  if ($c) {
+    $ev[$kM] = $c[0] . ', ' . $c[1];
+    if ($climaCoords === '') $climaCoords = $ev[$kM];
+    continue;
+  }
+  if ($dir === '' || $busquedas >= 3) continue;
+  if ($busquedas > 0) usleep(1100000);   /* Nominatim pide una búsqueda por segundo */
+  $busquedas++;
+  $g = buscarDireccion($dir);
+  if (!$g) continue;
+  $par = round((float)$g['lat'], 6) . ', ' . round((float)$g['lon'], 6);
+  if ($g['rank'] >= 26 && $link === '') $ev[$kM] = $par;   /* calle o más fino: va al mapa */
+  if ($climaCoords === '' && $g['rank'] >= 12) $climaCoords = $par;
+}
+if ($climaCoords !== '' && empty($ev['climaCoords'])) $ev['climaCoords'] = $climaCoords;
 
 // ---------- 3b. ¿la solicitud existe y es ésta? ----------
 /* ⚠️ ESTO VA DESPUÉS DEL LOGIN, Y NO ES CAPRICHO. La primera versión lo leía

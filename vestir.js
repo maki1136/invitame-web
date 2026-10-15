@@ -148,6 +148,12 @@
     var puestos = [];
     if (!d || !muestra) return puestos;
 
+    /* ★ 15/10/2026 — LO QUE EL CLIENTE ELIGIÓ ADENTRO DE `fx` NO ES VESTIDO.
+       La fecha límite y la pregunta de restricciones (fx.rsvp.limite /
+       .restricciones) vienen del formulario, y `fx` se copia ENTERO de la
+       muestra: sin esto se pisaban en silencio. Se guardan y se reponen. */
+    var rsvpCliente = (d.fx && d.fx.rsvp) ? copia(d.fx.rsvp) : null;
+
     Object.keys(muestra).forEach(function (k) {
       if (!esDeDiseno(k)) return;
       if (muestra[k] == null || muestra[k] === '') return;
@@ -172,6 +178,22 @@
       }
       /* el paquete es del cliente, no de la muestra */
       if (d.fx.paquete) delete d.fx.paquete;
+      /* ★ 15/10/2026 — Invítame Live: `fx.galeria.muestra` hace que la galería
+         se cree como MUESTRA (no vence nunca y no se limpia), y la foto de la
+         sección es la fiesta de la pareja de muestra. Ninguna de las dos es
+         del cliente. Medido en la primera invitación creada por el formulario
+         nuevo (prueba-y-formulario, desde bohemia). */
+      if (d.fx.galeria) {
+        delete d.fx.galeria.muestra;
+        if (/fotos-fiesta\//.test(String(d.fx.galeria.imagen || ''))) delete d.fx.galeria.imagen;
+      }
+    }
+
+    if (rsvpCliente) {
+      d.fx = d.fx || {};
+      d.fx.rsvp = d.fx.rsvp || {};
+      if (rsvpCliente.limite) d.fx.rsvp.limite = rsvpCliente.limite;
+      if (rsvpCliente.restricciones) d.fx.rsvp.restricciones = true;
     }
 
     /* y recién ahora, la voz que grabó ESTE cliente. Va DESPUÉS de la limpieza

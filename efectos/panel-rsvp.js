@@ -90,13 +90,66 @@
     ayuda.style.cssText = 'font-size:11px;opacity:.6;line-height:1.35';
     caja.appendChild(ayuda);
 
+    /* ★ 15/10/2026 — pedido de Jazmín: la FECHA LÍMITE para confirmar y la
+       pregunta de RESTRICCIONES ALIMENTARIAS. Las dibuja en la invitación
+       /efectos/rsvp-extras.js; el formulario del cliente las manda ya puestas.
+       ⚠️ Se escribe en el borrador VIVO (borrador()), no en el `d` de cuando
+       se armó la caja: si Jazmín cambia de invitación sin recargar, la caja
+       sigue en pantalla y no puede escribir en la anterior. */
+    var filaF = document.createElement('div');
+    filaF.style.cssText = 'margin:12px 0 8px';
+    var labF = document.createElement('label');
+    labF.textContent = 'Fecha límite para confirmar';
+    labF.style.cssText = 'display:block;font-size:12px;font-weight:600;margin:0 0 3px';
+    var fecha = document.createElement('input');
+    fecha.type = 'date';
+    fecha.id = 'rsvp-limite-panel';
+    fecha.value = String(datos(d).limite || '');
+    fecha.style.cssText = 'width:100%';
+    fecha.onchange = function () {
+      var b = borrador() || d;
+      if (fecha.value) datos(b).limite = fecha.value; else delete datos(b).limite;
+      refrescar();
+    };
+    var ayF = document.createElement('div');
+    ayF.textContent = 'Aparece abajo de la frase: «Confirma antes del …». Vacía, no aparece. No cierra la confirmación.';
+    ayF.style.cssText = 'font-size:11px;opacity:.6;line-height:1.35;margin-top:3px';
+    filaF.appendChild(labF); filaF.appendChild(fecha); filaF.appendChild(ayF);
+    caja.appendChild(filaF);
+
+    var filaR = document.createElement('label');
+    filaR.style.cssText = 'display:flex;gap:8px;align-items:flex-start;font-size:12px;font-weight:600;margin:6px 0 0;cursor:pointer';
+    var chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.id = 'rsvp-restric-panel';
+    chk.checked = !!datos(d).restricciones;
+    chk.style.cssText = 'margin-top:2px';
+    chk.onchange = function () {
+      var b = borrador() || d;
+      datos(b).restricciones = chk.checked;
+      refrescar();
+    };
+    var txR = document.createElement('span');
+    txR.innerHTML = 'Preguntar restricciones alimentarias<br><span style="font-weight:400;opacity:.62;font-size:11px">' +
+      'Suma al formulario «¿Alguna restricción alimentaria?». Lo que contestan lo ven los novios en su panel.</span>';
+    filaR.appendChild(chk); filaR.appendChild(txR);
+    caja.appendChild(filaR);
+
     return caja;
   }
 
   function revisar() {
     var d = borrador();
     if (!d) return;
-    if (document.getElementById(ID)) return;
+    if (document.getElementById(ID)) {
+      /* ya está: se sincroniza con la invitación abierta (puede haber cambiado) */
+      var r = (d.fx && d.fx.rsvp) || {};
+      var f = document.getElementById('rsvp-limite-panel');
+      if (f && document.activeElement !== f && f.value !== String(r.limite || '')) f.value = String(r.limite || '');
+      var c = document.getElementById('rsvp-restric-panel');
+      if (c && c.checked !== !!r.restricciones) c.checked = !!r.restricciones;
+      return;
+    }
     /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
        antes se colgaba del primer «.mejoras» y salía en cinco pestañas */
     var m = window.invCasa ? window.invCasa(ID) : document.querySelector('.mejoras');

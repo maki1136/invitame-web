@@ -8,30 +8,42 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- ===== EL FORMULARIO DEL CLIENTE — rearmado el 15/10/2026 ==================
+     Con el documento de Jazmín «AJUSTES FORMULARIO» y lo que acordó Maki:
+       · la primera parte, en el orden de Jazmín: modelo, qué festejas, clave, correo
+       · TODOS los diseños de la web, con la foto real de cada portada
+       · una sola imagen de ayuda por sector, sacada de una invitación REAL
+         (julia-y-santiago), en /formulario/ayuda/
+       · la portada en una sola tarjeta
+       · foto por lugar, por hotel, por persona y del cierre
+       · mesa de regalos genérica: el link de cualquier tienda del mundo
+       · confirmación con título, frase, fecha límite y restricciones
+       · el mapa y el clima salen solos de la dirección (solicitud-crear.php)
+       · todo en español de México («tú»)
+     El script está en /crear.js (y la elección del diseño en /crear-diseno.js).
+     ========================================================================== -->
 <style>
   :root{--uva:#6D1233;--uva2:#49111A;--rosa:#F56770;--rosa2:#e04f59;--cream:#faf6f0;--line:#ece2d8;--ink:#3f3730;--muted:#9a8f88}
   *{box-sizing:border-box}
   body{margin:0;font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#f7efe9,#f3e9e2);color:var(--ink)}
   .top{background:var(--uva);color:#fff;padding:18px 20px;text-align:center}
   .top .brand{font-weight:900;font-size:22px;letter-spacing:.5px}
-  .top .brand span{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600}
   .top .sub{opacity:.85;font-size:13px;margin-top:2px}
-  .wrap{max-width:620px;margin:0 auto;padding:18px 16px 60px}
-  .modelo{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px;margin-bottom:16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(73,17,26,.05)}
-  .modelo .sw{width:42px;height:42px;border-radius:10px;flex:none}
-  .modelo b{color:var(--uva)}
-  .modelo .ch{margin-left:auto}
+  .wrap{max-width:620px;margin:0 auto;padding:18px 16px 110px}
   .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 16px;margin-bottom:16px;box-shadow:0 6px 18px rgba(73,17,26,.05)}
-  .card h2{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:22px;margin:0 0 3px}
-  .card .desc{color:var(--muted);font-size:13px;margin:0 0 14px}
+  .card h2{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--uva);font-size:23px;margin:0 0 3px}
+  .card .desc{color:var(--muted);font-size:13px;margin:0 0 12px}
   label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}
   .req{color:var(--rosa)}
-  input[type=text],input[type=email],input[type=datetime-local],input[type=tel],textarea,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:'Nunito';font-size:15px;background:#fff;color:var(--ink)}
+  input[type=text],input[type=email],input[type=datetime-local],input[type=date],input[type=tel],textarea,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:'Nunito';font-size:15px;background:#fff;color:var(--ink)}
   textarea{resize:vertical;min-height:70px}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .hint{font-size:12px;color:var(--muted);margin-top:5px}
-  .up{border:1.5px dashed #d9c7bd;border-radius:12px;padding:16px;text-align:center;cursor:pointer;color:var(--uva);font-weight:700;background:#fdf8f4}
-  .up.small{padding:11px;font-size:13px}
+  .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  @media(max-width:420px){.three{grid-template-columns:1fr}}
+  .hint{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}
+  .up{border:1.5px dashed #d9c7bd;border-radius:12px;padding:14px;text-align:center;cursor:pointer;color:var(--uva);font-weight:700;background:#fdf8f4;font-size:14px}
+  .up.small{padding:10px;font-size:13px}
+  .up.ok{border-style:solid;border-color:#b9d3b6;background:#f3faf2;color:#2f6b35}
   .prev{max-height:150px;border-radius:10px;margin-top:10px;display:block}
   .prevmini{height:52px;border-radius:8px;margin:6px 6px 0 0}
   .btn{display:block;width:100%;border:0;border-radius:26px;padding:16px;font-family:'Nunito';font-weight:900;font-size:16px;cursor:pointer;background:var(--rosa);color:#fff;box-shadow:0 8px 20px rgba(245,103,112,.35)}
@@ -41,25 +53,15 @@
   .rmx{border:0;background:#f5e7e9;color:var(--uva);border-radius:8px;height:38px;cursor:pointer;font-weight:800}
   .addg{background:var(--uva);color:#fff;border:0;border-radius:20px;padding:9px 16px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer;margin-top:4px}
   .done{display:none;text-align:center;padding:40px 20px}
-  .done .big{font-size:52px}
   .done h1{font-family:'Cormorant Garamond',serif;color:var(--uva);font-size:30px;margin:10px 0 6px}
   .done p{color:var(--ink);font-size:15px;line-height:1.6}
-  .sectorfoto{position:relative;margin-top:10px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fdf8f4;max-width:230px}
-  .sectorfoto img{width:100%;height:auto;display:block;cursor:zoom-in}
-  .sectorfoto .cap{display:block;font-size:11px;color:var(--muted);padding:6px 9px;line-height:1.35}
-  @media(min-width:560px){.sectorfoto{max-width:260px}}
-  .helpbtn{display:inline-flex;align-items:center;gap:5px;background:#fbf3f6;color:var(--uva);border:1px solid #e6cdd7;border-radius:20px;padding:6px 13px;font-size:12.5px;font-weight:800;cursor:pointer;margin-top:10px;font-family:'Nunito'}
-  .helpbtn:hover{background:#f6e8ee}
-  .helpbox{display:none;margin-top:10px;background:#fdf8f4;border:1px solid var(--line);border-radius:13px;padding:13px;gap:14px;align-items:flex-start}
-  .helpbox.open{display:flex;flex-wrap:wrap}
-  .helpbox .vis{flex:none;width:132px}
-  .helpbox .vis svg{width:100%;height:auto;display:block}
-  .helpbox .txt{flex:1;min-width:190px;font-size:13px;line-height:1.6;color:var(--ink)}
-  .helpbox .txt b{color:var(--uva)}
-  .helpbox .txt ul{margin:6px 0 0;padding-left:18px}
-  .helpbox .txt li{margin:3px 0}
-  .helpbox .vis{position:relative}
-  .helpbox .vis .zoomtag{position:absolute;right:6px;bottom:6px;background:rgba(73,17,26,.82);color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:20px;pointer-events:none}
+  /* la imagen de ayuda: UNA por sector, de una invitación real */
+  .ayuda{display:flex;gap:12px;align-items:flex-start;margin:4px 0 6px}
+  .ayuda .ph{flex:none;width:118px;border-radius:11px;overflow:hidden;border:1px solid var(--line);background:#fdf8f4;cursor:zoom-in;position:relative}
+  .ayuda .ph img{width:100%;height:auto;display:block}
+  .ayuda .ph span{position:absolute;left:0;right:0;bottom:0;background:rgba(73,17,26,.78);color:#fff;font-size:10px;font-weight:800;text-align:center;padding:3px 0}
+  .ayuda .tx{font-size:12.5px;line-height:1.55;color:var(--ink)}
+  .ayuda .tx b{color:var(--uva)}
   .lbox{position:fixed;inset:0;background:rgba(30,8,14,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:14px;cursor:zoom-out}
   .lbox.open{display:flex}
   .lbox img{max-width:96vw;max-height:88vh;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
@@ -70,21 +72,38 @@
   .avisos b{color:var(--uva)}
   .fotoslista{margin-top:14px;background:#fdf8f4;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px}
   .fotoslista ul{padding-left:18px;margin:6px 0 0;line-height:1.6}
-  .rowpers{display:grid;grid-template-columns:1fr 1fr 34px;gap:7px;margin-bottom:7px;align-items:center}
-  .rowpers input{padding:9px 10px;font-size:14px}
   .subt{font-weight:800;color:var(--uva);font-size:13.5px;margin:18px 0 2px;padding-top:14px;border-top:1px solid var(--line)}
-  .subt:first-of-type{border-top:0;padding-top:0;margin-top:8px}
+  .subt.primero{border-top:0;padding-top:0;margin-top:8px}
   .err{background:#fdecec;color:#b0334a;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px;display:none}
   .loadingbar{position:fixed;inset:0;background:rgba(73,17,26,.35);display:none;align-items:center;justify-content:center;z-index:50}
   .loadingbar .box{background:#fff;border-radius:14px;padding:22px 26px;font-weight:800;color:var(--uva)}
+  /* personas: nombre, qué es, foto */
+  .rowpers{display:grid;grid-template-columns:1fr 1fr 74px 34px;gap:7px;margin-bottom:8px;align-items:center}
+  .rowpers input{padding:9px 10px;font-size:14px}
+  .rowpers .fp{height:38px;border:1.5px dashed #d9c7bd;border-radius:9px;background:#fdf8f4 center/cover no-repeat;color:var(--uva);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;text-align:center;line-height:1.1}
+  @media(max-width:420px){.rowpers{grid-template-columns:1fr 64px 34px}.rowpers .rel{grid-column:1/2}}
+  /* mesas de regalos: tienda + link */
+  .rowreg{display:grid;grid-template-columns:130px 1fr 34px;gap:7px;margin-bottom:7px;align-items:center}
+  .rowreg input{padding:9px 10px;font-size:14px}
+  @media(max-width:420px){.rowreg{grid-template-columns:1fr 34px}.rowreg .lk{grid-column:1/2}}
+  /* el sí / no de las restricciones */
+  .sino{display:flex;gap:8px;margin-top:4px}
+  .sino label{flex:1;margin:0;border:1.5px solid var(--line);border-radius:11px;padding:11px;text-align:center;cursor:pointer;font-weight:700}
+  .sino input{display:none}
+  .sino input:checked+span{color:var(--uva)}
+  .sino label:has(input:checked){border-color:var(--uva);background:#fbf3f6}
+  details.mas{margin-top:4px}
+  details.mas>summary{cursor:pointer;font-weight:800;color:var(--uva);font-size:14px;list-style:none;padding:4px 0}
+  details.mas>summary::-webkit-details-marker{display:none}
+  details.mas>summary::before{content:"+ "}
+  details.mas[open]>summary::before{content:"– "}
 </style>
 </head>
 <body>
   <div class="top"><div class="brand">invítame!</div><div class="sub">Completa tus datos y armamos tu invitación</div></div>
   <div class="wrap" id="wrap">
 
-    <!-- Lo que el formulario viejo de Google decía al principio. Sin esto el cliente
-         no sabe qué esperar y después reclama correcciones infinitas. -->
+    <!-- HOJA 1 -->
     <div class="card avisos">
       <h2>Antes de empezar, tres cosas</h2>
       <ul>
@@ -96,25 +115,33 @@
         <b>Fotos que conviene tener a la mano</b>
         <ul>
           <li><b>Portada:</b> 1 foto vertical (o un video corto vertical).</li>
-          <li><b>Frase / dedicatoria:</b> 1 foto de fondo (opcional).</li>
           <li><b>Cada lugar:</b> 1 foto del salón, la iglesia o la locación.</li>
-          <li><b>Dress code:</b> 1 o 2 fotos de inspiración (opcional).</li>
-          <li><b>Galería:</b> las que quieras; entre 6 y 20 se ven muy bien.</li>
+          <li><b>Hospedaje:</b> 1 foto del hotel (opcional).</li>
           <li><b>Personas importantes:</b> 1 foto de cada una (opcional).</li>
+          <li><b>Galería:</b> las que quieras; entre 6 y 20 se ven muy bien.</li>
           <li><b>Cierre:</b> 1 foto para el final de la invitación.</li>
         </ul>
         <div class="hint" style="margin-top:6px">Las que no tengas ahora, se pueden sumar después. Nada de esto frena el envío.</div>
       </div>
     </div>
 
-    <div class="modelo" id="modelo"><div class="sw" style="background:#a5674f"></div><div><div style="font-size:12px;color:var(--muted)">Modelo elegido</div><b id="modelo-nom">Boho</b></div><a class="ch" href="catalogo.html" style="color:var(--rosa);font-weight:800;text-decoration:none;font-size:13px">cambiar</a></div>
+    <!-- HOJA 2 · modelo elegido, qué festejas, clave, correo -->
+    <div class="card" id="card-modelo">
+      <h2>Modelo elegido</h2>
+      <p class="desc">Toca el diseño que más te guste. Desliza para ver todos.</p>
+      <div id="dis-modelos"></div>
+      <div id="dis-elegido" class="hint" style="font-size:13px"></div>
+      <div id="dis-perso" style="display:none;margin-top:6px;background:#fbf3f6;border:1px solid #e6cdd7;border-radius:12px;padding:12px 13px">
+        <b style="color:var(--uva);font-size:13.5px">Tu diseño personalizado</b>
+        <label>Cuéntanos qué te gustaría crear</label>
+        <textarea id="persoTxt" rows="3" placeholder="Ej: algo de playa, en azul y dorado, con conchas; los nombres en letra cursiva…"></textarea>
+        <div class="up small" id="up-insp" style="margin-top:8px">Subir imágenes de inspiración</div>
+        <input type="file" id="f-insp" accept="image/*" multiple style="display:none">
+        <div id="prev-insp"></div>
+      </div>
+      <div id="dis-colores"></div>
 
-    <div class="card">
-      <h2>¿Qué festejas?</h2>
-      <p class="desc">Elige el tipo de evento.</p>
-      <label>Número de clave / pedido</label><input type="text" id="orden" placeholder="Ej: 128">
-      <div class="hint">Es el número que te dimos al contratar. Si no tienes ninguno, déjalo vacío.</div>
-      <label>Tipo de evento</label>
+      <div class="subt">¿Qué festejas?</div>
       <select id="tipo">
         <option value="boda">Boda</option>
         <option value="xv">XV años</option>
@@ -123,108 +150,136 @@
         <option value="cumple">Cumpleaños</option>
         <option value="otro">Otro evento</option>
       </select>
-      <div data-help="tipo"></div>
-      <label>Título (el texto de arriba)</label><input type="text" id="kick" placeholder="Nuestra Boda">
-      <div class="hint">Es el texto pequeño que aparece arriba de los nombres en la portada (ej: "Nuestra Boda", "Mis XV").</div>
-      <div data-help="kick"></div>
-    </div>
 
-    <div class="card">
-      <h2 id="h-prot">Los protagonistas</h2>
-      <p class="desc" id="d-prot">¿Quiénes se casan / festejan?</p>
+      <div class="subt">Clave</div>
+      <input type="text" id="orden" placeholder="Ej: A19259">
+      <div class="hint">Es el número o código que te dimos al contratar. Si no lo tienes a la mano, déjalo vacío.</div>
+
+      <div class="subt">Correo y contacto</div>
+      <label>Tu correo <span class="req">*</span></label><input type="email" id="cmail" placeholder="tucorreo@gmail.com">
       <div class="two">
-        <div><label>Nombre 1 <span class="req">*</span></label><input type="text" id="n1" placeholder="María"></div>
-        <div><label>Nombre 2</label><input type="text" id="n2" placeholder="Diego"></div>
+        <div><label>Tu nombre <span class="req">*</span></label><input type="text" id="cnom" placeholder="Tu nombre"></div>
+        <div><label>Tu WhatsApp <span class="req">*</span></label><input type="tel" id="cwsp" placeholder="+52 999 123 4567"></div>
       </div>
-      <div data-help="nombres"></div>
-      <label>Fecha y hora del evento <span class="req">*</span></label><input type="datetime-local" id="fecha">
-      <div data-help="fecha"></div>
-      <label>Frase o dedicatoria</label><textarea id="frase" placeholder="Una frase bonita para la portada…"></textarea>
-      <div class="hint">Aparece en una sección propia, en letra cursiva. Ej: "Hay un instante en la vida en que se decide caminar juntos para siempre."</div>
-      <div data-help="frase"></div>
+      <div class="hint">Por aquí te avisamos en cuanto tu invitación esté lista.</div>
     </div>
 
+    <!-- HOJA 3 · LA PORTADA, en una sola tarjeta y con UNA sola imagen -->
     <div class="card">
-      <h2>Portada: foto o video</h2>
-      <p class="desc">La primera pantalla, a pantalla completa. Puede ser una <b>foto</b> o un <b>video</b> corto. <b>Vertical</b> se ve mejor (llena el celular).</p>
+      <h2>La portada</h2>
+      <p class="desc">La primera pantalla que ven tus invitados.</p>
+      <div data-ayuda="portada"></div>
+      <label>Foto o video de portada</label>
       <div class="two">
-        <div class="up" id="up-cover" onclick="document.getElementById('f-cover').click()">Subir foto</div>
-        <div class="up" id="up-covervid" onclick="document.getElementById('f-covervid').click()">Subir video</div>
+        <div class="up" id="up-cover">Subir foto</div>
+        <div class="up" id="up-covervid">Subir video</div>
       </div>
       <input type="file" id="f-cover" accept="image/*" style="display:none">
       <input type="file" id="f-covervid" accept="video/*" style="display:none">
       <div id="prev-cover"></div>
-      <div class="hint"><b>Si subes video:</b> vertical (9:16), cortito (de 6 a 15 segundos), en MP4 y de menos de 40 MB. Nosotros lo optimizamos. Si subes los dos, mostramos el video.</div>
-      <div data-help="foto"></div>
+      <div class="hint">Vertical se ve mejor. Video: de 6 a 15 segundos, MP4, menos de 40 MB. Si subes los dos, mostramos el video.</div>
+      <label>Título (el texto chico de arriba)</label><input type="text" id="kick" placeholder="Nuestra Boda">
+      <div class="two">
+        <div><label id="l-n1">Nombre 1 <span class="req">*</span></label><input type="text" id="n1" placeholder="María"></div>
+        <div id="caja-n2"><label>Nombre 2</label><input type="text" id="n2" placeholder="Diego"></div>
+      </div>
+      <label>Frase o dedicatoria</label><textarea id="frase" rows="2" placeholder="Ej: Hay un instante en la vida en que se decide caminar juntos para siempre."></textarea>
+      <label>Fecha y hora del evento <span class="req">*</span></label><input type="datetime-local" id="fecha">
+      <div class="hint">Con la fecha armamos la cuenta regresiva de la portada.</div>
     </div>
 
+    <!-- HOJA 4 · LOS SECTORES -->
     <div class="card">
       <h2>¿Dónde y cuándo?</h2>
       <p class="desc">Hasta tres lugares. Completa los que tengas: los vacíos no aparecen.</p>
-      <div class="subt">1 · Ceremonia</div>
-      <label>Ceremonia — lugar</label><input type="text" id="ev1t" placeholder="Basílica de Santa María">
-      <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev1f" placeholder="12:00 hs"></div>
-      <div><label>Dirección</label><input type="text" id="ev1d" placeholder="Calle 123, Ciudad"></div></div>
-      <label>Link de Google Maps de la ceremonia (opcional)</label><input type="text" id="ev1maps" placeholder="Pega el link de Google Maps">
+      <div data-ayuda="eventos"></div>
+      <div class="subt primero">1 · Ceremonia</div>
+      <label>Nombre del lugar</label><input type="text" id="ev1t" placeholder="Parroquia de San Pedro">
+      <div class="two"><div><label>Hora</label><input type="text" id="ev1f" placeholder="17:00 hrs"></div>
+      <div><label>Dirección</label><input type="text" id="ev1d" placeholder="Calle 60 No. 123, Centro, Mérida"></div></div>
+      <div class="up small" id="up-ev1" style="margin-top:9px">Subir foto del lugar</div>
       <div class="subt">2 · Fiesta</div>
-      <label>Fiesta — lugar</label><input type="text" id="ev2t" placeholder="Salón Las Rosas">
-      <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev2f" placeholder="14:00 hs"></div>
-      <div><label>Dirección</label><input type="text" id="ev2d" placeholder="Av. Siempre 456, Ciudad"></div></div>
-      <label>Link de Google Maps de la fiesta (opcional)</label><input type="text" id="ev2maps" placeholder="Pega el link de Google Maps">
+      <label>Nombre del lugar</label><input type="text" id="ev2t" placeholder="Hacienda Las Rosas">
+      <div class="two"><div><label>Hora</label><input type="text" id="ev2f" placeholder="20:00 hrs"></div>
+      <div><label>Dirección</label><input type="text" id="ev2d" placeholder="Carretera Mérida-Progreso km 12"></div></div>
+      <div class="up small" id="up-ev2" style="margin-top:9px">Subir foto del lugar</div>
       <div class="subt">3 · Un tercer lugar (opcional)</div>
-      <div class="hint" style="margin-bottom:2px">Para la tornaboda, el after, el civil o lo que sea que pase en otro lado. Si no tienes un tercer lugar, déjalo vacío y no aparece.</div>
-      <label>Tercer lugar — nombre</label><input type="text" id="ev3t" placeholder="Tornaboda">
-      <div class="two"><div><label>Hora / fecha</label><input type="text" id="ev3f" placeholder="Domingo 10:00 hs"></div>
+      <div class="hint" style="margin-bottom:2px">Para el civil, la tornaboda o lo que pase en otro lado.</div>
+      <label>Nombre del lugar</label><input type="text" id="ev3t" placeholder="Tornaboda">
+      <div class="two"><div><label>Día y hora</label><input type="text" id="ev3f" placeholder="Domingo 10:00 hrs"></div>
       <div><label>Dirección</label><input type="text" id="ev3d" placeholder="Calle 789, Ciudad"></div></div>
-      <label>Link de Google Maps del tercer lugar (opcional)</label><input type="text" id="ev3maps" placeholder="Pega el link de Google Maps">
-      <div class="hint">Con la <b>dirección</b> ya armamos el mapa, así que este campo es opcional. Si quieres que el pin caiga exacto, lo que sirve son las <b>coordenadas</b>: abre Google Maps en la computadora, haz clic derecho sobre el lugar y copia los dos números que aparecen arriba (ej: <i>20.9674, -89.5926</i>). El link corto de «Compartir» no sirve para esto.</div>
-      <div data-help="eventos"></div>
+      <div class="up small" id="up-ev3" style="margin-top:9px">Subir foto del lugar</div>
+      <div class="hint" style="margin-top:12px">Con la <b>dirección completa</b> (calle, número, colonia y ciudad) armamos el mapa y el clima del día solos.</div>
     </div>
 
     <div class="card">
       <h2>Hospedaje (opcional)</h2>
-      <p class="desc">Si vienen invitados de fuera, aquí van los hoteles que recomiendas.</p>
+      <p class="desc">Si vienen invitados de fuera, los hoteles que recomiendas.</p>
+      <div data-ayuda="hospedaje"></div>
       <label>Frase de la sección</label><input type="text" id="hotDesc" placeholder="Estos son los hoteles que recomendamos">
       <label>Hoteles recomendados</label>
-      <textarea id="hoteles" rows="6" placeholder="Hotel Casa del Sol&#10;Calle 60 nº 123, Centro&#10;www.casadelsol.com&#10;999 123 4567&#10;Código de descuento: BODAMD26&#10;&#10;(deja un renglón vacío y sigue con el siguiente hotel)"></textarea>
-      <div class="hint">Por cada hotel pon: <b>nombre</b>, <b>dirección</b>, <b>página web</b>, <b>teléfono</b> y el <b>código de descuento</b> si conseguiste uno. Uno debajo del otro, y un renglón en blanco entre hotel y hotel.</div>
-      <div data-help="hospedaje"></div>
+      <textarea id="hoteles" rows="5" placeholder="Hotel Casa del Sol&#10;Calle 60 No. 123, Centro&#10;www.casadelsol.com&#10;999 123 4567&#10;Código de descuento: BODAMD26&#10;&#10;(deja un renglón vacío y sigue con el siguiente hotel)"></textarea>
+      <div class="hint">Por cada hotel: nombre, dirección, página web, teléfono y el código de descuento si conseguiste uno.</div>
+      <div class="up small" id="up-hotel" style="margin-top:9px">Subir una foto del hotel</div>
     </div>
 
     <div class="card">
       <h2>Itinerario (opcional)</h2>
       <p class="desc">El paso a paso del día, para que nadie pregunte "¿a qué hora es…?".</p>
-      <label>Cronograma</label>
-      <textarea id="itinerario" rows="6" placeholder="17:00 · Ceremonia&#10;18:30 · Recepción y brindis&#10;20:00 · Cena&#10;22:00 · Baile&#10;02:00 · Tornafiesta"></textarea>
-      <div class="hint">Un renglón por momento. Nosotros lo maquetamos.</div>
-      <div data-help="itinerario"></div>
+      <div data-ayuda="itinerario"></div>
+      <textarea id="itinerario" rows="5" placeholder="17:00 · Ceremonia&#10;18:30 · Recepción y brindis&#10;20:00 · Cena&#10;22:00 · Baile"></textarea>
+      <div class="hint">Un renglón por momento, con la hora.</div>
     </div>
 
     <div class="card">
       <h2>Personas importantes (opcional)</h2>
       <p class="desc">Papás, padrinos, madrinas, testigos, chambelanes. Hasta 9.</p>
+      <div data-ayuda="personas"></div>
       <label>Frase de la sección</label><input type="text" id="persFrase" placeholder="Con la bendición de nuestros padres">
       <div id="personas" style="margin-top:12px"></div>
-      <button class="addg" type="button" id="pers-add" onclick="addPersona()">+ Agregar persona</button>
-      <div class="hint" style="margin-top:8px">Las fotos de cada persona se cargan después, con la diseñadora. Si no cargas ninguna persona, la sección no aparece.</div>
+      <button class="addg" type="button" id="pers-add">+ Agregar persona</button>
+      <div class="hint" style="margin-top:8px">Toca «Foto» para subir la foto de cada persona. Si no cargas ninguna persona, la sección no aparece.</div>
     </div>
 
     <div class="card">
-      <h2>Detalles</h2>
-      <label>Código de vestimenta (dress code)</label><input type="text" id="dress" placeholder="Elegante / Formal / Campestre…">
-      <div data-help="dress"></div>
-      <label>Mesa de regalos / datos</label><textarea id="regalos" placeholder="CLABE, número de cuenta, mesa de regalos, o lo que quieras poner…"></textarea>
-      <div data-help="regalos"></div>
-      <label>Música de fondo (opcional)</label><input type="text" id="musica" placeholder="Pega el link de YouTube de la canción">
-      <div class="hint">Pega el <b>link de YouTube</b> de la canción que quieres de fondo. Si lo dejas vacío, elegimos una acorde al estilo.</div>
+      <h2>Código de vestimenta</h2>
+      <p class="desc">Cómo tienen que ir vestidos tus invitados.</p>
+      <div data-ayuda="vestimenta"></div>
+      <textarea id="dress" rows="2" placeholder="Ej: Formal. Evitar el color blanco."></textarea>
+    </div>
+
+    <div class="card">
+      <h2>Mesa de regalos (opcional)</h2>
+      <p class="desc">Pega el link de cada mesa de regalos que tengas, de la tienda que sea.</p>
+      <div data-ayuda="regalos"></div>
+      <label>Frase de la sección</label><input type="text" id="regalos" placeholder="Tu presencia es nuestro mejor regalo…">
+      <div id="mesas" style="margin-top:12px"></div>
+      <button class="addg" type="button" id="reg-add">+ Agregar otra mesa</button>
+      <details class="mas" style="margin-top:12px">
+        <summary>Datos para transferencia</summary>
+        <label>CLABE o número de cuenta</label><input type="text" id="regClabe" placeholder="012 345 67890123456 7">
+        <div class="two">
+          <div><label>Titular</label><input type="text" id="regTitular" placeholder="María Pérez"></div>
+          <div><label>Banco</label><input type="text" id="regBanco" placeholder="BBVA"></div>
+        </div>
+      </details>
     </div>
 
     <div class="card">
       <h2>Confirmación de asistencia</h2>
-      <p class="desc">Cómo te avisan los invitados si vienen.</p>
-      <label>Frase de la sección</label><input type="text" id="cfFrase" placeholder="Confírmanos tu asistencia antes del 1 de marzo">
+      <p class="desc">Cómo te avisan tus invitados si vienen.</p>
+      <div data-ayuda="confirmacion"></div>
+      <label>Título</label><input type="text" id="cfTitulo" placeholder="Confirma tu asistencia">
+      <label>Frase o texto de invitación a confirmar</label><input type="text" id="cfFrase" placeholder="Nos encantará contar contigo. Confírmanos tu asistencia.">
+      <label>Fecha límite para confirmar</label><input type="date" id="rsvpLimite">
+      <div class="hint">Aparece como «Confirma antes del …».</div>
+      <label>¿Quieres preguntarles por restricciones alimentarias?</label>
+      <div class="sino">
+        <label><input type="radio" name="rsvpRestric" value="si"><span>Sí, preguntar</span></label>
+        <label><input type="radio" name="rsvpRestric" value="no" checked><span>No</span></label>
+      </div>
+      <div class="hint">Si dices que sí, al confirmar cada invitado puede escribir si es vegetariano, alérgico a algo, etc. Lo ves en tu panel.</div>
       <label>Correo donde quieres recibir las confirmaciones</label><input type="email" id="cfMail" placeholder="tucorreo@gmail.com">
-      <div class="hint">Cada vez que alguien confirme, te llega un correo acá. Puede ser el mismo que dejas abajo o uno distinto.</div>
       <div class="two">
         <div><label>WhatsApp de contacto 1</label><input type="tel" id="cfWsp1" placeholder="+52 999 123 4567"></div>
         <div><label>¿De quién es?</label><input type="text" id="cfWsp1n" placeholder="Ej: Mamá de la novia"></div>
@@ -233,131 +288,101 @@
         <div><label>WhatsApp de contacto 2 (opcional)</label><input type="tel" id="cfWsp2" placeholder="+52 999 765 4321"></div>
         <div><label>¿De quién es?</label><input type="text" id="cfWsp2n" placeholder="Ej: Wedding planner"></div>
       </div>
-      <div class="hint">Pon el número <b>con clave de país</b> (+52 México, +54 Argentina). Sin la clave, el botón de WhatsApp no abre desde el extranjero.</div>
-    </div>
-
-    <div class="card">
-      <h2>Extras</h2>
-      <label>Fondo con movimiento (frase principal)</label>
-      <select id="fraseFx"><option value="">Ninguno</option><option value="bokeh">Bokeh (círculos suaves)</option><option value="destellos">Destellos</option><option value="estrellas">Estrellas doradas</option><option value="petalos">Pétalos cayendo</option><option value="gradiente">Degradado animado</option><option value="ondas">Ondas suaves</option></select>
-      <label>Hashtag de Instagram (opcional)</label><input type="text" id="igHashtag" placeholder="#MariaYDiego2026">
-      <label>Cuenta de Instagram (opcional)</label><input type="text" id="igUser" placeholder="@mariaydiego">
-      <div class="hint">La cuenta donde quieres que suban las fotos del evento. Va con arroba.</div>
-      <label>Video por link (opcional)</label><input type="text" id="videoUrl" placeholder="Link de YouTube o Vimeo">
-      <div class="hint">Si tienes un video (el save the date, la propuesta), pega el link y aparece con un botón «Ver video».</div>
-      <label>Playlist de Spotify (opcional)</label><input type="text" id="spotifyUrl" placeholder="Link de la playlist de Spotify">
-      <div class="hint">En Spotify: Compartir → Copiar enlace de la playlist.</div>
-      <label style="margin-top:16px;display:block;font-weight:800;color:var(--uva)">Mesa de regalos (botones)</label>
-      <div class="hint" style="margin-bottom:8px">Pega el link de cada tienda. Los que dejes vacíos no aparecen.</div>
-      <label>Liverpool</label><input type="text" id="reg_liverpool" placeholder="link Liverpool">
-      <label>Amazon</label><input type="text" id="reg_amazon" placeholder="link Amazon">
-      <label>Sears</label><input type="text" id="reg_sears" placeholder="link Sears">
-      <label>Mercado Libre</label><input type="text" id="reg_mercadolibre" placeholder="link Mercado Libre">
-      <label>Palacio de Hierro</label><input type="text" id="reg_palacio" placeholder="link Palacio de Hierro">
-      <label>Venmo</label><input type="text" id="reg_venmo" placeholder="link o usuario Venmo">
-      <label>PayPal</label><input type="text" id="reg_paypal" placeholder="link PayPal">
-      <div class="hint" style="margin-top:6px">El clima del día se muestra automático sólo si arriba cargaste las <b>coordenadas</b> de la ceremonia (los dos números). Con la dirección sola no se puede.</div>
+      <div class="hint">Pon el número con clave de país (+52 México). Así el botón de WhatsApp abre desde cualquier lugar.</div>
     </div>
 
     <div class="card">
       <h2>Galería (opcional)</h2>
       <p class="desc">Fotos que quieras mostrar en la invitación.</p>
-      <div class="up small" id="up-gal" onclick="document.getElementById('f-gal').click()">Subir fotos de la galería</div>
+      <div data-ayuda="galeria"></div>
+      <div class="up small" id="up-gal">Subir fotos de la galería</div>
       <input type="file" id="f-gal" accept="image/*" multiple style="display:none">
       <div id="prev-gal"></div>
-      <label>¿Cómo quieres que se vean?</label>
-      <select id="galEstilo">
-        <option value="">Lo dejo a criterio del diseñador</option>
-        <option value="Slider">Slider — una foto a la vez, se pasan con flechas</option>
-        <option value="Mosaico">Mosaico — todas juntas en grilla</option>
-      </select>
-      <div data-help="galeria"></div>
     </div>
 
     <div class="card">
       <h2>El cierre</h2>
-      <p class="desc">Lo último que ve el invitado antes de salir de la invitación.</p>
+      <p class="desc">Lo último que ve el invitado al final de la invitación.</p>
+      <div data-ayuda="cierre"></div>
+      <div class="up small" id="up-cierre">Subir foto del cierre</div>
       <label>Frase final</label><input type="text" id="fraseFinal" placeholder="¡Te esperamos!">
-      <label>Texto final</label><textarea id="textoFinal" placeholder="Gracias por acompañarnos en este día tan importante."></textarea>
-      <div class="hint">Si lo dejas vacío, ponemos algo acorde al estilo.</div>
+      <label>Texto final</label><textarea id="textoFinal" rows="2" placeholder="Gracias por acompañarnos en este día tan importante."></textarea>
+      <div class="hint">Si lo dejas vacío, ponemos algo acorde al diseño.</div>
     </div>
 
     <div class="card">
-      <h2>El pase con voz</h2>
-      <p class="desc">Un mensaje grabado por ustedes. El invitado ve un boleto y lo toca para escucharlos. Es opcional.</p>
-      <div id="pv-caja" style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px">
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-          <div class="up small" style="flex:1;min-width:170px" id="pv-btn">Grabar el mensaje</div>
-          <div class="up small" style="flex:0 0 auto;display:none" id="pv-otra">Grabar de nuevo</div>
+      <h2>Más cosas (opcional)</h2>
+      <p class="desc">Todo esto es opcional. Ábrelo solo si lo quieres.</p>
+
+      <details class="mas"><summary>Música de fondo</summary>
+        <input type="text" id="musica" placeholder="Pega el link de YouTube de la canción">
+        <div class="hint">Si lo dejas vacío, elegimos una acorde al diseño.</div>
+      </details>
+
+      <details class="mas"><summary>El pase con voz: un mensaje grabado por ustedes</summary>
+        <div class="hint" style="margin-bottom:8px">El invitado ve un boleto y lo toca para escucharlos. Digan sus nombres y una frase corta.</div>
+        <div id="pv-caja" style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <div class="up small" style="flex:1;min-width:170px" id="pv-btn">Grabar el mensaje</div>
+            <div class="up small" style="flex:0 0 auto;display:none" id="pv-otra">Grabar de nuevo</div>
+          </div>
+          <div class="hint" id="pv-estado" style="margin-top:7px">Hasta 60 segundos. Se graba desde el celular o la computadora.</div>
+          <audio id="pv-oir" controls style="display:none;width:100%;margin-top:9px"></audio>
         </div>
-        <div class="hint" id="pv-estado" style="margin-top:7px">Hasta 60 segundos. Se graba desde el celular o la computadora.</div>
-        <audio id="pv-oir" controls style="display:none;width:100%;margin-top:9px"></audio>
-      </div>
-      <div class="hint" style="margin-top:8px">Consejo: digan sus nombres y una frase corta. Queda mejor que un mensaje largo.</div>
-    </div>
+      </details>
 
-    <div class="card">
-      <h2>Invitados</h2>
-      <p class="desc">Cada uno recibe su link + QR único.</p>
-      <div data-help="invitados"></div>
-      <div style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px;margin-bottom:12px">
-        <b style="color:var(--uva);font-size:13px">¿Tienes muchos invitados? Sube un Excel</b>
-        <div class="hint" style="margin-top:4px">Columnas en este orden: <b>Nombre</b> · <b>Personas</b> · <b>Mesa</b>. Formato .xlsx o .csv.</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px">
-          <div class="up small" style="flex:1;min-width:150px" id="up-xls" onclick="document.getElementById('f-xls').click()">Subir Excel / CSV</div>
-          <input type="file" id="f-xls" accept=".xlsx,.xls,.csv" style="display:none">
-          <a href="#" id="tpl-xls" class="up small" style="flex:1;min-width:140px;text-decoration:none">Descargar plantilla</a>
+      <details class="mas"><summary>Instagram, video y playlist</summary>
+        <label>Hashtag de Instagram</label><input type="text" id="igHashtag" placeholder="#MariaYDiego2027">
+        <label>Cuenta de Instagram</label><input type="text" id="igUser" placeholder="@mariaydiego">
+        <label>Video por link</label><input type="text" id="videoUrl" placeholder="Link de YouTube o Vimeo">
+        <div class="hint">El save the date, la propuesta… Aparece con un botón «Ver video».</div>
+        <label>Playlist de Spotify</label><input type="text" id="spotifyUrl" placeholder="Link de la playlist de Spotify">
+      </details>
+
+      <details class="mas"><summary>Lista de invitados</summary>
+        <div class="hint" style="margin-bottom:8px">Cada uno recibe su link y su QR. También la puedes cargar después, desde tu panel.</div>
+        <div style="background:#fbf3f6;border:1px solid #e6cdd7;border-radius:11px;padding:12px 13px;margin-bottom:12px">
+          <b style="color:var(--uva);font-size:13px">¿Tienes muchos invitados? Sube un Excel</b>
+          <div class="hint" style="margin-top:4px">Columnas en este orden: <b>Nombre</b> · <b>Personas</b> · <b>Mesa</b>. Formato .xlsx o .csv.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px">
+            <div class="up small" style="flex:1;min-width:150px" id="up-xls">Subir Excel / CSV</div>
+            <input type="file" id="f-xls" accept=".xlsx,.xls,.csv" style="display:none">
+            <a href="#" id="tpl-xls" class="up small" style="flex:1;min-width:140px;text-decoration:none">Descargar plantilla</a>
+          </div>
         </div>
-      </div>
-      <div id="guests"></div>
-      <button class="addg" type="button" onclick="addGuest()">+ Agregar invitado a mano</button>
+        <div id="guests"></div>
+        <button class="addg" type="button" id="guest-add">+ Agregar invitado a mano</button>
+      </details>
     </div>
 
     <div class="card">
-      <h2>¿Quieres algo especial?</h2>
-      <p class="desc">Cuéntanos si quieres algún cambio, color, detalle o pedido especial. Lo vemos nosotros.</p>
-      <div class="two">
-        <div><label>Colores que te gustaría</label><input type="text" id="colorSug" placeholder="Ej: verde oliva y dorado"></div>
-        <div><label>Estilo de letra</label><input type="text" id="tipoSug" placeholder="Ej: cursiva elegante"></div>
-      </div>
-      <div class="hint">Si no tienes preferencia, déjalos vacíos: elegimos lo que mejor le quede al modelo.</div>
-      <label>Cualquier otra cosa</label>
-      <textarea id="obs" placeholder="Ej: me gustaría que los nombres sean dorados, agregar una sección de padrinos, cambiar la música…"></textarea>
-      <div data-help="observaciones"></div>
-    </div>
-
-    <div class="card">
-      <h2>Tus datos de contacto</h2>
-      <p class="desc">Para avisarte cuando esté lista.</p>
-      <div class="two"><div><label>Tu nombre <span class="req">*</span></label><input type="text" id="cnom" placeholder="Tu nombre"></div>
-      <div><label>WhatsApp <span class="req">*</span></label><input type="tel" id="cwsp" placeholder="+52 999 123 4567"></div></div>
-      <label>Email <span class="req">*</span></label><input type="email" id="cmail" placeholder="tucorreo@gmail.com">
-      <div class="hint">Te avisamos por aquí en cuanto la invitación esté lista.</div>
-      <div data-help="contacto"></div>
+      <h2>¿Algo más?</h2>
+      <p class="desc">Cualquier detalle o pedido especial. Lo vemos nosotros.</p>
+      <textarea id="obs" placeholder="Ej: que los nombres vayan en dorado, cambiar la canción…"></textarea>
     </div>
 
     <div class="err" id="err"></div>
     <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden"><label for="sitio_web">Sitio web</label><input type="text" id="sitio_web" name="sitio_web" tabindex="-1" autocomplete="off"></div>
     <div id="robot" style="display:flex;justify-content:center;margin:6px 0 12px"></div>
-    <button class="btn" id="send" onclick="enviar()">Enviar mis datos</button>
-    <p class="hint" style="text-align:center;margin-top:14px">Al enviar, nuestro equipo arma tu invitación y te avisa cuando esté lista.</p>
+    <button class="btn" id="send">Enviar mis datos</button>
+    <p class="hint" style="text-align:center;margin-top:14px">Al enviar, nuestro equipo revisa tu invitación y te avisa cuando esté lista.</p>
   </div>
 
   <div class="done" id="done">
-    <div class="big"><svg viewBox="0 0 64 48" width="64" height="48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="58" height="38" rx="5"/><path d="M4 8l28 20L60 8"/></svg></div>
+    <div><svg viewBox="0 0 64 48" width="64" height="48" fill="none" stroke="#6D1233" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="58" height="38" rx="5"/><path d="M4 8l28 20L60 8"/></svg></div>
     <h1>¡Listo! Recibimos tus datos</h1>
     <p id="done-txt">Ya estamos armando tu invitación.<br>Te avisamos por WhatsApp en cuanto esté lista. ¡Gracias!</p>
   </div>
 
-  <div class="lbox" id="lbox" onclick="closeLB()"><span class="x">✕</span><img id="lbimg" src="" alt=""><div class="cap">Toca en cualquier lado para cerrar</div></div>
+  <div class="lbox" id="lbox"><span class="x">✕</span><img id="lbimg" src="" alt=""><div class="cap">Toca en cualquier lado para cerrar</div></div>
   <div class="loadingbar" id="loading"><div class="box">Enviando…</div></div>
 
-<script type="module" src="firebase-inv.js?v=23"></script>
-<script src="/muestras/catalogo.js?v=1"></script>
+<script type="module" src="firebase-inv.js?v=24"></script>
+<script src="/muestras/catalogo.js?v=2"></script>
 <script src="/efectos/paleta.js?v=1"></script>
-<script src="/vestir.js?v=1"></script>
-<script src="/solicitud-a-evento.js?v=1"></script>
-<script type="module" src="/crear.js?v=1"></script>
-<script src="/crear-diseno.js?v=1"></script>
+<script src="/vestir.js?v=2"></script>
+<script src="/solicitud-a-evento.js?v=2"></script>
+<script type="module" src="/crear.js?v=2"></script>
+<script src="/crear-diseno.js?v=2"></script>
 </body>
 </html>
