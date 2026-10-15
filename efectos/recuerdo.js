@@ -52,7 +52,11 @@
       d.style.cssText = 'width:' + (r.width || f.offsetWidth) + 'px;height:' + (r.height || f.offsetHeight) + 'px;' + f.style.cssText;
       d.className = f.className; f.replaceWith(d);
     });
-    var st = document.createElement('style'); st.textContent = 'html,body{scroll-behavior:auto!important}'; document.head.appendChild(st);
+    /* ⚠️ 15/10/2026 — SIN BARRA DE DESPLAZAMIENTO. En la compu (Chrome) la
+       barra ocupa 15 px dentro de los 390 del marco: la portada y los fondos
+       salían 15 px más angostos y quedaba una franja clara a la derecha.
+       En el celular la barra no ocupa lugar, por eso en el iPhone no se veía. */
+    var st = document.createElement('style'); st.textContent = 'html,body{scroll-behavior:auto!important;scrollbar-width:none!important}html::-webkit-scrollbar,body::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}'; document.head.appendChild(st);
   }
   /* lo mismo que hace recuerdo.py, que es lo que Maki aprobó */
   function ocultarFlotantes() {
