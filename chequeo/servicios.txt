@@ -1,9 +1,9 @@
-CHEQUEO DE SERVICIOS — 2026-10-14 19:12 UTC
+CHEQUEO DE SERVICIOS — 2026-10-15 18:55 UTC
 🔴 HAY 1 COSA(S) MAL
 
-MAL    Cloudinary (plan Small PAYG): 65.8 de 60 créditos = 110% → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.
-BIEN   Galería en vivo: 0.003 GB de 8 GB este mes = 0%
+MAL    Cloudinary (plan Small PAYG): 65.9 de 60 créditos = 110% → PASADO DEL PLAN. Cloudinary puede deshabilitar la cuenta y las invitaciones se quedan sin fotos ni videos. Subir de plan HOY.
+BIEN   Galería en vivo: 0.004 GB de 8 GB este mes = 0%
 BIEN   Firebase: contesta bien
 BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (952 KB)
 BIEN   Caché de fotos: prendida y entregando (r2)
-BIEN   Foto de prueba: subió, pasó el filtro (sightengine) y quedó APROBADA
+BIEN   Foto de prueba: subió, pasó el filtro (openai) y quedó APROBADA
