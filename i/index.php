@@ -502,26 +502,9 @@ $conCache = ($cacheQ === '1') || ($CACHE_MEDIOS === 'prendida' && $cacheQ !== '0
    `&cache=1` fuerza la caché igual (para probar el Worker a propósito).
    ⚠️ Esto evita la caída, no el tope: con el plan pago de Workers (USD 5/mes,
       10 millones de pedidos) el tope deja de ser un problema. Decisión de Maki. */
-function iv_cache_atiende() {
-  $f = rtrim(sys_get_temp_dir(), '/') . '/invitame-cache-medios.txt';
-  $h = @file_get_contents($f);
-  if ($h !== false && preg_match('/^(\d+) (ok|no)$/', trim($h), $m) && (time() - (int)$m[1]) < 60) return $m[2] === 'ok';
-  $ok = false;
-  $u = 'https://galeria.littlemomentsok.workers.dev/res.cloudinary.com/oc8cgqt4/image/upload/w_8,q_1,f_jpg/invitame/x4q8skckyryvodav1iwe.webp';
-  if (function_exists('curl_init')) {
-    $c = curl_init($u);
-    curl_setopt_array($c, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 2, CURLOPT_CONNECTTIMEOUT => 2, CURLOPT_NOBODY => false]);
-    curl_exec($c);
-    $ok = ((int)curl_getinfo($c, CURLINFO_HTTP_CODE) === 200);
-    curl_close($c);
-  } else {
-    $ctx = stream_context_create(['http' => ['timeout' => 2, 'ignore_errors' => true]]);
-    @file_get_contents($u, false, $ctx);
-    $ok = isset($http_response_header[0]) && strpos($http_response_header[0], ' 200') !== false;
-  }
-  @file_put_contents($f, time() . ' ' . ($ok ? 'ok' : 'no'));
-  return $ok;
-}
+/* La función vive en i/cache-atiende.php: la usan esta página Y las texturas
+   (i/textura.php), así las dos deciden igual si el cache está atendiendo. */
+require_once __DIR__ . '/cache-atiende.php';
 if ($conCache && $cacheQ !== '1' && !iv_cache_atiende()) $conCache = false;
 header('X-Invitame-Cache: ' . ($conCache ? 'worker' : 'directa'));
 $fotosLivianas = ($conCache ? '<script>window.INV_CACHE_MEDIOS="https://galeria.littlemomentsok.workers.dev/";</' . 'script>' : '')
