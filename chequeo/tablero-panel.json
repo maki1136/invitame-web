@@ -1,10 +1,10 @@
 {
- "cuando": "2026-10-15T19:15:58.573Z",
+ "cuando": "2026-10-15T20:35:34.492Z",
  "slug": "camila-y-tomas",
- "total": 362,
- "verde": 362,
+ "total": 364,
+ "verde": 363,
  "amarillo": 0,
- "rojo": 0,
+ "rojo": 1,
  "gris": 0,
  "items": [
   {
@@ -1807,6 +1807,18 @@
   },
   {
    "tab": "CONFIRMACIÓN",
+   "bloque": "rsvp-selector",
+   "control": "Fecha límite para confirmar",
+   "tipo": "date",
+   "guarda": false,
+   "dato": "",
+   "llega": false,
+   "seVe": true,
+   "estado": "rojo",
+   "nota": "lo toco y no se guarda nada"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
@@ -2089,6 +2101,17 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.compartir.boton",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "rsvp-selector",
+   "control": "Preguntar restricciones alimentariasSuma al formulario «¿Alguna restricción alimentaria?».",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.rsvp.restricciones",
    "llega": true,
    "seVe": true,
    "estado": "verde"
