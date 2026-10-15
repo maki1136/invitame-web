@@ -191,6 +191,44 @@ async function medio(req, env, ctx, url) {
   const vary = auto ? (resto.startsWith('video/') ? 'User-Agent' : 'Accept') : null;
   const rango = req.headers.get('Range');
 
+  /* 0. ⭐ LA CACHÉ DEL BORDE (15/10/2026). Antes cada pedido iba a R2, que
+        contesta en ~0,4 s; Cloudinary directo contesta en ~0,2 s porque ya
+        vive en la red de Cloudflare. Por eso la caché ahorraba plata pero
+        hacía la invitación más LENTA, y Maki eligió velocidad (9/10, texturas
+        revertidas). Ahora la copia se guarda TAMBIÉN en la caché del borde
+        de Cloudflare (la del data center más cercano al invitado), igual que
+        la galería en /f/: la segunda vez sale de ahí, sin tocar R2.
+        La clave lleva la variante (avif/webp/jpg, Safari/Chrome), así que
+        no hace falta Vary. Los pedazos de Safari (Range) los resuelve la
+        propia caché del borde: contesta 206 sola a partir de la copia entera.
+        ⚠️ Apagado sin tocar código: variable BORDE = 'no'. */
+  const conBorde = String(env.BORDE || '').toLowerCase() !== 'no' && typeof caches !== 'undefined';
+  const claveBorde = conBorde ? new Request(url.origin + '/__borde/' + key) : null;
+  if (conBorde && req.method !== 'HEAD') {
+    let enBorde = null;
+    try {
+      enBorde = await caches.default.match(rango ? new Request(claveBorde.url, { headers: { Range: rango } }) : claveBorde);
+    } catch (e) { enBorde = null; }
+    if (enBorde && (enBorde.status === 200 || enBorde.status === 206)) {
+      const h = new Headers(enBorde.headers);
+      h.set('Access-Control-Allow-Origin', '*'); h.set('Timing-Allow-Origin', '*');
+      h.set('X-Cache-Invitame', 'borde');
+      if (vary) h.set('Vary', vary);
+      return new Response(enBorde.body, { status: enBorde.status, headers: h });
+    }
+  }
+  /* Guarda la copia ENTERA en el borde (nunca un pedazo). */
+  const alBorde = (cuerpo, tipo, total) => {
+    if (!conBorde) return;
+    const hb = new Headers({
+      'Content-Type': tipo || 'application/octet-stream',
+      'Content-Length': String(total),
+      'Cache-Control': 'public, max-age=' + (versionada ? 31536000 : 604800),
+      'Accept-Ranges': 'bytes'
+    });
+    ctx.waitUntil(caches.default.put(claveBorde, new Response(cuerpo, { status: 200, headers: hb })).catch(() => {}));
+  };
+
   /* 1. ¿Ya está la copia? */
   let obj = null;
   try { obj = await env.BUCKET.head(key); } catch (e) { obj = null; }
@@ -212,12 +250,19 @@ async function medio(req, env, ctx, url) {
     }
     const cuerpo = r ? await env.BUCKET.get(key, { range: { offset: r.ini, length: r.fin - r.ini + 1 } })
                      : await env.BUCKET.get(key);
+    /* al borde va la copia ENTERA. Si pidieron un pedazo (los videos de
+       Safari), se lee entera aparte, una vez por data center. */
+    let cuerpoTel = cuerpo ? cuerpo.body : null;
+    if (conBorde && cuerpo) {
+      if (!r) { const [a, b] = cuerpo.body.tee(); cuerpoTel = a; alBorde(b, tipo, total); }
+      else ctx.waitUntil(env.BUCKET.get(key).then(o => { if (o) alBorde(o.body, tipo, total); }).catch(() => {}));
+    }
     if (cuerpo) {
       const h = cabecerasMedio(tipo, cc, r ? (r.fin - r.ini + 1) : total, vary);
       h.set('X-Cache-Invitame', 'r2');
       if (cuerpo.httpEtag) h.set('ETag', cuerpo.httpEtag);
-      if (r) { h.set('Content-Range', 'bytes ' + r.ini + '-' + r.fin + '/' + total); return new Response(cuerpo.body, { status: 206, headers: h }); }
-      return new Response(cuerpo.body, { status: 200, headers: h });
+      if (r) { h.set('Content-Range', 'bytes ' + r.ini + '-' + r.fin + '/' + total); return new Response(cuerpoTel, { status: 206, headers: h }); }
+      return new Response(cuerpoTel, { status: 200, headers: h });
     }
   }
 
@@ -246,6 +291,7 @@ async function medio(req, env, ctx, url) {
     customMetadata: { t: String(Date.now()), cc, u: resto.slice(0, 900), v: variante }
   }).catch(() => {}));
   const total = buf.byteLength;
+  alBorde(buf.slice(0), tipo, total);
   const r = rango ? leerRango(rango, total) : null;
   if (r && r.mal) {
     const h = cabecerasMedio(tipo, cc, null, vary); h.set('Content-Range', 'bytes */' + total);
