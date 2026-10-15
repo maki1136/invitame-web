@@ -634,8 +634,6 @@ function iv_sin_ejemplo($html) {
 }
 if ($leyoEvento) { $tpl = iv_sin_ejemplo($tpl); }
 
-/* ★ 3/10/2026 — `&diag=1`: el diagnóstico en un aparato real (ver /diag.php). Va PRIMERO. */
-$diagJs = (isset($_GET['diag']) && $_GET['diag'] === '1') ? '<script src="/efectos/diag.js?v=2"></' . 'script>' : '';
 /* ★ 5/10/2026 — MODO LIVIANO PARA SAFARI VIEJO (16 o menos).
    Medido en el iPad de Maki (Safari 16.6): el video de fondo fijo detrás de
    toda la invitación y las animaciones gigantes de la portada (el «ken burns»
@@ -673,7 +671,7 @@ $aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=nav
      portada conserva su blanco y negro (#pbg) y los SVG (lacre) los suyos. */
   . 'html.aparato-liviano *:not(#pbg):not(svg):not(svg *),html.aparato-liviano *::before,html.aparato-liviano *::after'
   . '{filter:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}</style>';
-$aInyectar = $diagJs . $aparatoLiviano . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
+$aInyectar = $aparatoLiviano . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 $aInyectar = iv_fotos_livianas($aInyectar);
 if ($aInyectar !== '') {
