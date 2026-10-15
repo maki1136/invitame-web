@@ -638,6 +638,7 @@
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
+    '/efectos/rsvp-extras.js',         /* fecha límite y pregunta de restricciones alimentarias (fx.rsvp) */
     '/efectos/previa-vidriera.js',     /* la miniatura esconde el pase y el formulario, como la publicada sin link */
     '/efectos/aviso-privacidad.js',    /* la línea de privacidad al pie de la confirmación */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */

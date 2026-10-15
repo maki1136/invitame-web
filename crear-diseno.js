@@ -58,7 +58,7 @@
   var muestraCache = {};   /* slug -> evento, para no bajarlo dos veces */
   var iframe = null, listo = false, pendiente = null, timer = null;
 
-  var LLAVE = 'inv_diseno_elegido';
+  var LLAVE = 'inv_diseno_elegido';   /* crear.js la borra al enviar */
 
   /* Pares de tipografías que ya usa el motor. Izquierda: los nombres grandes.
      Derecha: los títulos de sección. */
@@ -127,7 +127,7 @@
     if (!window.CREAR || !window.SOLICITUD_A_EVENTO) return null;
     var s = window.CREAR.leerFormulario();
     var d = window.SOLICITUD_A_EVENTO.mapear(s, {});
-    var m = elegido && window.muestraDe ? window.muestraDe(elegido) : null;
+    var m = muestraBase();
     var ev = (m && m.muestra && muestraCache[m.muestra]) ? muestraCache[m.muestra] : null;
     if (ev && window.INVVESTIR) window.INVVESTIR.vestir(d, ev, s);
 
@@ -161,8 +161,17 @@
     timer = setTimeout(dibujar, 350);
   }
 
+  /* ★ 15/10/2026: «Personalizado» no tiene muestra propia. La invitación nace
+     con el vestido de Perlas (sobria, la de paridad) y el pedido del cliente va
+     arriba de todo en el panel, para que Jazmín la diseñe. Así nunca nace con
+     el vestido de fábrica. */
+  var BASE_PERSONALIZADO = 'perlas';
+  function muestraBase() {
+    if (!elegido || !window.muestraDe) return null;
+    return window.muestraDe(elegido === 'personalizado' ? BASE_PERSONALIZADO : elegido);
+  }
   function bajarYDibujar(id) {
-    var m = window.muestraDe ? window.muestraDe(id) : null;
+    var m = window.muestraDe ? window.muestraDe(id === 'personalizado' ? BASE_PERSONALIZADO : id) : null;
     if (!m || !m.muestra) { pedirDibujo(); return; }
     if (muestraCache[m.muestra]) { pedirDibujo(); return; }
     if (!window.INVVESTIR) { pedirDibujo(); return; }
@@ -180,13 +189,16 @@
     var st = document.createElement('style');
     st.id = 'dis-css';
     st.textContent = [
-      '#dis-modelos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:10px 0 4px}',
-      '.dis-m{border:1px solid #e5d8ca;border-radius:12px;padding:11px 12px;cursor:pointer;background:#fff;text-align:left;transition:.15s}',
+      '.dis-fila-t{font-size:12px;font-weight:800;color:#6D1233;letter-spacing:.06em;text-transform:uppercase;margin:12px 0 6px}',
+      '.dis-fila{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 10px;-webkit-overflow-scrolling:touch}',
+      '.dis-m{flex:0 0 118px;scroll-snap-align:start;border:1.5px solid #e5d8ca;border-radius:12px;padding:0;cursor:pointer;background:#fff;text-align:left;overflow:hidden;transition:.15s;font-family:inherit}',
       '.dis-m:hover{border-color:#c9b9a6}',
-      '.dis-m.on{border-color:#6D1233;box-shadow:0 0 0 2px rgba(109,18,51,.13)}',
-      '.dis-m .sw{width:100%;height:34px;border-radius:8px;margin-bottom:8px}',
-      '.dis-m .nm{font-weight:800;font-size:13.5px;color:#3f3730}',
-      '.dis-m .bj{font-size:11.5px;line-height:1.35;color:#8a7a6a;margin-top:3px}',
+      '.dis-m.on{border-color:#6D1233;box-shadow:0 0 0 3px rgba(109,18,51,.18)}',
+      '.dis-m .ft{display:block;width:100%;height:216px;object-fit:cover;background:#efe6da}',
+      '.dis-m .sw{width:100%;height:216px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;color:#6D1233;font-weight:800;font-size:13px;background:repeating-linear-gradient(135deg,#fbf3f6,#fbf3f6 8px,#f4e6ec 8px,#f4e6ec 16px)}',
+      '.dis-m .nm{font-weight:800;font-size:12.5px;color:#3f3730;padding:7px 8px 1px;line-height:1.25}',
+      '.dis-m .vv{font-size:11px;color:#6D1233;padding:0 8px 8px;text-decoration:underline;display:inline-block}',
+      '#dis-elegido b{color:#6D1233}',
       '#dis-mas{margin-top:14px;border-top:1px solid #eee3d6;padding-top:10px}',
       '#dis-mas>summary{cursor:pointer;font-weight:700;font-size:13.5px;color:#6D1233;list-style:none}',
       '#dis-mas>summary::-webkit-details-marker{display:none}',
@@ -210,37 +222,82 @@
       '#dis-fono .cab{display:flex;align-items:center;justify-content:space-between;',
       '  font-size:11.5px;color:#6b6058;padding:2px 6px 7px;font-weight:700}',
       '#dis-fono .cerrar{cursor:pointer;border:0;background:none;font-size:15px;color:#8a7a6a;line-height:1}',
-      '#dis-ver{position:fixed;right:16px;bottom:16px;z-index:59;border:0;cursor:pointer;',
-      '  background:#6D1233;color:#fff;font-weight:800;font-size:13.5px;padding:12px 17px;',
-      '  border-radius:999px;box-shadow:0 12px 26px rgba(109,18,51,.34)}',
+      '#dis-ver{position:fixed;right:12px;bottom:12px;z-index:59;border:0;cursor:pointer;',
+      '  background:#6D1233;color:#fff;font-weight:800;font-size:12.5px;padding:9px 13px;',
+      '  border-radius:999px;box-shadow:0 8px 18px rgba(109,18,51,.30);opacity:.94}',
       '@media(min-width:1180px){#dis-fono{display:block}#dis-ver{display:none}}'
     ].join('\n');
     document.head.appendChild(st);
   }
 
-  function tarjetasModelos(caja) {
+  var TIPO = '';   /* lo que festeja: filtra las filas */
+  function filaDe(tipoFila, titulo, caja) {
     var M = window.MUESTRAS_INVITAME || {};
-    caja.innerHTML = '';
-    Object.keys(M).forEach(function (id) {
-      var m = M[id];
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'dis-m' + (id === elegido ? ' on' : '');
-      b.innerHTML = '<div class="sw" style="background:' + (m.color || '#ded3c4') + '"></div>' +
-                    '<div class="nm"></div><div class="bj"></div>';
-      b.querySelector('.nm').textContent = m.nombre || id;
-      b.querySelector('.bj').textContent = m.bajada || '';
-      b.onclick = function () {
-        elegido = id;
-        [].forEach.call(caja.querySelectorAll('.dis-m'), function (x) { x.classList.remove('on'); });
-        b.classList.add('on');
-        guardarElegido();
-        bajarYDibujar(id);
-        recargarFono();   /* el diseño trae su propia paleta */
-        abrirFono();
-      };
-      caja.appendChild(b);
+    var ids = Object.keys(M).filter(function (id) {
+      var m = M[id]; if (m.oculto) return false;
+      return (m.tipos || []).indexOf(tipoFila) >= 0;
     });
+    /* Perlas sirve para las dos: en XV va al final de la fila */
+    if (tipoFila === 'xv') ids.sort(function (a, b) { return (a === 'perlas') - (b === 'perlas'); });
+    var t = document.createElement('div'); t.className = 'dis-fila-t'; t.textContent = titulo;
+    var f = document.createElement('div'); f.className = 'dis-fila';
+    ids.forEach(function (id) { f.appendChild(tarjeta(id, M[id])); });
+    f.appendChild(tarjeta('personalizado', null));
+    caja.appendChild(t); caja.appendChild(f);
+  }
+  function tarjeta(id, m) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'dis-m' + (id === elegido ? ' on' : '');
+    b.setAttribute('data-id', id);
+    if (m) {
+      b.innerHTML = '<img class="ft" loading="lazy" alt=""><div class="nm"></div>' +
+                    '<a class="vv" target="_blank" rel="noopener">Ver en vivo</a>';
+      b.querySelector('.ft').src = m.foto || '';
+      b.querySelector('.ft').alt = 'Muestra ' + (m.nombre || id);
+      b.querySelector('.nm').textContent = m.nombre || id;
+      var a = b.querySelector('.vv');
+      a.href = '/i/?e=' + encodeURIComponent(m.muestra);
+      a.onclick = function (e) { e.stopPropagation(); };
+    } else {
+      b.innerHTML = '<div class="sw">Diseño personalizado</div><div class="nm">Lo creamos a tu gusto</div>';
+    }
+    b.onclick = function () { elegir(id); };
+    return b;
+  }
+  function elegir(id) {
+    elegido = id;
+    [].forEach.call(document.querySelectorAll('#dis-modelos .dis-m'), function (x) {
+      x.classList.toggle('on', x.getAttribute('data-id') === id);
+    });
+    guardarElegido();
+    mostrarElegido();
+    /* el modelo dice qué se festeja: si es sólo de boda o sólo de XV, se pone */
+    var m = window.muestraDe ? window.muestraDe(id) : null;
+    if (m && m.tipos && m.tipos.length === 1 && typeof window.CREAR_TIPO === 'function') window.CREAR_TIPO(m.tipos[0]);
+    bajarYDibujar(id);
+    recargarFono();
+    if (window.CREAR && window.CREAR.guardarBorrador) window.CREAR.guardarBorrador();
+  }
+  function mostrarElegido() {
+    var e = $('dis-elegido'), p = $('dis-perso');
+    if (p) p.style.display = (elegido === 'personalizado') ? '' : 'none';
+    if (!e) return;
+    if (!elegido) { e.innerHTML = ''; return; }
+    if (elegido === 'personalizado') { e.innerHTML = 'Elegiste: <b>Diseño personalizado</b>. Cuéntanos tu idea aquí abajo.'; return; }
+    var m = window.muestraDe ? window.muestraDe(elegido) : null;
+    if (!m) { e.innerHTML = ''; return; }
+    e.innerHTML = 'Elegiste: <b></b> · <a target="_blank" rel="noopener" style="color:#6D1233">ver la muestra completa</a>';
+    e.querySelector('b').textContent = m.nombre;
+    e.querySelector('a').href = '/i/?e=' + encodeURIComponent(m.muestra);
+  }
+  function tarjetasModelos(caja) {
+    caja.innerHTML = '';
+    if (TIPO !== 'xv') filaDe('boda', 'Boda', caja);
+    if (TIPO !== 'boda') filaDe('xv', 'XV años', caja);
+    /* que la elegida quede a la vista en su fila */
+    var on = caja.querySelector('.dis-m.on');
+    if (on && on.parentNode) on.parentNode.scrollLeft = Math.max(0, on.offsetLeft - 12);
   }
 
   function tarjetasPaletas(caja) {
@@ -356,45 +413,45 @@
   });
 
   function armar() {
-    /* ⚠️ EL BOTÓN DE ENVIAR NO ESTÁ ADENTRO DE NINGUNA TARJETA: es hermano de
-       la última. Con `closest('.card')` esto daba null y el bloque no se
-       montaba nunca —sin dar ningún error. Se cuelga de la última tarjeta. */
-    var cards = document.querySelectorAll('#wrap .card');
-    var anclaje = cards.length ? cards[cards.length - 1] : null;
-    if (!anclaje || $('card-diseno')) return false;
+    var caja = $('dis-modelos');
+    if (!caja || caja.dataset.listo === '1') return !!caja;
+    if (!window.MUESTRAS_INVITAME) return false;
+    caja.dataset.listo = '1';
     css();
 
-    var card = document.createElement('div');
-    card.className = 'card';
-    card.id = 'card-diseno';
-    card.innerHTML =
-      '<h3>El diseño de tu invitación</h3>' +
-      '<p class="desc">Elige el que más te guste. Lo vas viendo al instante, ' +
-      'y lo puedes cambiar todas las veces que quieras.</p>' +
-      '<div id="dis-modelos"></div>' +
+    /* los colores y la letra: cerrados, para el que quiera meterse */
+    var col = $('dis-colores');
+    if (col) col.innerHTML =
       '<details id="dis-mas">' +
         '<summary>Personalizar los colores y la letra</summary>' +
         '<div class="dis-tit">Los colores</div><div id="dis-paletas"></div>' +
         '<div class="dis-tit">La letra</div><div id="dis-letras"></div>' +
       '</details>';
-    anclaje.parentNode.insertBefore(card, anclaje);
 
     recuperarElegido();
-    if (!elegido) {
-      /* el que venía del catálogo, si entró por ahí */
-      var t = new URLSearchParams(location.search).get('tpl');
-      if (t && window.MUESTRAS_INVITAME && window.MUESTRAS_INVITAME[t]) elegido = t;
+    var t = new URLSearchParams(location.search).get('tpl');
+    if (t) {
+      t = t.toLowerCase();
+      /* el que viene en el link manda (catálogo → «Quiero este») */
+      if (t === 'personalizado' || (window.MUESTRAS_INVITAME[t] && !window.MUESTRAS_INVITAME[t].oculto)) elegido = t;
     }
-    tarjetasModelos($('dis-modelos'));
-    tarjetasPaletas($('dis-paletas'));
-    botonesLetra($('dis-letras'));
+    if (elegido && elegido !== 'personalizado' && !(window.MUESTRAS_INVITAME[elegido])) elegido = null;
+    TIPO = ($('tipo') && $('tipo').value) || '';
+    tarjetasModelos(caja);
+    if ($('dis-paletas')) tarjetasPaletas($('dis-paletas'));
+    if ($('dis-letras')) botonesLetra($('dis-letras'));
+    mostrarElegido();
     armarFono();
     avisoBorrador();
-    if (elegido) bajarYDibujar(elegido);
+    if (elegido) {
+      var m = window.muestraDe(elegido);
+      if (m && m.tipos && m.tipos.length === 1 && typeof window.CREAR_TIPO === 'function') window.CREAR_TIPO(m.tipos[0]);
+      bajarYDibujar(elegido);
+    }
 
     /* mientras escribe, la invitación se va armando */
-    document.addEventListener('input',  function (e) { if (e.target && e.target.closest('.card,#guests')) pedirDibujo(); });
-    document.addEventListener('change', function (e) { if (e.target && e.target.closest('.card,#guests')) pedirDibujo(); });
+    document.addEventListener('input',  function (e) { if (e.target && e.target.closest('.card')) pedirDibujo(); });
+    document.addEventListener('change', function (e) { if (e.target && e.target.closest('.card')) pedirDibujo(); });
     return true;
   }
 
@@ -402,17 +459,30 @@
   window.CREAR_DISENO = {
     elegido: function () { return elegido; },
     /* le pone el vestido al borrador que se va a mandar al servidor */
+    /* ★ 15/10/2026: DEVUELVE UNA PROMESA y ESPERA a la muestra. Antes, si
+       todavía no había bajado (mala señal, o el cliente mandó apenas eligió),
+       la invitación nacía con el vestido de fábrica y nadie se enteraba. */
     vestirLoQueSeManda: function (d, solicitud) {
-      var m = elegido && window.muestraDe ? window.muestraDe(elegido) : null;
-      var ev = (m && m.muestra && muestraCache[m.muestra]) ? muestraCache[m.muestra] : null;
-      if (ev && window.INVVESTIR) window.INVVESTIR.vestir(d, ev, solicitud);
-
-      /* ⚠️ SIEMPRE, haya vestido o no. Ver la nota grande del encabezado: el
-         mensaje de voz del cliente no tiene por qué depender de que la muestra
-         haya terminado de bajar. */
-      ponerLaVoz(d, solicitud);
-
-      return aplicarEleccion(d);
+      var m = muestraBase();
+      var fin = function () {
+        var ev = (m && m.muestra && muestraCache[m.muestra]) ? muestraCache[m.muestra] : null;
+        if (ev && window.INVVESTIR) window.INVVESTIR.vestir(d, ev, solicitud);
+        /* ⚠️ SIEMPRE, haya vestido o no: la voz del cliente no depende del diseño */
+        ponerLaVoz(d, solicitud);
+        return aplicarEleccion(d);
+      };
+      if (m && m.muestra && !muestraCache[m.muestra] && window.INVVESTIR) {
+        return window.INVVESTIR.bajarMuestra(m.muestra).then(function (ev) {
+          muestraCache[m.muestra] = ev; return fin();
+        }, function () { return fin(); });
+      }
+      return Promise.resolve(fin());
+    },
+    /* lo llama /crear.js cuando cambia «¿Qué festejas?» */
+    filtrar: function (tipo) {
+      TIPO = tipo || '';
+      var caja = $('dis-modelos');
+      if (caja && caja.dataset.listo === '1') tarjetasModelos(caja);
     }
   };
 

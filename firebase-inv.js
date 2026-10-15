@@ -273,7 +273,7 @@ const INV = {
   },
 
   // ---- Confirmación (RSVP) desde la invitación ----
-  async saveRSVP(slug, token, estado, personas, mensaje) {
+  async saveRSVP(slug, token, estado, personas, mensaje, restriccion) {
     // El mensaje que deja el invitado se GUARDA en su ficha. Antes sólo viajaba al
     // aviso por mail (que está apagado), así que se perdía.
     const payload = {
@@ -281,6 +281,12 @@ const INV = {
     };
     const m = (mensaje == null) ? '' : String(mensaje).slice(0, 500).trim();
     if (m) payload.rsvpMensaje = m;
+    /* ★ 15/10/2026 — la restricción alimentaria que escribe el invitado al
+       confirmar (alergias, vegetariano…). Sólo aparece si la invitación la
+       pregunta (fx.rsvp.restricciones). La regla de Firestore la deja escribir
+       al invitado, hasta 300 letras. */
+    const rr = (restriccion == null) ? '' : String(restriccion).slice(0, 300).trim();
+    if (rr) payload.rsvpRestriccion = rr;
     /* ⚠️⚠️ 1/10/2026 — CON MENSAJE, LA CONFIRMACIÓN NO SE GUARDABA.
        Las reglas de Firestore sólo dejan tocar rsvp, rsvpPersonas y rsvpAt:
        `rsvpMensaje` no está en la lista, así que el invitado que escribía
@@ -291,8 +297,9 @@ const INV = {
     try {
       await updateDoc(doc(db, GU, gid(slug, token)), payload);
     } catch (e) {
-      if (!m) throw e;
+      if (!m && !rr) throw e;
       delete payload.rsvpMensaje;
+      delete payload.rsvpRestriccion;
       await updateDoc(doc(db, GU, gid(slug, token)), payload);
     }
     return true;

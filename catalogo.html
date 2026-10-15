@@ -65,7 +65,7 @@
      /muestras/catalogo.js. */
   (function(){
     var M = window.MUESTRAS_INVITAME || {};
-    var ids = Object.keys(M);
+    var ids = Object.keys(M).filter(function(id){ return !M[id].oculto; });
     /* primero las que ya tienen invitación de muestra armada */
     ids.sort(function(a,b){ return (M[b].muestra?1:0) - (M[a].muestra?1:0); });
 
