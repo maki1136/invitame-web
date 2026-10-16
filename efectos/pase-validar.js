@@ -109,7 +109,7 @@
       h += '<div class="nom">' + esc(g.nombre || '') + '</div>' +
         '<div class="grid"><div class="g"><div class="gn">' + esc(max) + '</div><div class="gl">Pases</div></div>' +
         '<div class="g"><div class="gn">' + esc(quedan) + '</div><div class="gl">Quedan</div></div>' +
-        '<div class="g"><div class="gn">' + esc(g.mesa || '-') + '</div><div class="gl">Mesa</div></div></div>';
+        '<div class="g"><div class="gn">' + esc(String(g.mesa || '-').replace(/^\s*mesa\s*/i, '') || '-') + '</div><div class="gl">Mesa</div></div></div>';
     }
     if (aviso) h += '<div class="nota"><b>' + esc(aviso) + '</b></div>';
     if (estado === 'ok') {

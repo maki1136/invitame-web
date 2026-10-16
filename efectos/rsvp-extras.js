@@ -157,8 +157,11 @@
       for (var i = 1; i <= n; i++) {
         var o = document.createElement('option'); o.value = String(i); o.textContent = String(i); s.appendChild(o);
       }
-      s.value = String((!s.dataset.armadoPara || isNaN(antes) || antes > n) ? n : antes);
+      /* ⚠️ el motor arranca con un número de muestra en #pv-per (2) y recién
+         después pone el del pase: si el invitado todavía no eligió, va el total */
+      s.value = String((!s.dataset.tocado || isNaN(antes) || antes > n) ? n : antes);
       s.dataset.armadoPara = String(n);
+      if (!s.dataset.escucha) { s.dataset.escucha = '1'; s.addEventListener('change', function () { s.dataset.tocado = '1'; }); }
     });
   }
 
