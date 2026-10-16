@@ -724,6 +724,7 @@
     '/efectos/perlas-ajustes.js',      /* los retoques de Jazmín: el papel, las caras, la frase */
     '/efectos/regalo-perlas.js',       /* un regalo dibujado con perlas, en Mesa de regalos */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
+    '/efectos/panel-catalogo.js',      /* 16/10: los mismos diseños del formulario, para vestir la invitación desde el panel */
 
     '/colecciones/marfil.js',          /* copia de la referencia BOMA: serif espaciada y filetes */
     '/colecciones/disco.js',

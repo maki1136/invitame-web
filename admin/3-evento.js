@@ -155,6 +155,7 @@
   // los bloques de EFECTOS que escriben lo mismo).
   // ⚠️ Un panel-*.js nuevo se anota acá el mismo día, o no aparece.
   const CASA_DE_MODULO={
+    'catalogo-selector':['PRINCIPAL','diseno'],
     'coleccion-selector':['PRINCIPAL','diseno'],
     'paleta-selector':['PRINCIPAL','diseno'],
     'boton-selector':['PRINCIPAL','diseno'],
