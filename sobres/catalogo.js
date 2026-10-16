@@ -1449,6 +1449,14 @@ window.SOBRES_INVITAME = {
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/xv29/bi/bi-sobre-luz.jpg",
     color: "#D8B7B1", luz: 4.0, luzColor: "#FFF6F2", luzFundido: 0.65 },
 
+  'encaje-boda': { nombre: "Encaje boda · sobre de encaje marfil en X con dos solapas de encaje; se abren y muestran la tarjeta con corona de laurel y anillos, y se lava en luz blanca (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sobres-nuevos/encaje-boda-16-10.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sobres-nuevos/encaje-boda-16-10.jpg",
+    color: "#BCAFA5", luz: 4.0, luzColor: "#FFFFFF", luzFundido: 0.8 },
+  'encaje-xv': { nombre: "Encaje XV · sobre de encaje marfil en X con dos solapas de encaje; se abren y muestran la tarjeta con tiara y flores, y se lava en luz blanca (video)",
+    video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sobres-nuevos/encaje-xv-16-10.mp4",
+    poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sobres-nuevos/encaje-xv-16-10.jpg",
+    color: "#BCAFA5", luz: 4.0, luzColor: "#FFFFFF", luzFundido: 0.8 },
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
