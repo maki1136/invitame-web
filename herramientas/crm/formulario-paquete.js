@@ -20,7 +20,7 @@
    ⚠️ El formulario y /solicitud-crear.php leen `inv_formularios`. La regla de
       Firestore deja leerlo por código y escribirlo sólo al equipo.
    ⚠️ Código fuente en el repo: herramientas/crm/formulario-paquete.js. En el
-      servidor va pegado inline antes de </body> en crm-equipo/index.html.
+      servidor va pegado inline al final del body de crm-equipo/index.html.
    ============================================================================ */
 (function () {
   if (window.__invFormPaquete) return; window.__invFormPaquete = 1;
