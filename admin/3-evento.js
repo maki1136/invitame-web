@@ -542,7 +542,9 @@
     const _RS={confirmado:[ICO.tilde,'confirmó','#1f7a4d'],rechazado:[ICO.equis,'no puede','#8a2b2b'],pendiente:['','sin responder','#a39a90']};
     el('guests').innerHTML=D.invitados.map((g,i)=>{const url=BASEURL+'?e='+encodeURIComponent(D.slug||'')+'&g='+g.t;
       const r=_RS[g.rsvp||'pendiente']||_RS.pendiente;
-      const cuantos=(g.rsvp==='confirmado'&&g.rsvpPersonas)?(' ('+g.rsvpPersonas+')'):'';
+      /* ★ 16/10: «2 de 4» cuando confirmaron menos que los pases */
+      const _pp=parseInt(g.p,10)||0, _rp=parseInt(g.rsvpPersonas,10)||0;
+      const cuantos=(g.rsvp==='confirmado'&&_rp)?(' ('+_rp+(_pp&&_rp<_pp?' de '+_pp+', '+(_pp-_rp)+' sin confirmar':'')+')'):'';
       return '<div class="guest"><b>'+g.n+'</b>'+
       '<span title="'+r[1]+'" style="font-size:12px;font-weight:800;color:'+r[2]+';margin-left:8px;white-space:nowrap">'+r[0]+' '+r[1]+cuantos+'</span>'+
       '<button class="lnk" style="margin-left:auto;color:#6D1233" onclick="navigator.clipboard.writeText(\''+url+'\');this.textContent=\'¡copiado!\';setTimeout(()=>this.innerHTML=ICO.enlace+\' copiar link\',1500)">'+ICO.enlace+' copiar link</button>'+

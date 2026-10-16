@@ -173,13 +173,17 @@
 
   // ---------------- cuentas ----------------
   function cuentas(){
-    const c={inv:GENTE.length, pers:0, si:0, no:0, sin:0, vienen:0, mesas:mesasDe().length};
+    /* ★ 16/10/2026 (Jazmín): «si una invitación es para 4 y sólo 2 confirman,
+       que se vea 2 confirmaron y 2 pendientes». `pend` = personas que todavía
+       no confirmaron: las de las invitaciones sin responder + lo que falta en
+       las confirmadas a medias. */
+    const c={inv:GENTE.length, pers:0, si:0, no:0, sin:0, vienen:0, pend:0, mesas:mesasDe().length};
     GENTE.forEach(g=>{
       c.pers += num(g.pases);
       const e=estadoDe(g);
-      if(e==='si'){ c.si++; c.vienen += personasDe(g); }
+      if(e==='si'){ c.si++; c.vienen += personasDe(g); c.pend += Math.max(0, num(g.pases)-personasDe(g)); }
       else if(e==='no') c.no++;
-      else c.sin++;
+      else { c.sin++; c.pend += num(g.pases); }
     });
     return c;
   }
@@ -207,6 +211,7 @@
       '<div class="num rojo"><b>'+c.no+'</b><span>No pueden</span><div class="barra"><i style="width:'+(c.no/t*100)+'%"></i></div></div>'+
       '<div class="num"><b>'+c.sin+'</b><span>Sin responder</span></div>'+
       '<div class="num"><b>'+c.vienen+'</b><span>Personas que vienen</span></div>'+
+      '<div class="num"><b>'+c.pend+'</b><span>Personas sin confirmar</span></div>'+
       '<div class="num"><b>'+c.mesas+'</b><span>Mesas armadas</span></div>'+
     '</div>';
   }
@@ -365,7 +370,10 @@
             '<td class="ocultar-chico"><input class="mini telInput" data-tok="'+esc(g.token)+'" inputmode="tel" '+
               'value="'+esc(g.tel||'')+'" placeholder="52 999 123 4567" title="Con clave de pais. Con esto el boton de WhatsApp abre su chat directo."></td>'+
             '<td class="ocultar-chico">'+num(g.usos)+'/'+(num(g.usosMax)||num(g.pases))+'</td>'+
-            '<td><span class="chip '+e+'">'+(e==='si'?'Confirmó ✓':(e==='no'?'No puede':'Sin responder'))+'</span></td>'+
+            '<td><span class="chip '+e+'">'+(e==='si'
+                ? (personasDe(g)<num(g.pases) ? 'Confirmaron '+personasDe(g)+' de '+num(g.pases) : 'Confirmó ✓')
+                : (e==='no'?'No puede':'Sin responder'))+'</span>'+
+              (e==='si' && personasDe(g)<num(g.pases) ? '<div style="font-size:11px;color:var(--muted);margin-top:3px">'+(num(g.pases)-personasDe(g))+' sin confirmar</div>' : '')+'</td>'+
             '<td class="ocultar-chico" style="max-width:210px;color:#6b6058;font-size:12.5px">'+
               (g.rsvpMensaje?'<span title="'+esc(g.rsvpMensaje)+'">'+esc(String(g.rsvpMensaje).slice(0,48))+(String(g.rsvpMensaje).length>48?'…':'')+'</span>':'')+
               /* ★ 15/10/2026: la restricción alimentaria que contestó al confirmar */

@@ -641,6 +641,7 @@
     '/efectos/rsvp-extras.js',         /* fecha límite y pregunta de restricciones alimentarias (fx.rsvp) */
     '/efectos/clima-ciudad.js',        /* el clima con las coordenadas de la ciudad (climaCoords) */
     '/efectos/galeria-frase.js',       /* la frase debajo del título de la galería (galFrase) */
+    '/efectos/pase-validar.js',        /* el QR del pase abre «Pase válido / Ya ingresó» (p=1) */
     '/efectos/previa-vidriera.js',     /* la miniatura esconde el pase y el formulario, como la publicada sin link */
     '/efectos/aviso-privacidad.js',    /* la línea de privacidad al pie de la confirmación */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */

@@ -82,12 +82,15 @@
       try{
         const _m=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
         const _pv=await _m.getDocs(_m.collection(window.INV.db,'inv_privado'));
-        _pv.forEach(function(d){ const x=d.data()||{}; _autores[d.id]={creo:x.creadoPor||'', guardo:x.guardadoPor||'', el:x.guardadoEl||''}; });
+        _pv.forEach(function(d){ const x=d.data()||{}; _autores[d.id]={creo:x.creadoPor||'', guardo:x.guardadoPor||'', el:x.guardadoEl||'', creada:x.creadoEl||''}; });
       }catch(_e){ /* sin permiso o sin conexión: la columna queda vacía, no se rompe nada */ }
       const counts={},pers={};
       data.invitados.forEach(g=>{if(g.activo!==false){counts[g.slug]=(counts[g.slug]||0)+1;pers[g.slug]=(pers[g.slug]||0)+(parseInt(g.usosMax,10)||1);}});
       _invData=data.eventos.map(ev=>({ev,inv:counts[ev.slug]||0,pp:pers[ev.slug]||0}))
-        .sort((a,b)=>((parseInt(b.ev.orden,10)||0)-(parseInt(a.ev.orden,10)||0)));
+        /* ★ 16/10/2026 (Jazmín): las más nuevas arriba, por fecha de CREACIÓN
+           (`creadoEl` en inv_privado). Las viejas que no la tienen anotada usan
+           la fecha del último guardado. */
+        .sort((a,b)=>String(creadaDe(b.ev.slug)).localeCompare(String(creadaDe(a.ev.slug))));
       box.querySelector('.invmodal').innerHTML=
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'+
         '<h3 style="margin:0;color:#6D1233;font-weight:900">'+ICO.carpeta+' Invitaciones <span style="color:#b0a89f;font-weight:700;font-size:13px">('+_invData.length+')</span></h3>'+
@@ -103,6 +106,7 @@
   function filtrarInv(){const q=(el('invfiltro').value||'').toLowerCase();
     pintarFilasInv(_invData.filter(r=>((r.ev.n1||'')+' '+(r.ev.n2||'')+' '+(r.ev.slug||'')+' '+(r.ev.orden||'')+' '+(r.ev.tpl||'')+' '+quien(r.ev.slug)).toLowerCase().includes(q)));}
   let _autores={};
+  function creadaDe(slug){ const a=_autores[slug]||{}; return a.creada||a.el||''; }
   /* Del mail sale el nombre: littlemomentsok@ es Maki, info@invitameok es Jazmín.
      Si mañana entra alguien más, se agrega acá y listo. */
   function quien(slug){
@@ -128,7 +132,7 @@
         '<td style="padding:9px 6px">'+(ev.orden||'—')+'</td>'+
         '<td style="padding:9px 6px"><b>'+(nom||'—')+'</b><div style="font-size:11px;color:#b0a89f">'+s+' · '+r.inv+' inv · '+r.pp+' pases</div></td>'+
         '<td style="padding:9px 6px;color:#7d756c">'+fmt(ev.fecha)+'</td>'+
-        '<td style="padding:9px 6px;color:#7d756c;font-size:12px">'+quien(s)+'</td>'+
+        '<td style="padding:9px 6px;color:#7d756c;font-size:12px">'+quien(s)+(creadaDe(s)?'<div style="font-size:10px;color:#b0a89f">'+(((_autores[s]||{}).creada)?'creada ':'guardada ')+fmt(creadaDe(s))+'</div>':'')+'</td>'+
         '<td style="padding:9px 6px;text-align:right;white-space:nowrap">'+
           '<button '+A+'title="Ver invitación (nueva ventana)" onclick="window.open(\'/i/?e='+encodeURIComponent(s)+'\',\'_blank\')">'+ICO.ojo+'</button>'+
           '<button '+A+'title="Editar invitación" onclick="location.href=\'admin.html?e='+encodeURIComponent(s)+'\'">'+ICO.lapiz+'</button>'+

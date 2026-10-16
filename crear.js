@@ -255,6 +255,7 @@
   // ---- Borrador automático: los textos Y las fotos ya subidas ----
   const BORR='inv_borrador_v2';
   const CAMPOS=['orden','tipo','kick','n1','n2','fecha','frase','ev1t','ev1f','ev1d','ev2t','ev2f','ev2d','ev3t','ev3f','ev3d',
+    'ev1maps','ev2maps','ev3maps',
     'hotDesc','hoteles','itinerario','persFrase','dressTitulo','dress','regTitulo','regalos','regClabe','regTitular','regBanco',
     'galTitulo','galFrase',
     'cfTitulo','cfFrase','rsvpLimite','cfMail','cfWsp1','cfWsp1n','cfWsp2','cfWsp2n','fraseFinal','textoFinal',
@@ -371,9 +372,9 @@
       kick:$('kick').value.trim(), n1:$('n1').value.trim(), n2:$('n2').value.trim(), fecha:$('fecha').value, frase:$('frase').value.trim(),
       cover:FOTOS.cover, coverVideo:FOTOS.coverVideo, galeria:galURLs,
       galTitulo:$('galTitulo').value.trim(), galFrase:$('galFrase').value.trim(), galEstilo:galEstilo(),
-      ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1img:FOTOS.ev1img,
-      ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2img:FOTOS.ev2img,
-      ev3t:$('ev3t').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3img:FOTOS.ev3img,
+      ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1img:FOTOS.ev1img, ev1maps:$('ev1maps').value.trim(),
+      ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2img:FOTOS.ev2img, ev2maps:$('ev2maps').value.trim(),
+      ev3t:$('ev3t').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3img:FOTOS.ev3img, ev3maps:$('ev3maps').value.trim(),
       hotDesc:$('hotDesc').value.trim(), hoteles:$('hoteles').value.trim(), hotelImg:FOTOS.hotelImg,
       itinerario:$('itinerario').value.trim(),
       persFrase:$('persFrase').value.trim(), personas:leerPersonas(),
