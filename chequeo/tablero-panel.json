@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-17T18:08:29.845Z",
+ "cuando": "2026-10-18T18:15:21.142Z",
  "slug": "camila-y-tomas",
  "total": 364,
- "verde": 361,
- "amarillo": 2,
+ "verde": 363,
+ "amarillo": 0,
  "rojo": 1,
  "gris": 0,
  "items": [
@@ -1959,9 +1959,8 @@
    "guarda": true,
    "dato": "c_frase-para-seccion-confirmacion",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2059,9 +2058,8 @@
    "guarda": true,
    "dato": "c_texto-corto-boton-wsp-2",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
