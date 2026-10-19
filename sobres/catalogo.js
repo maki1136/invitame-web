@@ -1464,7 +1464,7 @@ window.SOBRES_INVITAME = {
   'puertas-rosas-prueba': { nombre: "Prueba · puertas de rosas en relieve con lacre de cisnes; se abren a los lados y la carta rosa baja despacio y sale de la pantalla, y debajo aparece la foto de la invitación (video)",
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sobres-nuevos/puertas-rosas-19-10f.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sobres-nuevos/puertas-rosas-19-10f.jpg",
-    color: "#FBF4EE", luz: 5.0, luzColor: "#FFFFFF", luzFundido: 0.8, empalme: "foto" },
+    color: "#FBF4EE", luz: 3.0, luzColor: "#FFFFFF", luzFundido: 2.4, empalme: "foto" },
   'carta-toscana': {
     nombre: "Tarjeta troquelada Toscana · se escribe sola (video)",
     video:  "/sobres/carta-toscana.mp4",
