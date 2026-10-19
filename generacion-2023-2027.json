@@ -280,14 +280,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405242/invitame/eventos/generacion-2023-2027/generacion-2023-2027-pasevoz-1.mp3",
+   "onda": "qlnggjcmzdhiff8pjlejlodbjf",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Ingeniería Industrial",
    "fecha": "06 · 11 · 2027",
    "hora": "17:00",
-   "talon": "GENERACIÓN 2023-2027",
-   "guion": "¿Qué tal? Soy Diego, presidente de la Generación 2023-2027 de Ingeniería Industrial. Fueron cuatro años intensos, y lo que más nos llevamos es la gente que estuvo a nuestro lado. Por eso queremos que vengas a Puerto Vallarta el 6 de noviembre: misa, foto con toga y una cena frente al mar. Te esperamos para celebrar."
+   "talon": "GENERACIÓN 2023-2027"
   },
   "boton": {
    "estilo": "esmalte"

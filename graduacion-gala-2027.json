@@ -289,13 +289,14 @@
   },
   "pasevoz": {
    "encendido": false,
+   "audio": "",
+   "onda": "",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Generación 2023-2027",
    "fecha": "13 · 11 · 2027",
    "hora": "17:00",
-   "talon": "GRADUACIÓN 2027",
-   "guion": "Hola, soy Mariana, presidenta de la Generación 2023-2027. Fueron cuatro años de proyectos, desvelos y amistades que se quedan. Ahora queremos cerrar esta etapa como se merece, y queremos hacerlo contigo, porque nos acompañaste en el camino. Te esperamos el 13 de noviembre en Cuernavaca: misa, reconocimientos y una gran cena. Nos vemos ahí."
+   "talon": "GRADUACIÓN 2027"
   },
   "boton": {
    "estilo": "placa"

@@ -277,14 +277,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405240/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-pasevoz-1.mp3",
+   "onda": "zjbrldprhazidafi87fba9c8e9",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Olivia",
    "fecha": "25 · 09 · 2027",
    "hora": "12:00",
-   "talon": "MI BAUTIZO Y PRIMER AÑ",
-   "guion": "Hola, soy Natalia, la mamá de Olivia. Hace un año nuestra vida cambió por completo y, la verdad, no podemos estar más agradecidos. Por eso queremos bautizarla y festejar su primer año el mismo día, rodeados de la gente que la quiere. Nos encantaría que tú estés ahí, en Santo Domingo y después en la comida. Te esperamos con mucho cariño."
+   "talon": "MI BAUTIZO Y PRIMER AÑ"
   },
   "boton": {
    "estilo": "esmalte"

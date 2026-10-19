@@ -274,14 +274,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405251/invitame/eventos/mis50-ricardo/mis50-ricardo-pasevoz-1.mp3",
+   "onda": "zg8f98d97ebgc974kec7chdca9",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Ricardo",
    "fecha": "23 · 10 · 2027",
    "hora": "20:30",
-   "talon": "MIS 50 AÑOS",
-   "guion": "¿Qué tal? Habla Ricardo. Me costó cincuenta años llegar hasta aquí, y quiero celebrarlo como se debe: con buena cena, buen whisky y la gente que me ha aguantado todo este tiempo. Tú estás en esa lista, así que no tienes excusa. Te espero el 23 de octubre en la Quinta Real. Ahí nos vemos."
+   "talon": "MIS 50 AÑOS"
   },
   "boton": {
    "estilo": "placa"

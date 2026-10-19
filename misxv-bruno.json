@@ -282,13 +282,14 @@
   },
   "pasevoz": {
    "encendido": false,
+   "audio": "",
+   "onda": "",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Bruno",
    "fecha": "07 · 08 · 2027",
    "hora": "19:00",
-   "talon": "MIS XV",
-   "guion": "¿Qué tal? Soy Bruno. Cumplo quince y la verdad tenía muchas ganas de que llegara este día. Has estado conmigo en muchos momentos, por eso quiero que estés en este también. Primero la misa en la Catedral de Toluca y después a cenar, bailar y pasarla increíble. Te espero el 7 de agosto. No faltes."
+   "talon": "MIS XV"
   },
   "boton": {
    "estilo": "placa"

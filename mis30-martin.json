@@ -269,14 +269,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405247/invitame/eventos/mis30-martin/mis30-martin-pasevoz-1.mp3",
+   "onda": "zhpnpmhpierkdnkkolqkrlzzrf",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Martín",
    "fecha": "24 · 04 · 2027",
    "hora": "21:00",
-   "talon": "MIS 30",
-   "guion": "Hola, soy Martín. Cumplo treinta y quiero celebrarlo con la gente que ha estado en las buenas y en las no tan buenas. Va a ser una noche tranquila al principio y con mucha pista al final, como debe ser. Te espero el 24 de abril en la Quinta Real de Zacatecas. Aparta la fecha y vente con ganas."
+   "talon": "MIS 30"
   },
   "boton": {
    "estilo": "esmalte"

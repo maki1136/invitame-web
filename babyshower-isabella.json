@@ -283,14 +283,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405238/invitame/eventos/babyshower-isabella/babyshower-isabella-pasevoz-1.mp3",
+   "onda": "zyzmcb9yqeocvmhjgbuodhe6uo",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Isabella",
    "fecha": "10 · 04 · 2027",
    "hora": "13:00",
-   "talon": "BABY SHOWER",
-   "guion": "Hola, soy Andrea. Diego y yo estamos contando los días para conocer a Isabella, y queríamos invitarte con nuestra voz, no sólo con un mensaje. Tú has estado cerca en este camino y nos encantaría que estés también en su baby shower. Va a ser una tarde tranquila, con juegos, pastel y mucho cariño. Te esperamos el 10 de abril."
+   "talon": "BABY SHOWER"
   },
   "boton": {
    "estilo": "esmalte"

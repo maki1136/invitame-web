@@ -294,14 +294,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405244/invitame/eventos/mateo-cumple5/mateo-cumple5-pasevoz-1.mp3",
+   "onda": "xuqhtplzvyxmytzrsmmsntqplp",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Mateo",
    "fecha": "15 · 05 · 2027",
    "hora": "14:00",
-   "talon": "MI CUMPLE Nº 5",
-   "guion": "¡Hola! Soy Mateo y ya voy a cumplir cinco. Te invito a mi fiesta, va a estar súper divertida: hay inflable, mago, piñata y un pastel gigante. Ponte tu disfraz, el que más te guste, y ven a jugar conmigo. Le pedí a mi mamá que te guardara un lugar. ¡Te espero, eh! No se te olvide. ¡Bye!"
+   "talon": "MI CUMPLE Nº 5"
   },
   "boton": {
    "estilo": "esmalte"

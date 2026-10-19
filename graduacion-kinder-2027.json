@@ -295,14 +295,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405243/invitame/eventos/graduacion-kinder-2027/graduacion-kinder-2027-pasevoz-1.mp3",
+   "onda": "jab5iec89bhhzefdbg9ihbihsu",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Pequeños graduados",
    "fecha": "03 · 07 · 2027",
    "hora": "10:00",
-   "talon": "¡NOS VAMOS A PRIMARIA!",
-   "guion": "¡Hola! Soy Emilia y ya me voy a primaria. Mis amigos y yo aprendimos un montón: a leer, a contar y a compartir. Ahora vamos a tener nuestra graduación, con diploma y birrete, y después una fiesta con piñata y pastel. ¿Vienes a vernos? Te esperamos el 3 de julio. ¡Va a estar padrísimo!"
+   "talon": "¡NOS VAMOS A PRIMARIA!"
   },
   "boton": {
    "estilo": "esmalte"

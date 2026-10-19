@@ -268,14 +268,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405248/invitame/eventos/mis30-paulina/mis30-paulina-pasevoz-1.mp3",
+   "onda": "lfcijifc0kigh8fgjfezddmjkk",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Paulina",
    "fecha": "18 · 09 · 2027",
    "hora": "19:30",
-   "talon": "MIS 30 AÑOS",
-   "guion": "¡Hola! Soy Pau. Cumplo treinta y quise darme el gusto de celebrarlo frente al mar, en Cancún. Sé que implica viajar, por eso tu presencia me importa tanto. Va a haber atardecer, buena cena y muchísima música. Aparta el 18 de septiembre, trae tu mejor look de playa y ven a brindar conmigo. ¡Te espero!"
+   "talon": "MIS 30 AÑOS"
   },
   "boton": {
    "estilo": "esmalte"

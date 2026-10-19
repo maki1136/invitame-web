@@ -294,14 +294,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405243/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-pasevoz-1.mp3",
+   "onda": "zxothlmpzm9opgqopkmimiqdld",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Valentina",
    "fecha": "26 · 06 · 2027",
    "hora": "10:00",
-   "talon": "GRADUACIÓN 2027",
-   "guion": "Hola, soy Valentina. Después de cinco años, muchos exámenes y más café del que quiero admitir, por fin me gradúo de Derecho. Nada de esto habría sido igual sin ti. Por eso quiero que estés el 26 de junio en Guanajuato: en la ceremonia y, sobre todo, en la cena para celebrar juntos. Te espero, de verdad."
+   "talon": "GRADUACIÓN 2027"
   },
   "boton": {
    "estilo": "esmalte"

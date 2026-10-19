@@ -266,14 +266,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405246/invitame/eventos/mis18-leo/mis18-leo-pasevoz-1.mp3",
+   "onda": "zjfdkgigjzgicjjgvdgivkhgjq",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Leo",
    "fecha": "30 · 10 · 2027",
    "hora": "21:00",
-   "talon": "MIS 18",
-   "guion": "¿Qué onda? Soy Leo. Cumplo dieciocho y quiero celebrarlo con la gente que vale la pena. Va a haber DJ, tacos, pastel y pista toda la noche. Tú sólo trae buena vibra y ganas de bailar, que esta noche no se repite. Te espero el sábado 30 de octubre en Tijuana. No me dejes plantado."
+   "talon": "MIS 18"
   },
   "boton": {
    "estilo": "placa"

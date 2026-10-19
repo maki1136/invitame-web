@@ -273,14 +273,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405241/invitame/eventos/comunion-tomas/comunion-tomas-pasevoz-1.mp3",
+   "onda": "rqlxspllfislzifkhkghicml9g",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Tomás",
    "fecha": "22 · 05 · 2027",
    "hora": "11:00",
-   "talon": "MI PRIMERA COMUNIÓN",
-   "guion": "Hola, soy Alejandra, la mamá de Tomás. Llevamos meses preparándonos: el catecismo, las oraciones, los nervios. Y ya llegó el día. Tomás hace su Primera Comunión el 22 de mayo y nos haría muy felices que estés con nosotros, en la misa y después en la comida. Gracias por ser parte de su vida. Te esperamos."
+   "talon": "MI PRIMERA COMUNIÓN"
   },
   "boton": {
    "estilo": "esmalte"

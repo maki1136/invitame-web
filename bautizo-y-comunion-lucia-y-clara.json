@@ -278,14 +278,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405239/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-pasevoz-1.mp3",
+   "onda": "kopgzijclgmipejhillgcidelf",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Lucía & Clara",
    "fecha": "08 · 05 · 2027",
    "hora": "12:00",
-   "talon": "MI PRIMERA COMUNIÓN Y ",
-   "guion": "Hola, soy Ana Sofía, la mamá de Lucía y Clara. Este 8 de mayo vamos a vivir un día muy especial: Lucía hace su Primera Comunión y Clarita recibe el Bautizo. Para nosotros es una bendición doble, y queremos compartirla contigo, que has estado cerca de nuestra familia. Te esperamos en la misa y después a comer juntos. Gracias por venir."
+   "talon": "MI PRIMERA COMUNIÓN Y "
   },
   "boton": {
    "estilo": "esmalte"

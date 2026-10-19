@@ -268,14 +268,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405249/invitame/eventos/mis40-alejandro/mis40-alejandro-pasevoz-1.mp3",
+   "onda": "zo4okjf4qjfigffnmklkhkdcnb",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Alejandro",
    "fecha": "24 · 07 · 2027",
    "hora": "21:00",
-   "talon": "MIS 40",
-   "guion": "Hola, habla Alejandro. Llegaron los cuarenta y, sinceramente, se sienten muy bien. Quiero celebrarlos con una noche de las buenas: cena, brindis y pista hasta tarde. No sería lo mismo sin ti, así que aparta la fecha: sábado 24 de julio en Aguascalientes. Te espero con un trago en la mano."
+   "talon": "MIS 40"
   },
   "boton": {
    "estilo": "placa"

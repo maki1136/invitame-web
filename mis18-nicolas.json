@@ -268,14 +268,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405246/invitame/eventos/mis18-nicolas/mis18-nicolas-pasevoz-1.mp3",
+   "onda": "zjmrrjcrjetvqvxoojojiesnht",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Nicolás",
    "fecha": "21 · 08 · 2027",
    "hora": "21:00",
-   "talon": "MIS 18",
-   "guion": "¿Qué onda? Soy Nico. Ya cumplo dieciocho y quiero festejarlo con los de siempre y con los que se han ido sumando. Va a haber cena, DJ y pista toda la noche. Ven con buena vibra y ganas de bailar, lo demás corre por mi cuenta. Te espero el 21 de agosto. No me falles."
+   "talon": "MIS 18"
   },
   "boton": {
    "estilo": "esmalte"

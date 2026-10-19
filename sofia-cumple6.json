@@ -296,14 +296,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405252/invitame/eventos/sofia-cumple6/sofia-cumple6-pasevoz-1.mp3",
+   "onda": "zf8dbdcb67m6984b9b76k4d677",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Sofía",
    "fecha": "19 · 06 · 2027",
    "hora": "13:00",
-   "talon": "MI MÁGICO CUMPLEAÑOS",
-   "guion": "¡Hola! Soy Sofía. ¿Sabes qué? ¡Voy a cumplir seis años! Y quiero que vengas a mi fiesta mágica. Va a haber burbujas gigantes, pintacaritas, piñata de arcoíris y un pastel de unicornio. Ponte algo de colores bonitos y, si tienes tutú, tráelo. Te voy a estar esperando con un abrazo muy grande. ¡Ven, porfa!"
+   "talon": "MI MÁGICO CUMPLEAÑOS"
   },
   "boton": {
    "estilo": "esmalte"

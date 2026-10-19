@@ -273,14 +273,15 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792405250/invitame/eventos/mis40-carolina/mis40-carolina-pasevoz-1.mp3",
+   "onda": "zkbe7if9lgbcdgh8lhhd9olkha",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Carolina",
    "fecha": "13 · 03 · 2027",
    "hora": "20:30",
-   "talon": "40 & FABULOUS",
-   "guion": "¡Hola! Soy Carolina y sí, ya llegaron los cuarenta. Y la verdad, me siento mejor que nunca. Quiero celebrarlo en grande, con la gente que me ha acompañado en tantas etapas, y tú eres una de esas personas. Va a haber buena cena, buenos tragos y mucha pista. Así que ponte guapa o guapo, y nos vemos el 13 de marzo."
+   "talon": "40 & FABULOUS"
   },
   "boton": {
    "estilo": "esmalte"
