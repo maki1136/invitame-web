@@ -146,6 +146,19 @@
       }
     }
 
+    if (d.fx) {
+      /* ★ 19/10/2026 — muestras de eventos nuevos: el boleto con voz trae la FECHA y la
+         HORA de la muestra, y el filtro su FRASE («Generación 2023-2027»). Son contenido:
+         la fecha se arma con la del cliente y la frase se vacía (la escribe el cliente). */
+      if (d.fx.pasevoz) {
+        var mF = String(d.fecha || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}:\d{2}))?/);
+        d.fx.pasevoz.fecha = mF ? (mF[3] + ' · ' + mF[2] + ' · ' + mF[1]) : '';
+        d.fx.pasevoz.hora  = (mF && mF[4]) ? mF[4] : '';
+        /* el talón dice «MIS 50 AÑOS» de la muestra: se arma con el sobretítulo del cliente */
+        d.fx.pasevoz.talon = String(d.kick || '').toUpperCase().slice(0, 22);
+      }
+      if (d.fx.filtro) d.fx.filtro.frase = '';
+    }
     if (d.fx && V.limpiarSeccionesDeLaMuestra) V.limpiarSeccionesDeLaMuestra(d);
     if (V.ponerSecciones) V.ponerSecciones(d, seccCliente);
     if (rsvpCliente && (rsvpCliente.limite || rsvpCliente.restricciones)) {
