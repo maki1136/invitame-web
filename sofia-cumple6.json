@@ -21,7 +21,7 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
- "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/sofia-cumple6/sofia-cumple6-portada.jpg",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_crop,g_south,h_0.66/invitame/eventos/sofia-cumple6/sofia-cumple6-portada",
  "galeria": [
   "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/sofia-cumple6/sofia-cumple6-galeria-1.jpg",
   "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/sofia-cumple6/sofia-cumple6-galeria-2.jpg",
@@ -34,6 +34,7 @@
  "ev1dir": "Hacienda Xcanatún, Carretera Mérida-Progreso km 12, Xcanatún, 97302, Mérida, Yuc.",
  "ev1fecha": "Sábado 19 de junio de 2027 · 13:00 h",
  "ev1maps": "https://maps.google.com/?q=Hacienda+Xcanatún+Mérida,+Yuc.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/sofia-cumple6/sofia-cumple6-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -301,7 +302,7 @@
    "onda": "zf8dbdcb67m6984b9b76k4d677",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
-   "departe": "Sofía",
+   "departe": "Mamá de Sofía",
    "fecha": "19 · 06 · 2027",
    "hora": "13:00",
    "talon": "MI MÁGICO CUMPLEAÑOS"

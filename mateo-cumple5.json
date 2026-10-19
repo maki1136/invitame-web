@@ -34,6 +34,7 @@
  "ev1dir": "Jardín del Hotel Hacienda Jurica by Brisas, Paseo Jurica s/n, Jurica, 76100, Santiago de Querétaro, Qro.",
  "ev1fecha": "Sábado 15 de mayo de 2027 · 14:00 h",
  "ev1maps": "https://maps.google.com/?q=Jardín+del+Hotel+Hacienda+Jurica+by+Brisas+Santiago+de+Querétaro,+Qro.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/mateo-cumple5/mateo-cumple5-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -50,10 +51,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Querétaro Marriott Hotel · Blvd. Bernardo Quintana 4050, Álamos 3a Secc., 76160 Santiago de Querétaro, Qro. · Tel. +52 442 000 0000 · https://www.marriott.com",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/mateo-cumple5/mateo-cumple5-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Fiesta de disfraces",
  "c_dresscode-texto": "Ven disfrazado de tu personaje favorito: héroe, explorador, robot o lo que tú quieras. Los papás, cómodos y listos para jugar.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/mateo-cumple5/mateo-cumple5-vestimenta-f",
  "personas": [
   {
    "nombre": "Daniela y Javier",
@@ -299,7 +302,7 @@
    "onda": "xuqhtplzvyxmytzrsmmsntqplp",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
-   "departe": "Mateo",
+   "departe": "Mamá de Mateo",
    "fecha": "15 · 05 · 2027",
    "hora": "14:00",
    "talon": "MI CUMPLE Nº 5"
