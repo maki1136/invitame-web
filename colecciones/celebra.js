@@ -586,6 +586,7 @@
     A.push(
       P + '.tl{ overflow:visible!important; position:relative!important; }',
       P + '.tl:not(.tl-centro){ padding:30px 18px 26px 48px!important; }',
+      P + '.tl.tl-centro{ padding:30px 14px 26px!important; }',   /* 19/10: el zigzag tampoco pega arriba (mis30-martin) */
       P + '.tl:not(.tl-centro)::before, ' + P + '.tl:not(.tl-centro) > .tl-prog{ left:25px!important; }',
       P + '.tl::before, ' + P + '.tl > .tl-prog{ top:var(--tl-ini,6px)!important; bottom:var(--tl-fin,6px)!important; height:auto!important; }',
       P + '.tl::before{ background-image:radial-gradient(circle, ' + TINTA3 + ' 1.2px, rgba(0,0,0,0) 1.3px)!important; background-size:3px 9px!important; background-repeat:repeat-y!important; background-color:transparent!important; width:3px!important; opacity:1!important; }',
