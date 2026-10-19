@@ -549,6 +549,9 @@
       /* el claro de la portada: RADIAL y que muera ANTES del borde de su caja
          (radio ≤ 56 %: si no, quedan dos costuras verticales — Sirena) */
       P + '.portada > .c{ position:relative!important; }',
+      /* el velo del motor es OSCURO (negro .66 abajo): sobre una colección clara con el claro radial
+         daba un gris barroso en toda la foto. Velo claro sólo abajo, como Óleo (19/10/2026) */
+      P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(' + RP + ',0) 48%, rgba(' + RP + ',.42) 100%)!important; }',
       P + '.portada > .c::before{ content:""!important; position:absolute!important; left:-50%!important; right:-50%!important; bottom:-45%!important; height:190%!important; pointer-events:none!important; z-index:-1!important; background:radial-gradient(56% 56% at 50% 52%, rgba(' + RP + ',.80) 0%, rgba(' + RP + ',.44) 46%, rgba(' + RP + ',0) 88%)!important; }'
     );
 
