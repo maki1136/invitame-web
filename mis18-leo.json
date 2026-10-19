@@ -26,6 +26,7 @@
  "ev1dir": "Grand Hotel Tijuana, Blvd. Agua Caliente 4500, Aviación, 22014, Tijuana, B.C.",
  "ev1fecha": "Sábado 30 de octubre de 2027 · 21:00 h",
  "ev1maps": "https://maps.google.com/?q=Grand+Hotel+Tijuana+Tijuana,+B.C.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/mis18-leo/mis18-leo-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -42,10 +43,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Grand Hotel Tijuana · Blvd. Agua Caliente 4500, Aviación, 22014 Tijuana, B.C. · Tel. +52 664 000 0000",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/mis18-leo/mis18-leo-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Urbano elegante",
  "c_dresscode-texto": "Negro, gris o mostaza. Tenis limpios, bienvenidos.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/mis18-leo/mis18-leo-vestimenta-f",
  "personas": [
   {
    "nombre": "Mariana y Gustavo",

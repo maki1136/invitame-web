@@ -26,6 +26,7 @@
  "ev1dir": "Hotel Quinta Real Zacatecas, Av. Ignacio Rayón 434, Centro, 98000, Zacatecas, Zac.",
  "ev1fecha": "Sábado 24 de abril de 2027 · 21:00 h",
  "ev1maps": "https://maps.google.com/?q=Hotel+Quinta+Real+Zacatecas+Zacatecas,+Zac.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/mis30-martin/mis30-martin-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -42,10 +43,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Hotel Quinta Real Zacatecas · Av. Ignacio Rayón 434, Centro, 98000 Zacatecas, Zac. · Tel. +52 492 000 0000 · Código: MARTIN30",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/mis30-martin/mis30-martin-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Formal",
  "c_dresscode-texto": "Formal en gris, blanco o negro.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/mis30-martin/mis30-martin-vestimenta-f",
  "personas": [
   {
    "nombre": "Irene",

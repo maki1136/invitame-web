@@ -34,6 +34,7 @@
  "ev1dir": "Rosewood San Miguel de Allende, Nemesio Diez 11, Centro, 37700, San Miguel de Allende, Gto.",
  "ev1fecha": "Viernes 15 de octubre de 2027 · 20:00 h",
  "ev1maps": "https://maps.google.com/?q=Rosewood+San+Miguel+de+Allende+San+Miguel+de+Allende,+Gto.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/gala-aurum/gala-aurum-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -50,10 +51,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Rosewood San Miguel de Allende · Nemesio Diez 11, Centro, 37700 San Miguel de Allende, Gto. · Tel. +52 415 000 0000 · https://www.rosewoodhotels.com · Código: AURUM25",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/gala-aurum/gala-aurum-hotel-f",
  "itTitulo": "Agenda",
  "c_itinerario-descripcion": "El programa del evento.",
  "dressTitulo": "Etiqueta rigurosa",
  "c_dresscode-texto": "Esmoquin para caballeros y vestido largo para damas.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/gala-aurum/gala-aurum-vestimenta-f",
  "personas": [
   {
    "nombre": "Lic. Gabriel Montiel",

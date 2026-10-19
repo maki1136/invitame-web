@@ -26,6 +26,7 @@
  "ev1dir": "Hotsson Hotel León — Salón Terraza, Blvd. Adolfo López Mateos 1102 Ote., Los Gavilanes, 37270, León, Gto.",
  "ev1fecha": "Sábado 21 de agosto de 2027 · 21:00 h",
  "ev1maps": "https://maps.google.com/?q=Hotsson+Hotel+León+—+Salón+Terraza+León,+Gto.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -42,10 +43,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Hotsson Hotel León · Blvd. Adolfo López Mateos 1102 Ote., Los Gavilanes, 37270 León, Gto. · Tel. +52 477 000 0000",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Formal casual",
  "c_dresscode-texto": "Camisa, saco opcional; vestido o conjunto. Negro, mostaza y crema van perfecto.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-vestimenta-f",
  "personas": [
   {
    "nombre": "Claudia y Ricardo",

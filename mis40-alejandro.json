@@ -26,6 +26,7 @@
  "ev1dir": "Hotel Quinta Real Aguascalientes, Av. Aguascalientes Sur 601, Jardines de la Asunción, 20270, Aguascalientes, Ags.",
  "ev1fecha": "Sábado 24 de julio de 2027 · 21:00 h",
  "ev1maps": "https://maps.google.com/?q=Hotel+Quinta+Real+Aguascalientes+Aguascalientes,+Ags.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -42,10 +43,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Fiesta Americana Aguascalientes · Laureles s/n esq. Av. Aguascalientes, Las Flores, 20220 Aguascalientes, Ags. · Tel. +52 449 000 0000 · https://www.fiestamericana.com",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Formal",
  "c_dresscode-texto": "Formal en negro, gris o plata.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-vestimenta-f",
  "personas": [
   {
    "nombre": "Daniela",

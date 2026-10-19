@@ -26,6 +26,7 @@
  "ev1dir": "Casa Lamm, Álvaro Obregón 99, Roma Norte, Cuauhtémoc, 06700, Ciudad de México, CDMX",
  "ev1fecha": "Sábado 13 de marzo de 2027 · 20:30 h",
  "ev1maps": "https://maps.google.com/?q=Casa+Lamm+Ciudad+de+México,+CDMX",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -42,10 +43,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Hotel Carlota · Río Amazonas 73, Cuauhtémoc, 06500 Ciudad de México, CDMX · Tel. +52 55 0000 0000 · Código: CARO40",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Formal",
  "c_dresscode-texto": "Formal y con brillo. Rosa, dorado y crema son bienvenidos.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-vestimenta-f",
  "personas": [
   {
    "nombre": "Eduardo",

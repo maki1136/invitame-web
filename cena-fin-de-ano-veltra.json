@@ -34,6 +34,7 @@
  "ev1dir": "Hotel Fiesta Americana Veracruz, Blvd. Manuel Ávila Camacho s/n, Costa de Oro, 94299, Boca del Río, Ver.",
  "ev1fecha": "Viernes 26 de noviembre de 2027 · 20:00 h",
  "ev1maps": "https://maps.google.com/?q=Hotel+Fiesta+Americana+Veracruz+Boca+del+Río,+Ver.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -50,10 +51,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Hotel Fiesta Americana Veracruz · Blvd. Manuel Ávila Camacho s/n, Costa de Oro, 94299 Boca del Río, Ver. · Tel. +52 229 000 0000 · https://www.fiestamericana.com · Código: VELTRA27",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-hotel-f",
  "itTitulo": "Agenda",
  "c_itinerario-descripcion": "El programa del evento.",
  "dressTitulo": "Formal",
  "c_dresscode-texto": "Formal con un toque de brillo: dorado, champaña o azul noche.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-vestimenta-f",
  "personas": [
   {
    "nombre": "Irene Salcedo",

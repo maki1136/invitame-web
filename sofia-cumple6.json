@@ -51,10 +51,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Hyatt Regency Mérida · Calle 60 No. 344 x Av. Colón, Centro, 97000 Mérida, Yuc. · Tel. +52 999 000 0000 · https://www.hyatt.com",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/sofia-cumple6/sofia-cumple6-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Colores pastel",
  "c_dresscode-texto": "Ven en tonos pastel. Si tienes tutú o diadema de unicornio, ¡éste es el día para usarlos!",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/sofia-cumple6/sofia-cumple6-vestimenta-f",
  "personas": [
   {
    "nombre": "Gabriela y Andrés",

@@ -26,6 +26,7 @@
  "ev1dir": "Casa Fayette, Lerdo de Tejada 2308, Col. Americana, 44150, Guadalajara, Jal.",
  "ev1fecha": "Sábado 10 de abril de 2027 · 13:00 h",
  "ev1maps": "https://maps.google.com/?q=Casa+Fayette+Guadalajara,+Jal.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/babyshower-isabella/babyshower-isabella-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -42,10 +43,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Hyatt Regency Andares Guadalajara · Blvd. Puerta de Hierro 5065, Puerta de Hierro, 45116 Zapopan, Jal. · Tel. +52 33 0000 0000 · https://www.hyatt.com",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/babyshower-isabella/babyshower-isabella-hotel-f",
  "itTitulo": "Cómo va a ser el día",
  "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
  "dressTitulo": "Tonos suaves",
  "c_dresscode-texto": "Ven en tonos rosa empolvado, nude, beige o blanco. Casual elegante.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/babyshower-isabella/babyshower-isabella-vestimenta-f",
  "personas": [
   {
    "nombre": "Leticia y Fernando",

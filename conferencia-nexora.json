@@ -34,6 +34,7 @@
  "ev1dir": "Centro de Convenciones Puebla William O. Jenkins, Blvd. Héroes del 5 de Mayo 402, Centro, 72000, Puebla, Pue.",
  "ev1fecha": "Jueves 9 de septiembre de 2027 · 09:00 h",
  "ev1maps": "https://maps.google.com/?q=Centro+de+Convenciones+Puebla+William+O.+Jenkins+Puebla,+Pue.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/conferencia-nexora/conferencia-nexora-lugar-1-f",
  "ev2t": "",
  "ev2sub": "",
  "ev2dir": "",
@@ -50,10 +51,12 @@
  "c_titulo-hoteles": "Dónde quedarse",
  "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
  "c_datos-de-hoteles-recomendados": "Hotel Quinta Real Puebla · Av. 7 Poniente 105, Centro Histórico, 72000 Puebla, Pue. · Tel. +52 222 000 0000 · Código: NEXORA27",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/conferencia-nexora/conferencia-nexora-hotel-f",
  "itTitulo": "Agenda",
  "c_itinerario-descripcion": "El programa del evento.",
  "dressTitulo": "Business casual",
  "c_dresscode-texto": "Saco sin corbata, camisa o blusa. Calzado cómodo: habrá recorridos entre salas.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/conferencia-nexora/conferencia-nexora-vestimenta-f",
  "personas": [
   {
    "nombre": "Ing. Marcelo Valdivia",
