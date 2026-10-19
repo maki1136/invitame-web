@@ -197,6 +197,23 @@ $idToken = isset($sesion['idToken']) ? $sesion['idToken'] : '';
 if ($idToken === '') { echo json_encode(array('ok'=>false,'error'=>'login')); exit; }
 $auth = array('Authorization: Bearer ' . $idToken);
 
+// ---------- 3bis. LAS MUESTRAS DE VENTA NO GUARDAN PUNTAJES (19/10/2026) ----------
+/* La sesión de marketing probó la trivia de `mia-mis15` y quedó «Fer · 10 pts»
+   en la tabla que ven las clientas. Una muestra de venta (fx.muestra.venta) la
+   juega cualquiera que mira el catálogo: no se escribe nada, se puede jugar
+   cuantas veces quiera, y la tabla muestra sólo SU vuelta. Las invitaciones de
+   clientes no llevan fx.muestra (vestir.js lo borra), así que no cambian. */
+$esMuestra = !empty($ev['fields']['fx']['mapValue']['fields']['muestra']['mapValue']['fields']['venta']['booleanValue']);
+if ($esMuestra) {
+  $tabla = $consultar ? array() : array(array('clave' => $clave, 'nombre' => $nombre, 'puntaje' => $puntaje));
+  echo json_encode(array(
+    'ok' => true, 'guardado' => false, 'yaJugaste' => false, 'muestra' => true,
+    'miPuntaje' => $consultar ? null : $puntaje, 'yo' => $clave,
+    'puesto' => $consultar ? 0 : 1, 'total' => count($tabla), 'tabla' => $tabla,
+  ), JSON_UNESCAPED_UNICODE);
+  exit;
+}
+
 // ---------- 4. la tabla que ya había ----------
 list($rt, $ct) = pedir($FS . 'inv_trivia/' . rawurlencode($slug), 'GET', null, $auth);
 $jug = array();
