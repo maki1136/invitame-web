@@ -86,12 +86,12 @@
      h3  letra de nombres chicos (tarjetas, personas, horas) */
   var TONOS = {
     /* 1 · KIDS · videojuego retro ORIGINAL: atardecer pastel, islas flotantes,
-       globos pixel. Press Start 2P SÓLO para nombres y títulos cortos, chica. */
+       globos pixel. Pixelify Sans SÓLO para nombres y títulos cortos, chica. */
     pixel: { nombre: 'Kids · Pixel aventura', pa:'#FFF4E8', pa2:'#FFE3D3', ti:'#1B2140', ti2:'#283050', ti3:'#F2A7B8', ac:'#FF8FA3', mt:'oro', mtT:'#8A4B12', base:'pixel',
-      disp:'Press Start 2P', scr:'', txt:'Fredoka', h3:'Fredoka', adorno:'pixel', forma:'pixel', boton:'0', cielo:1, radio:'0',
-      nm:['Press Start 2P','clamp(20px,5.8vw,30px)','normal',400,'uppercase','.02em',1.6],
+      disp:'Pixelify Sans', scr:'', txt:'Fredoka', h3:'Fredoka', adorno:'pixel', forma:'pixel', boton:'0', cielo:1, radio:'0',
+      nm:['Pixelify Sans','clamp(40px,11vw,58px)','normal',700,'uppercase','.04em',1.05],
       pk:['Fredoka','13px','uppercase','.3em','normal'],
-      h2:['14px','.04em','uppercase','normal',400],
+      h2:['24px','.04em','uppercase','normal',600],
       kk:['Fredoka','13px','uppercase','.22em','t'] },
     /* 2 · KIDS · cielo mágico: pastel rosa/lila/menta, nubes y arcoíris */
     unicornio: { nombre: 'Kids · Cielo mágico', pa:'#FFF5FA', pa2:'#F4E9FB', ti:'#3E1F35', ti2:'#4C2B43', ti3:'#C9B6E4', ac:'#A8E6CF', mt:'rosa', mtT:'#8E4A5C', base:'unicornio',
@@ -187,7 +187,7 @@
      si se pide un peso o una itálica que la familia no trae, Google Fonts
      devuelve 400 y NO CARGA NINGUNA de las del pedido. */
   var EJES = {
-    'Press Start 2P': '', 'Fredoka': ':wght@400;500;600', 'Sniglet': ':wght@400;800',
+    'Pixelify Sans': ':wght@400;600;700', 'Fredoka': ':wght@400;500;600', 'Sniglet': ':wght@400;800',
     'Sacramento': '', 'Quicksand': ':wght@400;500;600', 'Gloock': '', 'Pinyon Script': '',
     'Nunito': ':ital,wght@0,400;0,600;1,400', 'Cormorant': ':ital,wght@0,400;0,500;0,600;1,400',
     'Cormorant Garamond': ':ital,wght@0,400;0,500;1,400', 'Italiana': '',
@@ -201,7 +201,7 @@
     'Source Sans 3': ':ital,wght@0,400;0,600;1,400', 'DM Serif Display': ':ital@0;1',
     'Karla': ':ital,wght@0,400;0,600;1,400'
   };
-  var PILA = { 'Press Start 2P':'monospace', 'Fredoka':'system-ui,sans-serif', 'Sniglet':'system-ui,sans-serif',
+  var PILA = { 'Pixelify Sans':'monospace', 'Fredoka':'system-ui,sans-serif', 'Sniglet':'system-ui,sans-serif',
     'Quicksand':'system-ui,sans-serif', 'Nunito':'system-ui,sans-serif', 'Mulish':'system-ui,sans-serif',
     'Jost':'system-ui,sans-serif', 'Work Sans':'system-ui,sans-serif', 'DM Sans':'system-ui,sans-serif',
     'Baloo 2':'system-ui,sans-serif', 'Oswald':'"Arial Narrow",sans-serif', 'Source Sans 3':'system-ui,sans-serif',
@@ -719,6 +719,9 @@
 
     /* ---- 16 · Bodoni Moda: sin tamaño óptico automático (los perfiles finos
        desaparecen sobre la foto) */
+    /* ---- 17 · letras anchas (pixel): la cuenta regresiva y el título del pase
+       no pueden salirse del teléfono (medido el 19/10 en mateo-cumple5) */
+    if (tono() === 'pixel') A.push(P + '.portada .num{ font-size:clamp(26px,8vw,38px)!important; } ' + P + '.pase > .t{ font-size:clamp(26px,7.4vw,34px)!important; line-height:1.12!important; }');
     if (E.disp === 'Bodoni Moda') A.push(P + ':is(h2, h3, h4, .t, .v, .num, .it .h, #pv-names, #pv-names *){ font-optical-sizing:none!important; font-variation-settings:"opsz" 11!important; }');
     return A.join('\n');
   }
