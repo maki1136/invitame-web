@@ -371,7 +371,98 @@
       paleta:  ['#b06a7e', '#f7eef0', '#c9a0b0', '#8a4f60'],
       tipos:   ['xv'],
       oculto:  true
-    }
+    },
+    /* ---- 19/10/2026 · eventos nuevos (las que ya tienen portada con foto) ---- */
+    'fiesta-ejecutivo': {
+      nombre:  "Ejecutivo azul",
+      bajada:  "Azul ejecutivo con líneas de luz.",
+      muestra: 'conferencia-nexora',
+      foto:    '/formulario/disenos/conferencia-nexora.webp',
+      color:   '#122b53',
+      color2:  '#0c1e3b',
+      paleta:  ["#195c83", "#142346", "#0d0d4e", "#0f111f"],
+      tipos:   ["corporativo"]
+    },
+    'fiesta-gala': {
+      nombre:  "Gala art déco",
+      bajada:  "Negro y oro art déco para una noche de gala.",
+      muestra: 'gala-aurum',
+      foto:    '/formulario/disenos/gala-aurum.webp',
+      color:   '#30271a',
+      color2:  '#221c12',
+      paleta:  ["#63553f", "#372815", "#19160e", "#100f0a"],
+      tipos:   ["corporativo"]
+    },
+    'fiesta-brindis': {
+      nombre:  "Brindis de Año Nuevo",
+      bajada:  "Champán, burbujas y luces para cerrar el año.",
+      muestra: 'cena-fin-de-ano-veltra',
+      foto:    '/formulario/disenos/cena-fin-de-ano-veltra.webp',
+      color:   '#32312e',
+      color2:  '#242321',
+      paleta:  ["#4c5154", "#3d3e3e", "#26211a", "#161310"],
+      tipos:   ["corporativo"]
+    },
+    'celebra-toga': {
+      nombre:  "Toga y balanza",
+      bajada:  "Marfil, oro y la balanza de la toga.",
+      muestra: 'graduacion-derecho-valentina',
+      foto:    '/formulario/disenos/graduacion-derecho-valentina.webp',
+      color:   '#594f42',
+      color2:  '#40382f',
+      paleta:  ["#8d887d", "#645a4d", "#4e3e2a", "#2a2118"],
+      tipos:   ["graduacion"]
+    },
+    'fiesta-birrete': {
+      nombre:  "Birrete de gala",
+      bajada:  "Negro y oro, birrete de gala.",
+      muestra: 'graduacion-gala-2027',
+      foto:    '/formulario/disenos/graduacion-gala-2027.webp',
+      color:   '#3a2f1f',
+      color2:  '#292116',
+      paleta:  ["#7f6b4e", "#43301a", "#1a160e", "#0c0d09"],
+      tipos:   ["graduacion"]
+    },
+    'celebra-kinder': {
+      nombre:  "Pequeños graduados",
+      bajada:  "Azul cielo y crayones para los más pequeños.",
+      muestra: 'graduacion-kinder-2027',
+      foto:    '/formulario/disenos/graduacion-kinder-2027.webp',
+      color:   '#797e69',
+      color2:  '#575a4b',
+      paleta:  ["#a6a98c", "#919577", "#697469", "#414334"],
+      tipos:   ["graduacion"]
+    },
+    'celebra-generacion': {
+      nombre:  "Generación",
+      bajada:  "Cielo azul y birretes al aire.",
+      muestra: 'generacion-2023-2027',
+      foto:    '/formulario/disenos/generacion-2023-2027.webp',
+      color:   '#62707e',
+      color2:  '#46505a',
+      paleta:  ["#929ba0", "#60768b", "#596c7e", "#3c424c"],
+      tipos:   ["graduacion"]
+    },
+    'celebra-pixel': {
+      nombre:  "Pixel aventura",
+      bajada:  "Islas y globos pixel sobre cielo de atardecer.",
+      muestra: 'mateo-cumple5',
+      foto:    '/formulario/disenos/mateo-cumple5.webp',
+      color:   '#7b6961',
+      color2:  '#584b45',
+      paleta:  ["#a38e88", "#8f7c7a", "#75655d", "#45372a"],
+      tipos:   ["cumple"]
+    },
+    'celebra-unicornio': {
+      nombre:  "Cielo mágico",
+      bajada:  "Nubes, unicornio y destellos pastel.",
+      muestra: 'sofia-cumple6',
+      foto:    '/formulario/disenos/sofia-cumple6.webp',
+      color:   '#897f7d',
+      color2:  '#625b5a',
+      paleta:  ["#a09692", "#918685", "#847a78", "#695f5d"],
+      tipos:   ["cumple"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
