@@ -293,9 +293,9 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
-   "audio": "",
-   "onda": "",
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792435648/invitame/eventos/graduacion-gala-2027/graduacion-gala-2027-pasevoz-1.mp3",
+   "onda": "qj2mzpdb6bhghceffa80ehja70",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Generación 2023-2027",

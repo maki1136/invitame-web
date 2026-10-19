@@ -294,9 +294,9 @@
    "frasePor": "novios"
   },
   "pasevoz": {
-   "encendido": false,
-   "audio": "",
-   "onda": "",
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792435645/invitame/eventos/misxv-bruno/misxv-bruno-pasevoz-1.mp3",
+   "onda": "zhpjcsjeefurmxhpmkgnjgdht2",
    "over": "PASE DE INVITADO",
    "titulo": "Un mensaje para ti",
    "departe": "Bruno",
