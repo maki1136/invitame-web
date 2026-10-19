@@ -1460,7 +1460,7 @@ window.SOBRES_INVITAME = {
   'xfold-rosa-prueba': { nombre: "Prueba · xfold rosa con lacre de cisnes, solapas en X que se abren y dejan la tarjeta con el escudo de cisnes en relieve (video)",
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sobres-nuevos/xfold-rosa-escudo-19-10.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sobres-nuevos/xfold-rosa-escudo-19-10.jpg",
-    color: "#FCEAE0", luz: 4.8, luzColor: "#FFFFFF", luzFundido: 1.4, empalme: "foto" },
+    color: "#FCEAE0", luz: 5.9, luzColor: "#FFFFFF", luzFundido: 0.8, empalme: "blanco" },
   'puertas-rosas-prueba': { nombre: "Prueba · puertas de rosas en relieve con lacre de cisnes; se abren a los lados y la carta rosa baja despacio y sale de la pantalla, y debajo aparece la foto de la invitación (video)",
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sobres-nuevos/puertas-rosas-19-10f.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sobres-nuevos/puertas-rosas-19-10f.jpg",
