@@ -291,10 +291,17 @@
     e.querySelector('b').textContent = m.nombre;
     e.querySelector('a').href = '/i/?e=' + encodeURIComponent(m.muestra);
   }
+  /* ★ 19/10/2026 — UNA FILA POR TIPO (la lista vive en /muestras/catalogo.js,
+     window.MUESTRAS_TIPOS). Sólo se arman las filas que tienen muestras. Con
+     «¿Qué festejas?» elegido se ve sólo esa fila; si ese tipo todavía no tiene
+     muestras (u «Otro evento»), se ven todas, como antes con bautizo y cumple. */
   function tarjetasModelos(caja) {
     caja.innerHTML = '';
-    if (TIPO !== 'xv') filaDe('boda', 'Boda', caja);
-    if (TIPO !== 'boda') filaDe('xv', 'XV años', caja);
+    var tipos = (window.MUESTRAS_TIPOS || [['boda', 'Boda'], ['xv', 'XV años']]).filter(function (t) {
+      return window.muestrasDeTipo ? window.muestrasDeTipo(t[0]).length : (t[0] === 'boda' || t[0] === 'xv');
+    });
+    var solo = tipos.filter(function (t) { return t[0] === TIPO; });
+    (solo.length ? solo : tipos).forEach(function (t) { filaDe(t[0], t[1], caja); });
     /* que la elegida quede a la vista en su fila */
     var on = caja.querySelector('.dis-m.on');
     if (on && on.parentNode) on.parentNode.scrollLeft = Math.max(0, on.offsetLeft - 12);

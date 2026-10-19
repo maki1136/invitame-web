@@ -21,16 +21,19 @@
   const formToken=((new URLSearchParams(location.search).get('f')||'').match(/^[a-z0-9]{12,40}$/i)||[''])[0];
 
   // ---- Tipo de evento: el título sugerido y los nombres ----
-  const TITDEF={boda:'Nuestra Boda',xv:'Mis XV',bautismo:'Mi Bautizo',comunion:'Mi Primera Comunión',cumple:'Mi Cumpleaños',otro:''};
+  const TITDEF={boda:'Nuestra Boda',xv:'Mis XV',bautismo:'Mi Bautizo',comunion:'Mi Primera Comunión',cumple:'Mi Cumpleaños',
+                babyshower:'Baby Shower',graduacion:'Mi Graduación',corporativo:'',otro:''};
   function aplicarTipo(){
     const t=$('tipo').value;
     $('kick').placeholder=TITDEF[t]||'Título';
     if(!$('kick').dataset.touched) $('kick').value=TITDEF[t]||'';
     /* «Nombre 2» sólo se esconde en los eventos de UNA persona */
-    const solo1=(t==='xv'||t==='bautismo'||t==='comunion'||t==='cumple');
+    /* ★ 19/10/2026: graduación y corporativo también van con UN nombre (el
+       graduado, o la empresa / el evento). El baby shower, con los dos papás. */
+    const solo1=(t==='xv'||t==='bautismo'||t==='comunion'||t==='cumple'||t==='graduacion'||t==='corporativo');
     $('caja-n2').style.display=solo1?'none':'';
     if(solo1) $('n2').value='';
-    $('l-n1').firstChild.textContent = solo1 ? 'Nombre ' : 'Nombre 1 ';
+    $('l-n1').firstChild.textContent = t==='corporativo' ? 'Empresa o nombre del evento ' : (solo1 ? 'Nombre ' : 'Nombre 1 ');
     /* las filas de diseños se filtran SÓLO si la persona eligió el tipo a mano:
        el selector viene en «Boda» de entrada y una quinceañera, que ve los
        modelos ANTES que esta pregunta, se quedaría sin ver los de XV */
@@ -259,13 +262,16 @@
     'hotDesc','hoteles','itinerario','persFrase','dressTitulo','dress','regTitulo','regalos','regClabe','regTitular','regBanco',
     'galTitulo','galFrase',
     'cfTitulo','cfFrase','rsvpLimite','cfMail','cfWsp1','cfWsp1n','cfWsp2','cfWsp2n','fraseFinal','textoFinal',
-    'musica','igHashtag','igUser','videoUrl','spotifyUrl','persoTxt','obs','cnom','cwsp','cmail'];
+    'musica','igHashtag','igUser','videoUrl','spotifyUrl','persoTxt','obs','cnom','cwsp','cmail',
+    'menuTitulo','menuFrase','patTitulo'];
   function restric(){ const r=document.querySelector('input[name=rsvpRestric]:checked'); return !!(r&&r.value==='si'); }
   function galEstilo(){ const r=document.querySelector('input[name=galEstilo]:checked'); return r?r.value:'Slider'; }
   function guardarBorrador(){
     try{
       const d={_t:Date.now(), _fotos:FOTOS, _gal:galURLs, _insp:inspURLs, _restric:restric(),
-               _galEstilo:galEstilo(), _dinsp:dressInspURLs, _colSi:COLORES.si, _colNo:COLORES.no};
+               _galEstilo:galEstilo(), _dinsp:dressInspURLs, _colSi:COLORES.si, _colNo:COLORES.no,
+               /* ★ 19/10: menú, avisos, patrocinadores y preguntas extra (/crear-secciones.js) */
+               _secc:(window.CREAR_SECCIONES?window.CREAR_SECCIONES.borrador():null)};
       CAMPOS.forEach(k=>{ const e=$(k); if(e) d[k]=e.value; });
       d._inv=[...document.querySelectorAll('#guests .rowinv')].map(r=>{ const i=r.querySelectorAll('input'); return [i[0].value,i[1].value,i[2].value]; }).filter(x=>x[0]);
       d._pers=[...document.querySelectorAll('#personas .rowpers')].map(r=>{ const i=r.querySelectorAll('input[type=text]'); return [i[0].value,i[1].value,r.dataset.foto||'']; }).filter(x=>x[0]||x[2]);
@@ -290,6 +296,7 @@
     if(d._inv&&d._inv.length){ $('guests').innerHTML=''; d._inv.forEach(g=>addGuest(g[0]||'',g[1]||'',g[2]||'')); }
     if(d._pers&&d._pers.length){ $('personas').innerHTML=''; d._pers.forEach(p=>addPersona(p[0]||'',p[1]||'',p[2]||'')); }
     if(d._mesas&&d._mesas.length){ $('mesas').innerHTML=''; d._mesas.forEach(m=>addMesa(m[0]||'',m[1]||'')); }
+    if(d._secc&&window.CREAR_SECCIONES) window.CREAR_SECCIONES.poner(d._secc);
     return true;
   }
   document.addEventListener('input', e=>{ if(e.target&&e.target.closest('.card')) guardarBorrador(); });
@@ -365,6 +372,9 @@
     const invitados=[...document.querySelectorAll('#guests .rowinv')].map(r=>{const i=r.querySelectorAll('input');return {n:i[0].value.trim(),p:i[1].value.trim()||'1',m:i[2].value.trim()||'-'};}).filter(g=>g.n);
     const elegido=(window.CREAR_DISENO && window.CREAR_DISENO.elegido()) || tpl || '';
     const M=window.muestraDe?window.muestraDe(elegido):null;
+    /* ★ 19/10/2026 — las secciones nuevas (/crear-secciones.js). Cada una viaja
+       SÓLO si el cliente cargó algo: vacías no se mandan (ver abajo). */
+    const SEC=(window.CREAR_SECCIONES && window.CREAR_SECCIONES.leer()) || {};
     const data={
       estado:'pendiente', creado:serverTimestamp(),
       tpl:elegido, tplNombre:(elegido==='personalizado'?'Diseño personalizado':(M?M.nombre:'')),
@@ -396,11 +406,16 @@
       invitados, observaciones:$('obs').value.trim(),
       contactoNombre:$('cnom').value.trim(), contactoWsp:$('cwsp').value.trim(), contactoEmail:$('cmail').value.trim(),
       pasevozAudio:pasevozURL, pasevozOnda,
+      menu:SEC.menu, avisos:SEC.avisos, patrocinadores:SEC.patrocinadores, rsvpPreguntas:SEC.rsvpPreguntas,
       formToken:formToken,
       origen:'formulario-cliente'
     };
+    /* ⚠️ Firestore NO acepta `undefined`: lo que no se cargó, no se manda */
+    SECCIONES_NUEVAS.forEach(k=>{ if(data[k]==null) delete data[k]; });
     return data;
   }
+
+  const SECCIONES_NUEVAS=['menu','avisos','patrocinadores','rsvpPreguntas'];
 
   /* lo que este archivo le presta a /crear-diseno.js */
   window.CREAR = { leerFormulario: leerFormulario, guardarBorrador: guardarBorrador };
@@ -481,7 +496,17 @@
     try{
       await ready();
       const ref=doc(collection(window.INV.db,'inv_solicitudes'));
-      await setDoc(ref, data);
+      /* ★ 19/10/2026 — si la regla de inv_solicitudes todavía no admite las
+         claves nuevas (menu, avisos, patrocinadores, rsvpPreguntas), la
+         solicitud se guarda SIN ellas: el pedido no se puede perder. La
+         invitación las recibe igual, porque se arma con `data` (abajo). */
+      try{ await setDoc(ref, data); }
+      catch(e1){
+        const sin=Object.assign({},data); let habia=false;
+        SECCIONES_NUEVAS.forEach(k=>{ if(k in sin){ delete sin[k]; habia=true; } });
+        if(!habia) throw e1;
+        await setDoc(ref, sin);
+      }
 
       /* ===== Y LA INVITACIÓN SE CREA SOLA  (8/9/2026) =====================
          El mapeo es el MISMO que usa el panel (/solicitud-a-evento.js) y el

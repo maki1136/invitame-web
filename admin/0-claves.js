@@ -224,3 +224,51 @@
     "Color 1 titulo trivia:": "c_color-1-titulo-trivia",
     "Color 2 titulo trivia:": "c_color-2-titulo-trivia"
   };
+
+/* ===== LOS RÓTULOS DE LOS CAMPOS QUE VIVEN ADENTRO DE `fx`  (19/10/2026) =======
+
+   Los bloques de /efectos/panel-*.js escriben DIRECTO en `D.fx.<algo>`: no
+   pasan por `claveDe()`, así que su casillero NO depende del rótulo (no tienen
+   el problema de arriba). Igual van acá, en UNA lista, para que Jazmín y quien
+   toque el panel encuentren en un solo lugar qué campo escribe qué.
+
+   Izquierda: la ruta dentro de `fx` (o la clave del evento). Derecha: el
+   rótulo que se ve en el panel. El rótulo se puede corregir; la ruta NO (es
+   donde quedan guardados los datos).
+
+   Secciones nuevas para las muestras de eventos nuevos (kids, bautizo,
+   comunión, cumpleaños, baby shower, graduación, corporativo):
+     · fx.menu            → /efectos/menu.js           + panel-menu.js
+     · fx.avisos          → /efectos/avisos.js         + panel-avisos.js
+     · fx.patrocinadores  → /efectos/patrocinadores.js + panel-patrocinadores.js
+     · fx.rsvp.preguntas  → /efectos/rsvp-preguntas.js + panel-rsvp-preguntas.js
+     · fx.corporativo     → /efectos/tipos-evento.js (casillas bajo «Tipo de evento:»)
+
+   «Tipo de evento:» (tipoEvento) acepta: boda · xv · cumple · bautismo ·
+   comunion · babyshower · graduacion · corporativo · otro. La tabla de textos
+   de cada tipo vive en /efectos/tipos-evento.js (window.INVTIPOS).
+   ============================================================================ */
+window.INV_ROTULOS_FX = {
+  'menu':                     'Menú por tiempos',
+  'menu.encendido':           'Mostrar el menú',
+  'menu.titulo':              'Título del menú',
+  'menu.frase':               'Frase del menú',
+  'menu.tiempos':             'Tiempos (nombre y descripción)',
+
+  'avisos':                   'Avisos importantes',
+  'avisos.encendido':         'Mostrar los avisos',
+  'avisos.titulo':            'Título de los avisos',
+  'avisos.items':             'Avisos (ícono y texto)',
+
+  'patrocinadores':           'Patrocinadores',
+  'patrocinadores.encendido': 'Mostrar los patrocinadores',
+  'patrocinadores.titulo':    'Título de patrocinadores',
+  'patrocinadores.logos':     'Logos (imagen, nombre y link)',
+
+  'rsvp.preguntas':           'Preguntas extra al confirmar',
+  'rsvp.preguntas.lista':     'Preguntas (texto y tipo de respuesta)',
+
+  'corporativo':              'Evento corporativo',
+  'corporativo.trivia':       'Mostrar la trivia',
+  'corporativo.filtro':       'Mostrar el filtro de la fiesta'
+};

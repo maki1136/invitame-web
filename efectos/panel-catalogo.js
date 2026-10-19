@@ -101,7 +101,10 @@
     var msg = document.createElement('div'); msg.className = 'cat-m'; caja.appendChild(msg);
 
     var filtro = 'todos', antes = null;
-    [['todos', 'Todos'], ['boda', 'Boda'], ['xv', 'XV']].forEach(function (f) {
+    /* 19/10/2026: un filtro por cada tipo que tenga muestras (muestras/catalogo.js) */
+    [['todos', 'Todos']].concat((window.MUESTRAS_TIPOS || [['boda', 'Boda'], ['xv', 'XV']]).filter(function (t) {
+      return !window.muestrasDeTipo || window.muestrasDeTipo(t[0]).length;
+    })).forEach(function (f) {
       var b = document.createElement('button'); b.type = 'button'; b.textContent = f[1]; b.dataset.f = f[0];
       b.onclick = function () { filtro = f[0]; pintar(); };
       filtros.appendChild(b);

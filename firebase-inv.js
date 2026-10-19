@@ -305,6 +305,20 @@ const INV = {
     return true;
   },
 
+  /* ★ 19/10/2026 — LAS PREGUNTAS EXTRA DE LA CONFIRMACIÓN (fx.rsvp.preguntas).
+     Las respuestas viajan en UN campo de texto, `rsvpExtras` (≤ 600 letras,
+     JSON: [["¿Empresa?","Nexora"],["¿Cargo?","Directora"]]).
+     ⚠️ SE GUARDA APARTE, DESPUÉS de saveRSVP y nunca junto con él: si la regla
+        de Firestore todavía no deja escribir `rsvpExtras`, falla SÓLO esto y
+        el sí o el no del invitado ya quedó guardado. Lo llama
+        /efectos/rsvp-preguntas.js con su propio catch. */
+  async saveRSVPExtras(slug, token, texto) {
+    const t = String(texto == null ? '' : texto).slice(0, 600);
+    if (!t) return false;
+    await updateDoc(doc(db, GU, gid(slug, token)), { rsvpExtras: t });
+    return true;
+  },
+
   // ---- Puerta: descuenta 1 uso de forma segura (anti-passback) ----
   async marcarUso(slug, token) {
     const ref = doc(db, GU, gid(slug, token));

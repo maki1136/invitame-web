@@ -61,8 +61,8 @@
    con `foto`: la captura REAL de su portada (/formulario/disenos/<slug>.webp,
    sacada de la invitación publicada el 15/10). El formulario dibuja las
    tarjetas con esa foto.
-   · `tipos` filtra qué ve el cliente según lo que festeja (boda / xv). Para
-     bautizo, cumpleaños y otros se muestran todas.
+   · `tipos` filtra qué ve el cliente según lo que festeja. Ver «UNA FILA POR
+     TIPO DE EVENTO» (19/10/2026) al final: ya acepta todos los tipos.
    · `oculto: true` = queda para leer pedidos viejos que la eligieron, pero ya
      no se ofrece.
    · Si se agrega una muestra a la web, se agrega acá con su captura.
@@ -372,6 +372,40 @@
       tipos:   ['xv'],
       oculto:  true
     }
+  };
+
+  /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
+     `tipos` acepta los `tipoEvento` REALES de la invitación (los mismos de
+     /efectos/tipos-evento.js): boda · xv · cumple · bautismo · comunion ·
+     babyshower · graduacion · corporativo. Las muestras de niños («kids») son
+     `cumple`. Una muestra puede ir en varias filas (Perlas: boda y xv).
+     El formulario (/crear-diseno.js) arma una fila por cada tipo de esta lista
+     que tenga al menos una muestra visible, en este orden; con «¿Qué
+     festejas?» elegido, muestra sólo esa fila (si está vacía, todas).
+
+     FORMATO DE UNA ENTRADA NUEVA (las 21 de eventos nuevos, cuando tengan
+     su captura en /formulario/disenos/<slug>.webp):
+       'celebra-pixel': {
+         nombre:  "Kids · Pixel aventura",
+         bajada:  "Nubes y globos pixel sobre cielo claro.",
+         muestra: 'mateo-cumple5',
+         foto:    '/formulario/disenos/mateo-cumple5.webp',
+         color:   '#…',  color2: '#…',  paleta: ["#…","#…","#…","#…"],
+         tipos:   ["cumple"]
+       },
+  */
+  window.MUESTRAS_TIPOS = [
+    ['boda', 'Boda'], ['xv', 'XV años'], ['cumple', 'Cumpleaños'],
+    ['bautismo', 'Bautizo'], ['comunion', 'Primera comunión'],
+    ['babyshower', 'Baby shower'], ['graduacion', 'Graduación'],
+    ['corporativo', 'Corporativo']
+  ];
+  /* las muestras visibles de un tipo (ids) */
+  window.muestrasDeTipo = function (t) {
+    var m = window.MUESTRAS_INVITAME || {};
+    return Object.keys(m).filter(function (id) {
+      return !m[id].oculto && (m[id].tipos || []).indexOf(t) >= 0;
+    });
   };
 
   /* atajo comodo para los tres que la usan */

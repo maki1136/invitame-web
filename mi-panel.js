@@ -51,6 +51,14 @@
   let arrastrando = null;
 
   const num = v => { const n=parseInt(v,10); return isNaN(n)?0:n; };
+  /* ★ 19/10/2026 — las respuestas a las PREGUNTAS EXTRA de la confirmación
+     (fx.rsvp.preguntas). Las guarda /efectos/rsvp-preguntas.js en `rsvpExtras`,
+     un texto JSON: [["¿Empresa?","Nexora"],["¿Cargo?","Directora"]]. */
+  const extrasDe = g => {
+    if(!g || !g.rsvpExtras) return [];
+    try{ const a=JSON.parse(g.rsvpExtras); if(Array.isArray(a)) return a.filter(p=>Array.isArray(p)&&p[1]).map(p=>[String(p[0]||''),String(p[1])]); }catch(e){}
+    return [['Respuestas', String(g.rsvpExtras)]];
+  };
   const personasDe = g => (g.rsvp==='confirmado')
         ? (num(g.rsvpPersonas) || num(g.pases))
         : (g.rsvp==='rechazado' ? 0 : num(g.pases));
@@ -377,7 +385,8 @@
             '<td class="ocultar-chico" style="max-width:210px;color:#6b6058;font-size:12.5px">'+
               (g.rsvpMensaje?'<span title="'+esc(g.rsvpMensaje)+'">'+esc(String(g.rsvpMensaje).slice(0,48))+(String(g.rsvpMensaje).length>48?'…':'')+'</span>':'')+
               /* ★ 15/10/2026: la restricción alimentaria que contestó al confirmar */
-              (g.rsvpRestriccion?'<div style="margin-top:3px;color:#8a4b2c;font-weight:700" title="Restricción alimentaria">Restricción: '+esc(String(g.rsvpRestriccion).slice(0,60))+'</div>':'')+'</td>'+
+              (g.rsvpRestriccion?'<div style="margin-top:3px;color:#8a4b2c;font-weight:700" title="Restricción alimentaria">Restricción: '+esc(String(g.rsvpRestriccion).slice(0,60))+'</div>':'')+
+              extrasDe(g).map(p=>'<div style="margin-top:3px" title="'+esc(p[0])+'"><b>'+esc(p[0].slice(0,40))+'</b> '+esc(p[1].slice(0,60))+'</div>').join('')+'</td>'+
             (conVoz
               ? '<td><button class="pv-mic'+(g.pasevozAudio?' tiene':'')+'" data-pvgrab="'+esc(g.token)+'" '+
                 'title="'+(g.pasevozAudio?'Ya tiene un mensaje de voz':'Grabarle un mensaje de voz')+'"></button></td>'
@@ -504,7 +513,14 @@
         '<div style="margin-top:8px;font-size:13.5px;line-height:1.6">'+
         res.map(g=>'<div><b>'+esc(g.nombre)+'</b>: '+esc(g.rsvpRestriccion)+'</div>').join('')+'</div></div>'
       : '';
-    $('vista').innerHTML = cajaRes + (con.length
+    /* ★ 19/10/2026: y las respuestas a las preguntas extra */
+    const conEx = GENTE.filter(g=>extrasDe(g).length);
+    const cajaEx = conEx.length
+      ? '<div class="card" style="margin-bottom:14px"><b>Respuestas a tus preguntas ('+conEx.length+')</b>'+
+        '<div style="margin-top:8px;font-size:13.5px;line-height:1.6">'+
+        conEx.map(g=>'<div><b>'+esc(g.nombre)+'</b>: '+extrasDe(g).map(p=>esc(p[0])+' '+esc(p[1])).join(' · ')+'</div>').join('')+'</div></div>'
+      : '';
+    $('vista').innerHTML = cajaRes + cajaEx + (con.length
       ? '<div class="grillaMsj">'+con.map(g=>{const e=estadoDe(g);
           return '<div class="msj"><div class="de">'+esc(g.nombre)+'</div>'+
             '<div style="margin-bottom:9px"><span class="chip '+e+'">'+
@@ -671,11 +687,15 @@
     a.download = nombre; a.click(); URL.revokeObjectURL(a.href);
   }
   function bajarLista(){
+    /* ★ 19/10/2026: una columna por cada pregunta extra que contestó alguien */
+    const lista = filtrada(), preg = [];
+    lista.forEach(g=>extrasDe(g).forEach(p=>{ if(preg.indexOf(p[0])<0) preg.push(p[0]); }));
     bajarCSV('invitados-'+SLUG+'.csv',
-      [['Invitado','Lugares','Vienen','Mesa','WhatsApp','Usos','Estado','Mensaje','Restricción alimentaria']].concat(
-        filtrada().map(g=>{ const e=estadoDe(g);
+      [['Invitado','Lugares','Vienen','Mesa','WhatsApp','Usos','Estado','Mensaje','Restricción alimentaria'].concat(preg)].concat(
+        lista.map(g=>{ const e=estadoDe(g), ex=extrasDe(g);
           return [g.nombre, num(g.pases), personasDe(g), nombreMesa(mesaDe(g)), g.tel||'', num(g.usos)+'/'+(num(g.usosMax)||num(g.pases)),
-                  e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder'), g.rsvpMensaje||'', g.rsvpRestriccion||'']; })));
+                  e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder'), g.rsvpMensaje||'', g.rsvpRestriccion||'']
+                 .concat(preg.map(q=>{ const p=ex.find(x=>x[0]===q); return p?p[1]:''; })); })));
   }
   function bajarMesas(){
     const filas=[['Mesa','Invitado','Personas','Estado']];
