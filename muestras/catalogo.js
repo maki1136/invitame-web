@@ -473,6 +473,46 @@
       paleta:  ["#4b3f33", "#1a1710", "#16120b", "#110e09"],
       tipos:   ["xv"]
     },
+    'celebra-osita': {
+      nombre:  "Osita coronada",
+      bajada:  "Osita con coronita, globos y tonos crema.",
+      muestra: 'babyshower-isabella',
+      foto:    '/formulario/disenos/babyshower-isabella.webp',
+      color:   '#8d7766',
+      color2:  '#635347',
+      paleta:  ["#c0b0a6", "#a58f7f", "#886c54", "#48321d"],
+      tipos:   ["babyshower"]
+    },
+    'fiesta-noche': {
+      nombre:  "Noche de oro",
+      bajada:  "Negro mate, oro y estrellas que titilan.",
+      muestra: 'mis50-ricardo',
+      foto:    '/formulario/disenos/mis50-ricardo.webp',
+      color:   '#282522',
+      color2:  '#1c1a18',
+      paleta:  ["#4c4033", "#262420", "#1c1d1c", "#0e1218"],
+      tipos:   ["cumple"]
+    },
+    'fiesta-urbano': {
+      nombre:  "Urbano 18",
+      bajada:  "Ciudad de noche y haces de luz.",
+      muestra: 'mis18-leo',
+      foto:    '/formulario/disenos/mis18-leo.webp',
+      color:   '#32302d',
+      color2:  '#232220',
+      paleta:  ["#67615c", "#2c2c2b", "#1d1d1b", "#141411"],
+      tipos:   ["cumple"]
+    },
+    'celebra-grises': {
+      nombre:  "Treinta en grises",
+      bajada:  "Gris piedra, minimal y plata.",
+      muestra: 'mis30-martin',
+      foto:    '/formulario/disenos/mis30-martin.webp',
+      color:   '#7d7469',
+      color2:  '#585149',
+      paleta:  ["#b8b6b2", "#92897f", "#6a5d4d", "#433526"],
+      tipos:   ["cumple"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
