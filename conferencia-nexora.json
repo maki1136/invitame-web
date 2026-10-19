@@ -308,32 +308,32 @@
    "logos": [
     {
      "nombre": "Kaltia Data",
-     "img": "",
+     "img": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-logo-1",
      "link": ""
     },
     {
      "nombre": "Ruvenza Cloud",
-     "img": "",
+     "img": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-logo-2",
      "link": ""
     },
     {
      "nombre": "Grupo Ostrel",
-     "img": "",
+     "img": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-logo-3",
      "link": ""
     },
     {
      "nombre": "Lumbra Analytics",
-     "img": "",
+     "img": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-logo-4",
      "link": ""
     },
     {
      "nombre": "Tecnova Sur",
-     "img": "",
+     "img": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-logo-5",
      "link": ""
     },
     {
      "nombre": "Vireo Consulting",
-     "img": "",
+     "img": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-logo-6",
      "link": ""
     }
    ]
