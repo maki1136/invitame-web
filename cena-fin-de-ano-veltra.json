@@ -217,8 +217,9 @@
    "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-cierre"
   },
   "fondo": {
-   "tipo": "imagen",
-   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-brindis-base.jpg",
+   "tipo": "video",
+   "url": "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/eventos/ev-brindis-fondo.mp4",
+   "poster": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-brindis-base.jpg",
    "donde": "marco",
    "paso": 0.85,
    "velo": 0.08,
