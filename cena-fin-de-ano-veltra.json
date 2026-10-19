@@ -249,7 +249,8 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-fiestacam-1910"
   },
   "filtro": {
    "encendido": false

@@ -270,12 +270,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis18-leo/mis18-leo-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Leo · 18",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis18-leo/mis18-leo-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -286,7 +289,11 @@
    "departe": "Leo",
    "fecha": "30 · 10 · 2027",
    "hora": "21:00",
-   "talon": "MIS 18"
+   "talon": "MIS 18",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436903/invitame/eventos/mis18-leo/mis18-leo-pase-1910b.png",
+   "papel": "#151f28",
+   "tinta": "#f4ede2",
+   "acento": "#e0b53a"
   },
   "sobre": {
    "modelo": "ev-urbano",

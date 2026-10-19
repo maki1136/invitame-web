@@ -127,7 +127,7 @@
   {
    "q": "¿Cuál es mi platillo favorito?",
    "o": [
-    "Asado de boda",
+    "Asado zacatecano",
     "Enchiladas zacatecanas",
     "Birria"
    ],
@@ -212,7 +212,7 @@
     {
      "h": "02:30",
      "t": "Tornafiesta",
-     "d": "Asado de boda en gordita."
+     "d": "Asado zacatecano en gordita."
     },
     {
      "h": "04:00",
@@ -273,12 +273,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis30-martin/mis30-martin-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Martín · 30",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis30-martin/mis30-martin-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -289,7 +292,11 @@
    "departe": "Martín",
    "fecha": "24 · 04 · 2027",
    "hora": "21:00",
-   "talon": "MIS 30"
+   "talon": "MIS 30",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436878/invitame/eventos/mis30-martin/mis30-martin-pase-1910.png",
+   "papel": "#e3e1dc",
+   "tinta": "#2e2620",
+   "acento": "#5d636b"
   },
   "sobre": {
    "modelo": "ev-grises",

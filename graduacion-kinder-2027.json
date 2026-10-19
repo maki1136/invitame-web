@@ -291,12 +291,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/graduacion-kinder-2027/graduacion-kinder-2027-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "¡Nos vamos a primaria!",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro de la generación",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/graduacion-kinder-2027/graduacion-kinder-2027-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -307,7 +310,11 @@
    "departe": "Miss Daniela",
    "fecha": "03 · 07 · 2027",
    "hora": "10:00",
-   "talon": "¡NOS VAMOS A PRIMARIA!"
+   "talon": "¡NOS VAMOS A PRIMARIA!",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436877/invitame/eventos/graduacion-kinder-2027/graduacion-kinder-2027-pase-1910.png",
+   "papel": "#84cbe2",
+   "tinta": "#2e2620",
+   "acento": "#2f5d8a"
   },
   "sobre": {
    "modelo": "ev-kinder",

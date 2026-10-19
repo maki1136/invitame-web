@@ -272,12 +272,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Nico · Edición 18",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -288,7 +291,11 @@
    "departe": "Nicolás",
    "fecha": "21 · 08 · 2027",
    "hora": "21:00",
-   "talon": "MIS 18"
+   "talon": "MIS 18",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436875/invitame/eventos/mis18-nicolas/mis18-nicolas-pase-1910.png",
+   "papel": "#d6ad56",
+   "tinta": "#2e2620",
+   "acento": "#1a1a1a"
   },
   "sobre": {
    "modelo": "ev-editorial",

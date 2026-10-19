@@ -278,12 +278,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/comunion-tomas/comunion-tomas-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Primera Comunión · Tomás",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro de la comunión",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/comunion-tomas/comunion-tomas-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -294,7 +297,11 @@
    "departe": "Tomás",
    "fecha": "22 · 05 · 2027",
    "hora": "11:00",
-   "talon": "MI PRIMERA COMUNIÓN"
+   "talon": "MI PRIMERA COMUNIÓN",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436874/invitame/eventos/comunion-tomas/comunion-tomas-pase-1910.png",
+   "papel": "#fcf8ec",
+   "tinta": "#2e2620",
+   "acento": "#7a5530"
   },
   "sobre": {
    "modelo": "ev-olivo",

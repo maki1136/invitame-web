@@ -285,12 +285,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/graduacion-gala-2027/graduacion-gala-2027-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Generación 2023-2027",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro de la generación",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/graduacion-gala-2027/graduacion-gala-2027-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -301,7 +304,11 @@
    "departe": "Generación 2023-2027",
    "fecha": "13 · 11 · 2027",
    "hora": "17:00",
-   "talon": "GRADUACIÓN 2027"
+   "talon": "GRADUACIÓN 2027",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436877/invitame/eventos/graduacion-gala-2027/graduacion-gala-2027-pase-1910.png",
+   "papel": "#0d0d0e",
+   "tinta": "#f4ede2",
+   "acento": "#d4b04a"
   },
   "sobre": {
    "modelo": "ev-birrete",

@@ -286,12 +286,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/misxv-bruno/misxv-bruno-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Mis XV · Bruno",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro de mis XV",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/misxv-bruno/misxv-bruno-filtro-1910b"
   },
   "pasevoz": {
    "encendido": true,
@@ -302,7 +305,11 @@
    "departe": "Bruno",
    "fecha": "07 · 08 · 2027",
    "hora": "19:00",
-   "talon": "MIS XV"
+   "talon": "MIS XV",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436878/invitame/eventos/misxv-bruno/misxv-bruno-pase-1910.png",
+   "papel": "#262322",
+   "tinta": "#f4ede2",
+   "acento": "#d4b04a"
   },
   "sobre": {
    "modelo": "ev-bokeh",

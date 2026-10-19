@@ -289,12 +289,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mateo-cumple5/mateo-cumple5-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Nivel 5 · Mateo",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mateo-cumple5/mateo-cumple5-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -305,7 +308,11 @@
    "departe": "Mamá de Mateo",
    "fecha": "15 · 05 · 2027",
    "hora": "14:00",
-   "talon": "MI CUMPLE Nº 5"
+   "talon": "MI CUMPLE Nº 5",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436872/invitame/eventos/mateo-cumple5/mateo-cumple5-pase-1910.png",
+   "papel": "#cbc4e3",
+   "tinta": "#2e2620",
+   "acento": "#7a5c22"
   },
   "sobre": {
    "modelo": "ev-pixel",

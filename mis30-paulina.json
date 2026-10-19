@@ -272,12 +272,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis30-paulina/mis30-paulina-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Hello 30 · Pau",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis30-paulina/mis30-paulina-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -288,7 +291,11 @@
    "departe": "Paulina",
    "fecha": "18 · 09 · 2027",
    "hora": "19:30",
-   "talon": "MIS 30 AÑOS"
+   "talon": "MIS 30 AÑOS",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436876/invitame/eventos/mis30-paulina/mis30-paulina-pase-1910.png",
+   "papel": "#fae0d9",
+   "tinta": "#2e2620",
+   "acento": "#9a4a64"
   },
   "sobre": {
    "modelo": "ev-rosegold",

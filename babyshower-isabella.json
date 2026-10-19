@@ -287,12 +287,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/babyshower-isabella/babyshower-isabella-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Esperando a Isabella",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del baby shower",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/babyshower-isabella/babyshower-isabella-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -303,7 +306,11 @@
    "departe": "Isabella",
    "fecha": "10 · 04 · 2027",
    "hora": "13:00",
-   "talon": "BABY SHOWER"
+   "talon": "BABY SHOWER",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436873/invitame/eventos/babyshower-isabella/babyshower-isabella-pase-1910.png",
+   "papel": "#ffffff",
+   "tinta": "#2e2620",
+   "acento": "#7a5c22"
   },
   "sobre": {
    "modelo": "ev-osita",

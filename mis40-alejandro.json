@@ -272,12 +272,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Alex · 40",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -288,7 +291,11 @@
    "departe": "Alejandro",
    "fecha": "24 · 07 · 2027",
    "hora": "21:00",
-   "talon": "MIS 40"
+   "talon": "MIS 40",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436875/invitame/eventos/mis40-alejandro/mis40-alejandro-pase-1910.png",
+   "papel": "#20201f",
+   "tinta": "#f4ede2",
+   "acento": "#c9ccd4"
   },
   "sobre": {
    "modelo": "ev-plata",

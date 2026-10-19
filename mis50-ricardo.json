@@ -277,12 +277,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis50-ricardo/mis50-ricardo-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Ricardo · 50 de oro",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis50-ricardo/mis50-ricardo-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -293,7 +296,11 @@
    "departe": "Ricardo",
    "fecha": "23 · 10 · 2027",
    "hora": "20:30",
-   "talon": "MIS 50 AÑOS"
+   "talon": "MIS 50 AÑOS",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436875/invitame/eventos/mis50-ricardo/mis50-ricardo-pase-1910.png",
+   "papel": "#040309",
+   "tinta": "#f4ede2",
+   "acento": "#d4b04a"
   },
   "sobre": {
    "modelo": "ev-noche",

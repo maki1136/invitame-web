@@ -277,12 +277,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "Caro · 40 & fabulous",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -293,7 +296,11 @@
    "departe": "Carolina",
    "fecha": "13 · 03 · 2027",
    "hora": "20:30",
-   "talon": "40 & FABULOUS"
+   "talon": "40 & FABULOUS",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436874/invitame/eventos/mis40-carolina/mis40-carolina-pase-1910.png",
+   "papel": "#f4e0dc",
+   "tinta": "#2e2620",
+   "acento": "#7a5c22"
   },
   "sobre": {
    "modelo": "ev-marmol",

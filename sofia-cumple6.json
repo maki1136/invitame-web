@@ -291,12 +291,15 @@
   "galeria": {
    "encendido": true,
    "muestra": true,
-   "vidriera": false
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/sofia-cumple6/sofia-cumple6-fiestacam-1910"
   },
   "filtro": {
    "encendido": true,
    "frase": "El mágico cumple de Sofía",
-   "frasePor": "novios"
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/sofia-cumple6/sofia-cumple6-filtro-1910"
   },
   "pasevoz": {
    "encendido": true,
@@ -307,7 +310,11 @@
    "departe": "Mamá de Sofía",
    "fecha": "19 · 06 · 2027",
    "hora": "13:00",
-   "talon": "MI MÁGICO CUMPLEAÑOS"
+   "talon": "MI MÁGICO CUMPLEAÑOS",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/v1792436872/invitame/eventos/sofia-cumple6/sofia-cumple6-pase-1910.png",
+   "papel": "#f5dbe1",
+   "tinta": "#2e2620",
+   "acento": "#9a4a64"
   },
   "sobre": {
    "modelo": "ev-unicornio",
