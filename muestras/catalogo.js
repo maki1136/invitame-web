@@ -513,6 +513,76 @@
       paleta:  ["#b8b6b2", "#92897f", "#6a5d4d", "#433526"],
       tipos:   ["cumple"]
     },
+    'celebra-mono': {
+      nombre:  "Moño de raso",
+      bajada:  "Lino blanco y moño de raso rosa.",
+      muestra: 'bautizo-y-comunion-lucia-y-clara',
+      foto:    '/formulario/disenos/bautizo-y-comunion-lucia-y-clara.webp',
+      color:   '#898377',
+      color2:  '#605b53',
+      paleta:  ["#d3ccca", "#b0a69f", "#776d56", "#2c2b1b"],
+      tipos:   ["bautismo", "comunion"]
+    },
+    'celebra-olivo': {
+      nombre:  "Olivo y cruz",
+      bajada:  "Rama de olivo, bronce y papel de algodón.",
+      muestra: 'comunion-tomas',
+      foto:    '/formulario/disenos/comunion-tomas.webp',
+      color:   '#8e867a',
+      color2:  '#635e56',
+      paleta:  ["#c4c0b7", "#a6a197", "#877b6f", "#483c2e"],
+      tipos:   ["comunion"]
+    },
+    'celebra-estrellas': {
+      nombre:  "Estrellas de algodón",
+      bajada:  "Estrellas que se mecen sobre crema suave.",
+      muestra: 'bautizo-y-primer-ano-olivia',
+      foto:    '/formulario/disenos/bautizo-y-primer-ano-olivia.webp',
+      color:   '#8e8276',
+      color2:  '#635b52',
+      paleta:  ["#c7bfb3", "#a49d93", "#857769", "#463728"],
+      tipos:   ["bautismo"]
+    },
+    'celebra-marmol': {
+      nombre:  "Mármol fabulous",
+      bajada:  "Mármol rosa con vetas doradas.",
+      muestra: 'mis40-carolina',
+      foto:    '/formulario/disenos/mis40-carolina.webp',
+      color:   '#928377',
+      color2:  '#665c53',
+      paleta:  ["#c2b8b3", "#a1978a", "#8b7666", "#5b4836"],
+      tipos:   ["cumple"]
+    },
+    'celebra-editorial': {
+      nombre:  "18 editorial",
+      bajada:  "Mostaza y tinta negra, estilo revista.",
+      muestra: 'mis18-nicolas',
+      foto:    '/formulario/disenos/mis18-nicolas.webp',
+      color:   '#84745e',
+      color2:  '#5c5142',
+      paleta:  ["#b7ad9b", "#9a8a71", "#826949", "#3e2f22"],
+      tipos:   ["cumple"]
+    },
+    'fiesta-plata': {
+      nombre:  "Plata 40",
+      bajada:  "Negro y plata con globos que flotan.",
+      muestra: 'mis40-alejandro',
+      foto:    '/formulario/disenos/mis40-alejandro.webp',
+      color:   '#413d37',
+      color2:  '#2d2b26',
+      paleta:  ["#847d75", "#463f36", "#272621", "#121310"],
+      tipos:   ["cumple"]
+    },
+    'celebra-rosegold': {
+      nombre:  "Rose gold",
+      bajada:  "Rose gold con glitter cayendo.",
+      muestra: 'mis30-paulina',
+      foto:    '/formulario/disenos/mis30-paulina.webp',
+      color:   '#9e9088',
+      color2:  '#6e655f',
+      paleta:  ["#c7bab4", "#a29c95", "#958e88", "#775c4f"],
+      tipos:   ["cumple"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
