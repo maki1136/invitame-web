@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-nicolas/mis18-nicolas-portada-f.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-nicolas/mis18-nicolas-galeria-1-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-nicolas/mis18-nicolas-galeria-2-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-nicolas/mis18-nicolas-galeria-3-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-nicolas/mis18-nicolas-galeria-4-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-nicolas/mis18-nicolas-galeria-5-f.jpg"
+ ],
  "ev1t": "Fiesta",
  "ev1sub": "Hotsson Hotel León — Salón Terraza",
  "ev1dir": "Hotsson Hotel León — Salón Terraza, Blvd. Adolfo López Mateos 1102 Ote., Los Gavilanes, 37270, León, Gto.",
@@ -142,6 +150,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis18-nicolas/mis18-nicolas-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -228,7 +237,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis18-nicolas/mis18-nicolas-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",

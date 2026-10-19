@@ -154,7 +154,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=VPRjCeoBqrI",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
- "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/misxv-bruno/misxv-bruno-cierre",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/misxv-bruno/misxv-bruno-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -251,7 +251,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/misxv-bruno/misxv-bruno-cierre"
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/misxv-bruno/misxv-bruno-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",

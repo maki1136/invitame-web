@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-portada-f.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-galeria-1-f2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-galeria-2-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-galeria-3-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-galeria-4-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-galeria-5-f.jpg"
+ ],
  "ev1t": "Misa",
  "ev1sub": "Templo de Santo Domingo de Guzmán",
  "ev1dir": "Templo de Santo Domingo de Guzmán, Macedonio Alcalá s/n, Centro, 68000, Oaxaca de Juárez, Oax.",
@@ -146,6 +154,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=V1bFr2SWP1I",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -238,7 +247,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/bautizo-y-primer-ano-olivia/bautizo-y-primer-ano-olivia-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",

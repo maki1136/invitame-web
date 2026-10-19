@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-portada-f.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-galeria-1-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-galeria-2-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-galeria-3-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-galeria-4-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-galeria-5-f.jpg"
+ ],
  "ev1t": "Misa",
  "ev1sub": "Catedral de Morelia",
  "ev1dir": "Catedral de Morelia, Av. Francisco I. Madero Pte. s/n, Centro Histórico, 58000, Morelia, Mich.",
@@ -146,6 +154,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=XpYGgtrMTYs",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -239,7 +248,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/bautizo-y-comunion-lucia-y-clara/bautizo-y-comunion-lucia-y-clara-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",

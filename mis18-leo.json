@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-leo/mis18-leo-portada-f.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-leo/mis18-leo-galeria-1-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-leo/mis18-leo-galeria-2-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-leo/mis18-leo-galeria-3-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-leo/mis18-leo-galeria-4-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis18-leo/mis18-leo-galeria-5-f.jpg"
+ ],
  "ev1t": "Fiesta",
  "ev1sub": "Grand Hotel Tijuana",
  "ev1dir": "Grand Hotel Tijuana, Blvd. Agua Caliente 4500, Aviación, 22014, Tijuana, B.C.",
@@ -142,6 +150,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=2zNSgSzhBfM",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis18-leo/mis18-leo-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -226,7 +235,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis18-leo/mis18-leo-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",

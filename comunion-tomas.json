@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/comunion-tomas/comunion-tomas-portada-f.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/comunion-tomas/comunion-tomas-galeria-1-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/comunion-tomas/comunion-tomas-galeria-2-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/comunion-tomas/comunion-tomas-galeria-3-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/comunion-tomas/comunion-tomas-galeria-4-f2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/comunion-tomas/comunion-tomas-galeria-5-f2.jpg"
+ ],
  "ev1t": "Misa",
  "ev1sub": "Templo del Carmen",
  "ev1dir": "Templo del Carmen, Plaza del Carmen s/n, Centro Histórico, 78000, San Luis Potosí, S.L.P.",
@@ -143,6 +151,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=m0WwrQsCiN0",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/comunion-tomas/comunion-tomas-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -234,7 +243,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/comunion-tomas/comunion-tomas-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",

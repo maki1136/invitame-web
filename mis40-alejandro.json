@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis40-alejandro/mis40-alejandro-portada-f.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis40-alejandro/mis40-alejandro-galeria-1-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis40-alejandro/mis40-alejandro-galeria-2-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis40-alejandro/mis40-alejandro-galeria-3-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis40-alejandro/mis40-alejandro-galeria-4-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis40-alejandro/mis40-alejandro-galeria-5-f.jpg"
+ ],
  "ev1t": "Fiesta",
  "ev1sub": "Hotel Quinta Real Aguascalientes",
  "ev1dir": "Hotel Quinta Real Aguascalientes, Av. Aguascalientes Sur 601, Jardines de la Asunción, 20270, Aguascalientes, Ags.",
@@ -142,6 +150,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=HgzGwKwLmgM",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis40-alejandro/mis40-alejandro-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -228,7 +237,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis40-alejandro/mis40-alejandro-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",

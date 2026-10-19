@@ -22,6 +22,13 @@
  "nsize": "",
  "ncolor": "",
  "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis50-ricardo/mis50-ricardo-portada.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis50-ricardo/mis50-ricardo-galeria-1-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis50-ricardo/mis50-ricardo-galeria-2-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis50-ricardo/mis50-ricardo-galeria-3-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis50-ricardo/mis50-ricardo-galeria-4-f.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis50-ricardo/mis50-ricardo-galeria-5-f.jpg"
+ ],
  "ev1t": "Fiesta",
  "ev1sub": "Hotel Quinta Real Monterrey",
  "ev1dir": "Hotel Quinta Real Monterrey, Diego Rivera 500, Valle Oriente, 66260, San Pedro Garza García, N.L.",
@@ -143,6 +150,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=Gs069dndIYk",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis50-ricardo/mis50-ricardo-cierre-f",
  "secOrden": [
   "frase",
   "eventos",
@@ -234,7 +242,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/mis50-ricardo/mis50-ricardo-cierre-f"
   },
   "fondo": {
    "tipo": "imagen",
