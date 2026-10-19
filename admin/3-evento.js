@@ -84,15 +84,17 @@
   function scrollPreviewTo(sec){
     const fr=el('pv-frame'); if(!fr||!fr.contentDocument)return;
     try{
-      const doc=fr.contentDocument, scr=fr.parentElement;
-      // Agrandamos el iframe a la altura de su contenido para que el "celular"
-      // (.screen, overflow-y:auto) pueda scrollearlo. La invitación ya neutralizó
-      // el 100vh en modo preview, así que la altura es estable.
-      const h=Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
-      fr.style.height=h+'px';
+      const doc=fr.contentDocument, win=fr.contentWindow;
+      /* ⚠️ 19/10/2026 — LA MINIATURA NO SE PODÍA BAJAR CON LA RUEDITA (Maki, en Perlas).
+         Esto agrandaba el iframe a la altura entera de la invitación y scrolleaba
+         el «celular» (.screen) por código. Pero desde el 8/9 .screen tiene
+         overflow:hidden: por código se movía, a mano no se podía bajar nunca.
+         → El iframe queda en su alto de celular (844, escalado) y se scrollea
+           ADENTRO de la invitación, que es lo que hace la ruedita. */
+      if(fr.style.height) fr.style.height='';
       setTimeout(function(){
         try{
-          if(!sec){ scr.scrollTop=0; return; }
+          if(!sec){ win.scrollTo(0,0); return; }
           // `sec` es el nombre de una sección (data-sec) o, para los bloques de
           // EFECTOS, un selector de lo que ese bloque dibuja (ver VE_DE_CAJA).
           const esSel=/^[#.\[]/.test(sec);
@@ -102,13 +104,8 @@
                 .find(function(e){return e.querySelector('h2,h3');}) || doc.querySelector('[data-sec="'+sec+'"]'));
           _faltoAncla=!target;
           if(target){
-            // La posición se mide ADENTRO de la invitación y se pasa a la escala del
-            // celular (el iframe está achicado con scale). Antes se sumaba al scroll
-            // que ya había: desde la portada andaba, pero desde cualquier otra parte
-            // se pasaba de largo y la vista previa quedaba clavada abajo de todo.
-            const esc=fr.getBoundingClientRect().height/(fr.offsetHeight||1);
-            const y=target.getBoundingClientRect().top+(doc.defaultView.scrollY||0);
-            scr.scrollTop = Math.max(0, y*esc - 6);
+            const y=target.getBoundingClientRect().top+(win.scrollY||0);
+            win.scrollTo(0, Math.max(0, y-6));
           }
         }catch(e){}
       },140);
