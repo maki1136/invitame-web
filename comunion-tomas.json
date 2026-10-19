@@ -172,7 +172,7 @@
    "limite": "2027-05-08"
   },
   "itinerario": {
-   "estilo": "centro",
+   "estilo": "izquierda",
    "momentos": [
     {
      "h": "11:00",

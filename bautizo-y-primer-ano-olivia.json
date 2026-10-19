@@ -175,7 +175,7 @@
    "limite": "2027-09-11"
   },
   "itinerario": {
-   "estilo": "centro",
+   "estilo": "izquierda",
    "momentos": [
     {
      "h": "12:00",

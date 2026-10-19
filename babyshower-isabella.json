@@ -185,7 +185,7 @@
    ]
   },
   "itinerario": {
-   "estilo": "centro",
+   "estilo": "izquierda",
    "momentos": [
     {
      "h": "13:00",

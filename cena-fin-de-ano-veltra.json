@@ -85,9 +85,12 @@
  "reg_mercadolibre": "",
  "reg_palacio": "",
  "reg_sears": "",
- "regBanco": "BBVA",
- "regClabe": "012180001234567890",
+ "regBanco": "",
+ "regClabe": "",
  "regTitular": "",
+ "reg_otro_u": "",
+ "reg_otro_n": "",
+ "regCbu": "",
  "igHashtag": "#VeltraCierre27",
  "trivia": [],
  "c_habilitar-trivia": "no",
@@ -114,8 +117,7 @@
   "hospedaje",
   "dresscode",
   "padres",
-  "galeria",
-  "regalos"
+  "galeria"
  ],
  "fx": {
   "coleccion": "fiesta-brindis",
@@ -153,7 +155,7 @@
    ]
   },
   "itinerario": {
-   "estilo": "centro",
+   "estilo": "izquierda",
    "momentos": [
     {
      "h": "20:00",

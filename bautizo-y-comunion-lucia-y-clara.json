@@ -175,7 +175,7 @@
    "limite": "2027-04-24"
   },
   "itinerario": {
-   "estilo": "centro",
+   "estilo": "izquierda",
    "momentos": [
     {
      "h": "12:00",
