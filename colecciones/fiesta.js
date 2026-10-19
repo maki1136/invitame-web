@@ -397,8 +397,11 @@
       P + '.padres{ grid-template-columns:repeat(3,1fr)!important; gap:10px 8px!important; background-color:transparent!important; }',
       P + '.padres[data-col-n="1"]{ grid-template-columns:minmax(0,220px)!important; justify-content:center!important; }',
       P + '.padres[data-col-n="2"]{ grid-template-columns:repeat(2,1fr)!important; }',
-      P + '.padres[data-col-n="4"]{ grid-template-columns:repeat(4,1fr)!important; gap:8px 6px!important; }',
-      P + '.padres .av{ width:104px!important; height:104px!important; border:2px solid ' + ORO + '!important; }',
+      /* 19/10 (Maki: «los directivos no entran porque son 4»): con 4 van de a dos, 2×2 */
+      P + '.padres[data-col-n="4"]{ grid-template-columns:repeat(2,1fr)!important; gap:14px 10px!important; }',
+      /* el círculo no puede pasar del ancho de su columna (en 375 px tres de 104 se salían por los costados) */
+      P + '.padres .av{ width:min(104px,24vw)!important; height:min(104px,24vw)!important; border:2px solid ' + ORO + '!important; }',
+      P + '.padres .av img, ' + P + '.padres .av{ object-position:50% 30%!important; background-position:50% 30%!important; }',
       P + '.padres .nm{ font-size:18px!important; color:' + TINTA + '!important; font-family:' + fam('disp') + '!important; }'
     );
 
