@@ -1,0 +1,328 @@
+{
+ "slug": "mis18-nicolas",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Nicolás",
+ "n2": "",
+ "pnom": "Nicolás",
+ "titulo": "Nicolás",
+ "nEvento": "Nicolás",
+ "kick": "Mis 18",
+ "fecha": "2027-08-21T21:00",
+ "frase": "Edición especial: 18",
+ "tpl": "Cumpleaños · 18 editorial",
+ "notaArmado": "Muestra Cumpleaños · 18 editorial (19/10/2026). Referencia: SPEC-21 n.º 9. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Hotsson Hotel León — Salón Terraza",
+ "ev1dir": "Hotsson Hotel León — Salón Terraza, Blvd. Adolfo López Mateos 1102 Ote., Los Gavilanes, 37270, León, Gto.",
+ "ev1fecha": "Sábado 21 de agosto de 2027 · 21:00 h",
+ "ev1maps": "https://maps.google.com/?q=Hotsson+Hotel+León+—+Salón+Terraza+León,+Gto.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Hotsson Hotel León — Salón Terraza",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotsson Hotel León · Blvd. Adolfo López Mateos 1102 Ote., Los Gavilanes, 37270 León, Gto. · Tel. +52 477 000 0000",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal casual",
+ "c_dresscode-texto": "Camisa, saco opcional; vestido o conjunto. Negro, mostaza y crema van perfecto.",
+ "personas": [
+  {
+   "nombre": "Claudia y Ricardo",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Camila",
+   "rel": "Mi hermana",
+   "foto": ""
+  },
+  {
+   "nombre": "Emiliano, Regina y Joaquín",
+   "rel": "Mis amigos de siempre",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mis personas favoritas",
+ "padresKick": "¡Gracias por acompañarme en este día!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "El regalo es opcional, lo que importa es que vengas. Si quieres darme algo:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Nicolás Herrera Campos",
+ "igHashtag": "#Nico18Edicion",
+ "trivia": [
+  {
+   "q": "¿Qué me enoja más?",
+   "o": [
+    "Que revisen mi celular",
+    "La gente impuntual",
+    "Perder en videojuegos"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Tacos al pastor",
+    "Sushi",
+    "Guacamayas"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué voy a estudiar?",
+   "o": [
+    "Diseño industrial",
+    "Ingeniería",
+    "Medicina"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué hago un domingo?",
+   "o": [
+    "Andar en bici",
+    "Dormir hasta mediodía",
+    "Ir al estadio"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cuál es mi serie favorita?",
+   "o": [
+    "Stranger Things",
+    "The Office",
+    "Dark"
+   ],
+   "c": 1
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Confirma antes del 7 de agosto para apartarte un lugar.",
+ "c_numero-de-whatsapp": "+52 477 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Nico",
+ "waN1": "Confirmar a Nico",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Portada del año",
+ "cartaTitulo": "Portada del año",
+ "cartaTexto": "Un poco de locura, un poco de cordura\ny muchas ganas de pasarla bien.\nEso es lo único que tienes que traer a mis 18.\nTe espero.\nNico",
+ "musicaUrl": "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-editorial",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-08-07"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "21:00",
+     "t": "Llegada",
+     "d": "Mocktails y botanas."
+    },
+    {
+     "h": "22:00",
+     "t": "Cena",
+     "d": "Hamburguesas al carbón y barra de papas."
+    },
+    {
+     "h": "23:00",
+     "t": "Brindis",
+     "d": "Unas palabras (cortas, lo prometo)."
+    },
+    {
+     "h": "23:15",
+     "t": "Pastel",
+     "d": ""
+    },
+    {
+     "h": "23:30",
+     "t": "DJ",
+     "d": "A la pista."
+    },
+    {
+     "h": "02:00",
+     "t": "Fin de la fiesta",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#E1AD01",
+    "#111111",
+    "#F2E8CF",
+    "#6B4F1D"
+   ],
+   "evitar": [
+    "#FFFFFF"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Un poco de locura, un poco de cordura\ny muchas ganas de pasarla bien.\nEso es lo único que tienes que traer a mis 18.\nTe espero.\nNico"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-editorial-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Cumpleaños · 18 editorial) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Nico · Edición 18",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Nicolás",
+   "fecha": "21 · 08 · 2027",
+   "hora": "21:00",
+   "talon": "MIS 18",
+   "guion": "¿Qué onda? Soy Nico. Ya cumplo dieciocho y quiero festejarlo con los de siempre y con los que se han ido sumando. Va a haber cena, DJ y pista toda la noche. Ven con buena vibra y ganas de bailar, lo demás corre por mi cuenta. Te espero el 21 de agosto. No me falles."
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "La barra",
+   "frase": "Para toda la noche",
+   "tiempos": [
+    {
+     "nombre": "Mocktails",
+     "desc": "Limonada de frutos rojos, piña colada sin alcohol y sodas italianas."
+    },
+    {
+     "nombre": "Cena",
+     "desc": "Hamburguesas al carbón, papas gajo y alitas."
+    },
+    {
+     "nombre": "Postre",
+     "desc": "Pastel de chocolate y barra de churros."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "uber",
+     "texto": "Pide tu Uber o que te recojan: nadie se va manejando."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La fiesta termina a las 2:00 am."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Fotos",
+ "galFrase": "Dieciocho años en unas cuantas páginas."
+}

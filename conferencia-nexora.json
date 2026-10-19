@@ -1,0 +1,320 @@
+{
+ "slug": "conferencia-nexora",
+ "tipoEvento": "corporativo",
+ "tema": "corporativo",
+ "n1": "Nexora",
+ "n2": "",
+ "pnom": "Nexora",
+ "titulo": "Nexora",
+ "nEvento": "Nexora",
+ "kick": "Conferencia Anual 2027",
+ "fecha": "2027-09-09T09:00",
+ "frase": "Datos, personas y decisiones",
+ "tpl": "Corporativo · Ejecutivo azul",
+ "notaArmado": "Muestra Corporativo · Ejecutivo azul (19/10/2026). Referencia: SPEC-21 n.º 12. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Conferencia",
+ "ev1sub": "Centro de Convenciones Puebla William O. Jenkins",
+ "ev1dir": "Centro de Convenciones Puebla William O. Jenkins, Blvd. Héroes del 5 de Mayo 402, Centro, 72000, Puebla, Pue.",
+ "ev1fecha": "Jueves 9 de septiembre de 2027 · 09:00 h",
+ "ev1maps": "https://maps.google.com/?q=Centro+de+Convenciones+Puebla+William+O.+Jenkins+Puebla,+Pue.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Centro de Convenciones Puebla William O. Jenkins",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "La cita",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Quinta Real Puebla · Av. 7 Poniente 105, Centro Histórico, 72000 Puebla, Pue. · Tel. +52 222 000 0000 · Código: NEXORA27",
+ "itTitulo": "Agenda",
+ "c_itinerario-descripcion": "El programa del evento.",
+ "dressTitulo": "Business casual",
+ "c_dresscode-texto": "Saco sin corbata, camisa o blusa. Calzado cómodo: habrá recorridos entre salas.",
+ "personas": [
+  {
+   "nombre": "Ing. Marcelo Valdivia",
+   "rel": "Director General, Nexora",
+   "foto": ""
+  },
+  {
+   "nombre": "Mtra. Renata Olmedo",
+   "rel": "Directora de Innovación, Nexora",
+   "foto": ""
+  },
+  {
+   "nombre": "Dr. Tomás Ferrer",
+   "rel": "Conferencista magistral",
+   "foto": ""
+  },
+  {
+   "nombre": "Lic. Daniela Arriaga",
+   "rel": "Directora de Talento, Nexora",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Oradores",
+ "padresKick": "Quienes encabezan la jornada",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "",
+ "reg_amazon": "",
+ "reg_liverpool": "",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "",
+ "igHashtag": "#NexoraConf27",
+ "trivia": [],
+ "c_habilitar-trivia": "no",
+ "c_titulo-del-correo": "Confirma tu registro",
+ "c_frase-para-seccion-confirmacion": "Te pedimos confirmar a más tardar el 26 de agosto. El cupo es limitado.",
+ "c_numero-de-whatsapp": "+52 222 000 0001",
+ "c_texto-corto-boton-wsp": "Registro y dudas",
+ "waN1": "Registro y dudas",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Estás invitado",
+ "cartaTitulo": "Estás invitado",
+ "cartaTexto": "Te invitamos a la Conferencia Anual de Nexora:\nuna jornada para revisar lo que aprendimos este año\ny trazar juntos lo que sigue.\nNos dará gusto contar contigo.\nEquipo Nexora",
+ "musicaUrl": "https://www.youtube.com/watch?v=1e9B31FLT-s",
+ "videoUrl": "",
+ "spotifyUrl": "",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "fiesta-ejecutivo",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-08-26",
+   "preguntas": [
+    {
+     "texto": "Empresa",
+     "tipo": "texto"
+    },
+    {
+     "texto": "Cargo",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Tienes alguna restricción alimentaria?",
+     "tipo": "texto"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "09:00",
+     "t": "Registro y café",
+     "d": "Acreditación en el lobby principal."
+    },
+    {
+     "h": "09:45",
+     "t": "Apertura",
+     "d": "Mensaje del Director General, Ing. Marcelo Valdivia."
+    },
+    {
+     "h": "10:15",
+     "t": "Conferencia magistral",
+     "d": "«Decidir con datos en tiempos inciertos» — Dr. Tomás Ferrer."
+    },
+    {
+     "h": "11:15",
+     "t": "Coffee break y networking",
+     "d": ""
+    },
+    {
+     "h": "11:45",
+     "t": "Panel de innovación",
+     "d": "Moderado por la Mtra. Renata Olmedo, con clientes y socios."
+    },
+    {
+     "h": "13:00",
+     "t": "Comida",
+     "d": "Salón Puebla."
+    },
+    {
+     "h": "14:30",
+     "t": "Talleres simultáneos",
+     "d": "Analítica, liderazgo y cultura de equipo."
+    },
+    {
+     "h": "16:30",
+     "t": "Cierre y reconocimientos",
+     "d": "Con la Lic. Daniela Arriaga."
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#0B2545",
+    "#13315C",
+    "#8DA9C4",
+    "#C0C0C0"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Te invitamos a la Conferencia Anual de Nexora:\nuna jornada para revisar lo que aprendimos este año\ny trazar juntos lo que sigue.\nNos dará gusto contar contigo.\nEquipo Nexora"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-ejecutivo-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Corporativo · Ejecutivo azul) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": false
+  },
+  "pasevoz": {
+   "encendido": false
+  },
+  "boton": {
+   "estilo": "placa"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "Presenta tu pase con QR en el registro."
+    },
+    {
+     "icono": "otro",
+     "texto": "El centro de convenciones cuenta con estacionamiento con costo."
+    }
+   ]
+  },
+  "patrocinadores": {
+   "encendido": true,
+   "titulo": "Nos acompañan",
+   "logos": [
+    {
+     "nombre": "Kaltia Data",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Ruvenza Cloud",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Grupo Ostrel",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Lumbra Analytics",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Tecnova Sur",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Vireo Consulting",
+     "img": "",
+     "link": ""
+    }
+   ]
+  },
+  "corporativo": {
+   "trivia": false,
+   "filtro": false
+  }
+ },
+ "galTitulo": "Nuestro trabajo",
+ "galFrase": "Un vistazo a lo que construimos este año."
+}

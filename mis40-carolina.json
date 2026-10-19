@@ -1,0 +1,337 @@
+{
+ "slug": "mis40-carolina",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Carolina",
+ "n2": "",
+ "pnom": "Carolina",
+ "titulo": "Carolina",
+ "nEvento": "Carolina",
+ "kick": "40 & fabulous",
+ "fecha": "2027-03-13T20:30",
+ "frase": "Los 40 me quedan pintados",
+ "tpl": "Cumpleaños · Mármol fabulous",
+ "notaArmado": "Muestra Cumpleaños · Mármol fabulous (19/10/2026). Referencia: SPEC-21 n.º 7. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Casa Lamm",
+ "ev1dir": "Casa Lamm, Álvaro Obregón 99, Roma Norte, Cuauhtémoc, 06700, Ciudad de México, CDMX",
+ "ev1fecha": "Sábado 13 de marzo de 2027 · 20:30 h",
+ "ev1maps": "https://maps.google.com/?q=Casa+Lamm+Ciudad+de+México,+CDMX",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Casa Lamm",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Carlota · Río Amazonas 73, Cuauhtémoc, 06500 Ciudad de México, CDMX · Tel. +52 55 0000 0000 · Código: CARO40",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Formal y con brillo. Rosa, dorado y crema son bienvenidos.",
+ "personas": [
+  {
+   "nombre": "Eduardo",
+   "rel": "Mi esposo",
+   "foto": ""
+  },
+  {
+   "nombre": "Ximena y Bruno",
+   "rel": "Mis hijos",
+   "foto": ""
+  },
+  {
+   "nombre": "Laura y Francisco",
+   "rel": "Mis papás",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mi familia",
+ "padresKick": "¡Gracias por acompañarme en este día tan especial!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Para mí tu presencia es el mejor regalo. Si quieres consentirme, aquí van unas ideas:",
+ "reg_amazon": "",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "https://www.elpalaciodehierro.com",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Carolina Fuentes Aguirre",
+ "igHashtag": "#Caro40Fabulous",
+ "trivia": [
+  {
+   "q": "¿Dónde conocí a Eduardo?",
+   "o": [
+    "En la universidad",
+    "En una boda",
+    "En el trabajo"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cuál es mi bebida favorita?",
+   "o": [
+    "Mezcal",
+    "Vino rosado",
+    "Mojito"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿A qué me dedico?",
+   "o": [
+    "Arquitecta",
+    "Abogada",
+    "Doctora"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi viaje soñado?",
+   "o": [
+    "Grecia",
+    "Japón",
+    "Patagonia"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué canción no puede faltar en mi fiesta?",
+   "o": [
+    "Una de Gloria Trevi",
+    "Una de Juan Gabriel",
+    "Una de Dua Lipa"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Me encantaría celebrar contigo. Confírmame antes del 27 de febrero.",
+ "c_numero-de-whatsapp": "+52 55 0000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Caro",
+ "waN1": "Confirmar a Caro",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Llegué a los 40",
+ "cartaTitulo": "Llegué a los 40",
+ "cartaTexto": "Cuarenta años, muchas historias\ny las mejores todavía están por venir.\nQuiero brindar por esta nueva década con la gente que más quiero.\nPonte guapa, ponte guapo: nos vemos en la pista.\nCarolina",
+ "musicaUrl": "https://www.youtube.com/watch?v=eH3giaIzONA",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-marmol",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-02-27"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "20:30",
+     "t": "Recepción",
+     "d": "Cóctel de bienvenida y barra de mezcal."
+    },
+    {
+     "h": "21:30",
+     "t": "Cena",
+     "d": "Tres tiempos."
+    },
+    {
+     "h": "23:00",
+     "t": "Brindis",
+     "d": "Unas palabras de la familia."
+    },
+    {
+     "h": "23:15",
+     "t": "Pastel",
+     "d": "Cuarenta velitas, un solo deseo."
+    },
+    {
+     "h": "23:30",
+     "t": "¡A bailar!",
+     "d": "DJ hasta que el cuerpo aguante."
+    },
+    {
+     "h": "02:00",
+     "t": "Tornafiesta",
+     "d": "Chilaquiles para recargar."
+    },
+    {
+     "h": "03:00",
+     "t": "Fin de la fiesta",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#E8B4B8",
+    "#C9A227",
+    "#F5EBDD",
+    "#000000"
+   ],
+   "evitar": [
+    "#FFFFFF"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Cuarenta años, muchas historias\ny las mejores todavía están por venir.\nQuiero brindar por esta nueva década con la gente que más quiero.\nPonte guapa, ponte guapo: nos vemos en la pista.\nCarolina"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-marmol-rosa-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Cumpleaños · Mármol fabulous) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Caro · 40 & fabulous",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Carolina",
+   "fecha": "13 · 03 · 2027",
+   "hora": "20:30",
+   "talon": "40 & FABULOUS",
+   "guion": "¡Hola! Soy Carolina y sí, ya llegaron los cuarenta. Y la verdad, me siento mejor que nunca. Quiero celebrarlo en grande, con la gente que me ha acompañado en tantas etapas, y tú eres una de esas personas. Va a haber buena cena, buenos tragos y mucha pista. Así que ponte guapa o guapo, y nos vemos el 13 de marzo."
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "La barra",
+   "frase": "Para brindar toda la noche",
+   "tiempos": [
+    {
+     "nombre": "Bienvenida",
+     "desc": "Espumoso rosado y carajillos."
+    },
+    {
+     "nombre": "Coctelería",
+     "desc": "Mezcalitas de jamaica, margaritas y gin tonic de pepino."
+    },
+    {
+     "nombre": "Cena",
+     "desc": "Crema de elote, salmón con costra de hierbas y fondant de chocolate."
+    },
+    {
+     "nombre": "Tornafiesta",
+     "desc": "Chilaquiles verdes y café de olla."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "sin-ninos",
+     "texto": "Evento sólo para adultos. ¡Gracias por entender!"
+    },
+    {
+     "icono": "uber",
+     "texto": "Si vas a brindar, pide tu Uber. La colonia tiene poco estacionamiento."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Cuarenta en fotos",
+ "galFrase": "Algunas de mis épocas favoritas."
+}

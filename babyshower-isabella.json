@@ -1,0 +1,324 @@
+{
+ "slug": "babyshower-isabella",
+ "tipoEvento": "babyshower",
+ "tema": "babyshower",
+ "n1": "Isabella",
+ "n2": "",
+ "pnom": "Isabella",
+ "titulo": "Isabella",
+ "nEvento": "Isabella",
+ "kick": "Baby Shower",
+ "fecha": "2027-04-10T13:00",
+ "frase": "Una pequeña princesa está por llegar",
+ "tpl": "Baby shower · Osita coronada",
+ "notaArmado": "Muestra Baby shower · Osita coronada (19/10/2026). Referencia: SPEC-21 n.º 3. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Baby Shower",
+ "ev1sub": "Casa Fayette",
+ "ev1dir": "Casa Fayette, Lerdo de Tejada 2308, Col. Americana, 44150, Guadalajara, Jal.",
+ "ev1fecha": "Sábado 10 de abril de 2027 · 13:00 h",
+ "ev1maps": "https://maps.google.com/?q=Casa+Fayette+Guadalajara,+Jal.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Casa Fayette",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hyatt Regency Andares Guadalajara · Blvd. Puerta de Hierro 5065, Puerta de Hierro, 45116 Zapopan, Jal. · Tel. +52 33 0000 0000 · https://www.hyatt.com",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Tonos suaves",
+ "c_dresscode-texto": "Ven en tonos rosa empolvado, nude, beige o blanco. Casual elegante.",
+ "personas": [
+  {
+   "nombre": "Leticia y Fernando",
+   "rel": "Abuelos maternos",
+   "foto": ""
+  },
+  {
+   "nombre": "Margarita y Luis",
+   "rel": "Abuelos paternos",
+   "foto": ""
+  },
+  {
+   "nombre": "Valeria y Sebastián",
+   "rel": "Padrinos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Papás ansiosos",
+ "padresKick": "Andrea y Diego",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Tu presencia es nuestro mejor regalo. Si quieres consentir a Isabella, te dejamos estas opciones. Y si te animas con pañales, nos sirven todas las tallas.",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Andrea Morales Vega",
+ "igHashtag": "#LlegaIsabella",
+ "trivia": [
+  {
+   "q": "¿En qué semana creen que nacerá Isabella?",
+   "o": [
+    "Semana 38",
+    "Semana 39",
+    "Semana 40"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Quién eligió su nombre?",
+   "o": [
+    "Mamá",
+    "Papá",
+    "Los dos juntos"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Qué antojo no faltó en el embarazo?",
+   "o": [
+    "Mango con chile",
+    "Helado de vainilla",
+    "Tacos al pastor"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Quién va a cambiar más pañales?",
+   "o": [
+    "Andrea",
+    "Diego",
+    "La abuela"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿De qué color es su cuarto?",
+   "o": [
+    "Rosa empolvado",
+    "Verde salvia",
+    "Blanco"
+   ],
+   "c": 1
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Nos ayuda mucho saber si nos acompañas. Confírmanos antes del 27 de marzo.",
+ "c_numero-de-whatsapp": "+52 33 0000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a mamá",
+ "waN1": "Confirmar a mamá",
+ "c_numero-de-whatsapp-2": "+52 33 0000 0002",
+ "c_texto-corto-boton-wsp-2": "Confirmar a papá",
+ "waN2": "Confirmar a papá",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Pronto seremos tres",
+ "cartaTitulo": "Pronto seremos tres",
+ "cartaTexto": "La estamos esperando con el corazón lleno.\nQueremos celebrar su llegada con las personas que más queremos\ny que ya forman parte de su historia.\nTe esperamos para consentirla desde antes de conocerla.\nAndrea y Diego",
+ "musicaUrl": "https://www.youtube.com/watch?v=oE56g61mW44",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-osita",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-03-27",
+   "preguntas": [
+    {
+     "texto": "¿Niño o niña? ¡Adivina!",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Cuánto crees que pesará Isabella al nacer?",
+     "tipo": "texto"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "13:00",
+     "t": "Recepción",
+     "d": "Bebidas frescas y mesa de bocadillos."
+    },
+    {
+     "h": "13:45",
+     "t": "Comida",
+     "d": "Menú de tres tiempos."
+    },
+    {
+     "h": "15:00",
+     "t": "Juegos de baby shower",
+     "d": "Adivina la panza, bingo de regalos y la quiniela de Isabella."
+    },
+    {
+     "h": "16:00",
+     "t": "Apertura de regalos",
+     "d": "Con mucho cariño, uno por uno."
+    },
+    {
+     "h": "16:45",
+     "t": "Pastel",
+     "d": "Brindis por la nueva integrante de la familia."
+    },
+    {
+     "h": "17:30",
+     "t": "Despedida",
+     "d": "Un recuerdito dulce para cada invitado."
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#E8C4C0",
+    "#D6BFB4",
+    "#F7E5DC",
+    "#FFFFFF",
+    "#C9A86A"
+   ],
+   "evitar": [
+    "#000000",
+    "#1F3A93"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "La estamos esperando con el corazón lleno.\nQueremos celebrar su llegada con las personas que más queremos\ny que ya forman parte de su historia.\nTe esperamos para consentirla desde antes de conocerla.\nAndrea y Diego"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-osita-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Baby shower · Osita coronada) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Esperando a Isabella",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Isabella",
+   "fecha": "10 · 04 · 2027",
+   "hora": "13:00",
+   "talon": "BABY SHOWER",
+   "guion": "Hola, soy Andrea. Diego y yo estamos contando los días para conocer a Isabella, y queríamos invitarte con nuestra voz, no sólo con un mensaje. Tú has estado cerca en este camino y nos encantaría que estés también en su baby shower. Va a ser una tarde tranquila, con juegos, pastel y mucho cariño. Te esperamos el 10 de abril."
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "Habrá quiniela: trae tu mejor pronóstico de fecha y peso."
+    },
+    {
+     "icono": "uber",
+     "texto": "El estacionamiento es limitado; te sugerimos llegar en Uber o taxi."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Falta poco...",
+ "galFrase": "Así la hemos esperado, mes con mes."
+}

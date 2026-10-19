@@ -1,0 +1,333 @@
+{
+ "slug": "mis30-martin",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Martín",
+ "n2": "",
+ "pnom": "Martín",
+ "titulo": "Martín",
+ "nEvento": "Martín",
+ "kick": "Mis 30",
+ "fecha": "2027-04-24T21:00",
+ "frase": "Treinta, y con todo",
+ "tpl": "Cumpleaños · Treinta en grises",
+ "notaArmado": "Muestra Cumpleaños · Treinta en grises (19/10/2026). Referencia: SPEC-21 n.º 21. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Hotel Quinta Real Zacatecas",
+ "ev1dir": "Hotel Quinta Real Zacatecas, Av. Ignacio Rayón 434, Centro, 98000, Zacatecas, Zac.",
+ "ev1fecha": "Sábado 24 de abril de 2027 · 21:00 h",
+ "ev1maps": "https://maps.google.com/?q=Hotel+Quinta+Real+Zacatecas+Zacatecas,+Zac.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Hotel Quinta Real Zacatecas",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Quinta Real Zacatecas · Av. Ignacio Rayón 434, Centro, 98000 Zacatecas, Zac. · Tel. +52 492 000 0000 · Código: MARTIN30",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Formal en gris, blanco o negro.",
+ "personas": [
+  {
+   "nombre": "Irene",
+   "rel": "Mi esposa",
+   "foto": ""
+  },
+  {
+   "nombre": "Lía y Gael",
+   "rel": "Mis hijos",
+   "foto": ""
+  },
+  {
+   "nombre": "Rocío y Enrique",
+   "rel": "Mis papás",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mi familia",
+ "padresKick": "¡Gracias por estar en mi vida!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Para mí tu presencia es el mejor regalo. Si deseas obsequiarme algo, te dejo estas sugerencias:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Martín Valdez Escobedo",
+ "igHashtag": "#Mis30Martin",
+ "trivia": [
+  {
+   "q": "¿Dónde conocí a Irene?",
+   "o": [
+    "En la prepa",
+    "En la universidad",
+    "En un concierto"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿A qué me dedico?",
+   "o": [
+    "Ingeniero de minas",
+    "Fotógrafo",
+    "Contador"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi bebida favorita?",
+   "o": [
+    "Mezcal",
+    "Cerveza artesanal",
+    "Vino tinto"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué banda he visto más veces en vivo?",
+   "o": [
+    "The Killers",
+    "Caifanes",
+    "Arctic Monkeys"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi platillo favorito?",
+   "o": [
+    "Asado de boda",
+    "Enchiladas zacatecanas",
+    "Birria"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Por favor confirma antes del 10 de abril.",
+ "c_numero-de-whatsapp": "+52 492 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Martín",
+ "waN1": "Confirmar a Martín",
+ "c_numero-de-whatsapp-2": "+52 492 000 0002",
+ "c_texto-corto-boton-wsp-2": "Confirmar a Irene",
+ "waN2": "Confirmar a Irene",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Te invito",
+ "cartaTitulo": "Te invito",
+ "cartaTexto": "Los momentos importantes merecen compartirse.\nCumplir treinta es uno de ellos,\ny no se me ocurre mejor forma de celebrarlo\nque con la gente que quiero.\nMartín",
+ "musicaUrl": "https://www.youtube.com/watch?v=gGdGFtwCNBE",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-grises",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-04-10"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "21:00",
+     "t": "Recepción",
+     "d": "Cóctel de bienvenida."
+    },
+    {
+     "h": "22:00",
+     "t": "Cena",
+     "d": "Tres tiempos."
+    },
+    {
+     "h": "23:00",
+     "t": "Tragos y brindis",
+     "d": ""
+    },
+    {
+     "h": "00:00",
+     "t": "Fiesta",
+     "d": "DJ y pista."
+    },
+    {
+     "h": "02:30",
+     "t": "Tornafiesta",
+     "d": "Asado de boda en gordita."
+    },
+    {
+     "h": "04:00",
+     "t": "Fin del evento",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#2F2F2F",
+    "#7A7A7A",
+    "#BDBDBD",
+    "#FFFFFF"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Los momentos importantes merecen compartirse.\nCumplir treinta es uno de ellos,\ny no se me ocurre mejor forma de celebrarlo\nque con la gente que quiero.\nMartín"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-grises-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Cumpleaños · Treinta en grises) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Martín · 30",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Martín",
+   "fecha": "24 · 04 · 2027",
+   "hora": "21:00",
+   "talon": "MIS 30",
+   "guion": "Hola, soy Martín. Cumplo treinta y quiero celebrarlo con la gente que ha estado en las buenas y en las no tan buenas. Va a ser una noche tranquila al principio y con mucha pista al final, como debe ser. Te espero el 24 de abril en la Quinta Real de Zacatecas. Aparta la fecha y vente con ganas."
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Cena y barra",
+   "frase": "Lo que vamos a disfrutar",
+   "tiempos": [
+    {
+     "nombre": "Entrada",
+     "desc": "Ensalada de nopal con queso fresco y vinagreta de chile."
+    },
+    {
+     "nombre": "Plato fuerte",
+     "desc": "Lomo de cerdo en salsa de chile ancho con puré de camote."
+    },
+    {
+     "nombre": "Postre",
+     "desc": "Flan de cajeta."
+    },
+    {
+     "nombre": "Barra",
+     "desc": "Cerveza artesanal, mezcal zacatecano y vino tinto."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "sin-ninos",
+     "texto": "La fiesta es sólo para adultos."
+    },
+    {
+     "icono": "uber",
+     "texto": "Si vas a brindar, pide tu Uber o taxi."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Fotos",
+ "galFrase": "Treinta años, algunas fotos."
+}

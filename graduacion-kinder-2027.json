@@ -1,0 +1,327 @@
+{
+ "slug": "graduacion-kinder-2027",
+ "tipoEvento": "graduacion",
+ "tema": "graduacion",
+ "n1": "Pequeños graduados",
+ "n2": "",
+ "pnom": "Pequeños graduados",
+ "titulo": "Pequeños graduados",
+ "nEvento": "Pequeños graduados",
+ "kick": "¡Nos vamos a primaria!",
+ "fecha": "2027-07-03T10:00",
+ "frase": "Pequeños pasos, grandes logros",
+ "tpl": "Graduación · Pequeños graduados",
+ "notaArmado": "Muestra Graduación · Pequeños graduados (19/10/2026). Referencia: SPEC-21 n.º 17. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Ceremonia de fin de cursos",
+ "ev1sub": "Auditorio del Kínder Montessori Arcoíris",
+ "ev1dir": "Auditorio del Kínder Montessori Arcoíris, Blvd. Venustiano Carranza 2450, República Oriente, 25280, Saltillo, Coah.",
+ "ev1fecha": "Sábado 3 de julio de 2027 · 10:00 h",
+ "ev1maps": "https://maps.google.com/?q=Auditorio+del+Kínder+Montessori+Arcoíris+Saltillo,+Coah.",
+ "ev2t": "Fiesta",
+ "ev2sub": "Museo del Desierto — jardín de eventos",
+ "ev2dir": "Museo del Desierto — jardín de eventos, Prol. Pérez Treviño 3745, Parque Las Maravillas, 25015, Saltillo, Coah.",
+ "ev2fecha": "Sábado 3 de julio de 2027 · 13:00 h",
+ "ev2maps": "https://maps.google.com/?q=Museo+del+Desierto+—+jardín+de+eventos+Saltillo,+Coah.",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Auditorio del Kínder Montessori Arcoíris",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Camino Real Saltillo · Blvd. Los Fundadores 2000, Ampliación Mirasierra, 25016 Saltillo, Coah. · Tel. +52 844 000 0000 · https://www.caminoreal.com",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Niños: uniforme de gala. ¡No olviden su birrete! Familias: formal de día en tonos claros.",
+ "personas": [
+  {
+   "nombre": "Mtra. Irene Valdés",
+   "rel": "Directora",
+   "foto": ""
+  },
+  {
+   "nombre": "Miss Daniela, Miss Paula y Miss Carolina",
+   "rel": "Nuestras maestras",
+   "foto": ""
+  },
+  {
+   "nombre": "Papás, mamás, abuelos y todos los que nos llevaron cada mañana",
+   "rel": "Nuestras familias",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Personas importantes",
+ "padresKick": "¡Gracias por enseñarnos!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "",
+ "reg_amazon": "",
+ "reg_liverpool": "",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "",
+ "igHashtag": "#PequenosGraduados27",
+ "trivia": [
+  {
+   "q": "¿Cuál fue nuestra canción favorita en el salón?",
+   "o": [
+    "Los pollitos dicen",
+    "Witzi witzi araña",
+    "La vaca Lola"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cómo se llama la mascota del salón?",
+   "o": [
+    "El pez Burbuja",
+    "La tortuga Lola",
+    "El hámster Chispa"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Qué actividad nos gustaba más?",
+   "o": [
+    "Pintar",
+    "El recreo",
+    "La hora del cuento"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cuántos niños somos en el grupo?",
+   "o": [
+    "18",
+    "22",
+    "25"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿A dónde fue nuestra excursión?",
+   "o": [
+    "Al museo",
+    "A la granja",
+    "Al zoológico"
+   ],
+   "c": 1
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Esperamos que puedas venir. Confirma antes del 19 de junio.",
+ "c_numero-de-whatsapp": "+52 844 000 0001",
+ "c_texto-corto-boton-wsp": "Comité de padres",
+ "waN1": "Comité de padres",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "¡Ya somos grandes!",
+ "cartaTitulo": "¡Ya somos grandes!",
+ "cartaTexto": "Aprendimos letras, números, canciones\ny a compartir con nuestros amigos.\nAhora nos toca la primaria\ny queremos celebrarlo contigo.\nLos niños de 3.º de kínder",
+ "musicaUrl": "https://www.youtube.com/watch?v=VAguvAVCmNg",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-kinder",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-06-19",
+   "preguntas": [
+    {
+     "texto": "¿Cuántos niños vienen contigo?",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Algún niño tiene alergia a algún alimento?",
+     "tipo": "texto"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "10:00",
+     "t": "Ceremonia",
+     "d": "Entrada de los graduados y entrega de diplomas."
+    },
+    {
+     "h": "11:00",
+     "t": "Bailable de despedida",
+     "d": "Preparado por los niños con sus maestras."
+    },
+    {
+     "h": "11:30",
+     "t": "Foto de grupo",
+     "d": "Con birrete y diploma."
+    },
+    {
+     "h": "13:00",
+     "t": "Fiesta",
+     "d": "Llegada al jardín del museo."
+    },
+    {
+     "h": "13:30",
+     "t": "Comida",
+     "d": "Menú infantil y para papás."
+    },
+    {
+     "h": "14:30",
+     "t": "Juegos y piñata",
+     "d": ""
+    },
+    {
+     "h": "15:30",
+     "t": "Pastel",
+     "d": "Y lanzamiento de birretes."
+    },
+    {
+     "h": "16:30",
+     "t": "Despedida",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#8EC5E8",
+    "#FFD966",
+    "#FFF8E7",
+    "#1F4E79"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Aprendimos letras, números, canciones\ny a compartir con nuestros amigos.\nAhora nos toca la primaria\ny queremos celebrarlo contigo.\nLos niños de 3.º de kínder"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-kinder-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Graduación · Pequeños graduados) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "¡Nos vamos a primaria!",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Pequeños graduados",
+   "fecha": "03 · 07 · 2027",
+   "hora": "10:00",
+   "talon": "¡NOS VAMOS A PRIMARIA!",
+   "guion": "¡Hola! Soy Emilia y ya me voy a primaria. Mis amigos y yo aprendimos un montón: a leer, a contar y a compartir. Ahora vamos a tener nuestra graduación, con diploma y birrete, y después una fiesta con piñata y pastel. ¿Vienes a vernos? Te esperamos el 3 de julio. ¡Va a estar padrísimo!"
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "Trae bloqueador y gorrita: la fiesta es al aire libre."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La fiesta termina a las 16:30."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Nosotros",
+ "galFrase": "Tres años de juegos, letras y amigos."
+}

@@ -1,0 +1,334 @@
+{
+ "slug": "cena-fin-de-ano-veltra",
+ "tipoEvento": "corporativo",
+ "tema": "corporativo",
+ "n1": "Veltra Logistics",
+ "n2": "",
+ "pnom": "Veltra Logistics",
+ "titulo": "Veltra Logistics",
+ "nEvento": "Veltra Logistics",
+ "kick": "Cena de fin de año",
+ "fecha": "2027-11-26T20:00",
+ "frase": "Cerramos el año brindando juntos",
+ "tpl": "Corporativo · Brindis de Año Nuevo",
+ "notaArmado": "Muestra Corporativo · Brindis de Año Nuevo (19/10/2026). Referencia: SPEC-21 n.º 14. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Cena",
+ "ev1sub": "Hotel Fiesta Americana Veracruz",
+ "ev1dir": "Hotel Fiesta Americana Veracruz, Blvd. Manuel Ávila Camacho s/n, Costa de Oro, 94299, Boca del Río, Ver.",
+ "ev1fecha": "Viernes 26 de noviembre de 2027 · 20:00 h",
+ "ev1maps": "https://maps.google.com/?q=Hotel+Fiesta+Americana+Veracruz+Boca+del+Río,+Ver.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Hotel Fiesta Americana Veracruz",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "La cita",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Fiesta Americana Veracruz · Blvd. Manuel Ávila Camacho s/n, Costa de Oro, 94299 Boca del Río, Ver. · Tel. +52 229 000 0000 · https://www.fiestamericana.com · Código: VELTRA27",
+ "itTitulo": "Agenda",
+ "c_itinerario-descripcion": "El programa del evento.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Formal con un toque de brillo: dorado, champaña o azul noche.",
+ "personas": [
+  {
+   "nombre": "Irene Salcedo",
+   "rel": "Directora General",
+   "foto": ""
+  },
+  {
+   "nombre": "Rafael Ochoa",
+   "rel": "Director de Operaciones",
+   "foto": ""
+  },
+  {
+   "nombre": "Damián Ugalde",
+   "rel": "Director Comercial",
+   "foto": ""
+  },
+  {
+   "nombre": "Carmen Lozano",
+   "rel": "Directora de Capital Humano",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Directivos",
+ "padresKick": "Gracias por un gran año",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "",
+ "reg_amazon": "",
+ "reg_liverpool": "",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "",
+ "igHashtag": "#VeltraCierre27",
+ "trivia": [],
+ "c_habilitar-trivia": "no",
+ "c_titulo-del-correo": "¡Vamos a disfrutar una gran noche!",
+ "c_frase-para-seccion-confirmacion": "Confirma tu lugar a más tardar el 12 de noviembre.",
+ "c_numero-de-whatsapp": "+52 229 000 0001",
+ "c_texto-corto-boton-wsp": "Capital Humano",
+ "waN1": "Capital Humano",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "¡Lo logramos!",
+ "cartaTitulo": "¡Lo logramos!",
+ "cartaTexto": "Fue un año de mucho trabajo y muchas entregas a tiempo.\nQueremos agradecerlo como se merece:\ncon una cena junto a todo el equipo y nuestros socios.\n¡Te esperamos!\nVeltra Logistics",
+ "musicaUrl": "https://www.youtube.com/watch?v=6VHt4hazMG0",
+ "videoUrl": "",
+ "spotifyUrl": "",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "fiesta-brindis",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-11-12",
+   "preguntas": [
+    {
+     "texto": "Empresa",
+     "tipo": "texto"
+    },
+    {
+     "texto": "Cargo o área",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Asistirás con acompañante?",
+     "tipo": "sino"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "20:00",
+     "t": "Cóctel y recepción",
+     "d": "Bienvenida con bebidas y botanas jarochas."
+    },
+    {
+     "h": "21:00",
+     "t": "Palabras de la Dirección",
+     "d": "Balance del año."
+    },
+    {
+     "h": "21:20",
+     "t": "Cena",
+     "d": "Tres tiempos."
+    },
+    {
+     "h": "22:30",
+     "t": "Reconocimientos y rifa",
+     "d": "Al equipo del año y premios sorpresa."
+    },
+    {
+     "h": "23:00",
+     "t": "Photoshoot",
+     "d": "Cabina de fotos con marco del evento."
+    },
+    {
+     "h": "23:15",
+     "t": "¡Fiesta!",
+     "d": "DJ y pista."
+    },
+    {
+     "h": "02:00",
+     "t": "Cierre",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#0B1D3A",
+    "#E8D8B0",
+    "#C9A227",
+    "#F7E7CE"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Fue un año de mucho trabajo y muchas entregas a tiempo.\nQueremos agradecerlo como se merece:\ncon una cena junto a todo el equipo y nuestros socios.\n¡Te esperamos!\nVeltra Logistics"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-brindis-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Corporativo · Brindis de Año Nuevo) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": false
+  },
+  "pasevoz": {
+   "encendido": false
+  },
+  "boton": {
+   "estilo": "placa"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Menú",
+   "frase": "Tres tiempos con sabor del Golfo",
+   "tiempos": [
+    {
+     "nombre": "Entrada",
+     "desc": "Cóctel de camarón estilo Boca del Río."
+    },
+    {
+     "nombre": "Plato fuerte",
+     "desc": "Huachinango a la veracruzana o lomo de cerdo en mole de olla."
+    },
+    {
+     "nombre": "Postre",
+     "desc": "Pastel tres leches con café de Coatepec."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "uber",
+     "texto": "Si vas a brindar, deja el auto: pide tu Uber o taxi."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La cena termina a las 2:00 am."
+    }
+   ]
+  },
+  "patrocinadores": {
+   "encendido": true,
+   "titulo": "Nos acompañan",
+   "logos": [
+    {
+     "nombre": "Marlo Aduanas",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Transportes Ceibal",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Portuaria Delmar",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Grúas Tornel",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Alvex Seguros",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Embalajes Ríos",
+     "img": "",
+     "link": ""
+    }
+   ]
+  },
+  "corporativo": {
+   "trivia": false,
+   "filtro": false
+  }
+ },
+ "galTitulo": "Nosotros",
+ "galFrase": "El equipo que hizo posible este año."
+}

@@ -1,0 +1,328 @@
+{
+ "slug": "sofia-cumple6",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Sofía",
+ "n2": "",
+ "pnom": "Sofía",
+ "titulo": "Sofía",
+ "nEvento": "Sofía",
+ "kick": "Mi mágico cumpleaños",
+ "fecha": "2027-06-19T13:00",
+ "frase": "¡Cumplo 6 y quiero celebrarlo contigo!",
+ "tpl": "Kids · Cielo mágico",
+ "notaArmado": "Muestra Kids · Cielo mágico (19/10/2026). Referencia: SPEC-21 n.º 2. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Hacienda Xcanatún",
+ "ev1dir": "Hacienda Xcanatún, Carretera Mérida-Progreso km 12, Xcanatún, 97302, Mérida, Yuc.",
+ "ev1fecha": "Sábado 19 de junio de 2027 · 13:00 h",
+ "ev1maps": "https://maps.google.com/?q=Hacienda+Xcanatún+Mérida,+Yuc.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Hacienda Xcanatún",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hyatt Regency Mérida · Calle 60 No. 344 x Av. Colón, Centro, 97000 Mérida, Yuc. · Tel. +52 999 000 0000 · https://www.hyatt.com",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Colores pastel",
+ "c_dresscode-texto": "Ven en tonos pastel. Si tienes tutú o diadema de unicornio, ¡éste es el día para usarlos!",
+ "personas": [
+  {
+   "nombre": "Gabriela y Andrés",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Fernanda y Pablo",
+   "rel": "Mis padrinos",
+   "foto": ""
+  },
+  {
+   "nombre": "Rosa María y Héctor · Silvia y Manuel",
+   "rel": "Mis abuelitos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mis personas favoritas",
+ "padresKick": "¡Gracias por hacer esto posible!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Para mí lo más bonito es que vengas. Si quieres darme un regalito, aquí te dejo algunas ideas:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Gabriela Castro Rivas",
+ "igHashtag": "#SofiCumple6",
+ "trivia": [
+  {
+   "q": "¿Cuál es mi color favorito?",
+   "o": [
+    "Lila",
+    "Amarillo",
+    "Rojo"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué me gusta más de la escuela?",
+   "o": [
+    "Matemáticas",
+    "Arte",
+    "Educación física"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cómo se llama mi gatita?",
+   "o": [
+    "Nube",
+    "Michi",
+    "Canela"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué fruta como siempre?",
+   "o": [
+    "Mango",
+    "Fresa",
+    "Plátano"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cuántos años cumplo?",
+   "o": [
+    "5",
+    "6",
+    "7"
+   ],
+   "c": 1
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Me encantaría verte ahí. Confírmame antes del 5 de junio, por favor.",
+ "c_numero-de-whatsapp": "+52 999 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a mamá",
+ "waN1": "Confirmar a mamá",
+ "c_numero-de-whatsapp-2": "+52 999 000 0002",
+ "c_texto-corto-boton-wsp-2": "Confirmar a papá",
+ "waN2": "Confirmar a papá",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Una invitación entre nubes",
+ "cartaTitulo": "Una invitación entre nubes",
+ "cartaTexto": "Un unicornio me trajo esta carta para ti.\nDice que el 19 de junio el cielo se llena de colores\nporque cumplo 6 años.\nVen con tu tutú y tus ganas de jugar.\nCon cariño, Sofía",
+ "musicaUrl": "https://www.youtube.com/watch?v=7IzWx5e6v-w",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-unicornio",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-06-05",
+   "preguntas": [
+    {
+     "texto": "¿Cuántos niños vienen contigo?",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Algún niño tiene alergia a algún alimento?",
+     "tipo": "texto"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "13:00",
+     "t": "Bienvenida",
+     "d": "Llegada de invitados y coronas de flores para las niñas y niños."
+    },
+    {
+     "h": "13:30",
+     "t": "Pintacaritas y glitter",
+     "d": "Estrellas, arcoíris y cuernitos de unicornio."
+    },
+    {
+     "h": "14:15",
+     "t": "Comida",
+     "d": "Menú infantil y comida yucateca para los grandes."
+    },
+    {
+     "h": "15:15",
+     "t": "Burbujas gigantes",
+     "d": "Show de burbujas en el jardín."
+    },
+    {
+     "h": "16:00",
+     "t": "Piñata de arcoíris",
+     "d": "¡A llenar las bolsitas de dulces!"
+    },
+    {
+     "h": "16:30",
+     "t": "Pastel y mañanitas",
+     "d": "Seis velitas y un deseo."
+    },
+    {
+     "h": "17:30",
+     "t": "Despedida",
+     "d": "Un recuerdito mágico para cada invitado."
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#F7B6CF",
+    "#C9B6E4",
+    "#AFD8F2",
+    "#BDE8D2",
+    "#FCE7A2"
+   ],
+   "evitar": [
+    "#000000"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Un unicornio me trajo esta carta para ti.\nDice que el 19 de junio el cielo se llena de colores\nporque cumplo 6 años.\nVen con tu tutú y tus ganas de jugar.\nCon cariño, Sofía"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-unicornio-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Kids · Cielo mágico) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "El mágico cumple de Sofía",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Sofía",
+   "fecha": "19 · 06 · 2027",
+   "hora": "13:00",
+   "talon": "MI MÁGICO CUMPLEAÑOS",
+   "guion": "¡Hola! Soy Sofía. ¿Sabes qué? ¡Voy a cumplir seis años! Y quiero que vengas a mi fiesta mágica. Va a haber burbujas gigantes, pintacaritas, piñata de arcoíris y un pastel de unicornio. Ponte algo de colores bonitos y, si tienes tutú, tráelo. Te voy a estar esperando con un abrazo muy grande. ¡Ven, porfa!"
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "La fiesta es en jardín: trae bloqueador y gorrita."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "Terminamos a las 17:30."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Mis fotitos",
+ "galFrase": "Un poquito de mí antes de mi gran día."
+}

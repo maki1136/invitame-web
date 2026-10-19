@@ -1,0 +1,300 @@
+{
+ "slug": "comunion-tomas",
+ "tipoEvento": "comunion",
+ "tema": "comunion",
+ "n1": "Tomás",
+ "n2": "",
+ "pnom": "Tomás",
+ "titulo": "Tomás",
+ "nEvento": "Tomás",
+ "kick": "Mi Primera Comunión",
+ "fecha": "2027-05-22T11:00",
+ "frase": "Hoy Jesús viene a vivir en mi corazón",
+ "tpl": "Comunión · Olivo y cruz",
+ "notaArmado": "Muestra Comunión · Olivo y cruz (19/10/2026). Referencia: SPEC-21 n.º 5. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Misa",
+ "ev1sub": "Templo del Carmen",
+ "ev1dir": "Templo del Carmen, Plaza del Carmen s/n, Centro Histórico, 78000, San Luis Potosí, S.L.P.",
+ "ev1fecha": "Sábado 22 de mayo de 2027 · 11:00 h",
+ "ev1maps": "https://maps.google.com/?q=Templo+del+Carmen+San+Luis+Potosí,+S.L.P.",
+ "ev2t": "Recepción",
+ "ev2sub": "Hotel Museo Palacio de San Agustín",
+ "ev2dir": "Hotel Museo Palacio de San Agustín, Galeana 240, Centro Histórico, 78000, San Luis Potosí, S.L.P.",
+ "ev2fecha": "Sábado 22 de mayo de 2027 · 13:30 h",
+ "ev2maps": "https://maps.google.com/?q=Hotel+Museo+Palacio+de+San+Agustín+San+Luis+Potosí,+S.L.P.",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Templo del Carmen",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Museo Palacio de San Agustín · Galeana 240, Centro Histórico, 78000 San Luis Potosí, S.L.P. · Tel. +52 444 000 0000 · Código: COMUNIONTOMAS",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Formal de día, en tonos claros y naturales.",
+ "personas": [
+  {
+   "nombre": "Alejandra y Federico",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Isabel y Gonzalo",
+   "rel": "Mis padrinos",
+   "foto": ""
+  },
+  {
+   "nombre": "Guadalupe y Roberto · Irma y Antonio",
+   "rel": "Mis abuelitos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mis personas favoritas",
+ "padresKick": "¡Gracias por acompañarme en este día tan especial!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Lo más importante para mí es que me acompañes. Si deseas obsequiarme algo, te dejo estas opciones:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Alejandra Ibarra Soto",
+ "igHashtag": "#ComunionTomas",
+ "trivia": [
+  {
+   "q": "¿Qué deporte me gusta más?",
+   "o": [
+    "Futbol",
+    "Natación",
+    "Basquetbol"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cómo se llama mi tortuga?",
+   "o": [
+    "Lenta",
+    "Pepe",
+    "Galápago"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué materia me gusta más?",
+   "o": [
+    "Ciencias",
+    "Historia",
+    "Inglés"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Enchiladas potosinas",
+    "Pizza",
+    "Sopa de letras"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuántos años tengo?",
+   "o": [
+    "7",
+    "8",
+    "9"
+   ],
+   "c": 2
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Me gustaría mucho que vinieras. Confírmame antes del 8 de mayo, por favor.",
+ "c_numero-de-whatsapp": "+52 444 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a mamá",
+ "waN1": "Confirmar a mamá",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Mi oración de hoy",
+ "cartaTitulo": "Mi oración de hoy",
+ "cartaTexto": "Señor, gracias por mi familia y por mis amigos.\nHoy te recibo por primera vez y te pido\nque me acompañes siempre.\nMe hará muy feliz que estés conmigo en este día.\nTomás",
+ "musicaUrl": "https://www.youtube.com/watch?v=m0WwrQsCiN0",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-olivo",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-05-08"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "11:00",
+     "t": "Santa Misa",
+     "d": "Primera Comunión de Tomás."
+    },
+    {
+     "h": "12:15",
+     "t": "Fotos familiares",
+     "d": "En el atrio del templo."
+    },
+    {
+     "h": "13:30",
+     "t": "Recepción",
+     "d": "Bienvenida en el patio central."
+    },
+    {
+     "h": "14:30",
+     "t": "Comida",
+     "d": "Menú de tres tiempos y menú infantil."
+    },
+    {
+     "h": "16:00",
+     "t": "Pastel",
+     "d": "Unas palabras de los padrinos."
+    },
+    {
+     "h": "16:30",
+     "t": "Juegos en el patio",
+     "d": "Lotería y actividades para los niños."
+    },
+    {
+     "h": "18:30",
+     "t": "Fin de la celebración",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#A3B18A",
+    "#DAD7CD",
+    "#FFFDF5",
+    "#B08968"
+   ],
+   "evitar": [
+    "#FFFFFF"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Señor, gracias por mi familia y por mis amigos.\nHoy te recibo por primera vez y te pido\nque me acompañes siempre.\nMe hará muy feliz que estés conmigo en este día.\nTomás"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-olivo-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Comunión · Olivo y cruz) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Primera Comunión · Tomás",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Tomás",
+   "fecha": "22 · 05 · 2027",
+   "hora": "11:00",
+   "talon": "MI PRIMERA COMUNIÓN",
+   "guion": "Hola, soy Alejandra, la mamá de Tomás. Llevamos meses preparándonos: el catecismo, las oraciones, los nervios. Y ya llegó el día. Tomás hace su Primera Comunión el 22 de mayo y nos haría muy felices que estés con nosotros, en la misa y después en la comida. Gracias por ser parte de su vida. Te esperamos."
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  }
+ },
+ "galTitulo": "Mis fotos",
+ "galFrase": "Un poco de mí."
+}

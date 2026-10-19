@@ -1,0 +1,328 @@
+{
+ "slug": "mis30-paulina",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Paulina",
+ "n2": "",
+ "pnom": "Paulina",
+ "titulo": "Paulina",
+ "nEvento": "Paulina",
+ "kick": "Mis 30 años",
+ "fecha": "2027-09-18T19:30",
+ "frase": "Hello, 30",
+ "tpl": "Cumpleaños · Rose gold",
+ "notaArmado": "Muestra Cumpleaños · Rose gold (19/10/2026). Referencia: SPEC-21 n.º 11. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "JW Marriott Cancún Resort & Spa",
+ "ev1dir": "JW Marriott Cancún Resort & Spa, Blvd. Kukulcán km 14.5, Zona Hotelera, 77500, Cancún, Q. Roo",
+ "ev1fecha": "Sábado 18 de septiembre de 2027 · 19:30 h",
+ "ev1maps": "https://maps.google.com/?q=JW+Marriott+Cancún+Resort+&+Spa+Cancún,+Q.+Roo",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "JW Marriott Cancún Resort & Spa",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "JW Marriott Cancún Resort & Spa · Blvd. Kukulcán km 14.5, Zona Hotelera, 77500 Cancún, Q. Roo · Tel. +52 998 000 0000 · https://www.marriott.com · Código: PAU30",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Cóctel de playa",
+ "c_dresscode-texto": "Vestido corto o midi y guayabera o camisa de lino. Tonos rosa, nude y blanco.",
+ "personas": [
+  {
+   "nombre": "Sebastián",
+   "rel": "Mi esposo",
+   "foto": ""
+  },
+  {
+   "nombre": "Verónica y Jorge",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Andrea, Mariana y Fernanda",
+   "rel": "Mis amigas de toda la vida",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mis personas favoritas",
+ "padresKick": "¡Gracias por estar en mi vida!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Que viajes hasta aquí ya es el mejor regalo. Si quieres consentirme, aquí te dejo unas opciones:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Paulina Ortega Salinas",
+ "igHashtag": "#Pau30",
+ "trivia": [
+  {
+   "q": "¿Cuál es mi segundo nombre?",
+   "o": [
+    "Isabel",
+    "Fernanda",
+    "Alejandra"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿A qué me dedico?",
+   "o": [
+    "Diseñadora",
+    "Nutrióloga",
+    "Mercadóloga"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Dónde conocí a Sebastián?",
+   "o": [
+    "En el gym",
+    "En un viaje",
+    "En una boda"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Sushi",
+    "Pasta",
+    "Ceviche"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Qué no me puede faltar en la bolsa?",
+   "o": [
+    "Labial",
+    "Audífonos",
+    "Bloqueador"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "¡Te espero para festejar! Confírmame antes del 1 de septiembre para organizar todo.",
+ "c_numero-de-whatsapp": "+52 998 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Pau",
+ "waN1": "Confirmar a Pau",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Nueva etapa",
+ "cartaTitulo": "Nueva etapa",
+ "cartaTexto": "Treinta años y una lista larga de cosas por agradecer.\nQuiero empezar esta etapa frente al mar\ny con la gente que hace mi vida más bonita.\nTe espero en Cancún.\nPau",
+ "musicaUrl": "https://www.youtube.com/watch?v=TUVcZfQe-Kw",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-rosegold",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-09-01"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "19:30",
+     "t": "Recepción frente al mar",
+     "d": "Atardecer y cóctel de bienvenida."
+    },
+    {
+     "h": "20:30",
+     "t": "Cena",
+     "d": "Tres tiempos con sabores del Caribe."
+    },
+    {
+     "h": "22:00",
+     "t": "Brindis",
+     "d": "Por los primeros treinta."
+    },
+    {
+     "h": "22:15",
+     "t": "Pastel",
+     "d": ""
+    },
+    {
+     "h": "22:30",
+     "t": "Fiesta",
+     "d": "DJ en la terraza."
+    },
+    {
+     "h": "01:30",
+     "t": "Fin de la fiesta",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#B76E79",
+    "#E8C1B5",
+    "#F6E3DA",
+    "#FFFFFF"
+   ],
+   "evitar": [
+    "#000000"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Treinta años y una lista larga de cosas por agradecer.\nQuiero empezar esta etapa frente al mar\ny con la gente que hace mi vida más bonita.\nTe espero en Cancún.\nPau"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-rosegold-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Cumpleaños · Rose gold) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Hello 30 · Pau",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Paulina",
+   "fecha": "18 · 09 · 2027",
+   "hora": "19:30",
+   "talon": "MIS 30 AÑOS",
+   "guion": "¡Hola! Soy Pau. Cumplo treinta y quise darme el gusto de celebrarlo frente al mar, en Cancún. Sé que implica viajar, por eso tu presencia me importa tanto. Va a haber atardecer, buena cena y muchísima música. Aparta el 18 de septiembre, trae tu mejor look de playa y ven a brindar conmigo. ¡Te espero!"
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "La barra",
+   "frase": "Para brindar frente al mar",
+   "tiempos": [
+    {
+     "nombre": "Bienvenida",
+     "desc": "Espumoso rosado y aguas de frutas tropicales."
+    },
+    {
+     "nombre": "Coctelería",
+     "desc": "Margarita de maracuyá, mojito de mango y spritz."
+    },
+    {
+     "nombre": "Cena",
+     "desc": "Aguachile de camarón, pesca del día al tikin xic y pay de limón."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "sin-ninos",
+     "texto": "Celebración sólo para adultos."
+    },
+    {
+     "icono": "uber",
+     "texto": "Si te hospedas fuera del hotel, pide tu Uber o taxi de regreso."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Mis fotos",
+ "galFrase": "Treinta años de buenos recuerdos."
+}

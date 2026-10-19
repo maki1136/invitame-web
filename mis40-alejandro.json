@@ -1,0 +1,332 @@
+{
+ "slug": "mis40-alejandro",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Alejandro",
+ "n2": "",
+ "pnom": "Alejandro",
+ "titulo": "Alejandro",
+ "nEvento": "Alejandro",
+ "kick": "Mis 40",
+ "fecha": "2027-07-24T21:00",
+ "frase": "40 años siendo increíble",
+ "tpl": "Cumpleaños · Plata 40",
+ "notaArmado": "Muestra Cumpleaños · Plata 40 (19/10/2026). Referencia: SPEC-21 n.º 10. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Hotel Quinta Real Aguascalientes",
+ "ev1dir": "Hotel Quinta Real Aguascalientes, Av. Aguascalientes Sur 601, Jardines de la Asunción, 20270, Aguascalientes, Ags.",
+ "ev1fecha": "Sábado 24 de julio de 2027 · 21:00 h",
+ "ev1maps": "https://maps.google.com/?q=Hotel+Quinta+Real+Aguascalientes+Aguascalientes,+Ags.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Hotel Quinta Real Aguascalientes",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Fiesta Americana Aguascalientes · Laureles s/n esq. Av. Aguascalientes, Las Flores, 20220 Aguascalientes, Ags. · Tel. +52 449 000 0000 · https://www.fiestamericana.com",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Formal en negro, gris o plata.",
+ "personas": [
+  {
+   "nombre": "Daniela",
+   "rel": "Mi esposa",
+   "foto": ""
+  },
+  {
+   "nombre": "Emilia y Santiago",
+   "rel": "Mis hijos",
+   "foto": ""
+  },
+  {
+   "nombre": "Gloria y Arturo",
+   "rel": "Mis papás",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mis personas favoritas",
+ "padresKick": "¡Gracias por estar en mi vida!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Para mí tu presencia es el mejor regalo. Si quieres obsequiarme algo, te dejo estas opciones:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Alejandro Delgado Rangel",
+ "igHashtag": "#Alex40",
+ "trivia": [
+  {
+   "q": "¿Cuál es mi color favorito?",
+   "o": [
+    "Azul",
+    "Negro",
+    "Verde"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi profesión?",
+   "o": [
+    "Arquitecto",
+    "Abogado",
+    "Ingeniero en sistemas"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Cuál es mi pasatiempo?",
+   "o": [
+    "Correr",
+    "Cocinar",
+    "Jugar pádel"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Cuántos hermanos tengo?",
+   "o": [
+    "1",
+    "2",
+    "3"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Birria",
+    "Pizza",
+    "Sushi"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "¡Te espero para festejar y pasarla bien! Confírmame antes del 10 de julio.",
+ "c_numero-de-whatsapp": "+52 449 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Alejandro",
+ "waN1": "Confirmar a Alejandro",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Cuarenta y contando",
+ "cartaTitulo": "Cuarenta y contando",
+ "cartaTexto": "Cuatro décadas de amigos, familia y buenas historias.\nNo se me ocurre mejor forma de celebrarlas\nque con todos ustedes en una misma noche.\nTe espero para brindar.\nAlejandro",
+ "musicaUrl": "https://www.youtube.com/watch?v=HgzGwKwLmgM",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "fiesta-plata",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-07-10"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "21:00",
+     "t": "Recepción",
+     "d": "Cóctel de bienvenida."
+    },
+    {
+     "h": "21:45",
+     "t": "Brindis",
+     "d": "Por los primeros cuarenta."
+    },
+    {
+     "h": "22:00",
+     "t": "Cena",
+     "d": "Tres tiempos."
+    },
+    {
+     "h": "23:30",
+     "t": "Baile",
+     "d": "DJ y pista."
+    },
+    {
+     "h": "02:00",
+     "t": "Tornafiesta",
+     "d": "Tacos de canasta."
+    },
+    {
+     "h": "03:00",
+     "t": "Fin de fiesta",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#000000",
+    "#2B2B2B",
+    "#A8A9AD",
+    "#D9D9D9"
+   ],
+   "evitar": [
+    "#FFFFFF"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Cuatro décadas de amigos, familia y buenas historias.\nNo se me ocurre mejor forma de celebrarlas\nque con todos ustedes en una misma noche.\nTe espero para brindar.\nAlejandro"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-plata40-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Cumpleaños · Plata 40) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Alex · 40",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Alejandro",
+   "fecha": "24 · 07 · 2027",
+   "hora": "21:00",
+   "talon": "MIS 40",
+   "guion": "Hola, habla Alejandro. Llegaron los cuarenta y, sinceramente, se sienten muy bien. Quiero celebrarlos con una noche de las buenas: cena, brindis y pista hasta tarde. No sería lo mismo sin ti, así que aparta la fecha: sábado 24 de julio en Aguascalientes. Te espero con un trago en la mano."
+  },
+  "boton": {
+   "estilo": "placa"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Cena y barra",
+   "frase": "Lo que vamos a disfrutar",
+   "tiempos": [
+    {
+     "nombre": "Entrada",
+     "desc": "Ensalada de betabel rostizado con queso de cabra."
+    },
+    {
+     "nombre": "Plato fuerte",
+     "desc": "Filete en salsa de chile pasilla con papas cambray."
+    },
+    {
+     "nombre": "Postre",
+     "desc": "Tarta de guayaba con helado de queso."
+    },
+    {
+     "nombre": "Barra",
+     "desc": "Tequila, whisky, cerveza y vino de la región."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "sin-ninos",
+     "texto": "Fiesta sólo para adultos."
+    },
+    {
+     "icono": "uber",
+     "texto": "Si vas a brindar, pide tu Uber."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Galería",
+ "galFrase": "Algunos momentos de estos cuarenta años."
+}

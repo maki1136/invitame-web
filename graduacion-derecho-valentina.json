@@ -1,0 +1,353 @@
+{
+ "slug": "graduacion-derecho-valentina",
+ "tipoEvento": "graduacion",
+ "tema": "graduacion",
+ "n1": "Valentina",
+ "n2": "",
+ "pnom": "Valentina",
+ "titulo": "Valentina",
+ "nEvento": "Valentina",
+ "kick": "Graduación 2027",
+ "fecha": "2027-06-26T10:00",
+ "frase": "Licenciada en Derecho, por fin",
+ "tpl": "Graduación · Toga y balanza",
+ "notaArmado": "Muestra Graduación · Toga y balanza (19/10/2026). Referencia: SPEC-21 n.º 15. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Misa de acción de gracias",
+ "ev1sub": "Basílica Colegiata de Nuestra Señora de Guanajuato",
+ "ev1dir": "Basílica Colegiata de Nuestra Señora de Guanajuato, Plaza de la Paz s/n, Centro, 36000, Guanajuato, Gto.",
+ "ev1fecha": "Sábado 26 de junio de 2027 · 10:00 h",
+ "ev1maps": "https://maps.google.com/?q=Basílica+Colegiata+de+Nuestra+Señora+de+Guanajuato+Guanajuato,+Gto.",
+ "ev2t": "Ceremonia de graduación",
+ "ev2sub": "Teatro Juárez",
+ "ev2dir": "Teatro Juárez, De Sopeña s/n, Centro, 36000, Guanajuato, Gto.",
+ "ev2fecha": "Sábado 26 de junio de 2027 · 12:00 h",
+ "ev2maps": "https://maps.google.com/?q=Teatro+Juárez+Guanajuato,+Gto.",
+ "ev3t": "Cena",
+ "ev3sub": "Hotel Quinta Las Acacias",
+ "ev3dir": "Hotel Quinta Las Acacias, Paseo de la Presa 168, Centro, 36000, Guanajuato, Gto.",
+ "ev3fecha": "Sábado 26 de junio de 2027 · 20:00 h",
+ "ev3maps": "https://maps.google.com/?q=Hotel+Quinta+Las+Acacias+Guanajuato,+Gto.",
+ "cer": "Basílica Colegiata de Nuestra Señora de Guanajuato",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Quinta Las Acacias · Paseo de la Presa 168, Centro, 36000 Guanajuato, Gto. · Tel. +52 473 000 0000 · Código: VALELIC27",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Formal para la ceremonia y la cena. Tonos neutros, blanco, marfil o dorado.",
+ "personas": [
+  {
+   "nombre": "Lic. Joaquín Bermúdez Lara",
+   "rel": "Padrino de generación",
+   "foto": ""
+  },
+  {
+   "nombre": "Patricia y Eduardo",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Elena y Mauricio",
+   "rel": "Mis abuelos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Personas importantes",
+ "padresKick": "Gracias por acompañarme hasta aquí",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Que estés ahí ya es el mejor regalo. Si quieres tener un detalle conmigo, aquí te dejo unas opciones:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Valentina Rosales Ibarra",
+ "igHashtag": "#LicValentina",
+ "trivia": [
+  {
+   "q": "¿Qué rama del Derecho me gusta más?",
+   "o": [
+    "Penal",
+    "Familiar",
+    "Corporativo"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Cuántas tazas de café tomaba en época de exámenes?",
+   "o": [
+    "Una",
+    "Tres",
+    "Perdí la cuenta"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Qué materia casi me tumba?",
+   "o": [
+    "Derecho Romano",
+    "Amparo",
+    "Derecho Fiscal"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Dónde hice mi servicio social?",
+   "o": [
+    "En un juzgado",
+    "En una notaría",
+    "En una ONG"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué quiero hacer ahora?",
+   "o": [
+    "Una maestría",
+    "Viajar un año",
+    "Abrir mi despacho"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Confírmame antes del 12 de junio para la ceremonia y la cena.",
+ "c_numero-de-whatsapp": "+52 473 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Valentina",
+ "waN1": "Confirmar a Valentina",
+ "c_numero-de-whatsapp-2": "+52 473 000 0002",
+ "c_texto-corto-boton-wsp-2": "Confirmar a mamá",
+ "waN2": "Confirmar a mamá",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Lo logré",
+ "cartaTitulo": "Lo logré",
+ "cartaTexto": "Fueron años de códigos, desvelos y café.\nHoy cierro esta etapa en la Facultad de Derecho\nde la Universidad Libre del Bajío\ny quiero celebrarlo con quienes me sostuvieron en el camino.\nValentina",
+ "musicaUrl": "https://www.youtube.com/watch?v=04854XqcfCY",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-toga",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-06-12",
+   "preguntas": [
+    {
+     "texto": "¿Asistirás a la ceremonia en el Teatro Juárez?",
+     "tipo": "sino"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "10:00",
+     "t": "Misa de acción de gracias",
+     "d": "Basílica de Guanajuato."
+    },
+    {
+     "h": "12:00",
+     "t": "Ceremonia de graduación",
+     "d": "Entrega de títulos en el Teatro Juárez."
+    },
+    {
+     "h": "13:30",
+     "t": "Foto de generación",
+     "d": "En las escalinatas del teatro."
+    },
+    {
+     "h": "20:00",
+     "t": "Recepción",
+     "d": "Cóctel de bienvenida en el jardín."
+    },
+    {
+     "h": "20:45",
+     "t": "Cena",
+     "d": "Cuatro tiempos."
+    },
+    {
+     "h": "22:15",
+     "t": "Brindis",
+     "d": "Unas palabras de mi padrino de generación."
+    },
+    {
+     "h": "22:30",
+     "t": "Baile",
+     "d": ""
+    },
+    {
+     "h": "01:30",
+     "t": "Fin de la celebración",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#FFFFFF",
+    "#F5F0E6",
+    "#C9A227",
+    "#1E1E1E"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Fueron años de códigos, desvelos y café.\nHoy cierro esta etapa en la Facultad de Derecho\nde la Universidad Libre del Bajío\ny quiero celebrarlo con quienes me sostuvieron en el camino.\nValentina"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-toga-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Graduación · Toga y balanza) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Lic. Valentina · 2027",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Valentina",
+   "fecha": "26 · 06 · 2027",
+   "hora": "10:00",
+   "talon": "GRADUACIÓN 2027",
+   "guion": "Hola, soy Valentina. Después de cinco años, muchos exámenes y más café del que quiero admitir, por fin me gradúo de Derecho. Nada de esto habría sido igual sin ti. Por eso quiero que estés el 26 de junio en Guanajuato: en la ceremonia y, sobre todo, en la cena para celebrar juntos. Te espero, de verdad."
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Menú",
+   "frase": "Cena a cuatro tiempos",
+   "tiempos": [
+    {
+     "nombre": "Primer tiempo",
+     "desc": "Ensalada de higos con queso de cabra y nuez."
+    },
+    {
+     "nombre": "Segundo tiempo",
+     "desc": "Crema de chile poblano."
+    },
+    {
+     "nombre": "Tercer tiempo",
+     "desc": "Medallón de res en salsa de vino tinto con risotto de hongos."
+    },
+    {
+     "nombre": "Cuarto tiempo",
+     "desc": "Cheesecake de cajeta."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "Para la ceremonia, llega al Teatro Juárez 20 minutos antes."
+    },
+    {
+     "icono": "uber",
+     "texto": "Guanajuato tiene poco estacionamiento: mejor llega en taxi o Uber."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La cena termina a la 1:30 am."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Mis años en la facultad",
+ "galFrase": "De primer semestre a la toga."
+}

@@ -1,0 +1,335 @@
+{
+ "slug": "gala-aurum",
+ "tipoEvento": "corporativo",
+ "tema": "corporativo",
+ "n1": "Aurum Grupo Financiero",
+ "n2": "",
+ "pnom": "Aurum Grupo Financiero",
+ "titulo": "Aurum Grupo Financiero",
+ "nEvento": "Aurum Grupo Financiero",
+ "kick": "Cena de Gala",
+ "fecha": "2027-10-15T20:00",
+ "frase": "Una noche para celebrar 25 años de confianza",
+ "tpl": "Corporativo · Gala art déco",
+ "notaArmado": "Muestra Corporativo · Gala art déco (19/10/2026). Referencia: SPEC-21 n.º 13. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Cena de Gala",
+ "ev1sub": "Rosewood San Miguel de Allende",
+ "ev1dir": "Rosewood San Miguel de Allende, Nemesio Diez 11, Centro, 37700, San Miguel de Allende, Gto.",
+ "ev1fecha": "Viernes 15 de octubre de 2027 · 20:00 h",
+ "ev1maps": "https://maps.google.com/?q=Rosewood+San+Miguel+de+Allende+San+Miguel+de+Allende,+Gto.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Rosewood San Miguel de Allende",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "La cita",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Rosewood San Miguel de Allende · Nemesio Diez 11, Centro, 37700 San Miguel de Allende, Gto. · Tel. +52 415 000 0000 · https://www.rosewoodhotels.com · Código: AURUM25",
+ "itTitulo": "Agenda",
+ "c_itinerario-descripcion": "El programa del evento.",
+ "dressTitulo": "Etiqueta rigurosa",
+ "c_dresscode-texto": "Esmoquin para caballeros y vestido largo para damas.",
+ "personas": [
+  {
+   "nombre": "Lic. Gabriel Montiel",
+   "rel": "Presidente del Consejo",
+   "foto": ""
+  },
+  {
+   "nombre": "Mtra. Isabel Cárdenas",
+   "rel": "Directora General",
+   "foto": ""
+  },
+  {
+   "nombre": "C.P. Andrés Villaseñor",
+   "rel": "Director de Finanzas",
+   "foto": ""
+  },
+  {
+   "nombre": "Lic. Paola Esquivel",
+   "rel": "Directora de Relación con Inversionistas",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Directivos",
+ "padresKick": "Anfitriones de la noche",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "",
+ "reg_amazon": "",
+ "reg_liverpool": "",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "",
+ "igHashtag": "#Aurum25",
+ "trivia": [],
+ "c_habilitar-trivia": "no",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Te agradeceremos confirmar a más tardar el 1 de octubre.",
+ "c_numero-de-whatsapp": "+52 415 000 0001",
+ "c_texto-corto-boton-wsp": "Coordinación del evento",
+ "waN1": "Coordinación del evento",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Invitación",
+ "cartaTitulo": "Invitación",
+ "cartaTexto": "Aurum Grupo Financiero tiene el honor de invitarte\na su Cena de Gala por veinticinco años de historia.\nSerá un placer recibirte en San Miguel de Allende.\nConsejo de Administración",
+ "musicaUrl": "https://www.youtube.com/watch?v=Ozg3P3LrJs8",
+ "videoUrl": "",
+ "spotifyUrl": "",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "fiesta-gala",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-10-01",
+   "preguntas": [
+    {
+     "texto": "Empresa",
+     "tipo": "texto"
+    },
+    {
+     "texto": "Cargo",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Asistirás con acompañante?",
+     "tipo": "sino"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "20:00",
+     "t": "Cóctel de bienvenida",
+     "d": "Terraza principal."
+    },
+    {
+     "h": "21:00",
+     "t": "Mensaje del Presidente",
+     "d": "Lic. Gabriel Montiel."
+    },
+    {
+     "h": "21:15",
+     "t": "Cena",
+     "d": "Cuatro tiempos con maridaje."
+    },
+    {
+     "h": "22:45",
+     "t": "Reconocimientos",
+     "d": "A colaboradores y socios con trayectoria."
+    },
+    {
+     "h": "23:15",
+     "t": "Música en vivo y baile",
+     "d": ""
+    },
+    {
+     "h": "01:00",
+     "t": "Cierre",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#000000",
+    "#1A1A1A",
+    "#C9A227",
+    "#E6D3A3"
+   ],
+   "evitar": [
+    "#FFFFFF"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Aurum Grupo Financiero tiene el honor de invitarte\na su Cena de Gala por veinticinco años de historia.\nSerá un placer recibirte en San Miguel de Allende.\nConsejo de Administración"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-gala-deco-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Corporativo · Gala art déco) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": false
+  },
+  "pasevoz": {
+   "encendido": false
+  },
+  "boton": {
+   "estilo": "placa"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Menú de gala",
+   "frase": "Cuatro tiempos con maridaje",
+   "tiempos": [
+    {
+     "nombre": "Primer tiempo",
+     "desc": "Tartar de atún con aguacate y ponzu de naranja."
+    },
+    {
+     "nombre": "Segundo tiempo",
+     "desc": "Crema de flor de calabaza."
+    },
+    {
+     "nombre": "Tercer tiempo",
+     "desc": "Filete de res en reducción de vino tinto con puré trufado."
+    },
+    {
+     "nombre": "Cuarto tiempo",
+     "desc": "Esfera de chocolate amargo con frutos rojos."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "Presenta tu pase con QR a tu llegada."
+    },
+    {
+     "icono": "otro",
+     "texto": "Habrá servicio de valet parking."
+    }
+   ]
+  },
+  "patrocinadores": {
+   "encendido": true,
+   "titulo": "Nos acompañan",
+   "logos": [
+    {
+     "nombre": "Montiel & Asociados",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Grupo Alcira",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Fideval Seguros",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Ébano Capital",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Lustra Consultores",
+     "img": "",
+     "link": ""
+    },
+    {
+     "nombre": "Corvanta Inmobiliaria",
+     "img": "",
+     "link": ""
+    }
+   ]
+  },
+  "corporativo": {
+   "trivia": false,
+   "filtro": false
+  }
+ },
+ "galTitulo": "Nuestra historia",
+ "galFrase": "Veinticinco años en imágenes."
+}

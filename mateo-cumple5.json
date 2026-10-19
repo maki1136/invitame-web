@@ -1,0 +1,326 @@
+{
+ "slug": "mateo-cumple5",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Mateo",
+ "n2": "",
+ "pnom": "Mateo",
+ "titulo": "Mateo",
+ "nEvento": "Mateo",
+ "kick": "Mi cumple Nº 5",
+ "fecha": "2027-05-15T14:00",
+ "frase": "¡Nivel 5 desbloqueado!",
+ "tpl": "Kids · Pixel aventura",
+ "notaArmado": "Muestra Kids · Pixel aventura (19/10/2026). Referencia: SPEC-21 n.º 1. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Jardín del Hotel Hacienda Jurica by Brisas",
+ "ev1dir": "Jardín del Hotel Hacienda Jurica by Brisas, Paseo Jurica s/n, Jurica, 76100, Santiago de Querétaro, Qro.",
+ "ev1fecha": "Sábado 15 de mayo de 2027 · 14:00 h",
+ "ev1maps": "https://maps.google.com/?q=Jardín+del+Hotel+Hacienda+Jurica+by+Brisas+Santiago+de+Querétaro,+Qro.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Jardín del Hotel Hacienda Jurica by Brisas",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Querétaro Marriott Hotel · Blvd. Bernardo Quintana 4050, Álamos 3a Secc., 76160 Santiago de Querétaro, Qro. · Tel. +52 442 000 0000 · https://www.marriott.com",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Fiesta de disfraces",
+ "c_dresscode-texto": "Ven disfrazado de tu personaje favorito: héroe, explorador, robot o lo que tú quieras. Los papás, cómodos y listos para jugar.",
+ "personas": [
+  {
+   "nombre": "Daniela y Javier",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Mariana y Rodrigo",
+   "rel": "Mis padrinos",
+   "foto": ""
+  },
+  {
+   "nombre": "Lourdes y Ernesto · Patricia y Alberto",
+   "rel": "Mis abuelitos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mi equipo favorito",
+ "padresKick": "¡Gracias por jugar siempre conmigo!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Lo que más quiero es que vengas a jugar conmigo. Si quieres traerme algo, aquí te dejo unas ideas:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Daniela Ruiz Medina",
+ "igHashtag": "#MateoNivel5",
+ "trivia": [
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Pizza",
+    "Sopa de fideo",
+    "Ensalada"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué color me gusta más?",
+   "o": [
+    "Rosa",
+    "Verde",
+    "Azul"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Cómo se llama mi perrito?",
+   "o": [
+    "Galleta",
+    "Rocco",
+    "Pancho"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué quiero ser de grande?",
+   "o": [
+    "Astronauta",
+    "Bombero",
+    "Chef"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuántos años cumplo?",
+   "o": [
+    "4",
+    "5",
+    "6"
+   ],
+   "c": 1
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "¿Te unes a la partida?",
+ "c_frase-para-seccion-confirmacion": "Confírmame antes del 1 de mayo para guardarte tu lugar y tu bolsita de dulces.",
+ "c_numero-de-whatsapp": "+52 442 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a mamá",
+ "waN1": "Confirmar a mamá",
+ "c_numero-de-whatsapp-2": "+52 442 000 0002",
+ "c_texto-corto-boton-wsp-2": "Confirmar a papá",
+ "waN2": "Confirmar a papá",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "¡Tienes una misión!",
+ "cartaTitulo": "¡Tienes una misión!",
+ "cartaTexto": "Este año subo de nivel y quiero que juegues conmigo.\nHabrá monedas, sorpresas y muchísimo pastel.\nPonte tu disfraz favorito y ven a celebrar.\n¡Sin ti la partida no empieza!\nMateo",
+ "musicaUrl": "https://www.youtube.com/watch?v=ZbZSe6N_BXs",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-pixel",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-05-01",
+   "preguntas": [
+    {
+     "texto": "¿Cuántos niños vienen contigo?",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Algún niño tiene alergia a algún alimento?",
+     "tipo": "texto"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "14:00",
+     "t": "¡Arranca la partida!",
+     "d": "Recepción de jugadores y entrega de gorritos pixel."
+    },
+    {
+     "h": "14:30",
+     "t": "Juegos e inflable",
+     "d": "Brincolín, carrera de costales y búsqueda de monedas doradas."
+    },
+    {
+     "h": "15:30",
+     "t": "Comida",
+     "d": "Menú para niños y taquiza para los papás."
+    },
+    {
+     "h": "16:30",
+     "t": "Show de magia",
+     "d": "Un mago con trucos de otro nivel."
+    },
+    {
+     "h": "17:15",
+     "t": "Piñata",
+     "d": "¡A romper el bloque sorpresa!"
+    },
+    {
+     "h": "17:45",
+     "t": "Pastel y mañanitas",
+     "d": "Soplamos las 5 velitas todos juntos."
+    },
+    {
+     "h": "18:30",
+     "t": "Fin del juego",
+     "d": "Bolsitas de dulces para el camino a casa."
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#5DADEC",
+    "#4CAF50",
+    "#C0392B",
+    "#F4C430"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Este año subo de nivel y quiero que juegues conmigo.\nHabrá monedas, sorpresas y muchísimo pastel.\nPonte tu disfraz favorito y ven a celebrar.\n¡Sin ti la partida no empieza!\nMateo"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "video",
+   "url": "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/eventos/ev-pixel-fondo.mp4",
+   "poster": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-pixel-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Kids · Pixel aventura) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Nivel 5 · Mateo",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Mateo",
+   "fecha": "15 · 05 · 2027",
+   "hora": "14:00",
+   "talon": "MI CUMPLE Nº 5",
+   "guion": "¡Hola! Soy Mateo y ya voy a cumplir cinco. Te invito a mi fiesta, va a estar súper divertida: hay inflable, mago, piñata y un pastel gigante. Ponte tu disfraz, el que más te guste, y ven a jugar conmigo. Le pedí a mi mamá que te guardara un lugar. ¡Te espero, eh! No se te olvide. ¡Bye!"
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "Habrá inflable: trae calcetines de repuesto."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La fiesta termina a las 18:30."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Así he crecido",
+ "galFrase": "Del nivel 1 al nivel 5, en unas cuantas fotos."
+}

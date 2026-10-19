@@ -1,0 +1,326 @@
+{
+ "slug": "mis18-leo",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Leo",
+ "n2": "",
+ "pnom": "Leo",
+ "titulo": "Leo",
+ "nEvento": "Leo",
+ "kick": "Mis 18",
+ "fecha": "2027-10-30T21:00",
+ "frase": "Dieciocho. Ahora sí.",
+ "tpl": "Cumpleaños · Urbano 18",
+ "notaArmado": "Muestra Cumpleaños · Urbano 18 (19/10/2026). Referencia: SPEC-21 n.º 20. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Grand Hotel Tijuana",
+ "ev1dir": "Grand Hotel Tijuana, Blvd. Agua Caliente 4500, Aviación, 22014, Tijuana, B.C.",
+ "ev1fecha": "Sábado 30 de octubre de 2027 · 21:00 h",
+ "ev1maps": "https://maps.google.com/?q=Grand+Hotel+Tijuana+Tijuana,+B.C.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Grand Hotel Tijuana",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Grand Hotel Tijuana · Blvd. Agua Caliente 4500, Aviación, 22014 Tijuana, B.C. · Tel. +52 664 000 0000",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Urbano elegante",
+ "c_dresscode-texto": "Negro, gris o mostaza. Tenis limpios, bienvenidos.",
+ "personas": [
+  {
+   "nombre": "Mariana y Gustavo",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Matías",
+   "rel": "Mi hermano",
+   "foto": ""
+  },
+  {
+   "nombre": "Sofía, Iván y Andrea",
+   "rel": "Mis amigos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mis personas",
+ "padresKick": "Quienes me acompañan en este día",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "El regalo es opcional: lo que me importa es que vengas. Si quieres darme algo:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "https://www.sears.com.mx",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Leonardo Ruiz Esparza",
+ "igHashtag": "#Leo18",
+ "trivia": [
+  {
+   "q": "¿Qué deporte veo siempre?",
+   "o": [
+    "Beisbol",
+    "Basquetbol",
+    "Futbol americano"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Tacos de adobada",
+    "Sushi",
+    "Pizza"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué quiero estudiar?",
+   "o": [
+    "Música",
+    "Diseño gráfico",
+    "Administración"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué playlist no falta en mi coche?",
+   "o": [
+    "Rap",
+    "Rock en español",
+    "Electrónica"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué hago los domingos?",
+   "o": [
+    "Patinar",
+    "Dormir",
+    "Ir a la playa"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Es importante que confirmes antes del 16 de octubre para apartarte un lugar.",
+ "c_numero-de-whatsapp": "+52 664 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Leo",
+ "waN1": "Confirmar a Leo",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Llegó el día",
+ "cartaTitulo": "Llegó el día",
+ "cartaTexto": "Trae buena vibra, ganas de bailar\ny cero prisa por irte.\nLo demás lo pongo yo.\nTe espero en mis 18.\nLeo",
+ "musicaUrl": "https://www.youtube.com/watch?v=2zNSgSzhBfM",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "fiesta-urbano",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-10-16"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "21:00",
+     "t": "Llegada",
+     "d": "Mocktails y música."
+    },
+    {
+     "h": "22:00",
+     "t": "Cena",
+     "d": "Barra de tacos y burgers."
+    },
+    {
+     "h": "23:00",
+     "t": "Brindis",
+     "d": ""
+    },
+    {
+     "h": "23:15",
+     "t": "Pastel",
+     "d": ""
+    },
+    {
+     "h": "23:30",
+     "t": "DJ",
+     "d": "La pista es nuestra."
+    },
+    {
+     "h": "02:00",
+     "t": "Fin de la fiesta",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#111111",
+    "#6E6E6E",
+    "#E1AD01",
+    "#BFBFBF"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Trae buena vibra, ganas de bailar\ny cero prisa por irte.\nLo demás lo pongo yo.\nTe espero en mis 18.\nLeo"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-urbano-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Cumpleaños · Urbano 18) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Leo · 18",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Leo",
+   "fecha": "30 · 10 · 2027",
+   "hora": "21:00",
+   "talon": "MIS 18",
+   "guion": "¿Qué onda? Soy Leo. Cumplo dieciocho y quiero celebrarlo con la gente que vale la pena. Va a haber DJ, tacos, pastel y pista toda la noche. Tú sólo trae buena vibra y ganas de bailar, que esta noche no se repite. Te espero el sábado 30 de octubre en Tijuana. No me dejes plantado."
+  },
+  "boton": {
+   "estilo": "placa"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "La barra",
+   "frase": "Para toda la noche",
+   "tiempos": [
+    {
+     "nombre": "Mocktails",
+     "desc": "Limonada de maracuyá, piña colada sin alcohol y sodas italianas."
+    },
+    {
+     "nombre": "Cena",
+     "desc": "Tacos de adobada, burgers y papas."
+    },
+    {
+     "nombre": "Postre",
+     "desc": "Pastel de chocolate y barra de churros."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "uber",
+     "texto": "Pide tu Uber o que pasen por ti: nadie se va manejando."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La fiesta termina a las 2:00 am."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Fotos",
+ "galFrase": "Dieciocho años, sin filtro."
+}

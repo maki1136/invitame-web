@@ -1,0 +1,345 @@
+{
+ "slug": "misxv-bruno",
+ "tipoEvento": "xv",
+ "tema": "xv",
+ "n1": "Bruno",
+ "n2": "",
+ "pnom": "Bruno",
+ "titulo": "Bruno",
+ "nEvento": "Bruno",
+ "kick": "Mis XV",
+ "fecha": "2027-08-07T19:00",
+ "frase": "Quince años, una noche para recordar",
+ "tpl": "XV · Bokeh dorado",
+ "notaArmado": "Muestra XV · Bokeh dorado (19/10/2026). Referencia: SPEC-21 n.º 19. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Misa",
+ "ev1sub": "Catedral de Toluca",
+ "ev1dir": "Catedral de Toluca, Plaza de los Mártires s/n, Centro, 50000, Toluca, Edo. Méx.",
+ "ev1fecha": "Sábado 7 de agosto de 2027 · 19:00 h",
+ "ev1maps": "https://maps.google.com/?q=Catedral+de+Toluca+Toluca,+Edo.+Méx.",
+ "ev2t": "Recepción",
+ "ev2sub": "Hotel Quinta del Rey",
+ "ev2dir": "Hotel Quinta del Rey, Paseo Tollocan Ote. 500, Santa Ana Tlapaltitlán, 50160, Toluca, Edo. Méx.",
+ "ev2fecha": "Sábado 7 de agosto de 2027 · 21:00 h",
+ "ev2maps": "https://maps.google.com/?q=Hotel+Quinta+del+Rey+Toluca,+Edo.+Méx.",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Catedral de Toluca",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Quinta del Rey · Paseo Tollocan Ote. 500, Santa Ana Tlapaltitlán, 50160 Toluca, Edo. Méx. · Tel. +52 722 000 0000 · Código: XVBRUNO",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Traje oscuro para ellos y vestido largo o de coctel para ellas. Negro y dorado son bienvenidos.",
+ "personas": [
+  {
+   "nombre": "Verónica Larios y Fernando Aguilar",
+   "rel": "Mis papás",
+   "foto": ""
+  },
+  {
+   "nombre": "Renata",
+   "rel": "Mi hermana",
+   "foto": ""
+  },
+  {
+   "nombre": "Gabriela y Héctor",
+   "rel": "Mis padrinos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mis personas favoritas",
+ "padresKick": "¡Gracias por acompañarme en este día tan especial!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Para mí tu presencia es el mejor regalo. Si deseas obsequiarme algo, te dejo estas opciones:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Verónica Larios Pineda",
+ "igHashtag": "#XVBruno",
+ "trivia": [
+  {
+   "q": "¿Qué deporte practico?",
+   "o": [
+    "Futbol",
+    "Natación",
+    "Tenis"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Tacos de suadero",
+    "Pizza",
+    "Sushi"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué quiero estudiar?",
+   "o": [
+    "Medicina",
+    "Ingeniería en robótica",
+    "Arquitectura"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cómo se llama mi perro?",
+   "o": [
+    "Thor",
+    "Bruno Jr.",
+    "Coco"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi lugar favorito?",
+   "o": [
+    "El Nevado de Toluca",
+    "La playa",
+    "El cine"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Espero que puedas venir. Confírmame antes del 24 de julio.",
+ "c_numero-de-whatsapp": "+52 722 000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a mamá",
+ "waN1": "Confirmar a mamá",
+ "c_numero-de-whatsapp-2": "+52 722 000 0002",
+ "c_texto-corto-boton-wsp-2": "Confirmar a papá",
+ "waN2": "Confirmar a papá",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Para ti",
+ "cartaTitulo": "Para ti",
+ "cartaTexto": "Hay momentos que sólo pasan una vez,\ny compartirlos con quienes quieres los vuelve enormes.\nHas sido parte de mi camino\ny quiero que estés en mis XV.\nBruno",
+ "musicaUrl": "https://www.youtube.com/watch?v=VPRjCeoBqrI",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "fiesta-bokeh",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-07-24"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "19:00",
+     "t": "Misa",
+     "d": "Acción de gracias en la Catedral."
+    },
+    {
+     "h": "21:00",
+     "t": "Recepción",
+     "d": "Cóctel de bienvenida."
+    },
+    {
+     "h": "21:45",
+     "t": "Entrada y vals",
+     "d": "Con mi mamá y mi familia."
+    },
+    {
+     "h": "22:15",
+     "t": "Cena",
+     "d": "Tres tiempos."
+    },
+    {
+     "h": "23:15",
+     "t": "Brindis y pastel",
+     "d": ""
+    },
+    {
+     "h": "23:30",
+     "t": "Baile sorpresa",
+     "d": "Preparado con mis amigos."
+    },
+    {
+     "h": "23:45",
+     "t": "¡Fiesta!",
+     "d": "DJ y pista."
+    },
+    {
+     "h": "03:00",
+     "t": "Fin de la fiesta",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#000000",
+    "#1A1A1A",
+    "#C9A227",
+    "#F0D58C"
+   ],
+   "evitar": [
+    "#FFFFFF"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Hay momentos que sólo pasan una vez,\ny compartirlos con quienes quieres los vuelve enormes.\nHas sido parte de mi camino\ny quiero que estés en mis XV.\nBruno"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-bokeh-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (XV · Bokeh dorado) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Mis XV · Bruno",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Bruno",
+   "fecha": "07 · 08 · 2027",
+   "hora": "19:00",
+   "talon": "MIS XV",
+   "guion": "¿Qué tal? Soy Bruno. Cumplo quince y la verdad tenía muchas ganas de que llegara este día. Has estado conmigo en muchos momentos, por eso quiero que estés en este también. Primero la misa en la Catedral de Toluca y después a cenar, bailar y pasarla increíble. Te espero el 7 de agosto. No faltes."
+  },
+  "boton": {
+   "estilo": "placa"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Menú",
+   "frase": "Cena a tres tiempos",
+   "tiempos": [
+    {
+     "nombre": "Entrada",
+     "desc": "Crema de queso con chile poblano."
+    },
+    {
+     "nombre": "Plato fuerte",
+     "desc": "Pechuga rellena de espinaca en salsa de tres quesos con arroz."
+    },
+    {
+     "nombre": "Postre",
+     "desc": "Pastel de XV y mesa de dulces."
+    },
+    {
+     "nombre": "Barra",
+     "desc": "Mocktails para los quinceañeros; coctelería para adultos."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "uber",
+     "texto": "Si vas a brindar, pide tu Uber de regreso."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La fiesta termina a las 3:00 am."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Mis fotos",
+ "galFrase": "Quince años en unas cuantas imágenes."
+}

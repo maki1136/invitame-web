@@ -1,0 +1,337 @@
+{
+ "slug": "mis50-ricardo",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Ricardo",
+ "n2": "",
+ "pnom": "Ricardo",
+ "titulo": "Ricardo",
+ "nEvento": "Ricardo",
+ "kick": "Mis 50 años",
+ "fecha": "2027-10-23T20:30",
+ "frase": "Medio siglo y con ganas de mucho más",
+ "tpl": "Cumpleaños · Noche de oro",
+ "notaArmado": "Muestra Cumpleaños · Noche de oro (19/10/2026). Referencia: SPEC-21 n.º 8. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Fiesta",
+ "ev1sub": "Hotel Quinta Real Monterrey",
+ "ev1dir": "Hotel Quinta Real Monterrey, Diego Rivera 500, Valle Oriente, 66260, San Pedro Garza García, N.L.",
+ "ev1fecha": "Sábado 23 de octubre de 2027 · 20:30 h",
+ "ev1maps": "https://maps.google.com/?q=Hotel+Quinta+Real+Monterrey+San+Pedro+Garza+García,+N.L.",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Hotel Quinta Real Monterrey",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Hotel Quinta Real Monterrey · Diego Rivera 500, Valle Oriente, 66260 San Pedro Garza García, N.L. · Tel. +52 81 0000 0000 · Código: RICARDO50",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Formal",
+ "c_dresscode-texto": "Traje oscuro para ellos y vestido largo o de coctel para ellas. Detalles dorados, bienvenidos.",
+ "personas": [
+  {
+   "nombre": "Mónica",
+   "rel": "Mi esposa",
+   "foto": ""
+  },
+  {
+   "nombre": "Santiago (el rebelde) y Renata (la consentida)",
+   "rel": "Mis hijos",
+   "foto": ""
+  },
+  {
+   "nombre": "Óscar y Elena",
+   "rel": "Mis hermanos",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Mi familia",
+ "padresKick": "¡Gracias por acompañarme en este día tan especial!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Tu presencia es lo que más me importa. Si quieres tener un detalle conmigo, te dejo estas opciones:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "",
+ "reg_mercadolibre": "",
+ "reg_palacio": "https://www.elpalaciodehierro.com",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Ricardo Garza Treviño",
+ "igHashtag": "#Ricardo50",
+ "trivia": [
+  {
+   "q": "¿Cuál es mi profesión?",
+   "o": [
+    "Ingeniero civil",
+    "Contador",
+    "Médico"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuál es mi bebida favorita?",
+   "o": [
+    "Whisky",
+    "Cerveza",
+    "Tequila"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿De qué equipo soy?",
+   "o": [
+    "Rayados",
+    "Tigres",
+    "Ninguno, sólo veo beisbol"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Quién manda en la casa?",
+   "o": [
+    "Yo",
+    "Mónica",
+    "El perro"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué banda me sé de memoria?",
+   "o": [
+    "Queen",
+    "The Beatles",
+    "Los Bukis"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "Necesito saber cuántos valientes somos. Confírmame antes del 9 de octubre.",
+ "c_numero-de-whatsapp": "+52 81 0000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a Ricardo",
+ "waN1": "Confirmar a Ricardo",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Se buscan voluntarios",
+ "cartaTitulo": "Se buscan voluntarios",
+ "cartaTexto": "Para celebrar cincuenta años hacen falta valientes\nque aguanten cena, brindis y pista hasta tarde.\nSi te sientes a la altura, quedas oficialmente reclutado.\nNos vemos en Monterrey.\nRicardo",
+ "musicaUrl": "https://www.youtube.com/watch?v=Gs069dndIYk",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "fiesta-noche",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-10-09"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "20:30",
+     "t": "Cóctel de bienvenida",
+     "d": "Whisky, vino y botanas norteñas."
+    },
+    {
+     "h": "21:30",
+     "t": "Cena",
+     "d": "Tres tiempos con corte de la casa."
+    },
+    {
+     "h": "23:00",
+     "t": "Video sorpresa",
+     "d": "Cincuenta años en cinco minutos."
+    },
+    {
+     "h": "23:15",
+     "t": "Brindis y pastel",
+     "d": ""
+    },
+    {
+     "h": "23:30",
+     "t": "Baile",
+     "d": "Banda en vivo y luego DJ."
+    },
+    {
+     "h": "02:30",
+     "t": "Tornafiesta",
+     "d": "Tacos de trompo."
+    },
+    {
+     "h": "03:30",
+     "t": "Fin de la fiesta",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#0B1B3F",
+    "#1C2541",
+    "#C9A227",
+    "#000000"
+   ],
+   "evitar": [
+    "#FFFFFF"
+   ]
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Para celebrar cincuenta años hacen falta valientes\nque aguanten cena, brindis y pista hasta tarde.\nSi te sientes a la altura, quedas oficialmente reclutado.\nNos vemos en Monterrey.\nRicardo"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-noche-oro-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Cumpleaños · Noche de oro) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Ricardo · 50 de oro",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Ricardo",
+   "fecha": "23 · 10 · 2027",
+   "hora": "20:30",
+   "talon": "MIS 50 AÑOS",
+   "guion": "¿Qué tal? Habla Ricardo. Me costó cincuenta años llegar hasta aquí, y quiero celebrarlo como se debe: con buena cena, buen whisky y la gente que me ha aguantado todo este tiempo. Tú estás en esa lista, así que no tienes excusa. Te espero el 23 de octubre en la Quinta Real. Ahí nos vemos."
+  },
+  "boton": {
+   "estilo": "placa"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Cena y barra",
+   "frase": "Lo que vamos a disfrutar",
+   "tiempos": [
+    {
+     "nombre": "Entrada",
+     "desc": "Carpaccio de res con alcaparras y parmesano."
+    },
+    {
+     "nombre": "Plato fuerte",
+     "desc": "Rib eye al carbón con puré rústico y espárragos."
+    },
+    {
+     "nombre": "Postre",
+     "desc": "Glorias de Linares con helado de vainilla."
+    },
+    {
+     "nombre": "Barra",
+     "desc": "Whisky, tequila reposado, vino tinto y cerveza artesanal."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "sin-ninos",
+     "texto": "La fiesta es sólo para adultos."
+    },
+    {
+     "icono": "uber",
+     "texto": "Si vas a brindar, mejor pide tu Uber."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Un poco de mí...",
+ "galFrase": "Cinco décadas, algunas fotos."
+}

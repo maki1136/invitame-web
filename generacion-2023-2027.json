@@ -1,0 +1,339 @@
+{
+ "slug": "generacion-2023-2027",
+ "tipoEvento": "graduacion",
+ "tema": "graduacion",
+ "n1": "Ingeniería Industrial",
+ "n2": "",
+ "pnom": "Ingeniería Industrial",
+ "titulo": "Ingeniería Industrial",
+ "nEvento": "Ingeniería Industrial",
+ "kick": "Generación 2023-2027",
+ "fecha": "2027-11-06T17:00",
+ "frase": "El esfuerzo nos trajo hasta aquí",
+ "tpl": "Graduación · Generación",
+ "notaArmado": "Muestra Graduación · Generación (19/10/2026). Referencia: SPEC-21 n.º 18. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "ev1t": "Misa",
+ "ev1sub": "Parroquia de Nuestra Señora de Guadalupe",
+ "ev1dir": "Parroquia de Nuestra Señora de Guadalupe, Hidalgo 370, Centro, 48300, Puerto Vallarta, Jal.",
+ "ev1fecha": "Sábado 6 de noviembre de 2027 · 17:00 h",
+ "ev1maps": "https://maps.google.com/?q=Parroquia+de+Nuestra+Señora+de+Guadalupe+Puerto+Vallarta,+Jal.",
+ "ev2t": "Recepción",
+ "ev2sub": "CasaMagna Marriott Puerto Vallarta",
+ "ev2dir": "CasaMagna Marriott Puerto Vallarta, Paseo de la Marina 5, Marina Vallarta, 48335, Puerto Vallarta, Jal.",
+ "ev2fecha": "Sábado 6 de noviembre de 2027 · 20:00 h",
+ "ev2maps": "https://maps.google.com/?q=CasaMagna+Marriott+Puerto+Vallarta+Puerto+Vallarta,+Jal.",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Parroquia de Nuestra Señora de Guadalupe",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "CasaMagna Marriott Puerto Vallarta · Paseo de la Marina 5, Marina Vallarta, 48335 Puerto Vallarta, Jal. · Tel. +52 322 000 0000 · https://www.marriott.com · Código: ITC2327",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Misa: toga · Fiesta: formal",
+ "c_dresscode-texto": "Graduados con toga en la misa. En la recepción, formal: vestido largo o de coctel y traje.",
+ "personas": [
+  {
+   "nombre": "Ing. Héctor Salvatierra",
+   "rel": "Padrino de generación",
+   "foto": ""
+  },
+  {
+   "nombre": "Mtra. Lucía Arredondo",
+   "rel": "Coordinadora de la carrera",
+   "foto": ""
+  },
+  {
+   "nombre": "Diego Paredes",
+   "rel": "Presidente de generación",
+   "foto": ""
+  }
+ ],
+ "padresTitulo": "Personas importantes",
+ "padresKick": "En nuestra generación",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "",
+ "reg_amazon": "",
+ "reg_liverpool": "",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "",
+ "igHashtag": "#ITCGen2327",
+ "trivia": [
+  {
+   "q": "¿En qué empresa hicimos la primera visita industrial?",
+   "o": [
+    "Una cervecera",
+    "Una embotelladora",
+    "Una planta automotriz"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué materia nos unió más (de puro sufrir)?",
+   "o": [
+    "Investigación de operaciones",
+    "Cálculo integral",
+    "Termodinámica"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cuántos nos graduamos?",
+   "o": [
+    "48",
+    "63",
+    "75"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Cuál era el lugar oficial para estudiar?",
+   "o": [
+    "La biblioteca",
+    "La explanada",
+    "El malecón"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Quién llegaba siempre tarde a clase de 7?",
+   "o": [
+    "Diego",
+    "Todos",
+    "Nadie, éramos puntuales"
+   ],
+   "c": 1
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "Confirma tu asistencia",
+ "c_frase-para-seccion-confirmacion": "¡Gracias por compartir este día con nosotros! Confirma antes del 23 de octubre.",
+ "c_numero-de-whatsapp": "+52 322 000 0001",
+ "c_texto-corto-boton-wsp": "Comité de generación",
+ "waN1": "Comité de generación",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "Misión cumplida",
+ "cartaTitulo": "Misión cumplida",
+ "cartaTexto": "Cuatro años de proyectos, prácticas y madrugadas.\nHoy cerramos esta etapa juntos\ny queremos agradecer a quienes estuvieron en cada paso.\nAcompáñanos a celebrar.\nGeneración 2023-2027",
+ "musicaUrl": "https://www.youtube.com/watch?v=mk48xRzuNvA",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-generacion",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-10-23"
+  },
+  "itinerario": {
+   "estilo": "centro",
+   "momentos": [
+    {
+     "h": "17:00",
+     "t": "Misa de graduación",
+     "d": "Parroquia de Guadalupe, en el centro."
+    },
+    {
+     "h": "18:15",
+     "t": "Foto oficial",
+     "d": "Con toga y birrete en el malecón."
+    },
+    {
+     "h": "20:00",
+     "t": "Recepción",
+     "d": "Cóctel frente al mar."
+    },
+    {
+     "h": "21:00",
+     "t": "Cena",
+     "d": "Cuatro tiempos."
+    },
+    {
+     "h": "22:15",
+     "t": "Lanzamiento de birretes y brindis",
+     "d": ""
+    },
+    {
+     "h": "22:30",
+     "t": "Baile",
+     "d": "DJ hasta el cierre."
+    },
+    {
+     "h": "03:00",
+     "t": "Fin del evento",
+     "d": ""
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#1F4E89",
+    "#5B8CC8",
+    "#FFFFFF",
+    "#C9A227"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Cuatro años de proyectos, prácticas y madrugadas.\nHoy cerramos esta etapa juntos\ny queremos agradecer a quienes estuvieron en cada paso.\nAcompáñanos a celebrar.\nGeneración 2023-2027"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": ""
+  },
+  "fondo": {
+   "tipo": "imagen",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-generacion-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Graduación · Generación) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Gen 2023-2027 · ¡Lo logramos!",
+   "frasePor": "novios"
+  },
+  "pasevoz": {
+   "encendido": false,
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Ingeniería Industrial",
+   "fecha": "06 · 11 · 2027",
+   "hora": "17:00",
+   "talon": "GENERACIÓN 2023-2027",
+   "guion": "¿Qué tal? Soy Diego, presidente de la Generación 2023-2027 de Ingeniería Industrial. Fueron cuatro años intensos, y lo que más nos llevamos es la gente que estuvo a nuestro lado. Por eso queremos que vengas a Puerto Vallarta el 6 de noviembre: misa, foto con toga y una cena frente al mar. Te esperamos para celebrar."
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "menu": {
+   "encendido": true,
+   "titulo": "Menú",
+   "frase": "Cena a cuatro tiempos",
+   "tiempos": [
+    {
+     "nombre": "Primer tiempo",
+     "desc": "Tostada de atún con mango y chile serrano."
+    },
+    {
+     "nombre": "Segundo tiempo",
+     "desc": "Crema de coco y camarón."
+    },
+    {
+     "nombre": "Tercer tiempo",
+     "desc": "Pescado zarandeado o filete al chipotle."
+    },
+    {
+     "nombre": "Cuarto tiempo",
+     "desc": "Pay de plátano con helado de cajeta."
+    }
+   ]
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "hora-cierre",
+     "texto": "El evento termina a las 3:00 am."
+    },
+    {
+     "icono": "uber",
+     "texto": "Si vas a brindar, deja el auto y pide tu Uber o taxi."
+    },
+    {
+     "icono": "otro",
+     "texto": "Cuida tus pertenencias: el hotel no se hace responsable por objetos olvidados."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Nosotros",
+ "galFrase": "Así fueron estos cuatro años."
+}
