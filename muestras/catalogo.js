@@ -61,8 +61,8 @@
    con `foto`: la captura REAL de su portada (/formulario/disenos/<slug>.webp,
    sacada de la invitación publicada el 15/10). El formulario dibuja las
    tarjetas con esa foto.
-   · `tipos` filtra qué ve el cliente según lo que festeja (boda / xv). Para
-     bautizo, cumpleaños y otros se muestran todas.
+   · `tipos` filtra qué ve el cliente según lo que festeja. Ver «UNA FILA POR
+     TIPO DE EVENTO» (19/10/2026) al final: ya acepta todos los tipos.
    · `oculto: true` = queda para leer pedidos viejos que la eligieron, pero ya
      no se ofrece.
    · Si se agrega una muestra a la web, se agrega acá con su captura.
@@ -371,7 +371,252 @@
       paleta:  ['#b06a7e', '#f7eef0', '#c9a0b0', '#8a4f60'],
       tipos:   ['xv'],
       oculto:  true
-    }
+    },
+    /* ---- 19/10/2026 · eventos nuevos (las que ya tienen portada con foto) ---- */
+    'fiesta-ejecutivo': {
+      nombre:  "Ejecutivo azul",
+      bajada:  "Azul ejecutivo con líneas de luz.",
+      muestra: 'conferencia-nexora',
+      foto:    '/formulario/disenos/conferencia-nexora.webp',
+      color:   '#122b53',
+      color2:  '#0c1e3b',
+      paleta:  ["#195c83", "#142346", "#0d0d4e", "#0f111f"],
+      tipos:   ["corporativo"]
+    },
+    'fiesta-gala': {
+      nombre:  "Gala art déco",
+      bajada:  "Negro y oro art déco para una noche de gala.",
+      muestra: 'gala-aurum',
+      foto:    '/formulario/disenos/gala-aurum.webp',
+      color:   '#30271a',
+      color2:  '#221c12',
+      paleta:  ["#63553f", "#372815", "#19160e", "#100f0a"],
+      tipos:   ["corporativo"]
+    },
+    'fiesta-brindis': {
+      nombre:  "Brindis de Año Nuevo",
+      bajada:  "Champán, burbujas y luces para cerrar el año.",
+      muestra: 'cena-fin-de-ano-veltra',
+      foto:    '/formulario/disenos/cena-fin-de-ano-veltra.webp',
+      color:   '#32312e',
+      color2:  '#242321',
+      paleta:  ["#4c5154", "#3d3e3e", "#26211a", "#161310"],
+      tipos:   ["corporativo"]
+    },
+    'celebra-toga': {
+      nombre:  "Toga y balanza",
+      bajada:  "Marfil, oro y la balanza de la toga.",
+      muestra: 'graduacion-derecho-valentina',
+      foto:    '/formulario/disenos/graduacion-derecho-valentina.webp',
+      color:   '#594f42',
+      color2:  '#40382f',
+      paleta:  ["#8d887d", "#645a4d", "#4e3e2a", "#2a2118"],
+      tipos:   ["graduacion"]
+    },
+    'fiesta-birrete': {
+      nombre:  "Birrete de gala",
+      bajada:  "Negro y oro, birrete de gala.",
+      muestra: 'graduacion-gala-2027',
+      foto:    '/formulario/disenos/graduacion-gala-2027.webp',
+      color:   '#3a2f1f',
+      color2:  '#292116',
+      paleta:  ["#7f6b4e", "#43301a", "#1a160e", "#0c0d09"],
+      tipos:   ["graduacion"]
+    },
+    'celebra-kinder': {
+      nombre:  "Pequeños graduados",
+      bajada:  "Azul cielo y crayones para los más pequeños.",
+      muestra: 'graduacion-kinder-2027',
+      foto:    '/formulario/disenos/graduacion-kinder-2027.webp',
+      color:   '#797e69',
+      color2:  '#575a4b',
+      paleta:  ["#a6a98c", "#919577", "#697469", "#414334"],
+      tipos:   ["graduacion"]
+    },
+    'celebra-generacion': {
+      nombre:  "Generación",
+      bajada:  "Cielo azul y birretes al aire.",
+      muestra: 'generacion-2023-2027',
+      foto:    '/formulario/disenos/generacion-2023-2027.webp',
+      color:   '#62707e',
+      color2:  '#46505a',
+      paleta:  ["#929ba0", "#60768b", "#596c7e", "#3c424c"],
+      tipos:   ["graduacion"]
+    },
+    'celebra-pixel': {
+      nombre:  "Pixel aventura",
+      bajada:  "Islas y globos pixel sobre cielo de atardecer.",
+      muestra: 'mateo-cumple5',
+      foto:    '/formulario/disenos/mateo-cumple5.webp',
+      color:   '#7b6961',
+      color2:  '#584b45',
+      paleta:  ["#a38e88", "#8f7c7a", "#75655d", "#45372a"],
+      tipos:   ["cumple"]
+    },
+    'celebra-unicornio': {
+      nombre:  "Cielo mágico",
+      bajada:  "Nubes, unicornio y destellos pastel.",
+      muestra: 'sofia-cumple6',
+      foto:    '/formulario/disenos/sofia-cumple6.webp',
+      color:   '#897f7d',
+      color2:  '#625b5a',
+      paleta:  ["#a09692", "#918685", "#847a78", "#695f5d"],
+      tipos:   ["cumple"]
+    },
+    'fiesta-bokeh': {
+      nombre:  "Bokeh dorado",
+      bajada:  "Luces doradas que respiran sobre fondo negro.",
+      muestra: 'misxv-bruno',
+      foto:    '/formulario/disenos/misxv-bruno.webp',
+      color:   '#282219',
+      color2:  '#1c1812',
+      paleta:  ["#4b3f33", "#1a1710", "#16120b", "#110e09"],
+      tipos:   ["xv"]
+    },
+    'celebra-osita': {
+      nombre:  "Osita coronada",
+      bajada:  "Osita con coronita, globos y tonos crema.",
+      muestra: 'babyshower-isabella',
+      foto:    '/formulario/disenos/babyshower-isabella.webp',
+      color:   '#8d7766',
+      color2:  '#635347',
+      paleta:  ["#c0b0a6", "#a58f7f", "#886c54", "#48321d"],
+      tipos:   ["babyshower"]
+    },
+    'fiesta-noche': {
+      nombre:  "Noche de oro",
+      bajada:  "Negro mate, oro y estrellas que titilan.",
+      muestra: 'mis50-ricardo',
+      foto:    '/formulario/disenos/mis50-ricardo.webp',
+      color:   '#282522',
+      color2:  '#1c1a18',
+      paleta:  ["#4c4033", "#262420", "#1c1d1c", "#0e1218"],
+      tipos:   ["cumple"]
+    },
+    'fiesta-urbano': {
+      nombre:  "Urbano 18",
+      bajada:  "Ciudad de noche y haces de luz.",
+      muestra: 'mis18-leo',
+      foto:    '/formulario/disenos/mis18-leo.webp',
+      color:   '#32302d',
+      color2:  '#232220',
+      paleta:  ["#67615c", "#2c2c2b", "#1d1d1b", "#141411"],
+      tipos:   ["cumple"]
+    },
+    'celebra-grises': {
+      nombre:  "Treinta en grises",
+      bajada:  "Gris piedra, minimal y plata.",
+      muestra: 'mis30-martin',
+      foto:    '/formulario/disenos/mis30-martin.webp',
+      color:   '#7d7469',
+      color2:  '#585149',
+      paleta:  ["#b8b6b2", "#92897f", "#6a5d4d", "#433526"],
+      tipos:   ["cumple"]
+    },
+    'celebra-mono': {
+      nombre:  "Moño de raso",
+      bajada:  "Lino blanco y moño de raso rosa.",
+      muestra: 'bautizo-y-comunion-lucia-y-clara',
+      foto:    '/formulario/disenos/bautizo-y-comunion-lucia-y-clara.webp',
+      color:   '#898377',
+      color2:  '#605b53',
+      paleta:  ["#d3ccca", "#b0a69f", "#776d56", "#2c2b1b"],
+      tipos:   ["bautismo", "comunion"]
+    },
+    'celebra-olivo': {
+      nombre:  "Olivo y cruz",
+      bajada:  "Rama de olivo, bronce y papel de algodón.",
+      muestra: 'comunion-tomas',
+      foto:    '/formulario/disenos/comunion-tomas.webp',
+      color:   '#8e867a',
+      color2:  '#635e56',
+      paleta:  ["#c4c0b7", "#a6a197", "#877b6f", "#483c2e"],
+      tipos:   ["comunion"]
+    },
+    'celebra-estrellas': {
+      nombre:  "Estrellas de algodón",
+      bajada:  "Estrellas que se mecen sobre crema suave.",
+      muestra: 'bautizo-y-primer-ano-olivia',
+      foto:    '/formulario/disenos/bautizo-y-primer-ano-olivia.webp',
+      color:   '#8e8276',
+      color2:  '#635b52',
+      paleta:  ["#c7bfb3", "#a49d93", "#857769", "#463728"],
+      tipos:   ["bautismo"]
+    },
+    'celebra-marmol': {
+      nombre:  "Mármol fabulous",
+      bajada:  "Mármol rosa con vetas doradas.",
+      muestra: 'mis40-carolina',
+      foto:    '/formulario/disenos/mis40-carolina.webp',
+      color:   '#928377',
+      color2:  '#665c53',
+      paleta:  ["#c2b8b3", "#a1978a", "#8b7666", "#5b4836"],
+      tipos:   ["cumple"]
+    },
+    'celebra-editorial': {
+      nombre:  "18 editorial",
+      bajada:  "Mostaza y tinta negra, estilo revista.",
+      muestra: 'mis18-nicolas',
+      foto:    '/formulario/disenos/mis18-nicolas.webp',
+      color:   '#84745e',
+      color2:  '#5c5142',
+      paleta:  ["#b7ad9b", "#9a8a71", "#826949", "#3e2f22"],
+      tipos:   ["cumple"]
+    },
+    'fiesta-plata': {
+      nombre:  "Plata 40",
+      bajada:  "Negro y plata con globos que flotan.",
+      muestra: 'mis40-alejandro',
+      foto:    '/formulario/disenos/mis40-alejandro.webp',
+      color:   '#413d37',
+      color2:  '#2d2b26',
+      paleta:  ["#847d75", "#463f36", "#272621", "#121310"],
+      tipos:   ["cumple"]
+    },
+    'celebra-rosegold': {
+      nombre:  "Rose gold",
+      bajada:  "Rose gold con glitter cayendo.",
+      muestra: 'mis30-paulina',
+      foto:    '/formulario/disenos/mis30-paulina.webp',
+      color:   '#9e9088',
+      color2:  '#6e655f',
+      paleta:  ["#c7bab4", "#a29c95", "#958e88", "#775c4f"],
+      tipos:   ["cumple"]
+    },
+  };
+
+  /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
+     `tipos` acepta los `tipoEvento` REALES de la invitación (los mismos de
+     /efectos/tipos-evento.js): boda · xv · cumple · bautismo · comunion ·
+     babyshower · graduacion · corporativo. Las muestras de niños («kids») son
+     `cumple`. Una muestra puede ir en varias filas (Perlas: boda y xv).
+     El formulario (/crear-diseno.js) arma una fila por cada tipo de esta lista
+     que tenga al menos una muestra visible, en este orden; con «¿Qué
+     festejas?» elegido, muestra sólo esa fila (si está vacía, todas).
+
+     FORMATO DE UNA ENTRADA NUEVA (las 21 de eventos nuevos, cuando tengan
+     su captura en /formulario/disenos/<slug>.webp):
+       'celebra-pixel': {
+         nombre:  "Kids · Pixel aventura",
+         bajada:  "Nubes y globos pixel sobre cielo claro.",
+         muestra: 'mateo-cumple5',
+         foto:    '/formulario/disenos/mateo-cumple5.webp',
+         color:   '#…',  color2: '#…',  paleta: ["#…","#…","#…","#…"],
+         tipos:   ["cumple"]
+       },
+  */
+  window.MUESTRAS_TIPOS = [
+    ['boda', 'Boda'], ['xv', 'XV años'], ['cumple', 'Cumpleaños'],
+    ['bautismo', 'Bautizo'], ['comunion', 'Primera comunión'],
+    ['babyshower', 'Baby shower'], ['graduacion', 'Graduación'],
+    ['corporativo', 'Corporativo']
+  ];
+  /* las muestras visibles de un tipo (ids) */
+  window.muestrasDeTipo = function (t) {
+    var m = window.MUESTRAS_INVITAME || {};
+    return Object.keys(m).filter(function (id) {
+      return !m[id].oculto && (m[id].tipos || []).indexOf(t) >= 0;
+    });
   };
 
   /* atajo comodo para los tres que la usan */

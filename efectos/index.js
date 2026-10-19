@@ -608,6 +608,15 @@
      `dresscode-colores.js`, que se dispara con la marca `data-coleccion` y
      tiene que ver la que haya puesto CUALQUIER colección.
    · `acordeon.js` NO tiene orden: se cuelga del click y no depende de nadie.
+   · `tipos-evento.js` va DESPUÉS de `trivia-apagada.js` y ANTES de
+     `filtro.js` / `musica.js`, que leen `window.INVTIPO`. Igual se repasa solo
+     (el motor reescribe los textos en cada vista previa del panel).
+   · `rsvp-preguntas.js` va DESPUÉS de `rsvp-extras.js`: envuelve el
+     `INV.saveRSVP` que ya envolvió aquél y guarda `rsvpExtras` APARTE.
+   · `secciones-nuevas.js` va ANTES de `menu.js`, `avisos.js`,
+     `patrocinadores.js` y de sus `panel-*.js`: publica `window.INVSN` (igual
+     lo esperan si llegara tarde). Las tres secciones se ubican solas según
+     `secOrden` o, si no figuran, después del itinerario / de los contactos.
    · `reglas-duras.js` va EL ÚLTIMO DE TODOS, y tiene que ser el último: saca
      la frase suelta, sube la carta arriba y tapa el video y la playlist. Como
      mueve nodos y esconde secciones, necesita que TODOS los demás —incluidas
@@ -639,13 +648,17 @@
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
     '/efectos/panel-rsvp.js',          /* y el selector para volver a los dos botones */
     '/efectos/rsvp-extras.js',         /* fecha límite y pregunta de restricciones alimentarias (fx.rsvp) */
+    '/efectos/rsvp-preguntas.js',      /* 19/10: hasta 3 preguntas extra al confirmar (fx.rsvp.preguntas → rsvpExtras) */
     '/efectos/clima-ciudad.js',        /* el clima con las coordenadas de la ciudad (climaCoords) */
+    '/efectos/galeria-frase.js',       /* la frase debajo del título de la galería (galFrase) */
+    '/efectos/pase-validar.js',        /* el QR del pase abre «Pase válido / Ya ingresó» (p=1) */
     '/efectos/previa-vidriera.js',     /* la miniatura esconde el pase y el formulario, como la publicada sin link */
     '/efectos/aviso-privacidad.js',    /* la línea de privacidad al pie de la confirmación */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
     '/efectos/compartir.js',           /* «Compartí la invitación»: textos y sacarla */
     '/efectos/trivia-apagada.js',      /* la trivia sólo si «Habilitar trivia» está prendida */
+    '/efectos/tipos-evento.js',        /* 19/10: babyshower, graduacion y corporativo (INVTIPO) + el selector del panel */
     '/efectos/panel-compartir.js',     /* y su bloque, en CONFIRMACIÓN */
     '/efectos/panel-save-the-date.js', /* el save the date de regalo: su bloque en EFECTOS (lo arma save-the-date.js, que NO va en esta lista) */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
@@ -664,11 +677,19 @@
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
     '/efectos/itinerario-modo.js',     /* imagen o texto, elegido a mano (no que gane la imagen sola) */
+    '/efectos/secciones-nuevas.js',    /* 19/10: lo común de menú, avisos y patrocinadores (window.INVSN) */
+    '/efectos/menu.js',                /* el menú por tiempos (fx.menu), después del itinerario */
+    '/efectos/avisos.js',              /* avisos importantes con ícono (fx.avisos), después del menú */
+    '/efectos/patrocinadores.js',      /* logos de patrocinadores (fx.patrocinadores), antes del cierre */
     '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
     '/efectos/fecha.js',               /* las nueve maneras de mostrar la fecha */
     '/efectos/raspadita.js',           /* la raspadita: se monta sobre la fecha */
     '/efectos/panel-fecha.js',         /* y las dos, por fin, en el panel */
     '/efectos/panel-itinerario.js',    /* los momentos del itinerario, por fin cargables */
+    '/efectos/panel-menu.js',          /* 19/10: el bloque del menú, debajo del itinerario */
+    '/efectos/panel-avisos.js',        /* 19/10: el bloque de los avisos, debajo del menú */
+    '/efectos/panel-patrocinadores.js',/* 19/10: el bloque de patrocinadores, junto al cierre */
+    '/efectos/panel-rsvp-preguntas.js',/* 19/10: las preguntas extra, en CONFIRMACIÓN */
     '/efectos/carta-fuente.js',        /* la tipografía de la carta se aplicaba pero no se descargaba */
     '/efectos/panel-carta.js',         /* la carta tenía SIETE campos y ningún control en el panel */
     '/efectos/panel-novios-guardar.js',/* publicar le borraba a los novios las mesas y el itinerario */
@@ -722,6 +743,7 @@
     '/efectos/perlas-ajustes.js',      /* los retoques de Jazmín: el papel, las caras, la frase */
     '/efectos/regalo-perlas.js',       /* un regalo dibujado con perlas, en Mesa de regalos */
     '/efectos/panel-coleccion.js',     /* y el selector con el que Jazmín la elige */
+    '/efectos/panel-catalogo.js',      /* 16/10: los mismos diseños del formulario, para vestir la invitación desde el panel */
 
     '/colecciones/marfil.js',          /* copia de la referencia BOMA: serif espaciada y filetes */
     '/colecciones/disco.js',
@@ -761,6 +783,8 @@
     '/colecciones/degrade.js',       /* fondos de COLOR FIJOS (nace del Sapo, 29/9): 6 tonos oscuros,
                                           fx.coleccion 'degrade-<tono>'. Trae su propia paleta. */
 
+    '/colecciones/fiesta.js',        /* 19/10: familia OSCURA de eventos (cumple, corporativo, graduacion, XV varon): 8 tonos,
+                                         fx.coleccion 'fiesta-<tono>'. El fondo va adelante. Trae su propia paleta. */
     '/colecciones/sapo.js',          /* la ONCEAVA familia y la CUARTA de la linea de princesas:
                                           «La princesa y el sapo», el cuento de los Grimm y no la
                                           pelicula: la BOLA DE ORO que cae al pozo. OSCURA (la
@@ -793,6 +817,7 @@
                                           Escribe SOLO data-col (no data-coleccion): los defaults
                                           claros del motor siguen andando. */
 
+    '/colecciones/celebra.js',       /* 19/10: la familia CLARA de los eventos nuevos (kids, baby shower, bautizo, comunion, cumple, graduacion): 13 tonos, fx.coleccion 'celebra-<tono>'. Trae su propia paleta. */
     '/efectos/carta-texto.js',       /* la carta sale de cartaTexto y no del parrafo clavado en el motor */
 
     '/efectos/regalos-catalogo.js',  /* 3/10: los 10 regalos dibujados y los 51 fotografiados */

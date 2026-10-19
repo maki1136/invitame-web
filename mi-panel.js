@@ -51,6 +51,14 @@
   let arrastrando = null;
 
   const num = v => { const n=parseInt(v,10); return isNaN(n)?0:n; };
+  /* ★ 19/10/2026 — las respuestas a las PREGUNTAS EXTRA de la confirmación
+     (fx.rsvp.preguntas). Las guarda /efectos/rsvp-preguntas.js en `rsvpExtras`,
+     un texto JSON: [["¿Empresa?","Nexora"],["¿Cargo?","Directora"]]. */
+  const extrasDe = g => {
+    if(!g || !g.rsvpExtras) return [];
+    try{ const a=JSON.parse(g.rsvpExtras); if(Array.isArray(a)) return a.filter(p=>Array.isArray(p)&&p[1]).map(p=>[String(p[0]||''),String(p[1])]); }catch(e){}
+    return [['Respuestas', String(g.rsvpExtras)]];
+  };
   const personasDe = g => (g.rsvp==='confirmado')
         ? (num(g.rsvpPersonas) || num(g.pases))
         : (g.rsvp==='rechazado' ? 0 : num(g.pases));
@@ -173,13 +181,17 @@
 
   // ---------------- cuentas ----------------
   function cuentas(){
-    const c={inv:GENTE.length, pers:0, si:0, no:0, sin:0, vienen:0, mesas:mesasDe().length};
+    /* ★ 16/10/2026 (Jazmín): «si una invitación es para 4 y sólo 2 confirman,
+       que se vea 2 confirmaron y 2 pendientes». `pend` = personas que todavía
+       no confirmaron: las de las invitaciones sin responder + lo que falta en
+       las confirmadas a medias. */
+    const c={inv:GENTE.length, pers:0, si:0, no:0, sin:0, vienen:0, pend:0, mesas:mesasDe().length};
     GENTE.forEach(g=>{
       c.pers += num(g.pases);
       const e=estadoDe(g);
-      if(e==='si'){ c.si++; c.vienen += personasDe(g); }
+      if(e==='si'){ c.si++; c.vienen += personasDe(g); c.pend += Math.max(0, num(g.pases)-personasDe(g)); }
       else if(e==='no') c.no++;
-      else c.sin++;
+      else { c.sin++; c.pend += num(g.pases); }
     });
     return c;
   }
@@ -207,6 +219,7 @@
       '<div class="num rojo"><b>'+c.no+'</b><span>No pueden</span><div class="barra"><i style="width:'+(c.no/t*100)+'%"></i></div></div>'+
       '<div class="num"><b>'+c.sin+'</b><span>Sin responder</span></div>'+
       '<div class="num"><b>'+c.vienen+'</b><span>Personas que vienen</span></div>'+
+      '<div class="num"><b>'+c.pend+'</b><span>Personas sin confirmar</span></div>'+
       '<div class="num"><b>'+c.mesas+'</b><span>Mesas armadas</span></div>'+
     '</div>';
   }
@@ -365,11 +378,15 @@
             '<td class="ocultar-chico"><input class="mini telInput" data-tok="'+esc(g.token)+'" inputmode="tel" '+
               'value="'+esc(g.tel||'')+'" placeholder="52 999 123 4567" title="Con clave de pais. Con esto el boton de WhatsApp abre su chat directo."></td>'+
             '<td class="ocultar-chico">'+num(g.usos)+'/'+(num(g.usosMax)||num(g.pases))+'</td>'+
-            '<td><span class="chip '+e+'">'+(e==='si'?'Confirmó ✓':(e==='no'?'No puede':'Sin responder'))+'</span></td>'+
+            '<td><span class="chip '+e+'">'+(e==='si'
+                ? (personasDe(g)<num(g.pases) ? 'Confirmaron '+personasDe(g)+' de '+num(g.pases) : 'Confirmó ✓')
+                : (e==='no'?'No puede':'Sin responder'))+'</span>'+
+              (e==='si' && personasDe(g)<num(g.pases) ? '<div style="font-size:11px;color:var(--muted);margin-top:3px">'+(num(g.pases)-personasDe(g))+' sin confirmar</div>' : '')+'</td>'+
             '<td class="ocultar-chico" style="max-width:210px;color:#6b6058;font-size:12.5px">'+
               (g.rsvpMensaje?'<span title="'+esc(g.rsvpMensaje)+'">'+esc(String(g.rsvpMensaje).slice(0,48))+(String(g.rsvpMensaje).length>48?'…':'')+'</span>':'')+
               /* ★ 15/10/2026: la restricción alimentaria que contestó al confirmar */
-              (g.rsvpRestriccion?'<div style="margin-top:3px;color:#8a4b2c;font-weight:700" title="Restricción alimentaria">Restricción: '+esc(String(g.rsvpRestriccion).slice(0,60))+'</div>':'')+'</td>'+
+              (g.rsvpRestriccion?'<div style="margin-top:3px;color:#8a4b2c;font-weight:700" title="Restricción alimentaria">Restricción: '+esc(String(g.rsvpRestriccion).slice(0,60))+'</div>':'')+
+              extrasDe(g).map(p=>'<div style="margin-top:3px" title="'+esc(p[0])+'"><b>'+esc(p[0].slice(0,40))+'</b> '+esc(p[1].slice(0,60))+'</div>').join('')+'</td>'+
             (conVoz
               ? '<td><button class="pv-mic'+(g.pasevozAudio?' tiene':'')+'" data-pvgrab="'+esc(g.token)+'" '+
                 'title="'+(g.pasevozAudio?'Ya tiene un mensaje de voz':'Grabarle un mensaje de voz')+'"></button></td>'
@@ -496,7 +513,14 @@
         '<div style="margin-top:8px;font-size:13.5px;line-height:1.6">'+
         res.map(g=>'<div><b>'+esc(g.nombre)+'</b>: '+esc(g.rsvpRestriccion)+'</div>').join('')+'</div></div>'
       : '';
-    $('vista').innerHTML = cajaRes + (con.length
+    /* ★ 19/10/2026: y las respuestas a las preguntas extra */
+    const conEx = GENTE.filter(g=>extrasDe(g).length);
+    const cajaEx = conEx.length
+      ? '<div class="card" style="margin-bottom:14px"><b>Respuestas a tus preguntas ('+conEx.length+')</b>'+
+        '<div style="margin-top:8px;font-size:13.5px;line-height:1.6">'+
+        conEx.map(g=>'<div><b>'+esc(g.nombre)+'</b>: '+extrasDe(g).map(p=>esc(p[0])+' '+esc(p[1])).join(' · ')+'</div>').join('')+'</div></div>'
+      : '';
+    $('vista').innerHTML = cajaRes + cajaEx + (con.length
       ? '<div class="grillaMsj">'+con.map(g=>{const e=estadoDe(g);
           return '<div class="msj"><div class="de">'+esc(g.nombre)+'</div>'+
             '<div style="margin-bottom:9px"><span class="chip '+e+'">'+
@@ -663,11 +687,15 @@
     a.download = nombre; a.click(); URL.revokeObjectURL(a.href);
   }
   function bajarLista(){
+    /* ★ 19/10/2026: una columna por cada pregunta extra que contestó alguien */
+    const lista = filtrada(), preg = [];
+    lista.forEach(g=>extrasDe(g).forEach(p=>{ if(preg.indexOf(p[0])<0) preg.push(p[0]); }));
     bajarCSV('invitados-'+SLUG+'.csv',
-      [['Invitado','Lugares','Vienen','Mesa','WhatsApp','Usos','Estado','Mensaje','Restricción alimentaria']].concat(
-        filtrada().map(g=>{ const e=estadoDe(g);
+      [['Invitado','Lugares','Vienen','Mesa','WhatsApp','Usos','Estado','Mensaje','Restricción alimentaria'].concat(preg)].concat(
+        lista.map(g=>{ const e=estadoDe(g), ex=extrasDe(g);
           return [g.nombre, num(g.pases), personasDe(g), nombreMesa(mesaDe(g)), g.tel||'', num(g.usos)+'/'+(num(g.usosMax)||num(g.pases)),
-                  e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder'), g.rsvpMensaje||'', g.rsvpRestriccion||'']; })));
+                  e==='si'?'Confirmó':(e==='no'?'No puede':'Sin responder'), g.rsvpMensaje||'', g.rsvpRestriccion||'']
+                 .concat(preg.map(q=>{ const p=ex.find(x=>x[0]===q); return p?p[1]:''; })); })));
   }
   function bajarMesas(){
     const filas=[['Mesa','Invitado','Personas','Estado']];

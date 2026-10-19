@@ -140,7 +140,7 @@
        vale «los XV»; para una boda, «la boda». Se usa eso y no hace falta que nadie
        se acuerde de cambiar el texto a mano. */
     var _T = window.INVTIPO || {};
-    var titulo = String(k.titulo || ('El filtro de ' + (_T.de || 'la boda')));
+    var titulo = String(k.titulo || ('El filtro de ' + (_T.de || 'la fiesta')));
     var bajada = String(k.bajada || 'Tómate una foto con el marco de nuestra fiesta y compártela.');
     var boton  = String(k.boton  || 'Abrir la cámara');
     var vidriera = on(k.vidriera);

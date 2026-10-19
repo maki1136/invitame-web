@@ -91,7 +91,10 @@
 
   /* Los que se llaman igual en los dos lados. */
   var IGUALES = ['orden', 'videoUrl', 'fraseFinal', 'musica', 'musicaUrl',
-                 'fraseFx', 'igHashtag', 'spotifyUrl', 'tipoEvento', 'cfTitulo'];
+                 'fraseFx', 'igHashtag', 'spotifyUrl', 'tipoEvento', 'cfTitulo',
+                 /* ★ 15/10/2026 (Jazmín): títulos de Vestimenta, Regalos y Galería,
+                    y la frase de la galería (la dibuja /efectos/galeria-frase.js) */
+                 'dressTitulo', 'regTitulo', 'galTitulo', 'galFrase'];
 
   /* ★ 15/10/2026 — LAS FOTOS SUELTAS DEL FORMULARIO NUEVO.
      Izquierda: como viene en la solicitud. Derecha: la clave de imagen EXACTA
@@ -208,6 +211,68 @@
       d.fx.rsvp = d.fx.rsvp || {};
       if (/^\d{4}-\d{2}-\d{2}$/.test(String(s.rsvpLimite || ''))) d.fx.rsvp.limite = s.rsvpLimite;
       if (s.rsvpRestricciones) d.fx.rsvp.restricciones = true;
+    }
+
+    /* ---- ★ 19/10/2026 — LAS SECCIONES NUEVAS (/crear-secciones.js) ----
+       Menú, avisos, patrocinadores y preguntas extra de la confirmación.
+       Van a `fx` (las dibujan /efectos/menu.js, avisos.js, patrocinadores.js
+       y rsvp-preguntas.js) y nacen ENCENDIDAS: si el cliente las llenó, las
+       quiere ver. ⚠️ `fx` lo pisa el vestido: /vestir.js las repone. */
+    var esLista = function (a) { return Object.prototype.toString.call(a) === '[object Array]'; };
+    var corto = function (v, n) { return String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, n); };
+    if (s.menu && esLista(s.menu.tiempos) && s.menu.tiempos.length) {
+      d.fx = d.fx || {};
+      d.fx.menu = {
+        encendido: true, titulo: corto(s.menu.titulo, 70), frase: corto(s.menu.frase, 240),
+        tiempos: s.menu.tiempos.slice(0, 6).map(function (t) {
+          return { nombre: corto(t && t.nombre, 80), desc: corto(t && t.desc, 240) };
+        })
+      };
+    }
+    if (s.avisos && esLista(s.avisos.items) && s.avisos.items.length) {
+      d.fx = d.fx || {};
+      d.fx.avisos = {
+        encendido: true, titulo: corto(s.avisos.titulo, 70),
+        items: s.avisos.items.slice(0, 6).map(function (a) {
+          return { icono: corto(a && a.icono, 20) || 'otro', texto: corto(a && a.texto, 160) };
+        })
+      };
+    }
+    if (s.patrocinadores && esLista(s.patrocinadores.logos) && s.patrocinadores.logos.length) {
+      d.fx = d.fx || {};
+      d.fx.patrocinadores = {
+        encendido: true, titulo: corto(s.patrocinadores.titulo, 70),
+        logos: s.patrocinadores.logos.slice(0, 12).map(function (l) {
+          var img = corto(l && l.img, 400);
+          return { img: /^https:\/\/res\.cloudinary\.com\/oc8cgqt4\//.test(img) ? img : '',
+                   nombre: corto(l && l.nombre, 60), link: corto(l && l.link, 300) };
+        })
+      };
+    }
+    if (esLista(s.rsvpPreguntas) && s.rsvpPreguntas.length) {
+      d.fx = d.fx || {};
+      d.fx.rsvp = d.fx.rsvp || {};
+      d.fx.rsvp.preguntas = s.rsvpPreguntas.slice(0, 3).map(function (q) {
+        return { texto: corto(q && q.texto, 80), tipo: (q && q.tipo === 'sino') ? 'sino' : 'texto' };
+      }).filter(function (q) { return q.texto; });
+    }
+
+    /* ---- ★ 15/10/2026 — Vestimenta: inspiración y colores ----
+       La inspiración va al campo del panel «Fotos de inspiración dress code»
+       (una dirección por renglón). Los colores van a `fx.dresscode`, igual que
+       la fecha límite: `fx` lo pisa la muestra, y /vestir.js los repone. */
+    if (Object.prototype.toString.call(s.dressInsp) === '[object Array]' && s.dressInsp.length)
+      d['c_fotos-de-inspiracion-dress-code'] = s.dressInsp.slice(0, 6).join('\n');
+    var col = function (a) {
+      return (Object.prototype.toString.call(a) === '[object Array]' ? a : [])
+        .filter(function (c) { return /^#[0-9a-f]{6}$/i.test(String(c)); }).slice(0, 6);
+    };
+    var cSi = col(s.dressColores), cNo = col(s.dressEvitar);
+    if (cSi.length || cNo.length) {
+      d.fx = d.fx || {};
+      d.fx.dresscode = d.fx.dresscode || {};
+      if (cSi.length) { d.fx.dresscode.colores = cSi; d.fx.dresscode.titulo = 'Colores sugeridos'; }
+      if (cNo.length) d.fx.dresscode.evitar = cNo;
     }
 
     /* ---- las personas importantes (hasta 12) ---- */

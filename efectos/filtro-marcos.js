@@ -43,6 +43,10 @@
     bautismo: 'En el bautizo de',
     comunion: 'En la comunión de',
     cumple:   'En el cumple de',
+    /* 19/10/2026: los tres tipos nuevos (ver /efectos/tipos-evento.js) */
+    babyshower:  'En el baby shower de',
+    graduacion:  'En la graduación de',
+    corporativo: 'En el evento de',
     otro:     'En la fiesta de'
   };
 
@@ -83,7 +87,8 @@
   function fraseDe(ev, cfg) {
     var puesta = String((cfg && cfg.frase) || '').trim();
     if (puesta) return puesta.slice(0, 60);
-    var t = String(ev.tipoEvento || ev.tipo || 'boda').toLowerCase();
+    /* el tipo normalizado: el selector viejo del panel guardaba «Cumple XV» */
+    var t = window.invTipoDe ? window.invTipoDe(ev) : String(ev.tipoEvento || ev.tipo || 'boda').toLowerCase();
     return FRASES[t] || FRASES.otro;
   }
 

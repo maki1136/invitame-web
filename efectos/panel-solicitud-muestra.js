@@ -103,6 +103,19 @@
 
   function vestir(d, muestra, solicitud) {
     var puestos = [];
+    /* ★ 19/10/2026 — lo que el cliente eligió ADENTRO de `fx` no es vestido:
+       la confirmación (fecha límite, restricciones, preguntas extra), los
+       colores de Vestimenta y las secciones nuevas (menú, avisos,
+       patrocinadores). `fx` se copia ENTERO de la muestra y los pisaba. */
+    /* ⚠️ Se leen de un mapeo FRESCO de la solicitud y no de `d`: `d` es el
+       borrador vivo del panel y puede traer el `fx` de la invitación que
+       estaba abierta antes. */
+    var V = window.INVVESTIR || {};
+    var fresco = d;
+    try { if (solicitud && window.SOLICITUD_A_EVENTO) fresco = window.SOLICITUD_A_EVENTO.mapear(solicitud, {}); } catch (e) {}
+    var rsvpCliente  = (fresco.fx && fresco.fx.rsvp) ? copia(fresco.fx.rsvp) : null;
+    var dressCliente = (fresco.fx && fresco.fx.dresscode) ? copia(fresco.fx.dresscode) : null;
+    var seccCliente  = V.secciones ? V.secciones(fresco) : null;
     Object.keys(muestra).forEach(function (k) {
       if (!esDeDiseno(k)) return;
       if (muestra[k] == null || muestra[k] === '') return;
@@ -131,6 +144,32 @@
         d.fx.pasevoz.nota    = '';
         d.fx.pasevoz.titulo  = '';
       }
+    }
+
+    if (d.fx) {
+      /* ★ 19/10/2026 — muestras de eventos nuevos: el boleto con voz trae la FECHA y la
+         HORA de la muestra, y el filtro su FRASE («Generación 2023-2027»). Son contenido:
+         la fecha se arma con la del cliente y la frase se vacía (la escribe el cliente). */
+      if (d.fx.pasevoz) {
+        var mF = String(d.fecha || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}:\d{2}))?/);
+        d.fx.pasevoz.fecha = mF ? (mF[3] + ' · ' + mF[2] + ' · ' + mF[1]) : '';
+        d.fx.pasevoz.hora  = (mF && mF[4]) ? mF[4] : '';
+        /* el talón dice «MIS 50 AÑOS» de la muestra: se arma con el sobretítulo del cliente */
+        d.fx.pasevoz.talon = String(d.kick || '').toUpperCase().slice(0, 22);
+      }
+      if (d.fx.filtro) d.fx.filtro.frase = '';
+    }
+    if (d.fx && V.limpiarSeccionesDeLaMuestra) V.limpiarSeccionesDeLaMuestra(d);
+    if (V.ponerSecciones) V.ponerSecciones(d, seccCliente);
+    if (rsvpCliente && (rsvpCliente.limite || rsvpCliente.restricciones)) {
+      d.fx = d.fx || {}; d.fx.rsvp = d.fx.rsvp || {};
+      if (rsvpCliente.limite) d.fx.rsvp.limite = rsvpCliente.limite;
+      if (rsvpCliente.restricciones) d.fx.rsvp.restricciones = true;
+    }
+    if (dressCliente && ((dressCliente.colores || []).length || (dressCliente.evitar || []).length)) {
+      d.fx = d.fx || {}; d.fx.dresscode = d.fx.dresscode || {};
+      if ((dressCliente.colores || []).length) d.fx.dresscode.colores = dressCliente.colores;
+      if ((dressCliente.evitar || []).length) d.fx.dresscode.evitar = dressCliente.evitar;
     }
 
     /* y recien ahora, la que grabo ESTE cliente en /crear.js */

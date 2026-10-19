@@ -12,21 +12,28 @@
        `node chequeo/campos.js` (bloque 5) lee el objeto `data` de leerFormulario() y avisa
        «LO LLENA EL CLIENTE Y NO LLEGA AL PANEL».
    ============================================================================ */
-  import { collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { collection, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   const $=id=>document.getElementById(id);
   const tpl=(new URLSearchParams(location.search).get('tpl')||'').toLowerCase();
+  /* ★ 15/10/2026 — EL LINK DE CADA CLIENTE. Jazmín lo copia desde la venta en
+     el CRM: `crear.html?f=<código>`. El código apunta a `inv_formularios/<código>`,
+     que dice qué paquete compró. Ver «EL PAQUETE QUE COMPRÓ», más abajo. */
+  const formToken=((new URLSearchParams(location.search).get('f')||'').match(/^[a-z0-9]{12,40}$/i)||[''])[0];
 
   // ---- Tipo de evento: el título sugerido y los nombres ----
-  const TITDEF={boda:'Nuestra Boda',xv:'Mis XV',bautismo:'Mi Bautizo',comunion:'Mi Primera Comunión',cumple:'Mi Cumpleaños',otro:''};
+  const TITDEF={boda:'Nuestra Boda',xv:'Mis XV',bautismo:'Mi Bautizo',comunion:'Mi Primera Comunión',cumple:'Mi Cumpleaños',
+                babyshower:'Baby Shower',graduacion:'Mi Graduación',corporativo:'',otro:''};
   function aplicarTipo(){
     const t=$('tipo').value;
     $('kick').placeholder=TITDEF[t]||'Título';
     if(!$('kick').dataset.touched) $('kick').value=TITDEF[t]||'';
     /* «Nombre 2» sólo se esconde en los eventos de UNA persona */
-    const solo1=(t==='xv'||t==='bautismo'||t==='comunion'||t==='cumple');
+    /* ★ 19/10/2026: graduación y corporativo también van con UN nombre (el
+       graduado, o la empresa / el evento). El baby shower, con los dos papás. */
+    const solo1=(t==='xv'||t==='bautismo'||t==='comunion'||t==='cumple'||t==='graduacion'||t==='corporativo');
     $('caja-n2').style.display=solo1?'none':'';
     if(solo1) $('n2').value='';
-    $('l-n1').firstChild.textContent = solo1 ? 'Nombre ' : 'Nombre 1 ';
+    $('l-n1').firstChild.textContent = t==='corporativo' ? 'Empresa o nombre del evento ' : (solo1 ? 'Nombre ' : 'Nombre 1 ');
     /* las filas de diseños se filtran SÓLO si la persona eligió el tipo a mano:
        el selector viene en «Boda» de entrada y una quinceañera, que ve los
        modelos ANTES que esta pregunta, se quedaría sin ver los de XV */
@@ -58,7 +65,7 @@
   document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLB(); });
   document.querySelectorAll('[data-ayuda]').forEach(ph=>{
     const k=ph.getAttribute('data-ayuda'); if(!AYUDA[k]) return;
-    const src='/formulario/ayuda/'+k+'.webp';
+    const src='/formulario/ayuda/'+k+'.webp?v=2';   /* ⚠️ subir la versión si se recaptura alguna */
     const w=document.createElement('div'); w.className='ayuda';
     w.innerHTML='<div class="ph"><img src="'+src+'" alt="Así se ve en la invitación" loading="lazy"><span>Así se ve · toca</span></div>'+
                 '<div class="tx">'+AYUDA[k]+'</div>';
@@ -150,6 +157,40 @@
     try{ await ready(); for(const f of fs){ inspURLs.push(await window.INV.uploadImage(await comprimir(f,1400,0.8))); pintarInsp(); } guardarBorrador(); }
     catch(err){ pintarInsp(); if(!inspURLs.length) $('up-insp').textContent='Subir imágenes de inspiración'; alert('No se pudo subir: '+(err.message||err)); } });
 
+  /* ---- Vestimenta: imágenes de inspiración (hasta 6) ---- */
+  let dressInspURLs=[];
+  function pintarDressInsp(){ $('prev-dressinsp').innerHTML=dressInspURLs.map(u=>'<img class="prevmini" src="'+u+'">').join('');
+    if(dressInspURLs.length) $('up-dressinsp').textContent='Agregar más ('+dressInspURLs.length+' de 6)'; }
+  $('up-dressinsp').addEventListener('click',()=>{ if(dressInspURLs.length>=6){ alert('Ya cargaste 6, que es el máximo.'); return; } $('f-dressinsp').click(); });
+  $('f-dressinsp').addEventListener('change',async e=>{ const fs=[...e.target.files].slice(0,6-dressInspURLs.length); if(!fs.length)return; $('up-dressinsp').textContent='Subiendo…';
+    try{ await ready(); for(const f of fs){ dressInspURLs.push(await window.INV.uploadImage(await comprimir(f,1000,0.82))); pintarDressInsp(); } guardarBorrador(); }
+    catch(err){ pintarDressInsp(); if(!dressInspURLs.length) $('up-dressinsp').textContent='Subir imágenes de inspiración'; alert('No se pudo subir: '+(err.message||err)); } });
+
+  /* ---- Vestimenta: colores sugeridos y colores a evitar (hasta 6 cada uno) ----
+     Van a `fx.dresscode.colores` y `fx.dresscode.evitar`, que dibuja
+     /efectos/dresscode-colores.js y Jazmín ajusta en el panel. */
+  const COLORES={si:[], no:[]};
+  const COL_SUG={si:['#c9a77c','#7d8a72','#e9e1d3','#6e4b3a'], no:['#ffffff','#000000']};
+  function pintarColores(k){
+    const cont=$('col-'+k); cont.innerHTML='';
+    COLORES[k].forEach((c,i)=>{
+      const w=document.createElement('span'); w.className='cc';
+      const inp=document.createElement('input'); inp.type='color'; inp.value=c; inp.title='Toca para cambiar el color';
+      inp.oninput=()=>{ COLORES[k][i]=inp.value; guardarBorrador(); };
+      const x=document.createElement('button'); x.type='button'; x.textContent='✕'; x.title='Quitar';
+      x.onclick=()=>{ COLORES[k].splice(i,1); pintarColores(k); guardarBorrador(); };
+      w.appendChild(inp); w.appendChild(x); cont.appendChild(w);
+    });
+    if(COLORES[k].length<6){
+      const b=document.createElement('button'); b.type='button'; b.className='mas-col'; b.textContent='+ Agregar color';
+      b.onclick=()=>{ COLORES[k].push(COL_SUG[k][COLORES[k].length % COL_SUG[k].length]); pintarColores(k);
+        const ins=cont.querySelectorAll('input[type=color]'); const ult=ins[ins.length-1]; if(ult) try{ ult.click(); }catch(_){}
+        guardarBorrador(); };
+      cont.appendChild(b);
+    }
+  }
+  pintarColores('si'); pintarColores('no');
+
   // ---- Personas importantes: nombre, qué es y foto (hasta 9) ----
   function addPersona(nombre,rel,foto){
     const cont=$('personas');
@@ -217,13 +258,20 @@
   // ---- Borrador automático: los textos Y las fotos ya subidas ----
   const BORR='inv_borrador_v2';
   const CAMPOS=['orden','tipo','kick','n1','n2','fecha','frase','ev1t','ev1f','ev1d','ev2t','ev2f','ev2d','ev3t','ev3f','ev3d',
-    'hotDesc','hoteles','itinerario','persFrase','dress','regalos','regClabe','regTitular','regBanco',
+    'ev1maps','ev2maps','ev3maps',
+    'hotDesc','hoteles','itinerario','persFrase','dressTitulo','dress','regTitulo','regalos','regClabe','regTitular','regBanco',
+    'galTitulo','galFrase',
     'cfTitulo','cfFrase','rsvpLimite','cfMail','cfWsp1','cfWsp1n','cfWsp2','cfWsp2n','fraseFinal','textoFinal',
-    'musica','igHashtag','igUser','videoUrl','spotifyUrl','persoTxt','obs','cnom','cwsp','cmail'];
+    'musica','igHashtag','igUser','videoUrl','spotifyUrl','persoTxt','obs','cnom','cwsp','cmail',
+    'menuTitulo','menuFrase','patTitulo'];
   function restric(){ const r=document.querySelector('input[name=rsvpRestric]:checked'); return !!(r&&r.value==='si'); }
+  function galEstilo(){ const r=document.querySelector('input[name=galEstilo]:checked'); return r?r.value:'Slider'; }
   function guardarBorrador(){
     try{
-      const d={_t:Date.now(), _fotos:FOTOS, _gal:galURLs, _insp:inspURLs, _restric:restric()};
+      const d={_t:Date.now(), _fotos:FOTOS, _gal:galURLs, _insp:inspURLs, _restric:restric(),
+               _galEstilo:galEstilo(), _dinsp:dressInspURLs, _colSi:COLORES.si, _colNo:COLORES.no,
+               /* ★ 19/10: menú, avisos, patrocinadores y preguntas extra (/crear-secciones.js) */
+               _secc:(window.CREAR_SECCIONES?window.CREAR_SECCIONES.borrador():null)};
       CAMPOS.forEach(k=>{ const e=$(k); if(e) d[k]=e.value; });
       d._inv=[...document.querySelectorAll('#guests .rowinv')].map(r=>{ const i=r.querySelectorAll('input'); return [i[0].value,i[1].value,i[2].value]; }).filter(x=>x[0]);
       d._pers=[...document.querySelectorAll('#personas .rowpers')].map(r=>{ const i=r.querySelectorAll('input[type=text]'); return [i[0].value,i[1].value,r.dataset.foto||'']; }).filter(x=>x[0]||x[2]);
@@ -239,13 +287,16 @@
     if(!confirm('Encontramos lo que empezaste a llenar. ¿Lo recuperamos?\n\n(Si dices que no, empiezas de cero.)')){ borrarBorrador(); return false; }
     CAMPOS.forEach(k=>{ const e=$(k); if(e&&d[k]!=null) e.value=d[k]; });
     if(d.kick) $('kick').dataset.touched='1';
-    Object.assign(FOTOS, d._fotos||{}); galURLs=d._gal||[]; inspURLs=d._insp||[];
-    pintarCover(); pintarGaleria(); pintarInsp();
+    Object.assign(FOTOS, d._fotos||{}); galURLs=d._gal||[]; inspURLs=d._insp||[]; dressInspURLs=d._dinsp||[];
+    pintarCover(); pintarGaleria(); pintarInsp(); pintarDressInsp();
+    if(d._galEstilo){ const g=document.querySelector('input[name=galEstilo][value="'+d._galEstilo+'"]'); if(g) g.checked=true; }
+    COLORES.si=(d._colSi||[]).slice(0,6); COLORES.no=(d._colNo||[]).slice(0,6); pintarColores('si'); pintarColores('no');
     [['up-ev1','ev1img'],['up-ev2','ev2img'],['up-ev3','ev3img'],['up-hotel','hotelImg'],['up-cierre','cierreImg']].forEach(([b,k])=>marcar(b,FOTOS[k],'Foto cargada'));
     if(d._restric){ const s=document.querySelector('input[name=rsvpRestric][value=si]'); if(s) s.checked=true; }
     if(d._inv&&d._inv.length){ $('guests').innerHTML=''; d._inv.forEach(g=>addGuest(g[0]||'',g[1]||'',g[2]||'')); }
     if(d._pers&&d._pers.length){ $('personas').innerHTML=''; d._pers.forEach(p=>addPersona(p[0]||'',p[1]||'',p[2]||'')); }
     if(d._mesas&&d._mesas.length){ $('mesas').innerHTML=''; d._mesas.forEach(m=>addMesa(m[0]||'',m[1]||'')); }
+    if(d._secc&&window.CREAR_SECCIONES) window.CREAR_SECCIONES.poner(d._secc);
     return true;
   }
   document.addEventListener('input', e=>{ if(e.target&&e.target.closest('.card')) guardarBorrador(); });
@@ -321,20 +372,25 @@
     const invitados=[...document.querySelectorAll('#guests .rowinv')].map(r=>{const i=r.querySelectorAll('input');return {n:i[0].value.trim(),p:i[1].value.trim()||'1',m:i[2].value.trim()||'-'};}).filter(g=>g.n);
     const elegido=(window.CREAR_DISENO && window.CREAR_DISENO.elegido()) || tpl || '';
     const M=window.muestraDe?window.muestraDe(elegido):null;
+    /* ★ 19/10/2026 — las secciones nuevas (/crear-secciones.js). Cada una viaja
+       SÓLO si el cliente cargó algo: vacías no se mandan (ver abajo). */
+    const SEC=(window.CREAR_SECCIONES && window.CREAR_SECCIONES.leer()) || {};
     const data={
       estado:'pendiente', creado:serverTimestamp(),
       tpl:elegido, tplNombre:(elegido==='personalizado'?'Diseño personalizado':(M?M.nombre:'')),
       tipoEvento:$('tipo').value, orden:$('orden').value.trim(),
       kick:$('kick').value.trim(), n1:$('n1').value.trim(), n2:$('n2').value.trim(), fecha:$('fecha').value, frase:$('frase').value.trim(),
       cover:FOTOS.cover, coverVideo:FOTOS.coverVideo, galeria:galURLs,
-      ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1img:FOTOS.ev1img,
-      ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2img:FOTOS.ev2img,
-      ev3t:$('ev3t').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3img:FOTOS.ev3img,
+      galTitulo:$('galTitulo').value.trim(), galFrase:$('galFrase').value.trim(), galEstilo:galEstilo(),
+      ev1t:$('ev1t').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1img:FOTOS.ev1img, ev1maps:$('ev1maps').value.trim(),
+      ev2t:$('ev2t').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2img:FOTOS.ev2img, ev2maps:$('ev2maps').value.trim(),
+      ev3t:$('ev3t').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3img:FOTOS.ev3img, ev3maps:$('ev3maps').value.trim(),
       hotDesc:$('hotDesc').value.trim(), hoteles:$('hoteles').value.trim(), hotelImg:FOTOS.hotelImg,
       itinerario:$('itinerario').value.trim(),
       persFrase:$('persFrase').value.trim(), personas:leerPersonas(),
-      dress:$('dress').value.trim(),
-      regalos:$('regalos').value.trim(), regLinks:leerMesas(),
+      dressTitulo:$('dressTitulo').value.trim(), dress:$('dress').value.trim(),
+      dressColores:COLORES.si.slice(0,6), dressEvitar:COLORES.no.slice(0,6), dressInsp:dressInspURLs.slice(0,6),
+      regTitulo:$('regTitulo').value.trim(), regalos:$('regalos').value.trim(), regLinks:leerMesas(),
       regClabe:$('regClabe').value.trim(), regTitular:$('regTitular').value.trim(), regBanco:$('regBanco').value.trim(),
       cfTitulo:$('cfTitulo').value.trim(), cfFrase:$('cfFrase').value.trim(),
       rsvpLimite:$('rsvpLimite').value, rsvpRestricciones:restric(),
@@ -350,13 +406,50 @@
       invitados, observaciones:$('obs').value.trim(),
       contactoNombre:$('cnom').value.trim(), contactoWsp:$('cwsp').value.trim(), contactoEmail:$('cmail').value.trim(),
       pasevozAudio:pasevozURL, pasevozOnda,
+      menu:SEC.menu, avisos:SEC.avisos, patrocinadores:SEC.patrocinadores, rsvpPreguntas:SEC.rsvpPreguntas,
+      formToken:formToken,
       origen:'formulario-cliente'
     };
+    /* ⚠️ Firestore NO acepta `undefined`: lo que no se cargó, no se manda */
+    SECCIONES_NUEVAS.forEach(k=>{ if(data[k]==null) delete data[k]; });
     return data;
   }
 
+  const SECCIONES_NUEVAS=['menu','avisos','patrocinadores','rsvpPreguntas'];
+
   /* lo que este archivo le presta a /crear-diseno.js */
   window.CREAR = { leerFormulario: leerFormulario, guardarBorrador: guardarBorrador };
+
+  /* ===== EL PAQUETE QUE COMPRÓ (15/10/2026) ==================================
+     Maki: «el formulario se achica, depende de lo contratado».
+     Con `?f=<código>` se lee `inv_formularios/<código>` (lo crea Jazmín desde la
+     venta en el CRM) y se esconden las partes que el paquete no trae. Sin
+     código, el formulario sale completo, como siempre.
+     ⚠️ ESTO ES SÓLO LA PANTALLA. Qué se prende de verdad lo decide el SERVIDOR
+        (/solicitud-crear.php) leyendo el mismo documento: el navegador no
+        puede regalarse nada aunque toque el link.
+     ⚠️ La tabla de qué trae cada paquete vive en /paquetes.js y no se copia. */
+  const NOMBRE_PAQ={estandar:'Estándar', premium:'Premium', platinum:'Platinum'};
+  (async function(){
+    if(!formToken) return;
+    try{
+      await ready();
+      const s=await getDoc(doc(window.INV.db,'inv_formularios',formToken));
+      if(!s.exists()) return;
+      const f=s.data()||{}; const plan=f.paquete;
+      const P=window.INVPAQUETES; if(!P||!P.PAQUETES[plan]) return;
+      const tiene=k=>P.tiene(plan,k,f.extras||[]);
+      document.querySelectorAll('[data-funcion]').forEach(el=>{
+        if(!tiene(el.getAttribute('data-funcion'))) el.remove();
+      });
+      const box=$('paq');
+      box.innerHTML='Tu paquete: <b>'+NOMBRE_PAQ[plan]+'</b>. Te mostramos sólo lo que incluye.';
+      box.style.display='block';
+      if(f.clave && !$('orden').value) $('orden').value=f.clave;
+      const tip=String(f.tipoEvento||'').toLowerCase();
+      if(['boda','xv'].indexOf(tip)>-1 && window.CREAR_TIPO) window.CREAR_TIPO(tip);
+    }catch(e){ console.warn('no se pudo leer el paquete', e); }
+  })();
 
   /* ===== ANTI-ROBOTS (6/10/2026) — ver /anti-robot-lib.php ===== */
   const AR = { t0: Date.now(), token: '', activo: false };
@@ -403,7 +496,17 @@
     try{
       await ready();
       const ref=doc(collection(window.INV.db,'inv_solicitudes'));
-      await setDoc(ref, data);
+      /* ★ 19/10/2026 — si la regla de inv_solicitudes todavía no admite las
+         claves nuevas (menu, avisos, patrocinadores, rsvpPreguntas), la
+         solicitud se guarda SIN ellas: el pedido no se puede perder. La
+         invitación las recibe igual, porque se arma con `data` (abajo). */
+      try{ await setDoc(ref, data); }
+      catch(e1){
+        const sin=Object.assign({},data); let habia=false;
+        SECCIONES_NUEVAS.forEach(k=>{ if(k in sin){ delete sin[k]; habia=true; } });
+        if(!habia) throw e1;
+        await setDoc(ref, sin);
+      }
 
       /* ===== Y LA INVITACIÓN SE CREA SOLA  (8/9/2026) =====================
          El mapeo es el MISMO que usa el panel (/solicitud-a-evento.js) y el

@@ -118,6 +118,19 @@
     if (!I || typeof I.saveRSVP !== 'function' || I.saveRSVP.__conRestriccion) return;
     var original = I.saveRSVP;
     var envuelto = function (slug, token, estado, personas, mensaje, restriccion) {
+      /* ★ 16/10/2026 — LA CANTIDAD QUE ELIGIÓ EL INVITADO. El motor manda la
+         cantidad del PASE (el total, «4»), no la del selector «¿Cuántos
+         asistirán?» («2»): medido por Jazmín, una familia de 4 que confirmó 2
+         quedaba como «confirmaron 4». Se lee el selector, que es lo que eligió. */
+      if (estado === 'confirmado') {
+        var sel = null;
+        [].some.call(document.querySelectorAll('.rsvpform select'), function (s) {
+          if (s.offsetParent !== null) { sel = s; return true; } return false;
+        });
+        if (!sel) sel = document.querySelector('.rsvpform select');
+        var n = sel ? parseInt(sel.value, 10) : NaN;
+        if (!isNaN(n) && n > 0) personas = n;
+      }
       if (restriccion == null || restriccion === '') {
         var r = document.getElementById('rrestric');
         restriccion = (r && r.offsetParent !== null && r.value) ? r.value : '';
@@ -128,7 +141,32 @@
     I.saveRSVP = envuelto;
   }
 
+  /* ★ 16/10/2026 — el selector «¿Cuántos asistirán?» venía fijo en 1 a 4, sin
+     importar el pase: una familia de 6 no podía elegir 6, y una persona sola
+     podía elegir 4. Con pase personal (#pv-per) se arma de 1 al total del
+     pase, y arranca en el total. */
+  function ajustarCantidad() {
+    if (!/[?&]g=/.test(location.search)) return;    /* sólo con pase personal */
+    var per = document.getElementById('pv-per');
+    var n = per ? parseInt(per.textContent, 10) : NaN;
+    if (isNaN(n) || n < 1 || n > 60) return;
+    [].forEach.call(document.querySelectorAll('.rsvpform select'), function (s) {
+      if (s.dataset.armadoPara === String(n)) return;
+      var antes = parseInt(s.value, 10);
+      s.innerHTML = '';
+      for (var i = 1; i <= n; i++) {
+        var o = document.createElement('option'); o.value = String(i); o.textContent = String(i); s.appendChild(o);
+      }
+      /* ⚠️ el motor arranca con un número de muestra en #pv-per (2) y recién
+         después pone el del pase: si el invitado todavía no eligió, va el total */
+      s.value = String((!s.dataset.tocado || isNaN(antes) || antes > n) ? n : antes);
+      s.dataset.armadoPara = String(n);
+      if (!s.dataset.escucha) { s.dataset.escucha = '1'; s.addEventListener('change', function () { s.dataset.tocado = '1'; }); }
+    });
+  }
+
   function poner() {
+    try { ajustarCantidad(); } catch (e) {}
     try { lineaLimite(); } catch (e) {}
     try { preguntaRestricciones(); } catch (e) {}
     try { envolverGuardado(); } catch (e) {}

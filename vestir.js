@@ -137,6 +137,30 @@
     return hecho;
   }
 
+  /* ★ 19/10/2026 — MENÚ, AVISOS, PATROCINADORES Y PREGUNTAS EXTRA SON CONTENIDO.
+     Son los platos, los avisos, los logos y las preguntas de OTRA fiesta (la
+     muestra de Nexora tiene sus patrocinadores). No viajan con el vestido: se
+     sacan de lo copiado de la muestra y se reponen los del cliente.
+     Las usa también /efectos/panel-solicitud-muestra.js (el camino del panel). */
+  var SECCIONES_FX = ['menu', 'avisos', 'patrocinadores'];
+  function secciones(d) {
+    var out = {};
+    if (!d || !d.fx) return out;
+    SECCIONES_FX.forEach(function (k) { if (d.fx[k]) out[k] = copia(d.fx[k]); });
+    if (d.fx.rsvp && d.fx.rsvp.preguntas) out.preguntas = copia(d.fx.rsvp.preguntas);
+    return out;
+  }
+  function limpiarSeccionesDeLaMuestra(d) {
+    if (!d || !d.fx) return;
+    SECCIONES_FX.forEach(function (k) { delete d.fx[k]; });
+    if (d.fx.rsvp) delete d.fx.rsvp.preguntas;
+  }
+  function ponerSecciones(d, s) {
+    if (!d || !s) return;
+    SECCIONES_FX.forEach(function (k) { if (s[k]) { d.fx = d.fx || {}; d.fx[k] = s[k]; } });
+    if (s.preguntas) { d.fx = d.fx || {}; d.fx.rsvp = d.fx.rsvp || {}; d.fx.rsvp.preguntas = s.preguntas; }
+  }
+
   /**
    * Le pone a `d` el vestido de `muestra`.
    * @param d          el borrador de la invitación (SE MODIFICA)
@@ -153,6 +177,10 @@
        .restricciones) vienen del formulario, y `fx` se copia ENTERO de la
        muestra: sin esto se pisaban en silencio. Se guardan y se reponen. */
     var rsvpCliente = (d.fx && d.fx.rsvp) ? copia(d.fx.rsvp) : null;
+    /* ★ y los colores de Vestimenta que eligió el cliente (fx.dresscode) */
+    var dressCliente = (d.fx && d.fx.dresscode) ? copia(d.fx.dresscode) : null;
+    /* ★ 19/10/2026 — y las secciones nuevas que llenó el cliente */
+    var seccCliente = secciones(d);
 
     Object.keys(muestra).forEach(function (k) {
       if (!esDeDiseno(k)) return;
@@ -187,6 +215,30 @@
         delete d.fx.galeria.muestra;
         if (/fotos-fiesta\//.test(String(d.fx.galeria.imagen || ''))) delete d.fx.galeria.imagen;
       }
+
+      /* ★ 19/10/2026 — muestras de eventos nuevos: el boleto con voz trae la FECHA y la
+         HORA de la muestra, y el filtro su FRASE («Generación 2023-2027»). Son contenido:
+         la fecha se arma con la del cliente y la frase se vacía (la escribe el cliente). */
+      if (d.fx.pasevoz) {
+        var mF = String(d.fecha || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}:\d{2}))?/);
+        d.fx.pasevoz.fecha = mF ? (mF[3] + ' · ' + mF[2] + ' · ' + mF[1]) : '';
+        d.fx.pasevoz.hora  = (mF && mF[4]) ? mF[4] : '';
+        /* el talón dice «MIS 50 AÑOS» de la muestra: se arma con el sobretítulo del cliente */
+        d.fx.pasevoz.talon = String(d.kick || '').toUpperCase().slice(0, 22);
+      }
+      if (d.fx.filtro) d.fx.filtro.frase = '';
+      limpiarSeccionesDeLaMuestra(d);
+    }
+    ponerSecciones(d, seccCliente);
+
+    if (dressCliente && ((dressCliente.colores || []).length || (dressCliente.evitar || []).length)) {
+      d.fx = d.fx || {};
+      d.fx.dresscode = d.fx.dresscode || {};
+      if ((dressCliente.colores || []).length) {
+        d.fx.dresscode.colores = dressCliente.colores;
+        if (typeof dressCliente.titulo === 'string') d.fx.dresscode.titulo = dressCliente.titulo;
+      }
+      if ((dressCliente.evitar || []).length) d.fx.dresscode.evitar = dressCliente.evitar;
     }
 
     if (rsvpCliente) {
@@ -239,6 +291,9 @@
     vestir: vestir,
     limpiarLoQueEsDeOtros: limpiarLoQueEsDeOtros,
     laVozDelCliente: laVozDelCliente,
+    secciones: secciones,
+    limpiarSeccionesDeLaMuestra: limpiarSeccionesDeLaMuestra,
+    ponerSecciones: ponerSecciones,
     bajarMuestra: bajarMuestra,
     desdeFirestore: desdeFirestore
   };
