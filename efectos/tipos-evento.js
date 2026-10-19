@@ -95,6 +95,13 @@
       if (tb && tb.textContent !== q) tb.textContent = q;
     }
 
+    /* corporativo: el título del pase del motor dice «Con cariño, te esperamos», que en
+       un evento de empresa suena fuera de lugar. Sólo se cambia si sigue el de fábrica. */
+    if (t === 'corporativo') {
+      var pt = document.querySelector('.frame .pase > .t, .pase > .t');
+      if (pt && /^\s*Con cari(ñ|n)o, te esperamos\s*$/i.test(pt.textContent)) pt.textContent = 'Tu acceso al evento';
+    }
+
     /* corporativo: trivia y filtro apagados salvo que el panel los prenda */
     var corp = (ev.fx && ev.fx.corporativo) || {};
     var esCorp = t === 'corporativo';
