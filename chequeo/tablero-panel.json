@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-19T20:45:52.934Z",
+ "cuando": "2026-10-19T23:26:30.888Z",
  "slug": "camila-y-tomas",
- "total": 364,
- "verde": 363,
- "amarillo": 0,
+ "total": 373,
+ "verde": 371,
+ "amarillo": 1,
  "rojo": 1,
  "gris": 0,
  "items": [
@@ -397,6 +397,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Frase final:",
    "tipo": "textarea",
@@ -495,6 +506,17 @@
    "seVe": true,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.patrocinadores.encendido",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
@@ -960,6 +982,17 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "dresscode-selector",
+   "control": "El texto de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.dresscode.tituloEvitar",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "vestimenta titulo:",
    "tipo": "text",
@@ -1268,6 +1301,39 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "menu-selector",
+   "control": "Mostrar el menú",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.menu.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "menu-selector",
+   "control": "Mostrar el menú",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "fx.menu.frase",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "avisos-selector",
+   "control": "Mostrar los avisos",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.avisos.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "Título itinerario:",
    "tipo": "text",
@@ -1306,6 +1372,28 @@
    "tipo": "color",
    "guarda": true,
    "dato": "c_itinerario-color-de-texto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "menu-selector",
+   "control": "Mostrar el menú",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.menu.encendido",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "avisos-selector",
+   "control": "Mostrar los avisos",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.avisos.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1394,6 +1482,17 @@
    "tipo": "text",
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "",
+   "control": "Frase de la galería (debajo del título):",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "galFrase",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2679,8 +2778,9 @@
    "guarda": true,
    "dato": "trivia",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "TRIVIA",
