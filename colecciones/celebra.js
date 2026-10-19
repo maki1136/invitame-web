@@ -572,8 +572,8 @@
       P + '.padres{ grid-template-columns:repeat(3,1fr)!important; gap:10px 8px!important; background-color:transparent!important; }',
       P + '.padres[data-col-n="1"]{ grid-template-columns:minmax(0,220px)!important; justify-content:center!important; }',
       P + '.padres[data-col-n="2"]{ grid-template-columns:repeat(2,1fr)!important; }',
-      P + '.padres[data-col-n="4"]{ grid-template-columns:repeat(4,1fr)!important; gap:8px 6px!important; }',
-      P + '.padres .av{ width:104px!important; height:104px!important; border-radius:50%!important; }',
+      P + '.padres[data-col-n="4"]{ grid-template-columns:repeat(2,1fr)!important; gap:14px 10px!important; }',
+      P + '.padres .av{ width:min(104px,24vw)!important; height:min(104px,24vw)!important; border-radius:50%!important; }',   /* 19/10: en 375 px tres de 104 tocaban los bordes (mis30-martin) */
       P + '.padres .nm{ font-family:' + H3 + '!important; font-size:' + (E.forma === 'pixel' ? '17px' : '18px') + '!important; color:' + TINTA + '!important; }',
       P + '.padres .rel{ color:' + TINTA2 + '!important; }',
       '@media (max-width:360px){ ' + P + '.padres{ gap:8px 5px!important; } ' + P + '.padres .av{ width:88px!important; height:88px!important; } }'
