@@ -397,6 +397,10 @@
          andrea-y-felipe: 1:1). Sólo se fuerza si ELLA eligió el color
          (clases pv-tinta-propia / pv-acento-propio); sin elegir, nada cambia. */
       '#pv-sec.pv-tinta-propia .pv-titulo{color:var(--pv-tinta)!important}',
+      /* 19/10/2026: las colecciones claras (celebra) también pintan los datos con su tinta, y con
+         -webkit-text-fill-color: en un boleto OSCURO la fecha y la hora salían azul sobre azul
+         (generacion-2023-2027). Con tinta propia, los datos y el talón la toman también. */
+      '#pv-sec.pv-tinta-propia :is(.pv-titulo,.pv-datos dd,.pv-nota dd,.pv-talon span){color:var(--pv-tinta)!important;-webkit-text-fill-color:var(--pv-tinta)!important}',
       '#pv-sec.pv-acento-propio .pv-over,#pv-sec.pv-acento-propio .pv-departe{color:var(--pv-acento)!important}',
       '#pv-sec .pv-over{font-size:8px!important;line-height:1.35!important;' +
         'font-family:var(--pv-dat)!important;letter-spacing:.16em!important}',
