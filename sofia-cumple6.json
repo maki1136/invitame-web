@@ -309,6 +309,20 @@
    "hora": "13:00",
    "talon": "MI MÁGICO CUMPLEAÑOS"
   },
+  "sobre": {
+   "modelo": "ev-unicornio",
+   "tipo": "carta",
+   "color": "#D7CADA",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "S",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

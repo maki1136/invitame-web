@@ -294,6 +294,20 @@
    "hora": "17:00",
    "talon": "GENERACIÓN 2023-2027"
   },
+  "sobre": {
+   "modelo": "ev-generacion",
+   "tipo": "carta",
+   "color": "#1C2D46",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "I",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

@@ -303,6 +303,20 @@
    "hora": "17:00",
    "talon": "GRADUACIÓN 2027"
   },
+  "sobre": {
+   "modelo": "ev-birrete",
+   "tipo": "carta",
+   "color": "#181818",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "G",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },

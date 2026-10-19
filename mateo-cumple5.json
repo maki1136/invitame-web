@@ -307,6 +307,20 @@
    "hora": "14:00",
    "talon": "MI CUMPLE Nº 5"
   },
+  "sobre": {
+   "modelo": "ev-pixel",
+   "tipo": "carta",
+   "color": "#E3C9CE",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "M",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

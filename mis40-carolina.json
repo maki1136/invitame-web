@@ -286,6 +286,20 @@
    "hora": "20:30",
    "talon": "40 & FABULOUS"
   },
+  "sobre": {
+   "modelo": "ev-marmol",
+   "tipo": "carta",
+   "color": "#F6E3E0",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "C",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

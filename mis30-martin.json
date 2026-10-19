@@ -282,6 +282,20 @@
    "hora": "21:00",
    "talon": "MIS 30"
   },
+  "sobre": {
+   "modelo": "ev-grises",
+   "tipo": "carta",
+   "color": "#837F76",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "M",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

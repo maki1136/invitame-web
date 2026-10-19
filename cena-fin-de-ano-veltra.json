@@ -257,6 +257,20 @@
   "pasevoz": {
    "encendido": false
   },
+  "sobre": {
+   "modelo": "ev-brindis",
+   "tipo": "carta",
+   "color": "#D1BB9F",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "V",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },

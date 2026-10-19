@@ -287,6 +287,20 @@
    "hora": "11:00",
    "talon": "MI PRIMERA COMUNIÓN"
   },
+  "sobre": {
+   "modelo": "ev-olivo",
+   "tipo": "carta",
+   "color": "#E2E1DB",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "T",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

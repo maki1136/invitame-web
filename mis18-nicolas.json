@@ -281,6 +281,20 @@
    "hora": "21:00",
    "talon": "MIS 18"
   },
+  "sobre": {
+   "modelo": "ev-editorial",
+   "tipo": "carta",
+   "color": "#D1A134",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "N",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

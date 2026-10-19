@@ -262,6 +262,20 @@
   "pasevoz": {
    "encendido": false
   },
+  "sobre": {
+   "modelo": "ev-ejecutivo",
+   "tipo": "carta",
+   "color": "#1B2941",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "N",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },

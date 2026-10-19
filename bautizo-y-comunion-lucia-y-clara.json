@@ -292,6 +292,20 @@
    "hora": "12:00",
    "talon": "MI PRIMERA COMUNIÓN Y "
   },
+  "sobre": {
+   "modelo": "ev-mono",
+   "tipo": "carta",
+   "color": "#F1F2F3",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "L",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

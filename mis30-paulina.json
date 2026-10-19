@@ -281,6 +281,20 @@
    "hora": "19:30",
    "talon": "MIS 30 AÑOS"
   },
+  "sobre": {
+   "modelo": "ev-rosegold",
+   "tipo": "carta",
+   "color": "#E4BEB3",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "P",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

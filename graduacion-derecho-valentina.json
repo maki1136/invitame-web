@@ -309,6 +309,20 @@
    "hora": "10:00",
    "talon": "GRADUACIÓN 2027"
   },
+  "sobre": {
+   "modelo": "ev-toga",
+   "tipo": "carta",
+   "color": "#E2DBC9",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "V",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

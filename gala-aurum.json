@@ -254,6 +254,20 @@
   "pasevoz": {
    "encendido": false
   },
+  "sobre": {
+   "modelo": "ev-gala",
+   "tipo": "carta",
+   "color": "#201E1F",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "A",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },

@@ -281,6 +281,20 @@
    "hora": "21:00",
    "talon": "MIS 40"
   },
+  "sobre": {
+   "modelo": "ev-plata",
+   "tipo": "carta",
+   "color": "#1E1E20",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "A",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },

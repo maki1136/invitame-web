@@ -291,6 +291,20 @@
    "hora": "12:00",
    "talon": "MI BAUTIZO Y PRIMER AÑ"
   },
+  "sobre": {
+   "modelo": "ev-estrellas",
+   "tipo": "carta",
+   "color": "#E8E1D6",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "O",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

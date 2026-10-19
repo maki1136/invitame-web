@@ -296,6 +296,20 @@
    "hora": "13:00",
    "talon": "BABY SHOWER"
   },
+  "sobre": {
+   "modelo": "ev-osita",
+   "tipo": "carta",
+   "color": "#E6DDCB",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "I",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "esmalte"
   },

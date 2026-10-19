@@ -304,6 +304,20 @@
    "hora": "19:00",
    "talon": "MIS XV"
   },
+  "sobre": {
+   "modelo": "ev-bokeh",
+   "tipo": "carta",
+   "color": "#0F0F11",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "B",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },

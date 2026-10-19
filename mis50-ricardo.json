@@ -287,6 +287,20 @@
    "hora": "20:30",
    "talon": "MIS 50 AÑOS"
   },
+  "sobre": {
+   "modelo": "ev-noche",
+   "tipo": "carta",
+   "color": "#19191A",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "R",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },

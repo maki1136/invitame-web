@@ -279,6 +279,20 @@
    "hora": "21:00",
    "talon": "MIS 18"
   },
+  "sobre": {
+   "modelo": "ev-urbano",
+   "tipo": "carta",
+   "color": "#2A2A2A",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "L",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
   "boton": {
    "estilo": "placa"
   },
