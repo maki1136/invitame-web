@@ -408,17 +408,19 @@
           motor mide 11 px y ésta 26 → se corre 7,5 px. Sirve para los dos
           estilos (izquierda y zigzag `.tl-centro`). */
     A.push(
-      P + '.tl{ background-color:rgba(' + RPN + ',.88)!important; border:1px solid ' + LO + '.24)!important; border-radius:16px!important; }',
-      P + '.tl:not(.tl-centro){ padding-left:44px!important; }',
-      P + '.tl:not(.tl-centro)::before, ' + P + '.tl:not(.tl-centro) > .tl-prog{ left:23px!important; }',
+      P + '.tl{ background-color:rgba(' + RPN + ',.88)!important; border:1px solid ' + LO + '.24)!important; border-radius:16px!important; padding:30px 18px 26px 14px!important; }',
+      /* 19/10 (Maki: «el itinerario apretado»): sin padding la primera marca pegaba en el borde de arriba */
+      P + '.tl:not(.tl-centro){ padding-left:54px!important; }',
+      P + '.tl:not(.tl-centro)::before, ' + P + '.tl:not(.tl-centro) > .tl-prog{ left:33px!important; }',
       P + '.tl::before, ' + P + '.tl > .tl-prog{ top:var(--tl-ini,6px)!important; bottom:var(--tl-fin,6px)!important; height:auto!important; }',
       E.recto
         ? P + '.tl::before{ background-image:none!important; background-color:' + FILETE + '!important; width:1px!important; }'
         : P + '.tl::before{ background-image:radial-gradient(circle, ' + FILETE + ' 1.1px, rgba(0,0,0,0) 1.2px)!important; background-size:2px 9px!important; background-repeat:repeat-y!important; background-color:transparent!important; width:2px!important; }',
       P + '.tl > .tl-prog{ background-color:' + ACENTO + '!important; width:2px!important; opacity:.85!important; }',
       /* la marca: la pieza fotografiada del tono sobre un disco de papel */
-      P + '.tl > .it::before{ width:26px!important; height:26px!important; margin-left:-7.5px!important; margin-top:-7.5px!important; border-radius:' + (E.recto ? '5px' : '50%') + '!important; background-color:' + PANEL + '!important; background-image:url("' + PIEZA_CH + '")!important; background-size:cover!important; background-repeat:no-repeat!important; background-position:center!important; box-shadow:0 0 0 1px ' + LO + '.55), 0 2px 6px rgba(0,0,0,.35)!important; border:0!important; }',
+      P + '.tl > .it::before{ width:26px!important; height:26px!important; margin-left:-7.5px!important; margin-top:-7.5px!important; border-radius:' + (E.recto ? '5px' : '50%') + '!important; background-color:' + PANEL + '!important; background-image:url("' + PIEZA_CH + '")!important; background-size:cover!important; background-repeat:no-repeat!important; background-position:center!important; box-shadow:0 0 0 1px ' + LO + '.55), 0 0 0 6px rgba(' + RPN + ',1), 0 2px 8px rgba(0,0,0,.35)!important; border:0!important; }',
       P + '.tl.tl-centro > .it::before{ margin-top:-13px!important; }',
+      P + '.tl > .it{ z-index:1!important; }', P + '.tl > .tl-prog{ z-index:0!important; }',
       P + '.tl.tl-centro > .it:nth-child(odd)::before{ margin-left:0!important; margin-right:-7.5px!important; }',
       /* ⚠️ el motor maneja la marca con DOS reglas (reposo y revelado): va atada a .on */
       P + '.tl.tl-anim > .it:not(.on)::before{ opacity:0!important; }',
