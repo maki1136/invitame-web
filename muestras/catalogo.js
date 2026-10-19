@@ -463,6 +463,16 @@
       paleta:  ["#a09692", "#918685", "#847a78", "#695f5d"],
       tipos:   ["cumple"]
     },
+    'fiesta-bokeh': {
+      nombre:  "Bokeh dorado",
+      bajada:  "Luces doradas que respiran sobre fondo negro.",
+      muestra: 'misxv-bruno',
+      foto:    '/formulario/disenos/misxv-bruno.webp',
+      color:   '#282219',
+      color2:  '#1c1812',
+      paleta:  ["#4b3f33", "#1a1710", "#16120b", "#110e09"],
+      tipos:   ["xv"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
