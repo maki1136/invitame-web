@@ -50,17 +50,17 @@
   {
    "nombre": "Sebastián",
    "rel": "Mi esposo",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis30-paulina/mis30-paulina-persona-1"
   },
   {
    "nombre": "Verónica y Jorge",
    "rel": "Mis papás",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis30-paulina/mis30-paulina-persona-2"
   },
   {
    "nombre": "Andrea, Mariana y Fernanda",
    "rel": "Mis amigas de toda la vida",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis30-paulina/mis30-paulina-persona-3"
   }
  ],
  "padresTitulo": "Mis personas favoritas",

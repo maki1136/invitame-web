@@ -50,17 +50,17 @@
   {
    "nombre": "Claudia y Ricardo",
    "rel": "Mis papás",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-persona-1"
   },
   {
    "nombre": "Camila",
    "rel": "Mi hermana",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-persona-2"
   },
   {
    "nombre": "Emiliano, Regina y Joaquín",
    "rel": "Mis amigos de siempre",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis18-nicolas/mis18-nicolas-persona-3"
   }
  ],
  "padresTitulo": "Mis personas favoritas",

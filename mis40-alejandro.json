@@ -50,17 +50,17 @@
   {
    "nombre": "Daniela",
    "rel": "Mi esposa",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-persona-1"
   },
   {
    "nombre": "Emilia y Santiago",
    "rel": "Mis hijos",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-persona-2"
   },
   {
    "nombre": "Gloria y Arturo",
    "rel": "Mis papás",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis40-alejandro/mis40-alejandro-persona-3"
   }
  ],
  "padresTitulo": "Mis personas favoritas",

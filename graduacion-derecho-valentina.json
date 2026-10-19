@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-portada.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-galeria-1.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-galeria-2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-galeria-3.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-galeria-4.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-galeria-5.jpg"
+ ],
  "ev1t": "Misa de acción de gracias",
  "ev1sub": "Basílica Colegiata de Nuestra Señora de Guanajuato",
  "ev1dir": "Basílica Colegiata de Nuestra Señora de Guanajuato, Plaza de la Paz s/n, Centro, 36000, Guanajuato, Gto.",
@@ -50,17 +58,17 @@
   {
    "nombre": "Lic. Joaquín Bermúdez Lara",
    "rel": "Padrino de generación",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-persona-1"
   },
   {
    "nombre": "Patricia y Eduardo",
    "rel": "Mis papás",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-persona-2"
   },
   {
    "nombre": "Elena y Mauricio",
    "rel": "Mis abuelos",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-persona-3"
   }
  ],
  "padresTitulo": "Personas importantes",
@@ -142,6 +150,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=04854XqcfCY",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-cierre",
  "secOrden": [
   "frase",
   "eventos",
@@ -242,7 +251,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/graduacion-derecho-valentina/graduacion-derecho-valentina-cierre"
   },
   "fondo": {
    "tipo": "imagen",

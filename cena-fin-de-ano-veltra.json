@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-portada.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-galeria-1.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-galeria-2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-galeria-3.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-galeria-4.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-galeria-5.jpg"
+ ],
  "ev1t": "Cena",
  "ev1sub": "Hotel Fiesta Americana Veracruz",
  "ev1dir": "Hotel Fiesta Americana Veracruz, Blvd. Manuel Ávila Camacho s/n, Costa de Oro, 94299, Boca del Río, Ver.",
@@ -50,22 +58,22 @@
   {
    "nombre": "Irene Salcedo",
    "rel": "Directora General",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-persona-1"
   },
   {
    "nombre": "Rafael Ochoa",
    "rel": "Director de Operaciones",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-persona-2"
   },
   {
    "nombre": "Damián Ugalde",
    "rel": "Director Comercial",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-persona-3"
   },
   {
    "nombre": "Carmen Lozano",
    "rel": "Directora de Capital Humano",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-persona-4"
   }
  ],
  "padresTitulo": "Directivos",
@@ -98,6 +106,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=6VHt4hazMG0",
  "videoUrl": "",
  "spotifyUrl": "",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-cierre",
  "secOrden": [
   "frase",
   "eventos",
@@ -200,7 +209,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/cena-fin-de-ano-veltra/cena-fin-de-ano-veltra-cierre"
   },
   "fondo": {
    "tipo": "imagen",

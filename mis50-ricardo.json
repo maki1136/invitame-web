@@ -21,6 +21,7 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/mis50-ricardo/mis50-ricardo-portada.jpg",
  "ev1t": "Fiesta",
  "ev1sub": "Hotel Quinta Real Monterrey",
  "ev1dir": "Hotel Quinta Real Monterrey, Diego Rivera 500, Valle Oriente, 66260, San Pedro Garza García, N.L.",
@@ -50,17 +51,17 @@
   {
    "nombre": "Mónica",
    "rel": "Mi esposa",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis50-ricardo/mis50-ricardo-persona-1"
   },
   {
    "nombre": "Santiago (el rebelde) y Renata (la consentida)",
    "rel": "Mis hijos",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis50-ricardo/mis50-ricardo-persona-2"
   },
   {
    "nombre": "Óscar y Elena",
    "rel": "Mis hermanos",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis50-ricardo/mis50-ricardo-persona-3"
   }
  ],
  "padresTitulo": "Mi familia",

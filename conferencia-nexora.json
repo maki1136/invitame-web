@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-portada.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-galeria-1.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-galeria-2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-galeria-3.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-galeria-4.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/conferencia-nexora/conferencia-nexora-galeria-5.jpg"
+ ],
  "ev1t": "Conferencia",
  "ev1sub": "Centro de Convenciones Puebla William O. Jenkins",
  "ev1dir": "Centro de Convenciones Puebla William O. Jenkins, Blvd. Héroes del 5 de Mayo 402, Centro, 72000, Puebla, Pue.",
@@ -50,22 +58,22 @@
   {
    "nombre": "Ing. Marcelo Valdivia",
    "rel": "Director General, Nexora",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/conferencia-nexora/conferencia-nexora-persona-1"
   },
   {
    "nombre": "Mtra. Renata Olmedo",
    "rel": "Directora de Innovación, Nexora",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/conferencia-nexora/conferencia-nexora-persona-2"
   },
   {
    "nombre": "Dr. Tomás Ferrer",
    "rel": "Conferencista magistral",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/conferencia-nexora/conferencia-nexora-persona-3"
   },
   {
    "nombre": "Lic. Daniela Arriaga",
    "rel": "Directora de Talento, Nexora",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/conferencia-nexora/conferencia-nexora-persona-4"
   }
  ],
  "padresTitulo": "Oradores",
@@ -98,6 +106,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=1e9B31FLT-s",
  "videoUrl": "",
  "spotifyUrl": "",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/conferencia-nexora/conferencia-nexora-cierre",
  "secOrden": [
   "frase",
   "eventos",
@@ -205,7 +214,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/conferencia-nexora/conferencia-nexora-cierre"
   },
   "fondo": {
    "tipo": "imagen",

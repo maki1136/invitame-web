@@ -50,17 +50,17 @@
   {
    "nombre": "Eduardo",
    "rel": "Mi esposo",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-persona-1"
   },
   {
    "nombre": "Ximena y Bruno",
    "rel": "Mis hijos",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-persona-2"
   },
   {
    "nombre": "Laura y Francisco",
    "rel": "Mis papás",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/mis40-carolina/mis40-carolina-persona-3"
   }
  ],
  "padresTitulo": "Mi familia",

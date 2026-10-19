@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/gala-aurum/gala-aurum-portada.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/gala-aurum/gala-aurum-galeria-1.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/gala-aurum/gala-aurum-galeria-2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/gala-aurum/gala-aurum-galeria-3.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/gala-aurum/gala-aurum-galeria-4.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/gala-aurum/gala-aurum-galeria-5.jpg"
+ ],
  "ev1t": "Cena de Gala",
  "ev1sub": "Rosewood San Miguel de Allende",
  "ev1dir": "Rosewood San Miguel de Allende, Nemesio Diez 11, Centro, 37700, San Miguel de Allende, Gto.",
@@ -50,22 +58,22 @@
   {
    "nombre": "Lic. Gabriel Montiel",
    "rel": "Presidente del Consejo",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/gala-aurum/gala-aurum-persona-1"
   },
   {
    "nombre": "Mtra. Isabel Cárdenas",
    "rel": "Directora General",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/gala-aurum/gala-aurum-persona-2"
   },
   {
    "nombre": "C.P. Andrés Villaseñor",
    "rel": "Director de Finanzas",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/gala-aurum/gala-aurum-persona-3"
   },
   {
    "nombre": "Lic. Paola Esquivel",
    "rel": "Directora de Relación con Inversionistas",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/gala-aurum/gala-aurum-persona-4"
   }
  ],
  "padresTitulo": "Directivos",
@@ -98,6 +106,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=Ozg3P3LrJs8",
  "videoUrl": "",
  "spotifyUrl": "",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/gala-aurum/gala-aurum-cierre",
  "secOrden": [
   "frase",
   "eventos",
@@ -197,7 +206,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/gala-aurum/gala-aurum-cierre"
   },
   "fondo": {
    "tipo": "imagen",

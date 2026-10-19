@@ -21,6 +21,14 @@
  "nfont": "",
  "nsize": "",
  "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/generacion-2023-2027/generacion-2023-2027-portada.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/generacion-2023-2027/generacion-2023-2027-galeria-1.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/generacion-2023-2027/generacion-2023-2027-galeria-2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/generacion-2023-2027/generacion-2023-2027-galeria-3.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/generacion-2023-2027/generacion-2023-2027-galeria-4.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/generacion-2023-2027/generacion-2023-2027-galeria-5.jpg"
+ ],
  "ev1t": "Misa",
  "ev1sub": "Parroquia de Nuestra Señora de Guadalupe",
  "ev1dir": "Parroquia de Nuestra Señora de Guadalupe, Hidalgo 370, Centro, 48300, Puerto Vallarta, Jal.",
@@ -50,17 +58,17 @@
   {
    "nombre": "Ing. Héctor Salvatierra",
    "rel": "Padrino de generación",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/generacion-2023-2027/generacion-2023-2027-persona-1"
   },
   {
    "nombre": "Mtra. Lucía Arredondo",
    "rel": "Coordinadora de la carrera",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/generacion-2023-2027/generacion-2023-2027-persona-2"
   },
   {
    "nombre": "Diego Paredes",
    "rel": "Presidente de generación",
-   "foto": ""
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/generacion-2023-2027/generacion-2023-2027-persona-3"
   }
  ],
  "padresTitulo": "Personas importantes",
@@ -139,6 +147,7 @@
  "musicaUrl": "https://www.youtube.com/watch?v=mk48xRzuNvA",
  "videoUrl": "",
  "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/generacion-2023-2027/generacion-2023-2027-cierre",
  "secOrden": [
   "frase",
   "eventos",
@@ -228,7 +237,7 @@
   },
   "cierre": {
    "origen": "link",
-   "url": ""
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/generacion-2023-2027/generacion-2023-2027-cierre"
   },
   "fondo": {
    "tipo": "imagen",
