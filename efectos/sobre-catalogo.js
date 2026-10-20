@@ -1346,7 +1346,27 @@
     hint.textContent = 'Toca para abrir';
 
     sacarTapa();
-    setTimeout(function () { env.classList.add('puesto'); }, 30);
+    /* ★ 19/10/2026 — «APARECE PRIMERO LA PORTADA Y DESPUÉS SE ARMA EL SOBRE»
+       (Maki, «en casi todas»). En el sobre de solapas, la foto de la portada
+       que va ADENTRO (#col-sobre-carta) ya está en el celular (la bajó la
+       portada), pero el papel del sobre (cuerpo y solapa) recién se empieza a
+       bajar acá. Con `puesto` a los 30 ms se encendían las dos capas juntas: en
+       4G la foto aparecía al toque y el papel se iba dibujando encima.
+       → `puesto` espera a que el papel esté bajado y decodificado (máximo 6 s:
+         si no llega, se muestra igual, como antes). */
+    (function ponerCuandoEsteElPapel() {
+      var urls = porSolapas ? [m.cuerpo || m.poster || '', m.solapa || ''].filter(Boolean) : [];
+      var hecho = false, poner = function () { if (hecho) return; hecho = true; env.classList.add('puesto'); };
+      if (!urls.length) { setTimeout(poner, 30); return; }
+      var faltan = urls.length;
+      urls.forEach(function (u) {
+        var im = new Image(), listo = function () { if (--faltan <= 0) setTimeout(poner, 30); };
+        im.onload = function () { if (im.decode) im.decode().then(listo, listo); else listo(); };
+        im.onerror = listo;
+        im.src = u;
+      });
+      setTimeout(poner, 6000);
+    })();
 
     function esFoto()    { return env.dataset.empalme  === 'foto'; }
     function esSolapas() { return env.dataset.apertura === 'solapas'; }
