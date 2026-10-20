@@ -231,6 +231,10 @@
     '.tl.tl-centro > .it:nth-child(even).on{transform:translate(0,0)}',
     '.tl.tl-centro > .it:nth-child(even)::before{left:-31px;top:50%;margin-top:-5.5px}',
 
+    /* ---------- sin línea (fx.itinerario.linea = 'no') ---------- */
+    'html body .tl.tl-sin-linea::before,html body .tl.tl-sin-linea::after,html body .tl.tl-sin-linea .tl-prog{display:none!important;opacity:0!important;background:none!important}',
+    'html body .tl.tl-sin-linea{background-image:none!important}',
+
     /* ---------- si pidió menos movimiento ---------- */
     '@media(prefers-reduced-motion:reduce){',
     '  .tl.tl-anim > .it,.tl.tl-centro > .it:nth-child(odd),',
@@ -288,6 +292,9 @@
 
   function aplicarEstilo(tl) {
     tl.classList.toggle('tl-centro', estilo() === 'centro');
+    /* 20/10/2026 · Maki: «las líneas del itinerario sacalas, quedan horribles».
+       `fx.itinerario.linea = 'no'` saca la vía (y su progreso); quedan las marcas. */
+    tl.classList.toggle('tl-sin-linea', String(delPanel('linea') || '').toLowerCase() === 'no');
   }
 
   function armar(tl) {

@@ -314,13 +314,13 @@
       const rows=list.map((s,i)=>{
         const fecha=s.fecha?new Date(s.fecha):null; const fstr=(fecha&&!isNaN(fecha))?fecha.toLocaleDateString('es'):'—';
         const obs=s.observaciones?('<div style="background:#fff6e9;border-left:3px solid #c98a2e;border-radius:8px;padding:7px 10px;margin-top:7px;font-size:12.5px">'+ICO.papel+' <b>Pedido especial:</b> '+_esc(s.observaciones)+'</div>'):'';
-        const extra=[s.dress?(ICO.percha+' '+s.dress):'',s.regalos?(ICO.regalo+' '+s.regalos):''].filter(Boolean).join(' · ');
+        const extra=[s.dress?(ICO.percha+' '+_esc(s.dress)):'',s.regalos?(ICO.regalo+' '+_esc(s.regalos)):''].filter(Boolean).join(' · ');
         return '<div style="border:1px solid #eee2d8;border-radius:12px;padding:12px;margin-bottom:10px">'+
           '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'+
             '<div style="min-width:0"><b style="color:#6D1233;font-size:16px">'+_esc((s.n1||'')+(s.n2?' & '+s.n2:''))+'</b>'+
               '<div style="font-size:12px;color:#9a8f88">'+(s.tipoEvento?'<b style="color:#6D1233">'+_esc(s.tipoEvento)+'</b> · ':'')+_esc(s.tplNombre||s.tpl||'')+' · '+fstr+' · '+((s.invitados||[]).length)+' invitados</div>'+
               '<div style="font-size:12px;color:#7d756c;margin-top:2px">'+ICO.telefono+' '+_esc(s.contactoNombre||'—')+' · '+_esc(s.contactoWsp||'')+(s.contactoEmail?' · '+ICO.sobre+' '+_esc(s.contactoEmail):'')+'</div>'+
-              (extra?'<div style="font-size:12px;color:#7d756c;margin-top:2px">'+_esc(extra)+'</div>':'')+ obs +'</div>'+
+              (extra?'<div style="font-size:12px;color:#7d756c;margin-top:2px">'+extra+'</div>':'')+ obs +'</div>'+
             '<div style="white-space:nowrap;display:flex;flex-direction:column;gap:6px">'+
               '<button class="addbtn" onclick="cargarSolicitudIdx('+i+')">Cargar en el editor</button>'+
               '<button class="lnk" onclick="marcarResuelta(\''+s.id+'\')">Marcar resuelta</button>'+
@@ -340,6 +340,12 @@
      Acá quedó sólo lo que es del admin: repintar la pantalla y avisarle a
      Jazmín qué se cargó. */
   function cargarSolicitudIdx(i){ const s=(window._solicCache||[])[i]; if(!s)return;
+    /* ★ 20/10/2026 (Jazmín, con «denisse»): la solicitud ya había creado SU
+       invitación sola, pero «Cargar en el editor» volcaba los datos encima de
+       lo que estuviera abierto — una invitación nueva con los datos de ejemplo
+       (María & Diego). → Si ya tiene invitación, se abre ESA. */
+    const yaCreada=String(s.slugCreado||'').trim();
+    if(yaCreada && String((D&&D.slug)||'')!==yaCreada){ location.href='admin.html?e='+encodeURIComponent(yaCreada); return; }
     if(!window.SOLICITUD_A_EVENTO){
       alert('No cargó /solicitud-a-evento.js, así que no puedo traer los datos.\n\nRecargá la página y probá de nuevo.');
       return;

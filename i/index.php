@@ -412,8 +412,14 @@ if ($reglas) {
    quien ya compró. La contra es que un error nuevo también llega — por eso el
    banco corre contra la invitación de verdad antes de dar nada por bueno.
    ============================================================================ */
+/* ⚠️ 20/10/2026: con ?v=<fecha del archivo>. El CDN de Hostinger del sitio de
+   prueba se quedó con una copia VIEJA de /sobres/catalogo.js (cacheada 7 días,
+   de antes de que el .htaccess dijera no-cache): los sobres nuevos no existían
+   para el invitado y el motor caía al sobre de foto («arranca abierto»).
+   Con la versión en la dirección, cada cambio del catálogo es una dirección nueva. */
+$verCatalogo = @filemtime(__DIR__ . '/../sobres/catalogo.js') ?: 1;
 $engancheModulos = (strpos($tpl, 'catalogo.js') === false)
-  ? '<script src="/sobres/catalogo.js" defer></script>'
+  ? '<script src="/sobres/catalogo.js?v=' . $verCatalogo . '" defer></script>'
   : '';
 
 /* ===== LOS ARREGLOS DE ESTILO QUE VALEN PARA TODAS ============================
@@ -451,7 +457,7 @@ $apagarBanner = ($ver === 'viva') ? '<style>#banner-prueba{display:none!importan
       saca un módulo, esto se entera solo.
    ============================================================================ */
 $preCarga = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-          . '<link rel="preload" as="script" href="/sobres/catalogo.js">'
+          . '<link rel="preload" as="script" href="/sobres/catalogo.js?v=' . $verCatalogo . '">'
           . '<link rel="preload" as="script" href="/efectos/index.js">'
           . '<link rel="preload" as="script" href="/efectos/todo.php">'
           . '<link rel="preload" as="script" href="/efectos/imagenes-livianas.js">';

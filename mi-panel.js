@@ -1015,7 +1015,11 @@
 
   (async function(){
     let g=null; try{ g=JSON.parse(localStorage.getItem('inv_panel_novios')||'null'); }catch(_){}
-    if(g && g.slug && g.clave){ if(await hacerLogin(g.slug,g.clave)) return; }
     const qs = new URLSearchParams(location.search).get('e');
-    if(qs) $('slug').value = limpiarSlug(qs);
+    /* ★ 20/10/2026 (Jazmín): «cuando quiero abrir el panel me aparece el panel
+       de otra invitación». La sesión guardada ganaba siempre, aunque el link
+       dijera ?e=otra. Si el link pide OTRA invitación, se pide su clave. */
+    const pide = qs ? limpiarSlug(qs) : '';
+    if(g && g.slug && g.clave && (!pide || pide===g.slug)){ if(await hacerLogin(g.slug,g.clave)) return; }
+    if(pide) $('slug').value = pide;
   })();

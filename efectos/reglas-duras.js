@@ -260,6 +260,11 @@
       '  border-color:transparent transparent transparent currentColor}',
       '.rd-tapa .rd-txt{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.65}',
       '.rd-tapa.rd-ida{opacity:0;pointer-events:none;transition:opacity .45s ease}',
+      /* 20/10/2026 · Maki: «la playlist, las imágenes salen muy cortadas, en todas».
+         Spotify achica su reproductor a 152 px cuando despierta, y la tapa (una
+         foto cuadrada) quedaba recortada a una franja. Mientras está tapada, la
+         caja tiene alto propio; al abrirla, manda Spotify. */
+      '#spotify-embed[data-crudo="tapado"]{min-height:300px}',
       '.frame input::placeholder,.frame textarea::placeholder{',
       '  color:currentColor !important;opacity:.72 !important}'
     ].join('');

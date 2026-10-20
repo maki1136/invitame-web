@@ -6,7 +6,8 @@
    desde el panel) sea el protagonista: las secciones NO van macizas, sólo
    llevan un claro/oscuro radial chico detrás del texto.
    ⭐ TONOS: fx.coleccion = 'fiesta-<tono>'  (y ?coleccion=fiesta-<tono> para probar)
-        noche · plata · ejecutivo · gala · brindis · birrete · bokeh · urbano
+        noche · plata · ejecutivo · gala · brindis · birrete · bokeh · urbano ·
+        abordar · jardin
       'fiesta' a secas = noche.
    ⚠️ VIENE APAGADA: sin fx.coleccion fiesta* no hace nada (viaja en todo.php).
    ⚠️ CONVIVE CON DEGRADÉ: su propio ID, su propia hoja (#col-fiesta), su propio
@@ -46,7 +47,9 @@
     brindis:   { papel:'#0D1426', papel2:'#070B17', panel:'#172140', filete:'#4E5878', tinta:'#F1EADB', tinta2:'#C9C5BA', base:'brindis' },
     birrete:   { papel:'#0A0A0A', papel2:'#040404', panel:'#161616', filete:'#57503C', tinta:'#F0E8D2', tinta2:'#C9C2AE', base:'birrete' },
     bokeh:     { papel:'#100D08', papel2:'#090704', panel:'#1C1710', filete:'#5E5340', tinta:'#F2E6CC', tinta2:'#CDBFA4', base:'bokeh' },
-    urbano:    { papel:'#1A1B1D', papel2:'#111214', panel:'#26282B', filete:'#5E6064', tinta:'#EDEDE8', tinta2:'#C3C4BF', base:'urbano' }
+    urbano:    { papel:'#1A1B1D', papel2:'#111214', panel:'#26282B', filete:'#5E6064', tinta:'#EDEDE8', tinta2:'#C3C4BF', base:'urbano' },
+    abordar:   { papel:'#0E1A2E', papel2:'#08111F', panel:'#162640', filete:'#4A5C7A', tinta:'#F1EBDF', tinta2:'#CBC5B8', base:'abordar' },
+    jardin:    { papel:'#15221A', papel2:'#0C150F', panel:'#1E2F23', filete:'#4D6650', tinta:'#F0E8D6', tinta2:'#CCC4B0', base:'jardin' }
   };
 
   /* ⭐ CADA TONO CON SU PROPIO DISEÑO (no sólo el color). Por tono:
@@ -96,7 +99,15 @@
     /* 8 · Cumpleaños · Urbano 18 — concreto, haces de luz, mostaza; todo recto */
     urbano:    { disp:'Anton',        scr:'Anton',               txt:'Barlow',  metal:'mostaza', recto:1,
                  adorno:'rayo', forma:'cartel', port:'poster',
-                 h2:['disp',34,'.03em',1,400], kick:['txt',12,'.3em',1,600], btn:['disp','.12em',1] }
+                 h2:['disp',34,'.03em',1,400], kick:['txt',12,'.3em',1,600], btn:['disp','.12em',1] },
+    /* 9 · Boda · Pase de abordar — azul marino y crema, boletos con muescas, avioncito */
+    abordar:   { disp:'Cinzel',       scr:'Pinyon Script',       txt:'Montserrat', metal:'champagne',
+                 adorno:'avion', forma:'boleto', port:'deco',
+                 h2:['disp',22,'.1em',1,500], kick:['txt',11,'.34em',1,600], btn:['txt','.18em',1] },
+    /* 10 · Boda · Jardín pintado — verde bosque, flores al óleo, lacre dorado */
+    jardin:    { disp:'Playfair Display', scr:'Pinyon Script',   txt:'Lato',    metal:'oro',
+                 adorno:'rosa', forma:'filetes', port:'italica',
+                 h2:['disp',28,'.01em',0,500], kick:['scr',26,'0',0,400], btn:['disp','.08em',0] }
   };
   var METALES = {
     oro:       ['#C9A44E', '#E0C57A'],
@@ -268,6 +279,15 @@
     if (a === 'rayo') return svg(
       '<path fill="' + c + '" d="M29 2 L9 27 H21.5 L17 46 L39 18 H26.5 Z"/>' +
       '<path fill="' + PAPEL + '" d="M26.6 8.6 L15.4 23.6 H19.4 Z"/>');
+    /* abordar: avioncito de perfil con su estela punteada */
+    if (a === 'avion') return svg(
+      '<path fill="' + c + '" d="M44 22 C44 20.4 42.6 19.5 40.8 19.5 H30 L20 6 H15.5 L21 19.5 H11 L7.5 14.5 H4 L6.5 22 L4 29.5 H7.5 L11 24.5 H21 L15.5 38 H20 L30 24.5 H40.8 C42.6 24.5 44 23.6 44 22 Z"/>' +
+      '<path d="M2 36 C8 40 14 40 18 36" stroke="' + c + '" stroke-width="1.6" stroke-dasharray="2 3" stroke-linecap="round" fill="none"/>');
+    /* jardín: rosa abierta de pétalos con dos hojas */
+    if (a === 'rosa') return svg(
+      '<g fill="' + c + '"><path d="M24 30 C14 30 11 21 16 16 C17 22 21 23 24 22 C27 23 31 22 32 16 C37 21 34 30 24 30 Z"/><path d="M24 22 C19 21 18 15 21 12 C22 15 23 16 24 16 C25 16 26 15 27 12 C30 15 29 21 24 22 Z"/>' +
+      '<path d="M24 30 V45" stroke="' + c + '" stroke-width="1.8"/><path d="M24 38 C18 37 14 39 11 43 C17 43 21 42 24 38 Z"/><path d="M24 36 C30 34 34 35 37 39 C31 40 27 39 24 36 Z"/></g>' +
+      '<path d="M22 18 C23 19.5 25 19.5 26 18" stroke="' + PAPEL + '" stroke-width="1" fill="none"/>');
     return svg('<circle cx="24" cy="24" r="8" fill="' + c + '"/>');
   }
 
@@ -620,6 +640,26 @@
       P + '.tl{ border-radius:22px!important; box-shadow:0 0 24px ' + LO + '.16)!important; }',
       P + '.padres .av{ border:2px solid ' + ORO + '!important; box-shadow:0 0 18px ' + LO + '.45), 0 0 0 5px rgba(' + RP + ',.6)!important; }'
     );
+    /* abordar: BOLETO — muescas en los costados y una línea troquelada */
+    if (f === 'boleto') {
+      var MB = 'radial-gradient(circle 12px at 0 62%, #0000 98%, #000) left/51% 100% no-repeat, radial-gradient(circle 12px at 100% 62%, #0000 98%, #000) right/51% 100% no-repeat';
+      A.push(
+        P + ':is(.evento,.hotel){ border-radius:10px!important; border:0!important; -webkit-mask:' + MB + '!important; mask:' + MB + '!important; box-shadow:inset 0 0 0 1px ' + LO + '.45)!important; background-image:linear-gradient(90deg, ' + LO + '.55) 50%, rgba(0,0,0,0) 50%)!important; background-size:12px 1.5px!important; background-repeat:repeat-x!important; background-position:0 62%!important; }',
+        P + '.evento .ph{ border-radius:9px 9px 0 0!important; }',
+        P + '.tl{ border-radius:10px!important; border:1px dashed ' + LO + '.45)!important; }',
+        P + '.padres .av{ border:2px solid ' + ORO + '!important; box-shadow:0 0 0 4px ' + PAPEL + ', 0 0 0 5px ' + LO + '.4)!important; }',
+        /* 20/10/2026 · como la referencia de Maki: el boleto es de PAPEL MARFIL con
+           letra azul marino (no un panel oscuro más). Se invierten tinta y papel
+           SOLO adentro del boleto; los botones de adentro van en azul. */
+        P + ':is(.evento,.hotel,.tl){ background-color:' + TINTA + '!important; box-shadow:inset 0 0 0 1px rgba(' + rgb(PAPEL) + ',.18), 0 14px 30px rgba(0,0,0,.45)!important; background-image:linear-gradient(90deg, rgba(' + rgb(PAPEL) + ',.45) 50%, rgba(0,0,0,0) 50%)!important; }',
+        P + '.tl{ border:0!important; padding-top:18px!important; padding-bottom:18px!important; background-image:none!important; }',
+        P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:none!important; }',
+        P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d){ color:rgba(' + rgb(PAPEL) + ',.72)!important; -webkit-text-fill-color:rgba(' + rgb(PAPEL) + ',.72)!important; }',
+        P + ':is(.evento,.hotel) .btn{ background:' + PAPEL + '!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; border:0!important; box-shadow:0 4px 10px rgba(0,0,0,.25)!important; }',
+        P + ':is(.evento,.hotel) .btn.gh, ' + P + ':is(.evento,.hotel) .btn.ghost{ background:transparent!important; color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; border:1px solid rgba(' + rgb(PAPEL) + ',.55)!important; box-shadow:none!important; }',
+        P + ':is(.evento,.hotel) .btn *{ color:inherit!important; -webkit-text-fill-color:currentColor!important; }'
+      );
+    }
     /* urbano: cartel pegado — recto, sombra dura mostaza */
     if (f === 'cartel') A.push(
       P + ':is(.evento,.hotel){ border-radius:0!important; border:1px solid rgba(255,255,255,.10)!important; box-shadow:7px 7px 0 0 ' + ACENTO + '!important; margin-right:10px!important; }',
