@@ -1831,6 +1831,36 @@ window.SOBRES_INVITAME = {
     eje:      { x: 51.8, y: 54.3 }
   },
 
+  /* ★ 19/10/2026 · copia del sobre de @thedigitalinvite_ (TikTok 7695555994134301984) que pidió Maki:
+     verde salvia con peonías en relieve, solapa en V con banda lisa y lacre rojo GRANDE con una rosa
+     (sin siglas: es genérico). Flow, Nano Banana 2.1, con el cuadro del reel de referencia.
+     Recorte: doblez medido por textura (banda lisa vs relieve) + RANSAC; lacre por color.
+       L y = 381,36 + 0,8640·x · R y = 1048,64 − 0,8861·x · punta (381,3 ; 710,8) · lacre (386,641) r≈182
+     La referencia: la solapa sube con el lacre y aparece la invitación → la versión -cae es la fiel. */
+  "salvia-lacre-rojo": {
+    nombre:   "Salvia en relieve · peonías grabadas y lacre rojo con rosa (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-cuerpo.webp",
+    color:    "#878f72",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 49.6, y: 51.7 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "salvia-lacre-rojo-cae": {
+    nombre:   "Salvia en relieve · lacre rojo, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-cuerpo.webp",
+    color:    "#878f72",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 49.6, y: 51.7 }
+  },
+
   "rosado-flor-seca": {
     nombre:   "Rústico rosa · algodón de borde suelto, lacre con flor seca (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/rosado-flor-seca-poster.jpg",
