@@ -242,9 +242,9 @@
     try {
       var c = window.SOBRES_INVITAME || {};
       var v = Number((c[armadoModelo] || {}).luzFundido);
-      if (v > 0) return v;
+      if (v > 0) return RAPIDA ? Math.min(v, 0.6) : v;
     } catch (e) {}
-    return FUNDIDO;
+    return RAPIDA ? Math.min(FUNDIDO, 0.6) : FUNDIDO;
   }
 
   /* ★★★ LA FICHA DE APERTURA DE UN SOBRE POR SOLAPAS  (29/9/2026)
@@ -506,6 +506,11 @@
   var SOL_DUR = 1.50;   /* lo que tarda la solapa en irse por arriba */
   var ESPERA  = 1.25;   /* cuánto tarda el cuerpo en arrancar */
   var CAIDA   = 2.30;   /* lo que tarda el cuerpo en irse por abajo */
+  /* ★ 19/10/2026 — PRUEBA DE RITMO, sólo con `?apertura=rapida` en la
+     dirección: la apertura de solapas en ~3 s en vez de ~4,5 s, para que Maki
+     compare las dos lado a lado. Sin el parámetro no cambia nada. */
+  var RAPIDA = /[?&]apertura=rapida\b/.test(location.search);
+  if (RAPIDA) { SOL_DUR = 1.10; ESPERA = 0.80; CAIDA = 1.50; }
   var BAJA    = 110;    /* % de la caja que baja el cuerpo */
   /* La curva medida en la referencia (el recorrido del lacre) es
      cubic-bezier(.05,.03,.73,.16). Pero nosotros no movemos el lacre
