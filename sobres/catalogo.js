@@ -1874,6 +1874,15 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
+  "crema-hueso-liso-video": {
+    nombre:     "Crema hueso liso · lacre champán liso, sin dibujo, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7,c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/cand-crema/v-crema-liso-cand-e-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/cand-crema/v-crema-liso-cand-e-1080.jpg",
+    color:      "#f4e9dd",
+    luz:        2.5,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
   "salvia-lacre-rojo": {
     nombre:   "Salvia en relieve · peonías grabadas y lacre rojo con rosa (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-poster.jpg",
