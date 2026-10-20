@@ -701,6 +701,7 @@
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
+    '/efectos/personas-foto.js',       /* 20/10: personas sin foto o con el adorno del diseño (Jazmín) */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
     '/efectos/musica.js',              /* completa la sección «Playlist del evento» del motor */
     '/efectos/musica-al-toque.js',     /* 29/9: YouTube PRECARGADO (suena al toque del sobre) y arranca

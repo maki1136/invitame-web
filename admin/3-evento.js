@@ -42,6 +42,15 @@
   function personasHtml(){
     return '<div class="mejoras"><div class="h">'+ICO.corona+' Personas importantes (hasta 12)</div>'+
       '<div class="hint" style="margin-bottom:8px">Padres, padrinos, testigos, damas, caballeros… Cargá foto, nombre y relación. Aparecen en la sección de la invitación.</div>'+
+      /* ★ 20/10/2026 (Jazmín): cada persona puede ir con su foto, SIN foto, o con
+         el ADORNO del diseño (una pieza para todas: la que se sube acá; si no se
+         sube, la tapa de la raspadita de la colección). Lo pinta /efectos/personas-foto.js */
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 10px;background:#faf6f1;border-radius:10px">'+
+        '<div id="pers-adorno-ver" style="width:44px;height:44px;border-radius:50%;background:#e7dfd2 center/cover no-repeat;flex:none"></div>'+
+        '<div style="flex:1;font-size:12px;line-height:1.35"><b>Adorno del diseño</b><br><span style="opacity:.7">Para las personas que van «con el adorno». Si no subís nada, se usa el de la raspadita de la temática.</span></div>'+
+        '<label class="lnk" style="cursor:pointer;color:#6D1233;white-space:nowrap">'+ICO.subir+' Subir<input type="file" accept="image/*" style="display:none" onchange="subirAdornoPersonas(this)"></label>'+
+        '<span class="lnk" style="cursor:pointer" onclick="quitarAdornoPersonas()">Quitar</span>'+
+      '</div>'+
       '<div id="pers-list"></div>'+
       '<button class="addbtn" id="pers-add" style="margin-top:8px" onclick="addPersona()">+ Agregar persona</button>'+
       '</div>';
@@ -50,17 +59,32 @@
     if(!Array.isArray(D.personas))D.personas=[];
     const cont=el('pers-list'); if(!cont)return;
     cont.innerHTML=D.personas.map((p,i)=>{
-      const foto=p.foto?'<img src="'+p.foto+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover">':'<div style="width:52px;height:52px;border-radius:50%;background:#e7dfd2;display:flex;align-items:center;justify-content:center;color:#9a8">'+ICO.camara+'</div>';
+      const modo=p.modo||'foto';
+      const foto=(modo==='nada')?'<div style="width:52px;height:52px;border-radius:50%;border:2px dashed #e7dfd2;display:flex;align-items:center;justify-content:center;color:#b9ada0;font-size:11px">sin foto</div>'
+        :(modo==='adorno')?'<div style="width:52px;height:52px;border-radius:50%;background:#e7dfd2 center/cover no-repeat;'+(adornoPersonas()?'background-image:url(\''+adornoPersonas()+'\')':'')+';display:flex;align-items:center;justify-content:center;color:#9a8;font-size:10px">'+(adornoPersonas()?'':'adorno')+'</div>'
+        :p.foto?'<img src="'+p.foto+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover">':'<div style="width:52px;height:52px;border-radius:50%;background:#e7dfd2;display:flex;align-items:center;justify-content:center;color:#9a8">'+ICO.camara+'</div>';
+      const elegir='<select onchange="setPersona('+i+',\'modo\',this.value);renderPersonas()" style="padding:6px 8px;border:1px solid #e7ddd3;border-radius:8px;font-family:Nunito;font-size:13px">'+
+        [['foto','Con su foto'],['nada','Sin foto'],['adorno','Con el adorno del diseño']].map(o=>'<option value="'+o[0]+'"'+(o[0]===modo?' selected':'')+'>'+o[1]+'</option>').join('')+'</select>';
       return '<div class="guest" style="align-items:center;gap:10px">'+foto+
         '<div style="flex:1;display:flex;flex-direction:column;gap:6px">'+
         '<input type="text" placeholder="Nombre" value="'+(p.nombre||'').replace(/"/g,'&quot;')+'" oninput="setPersona('+i+',\'nombre\',this.value)">'+
         '<input type="text" placeholder="Relación (ej: Mamá de la novia)" value="'+(p.rel||'').replace(/"/g,'&quot;')+'" oninput="setPersona('+i+',\'rel\',this.value)">'+
-        '<label class="lnk" style="cursor:pointer;color:#6D1233">'+ICO.subir+' '+(p.foto?'Cambiar foto':'Subir foto')+'<input type="file" accept="image/*" style="display:none" onchange="subirImgPersona(this,'+i+')"></label>'+
+        elegir+
+        (modo==='foto'?'<label class="lnk" style="cursor:pointer;color:#6D1233">'+ICO.subir+' '+(p.foto?'Cambiar foto':'Subir foto')+'<input type="file" accept="image/*" style="display:none" onchange="subirImgPersona(this,'+i+')"></label>':'')+
         '</div>'+
         '<span class="x" onclick="delPersona('+i+')">'+ICO.equis+'</span></div>';
     }).join('')||'<div class="hint">Todavía no agregaste personas. (Si no cargás ninguna, la invitación muestra el diseño por defecto.)</div>';
     const add=el('pers-add'); if(add)add.style.display=D.personas.length>=12?'none':'';
+    const av=el('pers-adorno-ver'); if(av)av.style.backgroundImage=adornoPersonas()?'url(\''+adornoPersonas()+'\')':'none';
   }
+  function adornoPersonas(){ return (D.fx&&D.fx.personas&&D.fx.personas.adorno)||''; }
+  async function subirAdornoPersonas(input){
+    const f=input.files&&input.files[0]; if(!f)return;
+    if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
+    try{const url=await INV.uploadImage(f); D.fx=D.fx||{}; D.fx.personas=Object.assign({},D.fx.personas,{adorno:url}); renderPersonas(); postPreview();}
+    catch(e){alert('No pude subir la imagen. Probá de nuevo.');}
+  }
+  function quitarAdornoPersonas(){ if(D.fx&&D.fx.personas){ delete D.fx.personas.adorno; } renderPersonas(); postPreview(); }
   function addPersona(){if(!Array.isArray(D.personas))D.personas=[];if(D.personas.length>=12)return;D.personas.push({nombre:'',rel:'',foto:''});renderPersonas();}
   function delPersona(i){D.personas.splice(i,1);renderPersonas();}
   // ⚠️ Sin postPreview la miniatura no se enteraba (lo encontró el banco del panel, 30/9/2026)

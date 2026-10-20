@@ -94,7 +94,9 @@
       box.querySelector('.invmodal').innerHTML=
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'+
         '<h3 style="margin:0;color:#6D1233;font-weight:900">'+ICO.carpeta+' Invitaciones <span style="color:#b0a89f;font-weight:700;font-size:13px">('+_invData.length+')</span></h3>'+
-        '<button style="background:#F56770;color:#fff;border:0;border-radius:20px;padding:8px 15px;font-weight:800;font-family:Nunito;cursor:pointer" onclick="location.href=\'admin.html\'">＋ Nueva invitación</button></div>'+
+        /* ★ 20/10/2026 (Jazmín): «Cerrar» también ARRIBA, para no bajar hasta el final */
+        '<div style="display:flex;gap:8px"><button style="background:#F56770;color:#fff;border:0;border-radius:20px;padding:8px 15px;font-weight:800;font-family:Nunito;cursor:pointer" onclick="location.href=\'admin.html\'">＋ Nueva invitación</button>'+
+        '<button style="background:#efe7de;color:#49111A;border:0;border-radius:20px;padding:8px 16px;font-family:Nunito;font-weight:700;cursor:pointer" onclick="document.getElementById(\'invbox\').remove()">Cerrar</button></div></div>'+
         '<input id="invfiltro" placeholder="Filtrar por pareja, página, orden…" oninput="filtrarInv()" style="width:100%;padding:11px 12px;border:1px solid #e7ddd3;border-radius:10px;font-family:Nunito;font-size:14px;margin-bottom:12px" autofocus>'+
         '<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="text-align:left;color:#9a8f88;border-bottom:2px solid #efe7de">'+
         '<th style="padding:8px 6px">Evento</th><th style="padding:8px 6px">N° Orden</th><th style="padding:8px 6px">Página</th><th style="padding:8px 6px">Fecha</th><th style="padding:8px 6px">Armó</th><th style="padding:8px 6px;text-align:right">Acciones</th>'+
