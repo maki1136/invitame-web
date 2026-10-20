@@ -165,9 +165,34 @@
       var d = borrador();
       if (!d || !window.INVVESTIR) { msg.textContent = 'El panel todavía no terminó de cargar. Probá de nuevo en unos segundos.'; return; }
       msg.textContent = 'Trayendo el diseño de «' + m.nombre + '»…';
-      window.INVVESTIR.bajarMuestra(m.slug).then(function (muestra) {
+      /* ★ 20/10/2026 (Jazmín): «al seleccionar la vaquera no se aplica la foto
+         de portada». La invitación tenía las fotos de la muestra ANTERIOR
+         (monarca) y, como «sólo se rellena lo vacío», se quedaban. → Las fotos
+         que son IGUALES a las de la muestra anterior no son del cliente: se
+         vacían antes de vestir, y se ponen las de la nueva. */
+      var M0 = window.MUESTRAS_INVITAME || {}, d0 = borrador() || {};
+      var vieja = (d0.tpl && d0.tpl !== m.id && M0[d0.tpl] && M0[d0.tpl].muestra) ? M0[d0.tpl].muestra : '';
+      Promise.all([window.INVVESTIR.bajarMuestra(m.slug), vieja ? window.INVVESTIR.bajarMuestra(vieja).catch(function () { return null; }) : null]).then(function (r) {
+        var muestra = r[0], mv = r[1];
         var d2 = borrador(); if (!d2) throw new Error('sin borrador');
         antes = copia(d2);
+        /* Además: lo que el cliente o el equipo suben va a la carpeta raíz
+           `invitame/<código>`; las fotos de las muestras viven en subcarpetas
+           (`invitame/vaquera/…`, `invitame/monarca/…`, `invitame/eventos/…`).
+           Así se reconocen aunque la muestra anterior ya no esté marcada
+           (en Denisse ya decía «vaquera» pero tenía las fotos de monarca). */
+        var igual = function (a, b) { return a != null && a !== '' && JSON.stringify(a) === JSON.stringify(b); };
+        var deMuestra = function (u) { return typeof u === 'string' && /res\.cloudinary\.com\/[^?#]*\/invitame\/[^\/?#]+\/[^?#]/.test(u); };
+        var deOtra = function (k, v) { return deMuestra(v) || (mv && igual(v, mv[k])); };
+        Object.keys(d2).forEach(function (k) {
+          if (!(/^img_/.test(k) || k === 'cover' || k === 'coverVideo')) return;
+          if (deOtra(k, d2[k])) d2[k] = '';
+        });
+        if (Array.isArray(d2.galeria) && d2.galeria.length && d2.galeria.every(function (u) { return deMuestra(u); })) d2.galeria = [];
+        else if (mv && igual(d2.galeria, mv.galeria)) d2.galeria = [];
+        if (Array.isArray(d2.personas)) d2.personas.forEach(function (p, i) {
+          if (p && (deMuestra(p.foto) || (mv && Array.isArray(mv.personas) && mv.personas[i] && igual(p.foto, mv.personas[i].foto)))) p.foto = '';
+        });
         var propio = guardarPropio(d2);
         window.INVVESTIR.vestir(d2, muestra, null);
         reponerPropio(d2, propio);
