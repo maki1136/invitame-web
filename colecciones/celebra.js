@@ -10,7 +10,7 @@
    ⭐ TONOS: fx.coleccion = 'celebra-<tono>'  (o ?coleccion=celebra-<tono>)
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
       editorial · rosegold · toga · kinder · generacion · grises · futbol ·
-      palmeras · cabina · collage · scrapbook
+      palmeras · cabina · collage · scrapbook · seda · lavanda
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -219,7 +219,22 @@
       nm:['Pinyon Script','clamp(58px,15.5vw,84px)','normal',400,'none','0',1.12],
       pk:['Playfair Display','12px','uppercase','.34em','normal'],
       h2:['27px','.01em','none','italic',400],
-      kk:['Pinyon Script','29px','none','0','m'] }
+      kk:['Pinyon Script','29px','none','0','m'] },
+    /* 19 · BODA · seda y oro: la «elegante clásica» de la plataforma vieja, en lujo.
+       Seda blanca con relieve, letra Bodoni negra en versal, oro en filetes. */
+    seda: { nombre: 'Boda · Seda y oro', pa:'#FBF9F5', pa2:'#EFEAE1', ti:'#17140F', ti2:'#2A251F', ti3:'#DCD2C1', ac:'#B8975A', mt:'oro', mtT:'#76571A', base:'seda',
+      disp:'Bodoni Moda', scr:'Pinyon Script', txt:'Cormorant Garamond', h3:'Bodoni Moda', adorno:'olivo', forma:'marco', boton:'0', radio:'2px',
+      nm:['Bodoni Moda','clamp(42px,11.5vw,62px)','normal',500,'uppercase','.06em',1.08],
+      pk:['Cormorant Garamond','13px','uppercase','.42em','normal'],
+      h2:['25px','.12em','uppercase','normal',500],
+      kk:['Pinyon Script','30px','none','0','m'] },
+    /* 20 · XV · mariposas lavanda: lila, plata y cristal; mariposas que vuelan */
+    lavanda: { nombre: 'XV · Mariposas lavanda', pa:'#F8F5FB', pa2:'#ECE4F3', ti:'#2C2140', ti2:'#3B2E52', ti3:'#D6C8E8', ac:'#9D86CC', mt:'plata', mtT:'#5A5F69', base:'lavanda',
+      disp:'Playfair Display', scr:'Great Vibes', txt:'Jost', h3:'Playfair Display', adorno:'mariposa', forma:'camafeo', boton:'999px', radio:'18px',
+      nm:['Great Vibes','clamp(60px,16vw,88px)','normal',400,'none','0',1.1],
+      pk:['Jost','12px','uppercase','.38em','normal'],
+      h2:['27px','.02em','none','italic',400],
+      kk:['Great Vibes','30px','none','0','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -386,6 +401,13 @@
       '<path d="M12 24 C20 23 28 22 38 21" stroke="' + pa + '" stroke-width=".9" opacity=".7" fill="none"/>' +
       '<g fill="' + c + '"><circle cx="41" cy="31" r="1.4"/><circle cx="45" cy="28" r=".9"/><circle cx="8" cy="21" r="1"/></g>');
     /* PALMERA: tronco curvo y cinco hojas */
+    /* MARIPOSA: cuatro alas con nervadura calada y antenitas */
+    if (a === 'mariposa') return svg(
+      '<g fill="' + c + '"><path d="M23 24 C18 10 6 8 5 16 C4 23 12 26 23 25 Z"/><path d="M25 24 C30 10 42 8 43 16 C44 23 36 26 25 25 Z"/>' +
+      '<path d="M23 26 C14 27 9 33 12 38 C15 42 21 36 23 28 Z"/><path d="M25 26 C34 27 39 33 36 38 C33 42 27 36 25 28 Z"/>' +
+      '<ellipse cx="24" cy="27" rx="1.7" ry="8"/></g>' +
+      '<g fill="none" stroke="' + c + '" stroke-width="1.1" stroke-linecap="round"><path d="M23.4 19.5 C22 15 20 13 18 12"/><path d="M24.6 19.5 C26 15 28 13 30 12"/></g>' +
+      '<g fill="none" stroke="' + pa + '" stroke-width="1" opacity=".75"><path d="M22 23 C17 17 11 15 8 16"/><path d="M26 23 C31 17 37 15 40 16"/><path d="M22 28 C18 30 15 33 14 36"/><path d="M26 28 C30 30 33 33 34 36"/></g>');
     if (a === 'palmera') return svg(
       '<path d="M24 46 C25 36 25.5 28 23.5 19" stroke="' + c + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
       '<g fill="' + c + '"><path d="M23.5 19 C17 11 9 12 4 17 C11 15 17 16 23.5 19 Z"/><path d="M23.5 19 C30 11 38 12 44 17 C37 15 30 16 23.5 19 Z"/>' +
