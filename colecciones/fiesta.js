@@ -647,7 +647,17 @@
         P + ':is(.evento,.hotel){ border-radius:10px!important; border:0!important; -webkit-mask:' + MB + '!important; mask:' + MB + '!important; box-shadow:inset 0 0 0 1px ' + LO + '.45)!important; background-image:linear-gradient(90deg, ' + LO + '.55) 50%, rgba(0,0,0,0) 50%)!important; background-size:12px 1.5px!important; background-repeat:repeat-x!important; background-position:0 62%!important; }',
         P + '.evento .ph{ border-radius:9px 9px 0 0!important; }',
         P + '.tl{ border-radius:10px!important; border:1px dashed ' + LO + '.45)!important; }',
-        P + '.padres .av{ border:2px solid ' + ORO + '!important; box-shadow:0 0 0 4px ' + PAPEL + ', 0 0 0 5px ' + LO + '.4)!important; }'
+        P + '.padres .av{ border:2px solid ' + ORO + '!important; box-shadow:0 0 0 4px ' + PAPEL + ', 0 0 0 5px ' + LO + '.4)!important; }',
+        /* 20/10/2026 · como la referencia de Maki: el boleto es de PAPEL MARFIL con
+           letra azul marino (no un panel oscuro más). Se invierten tinta y papel
+           SOLO adentro del boleto; los botones de adentro van en azul. */
+        P + ':is(.evento,.hotel,.tl){ background-color:' + TINTA + '!important; box-shadow:inset 0 0 0 1px rgba(' + rgb(PAPEL) + ',.18), 0 14px 30px rgba(0,0,0,.45)!important; background-image:linear-gradient(90deg, rgba(' + rgb(PAPEL) + ',.45) 50%, rgba(0,0,0,0) 50%)!important; }',
+        P + '.tl{ border:0!important; padding-top:18px!important; padding-bottom:18px!important; }',
+        P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:none!important; }',
+        P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d){ color:rgba(' + rgb(PAPEL) + ',.72)!important; -webkit-text-fill-color:rgba(' + rgb(PAPEL) + ',.72)!important; }',
+        P + ':is(.evento,.hotel) .btn{ background:' + PAPEL + '!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; border:0!important; box-shadow:0 4px 10px rgba(0,0,0,.25)!important; }',
+        P + ':is(.evento,.hotel) .btn.gh, ' + P + ':is(.evento,.hotel) .btn.ghost{ background:transparent!important; color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; border:1px solid rgba(' + rgb(PAPEL) + ',.55)!important; box-shadow:none!important; }',
+        P + ':is(.evento,.hotel) .btn *{ color:inherit!important; -webkit-text-fill-color:currentColor!important; }'
       );
     }
     /* urbano: cartel pegado — recto, sombra dura mostaza */
