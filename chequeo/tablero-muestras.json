@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-20T22:18:00.998Z",
+ "cuando": "2026-10-20T23:01:46.884Z",
  "total": 55,
- "verde": 47,
- "rojo": 8,
+ "verde": 46,
+ "rojo": 9,
  "gris": 0,
  "items": [
   {
@@ -361,8 +361,11 @@
   {
    "slug": "prueba-desde-cero",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección eventos: previa «rgb(46, 67, 60)/rgb(247, 241, 231)» · publicada «rgb(74, 59, 46)/rgb(247, 241, 231)»",
+    "sección confirmacion: previa «rgb(46, 67, 60)/rgb(247, 241, 231)» · publicada «rgb(74, 59, 46)/rgb(247, 241, 231)»"
+   ],
    "error": ""
   },
   {
