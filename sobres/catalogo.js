@@ -1847,8 +1847,8 @@ window.SOBRES_INVITAME = {
      El motor tapa con luz desde `luz`, como el reel (≈1,9 s después de que se va la solapa). */
   "salvia-lacre-rojo-video": {
     nombre:     "Salvia en relieve · lacre rojo, la solapa se levanta y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/salvia-lacre-rojo-1080.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,w_1080,q_auto:best,f_jpg/invitame/sobres/salvia-lacre-rojo-1080.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/salvia-lacre-rojo-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:best,f_jpg/invitame/sobres/salvia-lacre-rojo-1080.jpg",
     color:      "#949883",
     luz:        2.6,
     luzColor:   "#FFFBF0",
@@ -1857,8 +1857,8 @@ window.SOBRES_INVITAME = {
 
   "encaje-blanco-perla-video": {
     nombre:     "Encaje blanco · perla, la solapa se levanta y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.8,eo_5.6,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/encaje-blanco-perla-1080.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.8,w_1080,q_auto:best,f_jpg/invitame/sobres/encaje-blanco-perla-1080.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.8,eo_5.6/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/encaje-blanco-perla-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.8/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:best,f_jpg/invitame/sobres/encaje-blanco-perla-1080.jpg",
     color:      "#e2e2e3",
     luz:        3.3,
     luzColor:   "#FFFBF0",
@@ -1867,8 +1867,8 @@ window.SOBRES_INVITAME = {
 
   "azul-marino-damasco-video": {
     nombre:     "Azul marino damasco · lacre con corazón, la solapa se levanta y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.3,eo_5.2,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/azul-marino-damasco-1080.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.3,w_1080,q_auto:best,f_jpg/invitame/sobres/azul-marino-damasco-1080.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.3,eo_5.2/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/azul-marino-damasco-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.3/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:best,f_jpg/invitame/sobres/azul-marino-damasco-1080.jpg",
     color:      "#344c65",
     luz:        3.4,
     luzColor:   "#FFFBF0",
@@ -1877,8 +1877,8 @@ window.SOBRES_INVITAME = {
 
   "rosa-perla-redonda-video": {
     nombre:     "Rosa perla · solapa redonda, se levanta y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.5,eo_4.8,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/rosa-perla-redonda-1080.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.5,w_1080,q_auto:best,f_jpg/invitame/sobres/rosa-perla-redonda-1080.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.5,eo_4.8/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/rosa-perla-redonda-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.5/c_crop,x_10,y_0,w_1060,h_1920/w_1080,q_auto:best,f_jpg/invitame/sobres/rosa-perla-redonda-1080.jpg",
     color:      "#d1b5a9",
     luz:        2.8,
     luzColor:   "#FFFBF0",
