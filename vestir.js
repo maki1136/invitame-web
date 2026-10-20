@@ -162,6 +162,43 @@
   }
 
   /**
+   * ★ 20/10/2026 — LAS FOTOS QUE EL CLIENTE NO MANDÓ SALEN DE LA MUESTRA.
+   * Jazmín: «si no coloco fotos, deben aparecer las predeterminadas de la
+   * muestra correspondiente: portada, frase, lugares, etc.». Antes quedaban
+   * vacías o con la foto genérica de ejemplo (Unsplash).
+   * ⚠️ SÓLO RELLENA LO VACÍO: lo que mandó el cliente nunca se pisa.
+   * ⚠️ El video de portada se copia sólo si el cliente no mandó ni foto ni
+   *    video (si no, el video de la muestra taparía su foto).
+   * ⚠️ La voz y el código de la galería siguen sin copiarse (son de otros).
+   * @return cuántas fotos se rellenaron
+   */
+  function vacia(v) {
+    if (v == null) return true;
+    var s = String(v).trim();
+    return s === '' || /images\.unsplash\.com/.test(s);   /* la foto genérica de ejemplo cuenta como vacía */
+  }
+  function fotosDeLaMuestra(d, m) {
+    if (!d || !m) return 0;
+    var n = 0;
+    var sinPortada = vacia(d.cover) && vacia(d.coverVideo);   /* se mira ANTES de rellenar la foto */
+    Object.keys(m).forEach(function (k) {
+      if (!/^img_/.test(k) && k !== 'cover') return;
+      if (vacia(m[k]) || !vacia(d[k])) return;
+      d[k] = m[k]; n++;
+    });
+    if (sinPortada && !vacia(m.coverVideo)) { d.coverVideo = m.coverVideo; n++; }
+    if ((!Array.isArray(d.galeria) || !d.galeria.filter(function (x) { return !vacia(x); }).length) &&
+        Array.isArray(m.galeria) && m.galeria.length) { d.galeria = copia(m.galeria); n++; }
+    if (Array.isArray(d.personas) && Array.isArray(m.personas)) {
+      d.personas.forEach(function (p, i) {
+        var mp = m.personas[i];
+        if (p && typeof p === 'object' && vacia(p.foto) && mp && !vacia(mp.foto)) { p.foto = mp.foto; n++; }
+      });
+    }
+    return n;
+  }
+
+  /**
    * Le pone a `d` el vestido de `muestra`.
    * @param d          el borrador de la invitación (SE MODIFICA)
    * @param muestra    el evento de la muestra, tal como sale de Firestore
@@ -252,6 +289,8 @@
        5 a propósito: primero se borra la de la muestra, después se pone la suya. */
     if (laVozDelCliente(d, solicitud)) puestos.push('pase con voz del cliente');
 
+    if (fotosDeLaMuestra(d, muestra)) puestos.push('fotos de la muestra donde el cliente no mandó');
+
     return puestos;
   }
 
@@ -291,6 +330,7 @@
     vestir: vestir,
     limpiarLoQueEsDeOtros: limpiarLoQueEsDeOtros,
     laVozDelCliente: laVozDelCliente,
+    fotosDeLaMuestra: fotosDeLaMuestra,
     secciones: secciones,
     limpiarSeccionesDeLaMuestra: limpiarSeccionesDeLaMuestra,
     ponerSecciones: ponerSecciones,

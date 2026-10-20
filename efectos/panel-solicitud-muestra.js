@@ -183,6 +183,8 @@
       d.fx.pasevoz.encendido = true;
       puestos.push('pase con voz del cliente');
     }
+    /* ★ 20/10/2026 (Jazmín): las fotos que el cliente no mandó salen de la muestra */
+    try { if (window.INVVESTIR && window.INVVESTIR.fotosDeLaMuestra && window.INVVESTIR.fotosDeLaMuestra(d, muestra)) puestos.push('fotos de la muestra donde el cliente no mandó'); } catch (e) {}
     return puestos;
   }
 
