@@ -100,6 +100,28 @@
     var grid = document.createElement('div'); grid.className = 'cat-g'; caja.appendChild(grid);
     var msg = document.createElement('div'); msg.className = 'cat-m'; caja.appendChild(msg);
 
+    /* ★ 20/10/2026 (Jazmín): «si no coloco fotos, deben aparecer las de la
+       muestra». Para las invitaciones que YA existen: un botón que rellena
+       sólo los lugares sin foto con las de su muestra, sin tocar el diseño. */
+    var fotos = document.createElement('button'); fotos.type = 'button';
+    fotos.style.cssText = 'margin-top:10px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 13px;font-weight:700;cursor:pointer;font-size:12.5px';
+    fotos.textContent = 'Poner las fotos de la muestra donde falten';
+    fotos.onclick = function () {
+      var d = borrador(); var M = window.MUESTRAS_INVITAME || {};
+      var m = d && M[d.tpl];
+      if (!m || !m.muestra) { msg.textContent = 'Primero elegí el diseño del catálogo (esta invitación no tiene muestra marcada).'; return; }
+      if (!window.INVVESTIR || !window.INVVESTIR.fotosDeLaMuestra) { msg.textContent = 'Recargá la página y probá de nuevo.'; return; }
+      msg.textContent = 'Trayendo las fotos de «' + m.nombre + '»…';
+      window.INVVESTIR.bajarMuestra(m.muestra).then(function (mu) {
+        var d2 = borrador(); antes = copia(d2);
+        var n = window.INVVESTIR.fotosDeLaMuestra(d2, mu);
+        refrescar();
+        msg.textContent = n ? ('✓ Puse ' + n + ' foto(s) de la muestra donde no había. Revisalas y tocá «Guardar y publicar».')
+                            : 'No faltaba ninguna foto: no cambié nada.';
+      }).catch(function () { msg.textContent = 'No pude traer las fotos de la muestra. Probá de nuevo.'; });
+    };
+    caja.appendChild(fotos);
+
     var filtro = 'todos', antes = null;
     /* 19/10/2026: un filtro por cada tipo que tenga muestras (muestras/catalogo.js) */
     [['todos', 'Todos']].concat((window.MUESTRAS_TIPOS || [['boda', 'Boda'], ['xv', 'XV']]).filter(function (t) {
