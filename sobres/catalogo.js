@@ -1913,6 +1913,109 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
+  /* ★ 20/10/2026 · 10 sobres en video elegidos por Maki (D28 · D29 · D31 · D34). Flow · Veo 3.1 Fast 720p -> 1080p reescalado,
+     entregado w_1080 q_auto:good. so_ saca la espera inicial, eo_ corta antes del blanco, luz = 0,5 s después de que la solapa sale del cuadro.
+     D34: c_crop g_south 0,85 tapa los triángulos blancos de las esquinas de arriba. Subido a `prueba`; Maki publica con su botón. */
+  "d31-rosa-a-video": {
+    nombre:     "Rosa floral en relieve · solapa en V, se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.7,eo_4.8/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d31-rosa-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.7/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d31-rosa-a-1080.jpg",
+    color:      "#CDA497",
+    luz:        2.6,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d31-salvia-a-video": {
+    nombre:     "Salvia floral en relieve · solapa en V, se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_4.7/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d31-salvia-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d31-salvia-a-1080.jpg",
+    color:      "#737F64",
+    luz:        3.1,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d31-marino-a-video": {
+    nombre:     "Azul marino floral en relieve · solapa en V, se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.4,eo_4.8/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d31-marino-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.4/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d31-marino-a-1080.jpg",
+    color:      "#102034",
+    luz:        2.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d31-negro-a-video": {
+    nombre:     "Negro floral en relieve · solapa en V, se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_4.7/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d31-negro-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d31-negro-a-1080.jpg",
+    color:      "#131313",
+    luz:        3.1,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d28-rosa-a-video": {
+    nombre:     "Rosa con puntilla y perla · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.4,eo_4.8/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d28-rosa-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.4/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d28-rosa-a-1080.jpg",
+    color:      "#E5C9BE",
+    luz:        2.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d28-salvia-a-video": {
+    nombre:     "Salvia con puntilla y perla · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.7,eo_5.3/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d28-salvia-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.7/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d28-salvia-a-1080.jpg",
+    color:      "#ABB499",
+    luz:        3.1,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d29-borravino-a-video": {
+    nombre:     "Borravino aterciopelado · lacre con flor, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_5/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d29-borravino-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d29-borravino-a-1080.jpg",
+    color:      "#220D11",
+    luz:        3.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d29-marino-b-video": {
+    nombre:     "Azul marino aterciopelado · lacre con flor, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_5/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d29-marino-b-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d29-marino-b-1080.jpg",
+    color:      "#071422",
+    luz:        3.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d34-celeste-b-video": {
+    nombre:     "Celeste perlado · lacre con flor, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_4.8/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d34-celeste-b-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/d34-celeste-b-1080.jpg",
+    color:      "#949DAE",
+    luz:        3.2,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d34-salvia-a-video": {
+    nombre:     "Salvia perlada · lacre con flor, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_5/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d34-salvia-a-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/d34-salvia-a-1080.jpg",
+    color:      "#ADA28C",
+    luz:        3.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "salvia-lacre-rojo": {
     nombre:   "Salvia en relieve · peonías grabadas y lacre rojo con rosa (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-poster.jpg",
