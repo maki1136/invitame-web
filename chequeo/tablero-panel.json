@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-20T19:21:03.174Z",
+ "cuando": "2026-10-20T21:45:07.100Z",
  "slug": "camila-y-tomas",
- "total": 373,
- "verde": 372,
+ "total": 374,
+ "verde": 373,
  "amarillo": 0,
  "rojo": 1,
  "gris": 0,
@@ -375,17 +375,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -402,6 +391,17 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2211,6 +2211,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.rsvp.restricciones",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "rsvp-selector",
+   "control": "Pase simple (sin nombre, QR ni mesa)El pase dice sólo «¡Esperamos contar contigo!» y la ca",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.pase",
    "llega": true,
    "seVe": true,
    "estado": "verde"
