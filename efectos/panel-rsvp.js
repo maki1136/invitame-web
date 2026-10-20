@@ -135,6 +135,30 @@
     filaR.appendChild(chk); filaR.appendChild(txR);
     caja.appendChild(filaR);
 
+    /* ★ 20/10/2026 — pedido de Jazmín: el PASE SIMPLE, como el link de la
+       plataforma vieja. Sin nombre, sin QR y sin mesa: sólo «¡Esperamos contar
+       contigo!» y la cantidad de personas. Lo dibuja /efectos/pase-simple.js. */
+    var filaS = document.createElement('label');
+    filaS.style.cssText = 'display:flex;gap:8px;align-items:flex-start;font-size:12px;font-weight:600;margin:10px 0 0;cursor:pointer';
+    var chkS = document.createElement('input');
+    chkS.type = 'checkbox';
+    chkS.id = 'pase-simple-panel';
+    chkS.checked = !!(d.fx && d.fx.pase && d.fx.pase.modo === 'simple');
+    chkS.style.cssText = 'margin-top:2px';
+    chkS.onchange = function () {
+      var b = borrador() || d;
+      if (!b.fx) b.fx = {};
+      if (!b.fx.pase || typeof b.fx.pase !== 'object') b.fx.pase = {};
+      if (chkS.checked) b.fx.pase.modo = 'simple'; else delete b.fx.pase.modo;
+      refrescar();
+    };
+    var txS = document.createElement('span');
+    txS.innerHTML = 'Pase simple (sin nombre, QR ni mesa)<br><span style="font-weight:400;opacity:.62;font-size:11px">' +
+      'El pase dice sólo «¡Esperamos contar contigo!» y la cantidad de personas. Las personas van en el link: ' +
+      '<b>…/i/?e=SLUG&amp;per=2</b> → «2 personas». Con link de invitado usa sus pases.</span>';
+    filaS.appendChild(chkS); filaS.appendChild(txS);
+    caja.appendChild(filaS);
+
     return caja;
   }
 
@@ -148,6 +172,9 @@
       if (f && document.activeElement !== f && f.value !== String(r.limite || '')) f.value = String(r.limite || '');
       var c = document.getElementById('rsvp-restric-panel');
       if (c && c.checked !== !!r.restricciones) c.checked = !!r.restricciones;
+      var ps = document.getElementById('pase-simple-panel');
+      var on = !!(d.fx && d.fx.pase && d.fx.pase.modo === 'simple');
+      if (ps && ps.checked !== on) ps.checked = on;
       return;
     }
     /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
