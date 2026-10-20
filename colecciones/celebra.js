@@ -9,7 +9,7 @@
 
    ⭐ TONOS: fx.coleccion = 'celebra-<tono>'  (o ?coleccion=celebra-<tono>)
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
-      editorial · rosegold · toga · kinder · generacion · grises
+      editorial · rosegold · toga · kinder · generacion · grises · futbol
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -180,7 +180,16 @@
       nm:['DM Serif Display','clamp(46px,12.5vw,66px)','normal',400,'none','0',1.08],
       pk:['Karla','12px','uppercase','.36em','normal'],
       h2:['27px','.01em','none','normal',400],
-      kk:['Karla','12px','uppercase','.28em','t'] }
+      kk:['Karla','12px','uppercase','.28em','t'] },
+    /* 14 · KIDS · fútbol: pasto verde, cal blanca de la cancha y balón.
+       Dibujo animado (sin fotos del nene). Lilita One SÓLO en nombres y títulos;
+       tarjetas con la línea de cal de la cancha por dentro. */
+    futbol: { nombre: 'Kids · Fútbol', pa:'#F5FAF2', pa2:'#E1F0DA', ti:'#0F2A1B', ti2:'#1E3A29', ti3:'#A8D49C', ac:'#2E9E4F', mt:'oro', mtT:'#76571A', base:'futbol',
+      disp:'Lilita One', scr:'', txt:'Nunito', h3:'Lilita One', adorno:'balon', forma:'cancha', boton:'999px', cielo:1, radio:'20px',
+      nm:['Lilita One','clamp(48px,13vw,70px)','normal',400,'uppercase','.02em',1.0],
+      pk:['Nunito','13px','uppercase','.3em','normal'],
+      h2:['28px','.03em','uppercase','normal',400],
+      kk:['Nunito','12.5px','uppercase','.24em','t'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -199,13 +208,13 @@
     'DM Sans': ':ital,wght@0,400;0,500;1,400', 'Libre Baskerville': ':ital,wght@0,400;0,700;1,400',
     'Baloo 2': ':wght@400;600;800', 'Patrick Hand': '', 'Oswald': ':wght@400;500;600',
     'Source Sans 3': ':ital,wght@0,400;0,600;1,400', 'DM Serif Display': ':ital@0;1',
-    'Karla': ':ital,wght@0,400;0,600;1,400'
+    'Karla': ':ital,wght@0,400;0,600;1,400', 'Lilita One': ''
   };
   var PILA = { 'Pixelify Sans':'monospace', 'Fredoka':'system-ui,sans-serif', 'Sniglet':'system-ui,sans-serif',
     'Quicksand':'system-ui,sans-serif', 'Nunito':'system-ui,sans-serif', 'Mulish':'system-ui,sans-serif',
     'Jost':'system-ui,sans-serif', 'Work Sans':'system-ui,sans-serif', 'DM Sans':'system-ui,sans-serif',
     'Baloo 2':'system-ui,sans-serif', 'Oswald':'"Arial Narrow",sans-serif', 'Source Sans 3':'system-ui,sans-serif',
-    'Karla':'system-ui,sans-serif', 'Sacramento':'cursive', 'Pinyon Script':'cursive', 'Allura':'cursive',
+    'Karla':'system-ui,sans-serif', 'Lilita One':'system-ui,sans-serif', 'Sacramento':'cursive', 'Pinyon Script':'cursive', 'Allura':'cursive',
     'Great Vibes':'cursive', 'Patrick Hand':'cursive' };
   function ff(n) { return '"' + n + '",' + (PILA[n] || 'Georgia,serif'); }
 
@@ -346,6 +355,18 @@
       '<path fill="' + c + '" d="M5 27 C9 19 18 21 24 20 C31 19 38 17 43 21 C45 23 42 26 38 26 C31 27 24 29 16 29 C11 29 7 31 5 27 Z"/>' +
       '<path d="M12 24 C20 23 28 22 38 21" stroke="' + pa + '" stroke-width=".9" opacity=".7" fill="none"/>' +
       '<g fill="' + c + '"><circle cx="41" cy="31" r="1.4"/><circle cx="45" cy="28" r=".9"/><circle cx="8" cy="21" r="1"/></g>');
+    /* BALÓN de fútbol: pentágono central y costuras, dibujado a 18 px */
+    if (a === 'balon') {
+      var pen = [], cos = '';
+      for (var j = 0; j < 5; j++) {
+        var an = -Math.PI / 2 + j * 2 * Math.PI / 5, x1 = 24 + 7 * Math.cos(an), y1 = 24 + 7 * Math.sin(an);
+        pen.push(x1.toFixed(1) + ' ' + y1.toFixed(1));
+        cos += '<path d="M' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' L' + (24 + 17 * Math.cos(an)).toFixed(1) + ' ' + (24 + 17 * Math.sin(an)).toFixed(1) + '"/>';
+      }
+      return svg('<circle cx="24" cy="24" r="19" fill="' + pa + '" stroke="' + c + '" stroke-width="3"/>' +
+        '<path fill="' + c + '" d="M' + pen.join(' L') + ' Z"/><g stroke="' + c + '" stroke-width="2.2" stroke-linecap="round">' + cos + '</g>' +
+        '<path fill="' + ACENTO + '" d="M44 5 L45 8.4 L48 9.4 L45 10.4 L44 13.8 L43 10.4 L40 9.4 L43 8.4 Z"/>');
+    }
     return svg('<path fill="' + c + '" d="' + estrella(24, 24, 18, 8) + '"/>');
   }
 
@@ -442,6 +463,14 @@
       P + '.tl{ border-radius:28px!important; border:3px solid ' + ORO_CL + '!important; }',
       P + '.padres .av{ border-radius:50%!important; border:4px solid ' + ACENTO + '!important; box-shadow:0 0 0 3px ' + ORO_CL + '!important; }',
       P + '.pasecard{ border-radius:28px!important; }'
+    );
+    if (f === 'cancha') A.push(
+      /* la LÍNEA DE CAL: un filete blanco por dentro del borde verde, como el área */
+      P + ':is(.evento,.hotel){ border-radius:20px!important; border:3px solid ' + ACENTO + '!important; box-shadow:inset 0 0 0 5px rgba(' + RP + ',.95), inset 0 0 0 7px rgba(' + rgb(ACENTO) + ',.35), 0 12px 24px rgba(' + RT + ',.10)!important; overflow:hidden!important; }',
+      P + '.evento .ph{ border-radius:17px 17px 0 0!important; }',
+      P + '.tl{ border-radius:20px!important; border:3px solid ' + ACENTO + '!important; box-shadow:inset 0 0 0 5px rgba(' + RP + ',.95), inset 0 0 0 7px rgba(' + rgb(ACENTO) + ',.30)!important; }',
+      P + '.padres .av{ border-radius:50%!important; border:4px solid #FFFFFF!important; box-shadow:0 0 0 3px ' + ACENTO + ', 0 8px 18px rgba(' + RT + ',.14)!important; }',
+      P + '.pasecard{ border-radius:20px!important; }'
     );
     if (f === 'recta') A.push(
       P + ':is(.evento,.hotel,.tl){ border-radius:2px!important; border:1px solid ' + B + '!important; box-shadow:inset 6px 0 0 ' + ORO + ', 0 10px 22px rgba(' + RT + ',.10)!important; }',
