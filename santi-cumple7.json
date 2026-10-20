@@ -1,0 +1,360 @@
+{
+ "slug": "santi-cumple7",
+ "tipoEvento": "cumple",
+ "tema": "cumple",
+ "n1": "Santi",
+ "n2": "",
+ "pnom": "Santi",
+ "titulo": "Santi",
+ "nEvento": "Santi",
+ "kick": "Mi cumple Nº 7",
+ "fecha": "2027-06-12T13:00",
+ "frase": "¡Este partido no se juega sin ti!",
+ "tpl": "Kids · Fútbol",
+ "notaArmado": "Muestra Kids · Fútbol (19/10/2026). Referencia: SPEC-21 n.º 22. Armada desde el panel de prueba.",
+ "idioma": "Español (México)",
+ "idiomaAuto": "false",
+ "layout": "juntos",
+ "cx": "50",
+ "cy": "50",
+ "cz": "100",
+ "nfont": "",
+ "nsize": "",
+ "ncolor": "",
+ "cover": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/santi-cumple7/santi-cumple7-portada.jpg",
+ "galeria": [
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/santi-cumple7/santi-cumple7-g1.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/santi-cumple7/santi-cumple7-g2.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/santi-cumple7/santi-cumple7-g3.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/santi-cumple7/santi-cumple7-g4.jpg",
+  "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/santi-cumple7/santi-cumple7-g5.jpg"
+ ],
+ "ev1t": "Fiesta en la cancha",
+ "ev1sub": "Quinta Los Laureles",
+ "ev1dir": "Quinta Los Laureles, Av. Río Mississippi 210, Del Valle, San Pedro Garza García, N.L.",
+ "ev1fecha": "Sábado 12 de junio de 2027 · 13:00 h",
+ "ev1maps": "https://maps.google.com/?q=Quinta+Los+Laureles+San+Pedro+Garza+García,+N.L.",
+ "img_c_ceremonia-1-imagen-jpg-480x320": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_480,h_320,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-lugar-1",
+ "ev2t": "",
+ "ev2sub": "",
+ "ev2dir": "",
+ "ev2fecha": "",
+ "ev2maps": "",
+ "ev3t": "",
+ "ev3sub": "",
+ "ev3dir": "",
+ "ev3fecha": "",
+ "ev3maps": "",
+ "cer": "Quinta Los Laureles",
+ "evTitulo": "Dónde y cuándo",
+ "evKicker": "Te esperamos",
+ "c_titulo-hoteles": "Dónde quedarse",
+ "c_descripcion-hotel": "Si vienes de fuera, te dejamos una opción cerca.",
+ "c_datos-de-hoteles-recomendados": "Live Aqua Urban Resort Monterrey · Av. José Vasconcelos 150 Ote., Del Valle, 66220 San Pedro Garza García, N.L. · Tel. +52 81 0000 0000 · https://www.liveaqua.com",
+ "img_c_imagen-hoteles": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_auto,w_640,h_480,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-hotel",
+ "itTitulo": "Cómo va a ser el día",
+ "c_itinerario-descripcion": "Hora por hora, para que no te pierdas nada.",
+ "dressTitulo": "Ropa para jugar",
+ "c_dresscode-texto": "Ven listo para correr: tenis o tachones, short y tu playera de fútbol favorita. Los papás, cómodos y con ganas de echarse una cascarita.",
+ "img_c_dresscode-imagen-aprox-jpg-250x250": "https://res.cloudinary.com/oc8cgqt4/image/upload/w_700,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-vestimenta",
+ "personas": [
+  {
+   "nombre": "Fernanda y Diego",
+   "rel": "Mis papás",
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-per1"
+  },
+  {
+   "nombre": "Ana y Pablo",
+   "rel": "Mis padrinos",
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-per2"
+  },
+  {
+   "nombre": "Carmen y Luis",
+   "rel": "Mis abuelitos",
+   "foto": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,g_faces,ar_1:1,w_400,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-per3"
+  }
+ ],
+ "padresTitulo": "Mi equipo favorito",
+ "padresKick": "¡Gracias por echarme porras siempre!",
+ "regTitulo": "Mesa de regalos",
+ "c_frase-para-seccion-regalos-mesa": "Lo que más quiero es que vengas a jugar conmigo. Si quieres traerme algo, aquí te dejo unas ideas:",
+ "reg_amazon": "https://www.amazon.com.mx",
+ "reg_liverpool": "https://mesaderegalos.liverpool.com.mx",
+ "reg_mercadolibre": "",
+ "reg_palacio": "",
+ "reg_sears": "",
+ "regBanco": "BBVA",
+ "regClabe": "012180001234567890",
+ "regTitular": "Fernanda Garza Treviño",
+ "igHashtag": "#SantiGolazo7",
+ "trivia": [
+  {
+   "q": "¿En qué posición me gusta jugar?",
+   "o": [
+    "Portero",
+    "Delantero",
+    "Defensa"
+   ],
+   "c": 1
+  },
+  {
+   "q": "¿Qué número llevo en la playera?",
+   "o": [
+    "10",
+    "9",
+    "7"
+   ],
+   "c": 2
+  },
+  {
+   "q": "¿Cuál es mi comida favorita?",
+   "o": [
+    "Pizza",
+    "Brócoli",
+    "Sopa"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Cómo se llama mi perrito?",
+   "o": [
+    "Gol",
+    "Balón",
+    "Chispa"
+   ],
+   "c": 0
+  },
+  {
+   "q": "¿Qué quiero ser de grande?",
+   "o": [
+    "Futbolista",
+    "Astronauta",
+    "Doctor"
+   ],
+   "c": 0
+  }
+ ],
+ "c_habilitar-trivia": "si",
+ "c_titulo-del-correo": "¿Te unes al equipo?",
+ "c_frase-para-seccion-confirmacion": "Confírmame antes del 1 de junio para apartarte tu playera y tu medalla.",
+ "c_numero-de-whatsapp": "+52 81 0000 0001",
+ "c_texto-corto-boton-wsp": "Confirmar a mamá",
+ "waN1": "Confirmar a mamá",
+ "c_numero-de-whatsapp-2": "+52 81 0000 0002",
+ "c_texto-corto-boton-wsp-2": "Confirmar a papá",
+ "waN2": "Confirmar a papá",
+ "c_mostrar-seccion-de-contacto": "si",
+ "c_titulo-contacto": "¿Alguna duda?",
+ "c_kicker-contacto": "Estamos para ayudarte",
+ "c_frase-para-seccion-contacto": "Escríbenos por WhatsApp y te respondemos.",
+ "cfTitulo": "¡Estás convocado!",
+ "cartaTitulo": "¡Estás convocado!",
+ "cartaTexto": "Ya cumplo 7 y lo quiero festejar en la cancha.\nVa a haber partido, porras, medallas y un pastel en forma de balón.\nPonte tus tenis y tu playera favorita, que te voy a pasar el balón.\n¡Sin ti el equipo no está completo!\nSanti",
+ "musicaUrl": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792459008/invitame/musica/m-pRpeEdMmmQ0-19-10.mp3",
+ "videoUrl": "",
+ "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXbYM3nMM0oPk",
+ "img_c_foto-para-el-fin-de-pagina": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/santi-cumple7/santi-cumple7-cierre",
+ "secOrden": [
+  "frase",
+  "eventos",
+  "itinerario",
+  "hospedaje",
+  "dresscode",
+  "padres",
+  "galeria",
+  "trivia",
+  "regalos"
+ ],
+ "fx": {
+  "coleccion": "celebra-futbol",
+  "paquete": {
+   "plan": "platinum",
+   "extras": []
+  },
+  "fecha": {
+   "disposicion": "circulos"
+  },
+  "raspadita": {
+   "modo": "partes",
+   "forma": "redondo",
+   "encendido": true,
+   "polvillo": true,
+   "destello": true,
+   "vibrar": true
+  },
+  "rsvp": {
+   "estilo": "interruptor",
+   "limite": "2027-06-01",
+   "preguntas": [
+    {
+     "texto": "¿Cuántos niños vienen contigo?",
+     "tipo": "texto"
+    },
+    {
+     "texto": "¿Qué talla de playera usa cada niño?",
+     "tipo": "texto"
+    }
+   ]
+  },
+  "itinerario": {
+   "estilo": "izquierda",
+   "momentos": [
+    {
+     "h": "13:00",
+     "t": "Llegada del equipo",
+     "d": "Bienvenida y entrega de playeras."
+    },
+    {
+     "h": "13:30",
+     "t": "Calentamiento",
+     "d": "Circuito de conos y tiros a portería."
+    },
+    {
+     "h": "14:00",
+     "t": "¡El gran partido!",
+     "d": "Niños contra papás, con árbitro y todo."
+    },
+    {
+     "h": "15:00",
+     "t": "Comida",
+     "d": "Hot dogs y pizza para los jugadores, taquiza para los papás."
+    },
+    {
+     "h": "16:00",
+     "t": "Penales y medallas",
+     "d": "Tanda de penales y una medalla para cada jugador."
+    },
+    {
+     "h": "16:45",
+     "t": "Pastel y mañanitas",
+     "d": "Soplamos las 7 velitas todos juntos."
+    },
+    {
+     "h": "17:30",
+     "t": "Silbatazo final",
+     "d": "Bolsitas de dulces para el camino a casa."
+    }
+   ]
+  },
+  "dresscode": {
+   "colores": [
+    "#2E9E4F",
+    "#FFFFFF",
+    "#0F2A1B",
+    "#F4C430"
+   ],
+   "evitar": []
+  },
+  "carta": {
+   "on": true,
+   "titulo": "Una carta para ti",
+   "kicker": "Antes que nada",
+   "texto": "Ya cumplo 7 y lo quiero festejar en la cancha.\nVa a haber partido, porras, medallas y un pastel en forma de balón.\nPonte tus tenis y tu playera favorita, que te voy a pasar el balón.\n¡Sin ti el equipo no está completo!\nSanti"
+  },
+  "cierre": {
+   "origen": "link",
+   "url": "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,c_fill,g_face,ar_1:1,w_1000/invitame/eventos/santi-cumple7/santi-cumple7-cierre"
+  },
+  "fondo": {
+   "tipo": "video",
+   "url": "https://res.cloudinary.com/oc8cgqt4/video/upload/invitame/eventos/ev-futbol-fondo.mp4",
+   "poster": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/ev-futbol2-base.jpg",
+   "donde": "marco",
+   "paso": 0.85,
+   "velo": 0.08,
+   "fuerza": 1.04,
+   "oscuras": 0,
+   "tapeMax": 0.5
+  },
+  "ambiente": {
+   "on": false,
+   "tipo": "nubes",
+   "seccion": "itinerario"
+  },
+  "tematica": {
+   "banda": "",
+   "simbolo": ""
+  },
+  "muestra": {
+   "venta": true,
+   "rsvp": true,
+   "cta": "¿Quieres la tuya?",
+   "estado": "Sin usar",
+   "mesa": 4,
+   "nombre": "Familia Ruiz",
+   "pases": "2",
+   "msj": "Hola, vi la muestra de Invítame (Kids · Fútbol) y quiero más info.",
+   "tel": "+52 1 999 416 0750"
+  },
+  "galeria": {
+   "encendido": true,
+   "muestra": true,
+   "vidriera": false,
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-fiestacam"
+  },
+  "filtro": {
+   "encendido": true,
+   "frase": "Santi · 7 · Golazo",
+   "frasePor": "novios",
+   "titulo": "El filtro del cumple",
+   "imagen": "https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_640,h_640,q_auto,f_auto/invitame/eventos/santi-cumple7/santi-cumple7-filtro"
+  },
+  "pasevoz": {
+   "encendido": true,
+   "audio": "https://res.cloudinary.com/oc8cgqt4/video/upload/v1792459079/invitame/eventos/santi-cumple7/santi-cumple7-pasevoz-1.mp3",
+   "onda": "tfzxnpwvvswuuxmsztfwwwoprf",
+   "over": "PASE DE INVITADO",
+   "titulo": "Un mensaje para ti",
+   "departe": "Mamá de Santi",
+   "fecha": "12 · 06 · 2027",
+   "hora": "13:00",
+   "talon": "MI CUMPLE Nº 7",
+   "textura": "https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/eventos/santi-cumple7/santi-cumple7-pase.jpg",
+   "papel": "#e3f0dc",
+   "tinta": "#0f2a1b",
+   "acento": "#76571a"
+  },
+  "sobre": {
+   "modelo": "degrade-esmeralda-sale",
+   "tipo": "carta",
+   "color": "#efe6d2",
+   "colorCarta": "",
+   "sello": true,
+   "emblema": "iniciales",
+   "ini": "S",
+   "relieve": true,
+   "selloColor": "#3a5643",
+   "textura": "lino",
+   "video": "",
+   "poster": ""
+  },
+  "boton": {
+   "estilo": "esmalte"
+  },
+  "diseno": {
+   "adorno": "",
+   "adornoCustom": "",
+   "cortes": "",
+   "textura": ""
+  },
+  "particulas": {
+   "on": false
+  },
+  "avisos": {
+   "encendido": true,
+   "titulo": "Avisos importantes",
+   "items": [
+    {
+     "icono": "otro",
+     "texto": "Trae bloqueador y una botella de agua: el partido es al aire libre."
+    },
+    {
+     "icono": "hora-cierre",
+     "texto": "La fiesta termina a las 17:30."
+    }
+   ]
+  }
+ },
+ "galTitulo": "Mis mejores jugadas",
+ "galFrase": "Goles, porras y un trofeo: así juego yo."
+}
