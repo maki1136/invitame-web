@@ -652,7 +652,7 @@
            letra azul marino (no un panel oscuro más). Se invierten tinta y papel
            SOLO adentro del boleto; los botones de adentro van en azul. */
         P + ':is(.evento,.hotel,.tl){ background-color:' + TINTA + '!important; box-shadow:inset 0 0 0 1px rgba(' + rgb(PAPEL) + ',.18), 0 14px 30px rgba(0,0,0,.45)!important; background-image:linear-gradient(90deg, rgba(' + rgb(PAPEL) + ',.45) 50%, rgba(0,0,0,0) 50%)!important; }',
-        P + '.tl{ border:0!important; padding-top:18px!important; padding-bottom:18px!important; }',
+        P + '.tl{ border:0!important; padding-top:18px!important; padding-bottom:18px!important; background-image:none!important; }',
         P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:none!important; }',
         P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d){ color:rgba(' + rgb(PAPEL) + ',.72)!important; -webkit-text-fill-color:rgba(' + rgb(PAPEL) + ',.72)!important; }',
         P + ':is(.evento,.hotel) .btn{ background:' + PAPEL + '!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; border:0!important; box-shadow:0 4px 10px rgba(0,0,0,.25)!important; }',
