@@ -57,6 +57,7 @@
       var modo = p.modo || 'foto';
       if (modo === 'nada' || (modo === 'adorno' && !img)) {
         av.style.setProperty('display', 'none', 'important');
+        t.style.alignSelf = 'center';            /* sin círculo, el nombre queda a media altura de los demás */
         t.setAttribute('data-pfoto', 'nada');
       } else if (modo === 'adorno') {
         av.style.removeProperty('display');
@@ -66,6 +67,7 @@
         t.setAttribute('data-pfoto', 'adorno');
       } else {
         av.style.removeProperty('display');
+        t.style.alignSelf = '';
         t.removeAttribute('data-pfoto');
       }
     });
