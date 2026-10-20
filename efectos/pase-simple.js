@@ -91,8 +91,12 @@
     }
     /* la letra de los números: la del título de la colección */
     var num = caja.querySelector('.ps-num');
-    var h = document.querySelector('.frame h2') || t;
+    var h = t || document.querySelector('.frame h2');
     if (h && !num.style.fontFamily) { try { num.style.fontFamily = getComputedStyle(h).fontFamily; } catch (e) {} }
+    /* ⚠️ el color se copia del título de la sección: la tarjeta del pase de
+       cada colección trae su propio color de letra pensado para el QR, y en
+       las colecciones claras (Celebra) salía papel sobre papel (20/10/2026). */
+    if (t) { try { var col = getComputedStyle(t).color; if (caja.style.color !== col) caja.style.color = col; } catch (e) {} }
     var p = personas();
     if (num.textContent !== p) num.textContent = p;
     if (card.classList.contains('reveal')) card.classList.add('in');
