@@ -179,13 +179,20 @@
     var preg = ESTADO.preguntas.map(function (p) { return { texto: limpio(p.texto, 80), tipo: p.tipo === 'sino' ? 'sino' : 'texto' }; })
       .filter(function (p) { return p.texto; }).slice(0, 3);
     if (preg.length) out.rsvpPreguntas = preg;
+    /* ★ 20/10/2026 — las secciones que el cliente NO quiere (fx.ocultas) */
+    var oc = ocultasMarcadas();
+    if (oc.length) out.ocultas = oc;
     return out;
   }
 
+  function ocultasMarcadas() {
+    return [].slice.call(document.querySelectorAll('#cs-ocultas .oc-sec:checked')).map(function (c) { return c.value; });
+  }
   function borrador() {
-    return { t: ESTADO.tiempos, a: ESTADO.avisos, l: ESTADO.logos, p: ESTADO.preguntas };
+    return { t: ESTADO.tiempos, a: ESTADO.avisos, l: ESTADO.logos, p: ESTADO.preguntas, o: ocultasMarcadas() };
   }
   function poner(b) {
+    if (b && Array.isArray(b.o)) [].forEach.call(document.querySelectorAll('#cs-ocultas .oc-sec'), function (c) { c.checked = b.o.indexOf(c.value) >= 0; });
     if (!b || typeof b !== 'object') return;
     var lista = function (x) { return Object.prototype.toString.call(x) === '[object Array]' ? x : []; };
     ESTADO.tiempos = lista(b.t).slice(0, 6);
