@@ -1855,6 +1855,36 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  "encaje-blanco-perla-video": {
+    nombre:     "Encaje blanco · perla, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.8,eo_5.1,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/encaje-blanco-perla-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.8,w_1080,q_auto:best,f_jpg/invitame/sobres/encaje-blanco-perla-1080.jpg",
+    color:      "#e2e2e3",
+    luz:        2.8,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "azul-marino-damasco-video": {
+    nombre:     "Azul marino damasco · lacre con corazón, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.3,eo_5.0,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/azul-marino-damasco-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.3,w_1080,q_auto:best,f_jpg/invitame/sobres/azul-marino-damasco-1080.jpg",
+    color:      "#344c65",
+    luz:        3.0,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "rosa-perla-redonda-video": {
+    nombre:     "Rosa perla · solapa redonda, se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.5,eo_4.6,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/rosa-perla-redonda-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.5,w_1080,q_auto:best,f_jpg/invitame/sobres/rosa-perla-redonda-1080.jpg",
+    color:      "#d1b5a9",
+    luz:        2.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "v-clasico-peonia-video": {
     nombre:     "V clásico rosa · lacre dorado con peonía, la solapa se levanta y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/v-clasico-peonia-1080.mp4",
