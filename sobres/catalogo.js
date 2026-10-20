@@ -1855,6 +1855,16 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  "v-clasico-peonia-video": {
+    nombre:     "V clásico rosa · lacre dorado con peonía, la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/v-clasico-peonia-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,w_1080,q_auto:best,f_jpg/invitame/sobres/v-clasico-peonia-1080.jpg",
+    color:      "#f4d2cf",
+    luz:        2.5,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "salvia-lacre-rojo": {
     nombre:   "Salvia en relieve · peonías grabadas y lacre rojo con rosa (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-poster.jpg",
