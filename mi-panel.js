@@ -185,12 +185,12 @@
        que se vea 2 confirmaron y 2 pendientes». `pend` = personas que todavía
        no confirmaron: las de las invitaciones sin responder + lo que falta en
        las confirmadas a medias. */
-    const c={inv:GENTE.length, pers:0, si:0, no:0, sin:0, vienen:0, pend:0, mesas:mesasDe().length};
+    const c={inv:GENTE.length, pers:0, si:0, no:0, sin:0, vienen:0, pend:0, pNo:0, mesas:mesasDe().length};
     GENTE.forEach(g=>{
       c.pers += num(g.pases);
       const e=estadoDe(g);
       if(e==='si'){ c.si++; c.vienen += personasDe(g); c.pend += Math.max(0, num(g.pases)-personasDe(g)); }
-      else if(e==='no') c.no++;
+      else if(e==='no'){ c.no++; c.pNo += num(g.pases); }
       else { c.sin++; c.pend += num(g.pases); }
     });
     return c;
@@ -210,17 +210,17 @@
       mensajes:vMensajes, qr:vQR, std:vSTD, opciones:vOpciones}[VISTA] || vResumen)();
   }
 
+  /* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma», punto 2): los números de
+     arriba son estos seis, en este orden. «Invitados» = PERSONAS. */
   function bloqueNumeros(){
-    const c=cuentas(), t=c.si+c.no+c.sin || 1;
+    const c=cuentas(), t=c.pers || 1;
     return '<div class="nums">'+
-      '<div class="num"><b>'+c.inv+'</b><span>Invitaciones enviadas</span></div>'+
-      '<div class="num"><b>'+c.pers+'</b><span>Personas invitadas</span></div>'+
-      '<div class="num"><b>'+c.si+'</b><span>Confirmaron</span><div class="barra"><i style="width:'+(c.si/t*100)+'%"></i></div></div>'+
-      '<div class="num rojo"><b>'+c.no+'</b><span>No pueden</span><div class="barra"><i style="width:'+(c.no/t*100)+'%"></i></div></div>'+
-      '<div class="num"><b>'+c.sin+'</b><span>Sin responder</span></div>'+
-      '<div class="num"><b>'+c.vienen+'</b><span>Personas que vienen</span></div>'+
-      '<div class="num"><b>'+c.pend+'</b><span>Personas sin confirmar</span></div>'+
-      '<div class="num"><b>'+c.mesas+'</b><span>Mesas armadas</span></div>'+
+      '<div class="num"><b>'+c.inv+'</b><span>Total de invitaciones</span></div>'+
+      '<div class="num"><b>'+c.sin+'</b><span>Pases sin respuesta</span></div>'+
+      '<div class="num"><b>'+c.pers+'</b><span>Total de invitados</span></div>'+
+      '<div class="num"><b>'+c.vienen+'</b><span>Invitados confirmados</span><div class="barra"><i style="width:'+(c.vienen/t*100)+'%"></i></div></div>'+
+      '<div class="num rojo"><b>'+c.pNo+'</b><span>Invitados que no asistirán</span><div class="barra"><i style="width:'+(c.pNo/t*100)+'%"></i></div></div>'+
+      '<div class="num"><b>'+c.mesas+'</b><span>Mesas</span></div>'+
     '</div>';
   }
 
@@ -372,7 +372,7 @@
         '</tr></thead><tbody>'+ lista.map((g,i)=>{
           const e=estadoDe(g);
           return '<tr class="'+(i%2?'par':'')+'">'+
-            '<td><button class="lapiz" data-ver="'+esc(g.token)+'" title="Ver ficha">&#9998;</button><b>'+esc(g.nombre)+'</b></td>'+
+            '<td><button class="lapiz" data-ver="'+esc(g.token)+'" title="Editar pase">&#9998;</button><b>'+esc(g.nombre)+'</b></td>'+
             '<td>'+personasDe(g)+' <span style="color:var(--muted);font-size:11.5px">de '+num(g.pases)+'</span></td>'+
             '<td><input class="mini mesaInput" data-tok="'+esc(g.token)+'" value="'+esc(nombreMesa(mesaDe(g)))+'" placeholder="—"></td>'+
             '<td class="ocultar-chico"><input class="mini telInput" data-tok="'+esc(g.token)+'" inputmode="tel" '+
@@ -595,6 +595,99 @@
   }
 
   // ---------- alta de un invitado nuevo ----------
+  /* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma», puntos 1 y 3): el lápiz abre
+     la ficha del pase CON LOS CAMPOS EDITABLES (antes era un aviso de solo
+     lectura). Guarda por el portero /pase-datos.php, que escribe sólo lo que
+     cambió y recalcula los usos que quedan sin regalar ni quitar los ya usados.
+     La mesa se guarda igual que el casillero de la lista (tablero de mesas). */
+  function ventanaEditarPase(g){
+    const max=num(g.usosMax)||num(g.pases), usados=Math.max(0, max-num(g.usos));
+    const e2=estadoDe(g);
+    const f=document.createElement('div');
+    f.className='fondo'; f.id='ventEditar';
+    f.innerHTML =
+      '<div class="vent">'+
+        '<h3>Editar pase</h3>'+
+        '<p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 6px">'+
+          (e2==='si'?'Confirmó: vienen '+personasDe(g):(e2==='no'?'No puede venir':'Sin responder'))+
+          ' · Entradas usadas: '+usados+' de '+max+'</p>'+
+        '<label>Nombre</label><input type="text" id="ep-nombre">'+
+        '<div class="fila">'+
+          '<div><label>Personas</label><input type="number" id="ep-personas" min="1" max="30"></div>'+
+          '<div><label>Número de mesa</label><input type="text" id="ep-mesa" placeholder="—"></div>'+
+        '</div>'+
+        '<label>WhatsApp</label><input type="tel" id="ep-tel" placeholder="52 999 123 4567">'+
+        '<label>Cantidad de usos</label><input type="number" id="ep-usos" min="1" max="30">'+
+        '<div class="hint">Cuántas veces se puede escanear su QR en la puerta. Ya usó '+usados+'.</div>'+
+        '<label>Descripción personas</label><input type="text" id="ep-desc" placeholder="Ej: 2 adultos y 1 niño">'+
+        '<label>Mensaje</label><textarea id="ep-msj" rows="2" placeholder="Opcional"></textarea>'+
+        '<div class="hint" style="word-break:break-all">Su link: '+esc(linkDe(g))+'</div>'+
+        '<div class="err" id="ep-err"></div>'+
+        '<div class="pie">'+
+          '<button class="btn gris" id="ep-cerrar">Cerrar</button>'+
+          '<button class="btn" id="ep-guardar">Guardar</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(f);
+    const q=s=>f.querySelector(s);
+    q('#ep-nombre').value=g.nombre||'';
+    q('#ep-personas').value=num(g.pases)||1;
+    q('#ep-mesa').value=nombreMesa(mesaDe(g))||'';
+    q('#ep-tel').value=g.tel||'';
+    q('#ep-usos').value=max||1;
+    q('#ep-desc').value=g.restriccion||'';
+    q('#ep-msj').value=g.notaNovios||'';
+    /* si las personas y los usos eran iguales, se mueven juntos (como al crear) */
+    const juntos=(num(g.pases)===max);
+    q('#ep-personas').addEventListener('input',()=>{ if(juntos) q('#ep-usos').value=q('#ep-personas').value; });
+    q('#ep-cerrar').addEventListener('click',()=>f.remove());
+    f.addEventListener('click',e=>{ if(e.target===f) f.remove(); });
+    q('#ep-guardar').addEventListener('click',()=>guardarEdicionPase(f,g));
+  }
+
+  async function guardarEdicionPase(f,g){
+    const q=s=>f.querySelector(s), err=q('#ep-err'), btn=q('#ep-guardar');
+    const nombre=q('#ep-nombre').value.trim();
+    if(!nombre){ err.textContent='Ponle un nombre.'; return; }
+    const tel=String(q('#ep-tel').value||'').replace(/[^0-9]/g,'');
+    if(tel && tel.length<8){ err.textContent='El WhatsApp parece incompleto: va con clave de país.'; return; }
+    const datos={slug:SLUG, clave:CLAVE, token:g.token};
+    const pases=Math.max(1,Math.min(30,parseInt(q('#ep-personas').value,10)||1));
+    const usos=Math.max(1,Math.min(30,parseInt(q('#ep-usos').value,10)||1));
+    const max=num(g.usosMax)||num(g.pases);
+    if(nombre!==(g.nombre||'')) datos.nombre=nombre;
+    if(pases!==num(g.pases)) datos.pases=pases;
+    if(usos!==max) datos.usosMax=usos;
+    if(tel!==String(g.tel||'')) datos.tel=tel;
+    const desc=q('#ep-desc').value.trim(), msj=q('#ep-msj').value.trim();
+    if(desc!==(g.restriccion||'')) datos.desc=desc;
+    if(msj!==(g.notaNovios||'')) datos.mensaje=msj;
+    const mesaNueva=q('#ep-mesa').value.trim(), mesaAntes=nombreMesa(mesaDe(g))||'';
+    btn.disabled=true; btn.textContent='Guardando…'; err.textContent='';
+    try{
+      if(Object.keys(datos).length>3){
+        const r=await fetch('/pase-datos.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(datos)});
+        const j=await r.json().catch(()=>({}));
+        if(!j.ok) throw new Error(j.error||'http'+r.status);
+        ['nombre','pases','usosMax','usos','tel','restriccion','notaNovios'].forEach(k=>{ if(k in j) g[k]=j[k]; });
+      }
+      if(mesaNueva!==mesaAntes){
+        let ms=mesasDe().slice(), destino='';
+        if(mesaNueva){
+          let m=ms.find(x=>String(x.nombre).toLowerCase()===mesaNueva.toLowerCase());
+          if(!m){ m={id:'m'+Date.now().toString(36), nombre:mesaNueva}; ms.push(m); PANEL.mesas=ms; }
+          destino=m.id;
+        }
+        const a=Object.assign({}, asigDe()); a[g.token]=destino||''; PANEL.asig=a;
+        await guardarPanel({mesas:mesasDe(), asig:a});
+      }
+      f.remove(); toast('Pase guardado'); pintar();
+    }catch(e){
+      err.textContent = (String(e.message)==='clave') ? 'No pudimos verificar tu clave. Vuelve a entrar al panel.' : 'No se pudo guardar. Inténtalo de nuevo.';
+      btn.disabled=false; btn.textContent='Guardar';
+    }
+  }
+
   function ventanaNuevoPase(){
     const f=document.createElement('div');
     f.className='fondo'; f.id='ventPase';
@@ -732,16 +825,7 @@
 
     if(t.dataset && t.dataset.ver){
       const g = GENTE.find(x=>x.token===t.dataset.ver); if(!g) return;
-      const e2 = estadoDe(g);
-      alert(g.nombre+'\n\n'+
-        'Lugares: '+num(g.pases)+'\n'+
-        'Vienen: '+personasDe(g)+'\n'+
-        'Mesa: '+(nombreMesa(mesaDe(g))||'sin asignar')+'\n'+
-        'Entradas usadas: '+num(g.usos)+' de '+(num(g.usosMax)||num(g.pases))+'\n'+
-        'Estado: '+(e2==='si'?'Confirmó':(e2==='no'?'No puede venir':'Sin responder'))+
-        (g.rsvpMensaje ? '\n\nMensaje que dejó:\n"'+g.rsvpMensaje+'"' : '')+
-        '\n\nSu link:\n'+linkDe(g));
-      return;
+      return ventanaEditarPase(g);
     }
     if(t.dataset && t.dataset.wa){
       const g=GENTE.find(x=>x.token===t.dataset.wa); if(!g) return;

@@ -75,7 +75,7 @@
     '#pv-validar .tit{font-size:24px;font-weight:800;margin:10px 0 2px;letter-spacing:.2px}' +
     '#pv-validar .nom{font-size:19px;font-weight:600;opacity:.95;margin-bottom:14px}' +
     '#pv-validar .grid{display:flex;gap:9px;justify-content:center;margin:4px 0 8px}' +
-    '#pv-validar .g{background:rgba(255,255,255,.16);border-radius:12px;padding:10px 12px;min-width:74px}' +
+    '#pv-validar .g{background:rgba(255,255,255,.16);border-radius:12px;padding:10px 8px;min-width:62px}' +
     '#pv-validar .gn{font-size:22px;font-weight:800}#pv-validar .gl{font-size:11px;opacity:.85}' +
     '#pv-validar .nota{font-size:12.5px;opacity:.9;margin-top:10px;line-height:1.4}' +
     '#pv-validar button{display:block;width:100%;padding:13px;border:0;border-radius:12px;margin-top:10px;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:rgba(255,255,255,.22)}' +
@@ -97,24 +97,38 @@
   function equipoLogueado() {
     try { return !!(window.INV && INV.auth && INV.auth.currentUser); } catch (e) { return false; }
   }
+  /* la sesión de Firebase tarda un momento en aparecer: se espera a saberlo */
+  function cuandoSepaSesion(cb) {
+    var listo = false, fin = function () { if (!listo) { listo = true; cb(); } };
+    try { if (window.INV && INV.onAuth) INV.onAuth(function () { fin(); }); } catch (e) {}
+    setTimeout(fin, 3500);
+  }
 
+  /* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma», punto 4): «si un pase tiene
+     5 usos, valida los primeros cinco escaneos y al sexto muestra PASE
+     INVÁLIDO. La validación debe ser automática.»
+     → Si quien escanea es del equipo (sesión iniciada en ese celular), CADA
+       escaneo descuenta una entrada solo, sin tocar nada. Sin sesión, se ve el
+       estado pero no se descuenta: así un invitado curioso que escanea su
+       propio QR no se gasta una entrada. */
   function pintar(estado, g, aviso) {
-    var clase = { ok: 'ok', usado: 'warn', no: 'bad', cargando: 'wait', error: 'wait' }[estado];
-    var ico = { ok: '✓', usado: '⚠', no: '✕', cargando: '…', error: '?' }[estado];
-    var tit = { ok: 'Pase válido', usado: 'Ya ingresó', no: 'Pase no válido', cargando: 'Revisando el pase…', error: 'No se pudo revisar' }[estado];
+    var clase = { entra: 'ok', ok: 'ok', invalido: 'bad', cargando: 'wait', error: 'wait' }[estado];
+    var ico = { entra: '✓', ok: '✓', invalido: '✕', cargando: '…', error: '?' }[estado];
+    var tit = { entra: 'PASE VÁLIDO', ok: 'PASE VÁLIDO', invalido: 'PASE INVÁLIDO', cargando: 'Revisando el pase…', error: 'No se pudo revisar' }[estado];
     var h = '<div class="rc ' + clase + '"><div class="ico">' + ico + '</div><div class="tit">' + tit + '</div>';
     if (g) {
       var max = g.usosMax || g.pases || 1;
       var quedan = (g.usos != null) ? g.usos : max;
       h += '<div class="nom">' + esc(g.nombre || '') + '</div>' +
-        '<div class="grid"><div class="g"><div class="gn">' + esc(max) + '</div><div class="gl">Pases</div></div>' +
+        '<div class="grid"><div class="g"><div class="gn">' + esc(max) + '</div><div class="gl">Entradas</div></div>' +
+        '<div class="g"><div class="gn">' + esc(Math.max(0, max - quedan)) + '</div><div class="gl">Usadas</div></div>' +
         '<div class="g"><div class="gn">' + esc(quedan) + '</div><div class="gl">Quedan</div></div>' +
         '<div class="g"><div class="gn">' + esc(String(g.mesa || '-').replace(/^\s*mesa\s*/i, '') || '-') + '</div><div class="gl">Mesa</div></div></div>';
     }
     if (aviso) h += '<div class="nota"><b>' + esc(aviso) + '</b></div>';
     if (estado === 'ok') {
-      if (equipoLogueado()) h += '<button class="fuerte" id="pv-reg">Registrar ingreso</button>';
-      else h += '<div class="nota">El ingreso lo registra el equipo con el escáner del evento.</div>';
+      h += '<div class="nota">Este celular solo mira el pase: no descuenta entradas. Para que cada escaneo cuente solo, iniciá sesión del equipo una vez en este celular.</div>' +
+           '<button class="fuerte" id="pv-login">Iniciar sesión del equipo</button>';
     }
     if (estado === 'error') h += '<button id="pv-otra">Probar de nuevo</button>';
     if (estado !== 'cargando') h += '<button id="pv-ver">Ver invitación</button>';
@@ -123,28 +137,26 @@
     var b;
     if ((b = document.getElementById('pv-ver'))) b.onclick = cerrar;
     if ((b = document.getElementById('pv-otra'))) b.onclick = revisar;
-    if ((b = document.getElementById('pv-reg'))) b.onclick = function () { registrar(g); };
+    if ((b = document.getElementById('pv-login'))) b.onclick = function () { location.href = '/scan.html?e=' + encodeURIComponent(SLUG); };
   }
 
-  function estadoDe(g) {
-    if (!g || g.activo === false) return 'no';
-    var quedan = (g.usos != null) ? g.usos : (g.usosMax || 1);
-    return quedan > 0 ? 'ok' : 'usado';
-  }
+  function quedanDe(g) { return (g.usos != null) ? g.usos : (g.usosMax || g.pases || 1); }
 
+  /* el equipo: se descuenta una entrada en el acto (transacción: no se puede
+     usar dos veces la misma) */
   function registrar(g) {
-    var b = document.getElementById('pv-reg');
-    if (b) { b.disabled = true; b.textContent = 'Registrando…'; }
+    pintar('cargando', g);
     INV.marcarUso(SLUG, TOKEN).then(function (r) {
       if (r && r.ok) {
         g.usos = r.restantes;
-        pintar(r.restantes > 0 ? 'ok' : 'usado', g, '✓ Ingreso registrado. Quedan ' + r.restantes + '.');
+        pintar('entra', g, '✓ Entrada registrada. Quedan ' + r.restantes + '.');
       } else if (r && r.motivo === 'sin-usos') {
-        g.usos = 0; pintar('usado', g);
-      } else pintar('no', null);
+        g.usos = 0;
+        pintar('invalido', g, 'Ya usó todas sus entradas.');
+      } else pintar('invalido', null, 'Este código no existe.');
     }).catch(function (e) {
-      pintar('ok', g, /permission|insufficient/i.test(String(e && e.message || e))
-        ? 'Tu usuario no tiene permiso para registrar ingresos.' : 'No se pudo registrar. Revisá la conexión.');
+      pintar(quedanDe(g) > 0 ? 'ok' : 'invalido', g, /permission|insufficient/i.test(String(e && e.message || e))
+        ? 'Tu usuario no tiene permiso para registrar entradas.' : 'No se pudo registrar. Revisá la conexión.');
     });
   }
 
@@ -156,7 +168,11 @@
         return pintar('error', null, 'Sin conexión con la base.');
       }
       INV.getInvitado(SLUG, TOKEN).then(function (g) {
-        pintar(estadoDe(g), g);
+        if (!g || g.activo === false) return pintar('invalido', null, 'Este código no existe o fue dado de baja.');
+        if (quedanDe(g) <= 0) return pintar('invalido', g, 'Ya usó todas sus entradas.');
+        cuandoSepaSesion(function () {
+          if (equipoLogueado()) registrar(g); else pintar('ok', g);
+        });
       }).catch(function () { pintar('error', null, 'Revisá la conexión a internet.'); });
     })(0);
   }

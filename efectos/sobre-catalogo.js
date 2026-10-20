@@ -1346,7 +1346,27 @@
     hint.textContent = 'Toca para abrir';
 
     sacarTapa();
-    setTimeout(function () { env.classList.add('puesto'); }, 30);
+    /* ★ 19/10/2026 — «APARECE PRIMERO LA PORTADA Y DESPUÉS SE ARMA EL SOBRE»
+       (Maki, «en casi todas»). En el sobre de solapas, la foto de la portada
+       que va ADENTRO (#col-sobre-carta) ya está en el celular (la bajó la
+       portada), pero el papel del sobre (cuerpo y solapa) recién se empieza a
+       bajar acá. Con `puesto` a los 30 ms se encendían las dos capas juntas: en
+       4G la foto aparecía al toque y el papel se iba dibujando encima.
+       → `puesto` espera a que el papel esté bajado y decodificado (máximo 6 s:
+         si no llega, se muestra igual, como antes). */
+    (function ponerCuandoEsteElPapel() {
+      var urls = porSolapas ? [m.cuerpo || m.poster || '', m.solapa || ''].filter(Boolean) : [];
+      var hecho = false, poner = function () { if (hecho) return; hecho = true; env.classList.add('puesto'); };
+      if (!urls.length) { setTimeout(poner, 30); return; }
+      var faltan = urls.length;
+      urls.forEach(function (u) {
+        var im = new Image(), listo = function () { if (--faltan <= 0) setTimeout(poner, 30); };
+        im.onload = function () { if (im.decode) im.decode().then(listo, listo); else listo(); };
+        im.onerror = listo;
+        im.src = u;
+      });
+      setTimeout(poner, 6000);
+    })();
 
     function esFoto()    { return env.dataset.empalme  === 'foto'; }
     function esSolapas() { return env.dataset.apertura === 'solapas'; }
@@ -1575,11 +1595,56 @@
       setTimeout(function () { clearInterval(_relojLuz); _fundirUnaVez(); }, (_luz + 4) * 1000);
     }
 
+    /* ★ 19/10/2026 — «APARECE UNA FOTO ATRÁS, DESAPARECE Y VUELVE A APARECER
+       LA PORTADA VERDADERA» (Maki, en las muestras de eventos nuevos).
+       Medido en mis18-leo: la foto de adentro del sobre (.h-fondo) vive en la
+       tarjeta, una caja de 390×693 en el medio de la pantalla, y la portada de
+       verdad está a pantalla completa, agrandada (452×1135, scale 1,16). Al
+       fundirse el sobre se veían LAS DOS a la vez, con distinto tamaño: un
+       fantasma. → Mientras el sobre se cae, la tarjeta crece a pantalla
+       completa y la foto se acomoda EXACTO donde está la de la portada (mismo
+       rectángulo, mismo encuadre). Cuando el sobre se funde, son la misma
+       imagen y el empalme no se ve. Sólo en el celular: en la compu la
+       tarjeta va con marco y bordes redondos a propósito. */
+    function acomodarCartaALaPortada(dur) {
+      try {
+        if (window.innerWidth >= 680) return;
+        var carta = document.getElementById('col-sobre-carta');
+        var f = carta && carta.querySelector('.h-fondo');
+        var p = document.querySelector('.portada .pbg');
+        if (!carta || !f || !p) return;
+        var r = p.getBoundingClientRect(), c = getComputedStyle(p);
+        if (!r.width || !r.height) return;
+        /* al revelar, el motor retiene los datos y agranda la foto 1,045
+           (html.inv-datos-esperan): se apunta a ese tamaño */
+        var k = (esFoto() && !document.documentElement.classList.contains('inv-datos-esperan')) ? 1.045 : 1;
+        var w = r.width * k, h = r.height * k;
+        var x = r.left - (w - r.width) / 2, y = r.top - (h - r.height) / 2;
+        var tr = dur + 's cubic-bezier(.22,.72,.28,1)';
+        /* de «auto» no se anima: primero se clava el tamaño de hoy, en px */
+        carta.style.width = carta.offsetWidth + 'px'; carta.style.height = carta.offsetHeight + 'px';
+        f.style.left = '0px'; f.style.top = '0px';
+        f.style.width = f.offsetWidth + 'px'; f.style.height = f.offsetHeight + 'px';
+        void f.offsetWidth;
+        carta.style.transition = 'width ' + tr + ',height ' + tr + ',opacity .45s ease';
+        carta.style.width = '100vw';
+        carta.style.height = '100vh';
+        f.style.transition = 'left ' + tr + ',top ' + tr + ',width ' + tr + ',height ' + tr + ',filter ' + tr;
+        f.style.right = 'auto'; f.style.bottom = 'auto';
+        f.style.left = x + 'px'; f.style.top = y + 'px';
+        f.style.width = w + 'px'; f.style.height = h + 'px';
+        f.style.transform = 'none';
+        f.style.backgroundSize = c.backgroundSize;
+        f.style.backgroundPosition = c.backgroundPosition;
+      } catch (e) {}
+    }
+
     function tocar() {
       if (env.classList.contains('abriendo')) return;
       env.classList.add('abriendo');
 
       if (esSolapas()) {
+        acomodarCartaALaPortada(ESPERA + CAIDA);
         var _fi = fichaDe();
         var esperaFin = _fi ? Number(_fi.destello)
           : ((env.dataset.solapa === '1') ? (ESPERA + CAIDA + 0.10) : SOLAPAS);

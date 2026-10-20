@@ -583,6 +583,16 @@
       paleta:  ["#c7bab4", "#a29c95", "#958e88", "#775c4f"],
       tipos:   ["cumple"]
     },
+    'celebra-futbol': {
+      nombre:  "Fútbol",
+      bajada:  "Cancha de acuarela y el cumpleañero en dibujo animado.",
+      muestra: 'santi-cumple7',
+      foto:    '/formulario/disenos/santi-cumple7.webp',
+      color:   '#a49175',
+      color2:  '#736552',
+      paleta:  ["#c3bea5", "#b49f7c", "#a48c70", "#75583f"],
+      tipos:   ["cumple"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
