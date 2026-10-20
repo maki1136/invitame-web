@@ -653,6 +653,26 @@
       paleta:  ["#beb3a8", "#a18981", "#4a5568", "#302628"],
       tipos:   ["xv"]
     },
+    'celebra-seda': {
+      nombre:  "Seda y oro",
+      bajada:  "Seda marfil, orquídeas y anillos de oro. Pase simple: sólo cuántas personas.",
+      muestra: 'isabela-y-santiago',
+      foto:    '/formulario/disenos/isabela-y-santiago.webp',
+      color:   '#B8975A',
+      color2:  '#17140F',
+      paleta:  ["#FBF9F5", "#EFEAE1", "#B8975A", "#17140F"],
+      tipos:   ["boda"]
+    },
+    'celebra-lavanda': {
+      nombre:  "Mariposas lavanda",
+      bajada:  "Tiara, glicinas y mariposas lilas. Pase simple: sólo cuántas personas.",
+      muestra: 'ximena-mis15',
+      foto:    '/formulario/disenos/ximena-mis15.webp',
+      color:   '#9D86CC',
+      color2:  '#2C2140',
+      paleta:  ["#F8F5FB", "#ECE4F3", "#9D86CC", "#2C2140"],
+      tipos:   ["xv"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
