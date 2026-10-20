@@ -2016,6 +2016,26 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  "c-celeste-video": {
+    nombre:     "Encaje celeste · solapa en V, se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_6.4/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/c-celeste-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/c-celeste-1080.jpg",
+    color:      "#9FBCD2",
+    luz:        2.8,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "c-negro-video": {
+    nombre:     "Encaje negro · solapa en V, se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1,eo_4.4/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/c-negro-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.1/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/c-negro-1080.jpg",
+    color:      "#393936",
+    luz:        2.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "salvia-lacre-rojo": {
     nombre:   "Salvia en relieve · peonías grabadas y lacre rojo con rosa (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/salvia-lacre-rojo-poster.jpg",
