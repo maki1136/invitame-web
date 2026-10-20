@@ -340,6 +340,12 @@
      Acá quedó sólo lo que es del admin: repintar la pantalla y avisarle a
      Jazmín qué se cargó. */
   function cargarSolicitudIdx(i){ const s=(window._solicCache||[])[i]; if(!s)return;
+    /* ★ 20/10/2026 (Jazmín, con «denisse»): la solicitud ya había creado SU
+       invitación sola, pero «Cargar en el editor» volcaba los datos encima de
+       lo que estuviera abierto — una invitación nueva con los datos de ejemplo
+       (María & Diego). → Si ya tiene invitación, se abre ESA. */
+    const yaCreada=String(s.slugCreado||'').trim();
+    if(yaCreada && String((D&&D.slug)||'')!==yaCreada){ location.href='admin.html?e='+encodeURIComponent(yaCreada); return; }
     if(!window.SOLICITUD_A_EVENTO){
       alert('No cargó /solicitud-a-evento.js, así que no puedo traer los datos.\n\nRecargá la página y probá de nuevo.');
       return;
