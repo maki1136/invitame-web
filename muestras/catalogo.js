@@ -593,6 +593,66 @@
       paleta:  ["#c3bea5", "#b49f7c", "#a48c70", "#75583f"],
       tipos:   ["cumple"]
     },
+    'celebra-palmeras': {
+      nombre:  "Camino de palmeras",
+      bajada:  "Portada en video: el auto avanza entre palmeras rumbo al mar.",
+      muestra: 'ainhoa-y-marco',
+      foto:    '/formulario/disenos/ainhoa-y-marco.webp',
+      color:   '#cec1a1',
+      color2:  '#a4946c',
+      paleta:  ["#efd2ac", "#cec1a1", "#a4946c", "#5d5b34"],
+      tipos:   ["boda"]
+    },
+    'celebra-cabina': {
+      nombre:  "Cabina de fotos",
+      bajada:  "Encaje marfil, perlas y fotos impresas como de cabina antigua.",
+      muestra: 'olivia-y-gael',
+      foto:    '/formulario/disenos/olivia-y-gael.webp',
+      color:   '#9d917e',
+      color2:  '#5f5043',
+      paleta:  ["#c5b191", "#9d917e", "#5f5043", "#1d1a1c"],
+      tipos:   ["boda"]
+    },
+    'fiesta-abordar': {
+      nombre:  "Pase de abordar",
+      bajada:  "Azul marino con rutas de avión y boletos para cada momento.",
+      muestra: 'elisa-y-hugo',
+      foto:    '/formulario/disenos/elisa-y-hugo.webp',
+      color:   '#566f7a',
+      color2:  '#43565f',
+      paleta:  ["#6e8c91", "#566f7a", "#43565f", "#20262e"],
+      tipos:   ["boda"]
+    },
+    'fiesta-jardin': {
+      nombre:  "Jardín pintado",
+      bajada:  "Rosas al óleo sobre verde profundo y lacre dorado.",
+      muestra: 'alma-y-nicolas',
+      foto:    '/formulario/disenos/alma-y-nicolas.webp',
+      color:   '#595644',
+      color2:  '#363328',
+      paleta:  ["#787a66", "#595644", "#363328", "#1c1e15"],
+      tipos:   ["boda"]
+    },
+    'celebra-collage': {
+      nombre:  "Collage rosa",
+      bajada:  "Moños, encaje y tarjetas pegadas con cinta, en rosa.",
+      muestra: 'lia-mis15',
+      foto:    '/formulario/disenos/lia-mis15.webp',
+      color:   '#90756d',
+      color2:  '#83584a',
+      paleta:  ["#9e8b7d", "#90756d", "#83584a", "#5c392a"],
+      tipos:   ["xv"]
+    },
+    'celebra-scrapbook': {
+      nombre:  "Scrapbook vintage",
+      bajada:  "Papel antiguo, rosas secas y boletos de recuerdo.",
+      muestra: 'amelia-mis15',
+      foto:    '/formulario/disenos/amelia-mis15.webp',
+      color:   '#a18981',
+      color2:  '#4a5568',
+      paleta:  ["#beb3a8", "#a18981", "#4a5568", "#302628"],
+      tipos:   ["xv"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
