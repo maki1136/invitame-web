@@ -139,7 +139,8 @@ const INV = {
     const out = [];
     for (const g of arr) {
       const token = g.token || rndToken();
-      const usosMax = parseInt(g.p, 10) || 1;
+      const pasesN = parseInt(g.p, 10) || 1;
+      let usosMax = pasesN;
       const ref = doc(db, GU, gid(slug, token));
 
       // IMPORTANTE: si el invitado YA existe, no se pisan los datos que genera
@@ -151,11 +152,17 @@ const INV = {
         const snap = await getDoc(ref);
         if (snap.exists()) previo = snap.data();
       } catch (e) { previo = null; }
+      /* ★ 19/10/2026 (Jazmín): la «Cantidad de usos» se puede poner distinta de
+         las personas desde el panel de los novios (pase-datos.php). Si acá no
+         cambiaron las personas, se respeta ese número; si las cambiaron, los
+         usos vuelven a ser iguales a las personas, como siempre. */
+      if (previo && (parseInt(previo.pases, 10) || 0) === pasesN && (parseInt(previo.usosMax, 10) || 0) > 0)
+        usosMax = parseInt(previo.usosMax, 10);
 
       const payload = {
         slug, token,
         nombre: g.n || "",
-        pases: usosMax,
+        pases: pasesN,
         mesa: (g.m ?? "-") + "",
         restriccion: g.restriccion || "",
         usosMax,

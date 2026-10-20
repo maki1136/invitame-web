@@ -173,21 +173,57 @@ $tok = isset($ses['idToken']) ? $ses['idToken'] : '';
 if ($tok === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
 $auth = array('Authorization: Bearer ' . $tok);
 
-// ---------- 4. escribir SÓLO tel y mail ----------
-$cuerpo = json_encode(array('fields' => array(
-  'tel'       => array('stringValue' => $tel),
-  'mail'      => array('stringValue' => $mail),
-  'updatedAt' => array('stringValue' => gmdate('Y-m-d\TH:i:s\Z')),
-)));
-$url = $FS . 'inv_invitados/' . rawurlencode($slug . '__' . $token)
-     . '?updateMask.fieldPaths=tel'
-     . '&updateMask.fieldPaths=mail'
-     . '&updateMask.fieldPaths=updatedAt'
-     . '&currentDocument.exists=true';
-list($rw, $cw) = pedir($url, 'PATCH', $cuerpo, $auth);
+// ---------- 4. escribir SÓLO lo que vino ----------
+/* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma»): el lápiz de la lista abre la
+   ficha EDITABLE del pase. Además del WhatsApp y el correo, ahora se pueden
+   cambiar el nombre, las personas, la cantidad de usos, la descripción y el
+   mensaje. Se escribe SÓLO lo que el navegador mandó: antes, guardar el
+   WhatsApp borraba el correo (se mandaba vacío y se pisaba). */
+$fields = array();
+if (array_key_exists('tel',  $in)) $fields['tel']  = array('stringValue' => $tel);
+if (array_key_exists('mail', $in)) $fields['mail'] = array('stringValue' => $mail);
+if (array_key_exists('nombre', $in)) {
+  $nom = trim(mb_substr(strip_tags(str_replace(array("\r","\n"), ' ', (string)$in['nombre'])), 0, 120));
+  if ($nom === '') { http_response_code(400); echo json_encode(array('ok'=>false,'error'=>'nombre')); exit; }
+  $fields['nombre'] = array('stringValue' => $nom);
+}
+if (array_key_exists('desc', $in))
+  $fields['restriccion'] = array('stringValue' => trim(mb_substr(strip_tags((string)$in['desc']), 0, 200)));
+if (array_key_exists('mensaje', $in))
+  $fields['notaNovios'] = array('stringValue' => trim(mb_substr(strip_tags((string)$in['mensaje']), 0, 300)));
+
+/* Personas y usos: los usos que QUEDAN se recalculan con los que ya se usaron
+   en la puerta, así cambiar el número no regala ni quita entradas usadas. */
+$quiereP = array_key_exists('pases', $in);
+$quiereU = array_key_exists('usosMax', $in);
+if ($quiereP || $quiereU) {
+  list($rg, $cg) = pedir($FS . 'inv_invitados/' . rawurlencode($slug . '__' . $token), 'GET', null, $auth);
+  if ($cg != 200) { echo json_encode(array('ok'=>false,'error'=>'no-existe')); exit; }
+  $f0 = json_decode($rg, true); $f0 = isset($f0['fields']) ? $f0['fields'] : array();
+  $num = function($k) use ($f0) { return isset($f0[$k]['integerValue']) ? (int)$f0[$k]['integerValue'] : (isset($f0[$k]['doubleValue']) ? (int)$f0[$k]['doubleValue'] : null); };
+  $pasesAntes = $num('pases'); $maxAntes = $num('usosMax'); $usosAntes = $num('usos');
+  if ($maxAntes === null) $maxAntes = $pasesAntes !== null ? $pasesAntes : 1;
+  if ($usosAntes === null) $usosAntes = $maxAntes;
+  $usados = max(0, $maxAntes - $usosAntes);
+  if ($quiereP) {
+    $p = max(1, min(30, (int)$in['pases']));
+    $fields['pases'] = array('integerValue' => (string)$p);
+  }
+  $max = $quiereU ? max(1, min(30, (int)$in['usosMax'])) : $maxAntes;
+  $fields['usosMax'] = array('integerValue' => (string)$max);
+  $fields['usos']    = array('integerValue' => (string)max(0, $max - $usados));
+}
+if (!$fields) { echo json_encode(array('ok'=>true,'token'=>$token,'nada'=>true)); exit; }
+$fields['updatedAt'] = array('stringValue' => gmdate('Y-m-d\TH:i:s\Z'));
+
+$url = $FS . 'inv_invitados/' . rawurlencode($slug . '__' . $token) . '?currentDocument.exists=true';
+foreach (array_keys($fields) as $k) $url .= '&updateMask.fieldPaths=' . rawurlencode($k);
+list($rw, $cw) = pedir($url, 'PATCH', json_encode(array('fields' => $fields)), $auth);
 if ($cw < 200 || $cw >= 300) {
   echo json_encode(array('ok' => false, 'error' => 'guardar', 'detalle' => 'http' . $cw));
   exit;
 }
 
-echo json_encode(array('ok' => true, 'token' => $token, 'tel' => $tel, 'mail' => $mail));
+$sal = array('ok' => true, 'token' => $token);
+foreach ($fields as $k => $v) $sal[$k] = isset($v['integerValue']) ? (int)$v['integerValue'] : $v['stringValue'];
+echo json_encode($sal, JSON_UNESCAPED_UNICODE);
