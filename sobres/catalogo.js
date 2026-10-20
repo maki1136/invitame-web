@@ -1839,16 +1839,17 @@ window.SOBRES_INVITAME = {
      La referencia: la solapa sube con el lacre y aparece la invitación → la versión -cae es la fiel. */
   /* ★ 20/10/2026 · LA VERSIÓN EN VIDEO, la que pidió Maki («es 100 % video»).
      Flow · Veo 3.1 Quality, 8 s, primer cuadro = el sobre cerrado idéntico al reel (Nano Banana 2.1),
-     lacre genérico con rosa, «You are invited» como el original.
+     lacre genérico con rosa, SIN texto (Maki 20/10: «no va texto ahí»).
+     Calidad: bajado de Flow en 1080p reescalado (1080×1920), entregado w_1080 q_auto:good (≈1,6 MB el clip).
      Original medido: quieto 0–1,0 · la solapa gira hacia arriba y sale por arriba 1,0–2,6 con sombra ·
      adentro verde con relieve 2,6–5,5 · luz a blanco 5,5–8,0.
      Recorte: so_0.6 (menos espera tras el toque) · eo_4.7 (luz relativa 2,6 + 1,45 ≤ 4,1 s de clip).
      El motor tapa con luz desde `luz`, como el reel (≈1,9 s después de que se va la solapa). */
   "salvia-lacre-rojo-video": {
     nombre:     "Salvia en relieve · lacre rojo, la solapa se levanta y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7,w_720,q_auto,vc_h264:baseline:3.1,ac_none/invitame/sobres/salvia-lacre-rojo-video.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,w_720,q_auto,f_jpg/invitame/sobres/salvia-lacre-rojo-video.jpg",
-    color:      "#8d937d",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7,w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/salvia-lacre-rojo-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,w_1080,q_auto:best,f_jpg/invitame/sobres/salvia-lacre-rojo-1080.jpg",
+    color:      "#949883",
     luz:        2.6,
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
