@@ -67,6 +67,10 @@
   document.addEventListener('click', function (e) {
     var b = e.target && e.target.closest && e.target.closest('.rsvpform .acc-r button');
     if (!b || !activo()) return;
+    /* Con el interruptor, el toque llega primero a su mitad (.mitad.izq / .der)
+       y después ella aprieta el botón ORIGINAL del motor (onclick="rsvp('si'|'no')").
+       La respuesta se lee SÓLO del original; a la mitad sólo se le pide el nombre. */
+    var original = /rsvp\(\s*'(si|no)'/.exec(b.getAttribute('onclick') || '');
     var rn = $('rname');
     var nombre = (rn && rn.value || '').replace(/\s+/g, ' ').trim();
     if (nombre.length < 2) {
@@ -76,7 +80,8 @@
       if (rn) rn.focus();
       return;
     }
-    var si = !b.classList.contains('no');
+    if (!original) return;                       /* la mitad del interruptor: sigue su camino */
+    var si = original[1] === 'si';
     if (enPanel) return;                         /* la miniatura muestra, no guarda */
     if (yendo) return;
     yendo = true;
@@ -88,7 +93,12 @@
         slug: (window.INVDATA || {}).slug || new URLSearchParams(location.search).get('e') || '',
         nombre: nombre.slice(0, 80), estado: si ? 'si' : 'no',
         personas: parseInt(sel && sel.value, 10) || 1,
-        mensaje: String(ta && ta.value || '').slice(0, 500),
+        mensaje: (function () {
+          var m = String(ta && ta.value || '').trim();
+          var rr = document.getElementById('rrestric');           /* «¿Alguna restricción alimentaria?» */
+          var r = String(rr && rr.value || '').trim();
+          return (m + (r ? (m ? ' · ' : '') + 'Restricción: ' + r : '')).slice(0, 500);
+        })(),
         trampa: '', segundos: Math.round((Date.now() - T0) / 1000)
       })
     }).then(function (r) { return r.json(); }).then(function (j) {
