@@ -1966,6 +1966,46 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.5
   },
 
+  "d27-negro-oro-video": {
+    nombre:     "Negro mate con lacre dorado · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.7/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d27-negro-oro-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/d27-negro-oro-1080.jpg",
+    color:      "#232323",
+    luz:        4.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.5
+  },
+
+  "d33b-mariposas-video": {
+    nombre:     "Mariposas y perlas con lacre de mariposa · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.7/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d33b-mariposas-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/d33b-mariposas-1080.jpg",
+    color:      "#BDA290",
+    luz:        4.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d36-blanco-video": {
+    nombre:     "Blanco con hilo y lacre negro · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.7/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d36-blanco-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_south,w_0.85,h_0.85/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/d36-blanco-1080.jpg",
+    color:      "#D3D1CB",
+    luz:        3.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d39-concha-video": {
+    nombre:     "Acuarela celeste con conchas y lacre de perla · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.1/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d39-concha-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d39-concha-1080.jpg",
+    color:      "#76C3CD",
+    luz:        3.8,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "tem-maria-paz-y-joaquin-video": {
     nombre:     "María Paz y Joaquín · papel kraft con espigas de trigo, lacre dorado con espiga · solapa con lacre sube y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-maria-paz-y-joaquin.mp4",
