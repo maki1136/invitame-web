@@ -233,18 +233,6 @@
       '               0 54px 110px rgba(20,14,6,.34);',
       '    outline:1px solid rgba(255,255,255,.20);outline-offset:-1px}',
       '  .frame img{max-width:100%;height:auto}',
-      /* ★ 21/10/2026 (Jazmín: «desde la compu queda súper feo ese negro
-         amarronado»). Los costados se eligen en el panel: PRINCIPAL → «El fondo
-         de la invitación» → «Los costados en la compu» (`fx.costados`).
-           foto  (por defecto) la portada desenfocada, como siempre
-           suave la misma foto, clara: sin oscurecer ni viñeta negra
-           claro el color del papel de la invitación, liso                    */
-      '  html[data-costados="suave"] #inv-lienzo{filter:blur(36px) saturate(1) brightness(1.06)}',
-      '  html[data-costados="suave"] #inv-tinte{opacity:.08}',
-      '  html[data-costados="suave"] #inv-vinieta{background:radial-gradient(115% 78% at 50% 42%,rgba(255,255,255,0) 30%,rgba(255,255,255,.18) 75%,rgba(255,255,255,.30) 100%)}',
-      '  html[data-costados="claro"] #inv-lienzo,html[data-costados="claro"] #inv-tinte{display:none}',
-      '  html[data-costados="claro"] #inv-vinieta{background:radial-gradient(120% 85% at 50% 40%,rgba(0,0,0,0) 40%,rgba(0,0,0,.06) 100%)}',
-      '  html[data-costados="claro"],html[data-costados="claro"] body{background:var(--lino,#f6f2ea) !important;background-image:none !important}',
       '}',
 
       /* ---- LA TABLET ---------------------------------------------------------
@@ -360,8 +348,35 @@
     if (l.style.backgroundImage !== css) l.style.backgroundImage = css;
   }
 
-  /* ★ 21/10: los costados que eligieron en el panel (fx.costados) */
+  /* ★ 21/10: los costados que eligieron en el panel (fx.costados).
+     ⚠️ VAN EN SU PROPIA HOJA (#encuadre-costados), no en #encuadre-monitor:
+     i/index.php ya imprime una COPIA de #encuadre-monitor desde el servidor y,
+     como el módulo no reinstala una hoja que ya existe, lo que se agregue ahí
+     nunca llega (ver la nota en i/index.php). */
+  function hojaCostados() {
+    if (document.getElementById('encuadre-costados')) return;
+    var s = document.createElement('style');
+    s.id = 'encuadre-costados';
+    s.textContent = [
+      '@media (min-width:' + MIN_VENTANA + 'px){',
+      /* ★ 21/10/2026 (Jazmín: «desde la compu queda súper feo ese negro
+         amarronado»). Los costados se eligen en el panel: PRINCIPAL → «El fondo
+         de la invitación» → «Los costados en la compu» (`fx.costados`).
+           foto  (por defecto) la portada desenfocada, como siempre
+           suave la misma foto, clara: sin oscurecer ni viñeta negra
+           claro el color del papel de la invitación, liso                    */
+      '  html[data-costados="suave"] #inv-lienzo{filter:blur(36px) saturate(1) brightness(1.06)}',
+      '  html[data-costados="suave"] #inv-tinte{opacity:.08}',
+      '  html[data-costados="suave"] #inv-vinieta{background:radial-gradient(115% 78% at 50% 42%,rgba(255,255,255,0) 30%,rgba(255,255,255,.18) 75%,rgba(255,255,255,.30) 100%)}',
+      '  html[data-costados="claro"] #inv-lienzo,html[data-costados="claro"] #inv-tinte{display:none}',
+      '  html[data-costados="claro"] #inv-vinieta{background:radial-gradient(120% 85% at 50% 40%,rgba(0,0,0,0) 40%,rgba(0,0,0,.06) 100%)}',
+      '  html[data-costados="claro"],html[data-costados="claro"] body{background:var(--lino,#f6f2ea) !important;background-image:none !important}',
+      '}'
+    ].join('\n');
+    (document.head || document.documentElement).appendChild(s);
+  }
   function costados() {
+    hojaCostados();
     var c = '';
     try { c = String(((window.INVEV || {}).fx || {}).costados || ''); } catch (e) {}
     if (!/^(suave|claro)$/.test(c)) c = '';
