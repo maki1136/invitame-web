@@ -235,13 +235,15 @@
       '</div>'+
       '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">'+
         '<h3 style="margin:0">Asistencia actual</h3><button class="btn" id="btnBajarConf" style="width:auto;padding:9px 16px">Descargar Excel</button></div>'+
-        (l.length?'<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13.5px">'+
-          '<tr style="text-align:left;color:#9a8f88;border-bottom:2px solid #efe7de"><th style="padding:8px 6px">Nombre y apellido</th><th style="padding:8px 6px">Asistirá</th><th style="padding:8px 6px">Personas</th><th style="padding:8px 6px">Mensaje</th></tr>'+
-          l.map(g=>{const e=estadoDe(g); return '<tr style="border-bottom:1px solid #f5efe8"><td style="padding:8px 6px;font-weight:700">'+esc(g.nombre)+'</td>'+
-            '<td style="padding:8px 6px"><span class="chip '+e+'">'+(e==='si'?'Sí':'No')+'</span></td>'+
-            '<td style="padding:8px 6px">'+(e==='si'?Math.max(1,personasDe(g)):'-')+'</td>'+
-            '<td style="padding:8px 6px;color:#6b6058;font-style:italic">'+esc(g.rsvpMensaje||'')+'</td></tr>';}).join('')+
-          '</table></div>':'<div class="vacio">Todavía no respondió nadie. Cuando tus invitados confirmen desde la invitación, aparecen acá.</div>')+
+        (l.length?'<div>'+
+          l.map(g=>{const e=estadoDe(g), n=Math.max(1,personasDe(g));
+            return '<div style="padding:10px 2px;border-bottom:1px solid #f5efe8">'+
+              '<div style="display:flex;align-items:center;gap:10px"><span style="flex:1;font-weight:800;font-size:14px">'+esc(g.nombre)+'</span>'+
+              '<span style="font-size:12.5px;color:#6b6058;white-space:nowrap">'+(e==='si'?(n+(n===1?' persona':' personas')):'')+'</span>'+
+              '<span class="chip '+e+'">'+(e==='si'?'Asistirá':'No asistirá')+'</span></div>'+
+              (g.rsvpMensaje?'<div style="color:#6b6058;font-size:13px;font-style:italic;margin-top:3px">'+esc(g.rsvpMensaje)+'</div>':'')+
+            '</div>';}).join('')+
+          '</div>':'<div class="vacio">Todavía no respondió nadie. Cuando tus invitados confirmen desde la invitación, aparecen acá.</div>')+
       '</div>';
     const b=$('btnBajarConf'); if(b) b.onclick=()=>bajarCSV('confirmaciones-'+SLUG+'.csv',
       [['Nombre y apellido','Asistirá','Personas','Mensaje']].concat(l.map(g=>{const e=estadoDe(g); return [g.nombre, e==='si'?'Sí':'No', e==='si'?Math.max(1,personasDe(g)):0, g.rsvpMensaje||''];})));
