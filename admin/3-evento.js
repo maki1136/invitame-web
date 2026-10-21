@@ -84,7 +84,7 @@
     try{const url=await INV.uploadImage(f); D.fx=D.fx||{}; D.fx.personas=Object.assign({},D.fx.personas,{adorno:url}); renderPersonas(); postPreview();}
     catch(e){alert('No pude subir la imagen. Probá de nuevo.');}
   }
-  function quitarAdornoPersonas(){ if(D.fx&&D.fx.personas){ delete D.fx.personas.adorno; } renderPersonas(); postPreview(); }
+  function quitarAdornoPersonas(){ if(D.fx&&D.fx.personas){ D.fx.personas.adorno=''; } renderPersonas(); postPreview(); }  /* '' y no delete: guardar hace merge */
   function addPersona(){if(!Array.isArray(D.personas))D.personas=[];if(D.personas.length>=12)return;D.personas.push({nombre:'',rel:'',foto:''});renderPersonas();}
   function delPersona(i){D.personas.splice(i,1);renderPersonas();}
   // ⚠️ Sin postPreview la miniatura no se enteraba (lo encontró el banco del panel, 30/9/2026)

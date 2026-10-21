@@ -172,7 +172,7 @@
     chkG.style.cssText = 'margin-top:2px';
     chkG.onchange = function () {
       var b = borrador() || d;
-      if (chkG.checked) datos(b).general = true; else delete datos(b).general;
+      datos(b).general = !!chkG.checked;   /* false, no delete: guardar hace merge y un borrado no viaja */
       refrescar();
     };
     var txG = document.createElement('span');
