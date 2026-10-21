@@ -51,7 +51,11 @@
          «Ver más» y un botón adentro quedaría escondido. */
       var bloque = t.parentNode.closest ? t.parentNode.closest('p,div') : null;
       t.parentNode.replaceChild(frag, t);
+      /* se sube hasta el hijo directo de la sección (p. ej. la caja «Ver más»,
+         .iv-plie, que recorta lo que tiene adentro) */
       var ancla = (bloque && bloque !== sec) ? bloque : null;
+      while (ancla && ancla.parentNode && ancla.parentNode !== sec) ancla = ancla.parentNode;
+      if (ancla && ancla.parentNode !== sec) ancla = null;
       botones.forEach(function (a) {
         var caja = document.createElement('div');
         caja.style.cssText = 'text-align:center';
