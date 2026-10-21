@@ -1958,7 +1958,7 @@ window.SOBRES_INVITAME = {
 
   "tem-lupita-mis15-video": {
     nombre:     "Lupita · lentejuelas plateadas con cinta negra y lacre de bola disco · solapa con lacre sube y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-lupita-mis15-f2.mp4",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.2/w_1080,q_50,vc_h264,ac_none/invitame/sobres/gen22v/tem-lupita-mis15-f2.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-lupita-mis15-f2.jpg",
     color:      "#545355",
     luz:        3.9,
