@@ -197,111 +197,19 @@ $pareja = trim($n1 . (($n1 !== '' && $n2 !== '') ? ' & ' : '') . $n2);
 if ($pareja === '') $pareja = $slug;
 
 // ---------- armar el mail ----------
+// ★ 20/10/2026 (Jazmín): el aviso trae la respuesta nueva arriba y la LISTA
+// COMPLETA actualizada abajo, como en el sistema viejo. Ver rsvp-mail-lib.php.
+include_once __DIR__ . '/rsvp-mail-lib.php';
 $asuntoBase = $sv('c_titulo-del-correo');
 if ($asuntoBase === '') $asuntoBase = 'Confirmación de asistencia';
-$quien   = ($nombre !== '') ? $nombre : 'Un invitado';
-$estadoT = ($estado === 'confirmado') ? 'CONFIRMÓ' : 'NO podrá asistir';
-
+$quien  = ($nombre !== '') ? $nombre : 'Un invitado';
 $asunto = $asuntoBase . ' — ' . $quien . ' (' . $pareja . ')';
-
-$cuerpo  = "Nueva respuesta en tu invitación\n";
-$cuerpo .= "----------------------------------\n\n";
-$cuerpo .= "Evento:    " . $pareja . "\n";
-$cuerpo .= "Invitado:  " . $quien . "\n";
-$cuerpo .= "Respuesta: " . $estadoT . "\n";
-if ($estado === 'confirmado' && $personas > 0) {
-  $cuerpo .= "Personas:  " . $personas . "\n";
-}
-if ($mensaje !== '') {
-  $cuerpo .= "\nMensaje que dejó:\n\"" . $mensaje . "\"\n";
-}
-$cuerpo .= "\nVer todas las confirmaciones en el panel:\n";
-$cuerpo .= $SITE . "/admin.html?e=" . rawurlencode($slug) . "\n\n";
-$cuerpo .= "-- \nInvítame · aviso automático\n";
-
-// ============================================================
-//  ENVÍO
-//  Camino A (RECOMENDADO): servicio de mail por API (Brevo / Resend).
-//    La clave vive FUERA del repo público, en:
-//        public_html/invitame-config.php
-//    con estas líneas (además de las de Cloudinary):
-//        $MAIL_KEY  = 'la_clave_del_servicio';
-//        $MAIL_FROM = 'littlemomentsok@gmail.com';   // remitente verificado
-//        // $MAIL_API = 'brevo';  // o 'resend' (si no se pone, se detecta solo)
-//
-//  Camino B (fallback): mail() de Hostinger. Funciona sólo si el dominio
-//    tiene MX/SPF/DKIM configurados; si no, Gmail lo descarta en silencio.
-// ============================================================
-$MAIL_KEY = ''; $MAIL_FROM = ''; $MAIL_API = '';
-// La config vive FUERA de la carpeta pública. Se busca subiendo carpetas (hasta 6),
-// igual que el resto de los PHP: así anda en el sitio de verdad (public_html) y en
-// el de prueba (public_html/sitio-prueba) sin tocar nada.
-for ($ivDir = __DIR__, $ivI = 0; $ivI < 6; $ivI++) {
-  if (is_readable($ivDir . '/invitame-config.php')) { include $ivDir . '/invitame-config.php'; break; }
-  $ivPadre = dirname($ivDir); if ($ivPadre === $ivDir) break; $ivDir = $ivPadre;
-}
-
-$deDominio = parse_url($SITE, PHP_URL_HOST);
-$de = ($MAIL_FROM !== '' && filter_var($MAIL_FROM, FILTER_VALIDATE_EMAIL))
-      ? $MAIL_FROM
-      : 'invitaciones@' . $deDominio;
-
-$enviado = false;
-$via     = 'mail';
-$detalle = '';
-
-if ($MAIL_KEY !== '') {
-  $api = $MAIL_API !== '' ? strtolower($MAIL_API)
-                          : ((strpos($MAIL_KEY, 're_') === 0) ? 'resend' : 'brevo');
-  if ($api === 'resend') {
-    $url = 'https://api.resend.com/emails';
-    $hdr = array('Authorization: Bearer ' . $MAIL_KEY, 'Content-Type: application/json');
-    $pay = json_encode(array(
-      'from'     => 'Invitame <' . $de . '>',
-      'to'       => array($para),
-      'reply_to' => $para,
-      'subject'  => $asunto,
-      'text'     => $cuerpo,
-    ));
-  } else {
-    $url = 'https://api.brevo.com/v3/smtp/email';
-    $hdr = array('api-key: ' . $MAIL_KEY, 'Content-Type: application/json', 'accept: application/json');
-    $pay = json_encode(array(
-      'sender'      => array('name' => 'Invitame', 'email' => $de),
-      'to'          => array(array('email' => $para)),
-      'replyTo'     => array('email' => $para),
-      'subject'     => $asunto,
-      'textContent' => $cuerpo,
-    ));
-  }
-  $ch = curl_init($url);
-  curl_setopt_array($ch, array(
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => $pay,
-    CURLOPT_HTTPHEADER     => $hdr,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_CONNECTTIMEOUT => 4,
-    CURLOPT_TIMEOUT        => 8,
-  ));
-  $rr = curl_exec($ch);
-  $cc = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  curl_close($ch);
-  $via     = $api;
-  $enviado = ($cc >= 200 && $cc < 300);
-  if (!$enviado) $detalle = 'http' . $cc . ' ' . substr((string) $rr, 0, 200);
-}
-
-// fallback: mail() del hosting
-if (!$enviado && $MAIL_KEY === '') {
-  $headers  = "From: Invitame <" . $de . ">\r\n";
-  $headers .= "Reply-To: " . $para . "\r\n";
-  $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-  $headers .= "X-Mailer: Invitame\r\n";
-  if (function_exists('mail')) {
-    $enviado = @mail($para, '=?UTF-8?B?' . base64_encode($asunto) . '?=', $cuerpo, $headers, '-f' . $de);
-  }
-  $via = 'mail';
-}
+$lista  = ($idToken !== '') ? ivm_listado($PROJECT, $slug, $idToken) : array();
+list($html, $cuerpo) = ivm_armar($pareja,
+  array('token' => $token, 'nombre' => $quien, 'estado' => $estado,
+        'personas' => ($estado === 'confirmado' ? $personas : 0), 'mensaje' => $mensaje),
+  $lista ?: array(), $SITE . '/mi-panel.html?e=' . rawurlencode($slug));
+list($enviado, $via, $detalle) = ivm_enviar($para, $asunto, $html, $cuerpo, $SITE);
 
 echo json_encode(array(
   'ok'         => (bool) $enviado,

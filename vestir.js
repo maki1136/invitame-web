@@ -283,6 +283,7 @@
       d.fx.rsvp = d.fx.rsvp || {};
       if (rsvpCliente.limite) d.fx.rsvp.limite = rsvpCliente.limite;
       if (rsvpCliente.restricciones) d.fx.rsvp.restricciones = true;
+      if (rsvpCliente.general) d.fx.rsvp.general = true;   /* 20/10: un solo link para todos */
     }
 
     /* y recién ahora, la voz que grabó ESTE cliente. Va DESPUÉS de la limpieza

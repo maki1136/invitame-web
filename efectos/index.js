@@ -701,6 +701,7 @@
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
+    '/efectos/rsvp-general.js',        /* 20/10: confirmar con un solo link para todos (Pack Estándar) */
     '/efectos/secciones-ocultas.js',   /* 20/10: secciones que no van (fx.ocultas), formulario y panel */
     '/efectos/personas-foto.js',       /* 20/10: personas sin foto o con el adorno del diseño (Jazmín) */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */

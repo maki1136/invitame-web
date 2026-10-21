@@ -159,6 +159,29 @@
     filaS.appendChild(chkS); filaS.appendChild(txS);
     caja.appendChild(filaS);
 
+    /* ★ 20/10/2026 — pedido de Jazmín: el Pack Estándar manda UN SOLO LINK para
+       todos. Con esto, sin link de invitado se puede confirmar igual (nombre,
+       sí/no, personas, mensaje). Lo hacen /efectos/rsvp-general.js y
+       /rsvp-general.php. El mail al cliente sale del aviso por mail de abajo. */
+    var filaG = document.createElement('label');
+    filaG.style.cssText = 'display:flex;gap:8px;align-items:flex-start;font-size:12px;font-weight:600;margin:10px 0 0;cursor:pointer';
+    var chkG = document.createElement('input');
+    chkG.type = 'checkbox';
+    chkG.id = 'rsvp-general-panel';
+    chkG.checked = !!datos(d).general;
+    chkG.style.cssText = 'margin-top:2px';
+    chkG.onchange = function () {
+      var b = borrador() || d;
+      if (chkG.checked) datos(b).general = true; else delete datos(b).general;
+      refrescar();
+    };
+    var txG = document.createElement('span');
+    txG.innerHTML = 'Un solo link para todos (Pack Estándar)<br><span style="font-weight:400;opacity:.62;font-size:11px">' +
+      'Con el link general cada invitado escribe su nombre y confirma. Las respuestas aparecen en INVITADOS. ' +
+      'Si además prendés «Habilitar aviso por mail», al cliente le llega un correo con la lista actualizada en cada respuesta.</span>';
+    filaG.appendChild(chkG); filaG.appendChild(txG);
+    caja.appendChild(filaG);
+
     return caja;
   }
 
