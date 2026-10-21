@@ -791,6 +791,8 @@
       P + '#video-sec .rd-tapa{ background:' + CENTRO + ', url("' + TAPA_VIDEO + '") center/cover no-repeat!important; border-radius:' + (E.radio === '0' ? '0' : '16px') + '!important; border:0!important; box-shadow:0 12px 28px rgba(' + RT + ',.20), 0 0 0 1px ' + ORO + '!important; }',
       /* el «Aviso de privacidad» salía azul de fábrica (rgb 0,0,238): lo cazó la regla familia-de-color, 21/10 */
       P + 'a[href*="privacidad"], ' + P + '#aviso-privacidad, ' + P + '.aviso-priv{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
+      /* «Copiar» de los datos de transferencia: en oro bajado daba 4,7 (piso 5) — regla contraste, 21/10 */
+      P + '.val .copy{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
       P + '#spotify-sec .rd-tapa{ background:' + CENTRO + ', url("' + TAPA_PLAY + '") center/cover no-repeat!important; border-radius:' + (E.radio === '0' ? '0' : '16px') + '!important; border:0!important; box-shadow:0 12px 28px rgba(' + RT + ',.20), 0 0 0 1px ' + ORO + '!important; }',
       P + '.rd-tapa .rd-aro{ border-color:' + ORO_CL + '!important; background:rgba(' + RT + ',.45)!important; box-shadow:0 0 0 1px rgba(' + RP + ',.5), 0 6px 18px rgba(' + RT + ',.3)!important; opacity:1!important; }',
       P + '.rd-tapa .rd-aro::after{ border-left-color:' + PAPEL + '!important; }',
