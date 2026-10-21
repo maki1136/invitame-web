@@ -234,7 +234,15 @@
       nm:['Great Vibes','clamp(60px,16vw,88px)','normal',400,'none','0',1.1],
       pk:['Jost','12px','uppercase','.38em','normal'],
       h2:['27px','.02em','none','italic',400],
-      kk:['Great Vibes','30px','none','0','m'] }
+      kk:['Great Vibes','30px','none','0','m'] },
+    /* 21 · XV · la noche estrellada de Van Gogh (20/10/2026, pedido de Jazmín):
+       azul cobalto, cielo de remolinos al óleo y estrellas amarillas; Allura + Playfair */
+    estrellada: { nombre: 'XV · Noche estrellada', pa:'#F2F6FC', pa2:'#DDE7F5', ti:'#14254A', ti2:'#1F3463', ti3:'#B9CBE8', ac:'#E8B83A', mt:'oro', mtT:'#7A5A12', base:'estrellada',
+      disp:'Playfair Display', scr:'Allura', txt:'Jost', h3:'Playfair Display', adorno:'luna', forma:'camafeo', boton:'999px', radio:'18px',
+      nm:['Allura','clamp(62px,17vw,92px)','normal',400,'none','0',1.05],
+      pk:['Jost','12px','uppercase','.38em','normal'],
+      h2:['27px','.02em','none','italic',400],
+      kk:['Allura','32px','none','0','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -402,6 +410,12 @@
       '<g fill="' + c + '"><circle cx="41" cy="31" r="1.4"/><circle cx="45" cy="28" r=".9"/><circle cx="8" cy="21" r="1"/></g>');
     /* PALMERA: tronco curvo y cinco hojas */
     /* MARIPOSA: cuatro alas con nervadura calada y antenitas */
+    /* LUNA de Van Gogh: medialuna con halo y una estrellita con remolino */
+    if (a === 'luna') return svg(
+      '<circle cx="21" cy="24" r="14" fill="' + ACENTO + '" opacity=".22"/>' +
+      '<path fill="' + c + '" d="M26 11 C17 11 11 18 11 25 C11 33 18 39 26 38 C20 36 16 31 16 25 C16 18 20 13 26 11 Z"/>' +
+      '<path d="' + estrella(35, 16, 5.2, 2.2) + '" fill="' + ACENTO + '"/>' +
+      '<path d="M29 31 C33 27 39 28 40 32 C41 36 36 38 34 35 C33 33 35 31 37 32" stroke="' + c + '" stroke-width="1.3" fill="none" stroke-linecap="round"/>');
     if (a === 'mariposa') return svg(
       '<g fill="' + c + '"><path d="M23 24 C18 10 6 8 5 16 C4 23 12 26 23 25 Z"/><path d="M25 24 C30 10 42 8 43 16 C44 23 36 26 25 25 Z"/>' +
       '<path d="M23 26 C14 27 9 33 12 38 C15 42 21 36 23 28 Z"/><path d="M25 26 C34 27 39 33 36 38 C33 42 27 36 25 28 Z"/>' +
@@ -775,6 +789,10 @@
     var CENTRO = 'radial-gradient(circle at 50% 50%, rgba(' + RT + ',.36) 0, rgba(' + RT + ',.14) 26%, rgba(' + RT + ',0) 46%)';
     A.push(
       P + '#video-sec .rd-tapa{ background:' + CENTRO + ', url("' + TAPA_VIDEO + '") center/cover no-repeat!important; border-radius:' + (E.radio === '0' ? '0' : '16px') + '!important; border:0!important; box-shadow:0 12px 28px rgba(' + RT + ',.20), 0 0 0 1px ' + ORO + '!important; }',
+      /* el «Aviso de privacidad» salía azul de fábrica (rgb 0,0,238): lo cazó la regla familia-de-color, 21/10 */
+      P + 'a[href*="privacidad"], ' + P + '#aviso-privacidad, ' + P + '.aviso-priv{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
+      /* «Copiar» de los datos de transferencia: en oro bajado daba 4,7 (piso 5) — regla contraste, 21/10 */
+      P + '.val .copy{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
       P + '#spotify-sec .rd-tapa{ background:' + CENTRO + ', url("' + TAPA_PLAY + '") center/cover no-repeat!important; border-radius:' + (E.radio === '0' ? '0' : '16px') + '!important; border:0!important; box-shadow:0 12px 28px rgba(' + RT + ',.20), 0 0 0 1px ' + ORO + '!important; }',
       P + '.rd-tapa .rd-aro{ border-color:' + ORO_CL + '!important; background:rgba(' + RT + ',.45)!important; box-shadow:0 0 0 1px rgba(' + RP + ',.5), 0 6px 18px rgba(' + RT + ',.3)!important; opacity:1!important; }',
       P + '.rd-tapa .rd-aro::after{ border-left-color:' + PAPEL + '!important; }',

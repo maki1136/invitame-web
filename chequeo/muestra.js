@@ -616,6 +616,17 @@
     tls.forEach(function (tl) {
       var its = [].slice.call(tl.children).filter(function (e) { return e.classList.contains('it') && ubicable(e); });
       if (!its.length) return;
+      /* ★ 21/10/2026 · Maki pidió SACAR las líneas del itinerario («quedan horribles»):
+         con fx.itinerario.linea='no' el .tl lleva `tl-sin-linea` y no hay vía que medir.
+         Se pasa SÓLO si de verdad no queda ninguna línea a la vista (ni vía ni .tl-prog). */
+      if (tl.classList.contains('tl-sin-linea')) {
+        var vb = getComputedStyle(tl, '::before'), pg0 = tl.querySelector('.tl-prog');
+        var visibleVia = vb.content !== 'none' && vb.display !== 'none' && parseFloat(vb.width) > 0 && parseFloat(vb.opacity || 1) > 0;
+        var visibleProg = pg0 && getComputedStyle(pg0).display !== 'none' && pg0.getBoundingClientRect().height > 4;
+        if (visibleVia || visibleProg) malos.push('tiene «sin línea» pero la línea se sigue viendo');
+        else medidos++;
+        return;
+      }
       var v = getComputedStyle(tl, '::before');
       if (v.content === 'none' || v.display === 'none') { malos.push('la vía no es .tl::before (no se pudo medir)'); return; }
       var R = tl.getBoundingClientRect();
