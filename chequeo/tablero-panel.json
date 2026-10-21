@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-21T19:00:22.178Z",
+ "cuando": "2026-10-21T21:37:42.905Z",
  "slug": "camila-y-tomas",
- "total": 393,
+ "total": 394,
  "verde": 392,
- "amarillo": 0,
+ "amarillo": 1,
  "rojo": 1,
  "gris": 0,
  "items": [
@@ -160,6 +160,17 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.fondo.tipo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "fondo-selector",
+   "control": "Qué reemplaza el papel",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.costados",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1648,8 +1659,9 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
