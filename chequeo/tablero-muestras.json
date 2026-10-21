@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-21T22:16:02.365Z",
+ "cuando": "2026-10-21T22:49:26.394Z",
  "total": 55,
- "verde": 44,
- "rojo": 11,
+ "verde": 49,
+ "rojo": 6,
  "gris": 0,
  "items": [
   {
@@ -199,64 +199,22 @@
   {
    "slug": "luciana-y-sebastian",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "fondo: previa «video» · publicada «»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
    "slug": "lupita-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "fondo: previa «video» · publicada «»",
-    "sección #1: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección pv-sec: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección #3: previa «rgba(21, 20, 26, 0.5)/rgb(230, 228, 238)» · publicada «rgb(21, 20, 26)/rgb(230, 228, 238)»",
-    "sección carta: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección itinerario: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección dresscode: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección galeria: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección spotify: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección regalos: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección share-sec: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección filtro-sec: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección gal-seccion: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgb(21, 20, 26)/rgb(58, 69, 61)»",
-    "sección contacto-sec: previa «rgba(30, 28, 37, 0.5)/rgb(58, 69, 61)» · publicada «rgb(30, 28, 37)/rgb(58, 69, 61)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
    "slug": "maria-jose-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "col: previa «degrade» · publicada «»",
-    "fondo: previa «imagen» · publicada «»",
-    "nombres: previa «Forum, serif 32.76px rgb(232, 223, 200)» · publicada «\"Rouge Script\", cursive 54px rgb(251, 247, 239)»",
-    "sección #1: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «oculta»",
-    "sección pv-sec: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «—»",
-    "sección #3: previa «rgba(27, 20, 44, 0.28)/rgb(40, 30, 62)» · publicada «—»",
-    "sección carta: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección frase: previa «oculta» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección eventos: previa «rgb(60, 46, 94)/rgb(198, 192, 168)» · publicada «rgb(18, 13, 32)/rgb(238, 230, 214)»",
-    "sección itinerario: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección hospedaje: previa «rgb(60, 46, 94)/rgb(198, 192, 168)» · publicada «rgb(18, 13, 32)/rgb(238, 230, 214)»",
-    "sección dresscode: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección padres: previa «rgb(60, 46, 94)/rgb(198, 192, 168)» · publicada «rgb(18, 13, 32)/rgb(238, 230, 214)»",
-    "sección galeria: previa «rgb(40, 30, 62)/rgb(198, 192, 168)» · publicada «rgb(26, 19, 48)/rgb(58, 69, 61)»",
-    "sección trivia: previa «rgb(60, 46, 94)/rgb(198, 192, 168)» · publicada «rgb(18, 13, 32)/rgb(238, 230, 214)»",
-    "sección regalos: previa «rgb(40, 30, 62)/rgb(198, 192, 168)» · publicada «rgb(26, 19, 48)/rgb(58, 69, 61)»",
-    "sección hashtag: previa «rgb(60, 46, 94)/rgb(198, 192, 168)» · publicada «rgb(18, 13, 32)/rgb(237, 232, 244)»",
-    "sección spotify: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección confirmacion: previa «rgb(60, 46, 94)/rgb(198, 192, 168)» · publicada «rgb(42, 32, 69)/rgb(238, 230, 214)»",
-    "sección share-sec: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección filtro-sec: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «—»",
-    "sección gal-seccion: previa «rgba(40, 30, 62, 0.28)/rgb(198, 192, 168)» · publicada «—»",
-    "sección contacto-sec: previa «rgba(27, 20, 44, 0.28)/rgb(198, 192, 168)» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»",
-    "sección #2: previa «—» · publicada «rgb(249, 238, 242)/rgb(58, 69, 61)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -269,10 +227,8 @@
   {
    "slug": "maria-paz-y-santiago",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección #3: previa «rgba(168, 125, 90, 0.15)/rgb(247, 241, 231)» · publicada «rgba(74, 59, 46, 0.15)/rgb(247, 241, 231)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -329,7 +285,7 @@
     "sección dresscode: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección galeria: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección video: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
-    "sección spotify: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
+    "sección spotify: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección regalos: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección share-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
     "sección filtro-sec: previa «rgba(231, 233, 236, 0.55)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.5)/rgb(58, 69, 61)»",
@@ -368,10 +324,8 @@
   {
    "slug": "paloma-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(62, 44, 37)» · publicada «rgba(246, 240, 228, 0.28)/rgb(62, 44, 37)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
