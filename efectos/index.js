@@ -701,6 +701,7 @@
     '/efectos/pieza-carta.js',         /* escribe los nombres sobre la tarjeta del sobre */
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
+    '/efectos/imagenes-del-panel.js',  /* 21/10: la foto que se carga en el panel (img_c_) gana a la de la muestra (img_f-) */
     '/efectos/hoteles-bloques.js',     /* 20/10: un hotel por bloque, con un solo «Reservar» (Jazmín) */
     '/efectos/rsvp-general.js',        /* 20/10: confirmar con un solo link para todos (Pack Estándar) */
     '/efectos/secciones-ocultas.js',   /* 20/10: secciones que no van (fx.ocultas), formulario y panel */

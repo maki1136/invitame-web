@@ -205,6 +205,21 @@
     sel.onchange = function () { fondo(d).tipo = sel.value; refrescar(); pintar(d); };
     cuerpo.appendChild(fila('Qué reemplaza el papel', sel));
 
+    /* ★ 21/10/2026 (Jazmín: «desde la compu queda súper feo ese negro
+       amarronado»): qué se ve a los COSTADOS de la invitación en una compu.
+       Lo pinta /efectos/encuadre-monitor.js. Se guarda '' (no se borra): el
+       guardado hace merge y un borrado no viaja. */
+    var selC = document.createElement('select');
+    [['', 'La portada desenfocada, oscura (como siempre)'],
+     ['suave', 'La portada desenfocada, clara'],
+     ['claro', 'Liso, del color del papel']].forEach(function (o) {
+      var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; selC.appendChild(op);
+    });
+    selC.value = (d.fx && d.fx.costados) || '';
+    selC.style.cssText = 'width:100%';
+    selC.onchange = function () { d.fx = d.fx || {}; d.fx.costados = selC.value; refrescar(); };
+    cuerpo.appendChild(fila('Los costados en la compu', selC));
+
     if (!f.tipo) {
       var nota = document.createElement('div');
       nota.textContent = 'Con “Sin fondo” la invitación queda exactamente como está hoy.';

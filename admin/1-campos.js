@@ -180,6 +180,12 @@
     let inp;
     if(t==='c')inp='<input type="color" id="'+id+'"'+oi+' value="'+((bind&&D[bind])?D[bind]:'#2e433c')+'">';
     else if(t==='f'){const _k=bind?('img_'+bind):('img_'+id);inp='<div class="file" onclick="this.nextElementSibling.click()">'+ICO.subir+' Subir imagen · '+l.replace(/\(.*?\)/,'').trim()+'</div><input type="file" accept="image/*" style="display:none" onchange="subirImg(this,\''+_k+'\',\''+id+'\')"><div id="prev-'+id+'">'+(D[_k]?fotoCargadaHtml(D[_k],_k,id):'')+'</div>'+
+      /* ★ 21/10/2026 (Jazmín): en las fotos de los LUGARES, en vez de una foto se
+         puede poner la portada o la imagen del diseño (la de la muestra elegida).
+         Lo hace usarImgDe() en admin/3-evento.js. */
+      (/ceremonia-\d-imagen|imagen-hoteles/.test(_k)?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+
+        '<button type="button" class="addbtn gh" style="padding:5px 10px;font-size:12px" onclick="usarImgDe(\''+_k+'\',\''+id+'\',\'portada\')">Usar la portada</button>'+
+        '<button type="button" class="addbtn gh" style="padding:5px 10px;font-size:12px" onclick="usarImgDe(\''+_k+'\',\''+id+'\',\'diseno\')">Usar la imagen del diseño</button></div>':'')+
       '<div class="hint">'+medidaSugerida(l)+'</div>';}
     else if(t==='font-custom'){const _tg=/secundaria/i.test(l)?'fTit':'nfont';inp='<input type="text" id="'+id+'" placeholder="Nombre o link de Google Fonts (ej: Great Vibes)" oninput="cargarFontCustom(this.value,\''+_tg+'\')">';}
     else if(t==='k'){const _b=claveDe(l);   // antes usaba solo BIND: las casillas sin BIND no guardaban
