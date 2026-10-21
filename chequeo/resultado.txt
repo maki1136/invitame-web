@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitameok.net/i/?e=camila-y-tomas
-Fecha: 21/10/2026, 12:37
+Fecha: 21/10/2026, 13:12
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 1 PROBLEMAS (y 114 cosas bien)
+HAY 5 PROBLEMAS (y 96 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -43,11 +43,12 @@ HAY 1 PROBLEMAS (y 114 cosas bien)
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.0 s)
+   (volvió a su lugar en 14.1 s)
    BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
+   MAL    al volver cae en el mismo lugar
+             -> la invitación anotó 14252 y volvió a 6363
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 143.7 s de punta a punta)
+   (tardó 157.4 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -80,11 +81,11 @@ HAY 1 PROBLEMAS (y 114 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.5 s)
+   (volvió a su lugar en 1.5 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 153.8 s de punta a punta)
+   (tardó 152.1 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -109,7 +110,9 @@ HAY 1 PROBLEMAS (y 114 cosas bien)
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
-   BIEN   ninguna foto viaja sin optimizar
+   MAL    ninguna foto viaja sin optimizar
+             -> 1 cruda(s): invitame/raspadita/tapa-perla-sola-3-10.webp (cuenta oc8cgqt4, por image)
+             quien: tapa-perla -> no la encontre en el documento
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
@@ -121,11 +124,11 @@ HAY 1 PROBLEMAS (y 114 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.6 s)
+   (volvió a su lugar en 8.8 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 113.1 s de punta a punta)
+   (tardó 129.1 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -143,30 +146,19 @@ HAY 1 PROBLEMAS (y 114 cosas bien)
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
-   BIEN   todos los textos se leen
-   BIEN   el boleto del pase se ve entero
-   BIEN   al tocar el boleto, el pedazo se corta y baja
-   BIEN   los módulos vienen en un solo pedido, no de a sesenta
+   ----   1 pantallas no se pudieron recorrer: ahi no se midio el contraste
+   MAL    todos los textos se leen
+             -> "“El mar nos vio empeza" 1.3/3 [#ffffff sobre luminancia 0.04-0.74 · p.frase.reveal] · "Cualquier cosa escríbe" 2.3/4.5 [#6b6157 sobre luminancia 0.34-0.86 · p.reveal.in] · "La fecha" 2.6/3 [#7d5f34 sobre luminancia 0.41-0.75 · div.kick.reveal] · "Raspa para revelar" 2.9/3 [#463b52 sobre luminancia 0.24-0.74 · h2.reveal.in] y 5 más
+   ----   el boleto del pase no esta en esta invitacion (no es un fallo)
+   MAL    los módulos vienen en un solo pedido, no de a sesenta
+             -> llegaron 0 pegados y 2 sueltos (antes eran 56 sueltos)
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.5 s)
-   BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 129.6 s de punta a punta)
+   (tardó 80.8 s de punta a punta)
 
