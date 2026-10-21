@@ -106,7 +106,7 @@
     }catch(e){console.error(e);box.querySelector('.invmodal').innerHTML='<p style="color:#F56770">Error: '+(e.message||e)+'</p>';}
   }
   function filtrarInv(){const q=(el('invfiltro').value||'').toLowerCase();
-    pintarFilasInv(_invData.filter(r=>((r.ev.n1||'')+' '+(r.ev.n2||'')+' '+(r.ev.slug||'')+' '+(r.ev.orden||'')+' '+(r.ev.tpl||'')+' '+quien(r.ev.slug)).toLowerCase().includes(q)));}
+    pintarFilasInv(_invData.filter(r=>((r.ev.n1||'')+' '+(r.ev.n2||'')+' '+(r.ev.slug||'')+' '+ordenDe(r.ev)+' '+(r.ev.tpl||'')+' '+quien(r.ev.slug)).toLowerCase().includes(q)));}
   let _autores={};
   function creadaDe(slug){ const a=_autores[slug]||{}; return a.creada||a.el||''; }
   /* Del mail sale el nombre: littlemomentsok@ es Maki, info@invitameok es Jazmín.
@@ -125,13 +125,29 @@
     if(!c || c===g) return g||c;
     return c+'<div style="font-size:10px;color:#b0a89f">últ.: '+g+'</div>';
   }
+  /* ★ 20/10/2026 (Jazmín): las muestras dicen «MUESTRA XV», «MUESTRA BODA»… en la
+     columna del N° de orden, así se distinguen de un vistazo de las de clientes.
+     Muestra = `fx.muestra.venta` (la marca de las muestras de venta) o una
+     dirección que esté en el catálogo de muestras. El tipo sale de `tipoEvento`. */
+  const ROT_MUESTRA={boda:'BODA',xv:'XV',cumple:'CUMPLEAÑOS',bautismo:'BAUTIZO',comunion:'COMUNIÓN',
+    babyshower:'BABY SHOWER',graduacion:'GRADUACIÓN',corporativo:'CORPORATIVO'};
+  function esMuestraInv(ev){
+    if(ev&&ev.fx&&ev.fx.muestra&&ev.fx.muestra.venta===true) return true;
+    const M=window.MUESTRAS_INVITAME||{};
+    return Object.keys(M).some(k=>M[k]&&M[k].muestra===ev.slug);
+  }
+  function ordenDe(ev){
+    if(!esMuestraInv(ev)) return ev.orden||'';
+    const t=(window.invTipoDe?window.invTipoDe(ev):String(ev.tipoEvento||'boda').toLowerCase());
+    return 'MUESTRA'+(ROT_MUESTRA[t]?' '+ROT_MUESTRA[t]:'');
+  }
   function pintarFilasInv(rows){
     const fmt=f=>{const d=new Date(f);return isNaN(d)?'—':(String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear());};
     const A='style="background:none;border:0;cursor:pointer;font-size:16px;padding:3px 5px" ';
     el('invrows').innerHTML=rows.map(r=>{const ev=r.ev,s=ev.slug,nom=(ev.n1||'')+(ev.n2?' & '+ev.n2:'');
       return '<tr style="border-bottom:1px solid #f1eae2">'+
         '<td style="padding:9px 6px;color:#6D1233;font-weight:700">'+(ev.nEvento||'—')+'</td>'+
-        '<td style="padding:9px 6px">'+(ev.orden||'—')+'</td>'+
+        (esMuestraInv(ev)?'<td style="padding:9px 6px;font-weight:800;color:#b0577a;font-size:12px;letter-spacing:.3px">'+ordenDe(ev)+'</td>':'<td style="padding:9px 6px">'+(ev.orden||'—')+'</td>')+
         '<td style="padding:9px 6px"><b>'+(nom||'—')+'</b><div style="font-size:11px;color:#b0a89f">'+s+' · '+r.inv+' inv · '+r.pp+' pases</div></td>'+
         '<td style="padding:9px 6px;color:#7d756c">'+fmt(ev.fecha)+'</td>'+
         '<td style="padding:9px 6px;color:#7d756c;font-size:12px">'+quien(s)+(creadaDe(s)?'<div style="font-size:10px;color:#b0a89f">'+(((_autores[s]||{}).creada)?'creada ':'guardada ')+fmt(creadaDe(s))+'</div>':'')+'</td>'+
