@@ -762,6 +762,14 @@ if ($conCache) {
 
 if ($img !== '') {
   if (strpos($img, 'http') !== 0) { $img = $SITE . ($img[0] === '/' ? '' : '/i/') . $img; }
+  /* ★ 21/10/2026 — Jazmín: «coloqué una foto en la miniatura y no funciona».
+     La foto estaba bien guardada, pero pesaba 1,4 MB: WhatsApp no dibuja la
+     tarjetita si la imagen pasa de ~600 KB, y la deja sin foto. Si es de
+     Cloudinary se pide achicada (1200 px, jpg, ~150 KB). Sólo si la dirección
+     no trae ya una transformación. */
+  if (preg_match('~^https://res\.cloudinary\.com/[A-Za-z0-9_-]+/image/upload/v\d+/~', $img)) {
+    $img = preg_replace('~(/image/upload/)(v\d+/)~', '$1w_1200,c_limit,q_auto,f_jpg/$2', $img, 1);
+  }
   $tpl = setMeta($tpl, 'property', 'og:image', $img);
   $tpl = setMeta($tpl, 'name', 'twitter:image', $img);
 }
