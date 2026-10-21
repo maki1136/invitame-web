@@ -169,6 +169,13 @@
           vacíos) para que no quede colgado el dato de la boda de ejemplo. */
     for (var i = 1; i <= 3; i++) {
       d['ev' + i + 't']     = s['ev' + i + 't'] || '';
+      /* ★ 21/10/2026 (Jazmín): «Cómo se llama este momento» (ej. «Ceremonia
+         eucarística»). Si lo escriben, va de TÍTULO y el lugar pasa abajo, a la
+         descripción, que es como el motor arma la tarjeta. Si no, como siempre. */
+      if (String(s['ev' + i + 'n'] || '').trim()) {
+        d['ev' + i + 'sub'] = d['ev' + i + 't'];
+        d['ev' + i + 't']   = String(s['ev' + i + 'n']).trim().slice(0, 60);
+      }
       d['ev' + i + 'dir']   = s['ev' + i + 'd'] || '';
       d['ev' + i + 'fecha'] = s['ev' + i + 'f'] || '';
       d['ev' + i + 'maps']  = s['ev' + i + 'maps'] || '';
