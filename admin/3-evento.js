@@ -374,6 +374,25 @@
     const b=p&&p.parentElement&&p.parentElement.querySelector('.file'); if(b) b.innerHTML=ICO.subir+' Subir imagen';
     if(typeof postPreview==='function') postPreview();
   }
+  /* ★ 21/10/2026 (Jazmín): poner en una foto de lugar la PORTADA o la imagen del
+     DISEÑO (la misma foto de la muestra del catálogo elegida), sin subir nada. */
+  async function usarImgDe(key,id,de){
+    let url='';
+    if(de==='portada') url=D.cover||'';
+    else{
+      try{
+        const M=window.MUESTRAS_INVITAME||{}, m=M[D.tpl]||M[String(D.tpl||'').toLowerCase()]||Object.values(M).find(x=>x&&String(x.nombre||'').toLowerCase()===String(D.tpl||'').toLowerCase()), slug=m&&m.muestra;
+        if(slug&&window.INVVESTIR&&INVVESTIR.bajarMuestra){
+          const mu=await INVVESTIR.bajarMuestra(slug), b=String(key).replace(/^img_[cf][_-]/,'').replace(/-+$/,'');
+          url=mu['img_c_'+b]||mu['img_c_'+b+'-']||mu['img_f-'+b+'-']||mu['img_f-'+b]||'';
+        }
+      }catch(e){ console.error(e); }
+    }
+    if(!url){ alert(de==='portada'?'Esta invitación todavía no tiene foto de portada.':'El diseño elegido no trae una imagen para este lugar. Elegí el diseño en PRINCIPAL → «Diseño del catálogo» o subí una foto.'); return; }
+    D[key]=url;
+    const p=el('prev-'+id); if(p)p.innerHTML=fotoCargadaHtml(url,key,id);
+    if(typeof postPreview==='function') postPreview();
+  }
   async function subirImg(input,key,id){
     const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
