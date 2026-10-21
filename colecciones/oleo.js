@@ -385,6 +385,41 @@
         P + '.portada #pv-names{ font-size:clamp(50px,14vw,64px)!important; line-height:1.05!important; }'
       ].join('\n')
     },
+    /* ⭐ VINO (20/10/2026, pedido de Jazmín): la Vaquera en vino tinto, dorado y blanco marfil.
+       Botas vino bordadas en oro, sombrero marfil, rosas vino y marfil sobre heno contra madera blanca. */
+    vino: {
+      hex: { '#C98E8A':'#8E2433', '#E3C2B8':'#F0DCDC', '#D9C3A0':'#D9BC7A', '#B08A4E':'#B8913F', '#F7EFEA':'#FBF6EE', '#FBF6F2':'#FDFAF4', '#4A2E2C':'#3E1520', '#6B4744':'#632A35', '#7A5634':'#7A5A1E', '#82504C':'#6E1A2A', '#FBF4EF':'#FDF8F0', '#F5E6DF':'#F3E3D8', '#2E1C1B':'#2A0E14', '#F2E4DC':'#F5EAE0', '#EAD9B8':'#EAD7A8' },
+      rgb: { '74,46,44':'62,21,32', '201,142,138':'142,36,51', '247,239,234':'251,246,238', '40,20,18':'42,14,20', '60,34,32':'42,14,20', '134,96,58':'122,90,30', '176,138,78':'184,145,63', '217,195,160':'217,188,122', '240,220,211':'240,220,220', '251,246,242':'253,250,244', '255,246,236':'253,248,240', '120,70,60':'42,14,20', '107,71,68':'99,42,53', '251,244,239':'253,248,240' },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/vaquera/vqv-fondo.jpg',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/piezas/vqv-medallon.jpg'
+      },
+      css: [
+        /* portada SIN personas: el texto va arriba, sobre la madera clara; las botas quedan abajo */
+        P + '.portada{ justify-content:flex-start!important; }',
+        P + '.portada .pveil{ background:linear-gradient(to bottom, rgba(253,250,244,.25) 0%, rgba(253,250,244,0) 45%)!important; }',
+        P + '.portada > .c{ margin-top:11vh!important; background:radial-gradient(closest-side, rgba(253,250,244,.6), rgba(253,250,244,.22) 70%, rgba(253,250,244,0))!important; padding:18px 24px!important; }',
+        P + '#pv-kick, ' + P + '.portada #pv-names, ' + P + '.portada #pv-names span, ' + P + '.portada :is(.num, .lab, .sep, .fecha){ color:#3E1520!important; -webkit-text-fill-color:#3E1520!important; text-shadow:0 0 10px rgba(253,250,244,.95)!important; }',
+        /* el fondo va ADELANTE: claro chico y liviano */
+        P + '.frame > section.sec:not(.verde):not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 64% 40% at 50% 45%, rgba(253,250,244,.5) 0%, rgba(253,250,244,.2) 55%, rgba(253,250,244,0) 80%)!important; }',
+        P + '.sec:not(.verde) :is(h2, p, .kick, .frase):not(:is(.evento, .hotel, .pasecard, .cf-letter, .tl) *){ text-shadow:0 0 6px rgba(253,250,244,1), 0 0 14px rgba(253,250,244,.95), 0 0 26px rgba(253,250,244,.8)!important; }',
+        P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(42,14,20,.42) 0, rgba(42,14,20,.18) 24%, rgba(42,14,20,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/vaquera/vqv-tapavid") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(42,14,20,.24)!important; }',
+        P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(42,14,20,.42) 0, rgba(42,14,20,.18) 24%, rgba(42,14,20,0) 44%), url("https://res.cloudinary.com/oc8cgqt4/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/vaquera/vqv-tapaplay") center/cover no-repeat!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(42,14,20,.24)!important; }',
+        P + '.rd-tapa .rd-aro{ border-color:#FDFAF4!important; background:rgba(42,14,20,.5)!important; box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(0,0,0,.4)!important; opacity:1!important; }',
+        P + '.rd-tapa .rd-aro::after{ border-left-color:#FDFAF4!important; }',
+        P + '.rd-tapa .rd-txt{ display:block!important; color:#FDFAF4!important; -webkit-text-fill-color:#FDFAF4!important; text-shadow:0 1px 3px rgba(0,0,0,.85)!important; }',
+        P + '#inv-fondo > video{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
+        P + '.footer .s{ color:#FDFAF4!important; -webkit-text-fill-color:#FDFAF4!important; }',
+        P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }',
+        /* ★ repaso §49 (29/9): la marca del itinerario es la PIEZA de la temática a 28 px (antes un circulito de 18 px) y la vía es un hilo de cuentas de oro, no una raya.
+           Medido: la ficha arranca en x 57 del .tl y la marca de fábrica va en left:-30 (18 px) → centro 36; la vía estaba en left:34 (2 px) → centro 35. Se conserva el centro. */
+        P + '.tl:not(.tl-centro) > .it::before{ width:28px!important; height:28px!important; left:-35px!important; top:-2px!important; background:url("https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto,w_96/invitame/piezas/vqv-medallon.jpg") center/contain no-repeat!important; background-color:transparent!important; border:0!important; box-shadow:none!important; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))!important; }',
+        P + '.tl:not(.tl-centro)::before{ left:33px!important; width:6px!important; background:radial-gradient(circle at 40% 35%, #FFF7E6 0 .8px, #B8913F 1.6px, rgba(0,0,0,0) 2.7px) center top / 6px 8px repeat-y!important; -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; mask-image:linear-gradient(180deg,transparent 0,#000 6%,#000 94%,transparent 100%)!important; }',
+        /* ★ repaso §49 (29/9): el nombre de la portada medía 34 px en el teléfono y no se leía (Maki, en Rapunzel: «no se entiende»). */
+        P + '.portada #pv-names{ font-size:clamp(50px,14vw,64px)!important; line-height:1.05!important; }'
+      ].join('\n')
+    },
     /* ⭐ MONARCA (25/9/2026, XV años): portada SIN personas — bosque de oyameles de Michoacán con monarcas (video, cámara quieta).
        Tinta café tostado (#3B2A1E) sobre crema #FBF6EE, acento naranja monarca (#C1611F), oro #C79A3E. */
     monarca: {
