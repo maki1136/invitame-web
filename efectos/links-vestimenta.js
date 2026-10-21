@@ -33,7 +33,7 @@
     while ((n = w.nextNode())) lista.push(n);
     lista.forEach(function (t) {
       var partes = t.nodeValue.split(RE);
-      var frag = document.createDocumentFragment();
+      var frag = document.createDocumentFragment(), botones = [];
       partes.forEach(function (p, i) {
         if (!p) return;
         if (i % 2 === 1) {
@@ -44,11 +44,21 @@
           a.className = 'btn inv-link-vest';
           a.textContent = rotulo(u);
           a.style.cssText = 'display:inline-block;margin:10px auto 4px;font-style:normal';
-          frag.appendChild(document.createElement('br'));
-          frag.appendChild(a);
+          botones.push(a);
         } else frag.appendChild(document.createTextNode(p));
       });
+      /* el botón va DEBAJO del párrafo, no adentro: el texto largo se corta con
+         «Ver más» y un botón adentro quedaría escondido. */
+      var bloque = t.parentNode.closest ? t.parentNode.closest('p,div') : null;
       t.parentNode.replaceChild(frag, t);
+      var ancla = (bloque && bloque !== sec) ? bloque : null;
+      botones.forEach(function (a) {
+        var caja = document.createElement('div');
+        caja.style.cssText = 'text-align:center';
+        caja.appendChild(a);
+        if (ancla) { ancla.parentNode.insertBefore(caja, ancla.nextSibling); ancla = caja; }
+        else sec.appendChild(caja);
+      });
     });
   }
 
