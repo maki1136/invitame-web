@@ -104,10 +104,14 @@ function ivm_armar($pareja, $nuevo, $lista, $linkPanel) {
 /* Manda el mail por la API (Resend / Brevo) o, sin clave, por mail() del hosting. */
 function ivm_enviar($para, $asunto, $html, $texto, $site) {
   $MAIL_KEY = ''; $MAIL_FROM = ''; $MAIL_API = '';
-  for ($ivDir = __DIR__, $ivI = 0; $ivI < 6; $ivI++) {
-    /* ★ 20/10: la clave del mail puede ir en su PROPIO archivo, invitame-mail.php
-       (fuera de public_html), para no tocar invitame-config.php, que es el de Cloudinary. */
-    if (is_readable($ivDir . '/invitame-mail.php')) { include $ivDir . '/invitame-mail.php'; if ($MAIL_KEY !== '') break; }
+  /* ★ 20/10: la clave del mail va en su PROPIO archivo, invitame-mail.php, FUERA
+     de public_html (no se toca invitame-config.php, que es el de Cloudinary).
+     Si no está, se busca en invitame-config.php como antes. */
+  for ($ivDir = __DIR__, $ivI = 0; $ivI < 7; $ivI++) {
+    if (is_readable($ivDir . '/invitame-mail.php')) { include $ivDir . '/invitame-mail.php'; break; }
+    $ivPadre = dirname($ivDir); if ($ivPadre === $ivDir) break; $ivDir = $ivPadre;
+  }
+  if ($MAIL_KEY === '') for ($ivDir = __DIR__, $ivI = 0; $ivI < 6; $ivI++) {
     if (is_readable($ivDir . '/invitame-config.php')) { include $ivDir . '/invitame-config.php'; break; }
     $ivPadre = dirname($ivDir); if ($ivPadre === $ivDir) break; $ivDir = $ivPadre;
   }
