@@ -2006,7 +2006,70 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* 21/10/2026 · d23, d26, d32, d35, d38 y París: mismos takes que Maki aprobó en 720p, bajados en 1080p reescalado de Flow
+     (verificado cuadro a cuadro contra el 720p). Sin recorte; luz = inicio de la luz − so. */
+  "d23-blanco-video": {
+    nombre:     "Blanco texturado con lacre blanco de guirnalda · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.5/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d23-blanco-uno-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d23-blanco-uno-1080.jpg",
+    color:      "#E0E1E1",
+    luz:        4.2,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d26-gris-plata-video": {
+    nombre:     "Gris perla con lacre plateado · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.9/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d26-gris-plata-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d26-gris-plata-1080.jpg",
+    color:      "#BDBBB6",
+    luz:        4.6,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d32-crema-encaje-video": {
+    nombre:     "Crema con puntilla de encaje y perla · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d32-crema-encaje-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d32-crema-encaje-1080.jpg",
+    color:      "#E2D7CE",
+    luz:        3.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "d35-burdeos-encaje-video": {
+    nombre:     "Burdeos y encaje blanco con lacre de laurel · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d35-rojo-blanco-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d35-rojo-blanco-1080.jpg",
+    color:      "#6D3B3F",
+    luz:        3.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.6
+  },
+
+  "d38-hojas-naranja-video": {
+    nombre:     "Blanco con hojas tropicales en relieve y lacre naranja · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.8/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/d38-hojas-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/d38-hojas-1080.jpg",
+    color:      "#E2E2E2",
+    luz:        4.5,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "paris-bordado-video": {
+    nombre:     "París bordado con solapa en V y lacre crema · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.8/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/paris-bordado-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/paris-bordado-1080.jpg",
+    color:      "#E9E5DD",
+    luz:        4.5,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "puertas-cinta-olivo-video": {
+    oculto:     true,
     nombre:     "Papel marfil con cinta de organza, moño y ramita de olivo · las puertas se abren y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.7/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/manos-puertas-cinta-olivo-b-1080.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/manos-puertas-cinta-olivo-b-1080.jpg",
@@ -2017,6 +2080,7 @@ window.SOBRES_INVITAME = {
   },
 
   "puertas-cinta-olivo-cae-video": {
+    oculto:     true,
     nombre:     "Papel marfil con cinta de organza, moño y ramita de olivo · el moño se suelta y cae, las puertas se abren y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_7.7/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/manos-puertas-cinta-olivo-c-1080.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/manos-puertas-cinta-olivo-c-1080.jpg",
@@ -2027,6 +2091,7 @@ window.SOBRES_INVITAME = {
   },
 
   "puertas-cinta-olivo-desata-video": {
+    oculto:     true,
     nombre:     "Papel marfil con cinta de organza, moño y ramita de olivo · el moño se desata, la cinta cae y las puertas se abren con luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_8.4/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/manos-puertas-cinta-olivo-d-1080.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/manos-puertas-cinta-olivo-d-1080.jpg",
