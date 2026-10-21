@@ -108,7 +108,7 @@ function ivm_enviar($para, $asunto, $html, $texto, $site) {
     /* ★ 20/10: la clave del mail puede ir en su PROPIO archivo, invitame-mail.php
        (fuera de public_html), para no tocar invitame-config.php, que es el de Cloudinary. */
     if (is_readable($ivDir . '/invitame-mail.php')) { include $ivDir . '/invitame-mail.php'; if ($MAIL_KEY !== '') break; }
-    if (is_readable($ivDir . '/invitame-config.php')) { include $ivDir . '/invitame-config.php'; if ($MAIL_KEY !== '') break; }
+    if (is_readable($ivDir . '/invitame-config.php')) { include $ivDir . '/invitame-config.php'; break; }
     $ivPadre = dirname($ivDir); if ($ivPadre === $ivDir) break; $ivDir = $ivPadre;
   }
   $de = ($MAIL_FROM !== '' && filter_var($MAIL_FROM, FILTER_VALIDATE_EMAIL)) ? $MAIL_FROM : 'invitaciones@' . parse_url($site, PHP_URL_HOST);
