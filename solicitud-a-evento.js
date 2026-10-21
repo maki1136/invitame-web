@@ -219,6 +219,11 @@
        y rsvp-preguntas.js) y nacen ENCENDIDAS: si el cliente las llenó, las
        quiere ver. ⚠️ `fx` lo pisa el vestido: /vestir.js las repone. */
     var esLista = function (a) { return Object.prototype.toString.call(a) === '[object Array]'; };
+    /* ★ 20/10/2026 — las secciones que el cliente sacó (las esconde /efectos/secciones-ocultas.js) */
+    if (esLista(s.ocultas) && s.ocultas.length) {
+      d.fx = d.fx || {};
+      d.fx.ocultas = s.ocultas.filter(function (k) { return /^[a-z]{3,12}$/.test(String(k)); }).slice(0, 20);
+    }
     var corto = function (v, n) { return String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, n); };
     if (s.menu && esLista(s.menu.tiempos) && s.menu.tiempos.length) {
       d.fx = d.fx || {};

@@ -76,12 +76,15 @@
     return snap.data();
   }
   async function traerGente(slug, tokens){
-    const out=[];
-    for(const t of (tokens||[])){
-      try{
-        const s = await getDoc(doc(db,'inv_invitados', slug + '__' + t));
-        if(s.exists()){ const d=s.data(); if(d.activo!==false) out.push(Object.assign({token:t}, d)); }
-      }catch(e){}
+    /* ★ 20/10/2026: de a 20 a la vez (con el link general puede haber 200 respuestas) */
+    const out=[], lista=Array.from(new Set(tokens||[]));
+    for(let i=0;i<lista.length;i+=20){
+      await Promise.all(lista.slice(i,i+20).map(async t=>{
+        try{
+          const s = await getDoc(doc(db,'inv_invitados', slug + '__' + t));
+          if(s.exists()){ const d=s.data(); if(d.activo!==false) out.push(Object.assign({token:t}, d)); }
+        }catch(e){}
+      }));
     }
     return out;
   }
@@ -199,20 +202,76 @@
   // =====================================================================
   //  VISTAS
   // =====================================================================
+  /* ★ 20/10/2026 — PACK ESTÁNDAR («Un solo link para todos»): el panel es sólo
+     para MIRAR las confirmaciones. No hay pases, mesas ni QR: se esconden, y
+     «Confirmaciones» muestra la lista completa con los totales y el Excel. */
+  const GENERAL = () => !!(PANEL && PANEL.general === true);
+  function menuGeneral(){
+    const lat=$('lat'); if(!lat) return;
+    let a=lat.querySelector('a[data-vista="confirmaciones"]');
+    if(GENERAL() && !a){
+      a=document.createElement('a'); a.dataset.vista='confirmaciones';
+      a.innerHTML='<span class="ico" data-ico="lista"></span> Confirmaciones';
+      const ref=lat.querySelector('a[data-vista="invitados"]'); ref.parentNode.insertBefore(a, ref);
+      try{ if(typeof ICO!=='undefined' && ICO.lista) a.querySelector('.ico').innerHTML=ICO.lista; }catch(e){}
+    }
+    ['invitados','mesas','qr'].forEach(v=>{ const x=lat.querySelector('a[data-vista="'+v+'"]'); if(x) x.style.display=GENERAL()?'none':''; });
+    if(a) a.style.display=GENERAL()?'':'none';
+    if(GENERAL() && ['invitados','mesas','qr'].indexOf(VISTA)>=0) VISTA='confirmaciones';
+  }
+  function respuestasGeneral(){
+    return GENTE.filter(g=>estadoDe(g)!=='sin').slice().sort((a,b)=>tiempo(b)-tiempo(a));
+  }
+  function tiempo(g){ const r=g.rsvpAt; if(!r) return 0; if(typeof r.toMillis==='function') return r.toMillis(); const n=Date.parse(r); return isNaN(n)?0:n; }
+  function vConfirmaciones(){
+    const l=respuestasGeneral();
+    const si=l.filter(g=>estadoDe(g)==='si'), no=l.filter(g=>estadoDe(g)==='no');
+    const per=si.reduce((s,g)=>s+Math.max(1,personasDe(g)),0);
+    $('vista').innerHTML='<div class="nums">'+
+        '<div class="num"><b>'+l.length+'</b><span>Respuestas</span></div>'+
+        '<div class="num"><b>'+per+'</b><span>Personas confirmadas</span></div>'+
+        '<div class="num"><b>'+si.length+'</b><span>Dijeron que sí</span></div>'+
+        '<div class="num rojo"><b>'+no.length+'</b><span>No podrán asistir</span></div>'+
+      '</div>'+
+      '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">'+
+        '<h3 style="margin:0">Asistencia actual</h3><button class="btn" id="btnBajarConf" style="width:auto;padding:9px 16px">Descargar Excel</button></div>'+
+        (l.length?'<div>'+
+          l.map(g=>{const e=estadoDe(g), n=Math.max(1,personasDe(g));
+            return '<div style="padding:10px 2px;border-bottom:1px solid #f5efe8">'+
+              '<div style="display:flex;align-items:center;gap:10px"><span style="flex:1;font-weight:800;font-size:14px">'+esc(g.nombre)+'</span>'+
+              '<span style="font-size:12.5px;color:#6b6058;white-space:nowrap">'+(e==='si'?(n+(n===1?' persona':' personas')):'')+'</span>'+
+              '<span class="chip '+e+'">'+(e==='si'?'Asistirá':'No asistirá')+'</span></div>'+
+              (g.rsvpMensaje?'<div style="color:#6b6058;font-size:13px;font-style:italic;margin-top:3px">'+esc(g.rsvpMensaje)+'</div>':'')+
+            '</div>';}).join('')+
+          '</div>':'<div class="vacio">Todavía no respondió nadie. Cuando tus invitados confirmen desde la invitación, aparecen acá.</div>')+
+      '</div>';
+    const b=$('btnBajarConf'); if(b) b.onclick=()=>bajarCSV('confirmaciones-'+SLUG+'.csv',
+      [['Nombre y apellido','Asistirá','Personas','Mensaje']].concat(l.map(g=>{const e=estadoDe(g); return [g.nombre, e==='si'?'Sí':'No', e==='si'?Math.max(1,personasDe(g)):0, g.rsvpMensaje||''];})));
+  }
+
   function pintar(){
+    menuGeneral();
     $('ttNombres').textContent = PANEL.nombres || SLUG;
     $('ttFecha').textContent   = PANEL.fechaTexto || '';
     $('topSub').textContent    = ({resumen:'Panel de control', invitados:'Personas y pases',
-      mesas:'Mesas', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', std:'Save the date', opciones:'Opciones'})[VISTA] || 'Mi panel';
+      mesas:'Mesas', confirmaciones:'Confirmaciones', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', std:'Save the date', opciones:'Opciones'})[VISTA] || 'Mi panel';
     document.querySelectorAll('.lat a[data-vista]').forEach(a=>
       a.classList.toggle('on', a.dataset.vista===VISTA));
-    ({resumen:vResumen, invitados:vInvitados, mesas:vMesas, itinerario:vItinerario,
+    ({resumen:vResumen, confirmaciones:vConfirmaciones, invitados:vInvitados, mesas:vMesas, itinerario:vItinerario,
       mensajes:vMensajes, qr:vQR, std:vSTD, opciones:vOpciones}[VISTA] || vResumen)();
   }
 
   /* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma», punto 2): los números de
      arriba son estos seis, en este orden. «Invitados» = PERSONAS. */
   function bloqueNumeros(){
+    if(GENERAL()){
+      const l=respuestasGeneral(), si=l.filter(g=>estadoDe(g)==='si');
+      return '<div class="nums">'+
+        '<div class="num"><b>'+l.length+'</b><span>Respuestas</span></div>'+
+        '<div class="num"><b>'+si.reduce((s,g)=>s+Math.max(1,personasDe(g)),0)+'</b><span>Personas confirmadas</span></div>'+
+        '<div class="num"><b>'+si.length+'</b><span>Dijeron que sí</span></div>'+
+        '<div class="num rojo"><b>'+(l.length-si.length)+'</b><span>No podrán asistir</span></div></div>';
+    }
     const c=cuentas(), t=c.pers || 1;
     return '<div class="nums">'+
       '<div class="num"><b>'+c.inv+'</b><span>Total de invitaciones</span></div>'+
@@ -244,7 +303,7 @@
                   '<span style="width:9px;height:9px;border-radius:50%;background:'+colorDe(e)+'"></span>'+
                   '<span style="flex:1;font-weight:700;font-size:13.5px">'+esc(g.nombre)+'</span>'+
                   '<span class="chip '+e+'">'+(e==='si'?'Asistirá':'No asistirá')+'</span></div>';}).join('')+'</div>'+
-              '<button class="lnk" data-ir="invitados" style="margin-top:10px">Ver todos</button>'
+              '<button class="lnk" data-ir="'+(GENERAL()?'confirmaciones':'invitados')+'" style="margin-top:10px">Ver todos</button>'
             : '<div class="vacio">Todavía no respondió nadie.</div>')+
         '</div>'+
       '</div>';

@@ -426,6 +426,13 @@
       </details>
     </div>
 
+    <!-- ★ 20/10/2026 (Jazmín): el cliente puede sacar secciones. Lo lee /crear-secciones.js → fx.ocultas -->
+    <div class="card">
+      <h2>¿Quieres quitar alguna sección? (opcional)</h2>
+      <p class="desc">Marca lo que <b>no</b> quieres que aparezca en tu invitación.</p>
+      <div id="cs-ocultas" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px 14px"><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="itinerario"> Itinerario</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="hospedaje"> Hospedaje</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="dresscode"> Código de vestimenta</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="padres"> Personas importantes</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="galeria"> Galería de fotos</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="regalos"> Mesa de regalos</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="carta"> La carta</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="clima"> El clima</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="hashtag"> Hashtag de Instagram</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="video"> Video</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="spotify"> Playlist</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="trivia"> Trivia</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="filtro"> Filtro de fotos</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="live"> Fotos de los invitados</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" class="oc-sec" value="contacto"> Contacto</label></div>
+    </div>
+
     <div class="card">
       <h2>¿Algo más?</h2>
       <p class="desc">Cualquier detalle o pedido especial. Lo vemos nosotros.</p>
@@ -451,11 +458,11 @@
 <script type="module" src="firebase-inv.js?v=24"></script>
 <script src="/muestras/catalogo.js?v=3"></script>
 <script src="/efectos/paleta.js?v=1"></script>
-<script src="/vestir.js?v=5"></script>
+<script src="/vestir.js?v=7"></script>
 <script src="/paquetes.js?v=2"></script>
-<script src="/solicitud-a-evento.js?v=4"></script>
-<script src="/crear-secciones.js?v=1"></script>
-<script type="module" src="/crear.js?v=5"></script>
+<script src="/solicitud-a-evento.js?v=5"></script>
+<script src="/crear-secciones.js?v=2"></script>
+<script type="module" src="/crear.js?v=6"></script>
 <script src="/crear-diseno.js?v=3"></script>
 <script src="/crear-opciones.js?v=1"></script>
 </body>

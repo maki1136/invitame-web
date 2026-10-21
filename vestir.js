@@ -142,7 +142,7 @@
      muestra de Nexora tiene sus patrocinadores). No viajan con el vestido: se
      sacan de lo copiado de la muestra y se reponen los del cliente.
      Las usa también /efectos/panel-solicitud-muestra.js (el camino del panel). */
-  var SECCIONES_FX = ['menu', 'avisos', 'patrocinadores'];
+  var SECCIONES_FX = ['menu', 'avisos', 'patrocinadores', 'ocultas'];   /* ocultas: 20/10, secciones que el cliente sacó */
   function secciones(d) {
     var out = {};
     if (!d || !d.fx) return out;
@@ -283,6 +283,7 @@
       d.fx.rsvp = d.fx.rsvp || {};
       if (rsvpCliente.limite) d.fx.rsvp.limite = rsvpCliente.limite;
       if (rsvpCliente.restricciones) d.fx.rsvp.restricciones = true;
+      if (rsvpCliente.general) d.fx.rsvp.general = true;   /* 20/10: un solo link para todos */
     }
 
     /* y recién ahora, la voz que grabó ESTE cliente. Va DESPUÉS de la limpieza

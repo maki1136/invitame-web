@@ -1913,6 +1913,169 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
+  /* ★ 20/10/2026 · 16 sobres a pantalla completa, uno por muestra (Flow · Veo 3.1 Fast 720p -> 1080p reescalado), lacre temático.
+     so_0.6 saca la espera inicial; eo_ corta antes de que el video vuelva a la imagen de partida; luz = 0,5 s después de que la solapa con el lacre sale del cuadro.
+     Revisados cuadro por cuadro. Subido a `prueba`; Maki publica con su botón. */
+  "tem-julia-y-santiago-video": {
+    nombre:     "Julia y Santiago · papel crema con pampa y flores secas, lacre terracota con hoja · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.1/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-julia-y-santiago.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-julia-y-santiago.jpg",
+    color:      "#d0b08e",
+    luz:        2.8,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-julieta-mis15-video": {
+    nombre:     "Julieta · papel kraft con margaritas y flores secas, lacre durazno · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.0/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-julieta-mis15.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-julieta-mis15.jpg",
+    color:      "#c29e72",
+    luz:        2.7,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-luciana-neon-video": {
+    nombre:     "Luciana · negro con corazón de neón rosa, lacre fucsia con corazón · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.8/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-luciana-neon.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-luciana-neon.jpg",
+    color:      "#121212",
+    luz:        3.5,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.5
+  },
+
+  "tem-luciana-y-sebastian-video": {
+    nombre:     "Luciana y Sebastián · polvo de colores holi, lacre blanco con corazón · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-luciana-y-sebastian.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-luciana-y-sebastian.jpg",
+    color:      "#e2dacd",
+    luz:        2.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-lupita-mis15-video": {
+    nombre:     "Lupita · negro con mosaico de espejos, lacre plateado de bola disco · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.6/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-lupita-mis15-b.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-lupita-mis15-b.jpg",
+    color:      "#63717e",
+    luz:        3.3,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-maria-paz-y-joaquin-video": {
+    nombre:     "María Paz y Joaquín · papel kraft con espigas de trigo, lacre dorado con espiga · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-maria-paz-y-joaquin.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-maria-paz-y-joaquin.jpg",
+    color:      "#a38969",
+    luz:        2.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-maria-paz-y-santiago-video": {
+    nombre:     "María Paz y Santiago · verde salvia con hojas en relieve, lacre champán con laurel · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.7/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-maria-paz-y-santiago.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-maria-paz-y-santiago.jpg",
+    color:      "#ccb492",
+    luz:        2.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-martina-mis15-video": {
+    nombre:     "Martina · rosa con ramas florales en relieve, lacre rosa · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.7/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-martina-mis15.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-martina-mis15.jpg",
+    color:      "#d7b1b2",
+    luz:        3.4,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-mia-mis15-video": {
+    nombre:     "Mía · negro con brillos, lacre de bola de espejos plateada · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.5,c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-mia-mis15.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-mia-mis15.jpg",
+    color:      "#030304",
+    luz:        3.2,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.5
+  },
+
+  "tem-montserrat-petalos-video": {
+    nombre:     "Montserrat · rosa con pétalos y bolitas de espejo, lacre rosa translúcido · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.3/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-r2c6.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-r2c6.jpg",
+    color:      "#be989f",
+    luz:        3,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-montserrat-mosaico-video": {
+    nombre:     "Montserrat · mosaico rosa de espejos, lacre plateado con rosa · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.3/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-montserrat-3-b.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-montserrat-3-b.jpg",
+    color:      "#923b47",
+    luz:        3,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-sofia-bordado-naranja-video": {
+    nombre:     "Sofía y Emilio · bordado mexicano naranja y turquesa, lacre rosa · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.5/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-r2c2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-r2c2.jpg",
+    color:      "#454e4a",
+    luz:        3.2,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.5
+  },
+
+  "tem-sofia-bordado-crema-video": {
+    nombre:     "Sofía y Emilio · bordado crema con flores fucsias, lacre fucsia · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-r2c4.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-r2c4.jpg",
+    color:      "#6e3459",
+    luz:        2.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-regina-y-emiliano-video": {
+    nombre:     "Regina y Emiliano · crema con lirios en relieve, lacre dorado con cruz · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.1/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-regina-y-emiliano.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-regina-y-emiliano.jpg",
+    color:      "#d2c1b0",
+    luz:        2.8,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  "tem-santi-cumple7-video": {
+    nombre:     "Santi · cancha de fútbol, pelota en el lacre · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_4.8/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-santi-cumple7.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-santi-cumple7.jpg",
+    color:      "#45882c",
+    luz:        2.5,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.5
+  },
+
+  "tem-mariana-y-rodrigo-video": {
+    nombre:     "Mariana y Rodrigo · azulejos azules y blancos, lacre azul cobalto · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.4/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-mariana-y-rodrigo-b.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-mariana-y-rodrigo-b.jpg",
+    color:      "#a3a59c",
+    luz:        3.1,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   /* ★ 20/10/2026 · 10 sobres en video elegidos por Maki (D28 · D29 · D31 · D34). Flow · Veo 3.1 Fast 720p -> 1080p reescalado,
      entregado w_1080 q_auto:good. so_ saca la espera inicial, eo_ corta antes del blanco, luz = 0,5 s después de que la solapa sale del cuadro.
      D34: c_crop g_south 0,85 tapa los triángulos blancos de las esquinas de arriba. Subido a `prueba`; Maki publica con su botón. */

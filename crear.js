@@ -406,7 +406,7 @@
       invitados, observaciones:$('obs').value.trim(),
       contactoNombre:$('cnom').value.trim(), contactoWsp:$('cwsp').value.trim(), contactoEmail:$('cmail').value.trim(),
       pasevozAudio:pasevozURL, pasevozOnda,
-      menu:SEC.menu, avisos:SEC.avisos, patrocinadores:SEC.patrocinadores, rsvpPreguntas:SEC.rsvpPreguntas,
+      menu:SEC.menu, avisos:SEC.avisos, patrocinadores:SEC.patrocinadores, rsvpPreguntas:SEC.rsvpPreguntas, ocultas:SEC.ocultas,
       formToken:formToken,
       origen:'formulario-cliente'
     };
@@ -415,7 +415,7 @@
     return data;
   }
 
-  const SECCIONES_NUEVAS=['menu','avisos','patrocinadores','rsvpPreguntas'];
+  const SECCIONES_NUEVAS=['menu','avisos','patrocinadores','rsvpPreguntas','ocultas'];
 
   /* lo que este archivo le presta a /crear-diseno.js */
   window.CREAR = { leerFormulario: leerFormulario, guardarBorrador: guardarBorrador };

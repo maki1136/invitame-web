@@ -52,6 +52,17 @@
     var c = cierre(ev);
     var gal = (ev && ev.galeria) || [];
 
+    /* ★ 20/10/2026 (Jazmín, Denisse): «coloco una foto para el fin, la veo en
+       la miniatura y en la invitación terminada no aparece». La muestra le
+       había dejado `fx.cierre = {origen:'link', url:<foto de la muestra>}` y
+       eso le ganaba a la foto que ella SUBIÓ en «Foto para el fin de página».
+       Una foto subida para esta fiesta (carpeta raíz `invitame/<código>` de
+       Cloudinary, no la subcarpeta de una muestra) es la elección más
+       concreta que hay: gana siempre, salvo que elijan a mano la portada. */
+    var fin = finDelPanel(ev);
+    var finDeMuestra = typeof fin === 'string' && /\/invitame\/[^\/?#]+\/[^?#]/.test(fin);
+    if (fin && !finDeMuestra && c.origen !== 'portada') return null;   /* la pone el motor */
+
     if (c.origen === 'link' && c.url) return c.url;
 
     if (c.origen === 'galeria' && gal.length) {
