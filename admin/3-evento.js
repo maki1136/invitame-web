@@ -385,6 +385,13 @@
         if(slug&&window.INVVESTIR&&INVVESTIR.bajarMuestra){
           const mu=await INVVESTIR.bajarMuestra(slug), b=String(key).replace(/^img_[cf][_-]/,'').replace(/-+$/,'');
           url=mu['img_c_'+b]||mu['img_c_'+b+'-']||mu['img_f-'+b+'-']||mu['img_f-'+b]||'';
+          /* (21/10) Jazmín: «que también aparezca en frase final y miniatura,
+             porque muchos clientes no colocan fotos». La miniatura vive con dos
+             nombres (imagen / im-gen); el cierre puede estar en fx.cierre. Si el
+             diseño no trae una propia, va la portada del diseño. */
+          if(!url && /miniatura-al-compartir/.test(b)) url=mu['img_c_imagen-miniatura-al-compartir']||mu['img_f-im-gen-miniatura-al-compartir']||mu['img_c_im-gen-miniatura-al-compartir']||mu['img_f-imagen-miniatura-al-compartir']||'';
+          if(!url && /fin-de-pagina/.test(b)) url=(mu.fx&&mu.fx.cierre&&mu.fx.cierre.url)||'';
+          if(!url && /miniatura-al-compartir|fin-de-pagina/.test(b)) url=mu.cover||'';
         }
       }catch(e){ console.error(e); }
     }

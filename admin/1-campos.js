@@ -183,7 +183,7 @@
       /* ★ 21/10/2026 (Jazmín): en las fotos de los LUGARES, en vez de una foto se
          puede poner la portada o la imagen del diseño (la de la muestra elegida).
          Lo hace usarImgDe() en admin/3-evento.js. */
-      (/ceremonia-\d-imagen|imagen-hoteles/.test(_k)?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+
+      (/ceremonia-\d-imagen|imagen-hoteles|foto-para-el-fin-de-pagina|miniatura-al-compartir/.test(_k)?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+
         '<button type="button" class="addbtn gh" style="padding:5px 10px;font-size:12px" onclick="usarImgDe(\''+_k+'\',\''+id+'\',\'portada\')">Usar la portada</button>'+
         '<button type="button" class="addbtn gh" style="padding:5px 10px;font-size:12px" onclick="usarImgDe(\''+_k+'\',\''+id+'\',\'diseno\')">Usar la imagen del diseño</button></div>':'')+
       '<div class="hint">'+medidaSugerida(l)+'</div>';}
