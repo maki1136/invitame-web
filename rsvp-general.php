@@ -139,8 +139,8 @@ if (isset($f['c_habilitar-aviso-por-mail']['booleanValue']) && $f['c_habilitar-a
     $base = $sv('c_titulo-del-correo'); if ($base === '') $base = 'Confirmación de asistencia';
     list($html, $texto) = ivm_armar($pareja, array('token' => $token, 'nombre' => $nombre, 'estado' => $estado,
       'personas' => ($estado === 'confirmado' ? $personas : 0), 'mensaje' => $mensaje), $lista ?: array(), '');
-    list($ok, $via) = ivm_enviar($para, $base . ' — ' . $nombre . ' (' . $pareja . ')', $html, $texto, $SITE);
-    $mail = $ok ? 'enviado' : 'fallo';
+    list($ok, $via, $det) = ivm_enviar($para, $base . ' — ' . $nombre . ' (' . $pareja . ')', $html, $texto, $SITE);
+    $mail = ($ok ? 'enviado' : 'fallo') . ':' . $via;   /* por dónde salió (brevo / resend / mail del hosting) */
   } else $mail = 'sin-mail';
 }
 
