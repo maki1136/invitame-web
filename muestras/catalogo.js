@@ -673,6 +673,26 @@
       paleta:  ["#F8F5FB", "#ECE4F3", "#9D86CC", "#2C2140"],
       tipos:   ["xv"]
     },
+    'celebra-estrellada': {
+      nombre:  "Noche estrellada",
+      bajada:  "La noche estrellada de Van Gogh: cielo de remolinos que se mueve, estrellas y luna dorada.",
+      muestra: 'estrella-mis15',
+      foto:    '/formulario/disenos/estrella-mis15.webp',
+      color:   '#1F3463',
+      color2:  '#E8B83A',
+      paleta:  ["#F2F6FC", "#4A78C2", "#1F3463", "#E8B83A"],
+      tipos:   ["xv"]
+    },
+    'oleo-vino': {
+      nombre:  "Vaquera vino",
+      bajada:  "Botas vino bordadas en oro, sombrero marfil y rosas sobre heno. Sobre de foto que cae.",
+      muestra: 'renata-mis15',
+      foto:    '/formulario/disenos/renata-mis15.webp',
+      color:   '#8E2433',
+      color2:  '#B8913F',
+      paleta:  ["#FBF6EE", "#D9BC7A", "#8E2433", "#3E1520"],
+      tipos:   ["xv"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
