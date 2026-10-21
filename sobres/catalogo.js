@@ -1957,11 +1957,11 @@ window.SOBRES_INVITAME = {
   },
 
   "tem-lupita-mis15-video": {
-    nombre:     "Lupita · negro con brillos y solapa holográfica, lacre plateado de bola disco · solapa con lacre sube y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-lupita-mis15-e1.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-lupita-mis15-e1.jpg",
-    color:      "#040404",
-    luz:        2.9,
+    nombre:     "Lupita · lentejuelas plateadas con cinta negra y lacre de bola disco · solapa con lacre sube y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-lupita-mis15-f2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-lupita-mis15-f2.jpg",
+    color:      "#545355",
+    luz:        3.9,
     luzColor:   "#FFFBF0",
     luzFundido: 0.5
   },
