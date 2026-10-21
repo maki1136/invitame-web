@@ -124,12 +124,31 @@ $doc = array('fields' => array(
 list($rc, $cc) = pedir($FS . 'inv_invitados/' . rawurlencode($slug . '__' . $token), 'PATCH', json_encode($doc), $auth);
 if ($cc < 200 || $cc >= 300) { echo json_encode(array('ok' => false, 'error' => 'guardar', 'detalle' => 'http' . $cc)); exit; }
 
+/* ---------- 3b. que aparezca en «Tus confirmaciones» (el panel del cliente) ----------
+   El panel lee a cada invitado por su código, de la lista `tokens` de
+   inv_paneles/<slug>__<clave>. Se suma este código sin tocar el resto
+   (appendMissingElements: si ya estaba, no se repite). La clave del panel vive
+   en inv_privado, que sólo se lee con la sesión del sistema. */
+$panel = 'sin-panel';
+list($rpv, $cpv) = pedir($FS . 'inv_privado/' . rawurlencode($slug), 'GET', null, $auth);
+$jpv = ($cpv == 200) ? json_decode((string)$rpv, true) : array();
+$clavePanel = isset($jpv['fields']['c_clave-del-panel-de-los-novios']['stringValue']) ? trim($jpv['fields']['c_clave-del-panel-de-los-novios']['stringValue']) : '';
+if ($clavePanel !== '') {
+  $docPanel = 'projects/' . $PROJECT . '/databases/(default)/documents/inv_paneles/' . $slug . '__' . $clavePanel;
+  $commit = array('writes' => array(array(
+    'transform' => array('document' => $docPanel, 'fieldTransforms' => array(
+      array('fieldPath' => 'tokens', 'appendMissingElements' => array('values' => array(array('stringValue' => $token)))))),
+    'currentDocument' => array('exists' => true),
+  )));
+  list($rk, $ck) = pedir('https://firestore.googleapis.com/v1/projects/' . $PROJECT . '/databases/(default)/documents:commit', 'POST', json_encode($commit), $auth);
+  $panel = ($ck >= 200 && $ck < 300) ? 'ok' : ('http' . $ck);
+}
+
 /* ---------- 4. el mail con la lista actualizada ---------- */
 $mail = 'apagado';
 if (isset($f['c_habilitar-aviso-por-mail']['booleanValue']) && $f['c_habilitar-aviso-por-mail']['booleanValue'] === true) {
   $para = '';
-  list($rpv, $cpv) = pedir($FS . 'inv_privado/' . rawurlencode($slug), 'GET', null, $auth);
-  if ($cpv == 200) { $jpv = json_decode((string)$rpv, true); if (isset($jpv['fields']['c_email-para-confirmaciones']['stringValue'])) $para = trim($jpv['fields']['c_email-para-confirmaciones']['stringValue']); }
+  if (isset($jpv['fields']['c_email-para-confirmaciones']['stringValue'])) $para = trim($jpv['fields']['c_email-para-confirmaciones']['stringValue']);
   if ($para === '') $para = $sv('c_email-para-confirmaciones');
   if ($para !== '' && filter_var($para, FILTER_VALIDATE_EMAIL)) {
     include_once __DIR__ . '/rsvp-mail-lib.php';
@@ -144,4 +163,4 @@ if (isset($f['c_habilitar-aviso-por-mail']['booleanValue']) && $f['c_habilitar-a
   } else $mail = 'sin-mail';
 }
 
-echo json_encode(array('ok' => true, 'mail' => $mail));
+echo json_encode(array('ok' => true, 'panel' => $panel, 'mail' => $mail));

@@ -684,6 +684,9 @@
       // Maki: «hay que arreglar todo para siempre, no quiero parches».
       await m.setDoc(m.doc(window.INV.db,'inv_paneles',slug+'__'+clave),{
         slug, nombres, tokens,
+        /* ★ 20/10/2026: con «Un solo link para todos» (Pack Estándar) el panel
+           del cliente es sólo para MIRAR las confirmaciones (mi-panel.js) */
+        general: !!(D.fx&&D.fx.rsvp&&D.fx.rsvp.general===true),
         fechaTexto: String(D['c_ceremonia-1-fecha-descripcion']||D.ev1fecha||''),
         actualizado: new Date().toISOString()
       }, {merge:true});
