@@ -34,7 +34,9 @@
     ['trivia',     'Trivia',                 '[data-sec="trivia"]'],
     ['filtro',     'Filtro de fotos',        '#filtro-sec'],
     ['live',       'Fotos de los invitados', '#gal-seccion'],
-    ['contacto',   'Contacto',               '[data-sec="contacto"]']
+    ['contacto',   'Contacto',               '[data-sec="contacto"]'],
+    /* 21/10 Jazmín: «hay clientes que sólo quieren confirmar por WhatsApp» */
+    ['confirmacion', 'Confirmación (sólo por WhatsApp)', '[data-sec="confirmacion"]']
   ];
   window.INVOCULTAS = { lista: LISTA };
 

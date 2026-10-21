@@ -397,6 +397,11 @@
     }
     if(!url){ alert(de==='portada'?'Esta invitación todavía no tiene foto de portada.':'El diseño elegido no trae una imagen para este lugar. Elegí el diseño en PRINCIPAL → «Diseño del catálogo» o subí una foto.'); return; }
     D[key]=url;
+    /* (21/10) Jazmín, renata: «la foto final no me la cambia… en la plataforma se
+       ve pero al guardarla no». La muestra deja fx.cierre={origen:'link',url:<la
+       de la muestra>} y una foto de carpeta de diseño (como la portada) no le
+       ganaba. Elegirla con este botón ES elegir el cierre: se escribe ahí también. */
+    if(/fin-de-pagina/.test(key)){ D.fx=D.fx||{}; D.fx.cierre=Object.assign({},D.fx.cierre||{},{origen:'link',url:url}); }
     const p=el('prev-'+id); if(p)p.innerHTML=fotoCargadaHtml(url,key,id);
     if(typeof postPreview==='function') postPreview();
   }
