@@ -59,6 +59,9 @@
        Una foto subida para esta fiesta (carpeta raíz `invitame/<código>` de
        Cloudinary, no la subcarpeta de una muestra) es la elección más
        concreta que hay: gana siempre, salvo que elijan a mano la portada. */
+    /* ★ 21/10/2026 (Jazmín): «la imagen del diseño» elegida a mano gana siempre */
+    if (c.origen === 'diseno' && c.url) return c.url;
+
     var fin = finDelPanel(ev);
     var finDeMuestra = typeof fin === 'string' && /\/invitame\/[^\/?#]+\/[^?#]/.test(fin);
     if (fin && !finDeMuestra && c.origen !== 'portada') return null;   /* la pone el motor */
@@ -151,6 +154,7 @@
     var sel = document.createElement('select');
     [['portada', 'La foto de portada'],
      ['galeria', 'La última foto de la galería'],
+     ['diseno',  'La imagen del diseño (la del catálogo)'],
      ['link',    'Otra imagen (pegar link)']].forEach(function (o) {
       var op = document.createElement('option');
       op.value = o[0]; op.textContent = o[1];
@@ -158,12 +162,33 @@
     });
     sel.value = datos(d).origen || 'portada';
     function verLink() { cajaLink.style.display = (sel.value === 'link') ? '' : 'none'; }
-    sel.onchange = function () { datos(d).origen = this.value; verLink(); refrescar(); };
+    sel.onchange = function () {
+      var v = this.value;
+      datos(d).origen = v; verLink();
+      if (v === 'diseno') { traerDelDiseno(d, sel); return; }
+      refrescar();
+    };
     verLink();
 
     caja.appendChild(grupo('Qué foto usar', sel));
     caja.appendChild(cajaLink);
     return caja;
+  }
+
+  /* ★ 21/10: la imagen del cierre de la muestra del catálogo elegida (D.tpl) */
+  function traerDelDiseno(d, sel) {
+    var M = window.MUESTRAS_INVITAME || {}, t = String(d.tpl || '');
+    var m = M[t] || M[t.toLowerCase()] || Object.keys(M).map(function (k) { return M[k]; })
+              .filter(function (x) { return x && String(x.nombre || '').toLowerCase() === t.toLowerCase(); })[0];
+    if (!m || !m.muestra || !window.INVVESTIR || !INVVESTIR.bajarMuestra) {
+      alert('Primero elegí el diseño en PRINCIPAL → «Diseño del catálogo».'); sel.value = 'portada'; datos(d).origen = 'portada'; refrescar(); return;
+    }
+    INVVESTIR.bajarMuestra(m.muestra).then(function (mu) {
+      var u = (mu.fx && mu.fx.cierre && mu.fx.cierre.url) || mu['img_c_foto-para-el-fin-de-pagina'] ||
+              mu['img_f-foto-para-el-fin-de-p-gina'] || mu.cover || '';
+      if (!u) { alert('El diseño elegido no trae una imagen para el cierre.'); sel.value = 'portada'; datos(d).origen = 'portada'; refrescar(); return; }
+      datos(d).url = u; refrescar();
+    }).catch(function () { alert('No se pudo traer la imagen del diseño. Probá de nuevo.'); });
   }
 
   function anclaje() {
