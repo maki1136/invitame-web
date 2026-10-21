@@ -1958,10 +1958,10 @@ window.SOBRES_INVITAME = {
 
   "tem-lupita-mis15-video": {
     nombre:     "Lupita · negro con mosaico de espejos, lacre plateado de bola disco · solapa con lacre sube y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.6/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-lupita-mis15-b.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-lupita-mis15-b.jpg",
-    color:      "#63717e",
-    luz:        3.3,
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.1/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-lupita-mis15-d1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-lupita-mis15-d1.jpg",
+    color:      "#97a6b1",
+    luz:        3.8,
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
@@ -2018,10 +2018,10 @@ window.SOBRES_INVITAME = {
 
   "tem-montserrat-mosaico-video": {
     nombre:     "Montserrat · mosaico rosa de espejos, lacre plateado con rosa · solapa con lacre sube y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.3/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-montserrat-3-b.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-montserrat-3-b.jpg",
-    color:      "#923b47",
-    luz:        3,
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.5/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-montserrat-3-d1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-montserrat-3-d1.jpg",
+    color:      "#903a46",
+    luz:        3.2,
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
@@ -2068,10 +2068,10 @@ window.SOBRES_INVITAME = {
 
   "tem-mariana-y-rodrigo-video": {
     nombre:     "Mariana y Rodrigo · azulejos azules y blancos, lacre azul cobalto · solapa con lacre sube y entra la luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.4/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-mariana-y-rodrigo-b.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-mariana-y-rodrigo-b.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.6/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-mariana-y-rodrigo-c1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/tem-mariana-y-rodrigo-c1.jpg",
     color:      "#a3a59c",
-    luz:        3.1,
+    luz:        3.3,
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
