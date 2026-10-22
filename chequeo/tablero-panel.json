@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-22T22:44:03.910Z",
+ "cuando": "2026-10-22T23:18:12.131Z",
  "slug": "camila-y-tomas",
- "total": 390,
- "verde": 389,
+ "total": 391,
+ "verde": 390,
  "amarillo": 0,
  "rojo": 1,
  "gris": 0,
@@ -1159,7 +1159,7 @@
   {
    "tab": "LUGAR_VEST",
    "bloque": "dresscode-selector",
-   "control": "El texto de arriba",
+   "control": "No mostrar los colores (ni los sugeridos ni los a evitar)",
    "tipo": "text",
    "guarda": true,
    "dato": "fx.dresscode.titulo",
@@ -1170,7 +1170,7 @@
   {
    "tab": "LUGAR_VEST",
    "bloque": "dresscode-selector",
-   "control": "El texto de arriba",
+   "control": "No mostrar los colores (ni los sugeridos ni los a evitar)",
    "tipo": "text",
    "guarda": true,
    "dato": "fx.dresscode.tituloEvitar",
@@ -1559,6 +1559,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "c_itinerario-color-de-texto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "dresscode-selector",
+   "control": "No mostrar los colores (ni los sugeridos ni los a evitar)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.dresscode.sinColores",
    "llega": true,
    "seVe": true,
    "estado": "verde"
