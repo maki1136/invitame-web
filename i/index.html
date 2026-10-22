@@ -828,10 +828,17 @@
   let FX=JSON.parse(JSON.stringify(FX_DEF));
   function mergeFX(src){ if(!src||typeof src!=='object')return; for(const k in FX){ if(src[k]&&typeof src[k]==='object') Object.assign(FX[k],src[k]); } }
 
+  /* 22/10/2026 · la portada en video arranca DESDE CERO al abrir la invitación.
+     El video de portada se carga y reproduce detrás del sobre cerrado; cuando el
+     invitado tocaba «Toca para abrir» ya iba por la mitad o por el final (Maki: «siempre
+     arranca con el final en el primer segundo»). Se reinicia una sola vez, al revelar. */
+  function portadaDesdeCero(){ if(window.__portada0)return; window.__portada0=true;
+    try{ const v=document.querySelector('.portada video.cover-vid'); if(!v||!v.getAttribute('src'))return;
+      v.currentTime=0; const p=v.play&&v.play(); if(p&&p.catch)p.catch(()=>{}); }catch(e){} }
   function abrir(){ el('scene').classList.add('open'); el('hint').textContent=''; playMusic();
     try{ document.body.classList.add('inv-open'); }catch(e){}   // habilita el menú de navegación
     setTimeout(()=>el('ephoto').classList.add('show'),350);   // la carta sale del sobre
-    setTimeout(()=>el('env').classList.add('gone'),2700);      // funde a la portada
+    setTimeout(()=>{ portadaDesdeCero(); el('env').classList.add('gone'); },2700);      // funde a la portada (el video de portada arranca desde cero)
     startParticles(); }
 
   // Sobre de entrada por TRIÁNGULOS: la imagen del sobre se parte en 4 solapas que se abren al tocar el sello (puro CSS)
@@ -892,7 +899,7 @@
     try{ v.muted=true; var _pp=v.play(); if(_pp&&_pp.catch) _pp.catch(function(){}); }catch(e){}
     const BURST=(typeof CONFIG.sobreBurst==='number')?CONFIG.sobreBurst:2.2;   // segundo del estallido de luz
     let opened=false, done=false, bloomed=false;
-    function fin(){ if(done)return; done=true; try{v.pause();}catch(e){} env.classList.add('gone');
+    function fin(){ if(done)return; done=true; try{v.pause();}catch(e){} portadaDesdeCero(); env.classList.add('gone');
       try{ document.body.classList.add('inv-open'); }catch(e){}   // si el invitado toca 2 veces y saltea la animación, el menú igual aparece
       startParticles(); }
     function bloom(){ if(bloomed)return; bloomed=true;
@@ -900,7 +907,7 @@
       env.classList.add('bloom-on');               // el resplandor dorado (opaco) cubre TODO
       /* 900 ms: 450 para llegar al blanco + 450 QUEDANDOSE en blanco. Antes
          eran 520 en total y el blanco no se alcanzaba a ver. Ver la nota del CSS. */
-      setTimeout(()=>{ try{v.pause();}catch(e){} env.classList.add('reveal'); startParticles(); }, 900);
+      setTimeout(()=>{ try{v.pause();}catch(e){} portadaDesdeCero(); env.classList.add('reveal'); startParticles(); }, 900);
       setTimeout(fin, 2200);                        // limpieza final (que no bloquee el scroll)
     }
     function abrirSobre(){

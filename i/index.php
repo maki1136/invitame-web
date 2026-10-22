@@ -648,28 +648,35 @@ if ($leyoEvento) { $tpl = iv_sin_ejemplo($tpl); }
    se frenan. Nada más cambia. En Safari 17+ y en Chrome/Android no hace nada.
    `&liviano-aparato=1` lo fuerza (para probar), `=0` lo apaga. */
 $lvQ = isset($_GET['liviano-aparato']) ? (string)$_GET['liviano-aparato'] : '';
-$aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=navigator.userAgent,v=0,m;'
-  . 'if(/AppleWebKit/.test(u)&&!/Chrome\/|Android/.test(u)){'
-  . 'm=u.match(/Version\/(\d+)/)||u.match(/ OS (\d+)_/);if(m)v=+m[1];}'
-  . 'if(q==="1"||(q!=="0"&&v&&v<17))document.documentElement.classList.add("aparato-liviano");'
-  /* ★ 5/10/2026 — y POR VELOCIDAD, para los Android viejos (Chrome actualizado
-     en un teléfono lento). Un segundo después de cargar se cuentan los cuadros
-     durante 2 s, sólo con la pestaña a la vista. Si dibuja menos de 12 por
-     segundo en promedio, pasa a liviano (una sola trabada suelta no alcanza) y lo recuerda
-     en esta pestaña. Un aparato normal dibuja 50-60: el umbral está muy lejos.
-     No baja nada ni cambia nada si el aparato anda bien. */
-  . 'var R=document.documentElement;try{if(q!=="0"&&sessionStorage.getItem("invLiviano")==="1")R.classList.add("aparato-liviano")}catch(e){}'
-  . 'if(q===""&&!R.classList.contains("aparato-liviano"))addEventListener("load",function(){setTimeout(function(){'
-  . 'if(document.visibilityState!=="visible")return;function L(){if(document.visibilityState!=="visible"||R.classList.contains("aparato-liviano"))return;R.classList.add("aparato-liviano");try{sessionStorage.setItem("invLiviano","1")}catch(e){}}var n=0,t0=0,u=0,peor=0;function f(t){if(!t0){t0=u=t}else{peor=Math.max(peor,t-u);u=t;n++}'
-  . 'if(t-t0<2000)requestAnimationFrame(f);else if(n<24)L()}requestAnimationFrame(f);'
-  /* y la otra vara: cuánto se traba en los primeros 8 s (un reloj cada 200 ms;
-     sólo cuentan las demoras de más de 100 ms). Más de 2,5 s trabada en total
-     = aparato lento. Uno rápido suma casi cero. */
-  . 'var esp=Date.now()+200,tr=0,k=0,iv=setInterval(function(){var d=Date.now()-esp;esp=Date.now()+200;'
-  . 'if(document.visibilityState!=="visible"){clearInterval(iv);return}if(d>100)tr+=d;if(tr>2500){clearInterval(iv);L()}if(++k>40)clearInterval(iv)},200)'
-  . '},1000)});'
+/* ★ 22/10/2026 — SE DECIDE UNA SOLA VEZ, ANTES DE MOSTRAR NADA, Y SÓLO CON DATOS FIJOS.
+   Maki: «en el iPhone las invitaciones saltan justo cuando termina de abrirse el
+   sobre y se quedan sin fondo de video». Era la medición de velocidad que había
+   acá (cuadros con requestAnimationFrame y demoras de un setInterval durante ~10 s
+   después del load): justo mientras se abre el sobre el teléfono está ocupado, la
+   medición daba «lento», ponía `aparato-liviano` A MITAD de la apertura —la foto
+   de portada, que iba por scale 1.15, saltaba a su tamaño; el video de fondo se
+   cambiaba por la foto; se sacaban los filtros— y lo guardaba en sessionStorage,
+   así que las invitaciones siguientes de la misma pestaña ya nacían sin video.
+   En un iframe (la miniatura del panel, Safari frena los relojes) era peor.
+   Medido en Chrome: forzar la clase a los 3,8 s de tocar el sobre → diferencia
+   entre cuadros 19,5 contra 0,8 de un cuadro normal.
+   AHORA: sólo criterios fijos, leídos en el <head> antes de dibujar:
+     Safari/iOS < 17 · deviceMemory < 3 · Ahorro de datos · 2G · «reducir movimiento».
+   Sin medir en vivo, sin sessionStorage (se borra la marca vieja si quedó).
+   `&liviano-aparato=1` lo fuerza (para probar), `=0` lo apaga. */
+$aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=navigator.userAgent,v=0,m,R=document.documentElement,c=navigator.connection||{},lv=false;'
+  . 'try{sessionStorage.removeItem("invLiviano")}catch(e){}'
+  . 'if(/AppleWebKit/.test(u)&&!/Chrome\/|Android/.test(u)){m=u.match(/Version\/(\d+)/)||u.match(/ OS (\d+)_/);if(m)v=+m[1];}'
+  . 'if(v&&v<17)lv=true;'
+  . 'if(navigator.deviceMemory&&navigator.deviceMemory<3)lv=true;'
+  . 'if(c.saveData||/2g/.test(c.effectiveType||""))lv=true;'
+  . 'try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)lv=true}catch(e){}'
+  . 'if(q==="1"||(q!=="0"&&lv))R.classList.add("aparato-liviano");'
   . '}catch(e){}})();</'
-  . 'script><style>html.aparato-liviano #pbg,html.aparato-liviano .sky{animation:none!important}'
+  /* paused y no none: si la clase llegara con la portada ya moviéndose, se congela donde está (no salta).
+     Los ids repetidos son para ganarle a las colecciones (óleo pone su animación con
+     !important y un prefijo largo: la regla vieja `animation:none` ni siquiera ganaba). */
+  . 'script><style>html.aparato-liviano #pbg#pbg#pbg,html.aparato-liviano .sky.sky.sky{animation-play-state:paused!important}'
   /* ★ 5/10/2026 — medido en el motor de Safari 16.4 (Playwright 1.32, como el
      iPad de Maki): sacar las sombras con `filter: drop-shadow()` llevó el peor
      congelamiento de 27 s a 1,7 s. Safari 16 recalcula esos filtros con el
