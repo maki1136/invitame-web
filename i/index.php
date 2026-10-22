@@ -673,8 +673,10 @@ $aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=nav
   . 'try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)lv=true}catch(e){}'
   . 'if(q==="1"||(q!=="0"&&lv))R.classList.add("aparato-liviano");'
   . '}catch(e){}})();</'
-  /* paused y no none: si la clase llegara con la portada ya moviéndose, se congela donde está (no salta) */
-  . 'script><style>html.aparato-liviano #pbg,html.aparato-liviano .sky{animation-play-state:paused!important}'
+  /* paused y no none: si la clase llegara con la portada ya moviéndose, se congela donde está (no salta).
+     Los ids repetidos son para ganarle a las colecciones (óleo pone su animación con
+     !important y un prefijo largo: la regla vieja `animation:none` ni siquiera ganaba). */
+  . 'script><style>html.aparato-liviano #pbg#pbg#pbg,html.aparato-liviano .sky.sky.sky{animation-play-state:paused!important}'
   /* ★ 5/10/2026 — medido en el motor de Safari 16.4 (Playwright 1.32, como el
      iPad de Maki): sacar las sombras con `filter: drop-shadow()` llevó el peor
      congelamiento de 27 s a 1,7 s. Safari 16 recalcula esos filtros con el
