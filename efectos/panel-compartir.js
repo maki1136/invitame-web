@@ -5,6 +5,10 @@
       eso `datos()` se vuelve a pedir adentro de cada handler.
    ============================================================================ */
 (function () {
+  /* ★ 22/10/2026 — Jazmín: «eliminá de todas las invitaciones y de la plataforma
+     el sector de "corre la voz"». La sección se esconde siempre (compartir.js)
+     y su bloque ya no se dibuja en el panel. */
+  return;
   var ID = 'compartir-selector';
 
   function borrador() {

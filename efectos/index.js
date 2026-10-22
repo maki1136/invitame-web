@@ -660,7 +660,7 @@
     '/efectos/compartir.js',           /* «Compartí la invitación»: textos y sacarla */
     '/efectos/trivia-apagada.js',      /* la trivia sólo si «Habilitar trivia» está prendida */
     '/efectos/tipos-evento.js',        /* 19/10: babyshower, graduacion y corporativo (INVTIPO) + el selector del panel */
-    '/efectos/panel-compartir.js',     /* y su bloque, en CONFIRMACIÓN */
+    '/efectos/panel-compartir.js',     /* 22/10: apagado adentro («Corre la voz» se sacó de todas) */
     '/efectos/panel-save-the-date.js', /* el save the date de regalo: su bloque en EFECTOS (lo arma save-the-date.js, que NO va en esta lista) */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
@@ -702,6 +702,7 @@
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/links-vestimenta.js',    /* 21/10: los links del texto de Vestimenta se pueden tocar (Pinterest) */
+    '/efectos/personas-centradas.js',  /* 22/10: Personas centradas; 4 o más, una debajo de la otra */
     '/efectos/regalo-sin-fondo.js',    /* 21/10: el regalo de Mesa de regalos sin el cuadrado blanco */
     '/efectos/imagenes-del-panel.js',  /* 21/10: la foto que se carga en el panel (img_c_) gana a la de la muestra (img_f-) */
     '/efectos/hoteles-bloques.js',     /* 20/10: un hotel por bloque, con un solo «Reservar» (Jazmín) */
