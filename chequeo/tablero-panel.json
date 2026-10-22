@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-22T00:07:47.279Z",
+ "cuando": "2026-10-22T04:19:21.683Z",
  "slug": "camila-y-tomas",
- "total": 395,
- "verde": 394,
+ "total": 390,
+ "verde": 389,
  "amarillo": 0,
  "rojo": 1,
  "gris": 0,
@@ -2382,50 +2382,6 @@
   },
   {
    "tab": "CONFIRMACIÓN",
-   "bloque": "compartir-selector",
-   "control": "Texto chico de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.compartir.kick",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "compartir-selector",
-   "control": "Texto chico de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.compartir.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "compartir-selector",
-   "control": "Texto chico de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.compartir.frase",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "compartir-selector",
-   "control": "Texto chico de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.compartir.boton",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
    "bloque": "rsvp-selector",
    "control": "Preguntar restricciones alimentariasSuma al formulario «¿Alguna restricción alimentaria?».",
    "tipo": "checkbox",
@@ -2508,17 +2464,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_mostrar-seccion-de-contacto",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "compartir-selector",
-   "control": "Mostrar la sección",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.compartir.on",
    "llega": true,
    "seVe": true,
    "estado": "verde"
