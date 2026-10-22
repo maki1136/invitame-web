@@ -44,6 +44,7 @@
     }
     /* el sobre se fue: desde cero, una sola vez */
     largado = true;
+    v.setAttribute('data-desde-cero', '');   /* videos-arrancan.js ya no lo recarga */
     try { if (v.currentTime > 0.05) v.currentTime = 0; } catch (e) {}
     try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
     parar();
