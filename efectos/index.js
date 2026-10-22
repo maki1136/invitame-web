@@ -702,6 +702,7 @@
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/links-vestimenta.js',    /* 21/10: los links del texto de Vestimenta se pueden tocar (Pinterest) */
+    '/efectos/trivia-legible.js',      /* 22/10: las respuestas de la trivia se leen en las colecciones claras */
     '/efectos/personas-centradas.js',  /* 22/10: Personas centradas; 4 o más, una debajo de la otra */
     '/efectos/regalo-sin-fondo.js',    /* 21/10: el regalo de Mesa de regalos sin el cuadrado blanco */
     '/efectos/imagenes-del-panel.js',  /* 21/10: la foto que se carga en el panel (img_c_) gana a la de la muestra (img_f-) */
