@@ -10,9 +10,10 @@
    invitaciones, que usan el motor congelado de su versión (2026-09-14): por eso
    va acá, para todas.
 
-   QUÉ HACE: mientras el sobre está a la vista, el video de portada queda QUIETO
-   en el cuadro 0. Cuando el sobre se va (clase `gone` / oculto / sin sobre), lo
-   pone a andar una sola vez desde el principio. Sin sobre, no toca nada.
+   QUÉ HACE: mientras el sobre está a la vista (o su luz blanca todavía tapa),
+   el video de portada queda QUIETO en el cuadro 0. Cuando se va, lo pone a
+   andar una sola vez desde el principio, y videos-arrancan.js ya no lo recarga
+   (ese load() era otro salto, medio segundo después). Sin sobre, no toca nada.
    ============================================================================ */
 (function () {
   'use strict';
@@ -36,7 +37,9 @@
       return;
     }
     if (!env) { parar(); return; }                     /* sin sobre: no hay salto que evitar */
-    if (sobreAVista(env)) {
+    var velo = document.getElementById('col-sobre-velo');   /* la luz blanca del sobre en video */
+    var veloTapa = velo && velo.isConnected && Number(getComputedStyle(velo).opacity) > 0.6;
+    if (sobreAVista(env) || veloTapa) {
       /* quieto en el primer cuadro mientras se ve el sobre */
       if (!v.paused) { try { v.pause(); } catch (e) {} }
       if (v.readyState >= 1 && v.currentTime > 0.05) { try { v.currentTime = 0; } catch (e) {} }
