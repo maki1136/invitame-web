@@ -202,6 +202,10 @@
   }
 
   function sincronizar() {
+    /* ★ 22/10/2026 (Jazmín: «un cliente no los quiere y no tengo opción de
+       sacarlos»): `fx.dresscode.sinColores` = true → no se muestran ni los
+       colores sugeridos ni los a evitar. Casilla en el panel. */
+    if ((fx().dresscode || {}).sinColores === true) { sacar(); return; }
     var lista = colores(), ev = evitar();
     if (!lista && !ev) { sacar(); return; }
     hoja();

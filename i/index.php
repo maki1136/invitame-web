@@ -126,6 +126,9 @@ if ($slug !== '') {
     if (isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue'])) {
       $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
     }
+    /* ★ 22/10: el tipo también (sólo «carta» usa el sobre del catálogo) */
+    $sobreTipo = isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['tipo']['stringValue'])
+      ? trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['tipo']['stringValue']) : '';
 
     // los campos que tapan los datos de ejemplo (la lista sale de la tabla)
     foreach ($DEMO_CAMPOS as $k) { $campos[$k] = $sv($k); }
@@ -282,6 +285,35 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
     '    max-width:92vw!important;border-radius:30px;' .
     '    box-shadow:0 32px 74px rgba(40,28,12,.34)}' .
     '}';
+}
+
+/* ★ 22/10/2026 — EL SOBRE DEL CATÁLOGO, DESDE EL PRIMER SEGUNDO.
+   Medido en renata-y-patricio (WebKit, perfil iPhone 13): los primeros ~3 s se
+   veía sólo el color del sobre (el catálogo y el módulo llegan `defer`), y quien
+   ya la había abierto veía primero el sobre de la visita anterior (el atajo de
+   localStorage: perlas). La tabla de arriba sólo conoce 5 sobres viejos.
+   Acá se lee el sobre elegido DIRECTO de /sobres/catalogo.js y se imprime su
+   póster ya en el HTML, en la misma lámina `.env-poster` que después usa
+   efectos/sobre-catalogo.js (la reutiliza), y se le avisa al módulo cuál es
+   (`window.__sobreServidor`) para que no arme el de la visita anterior. */
+$sobreCat = null;
+if ($sobre !== '' && isset($sobreTipo) && $sobreTipo === 'carta' && !isset($SOBRES_VIDEO[$sobre]) && preg_match('/^[a-z0-9\-]{2,80}$/', $sobre)) {
+  $txtCat = @file_get_contents(__DIR__ . '/../sobres/catalogo.js');
+  if ($txtCat !== false && preg_match('~\n  "' . preg_quote($sobre, '~') . '": \{(.*?)\n  \}~s', $txtCat, $mc)) {
+    $blq = $mc[1];
+    $pst = preg_match('~\n\s*poster:\s*"((?:https?://|/)[^"\s<>()\x5c]+)"~', $blq, $mp) ? $mp[1] : '';
+    $col = preg_match('~\n\s*color:\s*"(#[0-9A-Fa-f]{3,8})"~', $blq, $mk) ? $mk[1] : '';
+    $vid = preg_match('~\n\s*video:\s*"~', $blq) ? true : false;
+    if ($pst !== '' && $vid) $sobreCat = array('poster' => $pst, 'color' => $col);
+  }
+}
+if ($sobreCat) {
+  $preFirma .=
+    ($sobreCat['color'] !== '' ? '#env{background-color:' . $sobreCat['color'] . '}' : '') .
+    '#env .env-poster{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;' .
+    '  background-size:contain;background-position:center;background-repeat:no-repeat;visibility:visible!important}' .
+    '@media (max-width:679px){#env .env-poster{background-size:cover}}' .
+    '#env > *:not(.env-poster){visibility:hidden}';
 }
 
 $encuadreSobre = ($preFirma !== '')
@@ -684,6 +716,17 @@ $aparatoLiviano = '<script>(function(){try{var q=' . json_encode($lvQ) . ',u=nav
      portada conserva su blanco y negro (#pbg) y los SVG (lacre) los suyos. */
   . 'html.aparato-liviano *:not(#pbg):not(svg):not(svg *),html.aparato-liviano *::before,html.aparato-liviano *::after'
   . '{filter:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}</style>';
+if ($sobreCat) {
+  $n = 0;
+  $lam = '<div id="env"><i class="env-poster" aria-hidden="true" style="background-image:url(&quot;' .
+         htmlspecialchars($sobreCat['poster'], ENT_QUOTES) . '&quot;)"></i>';
+  $tpl2 = preg_replace('~<div id="env">~', $lam, $tpl, 1, $n);
+  if ($tpl2 !== null && $n === 1) {
+    $tpl = $tpl2;
+    $encuadreSobre .= '<script>window.__sobreServidor=' . json_encode($sobre) . ';</script>' .
+                      '<link rel="preload" as="image" href="' . htmlspecialchars($sobreCat['poster'], ENT_QUOTES) . '">';
+  }
+}
 $aInyectar = $aparatoLiviano . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 $aInyectar = iv_fotos_livianas($aInyectar);

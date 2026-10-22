@@ -160,6 +160,17 @@
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(a);
 
+    /* ★ 22/10/2026 — sacarlos del todo (sugeridos y a evitar). Se guarda
+       true/false (no se borra: el guardado hace merge). */
+    var labNo = document.createElement('label');
+    labNo.style.cssText = 'display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0 0 12px;cursor:pointer';
+    var chkNo = document.createElement('input'); chkNo.type = 'checkbox';
+    chkNo.checked = !!((datos() || {}).sinColores);
+    chkNo.onchange = function () { var dc = datos(); if (!dc) return; dc.sinColores = !!chkNo.checked; refrescar(); };
+    labNo.appendChild(chkNo);
+    labNo.appendChild(document.createTextNode('No mostrar los colores (ni los sugeridos ni los a evitar)'));
+    caja.appendChild(labNo);
+
     /* ---- el título ---- */
     var labT = document.createElement('label');
     labT.textContent = 'El texto de arriba';
