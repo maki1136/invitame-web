@@ -26,6 +26,10 @@
     var k = s.querySelector('.kick'), h = s.querySelector('h2'), p = s.querySelector('p'), b = document.getElementById('wa-share');
     if (!ORIG) ORIG = { kick: k && k.textContent, titulo: h && h.textContent, frase: p && p.textContent, boton: b && b.textContent };
     var c = cfg();
+    /* ★ 22/10/2026 — Jazmín: «eliminá de todas las invitaciones y de la plataforma
+       ese sector de "corre la voz"». Se esconde siempre (el elemento queda: otros
+       módulos lo usan de referencia para ubicarse). */
+    c = { on: false };
     if (c.on === false) { s.setAttribute('data-compartir-oculta', '1'); s.style.display = 'none'; }
     else if (s.getAttribute('data-compartir-oculta')) { s.removeAttribute('data-compartir-oculta'); s.style.display = ''; }
     function poner(el, v, o) { if (!el) return; var t = (v && String(v).trim()) ? String(v) : o; if (t != null && el.textContent !== t) el.textContent = t; }
