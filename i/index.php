@@ -298,7 +298,7 @@ if ($sobre !== '' && !isset($SOBRES_VIDEO[$sobre]) && preg_match('/^[a-z0-9\-]{2
   $txtCat = @file_get_contents(__DIR__ . '/../sobres/catalogo.js');
   if ($txtCat !== false && preg_match('~\n  "' . preg_quote($sobre, '~') . '": \{(.*?)\n  \}~s', $txtCat, $mc)) {
     $blq = $mc[1];
-    $pst = preg_match('~\n\s*poster:\s*"(https?://[^"\s<>()\\]+|/[^"\s<>()\\]+)"~', $blq, $mp) ? $mp[1] : '';
+    $pst = preg_match('~\n\s*poster:\s*"((?:https?://|/)[^"\s<>()\x5c]+)"~', $blq, $mp) ? $mp[1] : '';
     $col = preg_match('~\n\s*color:\s*"(#[0-9A-Fa-f]{3,8})"~', $blq, $mk) ? $mk[1] : '';
     $vid = preg_match('~\n\s*video:\s*"~', $blq) ? true : false;
     if ($pst !== '' && $vid) $sobreCat = array('poster' => $pst, 'color' => $col);
