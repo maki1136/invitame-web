@@ -77,6 +77,9 @@
       var v = vs[i];
       if (!esDecorativo(v)) continue;
       if (!v.paused) continue;
+      /* ★ 22/10: la portada no se arranca mientras se ve el sobre: la deja quieta en
+         el cuadro 0 portada-desde-cero.js y la larga él cuando el sobre se va */
+      if (window.__invPortadaCero && v.closest && v.closest('.portada') && !sobreSeFue()) continue;
       quedan++;
       if (ultimoIntento) {
         var t = ultimoIntento.get(v);
@@ -110,6 +113,9 @@
       var v = vs[i];
       if (!esDecorativo(v) || repintados.has(v)) continue;
       repintados.add(v);
+      /* ★ 22/10: si ya arrancó desde cero al irse el sobre, NO se recarga: el load()
+         la volvía al primer cuadro medio segundo después — el «salto» de la portada */
+      if (window.__invPortadaCero || v.hasAttribute('data-desde-cero')) continue;
       hizo = true;
       try {
         v.load();
