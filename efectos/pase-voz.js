@@ -669,7 +669,9 @@
          la columna y ES EL TOQUE el que la arranca (medido: el pulgar la alcanza
          en 1,699 s y la rotura arranca en 1,700). La primera version la rompia
          sola al aparecer en pantalla: el invitado se perdia el momento. */
-      if (msg.classList.contains('pv-pegada')) { romper(msg); return; }
+      /* ★ 22/10/2026 — UN SOLO TOQUE despega y reproduce a la vez (antes el
+         primero sólo rompía y había que tocar otra vez para escuchar). */
+      if (msg.classList.contains('pv-pegada')) romper(msg);
       if (au.paused) {
         pausarLaMusica();
         msg.classList.add('pv-son');
@@ -678,6 +680,18 @@
     });
     au.addEventListener('ended', parar);
     au.addEventListener('error', alFallar);
+
+    /* ★ 22/10/2026 — tocar CUALQUIER parte del pase (no sólo el talón) arranca
+       el mensaje: el toque se pasa al botón. */
+    var tk = sec.querySelector('.pv-tk');
+    if (tk && !tk.__pvToque) {
+      tk.__pvToque = true;
+      tk.style.cursor = 'pointer';
+      tk.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('a,input,select,textarea')) return;
+        msg.click();
+      });
+    }
   }
 
   /* ---- CUANDO SE MONTA -----------------------------------------------------
