@@ -6,28 +6,47 @@
 
    · 1 a 3 → en una fila, centradas (la regla de Maki: las tres juntas).
    · 4 o más → una debajo de la otra, centradas.
-   Pasa a flex (gana a la grilla de cualquier colección). Corre en la miniatura.
+   Corre en la miniatura.
    ============================================================================ */
 (function () {
   'use strict';
   if (window.__invPersonasCentro) return; window.__invPersonasCentro = 1;
   if (!/\/i\//.test(location.pathname)) return;
 
-  var css =
-    'html body .padres{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;grid-template-columns:none!important}' +
-    'html body .padres>.p{flex:0 0 calc((100% - 20px)/3)!important;max-width:calc((100% - 20px)/3)!important;min-width:0!important}' +
-    'html body .padres[data-muchas]>.p{flex:0 0 100%!important;max-width:100%!important}';
-
+  /* NO se cambia la grilla de cada colección (se probó pasar a flex y rompía:
+     nombres de a una palabra por renglón, tres que se partían en 2+1). Se toma
+     el ancho de columna que ya puso la colección y sólo se ajusta CUÁNTAS
+     columnas hay: tantas como personas (hasta las que ya tenía), centradas. */
   function aplicar() {
-    if (!document.getElementById('inv-personas-centro')) {
-      var st = document.createElement('style'); st.id = 'inv-personas-centro'; st.textContent = css;
-      (document.head || document.documentElement).appendChild(st);
-    }
     [].forEach.call(document.querySelectorAll('.padres'), function (p) {
-      var n = [].filter.call(p.children, function (c) { return c.classList.contains('p') && getComputedStyle(c).display !== 'none'; }).length;
-      if (n >= 4) p.setAttribute('data-muchas', ''); else p.removeAttribute('data-muchas');
+      var kids = [].filter.call(p.children, function (c) { return c.classList.contains('p') && getComputedStyle(c).display !== 'none'; });
+      var n = kids.length; if (!n) return;
+      if (!p.hasAttribute('data-cols-orig')) {
+        var cs = getComputedStyle(p);
+        if (cs.display !== 'grid') return;
+        var cols = cs.gridTemplateColumns.split(' ').filter(function (x) { return /px$/.test(x); });
+        if (!cols.length) return;
+        p.setAttribute('data-cols-orig', cols.length + '|' + cols[0]);
+      }
+      var o = p.getAttribute('data-cols-orig').split('|'), max = +o[0], w = o[1];
+      var firma = n + '|' + max;
+      if (p.getAttribute('data-centro') === firma) return;
+      p.setAttribute('data-centro', firma);
+      p.style.setProperty('justify-content', 'center', 'important');
+      if (n >= 4) {
+        /* muchas: una debajo de la otra */
+        p.style.setProperty('grid-template-columns', 'minmax(0, 280px)', 'important');
+        kids.forEach(function (k) { k.style.setProperty('text-align', 'center', 'important'); });
+      } else if (n < max) {
+        p.style.setProperty('grid-template-columns', 'repeat(' + n + ', ' + w + ')', 'important');
+      } else {
+        p.style.removeProperty('grid-template-columns');
+      }
     });
   }
   var n = 0, t = setInterval(function () { aplicar(); if (++n > 40) clearInterval(t); }, 400);
-  window.addEventListener('message', function () { setTimeout(aplicar, 120); setTimeout(aplicar, 700); });
+  window.addEventListener('message', function () {
+    [].forEach.call(document.querySelectorAll('.padres[data-centro]'), function (p) { p.removeAttribute('data-centro'); });
+    setTimeout(aplicar, 120); setTimeout(aplicar, 700);
+  });
 })();
