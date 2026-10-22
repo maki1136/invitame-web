@@ -313,7 +313,8 @@ if ($sobreCat) {
     '#env .env-poster{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;' .
     '  background-size:contain;background-position:center;background-repeat:no-repeat;visibility:visible!important}' .
     '@media (max-width:679px){#env .env-poster{background-size:cover}}' .
-    '#env > *:not(.env-poster){visibility:hidden}';
+    '#env > *:not(.env-poster){visibility:hidden}' .
+    '#env.gone,#env.gone *{visibility:hidden!important;pointer-events:none!important}';
 }
 
 $encuadreSobre = ($preFirma !== '')

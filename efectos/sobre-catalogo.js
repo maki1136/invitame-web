@@ -685,6 +685,12 @@
       + ' background-repeat:no-repeat; z-index:2; pointer-events:none;'
       + ' opacity:1; transition:opacity .22s linear; }',
     '#env.vid-vivo .env-poster{ opacity:0; }',
+    /* ★ 22/10/2026 — URGENTE iPhone: después de abrir no respondía ningún botón.
+       #env quedaba a pantalla completa (fixed, z 100) con el video y la lámina
+       forzados a visible: en iOS Safari un <video> fijo a pantalla completa se
+       traga los toques aunque tenga pointer-events:none y opacity 0. */
+    '#env.gone{ pointer-events:none!important; }',
+    '#env.gone, #env.gone *, #env.gone #env-vid, #env.gone .env-poster{ visibility:hidden!important; pointer-events:none!important; }',
     /* ★ 22/10/2026 — EN EL CELULAR EL SOBRE LLENA LA PANTALLA DE BORDE A BORDE.
        Con `contain`, en un teléfono más alto que 9:16 (iPhone 390×844) quedaban
        dos franjas de ~75 px arriba y abajo con el color de fondo del sobre, que
@@ -1723,6 +1729,37 @@
     } catch (e) {}
     return true;
   }
+
+  /* ★ 22/10/2026 — CUANDO EL SOBRE SE VA, SE VA DE VERDAD.
+     A los 800 ms de ponerse «gone» (lo pone este módulo o el motor): #env en
+     display:none, el video del sobre pausado y SIN fuente, y la lámina fuera.
+     Así no queda ninguna capa de video encima de la invitación (iPhone). */
+  (function sacarCapaAlIrse() {
+    var hecho = false;
+    function sacar() {
+      if (hecho) return; hecho = true;
+      var env = document.getElementById('env');
+      if (!env) return;
+      env.style.setProperty('display', 'none', 'important');
+      var v = document.getElementById('env-vid');
+      if (v) { try { v.pause(); v.removeAttribute('src'); v.removeAttribute('poster'); v.load(); } catch (e) {} }
+      var l = env.querySelector('.env-poster'); if (l && l.parentNode) l.parentNode.removeChild(l);
+    }
+    function mirar() {
+      var env = document.getElementById('env');
+      if (!env) { setTimeout(mirar, 200); return; }
+      if (env.classList.contains('gone')) { setTimeout(sacar, 800); return; }
+      try {
+        var mo = new MutationObserver(function () {
+          if (env.classList.contains('gone')) { mo.disconnect(); setTimeout(sacar, 800); }
+        });
+        mo.observe(env, { attributes: true, attributeFilter: ['class'] });
+      } catch (e) {
+        var iv = setInterval(function () { if (env.classList.contains('gone')) { clearInterval(iv); setTimeout(sacar, 800); } }, 300);
+      }
+    }
+    mirar();
+  })();
 
   /* ---- 2. ATAJO: pone algo al instante, pero NO cierra el tema ---- */
   (function atajo() {
