@@ -21,17 +21,14 @@
     [].forEach.call(document.querySelectorAll('.padres'), function (p) {
       var kids = [].filter.call(p.children, function (c) { return c.classList.contains('p') && getComputedStyle(c).display !== 'none'; });
       var n = kids.length; if (!n) return;
-      if (!p.hasAttribute('data-cols-orig')) {
-        var cs = getComputedStyle(p);
-        if (cs.display !== 'grid') return;
-        var cols = cs.gridTemplateColumns.split(' ').filter(function (x) { return /px$/.test(x); });
-        if (!cols.length) return;
-        p.setAttribute('data-cols-orig', cols.length + '|' + cols[0]);
-      }
-      var o = p.getAttribute('data-cols-orig').split('|'), max = +o[0], w = o[1];
-      var firma = n + '|' + max;
-      if (p.getAttribute('data-centro') === firma) return;
-      p.setAttribute('data-centro', firma);
+      /* se mira la grilla de la colección SIN lo nuestro, cada vez: la colección
+         la cambia mientras carga (primero 2 columnas, después 3) */
+      p.style.removeProperty('grid-template-columns');
+      var cs = getComputedStyle(p);
+      if (cs.display !== 'grid') return;
+      var cols = cs.gridTemplateColumns.split(' ').filter(function (x) { return /px$/.test(x); });
+      if (!cols.length) return;
+      var max = cols.length, w = cols[0];
       p.style.setProperty('justify-content', 'center', 'important');
       if (n >= 4) {
         /* muchas: una debajo de la otra */
@@ -39,14 +36,11 @@
         kids.forEach(function (k) { k.style.setProperty('text-align', 'center', 'important'); });
       } else if (n < max) {
         p.style.setProperty('grid-template-columns', 'repeat(' + n + ', ' + w + ')', 'important');
-      } else {
-        p.style.removeProperty('grid-template-columns');
       }
     });
   }
   var n = 0, t = setInterval(function () { aplicar(); if (++n > 40) clearInterval(t); }, 400);
   window.addEventListener('message', function () {
-    [].forEach.call(document.querySelectorAll('.padres[data-centro]'), function (p) { p.removeAttribute('data-centro'); });
     setTimeout(aplicar, 120); setTimeout(aplicar, 700);
   });
 })();
