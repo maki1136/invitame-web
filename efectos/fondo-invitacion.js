@@ -648,7 +648,14 @@
 
   function sincronizar() {
     var f = conf();
-    if (liviano()) { if (firma !== 'liviano') { firma = 'liviano'; sacar(); } return; }
+    if (liviano()) {
+      /* ★ 22/10: si el video de fondo YA está sonando a la vista, no se cambia por
+         la foto: eso es el salto que se veía al terminar el sobre en el iPhone. */
+      var cv = document.querySelector('#' + ID + ' > video');
+      if (cv && cv.videoWidth > 0 && !cv.paused) return;
+      if (firma !== 'liviano') { firma = 'liviano'; sacar(); }
+      return;
+    }
     var nueva = JSON.stringify([f.tipo, f.url, f.poster, f.fuerza, f.velo, f.paso, f.oscuras, f.donde, f.suave || null]);
     if (nueva === firma) {
       /* la colección puede llegar después, o cambiarse en el panel:
