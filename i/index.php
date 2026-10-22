@@ -126,6 +126,9 @@ if ($slug !== '') {
     if (isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue'])) {
       $sobre = trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['modelo']['stringValue']);
     }
+    /* ★ 22/10: el tipo también (sólo «carta» usa el sobre del catálogo) */
+    $sobreTipo = isset($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['tipo']['stringValue'])
+      ? trim($f['fx']['mapValue']['fields']['sobre']['mapValue']['fields']['tipo']['stringValue']) : '';
 
     // los campos que tapan los datos de ejemplo (la lista sale de la tabla)
     foreach ($DEMO_CAMPOS as $k) { $campos[$k] = $sv($k); }
@@ -294,7 +297,7 @@ if ($sobre !== '' && isset($SOBRES_VIDEO[$sobre])) {
    efectos/sobre-catalogo.js (la reutiliza), y se le avisa al módulo cuál es
    (`window.__sobreServidor`) para que no arme el de la visita anterior. */
 $sobreCat = null;
-if ($sobre !== '' && !isset($SOBRES_VIDEO[$sobre]) && preg_match('/^[a-z0-9\-]{2,80}$/', $sobre)) {
+if ($sobre !== '' && isset($sobreTipo) && $sobreTipo === 'carta' && !isset($SOBRES_VIDEO[$sobre]) && preg_match('/^[a-z0-9\-]{2,80}$/', $sobre)) {
   $txtCat = @file_get_contents(__DIR__ . '/../sobres/catalogo.js');
   if ($txtCat !== false && preg_match('~\n  "' . preg_quote($sobre, '~') . '": \{(.*?)\n  \}~s', $txtCat, $mc)) {
     $blq = $mc[1];
