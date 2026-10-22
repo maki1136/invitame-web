@@ -115,7 +115,7 @@
       repintados.add(v);
       /* ★ 22/10: si ya arrancó desde cero al irse el sobre, NO se recarga: el load()
          la volvía al primer cuadro medio segundo después — el «salto» de la portada */
-      if (v.hasAttribute('data-desde-cero')) continue;
+      if (window.__invPortadaCero || v.hasAttribute('data-desde-cero')) continue;
       hizo = true;
       try {
         v.load();
