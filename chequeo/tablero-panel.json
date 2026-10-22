@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-22T19:01:49.945Z",
+ "cuando": "2026-10-22T19:27:12.283Z",
  "slug": "camila-y-tomas",
  "total": 390,
- "verde": 388,
- "amarillo": 1,
+ "verde": 389,
+ "amarillo": 0,
  "rojo": 1,
  "gris": 0,
  "items": [
@@ -386,6 +386,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -402,17 +413,6 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2641,9 +2641,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.tinta",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
