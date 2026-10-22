@@ -2101,7 +2101,7 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
   "puertas-cinta-olivo-nudo-video": {
-    nombre:     "Papel marfil con cinta de organza, moño y ramita de olivo · el nudo se desata, la cinta cae y entra la luz (video)",
+    nombre:     "Olivo · En tus manos · papel marfil con cinta de organza, moño y ramita de olivo; el nudo se desata y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.6/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/manos-puertas-cinta-olivo-f-1080.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_north,w_0.98,h_0.98/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/manos-puertas-cinta-olivo-f-1080.jpg",
     color:      "#F5ECE3",
