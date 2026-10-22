@@ -86,12 +86,18 @@
     var cat = catalogo();
     if (!cat) return;
 
-    var claves = Object.keys(cat);
+    /* ★ 22/10: los sobres con `oculto:true` (versiones viejas que siguen andando
+       en invitaciones entregadas) NO se ofrecen — salvo el que ya tiene elegido
+       esta invitación. Con las cuatro versiones del olivo con casi el mismo
+       nombre, Jazmín no encontraba la buena. */
+    var actual = '';
+    try { actual = ((D.fx || {}).sobre || {}).modelo || ''; } catch (e) {}
+    var claves = Object.keys(cat).filter(function (k) { return !(cat[k] && cat[k].oculto) || k === actual || k === sel.value; });
     if (!claves.length) return;
 
     /* ¿ya está lleno? no lo toco: si lo redibujo pierdo el foco y el desplegable
        se cierra solo mientras Jazmín lo está mirando */
-    if (sel.options.length > claves.length) return;
+    if (sel.getAttribute('data-n') === String(claves.length) && sel.options.length > claves.length) return;
 
     var elegido = sel.value;
     /* si el select nació vacío, el valor de verdad está en el borrador */
@@ -108,6 +114,7 @@
               String(nombre).replace(/</g, '&lt;') + '</option>';
     });
     sel.innerHTML = html;
+    sel.setAttribute('data-n', String(claves.length));
     if (elegido) sel.value = elegido;
   }
 
