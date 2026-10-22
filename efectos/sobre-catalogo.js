@@ -685,6 +685,14 @@
       + ' background-repeat:no-repeat; z-index:2; pointer-events:none;'
       + ' opacity:1; transition:opacity .22s linear; }',
     '#env.vid-vivo .env-poster{ opacity:0; }',
+    /* ★ 22/10/2026 — EN EL CELULAR EL SOBRE LLENA LA PANTALLA DE BORDE A BORDE.
+       Con `contain`, en un teléfono más alto que 9:16 (iPhone 390×844) quedaban
+       dos franjas de ~75 px arriba y abajo con el color de fondo del sobre, que
+       en muchas muestras no es el del papel. `cover` centrado: el lacre queda en
+       el medio y se recorta un poco de los costados. En la compu (≥680 px) el
+       sobre va en su tarjeta (ver sobres/catalogo.js) y no cambia. */
+    '@media (max-width:679px){ #env .env-poster{ background-size:cover!important; }',
+    '  #env.carta-video #env-vid{ object-fit:cover!important; } }',
     '#env-vid::-webkit-media-controls,',
     '#env-vid::-webkit-media-controls-enclosure,',
     '#env-vid::-webkit-media-controls-panel,',
