@@ -831,6 +831,26 @@
         } catch (e) {}
         if ((n || 0) < 240) setTimeout(function () { ponerPoster((n || 0) + 1); }, 50);
       })();
+      /* ★ 22/10: la lámina sigue SIEMPRE al póster del video. Antes se ponía una
+         sola vez: si el atajo armaba el sobre de la visita anterior y después
+         llegaba el de verdad (actualizar), la lámina se quedaba con el viejo. */
+      (function seguirPoster(n) {
+        try {
+          var e2 = document.getElementById('env'), v2 = document.getElementById('env-vid');
+          if (e2 && v2 && !e2.classList.contains('gone')) {
+            var p2 = v2.getAttribute('poster');
+            var l2 = e2.querySelector('.env-poster');
+            if (p2) {
+              if (!l2) { l2 = document.createElement('i'); l2.className = 'env-poster'; l2.setAttribute('aria-hidden', 'true'); e2.appendChild(l2); }
+              var b2 = 'url("' + p2 + '")';
+              /* la caché (galeria…workers.dev) es la MISMA foto: no se cambia por eso */
+              var sin = function (s) { return String(s).replace(/https?:\/\/galeria\.littlemomentsok\.workers\.dev\//, 'https://').replace(/["']/g, ''); };
+              if (sin(l2.style.backgroundImage) !== sin(b2)) l2.style.backgroundImage = b2;
+            }
+          }
+        } catch (e) {}
+        if ((n || 0) < 300) setTimeout(function () { seguirPoster((n || 0) + 1); }, 80);
+      })();
       var vivo = function () {
         if (!env) env = document.getElementById('env');
         if (env && v.currentTime > 0.04 && !v.paused) env.classList.add('vid-vivo');
@@ -1707,7 +1727,9 @@
   /* ---- 2. ATAJO: pone algo al instante, pero NO cierra el tema ---- */
   (function atajo() {
     if (listo) return;
-    var id = recordado();
+    /* ★ 22/10: si el servidor ya dijo qué sobre es, ése manda (el recordado
+       puede ser el de antes de que lo cambiaran: renata-y-patricio mostraba perlas) */
+    var id = (typeof window.__sobreServidor === 'string' && window.__sobreServidor) || recordado();
     var m = delCatalogo(id);
     if (!m) { if (!catalogo()) setTimeout(atajo, 40); return; }
     if (armar(m, id)) listo = true;
