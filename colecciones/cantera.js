@@ -464,11 +464,22 @@
           «no se tapa un papel con otro papel».
        ⚠️ Se apaga POR PARTES: el atajo `background:` con !important pisa cosas
           que no queremos pisar. Queda sólo el medallón sobre el fondo de video. */
-    P + ':is(.rd-tapa, .col-vtapa){',
-    '  background-color:transparent!important;',
-    '  background-image:none!important;',
-    '  border:0!important; box-shadow:none!important;',
+    /* ⭐ 22/10/2026 · Maki: «no tienen imagen en ver video y en la playlist, hay
+       que arreglarlo». El medallón solo sobre el patio se perdía. Va una FOTO
+       propia, como Óleo y Perlas: proyector y tocadiscos sobre cantera rosa con
+       olivo y lirios (Flow · Nano Banana, sin personas ni texto). Sigue sin ser
+       un papel: es una foto con su sombra. El rótulo pasa a blanco sobre una
+       pastilla oscura para que se lea encima de la foto. */
+    P + '#video-sec .rd-tapa, ' + P + '#video-sec .col-vtapa{',
+    '  background:radial-gradient(circle at 50% 50%, rgba(40,28,18,.40) 0, rgba(40,28,18,.16) 26%, rgba(40,28,18,0) 46%), url("' + CDN + 'c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/cantera/cantera-tapa-video") center/cover no-repeat!important;',
+    '  border:0!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(74,53,36,.28)!important;',
     '}',
+    P + '#spotify-sec .rd-tapa, ' + P + '#spotify-sec .col-vtapa{',
+    '  background:radial-gradient(circle at 50% 50%, rgba(40,28,18,.40) 0, rgba(40,28,18,.16) 26%, rgba(40,28,18,0) 46%), url("' + CDN + 'c_fill,w_900,h_506,g_center,q_auto,f_auto/invitame/cantera/cantera-tapa-playlist") center/cover no-repeat!important;',
+    '  border:0!important; border-radius:14px!important; box-shadow:0 10px 26px rgba(74,53,36,.28)!important;',
+    '}',
+    P + ':is(#video-sec,#spotify-sec) :is(.rd-tapa,.col-vtapa) :is(.rd-txt,.txt){ color:#fff!important; -webkit-text-fill-color:#fff!important; text-shadow:0 1px 4px rgba(20,14,8,.9)!important; opacity:1!important; background:rgba(30,20,12,.62); padding:5px 12px 5px calc(12px + .26em); border-radius:99px; }',
+    P + ':is(#video-sec,#spotify-sec) :is(.rd-tapa,.col-vtapa) :is(.rd-aro,.aro){ background:rgba(250,244,234,.85)!important; }',
 
     /* ───────────── 5 · EL ITINERARIO — UNA SOLA COLUMNA, COMO PERLAS
        ⚠️⚠️ NO SE LE MUEVE LA VÍA DE LUGAR. Ponerla en `left:50%` hacía que las

@@ -702,6 +702,7 @@
     '/efectos/panel-pieza.js',         /* y sus ajustes dentro del bloque ✨ Efectos */
     '/efectos/panel-etiquetas.js',     /* nombres únicos en el panel */
     '/efectos/links-vestimenta.js',    /* 21/10: los links del texto de Vestimenta se pueden tocar (Pinterest) */
+    '/efectos/diag-toques.js',         /* 22/10: diagnóstico de toques, sólo con &diag=1 */
     '/efectos/boton-volver.js',        /* 22/10: «← Volver» a la web, sólo con &volver= */
     '/efectos/portada-desde-cero.js',  /* 22/10: el video de portada queda en el cuadro 0 hasta que se va el sobre */
     '/efectos/trivia-legible.js',      /* 22/10: las respuestas de la trivia se leen en las colecciones claras */
@@ -843,6 +844,8 @@
     '/efectos/vestido-basico.js',   /* sin colección elegida: el pase con QR y el itinerario */
     '/efectos/banda-tematica.js',   /* las 7 bandas de color pleno pasan a ser la foto de la temática */
     '/efectos/simbolo-tematica.js', /* los aros de cada título y la marca del itinerario */
+
+    '/efectos/tapas-foto.js',        /* 22/10: la foto propia de las tapas del video y la playlist (fx.tapas) */
 
     /* ⚠️ EL ÚLTIMO DE TODOS, Y TIENE QUE SERLO. Mueve nodos y esconde
        secciones: necesita que todo lo demás ya haya terminado de armar. */
