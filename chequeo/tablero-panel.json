@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-23T22:18:54.079Z",
+ "cuando": "2026-10-23T22:42:03.949Z",
  "slug": "camila-y-tomas",
- "total": 399,
- "verde": 396,
+ "total": 402,
+ "verde": 399,
  "amarillo": 0,
  "rojo": 3,
  "gris": 0,
@@ -380,6 +380,39 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fraseSize",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Ubicación de la frase",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.frase.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Velo sobre la foto (para que se lea)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.frase.velo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Cómo entra la foto",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.frase.foto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
