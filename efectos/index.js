@@ -708,6 +708,7 @@
     '/efectos/portada-desde-cero.js',  /* 22/10: el video de portada queda en el cuadro 0 hasta que se va el sobre */
     '/efectos/trivia-legible.js',      /* 22/10: las respuestas de la trivia se leen en las colecciones claras */
     '/efectos/personas-centradas.js',  /* 22/10: Personas centradas; 4 o más, una debajo de la otra */
+    '/efectos/regalos-solo-frase.js',  /* 23/10: Mesa de regalos se ve con sólo la frase («lluvia de sobres», regina) */
     '/efectos/regalo-sin-fondo.js',    /* 21/10: el regalo de Mesa de regalos sin el cuadrado blanco */
     '/efectos/imagenes-del-panel.js',  /* 21/10: la foto que se carga en el panel (img_c_) gana a la de la muestra (img_f-) */
     '/efectos/hoteles-bloques.js',     /* 20/10: un hotel por bloque, con un solo «Reservar» (Jazmín) */
