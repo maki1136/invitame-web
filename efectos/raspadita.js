@@ -119,7 +119,9 @@
     if (/^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)) return v[0] === '#' ? v : '#' + v;
     return porDefecto;
   }
-  function encendido() { return siNo(opt('encendido', 'rasp'), false); }
+  /* ★ 23/10/2026 (Jazmín): «que la raspadita siempre esté tapada por predeterminado».
+     Sin dato, va PRENDIDA. Sólo se apaga si alguien la destildó en el panel (false). */
+  function encendido() { return siNo(opt('encendido', 'rasp'), true); }
 
   function config() {
     var f = String(opt('forma', 'raspForma') || 'cuadrado').toLowerCase();

@@ -267,7 +267,7 @@
         '<div class="grp"><label>Foto 3 — el año</label>'+txt('fecha','foto3','link')+'</div></div>'+
         '<div class="h efx" data-ve=".scratch-sec, .rasp-zona, #pv-fecha">'+ICO.destello+' Efectos — raspadita de la fecha</div>'+
         '<div class="hint" style="margin-bottom:10px">Tapa la fecha con una capa que el invitado rasca con el dedo. Se monta sobre la disposición que hayas elegido arriba: si elegiste una de fotos, va apareciendo una foto por vez.</div>'+
-        '<div class="grp">'+chk('raspadita','encendido','Tapar la fecha para rascar')+'</div>'+
+        '<div class="grp">'+'<label class="chk"><input type="checkbox" '+((D.fx.raspadita||{}).encendido!==false&&(D.fx.raspadita||{}).encendido!=='0'?'checked':'')+' onchange="D.fx.raspadita=D.fx.raspadita||{};D.fx.raspadita.encendido=this.checked;postPreview()"> Tapar la fecha para rascar</label>'+'</div>'+
         '<div class="two"><div class="grp"><label>Cómo se rasca</label>'+sel('raspadita','modo',[['simple','Todo junto'],['partes','Por partes — el día, el mes y el año']])+'</div>'+
         '<div class="grp"><label>Forma de las fichas</label>'+sel('raspadita','forma',[['cuadrado','Cuadradas'],['redondo','Redondas'],['corazon','Corazones']])+'</div></div>'+
         '<div class="two"><div class="grp"><label>El mes</label>'+sel('raspadita','mes',[['corto','Corto — NOV'],['completo','Completo — Noviembre']])+'</div>'+

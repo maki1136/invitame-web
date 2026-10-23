@@ -231,6 +231,38 @@
       d.fx = d.fx || {};
       d.fx.ocultas = s.ocultas.filter(function (k) { return /^[a-z]{3,12}$/.test(String(k)); }).slice(0, 20);
     }
+    /* ★ 23/10/2026 (Jazmín): «si los clientes en el formulario no colocan
+       información, por ejemplo de Hospedaje recomendado o de Instagram, que no
+       agregue el sector cuando genere la invitación. Que genere sólo los
+       sectores de la información que sí colocan.»
+       Cada sección que el cliente dejó VACÍA se suma a `fx.ocultas` (la misma
+       lista de «Secciones que no van» del panel). Si después la completan,
+       Jazmín la destilda en PRINCIPAL → «Secciones que no van». */
+    var lleno = function () {
+      for (var i = 0; i < arguments.length; i++) {
+        var v = arguments[i];
+        if (esLista(v) ? v.length : String(v == null ? '' : v).trim()) return true;
+      }
+      return false;
+    };
+    var hayRegalo = lleno(s.regalos, s.regLinks) || REGALOS.some(function (k) { return lleno(s[k]); });
+    var vacias = [];
+    if (!lleno(s.hoteles, s.hotDesc, s.hotelImg))                    vacias.push('hospedaje');
+    if (!lleno(s.igHashtag, s.igUser))                               vacias.push('hashtag');
+    if (!lleno(s.videoUrl))                                          vacias.push('video');
+    if (!lleno(s.spotifyUrl))                                        vacias.push('spotify');
+    if (!lleno(s.itinerario))                                        vacias.push('itinerario');
+    if (!lleno(s.personas, s.persFrase))                             vacias.push('padres');
+    /* la galería NO: si no mandan fotos van las de la muestra (/vestir.js, 20/10) */
+    if (!lleno(s.dress, s.dressInsp, s.dressColores, s.dressEvitar)) vacias.push('dresscode');
+    if (!hayRegalo)                                                  vacias.push('regalos');
+    if (vacias.length) {
+      d.fx = d.fx || {};
+      var ya = esLista(d.fx.ocultas) ? d.fx.ocultas : [];
+      vacias.forEach(function (k) { if (ya.indexOf(k) < 0) ya.push(k); });
+      d.fx.ocultas = ya.slice(0, 20);
+    }
+
     var corto = function (v, n) { return String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, n); };
     if (s.menu && esLista(s.menu.tiempos) && s.menu.tiempos.length) {
       d.fx = d.fx || {};
