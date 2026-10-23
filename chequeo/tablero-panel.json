@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-23T20:24:25.004Z",
+ "cuando": "2026-10-23T21:40:59.144Z",
  "slug": "camila-y-tomas",
- "total": 391,
- "verde": 388,
+ "total": 399,
+ "verde": 396,
  "amarillo": 0,
  "rojo": 3,
  "gris": 0,
@@ -386,17 +386,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -413,6 +402,17 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -517,6 +517,28 @@
    "seVe": true,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "Empezá por acá",
+   "control": "Nombres en MAYÚSCULAS",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "nmayus",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.cierre.fraseAbajo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
@@ -1576,6 +1598,28 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "dresscode-selector",
+   "control": "Mostrar sólo los colores a evitar (sin tachar, abajo del texto y la imagen)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.dresscode.soloEvitar",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "itinerario-selector",
+   "control": "Con dibujitos en cada momento (iglesia, copas, baile…)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.itinerario.iconos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "menu-selector",
    "control": "Mostrar el menú",
    "tipo": "checkbox",
@@ -1916,12 +1960,34 @@
    "estado": "verde"
   },
   {
+   "tab": "PERSONAS",
+   "bloque": "Personas importantes (hasta 12)",
+   "control": "Sólo texto, uno debajo del otro (la relación arriba, los nombres abajo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.personas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
    "tab": "REGALOS",
    "bloque": "regalo-selector",
    "control": "Color del dibujo",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.regalo.color",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "regalo-selector",
+   "control": "Dibujados",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.regalo.pieTexto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2120,6 +2186,17 @@
    "tipo": "textarea",
    "guarda": true,
    "dato": "c_texto-boton-ver-datos-bancarios",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "regalo-selector",
+   "control": "Sin el título «Mesa de regalos» (queda sólo «Con cariño» y el texto)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.regalo.sinTitulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4151,6 +4228,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.sobre.sello",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "lacre-selector",
+   "control": "En el celular, el sobre entero (sin recortar), con el fondo de la invitación alrededor",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.sobre.completo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
