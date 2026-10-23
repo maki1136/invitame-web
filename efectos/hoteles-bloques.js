@@ -92,6 +92,7 @@
     pintando = true;
     cont.innerHTML = bloques(txt).map(hotel).join('');
     cont.setAttribute('data-bloques', '1');
+    cont.__nuestro = cont.innerHTML;     /* lo que dejamos nosotros, tal cual lo serializa el navegador */
     pintando = false;
   }
 
@@ -100,8 +101,15 @@
     var cont = document.getElementById('hosp-lista');
     if (!cont || cont === vigilada) return;
     vigilada = cont;
+    /* ⚠️⚠️ 22/10/2026 — ESTO ERA UN BUCLE INFINITO. El observador corre DESPUÉS
+       (microtarea), cuando `pintando` ya volvió a false: nuestro propio innerHTML
+       lo disparaba, borraba la marca y volvía a pintar, sin fin. La página quedaba
+       con el procesador al 100 % y en el iPhone no respondía ningún toque
+       (regina-y-emiliano). Ahora sólo se repinta si el contenido NO es el nuestro
+       (o sea, si el motor lo volvió a escribir). */
     new MutationObserver(function () {
       if (pintando) return;
+      if (cont.innerHTML === cont.__nuestro) return;
       cont.removeAttribute('data-bloques');
       setTimeout(aplicar, 0);
     }).observe(cont, { childList: true });
