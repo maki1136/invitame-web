@@ -844,6 +844,8 @@
     '/efectos/banda-tematica.js',   /* las 7 bandas de color pleno pasan a ser la foto de la temática */
     '/efectos/simbolo-tematica.js', /* los aros de cada título y la marca del itinerario */
 
+    '/efectos/tapas-foto.js',        /* 22/10: la foto propia de las tapas del video y la playlist (fx.tapas) */
+
     /* ⚠️ EL ÚLTIMO DE TODOS, Y TIENE QUE SERLO. Mueve nodos y esconde
        secciones: necesita que todo lo demás ya haya terminado de armar. */
     '/efectos/reglas-duras.js'         /* la frase no se pinta suelta, la carta va arriba, el video y la playlist nunca crudos */
