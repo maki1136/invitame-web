@@ -200,7 +200,12 @@
 
   function sacarLaFrase() {
     var secs = document.querySelectorAll('.fraseSec, section.frase');
-    var cede = loResuelveLaColeccion();
+    /* 23/10/2026 — evelyn-camarillo-saavedra: con «La carta» marcada en
+       «Secciones que no van», la frase se quedaba sin lugar y desaparecía.
+       Si la carta no va, la frase vuelve a su sección. */
+    var D = datos() || {};
+    var cartaFuera = !!(D.fx && Array.isArray(D.fx.ocultas) && D.fx.ocultas.indexOf('carta') > -1);
+    var cede = loResuelveLaColeccion() || cartaFuera;
     for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
       var ya = s.getAttribute('data-regla-frase') === 'fuera';

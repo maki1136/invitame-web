@@ -315,7 +315,7 @@
   // no se veía). Se anota que fue ELEGIDA, así las invitaciones viejas, que
   // tienen la de fábrica, siguen con la de su colección. Lo aplica
   // /efectos/fuentes-extra.js.
-  function setB(k,v){D[k]=v; if(k==='nfont'){D.fx=D.fx||{}; D.fx.nfontElegida=true;} render();}
+  function setB(k,v){D[k]=v; if(k==='nfont'){D.fx=D.fx||{}; D.fx.nfontElegida=true;} if(k==='ncolor'){D.fx=D.fx||{}; D.fx.ncolorElegido=true;} if(k==='nsize'){D.fx=D.fx||{}; D.fx.nsizeElegido=true;} render();}
 
   // ==== Editor de foto: arrastrar para mover + zoom (tipo Instagram) ====
   let edOn=false,edX=0,edY=0;
