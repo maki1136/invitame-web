@@ -436,6 +436,11 @@ if ($tablaPaquetes !== false) {
   }
 }
 foreach ($interruptoresPagos as $ruta) {
+  /* ★ 23/10/2026 (Jazmín): «que la raspadita siempre esté tapada por
+     predeterminado». Apagada, la sección decía «Raspa para revelar» con la
+     fecha a la vista. Queda como la trae la muestra (prendida); si no la
+     compró, el equipo la destilda en el panel. */
+  if ($ruta === 'fx.raspadita.encendido') continue;
   $partes = explode('.', $ruta);          /* fx.filtro.encendido */
   if (count($partes) < 2) continue;
   $ref = &$ev;
