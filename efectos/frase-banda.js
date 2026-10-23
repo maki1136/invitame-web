@@ -63,7 +63,8 @@
     var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio;
     if (firma === ultima && document.getElementById(ID_CSS)) return;
     ultima = firma;
-    var S = 'html body section.fraseSec.fraseSec';
+    /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
+    var S = 'html body section.fraseSec.fraseSec:not(#fb-a):not(#fb-b)';
     var css = [];
     if (foto === 'llena') {
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
@@ -75,7 +76,7 @@
             : pos === 'abajo' ? 'linear-gradient(to top, rgba(0,0,0,0) 8%, rgba(0,0,0,.42) 22%, rgba(0,0,0,.28) 42%, rgba(0,0,0,0) 62%)'
             : 'radial-gradient(85% 42% at 50% 50%, rgba(0,0,0,.38) 0%, rgba(0,0,0,.18) 55%, rgba(0,0,0,0) 100%)';
       css.push(S + ' #frase-tint{background:' + g + '!important}');
-      if (!colorPropio) css.push(S + ' > .frase{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.45)!important}');
+      if (!colorPropio) css.push(S + ' > p.frase.frase{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.45)!important}');
     } else {
       css.push(S + ' #frase-tint{background:' + VELOS[velo] + '!important}');
     }
