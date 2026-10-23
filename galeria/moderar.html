@@ -357,7 +357,7 @@ main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
 <div id="login" hidden>
   <div class="caja">
     <h2>Moderación</h2>
-    <p>Entra con tu cuenta, la misma con la que creaste la galería.</p>
+    <p>Entra con la misma cuenta del panel de Invítame.</p>
     <input id="lg-mail" type="email" placeholder="Correo" autocomplete="username">
     <input id="lg-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
     <button id="lg-ok" type="button">Entrar</button>
@@ -514,6 +514,8 @@ const ADMINS = [
   'NYR66cd13ofVY1T2xjT5HHzRXYq2'
 ];
 
+const EQUIPO_FIJO = ['littlemomentsok@gmail.com', 'info@invitameok.com'];
+
 function noPasa(txt) {
   $('cabecera').hidden = true;
   $('panel').hidden = true;
@@ -540,9 +542,23 @@ async function arrancar() {
 
   const yo = (auth.currentUser && auth.currentUser.uid) || '';
   const esDuenio = !!ev.duenio && ev.duenio === yo;
-  const esAdmin = ADMINS.indexOf(yo) >= 0;
+  let esAdmin = ADMINS.indexOf(yo) >= 0;
+  /* 23/10/2026 — Maki: «a Jazmín también le tenés que dar acceso». Además de
+     los uid de arriba, entra el EQUIPO: los correos fijos del panel y quien
+     esté activa en la caja Equipo (inv_equipo). Es la misma regla que
+     esEquipo() en las reglas de Firestore, que es el candado de verdad. */
+  if (!esAdmin) {
+    const mail = String((auth.currentUser && auth.currentUser.email) || '').toLowerCase();
+    if (EQUIPO_FIJO.indexOf(mail) >= 0) esAdmin = true;
+    else if (mail) {
+      try {
+        const m = await getDoc(doc(db, 'inv_equipo', mail));
+        if (m.exists() && m.data().activo !== false) esAdmin = true;
+      } catch (e) {}
+    }
+  }
   if (!esDuenio && !esAdmin) {
-    return noPasa('Esta galería no es de tu cuenta. Entra con la cuenta con la que la creaste.');
+    return noPasa('Esta galería no es de tu cuenta. Entra con la cuenta del panel de Invítame, o con la cuenta con la que la creaste.');
   }
 
   $('cabecera').hidden = false; $('panel').hidden = false;
