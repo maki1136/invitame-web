@@ -497,7 +497,9 @@
 
     var a = (typeof f.velo === 'number') ? f.velo : 0.3;
     f.poster = posterSano(f);
-    var fija = f.poster || f.url;
+    /* 23/10/2026 (citlalli): con «Una imagen» manda la imagen. El «poster» que
+       quedó del video anterior ganaba y la imagen nueva no se veía nunca. */
+    var fija = (f.tipo === 'imagen') ? (f.url || f.poster) : (f.poster || f.url);
 
     raiz.style.setProperty('--inv-fuerza', String(
       Math.max(0.5, Math.min(2.2, (typeof f.fuerza === 'number' && f.fuerza) ? f.fuerza : 1))));

@@ -250,6 +250,16 @@
     fila.appendChild(sel);
     caja.appendChild(fila);
 
+    /* ---- 23/10/2026: los dibujitos de cada momento ---- */
+    var filaIc = chico(document.createElement('label'),
+      'display:flex;gap:7px;align-items:center;font-size:12.5px;margin:0 0 12px;cursor:pointer');
+    var chkIc = document.createElement('input'); chkIc.type = 'checkbox';
+    chkIc.checked = !!datos(d).iconos;
+    chkIc.onchange = function () { datos(borrador() || d).iconos = chkIc.checked; dibujar(); refrescar(); };
+    filaIc.appendChild(chkIc);
+    filaIc.appendChild(document.createTextNode('Con dibujitos en cada momento (iglesia, copas, baile…)'));
+    caja.appendChild(filaIc);
+
     /* ---- los momentos ---- */
     var lista = document.createElement('div');
     caja.appendChild(lista);
@@ -277,6 +287,17 @@
         det.style.cssText = 'width:100%;font-size:12px';
         det.oninput = function () { datos(d).momentos[i].d = det.value; refrescar(); };
         col.appendChild(tit); col.appendChild(det);
+        /* 23/10/2026: el dibujito de este momento (efectos/itinerario-iconos.js) */
+        if (datos(d).iconos && window.INVITICONOS) {
+          var ic = document.createElement('select'); ic.style.cssText = 'width:100%;font-size:12px';
+          var o0 = document.createElement('option'); o0.value = ''; o0.textContent = 'Dibujito: automático'; ic.appendChild(o0);
+          Object.keys(window.INVITICONOS.nombres).forEach(function (k) {
+            var o = document.createElement('option'); o.value = k; o.textContent = 'Dibujito: ' + window.INVITICONOS.nombres[k]; ic.appendChild(o);
+          });
+          ic.value = m.i || '';
+          ic.onchange = function () { datos(d).momentos[i].i = ic.value; refrescar(); };
+          col.appendChild(ic);
+        }
 
         var bor = chico(document.createElement('button'),
           'cursor:pointer;line-height:1;padding:6px 8px');

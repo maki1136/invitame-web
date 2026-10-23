@@ -168,6 +168,17 @@
     filaOn.appendChild(document.createTextNode('Escribir sobre el lacre'));
     caja.appendChild(filaOn);
 
+    /* 23/10/2026 (citlalli): «el sobre se debe mirar completo, no abarca toda la
+       pantalla… con un fondo». Lo pinta efectos/sobre-completo.js */
+    var filaCo = chico(document.createElement('label'),
+      'display:flex;gap:7px;align-items:center;font-size:12.5px;margin:0 0 10px;cursor:pointer');
+    var chkCo = document.createElement('input'); chkCo.type = 'checkbox';
+    chkCo.checked = !!datosSobre(d).completo;
+    chkCo.onchange = function () { datosSobre(borrador() || d).completo = chkCo.checked; refrescar(); };
+    filaCo.appendChild(chkCo);
+    filaCo.appendChild(document.createTextNode('En el celular, el sobre entero (sin recortar), con el fondo de la invitación alrededor'));
+    caja.appendChild(filaCo);
+
     var cuerpo = document.createElement('div');
     caja.appendChild(cuerpo);
 

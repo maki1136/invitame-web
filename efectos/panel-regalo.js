@@ -54,6 +54,36 @@
     nada.type = 'button';
     caja.appendChild(nada);
 
+    /* ---- 23/10/2026: abajo del texto (citlalli: el sobrecito y «Lluvia de sobres») ---- */
+    caja.appendChild(el('label', 'display:block;font-weight:700;margin:18px 0 6px', 'Abajo del texto'));
+    var pieInfo = el('div', 'font-size:12px;color:#7a6a70;margin:0 0 6px', 'Una imagen chica y un rótulo debajo de la frase (ej: un sobre y «Lluvia de sobres»).');
+    caja.appendChild(pieInfo);
+    var pieFila = el('div', 'display:flex;align-items:center;gap:10px;margin:0 0 6px');
+    var pieVer = el('div', 'width:52px;height:52px;border-radius:10px;background:#f4efea center/contain no-repeat;flex:none');
+    var pieSub = el('label', 'cursor:pointer;color:#6D1233;font-weight:600', 'Subir imagen');
+    var pieInp = el('input'); pieInp.type = 'file'; pieInp.accept = 'image/*'; pieInp.style.display = 'none';
+    pieSub.appendChild(pieInp);
+    var pieQuitar = el('button', 'cursor:pointer;padding:4px 10px;font-size:12px', 'Quitar'); pieQuitar.type = 'button';
+    pieFila.appendChild(pieVer); pieFila.appendChild(pieSub); pieFila.appendChild(pieQuitar);
+    caja.appendChild(pieFila);
+    var pieTx = el('input'); pieTx.type = 'text'; pieTx.placeholder = 'Rótulo (ej: Lluvia de sobres)'; pieTx.style.cssText = 'width:100%';
+    caja.appendChild(pieTx);
+    var sinTitLab = el('label', 'display:flex;gap:7px;align-items:center;margin:8px 0 0;cursor:pointer');
+    var sinTit = el('input'); sinTit.type = 'checkbox';
+    sinTitLab.appendChild(sinTit); sinTitLab.appendChild(document.createTextNode('Sin el título «Mesa de regalos» (queda sólo «Con cariño» y el texto)'));
+    caja.appendChild(sinTitLab);
+    pieInp.onchange = async function () {
+      var f = pieInp.files && pieInp.files[0]; if (!f) return;
+      if (!window.INV || !INV.uploadImage) { alert('Todavía no cargó la base. Esperá 2 seg.'); return; }
+      pieSub.firstChild.textContent = 'Subiendo…';
+      try { var url = await INV.uploadImage(f); var r = datos(); if (r) { r.pieImg = url; } pintar(); refrescar(); }
+      catch (e) { alert('No pude subir la imagen. Probá de nuevo.'); }
+      pieSub.firstChild.textContent = 'Subir imagen';
+    };
+    pieQuitar.onclick = function () { var r = datos(); if (!r) return; r.pieImg = ''; pintar(); refrescar(); };
+    pieTx.oninput = function () { var r = datos(); if (!r) return; r.pieTexto = pieTx.value; refrescar(); };
+    sinTit.onchange = function () { var r = datos(); if (!r) return; r.sinTitulo = sinTit.checked; refrescar(); };
+
     function tile(grid, item, esDibujo) {
       var b = el('button', 'position:relative;aspect-ratio:1;border:1px solid #e3d6da;border-radius:12px;background:#faf7f5;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center');
       b.type = 'button'; b.title = item.nombre;
@@ -90,6 +120,9 @@
       var r = datos() || {}, d = borrador() || {};
       var foto = String(d[CAMPO] || '');
       var tinta = r.color || '#4a3a40';
+      pieVer.style.backgroundImage = r.pieImg ? 'url("' + r.pieImg + '")' : 'none';
+      if (document.activeElement !== pieTx) pieTx.value = r.pieTexto || '';
+      sinTit.checked = !!r.sinTitulo;
       col.value = /^#[0-9a-f]{6}$/i.test(r.color || '') ? r.color : '#4a3a40';
       [].forEach.call(caja.querySelectorAll('button[data-id]'), function (b) {
         var on = b.dataset.tipo === 'd' ? (r.dibujo === b.dataset.id)

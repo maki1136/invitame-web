@@ -171,6 +171,16 @@
     labNo.appendChild(document.createTextNode('No mostrar los colores (ni los sugeridos ni los a evitar)'));
     caja.appendChild(labNo);
 
+    /* 23/10/2026: sólo los colores a evitar, sin tachar, al pie (citlalli) */
+    var labSE = document.createElement('label');
+    labSE.style.cssText = 'display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0 0 12px;cursor:pointer';
+    var chkSE = document.createElement('input'); chkSE.type = 'checkbox';
+    chkSE.checked = !!((datos() || {}).soloEvitar);
+    chkSE.onchange = function () { var dc = datos(); if (!dc) return; dc.soloEvitar = !!chkSE.checked; refrescar(); };
+    labSE.appendChild(chkSE);
+    labSE.appendChild(document.createTextNode('Mostrar sólo los colores a evitar (sin tachar, abajo del texto y la imagen)'));
+    caja.appendChild(labSE);
+
     /* ---- el título ---- */
     var labT = document.createElement('label');
     labT.textContent = 'El texto de arriba';

@@ -93,8 +93,15 @@
   }
 
   /* la lista de colores a mostrar, o null si no hay que mostrar nada */
+  /* 23/10/2026 — citlalli-y-hedwin-jesus: «quitar "Los colores de la fiesta" y
+     los colores… abajo las bolitas con los colores que NO deben llevar».
+     `fx.dresscode.soloEvitar` = true → sólo la fila de los colores a evitar,
+     sin tachar, al pie de la sección: imagen, texto y abajo las bolitas. */
+  function soloEvitar() { return (fx().dresscode || {}).soloEvitar === true; }
+
   function colores() {
     var d = fx().dresscode || {};
+    if (soloEvitar()) return null;
     var c = d.colores;
     if (Object.prototype.toString.call(c) === '[object Array]') {
       c = c.filter(function (x) { return x && String(x).trim(); });
@@ -121,6 +128,7 @@
   }
   function tituloEvitar() {
     var d = fx().dresscode || {};
+    if (soloEvitar()) return typeof d.tituloEvitar === 'string' ? d.tituloEvitar : '';
     if (typeof d.tituloEvitar === 'string') return d.tituloEvitar;
     return TITULO_EVITAR;
   }
@@ -186,7 +194,7 @@
     if (!ancla) return;
 
     /* si ya está puesto igual, no se toca nada */
-    var firma = tit + '§' + (lista || []).join('|') + '§' + titEv + '§' + (ev || []).join('|');
+    var firma = (soloEvitar() ? 'S§' : '') + tit + '§' + (lista || []).join('|') + '§' + titEv + '§' + (ev || []).join('|');
     var ya = ancla.parentNode.querySelector('.' + CLASE);
     if (ya && ya.dataset.firma === firma) return;
     if (ya) ya.remove();
@@ -196,9 +204,20 @@
     caja.dataset.firma = firma;
 
     fila(caja, lista, tit, false);
-    fila(caja, ev, titEv, true);
+    fila(caja, ev, titEv, !soloEvitar());
 
-    ancla.parentNode.insertBefore(caja, ancla.nextSibling);
+    if (soloEvitar()) {
+      /* la imagen arriba del texto, y las bolitas al final de todo eso */
+      var tx = document.getElementById('dress-texto'), im = document.getElementById('dress-img');
+      if (tx && im && im.style.display !== 'none' && im.nextElementSibling !== tx && tx.parentNode === im.parentNode) {
+        im.parentNode.insertBefore(im, tx);
+      }
+      var ult = (tx && im && im.style.display !== 'none') ? (im.compareDocumentPosition(tx) & 4 ? tx : im) : (tx || ancla);
+      ult.parentNode.insertBefore(caja, ult.nextSibling);
+      caja.style.marginTop = '16px';
+    } else {
+      ancla.parentNode.insertBefore(caja, ancla.nextSibling);
+    }
   }
 
   function sincronizar() {

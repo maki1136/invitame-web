@@ -205,7 +205,12 @@
        Si la carta no va, la frase vuelve a su sección. */
     var D = datos() || {};
     var cartaFuera = !!(D.fx && Array.isArray(D.fx.ocultas) && D.fx.ocultas.indexOf('carta') > -1);
-    var cede = loResuelveLaColeccion() || cartaFuera;
+    /* Y si la carta no se ve (el motor la esconde cuando no tiene texto propio)
+       y la frase no se mudó adentro, la frase tampoco puede desaparecer. */
+    var cs = document.getElementById('carta-sec');
+    var cartaNoSeVe = !cs || cs.style.display === 'none';
+    var fraseAdentro = !!(cs && cs.querySelector('.mf-frase'));
+    var cede = loResuelveLaColeccion() || cartaFuera || (cartaNoSeVe && !fraseAdentro);
     for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
       var ya = s.getAttribute('data-regla-frase') === 'fuera';

@@ -319,7 +319,9 @@
       '<div class="grp"><label>Disposición nombres</label><select onchange="setB(\'layout\',this.value)">'+
       '<option value="apilados"'+((D.layout!=='juntos')?' selected':'')+'>Uno debajo del otro</option>'+
       '<option value="juntos"'+((D.layout==='juntos')?' selected':'')+'>Juntos (misma línea)</option>'+
-      '</select><div class="hint">Con nombres largos, "juntos" achica la letra para que entren en una sola línea.</div></div></div>'+
+      '<option value="tres"'+((D.layout==='tres')?' selected':'')+'>Uno arriba, «&» solo al medio, otro abajo</option>'+
+      '</select><div class="hint">Con nombres largos, "juntos" achica la letra para que entren en una sola línea.</div>'+
+      '<label style="display:flex;gap:6px;align-items:center;margin-top:6px;font-weight:500"><input type="checkbox" '+(D.nmayus?'checked':'')+' onchange="setB(\'nmayus\',this.checked)"> Nombres en MAYÚSCULAS</label></div></div>'+
       '<div class="two"><div class="grp"><label>Color nombres</label><input type="color" value="'+(/^#[0-9a-f]{6}$/i.test(D.ncolor||'')?D.ncolor:'#fbf7ef')+'" oninput="setB(\'ncolor\',this.value)"></div>'+
       '<div class="grp"><label>Tamaño nombres</label><input type="range" min="20" max="90" value="'+(parseInt(D.nsize,10)||52)+'" oninput="setB(\'nsize\',this.value)"></div></div>'+
       '<div class="grp"><label>Foto de portada</label><select onchange="setB(\'cover\',this.value)"><option value="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80">Campo</option><option value="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=80">Elegante</option><option value="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1000&q=80">Rosas</option></select><div class="file" style="margin-top:6px" id="coverbtn" onclick="document.getElementById(\'coverfile\').click()">'+ICO.subir+' Subir tu propia foto</div><div class="hint">Medida: 1080 × 1920 px (vertical, como la pantalla del celular). Las caras, en el centro: es lo que queda siempre a la vista.</div><input type="file" id="coverfile" accept="image/*" style="display:none" onchange="subirFoto(this,\'cover\')"></div>'+
