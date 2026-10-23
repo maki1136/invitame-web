@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-23T16:43:50.643Z",
+ "cuando": "2026-10-23T17:23:54.704Z",
  "slug": "camila-y-tomas",
  "total": 391,
- "verde": 388,
- "amarillo": 0,
+ "verde": 387,
+ "amarillo": 1,
  "rojo": 3,
  "gris": 0,
  "items": [
@@ -386,6 +386,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -402,17 +413,6 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2188,8 +2188,9 @@
    "guarda": true,
    "dato": "fx.muestra.estado",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
