@@ -1,10 +1,10 @@
 {
- "cuando": "2026-10-23T01:42:12.746Z",
+ "cuando": "2026-10-23T16:05:43.600Z",
  "slug": "camila-y-tomas",
  "total": 391,
- "verde": 389,
- "amarillo": 1,
- "rojo": 1,
+ "verde": 388,
+ "amarillo": 0,
+ "rojo": 3,
  "gris": 0,
  "items": [
   {
@@ -386,17 +386,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -413,6 +402,17 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2243,9 +2243,8 @@
    "guarda": true,
    "dato": "c_color-fondo-confirmacion",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2838,17 +2837,6 @@
    "estado": "verde"
   },
   {
-   "tab": "AVANZADO",
-   "bloque": "",
-   "control": "Activar",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "c_habilitar-trivia",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
    "tab": "TRIVIA",
    "bloque": "Preguntas y respuestas de la trivia",
    "control": "Escribí la pregunta",
@@ -3226,6 +3214,133 @@
    "tipo": "color",
    "guarda": true,
    "dato": "c_color-2-titulo-trivia",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "TRIVIA",
+   "bloque": "",
+   "control": "Activar",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "c_habilitar-trivia",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "c_habilitar-trivia (TRIVIA + PAQUETE)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Paquete",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.paquete.plan",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Pases personalizados· aparece cuando cargás sus datos",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Música· aparece cuando cargás sus datos",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "¡Pregúntame!",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras, c_habilitar-trivia",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "c_habilitar-trivia (TRIVIA + PAQUETE)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Envío por WhatsApp a cada invitado· aparece cuando cargás sus datos",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Control de acceso QR· aparece cuando cargás sus datos",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "El filtro de la fiesta",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Galería de los invitados· además hay que crear la galería",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Pase con voz",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Raspadita",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3959,18 +4074,6 @@
   },
   {
    "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Paquete",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.paquete.plan",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
    "bloque": "std-selector",
    "control": "Save the date · título de arriba",
    "tipo": "text",
@@ -4224,106 +4327,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.filtro.aGaleria",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Pases personalizados",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Música",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "¡Pregúntame!",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Envío por WhatsApp a cada invitado",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Control de acceso QR",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "El filtro de la fiesta",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Galería de los invitados",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Pase con voz",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "paquete-selector",
-   "control": "Raspadita",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
    "llega": true,
    "seVe": true,
    "estado": "verde"
