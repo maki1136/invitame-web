@@ -172,6 +172,18 @@
 
     caja.appendChild(grupo('Qué foto usar', sel));
     caja.appendChild(cajaLink);
+
+    /* 23/10/2026 (citlalli): «en vez de que diga gracias al inicio, quiero que el
+       gracias esté abajo de esta frase». La frase final (el «¡Gracias!» /
+       «¡Te esperamos!») va DEBAJO del texto final. Lo pinta efectos/cierre-orden.js */
+    var labAb = document.createElement('label');
+    labAb.style.cssText = 'display:flex;gap:7px;align-items:center;font-size:12.5px;margin:10px 0 0;cursor:pointer';
+    var chkAb = document.createElement('input'); chkAb.type = 'checkbox';
+    chkAb.checked = !!datos(d).fraseAbajo;
+    chkAb.onchange = function () { datos(borrador() || d).fraseAbajo = chkAb.checked; refrescar(); };
+    labAb.appendChild(chkAb);
+    labAb.appendChild(document.createTextNode('La frase final («¡Gracias!») abajo del texto final, no arriba'));
+    caja.appendChild(labAb);
     return caja;
   }
 

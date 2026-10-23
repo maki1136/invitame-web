@@ -51,6 +51,11 @@
         '<label class="lnk" style="cursor:pointer;color:#6D1233;white-space:nowrap">'+ICO.subir+' Subir<input type="file" accept="image/*" style="display:none" onchange="subirAdornoPersonas(this)"></label>'+
         '<span class="lnk" style="cursor:pointer" onclick="quitarAdornoPersonas()">Quitar</span>'+
       '</div>'+
+      /* ★ 23/10/2026 (citlalli): «únicamente texto», rótulo arriba y nombres abajo,
+         uno debajo del otro. Lo pinta /efectos/personas-lista.js */
+      '<label style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0 0 10px;cursor:pointer">'+
+        '<input type="checkbox" '+((D.fx&&D.fx.personas&&D.fx.personas.estilo==='lista')?'checked':'')+' onchange="D.fx=D.fx||{};D.fx.personas=Object.assign({},D.fx.personas,{estilo:this.checked?\'lista\':\'\'});postPreview()">'+
+        'Sólo texto, uno debajo del otro (la relación arriba, los nombres abajo)</label>'+
       '<div id="pers-list"></div>'+
       '<button class="addbtn" id="pers-add" style="margin-top:8px" onclick="addPersona()">+ Agregar persona</button>'+
       '</div>';

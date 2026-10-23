@@ -677,6 +677,7 @@
     '/efectos/panel-fondo.js',         /* y su bloque en el panel, con el subidor */
     '/efectos/itinerario-momentos.js', /* carga los momentos reales del itinerario */
     '/efectos/itinerario.js',          /* y la línea se dibuja con el scroll */
+    '/efectos/itinerario-iconos.js',   /* 23/10: los dibujitos de cada momento (citlalli) */
     '/efectos/itinerario-modo.js',     /* imagen o texto, elegido a mano (no que gane la imagen sola) */
     '/efectos/secciones-nuevas.js',    /* 19/10: lo común de menú, avisos y patrocinadores (window.INVSN) */
     '/efectos/menu.js',                /* el menú por tiempos (fx.menu), después del itinerario */
@@ -704,11 +705,15 @@
     '/efectos/links-vestimenta.js',    /* 21/10: los links del texto de Vestimenta se pueden tocar (Pinterest) */
     '/efectos/diag-toques.js',         /* 22/10: diagnóstico de toques, sólo con &diag=1 */
     '/efectos/boton-volver.js',        /* 22/10: «← Volver» a la web, sólo con &volver= */
+    '/efectos/mapa-abrir.js',          /* 23/10: «Abrir en Google Maps» debajo de cada mapa (citlalli) */
+    '/efectos/carta-con-frase.js',     /* 23/10: la carta que lleva la frase no se esconde por no tener texto propio (citlalli) */
     '/efectos/nombres-elegidos.js',    /* 23/10: el color, el tamaño y la letra de los nombres del panel le ganan a la colección */
     '/efectos/menu-equipo.js',         /* 23/10: menú «Equipo» (Editar / Panel de los novios) sólo para el equipo con sesión */
     '/efectos/portada-desde-cero.js',  /* 22/10: el video de portada queda en el cuadro 0 hasta que se va el sobre */
     '/efectos/trivia-legible.js',      /* 22/10: las respuestas de la trivia se leen en las colecciones claras */
+    '/efectos/personas-lista.js',      /* 23/10: personas sólo texto, una debajo de la otra (citlalli) */
     '/efectos/personas-centradas.js',  /* 22/10: Personas centradas; 4 o más, una debajo de la otra */
+    '/efectos/regalo-pie.js',          /* 23/10: imagen y rótulo abajo del texto de regalos (citlalli) */
     '/efectos/regalos-solo-frase.js',  /* 23/10: Mesa de regalos se ve con sólo la frase («lluvia de sobres», regina) */
     '/efectos/regalo-sin-fondo.js',    /* 21/10: el regalo de Mesa de regalos sin el cuadrado blanco */
     '/efectos/imagenes-del-panel.js',  /* 21/10: la foto que se carga en el panel (img_c_) gana a la de la muestra (img_f-) */
@@ -716,6 +721,7 @@
     '/efectos/rsvp-general.js',        /* 20/10: confirmar con un solo link para todos (Pack Estándar) */
     '/efectos/secciones-ocultas.js',   /* 20/10: secciones que no van (fx.ocultas), formulario y panel */
     '/efectos/personas-foto.js',       /* 20/10: personas sin foto o con el adorno del diseño (Jazmín) */
+    '/efectos/cierre-orden.js',        /* 23/10: el «¡Gracias!» abajo del texto final (citlalli) */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
     '/efectos/musica.js',              /* completa la sección «Playlist del evento» del motor */
     '/efectos/musica-al-toque.js',     /* 29/9: YouTube PRECARGADO (suena al toque del sobre) y arranca

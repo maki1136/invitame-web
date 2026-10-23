@@ -50,7 +50,9 @@
     if (!d.fx) d.fx = {};
     if (!d.fx.paquete) d.fx.paquete = {};
     var c = d.fx.paquete;
-    if (!c.plan) c.plan = (tabla() ? tabla().POR_DEFECTO : 'estandar');
+    /* 23/10/2026 — Jazmín: «yo no seleccioné nunca que compró Estándar». Si el
+       formulario no trajo el paquete, NO se asume Estándar: queda vacío y el
+       bloque lo pide en rojo hasta que alguien lo elija. */
     if (Object.prototype.toString.call(c.extras) !== '[object Array]') c.extras = [];
     return c;
   }
@@ -127,6 +129,9 @@
     fila.appendChild(lab);
 
     var sel = chico(document.createElement('select'), 'width:100%');
+    var op0 = document.createElement('option');
+    op0.value = ''; op0.textContent = '— Elegí el paquete que compró —';
+    sel.appendChild(op0);
     Object.keys(t.PAQUETES).forEach(function (k) {
       var p = t.PAQUETES[k];
       var op = document.createElement('option');
@@ -134,7 +139,7 @@
       op.textContent = p.nombre + ' — $' + p.precio + ' ' + p.moneda;
       sel.appendChild(op);
     });
-    sel.value = cfg(d).plan;
+    sel.value = cfg(d).plan || '';
     fila.appendChild(sel);
     caja.appendChild(fila);
 
@@ -162,9 +167,14 @@
       var p = t.PAQUETES[c.plan] || t.PAQUETES[t.POR_DEFECTO];
 
       /* qué incluye */
-      incluye.innerHTML = '<b>Incluye:</b> ' + p.incluye.map(function (k) {
-        return t.FUNCIONES[k] ? t.FUNCIONES[k].nombre : k;
-      }).join(' · ');
+      if (!c.plan) {
+        incluye.innerHTML = '<span style="display:block;padding:9px 11px;border-radius:9px;background:#FDEDEE;color:#6D1233;border:1px solid #F8D3D6;opacity:1">' +
+          '<b>Falta elegir qué paquete compró.</b> El formulario no lo trajo. Elegilo arriba y Guardar y publicar.</span>';
+      } else {
+        incluye.innerHTML = '<b>Incluye:</b> ' + p.incluye.map(function (k) {
+          return t.FUNCIONES[k] ? t.FUNCIONES[k].nombre : k;
+        }).join(' · ');
+      }
 
       /* los extras posibles son los que NO trae el plan */
       var afuera = t.leFalta(c.plan, []);
@@ -236,7 +246,7 @@
       var dd = borrador(); if (!dd) return;
       if (document.activeElement && caja.contains(document.activeElement)) return;
       var c = cfg(dd);
-      if (sel.value !== c.plan) sel.value = c.plan;
+      if (sel.value !== (c.plan || '')) sel.value = c.plan || '';
       pintar();
     };
 

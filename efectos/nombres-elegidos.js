@@ -25,6 +25,11 @@
     }
     if (fx.nfontElegida && ev.nfont) q.push('font-family:' + String(ev.nfont).replace(/[;{}<>]/g, '') + '!important');
     if (q.length) r.push(S + ',' + S + ' span{' + q.join(';') + '}');
+    if (ev.nmayus === true) r.push(S + ',' + S + ' span{text-transform:uppercase!important}');
+    if (ev.layout === 'tres') {
+      r.push(S + ' span{display:block!important}');
+      r.push(S + ' span.n-amp{font-size:.55em!important;line-height:1.1!important;margin:.08em 0!important}');
+    }
     if (fx.nsizeElegido && ev.nsize) {
       var n = parseInt(ev.nsize, 10) || 52;
       var juntos = ev.layout === 'juntos' && !!ev.n2;
@@ -34,8 +39,21 @@
     return r.join('\n');
   }
 
+  /* «tres»: CITLALLI / & / HEDWIN JESÚS — el «&» solo en su renglón (pedido de
+     la clienta de citlalli-y-hedwin-jesus). El motor escribe
+     <span>N1</span><br><span>&amp; N2</span>; acá se parte en tres. */
+  function tres(ev) {
+    if (ev.layout !== 'tres' || !ev.n1 || !ev.n2) return;
+    ['pv-names', 'ep-names'].forEach(function (id) {
+      var e = document.getElementById(id); if (!e || e.querySelector('.n-amp')) return;
+      var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+      e.innerHTML = '<span>' + esc(ev.n1) + '</span><span class="n-amp">&amp;</span><span>' + esc(ev.n2) + '</span>';
+    });
+  }
+
   function revisar() {
     var ev = window.INVEV; if (!ev || typeof ev !== 'object') return;
+    tres(ev);
     var t = css(ev);
     if (t === ultima) return;
     ultima = t;
