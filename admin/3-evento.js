@@ -620,7 +620,7 @@
     if(String(D.fecha||'').indexOf('2026-11-28')===0) av.push('La fecha sigue siendo la del ejemplo (28/11/2026)');
     if(/Hay un instante en la vida/.test(D.frase||'')) av.push('La «Frase Larga» es la del ejemplo (pestaña PRINCIPAL)');   /* 1/10/2026: decía «frase principal», que es OTRO campo (kick): Jazmín cambiaba ése y el aviso no se iba */
     if(/images\.unsplash\.com/.test(D.cover||'')) av.push('La foto de portada es una del ejemplo (no es de la pareja)');
-    // la trivia sólo cuenta si está PRENDIDA (AVANZADO → Habilitar trivia): apagada no se ve
+    // la trivia sólo cuenta si está PRENDIDA (TRIVIA → Habilitar trivia): apagada no se ve
     const _triviaOn=/^(true|si|sí|1)$/i.test(String(D['c_habilitar-trivia']));
     if(_triviaOn&&D.trivia&&D.trivia[0]&&/D[óo]nde se conocieron\?$/.test(D.trivia[0].q||'')) av.push('Las preguntas de la trivia son las de ejemplo');
     // Nota: sólo se avisa por cosas que el invitado VE. Campos internos o que ya
