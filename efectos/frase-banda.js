@@ -52,9 +52,15 @@
     var c = cfg(ev);
     var foto = c.foto === 'entera' ? 'entera' : 'llena';
     /* sin elegir: el velo sigue a la letra — letra clara, oscurece; letra oscura, aclara */
-    var velo = VELOS[c.velo] ? c.velo : veloSegunLetra();
     var pos = POS[c.pos] ? c.pos : 'centro';
-    var firma = foto + '|' + velo + '|' + pos;
+    /* ★ 23/10 (Jazmín, Regina: «se sigue viendo feo, muy oscura»). Sin elegir y
+       con FOTO: la foto queda limpia, va una sombra suave sólo detrás de la
+       frase y la letra pasa a blanca (si no eligieron un color en el panel). */
+    var hayFoto = !!(ev['img_c_fondo-seccion-frase-larga'] || ev['img_c_fondo-secci-n-frase-larga'] || ev['img_f-fondo-secci-n-frase-larga']);
+    var auto = !VELOS[c.velo];
+    var velo = auto ? (hayFoto ? 'foto' : veloSegunLetra()) : c.velo;
+    var colorPropio = String(ev.fraseColor || '').trim();
+    var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio;
     if (firma === ultima && document.getElementById(ID_CSS)) return;
     ultima = firma;
     var S = 'html body section.fraseSec.fraseSec';
@@ -64,9 +70,19 @@
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
       css.push(S + ' #bandfg{background-size:cover!important;background-position:center!important}');
     }
-    css.push(S + ' #frase-tint{background:' + VELOS[velo] + '!important}');
+    if (velo === 'foto') {
+      var g = pos === 'arriba' ? 'linear-gradient(to bottom, rgba(0,0,0,0) 8%, rgba(0,0,0,.42) 22%, rgba(0,0,0,.28) 42%, rgba(0,0,0,0) 62%)'
+            : pos === 'abajo' ? 'linear-gradient(to top, rgba(0,0,0,0) 8%, rgba(0,0,0,.42) 22%, rgba(0,0,0,.28) 42%, rgba(0,0,0,0) 62%)'
+            : 'radial-gradient(85% 42% at 50% 50%, rgba(0,0,0,.38) 0%, rgba(0,0,0,.18) 55%, rgba(0,0,0,0) 100%)';
+      css.push(S + ' #frase-tint{background:' + g + '!important}');
+      if (!colorPropio) css.push(S + ' > .frase{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.45)!important}');
+    } else {
+      css.push(S + ' #frase-tint{background:' + VELOS[velo] + '!important}');
+    }
     css.push(S + '{align-items:' + POS[pos] + '!important}');
-    if (pos !== 'centro') css.push(S + ' > .frase{' + (pos === 'arriba' ? 'margin-top:12%!important' : 'margin-bottom:12%!important') + '}');
+    /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
+    if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
+    if (pos === 'abajo')  css.push(S + '{padding-bottom:clamp(56px,20%,140px)!important}');
     var st = document.getElementById(ID_CSS);
     if (!st) { st = document.createElement('style'); st.id = ID_CSS; document.head.appendChild(st); }
     st.textContent = css.join('\n');
@@ -96,9 +112,9 @@
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(t); caja.appendChild(a);
     var c = datos(d);
-    caja.appendChild(select('Ubicación de la frase', [['centro', 'Centrada'], ['arriba', 'Arriba'], ['abajo', 'Abajo']],
+    caja.appendChild(select('Ubicación de la frase', [['arriba', 'Arriba'], ['centro', 'Centrado'], ['abajo', 'Abajo']],
       c.pos || 'centro', function (v) { datos(borrador() || d).pos = v; }));
-    caja.appendChild(select('Velo sobre la foto (para que se lea)', [['', 'Automático (según el color de la letra)'], ['suave', 'Oscurecer suave'], ['oscuro', 'Oscurecer fuerte'], ['ninguno', 'Sin velo'], ['claro', 'Aclarar suave'], ['claro-fuerte', 'Aclarar fuerte']],
+    caja.appendChild(select('Velo sobre la foto (para que se lea)', [['', 'Automático (sombra suave detrás de la frase)'], ['suave', 'Oscurecer suave'], ['oscuro', 'Oscurecer fuerte'], ['ninguno', 'Sin velo'], ['claro', 'Aclarar suave'], ['claro-fuerte', 'Aclarar fuerte']],
       c.velo || '', function (v) { datos(borrador() || d).velo = v; }));
     caja.appendChild(select('Cómo entra la foto', [['llena', 'Ocupa toda la franja'], ['entera', 'Entera, sobre una copia borrosa']],
       c.foto || 'llena', function (v) { datos(borrador() || d).foto = v; }));
