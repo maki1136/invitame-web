@@ -704,6 +704,7 @@
     '/efectos/links-vestimenta.js',    /* 21/10: los links del texto de Vestimenta se pueden tocar (Pinterest) */
     '/efectos/diag-toques.js',         /* 22/10: diagnóstico de toques, sólo con &diag=1 */
     '/efectos/boton-volver.js',        /* 22/10: «← Volver» a la web, sólo con &volver= */
+    '/efectos/nombres-elegidos.js',    /* 23/10: el color, el tamaño y la letra de los nombres del panel le ganan a la colección */
     '/efectos/menu-equipo.js',         /* 23/10: menú «Equipo» (Editar / Panel de los novios) sólo para el equipo con sesión */
     '/efectos/portada-desde-cero.js',  /* 22/10: el video de portada queda en el cuadro 0 hasta que se va el sobre */
     '/efectos/trivia-legible.js',      /* 22/10: las respuestas de la trivia se leen en las colecciones claras */
