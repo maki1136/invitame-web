@@ -37,6 +37,7 @@
    TRIVIA:["Texto sobre título:","Texto 'Puntos':","Texto 'Pregunta':","Texto del campo para ingresar el nombre:","Texto tabla de resultados:","Texto botón \"Iniciar Sesión\":","Texto \"Hola\" antes del nombre:","Texto botón \"Comenzar trivia\":","Texto botón \"Cerrar sesion\":","Texto \"No sos\" para cerrar sesión:","Texto columna \"Nombre\" en tabla de resultados:","Texto \"tabla de posiciones\":","Color 1 titulo trivia:","Color 2 titulo trivia:"]
   };
   FIELDS.EFECTOS=[];
+  FIELDS.PAQUETE=[];   // 23/10/2026: el bloque «El paquete que compró» tiene pestaña propia (pedido de Jazmín)
   // VERSIÓN ACTUAL de la plataforma. Cada invitación se publica clavada a una versión
   // y NO cambia cuando mejoramos el sistema (pedido de Jazmín, pág. 35).
   // VERSION del motor de la invitacion. Cada invitacion queda CLAVADA a la version con
@@ -55,7 +56,7 @@
   // Una invitacion clavada a una version anterior NO entiende el candado nuevo, asi que
   // al ponerle clave se la sube a esta (con aviso). Ver "invitacion privada" mas abajo.
   const VER_CANDADO_SERVIDOR='2026-08-11b';
-  const ORDER=["PRINCIPAL","LUGAR_VEST","GALERIA_INSTA_VID","PERSONAS","REGALOS","CONFIRMACIÓN","MUSIC_PASES","AVANZADO","TRIVIA","EFECTOS","INVITADOS"];
+  const ORDER=["PRINCIPAL","LUGAR_VEST","GALERIA_INSTA_VID","PERSONAS","REGALOS","CONFIRMACIÓN","MUSIC_PASES","AVANZADO","TRIVIA","PAQUETE","EFECTOS","INVITADOS"];
   /* Lista CURADA: solo fuentes que la invitación carga sí o sí (ver <link> en i/index.html). Menos, pero TODAS funcionan. */
   const FONTS=[["'Great Vibes',cursive","Great Vibes"],["'Rouge Script',cursive","Rouge Script"],["'Dancing Script',cursive","Dancing Script"],["'Parisienne',cursive","Parisienne"],["'Tangerine',cursive","Tangerine"],["'Sacramento',cursive","Sacramento"],["'Cormorant Garamond',serif","Cormorant"],["'Playfair Display',serif","Playfair Display"],["'Forum',serif","Forum"],["'Marcellus',serif","Marcellus"],["'EB Garamond',serif","EB Garamond"],["'Lora',serif","Lora"],["'Cinzel',serif","Cinzel"],["'Prata',serif","Prata"],["'Montserrat',sans-serif","Montserrat"],["'Poppins',sans-serif","Poppins"],["'Jost',sans-serif","Jost"],
     /* sumadas a pedido de Jazmín (29/9/2026). No están en el <link> del motor:

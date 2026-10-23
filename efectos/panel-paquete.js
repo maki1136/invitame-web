@@ -80,7 +80,9 @@
     caja.id = ID;
 
     var h = document.createElement('div');
-    h.className = 'h efx';
+    /* ⚠️ sin «efx»: desde el 23/10 vive en su pestaña PAQUETE, y esa clase es
+       la señal con la que los otros módulos reconocen la pestaña EFECTOS. */
+    h.className = 'h';
     h.innerHTML = ico('regalo') + ' El paquete que compró';
     caja.appendChild(h);
 
@@ -223,10 +225,30 @@
 
   function revisar() {
     var d = borrador();
-    if (!d || !enEfectos()) return;
+    if (!d) return;
 
     var ya = document.getElementById(ID);
     if (ya) { if (ya.__sync) ya.__sync(); return; }
+
+    /* 23/10/2026 — Jazmín: «¿puede ir como pestaña directamente?». Su casa es
+       la pestaña PAQUETE (invCasa en admin/3-evento.js). Un panel viejo, sin
+       invCasa, lo sigue mostrando al final de EFECTOS como antes. */
+    if (window.invCasa) {
+      var casa = window.invCasa(ID);
+      if (!casa) return;
+      /* ⚠️ en su pestaña NO lleva la clase «mejoras»: muchos módulos se cuelgan
+         del primer `.mejoras` que encuentran y se dibujarían adentro de éste. */
+      var c = construir(d);
+      c.className = 'paq-bloque';
+      if (!document.getElementById('paq-css')) {
+        var st = document.createElement('style'); st.id = 'paq-css';
+        st.textContent = '.paq-bloque>.h{display:flex;align-items:center;gap:8px;font-family:Epilogue,sans-serif;font-size:11.5px;font-weight:800;color:var(--uva);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid var(--line)}.paq-bloque>.h .ic{color:var(--rosa)}';
+        document.head.appendChild(st);
+      }
+      casa.appendChild(c);
+      return;
+    }
+    if (!enEfectos()) return;
 
     /* ⚠️⚠️ VA ÚLTIMO, Y NO ES UNA PREFERENCIA: ES UN CHOQUE MEDIDO.
 

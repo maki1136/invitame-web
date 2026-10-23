@@ -104,7 +104,7 @@
   // Cada pestaña edita principalmente una sección de la invitación.
   // Al cambiar de pestaña, scrolleamos el preview a esa sección para que
   // la diseñadora VEA lo que está tocando (antes el preview se quedaba en la portada).
-  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',EFECTOS:'',INVITADOS:''};
+  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',PAQUETE:'',EFECTOS:'',INVITADOS:''};
   function scrollPreviewTo(sec){
     const fr=el('pv-frame'); if(!fr||!fr.contentDocument)return;
     try{
@@ -191,7 +191,8 @@
     'compartir-selector':['CONFIRMACIÓN','compartir'],
     'regalo-selector':['REGALOS','regalo'],
     'std-selector':['EFECTOS','savethedate'],
-    'ocultas-selector':['PRINCIPAL','ocultas']
+    'ocultas-selector':['PRINCIPAL','ocultas'],
+    'paquete-selector':['PAQUETE','paquete']
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -205,7 +206,8 @@
     compartir:{abajo:true},
     regalo:{arriba:true},
     savethedate:{abajo:true},
-    ocultas:{abajo:true}
+    ocultas:{abajo:true},
+    paquete:{arriba:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
