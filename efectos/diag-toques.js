@@ -34,7 +34,9 @@
     var vs = [].slice.call(document.querySelectorAll('video'));
     s += ' | videos ' + vs.length + ': ' + vs.map(function (v) {
       var c = getComputedStyle(v);
-      return (v.id || (v.parentNode && v.parentNode.id) || 'v') + '(' + c.position + ',z' + c.zIndex + ',' + c.visibility + (c.display === 'none' ? ',none' : '') + ')';
+      var dibujado = v.getClientRects().length > 0;   /* false = un padre lo apaga (display:none) */
+      return (v.id || (v.parentNode && v.parentNode.id) || 'v') + '(' + c.position + ',z' + c.zIndex + ',' + c.visibility +
+        (c.display === 'none' ? ',none' : '') + (dibujado ? '' : ',sin caja') + ')';
     }).join(' ');
     s += ' | liviano:' + si(document.documentElement.classList.contains('aparato-liviano'));
     return s;
@@ -51,7 +53,7 @@
     }
     caja.textContent = toques.map(function (t, i) {
       return (toques.length - i) + ') ' + t.x + ',' + t.y + ' ' + t.el +
-        ' | end:' + t.end + ' click:' + t.click + (t.click === 'sí' ? ' prevent:' + t.prev : '') +
+        ' | end:' + t.end + (t.endPrev === 'sí' ? '(cancelado)' : '') + ' click:' + t.click + (t.click === 'sí' ? ' prevent:' + t.prev : '') +
         (t.clickEn && t.click !== 'sí' ? ' (click fue a ' + t.clickEn + ')' : '');
     }).join('\n') + '\n— ' + estado();
   }
@@ -67,6 +69,9 @@
   window.addEventListener('touchend', function (e) {
     if (!actual) return;
     if (mismo(actual.nodo, e.target)) actual.end = 'sí';
+    var t0 = actual;
+    /* si alguien cancela el touchend, iOS no manda el click */
+    setTimeout(function () { t0.endPrev = si(e.defaultPrevented); pintar(); }, 0);
     pintar();
   }, { capture: true, passive: true });
   window.addEventListener('click', function (e) {
