@@ -205,7 +205,7 @@
   const LUGAR_DE_CASA={
     diseno:{despuesDe:'.mejoras'},
     cierre:{antesDe:'#f-frase-final'},
-    frase:{despuesDeCampo:'#f-fondo-seccion-frase-larga'},
+    frase:{despuesDeCampo:'#prev-f-fondo-seccion-frase-larga'},
     vestimenta:{antesDe:'#f-vestimenta-titulo'},
     itinerario:{antesDe:'#f-titulo-itinerario'},
     confirmacion:{arriba:true},
