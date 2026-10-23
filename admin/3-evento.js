@@ -104,7 +104,7 @@
   // Cada pestaña edita principalmente una sección de la invitación.
   // Al cambiar de pestaña, scrolleamos el preview a esa sección para que
   // la diseñadora VEA lo que está tocando (antes el preview se quedaba en la portada).
-  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',EFECTOS:'',INVITADOS:''};
+  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',PAQUETE:'',EFECTOS:'',INVITADOS:''};
   function scrollPreviewTo(sec){
     const fr=el('pv-frame'); if(!fr||!fr.contentDocument)return;
     try{
@@ -191,7 +191,8 @@
     'compartir-selector':['CONFIRMACIÓN','compartir'],
     'regalo-selector':['REGALOS','regalo'],
     'std-selector':['EFECTOS','savethedate'],
-    'ocultas-selector':['PRINCIPAL','ocultas']
+    'ocultas-selector':['PRINCIPAL','ocultas'],
+    'paquete-selector':['PAQUETE','paquete']
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -205,7 +206,8 @@
     compartir:{abajo:true},
     regalo:{arriba:true},
     savethedate:{abajo:true},
-    ocultas:{abajo:true}
+    ocultas:{abajo:true},
+    paquete:{arriba:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
@@ -618,7 +620,7 @@
     if(String(D.fecha||'').indexOf('2026-11-28')===0) av.push('La fecha sigue siendo la del ejemplo (28/11/2026)');
     if(/Hay un instante en la vida/.test(D.frase||'')) av.push('La «Frase Larga» es la del ejemplo (pestaña PRINCIPAL)');   /* 1/10/2026: decía «frase principal», que es OTRO campo (kick): Jazmín cambiaba ése y el aviso no se iba */
     if(/images\.unsplash\.com/.test(D.cover||'')) av.push('La foto de portada es una del ejemplo (no es de la pareja)');
-    // la trivia sólo cuenta si está PRENDIDA (AVANZADO → Habilitar trivia): apagada no se ve
+    // la trivia sólo cuenta si está PRENDIDA (TRIVIA → Habilitar trivia): apagada no se ve
     const _triviaOn=/^(true|si|sí|1)$/i.test(String(D['c_habilitar-trivia']));
     if(_triviaOn&&D.trivia&&D.trivia[0]&&/D[óo]nde se conocieron\?$/.test(D.trivia[0].q||'')) av.push('Las preguntas de la trivia son las de ejemplo');
     // Nota: sólo se avisa por cosas que el invitado VE. Campos internos o que ya
