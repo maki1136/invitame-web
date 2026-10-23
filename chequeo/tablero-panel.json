@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-23T19:17:31.259Z",
+ "cuando": "2026-10-23T20:24:25.004Z",
  "slug": "camila-y-tomas",
  "total": 391,
  "verde": 388,
@@ -93,7 +93,7 @@
    "control": "Color nombres",
    "tipo": "color",
    "guarda": true,
-   "dato": "ncolor",
+   "dato": "ncolor, fx.ncolorElegido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -104,7 +104,7 @@
    "control": "Tamaño nombres",
    "tipo": "range",
    "guarda": true,
-   "dato": "nsize",
+   "dato": "nsize, fx.nsizeElegido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -386,6 +386,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -402,17 +413,6 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
