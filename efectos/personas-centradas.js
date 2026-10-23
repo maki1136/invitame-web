@@ -24,6 +24,8 @@
       /* se mira la grilla de la colección SIN lo nuestro, cada vez: la colección
          la cambia mientras carga (primero 2 columnas, después 3) */
       p.style.removeProperty('grid-template-columns');
+      p.style.removeProperty('grid-auto-flow');
+      p.style.removeProperty('row-gap');
       var cs = getComputedStyle(p);
       if (cs.display !== 'grid') return;
       var cols = cs.gridTemplateColumns.split(' ').filter(function (x) { return /px$/.test(x); });
@@ -33,6 +35,10 @@
       if (n >= 4) {
         /* muchas: una debajo de la otra */
         p.style.setProperty('grid-template-columns', 'minmax(0, 280px)', 'important');
+        /* 23/10 (Jazmín, Evelyn con 9): si la colección dejó `grid-auto-flow:column`,
+           las de más se apilaban a la derecha, encimadas en columnas de 0 px. */
+        p.style.setProperty('grid-auto-flow', 'row', 'important');
+        p.style.setProperty('row-gap', '22px', 'important');
         kids.forEach(function (k) { k.style.setProperty('text-align', 'center', 'important'); });
       } else if (n < max) {
         p.style.setProperty('grid-template-columns', 'repeat(' + n + ', ' + w + ')', 'important');

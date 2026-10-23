@@ -136,7 +136,8 @@
     var chk = document.createElement('input');
     chk.type = 'checkbox';
     chk.style.cssText = 'margin-top:2px';
-    chk.checked = siNo(rasp(d).encendido);
+    var encV = rasp(d).encendido;   /* 23/10: sin dato = prendida (como la invitación) */
+    chk.checked = (encV === undefined || encV === null || encV === '') ? true : siNo(encV);
     var sp = document.createElement('span');
     sp.textContent = 'Taparla con una raspadita';
     lin.appendChild(chk);
