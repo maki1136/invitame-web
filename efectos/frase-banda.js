@@ -72,9 +72,9 @@
       css.push(S + ' #bandfg{background-size:cover!important;background-position:center!important}');
     }
     if (velo === 'foto') {
-      var g = pos === 'arriba' ? 'linear-gradient(to bottom, rgba(0,0,0,0) 8%, rgba(0,0,0,.42) 22%, rgba(0,0,0,.28) 42%, rgba(0,0,0,0) 62%)'
-            : pos === 'abajo' ? 'linear-gradient(to top, rgba(0,0,0,0) 8%, rgba(0,0,0,.42) 22%, rgba(0,0,0,.28) 42%, rgba(0,0,0,0) 62%)'
-            : 'radial-gradient(85% 42% at 50% 50%, rgba(0,0,0,.38) 0%, rgba(0,0,0,.18) 55%, rgba(0,0,0,0) 100%)';
+      var g = pos === 'arriba' ? 'linear-gradient(to bottom, rgba(0,0,0,0) 6%, rgba(0,0,0,.34) 20%, rgba(0,0,0,.20) 40%, rgba(0,0,0,0) 58%)'
+            : pos === 'abajo' ? 'linear-gradient(to top, rgba(0,0,0,0) 6%, rgba(0,0,0,.34) 20%, rgba(0,0,0,.20) 40%, rgba(0,0,0,0) 58%)'
+            : 'radial-gradient(80% 38% at 50% 50%, rgba(0,0,0,.32) 0%, rgba(0,0,0,.14) 55%, rgba(0,0,0,0) 100%)';
       css.push(S + ' #frase-tint{background:' + g + '!important}');
       if (!colorPropio) css.push(S + ' > p.frase.frase{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.45)!important}');
     } else {
