@@ -68,7 +68,26 @@
       if (v == null || typeof v !== 'object') return false;
       v = v[partes[i]];
     }
-    return !!v;
+    return v === true || /^(true|si|sí|1)$/i.test(String(v));
+  }
+
+  /* 23/10/2026 — Maki: «si compraba un paquete y después quería agregar algo
+     extra, lo bonifico o lo vendo aparte, tenía que poder tildar y agregar lo
+     que quiera». Tildar un extra lo PRENDE en su bloque; destildarlo lo apaga.
+     Las funciones sin interruptor (pases, música…) aparecen cuando tienen
+     datos cargados: ahí la casilla sólo deja anotado que se la diste. */
+  function prender(d, clave, si) {
+    var t = tabla(); if (!t) return false;
+    var f = t.FUNCIONES[clave];
+    if (!f || !f.interruptor) return false;
+    var partes = f.interruptor.split('.');
+    var v = d;
+    for (var i = 0; i < partes.length - 1; i++) {
+      if (v[partes[i]] == null || typeof v[partes[i]] !== 'object') v[partes[i]] = {};
+      v = v[partes[i]];
+    }
+    v[partes[partes.length - 1]] = !!si;
+    return true;
   }
 
   function chico(el, css) { el.style.cssText = css; return el; }
@@ -125,7 +144,7 @@
     /* ---- los extras vendidos aparte ---- */
     var tituloExtras = chico(document.createElement('div'),
       'font-size:12px;font-weight:600;margin:0 0 4px');
-    tituloExtras.textContent = 'Le vendiste aparte';
+    tituloExtras.textContent = 'Le agregaste aparte (vendido o bonificado)';
     caja.appendChild(tituloExtras);
 
     var listaExtras = chico(document.createElement('div'), 'margin:0 0 12px');
@@ -168,11 +187,21 @@
             var pos = cc.extras.indexOf(k);
             if (this.checked && pos === -1) cc.extras.push(k);
             if (!this.checked && pos > -1) cc.extras.splice(pos, 1);
+            prender(d2, k, this.checked);
             pintar(); refrescar();
           };
           var txt = document.createElement('span');
           txt.textContent = f ? f.nombre : k;
           l.appendChild(i); l.appendChild(txt);
+          if (f && !f.interruptor) {
+            var nota = chico(document.createElement('span'), 'font-size:11px;opacity:.55');
+            nota.textContent = '· aparece cuando cargás sus datos';
+            l.appendChild(nota);
+          } else if (k === 'galeriaInvitados') {
+            var nota2 = chico(document.createElement('span'), 'font-size:11px;opacity:.55');
+            nota2.textContent = '· además hay que crear la galería';
+            l.appendChild(nota2);
+          }
           listaExtras.appendChild(l);
         });
       }

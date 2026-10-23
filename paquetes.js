@@ -71,7 +71,7 @@
     pases:           { nombre: 'Pases personalizados',       clase: 'filler', interruptor: null,
       nota: 'Cada invitado con su link y su QR. Es lo que habilita el panel de mesas de los novios.' },
     musica:          { nombre: 'Música',                     clase: 'filler', interruptor: null },
-    trivia:          { nombre: '¡Pregúntame!',               clase: 'killer', interruptor: null,
+    trivia:          { nombre: '¡Pregúntame!',               clase: 'killer', interruptor: 'c_habilitar-trivia',  /* 23/10: la casilla «Habilitar trivia» (pestaña TRIVIA) */
       nota: 'La trivia con ranking. En la página pública se llama «¡Pregúntame!» y se vende dentro de Premium.' },
     envioWhatsApp:   { nombre: 'Envío por WhatsApp a cada invitado', clase: 'filler', interruptor: null,
       nota: 'En Opciones del panel los novios escriben SU mensaje (hasta 300 caracteres, `PANEL.msjCompartir`) y en la lista de invitados el botón de WhatsApp abre el chat de esa persona con el mensaje y su link personal ya escritos. También hay Telegram y copiar link. ⚠️ DEPENDE DE `pases`: sin link por invitado no hay nada que mandar, así que no puede ir en un paquete que no tenga pases.' },
