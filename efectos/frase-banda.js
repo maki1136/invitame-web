@@ -56,7 +56,16 @@
     /* ★ 23/10 (Jazmín, Regina: «se sigue viendo feo, muy oscura»). Sin elegir y
        con FOTO: la foto queda limpia, va una sombra suave sólo detrás de la
        frase y la letra pasa a blanca (si no eligieron un color en el panel). */
+    /* la foto puede venir del campo o ponerla otro módulo (galería, muestra): se mira la franja */
     var hayFoto = !!(ev['img_c_fondo-seccion-frase-larga'] || ev['img_c_fondo-secci-n-frase-larga'] || ev['img_f-fondo-secci-n-frase-larga']);
+    if (!hayFoto) {
+      try {
+        ['bandfg', 'bandbg'].forEach(function (id) {
+          var e = document.getElementById(id);
+          if (e && /url\(/.test(getComputedStyle(e).backgroundImage)) hayFoto = true;
+        });
+      } catch (e) {}
+    }
     var auto = !VELOS[c.velo];
     var velo = auto ? (hayFoto ? 'foto' : veloSegunLetra()) : c.velo;
     var colorPropio = String(ev.fraseColor || '').trim();
