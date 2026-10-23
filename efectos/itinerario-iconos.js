@@ -29,7 +29,8 @@
   var NOMBRES = { iglesia: 'Iglesia', anillos: 'Anillos', copas: 'Copas / brindis', banquete: 'Banquete', cubiertos: 'Cena',
     baile: 'Baile', fiesta: 'Fiesta (bola disco)', pastel: 'Pastel', musica: 'Música', foto: 'Fotos', auto: 'Auto', corazon: 'Corazón' };
   var REGLAS = [
-    [/relig|iglesia|misa|ceremonia/i, 'iglesia'], [/civil|anillo|votos|boda/i, 'anillos'],
+    [/civil|anillo|votos|boda/i, 'anillos'], [/relig|iglesia|misa|ceremonia/i, 'iglesia'],
+    [/recepci/i, 'copas'],
     [/c[oó]ct?el|brind|bienvenida|copa/i, 'copas'], [/banquete|cena|comida|almuerzo/i, 'banquete'],
     [/baile|vals|pista/i, 'baile'], [/fiesta|fin|cierre|celebraci|disco|party/i, 'fiesta'],
     [/pastel|torta/i, 'pastel'], [/m[uú]sica|dj|show/i, 'musica'], [/foto/i, 'foto'], [/traslado|salida|auto/i, 'auto']

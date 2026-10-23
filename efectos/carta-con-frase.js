@@ -17,6 +17,15 @@
     if ((fx.carta && fx.carta.on === false) || oc.indexOf('carta') > -1) return;
     if (!cs.querySelector('.mf-frase')) return;
     if (cs.style.display === 'none') { cs.style.display = ''; cs.setAttribute('data-por-la-frase', '1'); }
+    /* sin carta propia: se ve SÓLO la frase, sin el sobre ni el texto de ejemplo
+       («Queridos amigos y familia…») ni el título «Una carta para ti». */
+    if (cs.getAttribute('data-por-la-frase')) {
+      var hayCarta = String((fx.carta && fx.carta.texto) || '').trim() !== '';
+      ['cartafx', 'cf-h2c', 'cf-kick'].forEach(function (id) {
+        var e = document.getElementById(id); if (!e) return;
+        if (!hayCarta) e.style.setProperty('display', 'none', 'important'); else e.style.removeProperty('display');
+      });
+    }
   }
   function arrancar() {
     if (!document.body) { setTimeout(arrancar, 60); return; }

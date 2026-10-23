@@ -705,6 +705,7 @@
     '/efectos/links-vestimenta.js',    /* 21/10: los links del texto de Vestimenta se pueden tocar (Pinterest) */
     '/efectos/diag-toques.js',         /* 22/10: diagnóstico de toques, sólo con &diag=1 */
     '/efectos/boton-volver.js',        /* 22/10: «← Volver» a la web, sólo con &volver= */
+    '/efectos/sobre-completo.js',      /* 23/10: el sobre entero en el celular, con el fondo alrededor (citlalli) */
     '/efectos/mapa-abrir.js',          /* 23/10: «Abrir en Google Maps» debajo de cada mapa (citlalli) */
     '/efectos/carta-con-frase.js',     /* 23/10: la carta que lleva la frase no se esconde por no tener texto propio (citlalli) */
     '/efectos/nombres-elegidos.js',    /* 23/10: el color, el tamaño y la letra de los nombres del panel le ganan a la colección */

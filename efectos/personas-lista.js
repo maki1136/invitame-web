@@ -10,13 +10,13 @@
   'use strict';
   if (window.__invPersonasLista) return; window.__invPersonasLista = 1;
   var ID = 'inv-personas-lista';
-  var CSS = 'html.inv-pl .padres{display:flex!important;flex-direction:column!important;align-items:center!important;gap:26px!important;grid-template-columns:none!important;max-width:100%!important}' +
-    'html.inv-pl .padres > .p{width:100%!important;max-width:340px!important;display:flex!important;flex-direction:column!important;align-items:center!important;background:transparent!important;box-shadow:none!important;border:0!important;padding:0!important}' +
-    'html.inv-pl .padres .av{display:none!important}' +
-    'html.inv-pl .padres .rl{order:-1!important;font-size:11px!important;letter-spacing:.22em!important;text-transform:uppercase!important;margin:0 0 6px!important;opacity:.85}' +
-    'html.inv-pl .padres .rl::after{content:"";display:block;width:34px;height:1px;margin:7px auto 0;background:currentColor;opacity:.45}' +
-    'html.inv-pl .padres .nm{font-size:21px!important;line-height:1.3!important;white-space:normal!important}' +
-    'html.inv-pl .padres .nm .pl-amp{display:block;font-size:.9em;margin:.1em 0}';
+  var CSS = 'html.inv-pl.inv-pl body .padres.padres{display:flex!important;flex-direction:column!important;align-items:center!important;gap:26px!important;grid-template-columns:none!important;max-width:100%!important}' +
+    'html.inv-pl.inv-pl body .padres.padres > .p{width:100%!important;max-width:340px!important;display:flex!important;flex-direction:column!important;align-items:center!important;background:transparent!important;box-shadow:none!important;border:0!important;padding:0!important}' +
+    'html.inv-pl.inv-pl body .padres.padres .av{display:none!important}' +
+    'html.inv-pl.inv-pl body .padres.padres .rl{order:-1!important;font-size:11px!important;letter-spacing:.22em!important;text-transform:uppercase!important;margin:0 0 6px!important;opacity:.85}' +
+    'html.inv-pl.inv-pl body .padres.padres .rl::after{content:"";display:block;width:34px;height:1px;margin:7px auto 0;background:currentColor;opacity:.45}' +
+    'html.inv-pl.inv-pl body .padres.padres .nm{font-size:21px!important;line-height:1.3!important;white-space:normal!important}' +
+    'html.inv-pl.inv-pl body .padres.padres .nm .pl-amp{display:block;font-size:.9em;margin:.1em 0}';
   function aplicar() {
     var ev = window.INVEV; if (!ev) return;
     var on = !!(ev.fx && ev.fx.personas && ev.fx.personas.estilo === 'lista');
