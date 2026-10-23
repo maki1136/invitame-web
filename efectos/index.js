@@ -723,6 +723,7 @@
     '/efectos/secciones-ocultas.js',   /* 20/10: secciones que no van (fx.ocultas), formulario y panel */
     '/efectos/personas-foto.js',       /* 20/10: personas sin foto o con el adorno del diseño (Jazmín) */
     '/efectos/cierre-orden.js',        /* 23/10: el «¡Gracias!» abajo del texto final (citlalli) */
+    '/efectos/frase-banda.js',         /* 23/10: frase larga — foto llena, velo y ubicación (Jazmín) */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
     '/efectos/musica.js',              /* completa la sección «Playlist del evento» del motor */
     '/efectos/musica-al-toque.js',     /* 29/9: YouTube PRECARGADO (suena al toque del sobre) y arranca

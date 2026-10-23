@@ -188,6 +188,7 @@
     'fondo-selector':['PRINCIPAL','diseno'],
     'motivo-selector':['PRINCIPAL','diseno'],
     'cierre-ajustes':['PRINCIPAL','cierre'],
+    'frase-ajustes':['PRINCIPAL','frase'],
     'dresscode-selector':['LUGAR_VEST','vestimenta'],
     'itinerario-selector':['LUGAR_VEST','itinerario'],
     'rsvp-selector':['CONFIRMACIÓN','confirmacion'],
@@ -204,6 +205,7 @@
   const LUGAR_DE_CASA={
     diseno:{despuesDe:'.mejoras'},
     cierre:{antesDe:'#f-frase-final'},
+    frase:{despuesDeCampo:'#f-fondo-seccion-frase-larga'},
     vestimenta:{antesDe:'#f-vestimenta-titulo'},
     itinerario:{antesDe:'#f-titulo-itinerario'},
     confirmacion:{arriba:true},
@@ -236,6 +238,7 @@
     var L=LUGAR_DE_CASA[c[1]]||{abajo:true}, ref=null;
     if(L.antesDe){ var f=p.querySelector(L.antesDe); ref=f&&(f.closest('.grp')||f); }
     if(ref&&ref.parentNode){ ref.parentNode.insertBefore(caja,ref); return caja; }
+    if(L.despuesDeCampo){ var fd=p.querySelector(L.despuesDeCampo); var rd=fd&&(fd.closest('.grp')||fd); if(rd&&rd.parentNode){ rd.parentNode.insertBefore(caja,rd.nextSibling); return caja; } var ff=p.querySelector('#f-frase-final'); var rf=ff&&(ff.closest('.grp')||ff); if(rf&&rf.parentNode){ rf.parentNode.insertBefore(caja,rf); return caja; } }
     if(L.despuesDe){ var b=p.querySelector(L.despuesDe); if(b&&b.parentNode){ b.parentNode.insertBefore(caja,b.nextSibling); return caja; } }
     if(L.arriba){ p.insertBefore(caja,p.firstChild); return caja; }
     p.appendChild(caja); return caja;
@@ -259,6 +262,7 @@
     'personas-bajada':'[data-sec=padres]',
     'inv-musica-panel':'#spotify-sec',
     'cierre-ajustes':'.footer',
+    'frase-ajustes':'.fraseSec',
     'compartir-selector':'#share-sec',
     'regalo-selector':'[data-sec=regalos]'
   };
