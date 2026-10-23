@@ -254,11 +254,11 @@
     $('ttNombres').textContent = PANEL.nombres || SLUG;
     $('ttFecha').textContent   = PANEL.fechaTexto || '';
     $('topSub').textContent    = ({resumen:'Panel de control', invitados:'Personas y pases',
-      mesas:'Mesas', confirmaciones:'Confirmaciones', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', std:'Save the date', opciones:'Opciones'})[VISTA] || 'Mi panel';
+      mesas:'Mesas', confirmaciones:'Confirmaciones', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', std:'Save the date', fotos:'Fotos de la fiesta', opciones:'Opciones'})[VISTA] || 'Mi panel';
     document.querySelectorAll('.lat a[data-vista]').forEach(a=>
       a.classList.toggle('on', a.dataset.vista===VISTA));
     ({resumen:vResumen, confirmaciones:vConfirmaciones, invitados:vInvitados, mesas:vMesas, itinerario:vItinerario,
-      mensajes:vMensajes, qr:vQR, std:vSTD, opciones:vOpciones}[VISTA] || vResumen)();
+      mensajes:vMensajes, qr:vQR, std:vSTD, fotos:vFotos, opciones:vOpciones}[VISTA] || vResumen)();
   }
 
   /* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma», punto 2): los números de
@@ -624,6 +624,11 @@
   // ---------- 6. OPCIONES ----------
   // ---------- SAVE THE DATE (regalo) ----------
   // La vista entera vive en /efectos/std-novios.js; acá sólo se le pasa lo suyo.
+  /* 23/10/2026: Invítame Live — los novios moderan su galería (efectos/galeria-novios-panel.js) */
+  function vFotos(){
+    if(!window.INVGAL_NOVIOS){ $('vista').innerHTML='<div class="card">Cargando…</div>'; setTimeout(()=>{ if(VISTA==='fotos') vFotos(); }, 400); return; }
+    window.INVGAL_NOVIOS.pintar($('vista'), { slug:SLUG, clave:CLAVE });
+  }
   function vSTD(){
     if(!window.INVSTD_NOVIOS){ $('vista').innerHTML='<div class="card">Cargando…</div>'; setTimeout(()=>{ if(VISTA==='std') vSTD(); }, 400); return; }
     window.INVSTD_NOVIOS.pintar($('vista'), { slug:SLUG, std:PANEL.std||{},

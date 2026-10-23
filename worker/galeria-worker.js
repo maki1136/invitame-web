@@ -877,6 +877,24 @@ const MODERAN = [
   'NYR66cd13ofVY1T2xjT5HHzRXYq2'
 ];
 
+/* 23/10/2026 — Maki: «a Jazmín también le tenés que dar acceso». El equipo de
+   Invítame modera cualquier fiesta: los correos fijos del panel y quien esté
+   activa en la caja Equipo (inv_equipo). Es lo mismo que esEquipo() en las
+   reglas de Firestore y que $EQUIPO en galeria-alta.php. */
+const EQUIPO_FIJO = ['littlemomentsok@gmail.com', 'info@invitameok.com', 'panel@invitame.local'];
+async function esDelEquipo(env, mail) {
+  const m = String(mail || '').trim().toLowerCase();
+  if (!m) return false;
+  if (EQUIPO_FIJO.indexOf(m) >= 0) return true;
+  try {
+    const t = await tokenGoogle(env);
+    const r = await fetch(FS + '/inv_equipo/' + encodeURIComponent(m), { headers: { Authorization: 'Bearer ' + t } });
+    if (!r.ok) return false;
+    const f = (await r.json()).fields || {};
+    return !(f.activo && f.activo.booleanValue === false);
+  } catch (e) { return false; }
+}
+
 async function ponerAjustes(req, env) {
   const quien = await verificarToken(req).catch(() => null);
   if (!quien) return respuesta({ error: 'Entra con tu cuenta.' }, 401);
@@ -890,7 +908,8 @@ async function ponerAjustes(req, env) {
 
   const admins = String(env.ADMIN_UIDS || '').split(',').map((x) => x.trim()).filter(Boolean);
   const esDuenio = ev.duenio && ev.duenio === quien.uid;
-  const esAdmin = admins.indexOf(quien.uid) >= 0 || MODERAN.indexOf(quien.uid) >= 0;
+  const esAdmin = admins.indexOf(quien.uid) >= 0 || MODERAN.indexOf(quien.uid) >= 0
+    || await esDelEquipo(env, quien.email);
   if (!esDuenio && !esAdmin) return respuesta({ error: 'Esta fiesta no es tuya.' }, 403);
 
   /* Sólo se escribe lo que vino. Mandar el modo no tiene por qué apagarle los
@@ -1050,7 +1069,11 @@ async function firmar(req, env, ctx) {
        con 200 personas: por eso lo escucha alguien antes, siempre. Y por eso
        mismo los audios vienen apagados de fábrica: quien los prende sabe que
        va a tener que aprobarlos. */
-    doc.estado = 'pendiente';
+    /* 23/10/2026 — Maki cambió la decisión del 1/9: con la fiesta en
+       automático, los saludos de voz también salen solos (si no, nadie los
+       aprueba y no se escuchan nunca). Con «Aprobar antes de mostrar»
+       prendido, esperan como antes. */
+    doc.estado = (ev.modo === 'auto') ? 'aprobada' : 'pendiente';
   } else {
     doc.texto = texto;
     const sucio = palabrota(texto);
