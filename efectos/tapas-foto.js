@@ -25,7 +25,17 @@
     var s = document.getElementById(id); if (!s || !url) return;
     var ts = s.querySelectorAll('.rd-tapa, .col-vtapa');
     for (var i = 0; i < ts.length; i++) {
-      var t = ts[i]; if (t.getAttribute('data-tapa-foto') === url) continue;
+      var t = ts[i];
+      /* ⚠️ reglas-duras.js mide la letra de las tapas: si no sabe que es una
+         FOTO copia el extremo de los hermanos (oscuro) y pinta el rótulo de
+         marrón sobre la pastilla. Se le dice que acá va BLANCO y se marca el
+         rótulo como resuelto; y se repasa siempre por si llegó antes. */
+      t.setAttribute('data-regla-extremo', 'b');
+      var txt0 = t.querySelector('.rd-txt, .txt');
+      if (txt0) txt0.setAttribute('data-regla-luz', 'foto');
+      var listo = t.getAttribute('data-tapa-foto') === url &&
+                  (!txt0 || /255, 255, 255/.test(getComputedStyle(txt0).color));
+      if (listo) continue;
       t.setAttribute('data-tapa-foto', url);
       t.style.setProperty('background', 'radial-gradient(circle at 50% 50%, rgba(30,22,16,.40) 0, rgba(30,22,16,.16) 26%, rgba(30,22,16,0) 46%), url("' + liviana(url) + '") center/cover no-repeat', 'important');
       t.style.setProperty('border', '0', 'important');
@@ -37,6 +47,7 @@
         txt.style.setProperty('-webkit-text-fill-color', '#fff', 'important');
         txt.style.setProperty('opacity', '1', 'important');
         txt.style.setProperty('text-shadow', '0 1px 4px rgba(20,14,8,.9)', 'important');
+        txt.setAttribute('data-regla-luz', 'foto');
         txt.style.setProperty('background', 'rgba(30,20,12,.6)', 'important');
         txt.style.setProperty('padding', '5px 12px 5px calc(12px + .26em)', 'important');
         txt.style.setProperty('border-radius', '99px', 'important');
