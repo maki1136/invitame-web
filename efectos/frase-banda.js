@@ -42,6 +42,25 @@
       return l > 0.55 ? 'suave' : 'claro';
     } catch (e) { return 'suave'; }
   }
+  function luz(c) {
+    var m = String(c).trim().match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (!m) return 1;
+    var h = m[1].length === 3 ? m[1].replace(/(.)/g, '$1$1') : m[1];
+    var r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  }
+  /* el corrector de legibilidad (reglas-duras) no toca la frase cuando la maneja este módulo */
+  function soltarCorrector(on) {
+    var s = document.querySelector('section.fraseSec'); if (!s) return;
+    if (!on) { s.removeAttribute('data-regla-no'); return; }
+    if (s.getAttribute('data-regla-no')) return;
+    s.setAttribute('data-regla-no', '1');
+    var f = s.querySelector('.frase');
+    if (f && f.hasAttribute('data-regla-luz')) {
+      ['color', '-webkit-text-fill-color', 'text-shadow'].forEach(function (k) { f.style.removeProperty(k); });
+      ['data-regla-luz', 'data-regla-orig', 'data-regla-inline', 'data-regla-opa', 'data-regla-fondo', 'data-regla-flojo'].forEach(function (k) { f.removeAttribute(k); });
+    }
+  }
   function cfg(ev) { return (ev && ev.fx && ev.fx.frase) || {}; }
 
   /* ================= LADO INVITACIÓN ================= */
@@ -52,21 +71,54 @@
     var c = cfg(ev);
     var foto = c.foto === 'entera' ? 'entera' : 'llena';
     /* sin elegir: el velo sigue a la letra — letra clara, oscurece; letra oscura, aclara */
-    var velo = VELOS[c.velo] ? c.velo : veloSegunLetra();
     var pos = POS[c.pos] ? c.pos : 'centro';
-    var firma = foto + '|' + velo + '|' + pos;
-    if (firma === ultima && document.getElementById(ID_CSS)) return;
+    /* ★ 23/10 (Jazmín, Regina: «se sigue viendo feo, muy oscura»). Sin elegir y
+       con FOTO: la foto queda limpia, va una sombra suave sólo detrás de la
+       frase y la letra pasa a blanca (si no eligieron un color en el panel). */
+    /* la foto puede venir del campo o ponerla otro módulo (galería, muestra): se mira la franja */
+    var hayFoto = !!(ev['img_c_fondo-seccion-frase-larga'] || ev['img_c_fondo-secci-n-frase-larga'] || ev['img_f-fondo-secci-n-frase-larga']);
+    if (!hayFoto) {
+      try {
+        ['bandfg', 'bandbg'].forEach(function (id) {
+          var e = document.getElementById(id);
+          if (e && /url\(/.test(getComputedStyle(e).backgroundImage)) hayFoto = true;
+        });
+      } catch (e) {}
+    }
+    var auto = !VELOS[c.velo];
+    var velo = auto ? (hayFoto ? 'foto' : veloSegunLetra()) : c.velo;
+    var colorPropio = String(ev.fraseColor || '').trim();
+    var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio;
+    if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo === 'foto'); return; }
     ultima = firma;
-    var S = 'html body section.fraseSec.fraseSec';
+    /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
+    var S = 'html body section.fraseSec.fraseSec:not(#fb-a):not(#fb-b)';
     var css = [];
     if (foto === 'llena') {
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
       css.push(S + ' #bandfg{background-size:cover!important;background-position:center!important}');
     }
-    css.push(S + ' #frase-tint{background:' + VELOS[velo] + '!important}');
+    if (velo === 'foto') {
+      var g = pos === 'arriba' ? 'linear-gradient(to bottom, rgba(0,0,0,0) 6%, rgba(0,0,0,.34) 20%, rgba(0,0,0,.20) 40%, rgba(0,0,0,0) 58%)'
+            : pos === 'abajo' ? 'linear-gradient(to top, rgba(0,0,0,0) 6%, rgba(0,0,0,.34) 20%, rgba(0,0,0,.20) 40%, rgba(0,0,0,0) 58%)'
+            : 'radial-gradient(80% 38% at 50% 50%, rgba(0,0,0,.32) 0%, rgba(0,0,0,.14) 55%, rgba(0,0,0,0) 100%)';
+      /* la letra: la que eligieron en el panel o blanca. Si es oscura, la sombra
+         de atrás pasa a ser clara. */
+      var letra = colorPropio || '#fff';
+      var oscura = luz(letra) < 0.5;
+      if (oscura) g = g.replace(/rgba\(0,0,0,/g, 'rgba(255,255,255,');
+      css.push(S + ' #frase-tint{background:' + g + '!important}');
+      css.push(S + ' > p.frase.frase{color:' + letra + '!important;-webkit-text-fill-color:' + letra + '!important;text-shadow:' +
+        (oscura ? '0 1px 2px rgba(255,255,255,.6),0 0 14px rgba(255,255,255,.5)' : '0 1px 3px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.45)') + '!important}');
+    } else {
+      css.push(S + ' #frase-tint{background:' + VELOS[velo] + '!important}');
+    }
     css.push(S + '{align-items:' + POS[pos] + '!important}');
-    if (pos !== 'centro') css.push(S + ' > .frase{' + (pos === 'arriba' ? 'margin-top:12%!important' : 'margin-bottom:12%!important') + '}');
+    /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
+    if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
+    if (pos === 'abajo')  css.push(S + '{padding-bottom:clamp(56px,20%,140px)!important}');
+    soltarCorrector(velo === 'foto');
     var st = document.getElementById(ID_CSS);
     if (!st) { st = document.createElement('style'); st.id = ID_CSS; document.head.appendChild(st); }
     st.textContent = css.join('\n');
@@ -96,9 +148,9 @@
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
     caja.appendChild(t); caja.appendChild(a);
     var c = datos(d);
-    caja.appendChild(select('Ubicación de la frase', [['centro', 'Centrada'], ['arriba', 'Arriba'], ['abajo', 'Abajo']],
+    caja.appendChild(select('Ubicación de la frase', [['arriba', 'Arriba'], ['centro', 'Centrado'], ['abajo', 'Abajo']],
       c.pos || 'centro', function (v) { datos(borrador() || d).pos = v; }));
-    caja.appendChild(select('Velo sobre la foto (para que se lea)', [['', 'Automático (según el color de la letra)'], ['suave', 'Oscurecer suave'], ['oscuro', 'Oscurecer fuerte'], ['ninguno', 'Sin velo'], ['claro', 'Aclarar suave'], ['claro-fuerte', 'Aclarar fuerte']],
+    caja.appendChild(select('Velo sobre la foto (para que se lea)', [['', 'Automático (sombra suave detrás de la frase)'], ['suave', 'Oscurecer suave'], ['oscuro', 'Oscurecer fuerte'], ['ninguno', 'Sin velo'], ['claro', 'Aclarar suave'], ['claro-fuerte', 'Aclarar fuerte']],
       c.velo || '', function (v) { datos(borrador() || d).velo = v; }));
     caja.appendChild(select('Cómo entra la foto', [['llena', 'Ocupa toda la franja'], ['entera', 'Entera, sobre una copia borrosa']],
       c.foto || 'llena', function (v) { datos(borrador() || d).foto = v; }));

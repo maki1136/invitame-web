@@ -1073,6 +1073,9 @@
     var nodos = marco.querySelectorAll('*');
     for (var i = 0; i < nodos.length; i++) {
       var el = nodos[i];
+      /* 23/10: lo que ya maneja otro módulo a propósito (la frase larga sobre su
+         foto, efectos/frase-banda.js) no lo toca el corrector. */
+      if (el.closest && el.closest('[data-regla-no]')) continue;
 
       var esCampo = /^(INPUT|TEXTAREA)$/.test(el.tagName);
       if (!esCampo) {
