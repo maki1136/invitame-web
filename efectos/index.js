@@ -723,6 +723,7 @@
     '/efectos/secciones-ocultas.js',   /* 20/10: secciones que no van (fx.ocultas), formulario y panel */
     '/efectos/personas-foto.js',       /* 20/10: personas sin foto o con el adorno del diseño (Jazmín) */
     '/efectos/cierre-orden.js',        /* 23/10: el «¡Gracias!» abajo del texto final (citlalli) */
+    '/efectos/contacto-botones.js',    /* 24/10: los botones de Contacto con aire (Maki) */
     '/efectos/dresscode-sin-corbata.js', /* 24/10: el traje del dibujo de Vestimenta, sin corbata (Jazmín) */
     '/efectos/frase-banda.js',         /* 23/10: frase larga — foto llena, velo y ubicación (Jazmín) */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */

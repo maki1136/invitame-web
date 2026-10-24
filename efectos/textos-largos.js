@@ -121,6 +121,8 @@
     '.carta', '.sobre-carta', '#carta',
     '.tl', '.itin', '.timeline',
     '#env',
+    /* 24/10 Maki: «la imagen se corta con el ver más, ¿no se puede leer todo de corrido?» */
+    '#contacto-sec',
     'form'
   ].join(',');
 
