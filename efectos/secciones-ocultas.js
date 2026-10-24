@@ -21,7 +21,7 @@
 
   var LISTA = [
     /* 23/10 Jazmín: «que también esté la opción de ocultar la frase larga» */
-    ['frase',      'Frase larga',            'section.fraseSec, [data-sec="frase"]'],
+    ['frase',      'Frase larga',            'section.fraseSec, [data-sec="frase"], #carta-sec .mf-frase'],
     ['itinerario', 'Itinerario',             '[data-sec="itinerario"]'],
     ['hospedaje',  'Hospedaje',              '[data-sec="hospedaje"]'],
     ['dresscode',  'Código de vestimenta',   '[data-sec="dresscode"]'],
