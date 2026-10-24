@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-24T18:40:27.419Z",
+ "cuando": "2026-10-24T19:09:53.113Z",
  "slug": "camila-y-tomas",
- "total": 403,
- "verde": 398,
- "amarillo": 2,
+ "total": 404,
+ "verde": 401,
+ "amarillo": 0,
  "rojo": 3,
  "gris": 0,
  "items": [
@@ -1769,9 +1769,8 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -2444,9 +2443,8 @@
    "guarda": true,
    "dato": "c_kicker-contacto",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2510,6 +2508,17 @@
    "tipo": "text",
    "guarda": true,
    "dato": "c_texto-corto-boton-wsp-2",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "",
+   "control": "Frase del mensaje de WhatsApp (al tocar el botón):",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "c_mensaje-wsp-contacto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
