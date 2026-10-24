@@ -190,6 +190,7 @@
     "Número de whatsapp 2:": "c_numero-de-whatsapp-2",
     "Texto corto botón wsp:": "c_texto-corto-boton-wsp",
     "Texto corto botón wsp 2:": "c_texto-corto-boton-wsp-2",
+    "Frase del mensaje de WhatsApp (al tocar el botón):": "c_mensaje-wsp-contacto",
     "Mostrar sección de contacto:": "c_mostrar-seccion-de-contacto",
     "Color de fondo sección QR:": "c_color-de-fondo-seccion-qr",
     "Imagen fondo QR": "c_imagen-fondo-qr",
