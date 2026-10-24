@@ -11,7 +11,9 @@
   st.id = 'inv-contacto-botones';
   var S = 'html body #contacto-sec#contacto-sec';
   st.textContent =
-    S + ' a.wsp{display:inline-flex!important;align-items:center;justify-content:center;' +
+    /* ⚠️ 24/10: SIN tocar `display`. El motor esconde con display:none el botón que
+       no tiene número; forzarlo hizo aparecer «Escribir a Diego» (Renata). */
+    S + ' a.wsp{align-items:center;justify-content:center;' +
     'padding:12px 22px!important;margin:8px 6px!important;line-height:1.25!important;' +
     'max-width:calc(100% - 24px)!important;box-sizing:border-box!important;white-space:normal!important;text-align:center!important}';
   (document.head || document.documentElement).appendChild(st);
