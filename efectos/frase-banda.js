@@ -86,7 +86,8 @@
       } catch (e) {}
     }
     var auto = !VELOS[c.velo];
-    var velo = auto ? (hayFoto ? 'foto' : veloSegunLetra()) : c.velo;
+    /* sin foto: nada de degradé marrón de relleno; la frase va sobre el fondo de la invitación */
+    var velo = auto ? (hayFoto ? 'foto' : 'sinfoto') : c.velo;
     var colorPropio = String(ev.fraseColor || '').trim();
     var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio;
     if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo === 'foto'); return; }
@@ -99,7 +100,11 @@
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
       css.push(S + ' #bandfg{background-size:cover!important;background-position:center!important}');
     }
-    if (velo === 'foto') {
+    if (velo === 'sinfoto') {
+      css.push(S + ' #bandbg, ' + S + ' #bandfg{background:none!important;filter:none!important}');
+      css.push(S + ' #frase-tint{background:transparent!important}');
+      if (colorPropio) css.push(S + ' > p.frase.frase{color:' + colorPropio + '!important;-webkit-text-fill-color:' + colorPropio + '!important}');
+    } else if (velo === 'foto') {
       var g = pos === 'arriba' ? 'linear-gradient(to bottom, rgba(0,0,0,0) 6%, rgba(0,0,0,.34) 20%, rgba(0,0,0,.20) 40%, rgba(0,0,0,0) 58%)'
             : pos === 'abajo' ? 'linear-gradient(to top, rgba(0,0,0,0) 6%, rgba(0,0,0,.34) 20%, rgba(0,0,0,.20) 40%, rgba(0,0,0,0) 58%)'
             : 'radial-gradient(80% 38% at 50% 50%, rgba(0,0,0,.32) 0%, rgba(0,0,0,.14) 55%, rgba(0,0,0,0) 100%)';
