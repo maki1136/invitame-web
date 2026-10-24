@@ -61,6 +61,25 @@
       ['data-regla-luz', 'data-regla-orig', 'data-regla-inline', 'data-regla-opa', 'data-regla-fondo', 'data-regla-flojo'].forEach(function (k) { f.removeAttribute(k); });
     }
   }
+  function papelVecino() {
+    try {
+      var s = document.querySelector('section.fraseSec'); if (!s) return '';
+      var cands = [s.nextElementSibling, s.previousElementSibling, s.nextElementSibling && s.nextElementSibling.nextElementSibling];
+      for (var i = 0; i < cands.length; i++) {
+        var e = cands[i]; if (!e || !e.classList || !e.classList.contains('sec')) continue;
+        var cs = getComputedStyle(e);
+        var col = cs.backgroundColor, m = col.match(/[\d.]+/g);
+        if (m && (m.length < 4 || +m[3] > 0.05)) return col;
+      }
+    } catch (e) {}
+    return '';
+  }
+  /* va en el style del elemento: hay reglas de colección que le ganan a cualquier hoja */
+  function ponerPapel(col) {
+    var s = document.querySelector('section.fraseSec'); if (!s) return;
+    if (col) { s.style.setProperty('background-color', col, 'important'); s.setAttribute('data-fb-papel', '1'); }
+    else if (s.getAttribute('data-fb-papel')) { s.style.removeProperty('background-color'); s.removeAttribute('data-fb-papel'); }
+  }
   function cfg(ev) { return (ev && ev.fx && ev.fx.frase) || {}; }
 
   /* ================= LADO INVITACIÓN ================= */
@@ -95,6 +114,10 @@
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
     var S = 'html body section.fraseSec.fraseSec:not(#fb-a):not(#fb-b)';
     var css = [];
+    /* ★ la caja oscura de verdad: i/estilos-servidor.css le pone a TODA .capa un
+       ::after con velo marrón al 46-56 %, y en la franja hay dos .capa (#bandfg y
+       #frase-tint): dos velos apilados. Acá el velo lo decide este módulo. */
+    css.push(S + ' .capa::after{display:none!important;content:none!important}');
     if (foto === 'llena') {
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
@@ -103,6 +126,10 @@
     if (velo === 'sinfoto') {
       css.push(S + ' #bandbg, ' + S + ' #bandfg{background:none!important;filter:none!important}');
       css.push(S + ' #frase-tint{background:transparent!important}');
+      /* y el papel de la sección vecina, para que no se vea el fondo de la invitación como una caja */
+      var papel = papelVecino();
+      ponerPapel(papel);
+      if (papel) css.push(S + '{-webkit-mask-image:none!important;mask-image:none!important}');
       if (colorPropio) css.push(S + ' > p.frase.frase{color:' + colorPropio + '!important;-webkit-text-fill-color:' + colorPropio + '!important}');
     } else if (velo === 'foto') {
       var g = pos === 'arriba' ? 'linear-gradient(to bottom, rgba(0,0,0,0) 6%, rgba(0,0,0,.34) 20%, rgba(0,0,0,.20) 40%, rgba(0,0,0,0) 58%)'
@@ -124,6 +151,7 @@
     if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
     if (pos === 'abajo')  css.push(S + '{padding-bottom:clamp(56px,20%,140px)!important}');
     soltarCorrector(velo === 'foto');
+    if (velo !== 'sinfoto') ponerPapel('');
     var st = document.getElementById(ID_CSS);
     if (!st) { st = document.createElement('style'); st.id = ID_CSS; document.head.appendChild(st); }
     st.textContent = css.join('\n');
