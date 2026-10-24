@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-24T18:18:47.554Z",
+ "cuando": "2026-10-24T18:40:27.419Z",
  "slug": "camila-y-tomas",
  "total": 403,
- "verde": 400,
- "amarillo": 0,
+ "verde": 398,
+ "amarillo": 2,
  "rojo": 3,
  "gris": 0,
  "items": [
@@ -1769,8 +1769,9 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -2443,8 +2444,9 @@
    "guarda": true,
    "dato": "c_kicker-contacto",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
