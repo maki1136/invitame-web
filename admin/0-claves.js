@@ -115,6 +115,7 @@
        MISMA clave que ya producían: ningún dato se movió. Ahora corregir una
        etiqueta es seguro. */
     "Tipografía cuenta regresiva:": "c_tipografia-cuenta-regresiva",
+    "Color cuenta regresiva:": "c_color-cuenta-regresiva",
     "Posición cuentra regresiva y nombres:": "c_posicion-cuentra-regresiva-y-nombres",
     "Fondo sección frase larga": "c_fondo-seccion-frase-larga",
     "Texto final:": "c_texto-final",
