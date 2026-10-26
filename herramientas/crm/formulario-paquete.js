@@ -57,7 +57,7 @@
     var lab = el('label', 'display:block;font-size:12px;margin:2px 0 3px', 'Paquete que compró');
     var sel = document.createElement('select');
     sel.style.cssText = 'width:100%;padding:8px;border:1px solid var(--linea);border-radius:8px';
-    [['', '— elegir —'], ['estandar', 'Estándar'], ['premium', 'Premium'], ['platinum', 'Platinum']].forEach(function (o) {
+    [['', '— elegir —'], ['estandar', 'Estándar'], ['plus', 'Plus'], ['premium', 'Premium'], ['platinum', 'Platinum']].forEach(function (o) {
       var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op);
     });
     caja.appendChild(lab); caja.appendChild(sel);

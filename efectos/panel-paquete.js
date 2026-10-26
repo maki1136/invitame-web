@@ -88,7 +88,8 @@
       if (v[partes[i]] == null || typeof v[partes[i]] !== 'object') v[partes[i]] = {};
       v = v[partes[i]];
     }
-    v[partes[partes.length - 1]] = !!si;
+    /* 26/10: algunas funciones no se prenden con true sino con un valor (pase simple: 'simple') */
+    v[partes[partes.length - 1]] = f.valor ? (si ? f.valor : '') : !!si;
     return true;
   }
 

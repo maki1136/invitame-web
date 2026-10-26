@@ -478,10 +478,13 @@ function listaJs($s) {
 function paquetesIncluye($js, $plan, $extras) {
   if (!is_string($js) || $js === '') return null;
   if (!preg_match('~var BASE = \[([^\]]*)\]~s', $js, $mb)) return null;
-  if (!preg_match('~var DE_PREMIUM = BASE\.concat\(\[([^\]]*)\]\)~s', $js, $mp)) return null;
+  /* 26/10/2026: PLUS entre Estándar y Premium (DE_PREMIUM ahora sale de DE_PLUS) */
+  if (!preg_match('~var DE_PLUS = BASE\.concat\(\[([^\]]*)\]\)~s', $js, $mpl)) return null;
+  if (!preg_match('~var DE_PREMIUM = DE_PLUS\.concat\(\[([^\]]*)\]\)~s', $js, $mp)) return null;
   if (!preg_match('~var DE_PLATINUM = DE_PREMIUM\.concat\(\[([^\]]*)\]\)~s', $js, $ml)) return null;
-  $base = listaJs($mb[1]); $pre = array_merge($base, listaJs($mp[1])); $pla = array_merge($pre, listaJs($ml[1]));
-  $planes = array('estandar' => $base, 'premium' => $pre, 'platinum' => $pla);
+  $base = listaJs($mb[1]); $plus = array_merge($base, listaJs($mpl[1]));
+  $pre = array_merge($plus, listaJs($mp[1])); $pla = array_merge($pre, listaJs($ml[1]));
+  $planes = array('estandar' => $base, 'plus' => $plus, 'premium' => $pre, 'platinum' => $pla);
   if (!isset($planes[$plan])) return null;
   return array_values(array_unique(array_merge($planes[$plan], $extras)));
 }
@@ -505,7 +508,7 @@ if (preg_match('/^[a-z0-9]{12,40}$/i', $formToken)) {
     } else {
       if (!isset($ev['fx']) || !is_array($ev['fx'])) $ev['fx'] = array();
       $ev['fx']['paquete'] = array('plan' => $plan, 'extras' => $extras);
-      $NOMBRES = array('estandar' => 'Estándar', 'premium' => 'Premium', 'platinum' => 'Platinum');
+      $NOMBRES = array('estandar' => 'Estándar', 'plus' => 'Plus', 'premium' => 'Premium', 'platinum' => 'Platinum');
       $avisoPaquete[] = 'PAQUETE: ' . (isset($NOMBRES[$plan]) ? $NOMBRES[$plan] : $plan) .
                         (count($extras) ? ' + extras: ' . implode(', ', $extras) : '') . ' (del link del CRM).';
       /* las funciones pagas con interruptor: [nombre, ruta] desde paquetes.js */
@@ -533,6 +536,12 @@ if (preg_match('/^[a-z0-9]{12,40}$/i', $formToken)) {
         unset($ref);
       }
       if (in_array('accesoQR', $incluye, true)) $avisoPaquete[] = 'Incluye control de acceso QR.';
+      /* 26/10/2026: el PLUS nace con el pase simple (cantidad de personas + frase, sin nombre ni QR) */
+      if (in_array('paseCantidad', $incluye, true) && !in_array('pases', $incluye, true)) {
+        if (!isset($ev['fx']['pase']) || !is_array($ev['fx']['pase'])) $ev['fx']['pase'] = array();
+        $ev['fx']['pase']['modo'] = 'simple';
+        $avisoPaquete[] = 'Incluye cantidad de invitados y frase: armá cada link en CONFIRMACIÓN → «Armar el link de cada invitado».';
+      }
     }
   } else {
     $avisoPaquete[] = 'El link del formulario traía un código de paquete que no existe: revisar con ventas qué compró.';

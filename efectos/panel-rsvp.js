@@ -159,6 +159,46 @@
     filaS.appendChild(chkS); filaS.appendChild(txS);
     caja.appendChild(filaS);
 
+    /* ★ 26/10/2026 (Jazmín, Pack PLUS): título, frase y el link de cada invitado
+       con su cantidad, sin tener que escribir la dirección a mano. */
+    var ps = function () { var b = borrador() || d; if (!b.fx) b.fx = {}; if (!b.fx.pase || typeof b.fx.pase !== 'object') b.fx.pase = {}; return b.fx.pase; };
+    var cajaS = document.createElement('div');
+    cajaS.id = 'pase-simple-extra';
+    cajaS.style.cssText = 'margin:8px 0 0 22px;padding:10px 12px;border:1px dashed rgba(0,0,0,.15);border-radius:10px;font-size:12px';
+    var mk = function (tag, css, txt) { var e = document.createElement(tag); if (css) e.style.cssText = css; if (txt != null) e.textContent = txt; return e; };
+    var inTit = mk('input', 'width:100%;margin:2px 0 8px'); inTit.type = 'text'; inTit.placeholder = 'Título (por defecto: ¡Esperamos contar contigo!) — ej: Datos del invitado:';
+    inTit.value = (d.fx && d.fx.pase && d.fx.pase.titulo) || '';
+    inTit.oninput = function () { ps().titulo = inTit.value; refrescar(); };
+    var inFr = mk('input', 'width:100%;margin:2px 0 10px'); inFr.type = 'text'; inFr.placeholder = 'Frase debajo de la cantidad — ej: ¡Te esperamos!';
+    inFr.value = (d.fx && d.fx.pase && d.fx.pase.frase) || '';
+    inFr.oninput = function () { ps().frase = inFr.value; refrescar(); };
+    cajaS.appendChild(mk('div', 'font-weight:700;margin-bottom:2px', 'Título del pase')); cajaS.appendChild(inTit);
+    cajaS.appendChild(mk('div', 'font-weight:700;margin-bottom:2px', 'Frase (para todos)')); cajaS.appendChild(inFr);
+    cajaS.appendChild(mk('div', 'font-weight:700;margin:2px 0 4px', 'Armar el link de cada invitado'));
+    var filaL = mk('div', 'display:flex;gap:6px;align-items:center;flex-wrap:wrap');
+    var inN = mk('input', 'width:70px'); inN.type = 'number'; inN.min = 1; inN.max = 50; inN.value = 2; inN.title = 'Cantidad de personas';
+    var inM = mk('input', 'flex:1;min-width:140px'); inM.type = 'text'; inM.placeholder = 'Frase sólo para este link (opcional)';
+    var bt = mk('button', 'padding:6px 12px;border-radius:8px;border:0;background:#6D1233;color:#fff;cursor:pointer;font-weight:700', 'Copiar link'); bt.type = 'button';
+    var out = mk('div', 'margin-top:6px;word-break:break-all;opacity:.75;font-size:11px', '');
+    var armar = function () {
+      var b = borrador() || d, n = parseInt(inN.value, 10) || 1;
+      var u = location.origin + '/i/?e=' + encodeURIComponent(b.slug || '') + '&per=' + n;
+      if (inM.value.trim()) u += '&msg=' + encodeURIComponent(inM.value.trim());
+      out.textContent = u; return u;
+    };
+    inN.oninput = armar; inM.oninput = armar;
+    bt.onclick = function () {
+      var u = armar();
+      var ok = function () { bt.textContent = '¡Copiado!'; setTimeout(function () { bt.textContent = 'Copiar link'; }, 1500); };
+      try { navigator.clipboard.writeText(u).then(ok, function () { window.prompt('Copiá el link:', u); }); } catch (e) { window.prompt('Copiá el link:', u); }
+    };
+    filaL.appendChild(mk('span', '', 'Personas:')); filaL.appendChild(inN); filaL.appendChild(inM); filaL.appendChild(bt);
+    cajaS.appendChild(filaL); cajaS.appendChild(out);
+    var verS = function () { cajaS.style.display = chkS.checked ? '' : 'none'; };
+    var prevOn = chkS.onchange; chkS.onchange = function () { prevOn(); verS(); };
+    verS(); armar();
+    caja.appendChild(cajaS);
+
     /* ★ 20/10/2026 — pedido de Jazmín: el Pack Estándar manda UN SOLO LINK para
        todos. Con esto, sin link de invitado se puede confirmar igual (nombre,
        sí/no, personas, mensaje). Lo hacen /efectos/rsvp-general.js y
@@ -198,6 +238,7 @@
       var ps = document.getElementById('pase-simple-panel');
       var on = !!(d.fx && d.fx.pase && d.fx.pase.modo === 'simple');
       if (ps && ps.checked !== on) ps.checked = on;
+      var ex = document.getElementById('pase-simple-extra'); if (ex) ex.style.display = on ? '' : 'none';
       return;
     }
     /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
