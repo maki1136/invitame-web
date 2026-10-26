@@ -39,6 +39,19 @@
   }
 
   // ==== PERSONAS IMPORTANTES (hasta 12) ====
+  /* ★ 26/10/2026 — espacios de Personas, en px (vacío = como viene) */
+  function persDesliz(rot,clave){
+    var v=(D.fx&&D.fx.personas&&D.fx.personas[clave]!=null&&D.fx.personas[clave]!=='')?parseInt(D.fx.personas[clave],10):null;
+    return '<div style="margin:0 0 10px"><label style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin:0 0 4px">'+rot+
+      '<span style="font-weight:400;opacity:.7" id="pd-'+clave+'">'+(v==null?'como viene':v+' px')+'</span></label>'+
+      '<input type="range" min="0" max="120" step="2" value="'+(v==null?24:v)+'" style="width:100%" oninput="persEsp(\''+clave+'\',this.value)"></div>';
+  }
+  function persEsp(clave,val){
+    D.fx=D.fx||{}; D.fx.personas=Object.assign({},D.fx.personas); D.fx.personas[clave]=parseInt(val,10);
+    var s=document.getElementById('pd-'+clave); if(s) s.textContent=val+' px';
+    postPreview();
+  }
+  window.persEsp=persEsp;
   function personasHtml(){
     return '<div class="mejoras"><div class="h">'+ICO.corona+' Personas importantes (hasta 12)</div>'+
       '<div class="hint" style="margin-bottom:8px">Padres, padrinos, testigos, damas, caballeros… Cargá foto, nombre y relación. Aparecen en la sección de la invitación.</div>'+
@@ -56,6 +69,10 @@
       '<label style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0 0 10px;cursor:pointer">'+
         '<input type="checkbox" '+((D.fx&&D.fx.personas&&D.fx.personas.estilo==='lista')?'checked':'')+' onchange="D.fx=D.fx||{};D.fx.personas=Object.assign({},D.fx.personas,{estilo:this.checked?\'lista\':\'\'});postPreview()">'+
         'Sólo texto, uno debajo del otro (la relación arriba, los nombres abajo)</label>'+
+      /* ★ 26/10/2026 (citlalli): «que dejen un espacio después del título y entre los
+         padres de la novia y los del novio». Lo pinta /efectos/tamanos-ajustables.js */
+      persDesliz('Espacio debajo del título','espTit')+
+      persDesliz('Espacio entre una persona y la otra','espEntre')+
       '<div id="pers-list"></div>'+
       '<button class="addbtn" id="pers-add" style="margin-top:8px" onclick="addPersona()">+ Agregar persona</button>'+
       '</div>';

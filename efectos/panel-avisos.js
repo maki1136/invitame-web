@@ -28,7 +28,7 @@
       ];
       syncs.push(S.lista(caja, R('avisos.items', 'Avisos (ícono y texto)'), 6,
         [{ k: 'icono', tipo: 'select', ops: ICONOS, ancho: '0 1 160px' },
-         { k: 'texto', ph: 'Ej: Evento solo para adultos.', ancho: '2 1 200px', max: 160 }],
+         { k: 'texto', ph: 'Ej: Evento solo para adultos.', ancho: '2 1 200px', max: 320 }],
         function () { return a().items; }, function (x) { a().items = x; },
         function () {
           if (!(a().items || []).length) a().encendido = true;   /* el primero la prende */

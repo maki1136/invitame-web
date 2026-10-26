@@ -34,7 +34,7 @@
     var e = S.ev(); if (!e) return;
     var c = (e.fx && e.fx.avisos) || {};
     var items = (Object.prototype.toString.call(c.items) === '[object Array]' ? c.items : [])
-      .map(function (a) { return { i: ICONOS[a && a.icono] ? a.icono : 'otro', t: S.txt(a && a.texto, 160) }; })
+      .map(function (a) { return { i: ICONOS[a && a.icono] ? a.icono : 'otro', t: S.txt(a && a.texto, 320) }; })
       .filter(function (a) { return a.t; }).slice(0, 6);
     if (!S.on(c.encendido) || !items.length) { S.quitar(KEY); return; }
     S.css();
