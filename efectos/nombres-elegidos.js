@@ -51,9 +51,26 @@
     });
   }
 
+  /* 26/10 (Evelyn): el corrector de legibilidad (reglas-duras) le ponía blanco
+     inline con !important a cada renglón del nombre. Con un color elegido en el
+     panel, el nombre queda fuera del corrector. */
+  function soltarCorrector(ev) {
+    var on = !!((ev.fx || {}).ncolorElegido && /^#[0-9a-f]{3,8}$/i.test(ev.ncolor || ''));
+    ['pv-names', 'ep-names'].forEach(function (id) {
+      var e = document.getElementById(id); if (!e) return;
+      if (!on) { e.removeAttribute('data-regla-no'); return; }
+      e.setAttribute('data-regla-no', '1');
+      [].forEach.call(e.querySelectorAll('[data-regla-luz]'), function (x) {
+        ['color', '-webkit-text-fill-color'].forEach(function (k) { x.style.removeProperty(k); });
+        ['data-regla-luz', 'data-regla-orig', 'data-regla-inline', 'data-regla-opa', 'data-regla-fondo', 'data-regla-flojo'].forEach(function (k) { x.removeAttribute(k); });
+      });
+    });
+  }
+
   function revisar() {
     var ev = window.INVEV; if (!ev || typeof ev !== 'object') return;
     tres(ev);
+    soltarCorrector(ev);
     var t = css(ev);
     if (t === ultima) return;
     ultima = t;
