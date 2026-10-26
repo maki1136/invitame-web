@@ -54,6 +54,21 @@
     nada.type = 'button';
     caja.appendChild(nada);
 
+    /* ---- 26/10/2026: el tamaño (citlalli: «las argollas las quiero más grandes») ---- */
+    function deslizador(rotulo, clave) {
+      var w = el('div', 'margin:14px 0 0');
+      var l = el('label', 'display:flex;justify-content:space-between;font-weight:700;margin:0 0 4px');
+      var tx = el('span', '', rotulo), vv = el('span', 'font-weight:400;opacity:.7', '');
+      l.appendChild(tx); l.appendChild(vv); w.appendChild(l);
+      var s = el('input'); s.type = 'range'; s.min = 40; s.max = 250; s.step = 5; s.style.cssText = 'width:100%';
+      w.appendChild(s);
+      s.oninput = function () { var r = datos(); if (!r) return; r[clave] = parseInt(s.value, 10); vv.textContent = s.value + '%'; refrescar(); };
+      w.pintar = function () { var r = datos() || {}; var v = parseInt(r[clave], 10) || 100; s.value = v; vv.textContent = v + '%'; };
+      return w;
+    }
+    var tamArriba = deslizador('Tamaño de la imagen de arriba', 'tam');
+    caja.appendChild(tamArriba);
+
     /* ---- 23/10/2026: abajo del texto (citlalli: el sobrecito y «Lluvia de sobres») ---- */
     caja.appendChild(el('label', 'display:block;font-weight:700;margin:18px 0 6px', 'Abajo del texto'));
     var pieInfo = el('div', 'font-size:12px;color:#7a6a70;margin:0 0 6px', 'Una imagen chica y un rótulo debajo de la frase (ej: un sobre y «Lluvia de sobres»).');
@@ -83,6 +98,8 @@
     pieQuitar.onclick = function () { var r = datos(); if (!r) return; r.pieImg = ''; pintar(); refrescar(); };
     pieTx.oninput = function () { var r = datos(); if (!r) return; r.pieTexto = pieTx.value; refrescar(); };
     sinTit.onchange = function () { var r = datos(); if (!r) return; r.sinTitulo = sinTit.checked; refrescar(); };
+    var tamAbajo = deslizador('Tamaño de la imagen de abajo', 'pieTam');
+    caja.appendChild(tamAbajo);
 
     function tile(grid, item, esDibujo) {
       var b = el('button', 'position:relative;aspect-ratio:1;border:1px solid #e3d6da;border-radius:12px;background:#faf7f5;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center');
@@ -123,6 +140,7 @@
       pieVer.style.backgroundImage = r.pieImg ? 'url("' + r.pieImg + '")' : 'none';
       if (document.activeElement !== pieTx) pieTx.value = r.pieTexto || '';
       sinTit.checked = !!r.sinTitulo;
+      tamArriba.pintar(); tamAbajo.pintar();
       col.value = /^#[0-9a-f]{6}$/i.test(r.color || '') ? r.color : '#4a3a40';
       [].forEach.call(caja.querySelectorAll('button[data-id]'), function (b) {
         var on = b.dataset.tipo === 'd' ? (r.dibujo === b.dataset.id)

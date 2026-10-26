@@ -278,7 +278,7 @@
       d.fx.avisos = {
         encendido: true, titulo: corto(s.avisos.titulo, 70),
         items: s.avisos.items.slice(0, 6).map(function (a) {
-          return { icono: corto(a && a.icono, 20) || 'otro', texto: corto(a && a.texto, 160) };
+          return { icono: corto(a && a.icono, 20) || 'otro', texto: corto(a && a.texto, 320) };
         })
       };
     }
