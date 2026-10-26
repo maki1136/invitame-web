@@ -725,6 +725,7 @@
     '/efectos/cierre-orden.js',        /* 23/10: el «¡Gracias!» abajo del texto final (citlalli) */
     '/efectos/contacto-botones.js',    /* 24/10: los botones de Contacto con aire (Maki) */
     '/efectos/contacto-mensaje.js',    /* 24/10: el WhatsApp de confirmar abre con el mensaje escrito (Jazmín) */
+    '/efectos/rouge-signos.js',        /* 26/10: Rouge Script dibuja mal «¡» y «¿» (Jazmín, Olivia) */
     '/efectos/tamanos-ajustables.js',  /* 26/10: tamaño de las imágenes de Regalos y espacios de Personas, desde el panel */
     '/efectos/pase-por-paquete.js',    /* 26/10: en Estándar no se muestra el pase con QR (Jazmín, Aurora) */
     '/efectos/trivia-sin-correcta.js', /* 26/10: una pregunta sin correcta marcada trababa la trivia */
