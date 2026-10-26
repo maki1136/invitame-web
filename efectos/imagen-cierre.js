@@ -184,6 +184,47 @@
     labAb.appendChild(chkAb);
     labAb.appendChild(document.createTextNode('La frase final («¡Gracias!») abajo del texto final, no arriba'));
     caja.appendChild(labAb);
+
+    /* ★ 26/10/2026 (citlalli): dónde va el texto y una imagen arriba. Lo pinta efectos/cierre-orden.js */
+    var selP = document.createElement('select');
+    [['abajo', 'Abajo (como viene)'], ['centro', 'Centrado'], ['arriba', 'Arriba']].forEach(function (o) {
+      var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; selP.appendChild(op);
+    });
+    selP.value = datos(d).pos || 'abajo';
+    selP.onchange = function () { datos(borrador() || d).pos = selP.value; refrescar(); };
+    var gP = grupo('Ubicación del texto del cierre', selP); gP.style.marginTop = '10px';
+    caja.appendChild(gP);
+
+    var fila = document.createElement('div');
+    fila.style.cssText = 'display:flex;align-items:center;gap:10px;margin:10px 0 4px';
+    var ver = document.createElement('div');
+    ver.style.cssText = 'width:52px;height:52px;border-radius:10px;background:#f4efea center/contain no-repeat;flex:none';
+    var sub = document.createElement('label'); sub.style.cssText = 'cursor:pointer;color:#6D1233;font-weight:600;font-size:12.5px';
+    sub.textContent = 'Subir imagen de arriba (ej. argollas)';
+    var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.style.display = 'none'; sub.appendChild(inp);
+    var qt = document.createElement('button'); qt.type = 'button'; qt.textContent = 'Quitar'; qt.style.cssText = 'cursor:pointer;padding:4px 10px;font-size:12px';
+    fila.appendChild(ver); fila.appendChild(sub); fila.appendChild(qt);
+    caja.appendChild(fila);
+    var tam = document.createElement('input'); tam.type = 'range'; tam.min = 60; tam.max = 320; tam.step = 10; tam.style.cssText = 'width:100%';
+    var gT = grupo('Tamaño de la imagen de arriba', tam);
+    caja.appendChild(gT);
+    function pintarImg() {
+      var c = datos(borrador() || d);
+      ver.style.backgroundImage = c.img ? 'url("' + c.img + '")' : 'none';
+      tam.value = parseInt(c.imgTam, 10) || 150;
+      gT.style.display = c.img ? '' : 'none';
+    }
+    inp.onchange = async function () {
+      var f = inp.files && inp.files[0]; if (!f) return;
+      if (!window.INV || !INV.uploadImage) { alert('Todavía no cargó la base. Esperá 2 seg.'); return; }
+      sub.firstChild.textContent = 'Subiendo…';
+      try { var u = await INV.uploadImage(f); datos(borrador() || d).img = u; pintarImg(); refrescar(); }
+      catch (e) { alert('No pude subir la imagen. Probá de nuevo.'); }
+      sub.firstChild.textContent = 'Subir imagen de arriba (ej. argollas)';
+    };
+    qt.onclick = function () { datos(borrador() || d).img = ''; pintarImg(); refrescar(); };
+    tam.oninput = function () { datos(borrador() || d).imgTam = parseInt(tam.value, 10); refrescar(); };
+    pintarImg();
     return caja;
   }
 
