@@ -1,10 +1,10 @@
 {
- "cuando": "2026-10-26T23:22:14.994Z",
+ "cuando": "2026-10-26T23:27:17.720Z",
  "slug": "camila-y-tomas",
- "total": 409,
- "verde": 406,
+ "total": 410,
+ "verde": 405,
  "amarillo": 0,
- "rojo": 3,
+ "rojo": 5,
  "gris": 0,
  "items": [
   {
@@ -2598,7 +2598,9 @@
    "dato": "fx.pase",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.pase (CONFIRMACIÓN + PAQUETE)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -3531,6 +3533,19 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Cantidad de invitados y frase",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras, fx.pase",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.pase (CONFIRMACIÓN + PAQUETE)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "EFECTOS",
