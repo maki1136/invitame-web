@@ -429,7 +429,7 @@
         (/solicitud-crear.php) leyendo el mismo documento: el navegador no
         puede regalarse nada aunque toque el link.
      ⚠️ La tabla de qué trae cada paquete vive en /paquetes.js y no se copia. */
-  const NOMBRE_PAQ={estandar:'Estándar', premium:'Premium', platinum:'Platinum'};
+  const NOMBRE_PAQ={estandar:'Estándar', plus:'Plus', premium:'Premium', platinum:'Platinum'};
   (async function(){
     if(!formToken) return;
     try{

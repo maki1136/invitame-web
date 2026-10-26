@@ -40,6 +40,15 @@
     return v;
   }
 
+  /* ★ 26/10/2026 (Jazmín, Pack PLUS): una frase debajo de la cantidad
+     («¡Te esperamos!»). Del link: &msg=… (también &m=…, como la plataforma
+     vieja); si no, fx.pase.frase. */
+  function frase() {
+    var u = String(QS.get('msg') || QS.get('m') || '').trim();
+    if (u) return u.slice(0, 120);
+    return String(cfg().frase || '').trim().slice(0, 120);
+  }
+
   function personas() {
     var u = texto(QS.get('per'));
     if (u) return u;
@@ -61,7 +70,8 @@
       'section.pase.pase-simple .ps-caja{display:block}',
       'section.pase.pase-simple .ps-kick{font-size:11px;letter-spacing:.32em;text-transform:uppercase;opacity:.7;margin-bottom:8px}',
       'section.pase.pase-simple .ps-num{font-size:40px;line-height:1.1}',
-      'section.pase.pase-simple .ps-linea{width:56px;height:1px;margin:14px auto 0;background:currentColor;opacity:.45}'
+      'section.pase.pase-simple .ps-linea{width:56px;height:1px;margin:14px auto 0;background:currentColor;opacity:.45}',
+      'section.pase.pase-simple .ps-frase{margin-top:14px;font-size:17px;line-height:1.35}'
     ].join('\n');
     (document.head || document.documentElement).appendChild(s);
   }
@@ -99,6 +109,9 @@
     if (t) { try { var col = getComputedStyle(t).color; if (caja.style.color !== col) caja.style.color = col; } catch (e) {} }
     var p = personas();
     if (num.textContent !== p) num.textContent = p;
+    var fr = caja.querySelector('.ps-frase'), ft = frase();
+    if (ft && !fr) { fr = document.createElement('div'); fr.className = 'ps-frase'; caja.appendChild(fr); }
+    if (fr) { if (fr.textContent !== ft) fr.textContent = ft; fr.style.display = ft ? '' : 'none'; }
     if (card.classList.contains('reveal')) card.classList.add('in');
   }
 

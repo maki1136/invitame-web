@@ -98,7 +98,13 @@
     sobreAnimado:    { nombre: 'Sobre de entrada animado',   clase: 'filler', interruptor: null },
     carta:           { nombre: 'La carta',                   clase: 'filler', interruptor: null },
     personas:        { nombre: 'Personas importantes',       clase: 'filler', interruptor: null },
-    video:           { nombre: 'Nuestro video',              clase: 'filler', interruptor: null }
+    video:           { nombre: 'Nuestro video',              clase: 'filler', interruptor: null },
+    /* 26/10/2026 (Jazmín): el Pack PLUS. Sin nombres, pero con la cantidad de
+       personas permitidas y una frase («2 personas · ¡Te esperamos!»). Es el
+       «Pase simple» (efectos/pase-simple.js). `valor`: lo que se escribe en el
+       interruptor al prenderlo (si no, es true/false). */
+    paseCantidad:    { nombre: 'Cantidad de invitados y frase', clase: 'filler', interruptor: 'fx.pase.modo', valor: 'simple',
+      nota: 'El pase dice la cantidad de personas y una frase, sin nombre ni QR. Cada link lleva su cantidad (&per=2).' }
   };
 
   /* La invitación completa. Todo esto no cuesta nada de servir (USD 0,44 por
@@ -112,7 +118,10 @@
   /* Lo que hace que alguien suba: cada invitado con su pase, su música, la
      trivia, el envío por WhatsApp con el mensaje que ellos escriban, y —lo que
      no tiene nadie— su mensaje grabado. */
-  var DE_PREMIUM = BASE.concat(['pases', 'musica', 'trivia', 'envioWhatsApp', 'paseVoz']);
+  /* 26/10/2026: PLUS = el Estándar + la cantidad de invitados y una frase en cada link. */
+  var DE_PLUS = BASE.concat(['paseCantidad']);
+
+  var DE_PREMIUM = DE_PLUS.concat(['pases', 'musica', 'trivia', 'envioWhatsApp', 'paseVoz']);
 
   /* El día del evento resuelto. Los tres leaders viven acá. */
   var DE_PLATINUM = DE_PREMIUM.concat(['accesoQR', 'filtro', 'galeriaInvitados', 'raspadita']);
@@ -126,6 +135,12 @@
       bajada: 'La invitación completa, con sobre animado.',
       precio: 1200, moneda: 'MXN',
       incluye: BASE.slice()
+    },
+    plus: {
+      nombre: 'Plus',
+      bajada: 'El Estándar, con la cantidad de invitados y una frase en cada link.',
+      precio: 1400, moneda: 'MXN',
+      incluye: DE_PLUS.slice()
     },
     premium: {
       nombre: 'Premium',
@@ -148,7 +163,7 @@
 
   /**
    * ¿Esta invitación tiene esta función?
-   * @param paquete  'estandar' | 'premium' | 'platinum'
+   * @param paquete  'estandar' | 'plus' | 'premium' | 'platinum'
    * @param funcion  una clave de FUNCIONES
    * @param extras   lista de funciones vendidas aparte (las carga el equipo en
    *                 el panel: «le vendí la raspadita suelta»)
