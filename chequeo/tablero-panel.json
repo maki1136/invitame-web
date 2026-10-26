@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-26T06:41:23.973Z",
+ "cuando": "2026-10-26T19:22:49.692Z",
  "slug": "camila-y-tomas",
- "total": 404,
- "verde": 401,
- "amarillo": 0,
+ "total": 408,
+ "verde": 404,
+ "amarillo": 1,
  "rojo": 3,
  "gris": 0,
  "items": [
@@ -1830,6 +1830,28 @@
   {
    "tab": "PERSONAS",
    "bloque": "Personas importantes (hasta 12)",
+   "control": "Espacio debajo del títulocomo viene",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.personas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PERSONAS",
+   "bloque": "Personas importantes (hasta 12)",
+   "control": "Espacio entre una persona y la otracomo viene",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.personas.espEntre",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PERSONAS",
+   "bloque": "Personas importantes (hasta 12)",
    "control": "Cambiar foto",
    "tipo": "text",
    "guarda": true,
@@ -2028,10 +2050,32 @@
   {
    "tab": "REGALOS",
    "bloque": "regalo-selector",
+   "control": "Tamaño de la imagen de arriba100%",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.regalo.tam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "regalo-selector",
    "control": "Dibujados",
    "tipo": "text",
    "guarda": true,
    "dato": "fx.regalo.pieTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "regalo-selector",
+   "control": "Tamaño de la imagen de abajo100%",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.regalo.pieTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2309,8 +2353,9 @@
    "guarda": true,
    "dato": "fx.muestra.estado",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
