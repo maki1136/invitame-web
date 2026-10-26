@@ -35,7 +35,7 @@
         '<input type="text" value="'+String(p.q||'').replace(/"/g,'&quot;')+'" oninput="tqSet('+i+',this.value)" placeholder="Escribí la pregunta">'+
         '<div class="tqopts">'+opts+'</div>'+
         (p.o.length<4?'<button class="lnk" onclick="tqAddOpt('+i+')">+ agregar opción</button>':'')+
-        '<div class="hint">Marcá el círculo de la respuesta correcta.</div></div>';
+        ((p.c>=0&&p.c<p.o.length)?'<div class="hint">Marcá el círculo de la respuesta correcta.</div>':'<div class="hint" style="color:#b3261e;font-weight:600">⚠ Falta marcar la respuesta correcta: tocá el círculo de la que va.</div>')+'</div>';
     }).join('');
     return '<div class="mejoras"><div class="h">'+ICO.destello+' Preguntas y respuestas de la trivia</div>'+
       '<div class="hint" style="margin-bottom:10px">Cada invitado responde y suma puntos. Se muestran en la sección "¡Pregúntame!" de la invitación.</div>'+
@@ -44,7 +44,7 @@
   // las cuatro sin postPreview: la miniatura no se enteraba de la trivia (banco del panel, 30/9/2026)
   function tqSet(i,v){D.trivia[i].q=v;postPreview();}
   function tqOpt(i,j,v){D.trivia[i].o[j]=v;postPreview();}
-  function tqCorrect(i,j){D.trivia[i].c=j;postPreview();}
+  function tqCorrect(i,j){D.trivia[i].c=j;postPreview();renderPanel();}
   function tqAddOpt(i){if(D.trivia[i].o.length<4){D.trivia[i].o.push('');renderPanel();}}
   function tqDelOpt(i,j){if(D.trivia[i].o.length>2){D.trivia[i].o.splice(j,1);if(D.trivia[i].c>=D.trivia[i].o.length)D.trivia[i].c=0;renderPanel();}}
   function tqAdd(){D.trivia.push({q:'',o:['',''],c:0});renderPanel();}
