@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-26T23:38:38.171Z",
+ "cuando": "2026-10-26T23:48:14.424Z",
  "slug": "camila-y-tomas",
  "total": 410,
- "verde": 405,
- "amarillo": 0,
+ "verde": 404,
+ "amarillo": 1,
  "rojo": 5,
  "gris": 0,
  "items": [
@@ -430,6 +430,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -446,17 +457,6 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -575,22 +575,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1780,8 +1780,9 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
