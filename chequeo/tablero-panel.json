@@ -1,10 +1,10 @@
 {
- "cuando": "2026-10-27T20:00:39.554Z",
+ "cuando": "2026-10-27T20:16:31.725Z",
  "slug": "camila-y-tomas",
- "total": 414,
- "verde": 409,
- "amarillo": 0,
- "rojo": 5,
+ "total": 404,
+ "verde": 402,
+ "amarillo": 1,
+ "rojo": 1,
  "gris": 0,
  "items": [
   {
@@ -2619,8 +2619,9 @@
    "guarda": true,
    "dato": "c_mensaje-wsp-contacto",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2642,9 +2643,7 @@
    "dato": "fx.pase",
    "llega": true,
    "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.pase (CONFIRMACIÓN + PAQUETE)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -3460,9 +3459,7 @@
    "dato": "c_habilitar-trivia",
    "llega": true,
    "seVe": true,
-   "estado": "rojo",
-   "duplicado": "c_habilitar-trivia (TRIVIA + PAQUETE)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+   "estado": "verde"
   },
   {
    "tab": "PAQUETE",
@@ -3475,121 +3472,6 @@
    "seVe": true,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Pases personalizados· aparece cuando cargás sus datos",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Música· aparece cuando cargás sus datos",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "¡Pregúntame!",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras, c_habilitar-trivia",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "c_habilitar-trivia (TRIVIA + PAQUETE)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Envío por WhatsApp a cada invitado· aparece cuando cargás sus datos",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Control de acceso QR· aparece cuando cargás sus datos",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "El filtro de la fiesta",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Galería de los invitados· además hay que crear la galería",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Pase con voz",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Raspadita",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PAQUETE",
-   "bloque": "paquete-selector",
-   "control": "Cantidad de invitados y frase",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.paquete.extras, fx.pase",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.pase (CONFIRMACIÓN + PAQUETE)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "EFECTOS",
