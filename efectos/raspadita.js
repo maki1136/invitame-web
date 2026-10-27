@@ -581,6 +581,7 @@
       return;
     }
     if (stOff) stOff.textContent = '';
+    if (!window.INVEV && !ES_PREVIEW) return;   /* 27/10: esperar los datos antes de tapar */
     if (completado) return;                 /* ⚠️ ya se raspó: no se rearma */
 
     var cfg = config();
@@ -827,7 +828,9 @@
     } else {
       var n = 0, t = setInterval(function () {
         armar();
-        if (document.querySelector('.rasp-zona') || ++n > 60) clearInterval(t);
+        /* ⚠️ 27/10: no se corta hasta que llegaron los datos (INVEV): sin datos
+           va prendida por defecto, y si después resulta apagada hay que esconderla */
+        if ((window.INVEV && (document.querySelector('.rasp-zona') || !encendido())) || ++n > 80) clearInterval(t);
       }, 250);
     }
   }
