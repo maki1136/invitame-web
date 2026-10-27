@@ -33,7 +33,22 @@
       css += 'html body .frame .footer.footer{justify-content:' + POS[c.pos] + '!important;' +
              (c.pos === 'arriba' ? 'padding-top:56px!important' : '') + '}';
     }
+    /* ★ 27/10: fx.cierre.textoTam (%) agranda la frase del cierre (#fin-texto) */
     if (st.textContent !== css) st.textContent = css;
+    var tt = parseInt(c.textoTam, 10) || 100;
+    var fte = document.getElementById('fin-texto');
+    if (fte) {
+      if (!fte.dataset.fzBase) {
+        fte.style.removeProperty('font-size');
+        var bz = parseFloat(getComputedStyle(fte).fontSize);
+        if (bz) fte.dataset.fzBase = bz;
+      }
+      var base = parseFloat(fte.dataset.fzBase);
+      if (base) {
+        if (tt !== 100) { fte.style.setProperty('font-size', (base * tt / 100).toFixed(1) + 'px', 'important'); fte.style.setProperty('line-height', '1.55', 'important'); }
+        else { fte.style.removeProperty('font-size'); fte.style.removeProperty('line-height'); }
+      }
+    }
     var url = String(c.img || '').trim();
     var im = document.getElementById('fin-img');
     if (!/^https?:\/\//i.test(url)) { if (im) im.remove(); return; }
