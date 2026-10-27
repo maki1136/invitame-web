@@ -192,6 +192,21 @@
     i.value = get() || '';
     i.oninput = function () { set(this.value.trim()); refrescar(); };
     g.appendChild(i);
+    /* ★ 27/10/2026 (Jazmín, Citlalli): además del link, subir la foto desde la compu */
+    if (!area && /imagen/i.test(rotulo)) {
+      var lb = document.createElement('label');
+      lb.style.cssText = 'display:inline-block;cursor:pointer;margin-top:6px;padding:5px 10px;font-size:12px;border-radius:8px;border:1px solid #e7ddd3;background:#fff';
+      lb.textContent = 'Subir imagen';
+      var f = document.createElement('input'); f.type = 'file'; f.accept = 'image/*'; f.style.display = 'none';
+      f.onchange = async function () {
+        var x = f.files && f.files[0]; if (!x) return;
+        if (!window.INV || !INV.uploadImage) { alert('Todavía no cargó la base. Esperá 2 seg.'); return; }
+        lb.firstChild.textContent = 'Subiendo…';
+        try { var u = await INV.uploadImage(x); i.value = u; set(u); refrescar(); lb.firstChild.textContent = 'Subida ✓'; }
+        catch (e) { alert('No pude subir la imagen. Probá de nuevo.'); lb.firstChild.textContent = 'Subir imagen'; }
+      };
+      lb.appendChild(f); g.appendChild(lb);
+    }
     var a = document.createElement('div'); a.className = 'hint'; a.textContent = ayuda; g.appendChild(a);
     caja.appendChild(g);
   }
