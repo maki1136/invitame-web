@@ -33,7 +33,13 @@
 
   /* fuentes (Google Fonts) */
   var FUENTES = ['Cormorant Garamond:ital,wght@0,400;0,500;0,600;1,400', 'Great Vibes', 'Pinyon Script',
-    'Montserrat:wght@300;400;500', 'Playfair Display:ital,wght@0,400;1,400', 'Italiana', 'Allura', 'Jost:wght@300;400'];
+    'Montserrat:wght@300;400;500', 'Playfair Display:ital,wght@0,400;1,400', 'Italiana', 'Allura', 'Jost:wght@300;400',
+    'Parisienne', 'Alex Brush', 'Tangerine:wght@400;700', 'Dancing Script', 'Cinzel:wght@400;500', 'Marcellus', 'Lora:ital@0;1',
+    'Bodoni Moda:ital@0;1', 'Raleway:wght@300;400'];
+  /* ★ 27/10 (Maki): «que se pueda cambiar la tipografía». Las que se ofrecen en el panel. */
+  var FAMILIAS = FUENTES.map(function (f) { return f.split(':')[0]; });
+  /* ★ y la forma de la foto */
+  var FORMAS = [['arco', 'Arco'], ['rectangulo', 'Rectángulo'], ['cuadrado', 'Cuadrado'], ['circulo', 'Círculo'], ['ovalo', 'Óvalo'], ['fondo', 'Foto de fondo (toda la imagen)']];
 
   /* ★ LOS 10 DISEÑOS. fondo: archivo en Cloudinary (invitame/std/<id>); papel:
      color de respaldo mientras carga o si no carga. tinta/acento: medidos
@@ -116,7 +122,7 @@
     l.href = 'https://fonts.googleapis.com/css2?' + FUENTES.map(function (f) { return 'family=' + f.replace(/ /g, '+'); }).join('&') + '&display=swap';
     document.head.appendChild(l);
     var pedir = [];
-    DISENOS.forEach(function (d) { [d.tit, d.nom, d.txt].forEach(function (n) { pedir.push('48px "' + n + '"', 'italic 48px "' + n + '"', '600 48px "' + n + '"'); }); });
+    FAMILIAS.forEach(function (n) { [n].forEach(function (n) { pedir.push('48px "' + n + '"', 'italic 48px "' + n + '"', '600 48px "' + n + '"'); }); });
     fuentesListas = new Promise(function (ok) { l.onload = ok; l.onerror = ok; setTimeout(ok, 4000); })
       .then(function () { return Promise.all(pedir.map(function (p) { return document.fonts.load(p).catch(function () {}); })); })
       .then(function () { return document.fonts.ready; });
@@ -135,10 +141,14 @@
   }
 
   /* ---------- dibujo ---------- */
-  function cubrir(ctx, im, x, y, w, h) {
-    var r = Math.max(w / im.naturalWidth, h / im.naturalHeight);
+  /* fx/fy: qué parte de la foto queda a la vista (0 = izquierda/arriba, 1 = derecha/abajo).
+     Por defecto la foto se corre hacia arriba (fy .3): en un retrato las caras
+     están en el tercio de arriba y así no se cortan. zoom ≥ 1 acerca. */
+  function cubrir(ctx, im, x, y, w, h, fx, fy, zoom) {
+    var r = Math.max(w / im.naturalWidth, h / im.naturalHeight) * Math.max(1, +zoom || 1);
     var sw = w / r, sh = h / r;
-    ctx.drawImage(im, (im.naturalWidth - sw) / 2, (im.naturalHeight - sh) / 2, sw, sh, x, y, w, h);
+    fx = fx == null ? 0.5 : fx; fy = fy == null ? 0.5 : fy;
+    ctx.drawImage(im, (im.naturalWidth - sw) * fx, (im.naturalHeight - sh) * fy, sw, sh, x, y, w, h);
   }
   /* escribe centrado y achica hasta que entre en maxW */
   function texto(ctx, t, x, y, o) {
@@ -174,6 +184,24 @@
   function linea(ctx, x1, y, x2, color, gr) { ctx.strokeStyle = color; ctx.lineWidth = gr || 2; ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke(); }
   function rombo(ctx, x, y, r, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r); ctx.lineTo(x - r, y); ctx.closePath(); ctx.fill(); }
   function adorno(ctx, y, d) { linea(ctx, W / 2 - 150, y, W / 2 - 22, d.acento, 2); linea(ctx, W / 2 + 22, y, W / 2 + 150, d.acento, 2); rombo(ctx, W / 2, y, 8, d.acento); }
+  /* el contorno de la foto según la forma elegida */
+  function forma(ctx, f, x, y, w, h) {
+    if (f === 'circulo' || f === 'ovalo') { ctx.beginPath(); ctx.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2); ctx.closePath(); return; }
+    if (f === 'rectangulo' || f === 'cuadrado') {
+      var rr = 14; ctx.beginPath(); ctx.moveTo(x + rr, y); ctx.lineTo(x + w - rr, y); ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
+      ctx.lineTo(x + w, y + h - rr); ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h); ctx.lineTo(x + rr, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - rr); ctx.lineTo(x, y + rr); ctx.quadraticCurveTo(x, y, x + rr, y); ctx.closePath(); return;
+    }
+    arco(ctx, x, y, w, h);
+  }
+  /* medidas de cada forma: todas terminan a la misma altura (810), así los textos no cambian de lugar */
+  function cajaFoto(f, sube) {
+    var abajo = 810 - (sube || 0), alto = 700 - (sube || 0), ancho = 580;
+    if (f === 'rectangulo') ancho = 600;
+    if (f === 'ovalo') ancho = Math.round(alto * 0.78);
+    if (f === 'cuadrado' || f === 'circulo') { alto = Math.min(alto, 620); ancho = alto; }
+    return { x: (W - ancho) / 2, y: abajo - alto, w: ancho, h: alto };
+  }
   function arco(ctx, x, y, w, h) {
     var r = w / 2;
     ctx.beginPath(); ctx.moveTo(x, y + r); ctx.arc(x + r, y + r, r, Math.PI, 0); ctx.lineTo(x + w, y + h - 24);
@@ -231,20 +259,30 @@
 
   function armar(lienzo, op) {
     op = op || {};
-    var d = DISENOS.filter(function (x) { return x.id === op.diseno; })[0] || DISENOS[0];
+    var d0 = DISENOS.filter(function (x) { return x.id === op.diseno; })[0] || DISENOS[0];
+    /* colores y letras propios (panel) encima de los del diseño */
+    var d = {}; for (var k0 in d0) d[k0] = d0[k0];
+    var co = op.colores || {}, fu = op.fuentes || {};
+    ['tinta', 'suave', 'acento'].forEach(function (k) { if (co[k]) d[k] = co[k]; });
+    if (co.papel) d.papelPropio = co.papel;
+    ['tit', 'nom', 'txt'].forEach(function (k) { if (fu[k]) d[k] = fu[k]; });
+    var fo = op.foco || {};
     var tx = op.textos || {}, aj = op.ajustes || {}, modoFoto = op.modoFoto || 'arco';
+    if (modoFoto !== 'fondo' && !/^(arco|rectangulo|cuadrado|circulo|ovalo)$/.test(modoFoto)) modoFoto = 'arco';
     lienzo.width = W; lienzo.height = H;
     var ctx = lienzo.getContext('2d');
     return Promise.all([cargarFuentes(), imagen(op.fondo || (d.fondo ? CL + d.fondo : '')), imagen(op.foto)]).then(function (r) {
       var fondo = r[1], foto = r[2];
       ctx.fillStyle = d.papel; ctx.fillRect(0, 0, W, H);
       if (foto && modoFoto === 'fondo') {
-        cubrir(ctx, foto, 0, 0, W, H);
+        cubrir(ctx, foto, 0, 0, W, H, fo.x, fo.y == null ? 0.3 : fo.y, fo.zoom);
         /* velo: oscurece parejo y un poco más donde suelen ir los textos */
+        /* ★ los textos van ABAJO (las caras suelen estar arriba y no se tapan):
+           la foto queda casi limpia arriba y se oscurece hacia abajo */
         var v = op.velo == null ? 0.45 : +op.velo;
-        ctx.fillStyle = 'rgba(0,0,0,' + v + ')'; ctx.fillRect(0, 0, W, H);
-        var g = ctx.createLinearGradient(0, H * 0.45, 0, H);
-        g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,' + Math.min(0.5, v * 0.9) + ')');
+        ctx.fillStyle = 'rgba(0,0,0,' + (v * 0.35) + ')'; ctx.fillRect(0, 0, W, H);
+        var g = ctx.createLinearGradient(0, H * 0.38, 0, H);
+        g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.35, 'rgba(0,0,0,' + Math.min(0.85, v * 1.3) + ')'); g.addColorStop(1, 'rgba(0,0,0,' + Math.min(0.92, v * 1.7) + ')');
         ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       } else {
         if (fondo && foto && d.zoomArco) {
@@ -252,12 +290,13 @@
              adorno de abajo a la izquierda (la ramita) queda fuera de los textos */
           var z = d.zoomArco; cubrir(ctx, fondo, W - W * z, 0, W * z, H * z);
         } else if (fondo) cubrir(ctx, fondo, 0, 0, W, H);
+        if (d.papelPropio) { ctx.fillStyle = d.papelPropio; ctx.fillRect(0, 0, W, H); }   /* color de fondo liso elegido en el panel */
         if (foto) {
-          var aw = 580, ah = 700 - (d.arcoSube || 0), ax = (W - aw) / 2, ay = 110;
+          var cf = cajaFoto(modoFoto, d.arcoSube), ax = cf.x, ay = cf.y, aw = cf.w, ah = cf.h;
           ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.22)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 14;
-          arco(ctx, ax, ay, aw, ah); ctx.fillStyle = d.papel; ctx.fill(); ctx.restore();
-          ctx.save(); arco(ctx, ax, ay, aw, ah); ctx.clip(); cubrir(ctx, foto, ax, ay, aw, ah); ctx.restore();
-          ctx.save(); arco(ctx, ax - 16, ay - 16, aw + 32, ah + 32); ctx.strokeStyle = d.acento; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
+          forma(ctx, modoFoto, ax, ay, aw, ah); ctx.fillStyle = d.papel; ctx.fill(); ctx.restore();
+          ctx.save(); forma(ctx, modoFoto, ax, ay, aw, ah); ctx.clip(); cubrir(ctx, foto, ax, ay, aw, ah, fo.x, fo.y == null ? 0.3 : fo.y, fo.zoom); ctx.restore();
+          ctx.save(); forma(ctx, modoFoto, ax - 16, ay - 16, aw + 32, ah + 32); ctx.strokeStyle = d.acento; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
         }
         if (d.lay === 'marco' && !foto) {
           ctx.strokeStyle = d.acento; ctx.lineWidth = 3; ctx.strokeRect(70, 70, W - 140, H - 140);
@@ -269,8 +308,15 @@
       if (!(foto && modoFoto !== 'fondo')) {
         var ys = piezas.map(function (p) { return p.y; });
         var mn = Math.min.apply(null, ys) - 120, mx = Math.max.apply(null, ys);
-        var corr = Math.round(H * (d.centro || 0.48) - (mn + mx) / 2);
+        var fondoFoto = foto && modoFoto === 'fondo';
+        var cy = H * (fondoFoto ? 0.71 : (d.centro || 0.48));
+        var corr = Math.round(cy - (mn + mx) / 2);
         piezas.forEach(function (p) { p.y += corr; });
+        /* con foto de fondo el bloque es más compacto, en el tercio de abajo */
+        if (fondoFoto) piezas.forEach(function (p) {
+          p.y = Math.round(cy + (p.y - cy) * 0.8);
+          if (p.o) { p.o = Object.assign({}, p.o, { tam: Math.round(p.o.tam * 0.82), min: p.o.min ? Math.round(p.o.min * 0.82) : p.o.min }); }
+        });
       }
       (op.extras || []).forEach(function (e, i) {
         if (!e || !String(e.txt || '').trim()) return;
@@ -284,13 +330,14 @@
         if (a.oculto) return;
         var x = p.x + (+a.dx || 0), y = p.y + (+a.dy || 0), esc = +a.esc || 1;
         if (p.deco) {
-          if (p.deco === 'adorno') adorno(ctx, y, { acento: acento }); else linea(ctx, W / 2 - 60, y, W / 2 + 60, acento, 3);
+          var ac = a.color || acento; if (p.deco === 'adorno') adorno(ctx, y, { acento: ac }); else linea(ctx, W / 2 - 60, y, W / 2 + 60, ac, 3);
           cajas.push({ id: p.id, x: W / 2 - 160, y: y - 14, w: 320, h: 28 });
           return;
         }
         var t = a.txt != null && a.txt !== '' ? a.txt : p.txt;
         if (t === '-' || !t) return;
         var o = {}; for (var k in p.o) o[k] = p.o[k];
+        if (a.fam) o.fam = a.fam; if (a.color) o.color = a.color;   /* letra y color de ESA pieza */
         /* sobre foto de fondo, una sombra suave para que la letra no se pierda */
         if (foto && modoFoto === 'fondo') { ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 18; } else { ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; }
         o.tam = Math.round(o.tam * esc); if (o.min) o.min = Math.round(o.min * esc);
@@ -305,5 +352,5 @@
     });
   }
 
-  window.INVSTDG = { DISENOS: DISENOS, textosDe: textosDe, elegirSolo: elegirSolo, armar: armar, W: W, H: H };
+  window.INVSTDG = { DISENOS: DISENOS, FAMILIAS: FAMILIAS, FORMAS: FORMAS, textosDe: textosDe, elegirSolo: elegirSolo, armar: armar, W: W, H: H };
 })();
