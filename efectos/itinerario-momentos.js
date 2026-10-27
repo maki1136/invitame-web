@@ -92,7 +92,8 @@
     s.textContent =
       'html[data-tl-apilado] .tl .h .tl-hora,html[data-tl-apilado] .tl .h .tl-nom{display:block}' +
       'html[data-tl-apilado] .tl.tl-centro > .it{text-align:center!important}' +
-      'html[data-tl-apilado] .tl.tl-centro > .it .d{text-align:center!important}';
+      'html[data-tl-apilado] .tl.tl-centro > .it .d{text-align:center!important}' +
+      'html[data-tl-apilado] .tl > .it .it-ico{margin-left:auto!important;margin-right:auto!important}';
     (document.head || document.documentElement).appendChild(s);
   }
   function firmaDe(ms) { try { return JSON.stringify(ms) + (apilado() ? '|ap' : ''); } catch (e) { return ''; } }
