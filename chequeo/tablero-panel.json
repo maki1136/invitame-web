@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-27T20:58:24.644Z",
+ "cuando": "2026-10-27T21:44:19.341Z",
  "slug": "camila-y-tomas",
  "total": 404,
- "verde": 403,
- "amarillo": 0,
+ "verde": 400,
+ "amarillo": 3,
  "rojo": 1,
  "gris": 0,
  "items": [
@@ -2575,8 +2575,9 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2839,8 +2840,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.hora",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -2861,8 +2863,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.rotuloHora",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
