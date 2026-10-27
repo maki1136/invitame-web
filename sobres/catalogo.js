@@ -2341,6 +2341,17 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
+  /* 27/10 Jazmín (Citlalli): el paquete de papel con moño de organza; al abrir,
+     el moño se desliza y cae al piso, se queda ahí y entra la luz. */
+  "paquete-liston-cae-video": {
+    nombre:     "Paquete de papel con moño · el listón cae al piso y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_2.6,eo_7.6/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/uhv1pqg8tjxdquhklhbm.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_2.6/w_1080,q_auto:best,f_jpg/invitame/sobres/gen22v/uhv1pqg8tjxdquhklhbm.jpg",
+    color:      "#847a6e",
+    luz:        3.3,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
 
   "salvia-lacre-rojo": {
     nombre:   "Salvia en relieve · peonías grabadas y lacre rojo con rosa (foto)",
