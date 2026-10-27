@@ -393,6 +393,16 @@
     var g=function(k){ var e=c.querySelector('[data-f="'+k+'"]'); return e?e.value:''; };
     var d=g('d'),m=g('m'),a=g('a');
     if(!d||!m||!a){ if(!d&&!m&&!a) setB(b,''); return; }   // a medio elegir: todavía no se guarda
+    /* ★ 27/10/2026 (Jazmín: «la fecha la cargamos en el formulario y después en
+       el panel no se guarda»). La «Fecha descripción» (evNfecha) MANDA sobre la
+       fecha: si quedó el texto del formulario («5:00», «4:00 pm»), cambiar la
+       fecha acá no se veía. Al elegir la fecha de una ceremonia, ese texto se borra. */
+    var mc=/^c_ceremonia-(\d)-fecha$/.exec(b);
+    if(mc && D['ev'+mc[1]+'fecha']){
+      D['ev'+mc[1]+'fecha']='';
+      var inpD=document.getElementById('f-'+slug('Ceremonia '+mc[1]+' - Fecha descripción:'));
+      if(inpD) inpD.value='';
+    }
     setB(b, a+'-'+m+'-'+d+'T'+(g('h')||'00')+':'+(g('i')||'00'));
   }
   function sacarImg(key,id){

@@ -163,6 +163,19 @@
     IGUALES.forEach(function (k) { if (s[k]) d[k] = s[k]; });
     REGALOS.forEach(function (k) { if (s[k]) d[k] = s[k]; });
 
+    function horaDe(txt) {
+      var x = String(txt || '').trim().toLowerCase().replace(/\s+/g, ' ');
+      var m = /^(\d{1,2})(?:[:.](\d{2}))?\s*(?:hrs?\.?|h|horas)?\s*(a\.?\s?m\.?|p\.?\s?m\.?)?\s*(?:hrs?\.?|h|horas)?$/.exec(x);
+      if (!m) return '';
+      var h = parseInt(m[1], 10), mi = m[2] ? parseInt(m[2], 10) : 0;
+      if (h > 23 || mi > 59) return '';
+      var ap = m[3] ? m[3].replace(/[^ap]/g, '') : '';
+      if (ap === 'p' && h < 12) h += 12;
+      if (ap === 'a' && h === 12) h = 0;
+      if (!ap && h >= 1 && h <= 9) h += 12;   /* «5:00» en una fiesta es de la tarde */
+      return ('0' + h).slice(-2) + ':' + ('0' + mi).slice(-2);
+    }
+
     /* ---- los tres eventos ----
        ⚠️ Los nombres NO coinciden: en la solicitud es `ev1d` y en el panel
           `ev1dir`; `ev1f` es `ev1fecha`. Se escriben SIEMPRE (aunque estén
@@ -178,6 +191,16 @@
       }
       d['ev' + i + 'dir']   = s['ev' + i + 'd'] || '';
       d['ev' + i + 'fecha'] = s['ev' + i + 'f'] || '';
+      /* ★ 27/10/2026 (Jazmín): la hora del formulario es texto libre y quedaba en
+         «Fecha descripción», que manda sobre la fecha del panel: cambiarla en el
+         panel no se veía. Si la hora se entiende («17:00», «5:00 pm», «4 pm»),
+         se arma la fecha de la ceremonia con el día del evento y la descripción
+         queda vacía; si no se entiende, queda el texto como antes. */
+      var fh = horaDe(s['ev' + i + 'f']), dia = String(s.fecha || '').slice(0, 10);
+      if (fh && /^\d{4}-\d{2}-\d{2}$/.test(dia)) {
+        d['c_ceremonia-' + i + '-fecha'] = dia + 'T' + fh;
+        d['ev' + i + 'fecha'] = '';
+      }
       d['ev' + i + 'maps']  = s['ev' + i + 'maps'] || '';
     }
 
