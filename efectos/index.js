@@ -661,6 +661,7 @@
     '/efectos/trivia-apagada.js',      /* la trivia sólo si «Habilitar trivia» está prendida */
     '/efectos/tipos-evento.js',        /* 19/10: babyshower, graduacion y corporativo (INVTIPO) + el selector del panel */
     '/efectos/panel-compartir.js',     /* 22/10: apagado adentro («Corre la voz» se sacó de todas) */
+    '/efectos/panel-std-generico.js',  /* 27/10: save the date SIN invitación, 10 diseños, textos movibles (Maki) */
     '/efectos/panel-save-the-date.js', /* el save the date de regalo: su bloque en EFECTOS (lo arma save-the-date.js, que NO va en esta lista) */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
@@ -720,6 +721,7 @@
     '/efectos/imagenes-del-panel.js',  /* 21/10: la foto que se carga en el panel (img_c_) gana a la de la muestra (img_f-) */
     '/efectos/hoteles-bloques.js',     /* 20/10: un hotel por bloque, con un solo «Reservar» (Jazmín) */
     '/efectos/rsvp-general.js',        /* 20/10: confirmar con un solo link para todos (Pack Estándar) */
+    '/efectos/rsvp-recordado.js',      /* 27/10: «Confirmaste que asistirás…» al volver a entrar (Jazmín) */
     '/efectos/secciones-ocultas.js',   /* 20/10: secciones que no van (fx.ocultas), formulario y panel */
     '/efectos/personas-foto.js',       /* 20/10: personas sin foto o con el adorno del diseño (Jazmín) */
     '/efectos/cierre-orden.js',        /* 23/10: el «¡Gracias!» abajo del texto final (citlalli) */
