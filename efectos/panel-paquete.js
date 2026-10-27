@@ -70,7 +70,35 @@
       if (v == null || typeof v !== 'object') return false;
       v = v[partes[i]];
     }
+    if (f.valor) return String(v || '') === String(f.valor);
     return v === true || /^(true|si|sí|1)$/i.test(String(v));
+  }
+
+  /* ★ 27/10/2026 (Jazmín: «la quiero en formato Plus para mostrarle a un
+     cliente… sigue siendo Estándar y encima tiene el mensaje de voz»).
+     Deja la invitación IGUAL al paquete: prende lo que trae (con interruptor)
+     y apaga lo que no trae ni se vendió aparte. Sólo se hace con el botón:
+     nunca solo, por si ya se lo mostraron al cliente. */
+  function ajustarAlPaquete(d) {
+    var t = tabla(); if (!t) return;
+    var c = cfg(d);
+    Object.keys(t.FUNCIONES).forEach(function (k) {
+      var f = t.FUNCIONES[k];
+      if (!f.interruptor) return;
+      prender(d, k, t.tiene(c.plan, k, c.extras));
+    });
+    /* el pase con la cantidad: si el paquete lo trae, que no quede oculto */
+    if (t.tiene(c.plan, 'paseCantidad', c.extras) && d.fx && Array.isArray(d.fx.ocultas)) {
+      d.fx.ocultas = d.fx.ocultas.filter(function (x) { return x !== 'pase'; });
+    }
+  }
+  function faltaPrender(d) {
+    var t = tabla(); if (!t) return [];
+    var c = cfg(d);
+    return t.funcionesDe(c.plan, c.extras).filter(function (k) {
+      var f = t.FUNCIONES[k];
+      return f && f.interruptor && f.valor && !estaPrendida(d, k);
+    });
   }
 
   /* 23/10/2026 — Maki: «si compraba un paquete y después quería agregar algo
@@ -147,6 +175,23 @@
     var incluye = chico(document.createElement('div'), 'font-size:11.5px;line-height:1.5;margin:0 0 12px;opacity:.72');
     caja.appendChild(incluye);
 
+    var btnAjustar = document.createElement('button');
+    btnAjustar.type = 'button';
+    btnAjustar.textContent = 'Dejar la invitación igual a este paquete';
+    btnAjustar.style.cssText = 'cursor:pointer;padding:7px 12px;font-size:12.5px;font-weight:600;border-radius:9px;' +
+      'border:1px solid #6D1233;background:#fff;color:#6D1233;margin:0 0 4px';
+    var notaAjustar = chico(document.createElement('div'), 'font-size:11px;opacity:.6;line-height:1.4;margin:0 0 12px');
+    notaAjustar.textContent = 'Prende lo que trae el paquete y apaga lo que no trae (mensaje de voz, raspadita, filtro…). Sirve para armar una muestra de cada paquete. Después: Guardar y publicar.';
+    btnAjustar.onclick = function () {
+      var d2 = borrador(); if (!d2) return;
+      ajustarAlPaquete(d2);
+      pintar(); refrescar();
+      btnAjustar.textContent = 'Listo: ahora Guardar y publicar';
+      setTimeout(function () { btnAjustar.textContent = 'Dejar la invitación igual a este paquete'; }, 4000);
+    };
+    caja.appendChild(btnAjustar);
+    caja.appendChild(notaAjustar);
+
     /* ---- los extras vendidos aparte ---- */
     var tituloExtras = chico(document.createElement('div'),
       'font-size:12px;font-weight:600;margin:0 0 4px');
@@ -221,6 +266,14 @@
       var regalado = t.leFalta(c.plan, c.extras).filter(function (k) {
         return estaPrendida(dd, k);
       });
+      var falta = faltaPrender(dd);
+      if (falta.length && !regalado.length) {
+        aviso.style.display = 'block';
+        aviso.innerHTML = '<b>El paquete trae algo que está apagado:</b> ' +
+          falta.map(function (k) { return t.FUNCIONES[k].nombre; }).join(' · ') +
+          '<br><span style="opacity:.8">Tocá «Dejar la invitación igual a este paquete».</span>';
+        return;
+      }
       if (regalado.length) {
         aviso.style.display = 'block';
         aviso.innerHTML = '<b>Ojo: esta invitación tiene prendido algo que no compró.</b><br>' +

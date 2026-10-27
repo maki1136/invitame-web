@@ -572,7 +572,15 @@
   function armar() {
     var card = document.getElementById('scratchcard');
     if (!card) return;
-    if (!encendido()) return;
+    /* ★ 27/10/2026 (Jazmín, muestras por paquete): apagada en el panel, la
+       sección «Raspa para revelar» no se muestra (sin tapa no tiene sentido). */
+    var stOff = document.getElementById('inv-rasp-off');
+    if (!encendido()) {
+      if (!stOff) { stOff = document.createElement('style'); stOff.id = 'inv-rasp-off'; document.head.appendChild(stOff); }
+      stOff.textContent = 'section.scratch-sec{display:none!important}';
+      return;
+    }
+    if (stOff) stOff.textContent = '';
     if (completado) return;                 /* ⚠️ ya se raspó: no se rearma */
 
     var cfg = config();
