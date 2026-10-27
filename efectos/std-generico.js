@@ -39,15 +39,15 @@
      color de respaldo mientras carga o si no carga. tinta/acento: medidos
      contra el fondo. lay: 'clasico' | 'marco' | 'moderno'. */
   var DISENOS = [
-    { id: 'marfil-oro', fondo: 'kufr8mhkoclzkhfjpzvz',     nombre: 'Marfil y oro',        papel: '#f3ece0', tinta: '#3d3329', suave: '#6b5d4f', acento: '#a8843f', lay: 'marco',   tit: 'Pinyon Script',  nom: 'Pinyon Script',      txt: 'Cormorant Garamond' },
-    { id: 'salvia', fondo: 'gj1ttc3xl5u2yby0t9uv',         nombre: 'Salvia',              papel: '#e4e7dc', tinta: '#2e3a2f', suave: '#4f5e4f', acento: '#7d8f72', lay: 'clasico', tit: 'Great Vibes',    nom: 'Great Vibes',        txt: 'Cormorant Garamond' },
+    { id: 'marfil-oro', fondo: 'kufr8mhkoclzkhfjpzvz',     nombre: 'Marfil y oro',        papel: '#f3ece0', tinta: '#3d3329', suave: '#6b5d4f', acento: '#a8843f', arcoSube: 90, lay: 'clasico', max: 560, centro: 0.465, tit: 'Pinyon Script',  nom: 'Pinyon Script',      txt: 'Cormorant Garamond' },
+    { id: 'salvia', fondo: 'gj1ttc3xl5u2yby0t9uv',         nombre: 'Salvia',              papel: '#e4e7dc', tinta: '#2e3a2f', suave: '#4f5e4f', acento: '#7d8f72', lay: 'clasico', max: 700, tit: 'Great Vibes',    nom: 'Great Vibes',        txt: 'Cormorant Garamond' },
     { id: 'terracota', fondo: 'utuog1gmfnqpht2khrun',      nombre: 'Terracota',           papel: '#efe2d3', tinta: '#4e2f22', suave: '#7a5040', acento: '#b0654a', lay: 'moderno', tit: 'Italiana',       nom: 'Playfair Display',   txt: 'Jost' },
     { id: 'azul-polvo', fondo: 'yazlxfeuwkl06iuohfpk',     nombre: 'Azul polvo',          papel: '#e3e8ee', tinta: '#26364a', suave: '#4a5b70', acento: '#7f97b0', lay: 'clasico', tit: 'Allura',         nom: 'Allura',             txt: 'Cormorant Garamond' },
     { id: 'noche-oro', fondo: 'cevtmqhwlyb8yturqc5u',      nombre: 'Noche y oro',         papel: '#17161a', tinta: '#f1e8d6', suave: '#d6cbb5', acento: '#c9a45c', lay: 'marco',   tit: 'Pinyon Script',  nom: 'Pinyon Script',      txt: 'Cormorant Garamond', oscuro: true },
     { id: 'borgona', fondo: 'rsjxavkzh7tohnz7t9sm',        nombre: 'Borgoña',             papel: '#4a1620', tinta: '#f6ebe2', suave: '#e8d6cb', acento: '#d9b48a', lay: 'clasico', tit: 'Great Vibes',    nom: 'Great Vibes',        txt: 'Cormorant Garamond', oscuro: true },
-    { id: 'lavanda', fondo: 'puas94gd0cjzf7bg6p2z',        nombre: 'Lavanda',             papel: '#e8e4ee', tinta: '#38324a', suave: '#5c5470', acento: '#9a8fb5', lay: 'moderno', tit: 'Italiana',       nom: 'Allura',             txt: 'Jost' },
-    { id: 'rosa-empolvado', fondo: 'kv4jyurjtv3wf3qgbg2r', nombre: 'Rosa empolvado',      papel: '#f2e3df', tinta: '#4e2f33', suave: '#7a5157', acento: '#c58f8f', lay: 'marco',   tit: 'Allura',         nom: 'Great Vibes',        txt: 'Cormorant Garamond' },
-    { id: 'olivo', fondo: 'pmaxd4ywahafmfyfvn08',          nombre: 'Olivo profundo',      papel: '#2f3626', tinta: '#f1ecdc', suave: '#d7d2bd', acento: '#c2b27d', lay: 'clasico', tit: 'Pinyon Script',  nom: 'Pinyon Script',      txt: 'Cormorant Garamond', oscuro: true },
+    { id: 'lavanda', fondo: 'puas94gd0cjzf7bg6p2z',        nombre: 'Lavanda',             papel: '#e8e4ee', tinta: '#38324a', suave: '#5c5470', acento: '#9a8fb5', arcoSube: 60, zoomArco: 1.3, lay: 'moderno', max: 740, centro: 0.30, tit: 'Italiana',       nom: 'Allura',             txt: 'Jost' },
+    { id: 'rosa-empolvado', fondo: 'kv4jyurjtv3wf3qgbg2r', nombre: 'Rosa empolvado',      papel: '#f2e3df', tinta: '#4e2f33', suave: '#7a5157', acento: '#c58f8f', lay: 'clasico', max: 680, tit: 'Allura',         nom: 'Great Vibes',        txt: 'Cormorant Garamond' },
+    { id: 'olivo', fondo: 'pmaxd4ywahafmfyfvn08',          nombre: 'Olivo profundo',      papel: '#2f3626', tinta: '#f1ecdc', suave: '#d7d2bd', acento: '#c2b27d', arcoSube: 60, lay: 'clasico', tit: 'Pinyon Script',  nom: 'Pinyon Script',      txt: 'Cormorant Garamond', oscuro: true },
     { id: 'blanco', fondo: 'crkp5jlbh21ewja1fsah',         nombre: 'Blanco minimal',      papel: '#fbfaf7', tinta: '#1f1f1f', suave: '#555555', acento: '#9a9a9a', lay: 'moderno', tit: 'Italiana',       nom: 'Playfair Display',   txt: 'Montserrat' }
   ];
 
@@ -74,7 +74,8 @@
   }
   function ciudadDe(ev) {
     var dir = String((ev && (ev.ev1dir || ev.ev2dir)) || '');
-    var partes = dir.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    /* sin códigos de Google Maps («7FQV+WVQ ») ni códigos postales */
+    var partes = dir.split(',').map(function (x) { return x.trim().replace(/^[A-Z0-9]{4,8}\+[A-Z0-9]{2,4}\s*/, '').replace(/^\d{4,6}\s*/, ''); }).filter(Boolean);
     /* «…, 77710 Playa del Carmen, Quintana Roo» → «Playa del Carmen, Quintana Roo» */
     if (partes.length >= 2) {
       var a = partes[partes.length - 2].replace(/^\d{4,6}\s*/, ''), b = partes[partes.length - 1];
@@ -185,18 +186,20 @@
      o la reescribe; op.extras = [{txt, x, y, tam, color}] son textos propios.
      armar() devuelve las cajas de cada pieza para poder arrastrarlas. */
   function piezasDe(d, tx, foto, modoFoto) {
-    var P = [], M = 860;
+    var P = [], M = (foto && modoFoto === 'fondo') ? 860 : (d.max || 860);
     function add(id, t, x, y, o) { P.push({ id: id, txt: t, x: x, y: y, o: o }); }
     function deco(id, y, tipo) { P.push({ id: id, deco: tipo, x: W / 2, y: y }); }
     if (foto && modoFoto !== 'fondo') {
-      var y0 = 150 + 900 + 120;
-      add('titulo', tx.titulo, W / 2, y0, { tam: 96, fam: d.tit, color: d.tinta, max: M });
-      add('sub', tx.sub, W / 2, y0 + 70, { tam: 34, fam: d.txt, color: d.suave, max: M, mayus: true, esp: 8 });
-      add('nombres', tx.nombres, W / 2, y0 + 210, { tam: 120, fam: d.nom, color: d.tinta, max: M, min: 54, nombres: true });
-      deco('adorno1', y0 + 270, 'adorno');
-      add('fecha', tx.fecha, W / 2, y0 + 350, { tam: 64, fam: d.txt, color: d.tinta, max: M, esp: 4 });
-      add('detalle', tx.detalle, W / 2, y0 + 412, { tam: 30, fam: d.txt, color: d.suave, max: M });
-      add('pie', tx.pie, W / 2, H - 70, { tam: 26, fam: d.txt, color: d.suave, max: M, mayus: true, esp: 5 });
+      /* foto en arco arriba (110→810) y los textos abajo, con aire entre cada renglón
+         (los nombres en dos renglones ocupan ~230 px: van solos en su franja) */
+      var s = d.arcoSube || 0;   /* diseños con adornos abajo: todo sube un poco y el arco es más bajo */
+      add('titulo', tx.titulo, W / 2, 930 - s, { tam: 92, fam: d.tit, color: d.tinta, max: M });
+      add('sub', tx.sub, W / 2, 988 - s, { tam: 32, fam: d.txt, color: d.suave, max: M, mayus: true, esp: 8 });
+      add('nombres', tx.nombres, W / 2, 1170 - s, { tam: 116, fam: d.nom, color: d.tinta, max: M, min: 54, nombres: true });
+      deco('adorno1', 1320 - s, 'adorno');
+      add('fecha', tx.fecha, W / 2, 1408 - s, { tam: 62, fam: d.txt, color: d.tinta, max: M, esp: 4 });
+      add('detalle', tx.detalle, W / 2, 1468 - s, { tam: 30, fam: d.txt, color: d.suave, max: M });
+      add('pie', tx.pie, W / 2, 1560 - s, { tam: 26, fam: d.txt, color: d.suave, max: M, mayus: true, esp: 5 });
       return P;
     }
     var claro = foto && modoFoto === 'fondo';       /* foto de fondo: tinta clara sobre velo */
@@ -220,7 +223,9 @@
       add('fecha', tx.fecha, W / 2, top2 + 780, { tam: 80, fam: d.txt, color: tin, max: M, esp: 6 });
       add('detalle', tx.detalle, W / 2, top2 + 860, { tam: 34, fam: d.txt, color: sua, max: M, est: 'italic' });
     }
-    add('pie', tx.pie, W / 2, H - (d.lay === 'marco' ? 150 : 110), { tam: 26, fam: d.txt, color: sua, max: M, mayus: true, esp: 6 });
+    /* el renglón final va debajo del bloque (abajo de todo se pisaba con las hojas del fondo) */
+    var ult = P[P.length - 1];
+    add('pie', tx.pie, W / 2, ult.y + 120, { tam: 26, fam: d.txt, color: sua, max: M, mayus: true, esp: 6 });
     return P;
   }
 
@@ -236,15 +241,19 @@
       if (foto && modoFoto === 'fondo') {
         cubrir(ctx, foto, 0, 0, W, H);
         /* velo: oscurece parejo y un poco más donde suelen ir los textos */
-        var v = op.velo == null ? 0.38 : +op.velo;
+        var v = op.velo == null ? 0.45 : +op.velo;
         ctx.fillStyle = 'rgba(0,0,0,' + v + ')'; ctx.fillRect(0, 0, W, H);
         var g = ctx.createLinearGradient(0, H * 0.45, 0, H);
         g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,' + Math.min(0.5, v * 0.9) + ')');
         ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       } else {
-        if (fondo) cubrir(ctx, fondo, 0, 0, W, H);
+        if (fondo && foto && d.zoomArco) {
+          /* con foto en arco, el fondo se agranda desde arriba a la derecha y el
+             adorno de abajo a la izquierda (la ramita) queda fuera de los textos */
+          var z = d.zoomArco; cubrir(ctx, fondo, W - W * z, 0, W * z, H * z);
+        } else if (fondo) cubrir(ctx, fondo, 0, 0, W, H);
         if (foto) {
-          var aw = 700, ah = 900, ax = (W - aw) / 2, ay = 150;
+          var aw = 580, ah = 700 - (d.arcoSube || 0), ax = (W - aw) / 2, ay = 110;
           ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.22)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 14;
           arco(ctx, ax, ay, aw, ah); ctx.fillStyle = d.papel; ctx.fill(); ctx.restore();
           ctx.save(); arco(ctx, ax, ay, aw, ah); ctx.clip(); cubrir(ctx, foto, ax, ay, aw, ah); ctx.restore();
@@ -258,10 +267,10 @@
       var piezas = piezasDe(d, tx, foto, modoFoto);
       /* sin foto en arco: el bloque de textos (menos el pie) va centrado en la altura */
       if (!(foto && modoFoto !== 'fondo')) {
-        var ys = piezas.filter(function (p) { return p.id !== 'pie'; }).map(function (p) { return p.y; });
+        var ys = piezas.map(function (p) { return p.y; });
         var mn = Math.min.apply(null, ys) - 120, mx = Math.max.apply(null, ys);
-        var corr = Math.round(H * 0.47 - (mn + mx) / 2);
-        piezas.forEach(function (p) { if (p.id !== 'pie') p.y += corr; });
+        var corr = Math.round(H * (d.centro || 0.48) - (mn + mx) / 2);
+        piezas.forEach(function (p) { p.y += corr; });
       }
       (op.extras || []).forEach(function (e, i) {
         if (!e || !String(e.txt || '').trim()) return;
@@ -282,6 +291,8 @@
         var t = a.txt != null && a.txt !== '' ? a.txt : p.txt;
         if (t === '-' || !t) return;
         var o = {}; for (var k in p.o) o[k] = p.o[k];
+        /* sobre foto de fondo, una sombra suave para que la letra no se pierda */
+        if (foto && modoFoto === 'fondo') { ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 18; } else { ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; }
         o.tam = Math.round(o.tam * esc); if (o.min) o.min = Math.round(o.min * esc);
         var usado, alto;
         if (o.nombres) { var nn = nombres(ctx, t, x, y, o); usado = nn.tam; alto = nn.dos ? nn.tam * 2.1 : nn.tam * 1.1; }
