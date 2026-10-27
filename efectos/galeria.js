@@ -61,13 +61,24 @@
     sec.style.cssText = document.querySelector('.sec')
       ? 'text-align:center;'
       : 'text-align:center;padding:52px 22px;';
+    /* 27/10: la cámara centrada con una hoja propia (algún módulo reescribe
+       el style del círculo y le saca el display). */
+    if (!document.getElementById('gal-cam-css')) {
+      var stc = document.createElement('style'); stc.id = 'gal-cam-css';
+      stc.textContent = 'html body #gal-seccion .gal-cam{display:flex!important;align-items:center!important;' +
+        'justify-content:center!important;margin:0 auto 16px!important;padding:0!important}' +
+        'html body #gal-seccion .gal-cam svg{display:block!important;margin:0!important}';
+      document.head.appendChild(stc);
+    }
     sec.innerHTML =
-      '<div style="display:inline-flex;align-items:center;justify-content:center;' +
+      /* 27/10 (Jazmín, Citlalli): una colección le pisaba el display y la
+         cámara quedaba arriba a la izquierda del círculo → !important. */
+      '<div class="gal-cam" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:0!important;' +
         'width:62px;height:62px;border-radius:50%;margin-bottom:16px;' +
         'background:' + acento + ';color:#fff;' +
         'box-shadow:0 2px 3px rgba(40,6,20,.22), 7px 9px 15px -3px rgba(40,6,20,.42),' +
         'inset 0 2px 0 rgba(255,255,255,.35), inset 0 -3px 7px rgba(0,0,0,.22);">' +
-        '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+        '<svg width="30" height="30" style="display:block;margin:16px auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
           'stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
           '<path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.7a1 1 0 0 0 .83-.45l.94-1.4A1 1 0 0 1 9.8 3.7h4.4' +
             'a1 1 0 0 1 .83.45l.94 1.4A1 1 0 0 0 16.8 6h1.7A2.5 2.5 0 0 1 21 8.5v9' +
