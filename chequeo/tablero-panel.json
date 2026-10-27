@@ -1,10 +1,10 @@
 {
- "cuando": "2026-10-27T17:53:16.312Z",
+ "cuando": "2026-10-27T18:56:57.977Z",
  "slug": "camila-y-tomas",
- "total": 414,
- "verde": 409,
+ "total": 400,
+ "verde": 398,
  "amarillo": 0,
- "rojo": 5,
+ "rojo": 2,
  "gris": 0,
  "items": [
   {
@@ -2346,106 +2346,6 @@
   },
   {
    "tab": "CONFIRMACIÓN",
-   "bloque": "rsvp-selector",
-   "control": "El estilo",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.rsvp.estilo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "rsvp-selector",
-   "control": "Fecha límite para confirmar",
-   "tipo": "date",
-   "guarda": false,
-   "dato": "",
-   "llega": false,
-   "seVe": true,
-   "estado": "rojo",
-   "nota": "lo toco y no se guarda nada"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Nombre de ejemplo",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.nombre",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Nombre de ejemplo",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.pases",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Nombre de ejemplo",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.mesa",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Nombre de ejemplo",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.estado",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Teléfono de ventas",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.tel",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Teléfono de ventas",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.cta",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Teléfono de ventas",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.msj",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
    "bloque": "",
    "control": "Color texto Confirmación:",
    "tipo": "color",
@@ -2618,63 +2518,6 @@
    "tipo": "textarea",
    "guarda": true,
    "dato": "c_mensaje-wsp-contacto",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "rsvp-selector",
-   "control": "Preguntar restricciones alimentariasSuma al formulario «¿Alguna restricción alimentaria?».",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.rsvp.restricciones",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "rsvp-selector",
-   "control": "Pase simple (sin nombre, QR ni mesa)El pase dice sólo «¡Esperamos contar contigo!» y la ca",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.pase",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.pase (CONFIRMACIÓN + PAQUETE)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "rsvp-selector",
-   "control": "Un solo link para todos (Pack Estándar)Con el link general cada invitado escribe su nombre",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.rsvp.general",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Mostrar la confirmación y el pase aunque no haya link de invitado",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.muestra.rsvp",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "muestra-selector",
-   "control": "Usar los teléfonos de venta de Invítame y mostrar el llamado del final",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.muestra.venta",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3587,9 +3430,7 @@
    "dato": "fx.paquete.extras, fx.pase",
    "llega": true,
    "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.pase (CONFIRMACIÓN + PAQUETE)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
