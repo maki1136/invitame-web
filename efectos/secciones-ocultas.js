@@ -34,6 +34,8 @@
     ['video',      'Video',                  '[data-sec="video"]'],
     ['spotify',    'Playlist',               '[data-sec="spotify"]'],
     ['trivia',     'Trivia',                 '[data-sec="trivia"]'],
+    /* 26/10 Jazmín: poder sacar el pase / «cantidad de invitados» a mano */
+    ['pase',       'Pase del invitado (cantidad de personas)', 'section.pase'],
     ['filtro',     'Filtro de fotos',        '#filtro-sec'],
     ['live',       'Fotos de los invitados', '#gal-seccion'],
     ['contacto',   'Contacto',               '[data-sec="contacto"]'],
