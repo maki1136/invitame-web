@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-27T19:46:51.387Z",
+ "cuando": "2026-10-27T20:00:39.554Z",
  "slug": "camila-y-tomas",
  "total": 414,
- "verde": 408,
- "amarillo": 1,
+ "verde": 409,
+ "amarillo": 0,
  "rojo": 5,
  "gris": 0,
  "items": [
@@ -2564,9 +2564,8 @@
    "guarda": true,
    "dato": "c_frase-para-seccion-contacto",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
