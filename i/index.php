@@ -52,7 +52,7 @@ $slug = isset($_GET['e']) ? strtolower($_GET['e']) : '';
 $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
 $img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
-$coverReal = ''; $idioma = ''; $paleta = '';
+$coverReal = ''; $idioma = ''; $paleta = ''; $nom1 = ''; $nom2 = '';
 $estado = ''; $revision = '';
 
 $campos = array(); $tamElegidos = array(); $leyoEvento = false;
@@ -114,6 +114,7 @@ if ($slug !== '') {
     $desc = $firstOf(array('c_descripcion-al-compartir', 'c_descripci-n-al-compartir', 'frase'));
 
     $kick   = $sv('kick');
+    $nom1   = $sv('n1'); $nom2 = $sv('n2');   /* 27/10: para no mostrar «María & Diego» al cargar */
     $ver    = $sv('ver');
     $idioma = $sv('idioma');
     $paleta = strtolower($sv('paleta'));
@@ -672,6 +673,32 @@ function iv_sin_ejemplo($html) {
   return $html;
 }
 if ($leyoEvento) { $tpl = iv_sin_ejemplo($tpl); }
+
+/* ★ 27/10/2026 (Jazmín, Citlalli): «al entrar de repente al link aparece
+   "Nuestra boda María & Diego", como si fuera de otra boda». Son los nombres
+   de la boda de ejemplo del molde: se ven el instante antes de que el motor
+   ponga los de verdad. Se escriben ya los reales (o vacío) desde el servidor. */
+function iv_nombres_reales($html, $n1, $n2, $kick) {
+  $e = function ($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); };
+  $ep = ($n1 !== '' || $n2 !== '') ? $e($n1) . ($n2 !== '' ? '<br>&amp; ' . $e($n2) : '') : '';
+  $pv = ($n1 !== '' || $n2 !== '')
+    ? '<span style="animation-delay:.45s">' . $e($n1) . '</span>' . ($n2 !== '' ? '<br><span style="animation-delay:.7s">&amp; ' . $e($n2) . '</span>' : '')
+    : '';
+  $cambios = array(
+    array('~(<div class="epn" id="ep-names">).*?(</div>)~s', $ep),
+    array('~(<h1 class="names" id="pv-names">).*?(</h1>)~s', $pv),
+    array('~(<div class="epd" id="ep-date">)[^<]*(</div>)~', ''),
+    array('~(<div class="s" id="fin-texto">)[^<]*(</div>)~', ''),
+  );
+  if ($kick !== '') $cambios[] = array('~(<div class="epk" id="ep-kick">)[^<]*(</div>)~', $e($kick));
+  foreach ($cambios as $c) {
+    $adentro = $c[1]; $n = 0;
+    $r = preg_replace_callback($c[0], function ($m) use ($adentro) { return $m[1] . $adentro . $m[2]; }, $html, 1, $n);
+    if ($r !== null && $n === 1) { $html = $r; }
+  }
+  return $html;
+}
+if ($leyoEvento) { $tpl = iv_nombres_reales($tpl, $nom1, $nom2, $kick); }
 
 /* ★ 5/10/2026 — MODO LIVIANO PARA SAFARI VIEJO (16 o menos).
    Medido en el iPad de Maki (Safari 16.6): el video de fondo fijo detrás de
