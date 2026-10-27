@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-27T21:44:19.341Z",
+ "cuando": "2026-10-27T22:06:43.596Z",
  "slug": "camila-y-tomas",
  "total": 404,
- "verde": 400,
- "amarillo": 3,
+ "verde": 403,
+ "amarillo": 0,
  "rojo": 1,
  "gris": 0,
  "items": [
@@ -931,7 +931,7 @@
    "control": "Ceremonia 1 - Fecha",
    "tipo": "lista",
    "guarda": true,
-   "dato": "c_ceremonia-1-fecha",
+   "dato": "ev1fecha, c_ceremonia-1-fecha",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1041,7 +1041,7 @@
    "control": "Ceremonia 2 - Fecha",
    "tipo": "lista",
    "guarda": true,
-   "dato": "c_ceremonia-2-fecha",
+   "dato": "ev2fecha, c_ceremonia-2-fecha",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2575,9 +2575,8 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2840,9 +2839,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.hora",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
@@ -2863,9 +2861,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.rotuloHora",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
