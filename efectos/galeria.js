@@ -61,6 +61,15 @@
     sec.style.cssText = document.querySelector('.sec')
       ? 'text-align:center;'
       : 'text-align:center;padding:52px 22px;';
+    /* 27/10: la cámara centrada con una hoja propia (algún módulo reescribe
+       el style del círculo y le saca el display). */
+    if (!document.getElementById('gal-cam-css')) {
+      var stc = document.createElement('style'); stc.id = 'gal-cam-css';
+      stc.textContent = 'html body #gal-seccion .gal-cam{display:flex!important;align-items:center!important;' +
+        'justify-content:center!important;margin:0 auto 16px!important;padding:0!important}' +
+        'html body #gal-seccion .gal-cam svg{display:block!important;margin:0!important}';
+      document.head.appendChild(stc);
+    }
     sec.innerHTML =
       /* 27/10 (Jazmín, Citlalli): una colección le pisaba el display y la
          cámara quedaba arriba a la izquierda del círculo → !important. */
