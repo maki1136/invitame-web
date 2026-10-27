@@ -69,7 +69,7 @@
         'background:' + acento + ';color:#fff;' +
         'box-shadow:0 2px 3px rgba(40,6,20,.22), 7px 9px 15px -3px rgba(40,6,20,.42),' +
         'inset 0 2px 0 rgba(255,255,255,.35), inset 0 -3px 7px rgba(0,0,0,.22);">' +
-        '<svg width="30" height="30" style="display:block;margin:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+        '<svg width="30" height="30" style="display:block;margin:16px auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
           'stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
           '<path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.7a1 1 0 0 0 .83-.45l.94-1.4A1 1 0 0 1 9.8 3.7h4.4' +
             'a1 1 0 0 1 .83.45l.94 1.4A1 1 0 0 0 16.8 6h1.7A2.5 2.5 0 0 1 21 8.5v9' +
