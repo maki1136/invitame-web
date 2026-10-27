@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-27T02:34:37.050Z",
+ "cuando": "2026-10-27T17:23:03.782Z",
  "slug": "camila-y-tomas",
- "total": 412,
- "verde": 407,
+ "total": 414,
+ "verde": 409,
  "amarillo": 0,
  "rojo": 5,
  "gris": 0,
@@ -457,6 +457,17 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1691,6 +1702,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.itinerario.iconos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "itinerario-selector",
+   "control": "La hora arriba y el nombre abajo, centrados",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.itinerario.apilado",
    "llega": true,
    "seVe": true,
    "estado": "verde"
