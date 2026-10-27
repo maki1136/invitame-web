@@ -33,7 +33,7 @@
   function motor() {
     if (window.INVSTDG) return Promise.resolve(window.INVSTDG);
     return new Promise(function (ok, no) {
-      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261027c';
+      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261027d';
       s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
     });
   }

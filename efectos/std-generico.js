@@ -107,9 +107,18 @@
   /* sin elección: el diseño cuyo papel se parece más a la paleta de la muestra */
   function elegirSolo(ev) {
     var col = String((ev && ev.fx && (ev.fx.coleccion || '')) || '') + ' ' + String((ev && ev.tpl) || '');
-    var mapa = [[/oliva|olivo|campestre|bohemia/i, 'olivo'], [/salvia|jardin|eucalipto/i, 'salvia'], [/borgo|vino|ciruela/i, 'borgona'],
-      [/onix|disco|noche|negro|nocturno/i, 'noche-oro'], [/lavanda|lila/i, 'lavanda'], [/rosa|rose|acuarela/i, 'rosa-empolvado'],
-      [/terracota|mexicana|talavera/i, 'terracota'], [/azul|mar|playa|celeste/i, 'azul-polvo'], [/blanco|minimal|piedra|marmol/i, 'blanco']];
+    /* ★ 27/10: más temáticas, para que cada muestra traiga el que va con ella */
+    var mapa = [
+      [/lavanda|lila/i, 'lavanda'],
+      [/rosegold|rosadisco|rosa|rose|acuarela|unicornio|osita|scrapbook|babyshower/i, 'rosa-empolvado'],
+      [/vino|borgo|ciruela|monarca|mascarada|brindis/i, 'borgona'],
+      [/onix|disco|noche|negro|nocturno|glam|brillos|glow|estrell|gala|ejecutivo|plata|bokeh|urbano|birrete|toga/i, 'noche-oro'],
+      [/oliva|olivo|campestre|bohemia|jardin|futbol/i, 'olivo'],
+      [/salvia|eucalipto|sapo|palmeras/i, 'salvia'],
+      [/terracota|mexicana|talavera|cantera|vaquera|boho|globos/i, 'terracota'],
+      [/azul|mar\b|sirena|playa|celeste|kinder|pixel|cenicienta|abordar/i, 'azul-polvo'],
+      [/blanco|minimal|piedra|marmol|mono|grises|seda|editorial|cabina|collage|generacion/i, 'blanco']
+    ];
     for (var i = 0; i < mapa.length; i++) if (mapa[i][0].test(col)) return mapa[i][1];
     return 'marfil-oro';
   }
