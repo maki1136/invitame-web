@@ -723,6 +723,7 @@
     '/efectos/secciones-ocultas.js',   /* 20/10: secciones que no van (fx.ocultas), formulario y panel */
     '/efectos/personas-foto.js',       /* 20/10: personas sin foto o con el adorno del diseño (Jazmín) */
     '/efectos/cierre-orden.js',        /* 23/10: el «¡Gracias!» abajo del texto final (citlalli) */
+    '/efectos/hashtag-ajuste.js',      /* 27/10: el hashtag largo se achica para entrar en la pantalla */
     '/efectos/contacto-botones.js',    /* 24/10: los botones de Contacto con aire (Maki) */
     '/efectos/contacto-mensaje.js',    /* 24/10: el WhatsApp de confirmar abre con el mensaje escrito (Jazmín) */
     '/efectos/cuenta-color.js',        /* 26/10: color de la cuenta regresiva desde el panel (Jazmín, Evelyn) */
