@@ -380,10 +380,11 @@
     var c = '';
     try { c = String(((window.INVEV || {}).fx || {}).costados || ''); } catch (e) {}
     /* 26/10 Jazmín: «acordate de cambiar ese fondo feo» — el oscuro de fábrica
-       ya no es el que viene por defecto: sin elección, va la versión CLARA.
-       El oscuro de antes queda como opción a propósito ('oscuro'). */
+       ya no es el que viene por defecto: sin elección, van LISOS del color
+       del papel (la portada desenfocada, aun clara, sale marrón si la foto lo
+       es). El oscuro de antes queda como opción a propósito ('oscuro'). */
     if (c === 'oscuro') c = '';
-    else if (!/^(suave|claro)$/.test(c)) c = 'suave';
+    else if (!/^(suave|claro)$/.test(c)) c = 'claro';
     var h = document.documentElement;
     if (c) { if (h.getAttribute('data-costados') !== c) h.setAttribute('data-costados', c); }
     else if (h.hasAttribute('data-costados')) h.removeAttribute('data-costados');
