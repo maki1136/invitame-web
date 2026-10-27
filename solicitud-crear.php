@@ -119,6 +119,13 @@ $PROHIBIDOS = array(
   'creadoPor', 'creadoEl', 'guardadoPor', 'guardadoEl', '_solicId',
   'c_clave-del-panel-de-los-novios', 'c_contrasena-para-el-evento',
 );
+/* ★ 27/10/2026 (Jazmín): «cuando completamos el formulario, en la plataforma no
+   aparece con la clave». La clave de la compra (el N° de orden, ej. AML20095)
+   es sólo una etiqueta para encontrar la venta: no abre nada. Se guarda la que
+   escribió el formulario, limpia; y si el link del CRM trae la suya, manda ésa
+   (más abajo). */
+$ordenCliente = (isset($ev['orden']) && is_string($ev['orden'])) ? strtoupper(trim($ev['orden'])) : '';
+if (!preg_match('/^[A-Z0-9][A-Z0-9 _-]{1,29}$/', $ordenCliente)) $ordenCliente = '';
 foreach ($PROHIBIDOS as $k) { unset($ev[$k]); }
 /* ★ 6/10/2026 — SEGURIDAD: la portada sólo puede ser una foto de NUESTRA cuenta de
    Cloudinary (es lo único que sube el formulario). Ver la nota en i/index.php. */
@@ -508,6 +515,9 @@ if (preg_match('/^[a-z0-9]{12,40}$/i', $formToken)) {
     } else {
       if (!isset($ev['fx']) || !is_array($ev['fx'])) $ev['fx'] = array();
       $ev['fx']['paquete'] = array('plan' => $plan, 'extras' => $extras);
+      /* la clave de la venta que puso el CRM manda sobre la tipeada */
+      $claveCrm = isset($ff['clave']['stringValue']) ? strtoupper(trim($ff['clave']['stringValue'])) : '';
+      if (preg_match('/^[A-Z0-9][A-Z0-9 _-]{1,29}$/', $claveCrm)) $ordenCliente = $claveCrm;
       $NOMBRES = array('estandar' => 'Estándar', 'plus' => 'Plus', 'premium' => 'Premium', 'platinum' => 'Platinum');
       $avisoPaquete[] = 'PAQUETE: ' . (isset($NOMBRES[$plan]) ? $NOMBRES[$plan] : $plan) .
                         (count($extras) ? ' + extras: ' . implode(', ', $extras) : '') . ' (del link del CRM).';
@@ -559,6 +569,7 @@ $revision = codigo(14);         // el código del link de revisión
 $estado   = $ENTREGA_AUTOMATICA ? 'entregada' : 'por-revisar';
 
 $ev['estado']   = $estado;
+if ($ordenCliente !== '') $ev['orden'] = $ordenCliente;
 $ev['revision'] = $revision;
 $ev['privado']  = false;
 $ev['marca']    = $marca;   /* de qué marca es esta invitación */
