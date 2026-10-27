@@ -85,10 +85,14 @@
     Object.keys(t.FUNCIONES).forEach(function (k) {
       var f = t.FUNCIONES[k];
       if (!f.interruptor) return;
-      prender(d, k, t.tiene(c.plan, k, c.extras));
+      var si = t.tiene(c.plan, k, c.extras);
+      /* con pases personalizados (Premium y Platinum) va el pase con nombre y QR,
+         no el simple: la cantidad ya viene dentro de cada pase */
+      if (k === 'paseCantidad' && t.tiene(c.plan, 'pases', c.extras)) si = false;
+      prender(d, k, si);
     });
     /* el pase con la cantidad: si el paquete lo trae, que no quede oculto */
-    if (t.tiene(c.plan, 'paseCantidad', c.extras) && d.fx && Array.isArray(d.fx.ocultas)) {
+    if ((t.tiene(c.plan, 'paseCantidad', c.extras) || t.tiene(c.plan, 'pases', c.extras)) && d.fx && Array.isArray(d.fx.ocultas)) {
       d.fx.ocultas = d.fx.ocultas.filter(function (x) { return x !== 'pase'; });
     }
   }
@@ -97,6 +101,7 @@
     var c = cfg(d);
     return t.funcionesDe(c.plan, c.extras).filter(function (k) {
       var f = t.FUNCIONES[k];
+      if (k === 'paseCantidad' && t.tiene(c.plan, 'pases', c.extras)) return false;
       return f && f.interruptor && f.valor && !estaPrendida(d, k);
     });
   }
