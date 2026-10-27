@@ -210,12 +210,12 @@
        Lo pinta /efectos/encuadre-monitor.js. Se guarda '' (no se borra): el
        guardado hace merge y un borrado no viaja. */
     var selC = document.createElement('select');
-    [['', 'La portada desenfocada, oscura (como siempre)'],
+    [['', 'Liso, del color del papel'],
      ['suave', 'La portada desenfocada, clara'],
-     ['claro', 'Liso, del color del papel']].forEach(function (o) {
+     ['oscuro', 'La portada desenfocada, oscura']].forEach(function (o) {
       var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; selC.appendChild(op);
     });
-    selC.value = (d.fx && d.fx.costados) || '';
+    selC.value = (d.fx && d.fx.costados === 'claro') ? '' : ((d.fx && d.fx.costados) || '');
     selC.style.cssText = 'width:100%';
     selC.onchange = function () { d.fx = d.fx || {}; d.fx.costados = selC.value; refrescar(); };
     cuerpo.appendChild(fila('Los costados en la compu', selC));
