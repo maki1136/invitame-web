@@ -5,8 +5,10 @@
    Estándar no hay link por invitado, así que ese pase mostraba el ejemplo
    («Familia Rivera») y el QR no servía para nada.
    REGLA: si `fx.paquete.plan` es 'estandar' y no le vendieron aparte 'pases' ni
-   'accesoQR', el pase con QR no se muestra. El «Pase simple» (sin QR, sólo la
-   cantidad de personas) sigue funcionando en cualquier paquete.
+   'accesoQR', el pase con QR no se muestra.
+   26/10 noche, Jazmín (Aurora): «hay que eliminar el sector que dice cantidad
+   de invitados, porque es un pack estándar». La cantidad de personas por link
+   es del Pack PLUS, así que en un Estándar tampoco va el «Pase simple».
    ============================================================================ */
 (function () {
   'use strict';
@@ -16,10 +18,9 @@
     var ev = window.INVEV; if (!ev) return;
     var pq = (ev.fx && ev.fx.paquete) || {};
     var extras = Array.isArray(pq.extras) ? pq.extras : [];
-    var simple = ev.fx && ev.fx.pase && ev.fx.pase.modo === 'simple';
     var sinPases = pq.plan === 'estandar' && extras.indexOf('pases') < 0 && extras.indexOf('accesoQR') < 0;
     var st = document.getElementById(ID);
-    if (sinPases && !simple) {
+    if (sinPases) {
       if (!st) { st = document.createElement('style'); st.id = ID; document.head.appendChild(st); }
       st.textContent = 'section.pase{display:none!important}';
     } else if (st) st.textContent = '';
