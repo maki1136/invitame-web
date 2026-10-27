@@ -13,23 +13,20 @@
     e.style.maxWidth = '100%';
     e.style.whiteSpace = 'nowrap';
     if (!e.dataset.fzBase) {
-      e.style.removeProperty('font-size');
-      var b = parseFloat(getComputedStyle(e).fontSize);
+      var b = parseFloat(getComputedStyle(e).fontSize);   /* ⚠️ el molde lo trae inline: no borrarlo */
       if (!b) return;
       e.dataset.fzBase = b;
     }
     var base = parseFloat(e.dataset.fzBase), fz = base;
     e.style.setProperty('font-size', fz + 'px', 'important');
-    var caja = e.parentElement ? e.parentElement.clientWidth -
-      (parseFloat(getComputedStyle(e.parentElement).paddingLeft) || 0) -
-      (parseFloat(getComputedStyle(e.parentElement).paddingRight) || 0) : 0;
+    var caja = e.clientWidth;
     if (!caja) return;
     var n = 0;
-    while (e.scrollWidth > caja && fz > 18 && n++ < 40) {
+    while (e.scrollWidth > caja + 1 && fz > 18 && n++ < 40) {
       fz -= 1;
       e.style.setProperty('font-size', fz + 'px', 'important');
     }
-    if (e.scrollWidth > caja) { e.style.whiteSpace = 'normal'; e.style.overflowWrap = 'anywhere'; }
+    if (e.scrollWidth > caja + 1) { e.style.whiteSpace = 'normal'; e.style.overflowWrap = 'anywhere'; }
   }
   var k = 0, t = setInterval(function () { ajustar(); if (++k > 40) clearInterval(t); }, 500);
   addEventListener('resize', function () { setTimeout(ajustar, 120); });
