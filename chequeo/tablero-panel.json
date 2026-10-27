@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-26T23:48:14.424Z",
+ "cuando": "2026-10-27T00:21:46.948Z",
  "slug": "camila-y-tomas",
- "total": 410,
- "verde": 404,
- "amarillo": 1,
+ "total": 411,
+ "verde": 406,
+ "amarillo": 0,
  "rojo": 5,
  "gris": 0,
  "items": [
@@ -430,17 +430,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -457,6 +446,28 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -575,22 +586,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1780,9 +1791,8 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
