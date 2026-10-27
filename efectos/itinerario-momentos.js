@@ -57,10 +57,16 @@
 
   /* el mismo HTML que ya escribe el motor, para heredar diseño y animación */
   function pintar(tl, momentos) {
+    /* 27/10 Jazmín (Citlalli): «el dibujo arriba, la hora abajo y la frase
+       abajo», todo centrado → fx.itinerario.apilado (panel: casilla
+       «La hora y el nombre en renglones separados, centrados»). */
+    var api = apilado();
     var html = momentos.map(function (m) {
-      var titulo = [m.h, m.t].filter(Boolean).join(' · ');
+      var titulo = api
+        ? (m.h ? '<span class="tl-hora">' + esc(m.h) + '</span>' : '') + (m.t ? '<span class="tl-nom">' + esc(m.t) + '</span>' : '')
+        : esc([m.h, m.t].filter(Boolean).join(' · '));
       return '<div class="it">' +
-               '<div class="h">' + esc(titulo) + '</div>' +
+               '<div class="h">' + titulo + '</div>' +
                (m.d ? '<div class="d">' + esc(m.d) + '</div>' : '') +
              '</div>';
     }).join('');
@@ -74,11 +80,27 @@
     tl.__tlListo = false;
   }
 
-  function firmaDe(ms) { try { return JSON.stringify(ms); } catch (e) { return ''; } }
+  function apilado() {
+    try { return !!(window.INVEV && window.INVEV.fx && window.INVEV.fx.itinerario && window.INVEV.fx.itinerario.apilado); }
+    catch (e) { return false; }
+  }
+  function estiloApilado() {
+    var h = document.documentElement, on = apilado();
+    if (on) h.setAttribute('data-tl-apilado', '1'); else h.removeAttribute('data-tl-apilado');
+    if (document.getElementById('tl-apilado-css')) return;
+    var s = document.createElement('style'); s.id = 'tl-apilado-css';
+    s.textContent =
+      'html[data-tl-apilado] .tl .h .tl-hora,html[data-tl-apilado] .tl .h .tl-nom{display:block}' +
+      'html[data-tl-apilado] .tl.tl-centro > .it{text-align:center!important}' +
+      'html[data-tl-apilado] .tl.tl-centro > .it .d{text-align:center!important}';
+    (document.head || document.documentElement).appendChild(s);
+  }
+  function firmaDe(ms) { try { return JSON.stringify(ms) + (apilado() ? '|ap' : ''); } catch (e) { return ''; } }
   var firmaVieja = null;
 
   function armar() {
     var ms = leerMomentos();
+    estiloApilado();
     if (!ms) return;                      /* sin datos: no se toca nada */
 
     var tl = document.querySelector('.tl');

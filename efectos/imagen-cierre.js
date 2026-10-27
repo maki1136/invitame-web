@@ -195,6 +195,17 @@
     var gP = grupo('Ubicación del texto del cierre', selP); gP.style.marginTop = '10px';
     caja.appendChild(gP);
 
+    /* ★ 27/10/2026 (citlalli): «un poquito más grande para que la frase llene esa parte» */
+    var tamF = document.createElement('input'); tamF.type = 'range'; tamF.min = 80; tamF.max = 180; tamF.step = 5; tamF.style.cssText = 'width:100%';
+    tamF.value = parseInt(datos(d).textoTam, 10) || 100;
+    var gF = grupo('Tamaño de la frase del cierre (' + tamF.value + '%)', tamF);
+    tamF.oninput = function () {
+      datos(borrador() || d).textoTam = parseInt(tamF.value, 10);
+      var l = gF.querySelector('label, div'); if (l) l.textContent = 'Tamaño de la frase del cierre (' + tamF.value + '%)';
+      refrescar();
+    };
+    caja.appendChild(gF);
+
     var fila = document.createElement('div');
     fila.style.cssText = 'display:flex;align-items:center;gap:10px;margin:10px 0 4px';
     var ver = document.createElement('div');

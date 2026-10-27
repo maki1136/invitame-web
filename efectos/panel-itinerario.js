@@ -260,6 +260,16 @@
     filaIc.appendChild(document.createTextNode('Con dibujitos en cada momento (iglesia, copas, baile…)'));
     caja.appendChild(filaIc);
 
+    /* ---- 27/10/2026 (Jazmín, Citlalli): hora y nombre en renglones separados ---- */
+    var filaAp = chico(document.createElement('label'),
+      'display:flex;gap:7px;align-items:center;font-size:12.5px;margin:0 0 12px;cursor:pointer');
+    var chkAp = document.createElement('input'); chkAp.type = 'checkbox';
+    chkAp.checked = !!datos(d).apilado;
+    chkAp.onchange = function () { datos(borrador() || d).apilado = chkAp.checked; refrescar(); };
+    filaAp.appendChild(chkAp);
+    filaAp.appendChild(document.createTextNode('La hora arriba y el nombre abajo, centrados'));
+    caja.appendChild(filaAp);
+
     /* ---- los momentos ---- */
     var lista = document.createElement('div');
     caja.appendChild(lista);
