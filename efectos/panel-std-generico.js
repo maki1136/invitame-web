@@ -31,7 +31,7 @@
   function motor() {
     if (window.INVSTDG) return Promise.resolve(window.INVSTDG);
     return new Promise(function (ok, no) {
-      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=1';
+      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261027b';
       s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
     });
   }
