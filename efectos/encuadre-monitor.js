@@ -379,7 +379,11 @@
     hojaCostados();
     var c = '';
     try { c = String(((window.INVEV || {}).fx || {}).costados || ''); } catch (e) {}
-    if (!/^(suave|claro)$/.test(c)) c = '';
+    /* 26/10 Jazmín: «acordate de cambiar ese fondo feo» — el oscuro de fábrica
+       ya no es el que viene por defecto: sin elección, va la versión CLARA.
+       El oscuro de antes queda como opción a propósito ('oscuro'). */
+    if (c === 'oscuro') c = '';
+    else if (!/^(suave|claro)$/.test(c)) c = 'suave';
     var h = document.documentElement;
     if (c) { if (h.getAttribute('data-costados') !== c) h.setAttribute('data-costados', c); }
     else if (h.hasAttribute('data-costados')) h.removeAttribute('data-costados');
