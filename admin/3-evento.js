@@ -200,6 +200,7 @@
   const CASA_DE_MODULO={
     'catalogo-selector':['PRINCIPAL','diseno'],
     'coleccion-selector':['PRINCIPAL','diseno'],
+    'tono-selector':['PRINCIPAL','diseno'],      /* 28/10: tono de la colección */
     'paleta-selector':['PRINCIPAL','diseno'],
     'boton-selector':['PRINCIPAL','diseno'],
     'fondo-selector':['PRINCIPAL','diseno'],
