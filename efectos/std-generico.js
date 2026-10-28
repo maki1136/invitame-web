@@ -39,13 +39,14 @@
   /* ★ 27/10 (Maki): «que se pueda cambiar la tipografía». Las que se ofrecen en el panel. */
   var FAMILIAS = FUENTES.map(function (f) { return f.split(':')[0]; });
   /* ★ y la forma de la foto */
+  var DISPOSICIONES = [['', 'La del diseño'], ['clasico', 'Clásica (centrada)'], ['moderno', 'Moderna (título en mayúsculas)'], ['fecha', 'La fecha bien grande'], ['editorial', 'Editorial (a la izquierda)']];
   var FORMAS = [['arco', 'Arco'], ['rectangulo', 'Rectángulo'], ['cuadrado', 'Cuadrado'], ['circulo', 'Círculo'], ['ovalo', 'Óvalo'], ['fondo', 'Foto de fondo (toda la imagen)']];
 
   /* ★ LOS 10 DISEÑOS. fondo: archivo en Cloudinary (invitame/std/<id>); papel:
      color de respaldo mientras carga o si no carga. tinta/acento: medidos
      contra el fondo. lay: 'clasico' | 'marco' | 'moderno'. */
   var DISENOS = [
-    { id: 'marfil-oro', fondo: 'kufr8mhkoclzkhfjpzvz',     nombre: 'Marfil y oro',        papel: '#f3ece0', tinta: '#3d3329', suave: '#6b5d4f', acento: '#a8843f', arcoSube: 90, lay: 'clasico', max: 560, centro: 0.465, tit: 'Pinyon Script',  nom: 'Pinyon Script',      txt: 'Cormorant Garamond' },
+    { id: 'marfil-oro', fondo: 'kufr8mhkoclzkhfjpzvz',     nombre: 'Marfil y oro',        papel: '#f3ece0', tinta: '#3d3329', suave: '#6b5d4f', acento: '#a8843f', arcoSube: 90, izq: 215, centroFecha: 0.49, lay: 'clasico', max: 560, centro: 0.465, tit: 'Pinyon Script',  nom: 'Pinyon Script',      txt: 'Cormorant Garamond' },
     { id: 'salvia', fondo: 'gj1ttc3xl5u2yby0t9uv',         nombre: 'Salvia',              papel: '#e4e7dc', tinta: '#2e3a2f', suave: '#4f5e4f', acento: '#7d8f72', lay: 'clasico', max: 700, tit: 'Great Vibes',    nom: 'Great Vibes',        txt: 'Cormorant Garamond' },
     { id: 'terracota', fondo: 'utuog1gmfnqpht2khrun',      nombre: 'Terracota',           papel: '#efe2d3', tinta: '#4e2f22', suave: '#7a5040', acento: '#b0654a', lay: 'moderno', tit: 'Italiana',       nom: 'Playfair Display',   txt: 'Jost' },
     { id: 'azul-polvo', fondo: 'yazlxfeuwkl06iuohfpk',     nombre: 'Azul polvo',          papel: '#e3e8ee', tinta: '#26364a', suave: '#4a5b70', acento: '#7f97b0', lay: 'clasico', tit: 'Allura',         nom: 'Allura',             txt: 'Cormorant Garamond' },
@@ -168,10 +169,10 @@
     while (medir() > o.max && tam > (o.min || 18)) tam -= 2;
     ctx.fillStyle = o.color;
     ctx.textBaseline = 'alphabetic';
-    if (!esp) { ctx.textAlign = 'center'; ctx.fillText(t, x, y); }
+    if (!esp) { ctx.textAlign = o.izq ? 'left' : 'center'; ctx.fillText(t, x, y); }
     else {
       ctx.textAlign = 'left';
-      var w = medir(), cx = x - w / 2;
+      var w = medir(), cx = o.izq ? x : x - w / 2;
       for (var i = 0; i < t.length; i++) { ctx.fillText(t[i], cx, y); cx += ctx.measureText(t[i]).width + esp; }
     }
     return tam;
@@ -182,12 +183,12 @@
     ctx.font = tam + 'px "' + o.fam + '"';
     var partes = t.split(/\s*&\s*/);
     if (ctx.measureText(t).width <= o.max || partes.length < 2) {
-      var usado = texto(ctx, t, x, y, { tam: tam, fam: o.fam, color: o.color, max: o.max, min: o.min });
+      var usado = texto(ctx, t, x, y, { tam: tam, fam: o.fam, color: o.color, max: o.max, min: o.min, izq: o.izq });
       return { alto: usado * 1.0, tam: usado };
     }
     var a = partes[0], b = '& ' + partes.slice(1).join(' & ');
-    var t1 = texto(ctx, a, x, y - tam * 0.45, { tam: tam, fam: o.fam, color: o.color, max: o.max, min: o.min });
-    var t2 = texto(ctx, b, x, y - tam * 0.45 + Math.min(t1, tam) * 1.05, { tam: Math.min(t1, tam), fam: o.fam, color: o.color, max: o.max, min: o.min });
+    var t1 = texto(ctx, a, x, y - tam * 0.45, { tam: tam, fam: o.fam, color: o.color, max: o.max, min: o.min, izq: o.izq });
+    var t2 = texto(ctx, b, x, y - tam * 0.45 + Math.min(t1, tam) * 1.05, { tam: Math.min(t1, tam), fam: o.fam, color: o.color, max: o.max, min: o.min, izq: o.izq });
     return { alto: tam * 1.6, tam: Math.min(t1, t2), dos: true };
   }
   function linea(ctx, x1, y, x2, color, gr) { ctx.strokeStyle = color; ctx.lineWidth = gr || 2; ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke(); }
@@ -241,7 +242,29 @@
     }
     var claro = foto && modoFoto === 'fondo';       /* foto de fondo: tinta clara sobre velo */
     var tin = claro ? '#ffffff' : d.tinta, sua = claro ? 'rgba(255,255,255,.88)' : d.suave;
-    if (d.lay === 'moderno') {
+    if (d.lay === 'fecha') {
+      /* ★ 27/10: la FECHA protagonista, bien grande, y los nombres debajo */
+      var t3 = 420;
+      add('titulo', tx.titulo, W / 2, t3, { tam: 56, fam: d.txt, color: tin, max: M, mayus: true, esp: 16 });
+      deco('raya1', t3 + 70, 'raya');
+      add('fecha', tx.fecha, W / 2, t3 + 300, { tam: 190, fam: d.tit === d.nom ? d.txt : d.tit, color: tin, max: M + 40, esp: 2, est: '300' });
+      add('sub', tx.sub, W / 2, t3 + 430, { tam: 36, fam: d.txt, color: sua, max: M, mayus: true, esp: 12 });
+      add('nombres', tx.nombres, W / 2, t3 + 640, { tam: 140, fam: d.nom, color: tin, max: M, min: 60, nombres: true });
+      deco('raya2', t3 + 800, 'raya');
+      add('detalle', tx.detalle, W / 2, t3 + 880, { tam: 32, fam: d.txt, color: sua, max: M });
+    } else if (d.lay === 'editorial') {
+      /* ★ 27/10: todo alineado a la izquierda, como una tarjeta de revista */
+      var x0 = d.izq || 150, t4 = 470, Mi = Math.min(M, 930 - x0);
+      add('sub', tx.sub, x0, t4, { tam: 34, fam: d.txt, color: sua, max: Mi, mayus: true, esp: 10, izq: true });
+      add('titulo', tx.titulo, x0, t4 + 170, { tam: 160, fam: d.tit, color: tin, max: Mi, izq: true });
+      P.push({ id: 'raya1', deco: 'raya', x: x0, y: t4 + 250, izq: true });
+      add('nombres', tx.nombres, x0, t4 + 470, { tam: 130, fam: d.nom, color: tin, max: Mi, min: 60, nombres: true, izq: true });
+      add('fecha', tx.fecha, x0, t4 + 690, { tam: 76, fam: d.txt, color: tin, max: Mi, esp: 6, izq: true });
+      add('detalle', tx.detalle, x0, t4 + 760, { tam: 32, fam: d.txt, color: sua, max: Mi, izq: true });
+      var ul = P[P.length - 1];
+      add('pie', tx.pie, x0, ul.y + 110, { tam: 26, fam: d.txt, color: sua, max: Mi, mayus: true, esp: 6, izq: true });
+      return P;
+    } else if (d.lay === 'moderno') {
       var top = 470;
       add('sub', tx.sub, W / 2, top - 120, { tam: 34, fam: d.txt, color: sua, max: M, mayus: true, esp: 10 });
       add('titulo', tx.titulo, W / 2, top, { tam: 120, fam: d.tit, color: tin, max: M, mayus: true, esp: 6 });
@@ -276,6 +299,9 @@
     if (co.papel) d.papelPropio = co.papel;
     ['tit', 'nom', 'txt'].forEach(function (k) { if (fu[k]) d[k] = fu[k]; });
     var fo = op.foco || {};
+    /* ★ 27/10: la disposición de los textos se puede elegir (clasico, moderno, fecha, editorial) */
+    if (op.lay && /^(clasico|moderno|fecha|editorial)$/.test(op.lay)) d.lay = op.lay;
+    var conMarco = op.marco != null ? !!op.marco : d0.lay === 'marco';
     var tx = op.textos || {}, aj = op.ajustes || {}, modoFoto = op.modoFoto || 'arco';
     if (modoFoto !== 'fondo' && !/^(arco|rectangulo|cuadrado|circulo|ovalo)$/.test(modoFoto)) modoFoto = 'arco';
     lienzo.width = W; lienzo.height = H;
@@ -299,7 +325,9 @@
              adorno de abajo a la izquierda (la ramita) queda fuera de los textos */
           var z = d.zoomArco; cubrir(ctx, fondo, W - W * z, 0, W * z, H * z);
         } else if (fondo) cubrir(ctx, fondo, 0, 0, W, H);
-        if (d.papelPropio) { ctx.fillStyle = d.papelPropio; ctx.fillRect(0, 0, W, H); }   /* color de fondo liso elegido en el panel */
+        if (d.papelPropio) {   /* color de fondo elegido en el panel: tiñe el papel (se sigue viendo la textura) */
+          ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = d.papelPropio; ctx.fillRect(0, 0, W, H); ctx.restore();
+        }
         if (foto) {
           var cf = cajaFoto(modoFoto, d.arcoSube), ax = cf.x, ay = cf.y, aw = cf.w, ah = cf.h;
           ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.22)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 14;
@@ -307,7 +335,7 @@
           ctx.save(); forma(ctx, modoFoto, ax, ay, aw, ah); ctx.clip(); cubrir(ctx, foto, ax, ay, aw, ah, fo.x, fo.y == null ? 0.3 : fo.y, fo.zoom); ctx.restore();
           ctx.save(); forma(ctx, modoFoto, ax - 16, ay - 16, aw + 32, ah + 32); ctx.strokeStyle = d.acento; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
         }
-        if (d.lay === 'marco' && !foto) {
+        if (conMarco && !foto) {
           ctx.strokeStyle = d.acento; ctx.lineWidth = 3; ctx.strokeRect(70, 70, W - 140, H - 140);
           ctx.lineWidth = 1.5; ctx.strokeRect(92, 92, W - 184, H - 184);
         }
@@ -318,7 +346,7 @@
         var ys = piezas.map(function (p) { return p.y; });
         var mn = Math.min.apply(null, ys) - 120, mx = Math.max.apply(null, ys);
         var fondoFoto = foto && modoFoto === 'fondo';
-        var cy = H * (fondoFoto ? 0.71 : (d.centro || 0.48));
+        var cy = H * (fondoFoto ? 0.71 : ((d.lay === 'fecha' && d.centroFecha) || d.centro || 0.48));
         var corr = Math.round(cy - (mn + mx) / 2);
         piezas.forEach(function (p) { p.y += corr; });
         /* con foto de fondo el bloque es más compacto, en el tercio de abajo */
@@ -339,8 +367,11 @@
         if (a.oculto) return;
         var x = p.x + (+a.dx || 0), y = p.y + (+a.dy || 0), esc = +a.esc || 1;
         if (p.deco) {
-          var ac = a.color || acento; if (p.deco === 'adorno') adorno(ctx, y, { acento: ac }); else linea(ctx, W / 2 - 60, y, W / 2 + 60, ac, 3);
-          cajas.push({ id: p.id, x: W / 2 - 160, y: y - 14, w: 320, h: 28 });
+          var ac = a.color || acento;
+          if (p.deco === 'adorno') adorno(ctx, y, { acento: ac });
+          else if (p.izq) linea(ctx, x, y, x + 140, ac, 3);
+          else linea(ctx, W / 2 - 60, y, W / 2 + 60, ac, 3);
+          cajas.push({ id: p.id, x: p.izq ? x - 20 : W / 2 - 160, y: y - 14, w: p.izq ? 180 : 320, h: 28 });
           return;
         }
         var t = a.txt != null && a.txt !== '' ? a.txt : p.txt;
@@ -354,12 +385,12 @@
         if (o.nombres) { var nn = nombres(ctx, t, x, y, o); usado = nn.tam; alto = nn.dos ? nn.tam * 2.1 : nn.tam * 1.1; }
         else { usado = texto(ctx, t, x, y, o); alto = usado * 1.2; }
         var top = o.nombres ? y - usado * (alto > usado * 1.5 ? 1.35 : 0.9) : y - usado * 0.9;
-        cajas.push({ id: p.id, x: W / 2 - o.max / 2, y: top, w: o.max, h: alto, cx: x });
+        cajas.push({ id: p.id, x: o.izq ? x - 10 : W / 2 - o.max / 2, y: top, w: o.max, h: alto, cx: x });
       });
       lienzo.__cajas = cajas;
       return lienzo;
     });
   }
 
-  window.INVSTDG = { DISENOS: DISENOS, FAMILIAS: FAMILIAS, FORMAS: FORMAS, textosDe: textosDe, elegirSolo: elegirSolo, armar: armar, W: W, H: H };
+  window.INVSTDG = { DISENOS: DISENOS, FAMILIAS: FAMILIAS, FORMAS: FORMAS, DISPOSICIONES: DISPOSICIONES, textosDe: textosDe, elegirSolo: elegirSolo, armar: armar, W: W, H: H };
 })();

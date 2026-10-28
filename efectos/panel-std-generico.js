@@ -11,6 +11,7 @@
      foto, modoFoto, velo,        // foto opcional: arco | rectangulo | cuadrado | circulo | ovalo | fondo
      foco: {x, y, zoom},          // qué parte de la foto se ve (0..1) y cuánto se acerca
      colores: {tinta, suave, acento, papel}, fuentes: {tit, nom, txt},   // vacío = los del diseño
+     lay: '' | clasico | moderno | fecha | editorial, marco: true/false,  // disposición y marco fino
      textos: {titulo, sub, nombres, fecha, detalle, pie},   // vacío = el que sale solo
      ajustes: {<pieza>: {dx, dy, esc, oculto, fam, color}}, // arrastrar / tamaño / letra / color
      extras: [{txt, y, tam}]                                // textos propios
@@ -33,7 +34,7 @@
   function motor() {
     if (window.INVSTDG) return Promise.resolve(window.INVSTDG);
     return new Promise(function (ok, no) {
-      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261027d';
+      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261027e';
       s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
     });
   }
@@ -73,7 +74,14 @@
     var gDis = el('div', 'margin:0 0 10px');
     gDis.appendChild(el('label', 'display:block;font-size:12px;font-weight:600;margin:0 0 3px', 'Diseño'));
     var selDis = document.createElement('select'); selDis.style.cssText = 'width:100%';
-    gDis.appendChild(selDis); der.appendChild(gDis);
+    gDis.appendChild(selDis);
+    /* ★ 27/10: cómo van acomodados los textos, y un marco fino alrededor */
+    var filaLay = el('div', 'display:flex;gap:8px;align-items:center;margin-top:6px;font-size:12px;flex-wrap:wrap');
+    var selLay = document.createElement('select'); selLay.style.cssText = 'flex:1;min-width:160px';
+    var lbMarco = el('label', 'display:flex;gap:4px;align-items:center;cursor:pointer'); var chMarco = document.createElement('input'); chMarco.type = 'checkbox';
+    lbMarco.appendChild(chMarco); lbMarco.appendChild(el('span', '', 'Marco fino'));
+    filaLay.appendChild(el('span', '', 'Disposición')); filaLay.appendChild(selLay); filaLay.appendChild(lbMarco);
+    gDis.appendChild(filaLay); der.appendChild(gDis);
 
     /* ---- foto ---- */
     var gFoto = el('div', 'margin:0 0 10px');
@@ -99,7 +107,7 @@
     var gCol = el('div', 'margin:0 0 10px');
     gCol.appendChild(el('label', 'display:block;font-size:12px;font-weight:600;margin:0 0 3px', 'Colores'));
     var colFila = el('div', 'display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;font-size:11px');
-    var COLS = [['tinta', 'Letra principal'], ['suave', 'Letra chica'], ['acento', 'Adornos y marco'], ['papel', 'Fondo liso']], colIn = {};
+    var COLS = [['tinta', 'Letra principal'], ['suave', 'Letra chica'], ['acento', 'Adornos y marco'], ['papel', 'Color del fondo']], colIn = {};
     COLS.forEach(function (c) {
       var w = el('label', 'display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer'); var i = document.createElement('input'); i.type = 'color';
       i.style.cssText = 'width:40px;height:30px;border:0;padding:0;background:none;cursor:pointer';
@@ -148,7 +156,7 @@
     function opciones() {
       var s = cfg(), tx = {};
       RENG.forEach(function (r) { tx[r[0]] = (s.textos[r[0]] != null && String(s.textos[r[0]]).trim() !== '') ? s.textos[r[0]] : auto[r[0]]; });
-      return { diseno: disenoActual(), foto: s.foto || '', modoFoto: s.modoFoto || 'arco', velo: s.velo, foco: s.foco || {},
+      return { diseno: disenoActual(), lay: s.lay || '', marco: s.marco == null ? null : !!s.marco, foto: s.foto || '', modoFoto: s.modoFoto || 'arco', velo: s.velo, foco: s.foco || {},
                colores: s.colores || {}, fuentes: s.fuentes || {}, textos: tx, ajustes: s.ajustes, extras: s.extras };
     }
     var pintando = null, otra = false;
@@ -170,6 +178,10 @@
     function sincronizar() {
       var s = cfg();
       selDis.value = s.diseno || '';
+      if (!selLay.options.length && M) M.DISPOSICIONES.forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; selLay.appendChild(op); });
+      selLay.value = s.lay || '';
+      var dd0 = M ? (M.DISENOS.filter(function (x) { return x.id === disenoActual(); })[0] || {}) : {};
+      chMarco.checked = s.marco == null ? dd0.lay === 'marco' : !!s.marco;
       selModo.value = s.modoFoto || 'arco';
       velo.value = s.velo == null ? 0.38 : s.velo;
       gVelo.style.display = (s.foto && (s.modoFoto || 'arco') === 'fondo') ? '' : 'none';
@@ -202,6 +214,8 @@
     bAgregar.onclick = function () { cfg().extras.push({ txt: '', y: 1700 - cfg().extras.length * 80, tam: 40 }); dibujarExtras(); pintar(); };
 
     selDis.onchange = function () { cfg().diseno = selDis.value; sincronizar(); pintar(); refrescar(); };
+    selLay.onchange = function () { cfg().lay = selLay.value; cfg().ajustes = {}; pintar(); refrescar(); };
+    chMarco.onchange = function () { cfg().marco = chMarco.checked; pintar(); refrescar(); };
     function foco(k, v) { var s = cfg(); if (!s.foco) s.foco = {}; s.foco[k] = +v; pintar(); refrescar(); }
     focoY.oninput = function () { foco('y', focoY.value); };
     focoX.oninput = function () { foco('x', focoX.value); };
