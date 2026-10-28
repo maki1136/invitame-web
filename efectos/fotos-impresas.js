@@ -74,7 +74,14 @@
   var MOS = {
     alto: 'html body #car.carousel.mosaico img{height:clamp(200px,58vw,260px)!important}',
     grande: 'html body #car.carousel.mosaico{grid-template-columns:1fr!important;gap:12px!important}' +
-            'html body #car.carousel.mosaico img{height:auto!important;aspect-ratio:4/5;max-height:560px;object-position:50% 28%!important}'
+            'html body #car.carousel.mosaico img{height:auto!important;aspect-ratio:4/5;max-height:560px;object-position:50% 28%!important}',
+    /* ★ 28/10 (Jazmín, Gabriel y Dany: «no a lo largo sino de lado para irle
+       moviendo»): grandes, en fila, y se pasan con el dedo de costado */
+    deslizar: 'html body #car.carousel.mosaico{display:flex!important;grid-template-columns:none!important;gap:14px!important;overflow-x:auto!important;overflow-y:visible!important;' +
+              'scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;transform:none!important;padding:14px 9% 22px!important;margin-left:0!important;margin-right:0!important}' +
+              'html body #car.carousel.mosaico::-webkit-scrollbar{display:none}' +
+              'html body #car.carousel.mosaico::after{display:none!important}' +
+              'html body #car.carousel.mosaico img{flex:0 0 82%!important;width:82%!important;height:auto!important;aspect-ratio:4/5;object-fit:cover;object-position:50% 28%!important;scroll-snap-align:center;position:relative!important;opacity:1!important}'
   };
   function mosaico() {
     var e = ev(); var m = e ? String(((e.fx || {}).fotos || {}).mosaico || '') : '';
@@ -124,7 +131,7 @@
     var g2 = document.createElement('div'); g2.className = 'grp';
     var l2 = document.createElement('label'); l2.textContent = 'Tamaño de las fotos (estilo Mosaico)'; g2.appendChild(l2);
     var s2 = document.createElement('select');
-    [['', 'Chicas — dos por renglón (como siempre)'], ['alto', 'Más grandes — dos por renglón, más altas'], ['grande', 'Grandes — una por renglón, a todo el ancho']].forEach(function (o) {
+    [['', 'Chicas — dos por renglón (como siempre)'], ['alto', 'Más grandes — dos por renglón, más altas'], ['grande', 'Grandes — una por renglón, a todo el ancho'], ['deslizar', 'Grandes — de costado, se pasan con el dedo']].forEach(function (o) {
       var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; s2.appendChild(op);
     });
     s2.value = String(cfg(d).mosaico || '');
