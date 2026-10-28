@@ -76,7 +76,7 @@
   function datos(d) { d.fx = d.fx || {}; d.fx.portadaSinFoto = d.fx.portadaSinFoto || {}; return d.fx.portadaSinFoto; }
   function temas(cb) {
     if (window.INVSTDG_TEMAS) return cb(window.INVSTDG_TEMAS);
-    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028b';
+    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028c';
     s.onload = function () { cb(window.INVSTDG_TEMAS || []); }; s.onerror = function () { cb([]); };
     document.head.appendChild(s);
   }
@@ -84,6 +84,10 @@
   function muestraDe(d) {
     var M = window.MUESTRAS_INVITAME || {}, tpl = String(d.tpl || '');
     var col = String(((d.fx || {}).coleccion) || '');
+    /* primero la tabla exacta de las 62 muestras (std-temas.js): plantilla y colección */
+    var MD = window.INVSTDG_MUESTRA_DE || {};
+    if (MD.tpl && MD.tpl[tpl]) return MD.tpl[tpl];
+    if (MD.col && MD.col[col]) return MD.col[col];
     var lista = Object.keys(M).map(function (k) { return M[k]; });
     var m = M[tpl] || M[tpl.toLowerCase()] ||
       lista.filter(function (x) { return x && String(x.nombre || '').toLowerCase() === tpl.toLowerCase(); })[0] ||
