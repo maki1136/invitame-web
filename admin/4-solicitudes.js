@@ -61,6 +61,14 @@
   async function cargarEvento(){
     const p=new URLSearchParams(location.search),slug=p.get('e');if(!slug||!window.INV||!INV.ok)return;
     const ev=await INV.getEvento(slug);if(ev){Object.assign(D,ev);}
+    /* ⚠️ 28/10/2026 · EN EL ORIGEN: los bloques de /efectos/panel-*.js se arman
+       apenas existe D, que arranca con los datos de FÁBRICA (María y Diego,
+       «Rústica Campestre»). Si se armaban antes de este punto, quedaban
+       mostrando los valores de fábrica y no los de la invitación (pasó con la
+       portada sin foto: ofrecía los fondos de «XV Rosa» en una boda Bohemia).
+       Cargado el evento, se sacan todos y cada módulo se vuelve a armar solo
+       con los datos de verdad (todos revisan su caja cada 0,7 s). */
+    try{ if(typeof CASA_DE_MODULO==='object') Object.keys(CASA_DE_MODULO).forEach(function(id){ const x=document.getElementById(id); if(x) x.remove(); }); }catch(_e){}
     // la clave del panel y el mail viven aparte: se traen con la sesion de la disenadora
     const pv=await INV.getPrivado(slug); if(pv){ (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(pv[k]!==undefined) D[k]=pv[k]; }); }
     ensureFX();
