@@ -14,6 +14,8 @@
      tinta:  color de la letra de la portada (sale del diseño; se puede cambiar)
      oscuro: true si el fondo es oscuro
      cual:   'a' | 'b' | 'c' (cuál de los tres se eligió, para el panel)
+     fin:    true (por defecto) = el cierre ¡Gracias! también sin foto
+     finFondo / finTinta / finOscuro: el OTRO fondo del diseño, para el cierre
    Panel: PRINCIPAL → «Portada sin foto». Corre también en la miniatura.
    ============================================================================ */
 (function () {
@@ -32,7 +34,7 @@
   function aplicar() {
     var ev = window.INVEV; if (!ev) return;
     var c = cfg(ev), f = String(c.fondo || '').trim();
-    var firma = f + '|' + (c.tinta || '') + '|' + !!c.oscuro;
+    var firma = f + '|' + (c.tinta || '') + '|' + !!c.oscuro + '|' + (c.fin === false ? 0 : 1) + '|' + (c.finFondo || '') + '|' + (c.finTinta || '');
     if (firma === ultima && (!f || document.getElementById(ID_CSS))) return;
     ultima = firma;
     var st = document.getElementById(ID_CSS);
@@ -52,6 +54,17 @@
       /* los velos propios de cada colección (pensados para la foto) se apagan */
       S + '::before, ' + S + '::after, ' + S + ' :is(.pbg, .c, .pveil)::before, ' + S + ' :is(.pbg, .c, .pveil)::after{background:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'
     ];
+    /* ★ Jazmín: «y la foto final también». El cierre (¡Gracias!) usa el OTRO
+       fondo del diseño (si la portada es el B, el cierre es el C, y al revés). */
+    var ff = String(c.finFondo || '').trim();
+    if (c.fin !== false && /^https:\/\//.test(ff)) {
+      var T2 = c.finTinta || T, osc2 = luz(T2) < 0.5;
+      var SH2 = osc2 ? '0 1px 2px rgba(255,255,255,.55),0 0 18px rgba(255,255,255,.45)' : '0 1px 3px rgba(0,0,0,.45),0 2px 16px rgba(0,0,0,.35)';
+      var F = 'html[data-portada-sin-foto] body .footer.footer:not(#psf-b)';
+      css.push(F + '{background:' + (c.finOscuro ? 'linear-gradient(rgba(0,0,0,0) 40%,rgba(0,0,0,.30)),' : '') + 'url("' + ff.replace(/"/g, '') + '") center/cover no-repeat!important}');
+      css.push(F + '::before, ' + F + '::after{background:none!important;box-shadow:none!important}');
+      css.push(F + ' :is(.n, .s, .sm, #fin-frase, #fin-texto, #fin-nombres, #pie-pub){color:' + T2 + '!important;-webkit-text-fill-color:' + T2 + '!important;text-shadow:' + SH2 + '!important}');
+    }
     if (!st) { st = document.createElement('style'); st.id = ID_CSS; document.head.appendChild(st); }
     st.textContent = css.join('\n');
   }
@@ -90,10 +103,17 @@
     colorW.appendChild(col); colorW.appendChild(document.createTextNode('Color de la letra de la portada'));
     caja.appendChild(colorW);
     col.oninput = function () { datos(borrador() || d).tinta = col.value; refrescar(); };
+    var finW = document.createElement('label');
+    finW.style.cssText = 'display:flex;align-items:center;gap:8px;font-size:12px;margin-top:6px';
+    var chFin = document.createElement('input'); chFin.type = 'checkbox';
+    finW.appendChild(chFin); finW.appendChild(document.createTextNode('La foto final (¡Gracias!) también sin foto, con el otro fondo del diseño'));
+    caja.appendChild(finW);
+    chFin.onchange = function () { datos(borrador() || d).fin = chFin.checked; refrescar(); };
 
     function pintar() {
       var c = datos(borrador() || d);
       colorW.style.display = c.fondo ? 'flex' : 'none';
+      finW.style.display = c.fondo ? 'flex' : 'none'; chFin.checked = c.fin !== false;
       if (c.tinta) col.value = c.tinta;
       [].forEach.call(fila.children, function (b) { b.style.outline = (b.__v || '') === (c.fondo ? c.cual : '') ? '3px solid #c0567a' : '1px solid rgba(0,0,0,.15)'; });
     }
@@ -106,7 +126,12 @@
       b.onclick = function () {
         var c = datos(borrador() || d);
         if (!dd) { c.fondo = ''; c.cual = ''; }
-        else { c.fondo = dd.fondo; c.cual = v; c.tinta = dd.tinta; c.oscuro = !!dd.oscuro; }
+        else {
+          c.fondo = dd.fondo; c.cual = v; c.tinta = dd.tinta; c.oscuro = !!dd.oscuro;
+          var otro = (fila.__mios || []).filter(function (x) { return x !== dd; })[0] || dd;
+          c.finFondo = otro.fondo; c.finTinta = otro.tinta; c.finOscuro = !!otro.oscuro;
+          if (c.fin == null) c.fin = true;
+        }
         pintar(); refrescar();
       };
       fila.appendChild(b);
@@ -121,6 +146,7 @@
         n.textContent = 'Este diseño todavía no tiene fondos propios. Elegí el diseño en «Diseño del catálogo» (arriba) y volvé acá.';
         fila.appendChild(n);
       }
+      fila.__mios = mios;
       var NOM = { a: 'Detalle abajo', b: 'Detalle arriba', c: 'Marco' };
       mios.forEach(function (x) { var v = x.id.slice(-1); boton(v, NOM[v] || v, x.fondo, x); });
       pintar();
