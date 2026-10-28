@@ -34,7 +34,7 @@
   function motor() {
     if (window.INVSTDG) return Promise.resolve(window.INVSTDG);
     return new Promise(function (ok, no) {
-      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261027f';
+      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261028';
       s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
     });
   }
@@ -335,6 +335,16 @@
         });
       })();
     };
+    /* 28/10: si lo eligió el cliente en el formulario, se avisa arriba */
+    var avisoCli = el('div', 'display:none;margin:0 0 10px;padding:8px 10px;border-radius:10px;background:#eaf4ea;color:#24502a;font-size:12.5px;font-weight:600');
+    caja.insertBefore(avisoCli, gVar);
+    function pintarAvisoCliente() {
+      var s = cfg();
+      if (!s.elegidoPorCliente) { avisoCli.style.display = 'none'; return; }
+      avisoCli.style.display = '';
+      avisoCli.textContent = '✓ Elegido por el cliente en el formulario.' + (s.conFoto && !s.foto ? ' Eligió uno CON FOTO pero no subió la foto: pedísela.' : '');
+      if (s.conFoto && !s.foto) { avisoCli.style.background = '#fdecea'; avisoCli.style.color = '#8a1f1f'; }
+    }
     caja.__api = { cargar: cargar, guardarVariante: guardarVariante, limpiarVariantes: function () { cfg().variantes = []; dibujarVariantes(); } };
 
     /* ---- descargar ---- */
@@ -357,7 +367,7 @@
       var o = el('option', '', 'Automático (según la muestra elegida)'); o.value = ''; selDis.appendChild(o);
       m.DISENOS.forEach(function (d) { var op = el('option', '', d.nombre); op.value = d.id; selDis.appendChild(op); });
       auto = m.textosDe(borrador());
-      sincronizar(); dibujarVariantes(); pintar();
+      sincronizar(); dibujarVariantes(); pintarAvisoCliente(); pintar();
     }, function () { nota.textContent = 'No se pudo cargar el dibujante. Recargá la página.'; });
 
     /* si cambian nombres/fecha arriba en el panel, el automático se actualiza */

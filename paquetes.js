@@ -104,7 +104,12 @@
        «Pase simple» (efectos/pase-simple.js). `valor`: lo que se escribe en el
        interruptor al prenderlo (si no, es true/false). */
     paseCantidad:    { nombre: 'Cantidad de invitados y frase', clase: 'filler', interruptor: 'fx.pase.modo', valor: 'simple',
-      nota: 'El pase dice la cantidad de personas y una frase, sin nombre ni QR. Cada link lleva su cantidad (&per=2).' }
+      nota: 'El pase dice la cantidad de personas y una frase, sin nombre ni QR. Cada link lleva su cantidad (&per=2).' },
+    /* 28/10/2026 (Maki): el Save the Date lo ELIGE el cliente en el formulario.
+       No viene en ningún paquete: Jazmín lo marca como extra (vendido o de
+       regalo, da lo mismo) y el formulario muestra «Elige tu Save the Date». */
+    saveTheDate:     { nombre: 'Save the Date (lo elige en el formulario)', clase: 'filler', interruptor: null,
+      nota: 'El formulario le muestra todos los diseños con sus nombres y su fecha; el que elige llega precargado al panel (EFECTOS → Save the Date).' }
   };
 
   /* La invitación completa. Todo esto no cuesta nada de servir (USD 0,44 por

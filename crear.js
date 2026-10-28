@@ -408,8 +408,10 @@
       pasevozAudio:pasevozURL, pasevozOnda,
       menu:SEC.menu, avisos:SEC.avisos, patrocinadores:SEC.patrocinadores, rsvpPreguntas:SEC.rsvpPreguntas, ocultas:SEC.ocultas,
       formToken:formToken,
+      stdg:(window.CREAR_STD && window.CREAR_STD.leer()) || null,
       origen:'formulario-cliente'
     };
+    if(!data.stdg) delete data.stdg;
     /* ⚠️ Firestore NO acepta `undefined`: lo que no se cargó, no se manda */
     SECCIONES_NUEVAS.forEach(k=>{ if(data[k]==null) delete data[k]; });
     return data;
@@ -439,6 +441,9 @@
       const f=s.data()||{}; const plan=f.paquete;
       const P=window.INVPAQUETES; if(!P||!P.PAQUETES[plan]) return;
       const tiene=k=>P.tiene(plan,k,f.extras||[]);
+      /* 28/10: /crear-std.js escucha esto para mostrar «Elige tu Save the Date» */
+      window.__INVFORM={plan:plan, extras:(f.extras||[]).slice()};
+      try{ window.dispatchEvent(new Event('inv-paquete')); }catch(e){}
       document.querySelectorAll('[data-funcion]').forEach(el=>{
         if(!tiene(el.getAttribute('data-funcion'))) el.remove();
       });
@@ -533,6 +538,7 @@
 
       borrarBorrador();
       try{ localStorage.removeItem('inv_diseno_elegido'); }catch(e){}
+      try{ window.CREAR_STD && window.CREAR_STD.olvidar(); }catch(e){}
       $('loading').style.display='none';
       $('wrap').style.display='none'; document.querySelector('.top .sub').textContent='¡Gracias!';
       const fono=document.getElementById('dis-fono'), ver=document.getElementById('dis-ver');

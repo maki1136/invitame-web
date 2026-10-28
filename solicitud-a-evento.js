@@ -233,6 +233,20 @@
       });
     }
 
+    /* ---- 28/10: el Save the Date que eligió el cliente (fx.stdg) ----
+       Sólo se copian las claves del dibujo, saneadas. Lo repone /vestir.js
+       después de vestir (está en SECCIONES_FX). */
+    if (s.stdg && typeof s.stdg === 'object' && typeof s.stdg.diseno === 'string') {
+      var g = s.stdg, out = { diseno: String(g.diseno).slice(0, 40), elegidoPorCliente: true };
+      ['lay', 'modoFoto'].forEach(function (k) { if (typeof g[k] === 'string') out[k] = g[k].slice(0, 20); });
+      if (typeof g.marco === 'boolean') out.marco = g.marco;
+      if (typeof g.foto === 'string' && /^https:\/\/res\.cloudinary\.com\/oc8cgqt4\//.test(g.foto)) out.foto = g.foto;
+      if (g.conFoto) out.conFoto = true;
+      ['foco', 'colores', 'fuentes'].forEach(function (k) { if (g[k] && typeof g[k] === 'object') out[k] = JSON.parse(JSON.stringify(g[k])); });
+      d.fx = d.fx || {};
+      d.fx.stdg = out;
+    }
+
     /* ---- la confirmación: fecha límite y restricciones (fx.rsvp) ----
        ⚠️ Van dentro de `fx`, y `fx` lo REEMPLAZA el vestido de la muestra.
           Por eso /vestir.js los vuelve a poner después de vestir. */
