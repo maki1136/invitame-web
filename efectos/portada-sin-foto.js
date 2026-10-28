@@ -162,8 +162,15 @@
     caja.appendChild(finW);
     chFin.onchange = function () { datos(borrador() || d).fin = chFin.checked; refrescar(); };
 
+    /* ★ 28/10 (mia): eligieron un fondo y después no entendían por qué la foto
+       de portada no aparecía. Con la portada sin foto prendida, se avisa grande. */
+    var aviso = document.createElement('div');
+    aviso.style.cssText = 'display:none;background:#fff3cd;border:1px solid #ffe08a;border-radius:10px;padding:8px 10px;margin:8px 0 0;font-size:12px;color:#7a5c00;line-height:1.4';
+    aviso.textContent = '⚠️ Prendida: la portada NO muestra la foto ni el video de portada, muestra este fondo. Para volver a la foto tocá «Con foto».';
+    caja.appendChild(aviso);
     function pintar() {
       var c = datos(borrador() || d);
+      aviso.style.display = c.fondo ? 'block' : 'none';
       colorW.style.display = c.fondo ? 'flex' : 'none';
       finW.style.display = c.fondo ? 'flex' : 'none'; chFin.checked = c.fin !== false;
       if (c.tinta) col.value = c.tinta;
@@ -229,7 +236,7 @@
     });
     return caja;
   }
-  function firmaD(d) { return String(d.slug || '') + '|' + String(((d.fx || {}).coleccion) || '') + '|' + String(d.tpl || ''); }
+  function firmaD(d) { var fx = d.fx || {}; return String(d.slug || '') + '|' + String(fx.coleccion || '') + '|' + String(d.tpl || '') + '|' + String((fx.portadaSinFoto || {}).fondo || ''); }
   function revisarPanel() {
     var d = borrador(); if (!d) return;
     /* ⚠️ 28/10: el panel arranca con un borrador de fábrica y DESPUÉS carga el
