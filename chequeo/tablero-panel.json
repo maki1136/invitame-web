@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-28T00:31:48.170Z",
+ "cuando": "2026-10-28T00:56:04.862Z",
  "slug": "camila-y-tomas",
- "total": 418,
- "verde": 415,
+ "total": 420,
+ "verde": 417,
  "amarillo": 2,
  "rojo": 1,
  "gris": 0,
@@ -430,17 +430,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -479,6 +468,17 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -597,22 +597,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1824,9 +1824,8 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -2576,8 +2575,9 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2587,9 +2587,8 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp-2",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2852,8 +2851,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.rotuloFecha",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -4215,6 +4215,17 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.stdg.lay",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
    "control": "Letra principal",
    "tipo": "color",
    "guarda": true,
@@ -4248,7 +4259,7 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
-   "control": "Fondo liso",
+   "control": "Color del fondo",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.stdg.colores.papel",
@@ -4621,6 +4632,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.filtro.aGaleria",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Marco fino",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.stdg.marco",
    "llega": true,
    "seVe": true,
    "estado": "verde"
