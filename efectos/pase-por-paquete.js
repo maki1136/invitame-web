@@ -19,10 +19,19 @@
     var pq = (ev.fx && ev.fx.paquete) || {};
     var extras = Array.isArray(pq.extras) ? pq.extras : [];
     var sinPases = pq.plan === 'estandar' && extras.indexOf('pases') < 0 && extras.indexOf('accesoQR') < 0;
+    /* ★ 27/10 (Maki): «a la Premium hay que eliminarle el código QR». El QR del
+       pase es para escanearlo en la puerta: es el Control de acceso QR, que
+       viene SÓLO en Platinum (o vendido aparte). Premium lleva el pase con
+       nombre, pero sin QR. Sin paquete anotado no se toca nada. */
+    var conQR = pq.plan === 'platinum' || extras.indexOf('accesoQR') > -1;
+    var sinQR = !!pq.plan && !conQR;
+    var css = '';
+    if (sinPases) css = 'section.pase{display:none!important}';
+    else if (sinQR) css = 'section.pase #qr,section.pase #pv-estado,section.pase .k:has(+ #pv-estado){display:none!important}';   /* sin QR tampoco va «Estado del pase» (es del escaneo en la puerta) */
     var st = document.getElementById(ID);
-    if (sinPases) {
+    if (css) {
       if (!st) { st = document.createElement('style'); st.id = ID; document.head.appendChild(st); }
-      st.textContent = 'section.pase{display:none!important}';
+      st.textContent = css;
     } else if (st) st.textContent = '';
   }
   var n = 0, t = setInterval(function () { aplicar(); if (++n > 40) clearInterval(t); }, 400);
