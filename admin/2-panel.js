@@ -258,6 +258,9 @@
         '<div class="grp"><label>Disposición</label>'+sel('fecha','disposicion',[['','Como siempre'],['fotos','Tres fotos — un número sobre cada una'],['circulos','Tres círculos con foto'],['barras','Barras — 28 | 11 | 26'],['apilada','Apilada — una debajo de la otra'],['filetes','Con filetes — NOV — 28 — 2026'],['semana','Con día de la semana y hora'],['monograma','Monograma arriba y la fecha abajo'],['grande','El día grande y el mes al costado'],['manuscrita','Manuscrita — Save the date en cursiva']])+'</div>'+
         '<div class="two"><div class="grp"><label>Color del texto</label>'+col('fecha','color')+'</div>'+
         '<div class="grp"><label>Color de los detalles</label>'+col('fecha','acento')+'</div></div>'+
+        '<div class="two"><div class="grp"><label>Color de los círculos — para "tres círculos"</label>'+col('fecha','circulo')+'</div>'+
+        '<div class="grp"><label>Color de los números de los círculos</label>'+col('fecha','numero')+'</div></div>'+
+        ((D.fx.fecha.circulo||D.fx.fecha.numero)?'<div class="grp"><button class="lnk" onclick="D.fx.fecha.circulo=\'\';D.fx.fecha.numero=\'\';renderPanel();postPreview()">Volver a los colores del diseño</button></div>':'')+
         '<div class="two"><div class="grp"><label>Texto de arriba</label>'+txt('fecha','kick','Save the date')+'</div>'+
         '<div class="grp"><label>Texto de abajo</label>'+txt('fecha','pie','Nos casamos')+'</div></div>'+
         '<div class="two"><div class="grp"><label>Hora — para "día de la semana"</label>'+txt('fecha','hora','20:30')+'</div>'+

@@ -30,10 +30,55 @@
     if (isNaN(r)) return 1; return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   }
 
+  /* ★ 28/10/2026 (Jazmín: «esas imágenes no tienen nada que ver con el
+     diseño»). La opción más fiel: EL FONDO DE ESTA MISMA INVITACIÓN (el que
+     se ve detrás de las secciones), como portada. Se guarda fondo:'propio' y
+     se resuelve en vivo: si cambian el fondo de la invitación, la portada lo sigue. */
+  function cuadroVideo(u) {
+    var m = String(u || '').match(/^(https?:\/\/(?:galeria\.littlemomentsok\.workers\.dev\/)?res\.cloudinary\.com\/[^\/]+)\/video\/upload\/(?:[^\/]*_[^\/]*\/)*(.+?)\.[a-z0-9]+$/i);
+    return m ? m[1] + '/video/upload/so_1.5,f_jpg,q_auto:good,w_1080/' + m[2] + '.jpg' : '';
+  }
+  function fondoDelDato(fx) {
+    var f = (fx && fx.fondo) || {}, u = String(f.url || ''), p = String(f.poster || '');
+    if (/\.gif(\?|$)/i.test(u)) return u.replace(/\.gif(\?|$)/i, '.jpg$1');
+    if (f.tipo === 'imagen' && /^https:/.test(u)) return u;
+    if (/^https:/.test(p)) return p;
+    if (/^https:/.test(u)) return /\/video\/upload\//.test(u) ? cuadroVideo(u) : u;
+    return '';
+  }
+  function urlDeCss(el) {
+    if (!el) return '';
+    var m = String(getComputedStyle(el).backgroundImage || '').match(/url\(["']?(https:[^"')]+)["']?\)/);
+    return m ? m[1] : '';
+  }
+  function fondoPropio(ev) {
+    var u = fondoDelDato((ev || {}).fx);
+    if (u) return u;
+    /* sin fondo cargado: el papel que pone la colección */
+    var v = document.querySelector('#inv-fondo video');
+    if (v && v.poster) return v.poster;
+    return urlDeCss(document.getElementById('inv-fondo')) || urlDeCss(document.querySelector('.frame')) || urlDeCss(document.body);
+  }
+  /* la letra: el color de los títulos de la invitación, que ya está pensado para ese fondo */
+  function tintaPropia() {
+    var t = document.querySelector('.sec:not(.verde) h2');
+    var c = t ? getComputedStyle(t).color : '';
+    var m = c.match(/\d+/g);
+    if (!m) return '';
+    return '#' + m.slice(0, 3).map(function (x) { return ('0' + (+x).toString(16)).slice(-2); }).join('');
+  }
+
   var ultima = null;
   function aplicar() {
     var ev = window.INVEV; if (!ev) return;
     var c = cfg(ev), f = String(c.fondo || '').trim();
+    var propio = (f === 'propio');
+    if (propio) {
+      var fp = fondoPropio(ev), tp = c.tinta || tintaPropia();
+      c = Object.assign({}, c, { fondo: fp, tinta: tp, oscuro: tp ? luz(tp) > 0.5 : false, finFondo: fp, finTinta: tp });
+      c.finOscuro = c.oscuro;
+      f = fp;
+    }
     var firma = f + '|' + (c.tinta || '') + '|' + !!c.oscuro + '|' + (c.fin === false ? 0 : 1) + '|' + (c.finFondo || '') + '|' + (c.finTinta || '');
     if (firma === ultima && (!f || document.getElementById(ID_CSS))) return;
     ultima = firma;
@@ -128,13 +173,21 @@
       var b = document.createElement('button'); b.type = 'button'; b.__v = v;
       b.style.cssText = 'width:74px;padding:0;border:0;border-radius:10px;overflow:hidden;background:#fff;cursor:pointer;font-size:11px;line-height:1.2';
       if (img) { var i = document.createElement('img'); i.src = img.replace('w_1080,h_1920', 'w_150,h_266'); i.style.cssText = 'display:block;width:74px;height:131px;object-fit:cover'; b.appendChild(i); }
-      else { var x = document.createElement('div'); x.style.cssText = 'width:74px;height:131px;display:flex;align-items:center;justify-content:center;background:#f3ece6;padding:6px;box-sizing:border-box'; x.textContent = 'Con la foto (como siempre)'; b.appendChild(x); }
+      else { var x = document.createElement('div'); x.style.cssText = 'width:74px;height:131px;display:flex;align-items:center;justify-content:center;background:#f3ece6;padding:6px;box-sizing:border-box'; x.textContent = (dd === 'propio' ? 'El mismo fondo de esta invitación' : 'Con la foto (como siempre)'); b.appendChild(x); }
       var l = document.createElement('div'); l.textContent = txt; l.style.cssText = 'padding:4px 2px'; b.appendChild(l);
       b.onclick = function () {
         var c = datos(borrador() || d);
         if (!dd) { c.fondo = ''; c.cual = ''; }
-        else if (sel && sel.value) c.muestra = sel.value;
+        else if (dd === 'propio') {
+          /* el fondo de la invitación: la letra la toma sola de los títulos */
+          c.fondo = 'propio'; c.cual = 'f'; c.tinta = ''; c.oscuro = false;
+          c.finFondo = ''; c.finTinta = ''; c.finOscuro = false;
+          if (c.fin == null) c.fin = true;
+        }
         else {
+          /* ⚠️ 28/10: acá había un «else if (sel.value) c.muestra = …» que se
+             comía el clic: el fondo nunca se guardaba y la portada no cambiaba. */
+          if (sel && sel.value) c.muestra = sel.value;
           c.fondo = dd.fondo; c.cual = v; c.tinta = dd.tinta; c.oscuro = !!dd.oscuro;
           var otro = (fila.__mios || []).filter(function (x) { return x !== dd; })[0] || dd;
           c.finFondo = otro.fondo; c.finTinta = otro.tinta; c.finOscuro = !!otro.oscuro;
@@ -156,13 +209,16 @@
       var fams = [], nom = {};
       T.forEach(function (x) { if (/^m-/.test(x.familia || '') && fams.indexOf(x.familia) < 0) { fams.push(x.familia); nom[x.familia] = String(x.nombre || '').replace(/ · [^·]*$/, ''); } });
       fams.sort(function (x, y) { return String(nom[x]).localeCompare(String(nom[y]), 'es'); });
-      fams.forEach(function (fm) { var o = document.createElement('option'); o.value = fm.slice(2); o.textContent = nom[fm]; sel.appendChild(o); });
+      /* el diseño de ESTA invitación va primero y marcado */
+      if (fams.indexOf('m-' + auto) > -1) { fams.splice(fams.indexOf('m-' + auto), 1); fams.unshift('m-' + auto); }
+      fams.forEach(function (fm, k) { var o = document.createElement('option'); o.value = fm.slice(2); o.textContent = (fm === 'm-' + auto ? '★ ' + nom[fm] + ' (el de esta invitación)' : nom[fm]); sel.appendChild(o); });
       var ini = c0.muestra || (fams.indexOf('m-' + auto) > -1 ? auto : (fams[0] || '').slice(2));
       sel.value = ini;
       function dibujar(slug) {
         fila.innerHTML = '';
         var mios = T.filter(function (x) { return x.familia === 'm-' + slug && !/-a$/.test(x.id); });
         boton('', 'Con foto', '', null);
+        boton('f', 'Fondo de la invitación', fondoDelDato((borrador() || d).fx) || '', 'propio');
         fila.__mios = mios;
         var NOM = { a: 'Detalle abajo', b: 'Detalle arriba', c: 'Marco' };
         mios.forEach(function (x) { var v = x.id.slice(-1); boton(v, NOM[v] || v, x.fondo, x); });
