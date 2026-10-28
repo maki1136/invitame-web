@@ -76,7 +76,7 @@
   function datos(d) { d.fx = d.fx || {}; d.fx.portadaSinFoto = d.fx.portadaSinFoto || {}; return d.fx.portadaSinFoto; }
   function temas(cb) {
     if (window.INVSTDG_TEMAS) return cb(window.INVSTDG_TEMAS);
-    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028f';
+    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028g';
     s.onload = function () { cb(window.INVSTDG_TEMAS || []); }; s.onerror = function () { cb([]); };
     document.head.appendChild(s);
   }
