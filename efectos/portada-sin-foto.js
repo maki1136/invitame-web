@@ -6,7 +6,8 @@
    Cada diseño (muestra) ya tiene 3 fondos propios de su temática, hechos en Flow
    para los Save the Date (/efectos/std-temas.js): A = detalle abajo, B = detalle
    arriba, C = marco. Son verticales, como la portada del celular, y traen su
-   color de letra medido contra el fondo. Este módulo los ofrece como portada.
+   color de letra medido contra el fondo. Este módulo ofrece el B y el C como portada (el A cae
+   debajo de la cuenta regresiva).
 
    EL DATO — fx.portadaSinFoto:
      fondo:  URL de la imagen ('' = apagado, la portada usa la foto de siempre)
@@ -47,7 +48,9 @@
       S + ' video, ' + S + ' .cover-vid{display:none!important}',
       S + ' .pveil{background:' + (c.oscuro ? 'linear-gradient(rgba(0,0,0,.04) 30%,rgba(0,0,0,.28))' : 'radial-gradient(70% 40% at 50% 52%, rgba(255,255,255,.35), rgba(255,255,255,0) 100%)') + '!important}',
       S + ' :is(.kicker, .names, .names *, .fecha, .num, .lab, .sep, .scrollcue, .count, .count *){color:' + T + '!important;-webkit-text-fill-color:' + T + '!important;text-shadow:' + SH + '!important}',
-      S + ' .scrollcue svg{filter:none!important}'
+      S + ' .scrollcue svg{filter:none!important}',
+      /* los velos propios de cada colección (pensados para la foto) se apagan */
+      S + '::before, ' + S + '::after, ' + S + ' :is(.pbg, .c, .pveil)::before, ' + S + ' :is(.pbg, .c, .pveil)::after{background:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'
     ];
     if (!st) { st = document.createElement('style'); st.id = ID_CSS; document.head.appendChild(st); }
     st.textContent = css.join('\n');
@@ -110,7 +113,8 @@
     }
     temas(function (T) {
       var slug = muestraDe(borrador() || d) || String((borrador() || d).slug || '');
-      var mios = T.filter(function (x) { return x.familia === 'm-' + slug; });
+      /* el A (detalle abajo) queda debajo de la cuenta regresiva: en la portada van el B y el C */
+      var mios = T.filter(function (x) { return x.familia === 'm-' + slug && !/-a$/.test(x.id); });
       boton('', 'Con foto', '', null);
       if (!mios.length) {
         var n = document.createElement('div'); n.style.cssText = 'font-size:11.5px;opacity:.7;max-width:260px';
