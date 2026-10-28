@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-28T22:22:57.895Z",
+ "cuando": "2026-10-28T22:49:13.502Z",
  "slug": "camila-y-tomas",
- "total": 427,
- "verde": 425,
+ "total": 428,
+ "verde": 426,
  "amarillo": 0,
  "rojo": 2,
  "gris": 0,
@@ -2084,17 +2084,6 @@
   {
    "tab": "PERSONAS",
    "bloque": "",
-   "control": "Qué dice",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "padresKick",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PERSONAS",
-   "bloque": "",
    "control": "Color - Personas importantes:",
    "tipo": "color",
    "guarda": true,
@@ -3777,6 +3766,28 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.fecha.acento",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "",
+   "control": "Color de los círculos — para \"tres círculos\"",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.fecha.circulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "",
+   "control": "Color de los números de los círculos",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.fecha.numero",
    "llega": true,
    "seVe": true,
    "estado": "verde"
