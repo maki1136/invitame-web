@@ -205,6 +205,7 @@
     'fondo-selector':['PRINCIPAL','diseno'],
     'motivo-selector':['PRINCIPAL','diseno'],
     'cierre-ajustes':['PRINCIPAL','cierre'],
+    'portadasf-selector':['PRINCIPAL','portada'],   /* 28/10: portada sin foto */
     'flecha-selector':['PRINCIPAL','portada'],   /* 28/10: la flecha de la portada */
     'frase-ajustes':['PRINCIPAL','frase'],
     'dresscode-selector':['LUGAR_VEST','vestimenta'],
@@ -286,6 +287,7 @@
     'cierre-ajustes':'.footer',
     'frase-ajustes':'.fraseSec',
     'flecha-selector':'.portada',
+    'portadasf-selector':'.portada',
     'compartir-selector':'#share-sec',
     'regalo-selector':'[data-sec=regalos]'
   };

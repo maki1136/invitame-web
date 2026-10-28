@@ -735,6 +735,7 @@
     '/efectos/pase-por-paquete.js',    /* 26/10: en Estándar no se muestra el pase con QR (Jazmín, Aurora) */
     '/efectos/trivia-sin-correcta.js', /* 26/10: una pregunta sin correcta marcada trababa la trivia */
     '/efectos/dresscode-sin-corbata.js', /* 24/10: el traje del dibujo de Vestimenta, sin corbata (Jazmín) */
+    '/efectos/portada-sin-foto.js',    /* 28/10: portada con un fondo del mismo diseño para el cliente sin fotos (Jazmín) */
     '/efectos/flecha-portada.js',      /* 28/10: la flecha de la portada más grande, con tamaño y estilo (Jazmín) */
     '/efectos/frase-banda.js',         /* 23/10: frase larga — foto llena, velo y ubicación (Jazmín) */
     '/efectos/imagen-cierre.js',       /* el "¡Gracias!" del final iba sobre una foto de stock */
