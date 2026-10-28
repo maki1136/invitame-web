@@ -83,8 +83,11 @@
   /* la muestra del diseño elegido (PRINCIPAL → «Diseño del catálogo») */
   function muestraDe(d) {
     var M = window.MUESTRAS_INVITAME || {}, tpl = String(d.tpl || '');
-    var m = M[tpl] || M[tpl.toLowerCase()] || Object.keys(M).map(function (k) { return M[k]; })
-      .filter(function (x) { return x && String(x.nombre || '').toLowerCase() === tpl.toLowerCase(); })[0];
+    var col = String(((d.fx || {}).coleccion) || '');
+    var lista = Object.keys(M).map(function (k) { return M[k]; });
+    var m = M[tpl] || M[tpl.toLowerCase()] ||
+      lista.filter(function (x) { return x && String(x.nombre || '').toLowerCase() === tpl.toLowerCase(); })[0] ||
+      M[col] || M[col.toLowerCase()];
     return (m && m.muestra) || '';
   }
   function construir(d) {
@@ -126,6 +129,7 @@
       b.onclick = function () {
         var c = datos(borrador() || d);
         if (!dd) { c.fondo = ''; c.cual = ''; }
+        else if (sel && sel.value) c.muestra = sel.value;
         else {
           c.fondo = dd.fondo; c.cual = v; c.tinta = dd.tinta; c.oscuro = !!dd.oscuro;
           var otro = (fila.__mios || []).filter(function (x) { return x !== dd; })[0] || dd;
@@ -136,20 +140,31 @@
       };
       fila.appendChild(b);
     }
+    /* ★ 28/10 (Jazmín: «no me permite colocar una imagen sin foto»): si no se
+       reconoce el diseño, o se quieren los fondos de otro, se elige de la lista */
+    var gSel = document.createElement('div'); gSel.className = 'grp'; gSel.style.marginTop = '8px';
+    var lSel = document.createElement('label'); lSel.textContent = 'Fondos de qué diseño'; gSel.appendChild(lSel);
+    var sel = document.createElement('select'); gSel.appendChild(sel);
+    caja.insertBefore(gSel, fila);
     temas(function (T) {
-      var slug = muestraDe(borrador() || d) || String((borrador() || d).slug || '');
-      /* el A (detalle abajo) queda debajo de la cuenta regresiva: en la portada van el B y el C */
-      var mios = T.filter(function (x) { return x.familia === 'm-' + slug && !/-a$/.test(x.id); });
-      boton('', 'Con foto', '', null);
-      if (!mios.length) {
-        var n = document.createElement('div'); n.style.cssText = 'font-size:11.5px;opacity:.7;max-width:260px';
-        n.textContent = 'Este diseño todavía no tiene fondos propios. Elegí el diseño en «Diseño del catálogo» (arriba) y volvé acá.';
-        fila.appendChild(n);
+      var dd0 = borrador() || d, c0 = datos(dd0);
+      var auto = muestraDe(dd0) || String(dd0.slug || '');
+      var fams = [], nom = {};
+      T.forEach(function (x) { if (/^m-/.test(x.familia || '') && fams.indexOf(x.familia) < 0) { fams.push(x.familia); nom[x.familia] = String(x.nombre || '').split(' · ')[0]; } });
+      fams.forEach(function (fm) { var o = document.createElement('option'); o.value = fm.slice(2); o.textContent = nom[fm]; sel.appendChild(o); });
+      var ini = c0.muestra || (fams.indexOf('m-' + auto) > -1 ? auto : (fams[0] || '').slice(2));
+      sel.value = ini;
+      function dibujar(slug) {
+        fila.innerHTML = '';
+        var mios = T.filter(function (x) { return x.familia === 'm-' + slug && !/-a$/.test(x.id); });
+        boton('', 'Con foto', '', null);
+        fila.__mios = mios;
+        var NOM = { a: 'Detalle abajo', b: 'Detalle arriba', c: 'Marco' };
+        mios.forEach(function (x) { var v = x.id.slice(-1); boton(v, NOM[v] || v, x.fondo, x); });
+        pintar();
       }
-      fila.__mios = mios;
-      var NOM = { a: 'Detalle abajo', b: 'Detalle arriba', c: 'Marco' };
-      mios.forEach(function (x) { var v = x.id.slice(-1); boton(v, NOM[v] || v, x.fondo, x); });
-      pintar();
+      sel.onchange = function () { datos(borrador() || d).muestra = sel.value; dibujar(sel.value); };
+      dibujar(ini);
     });
     return caja;
   }
