@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-28T16:56:26.028Z",
+ "cuando": "2026-10-28T17:31:08.398Z",
  "slug": "camila-y-tomas",
- "total": 421,
- "verde": 420,
+ "total": 422,
+ "verde": 421,
  "amarillo": 0,
  "rojo": 1,
  "gris": 0,
@@ -4272,6 +4272,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.stdg.colores.papel",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.luz",
    "llega": true,
    "seVe": true,
    "estado": "verde"
