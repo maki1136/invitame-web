@@ -109,7 +109,13 @@
     var velo = auto ? (hayFoto ? 'foto' : 'sinfoto') : c.velo;
     var colorPropio = String(ev.fraseColor || '').trim();
     var peso = String(c.peso || '');
-    var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso;
+    /* ★ 28/10 (Maki: «¿y el tamaño qué onda?»). «Tamaño de la frase larga» y
+       «Tipografía frase larga» (PRINCIPAL) el motor los pone en línea SIN
+       !important, y las colecciones (bohemia, cantera, oleo, celebra…) los pisan
+       con 17-19 px !important: el campo no hacía nada. Acá ganan. */
+    var tamN = parseInt(ev.fraseSize, 10) || 0;
+    var fuente = String(ev.fraseFont || '').trim();
+    var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
     if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno'); return; }
     ultima = firma;
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
@@ -158,6 +164,8 @@
           (esOsc ? '0 1px 2px rgba(255,255,255,.7),0 0 16px rgba(255,255,255,.6)' : '0 1px 3px rgba(0,0,0,.6),0 2px 16px rgba(0,0,0,.5)') + '!important}');
       }
     }
+    if (tamN > 0) css.push(S + ' > p.frase.frase{font-size:clamp(' + tamN + 'px, 7.2vw, ' + Math.round(tamN * 1.35) + 'px)!important;line-height:1.45!important}');
+    if (fuente) css.push(S + ' > p.frase.frase{font-family:' + (/[,'"]/.test(fuente) ? fuente : "'" + fuente + "'") + '!important}');
     if (/^(400|500|600|700|800)$/.test(peso)) css.push(S + ' > p.frase.frase{font-weight:' + peso + '!important}');
     css.push(S + '{align-items:' + POS[pos] + '!important}');
     /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
