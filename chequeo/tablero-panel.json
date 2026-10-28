@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-28T17:31:08.398Z",
+ "cuando": "2026-10-28T20:00:59.805Z",
  "slug": "camila-y-tomas",
- "total": 422,
- "verde": 421,
+ "total": 426,
+ "verde": 425,
  "amarillo": 0,
  "rojo": 1,
  "gris": 0,
@@ -353,6 +353,28 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "flecha-selector",
+   "control": "Tamaño",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.flecha.tam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "flecha-selector",
+   "control": "Estilo",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.flecha.estilo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Frase Larga:",
    "tipo": "textarea",
@@ -413,6 +435,17 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.frase.velo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Grosor de la letra",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.frase.peso",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4118,6 +4151,17 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.fotos.estilo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "fotos-estilo-ajustes",
+   "control": "Tamaño de las fotos (estilo Mosaico)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.fotos.mosaico",
    "llega": true,
    "seVe": true,
    "estado": "verde"
