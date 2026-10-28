@@ -44,9 +44,20 @@
   function construir() {
     var caja = el('div', 'margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(0,0,0,.10)');
     caja.id = ID;
-    caja.appendChild(el('div', 'font-size:13px;font-weight:600;margin-bottom:2px', 'Save the date sin invitación (10 diseños)'));
+    caja.appendChild(el('div', 'font-size:13px;font-weight:600;margin-bottom:2px', 'Save the date sin invitación (40 diseños)'));
     caja.appendChild(el('div', 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35',
       'Sale solo con los datos del formulario: no hace falta que la invitación esté armada. Elegí el diseño, subí una foto si querés, arrastrá los textos sobre la imagen para acomodarlos y descargalo.'));
+
+    /* ★ 27/10 (Maki): varias variantes guardadas por invitación (3 sin foto + 1 con
+       foto en cada muestra). fx.stdg.variantes = [{nombre, cfg}] — cfg es una
+       copia completa del save the date. Tocar una la carga para editar/bajar. */
+    var gVar = el('div', 'margin:0 0 12px;padding:8px 10px;background:rgba(0,0,0,.035);border-radius:10px');
+    gVar.appendChild(el('div', 'font-size:12px;font-weight:600;margin:0 0 6px', 'Variantes guardadas'));
+    var listaVar = el('div', 'display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px');
+    var bGuardarVar = el('button', BTN, '+ Guardar esta como variante'); bGuardarVar.type = 'button';
+    var bBajarTodas = el('button', BTN, 'Descargar todas'); bBajarTodas.type = 'button';
+    var filaVar = el('div', 'display:flex;gap:6px;flex-wrap:wrap'); filaVar.appendChild(bGuardarVar); filaVar.appendChild(bBajarTodas);
+    gVar.appendChild(listaVar); gVar.appendChild(filaVar); caja.appendChild(gVar);
 
     var fila = el('div', 'display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap');
     var izq = el('div', 'width:216px;flex:none'), der = el('div', 'flex:1;min-width:220px');
@@ -276,6 +287,56 @@
     bOcu.onclick = function () { if (!sel) return; aj().oculto = true; sel = null; ctrlSel.style.display = 'none'; pintar(); refrescar(); };
     bVol.onclick = function () { if (!sel) return; delete cfg().ajustes[sel]; pintar(); refrescar(); };
 
+    /* ---- variantes ---- */
+    var CLAVES = ['diseno', 'lay', 'marco', 'foto', 'modoFoto', 'velo', 'foco', 'colores', 'fuentes', 'textos', 'ajustes', 'extras'];
+    function copia(o) { return JSON.parse(JSON.stringify(o == null ? null : o)); }
+    function fotoActual() { var s = cfg(), o = {}; CLAVES.forEach(function (k) { if (s[k] !== undefined) o[k] = copia(s[k]); }); return o; }
+    function cargar(c) {
+      var s = cfg(); CLAVES.forEach(function (k) { if (c[k] === undefined) delete s[k]; else s[k] = copia(c[k]); });
+      if (!s.textos) s.textos = {}; if (!s.ajustes) s.ajustes = {}; if (!Array.isArray(s.extras)) s.extras = [];
+      sel = null; ctrlSel.style.display = 'none'; sincronizar(); pintar(); refrescar();
+    }
+    function dibujarVariantes() {
+      var s = cfg(), vs = Array.isArray(s.variantes) ? s.variantes : [];
+      listaVar.innerHTML = '';
+      if (!vs.length) listaVar.appendChild(el('span', 'font-size:11.5px;opacity:.6', 'Todavía no hay. Armá una y tocá «Guardar esta como variante».'));
+      vs.forEach(function (v, i) {
+        var chip = el('span', 'display:inline-flex;align-items:center;gap:2px;background:#fff;border:1px solid rgba(0,0,0,.15);border-radius:16px;padding:2px 4px 2px 10px;font-size:12px');
+        var b = el('button', 'border:0;background:none;cursor:pointer;font-weight:600;color:#49111A;font-size:12px', v.nombre || ('Variante ' + (i + 1))); b.type = 'button';
+        b.onclick = function () { cargar(v.cfg || {}); nota.textContent = 'Cargada: ' + (v.nombre || ('Variante ' + (i + 1))) + '. Si la cambiás, volvé a guardarla.'; };
+        var x = el('button', 'border:0;background:none;cursor:pointer;opacity:.5;font-size:12px', '✕'); x.type = 'button';
+        x.onclick = function () { cfg().variantes.splice(i, 1); dibujarVariantes(); refrescar(); };
+        chip.appendChild(b); chip.appendChild(x); listaVar.appendChild(chip);
+      });
+    }
+    function guardarVariante(nombre) {
+      var s = cfg(); if (!Array.isArray(s.variantes)) s.variantes = [];
+      s.variantes.push({ nombre: nombre || ('Variante ' + (s.variantes.length + 1)), cfg: fotoActual() });
+      dibujarVariantes(); refrescar();
+    }
+    bGuardarVar.onclick = function () { guardarVariante(); nota.textContent = 'Guardada. Acordate de «Guardar y publicar».'; };
+    bBajarTodas.onclick = function () {
+      if (!M) return; var vs = cfg().variantes || []; var i = 0;
+      (function una() {
+        if (i >= vs.length) { nota.textContent = 'Listo: se descargaron ' + vs.length + ' imágenes.'; return; }
+        var v = vs[i++], s0 = cfg(), tx = {};
+        var c = v.cfg || {}, tt = c.textos || {};
+        RENG.forEach(function (r) { tx[r[0]] = (tt[r[0]] != null && String(tt[r[0]]).trim() !== '') ? tt[r[0]] : auto[r[0]]; });
+        var op = { diseno: c.diseno || (M ? M.elegirSolo(borrador()) : ''), lay: c.lay || '', marco: c.marco == null ? null : !!c.marco, foto: c.foto || '', modoFoto: c.modoFoto || 'arco', velo: c.velo, foco: c.foco || {},
+                   colores: c.colores || {}, fuentes: c.fuentes || {}, textos: tx, ajustes: c.ajustes || {}, extras: c.extras || [] };
+        var cv = document.createElement('canvas');
+        M.armar(cv, op).then(function () {
+          cv.toBlob(function (b) {
+            var a = document.createElement('a'); a.href = URL.createObjectURL(b);
+            a.download = 'save-the-date-' + ((borrador().slug || 'invitacion').trim()) + '-' + String(v.nombre || i).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.jpg';
+            document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+            setTimeout(una, 700);
+          }, 'image/jpeg', 0.93);
+        });
+      })();
+    };
+    caja.__api = { cargar: cargar, guardarVariante: guardarVariante, limpiarVariantes: function () { cfg().variantes = []; dibujarVariantes(); } };
+
     /* ---- descargar ---- */
     bBajar.onclick = function () {
       if (!M) return;
@@ -296,7 +357,7 @@
       var o = el('option', '', 'Automático (según la muestra elegida)'); o.value = ''; selDis.appendChild(o);
       m.DISENOS.forEach(function (d) { var op = el('option', '', d.nombre); op.value = d.id; selDis.appendChild(op); });
       auto = m.textosDe(borrador());
-      sincronizar(); pintar();
+      sincronizar(); dibujarVariantes(); pintar();
     }, function () { nota.textContent = 'No se pudo cargar el dibujante. Recargá la página.'; });
 
     /* si cambian nombres/fecha arriba en el panel, el automático se actualiza */
