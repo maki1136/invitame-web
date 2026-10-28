@@ -1147,7 +1147,8 @@
     var T = TONOS[tn], c = CSS_BASE;
     [['#4a4642', T.TINTA], ['#55514b', T.TINTA2], ['#b6b0a8', T.TINTA3], ['#8a7446', T.ORO],
      ['rgba(138,116,70,.32)', T.ORO_CL], ['#e5e0d5', T.PAPEL], ['#2a231e', T.CUERPO], ['#3a3733', T.VERDE2],
-     ['#f1ede4', T.LINO2], ['#635c4d', T.SAGE], ['#cdc5b4', T.SAGECL]].forEach(function (p) { c = c.split(p[0]).join(p[1]); });
+     ['#f1ede4', T.LINO2], ['#635c4d', T.SAGE], ['#cdc5b4', T.SAGECL],
+     ['#f4f1ea', '#eaf2f8'], ['#f3efe6', '#e6eff6'], ['#e8e3d9', '#d6e4ee'], ['#d9d3c9', '#c4d7e4'], ['#b0a79a', '#8fadc0'], ['#f5f1e9', T.CREAM]].forEach(function (p) { c = c.split(p[0]).join(p[1]); });
     var H = 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA + '="' + NOMBRE + '"]';
     c += '\n' + H + ' .frame { background-color:' + T.PAPEL + ' !important; background-blend-mode:multiply !important; }';
     c += '\n' + H + ' body { background-color:' + T.CUERPO + ' !important; background-blend-mode:multiply; }';
