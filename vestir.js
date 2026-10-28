@@ -142,7 +142,7 @@
      muestra de Nexora tiene sus patrocinadores). No viajan con el vestido: se
      sacan de lo copiado de la muestra y se reponen los del cliente.
      Las usa también /efectos/panel-solicitud-muestra.js (el camino del panel). */
-  var SECCIONES_FX = ['menu', 'avisos', 'patrocinadores', 'ocultas'];   /* ocultas: 20/10, secciones que el cliente sacó */
+  var SECCIONES_FX = ['menu', 'avisos', 'patrocinadores', 'ocultas', 'stdg'];   /* stdg: 28/10, el Save the Date que eligió el cliente (el de la muestra trae SUS fotos) */   /* ocultas: 20/10, secciones que el cliente sacó */
   function secciones(d) {
     var out = {};
     if (!d || !d.fx) return out;

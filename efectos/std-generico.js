@@ -340,7 +340,7 @@
     if (modoFoto !== 'fondo' && !/^(arco|rectangulo|cuadrado|circulo|ovalo)$/.test(modoFoto)) modoFoto = 'arco';
     lienzo.width = W; lienzo.height = H;
     var ctx = lienzo.getContext('2d');
-    return Promise.all([cargarFuentes(), imagen(op.fondo || (d.fondo ? (d.fondo.indexOf('/') > -1 ? CL.replace('invitame/stdcand/', 'invitame/') + d.fondo : CL + d.fondo) : '')), imagen(op.foto)]).then(function (r) {
+    return Promise.all([cargarFuentes(), imagen(op.fondo || (d.fondo ? ((d.fondo.indexOf('/') > -1 ? CL.replace('invitame/stdcand/', 'invitame/') + d.fondo : CL + d.fondo).replace(op.mini ? 'q_auto:best,f_jpg,w_1080,h_1920' : '#', 'q_auto:eco,f_jpg,w_432,h_768')) : '')), imagen(op.foto)]).then(function (r) {
       var fondo = r[1], foto = r[2];
       ctx.fillStyle = d.papel; ctx.fillRect(0, 0, W, H);
       if (foto && modoFoto === 'fondo') {
