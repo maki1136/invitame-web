@@ -27,7 +27,7 @@
     var sinQR = !!pq.plan && !conQR;
     var css = '';
     if (sinPases) css = 'section.pase{display:none!important}';
-    else if (sinQR) css = 'section.pase #qr{display:none!important}';
+    else if (sinQR) css = 'section.pase #qr,section.pase #pv-estado,section.pase .k:has(+ #pv-estado){display:none!important}';   /* sin QR tampoco va «Estado del pase» (es del escaneo en la puerta) */
     var st = document.getElementById(ID);
     if (css) {
       if (!st) { st = document.createElement('style'); st.id = ID; document.head.appendChild(st); }
