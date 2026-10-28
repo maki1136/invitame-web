@@ -76,7 +76,7 @@
   function datos(d) { d.fx = d.fx || {}; d.fx.portadaSinFoto = d.fx.portadaSinFoto || {}; return d.fx.portadaSinFoto; }
   function temas(cb) {
     if (window.INVSTDG_TEMAS) return cb(window.INVSTDG_TEMAS);
-    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028c';
+    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028d';
     s.onload = function () { cb(window.INVSTDG_TEMAS || []); }; s.onerror = function () { cb([]); };
     document.head.appendChild(s);
   }
@@ -86,8 +86,8 @@
     var col = String(((d.fx || {}).coleccion) || '');
     /* primero la tabla exacta de las 62 muestras (std-temas.js): plantilla y colección */
     var MD = window.INVSTDG_MUESTRA_DE || {};
+    if (MD.col && MD.col[col]) return MD.col[col];   /* la colección es más precisa que el nombre */
     if (MD.tpl && MD.tpl[tpl]) return MD.tpl[tpl];
-    if (MD.col && MD.col[col]) return MD.col[col];
     var lista = Object.keys(M).map(function (k) { return M[k]; });
     var m = M[tpl] || M[tpl.toLowerCase()] ||
       lista.filter(function (x) { return x && String(x.nombre || '').toLowerCase() === tpl.toLowerCase(); })[0] ||
@@ -155,6 +155,7 @@
       var auto = muestraDe(dd0) || String(dd0.slug || '');
       var fams = [], nom = {};
       T.forEach(function (x) { if (/^m-/.test(x.familia || '') && fams.indexOf(x.familia) < 0) { fams.push(x.familia); nom[x.familia] = String(x.nombre || '').split(' · ')[0]; } });
+      fams.sort(function (x, y) { return String(nom[x]).localeCompare(String(nom[y]), 'es'); });
       fams.forEach(function (fm) { var o = document.createElement('option'); o.value = fm.slice(2); o.textContent = nom[fm]; sel.appendChild(o); });
       var ini = c0.muestra || (fams.indexOf('m-' + auto) > -1 ? auto : (fams[0] || '').slice(2));
       sel.value = ini;
