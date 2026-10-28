@@ -42,13 +42,16 @@
     caja.__pintar();
     return caja;
   }
+  function firmaD(d) { return String(d.slug || '') + '|' + String(((d.fx || {}).coleccion) || '') + '|' + String(d.tpl || ''); }
   function revisarPanel() {
     var d = borrador(); if (!d) return;
     var ya = document.getElementById(ID);
-    if (ya) { if (ya.__col !== col(d)) ya.__pintar(); return; }
+    if (ya && ya.__d === firmaD(d)) { if (ya.__col !== col(d)) ya.__pintar(); return; }
+    if (ya) ya.remove();   /* D cambió (cargó el evento): se rearma con el de verdad */
     var a = window.invCasa ? window.invCasa(ID) : null;
     if (!a) return;
-    a.appendChild(construir(d));
+    var caja = construir(d); caja.__d = firmaD(d);
+    a.appendChild(caja);
   }
   var n = 0, t = setInterval(function () {
     if (borrador() || document.querySelector('.mejoras')) { clearInterval(t); setInterval(revisarPanel, 700); revisarPanel(); }

@@ -229,12 +229,20 @@
     });
     return caja;
   }
+  function firmaD(d) { return String(d.slug || '') + '|' + String(((d.fx || {}).coleccion) || '') + '|' + String(d.tpl || ''); }
   function revisarPanel() {
     var d = borrador(); if (!d) return;
-    if (document.getElementById(ID)) return;
+    /* ⚠️ 28/10: el panel arranca con un borrador de fábrica y DESPUÉS carga el
+       evento (otro objeto D). Si la caja se armó con el primero, mostraba los
+       datos de otra invitación («★ XV Rosa» en una boda Bohemia). Se rearma
+       cuando cambia la invitación cargada (D es el mismo objeto: se compara el slug). */
+    var ya = document.getElementById(ID);
+    if (ya && ya.__d === firmaD(d)) return;
+    if (ya) ya.remove();
     var a = window.invCasa ? window.invCasa(ID) : null;
     if (!a) return;
-    a.appendChild(construir(d));
+    var caja = construir(d); caja.__d = firmaD(d);
+    a.appendChild(caja);
   }
 
   /* ================= ARRANQUE ================= */
