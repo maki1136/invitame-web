@@ -35,7 +35,7 @@
     if (window.INVSTDG) return Promise.resolve(window.INVSTDG);
     return new Promise(function (ok, no) {
       /* ★ 28/10: primero los fondos propios de cada muestra, después el motor */
-      var t = document.createElement('script'); t.src = '/efectos/std-temas.js?v=20261028e';
+      var t = document.createElement('script'); t.src = '/efectos/std-temas.js?v=20261028f';
       t.onload = t.onerror = function () {
         var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261028b';
         s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
@@ -386,7 +386,7 @@
       orden.sort(function (a, b) { var pa = a === 'm-' + slugAhora ? 0 : a === 'generales' ? 1 : 2, pb = b === 'm-' + slugAhora ? 0 : b === 'generales' ? 1 : 2; return pa - pb; });
       orden.forEach(function (g) {
         var og = document.createElement('optgroup');
-        og.label = g === 'generales' ? 'Diseños generales' : (g === 'm-' + slugAhora ? 'Los de esta muestra' : 'Muestra ' + String(grupos[g][0].nombre).split(' · ')[0]);
+        og.label = g === 'generales' ? 'Diseños generales' : (g === 'm-' + slugAhora ? 'Los de esta muestra' : 'Muestra ' + String(grupos[g][0].nombre).replace(/ · [^·]*$/, ''));
         grupos[g].forEach(function (d) { var op = el('option', '', d.nombre); op.value = d.id; og.appendChild(op); });
         selDis.appendChild(og);
       });

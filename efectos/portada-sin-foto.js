@@ -76,7 +76,7 @@
   function datos(d) { d.fx = d.fx || {}; d.fx.portadaSinFoto = d.fx.portadaSinFoto || {}; return d.fx.portadaSinFoto; }
   function temas(cb) {
     if (window.INVSTDG_TEMAS) return cb(window.INVSTDG_TEMAS);
-    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028e';
+    var s = document.createElement('script'); s.src = '/efectos/std-temas.js?v=20261028f';
     s.onload = function () { cb(window.INVSTDG_TEMAS || []); }; s.onerror = function () { cb([]); };
     document.head.appendChild(s);
   }
@@ -154,7 +154,7 @@
       var dd0 = borrador() || d, c0 = datos(dd0);
       var auto = muestraDe(dd0) || String(dd0.slug || '');
       var fams = [], nom = {};
-      T.forEach(function (x) { if (/^m-/.test(x.familia || '') && fams.indexOf(x.familia) < 0) { fams.push(x.familia); nom[x.familia] = String(x.nombre || '').split(' · ')[0]; } });
+      T.forEach(function (x) { if (/^m-/.test(x.familia || '') && fams.indexOf(x.familia) < 0) { fams.push(x.familia); nom[x.familia] = String(x.nombre || '').replace(/ · [^·]*$/, ''); } });
       fams.sort(function (x, y) { return String(nom[x]).localeCompare(String(nom[y]), 'es'); });
       fams.forEach(function (fm) { var o = document.createElement('option'); o.value = fm.slice(2); o.textContent = nom[fm]; sel.appendChild(o); });
       var ini = c0.muestra || (fams.indexOf('m-' + auto) > -1 ? auto : (fams[0] || '').slice(2));
