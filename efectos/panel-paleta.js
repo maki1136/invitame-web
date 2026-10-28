@@ -228,13 +228,15 @@
     var caja = document.getElementById(ID); if (!caja) return;
     var av = caja.querySelector('[data-aviso-col]'), gr = caja.querySelector('[data-grilla]');
     var col = String((d.fx && d.fx.coleccion) || '');
-    var propia = !TOMAN_PALETA[col];
+    /* la casilla va en TODA colección (Jazmín: «esto no lo encuentro»: estaba
+       en Bohemia, que no la mostraba). En Perlas y Bohemia la grilla anda igual. */
+    var propia = !!col;
     /* ★ 28/10/2026 (Maki: «debería tener una paleta de colores como todo y
        listo»). Antes la grilla se apagaba con un aviso. Ahora hay una casilla:
        «Pintar también la colección con la paleta» (fx.paleta.coleccion) y la
        pinta /efectos/paleta-coleccion.js, en cualquier colección. */
     var manda = !!(d.fx && d.fx.paleta && d.fx.paleta.coleccion === true);
-    var tapa = propia && !manda;
+    var tapa = !TOMAN_PALETA[col] && !manda;
     var chk = caja.querySelector('[data-pal-col]');
     if (!chk) {
       chk = document.createElement('label'); chk.setAttribute('data-pal-col', '1');
@@ -259,7 +261,9 @@
         if (s) { var o = [].find.call(s.options, function (x) { return x.value === col; }); if (o) nom = o.textContent; }
         av.textContent = manda
           ? 'La colección «' + nom + '» se pinta con la paleta elegida. Las fotos y texturas del diseño no cambian: si el papel de fondo no combina, cambialo en «El fondo de la invitación».'
-          : 'La colección «' + nom + '» trae sus propios colores. Para que la paleta la pinte, marcá la casilla de abajo.';
+          : (TOMAN_PALETA[col]
+             ? 'La colección «' + nom + '» toma algunos colores de la paleta. Para que la paleta pinte TODO el diseño (tinta, papel y metal), marcá la casilla de abajo.'
+             : 'La colección «' + nom + '» trae sus propios colores. Para que la paleta la pinte, marcá la casilla de abajo.');
       }
     }
     if (gr) { gr.style.opacity = tapa ? '.4' : ''; gr.style.pointerEvents = tapa ? 'none' : ''; }
