@@ -34,8 +34,13 @@
   function motor() {
     if (window.INVSTDG) return Promise.resolve(window.INVSTDG);
     return new Promise(function (ok, no) {
-      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261028';
-      s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
+      /* ★ 28/10: primero los fondos propios de cada muestra, después el motor */
+      var t = document.createElement('script'); t.src = '/efectos/std-temas.js?v=20261028b';
+      t.onload = t.onerror = function () {
+        var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261028b';
+        s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
+      };
+      document.head.appendChild(t);
     });
   }
   function el(tag, css, txt) { var e = document.createElement(tag); if (css) e.style.cssText = css; if (txt != null) e.textContent = txt; return e; }
@@ -44,7 +49,7 @@
   function construir() {
     var caja = el('div', 'margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(0,0,0,.10)');
     caja.id = ID;
-    caja.appendChild(el('div', 'font-size:13px;font-weight:600;margin-bottom:2px', 'Save the date sin invitación (40 diseños)'));
+    caja.appendChild(el('div', 'font-size:13px;font-weight:600;margin-bottom:2px', 'Save the date sin invitación (los generales y 3 propios por muestra)'));
     caja.appendChild(el('div', 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35',
       'Sale solo con los datos del formulario: no hace falta que la invitación esté armada. Elegí el diseño, subí una foto si querés, arrastrá los textos sobre la imagen para acomodarlos y descargalo.'));
 
@@ -127,7 +132,12 @@
     });
     var bColDis = el('button', BTN, 'Colores del diseño'); bColDis.type = 'button';
     bColDis.onclick = function () { cfg().colores = {}; sincronizar(); pintar(); refrescar(); };
-    colFila.appendChild(bColDis); gCol.appendChild(colFila); der.appendChild(gCol);
+    colFila.appendChild(bColDis); gCol.appendChild(colFila);
+    /* ★ 28/10: aclarar el fondo detrás de los textos (fondos con mucho dibujo) */
+    var gLuz = el('div', 'margin-top:6px;font-size:12px'); gLuz.appendChild(el('span', '', 'Aclarar el fondo detrás del texto'));
+    var luz = document.createElement('input'); luz.type = 'range'; luz.min = 0; luz.max = 0.9; luz.step = 0.02; luz.style.cssText = 'width:100%';
+    gLuz.appendChild(luz); gCol.appendChild(gLuz); der.appendChild(gCol);
+    luz.oninput = function () { cfg().luz = +luz.value; pintar(); refrescar(); };
 
     var gFu = el('div', 'margin:0 0 10px');
     gFu.appendChild(el('label', 'display:block;font-size:12px;font-weight:600;margin:0 0 3px', 'Tipografías'));
@@ -167,7 +177,7 @@
     function opciones() {
       var s = cfg(), tx = {};
       RENG.forEach(function (r) { tx[r[0]] = (s.textos[r[0]] != null && String(s.textos[r[0]]).trim() !== '') ? s.textos[r[0]] : auto[r[0]]; });
-      return { diseno: disenoActual(), lay: s.lay || '', marco: s.marco == null ? null : !!s.marco, foto: s.foto || '', modoFoto: s.modoFoto || 'arco', velo: s.velo, foco: s.foco || {},
+      return { diseno: disenoActual(), lay: s.lay || '', marco: s.marco == null ? null : !!s.marco, foto: s.foto || '', modoFoto: s.modoFoto || 'arco', velo: s.velo, luz: s.luz, foco: s.foco || {},
                colores: s.colores || {}, fuentes: s.fuentes || {}, textos: tx, ajustes: s.ajustes, extras: s.extras };
     }
     var pintando = null, otra = false;
@@ -193,6 +203,7 @@
       selLay.value = s.lay || '';
       var dd0 = M ? (M.DISENOS.filter(function (x) { return x.id === disenoActual(); })[0] || {}) : {};
       chMarco.checked = s.marco == null ? dd0.lay === 'marco' : !!s.marco;
+      luz.value = s.luz != null ? s.luz : (dd0.luz || 0); gLuz.style.display = s.foto ? 'none' : '';
       selModo.value = s.modoFoto || 'arco';
       velo.value = s.velo == null ? 0.38 : s.velo;
       gVelo.style.display = (s.foto && (s.modoFoto || 'arco') === 'fondo') ? '' : 'none';
@@ -288,7 +299,7 @@
     bVol.onclick = function () { if (!sel) return; delete cfg().ajustes[sel]; pintar(); refrescar(); };
 
     /* ---- variantes ---- */
-    var CLAVES = ['diseno', 'lay', 'marco', 'foto', 'modoFoto', 'velo', 'foco', 'colores', 'fuentes', 'textos', 'ajustes', 'extras'];
+    var CLAVES = ['diseno', 'lay', 'marco', 'foto', 'modoFoto', 'velo', 'luz', 'foco', 'colores', 'fuentes', 'textos', 'ajustes', 'extras'];
     function copia(o) { return JSON.parse(JSON.stringify(o == null ? null : o)); }
     function fotoActual() { var s = cfg(), o = {}; CLAVES.forEach(function (k) { if (s[k] !== undefined) o[k] = copia(s[k]); }); return o; }
     function cargar(c) {
@@ -322,7 +333,7 @@
         var v = vs[i++], s0 = cfg(), tx = {};
         var c = v.cfg || {}, tt = c.textos || {};
         RENG.forEach(function (r) { tx[r[0]] = (tt[r[0]] != null && String(tt[r[0]]).trim() !== '') ? tt[r[0]] : auto[r[0]]; });
-        var op = { diseno: c.diseno || (M ? M.elegirSolo(borrador()) : ''), lay: c.lay || '', marco: c.marco == null ? null : !!c.marco, foto: c.foto || '', modoFoto: c.modoFoto || 'arco', velo: c.velo, foco: c.foco || {},
+        var op = { diseno: c.diseno || (M ? M.elegirSolo(borrador()) : ''), lay: c.lay || '', marco: c.marco == null ? null : !!c.marco, foto: c.foto || '', modoFoto: c.modoFoto || 'arco', velo: c.velo, luz: c.luz, foco: c.foco || {},
                    colores: c.colores || {}, fuentes: c.fuentes || {}, textos: tx, ajustes: c.ajustes || {}, extras: c.extras || [] };
         var cv = document.createElement('canvas');
         M.armar(cv, op).then(function () {
@@ -365,7 +376,20 @@
     motor().then(function (m) {
       M = m;
       var o = el('option', '', 'Automático (según la muestra elegida)'); o.value = ''; selDis.appendChild(o);
-      m.DISENOS.forEach(function (d) { var op = el('option', '', d.nombre); op.value = d.id; selDis.appendChild(op); });
+      /* ★ 28/10: agrupados — primero los de ESTA muestra, después los generales y los de cada muestra */
+      var slugAhora = ((borrador() || {}).slug || (new URLSearchParams(location.search).get('e')) || '').trim();
+      var grupos = {}, orden = [];
+      m.DISENOS.forEach(function (d) {
+        var g = /^m-/.test(d.familia || '') ? d.familia : 'generales';
+        if (!grupos[g]) { grupos[g] = []; orden.push(g); } grupos[g].push(d);
+      });
+      orden.sort(function (a, b) { var pa = a === 'm-' + slugAhora ? 0 : a === 'generales' ? 1 : 2, pb = b === 'm-' + slugAhora ? 0 : b === 'generales' ? 1 : 2; return pa - pb; });
+      orden.forEach(function (g) {
+        var og = document.createElement('optgroup');
+        og.label = g === 'generales' ? 'Diseños generales' : (g === 'm-' + slugAhora ? 'Los de esta muestra' : 'Muestra ' + String(grupos[g][0].nombre).split(' · ')[0]);
+        grupos[g].forEach(function (d) { var op = el('option', '', d.nombre); op.value = d.id; og.appendChild(op); });
+        selDis.appendChild(og);
+      });
       auto = m.textosDe(borrador());
       sincronizar(); dibujarVariantes(); pintarAvisoCliente(); pintar();
     }, function () { nota.textContent = 'No se pudo cargar el dibujante. Recargá la página.'; });

@@ -49,8 +49,13 @@
   function motor() {
     if (window.INVSTDG) return Promise.resolve(window.INVSTDG);
     return new Promise(function (ok, no) {
-      var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261028';
-      s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
+      /* ★ 28/10: primero los fondos propios de cada muestra, después el motor */
+      var t = document.createElement('script'); t.src = '/efectos/std-temas.js?v=20261028b';
+      t.onload = t.onerror = function () {
+        var s = document.createElement('script'); s.src = '/efectos/std-generico.js?v=20261028b';
+        s.onload = function () { ok(window.INVSTDG); }; s.onerror = no; document.head.appendChild(s);
+      };
+      document.head.appendChild(t);
     });
   }
 

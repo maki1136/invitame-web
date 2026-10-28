@@ -340,7 +340,7 @@
     if (modoFoto !== 'fondo' && !/^(arco|rectangulo|cuadrado|circulo|ovalo)$/.test(modoFoto)) modoFoto = 'arco';
     lienzo.width = W; lienzo.height = H;
     var ctx = lienzo.getContext('2d');
-    return Promise.all([cargarFuentes(), imagen(op.fondo || (d.fondo ? ((d.fondo.indexOf('/') > -1 ? CL.replace('invitame/stdcand/', 'invitame/') + d.fondo : CL + d.fondo).replace(op.mini ? 'q_auto:best,f_jpg,w_1080,h_1920' : '#', 'q_auto:eco,f_jpg,w_432,h_768')) : '')), imagen(op.foto)]).then(function (r) {
+    return Promise.all([cargarFuentes(), imagen(op.fondo || (d.fondo ? ((/^https?:/.test(d.fondo) ? d.fondo : d.fondo.indexOf('/') > -1 ? CL.replace('invitame/stdcand/', 'invitame/') + d.fondo : CL + d.fondo).replace(op.mini ? 'q_auto:best,f_jpg,w_1080,h_1920' : '#', 'q_auto:eco,f_jpg,w_432,h_768')) : '')), imagen(op.foto)]).then(function (r) {
       var fondo = r[1], foto = r[2];
       ctx.fillStyle = d.papel; ctx.fillRect(0, 0, W, H);
       if (foto && modoFoto === 'fondo') {
@@ -394,6 +394,29 @@
         piezas.push({ id: 'extra' + i, txt: String(e.txt), x: W / 2, y: e.y != null ? e.y : 1700 - i * 70,
           o: { tam: e.tam || 40, fam: e.fam || d.txt, color: e.color || ((foto && modoFoto === 'fondo') ? '#ffffff' : d.tinta), max: 900, est: e.est || '' } });
       });
+      /* ★ 28/10: «luz» = un velo suave del color del papel detrás del bloque de
+         textos, para fondos con dibujo (campos, playa, flores). d.luz por diseño,
+         op.luz desde el panel. */
+      var lz = op.luz != null && op.luz !== '' ? +op.luz : (+d.luz || 0);
+      if (!foto && lz > 0) {
+        var yy = piezas.filter(function (p) { return !/^extra/.test(p.id); }).map(function (p) { return p.y; });
+        var y0 = Math.min.apply(null, yy) - 140, y1 = Math.max.apply(null, yy) + 40;
+        var lcx = d.lay === 'editorial' ? Math.min(W / 2, (d.izq || 150) + 330) : W / 2;
+        var ry = (y1 - y0) / 2 + 170, rx = W * 0.72, lcy = (y0 + y1) / 2;
+        var hx = String(d.papelPropio || d.papel || '#ffffff').replace('#', '');
+        if (hx.length === 3) hx = hx.replace(/(.)/g, '$1$1');
+        /* se aclara (o se oscurece en los diseños oscuros) para que despeje de verdad */
+        var rgbP = [0, 2, 4].map(function (i) {
+          var c = parseInt(hx.substr(i, 2), 16); if (isNaN(c)) c = 255;
+          return Math.round(d.oscuro ? c * 0.45 : c + (255 - c) * 0.7);
+        }).join(',');
+        ctx.save(); ctx.translate(lcx, lcy); ctx.scale(rx / ry, 1);
+        var gl = ctx.createRadialGradient(0, 0, 0, 0, 0, ry);
+        gl.addColorStop(0, 'rgba(' + rgbP + ',' + Math.min(0.95, lz) + ')');
+        gl.addColorStop(0.72, 'rgba(' + rgbP + ',' + Math.min(0.95, lz * 0.92) + ')');
+        gl.addColorStop(1, 'rgba(' + rgbP + ',0)');
+        ctx.fillStyle = gl; ctx.fillRect(-ry * 2, -ry * 1.2, ry * 4, ry * 2.4); ctx.restore();
+      }
       var cajas = [];
       var acento = (foto && modoFoto === 'fondo') ? 'rgba(255,255,255,.8)' : d.acento;
       piezas.forEach(function (p) {
@@ -425,6 +448,11 @@
       return lienzo;
     });
   }
+
+  /* ★ 28/10: los 3 fondos propios de cada muestra (/efectos/std-temas.js) */
+  (window.INVSTDG_TEMAS || []).forEach(function (d) {
+    if (d && d.id && !DISENOS.some(function (x) { return x.id === d.id; })) DISENOS.push(d);
+  });
 
   window.INVSTDG = { DISENOS: DISENOS, FAMILIAS: FAMILIAS, FORMAS: FORMAS, DISPOSICIONES: DISPOSICIONES, textosDe: textosDe, elegirSolo: elegirSolo, armar: armar, W: W, H: H };
 })();
