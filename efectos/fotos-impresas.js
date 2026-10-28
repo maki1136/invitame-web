@@ -74,7 +74,7 @@
   var MOS = {
     alto: 'html body #car.carousel.mosaico img{height:clamp(200px,58vw,260px)!important}',
     grande: 'html body #car.carousel.mosaico{grid-template-columns:1fr!important;gap:12px!important}' +
-            'html body #car.carousel.mosaico img{height:auto!important;aspect-ratio:4/5;max-height:560px}'
+            'html body #car.carousel.mosaico img{height:auto!important;aspect-ratio:4/5;max-height:560px;object-position:50% 28%!important}'
   };
   function mosaico() {
     var e = ev(); var m = e ? String(((e.fx || {}).fotos || {}).mosaico || '') : '';
