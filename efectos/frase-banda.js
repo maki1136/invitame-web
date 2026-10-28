@@ -110,7 +110,7 @@
     var colorPropio = String(ev.fraseColor || '').trim();
     var peso = String(c.peso || '');
     var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso;
-    if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo === 'foto'); return; }
+    if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno'); return; }
     ultima = firma;
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
     var S = 'html body section.fraseSec.fraseSec:not(#fb-a):not(#fb-b)';
@@ -163,7 +163,7 @@
     /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
     if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
     if (pos === 'abajo')  css.push(S + '{padding-bottom:clamp(56px,20%,140px)!important}');
-    soltarCorrector(velo === 'foto');
+    soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno');
     if (velo !== 'sinfoto') ponerPapel('');
     var st = document.getElementById(ID_CSS);
     if (!st) { st = document.createElement('style'); st.id = ID_CSS; document.head.appendChild(st); }
