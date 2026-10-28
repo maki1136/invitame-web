@@ -88,6 +88,9 @@
     { id:'cafe-caramelo', nombre:'Café y caramelo', metal:'oro',
       verde:'#402a1e', verde2:'#2c1c13', sage:'#7d5334', sageCl:'#cda87e', oro:'#c09a63',
       lino:'#f5efe6', lino2:'#fbf8f2', cream:'#ece2d3', muted:'#6a5b4c', seal:'#5c3a22' },
+    { id:'azul-cielo-oro', nombre:'Azul cielo, petróleo y dorado', metal:'oro',
+      verde:'#1f4b5c', verde2:'#163a47', sage:'#3b6a7c', sageCl:'#bcd2df', oro:'#a8843e',
+      lino:'#dce9f3', lino2:'#e8f1f8', cream:'#f2f7fb', muted:'#2c5868', seal:'#1f4b5c' },
     { id:'celeste-polvo', nombre:'Celeste polvo y blanco', metal:'plata',
       verde:'#2f4453', verde2:'#20313c', sage:'#537287', sageCl:'#b6cbd8', oro:'#9fabb2',
       lino:'#f2f5f7', lino2:'#fafcfd', cream:'#e6ecf0', muted:'#5a666e', seal:'#3b5567' },
@@ -185,6 +188,8 @@
        pelearse consigo mismo, y las que la colección NO reclama (los acentos)
        siguen siendo de la pareja. */
   function deLaColeccion() {
+    /* ★ 28/10: con «Pintar también la colección» la paleta manda (paleta-coleccion.js) */
+    try { if (window.INVPALETA_MANDA && window.INVPALETA_MANDA()) return window.INVPALETA_COLECCION(); } catch (e) {}
     var c = window.INVCOLPALETA;
     return (c && typeof c === 'object') ? c : null;
   }

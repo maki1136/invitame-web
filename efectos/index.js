@@ -643,6 +643,7 @@
     '/efectos/fuentes-extra.js',       /* las tipografías que no vienen precargadas (y las pegadas de Google Fonts) */
     '/efectos/paleta.js',              /* la paleta: pinta las 12 variables de color de una */
     '/efectos/panel-paleta.js',        /* y el selector de las 20, en el panel */
+    '/efectos/paleta-coleccion.js',    /* 28/10: «Pintar también la colección» — la paleta manda en cualquier colección */
     '/efectos/botones.js',             /* el material de los botones: lacre, cristal, nácar… */
     '/efectos/panel-botones.js',       /* y su selector, debajo del de paletas */
     '/efectos/rsvp-interruptor.js',    /* el sí/no de la confirmación, como interruptor */
@@ -735,7 +736,6 @@
     '/efectos/pase-por-paquete.js',    /* 26/10: en Estándar no se muestra el pase con QR (Jazmín, Aurora) */
     '/efectos/trivia-sin-correcta.js', /* 26/10: una pregunta sin correcta marcada trababa la trivia */
     '/efectos/dresscode-sin-corbata.js', /* 24/10: el traje del dibujo de Vestimenta, sin corbata (Jazmín) */
-    '/efectos/panel-tono.js',          /* 28/10: tono de la colección (Marfil azul cielo/petróleo/dorado) */
     '/efectos/portada-sin-foto.js',    /* 28/10: portada con un fondo del mismo diseño para el cliente sin fotos (Jazmín) */
     '/efectos/flecha-portada.js',      /* 28/10: la flecha de la portada más grande, con tamaño y estilo (Jazmín) */
     '/efectos/frase-banda.js',         /* 23/10: frase larga — foto llena, velo y ubicación (Jazmín) */

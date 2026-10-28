@@ -1,6 +1,6 @@
 /* ===== EL SELECTOR DE PALETA, EN EL PANEL =====================================
 
-   Pone arriba de todo del bloque ✨ EFECTOS una grilla con las 20 paletas.
+   Pone arriba de todo del bloque ✨ EFECTOS una grilla con las paletas.
    Se elige una y la invitación entera se repinta: los nombres, los fondos de
    sección, el lacre, los filetes. Es UNA decisión en lugar de nueve campos de
    color sueltos.
@@ -228,14 +228,38 @@
     var caja = document.getElementById(ID); if (!caja) return;
     var av = caja.querySelector('[data-aviso-col]'), gr = caja.querySelector('[data-grilla]');
     var col = String((d.fx && d.fx.coleccion) || '');
-    var tapa = !TOMAN_PALETA[col];
+    var propia = !TOMAN_PALETA[col];
+    /* ★ 28/10/2026 (Maki: «debería tener una paleta de colores como todo y
+       listo»). Antes la grilla se apagaba con un aviso. Ahora hay una casilla:
+       «Pintar también la colección con la paleta» (fx.paleta.coleccion) y la
+       pinta /efectos/paleta-coleccion.js, en cualquier colección. */
+    var manda = !!(d.fx && d.fx.paleta && d.fx.paleta.coleccion === true);
+    var tapa = propia && !manda;
+    var chk = caja.querySelector('[data-pal-col]');
+    if (!chk) {
+      chk = document.createElement('label'); chk.setAttribute('data-pal-col', '1');
+      chk.style.cssText = 'display:flex;align-items:flex-start;gap:8px;font-size:12.5px;font-weight:600;margin:0 0 10px;line-height:1.35;cursor:pointer';
+      var ib = document.createElement('input'); ib.type = 'checkbox'; ib.style.marginTop = '2px';
+      ib.onchange = function () {
+        var dd = borrador() || d; dd.fx = dd.fx || {}; dd.fx.paleta = dd.fx.paleta || {};
+        dd.fx.paleta.coleccion = ib.checked; refrescar(); avisar(dd);
+      };
+      chk.appendChild(ib);
+      var tx = document.createElement('span');
+      tx.textContent = 'Pintar también la colección con la paleta (la tinta, el papel y el metal del diseño pasan a los colores de la paleta)';
+      chk.appendChild(tx);
+      av.parentNode.insertBefore(chk, av.nextSibling);
+    }
+    chk.style.display = propia ? 'flex' : 'none';
+    chk.querySelector('input').checked = manda;
     if (av) {
-      av.style.display = tapa ? 'block' : 'none';
-      if (tapa) {
+      av.style.display = propia ? 'block' : 'none';
+      if (propia) {
         var s = document.querySelector('#coleccion-selector select'), nom = col;
         if (s) { var o = [].find.call(s.options, function (x) { return x.value === col; }); if (o) nom = o.textContent; }
-        av.textContent = 'La colección «' + nom + '» trae sus propios colores: mientras esté puesta, ' +
-          'la paleta no cambia nada. Para usar una paleta elegí «Sin colección», Perlas o Bohemia.';
+        av.textContent = manda
+          ? 'La colección «' + nom + '» se pinta con la paleta elegida. Las fotos y texturas del diseño no cambian: si el papel de fondo no combina, cambialo en «El fondo de la invitación».'
+          : 'La colección «' + nom + '» trae sus propios colores. Para que la paleta la pinte, marcá la casilla de abajo.';
       }
     }
     if (gr) { gr.style.opacity = tapa ? '.4' : ''; gr.style.pointerEvents = tapa ? 'none' : ''; }
@@ -246,7 +270,14 @@
   function revisar() {
     var d = borrador();
     if (!d || !window.INVPALETAS) return;
-    if (document.getElementById(ID)) { avisar(d); return; }   /* ya está puesto */
+    var ya = document.getElementById(ID);
+    if (ya) {
+      /* ⚠️ 28/10: el panel arranca con un borrador de fábrica y después carga el
+         evento (mismo objeto D): la grilla quedaba marcando la paleta de fábrica. */
+      var f = String(d.slug || '') + '|' + String((d.fx && d.fx.paleta && d.fx.paleta.id) || '');
+      if (ya.__f !== f) { ya.__f = f; pintarGrilla(d); }
+      avisar(d); return;
+    }
 
     /* la casa de este bloque la decide el panel (invCasa en admin/3-evento.js):
        antes se colgaba del primer «.mejoras» y salía en cinco pestañas */
