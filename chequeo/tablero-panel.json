@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-28T23:13:04.231Z",
+ "cuando": "2026-10-28T22:22:57.895Z",
  "slug": "camila-y-tomas",
- "total": 429,
- "verde": 426,
- "amarillo": 1,
+ "total": 427,
+ "verde": 425,
+ "amarillo": 0,
  "rojo": 2,
  "gris": 0,
  "items": [
@@ -475,17 +475,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -524,6 +513,17 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -642,22 +642,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2508,9 +2508,8 @@
    "guarda": true,
    "dato": "c_color-fondo-confirmacion",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -3778,28 +3777,6 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.fecha.acento",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "",
-   "control": "Color de los círculos — para \"tres círculos\"",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.fecha.circulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "",
-   "control": "Color de los números de los círculos",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.fecha.numero",
    "llega": true,
    "seVe": true,
    "estado": "verde"
