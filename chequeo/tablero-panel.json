@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-28T02:22:54.297Z",
+ "cuando": "2026-10-28T15:06:18.244Z",
  "slug": "camila-y-tomas",
- "total": 420,
- "verde": 419,
+ "total": 421,
+ "verde": 420,
  "amarillo": 0,
  "rojo": 1,
  "gris": 0,
@@ -3471,6 +3471,17 @@
    "seVe": true,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Save the Date (lo elige en el formulario)· aparece cuando cargás sus datos",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
