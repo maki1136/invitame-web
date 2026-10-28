@@ -93,6 +93,20 @@ if ($slug !== '') {
       'img_f-imagen-miniatura-al-compartir'
     ));
     $coverReal = $sv('cover');
+    /* ★ 28/10/2026 (Jazmín, «mia»): con «Portada sin foto» prendida, LA PORTADA
+       es ese fondo, no la foto de `cover` (que suele ser la de la muestra). Lo
+       usan el primer cuadro y la miniatura al compartir cuando no hay una propia. */
+    $fxF = isset($f['fx']['mapValue']['fields']) ? $f['fx']['mapValue']['fields'] : array();
+    $psfF = isset($fxF['portadaSinFoto']['mapValue']['fields']) ? $fxF['portadaSinFoto']['mapValue']['fields'] : array();
+    $psfFondo = isset($psfF['fondo']['stringValue']) ? trim($psfF['fondo']['stringValue']) : '';
+    if ($psfFondo === 'propio') {
+      $fo = isset($fxF['fondo']['mapValue']['fields']) ? $fxF['fondo']['mapValue']['fields'] : array();
+      $foT = isset($fo['tipo']['stringValue']) ? $fo['tipo']['stringValue'] : '';
+      $foU = isset($fo['url']['stringValue']) ? trim($fo['url']['stringValue']) : '';
+      $foP = isset($fo['poster']['stringValue']) ? trim($fo['poster']['stringValue']) : '';
+      $psfFondo = ($foT === 'imagen' && $foU !== '') ? $foU : ($foP !== '' ? $foP : (strpos($foU, '/video/upload/') === false ? $foU : ''));
+    }
+    if ($psfFondo !== '' && preg_match('~^https://[A-Za-z0-9.-]+/[^\s"\'<>()\\\\]*$~', $psfFondo)) $coverReal = $psfFondo;
     /* ★ 6/10/2026 — SEGURIDAD (auditoría antes de vender). La portada se escribe
        adentro de un <style> y de los meta tags. Llega de la base, y la base la
        puede llenar el formulario público (solicitud-crear.php): con un texto como

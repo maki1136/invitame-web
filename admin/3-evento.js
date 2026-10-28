@@ -424,7 +424,20 @@
      DISEÑO (la misma foto de la muestra del catálogo elegida), sin subir nada. */
   async function usarImgDe(key,id,de){
     let url='';
-    if(de==='portada') url=D.cover||'';
+    if(de==='portada'){
+      url=D.cover||'';
+      /* ★ 28/10 (Jazmín, «mia»: «Usar la portada» ponía la foto de la muestra).
+         Con «Portada sin foto» prendida, LA PORTADA que se ve es ese fondo. */
+      const psf=(D.fx&&D.fx.portadaSinFoto)||{};
+      if(psf.fondo){
+        let u=psf.fondo;
+        if(u==='propio'){ const fo=(D.fx&&D.fx.fondo)||{}; u=(fo.tipo==='imagen'&&fo.url)?fo.url:(fo.poster||(/\/video\/upload\//.test(fo.url||'')?'':(fo.url||''))); }
+        if(/^https:/.test(u||'')) url=u;
+      }
+      /* la miniatura es horizontal (1200 × 630): se recorta sola en Cloudinary */
+      if(url && /miniatura-al-compartir/.test(key) && /res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(url) && !/c_fill,w_1200,h_630/.test(url))
+        url=url.replace('/image/upload/','/image/upload/c_fill,w_1200,h_630,g_center/');
+    }
     else{
       try{
         const M=window.MUESTRAS_INVITAME||{}, m=M[D.tpl]||M[String(D.tpl||'').toLowerCase()]||Object.values(M).find(x=>x&&String(x.nombre||'').toLowerCase()===String(D.tpl||'').toLowerCase()), slug=m&&m.muestra;
