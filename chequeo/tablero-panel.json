@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-28T21:46:16.085Z",
+ "cuando": "2026-10-28T21:54:42.172Z",
  "slug": "camila-y-tomas",
  "total": 427,
- "verde": 424,
- "amarillo": 1,
+ "verde": 425,
+ "amarillo": 0,
  "rojo": 2,
  "gris": 0,
  "items": [
@@ -1869,9 +1869,8 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -4269,6 +4268,78 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.frase",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.nombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.fecha",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.detalle",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.pie",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
@@ -4442,78 +4513,6 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.frase",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.nombres",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.fecha",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.detalle",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.pie",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
   },
   {
    "tab": "EFECTOS",

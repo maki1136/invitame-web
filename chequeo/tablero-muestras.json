@@ -1,17 +1,15 @@
 {
- "cuando": "2026-10-28T21:59:13.097Z",
+ "cuando": "2026-10-28T22:08:11.676Z",
  "total": 55,
- "verde": 48,
- "rojo": 7,
+ "verde": 49,
+ "rojo": 6,
  "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(74, 58, 40)» · publicada «rgba(248, 240, 220, 0.28)/rgb(74, 58, 40)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
