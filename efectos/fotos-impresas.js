@@ -66,7 +66,24 @@
     var s = document.getElementById(HOJA); if (s) s.remove();
   }
 
-  function sincronizar() { if (pedido()) poner(); else sacar(); }
+  /* ★ 28/10 (Jazmín, Gabriel y Dany: «que las fotos se vean más grandes»).
+     El mosaico (2 columnas de 150 px de alto) ahora tiene tamaño elegible:
+     fx.fotos.mosaico = '' (como siempre) | 'alto' (2 columnas más altas) |
+     'grande' (una foto por renglón, a todo el ancho) */
+  var HOJA_M = 'inv-fotos-mosaico';
+  var MOS = {
+    alto: 'html body #car.carousel.mosaico img{height:clamp(200px,58vw,260px)!important}',
+    grande: 'html body #car.carousel.mosaico{grid-template-columns:1fr!important;gap:12px!important}' +
+            'html body #car.carousel.mosaico img{height:auto!important;aspect-ratio:4/5;max-height:560px;object-position:50% 28%!important}'
+  };
+  function mosaico() {
+    var e = ev(); var m = e ? String(((e.fx || {}).fotos || {}).mosaico || '') : '';
+    var s = document.getElementById(HOJA_M);
+    if (!MOS[m]) { if (s) s.remove(); return; }
+    if (!s) { s = document.createElement('style'); s.id = HOJA_M; (document.head || document.documentElement).appendChild(s); }
+    if (s.textContent !== MOS[m]) s.textContent = MOS[m];
+  }
+  function sincronizar() { if (pedido()) poner(); else sacar(); mosaico(); }
 
   /* ---------- EN LA INVITACIÓN ---------- */
   /* sin INVEV (el panel, otras páginas) no hace nada: pedido() da false */
@@ -104,6 +121,19 @@
     a.textContent = 'Impresas: cada foto con borde de papel, la de arriba con la esquina doblada y las demás asomando atrás. Sirve en invitaciones claras y oscuras.';
     g.appendChild(a);
     caja.appendChild(g);
+    var g2 = document.createElement('div'); g2.className = 'grp';
+    var l2 = document.createElement('label'); l2.textContent = 'Tamaño de las fotos (estilo Mosaico)'; g2.appendChild(l2);
+    var s2 = document.createElement('select');
+    [['', 'Chicas — dos por renglón (como siempre)'], ['alto', 'Más grandes — dos por renglón, más altas'], ['grande', 'Grandes — una por renglón, a todo el ancho']].forEach(function (o) {
+      var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; s2.appendChild(op);
+    });
+    s2.value = String(cfg(d).mosaico || '');
+    s2.onchange = function () { cfg(d).mosaico = this.value; refrescar(); };
+    g2.appendChild(s2);
+    var a2 = document.createElement('div'); a2.className = 'hint';
+    a2.textContent = 'Sirve cuando en PRINCIPAL/GALERÍA el «Estilo de la galería de fotos» es Mosaico.';
+    g2.appendChild(a2);
+    caja.appendChild(g2);
     return caja;
   }
 

@@ -205,6 +205,7 @@
     'fondo-selector':['PRINCIPAL','diseno'],
     'motivo-selector':['PRINCIPAL','diseno'],
     'cierre-ajustes':['PRINCIPAL','cierre'],
+    'flecha-selector':['PRINCIPAL','portada'],   /* 28/10: la flecha de la portada */
     'frase-ajustes':['PRINCIPAL','frase'],
     'dresscode-selector':['LUGAR_VEST','vestimenta'],
     'itinerario-selector':['LUGAR_VEST','itinerario'],
@@ -224,6 +225,7 @@
   const LUGAR_DE_CASA={
     diseno:{despuesDe:'.mejoras'},
     cierre:{antesDe:'#f-frase-final'},
+    portada:{antesDe:'#f-frase-larga'},
     frase:{despuesDeCampo:'#prev-f-fondo-seccion-frase-larga'},
     vestimenta:{antesDe:'#f-vestimenta-titulo'},
     itinerario:{antesDe:'#f-titulo-itinerario'},
@@ -283,6 +285,7 @@
     'inv-musica-panel':'#spotify-sec',
     'cierre-ajustes':'.footer',
     'frase-ajustes':'.fraseSec',
+    'flecha-selector':'.portada',
     'compartir-selector':'#share-sec',
     'regalo-selector':'[data-sec=regalos]'
   };
