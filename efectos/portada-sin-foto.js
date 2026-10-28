@@ -49,7 +49,7 @@
       S + ' .pbg{display:block!important;background-image:url("' + f.replace(/"/g, '') + '")!important;background-size:cover!important;background-position:center!important;inset:0!important;animation:none!important;transform:none!important;filter:none!important;opacity:1!important}',
       S + ' video, ' + S + ' .cover-vid{display:none!important}',
       S + ' .pveil{background:' + (c.oscuro ? 'linear-gradient(rgba(0,0,0,.04) 30%,rgba(0,0,0,.28))' : 'radial-gradient(70% 40% at 50% 52%, rgba(255,255,255,.35), rgba(255,255,255,0) 100%)') + '!important}',
-      S + ' :is(.kicker, .names, .names *, .fecha, .num, .lab, .sep, .scrollcue, .count, .count *){color:' + T + '!important;-webkit-text-fill-color:' + T + '!important;text-shadow:' + SH + '!important}',
+      S + ':not(#psf-c):not(#psf-d) :is(.kicker, .names, .names *, .fecha, .num, .lab, .sep, .scrollcue, .count, .count *, #pv-kick, #pv-names, #pv-names *, #pv-fecha, #d, #h, #m, #s){color:' + T + '!important;-webkit-text-fill-color:' + T + '!important;text-shadow:' + SH + '!important}',
       S + ' .scrollcue svg{filter:none!important}',
       /* los velos propios de cada colección (pensados para la foto) se apagan */
       S + '::before, ' + S + '::after, ' + S + ' :is(.pbg, .c, .pveil)::before, ' + S + ' :is(.pbg, .c, .pveil)::after{background:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'
