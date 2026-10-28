@@ -216,7 +216,8 @@
     'std-selector':['EFECTOS','savethedate'],
     'stdg-selector':['EFECTOS','savethedate'],   /* 27/10: save the date sin invitación */
     'ocultas-selector':['PRINCIPAL','ocultas'],
-    'paquete-selector':['PAQUETE','paquete']
+    'paquete-selector':['PAQUETE','paquete'],
+    'qrlink-selector':['INVITADOS','qrlink']   /* 28/10: QR para abrir la invitación (Jazmín) */
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -232,7 +233,8 @@
     regalo:{arriba:true},
     savethedate:{abajo:true},
     ocultas:{abajo:true},
-    paquete:{arriba:true}
+    paquete:{arriba:true},
+    qrlink:{arriba:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
