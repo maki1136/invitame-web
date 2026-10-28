@@ -368,6 +368,10 @@
   /* ===== LEER EL FORMULARIO ENTERO ==========================================
      Lo usan el envío Y la vista previa en vivo: una sola lectura, dos usos.
      ⚠️ ACÁ SE LEE EL VALOR, NO EL CASILLERO ($('n1').value, nunca `n1` suelto). */
+  /* ★ 28/10/2026: un link de paquete BORRA las partes que no trae (data-funcion),
+     y leer `.value` de un casillero borrado rompía TODO el formulario (no se
+     podía enviar con un link Estándar). Lo que no está, vale vacío. */
+  function vv(id){ const e=$(id); return e ? String(e.value==null?'':e.value).trim() : ''; }
   function leerFormulario(){
     const invitados=[...document.querySelectorAll('#guests .rowinv')].map(r=>{const i=r.querySelectorAll('input');return {n:i[0].value.trim(),p:i[1].value.trim()||'1',m:i[2].value.trim()||'-'};}).filter(g=>g.n);
     const elegido=(window.CREAR_DISENO && window.CREAR_DISENO.elegido()) || tpl || '';
@@ -378,33 +382,33 @@
     const data={
       estado:'pendiente', creado:serverTimestamp(),
       tpl:elegido, tplNombre:(elegido==='personalizado'?'Diseño personalizado':(M?M.nombre:'')),
-      tipoEvento:$('tipo').value, orden:$('orden').value.trim(),
-      kick:$('kick').value.trim(), n1:$('n1').value.trim(), n2:$('n2').value.trim(), fecha:$('fecha').value, frase:$('frase').value.trim(),
+      tipoEvento:vv('tipo'), orden:vv('orden'),
+      kick:vv('kick'), n1:vv('n1'), n2:vv('n2'), fecha:vv('fecha'), frase:vv('frase'),
       cover:FOTOS.cover, coverVideo:FOTOS.coverVideo, galeria:galURLs,
-      galTitulo:$('galTitulo').value.trim(), galFrase:$('galFrase').value.trim(), galEstilo:galEstilo(),
-      ev1t:$('ev1t').value.trim(), ev1n:$('ev1n').value.trim(), ev1f:$('ev1f').value.trim(), ev1d:$('ev1d').value.trim(), ev1img:FOTOS.ev1img, ev1maps:$('ev1maps').value.trim(),
-      ev2t:$('ev2t').value.trim(), ev2n:$('ev2n').value.trim(), ev2f:$('ev2f').value.trim(), ev2d:$('ev2d').value.trim(), ev2img:FOTOS.ev2img, ev2maps:$('ev2maps').value.trim(),
-      ev3t:$('ev3t').value.trim(), ev3n:$('ev3n').value.trim(), ev3f:$('ev3f').value.trim(), ev3d:$('ev3d').value.trim(), ev3img:FOTOS.ev3img, ev3maps:$('ev3maps').value.trim(),
-      hotDesc:$('hotDesc').value.trim(), hoteles:$('hoteles').value.trim(), hotelImg:FOTOS.hotelImg,
-      itinerario:$('itinerario').value.trim(),
-      persFrase:$('persFrase').value.trim(), personas:leerPersonas(),
-      dressTitulo:$('dressTitulo').value.trim(), dress:$('dress').value.trim(),
+      galTitulo:vv('galTitulo'), galFrase:vv('galFrase'), galEstilo:galEstilo(),
+      ev1t:vv('ev1t'), ev1n:vv('ev1n'), ev1f:vv('ev1f'), ev1d:vv('ev1d'), ev1img:FOTOS.ev1img, ev1maps:vv('ev1maps'),
+      ev2t:vv('ev2t'), ev2n:vv('ev2n'), ev2f:vv('ev2f'), ev2d:vv('ev2d'), ev2img:FOTOS.ev2img, ev2maps:vv('ev2maps'),
+      ev3t:vv('ev3t'), ev3n:vv('ev3n'), ev3f:vv('ev3f'), ev3d:vv('ev3d'), ev3img:FOTOS.ev3img, ev3maps:vv('ev3maps'),
+      hotDesc:vv('hotDesc'), hoteles:vv('hoteles'), hotelImg:FOTOS.hotelImg,
+      itinerario:vv('itinerario'),
+      persFrase:vv('persFrase'), personas:leerPersonas(),
+      dressTitulo:vv('dressTitulo'), dress:vv('dress'),
       dressColores:COLORES.si.slice(0,6), dressEvitar:COLORES.no.slice(0,6), dressInsp:dressInspURLs.slice(0,6),
-      regTitulo:$('regTitulo').value.trim(), regalos:$('regalos').value.trim(), regLinks:leerMesas(),
-      regClabe:$('regClabe').value.trim(), regTitular:$('regTitular').value.trim(), regBanco:$('regBanco').value.trim(),
-      cfTitulo:$('cfTitulo').value.trim(), cfFrase:$('cfFrase').value.trim(),
-      rsvpLimite:$('rsvpLimite').value, rsvpRestricciones:restric(),
-      cfMail:$('cfMail').value.trim(),
-      cfWsp1:$('cfWsp1').value.trim(), cfWsp1n:$('cfWsp1n').value.trim(),
-      cfWsp2:$('cfWsp2').value.trim(), cfWsp2n:$('cfWsp2n').value.trim(),
-      cierreImg:FOTOS.cierreImg, fraseFinal:$('fraseFinal').value.trim(), textoFinal:$('textoFinal').value.trim(),
+      regTitulo:vv('regTitulo'), regalos:vv('regalos'), regLinks:leerMesas(),
+      regClabe:vv('regClabe'), regTitular:vv('regTitular'), regBanco:vv('regBanco'),
+      cfTitulo:vv('cfTitulo'), cfFrase:vv('cfFrase'),
+      rsvpLimite:vv('rsvpLimite'), rsvpRestricciones:restric(),
+      cfMail:vv('cfMail'),
+      cfWsp1:vv('cfWsp1'), cfWsp1n:vv('cfWsp1n'),
+      cfWsp2:vv('cfWsp2'), cfWsp2n:vv('cfWsp2n'),
+      cierreImg:FOTOS.cierreImg, fraseFinal:vv('fraseFinal'), textoFinal:vv('textoFinal'),
       /* ⚠️ «Música de fondo» va a `musicaUrl`, NO a `musica` (17/9/2026):
          `musica` es el TEXTO que se muestra abajo de la playlist. */
-      musicaUrl:$('musica').value.trim(),
-      igHashtag:$('igHashtag').value.trim(), igUser:$('igUser').value.trim(), videoUrl:$('videoUrl').value.trim(), spotifyUrl:$('spotifyUrl').value.trim(),
-      personalizado:(elegido==='personalizado'?$('persoTxt').value.trim():''), inspiracion:(elegido==='personalizado'?inspURLs:[]),
-      invitados, observaciones:$('obs').value.trim(),
-      contactoNombre:$('cnom').value.trim(), contactoWsp:$('cwsp').value.trim(), contactoEmail:$('cmail').value.trim(),
+      musicaUrl:vv('musica'),
+      igHashtag:vv('igHashtag'), igUser:vv('igUser'), videoUrl:vv('videoUrl'), spotifyUrl:vv('spotifyUrl'),
+      personalizado:(elegido==='personalizado'?vv('persoTxt'):''), inspiracion:(elegido==='personalizado'?inspURLs:[]),
+      invitados, observaciones:vv('obs'),
+      contactoNombre:vv('cnom'), contactoWsp:vv('cwsp'), contactoEmail:vv('cmail'),
       pasevozAudio:pasevozURL, pasevozOnda,
       menu:SEC.menu, avisos:SEC.avisos, patrocinadores:SEC.patrocinadores, rsvpPreguntas:SEC.rsvpPreguntas, ocultas:SEC.ocultas,
       formToken:formToken,
