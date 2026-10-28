@@ -213,10 +213,13 @@
 
   function ponerFondoDeLaColeccion() {
     try {
-      if (fondoPropio()) return;              /* la clienta eligió el suyo */
       var E = window.INVEV; if (!E) return;
       E.fx = E.fx || {};
-      E.fx.fondo = { tipo: 'imagen', url: FONDO_PERLAS, fuerza: 1.0,
+      /* el fondo del tono (Marfil azul: papel celeste con perlas y oro) */
+      var tn = tono(), url = (tn && TONOS[tn].FONDO) || FONDO_PERLAS;
+      if (E.fx.__mfFondo && E.fx.fondo && E.fx.fondo.url !== url) { delete E.fx.fondo; delete E.fx.__mfFondo; }
+      if (fondoPropio()) return;              /* la clienta eligió el suyo */
+      E.fx.fondo = { tipo: 'imagen', url: url, fuerza: 1.0,
                      velo: 0, paso: 0.95, oscuras: 0, donde: 'marco' };
       E.fx.__mfFondo = true;                  /* marca: lo puso la colección */
     } catch (e) {}
@@ -1126,7 +1129,41 @@
     .replace(/h\[c\]/g, 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA + '="' + NOMBRE + '"]')
     .replace(/h\[t\]/g, 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA_T + ']');
 
+  /* ★ 28/10/2026 (Jazmín, una novia: «Marfil con azul cielo, azul petróleo y
+     dorado»). TONOS de la colección: la misma pieza con otra tinta, otro papel
+     y otro metal. Se elige en PRINCIPAL → «Tono de la colección» (fx.tono).
+     La hoja se arma reemplazando los colores propios de Marfil por los del
+     tono; el papel de textura se tiñe con background-blend-mode:multiply. */
+  var CSS_BASE = CSS, CSS_TONO = '';
+  var TONOS = {
+    azul: { TINTA: '#1f4b5c', TINTA2: '#2c5868', TINTA3: '#a9c2d1', ORO: '#a8843e', ORO_CL: 'rgba(168,132,62,.36)',
+            PAPEL: '#dce9f3', CUERPO: '#16303b', VERDE2: '#163a47', CREAM: '#f2f7fb', LINO2: '#e8f1f8',
+            SAGE: '#3b6a7c', SAGECL: '#bcd2df',
+            FONDO: 'https://res.cloudinary.com/oc8cgqt4/image/upload/stdcand3/marfil-azul-fondor.jpg' }
+  };
+  function tono() { try { var t = String((((window.INVEV || {}).fx) || {}).tono || ''); return TONOS[t] ? t : ''; } catch (e) { return ''; } }
+  function cssDeTono(tn) {
+    if (!tn) return CSS_BASE;
+    var T = TONOS[tn], c = CSS_BASE;
+    [['#4a4642', T.TINTA], ['#55514b', T.TINTA2], ['#b6b0a8', T.TINTA3], ['#8a7446', T.ORO],
+     ['rgba(138,116,70,.32)', T.ORO_CL], ['#e5e0d5', T.PAPEL], ['#2a231e', T.CUERPO], ['#3a3733', T.VERDE2],
+     ['#f1ede4', T.LINO2], ['#635c4d', T.SAGE], ['#cdc5b4', T.SAGECL],
+     ['#f4f1ea', '#eaf2f8'], ['#f3efe6', '#e6eff6'], ['#e8e3d9', '#d6e4ee'], ['#d9d3c9', '#c4d7e4'], ['#b0a79a', '#8fadc0'], ['#f5f1e9', T.CREAM]].forEach(function (p) { c = c.split(p[0]).join(p[1]); });
+    var H = 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA + '="' + NOMBRE + '"]';
+    c += '\n' + H + ' .frame { background-color:' + T.PAPEL + ' !important; background-blend-mode:multiply !important; }';
+    c += '\n' + H + ' body { background-color:' + T.CUERPO + ' !important; background-blend-mode:multiply; }';
+    return c;
+  }
+  function paletaDeTono(tn) {
+    if (!tn) return PALETA_PROPIA;
+    var T = TONOS[tn];
+    return { '--verde': T.TINTA, '--verde2': T.VERDE2, '--muted': T.TINTA2, '--cream': T.CREAM, '--lino': T.PAPEL,
+             '--lino2': T.LINO2, '--sec-col-v': T.TINTA, '--sage': T.SAGE, '--sage-cl': T.SAGECL, '--oro': T.ORO };
+  }
+
   function hoja() {
+    var tn = tono();
+    if (CSS_TONO !== tn) { CSS = cssDeTono(tn); CSS_TONO = tn; }
     var s = document.getElementById(ID_CSS);
     if (!s) {
       s = document.createElement('style');
@@ -1284,7 +1321,8 @@
     hoja();
     var raiz = document.documentElement;
     raiz.setAttribute(MARCA, NOMBRE);
-    window.INVCOLPALETA = PALETA_PROPIA;   /* el papel y la tinta le ganan a la paleta */
+    window.INVCOLPALETA = paletaDeTono(tono());   /* el papel y la tinta le ganan a la paleta */
+    if (tono()) raiz.setAttribute('data-mf-tono', tono()); else raiz.removeAttribute('data-mf-tono');
 
     /* el papel y el fondo entran como variables, no clavados en la hoja:
        así la hoja se arma aunque las texturas todavía no hayan llegado. */
@@ -1316,7 +1354,8 @@
     var raiz = document.documentElement;
     raiz.removeAttribute(MARCA);
     raiz.removeAttribute(MARCA_T);
-    if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
+    if (window.INVCOLPALETA && window.INVCOLPALETA['--lino']) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
+    raiz.removeAttribute('data-mf-tono');
     raiz.style.removeProperty('--mf-papel');
     raiz.style.removeProperty('--mf-fondo');
     sacarPerlas();

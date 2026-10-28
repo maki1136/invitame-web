@@ -220,6 +220,8 @@
     '  flex:0 1 70px;min-width:0;border-radius:50%;overflow:hidden;',
     '  background:#cfc6ba center/cover no-repeat}',
     '.ivf-circ .c::after{content:"";position:absolute;inset:0;background:rgba(40,30,22,.38)}',
+    /* con color elegido en el panel, sin el velo oscuro (si no, el color sale apagado) */
+    'html body .ivf.ivf-circ[data-ivf-color] .c::after{display:none!important}',
     '.ivf-circ .n{position:absolute;inset:0;z-index:2;display:flex;align-items:center;',
     '  justify-content:center;font-family:Marcellus,serif;font-size:23px;color:#fff}'
   ].join('\n');
@@ -338,7 +340,13 @@
       ini:    opt('ini', 'fechaIni') || '',
       foto1:  opt('foto1', 'fechaFoto1') || '',
       foto2:  opt('foto2', 'fechaFoto2') || '',
-      foto3:  opt('foto3', 'fechaFoto3') || ''
+      foto3:  opt('foto3', 'fechaFoto3') || '',
+      /* ★ 28/10/2026 · Jazmín (gabriel-y-dany): «que se pueda modificar el
+         color de los círculos». Para la disposición «Tres círculos»:
+         circulo = el relleno del círculo · numero = el color del número.
+         Vacíos = el gris de siempre (o el que ponga la colección). */
+      circ:   color(opt('circulo', 'fechaCirculo'), ''),
+      num:    color(opt('numero', 'fechaNumero'), '')
     };
 
     var firma = JSON.stringify([tipo, f, o]);
@@ -363,6 +371,20 @@
     var base = getComputedStyle(document.getElementById('sc-day') || under).color;
     nodo.style.setProperty('--ivf-col', o.col || base);
     nodo.style.setProperty('--ivf-ac',  o.ac || o.col || base);
+
+    /* los colores de los círculos van EN LÍNEA con !important: así le ganan a
+       las hojas de las colecciones (Perlas, Marfil, Bohemia los visten). */
+    if (tipo === 'circulos' && (o.circ || o.num)) {
+      nodo.setAttribute('data-ivf-color', '1');
+      [].forEach.call(nodo.querySelectorAll('.c'), function (c) {
+        if (o.circ) {
+          if (!c.style.backgroundImage) c.style.setProperty('background-image', 'none', 'important');
+          c.style.setProperty('background-color', o.circ, 'important');
+        }
+        var n = c.querySelector('.n');
+        if (n && o.num) { n.style.setProperty('color', o.num, 'important'); n.style.setProperty('-webkit-text-fill-color', o.num, 'important'); n.style.setProperty('text-shadow', 'none', 'important'); }
+      });
+    }
 
     under.style.visibility = 'hidden';    /* la fecha original se esconde */
     card.appendChild(nodo);
