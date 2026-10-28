@@ -108,7 +108,8 @@
     /* sin foto: nada de degradé marrón de relleno; la frase va sobre el fondo de la invitación */
     var velo = auto ? (hayFoto ? 'foto' : 'sinfoto') : c.velo;
     var colorPropio = String(ev.fraseColor || '').trim();
-    var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio;
+    var peso = String(c.peso || '');
+    var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso;
     if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo === 'foto'); return; }
     ultima = firma;
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
@@ -139,13 +140,25 @@
          de atrás pasa a ser clara. */
       var letra = colorPropio || '#fff';
       var oscura = luz(letra) < 0.5;
-      if (oscura) g = g.replace(/rgba\(0,0,0,/g, 'rgba(255,255,255,');
+      /* ★ 28/10 (Jazmín, Gabriel y Dany: «no se ve»): con letra oscura sobre foto
+         el aclarado tiene que ser bastante más fuerte que el oscurecido */
+      if (oscura) g = g.replace(/rgba\(0,0,0,(\.?\d+)\)/g, function (m, a) { return 'rgba(255,255,255,' + Math.min(0.78, (+a) * 2.1).toFixed(2) + ')'; });
       css.push(S + ' #frase-tint{background:' + g + '!important}');
       css.push(S + ' > p.frase.frase{color:' + letra + '!important;-webkit-text-fill-color:' + letra + '!important;text-shadow:' +
         (oscura ? '0 1px 2px rgba(255,255,255,.6),0 0 14px rgba(255,255,255,.5)' : '0 1px 3px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.45)') + '!important}');
     } else {
       css.push(S + ' #frase-tint{background:' + VELOS[velo] + '!important}');
+      /* ★ 28/10 (Gabriel y Dany: velo oscuro con letra oscura = no se lee). Con
+         velo elegido y sin color propio, la letra va contraria al velo. */
+      if (velo !== 'ninguno') {
+        var clara = /^(suave|oscuro)$/.test(velo);
+        var lt = colorPropio || (clara ? '#ffffff' : '#2b2622');
+        var esOsc = luz(lt) < 0.5;
+        css.push(S + ' > p.frase.frase{color:' + lt + '!important;-webkit-text-fill-color:' + lt + '!important;text-shadow:' +
+          (esOsc ? '0 1px 2px rgba(255,255,255,.7),0 0 16px rgba(255,255,255,.6)' : '0 1px 3px rgba(0,0,0,.6),0 2px 16px rgba(0,0,0,.5)') + '!important}');
+      }
     }
+    if (/^(400|500|600|700|800)$/.test(peso)) css.push(S + ' > p.frase.frase{font-weight:' + peso + '!important}');
     css.push(S + '{align-items:' + POS[pos] + '!important}');
     /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
     if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
@@ -185,6 +198,8 @@
       c.pos || 'centro', function (v) { datos(borrador() || d).pos = v; }));
     caja.appendChild(select('Velo sobre la foto (para que se lea)', [['', 'Automático (sombra suave detrás de la frase)'], ['suave', 'Oscurecer suave'], ['oscuro', 'Oscurecer fuerte'], ['ninguno', 'Sin velo'], ['claro', 'Aclarar suave'], ['claro-fuerte', 'Aclarar fuerte']],
       c.velo || '', function (v) { datos(borrador() || d).velo = v; }));
+    caja.appendChild(select('Grosor de la letra', [['', 'El del diseño'], ['400', 'Normal'], ['500', 'Un poco más gruesa'], ['600', 'Gruesa'], ['700', 'Negrita']],
+      c.peso || '', function (v) { datos(borrador() || d).peso = v; }));
     caja.appendChild(select('Cómo entra la foto', [['llena', 'Ocupa toda la franja'], ['entera', 'Entera, sobre una copia borrosa']],
       c.foto || 'llena', function (v) { datos(borrador() || d).foto = v; }));
 
