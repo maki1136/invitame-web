@@ -1,11 +1,11 @@
 {
- "cuando": "2026-10-29T00:18:37.281Z",
+ "cuando": "2026-10-29T00:31:22.393Z",
  "slug": "camila-y-tomas",
  "total": 430,
- "verde": 420,
- "amarillo": 1,
- "rojo": 1,
- "gris": 8,
+ "verde": 428,
+ "amarillo": 0,
+ "rojo": 2,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -2416,64 +2416,89 @@
    "bloque": "rsvp-selector",
    "control": "Fecha límite para confirmar",
    "tipo": "date",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": false,
+   "dato": "",
+   "llega": false,
+   "seVe": true,
+   "estado": "rojo",
+   "nota": "lo toco y no se guarda nada"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.muestra.nombre",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.muestra.pases",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.muestra.mesa",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.muestra.estado",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Teléfono de ventas",
    "tipo": "text",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.muestra.tel",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Teléfono de ventas",
    "tipo": "text",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.muestra.cta",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Teléfono de ventas",
    "tipo": "text",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.muestra.msj",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2837,9 +2862,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.departe",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
