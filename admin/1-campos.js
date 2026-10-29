@@ -115,6 +115,12 @@
 
   function typeFor(l){
     if(/color/i.test(l))return'c';
+    /* ⚠️ 29/10/2026 (Jazmín: «en el sector de galería no se puede cambiar el subtítulo»).
+       «Titulo para fotos y menú:» y «Estilo de la galería de fotos:» tienen la
+       palabra «fotos», y la regla de abajo los convertía en botón de SUBIR
+       IMAGEN: el título no se podía escribir ni el estilo elegir. Van antes. */
+    if(/^titulo para fotos y men/i.test(l))return't';
+    if(/^estilo de la galer/i.test(l))return'sel-galeria';
     if(/imagen|imágen|foto|ícono|icono|miniatura|música|galería de fotos|fondo secc|logo/i.test(l))return'f';
     if(/^prender o apagar/i.test(l))return'sel-menu';
     if(/personalizada.*google font|link google font|personalizada \(link/i.test(l))return'font-custom';
@@ -175,6 +181,13 @@
       lista('d',dd,m[3],'Día')+lista('m',MES.map(function(n,i){return [('0'+(i+1)).slice(-2),n];}),m[2],'Mes')+lista('a',anios.map(function(a){return [a,a];}),m[1],'Año')+
       lista('h',hh,m[4]||(m[1]?'00':''),'Hora')+lista('i',mm,m[5]||(m[1]?'00':''),'Min')+'</div>';
   }
+  /* Lo que se LEE en el panel. La etiqueta de código (la clave de BIND, HINTS, etc.)
+     no cambia: sólo cambia el rótulo. Jazmín (29/10): «que haya TÍTULO PRINCIPAL y
+     TÍTULO SECUNDARIO (OPCIONAL)». */
+  const ETIQUETA_VISIBLE={
+    "Titulo para fotos y menú:":"Título principal de la galería",
+    "Frase de la galería (debajo del título):":"Título secundario de la galería (opcional)"
+  };
   function fieldHtml(l){
     const t=typeFor(l),id='f-'+slug(l),bind=claveDe(l);
     const oi=bind?(' oninput="setB(\''+bind+'\',this.value)"'):'';
@@ -212,7 +225,7 @@
     }
     else {let _v=(bind&&D[bind]!=null)?D[bind]:(bind==='n1'?'María':bind==='n2'?'Diego':bind==='kick'?'Nuestra Boda':'');inp='<input type="text" id="'+id+'" value="'+String(_v).replace(/"/g,'&quot;')+'"'+oi+'>';}
     const _h=HINTS[l]?'<div class="hint">'+HINTS[l]+'</div>':'';
-    return '<div class="grp"><label>'+l+'</label>'+inp+_h+'</div>';
+    return '<div class="grp"><label>'+(ETIQUETA_VISIBLE[l]||l)+'</label>'+inp+_h+'</div>';
   }
   // Ayudas cortas para las chicas — se muestran debajo del campo
   const HINTS={
@@ -267,7 +280,8 @@
     "Deshabilitar publicidad de invitame:":"Prendelo para que NO aparezca el pie de Invítame (logo, «Invitación creada con Invítame» y el link «Ingresa aquí»). Usalo si el cliente lo pide.",
     "ES DEMO ?:":"Prendelo en las invitaciones de muestra: aparece un cartel arriba avisando que es un ejemplo.",
     "Estilo de la galería de fotos:":"Slider = una foto a la vez con flechas. Mosaico = todas en grilla.",
-    "Frase de la galería (debajo del título):":"Una frase corta debajo del título de la galería. Vacío = no aparece.",
+    "Frase de la galería (debajo del título):":"Un texto corto debajo del título principal. Es opcional: vacío = no aparece.",
+    "Titulo para fotos y menú:":"El título grande de la sección de fotos. También es el nombre que se ve en el menú.",
     "Bloquear control de accesos QR y mesas:":"Prendelo para que el escáner de puerta NO pueda cargar este evento.",
     "Imagen del logo - 150px ancho / 50px alto":"Si la subís, aparece en el pie de la invitación.",
     "Datos de hoteles recomendados:":"UNA LÍNEA por hotel, con este formato:  Hotel Los Robles | A 5 min del salón · desde $8.000 | https://link-de-reserva.com  — El link es opcional (si no lo ponés, busca el nombre en Google). En cuanto escribas acá, desaparecen los hoteles de ejemplo.",
