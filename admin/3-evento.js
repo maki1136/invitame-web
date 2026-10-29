@@ -205,6 +205,7 @@
     'fondo-selector':['PRINCIPAL','diseno'],
     'motivo-selector':['PRINCIPAL','diseno'],
     'cierre-ajustes':['PRINCIPAL','cierre'],
+    'iconos-eventos-selector':['LUGAR_VEST','eventos'],   /* 29/10: íconos en Dónde y cuándo */
     'portadasf-selector':['PRINCIPAL','portada'],   /* 28/10: portada sin foto */
     'flecha-selector':['PRINCIPAL','portada'],   /* 28/10: la flecha de la portada */
     'frase-ajustes':['PRINCIPAL','frase'],
@@ -228,6 +229,7 @@
     cierre:{antesDe:'#f-frase-final'},
     portada:{antesDe:'#f-frase-larga'},
     frase:{despuesDeCampo:'#prev-f-fondo-seccion-frase-larga'},
+    eventos:{antesDe:'#f-ceremonia-1-titulo'},
     vestimenta:{antesDe:'#f-vestimenta-titulo'},
     itinerario:{antesDe:'#f-titulo-itinerario'},
     confirmacion:{arriba:true},
@@ -289,7 +291,8 @@
     'flecha-selector':'.portada',
     'portadasf-selector':'.portada',
     'compartir-selector':'#share-sec',
-    'regalo-selector':'[data-sec=regalos]'
+    'regalo-selector':'[data-sec=regalos]',
+    'iconos-eventos-selector':'[data-sec=eventos]'
   };
   function veDeCampo(nodo){
     if(!nodo||!nodo.closest) return null;
