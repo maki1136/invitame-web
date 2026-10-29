@@ -77,8 +77,10 @@
     var h = sec.querySelector('h2'), col = h ? getComputedStyle(h).color : '';
     var fam = h ? getComputedStyle(h).fontFamily : '';
     var texto = r.si
-      ? 'Confirmaste que <b>asistirás</b>' + (r.fecha ? ' el ' + r.fecha : '')
-      : 'Nos avisaste que <b>no podrás asistir</b>' + (r.fecha ? ' (' + r.fecha + ')' : '');
+      /* ★ 28/10 (Jazmín): «que primero aparezca la fecha en la que confirmaron»:
+         «confirmaste que asistirás el 27/10» se leía como la fecha de la fiesta */
+      ? (r.fecha ? 'El ' + r.fecha + ' confirmaste que <b>asistirás</b>.' : 'Confirmaste que <b>asistirás</b>.')
+      : (r.fecha ? 'El ' + r.fecha + ' nos avisaste que <b>no podrás asistir</b>.' : 'Nos avisaste que <b>no podrás asistir</b>.');
     var per = r.si && r.personas ? '<div class="rh-p">Personas confirmadas: ' + parseInt(r.personas, 10) + '</div>' : '<div class="rh-p"></div>';
     c.innerHTML = '<div class="rh-t">' + texto + '</div>' + per +
       '<div class="acc-r"><button type="button" class="rh-mod">Modificar confirmación</button></div>';
