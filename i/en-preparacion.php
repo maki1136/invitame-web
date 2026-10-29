@@ -36,6 +36,28 @@ header('X-Robots-Tag: noindex, nofollow');
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Tu invitación se está diseñando</title>
+<?php
+/* ★ 29/10/2026 (Jazmín, boda-daniel-miranda: el link ya entregado seguía
+   mostrando en WhatsApp «Tu invitación se está diseñando»). WhatsApp guarda la
+   vista previa del PRIMER envío, y si el link se mandó mientras estaba en
+   revisión, quedaba esa para siempre. Ahora la vista previa es SIEMPRE la de
+   los novios (foto, título y frase): el contenido sigue escondido hasta
+   entregarla, pero el link no queda «quemado». */
+$__t = isset($title) ? trim((string)$title) : '';
+$__k = isset($kick) ? trim((string)$kick) : '';
+if ($__t !== '' && empty($titleEsPropio) && $__k !== '') $__t .= ' — ' . $__k;
+$__d = isset($desc) ? trim((string)$desc) : '';
+$__i = isset($img) ? trim((string)$img) : '';
+if ($__i !== '' && preg_match('~^https://res\.cloudinary\.com/[A-Za-z0-9_-]+/image/upload/([^/]+)/~', $__i, $__m)
+    && !preg_match('~^[a-z]{1,3}_[^/]*$~', $__m[1])) {
+  $__i = preg_replace('~(/image/upload/)~', '$1w_1200,c_limit,q_auto,f_jpg/', $__i, 1);
+}
+$__e = function ($x) { return htmlspecialchars($x, ENT_QUOTES, 'UTF-8'); };
+if ($__t !== '') echo '<meta property="og:title" content="' . $__e($__t) . '">' . "\n";
+if ($__d !== '') echo '<meta property="og:description" content="' . $__e($__d) . '">' . "\n";
+if ($__i !== '' && preg_match('~^https://~', $__i)) echo '<meta property="og:image" content="' . $__e($__i) . '">' . "\n";
+echo '<meta property="og:type" content="website">' . "\n";
+?>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Nunito:wght@400;600&display=swap">
 <style>
