@@ -212,6 +212,8 @@
     capa.innerHTML =
       '<div id="filtro-marco-caja" style="position:relative;width:100%;max-width:calc(100vh * 0.5625);' +
         'aspect-ratio:9/16;max-height:100%;background:#000;overflow:hidden;">' +
+        '<video id="filtro-fondo" playsinline autoplay muted aria-hidden="true" ' +
+          'style="position:absolute;inset:-8%;width:116%;height:116%;object-fit:cover;filter:blur(22px) brightness(.8);display:none;"></video>' +
         '<video id="filtro-video" playsinline autoplay muted ' +
           'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>' +
         '<img id="filtro-vista" alt="" ' +
@@ -270,12 +272,32 @@
 
     apagarCamara();
     navigator.mediaDevices.getUserMedia({
-      video: { facingMode: camara, width: { ideal: 1080 }, height: { ideal: 1920 } },
+      /* ★ 29/10 (Jazmín, citlalli: «se ve la cámara con zoom súper grande»).
+         Pedir 1080×1920 hacía que muchos teléfonos y compus entregaran una toma
+         ACOSTADA (16:9) o un recorte del sensor: metida en el marco parado con
+         «cover», se veía un pedacito agrandado. Ahora se pide la proporción
+         del marco sin clavar la medida, se baja el zoom al mínimo y, si la toma
+         igual viene acostada, se muestra ENTERA (contain) con la misma imagen
+         desenfocada atrás — y la foto final se compone igual. */
+      video: { facingMode: camara, aspectRatio: { ideal: 9 / 16 }, width: { ideal: 1280 } },
       audio: false
     }).then(function (s) {
       stream = s;
       v.srcObject = s;
       v.style.transform = (camara === 'user') ? 'scaleX(-1)' : '';
+      try {
+        var tr = s.getVideoTracks()[0], cap = tr && tr.getCapabilities ? tr.getCapabilities() : null;
+        if (cap && cap.zoom && typeof cap.zoom.min === 'number') tr.applyConstraints({ advanced: [{ zoom: cap.zoom.min }] }).catch(function () {});
+      } catch (e) {}
+      var fo = document.getElementById('filtro-fondo');
+      v.onloadedmetadata = function () {
+        var acostada = v.videoWidth > v.videoHeight;
+        v.style.objectFit = acostada ? 'contain' : 'cover';
+        if (fo) {
+          fo.style.display = acostada ? 'block' : 'none';
+          if (acostada) { fo.srcObject = s; fo.style.transform = v.style.transform; fo.play().catch(function () {}); }
+        }
+      };
       v.play().catch(function () {});
       barraDeCamara(col);
     }).catch(function () {
@@ -424,13 +446,24 @@
       c.width = ANCHO; c.height = ALTO;
       var x = c.getContext('2d');
 
-      /* Recorte "cover": se llena la caja y se corta lo que sobra. */
+      /* Recorte "cover": se llena la caja y se corta lo que sobra.
+         Si la toma vino ACOSTADA, va entera (contain) sobre la misma
+         imagen agrandada y desenfocada, igual que en la pantalla. */
+      var acostada = fw > fh;
       var escala = Math.max(ANCHO / fw, ALTO / fh);
       var w = fw * escala, h = fh * escala;
       var dx = (ANCHO - w) / 2, dy = (ALTO - h) / 2;
 
       if (espejo) { x.translate(ANCHO, 0); x.scale(-1, 1); }
-      x.drawImage(fuente, dx, dy, w, h);
+      if (acostada) {
+        try { x.filter = 'blur(26px) brightness(.8)'; } catch (e) {}
+        x.drawImage(fuente, dx - 40, dy - 40, w + 80, h + 80);
+        try { x.filter = 'none'; } catch (e) {}
+        var e2 = Math.min(ANCHO / fw, ALTO / fh), w2 = fw * e2, h2 = fh * e2;
+        x.drawImage(fuente, (ANCHO - w2) / 2, (ALTO - h2) / 2, w2, h2);
+      } else {
+        x.drawImage(fuente, dx, dy, w, h);
+      }
       if (espejo) { x.setTransform(1, 0, 0, 1, 0, 0); }
 
       x.drawImage(m, 0, 0, ANCHO, ALTO);
