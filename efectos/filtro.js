@@ -271,17 +271,34 @@
     if (!puede) return porArchivo();
 
     apagarCamara();
-    navigator.mediaDevices.getUserMedia({
-      /* ★ 29/10 (Jazmín, citlalli: «se ve la cámara con zoom súper grande»).
-         Pedir 1080×1920 hacía que muchos teléfonos y compus entregaran una toma
-         ACOSTADA (16:9) o un recorte del sensor: metida en el marco parado con
-         «cover», se veía un pedacito agrandado. Ahora se pide la proporción
-         del marco sin clavar la medida, se baja el zoom al mínimo y, si la toma
-         igual viene acostada, se muestra ENTERA (contain) con la misma imagen
-         desenfocada atrás — y la foto final se compone igual. */
-      video: { facingMode: camara, aspectRatio: { ideal: 9 / 16 }, width: { ideal: 1280 } },
-      audio: false
-    }).then(function (s) {
+    /* ★ 29/10 noche (Jazmín, Citlalli, otra vez: «no se ve el zoom pero tampoco
+       se ve completo, se ve cortada»). LA RAÍZ: con el teléfono PARADO, la
+       cámara entregaba la toma ACOSTADA (más ancha que alta). Una toma acostada
+       en un marco parado o se corta (zoom) o queda una franja en el medio: no
+       hay encuadre que la arregle. Ahora se pide la toma en la orientación de la
+       pantalla (720×1280 con el teléfono parado); si igual llega acostada, se
+       prueba con la proporción exacta y, como último recurso, el pedido de
+       antes (con los tres encuadres del botón). */
+    var parado = (window.innerHeight || 0) >= (window.innerWidth || 0);
+    var pedidos = parado
+      ? [{ facingMode: camara, width: { ideal: 720 }, height: { ideal: 1280 } },
+         { facingMode: camara, aspectRatio: { exact: 9 / 16 }, height: { ideal: 1280 } },
+         { facingMode: camara, aspectRatio: { ideal: 9 / 16 }, width: { ideal: 1280 } }]
+      : [{ facingMode: camara, aspectRatio: { ideal: 9 / 16 }, width: { ideal: 1280 } }];
+    function pedir(i) {
+      return navigator.mediaDevices.getUserMedia({ video: pedidos[i], audio: false }).then(function (s) {
+        var tr0 = s.getVideoTracks()[0], se = (tr0 && tr0.getSettings) ? tr0.getSettings() : {};
+        if (parado && se.width && se.height && se.width > se.height && i < pedidos.length - 1) {
+          s.getTracks().forEach(function (x) { x.stop(); });
+          return pedir(i + 1);
+        }
+        return s;
+      }, function (err) {
+        if (i < pedidos.length - 1) return pedir(i + 1);
+        throw err;
+      });
+    }
+    pedir(0).then(function (s) {
       stream = s;
       v.srcObject = s;
       v.style.transform = (camara === 'user') ? 'scaleX(-1)' : '';
