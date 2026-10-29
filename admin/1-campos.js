@@ -262,7 +262,7 @@
     "Fotos de inspiración dress code:":"Pegá los links de las fotos separados por coma. Si lo dejás vacío, NO se muestran fotos de ejemplo (se esconde el botón Ver inspiración).",
     "Contraseña para el evento:":"Si la ponés, la invitación pide esa clave antes de mostrarse. Dejala vacía para que sea pública.",
     "Deshabilitar invitación:":"Prendelo para cerrar la invitación: el invitado ve un aviso de que no está disponible.",
-    "Deshabilitar publicidad de invitame:":"Prendelo para que NO aparezca «Invitación creada con InvitaME» en el pie.",
+    "Deshabilitar publicidad de invitame:":"Prendelo para que NO aparezca el pie de Invítame (logo, «Invitación creada con Invítame» y el link «Ingresa aquí»). Usalo si el cliente lo pide.",
     "ES DEMO ?:":"Prendelo en las invitaciones de muestra: aparece un cartel arriba avisando que es un ejemplo.",
     "Estilo de la galería de fotos:":"Slider = una foto a la vez con flechas. Mosaico = todas en grilla.",
     "Frase de la galería (debajo del título):":"Una frase corta debajo del título de la galería. Vacío = no aparece.",
