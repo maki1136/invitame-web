@@ -61,6 +61,7 @@
   async function cargarEvento(){
     const p=new URLSearchParams(location.search),slug=p.get('e');if(!slug||!window.INV||!INV.ok)return;
     const ev=await INV.getEvento(slug);if(ev){Object.assign(D,ev);}
+    window.__invGPBase = (ev&&ev.guardadoPanel)||'';   /* para avisar si otra pestaña guarda después */
     /* ⚠️ 28/10/2026 · EN EL ORIGEN: los bloques de /efectos/panel-*.js se arman
        apenas existe D, que arranca con los datos de FÁBRICA (María y Diego,
        «Rústica Campestre»). Si se armaban antes de este punto, quedaban

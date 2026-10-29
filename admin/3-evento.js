@@ -874,8 +874,26 @@
          última escritura de la base. Si la base cambió DESPUÉS, alguien la
          escribió por código y el banco lo marca MAL. Va en el documento público
          porque el banco no tiene login (es sólo una hora, no dice quién). */
+      /* ⚠️ 29/10/2026 (boda-daniel-miranda: entregada a las 13:55 y vuelta a
+         «se está diseñando» a las 13:58). El ESTADO (por revisar / entregada) y
+         su código lo maneja SÓLO el botón de entregar (admin/5-entrega.js).
+         «Guardar y publicar» los mandaba con lo que tenía en memoria: un panel
+         abierto desde antes de entregar volvía a esconder la invitación. */
+      delete cfg.estado; delete cfg.revision;
+      /* ⚠️ Y si otra pestaña (u otra persona) guardó esta invitación DESPUÉS de
+         que se abrió acá, se avisa antes de pisarla. */
+      try{
+        const _rem=await INV.getEvento(slug);
+        const _gpR=_rem&&_rem.guardadoPanel||'';
+        if(_gpR && window.__invGPBase!==undefined && _gpR!==window.__invGPBase){
+          if(!confirm('⚠️ Esta invitación se guardó en OTRA pestaña o computadora después de que abriste esta.\n\nSi guardás acá, se pisa lo que se guardó allá.\n\nAceptar = guardar igual · Cancelar = no guardar (recargá la página para ver lo último)')){
+            if(btn){btn.textContent=txt||'Guardar';btn.disabled=false;} return;
+          }
+        }
+      }catch(_e){}
       cfg.guardadoPanel = new Date().toISOString();
       await INV.saveEvento(slug, cfg);
+      window.__invGPBase = cfg.guardadoPanel;
       /* ===== QUIÉN LA ARMÓ Y QUIÉN LA TOCÓ ÚLTIMO ==========================
          El 7/9/2026 nadie pudo decir dónde estaba la invitación que había hecho
          Jazmín: el sistema no guardaba el autor. Con tres personas cargando
