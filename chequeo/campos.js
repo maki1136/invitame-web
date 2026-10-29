@@ -91,7 +91,9 @@ const sinLector = campos.filter(c => !seLee(c.clave) && !SOLO_INTERNO.includes(c
 if (sinLector.length) avisos.push(['CAMPOS QUE SE PUEDEN LLENAR Y NADIE LEE',
   sinLector.map(c => `${c.tab.padEnd(18)} ${c.rotulo.slice(0, 48).padEnd(50)} -> ${c.clave}`)]);
 
-const sinCampo = Object.keys(BIND).filter(l => !campos.some(c => c.rotulo === l))
+/* sacados del panel A PROPÓSITO: el motor los sigue leyendo para las invitaciones ya entregadas */
+const SACADOS_DEL_PANEL = ['galKicker'];   /* 29/10/2026 (Jazmín): la galería sin bajada, sólo título principal y secundario */
+const sinCampo = Object.keys(BIND).filter(l => !campos.some(c => c.rotulo === l)).filter(l => !SACADOS_DEL_PANEL.includes(BIND[l]))
   .filter(l => { const k = BIND[l]; return lector.includes('ev.' + k) && !admin.includes(`setB('${k}'`) && !admin.includes(`setB(\\'${k}\\'`); });
 if (sinCampo.length) avisos.push(['LA INVITACIÓN LO LEE Y EL PANEL NO TIENE CÓMO CARGARLO',
   sinCampo.map(l => `${l.slice(0, 50).padEnd(52)} -> ${BIND[l]}`)]);

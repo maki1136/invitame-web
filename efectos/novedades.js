@@ -54,7 +54,7 @@
     var tx = document.createElement('div');
     var n = parseInt(d.nEvento, 10);
     tx.innerHTML = '<b>Novedades de la plataforma</b><br><span style="opacity:.65;font-size:11.5px">' +
-      'El pie nuevo «¿Quieres una invitación como esta?», la frase larga que crece con el texto, el pase escondido en el link general y la fecha adelante en «confirmaste que asistirás». ' +
+      'El pie nuevo «¿Quieres una invitación como esta?», la frase larga que crece con el texto, el pase escondido en el link general , la fecha adelante en «confirmaste que asistirás» y la galería sin bajada (sólo título principal y secundario). ' +
       (n > 0 && n < CORTE ? 'Esta invitación es de antes (n.º ' + n + '): queda como se entregó, salvo que la prendas acá.' : 'Las invitaciones nuevas lo traen prendido.') +
       '</span>';
     cb.onchange = function () {

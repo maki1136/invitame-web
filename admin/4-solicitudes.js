@@ -62,6 +62,8 @@
     const p=new URLSearchParams(location.search),slug=p.get('e');if(!slug||!window.INV||!INV.ok)return;
     const ev=await INV.getEvento(slug);if(ev){Object.assign(D,ev);}
     window.__invGPBase = (ev&&ev.guardadoPanel)||'';   /* para avisar si otra pestaña guarda después */
+    /* la foto de las claves que tenía la invitación al abrirla: «Guardar y publicar» borra de la base lo que el panel quitó (publicar() en 3-evento.js) */
+    try{ window.__invRutas = ev ? {slug:slug, rutas:window.__invRutasDe(ev)} : null; }catch(_e){ window.__invRutas=null; }
     /* ⚠️ 28/10/2026 · EN EL ORIGEN: los bloques de /efectos/panel-*.js se arman
        apenas existe D, que arranca con los datos de FÁBRICA (María y Diego,
        «Rústica Campestre»). Si se armaban antes de este punto, quedaban

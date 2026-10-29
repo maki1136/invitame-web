@@ -22,7 +22,19 @@
     try { return String(((window.INVEV || {}).galFrase) || '').trim(); } catch (e) { return ''; }
   }
 
+  /* ★ 29/10 (Jazmín): «que no haya bajada de galería, que haya TÍTULO PRINCIPAL
+     y TÍTULO SECUNDARIO, nada más». La bajada (#gal-kick, «Recuerdos» / «Mis
+     Fotos») sale del panel y no se muestra en las invitaciones NUEVAS. Las ya
+     entregadas la siguen mostrando como estaban (INVNUEVA). */
+  function bajada() {
+    var k = document.getElementById('gal-kick'); if (!k) return;
+    var nueva = window.INVNUEVA ? window.INVNUEVA() : false;
+    if (nueva) { if (k.style.display !== 'none') { k.style.setProperty('display', 'none', 'important'); k.setAttribute('data-sin-bajada', '1'); } }
+    else if (k.getAttribute('data-sin-bajada')) { k.style.removeProperty('display'); k.removeAttribute('data-sin-bajada'); }
+  }
+
   function poner() {
+    bajada();
     var h = document.getElementById('gal-h2');
     if (!h) return;
     var t = texto();

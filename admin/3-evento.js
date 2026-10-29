@@ -821,6 +821,67 @@
     try{ if(cur==='AVANZADO') go('AVANZADO'); }catch(e){}
   }
 
+  /* ⭐ «LOS CAMBIOS NO SE GUARDAN» (29/10/2026, Jazmín: «sucede mucho»).
+     CAUSA: `INV.saveEvento` guarda con `merge:true`, y `merge` SUMA, nunca resta.
+     Todo lo que el panel QUITA (destildar «Pase simple», vaciar un texto propio,
+     «Volver a lo de la colección», «Quitar foto», apagar una muestra) se borra de
+     la memoria del panel pero sigue en la base: al recargar, vuelve. Parecía que
+     «Guardar y publicar» no guardaba.
+     ARREGLO: al cargar la invitación se anotan sus claves (`window.__invRutas`);
+     al publicar, las que estaban y YA NO están se borran de la base de verdad
+     (deleteField). Y después se RELEE y se compara: si algo no quedó igual, se
+     avisa en vez de callar.
+     ⚠️ Sólo se borra lo que estaba al abrir y el panel quitó. Lo que otro proceso
+       escribió después (estado, entrega, galería) no estaba en la foto: no se toca. */
+  const _NO_BORRAR=new Set(['updatedAt','slug','estado','revision','borradaPor','invitados','guardadoPanel','privado','ver']);
+  function _esMapa(v){ return !!v && typeof v==='object' && !Array.isArray(v) && (Object.getPrototypeOf(v)===Object.prototype||Object.getPrototypeOf(v)===null); }
+  function _rutasDe(o,pre,out,prof){
+    pre=pre||[]; out=out||[]; prof=prof||0;
+    if(!_esMapa(o)||prof>8) return out;
+    Object.keys(o).forEach(function(k){
+      if(!pre.length && _NO_BORRAR.has(k)) return;
+      if(!pre.length && (INV.CAMPOS_PRIVADOS||[]).indexOf(k)>=0) return;
+      const p=pre.concat(k); out.push(p); _rutasDe(o[k],p,out,prof+1);
+    });
+    return out;
+  }
+  window.__invRutasDe=_rutasDe;   // lo usa cargarEvento() en 4-solicitudes.js
+  function _valorEn(o,p){ let c=o; for(let i=0;i<p.length;i++){ if(!_esMapa(c)) return {hay:false,padre:i>0}; c=c[p[i]]; } return {hay:c!==undefined}; }
+  function _rutasQuitadas(antes,cfg){
+    const quitadas=[], cero=function(p){ return quitadas.some(function(q){ return q.length<=p.length && q.every(function(k,i){ return k===p[i]; }); }); };
+    antes.slice().sort(function(a,b){ return a.length-b.length; }).forEach(function(p){
+      if(cero(p)) return;
+      if(_valorEn(cfg,p).hay) return;
+      if(p.length>1){ let c=cfg; for(let i=0;i<p.length-1;i++){ c=_esMapa(c)?c[p[i]]:undefined; } if(!_esMapa(c)) return; }   // el padre no es un mapa (se reemplazó por otra cosa): no se toca
+      quitadas.push(p);
+    });
+    return quitadas;
+  }
+  function _orden(v){
+    if(Array.isArray(v)) return v.map(_orden);
+    if(_esMapa(v)){ const o={}; Object.keys(v).sort().forEach(function(k){ if(v[k]!==undefined) o[k]=_orden(v[k]); }); return o; }
+    return v;
+  }
+  function _noQuedoIgual(cfg,remoto){
+    if(!remoto) return ['(no se pudo releer)'];
+    return Object.keys(cfg).filter(function(k){
+      if(_NO_BORRAR.has(k) && k!=='guardadoPanel' && k!=='privado') return false;
+      if(cfg[k]===undefined) return false;
+      return JSON.stringify(_orden(cfg[k]))!==JSON.stringify(_orden(remoto[k]));
+    });
+  }
+  async function borrarLoQuitado(slug,cfg){
+    const f=window.__invRutas;
+    if(!f||f.slug!==slug) return [];                       // invitación nueva, o el panel no la cargó: no hay nada que comparar
+    const quitadas=_rutasQuitadas(f.rutas,cfg);
+    if(!quitadas.length) return [];
+    if(quitadas.length>40){ console.warn('borrarLoQuitado: demasiadas claves ('+quitadas.length+'), no se borra nada',quitadas); return []; }
+    const m=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const args=[]; quitadas.forEach(function(p){ args.push(new m.FieldPath(...p), m.deleteField()); });
+    await m.updateDoc(m.doc(window.INV.db,'inv_eventos',slug), ...args);
+    return quitadas;
+  }
+
   async function publicar(){
     if(!window.INV||!window.INV.ok){alert("Todavía no se conectó la base de datos. Esperá 2 segundos y probá de nuevo.");return;}
     /* ⚠️ ESTE AVISO ES LO ÚLTIMO QUE SEPARA AL CLIENTE DE VER LA BODA DE OTRO.
@@ -898,6 +959,18 @@
       cfg.guardadoPanel = new Date().toISOString();
       await INV.saveEvento(slug, cfg);
       window.__invGPBase = cfg.guardadoPanel;
+      /* lo que se quitó en el panel se quita también de la base (ver arriba) */
+      let _quitadas=[]; try{ _quitadas=await borrarLoQuitado(slug,cfg); }catch(_e){ console.error('borrarLoQuitado',_e); _quitadas=null; }
+      /* y se RELEE para comprobar que quedó igual a lo que se ve en el panel */
+      try{
+        const _post=await INV.getEvento(slug);
+        const _mal=_noQuedoIgual(cfg,_post);
+        if(_quitadas===null) _mal.push('(lo que quitaste no se pudo borrar)');
+        if(_mal.length){
+          console.error('GUARDADO INCOMPLETO',slug,_mal);
+          alert('Ojo: estos cambios NO quedaron guardados en la base:\n\n· '+_mal.slice(0,8).join('\n· ')+(_mal.length>8?'\n· … y '+(_mal.length-8)+' más':'')+'\n\nVolvé a tocar «Guardar y publicar». Si se repite, mandale a Maki una captura de este cartel.');
+        } else if(_post){ window.__invRutas={slug:slug, rutas:_rutasDe(_post)}; }
+      }catch(_e){ console.error('releer tras guardar',_e); }
       /* ===== QUIÉN LA ARMÓ Y QUIÉN LA TOCÓ ÚLTIMO ==========================
          El 7/9/2026 nadie pudo decir dónde estaba la invitación que había hecho
          Jazmín: el sistema no guardaba el autor. Con tres personas cargando

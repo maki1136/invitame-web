@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-29T20:30:19.659Z",
+ "cuando": "2026-10-29T21:17:24.565Z",
  "slug": "camila-y-tomas",
- "total": 432,
- "verde": 423,
- "amarillo": 1,
+ "total": 433,
+ "verde": 425,
+ "amarillo": 0,
  "rojo": 8,
  "gris": 0,
  "items": [
@@ -880,6 +880,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1897,9 +1908,8 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
