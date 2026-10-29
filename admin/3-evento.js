@@ -331,7 +331,7 @@
     if(cur==='INVITADOS'){el('panel').innerHTML=invitadosHtml();renderGuests();return;}
     if(cur==='EFECTOS'){el('panel').innerHTML=efectosHtml();return;}
     let h=(cur==='PRINCIPAL'?mejorasHtml():cur==='TRIVIA'?triviaHtml():cur==='GALERIA_INSTA_VID'?galeriaHtml():cur==='PERSONAS'?personasHtml():cur==='REGALOS'?regalosExtraHtml():'');
-    h+=FIELDS[cur].map(fieldHtml).join('');
+    h+=FIELDS[cur].map(function(f){ return fieldHtml(f)+(cur==='REGALOS'&&/^Datos bancarios para transferencias/.test(f)&&typeof titularBancoHtml==='function'?titularBancoHtml():''); }).join('');
     el('panel').innerHTML=h;
     if(cur==='PRINCIPAL'){buildTemas();el('mf-nfont').value=D.nfont;sincronizarVersionPreview();render();}
     if(cur==='PERSONAS'){renderPersonas();}
