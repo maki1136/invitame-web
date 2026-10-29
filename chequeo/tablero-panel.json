@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-29T19:35:13.603Z",
+ "cuando": "2026-10-29T20:30:19.659Z",
  "slug": "camila-y-tomas",
  "total": 432,
- "verde": 424,
- "amarillo": 0,
+ "verde": 423,
+ "amarillo": 1,
  "rojo": 8,
  "gris": 0,
  "items": [
@@ -1897,8 +1897,9 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
