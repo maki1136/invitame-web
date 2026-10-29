@@ -89,7 +89,9 @@
     var m = (((window.INVEV || {}).fx) || {}).muestra || {};
     var vidriera = m.rsvp === true || String(m.rsvp) === '1' || /^(si|sí|true)$/i.test(String(m.rsvp || ''));
     /* en la miniatura del panel se ve igual, para poder diseñarlo */
-    if (!QS.get('g') && !QS.get('per') && !vidriera && QS.get('preview') !== '1') { sec.style.display = 'none'; return; }
+    /* ⛔ y sólo en las invitaciones nuevas: las ya entregadas siguen como estaban */
+    var esNueva = window.INVNUEVA ? window.INVNUEVA() : false;
+    if (esNueva && !QS.get('g') && !QS.get('per') && !vidriera && QS.get('preview') !== '1') { sec.style.display = 'none'; return; }
     /* el motor esconde el pase sin link de invitado: acá se muestra igual,
        porque no tiene nada personal */
     sec.style.display = '';

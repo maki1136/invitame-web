@@ -1234,7 +1234,7 @@
     var carta = document.getElementById('carta-sec');
     var banda = document.querySelector('.fraseSec');
     if (!carta || !banda) return;
-    if (cartaOculta(carta)) { devolverFrase(); return; }
+    if ((window.INVNUEVA ? window.INVNUEVA() : false) && cartaOculta(carta)) { devolverFrase(); return; }
     if (carta.querySelector('.mf-frase')) return;      /* ya está mudada */
 
     var p = banda.querySelector('p.frase') || banda.querySelector('p');

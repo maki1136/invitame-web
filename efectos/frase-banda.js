@@ -115,7 +115,7 @@
        con 17-19 px !important: el campo no hacía nada. Acá ganan. */
     var tamN = parseInt(ev.fraseSize, 10) || 0;
     var fuente = String(ev.fraseFont || '').trim();
-    var firma = foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
+    var firma = (window.INVNUEVA && window.INVNUEVA() ? 'N|' : 'V|') + foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
     if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno'); return; }
     ultima = firma;
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
@@ -128,7 +128,7 @@
     /* ★ 29/10 (gonzalo-surian: frase larga en 42 px, cortada arriba y abajo).
        La franja medía como mucho 320 px: una frase larga o grande se salía y la
        máscara de los bordes se la comía. Ahora crece con el texto. */
-    css.push(S + '{height:auto!important;max-height:none!important;min-height:clamp(200px,32vh,320px)!important;padding-top:56px!important;padding-bottom:56px!important;box-sizing:border-box!important}');
+    if (window.INVNUEVA && window.INVNUEVA()) css.push(S + '{height:auto!important;max-height:none!important;min-height:clamp(200px,32vh,320px)!important;padding-top:56px!important;padding-bottom:56px!important;box-sizing:border-box!important}');
     if (foto === 'llena') {
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
