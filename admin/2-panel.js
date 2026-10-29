@@ -141,9 +141,16 @@
     return '<div class="mejoras"><div class="h">'+ICO.regalo+' Más formas de regalar</div>'+
      '<div class="hint" style="margin-bottom:8px">Las tiendas (Liverpool, Amazon…) y la CLABE van más abajo, en esta misma pestaña. Los que dejes vacíos no aparecen.</div>'+
      '<label>Venmo</label>'+inp('reg_venmo','link o usuario Venmo')+
-     '<label>PayPal</label>'+inp('reg_paypal','link PayPal')+
-     '<div class="two"><div class="grp"><label>Titular de la cuenta</label>'+inp('regTitular','Nombre del titular')+'</div>'+
-     '<div class="grp"><label>Banco</label>'+inp('regBanco','Banco')+'</div></div></div>';
+     '<label>PayPal</label>'+inp('reg_paypal','link PayPal')+'</div>';
+  }
+  /* ★ 28/10 (Jazmín, «mia»: «no está la opción de colocar TITULAR y BANCO»).
+     Estaban arriba de todo, en «Más formas de regalar», y no se encontraban:
+     ahora van JUSTO DEBAJO del campo de la CLABE (renderPanel los pone ahí). */
+  function titularBancoHtml(){
+    const inp=(k,ph)=>'<input value="'+String(D[k]||'').replace(/"/g,'&quot;')+'" oninput="setB(\''+k+'\',this.value)" placeholder="'+ph+'">';
+    return '<div class="two" style="margin:-4px 0 14px"><div class="grp"><label>Titular de la cuenta</label>'+inp('regTitular','Nombre del titular')+'</div>'+
+     '<div class="grp"><label>Banco</label>'+inp('regBanco','Banco')+'</div></div>'+
+     '<div class="hint" style="margin:-8px 0 14px">En «Datos bancarios» va sólo el número (CLABE o CBU). El titular y el banco, acá: salen en su renglón.</div>';
   }
   async function subirAudio(input){
     const f=input.files&&input.files[0]; if(!f)return;

@@ -131,7 +131,7 @@
     var g2 = document.createElement('div'); g2.className = 'grp';
     var l2 = document.createElement('label'); l2.textContent = 'Tamaño de las fotos (estilo Mosaico)'; g2.appendChild(l2);
     var s2 = document.createElement('select');
-    [['', 'Chicas — dos por renglón (como siempre)'], ['alto', 'Más grandes — dos por renglón, más altas'], ['grande', 'Grandes — una por renglón, a todo el ancho'], ['deslizar', 'Grandes — de costado, se pasan con el dedo']].forEach(function (o) {
+    [['', 'Chicas — dos por renglón (como siempre)'], ['alto', 'Más grandes — dos por renglón, más altas'], ['deslizar', 'Una al lado de la otra — grandes, se pasan con el dedo'], ['grande', 'Grandes — una debajo de la otra']].forEach(function (o) {
       var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; s2.appendChild(op);
     });
     s2.value = String(cfg(d).mosaico || '');
