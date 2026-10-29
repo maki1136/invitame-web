@@ -51,6 +51,7 @@
       if (f !== inicio) franja();
     });
   }
+  window.__invVersionRevisar = revisar;   /* para probarlo */
   revisar();
   setInterval(revisar, 90 * 1000);
 })();
