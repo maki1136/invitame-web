@@ -125,6 +125,10 @@
        ::after con velo marrón al 46-56 %, y en la franja hay dos .capa (#bandfg y
        #frase-tint): dos velos apilados. Acá el velo lo decide este módulo. */
     css.push(S + ' .capa::after{display:none!important;content:none!important}');
+    /* ★ 29/10 (gonzalo-surian: frase larga en 42 px, cortada arriba y abajo).
+       La franja medía como mucho 320 px: una frase larga o grande se salía y la
+       máscara de los bordes se la comía. Ahora crece con el texto. */
+    css.push(S + '{height:auto!important;max-height:none!important;min-height:clamp(200px,32vh,320px)!important;padding-top:56px!important;padding-bottom:56px!important;box-sizing:border-box!important}');
     if (foto === 'llena') {
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */

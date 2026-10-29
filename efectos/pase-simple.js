@@ -81,6 +81,15 @@
     var sec = document.querySelector('section.pase');
     if (!sec) return;
     css();
+    /* ⚠️ 29/10/2026 (Jazmín, gonzalo-surian: «¿por qué aparece ese sector si
+       no lo habilité?»). Sin link de invitado (&g=… o &per=…) el pase se veía
+       igual con «2 personas» inventado, también en invitaciones de clientes.
+       Ahora, sin link de invitado se muestra SÓLO en las muestras que lo piden
+       (panel → Sector de muestras → «Mostrar la confirmación y el pase…»). */
+    var m = (((window.INVEV || {}).fx) || {}).muestra || {};
+    var vidriera = m.rsvp === true || String(m.rsvp) === '1' || /^(si|sí|true)$/i.test(String(m.rsvp || ''));
+    /* en la miniatura del panel se ve igual, para poder diseñarlo */
+    if (!QS.get('g') && !QS.get('per') && !vidriera && QS.get('preview') !== '1') { sec.style.display = 'none'; return; }
     /* el motor esconde el pase sin link de invitado: acá se muestra igual,
        porque no tiene nada personal */
     sec.style.display = '';

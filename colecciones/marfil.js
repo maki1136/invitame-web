@@ -1217,10 +1217,24 @@
         escribe la clienta en el panel dejaría de actualizarse.
      -------------------------------------------------------------------- */
 
+  /* ⚠️ 29/10/2026 (Jazmín, gonzalo-surian: «cuando seleccionamos que no
+     aparezca el sobre, se elimina la frase larga; son dos sectores diferentes»).
+     Si la carta está apagada u oculta, la frase NO se muda: se queda (o vuelve)
+     a su banda y se ve sola. */
+  function cartaOculta(carta) {
+    try {
+      var fx = ((window.INVEV || {}).fx) || {};
+      if ((fx.ocultas || []).indexOf('carta') > -1) return true;
+      if (fx.carta && (fx.carta.on === false || fx.carta.on === 'false')) return true;
+      return getComputedStyle(carta).display === 'none';
+    } catch (e) { return false; }
+  }
+
   function mudarFrase() {
     var carta = document.getElementById('carta-sec');
     var banda = document.querySelector('.fraseSec');
     if (!carta || !banda) return;
+    if (cartaOculta(carta)) { devolverFrase(); return; }
     if (carta.querySelector('.mf-frase')) return;      /* ya está mudada */
 
     var p = banda.querySelector('p.frase') || banda.querySelector('p');
