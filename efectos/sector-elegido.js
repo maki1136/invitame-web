@@ -30,11 +30,20 @@
      centrado y aparece abajo»: la colección clavaba la suya) */
   var POS = 'c_posicion-cuentra-regresiva-y-nombres';
   var POS_MAPA = { 'Arriba': 'flex-start', 'Centrado': 'center', 'Abajo': 'flex-end' };
+  /* ★ 29/10 (Jazmín: «la transparencia en la barra está en 0 y sigue saliendo
+     el recuadro, y tampoco está la opción de cambiarle el color»): los
+     recuadros de Ceremonia/Recepción y de Personas, con color y transparencia
+     elegidos en el panel, le ganan a la colección. */
+  var RECU = {
+    eventos: { alpha: 'c_transparencia-recuadros-de-texto',    color: 'c_color-de-los-recuadros-de-texto',    sel: '.evento' },
+    padres:  { alpha: 'c_transparencia-recuadros-de-personas', color: 'c_color-de-los-recuadros-de-personas', sel: '.p' }
+  };
   /* el panel pregunta qué claves anotar */
   window.INVSECTOR_CLAVES = (function () {
     var o = {};
     Object.keys(SEC).forEach(function (s) { ['bg', 'img', 'texto'].forEach(function (t) { var k = SEC[s][t]; if (k) { o[k] = 1; o['img_' + k] = 1; } }); });
     o[POS] = 1;
+    Object.keys(RECU).forEach(function (s) { o[RECU[s].alpha] = 1; o[RECU[s].color] = 1; });
     return o;
   })();
 
@@ -83,6 +92,32 @@
       }
       if (tx) css.push(S + ' :is(h2,h3,p,.kick,.d,.l,li,.t){color:' + tx + '!important;-webkit-text-fill-color:' + tx + '!important}');
     });
+    /* los recuadros */
+    Object.keys(RECU).forEach(function (s) {
+      var r = RECU[s];
+      var hayA = el[r.alpha] && v(e, r.alpha) !== null, hayC = el[r.color] && v(e, r.color);
+      if (!hayA && !hayC) {
+        [].forEach.call(document.querySelectorAll('[data-sec="' + s + '"] [data-recuadro-elegido]'), function (n) {
+          ['background', 'box-shadow', 'border-color', 'backdrop-filter'].forEach(function (p) { n.style.removeProperty(p); });
+          n.removeAttribute('data-recuadro-elegido');
+        });
+        return;
+      }
+      var a = hayA ? Math.max(0, Math.min(100, parseInt(v(e, r.alpha), 10) || 0)) / 100 : 1;
+      var col = hayC ? v(e, r.color) : '#ffffff';
+      firma += '|rec' + s + a + col;
+      var R = 'html body [data-sec="' + s + '"][data-sec="' + s + '"] ' + r.sel + r.sel;
+      css.push(R + '{background:' + rgba(col, a) + '!important;background-image:none!important;' +
+        (a < 0.12 ? 'box-shadow:none!important;border-color:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;' : '') + '}');
+      /* en línea con !important: hay colecciones que lo clavan con selectores muy específicos */
+      [].forEach.call(document.querySelectorAll('[data-sec="' + s + '"] ' + r.sel), function (n) {
+        n.style.setProperty('background', rgba(col, a), 'important');
+        if (a < 0.12) { n.style.setProperty('box-shadow', 'none', 'important'); n.style.setProperty('border-color', 'transparent', 'important'); n.style.setProperty('backdrop-filter', 'none', 'important'); }
+        else { n.style.removeProperty('box-shadow'); n.style.removeProperty('border-color'); }
+        n.setAttribute('data-recuadro-elegido', '1');
+      });
+      css.push(R + '::before,' + R + '::after{background:none!important;background-image:none!important;' + (a < 0.12 ? 'border-color:transparent!important;box-shadow:none!important;' : '') + '}');
+    });
     /* la posición de los nombres */
     var port = document.querySelector('.portada');
     if (el[POS] && POS_MAPA[v(e, POS) || ''] && port) {
@@ -93,7 +128,8 @@
     }
     for (var sa in antes) if (!enLinea[sa]) { var na = document.querySelector('[data-sec="' + sa + '"]'); if (na) na.style.removeProperty('background'); }
     var ya = document.getElementById(ID_CSS);
-    if (firma === ultima && ya && !faltaEnLinea()) {
+    var faltaRecuadro = Object.keys(RECU).some(function (s) { return (el[RECU[s].alpha] || el[RECU[s].color]) && document.querySelector('[data-sec="' + s + '"] ' + RECU[s].sel + ':not([data-recuadro-elegido])'); });
+    if (firma === ultima && ya && !faltaEnLinea() && !faltaRecuadro) {
       if (ya.parentNode && ya !== ya.parentNode.lastElementChild) ya.parentNode.appendChild(ya);   /* que siga último */
       return;
     }

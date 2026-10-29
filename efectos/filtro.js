@@ -293,6 +293,8 @@
       v.onloadedmetadata = function () {
         var acostada = v.videoWidth > v.videoHeight;
         v.style.objectFit = acostada ? 'contain' : 'cover';
+        encuadrar();
+        barraDeCamara(col);
         if (fo) {
           fo.style.display = acostada ? 'block' : 'none';
           if (acostada) { fo.srcObject = s; fo.style.transform = v.style.transform; fo.play().catch(function () {}); }
@@ -382,6 +384,23 @@
     return b;
   }
 
+  /* ★ 29/10 (Jazmín: «no se ve el zoom pero tampoco se ve completo, se ve
+     cortada»). Con la toma acostada hay tres encuadres y se elige con un botón:
+     intermedio (por defecto), lleno (como antes) y completo (entera). */
+  var AJUSTES = [0.55, 1, 0], ajusteI = 0;
+  function escalaDe(fw, fh, bw, bh) {
+    if (!(fw > fh)) return 1;
+    var h0 = (bw * fh / fw) / bh;                 /* alto que ocupa entera, de 0 a 1 */
+    return Math.pow(1 / h0, AJUSTES[ajusteI]);
+  }
+  function encuadrar() {
+    var v = document.getElementById('filtro-video'), caja = document.getElementById('filtro-marco-caja');
+    if (!v || !caja || !v.videoWidth) return;
+    var espejo = (camara === 'user') ? 'scaleX(-1) ' : '';
+    var k = escalaDe(v.videoWidth, v.videoHeight, caja.clientWidth, caja.clientHeight);
+    v.style.transform = espejo + (k !== 1 ? 'scale(' + k.toFixed(3) + ')' : '');
+  }
+
   function barraDeCamara(col) {
     var b = limpiarBarra();
     if (!b) return;
@@ -410,7 +429,17 @@
 
     b.appendChild(girar);
     b.appendChild(tirar);
-    b.appendChild(hueco());
+    var v0 = document.getElementById('filtro-video');
+    if (v0 && v0.videoWidth > v0.videoHeight) {
+      var enc = document.createElement('button');
+      enc.type = 'button';
+      enc.setAttribute('aria-label', 'Cambiar el encuadre');
+      enc.style.cssText = girar.style.cssText;
+      enc.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+      enc.addEventListener('click', function () { ajusteI = (ajusteI + 1) % AJUSTES.length; encuadrar(); });
+      b.appendChild(enc);
+    } else b.appendChild(hueco());
   }
 
   function barraDeArchivo() {
@@ -459,7 +488,7 @@
         try { x.filter = 'blur(26px) brightness(.8)'; } catch (e) {}
         x.drawImage(fuente, dx - 40, dy - 40, w + 80, h + 80);
         try { x.filter = 'none'; } catch (e) {}
-        var e2 = Math.min(ANCHO / fw, ALTO / fh), w2 = fw * e2, h2 = fh * e2;
+        var e2 = Math.min(ANCHO / fw, ALTO / fh) * escalaDe(fw, fh, ANCHO, ALTO), w2 = fw * e2, h2 = fh * e2;
         x.drawImage(fuente, (ANCHO - w2) / 2, (ALTO - h2) / 2, w2, h2);
       } else {
         x.drawImage(fuente, dx, dy, w, h);
