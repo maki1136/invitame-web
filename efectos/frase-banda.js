@@ -15,6 +15,12 @@
      foto:  'llena' (la foto cubre toda la franja, por defecto) | 'entera' (como era antes)
      velo:  'ninguno' | 'claro' | 'claro-fuerte' | 'suave' | 'oscuro' — sin elegir, según el color de la letra
      pos:   'arriba' | 'centro' (por defecto) | 'abajo'
+     ★ 29/10 (Jazmín: «poder ampliar la imagen sin que el texto también aumente
+       de tamaño; las opciones separadas: 1. imagen, 2. texto»):
+     alto:  px de la franja (0 = automático). Es un MÍNIMO: si el texto no entra, crece.
+     zoom:  100–250 (%) acercar la foto, sin tocar la letra.
+     foco:  0–100 (%) qué parte de la foto se ve (0 arriba, 50 centro, 100 abajo).
+     Los tres son opt-in: sin tocarlos, nada cambia (invitaciones ya entregadas).
    La tipografía, el tamaño, el color y el texto ya estaban en PRINCIPAL
    (fraseFont, fraseSize, fraseColor, frase) y los sigue pintando el motor.
    La foto es «Fondo sección frase larga» (img_c_fondo-seccion-frase-larga); el
@@ -115,7 +121,10 @@
        con 17-19 px !important: el campo no hacía nada. Acá ganan. */
     var tamN = parseInt(ev.fraseSize, 10) || 0;
     var fuente = String(ev.fraseFont || '').trim();
-    var firma = (window.INVNUEVA && window.INVNUEVA() ? 'N|' : 'V|') + foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
+    var alto = Math.max(0, Math.min(900, parseInt(c.alto, 10) || 0));
+    var zoom = Math.max(100, Math.min(250, parseInt(c.zoom, 10) || 100));
+    var foco = (c.foco === undefined || c.foco === '' || c.foco === null) ? null : Math.max(0, Math.min(100, parseInt(c.foco, 10) || 0));
+    var firma = alto + '|' + zoom + '|' + foco + '|' + (window.INVNUEVA && window.INVNUEVA() ? 'N|' : 'V|') + foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
     if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno'); return; }
     ultima = firma;
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
@@ -129,10 +138,17 @@
        La franja medía como mucho 320 px: una frase larga o grande se salía y la
        máscara de los bordes se la comía. Ahora crece con el texto. */
     if (window.INVNUEVA && window.INVNUEVA()) css.push(S + '{height:auto!important;max-height:none!important;min-height:clamp(200px,32vh,320px)!important;padding-top:56px!important;padding-bottom:56px!important;box-sizing:border-box!important}');
+    /* 1. LA IMAGEN — independiente del texto */
+    if (alto > 0) css.push(S + '{height:auto!important;max-height:none!important;min-height:' + alto + 'px!important;box-sizing:border-box!important}');
+    if (zoom > 100 || foco !== null) {
+      var fy = foco === null ? 50 : foco;
+      css.push(S + '{overflow:hidden!important}');
+      css.push(S + ' #bandfg{background-position:50% ' + fy + '%!important;transform:scale(' + (zoom / 100) + ')!important;transform-origin:50% ' + fy + '%!important}');
+    }
     if (foto === 'llena') {
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
-      css.push(S + ' #bandfg{background-size:cover!important;background-position:center!important}');
+      css.push(S + ' #bandfg{background-size:cover!important' + (foco === null ? ';background-position:center!important' : '') + '}');
     }
     if (velo === 'sinfoto') {
       css.push(S + ' #bandbg, ' + S + ' #bandfg{background:none!important;filter:none!important}');
@@ -197,30 +213,93 @@
     g.appendChild(s); return g;
   }
 
+  function rango(etiqueta, min, max, paso, valor, mostrar, alCambiar) {
+    var g = document.createElement('div'); g.className = 'grp';
+    var l = document.createElement('label'); g.appendChild(l);
+    var r = document.createElement('input'); r.type = 'range'; r.min = min; r.max = max; r.step = paso; r.value = valor;
+    function rot() { l.textContent = etiqueta + ': ' + mostrar(+r.value); }
+    rot();
+    r.oninput = function () { rot(); alCambiar(+r.value); refrescar(); };
+    g.appendChild(r); return g;
+  }
+  function titulo(txt) {
+    var h = document.createElement('div'); h.textContent = txt;
+    h.style.cssText = 'font-size:13px;font-weight:700;margin:14px 0 6px;padding-top:10px;border-top:1px solid rgba(0,0,0,.08);color:#6D1233';
+    return h;
+  }
+
   function construir(d) {
     var caja = document.createElement('div'); caja.id = ID;
     var t = document.createElement('div'); t.textContent = 'Cómo se ve la frase larga';
     t.style.cssText = 'font-size:13px;font-weight:600;margin-bottom:2px';
     var a = document.createElement('div');
-    a.textContent = 'La foto es la de «Fondo sección frase larga»: subí una del cliente o usá la imagen del diseño.';
-    a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:10px;line-height:1.35';
+    a.textContent = 'La imagen y el texto se ajustan por separado: agrandar la imagen no cambia la letra, y al revés.';
+    a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:4px;line-height:1.35';
     caja.appendChild(t); caja.appendChild(a);
     var c = datos(d);
-    caja.appendChild(select('Ubicación de la frase', [['arriba', 'Arriba'], ['centro', 'Centrado'], ['abajo', 'Abajo']],
-      c.pos || 'centro', function (v) { datos(borrador() || d).pos = v; }));
-    caja.appendChild(select('Velo sobre la foto (para que se lea)', [['', 'Automático (sombra suave detrás de la frase)'], ['suave', 'Oscurecer suave'], ['oscuro', 'Oscurecer fuerte'], ['ninguno', 'Sin velo'], ['claro', 'Aclarar suave'], ['claro-fuerte', 'Aclarar fuerte']],
-      c.velo || '', function (v) { datos(borrador() || d).velo = v; }));
-    caja.appendChild(select('Grosor de la letra', [['', 'El del diseño'], ['400', 'Normal'], ['500', 'Un poco más gruesa'], ['600', 'Gruesa'], ['700', 'Negrita']],
-      c.peso || '', function (v) { datos(borrador() || d).peso = v; }));
+
+    /* ---- 1. LA IMAGEN ---- */
+    caja.appendChild(titulo('1. La imagen'));
+    var ai = document.createElement('div');
+    ai.textContent = 'La foto es la de «Fondo sección frase larga» (arriba): subí una del cliente o usá la imagen del diseño.';
+    ai.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:8px;line-height:1.35';
+    caja.appendChild(ai);
+    caja.appendChild(rango('Alto de la imagen', 0, 800, 10, parseInt(c.alto, 10) || 0,
+      function (v) { return v < 200 ? 'automático' : v + ' px'; },
+      function (v) { datos(borrador() || d).alto = v < 200 ? 0 : v; }));
+    caja.appendChild(rango('Ampliar la imagen (zoom)', 100, 250, 5, parseInt(c.zoom, 10) || 100,
+      function (v) { return v <= 100 ? 'sin zoom' : v + ' %'; },
+      function (v) { datos(borrador() || d).zoom = v; }));
+    caja.appendChild(rango('Qué parte de la foto se ve', 0, 100, 1, (c.foco === undefined || c.foco === '' || c.foco === null) ? 50 : c.foco,
+      function (v) { return v < 34 ? 'más de arriba (' + v + ')' : v > 66 ? 'más de abajo (' + v + ')' : 'el centro (' + v + ')'; },
+      function (v) { datos(borrador() || d).foco = v; }));
     caja.appendChild(select('Cómo entra la foto', [['llena', 'Ocupa toda la franja'], ['entera', 'Entera, sobre una copia borrosa']],
       c.foto || 'llena', function (v) { datos(borrador() || d).foto = v; }));
-
+    caja.appendChild(select('Velo sobre la foto (para que se lea)', [['', 'Automático (sombra suave detrás de la frase)'], ['suave', 'Oscurecer suave'], ['oscuro', 'Oscurecer fuerte'], ['ninguno', 'Sin velo'], ['claro', 'Aclarar suave'], ['claro-fuerte', 'Aclarar fuerte']],
+      c.velo || '', function (v) { datos(borrador() || d).velo = v; }));
     var b = document.createElement('button'); b.type = 'button';
     b.textContent = 'Usar la imagen del diseño';
     b.style.cssText = 'margin:2px 0 6px;padding:8px 12px;border-radius:10px;border:1px solid rgba(0,0,0,.15);background:#fff;cursor:pointer;font-size:12.5px';
     b.onclick = function () { traerDelDiseno(borrador() || d, b); };
     caja.appendChild(b);
+
+    /* ---- 2. EL TEXTO ---- */
+    caja.appendChild(titulo('2. El texto'));
+    /* la tipografía, el tamaño y el color son los campos de siempre de PRINCIPAL
+       (fraseFont, fraseSize, fraseColor): se MUDAN acá, no se duplican */
+    var slot = document.createElement('div'); slot.className = 'fb-texto-campos';
+    caja.appendChild(slot);
+    caja.appendChild(select('Posición del texto', [['arriba', 'Arriba'], ['centro', 'Centrado'], ['abajo', 'Abajo']],
+      c.pos || 'centro', function (v) { datos(borrador() || d).pos = v; }));
+    caja.appendChild(select('Grosor de la letra', [['', 'El del diseño'], ['400', 'Normal'], ['500', 'Un poco más gruesa'], ['600', 'Gruesa'], ['700', 'Negrita']],
+      c.peso || '', function (v) { datos(borrador() || d).peso = v; }));
     return caja;
+  }
+
+  /* los campos de texto de PRINCIPAL que viven en «2. El texto» (se buscan por
+     el dato que guardan, no por el rótulo) */
+  var CAMPOS_TEXTO = [
+    ['fraseFont', 'Tipografía'],
+    ['fraseSize', 'Tamaño del texto'],
+    ['fraseColor', 'Color del texto']
+  ];
+  function mudarCampos() {
+    var caja = document.getElementById(ID); if (!caja) return;
+    var slot = caja.querySelector('.fb-texto-campos'); if (!slot) return;
+    CAMPOS_TEXTO.forEach(function (k) {
+      var sel = '[oninput*="\'' + k[0] + '\'"],[onchange*="\'' + k[0] + '\'"]';
+      var todos = [].slice.call(document.querySelectorAll('#panel ' + sel));
+      var afuera = todos.filter(function (x) { return !slot.contains(x); })[0];
+      if (!afuera) return;
+      var g = afuera.closest('.grp'); if (!g) return;
+      [].forEach.call(slot.querySelectorAll('[data-fb-campo="' + k[0] + '"]'), function (v) { v.remove(); });
+      g.setAttribute('data-fb-campo', k[0]);
+      var lab = g.querySelector('label');
+      if (lab) lab.textContent = k[1] + (k[0] === 'fraseSize' ? ' (a la izquierda del todo = automático)' : '');
+      slot.appendChild(g);
+    });
+    /* el orden: tipografía, tamaño, color */
+    CAMPOS_TEXTO.forEach(function (k) { var g = slot.querySelector('[data-fb-campo="' + k[0] + '"]'); if (g) slot.appendChild(g); });
   }
 
   function traerDelDiseno(d, btn) {
@@ -244,10 +323,11 @@
 
   function revisarPanel() {
     var d = borrador(); if (!d) return;
-    if (document.getElementById(ID)) return;
+    if (document.getElementById(ID)) { mudarCampos(); return; }
     var a = window.invCasa ? window.invCasa(ID) : null;
     if (!a) return;
     a.appendChild(construir(d));
+    mudarCampos();
   }
 
   /* ================= ARRANQUE ================= */
