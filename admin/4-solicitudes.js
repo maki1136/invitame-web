@@ -345,6 +345,10 @@
         return '<div style="border:1px solid #eee2d8;border-radius:12px;padding:12px;margin-bottom:10px">'+
           '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'+
             '<div style="min-width:0"><b style="color:#6D1233;font-size:16px">'+_esc((s.n1||'')+(s.n2?' & '+s.n2:''))+'</b>'+
+              /* ★ 29/10 (Jazmín): «que también aparezca la clave de compra» */
+              (String(s.orden||'').trim()
+                ? ' <span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:#f6e9ee;color:#6D1233;font-size:12px;font-weight:800;letter-spacing:.4px;vertical-align:2px">Clave: '+_esc(String(s.orden).trim().toUpperCase())+'</span>'
+                : ' <span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:#fdecec;color:#c0392b;font-size:12px;font-weight:700;vertical-align:2px">Sin clave de compra</span>')+
               '<div style="font-size:12px;color:#9a8f88">'+(s.tipoEvento?'<b style="color:#6D1233">'+_esc(s.tipoEvento)+'</b> · ':'')+_esc(s.tplNombre||s.tpl||'')+' · '+fstr+' · '+((s.invitados||[]).length)+' invitados</div>'+
               '<div style="font-size:12px;color:#7d756c;margin-top:2px">'+ICO.telefono+' '+_esc(s.contactoNombre||'—')+' · '+_esc(s.contactoWsp||'')+(s.contactoEmail?' · '+ICO.sobre+' '+_esc(s.contactoEmail):'')+'</div>'+
               (extra?'<div style="font-size:12px;color:#7d756c;margin-top:2px">'+extra+'</div>':'')+ obs +'</div>'+

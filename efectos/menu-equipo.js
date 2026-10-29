@@ -56,6 +56,8 @@
     caja.innerHTML =
       '<div class="ie-c">' +
         '<div class="ie-i">' + esc(s) +
+          /* ★ 29/10 (Jazmín): la clave de compra del cliente */
+          (String(ev.orden || '').trim() ? '<br><b style="color:#6D1233;letter-spacing:.3px">Clave: ' + esc(String(ev.orden).trim().toUpperCase()) + '</b>' : '<br><span style="color:#c0392b">Sin clave de compra</span>') +
           (paq.plan ? ' · ' + esc(PAQ[paq.plan] || paq.plan) + (extras ? ' + ' + extras + ' extra' + (extras > 1 ? 's' : '') : '') : '') +
           (est ? '<br>' + esc(est) : '') + '</div>' +
         '<a href="/admin.html?e=' + encodeURIComponent(s) + '" target="_blank" rel="noopener">✏️ Editar</a>' +
