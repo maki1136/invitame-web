@@ -32,6 +32,7 @@
     '.inv-pub a{text-decoration:underline;text-underline-offset:2px;font-weight:700}';
 
   function ev() { return window.INVEV || null; }
+  function nueva(e) { return window.INVNUEVA ? window.INVNUEVA(e) : false; }
   function apagado(e) {
     var v = e && e['c_deshabilitar-publicidad-de-invitame'];
     return v === true || v === 'true' || v === 1 || v === '1' || v === 'si' || v === 'sí';
@@ -51,7 +52,9 @@
     var pie = document.getElementById('pie-pub');
     var e = ev();
     if (!pie || !pie.parentNode || !e) return;
-    if (apagado(e)) { sacar(); pie.style.display = 'none'; return; }
+    /* ⛔ 29/10: las invitaciones ya hechas quedan con su renglón de siempre */
+    if (!nueva(e)) { sacar(); if (pie.__pieInv) { pie.style.display = ''; pie.__pieInv = 0; } return; }
+    if (apagado(e)) { sacar(); pie.style.display = 'none'; pie.__pieInv = 1; return; }
     if (!document.getElementById(ID_CSS)) {
       var s = document.createElement('style'); s.id = ID_CSS; s.textContent = CSS;
       (document.head || document.documentElement).appendChild(s);
@@ -73,7 +76,7 @@
     var ancla = document.getElementById('col-mvta');
     if (!ancla || ancla.parentNode !== pie.parentNode) ancla = pie;
     if (b.previousElementSibling !== ancla) ancla.parentNode.insertBefore(b, ancla.nextSibling);
-    if (pie.style.display !== 'none') pie.style.display = 'none';
+    if (pie.style.display !== 'none') { pie.style.display = 'none'; pie.__pieInv = 1; }
   }
 
   function arrancar() {

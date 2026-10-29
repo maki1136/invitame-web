@@ -637,6 +637,7 @@
        versiones vivas. Un arreglo en el HTML no llega a ninguna invitación ya
        entregada; un módulo sí llega a todas. Lo que NUNCA puede estar mal va
        acá, no en el HTML. (20/9/2026: el PLAY del video del fondo.) */
+    '/efectos/novedades.js',           /* 29/10: lo nuevo que se VE, sólo en invitaciones nuevas (INVNUEVA) — VA PRIMERO */
     '/efectos/videos-blindados.js',    /* ningún video es un reproductor, en ninguna versión */
     '/efectos/sobre-catalogo.js',      /* el sobre de entrada: el motor lo ignoraba */
     '/efectos/lacre-sin-ampersand.js', /* el sello de unos XV decia «M&»: el motor pega el & siempre */

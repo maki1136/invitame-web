@@ -219,6 +219,7 @@
     'std-selector':['EFECTOS','savethedate'],
     'stdg-selector':['EFECTOS','savethedate'],   /* 27/10: save the date sin invitación */
     'ocultas-selector':['PRINCIPAL','ocultas'],
+    'novedades-selector':['PRINCIPAL','ocultas'],   /* 29/10: novedades sólo en invitaciones nuevas */
     'paquete-selector':['PAQUETE','paquete'],
     'qrlink-selector':['INVITADOS','qrlink']   /* 28/10: QR para abrir la invitación (Jazmín) */
   };

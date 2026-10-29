@@ -76,7 +76,12 @@
     }
     var h = sec.querySelector('h2'), col = h ? getComputedStyle(h).color : '';
     var fam = h ? getComputedStyle(h).fontFamily : '';
-    var texto = r.si
+    var nuevaInv = window.INVNUEVA ? window.INVNUEVA() : false;
+    var texto = !nuevaInv
+      /* ⛔ 29/10: las invitaciones ya hechas, con el texto de antes */
+      ? (r.si ? 'Confirmaste que <b>asistirás</b>' + (r.fecha ? ' el ' + r.fecha : '')
+              : 'Nos avisaste que <b>no podrás asistir</b>' + (r.fecha ? ' (' + r.fecha + ')' : ''))
+      : r.si
       /* ★ 28/10 (Jazmín): «que primero aparezca la fecha en la que confirmaron»:
          «confirmaste que asistirás el 27/10» se leía como la fecha de la fiesta */
       ? (r.fecha ? 'El ' + r.fecha + ' confirmaste que <b>asistirás</b>.' : 'Confirmaste que <b>asistirás</b>.')
