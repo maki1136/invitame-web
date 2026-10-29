@@ -147,7 +147,7 @@
      Estaban arriba de todo, en «Más formas de regalar», y no se encontraban:
      ahora van JUSTO DEBAJO del campo de la CLABE (renderPanel los pone ahí). */
   function titularBancoHtml(){
-    const inp=(k,ph)=>'<input value="'+String(D[k]||'').replace(/"/g,'&quot;')+'" oninput="setB(\''+k+'\',this.value)" placeholder="'+ph+'">';
+    const inp=(k,ph)=>'<input type="text" value="'+String(D[k]||'').replace(/"/g,'&quot;')+'" oninput="setB(\''+k+'\',this.value)" placeholder="'+ph+'">';
     return '<div class="two" style="margin:-4px 0 14px"><div class="grp"><label>Titular de la cuenta</label>'+inp('regTitular','Nombre del titular')+'</div>'+
      '<div class="grp"><label>Banco</label>'+inp('regBanco','Banco')+'</div></div>'+
      '<div class="hint" style="margin:-8px 0 14px">En «Datos bancarios» va sólo el número (CLABE o CBU). El titular y el banco, acá: salen en su renglón.</div>';
