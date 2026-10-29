@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-29T00:31:22.393Z",
+ "cuando": "2026-10-29T00:49:53.080Z",
  "slug": "camila-y-tomas",
  "total": 430,
  "verde": 428,
@@ -2215,28 +2215,6 @@
   },
   {
    "tab": "REGALOS",
-   "bloque": "Más formas de regalar",
-   "control": "Titular de la cuenta",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "regTitular",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "REGALOS",
-   "bloque": "Más formas de regalar",
-   "control": "Banco",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "regBanco",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "REGALOS",
    "bloque": "",
    "control": "Color fondo \"Regalos\":",
    "tipo": "color",
@@ -2374,6 +2352,28 @@
    "tipo": "textarea",
    "guarda": true,
    "dato": "regClabe",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "",
+   "control": "Titular de la cuenta",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "regTitular",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "",
+   "control": "Banco",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "regBanco",
    "llega": true,
    "seVe": true,
    "estado": "verde"
