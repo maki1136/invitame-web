@@ -1,11 +1,11 @@
 {
- "cuando": "2026-10-28T23:46:19.834Z",
+ "cuando": "2026-10-29T00:18:37.281Z",
  "slug": "camila-y-tomas",
- "total": 429,
- "verde": 427,
- "amarillo": 0,
- "rojo": 2,
- "gris": 0,
+ "total": 430,
+ "verde": 420,
+ "amarillo": 1,
+ "rojo": 1,
+ "gris": 8,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -475,17 +475,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -524,6 +513,17 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -642,11 +642,11 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "paleta-selector",
+   "control": "Pintar también la colección con la paleta (la tinta, el papel y el metal del diseño pasan ",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.paleta.coleccion",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -658,6 +658,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.cierre.fraseAbajo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2405,89 +2416,64 @@
    "bloque": "rsvp-selector",
    "control": "Fecha límite para confirmar",
    "tipo": "date",
-   "guarda": false,
-   "dato": "",
-   "llega": false,
-   "seVe": true,
-   "estado": "rojo",
-   "nota": "lo toco y no se guarda nada"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.nombre",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.pases",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.mesa",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Nombre de ejemplo",
    "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.estado",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Teléfono de ventas",
    "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.tel",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Teléfono de ventas",
    "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.cta",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "muestra-selector",
    "control": "Teléfono de ventas",
    "tipo": "text",
-   "guarda": true,
-   "dato": "fx.muestra.msj",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2851,8 +2837,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.departe",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
