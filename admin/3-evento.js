@@ -349,7 +349,7 @@
   // no se veía). Se anota que fue ELEGIDA, así las invitaciones viejas, que
   // tienen la de fábrica, siguen con la de su colección. Lo aplica
   // /efectos/fuentes-extra.js.
-  function setB(k,v){D[k]=v; /* 28/10: subir foto o video de portada = quieren la portada CON foto: se apaga «portada sin foto» */ if((k==='cover'||k==='coverVideo')&&v&&D.fx&&D.fx.portadaSinFoto&&D.fx.portadaSinFoto.fondo){D.fx.portadaSinFoto.fondo='';D.fx.portadaSinFoto.cual='';} if(k==='nfont'){D.fx=D.fx||{}; D.fx.nfontElegida=true;} if(k==='ncolor'){D.fx=D.fx||{}; D.fx.ncolorElegido=true;} if(k==='nsize'){D.fx=D.fx||{}; D.fx.nsizeElegido=true;} render();}
+  function setB(k,v){D[k]=v; /* 29/10: color de sección elegido a mano → manda sobre la colección (efectos/sector-elegido.js) */ if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[k]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[k]=true;} /* 28/10: subir foto o video de portada = quieren la portada CON foto: se apaga «portada sin foto» */ if((k==='cover'||k==='coverVideo')&&v&&D.fx&&D.fx.portadaSinFoto&&D.fx.portadaSinFoto.fondo){D.fx.portadaSinFoto.fondo='';D.fx.portadaSinFoto.cual='';} if(k==='nfont'){D.fx=D.fx||{}; D.fx.nfontElegida=true;} if(k==='ncolor'){D.fx=D.fx||{}; D.fx.ncolorElegido=true;} if(k==='nsize'){D.fx=D.fx||{}; D.fx.nsizeElegido=true;} render();}
 
   // ==== Editor de foto: arrastrar para mover + zoom (tipo Instagram) ====
   let edOn=false,edX=0,edY=0;
@@ -415,7 +415,7 @@
   }
   function sacarImg(key,id){
     if(!confirm('¿Sacamos esta foto? La sección queda sin foto.')) return;
-    D[key]='';
+    D[key]=''; if(D.fx&&D.fx.sectorElegido&&D.fx.sectorElegido[key]) D.fx.sectorElegido[key]=false;
     const p=el('prev-'+id); if(p)p.innerHTML='';
     const b=p&&p.parentElement&&p.parentElement.querySelector('.file'); if(b) b.innerHTML=ICO.subir+' Subir imagen';
     if(typeof postPreview==='function') postPreview();
@@ -469,7 +469,7 @@
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     const box=input.previousElementSibling; const prev=box?box.innerHTML:'';
     if(box)box.textContent='Subiendo…';
-    try{const url=await INV.uploadImage(f); D[key]=url;
+    try{const url=await INV.uploadImage(f); D[key]=url; if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[key]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[key]=true;}
       if(box)box.innerHTML=ICO.tilde+' Imagen subida (tocá para cambiar)';
       const p=el('prev-'+id); if(p)p.innerHTML=fotoCargadaHtml(url,key,id);
       if(/fondo/i.test(key)) avisarFotoFondo(url,id);
