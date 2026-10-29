@@ -1,10 +1,10 @@
 {
- "cuando": "2026-10-29T01:10:41.108Z",
+ "cuando": "2026-10-29T19:35:13.603Z",
  "slug": "camila-y-tomas",
- "total": 430,
- "verde": 428,
+ "total": 432,
+ "verde": 424,
  "amarillo": 0,
- "rojo": 2,
+ "rojo": 8,
  "gris": 0,
  "items": [
   {
@@ -335,10 +335,12 @@
    "control": "Posición cuentra regresiva y nombres:",
    "tipo": "lista",
    "guarda": true,
-   "dato": "c_posicion-cuentra-regresiva-y-nombres",
+   "dato": "fx.sectorElegido, c_posicion-cuentra-regresiva-y-nombres",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "PRINCIPAL",
@@ -954,7 +956,20 @@
    "control": "Transparencia recuadros de texto:",
    "tipo": "range",
    "guarda": true,
-   "dato": "c_transparencia-recuadros-de-texto",
+   "dato": "fx.sectorElegido, c_transparencia-recuadros-de-texto",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Color de los recuadros de texto:",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.sectorElegido.c_color-de-los-recuadros-de-texto, c_color-de-los-recuadros-de-texto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1383,7 +1398,7 @@
    "control": "Vestimenta color:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_vestimenta-color",
+   "dato": "fx.sectorElegido.c_vestimenta-color, c_vestimenta-color",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1416,7 +1431,7 @@
    "control": "Color de fondo \"donde y cuando\":",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-de-fondo-donde-y-cuando",
+   "dato": "fx.sectorElegido.c_color-de-fondo-donde-y-cuando, c_color-de-fondo-donde-y-cuando",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1427,7 +1442,7 @@
    "control": "Color de fondo Dresscode:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-de-fondo-dresscode",
+   "dato": "fx.sectorElegido.c_color-de-fondo-dresscode, c_color-de-fondo-dresscode",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1713,7 +1728,7 @@
    "control": "Itinerario color de fondo:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_itinerario-color-de-fondo",
+   "dato": "fx.sectorElegido.c_itinerario-color-de-fondo, c_itinerario-color-de-fondo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1724,7 +1739,7 @@
    "control": "Itinerario color de texto:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_itinerario-color-de-texto",
+   "dato": "fx.sectorElegido.c_itinerario-color-de-texto, c_itinerario-color-de-texto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1834,10 +1849,12 @@
    "control": "Color logo y texto seccion Instagram:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-logo-y-texto-seccion-instagram",
+   "dato": "fx.sectorElegido, c_color-logo-y-texto-seccion-instagram",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -1911,7 +1928,7 @@
    "control": "Color de fondo \"Galería\":",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-de-fondo-galeria",
+   "dato": "fx.sectorElegido.c_color-de-fondo-galeria, c_color-de-fondo-galeria",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2065,10 +2082,12 @@
    "control": "Fondo color Personas:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_fondo-color-personas",
+   "dato": "fx.sectorElegido, c_fondo-color-personas",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "PERSONAS",
@@ -2076,7 +2095,18 @@
    "control": "Transparencia recuadros de personas:",
    "tipo": "range",
    "guarda": true,
-   "dato": "c_transparencia-recuadros-de-personas",
+   "dato": "fx.sectorElegido.c_transparencia-recuadros-de-personas, c_transparencia-recuadros-de-personas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PERSONAS",
+   "bloque": "",
+   "control": "Color de los recuadros de personas:",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.sectorElegido.c_color-de-los-recuadros-de-personas, c_color-de-los-recuadros-de-personas",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2131,7 +2161,7 @@
    "control": "Color para la sección personas:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-para-la-seccion-personas",
+   "dato": "fx.sectorElegido.c_color-para-la-seccion-personas, c_color-para-la-seccion-personas",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2219,10 +2249,12 @@
    "control": "Color fondo \"Regalos\":",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-fondo-regalos",
+   "dato": "fx.sectorElegido, c_color-fondo-regalos",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "REGALOS",
@@ -2340,7 +2372,7 @@
    "control": "Color para sección regalos (mesa):",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-para-seccion-regalos-mesa",
+   "dato": "fx.sectorElegido.c_color-para-seccion-regalos-mesa, c_color-para-seccion-regalos-mesa",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2517,10 +2549,12 @@
    "control": "Color fondo Confirmación:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-fondo-confirmacion",
+   "dato": "fx.sectorElegido, c_color-fondo-confirmacion",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "CONFIRMACIÓN",
