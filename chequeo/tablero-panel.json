@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-28T22:22:57.895Z",
+ "cuando": "2026-10-28T23:46:19.834Z",
  "slug": "camila-y-tomas",
- "total": 427,
- "verde": 425,
+ "total": 429,
+ "verde": 427,
  "amarillo": 0,
  "rojo": 2,
  "gris": 0,
@@ -475,6 +475,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -513,17 +524,6 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.cierre.textoTam",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -642,22 +642,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3777,6 +3777,28 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.fecha.acento",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "",
+   "control": "Color de los círculos — para \"tres círculos\"",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.fecha.circulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "",
+   "control": "Color de los números de los círculos",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.fecha.numero",
    "llega": true,
    "seVe": true,
    "estado": "verde"
