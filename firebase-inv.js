@@ -333,6 +333,7 @@ const INV = {
       const s = await tx.get(ref);
       if (!s.exists()) return { ok: false, motivo: "no-existe" };
       const d = s.data();
+      if (d.activo === false) return { ok: false, motivo: "baja", data: d };   /* pase borrado (30/10) */
       if ((d.usos || 0) <= 0) return { ok: false, motivo: "sin-usos", data: d };
       tx.update(ref, { usos: d.usos - 1, ultimoIngreso: serverTimestamp() });
       return { ok: true, restantes: d.usos - 1, data: d };

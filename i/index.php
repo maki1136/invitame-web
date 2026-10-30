@@ -53,7 +53,7 @@ $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
 $img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
 $coverReal = ''; $idioma = ''; $paleta = ''; $nom1 = ''; $nom2 = '';
-$estado = ''; $revision = '';
+$estado = ''; $revision = ''; $bloqueoSinPase = false;
 
 $campos = array(); $tamElegidos = array(); $leyoEvento = false;
 
@@ -135,6 +135,10 @@ if ($slug !== '') {
 
     // ¿ya se puede ver? Ver el bloque grande más abajo. Sin campo = sí.
     $estado   = $sv('estado');
+    /* ★ 30/10/2026 (Jazmín): «Bloquear acceso a la invitación a personas sin pase» */
+    $bq = isset($f['c_bloquear-acceso-sin-pase']) ? $f['c_bloquear-acceso-sin-pase'] : null;
+    $bloqueoSinPase = $bq && ((isset($bq['booleanValue']) && $bq['booleanValue'] === true) ||
+                     (isset($bq['stringValue']) && in_array(strtolower(trim($bq['stringValue'])), array('true','1','si','sí'), true)));
     $revision = $sv('revision');
 
     // QUÉ SOBRE ES. Vive anidado: fx → sobre → modelo.
@@ -186,6 +190,37 @@ if ($slug !== '') {
       pone el portero al crearla, y con hash_equals, para que el tiempo de
       respuesta no delate cuántos caracteres acertó quien esté probando.
    ============================================================================ */
+/* ===== SÓLO CON PASE (30/10/2026) ==========================================
+   Jazmín: «había una opción de BLOQUEAR ACCESO A LA INVITACIÓN A PERSONAS SIN
+   PASE. Es importante para los que quieren llevar el control de acceso: por
+   ejemplo confirman que no van y se borra su pase, y ya no pueden verla; o por
+   seguridad, que nadie la vea sin pase».
+   Con la casilla prendida (AVANZADO), la invitación sólo abre con el link
+   personal (&g=…) de un invitado que exista y no esté dado de baja. El link
+   general, un pase borrado o uno inventado ven un cartel. Se decide ACÁ, en el
+   servidor: esconderlo con JavaScript se saltea mirando el código.
+   El link de revisión (&rev=…) pasa. La miniatura del panel no trae ?e=, así
+   que no pasa por acá; &preview=1 NO es excepción (cualquiera lo agrega). */
+$revOk = isset($_GET['rev']) && $revision !== '' && hash_equals($revision, preg_replace('/[^A-Za-z0-9_\-]/', '', (string)$_GET['rev']));
+if ($bloqueoSinPase && !$revOk) {
+  $tk = isset($_GET['g']) ? preg_replace('/[^A-Za-z0-9]/', '', (string)$_GET['g']) : '';
+  $pasa = false;
+  if ($tk !== '') {
+    $ug = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT . '/databases/(default)/documents/inv_invitados/' . rawurlencode($slug . '__' . $tk);
+    $cg = curl_init($ug);
+    curl_setopt_array($cg, [CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 3, CURLOPT_TIMEOUT => 4, CURLOPT_SSL_VERIFYPEER => true]);
+    $rg = curl_exec($cg); $hg = curl_getinfo($cg, CURLINFO_HTTP_CODE); curl_close($cg);
+    if ($rg && $hg == 200) {
+      $dg = json_decode($rg, true); $fg = isset($dg['fields']) ? $dg['fields'] : array();
+      $baja = isset($fg['activo']['booleanValue']) && $fg['activo']['booleanValue'] === false;
+      $pasa = !$baja;
+    } elseif ($hg == 0 || $hg >= 500) {
+      $pasa = true;   /* si la base no contesta, no se le cierra la puerta a un invitado de verdad */
+    }
+  }
+  if (!$pasa) { include __DIR__ . '/sin-pase.php'; exit; }
+}
+
 if ($estado === 'por-revisar') {
   $pide  = isset($_GET['rev']) ? preg_replace('/[^A-Za-z0-9_\-]/', '', $_GET['rev']) : '';
   $puede = ($pide !== '' && $revision !== '' && hash_equals($revision, $pide));

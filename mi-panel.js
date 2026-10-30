@@ -701,6 +701,8 @@
           '<button class="btn gris" id="ep-cerrar">Cerrar</button>'+
           '<button class="btn" id="ep-guardar">Guardar</button>'+
         '</div>'+
+        '<div style="text-align:center;margin-top:12px"><button type="button" id="ep-borrar" '+
+          'style="background:none;border:0;color:#b3261e;font-size:13px;text-decoration:underline;cursor:pointer">Borrar este pase</button></div>'+
       '</div>';
     document.body.appendChild(f);
     const q=s=>f.querySelector(s);
@@ -717,6 +719,28 @@
     q('#ep-cerrar').addEventListener('click',()=>f.remove());
     f.addEventListener('click',e=>{ if(e.target===f) f.remove(); });
     q('#ep-guardar').addEventListener('click',()=>guardarEdicionPase(f,g));
+    q('#ep-borrar').addEventListener('click',()=>borrarPase(f,g));
+  }
+
+  /* ★ 30/10/2026 (Jazmín): borrar un pase — por ejemplo el de alguien que
+     confirmó que no va. Es un borrado lógico (activo=false) por el portero
+     /pase-datos.php: desaparece de la lista, la puerta lo rechaza y, si la
+     invitación tiene «Bloquear acceso a personas sin pase», su link ya no abre. */
+  async function borrarPase(f,g){
+    const q=s=>f.querySelector(s), err=q('#ep-err'), b=q('#ep-borrar');
+    if(!confirm('¿Borrar el pase de «'+(g.nombre||'este invitado')+'»?\n\nYa no podrá entrar en la puerta con su código. No se puede deshacer desde acá.')) return;
+    b.disabled=true; b.textContent='Borrando…'; err.textContent='';
+    try{
+      const r=await fetch('/pase-datos.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:SLUG,clave:CLAVE,token:g.token,baja:true})});
+      const j=await r.json().catch(()=>({}));
+      if(!j.ok || j.activo!==false) throw new Error(j.error||'http'+r.status);
+      const i=GENTE.findIndex(x=>x.token===g.token); if(i>=0) GENTE.splice(i,1);
+      const a=Object.assign({}, asigDe()); if(a[g.token]){ delete a[g.token]; PANEL.asig=a; try{ await guardarPanel({mesas:mesasDe(), asig:a}); }catch(e){} }
+      f.remove(); toast('Pase borrado'); pintar();
+    }catch(e){
+      err.textContent=(String(e.message)==='clave')?'No pudimos verificar tu clave. Vuelve a entrar al panel.':'No se pudo borrar. Inténtalo de nuevo.';
+      b.disabled=false; b.textContent='Borrar este pase';
+    }
   }
 
   async function guardarEdicionPase(f,g){
@@ -893,7 +917,10 @@
     if(t.id==='bajarMesas') return bajarMesas();
     if(t.id==='imprimir')   return window.print();
     if(t.id==='nuevaMesa')  return nuevaMesa();
-    if(t.id==='verInv' || t.id==='verInv2') return window.open('/i/?e='+encodeURIComponent(SLUG),'_blank');
+    if(t.id==='verInv' || t.id==='verInv2'){
+      if(window.__invBloqueoSinPase && GENTE.length){ toast('Tu invitación sólo se abre con el link de un pase: te mostramos la de '+(GENTE[0].nombre||'un invitado')); return window.open(linkDe(GENTE[0]),'_blank'); }
+      return window.open('/i/?e='+encodeURIComponent(SLUG),'_blank');
+    }
 
     if(t.dataset && t.dataset.borrar) return borrarMesa(t.dataset.borrar);
 
@@ -1049,6 +1076,10 @@
        entero. Ahora, si su panel no tiene itinerario propio, se trae el que ya
        se ve en la invitación (sólo para mostrarlo: se guarda cuando lo tocan). */
     try{
+      /* ★ 30/10: si la invitación tiene «Bloquear acceso a personas sin pase»,
+         el link general ya no abre: «Ver invitación» abre la de un pase. */
+      try{ const s0=await getDoc(doc(db,'inv_eventos', slug)); const v0=s0.exists()?s0.data()['c_bloquear-acceso-sin-pase']:null;
+           window.__invBloqueoSinPase = (v0===true||v0==='true'||v0==='1'||v0===1); }catch(e){}
       const yaTiene = PANEL.itinerario && Array.isArray(PANEL.itinerario.momentos) && PANEL.itinerario.momentos.length;
       if(!yaTiene){
         const se = await getDoc(doc(db,'inv_eventos', slug));

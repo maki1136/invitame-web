@@ -179,6 +179,7 @@
       if(r&&r.data){ g=Object.assign(g,r.data); }
       if(r&&r.motivo==='sin-usos'){ g.usos=0; MAPA.set(token,g); actualizarStats();
         mostrar('warn','⚠','Ya ingresó','No le quedan pases',g); }
+      else if(r&&r.motivo==='baja'){ MAPA.delete(token); mostrar('bad','✕','Pase dado de baja','Los anfitriones borraron este pase',g); }
       else { mostrar('bad','✕','No pude registrarlo','Reintentá o anotalo a mano',g); }
       return;
     }
@@ -218,5 +219,5 @@
     const t=setInterval(()=>{ if(window.INV&&window.INV.ok&&window.INV.user){ clearInterval(t); cargar(); } },400);
     setTimeout(()=>{ clearInterval(t); if(!SLUG&&!(window.INV&&window.INV.user)) el('loadmsg').textContent='Iniciá sesión para cargar el evento.'; },12000); })();
 </script>
-<script type="module" src="firebase-inv.js?v=23"></script>
+<script type="module" src="firebase-inv.js?v=26"></script>
 </body></html>

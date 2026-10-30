@@ -213,6 +213,11 @@ if ($quiereP || $quiereU) {
   $fields['usosMax'] = array('integerValue' => (string)$max);
   $fields['usos']    = array('integerValue' => (string)max(0, $max - $usados));
 }
+/* ★ 30/10/2026 (Jazmín): «Borrar este pase» desde el panel de los novios.
+   Borrado LÓGICO, como el admin: activo=false. El link deja de abrir la
+   invitación (si está prendido «Bloquear acceso… sin pase») y la puerta lo
+   rechaza. Nunca se borra el documento: así queda el registro. */
+if (!empty($in['baja'])) $fields['activo'] = array('booleanValue' => false);
 if (!$fields) { echo json_encode(array('ok'=>true,'token'=>$token,'nada'=>true)); exit; }
 $fields['updatedAt'] = array('stringValue' => gmdate('Y-m-d\TH:i:s\Z'));
 
@@ -225,5 +230,5 @@ if ($cw < 200 || $cw >= 300) {
 }
 
 $sal = array('ok' => true, 'token' => $token);
-foreach ($fields as $k => $v) $sal[$k] = isset($v['integerValue']) ? (int)$v['integerValue'] : $v['stringValue'];
+foreach ($fields as $k => $v) $sal[$k] = isset($v['integerValue']) ? (int)$v['integerValue'] : (isset($v['booleanValue']) ? (bool)$v['booleanValue'] : $v['stringValue']);
 echo json_encode($sal, JSON_UNESCAPED_UNICODE);
