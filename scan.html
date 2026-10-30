@@ -151,10 +151,17 @@
   function manual(){ const t=prompt("Código del invitado (token):"); if(t){pausa=true;validar(t.trim());} }
 
   async function validar(token){
-    const g=MAPA.get(token);
+    /* ★ 30/10/2026 — LA LISTA DE LA PUERTA NO SE CONGELA. Antes se validaba
+       contra la lista bajada al abrir: un invitado que los novios cargaron
+       DESPUÉS salía «Código no válido», y uno al que le subieron los usos salía
+       «Ya ingresó». Ahora, si no está en la lista se lo busca en la base, y el
+       «ya no le quedan» lo decide SIEMPRE la base (la transacción de abajo). */
+    let g=MAPA.get(token);
+    if(!g && window.INV && INV.ok && token){
+      try{ const f=await INV.getInvitado(SLUG,token); if(f && f.activo!==false){ g=f; MAPA.set(token,g); el('s-tot').textContent=(+el('s-tot').textContent||0)+(g.usosMax||1); } }catch(e){}
+    }
     if(!g){ mostrar('bad','✕','Código no válido','Este QR no es de este evento',null); return; }
     const usos=(g.usos!=null)?g.usos:(g.usosMax||1);
-    if(usos<=0){ mostrar('warn','⚠','Ya ingresó','No le quedan pases',g); return; }
 
     // El cartel verde SOLO sale si la base confirmó el ingreso.
     // Antes se mostraba "¡Habilitado!" y después se intentaba descontar: con dos
@@ -169,11 +176,13 @@
     catch(e){ mostrar('bad','✕','Sin conexión','No se registró el ingreso. Reintentá.',g); return; }
 
     if(!r||!r.ok){
+      if(r&&r.data){ g=Object.assign(g,r.data); }
       if(r&&r.motivo==='sin-usos'){ g.usos=0; MAPA.set(token,g); actualizarStats();
         mostrar('warn','⚠','Ya ingresó','No le quedan pases',g); }
       else { mostrar('bad','✕','No pude registrarlo','Reintentá o anotalo a mano',g); }
       return;
     }
+    if(r.data){ g=Object.assign(g,r.data); }   /* nombre, mesa y usos frescos de la base */
     g.usos=(typeof r.restantes==='number')?r.restantes:Math.max(0,usos-1);
     MAPA.set(token,g); actualizarStats();
     mostrar('ok','✓','¡Habilitado!','Ingreso registrado',g);
@@ -190,7 +199,7 @@
       extra='<div class="grid"><div class="g"><div class="gn">'+esc(g.usosMax||1)+'</div><div class="gl">Pases</div></div>'+
         '<div class="g"><div class="gn">'+esc(usos)+'</div><div class="gl">Quedan</div></div>'+
         '<div class="g"><div class="gn">'+esc(g.mesa||'-')+'</div><div class="gl">Mesa</div></div></div>'+
-        (g.restriccion?'<div class="rest">🍽️ '+esc(g.restriccion)+'</div>':'');
+        (g.restriccion?'<div class="rest">📝 '+esc(g.restriccion)+'</div>':'');
     }
     rc.innerHTML='<div class="ico">'+esc(ico)+'</div><div class="nom">'+esc(g?g.nombre:'—')+'</div><div class="est">'+esc(estado)+'</div>'+extra+'<button onclick="siguiente()">Siguiente ›</button>';
     el('res').classList.remove('hidden');

@@ -404,7 +404,7 @@
       if(FILTRO==='no'&&e!=='no')return false;
       if(FILTRO==='sin'&&e!=='sin')return false;
       if(!q) return true;
-      return (String(g.nombre||'')+' '+mesaDe(g)).toLowerCase().indexOf(q)>-1;
+      return (String(g.nombre||'')+' '+nombreMesa(mesaDe(g))).toLowerCase().indexOf(q)>-1;
     });
   }
   function vInvitados(){
@@ -550,16 +550,26 @@
   async function borrarMesa(id){
     const gente = enMesa(id);
     if(gente.length && !confirm('Esa mesa tiene '+gente.length+' invitado(s). Se van a quedar sin mesa. ¿Seguimos?')) return;
-    const ms = mesasDe().filter(m=>m.id!==id);
+    /* ★ 30/10: los de esa mesa quedan «sin mesa» A PROPÓSITO (''), no se borra
+       la clave: borrándola, la invitación seguía mostrando la mesa vieja y al
+       recargar la mesa volvía. Y se cuentan también los que puso el equipo
+       (sin asignación propia, encontrados por el nombre de la mesa). */
     const a = Object.assign({}, asigDe());
-    Object.keys(a).forEach(k=>{ if(a[k]===String(id)) delete a[k]; });
+    gente.forEach(g=>{ a[g.token]=''; });
+    Object.keys(a).forEach(k=>{ if(a[k]===String(id)) a[k]=''; });
+    const ms = mesasDe().filter(m=>m.id!==id);
     PANEL.mesas=ms; PANEL.asig=a; vMesas();
     await guardarPanel({mesas:ms, asig:a});
   }
   async function renombrarMesa(id, nombre){
+    /* ★ 30/10: los que puso el equipo están en esa mesa por el NOMBRE: antes de
+       cambiarlo se les anota la mesa por su id, si no quedaban «sin mesa» y la
+       invitación seguía con el nombre viejo. */
+    const a = Object.assign({}, asigDe()); let tocoAsig=false;
+    enMesa(id).forEach(g=>{ if(!Object.prototype.hasOwnProperty.call(a,g.token)||a[g.token]!==String(id)){ a[g.token]=String(id); tocoAsig=true; } });
     const ms = mesasDe().map(m => m.id===id ? Object.assign({},m,{nombre:nombre||'Mesa'}) : m);
-    PANEL.mesas = ms;
-    await guardarPanel({mesas:ms});
+    PANEL.mesas = ms; if(tocoAsig) PANEL.asig=a;
+    await guardarPanel(tocoAsig ? {mesas:ms, asig:a} : {mesas:ms});
   }
 
   // ---------- 4. MENSAJES ----------
@@ -1033,6 +1043,20 @@
     const p = await traerPanel(slug, clave);
     if(!p) return false;
     SLUG=slug; CLAVE=clave; PANEL=p;
+    /* ★ 30/10/2026 — EL ITINERARIO ARRANCA CON EL DE LA INVITACIÓN. Antes el
+       panel decía «todavía no cargaron ningún momento» aunque la diseñadora ya
+       lo hubiera armado, y el primer «Guardar» de los novios lo reemplazaba
+       entero. Ahora, si su panel no tiene itinerario propio, se trae el que ya
+       se ve en la invitación (sólo para mostrarlo: se guarda cuando lo tocan). */
+    try{
+      const yaTiene = PANEL.itinerario && Array.isArray(PANEL.itinerario.momentos) && PANEL.itinerario.momentos.length;
+      if(!yaTiene){
+        const se = await getDoc(doc(db,'inv_eventos', slug));
+        const it = se.exists() ? ((se.data().fx||{}).itinerario||{}) : {};
+        const ms = Array.isArray(it.momentos) ? it.momentos.filter(m=>m&&(m.h||m.t)).map(m=>({h:String(m.h||''), t:String(m.t||''), d:String(m.d||'')})) : [];
+        if(ms.length) PANEL.itinerario = Object.assign({}, PANEL.itinerario||{}, {modo: (PANEL.itinerario&&PANEL.itinerario.modo)||it.modo||'', momentos: ms});
+      }
+    }catch(e){ /* sin la invitación, el panel sigue como antes */ }
     $('entrar').style.display='none';
     $('panel').style.display='';
     await cargar();

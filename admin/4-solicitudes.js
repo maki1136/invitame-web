@@ -76,6 +76,8 @@
     const pv=await INV.getPrivado(slug); if(pv){ (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(pv[k]!==undefined) D[k]=pv[k]; }); }
     ensureFX();
     const gs=await INV.listInvitados(slug);if(gs.length)D.invitados=gs.filter(g=>g.activo!==false).map(g=>({n:g.nombre,p:g.pases,m:g.mesa,restriccion:g.restriccion,t:g.token,rsvp:g.rsvp,rsvpPersonas:g.rsvpPersonas,usos:g.usos}));
+    /* ★ 30/10: la foto de los invitados al abrir — publicar() sólo manda lo que la diseñadora CAMBIÓ (ver 3-evento.js) */
+    window.__invInvBase={slug:slug, por:{}}; (D.invitados||[]).forEach(g=>{ if(g.t) window.__invInvBase.por[g.t]={n:g.n,p:String(g.p),m:g.m,restriccion:g.restriccion||''}; });
     renderPanel();render();if(cur==='INVITADOS')renderGuests();
   }
 

@@ -206,11 +206,15 @@ $auth = array('Authorization: Bearer ' . $idToken);
 // ---------- 4. escribir SOLO el itinerario ----------
 $cuando = gmdate('Y-m-d\TH:i:s\Z');
 
-$hojas = array('fx.itinerario.momentos', 'fx.itinerario.actualizadoEl');
-$sub = array(
-  'momentos'      => array('arrayValue' => array('values' => $momentos)),
-  'actualizadoEl' => array('stringValue' => $cuando),
-);
+/* ★ 30/10/2026 — UNA LISTA VACÍA NO BORRA EL ITINERARIO DE LA INVITACIÓN.
+   Elegir «Escrito» sin momentos y guardar escribía momentos:[] y la sección
+   desaparecía. Los momentos sólo se escriben si hay alguno. */
+$hojas = array('fx.itinerario.actualizadoEl');
+$sub = array('actualizadoEl' => array('stringValue' => $cuando));
+if (count($momentos)) {
+  $hojas[] = 'fx.itinerario.momentos';
+  $sub['momentos'] = array('arrayValue' => array('values' => $momentos));
+}
 if ($modo !== '' && !$soloImagenSinImagen) {
   $hojas[] = 'fx.itinerario.modo';
   $sub['modo'] = array('stringValue' => $modo);

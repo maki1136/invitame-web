@@ -987,10 +987,36 @@
       await INV.savePrivado(slug, _priv);
       await INV.limpiarPrivadosDelPublico(slug);   // saca los que habian quedado de antes
       // 2) guarda cada invitado y obtiene su token/link
+      /* ★ 30/10/2026 — NO PISAR LO QUE CAMBIARON LOS NOVIOS. Si esta pestaña se
+         abrió antes de que los novios editaran un pase (nombre, personas, mesa,
+         descripción) o cargaran invitados nuevos, publicar les devolvía todo a
+         como estaba al abrir y los invitados nuevos desaparecían de su panel.
+         Ahora se relee la lista: de cada invitado se manda sólo lo que la
+         diseñadora cambió, y los que cargaron los novios se suman. */
+      try{
+        const _base=(window.__invInvBase&&window.__invInvBase.slug===slug)?window.__invInvBase.por:null;
+        const _fres=await INV.listInvitados(slug);
+        const _por={}; _fres.forEach(f=>{ if(f&&f.token) _por[f.token]=f; });
+        if(_base){
+          D.invitados.forEach(g=>{
+            const b=_base[g.t], f=_por[g.t]; if(!b||!f) return;
+            if(g.n===b.n) g.n=f.nombre;
+            if(String(g.p)===b.p) g.p=f.pases;
+            if(g.m===b.m) g.m=f.mesa;
+            if((g.restriccion||'')===b.restriccion) g.restriccion=f.restriccion||'';
+          });
+        }
+        const _tengo=new Set(D.invitados.map(g=>g.t).filter(Boolean));
+        _fres.forEach(f=>{
+          if(!f||!f.token||f.activo===false||_tengo.has(f.token)||(_borrados||[]).indexOf(f.token)>=0) return;
+          D.invitados.push({n:f.nombre,p:f.pases,m:f.mesa,restriccion:f.restriccion||'',t:f.token,rsvp:f.rsvp,rsvpPersonas:f.rsvpPersonas,usos:f.usos});
+        });
+      }catch(_e){ console.error('releer invitados antes de publicar',_e); }
       const arr=D.invitados.map(g=>({n:g.n,p:g.p,m:g.m,restriccion:g.restriccion,token:g.t}));
       const res=await INV.saveInvitados(slug, arr);
       // devuelve tokens -> los reflejo en D para mostrar el link
       res.forEach((r,i)=>{ if(D.invitados[i]){ D.invitados[i].t=r.token; D.invitados[i].rsvp=r.rsvp; D.invitados[i].rsvpPersonas=r.rsvpPersonas; D.invitados[i].usos=r.usos; } });
+      window.__invInvBase={slug:slug, por:{}}; D.invitados.forEach(g=>{ if(g.t) window.__invInvBase.por[g.t]={n:g.n,p:String(g.p),m:g.m,restriccion:g.restriccion||''}; });
       // dar de baja en la base a los que se borraron del panel
       if(_borrados.length){
         const quedan=[];
