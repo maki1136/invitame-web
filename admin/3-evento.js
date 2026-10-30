@@ -1006,6 +1006,9 @@
             if((g.restriccion||'')===b.restriccion) g.restriccion=f.restriccion||'';
           });
         }
+        /* ★ 30/10: un pase que los novios BORRARON desde su panel no vuelve
+           a aparecer en esta lista (ni se re-guarda) aunque la pestaña sea vieja. */
+        D.invitados=D.invitados.filter(g=>!(g.t && _por[g.t] && _por[g.t].activo===false));
         const _tengo=new Set(D.invitados.map(g=>g.t).filter(Boolean));
         _fres.forEach(f=>{
           if(!f||!f.token||f.activo===false||_tengo.has(f.token)||(_borrados||[]).indexOf(f.token)>=0) return;
