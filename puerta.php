@@ -194,16 +194,17 @@ if ($accion === 'uso') {
     if ($usos <= 0) { pedir($API . ':rollback', 'POST', json_encode(array('transaction' => $tx)), $auth); salir(array('ok' => false, 'motivo' => 'sin-usos', 'data' => $d)); }
     $commit = array('transaction' => $tx, 'writes' => array(array(
       'update' => array('name' => $docName, 'fields' => array(
-        'usos' => array('integerValue' => (string)($usos - 1)),
-        'ultimoIngreso' => array('timestampValue' => gmdate('Y-m-d\TH:i:s\Z')),
-        'ultimoIngresoPor' => array('stringValue' => 'puerta'))),
-      'updateMask' => array('fieldPaths' => array('usos', 'ultimoIngreso', 'ultimoIngresoPor')),
+        'usos' => array('integerValue' => (string)($usos - 1)))),
+      'updateMask' => array('fieldPaths' => array('usos')),
+      /* la hora la pone Firestore, igual que INV.marcarUso (serverTimestamp) */
+      'updateTransforms' => array(array('fieldPath' => 'ultimoIngreso', 'setToServerValue' => 'REQUEST_TIME')),
       'currentDocument' => array('exists' => true))));
     list($rc, $cc) = pedir($API . ':commit', 'POST', json_encode($commit), $auth);
     if ($cc == 200) { $d['usos'] = $usos - 1; salir(array('ok' => true, 'restantes' => $usos - 1, 'data' => $d)); }
     /* 409 / ABORTED = otro celular escaneó justo a la vez: se reintenta */
+    $ultimo = 'commit' . $cc . ' ' . substr((string)$rc, 0, 160);
   }
-  salir(array('ok' => false, 'motivo' => 'reintentar'));
+  salir(array('ok' => false, 'motivo' => 'reintentar', 'detalle' => isset($ultimo) ? $ultimo : ('tx' . (isset($ct) ? $ct : '') . '/' . (isset($cg) ? $cg : ''))));
 }
 
 salir(array('ok' => false, 'error' => 'accion'), 400);
