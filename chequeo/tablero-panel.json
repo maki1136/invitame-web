@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-30T20:17:58.412Z",
+ "cuando": "2026-10-30T20:51:51.691Z",
  "slug": "camila-y-tomas",
  "total": 440,
  "verde": 432,
@@ -456,6 +456,17 @@
   {
    "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
+   "control": "Movimiento sobre la frase (círculos, pétalos, destellos)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fraseFx",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
    "control": "Tipografía",
    "tipo": "lista",
    "guarda": true,
@@ -732,17 +743,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -935,6 +935,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1861,17 +1872,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.avisos.encendido",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "GALERIA_INSTA_VID",
-   "bloque": "Fondo con movimiento (frase principal)",
-   "control": "(sin rótulo)",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fraseFx",
    "llega": true,
    "seVe": true,
    "estado": "verde"
