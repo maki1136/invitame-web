@@ -198,6 +198,7 @@
     "Color de fondo sección QR:": "c_color-de-fondo-seccion-qr",
     "Imagen fondo QR": "c_imagen-fondo-qr",
     "Deshabilitar publicidad de invitame:": "c_deshabilitar-publicidad-de-invitame",
+    "WhatsApp del wedding planner (pie de la invitación):": "c_whatsapp-wedding-planner",   /* 30/10/2026: pie con el WhatsApp del planner */
     "Deshabilitar invitación:": "c_deshabilitar-invitacion",
     "Contraseña para el evento:": "c_contrasena-para-el-evento",
     "Clave del panel de los novios:": "c_clave-del-panel-de-los-novios",
