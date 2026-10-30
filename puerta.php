@@ -179,32 +179,32 @@ if ($accion === 'uno') {
 if ($accion === 'uso') {
   list($bl,) = bloqueado($FS, $slug, $auth);
   if ($bl) salir(array('ok' => false, 'motivo' => 'bloqueado'));
-  $API = 'https://firestore.googleapis.com/v1/' . $BASE;
-  for ($intento = 0; $intento < 4; $intento++) {
-    list($rt, $ct) = pedir($API . ':beginTransaction', 'POST', json_encode(array('options' => array('readWrite' => new stdClass()))), $auth);
-    if ($ct != 200) continue;
-    $tx = json_decode($rt, true)['transaction'] ?? '';
-    list($rg, $cg) = pedir('https://firestore.googleapis.com/v1/' . $docName . '?transaction=' . rawurlencode($tx), 'GET', null, $auth);
-    if ($cg == 404) { pedir($API . ':rollback', 'POST', json_encode(array('transaction' => $tx)), $auth); salir(array('ok' => false, 'motivo' => 'no-existe')); }
-    if ($cg != 200) { pedir($API . ':rollback', 'POST', json_encode(array('transaction' => $tx)), $auth); continue; }
-    $f = (json_decode($rg, true)['fields']) ?? array();
-    $d = ficha($f);
-    if (isset($d['activo']) && $d['activo'] === false) { pedir($API . ':rollback', 'POST', json_encode(array('transaction' => $tx)), $auth); salir(array('ok' => false, 'motivo' => 'baja', 'data' => $d)); }
+  /* ⚠️ Escritura CONDICIONAL (concurrencia optimista): se lee la ficha con
+     su updateTime y se escribe SÓLO si nadie la tocó desde entonces. Si otro
+     celular descontó justo a la vez, Firestore la rechaza (precondición) y se
+     vuelve a leer. Mismo efecto que la transacción de INV.marcarUso. */
+  $URLDOC = $FS . 'inv_invitados/' . rawurlencode($slug . '__' . $token);
+  for ($intento = 0; $intento < 5; $intento++) {
+    list($rg, $cg) = pedir($URLDOC, 'GET', null, $auth);
+    if ($cg == 404) salir(array('ok' => false, 'motivo' => 'no-existe'));
+    if ($cg != 200) { $ultimo = 'leer' . $cg; continue; }
+    $doc = json_decode($rg, true);
+    $d = ficha($doc['fields'] ?? array());
+    if (isset($d['activo']) && $d['activo'] === false) salir(array('ok' => false, 'motivo' => 'baja', 'data' => $d));
     $usos = isset($d['usos']) ? (int)$d['usos'] : 0;
-    if ($usos <= 0) { pedir($API . ':rollback', 'POST', json_encode(array('transaction' => $tx)), $auth); salir(array('ok' => false, 'motivo' => 'sin-usos', 'data' => $d)); }
-    $commit = array('transaction' => $tx, 'writes' => array(array(
-      'update' => array('name' => $docName, 'fields' => array(
-        'usos' => array('integerValue' => (string)($usos - 1)))),
+    if ($usos <= 0) salir(array('ok' => false, 'motivo' => 'sin-usos', 'data' => $d));
+    $commit = array('writes' => array(array(
+      'update' => array('name' => $docName, 'fields' => array('usos' => array('integerValue' => (string)($usos - 1)))),
       'updateMask' => array('fieldPaths' => array('usos')),
-      /* la hora la pone Firestore, igual que INV.marcarUso (serverTimestamp) */
       'updateTransforms' => array(array('fieldPath' => 'ultimoIngreso', 'setToServerValue' => 'REQUEST_TIME')),
-      'currentDocument' => array('exists' => true))));
-    list($rc, $cc) = pedir($API . ':commit', 'POST', json_encode($commit), $auth);
+      'currentDocument' => array('updateTime' => $doc['updateTime']))));
+    list($rc, $cc) = pedir('https://firestore.googleapis.com/v1/' . $BASE . ':commit', 'POST', json_encode($commit), $auth);
     if ($cc == 200) { $d['usos'] = $usos - 1; salir(array('ok' => true, 'restantes' => $usos - 1, 'data' => $d)); }
-    /* 409 / ABORTED = otro celular escaneó justo a la vez: se reintenta */
     $ultimo = 'commit' . $cc . ' ' . substr((string)$rc, 0, 160);
+    if ($cc != 400 && $cc != 409 && $cc != 412) break;   /* sólo se reintenta si fue el «lo tocó otro» */
+    usleep(150000);
   }
-  salir(array('ok' => false, 'motivo' => 'reintentar', 'detalle' => isset($ultimo) ? $ultimo : ('tx' . (isset($ct) ? $ct : '') . '/' . (isset($cg) ? $cg : ''))));
+  salir(array('ok' => false, 'motivo' => 'reintentar', 'detalle' => isset($ultimo) ? $ultimo : ''));
 }
 
 salir(array('ok' => false, 'error' => 'accion'), 400);
