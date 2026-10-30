@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-30T19:39:02.281Z",
+ "cuando": "2026-10-30T19:56:10.561Z",
  "slug": "camila-y-tomas",
  "total": 440,
  "verde": 432,
@@ -732,6 +732,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -924,17 +935,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
