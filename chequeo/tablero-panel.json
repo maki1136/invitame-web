@@ -1,10 +1,10 @@
 {
- "cuando": "2026-10-30T18:55:15.822Z",
+ "cuando": "2026-10-30T19:21:37.280Z",
  "slug": "camila-y-tomas",
- "total": 438,
- "verde": 430,
+ "total": 408,
+ "verde": 401,
  "amarillo": 0,
- "rojo": 8,
+ "rojo": 7,
  "gris": 0,
  "items": [
   {
@@ -339,7 +339,7 @@
    "llega": true,
    "seVe": true,
    "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
    "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
@@ -1000,12 +1000,10 @@
    "control": "Transparencia recuadros de texto:",
    "tipo": "range",
    "guarda": true,
-   "dato": "fx.sectorElegido, c_transparencia-recuadros-de-texto",
+   "dato": "c_transparencia-recuadros-de-texto",
    "llega": true,
    "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+   "estado": "verde"
   },
   {
    "tab": "LUGAR_VEST",
@@ -1013,7 +1011,7 @@
    "control": "Color de los recuadros de texto:",
    "tipo": "color",
    "guarda": true,
-   "dato": "fx.sectorElegido.c_color-de-los-recuadros-de-texto, c_color-de-los-recuadros-de-texto",
+   "dato": "c_color-de-los-recuadros-de-texto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1383,28 +1381,6 @@
   },
   {
    "tab": "LUGAR_VEST",
-   "bloque": "dresscode-selector",
-   "control": "No mostrar los colores (ni los sugeridos ni los a evitar)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.dresscode.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "dresscode-selector",
-   "control": "No mostrar los colores (ni los sugeridos ni los a evitar)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.dresscode.tituloEvitar",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "vestimenta titulo:",
    "tipo": "text",
@@ -1442,7 +1418,7 @@
    "control": "Vestimenta color:",
    "tipo": "color",
    "guarda": true,
-   "dato": "fx.sectorElegido.c_vestimenta-color, c_vestimenta-color",
+   "dato": "c_vestimenta-color",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1475,7 +1451,7 @@
    "control": "Color de fondo \"donde y cuando\":",
    "tipo": "color",
    "guarda": true,
-   "dato": "fx.sectorElegido.c_color-de-fondo-donde-y-cuando, c_color-de-fondo-donde-y-cuando",
+   "dato": "c_color-de-fondo-donde-y-cuando",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1486,260 +1462,7 @@
    "control": "Color de fondo Dresscode:",
    "tipo": "color",
    "guarda": true,
-   "dato": "fx.sectorElegido.c_color-de-fondo-dresscode, c_color-de-fondo-dresscode",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Como se muestra",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.itinerario.modo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "La línea",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.itinerario.estilo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "17:00",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Ceremonia",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Detalle (opcional)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "17:00",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Ceremonia",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Detalle (opcional)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "17:00",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Ceremonia",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Detalle (opcional)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "17:00",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Ceremonia",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Detalle (opcional)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "17:00",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Ceremonia",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Detalle (opcional)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "17:00",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Ceremonia",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Detalle (opcional)",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.itinerario.momentos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "menu-selector",
-   "control": "Mostrar el menú",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.menu.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "menu-selector",
-   "control": "Mostrar el menú",
-   "tipo": "textarea",
-   "guarda": true,
-   "dato": "fx.menu.frase",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "avisos-selector",
-   "control": "Mostrar los avisos",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.avisos.titulo",
+   "dato": "c_color-de-fondo-dresscode",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1772,7 +1495,7 @@
    "control": "Itinerario color de fondo:",
    "tipo": "color",
    "guarda": true,
-   "dato": "fx.sectorElegido.c_itinerario-color-de-fondo, c_itinerario-color-de-fondo",
+   "dato": "c_itinerario-color-de-fondo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1783,73 +1506,7 @@
    "control": "Itinerario color de texto:",
    "tipo": "color",
    "guarda": true,
-   "dato": "fx.sectorElegido.c_itinerario-color-de-texto, c_itinerario-color-de-texto",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "dresscode-selector",
-   "control": "No mostrar los colores (ni los sugeridos ni los a evitar)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.dresscode.sinColores",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "dresscode-selector",
-   "control": "Mostrar sólo los colores a evitar (sin tachar, abajo del texto y la imagen)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.dresscode.soloEvitar",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "Con dibujitos en cada momento (iglesia, copas, baile…)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.itinerario.iconos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "itinerario-selector",
-   "control": "La hora arriba y el nombre abajo, centrados",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.itinerario.apilado",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "menu-selector",
-   "control": "Mostrar el menú",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.menu.encendido",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "avisos-selector",
-   "control": "Mostrar los avisos",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.avisos.encendido",
+   "dato": "c_itinerario-color-de-texto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1897,7 +1554,7 @@
    "llega": true,
    "seVe": true,
    "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
    "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
@@ -2141,7 +1798,7 @@
    "llega": true,
    "seVe": true,
    "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
    "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
@@ -2308,7 +1965,7 @@
    "llega": true,
    "seVe": true,
    "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
    "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
@@ -2608,7 +2265,7 @@
    "llega": true,
    "seVe": true,
    "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
    "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
@@ -3219,6 +2876,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_bloquear-control-de-accesos-qr-y-mesas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "AVANZADO",
+   "bloque": "",
+   "control": "Activar",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "c_bloquear-acceso-sin-pase",
    "llega": true,
    "seVe": true,
    "estado": "verde"
