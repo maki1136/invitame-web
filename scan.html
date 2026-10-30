@@ -42,7 +42,7 @@
 <div id="authgate" style="position:fixed;inset:0;z-index:99999;background:#12100f;display:flex;align-items:center;justify-content:center;padding:22px">
   <div style="background:#1c1a18;border:1px solid #2c2926;border-radius:16px;padding:26px 22px;width:100%;max-width:340px">
     <div style="font-weight:800;font-size:19px;color:#f3efe6;margin-bottom:2px">🎟️ Control de Acceso</div>
-    <div style="color:#9a948a;font-size:13px;margin-bottom:14px">Entrá con la clave de la fiesta que te mandaron los anfitriones</div>
+    <div style="color:#9a948a;font-size:13px;margin-bottom:14px">Entra con la clave de la fiesta que te mandaron los anfitriones</div>
     <input id="pu-slug" placeholder="Dirección de la fiesta (ej: maria-y-diego)" autocapitalize="off" autocorrect="off" spellcheck="false" style="width:100%;padding:13px;border-radius:10px;border:1px solid #3a3631;background:#12100f;color:#fff;font-size:16px;margin-bottom:10px">
     <input id="pu-clave" placeholder="Clave de la puerta" autocapitalize="characters" autocorrect="off" spellcheck="false" style="width:100%;padding:13px;border-radius:10px;border:1px solid #3a3631;background:#12100f;color:#fff;font-size:16px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.12em">
     <div id="pu-err" style="color:#e88;font-size:12.5px;min-height:16px;margin-bottom:8px"></div>
@@ -62,7 +62,7 @@
     window.INV.onAuth(function(u){ var g=document.getElementById('authgate'); if(g) g.style.display=(u||window.PUERTA)?'none':'flex'; });
     function entrar(){
       var e=(document.getElementById('ag-mail').value||'').trim(), p=document.getElementById('ag-pass').value, err=document.getElementById('ag-err');
-      if(!e||!p){ err.textContent='Completá el correo y la contraseña'; return; }
+      if(!e||!p){ err.textContent='Completa el correo y la contraseña'; return; }
       err.textContent='Entrando…';
       window.INV.login(e,p).then(function(){err.textContent='';}).catch(function(){ err.textContent='Correo o contraseña incorrectos'; });
     }
@@ -83,19 +83,19 @@
     var s=(document.getElementById('pu-slug').value||'').trim().toLowerCase().replace(/^.*[?&]e=/,'').replace(/[&#].*$/,'');
     var c=(document.getElementById('pu-clave').value||'').replace(/[^A-Za-z0-9]/g,'').toUpperCase();
     var err=document.getElementById('pu-err');
-    if(!s||!c){ if(!auto) err.textContent='Completá la dirección y la clave'; return; }
+    if(!s||!c){ if(!auto) err.textContent='Completa la dirección y la clave'; return; }
     err.textContent='Entrando…';
     try{
       var r=await fetch('/puerta.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accion:'lista',slug:s,puerta:c})});
       var j=await r.json().catch(function(){return {};});
-      if(!j.ok){ err.textContent = j.error==='clave-puerta' ? 'La clave no es de esta fiesta. Revisá la dirección y la clave.' : (j.error==='no-existe' ? 'No encontré esa fiesta. Revisá la dirección.' : 'No pude entrar. Revisá la conexión y probá de nuevo.'); return; }
+      if(!j.ok){ err.textContent = j.error==='clave-puerta' ? 'La clave no es de esta fiesta. Revisa la dirección y la clave.' : (j.error==='no-existe' ? 'No encontré esa fiesta. Revisa la dirección.' : 'No pude entrar. Revisa la conexión y prueba de nuevo.'); return; }
       window.PUERTA={slug:s, clave:c, primera:j};
       try{ localStorage.setItem('inv-puerta', JSON.stringify({slug:s, clave:c})); }catch(e){}
       err.textContent='';
       document.getElementById('authgate').style.display='none';
       document.getElementById('slug').value=s;
       if(typeof cargar==='function') cargar();
-    }catch(e){ err.textContent='Sin internet. Revisá la conexión y probá de nuevo.'; }
+    }catch(e){ err.textContent='Sin internet. Revisa la conexión y prueba de nuevo.'; }
   }
   document.getElementById('pu-btn').onclick=function(){ entrarPuerta(false); };
   document.getElementById('pu-clave').addEventListener('keydown',function(ev){ if(ev.key==='Enter') entrarPuerta(false); });
@@ -112,7 +112,7 @@ window.PU={
 </script>
 <div class="wrap">
   <h1>🎟️ Control de Acceso</h1>
-  <div class="sub">InvitaME · escaneá el QR de cada invitado en la puerta</div>
+  <div class="sub">InvitaME · escanea el QR de cada invitado en la puerta</div>
   <button type="button" onclick="window.salirPuerta&&window.salirPuerta();if(window.INV&&window.INV.logout&&window.INV.user)window.INV.logout();location.reload()" style="background:none;border:0;color:#9a948a;font-size:12px;text-decoration:underline;cursor:pointer;padding:0;margin-bottom:12px">Cerrar sesión</button>
 
   <!-- PASO 1: cargar evento -->
@@ -132,7 +132,7 @@ window.PU={
     </div>
     <div id="reader"></div>
     <button class="alt" onclick="manual()">Ingresar código a mano</button>
-    <div class="msg" id="scanmsg">Apuntá la cámara al QR</div>
+    <div class="msg" id="scanmsg">Apunta la cámara al QR</div>
     <button type="button" onclick="cambiarEvento()" style="background:none;border:0;color:#9a948a;font-size:12px;text-decoration:underline;cursor:pointer;padding:8px 0;margin-top:4px">← Cambiar de evento</button>
   </div>
 </div>
@@ -145,9 +145,9 @@ window.PU={
 
   async function cargar(){
     SLUG=(el('slug').value||"").trim().toLowerCase();
-    if(!SLUG){el('loadmsg').textContent="Escribí la dirección del evento.";return;}
+    if(!SLUG){el('loadmsg').textContent="Escribe la dirección del evento.";return;}
     if(PU.activo() && SLUG!==window.PUERTA.slug){ el('loadmsg').textContent="Con la clave de puerta sólo se puede abrir la fiesta "+window.PUERTA.slug+"."; SLUG=window.PUERTA.slug; el('slug').value=SLUG; }
-    if(!PU.activo() && (!window.INV||!INV.ok)){el('loadmsg').textContent="Conectando a la base… probá de nuevo en 2 seg.";return;}
+    if(!PU.activo() && (!window.INV||!INV.ok)){el('loadmsg').textContent="Conectando a la base… prueba de nuevo en 2 seg.";return;}
     el('btnLoad').textContent="Cargando…";el('btnLoad').disabled=true;
     if(PU.activo()){
       try{
@@ -160,9 +160,9 @@ window.PU={
         el('s-tot').textContent=activos.reduce((a,g)=>a+(g.usosMax||1),0);
         actualizarStats();
         el('login').classList.add('hidden'); el('panel').classList.remove('hidden');
-        if(j.nombres) el('scanmsg').textContent='Puerta de '+j.nombres+' · apuntá la cámara al QR';
+        if(j.nombres) el('scanmsg').textContent='Puerta de '+j.nombres+' · apunta la cámara al QR';
         iniciarCamara();
-      }catch(e){ el('loadmsg').textContent="No pude cargar la fiesta. Revisá la conexión y probá de nuevo."; el('btnLoad').textContent="Cargar lista de invitados"; el('btnLoad').disabled=false; }
+      }catch(e){ el('loadmsg').textContent="No pude cargar la fiesta. Revisa la conexión y prueba de nuevo."; el('btnLoad').textContent="Cargar lista de invitados"; el('btnLoad').disabled=false; }
       return;
     }
     try{
@@ -177,7 +177,7 @@ window.PU={
       }catch(_e){ /* si no se puede leer el evento, seguimos como antes */ }
       const lista=await INV.listInvitados(SLUG);
       const activos=lista.filter(g=>g.activo!==false);
-      if(!activos.length){el('loadmsg').textContent="No encontré invitados para ese evento. Revisá la dirección.";el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;return;}
+      if(!activos.length){el('loadmsg').textContent="No encontré invitados para ese evento. Revisa la dirección.";el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;return;}
       MAPA.clear(); INGRESOS=0;
       activos.forEach(g=>{ MAPA.set(g.token,g); if((g.usosMax||0)-(g.usos||0)>0) INGRESOS+=(g.usosMax-(g.usos||0)); });
       el('s-tot').textContent=activos.reduce((a,g)=>a+(g.usosMax||1),0);
@@ -188,10 +188,10 @@ window.PU={
       var m=String(e&&e.message||e);
       // el operador de puerta no tiene que leer errores técnicos
       el('loadmsg').textContent = /permission|insufficient/i.test(m)
-        ? "No tenés permiso para ver este evento. Iniciá sesión de nuevo."
+        ? "No tienes permiso para ver este evento. Inicia sesión de nuevo."
         : (/network|offline|unavailable/i.test(m)
-            ? "Sin internet. Revisá la conexión y probá de nuevo."
-            : "No pude cargar el evento. Revisá la dirección y probá de nuevo.");
+            ? "Sin internet. Revisa la conexión y prueba de nuevo."
+            : "No pude cargar el evento. Revisa la dirección y prueba de nuevo.");
       el('btnLoad').textContent="Cargar lista de invitados";el('btnLoad').disabled=false;}
   }
   function actualizarStats(){
@@ -201,7 +201,7 @@ window.PU={
   function iniciarCamara(){
     scanner=new Html5Qrcode("reader");
     scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:230,height:230}},onScan,()=>{})
-      .catch(e=>{el('scanmsg').textContent="No pude abrir la cámara. Usá 'Ingresar código a mano'.";});
+      .catch(e=>{el('scanmsg').textContent="No pude abrir la cámara. Usa 'Ingresar código a mano'.";});
   }
   function parseToken(txt){ try{ if(txt.includes('g=')){const u=new URL(txt,location.href);return u.searchParams.get('g');} }catch(e){} return (txt||"").trim(); }
 
@@ -232,12 +232,12 @@ window.PU={
     // celulares en la puerta, el mismo QR entraba dos veces.
     mostrar('wait','⏳','Verificando…','Un segundo',g);
     if(!PU.activo() && !(window.INV&&INV.ok)){
-      mostrar('bad','✕','Sin conexión','No puedo verificar el pase. Reintentá.',g);
+      mostrar('bad','✕','Sin conexión','No puedo verificar el pase. Reintenta.',g);
       return;
     }
     let r=null;
     try{ r = PU.activo() ? await PU.pedir({accion:'uso',token}) : await INV.marcarUso(SLUG,token); }
-    catch(e){ mostrar('bad','✕','Sin conexión','No se registró el ingreso. Reintentá.',g); return; }
+    catch(e){ mostrar('bad','✕','Sin conexión','No se registró el ingreso. Reintenta.',g); return; }
 
     if(!r||!r.ok){
       if(r&&r.data){ g=Object.assign(g,r.data); }
@@ -245,7 +245,7 @@ window.PU={
         mostrar('warn','⚠','Ya ingresó','No le quedan pases',g); }
       else if(r&&r.motivo==='bloqueado'){ mostrar('bad','✕','Puerta bloqueada','El control de accesos está bloqueado desde el panel',g); }
       else if(r&&r.motivo==='baja'){ MAPA.delete(token); mostrar('bad','✕','Pase dado de baja','Los anfitriones borraron este pase',g); }
-      else { mostrar('bad','✕','No pude registrarlo','Reintentá o anotalo a mano',g); }
+      else { mostrar('bad','✕','No pude registrarlo','Reintenta o anotalo a mano',g); }
       return;
     }
     if(r.data){ g=Object.assign(g,r.data); }   /* nombre, mesa y usos frescos de la base */
@@ -270,7 +270,7 @@ window.PU={
     rc.innerHTML='<div class="ico">'+esc(ico)+'</div><div class="nom">'+esc(g?g.nombre:'—')+'</div><div class="est">'+esc(estado)+'</div>'+extra+'<button onclick="siguiente()">Siguiente ›</button>';
     el('res').classList.remove('hidden');
   }
-  function siguiente(){ el('res').classList.add('hidden'); setTimeout(()=>{pausa=false;el('scanmsg').textContent="Apuntá la cámara al QR";},300); }
+  function siguiente(){ el('res').classList.add('hidden'); setTimeout(()=>{pausa=false;el('scanmsg').textContent="Apunta la cámara al QR";},300); }
   function cambiarEvento(){
     try{ if(scanner&&scanner.stop) scanner.stop().catch(()=>{}); }catch(e){}
     scanner=null; MAPA.clear(); SLUG=""; pausa=false;
@@ -283,7 +283,7 @@ window.PU={
   // Espera a que HAYA SESIÓN: sin login no se pide la lista de invitados.
   (function(){ const e=new URLSearchParams(location.search).get('e'); if(!e)return; el('slug').value=e; el('loadmsg').textContent='Cargando el evento…';
     const t=setInterval(()=>{ if(window.PUERTA){ clearInterval(t); return; } if(window.INV&&window.INV.ok&&window.INV.user){ clearInterval(t); cargar(); } },400);
-    setTimeout(()=>{ clearInterval(t); if(!SLUG&&!(window.INV&&window.INV.user)&&!window.PUERTA) el('loadmsg').textContent='Iniciá sesión para cargar el evento.'; },12000); })();
+    setTimeout(()=>{ clearInterval(t); if(!SLUG&&!(window.INV&&window.INV.user)&&!window.PUERTA) el('loadmsg').textContent='Inicia sesión para cargar el evento.'; },12000); })();
 </script>
 <script type="module" src="firebase-inv.js?v=26"></script>
 </body></html>
