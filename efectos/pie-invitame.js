@@ -37,6 +37,14 @@
     var v = e && e['c_deshabilitar-publicidad-de-invitame'];
     return v === true || v === 'true' || v === 1 || v === '1' || v === 'si' || v === 'sí';
   }
+  /* ★ 30/10/2026 (Maki): «los wedding planners venden con su propia marca».
+     Con «WhatsApp del wedding planner» (AVANZADO) el pie no nombra a Invítame:
+     dice sólo «¿Quieres una invitación como esta? Ingresa aquí» y abre el
+     WhatsApp del planner. Es elegido a mano: vale también en las ya hechas. */
+  function planner(e) {
+    var n = String((e && e['c_whatsapp-wedding-planner']) || '').replace(/[^0-9]/g, '');
+    return n.length >= 8 ? n : '';
+  }
   function ingles() { return /^en/i.test(document.documentElement.lang || ''); }
   function luz(c) {
     var m = String(c || '').match(/\d+(\.\d+)?/g); if (!m) return 1;
@@ -53,8 +61,10 @@
     var e = ev();
     if (!pie || !pie.parentNode || !e) return;
     /* ⛔ 29/10: las invitaciones ya hechas quedan con su renglón de siempre */
-    if (!nueva(e)) { sacar(); if (pie.__pieInv) { pie.style.display = ''; pie.__pieInv = 0; } return; }
-    if (apagado(e)) { sacar(); pie.style.display = 'none'; pie.__pieInv = 1; return; }
+    var pl = planner(e);
+    if (!pl && !nueva(e)) { sacar(); if (pie.__pieInv) { pie.style.display = ''; pie.__pieInv = 0; } return; }
+    /* con el WhatsApp del planner cargado, sale el pie del planner aunque esté tildado «Deshabilitar publicidad de invitame» (ése saca lo de Invítame) */
+    if (!pl && apagado(e)) { sacar(); pie.style.display = 'none'; pie.__pieInv = 1; return; }
     if (!document.getElementById(ID_CSS)) {
       var s = document.createElement('style'); s.id = ID_CSS; s.textContent = CSS;
       (document.head || document.documentElement).appendChild(s);
@@ -62,11 +72,16 @@
     var tono = luz(getComputedStyle(pie).color) > 0.6 ? 'oscuro' : 'claro';
     var b = document.getElementById(ID);
     var en = ingles();
-    var firma = tono + '|' + (en ? 'en' : 'es');
+    var firma = tono + '|' + (en ? 'en' : 'es') + '|' + pl;
     if (!b) { b = document.createElement('div'); b.id = ID; }
     if (b.__firma !== firma) {
       b.__firma = firma;
       b.className = 'inv-pub ' + tono;
+      if (pl) {
+        var txt = en ? 'Hi! I saw an invitation and I would like one like it.' : '¡Hola! Vi una invitación y quiero una como esta.';
+        b.innerHTML = '<div>' + (en ? 'Want an invitation like this one? ' : '¿Quieres una invitación como esta? ') +
+          '<a href="https://wa.me/' + pl + '?text=' + encodeURIComponent(txt) + '" target="_blank" rel="noopener">' + (en ? 'Click here' : 'Ingresa aquí') + '</a></div>';
+      } else
       b.innerHTML = '<div class="l1"><img src="/invitame-marca.png" alt="Invítame">' +
         (en ? 'Invitation made with Invítame' : 'Invitación creada con Invítame') + '</div>' +
         '<div>' + (en ? 'Want an invitation like this one? ' : '¿Quieres una invitación como esta? ') +
