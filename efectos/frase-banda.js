@@ -300,6 +300,28 @@
     });
     /* el orden: tipografía, tamaño, color */
     CAMPOS_TEXTO.forEach(function (k) { var g = slot.querySelector('[data-fb-campo="' + k[0] + '"]'); if (g) slot.appendChild(g); });
+    /* ★ 30/10/2026 (Jazmín, diego-y-viviana: «no se puede sacar esa lluvia
+       roja»): el «Fondo con movimiento» de la frase (bokeh, pétalos…) vivía
+       en la pestaña GALERÍA y nadie lo encontraba. Ahora va ACÁ, en la caja
+       de la frase, y el de GALERÍA se esconde (un control en un solo lugar). */
+    esconderViejo();
+    var d = borrador();
+    var sel = slot.querySelector('#fb-movimiento');
+    if (!sel && d) {
+      var g = document.createElement('div'); g.className = 'grp'; g.setAttribute('data-fb-campo', 'fraseFx');
+      g.innerHTML = '<label>Movimiento sobre la frase (círculos, pétalos, destellos)</label>';
+      sel = document.createElement('select'); sel.id = 'fb-movimiento';
+      [['none', 'Ninguno'], ['bokeh', 'Círculos suaves (bokeh)'], ['destellos', 'Destellos'], ['estrellas', 'Estrellas doradas'],
+       ['petalos', 'Pétalos cayendo'], ['gradiente', 'Degradado animado'], ['ondas', 'Ondas suaves']].forEach(function (o) {
+        var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op);
+      });
+      sel.onchange = function () { var dd = borrador(); if (!dd) return; dd.fraseFx = sel.value; refrescar(); };
+      g.appendChild(sel);
+      var h = document.createElement('div'); h.className = 'hint'; h.textContent = '«Ninguno» saca la lluvia de círculos o pétalos que se mueve sobre la frase.';
+      g.appendChild(h);
+      slot.appendChild(g);
+    }
+    if (sel && d && document.activeElement !== sel) { var v = d.fraseFx || 'none'; if (sel.value !== v) sel.value = v; }
   }
 
   function traerDelDiseno(d, btn) {
@@ -321,8 +343,15 @@
     }).catch(function () { btn.disabled = false; btn.textContent = 'Usar la imagen del diseño'; alert('No se pudo traer la imagen del diseño. Probá de nuevo.'); });
   }
 
+  /* el «Fondo con movimiento» viejo de GALERÍA se esconde siempre (vive en la caja de la frase) */
+  function esconderViejo() {
+    [].forEach.call(document.querySelectorAll('select[onchange*="\'fraseFx\'"]'), function (s) {
+      var m = s.closest('.mejoras'); if (m && m.style.display !== 'none') m.style.display = 'none';
+    });
+  }
   function revisarPanel() {
     var d = borrador(); if (!d) return;
+    esconderViejo();
     if (document.getElementById(ID)) { mudarCampos(); return; }
     var a = window.invCasa ? window.invCasa(ID) : null;
     if (!a) return;

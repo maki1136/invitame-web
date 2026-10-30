@@ -127,6 +127,9 @@
         anotarSalida();          /* se anota la altura ANTES de irse */
       };
       a.addEventListener('pointerdown', refrescar);
+      /* ★ 30/10: y también solo, el primer medio minuto (el href viejo traía el
+         nombre de ejemplo «Hugo y Lucía» si el invitado cargaba tarde). */
+      (function () { var k = 0, ti = setInterval(function () { a.setAttribute('href', armarUrl(cfg.gid)); if (++k > 30) clearInterval(ti); }, 1000); })();
       a.addEventListener('focus', refrescar);
       a.addEventListener('click', refrescar);
       a.addEventListener('pointerdown', hundir);

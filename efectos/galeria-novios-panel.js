@@ -35,7 +35,7 @@
 
   function pintar(cont, cfg) {
     if (!document.getElementById('gn-css')) { var st = document.createElement('style'); st.id = 'gn-css'; st.textContent = ESTILO; document.head.appendChild(st); }
-    var filtro = 'todo', items = [];
+    var filtro = 'todo', items = [], gid = '';
     cont.innerHTML = '<div class="card">Cargando las fotos…</div>';
 
     function dibujar() {
@@ -53,9 +53,34 @@
             }).join('') +
             '<button data-gnr="1">↻ Actualizar</button>' +
           '</div>' +
+          paraLaFiesta() +
           (lista.length ? '<div class="gn-grilla">' + lista.map(tarjeta).join('') + '</div>'
                         : '<div class="hint">Todavía no hay nada acá.</div>') +
         '</div>';
+    }
+    /* ★ 30/10/2026 — Maki: «como vamos a ir nosotros a todas las fiestas».
+       Los links que hacen falta EL DÍA (la pantalla del salón, el cartel con
+       el QR para imprimir y el link para subir fotos) sólo estaban en el panel
+       del equipo. Ahora los novios los tienen acá y los mandan por WhatsApp. */
+    function paraLaFiesta() {
+      if (!gid) return '';
+      var B = 'https://invitameok.net', g = encodeURIComponent(gid);
+      var L = [
+        ['Pantalla del salón', B + '/galeria/pantalla.html?g=' + g, 'Ábrelo en la compu o TV del salón y toca el botón para empezar: pasa las fotos que suben los invitados y cada tanto el QR para subir.'],
+        ['Cartel con el QR para imprimir', B + '/galeria/cartel.html?g=' + g, 'Para las mesas o la entrada: los invitados escanean y suben sus fotos.'],
+        ['Link para que suban fotos', B + '/galeria/?g=' + g, 'El mismo del QR, para mandarlo por WhatsApp.']
+      ];
+      return '<div style="border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:12px 14px;margin:0 0 14px">' +
+        '<b style="font-size:14px">Para el día de la fiesta</b>' +
+        L.map(function (x) {
+          var msj = x[0] + ' de nuestra fiesta: ' + x[1];
+          return '<div style="margin-top:10px"><div style="font-weight:600;font-size:13px">' + x[0] + '</div>' +
+            '<div class="hint" style="margin:2px 0 6px">' + x[2] + '</div>' +
+            '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+              '<a class="btn" style="text-decoration:none;padding:8px 12px;font-size:12.5px" target="_blank" rel="noopener" href="' + x[1] + '">Abrir</a>' +
+              '<a class="btn gris" style="text-decoration:none;padding:8px 12px;font-size:12.5px" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msj) + '">Enviar por WhatsApp</a>' +
+            '</div></div>';
+        }).join('') + '</div>';
     }
     function tarjeta(i) {
       var cuerpo;
@@ -75,7 +100,7 @@
       api(cfg, { accion: 'listar' }).then(function (j) {
         if (!j || !j.ok) { cont.innerHTML = '<div class="card">No pudimos traer las fotos (' + esc(j && j.error) + '). Probá de nuevo en un rato.</div>'; return; }
         if (j.sinGaleria) { cont.innerHTML = '<div class="card"><h3 style="margin:0 0 6px">Fotos de la fiesta</h3><div class="hint">Tu invitación todavía no tiene la galería de fotos de los invitados. Si la contrataste, escribinos y la activamos.</div></div>'; return; }
-        items = j.items || []; dibujar();
+        items = j.items || []; gid = j.gid || ''; dibujar();
       }).catch(function () { cont.innerHTML = '<div class="card">Sin conexión. Probá de nuevo.</div>'; });
     }
     cont.onclick = function (e) {

@@ -215,9 +215,9 @@
       const ref=lat.querySelector('a[data-vista="invitados"]'); ref.parentNode.insertBefore(a, ref);
       try{ if(typeof ICO!=='undefined' && ICO.lista) a.querySelector('.ico').innerHTML=ICO.lista; }catch(e){}
     }
-    ['invitados','mesas','qr'].forEach(v=>{ const x=lat.querySelector('a[data-vista="'+v+'"]'); if(x) x.style.display=GENERAL()?'none':''; });
+    ['invitados','mesas','qr','puerta'].forEach(v=>{ const x=lat.querySelector('a[data-vista="'+v+'"]'); if(x) x.style.display=GENERAL()?'none':''; });
     if(a) a.style.display=GENERAL()?'':'none';
-    if(GENERAL() && ['invitados','mesas','qr'].indexOf(VISTA)>=0) VISTA='confirmaciones';
+    if(GENERAL() && ['invitados','mesas','qr','puerta'].indexOf(VISTA)>=0) VISTA='confirmaciones';
   }
   function respuestasGeneral(){
     return GENTE.filter(g=>estadoDe(g)!=='sin').slice().sort((a,b)=>tiempo(b)-tiempo(a));
@@ -254,11 +254,11 @@
     $('ttNombres').textContent = PANEL.nombres || SLUG;
     $('ttFecha').textContent   = PANEL.fechaTexto || '';
     $('topSub').textContent    = ({resumen:'Panel de control', invitados:'Personas y pases',
-      mesas:'Mesas', confirmaciones:'Confirmaciones', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', std:'Save the date', fotos:'Fotos de la fiesta', opciones:'Opciones'})[VISTA] || 'Mi panel';
+      mesas:'Mesas', confirmaciones:'Confirmaciones', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', puerta:'Puerta (escáner QR)', std:'Save the date', fotos:'Fotos de la fiesta', opciones:'Opciones'})[VISTA] || 'Mi panel';
     document.querySelectorAll('.lat a[data-vista]').forEach(a=>
       a.classList.toggle('on', a.dataset.vista===VISTA));
     ({resumen:vResumen, confirmaciones:vConfirmaciones, invitados:vInvitados, mesas:vMesas, itinerario:vItinerario,
-      mensajes:vMensajes, qr:vQR, std:vSTD, fotos:vFotos, opciones:vOpciones}[VISTA] || vResumen)();
+      mensajes:vMensajes, qr:vQR, puerta:vPuerta, std:vSTD, fotos:vFotos, opciones:vOpciones}[VISTA] || vResumen)();
   }
 
   /* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma», punto 2): los números de
@@ -613,6 +613,43 @@
   }
 
   // ---------- 5. QR PARA IMPRIMIR ----------
+  /* ★ 30/10/2026 — LA PUERTA. Maki: «como vamos a ir nosotros a todas las
+     fiestas… cada fiesta con QR debe tener eso». Los novios le mandan a quien
+     esté en la puerta el link del escáner y la CLAVE DE PUERTA de su fiesta
+     (puerta.php la calcula; no se guarda en ningún lado). Esa persona escanea
+     sin cuenta del equipo y sólo ve esta fiesta. */
+  let CLAVE_PUERTA=null;
+  async function vPuerta(){
+    const v=$('vista');
+    v.innerHTML='<div class="card">Cargando la clave de la puerta…</div>';
+    if(!CLAVE_PUERTA){
+      try{
+        const r=await fetch('/puerta.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accion:'clave',slug:SLUG,clave:CLAVE})});
+        const j=await r.json(); if(j.ok) CLAVE_PUERTA=j;
+      }catch(e){}
+    }
+    if(VISTA!=='puerta') return;
+    if(!CLAVE_PUERTA){ v.innerHTML='<div class="card">No pudimos traer la clave de la puerta. Revisa tu conexión y vuelve a entrar a esta sección.</div>'; return; }
+    const link=CLAVE_PUERTA.link, k=CLAVE_PUERTA.puerta;
+    const msj='Hola! Para controlar la entrada de nuestra fiesta con el QR de cada invitado:\n\n1. Abre este link en tu celular: '+link+'\n2. Pon la clave de la puerta: '+k+'\n3. Toca «Entrar a la puerta», permite la cámara y escanea el QR del pase de cada invitado.\n\nVerde = puede pasar. Amarillo = ya usó todos sus lugares. Rojo = no es de esta fiesta o fue dado de baja.';
+    v.innerHTML=
+      '<div class="card" style="max-width:560px">'+
+        '<h3 style="margin:0 0 6px">La puerta de tu fiesta</h3>'+
+        '<p style="margin:0 0 14px;color:var(--text-secondary);font-size:13.5px">Mándale esto a quien vaya a controlar la entrada (el salón, el organizador o un familiar). '+
+          'Escanea el QR del pase de cada invitado con su celular. No necesita cuenta: sólo el link y la clave, y únicamente ve tu fiesta.</p>'+
+        '<label style="font-size:12px;font-weight:600">Link del escáner</label>'+
+        '<div style="font-family:monospace;font-size:13px;background:var(--bg-soft,#f5f1ea);padding:10px;border-radius:8px;word-break:break-all;margin:4px 0 12px">'+esc(link)+'</div>'+
+        '<label style="font-size:12px;font-weight:600">Clave de la puerta</label>'+
+        '<div id="pu-k" style="font-family:monospace;font-size:26px;letter-spacing:.18em;font-weight:700;margin:4px 0 16px">'+esc(k)+'</div>'+
+        '<div style="display:flex;gap:10px;flex-wrap:wrap">'+
+          '<a class="btn" style="text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(msj)+'">Enviar por WhatsApp</a>'+
+          '<button class="btn gris" id="pu-copiar">Copiar mensaje</button>'+
+        '</div>'+
+        '<p style="margin:14px 0 0;color:var(--text-secondary);font-size:12.5px">Pueden escanear varios celulares a la vez: un mismo QR no entra dos veces. Necesita internet en la puerta.</p>'+
+      '</div>';
+    const c=$('pu-copiar'); if(c) c.onclick=()=>{ try{ navigator.clipboard.writeText(msj.replace(/\\n/g,'\n')); toast('Mensaje copiado'); }catch(e){} };
+  }
+
   function vQR(){
     $('vista').innerHTML =
       '<div class="barrita"><button class="accion" id="imprimir">Imprimir esta hoja</button></div>'+
