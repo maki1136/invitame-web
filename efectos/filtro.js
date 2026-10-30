@@ -283,6 +283,8 @@
     var pedidos = parado
       ? [{ facingMode: camara, width: { ideal: 720 }, height: { ideal: 1280 } },
          { facingMode: camara, aspectRatio: { exact: 9 / 16 }, height: { ideal: 1280 } },
+         /* el iPhone mide en el sentido del sensor: pidiendo 1280×720 con el teléfono parado, entrega 720×1280 */
+         { facingMode: camara, width: { ideal: 1280 }, height: { ideal: 720 } },
          { facingMode: camara, aspectRatio: { ideal: 9 / 16 }, width: { ideal: 1280 } }]
       : [{ facingMode: camara, aspectRatio: { ideal: 9 / 16 }, width: { ideal: 1280 } }];
     function pedir(i) {
@@ -308,14 +310,14 @@
       } catch (e) {}
       var fo = document.getElementById('filtro-fondo');
       v.onloadedmetadata = function () {
-        var acostada = v.videoWidth > v.videoHeight;
-        v.style.objectFit = acostada ? 'contain' : 'cover';
+        /* ★ 30/10/2026 (Maki, en iPhone y Android: «tiene que estar toda la foto
+           en vertical, 9:16, como para historia»). SIEMPRE llena el marco: si la
+           cámara manda la toma acostada, se recortan los costados (como hace
+           Instagram). Nada de franjas ni difuminado. */
+        v.style.objectFit = 'cover';
         encuadrar();
         barraDeCamara(col);
-        if (fo) {
-          fo.style.display = acostada ? 'block' : 'none';
-          if (acostada) { fo.srcObject = s; fo.style.transform = v.style.transform; fo.play().catch(function () {}); }
-        }
+        if (fo) { fo.style.display = 'none'; }
       };
       v.play().catch(function () {});
       barraDeCamara(col);
@@ -404,11 +406,11 @@
   /* ★ 29/10 (Jazmín: «no se ve el zoom pero tampoco se ve completo, se ve
      cortada»). Con la toma acostada hay tres encuadres y se elige con un botón:
      intermedio (por defecto), lleno (como antes) y completo (entera). */
-  var AJUSTES = [0.55, 1, 0], ajusteI = 0;
+  var AJUSTES = [1], ajusteI = 0;   /* 30/10: siempre lleno (9:16) */
   function escalaDe(fw, fh, bw, bh) {
     if (!(fw > fh)) return 1;
     var h0 = (bw * fh / fw) / bh;                 /* alto que ocupa entera, de 0 a 1 */
-    return Math.pow(1 / h0, AJUSTES[ajusteI]);
+    return 1;   /* 30/10: con «cover» el recorte ya lo hace el video; escalar encima era doble zoom */
   }
   function encuadrar() {
     var v = document.getElementById('filtro-video'), caja = document.getElementById('filtro-marco-caja');
@@ -447,7 +449,7 @@
     b.appendChild(girar);
     b.appendChild(tirar);
     var v0 = document.getElementById('filtro-video');
-    if (v0 && v0.videoWidth > v0.videoHeight) {
+    if (false) {
       var enc = document.createElement('button');
       enc.type = 'button';
       enc.setAttribute('aria-label', 'Cambiar el encuadre');
@@ -495,7 +497,7 @@
       /* Recorte "cover": se llena la caja y se corta lo que sobra.
          Si la toma vino ACOSTADA, va entera (contain) sobre la misma
          imagen agrandada y desenfocada, igual que en la pantalla. */
-      var acostada = fw > fh;
+      var acostada = false;   /* 30/10: la foto también llena el 9:16, igual que la pantalla */
       var escala = Math.max(ANCHO / fw, ALTO / fh);
       var w = fw * escala, h = fh * escala;
       var dx = (ANCHO - w) / 2, dy = (ALTO - h) / 2;
