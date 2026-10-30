@@ -49,7 +49,7 @@
     if (!ev || typeof ev !== 'object') return;
     ['nfont', 'fTit', 'fTit2', 'fraseFont'].forEach(function (k) { pedir(familia(ev[k])); });
     for (var k in ev) {
-      if (/^c_tipograf/i.test(k)) pedir(familia(ev[k]));
+      if (/^c_(.*-)?tipograf/i.test(k)) pedir(familia(ev[k]));
     }
     var fx = ev.fx || {};
     /* la de los nombres, si la eligieron en el panel, le gana a la colección */
