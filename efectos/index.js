@@ -657,6 +657,7 @@
     '/efectos/previa-vidriera.js',     /* la miniatura esconde el pase y el formulario, como la publicada sin link */
     '/efectos/aviso-privacidad.js',    /* la línea de privacidad al pie de la confirmación */
     '/efectos/rsvp-muestra.js',        /* la muestra: la confirmación y el pase, sin invitado */
+    '/efectos/pase-mensaje.js',        /* 30/10: el «Mensaje» que los novios le escriben a cada invitado, debajo de su pase */
     '/efectos/pase-simple.js',         /* 20/10: el pase sin nombre, QR ni mesa — sólo «¡Esperamos contar contigo!» y las personas (fx.pase.modo='simple') */
     '/efectos/panel-muestra.js',       /* el Sector de muestras del panel: los dos interruptores */
     '/efectos/compartir.js',           /* «Compartí la invitación»: textos y sacarla */
