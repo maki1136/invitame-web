@@ -83,7 +83,21 @@
               'html body #car.carousel.mosaico::after{display:none!important}' +
               'html body #car.carousel.mosaico img{flex:0 0 82%!important;width:82%!important;height:auto!important;aspect-ratio:4/5;object-fit:cover;object-position:50% 28%!important;scroll-snap-align:center;position:relative!important;opacity:1!important}'
   };
+  /* ★ 30/10/2026 (Jazmín, bladimir-y-diana): «eliminar [los puntitos] cuando la
+     galería esté en formato mosaico, no los necesitamos para pasar las fotos».
+     El motor los escondía buscándolos ADENTRO de #car, pero están al lado: en
+     mosaico quedaban 6 puntitos que no hacían nada. Con el slider siguen. */
+  function puntitos() {
+    var car = document.getElementById('car'); if (!car) return;
+    var sec = car.closest('section') || car.parentNode;
+    var mos = car.classList.contains('mosaico');
+    [].forEach.call(sec.querySelectorAll('.dots'), function (d) {
+      if (mos) { if (d.style.display !== 'none') { d.style.setProperty('display', 'none', 'important'); d.setAttribute('data-sin-puntos', '1'); } }
+      else if (d.getAttribute('data-sin-puntos')) { d.style.removeProperty('display'); d.removeAttribute('data-sin-puntos'); }
+    });
+  }
   function mosaico() {
+    puntitos();
     var e = ev(); var m = e ? String(((e.fx || {}).fotos || {}).mosaico || '') : '';
     var s = document.getElementById(HOJA_M);
     if (!MOS[m]) { if (s) s.remove(); return; }
