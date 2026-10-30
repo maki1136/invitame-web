@@ -300,6 +300,19 @@
     });
     /* el orden: tipografía, tamaño, color */
     CAMPOS_TEXTO.forEach(function (k) { var g = slot.querySelector('[data-fb-campo="' + k[0] + '"]'); if (g) slot.appendChild(g); });
+    /* ★ 30/10/2026 (Jazmín, diego-y-viviana: «no se puede sacar esa lluvia
+       roja»): el «Fondo con movimiento» de la frase (bokeh, pétalos…) vivía
+       en la pestaña GALERÍA y nadie lo encontraba. Se muda ACÁ (es el mismo
+       control, no una copia): «Ninguno» lo saca. */
+    var fx = [].slice.call(document.querySelectorAll('#panel select[onchange*="\'fraseFx\'"]')).filter(function (x) { return !caja.contains(x); })[0];
+    if (fx) {
+      var bloque = fx.closest('.mejoras') || fx.parentElement;
+      [].forEach.call(slot.querySelectorAll('[data-fb-campo="fraseFx"]'), function (v) { v.remove(); });
+      bloque.setAttribute('data-fb-campo', 'fraseFx');
+      var h = bloque.querySelector('.h'); if (h) h.lastChild.textContent = ' Movimiento sobre la frase (círculos, pétalos, destellos) — «Ninguno» lo saca';
+      bloque.style.margin = '12px 0 0';
+      slot.appendChild(bloque);
+    }
   }
 
   function traerDelDiseno(d, btn) {
