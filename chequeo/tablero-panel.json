@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-30T18:55:15.822Z",
+ "cuando": "2026-10-30T19:56:10.561Z",
  "slug": "camila-y-tomas",
- "total": 438,
- "verde": 430,
+ "total": 440,
+ "verde": 432,
  "amarillo": 0,
  "rojo": 8,
  "gris": 0,
@@ -636,6 +636,17 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fTit2",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "",
+   "control": "Tipografía de los subtítulos (cursiva arriba de cada título):",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "c_tipografia-subtitulos",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3219,6 +3230,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_bloquear-control-de-accesos-qr-y-mesas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "AVANZADO",
+   "bloque": "",
+   "control": "Activar",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "c_bloquear-acceso-sin-pase",
    "llega": true,
    "seVe": true,
    "estado": "verde"
