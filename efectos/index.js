@@ -749,6 +749,7 @@
     '/efectos/wa-flotante.js',         /* el flotante de WhatsApp iba a wa.me/ sin número */
     '/efectos/muestra-venta.js',       /* la muestra vende: teléfonos de Invítame y el llamado */
     '/efectos/iconos-eventos.js',      /* 29/10: íconos en los lugares de Dónde y cuándo */
+    '/efectos/subtitulos-fuente.js',   /* 30/10: la letra de los subtítulos (.kick) desde el panel */
     '/efectos/sector-elegido.js',      /* 29/10: el fondo/color de sección elegido en el panel le gana a la colección */
     '/efectos/pie-invitame.js',        /* 28/10: el pie «creada con Invítame» con link a la web (se saca en AVANZADO) */
     '/efectos/textos-largos.js',       /* hoteles y vestimenta: se pliegan con "Ver más" */

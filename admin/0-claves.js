@@ -66,6 +66,7 @@
     "Tipografía protagonistas:": "nfont",
     "Tipografía principal:": "fTit",
     "Tipografía secundaria:": "fTit2",
+    "Tipografía de los subtítulos (cursiva arriba de cada título):": "c_tipografia-subtitulos",
     "Frase Larga:": "frase",
     "Color frase larga:": "fraseColor",
     "Tipografía frase larga:": "fraseFont",

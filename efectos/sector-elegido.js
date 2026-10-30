@@ -91,6 +91,10 @@
         css.push(S + '::before,' + S + '::after{background:none!important;background-image:none!important;opacity:0!important}');
       }
       if (tx) css.push(S + ' :is(h2,h3,p,.kick,.d,.l,li,.t){color:' + tx + '!important;-webkit-text-fill-color:' + tx + '!important}');
+      /* ★ 30/10 (Jazmín, diego-y-viviana: «en el itinerario el color de la
+         tipografía no se modifica»): las HORAS (.h) se quedaban con el color
+         principal. Sólo en invitaciones nuevas (INVNUEVA). */
+      if (tx && s === 'itinerario' && window.INVNUEVA && window.INVNUEVA(e)) css.push(S + ' .tl .it :is(.h,.d,.t){color:' + tx + '!important;-webkit-text-fill-color:' + tx + '!important}');
     });
     /* los recuadros */
     Object.keys(RECU).forEach(function (s) {
