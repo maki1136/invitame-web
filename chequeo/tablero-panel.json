@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-30T18:32:05.146Z",
+ "cuando": "2026-10-30T18:37:47.507Z",
  "slug": "camila-y-tomas",
- "total": 437,
- "verde": 428,
- "amarillo": 1,
+ "total": 438,
+ "verde": 430,
+ "amarillo": 0,
  "rojo": 8,
  "gris": 0,
  "items": [
@@ -721,6 +721,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -913,17 +924,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2951,9 +2951,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.departe",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
@@ -3083,6 +3082,17 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "idioma",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "AVANZADO",
+   "bloque": "",
+   "control": "WhatsApp del wedding planner (pie de la invitación):",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "c_whatsapp-wedding-planner",
    "llega": true,
    "seVe": true,
    "estado": "verde"
