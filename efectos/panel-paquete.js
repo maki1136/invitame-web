@@ -295,6 +295,18 @@
     sel.onchange = function () {
       var d2 = borrador(); if (!d2) return;
       cfg(d2).plan = sel.value;
+      /* ★ 30/10/2026 — EL PASE SIGUE AL PAQUETE. Un Plus nace con el pase
+         simple (sin nombre ni QR). Si después se lo pasa a Premium/Platinum,
+         el pase seguía simple: la puerta no tenía QR que escanear. Ahora, al
+         elegir un paquete con «Pases personalizados», se saca el simple; y al
+         elegir el Plus, se pone (igual que el formulario). */
+      var tt = tabla();
+      if (tt && sel.value) {
+        var c2 = cfg(d2), conPases = tt.tiene(sel.value, 'pases', c2.extras), conCant = tt.tiene(sel.value, 'paseCantidad', c2.extras);
+        d2.fx = d2.fx || {};
+        if (conPases && d2.fx.pase && String(d2.fx.pase.modo || '').toLowerCase() === 'simple') d2.fx.pase.modo = '';
+        else if (!conPases && conCant) { d2.fx.pase = d2.fx.pase || {}; d2.fx.pase.modo = 'simple'; }
+      }
       pintar(); refrescar();
     };
 
