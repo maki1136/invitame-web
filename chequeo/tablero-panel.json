@@ -1,5 +1,5 @@
 {
- "cuando": "2026-10-30T18:37:47.507Z",
+ "cuando": "2026-10-30T18:48:32.136Z",
  "slug": "camila-y-tomas",
  "total": 438,
  "verde": 430,
@@ -510,6 +510,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -548,17 +559,6 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.cierre.textoTam",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -688,22 +688,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
