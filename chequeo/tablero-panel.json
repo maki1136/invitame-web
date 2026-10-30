@@ -1,8 +1,8 @@
 {
- "cuando": "2026-10-29T21:17:24.565Z",
+ "cuando": "2026-10-30T18:15:07.246Z",
  "slug": "camila-y-tomas",
- "total": 433,
- "verde": 425,
+ "total": 437,
+ "verde": 429,
  "amarillo": 0,
  "rojo": 8,
  "gris": 0,
@@ -400,33 +400,11 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "",
-   "control": "Color frase larga:",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fraseColor",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "",
-   "control": "Tipografía frase larga:",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fraseFont",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "",
-   "control": "Tamaño de la frase larga (por defecto automático):",
+   "bloque": "frase-ajustes",
+   "control": "Alto de la imagen: automático",
    "tipo": "range",
    "guarda": true,
-   "dato": "fraseSize",
+   "dato": "fx.frase.alto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -434,10 +412,32 @@
   {
    "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
-   "control": "Ubicación de la frase",
+   "control": "Ampliar la imagen (zoom): sin zoom",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.frase.zoom",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Qué parte de la foto se ve: el centro (50)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.frase.foco",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Cómo entra la foto",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.frase.pos",
+   "dato": "fx.frase.foto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -456,10 +456,10 @@
   {
    "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
-   "control": "Grosor de la letra",
+   "control": "Tipografía",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.frase.peso",
+   "dato": "fraseFont",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -467,10 +467,43 @@
   {
    "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
-   "control": "Cómo entra la foto",
+   "control": "Tamaño del texto (a la izquierda del todo = automático)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fraseSize",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Color del texto",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fraseColor",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Posición del texto",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.frase.foto",
+   "dato": "fx.frase.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Grosor de la letra",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.frase.peso",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -688,6 +721,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -880,17 +924,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1914,10 +1947,10 @@
   {
    "tab": "GALERIA_INSTA_VID",
    "bloque": "",
-   "control": "Frase de la galería (debajo del título):",
-   "tipo": "textarea",
+   "control": "Estilo de la galería de fotos:",
+   "tipo": "lista",
    "guarda": true,
-   "dato": "galFrase",
+   "dato": "c_estilo-de-la-galeria-de-fotos",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1925,10 +1958,21 @@
   {
    "tab": "GALERIA_INSTA_VID",
    "bloque": "",
-   "control": "Bajada galería (arriba del título):",
+   "control": "Título principal de la galería",
    "tipo": "text",
    "guarda": true,
-   "dato": "galKicker",
+   "dato": "galTitulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "",
+   "control": "Título secundario de la galería (opcional)",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "galFrase",
    "llega": true,
    "seVe": true,
    "estado": "verde"
