@@ -304,10 +304,7 @@
        roja»): el «Fondo con movimiento» de la frase (bokeh, pétalos…) vivía
        en la pestaña GALERÍA y nadie lo encontraba. Ahora va ACÁ, en la caja
        de la frase, y el de GALERÍA se esconde (un control en un solo lugar). */
-    [].forEach.call(document.querySelectorAll('#panel select[onchange*="\'fraseFx\'"]'), function (s) {
-      if (caja.contains(s)) return;
-      var m = s.closest('.mejoras'); if (m) m.style.display = 'none';
-    });
+    esconderViejo();
     var d = borrador();
     var sel = slot.querySelector('#fb-movimiento');
     if (!sel && d) {
@@ -346,8 +343,15 @@
     }).catch(function () { btn.disabled = false; btn.textContent = 'Usar la imagen del diseño'; alert('No se pudo traer la imagen del diseño. Probá de nuevo.'); });
   }
 
+  /* el «Fondo con movimiento» viejo de GALERÍA se esconde siempre (vive en la caja de la frase) */
+  function esconderViejo() {
+    [].forEach.call(document.querySelectorAll('select[onchange*="\'fraseFx\'"]'), function (s) {
+      var m = s.closest('.mejoras'); if (m && m.style.display !== 'none') m.style.display = 'none';
+    });
+  }
   function revisarPanel() {
     var d = borrador(); if (!d) return;
+    esconderViejo();
     if (document.getElementById(ID)) { mudarCampos(); return; }
     var a = window.invCasa ? window.invCasa(ID) : null;
     if (!a) return;
