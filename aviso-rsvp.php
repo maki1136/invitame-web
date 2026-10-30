@@ -118,14 +118,27 @@ if ($token === '') {
   echo json_encode(array('ok' => false, 'error' => 'token'));
   exit;
 }
-list($ri, $ci) = traerDoc($PROJECT, 'inv_invitados', $slug . '__' . $token);
+/* ★ 30/10/2026 — INVITACIONES CON CONTRASEÑA (privadas): la lectura anónima da
+   403 y el aviso no salía nunca. Si la anónima no anda, se lee con la cuenta
+   del sistema (la misma que ya se usa abajo para el mail de los novios). */
+$APIKEY_WEB = 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc';
+$__tokSis = null;
+function traerDocSeguro($project, $col, $id) {
+  global $APIKEY_WEB, $__tokSis;
+  list($r, $c) = traerDoc($project, $col, $id);
+  if ($r && $c == 200) return array($r, $c);
+  if ($__tokSis === null) $__tokSis = entrarAlSistema($APIKEY_WEB);
+  if ($__tokSis === '') return array($r, $c);
+  return traerDocAuth($project, $col, $id, $__tokSis);
+}
+list($ri, $ci) = traerDocSeguro($PROJECT, 'inv_invitados', $slug . '__' . $token);
 if (!$ri || $ci != 200) {
   echo json_encode(array('ok' => false, 'error' => 'invitado'));
   exit;
 }
 
 // ---------- leer el evento (de ahí sale el mail de destino) ----------
-list($res, $code) = traerDoc($PROJECT, 'inv_eventos', $slug);
+list($res, $code) = traerDocSeguro($PROJECT, 'inv_eventos', $slug);
 
 if (!$res || $code != 200) {
   echo json_encode(array('ok' => false, 'error' => 'evento'));
@@ -173,8 +186,7 @@ if (is_readable($rutaLim)) {
 // cualquiera que tenga el link de una invitacion, y era una fuga de datos personales.
 // Ahora vive en inv_privado/{slug}, que solo se lee con sesion iniciada.
 $para = '';
-$APIKEY_WEB = 'AIzaSyBXWZc9xdpXx7HCkJfxcyofgI00buNlIXc';
-$idToken = entrarAlSistema($APIKEY_WEB);
+$idToken = ($__tokSis !== null) ? $__tokSis : entrarAlSistema($APIKEY_WEB);
 if ($idToken !== '') {
   list($rpv, $cpv) = traerDocAuth($PROJECT, 'inv_privado', $slug, $idToken);
   if ($cpv == 200) {

@@ -118,12 +118,7 @@ if ($cp != 200) {
 }
 
 // ---------- 2. ¿la invitación existe? ----------
-list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($slug) . '?key=' . $APIKEY);
-if ($ce != 200) {
-  http_response_code(404);
-  echo json_encode(array('ok' => false, 'error' => 'invitacion'));
-  exit;
-}
+/* ★ 30/10/2026: se comprueba más abajo, ya con la cuenta del sistema (las invitaciones con contraseña daban 403). */
 
 // ---------- 3. credenciales del sistema ----------
 $PANEL_USER = ''; $PANEL_PASS = '';
@@ -167,6 +162,14 @@ $sesion  = json_decode($ra, true);
 $idToken = isset($sesion['idToken']) ? $sesion['idToken'] : '';
 if ($idToken === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
 $auth = array('Authorization: Bearer ' . $idToken);
+
+// ---------- ¿la invitación existe? (con la cuenta del sistema) ----------
+list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($slug), 'GET', null, $auth);
+if ($ce != 200) {
+  http_response_code(404);
+  echo json_encode(array('ok' => false, 'error' => 'invitacion'));
+  exit;
+}
 
 // ---------- 4. escribir SOLO la frase ----------
 // ⚠️ Las tres hojas y nada más. Ver la nota grande de arriba.

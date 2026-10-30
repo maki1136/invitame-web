@@ -77,17 +77,9 @@ function pedir($url, $metodo = 'GET', $cuerpo = null, $headers = array()) {
 }
 
 /* ---------- 1. el evento: ¿tiene prendido el link general? ---------- */
-list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($slug) . '?key=' . $APIKEY);
-if ($ce != 200) { echo json_encode(array('ok' => false, 'error' => 'evento')); exit; }
-$ev = json_decode($re, true);
-$f  = isset($ev['fields']) ? $ev['fields'] : array();
-$fx = isset($f['fx']['mapValue']['fields']) ? $f['fx']['mapValue']['fields'] : array();
-$rs = isset($fx['rsvp']['mapValue']['fields']) ? $fx['rsvp']['mapValue']['fields'] : array();
-if (!(isset($rs['general']['booleanValue']) && $rs['general']['booleanValue'] === true)) { echo json_encode(array('ok' => false, 'error' => 'apagado')); exit; }
-$mu = isset($fx['muestra']['mapValue']['fields']) ? $fx['muestra']['mapValue']['fields'] : array();
-if (isset($mu['venta']['booleanValue']) && $mu['venta']['booleanValue'] === true) { echo json_encode(array('ok' => true, 'muestra' => true)); exit; }
-$sv = function ($k) use ($f) { return isset($f[$k]['stringValue']) ? trim($f[$k]['stringValue']) : ''; };
-
+/* ★ 30/10/2026: el evento se lee DESPUÉS de entrar con la cuenta del sistema:
+   en una invitación con contraseña la lectura anónima da 403 y el link general
+   no podía confirmar. */
 /* ---------- 2. la cuenta del sistema ---------- */
 $PANEL_USER = ''; $PANEL_PASS = '';
 $cand = array();
@@ -101,6 +93,19 @@ $ses = json_decode((string)$ra, true);
 $idToken = isset($ses['idToken']) ? $ses['idToken'] : '';
 if ($ca != 200 || $idToken === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
 $auth = array('Authorization: Bearer ' . $idToken);
+
+/* ---------- 1. el evento: ¿tiene prendido el link general? ---------- */
+list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($slug), 'GET', null, $auth);
+if ($ce != 200) { echo json_encode(array('ok' => false, 'error' => 'evento')); exit; }
+$ev = json_decode($re, true);
+$f  = isset($ev['fields']) ? $ev['fields'] : array();
+$fx = isset($f['fx']['mapValue']['fields']) ? $f['fx']['mapValue']['fields'] : array();
+$rs = isset($fx['rsvp']['mapValue']['fields']) ? $fx['rsvp']['mapValue']['fields'] : array();
+if (!(isset($rs['general']['booleanValue']) && $rs['general']['booleanValue'] === true)) { echo json_encode(array('ok' => false, 'error' => 'apagado')); exit; }
+$mu = isset($fx['muestra']['mapValue']['fields']) ? $fx['muestra']['mapValue']['fields'] : array();
+if (isset($mu['venta']['booleanValue']) && $mu['venta']['booleanValue'] === true) { echo json_encode(array('ok' => true, 'muestra' => true)); exit; }
+$sv = function ($k) use ($f) { return isset($f[$k]['stringValue']) ? trim($f[$k]['stringValue']) : ''; };
+
 
 /* ---------- 3. guardar la respuesta (la misma persona no se duplica) ---------- */
 $clave = preg_replace('/[^a-z0-9]/', '', strtr(mb_strtolower($nombre), array('á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u','ü'=>'u','ñ'=>'n')));

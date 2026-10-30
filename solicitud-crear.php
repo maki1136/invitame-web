@@ -438,7 +438,7 @@ if ($cm == 200) {
 $interruptoresPagos = array();
 $tablaPaquetes = @file_get_contents(__DIR__ . '/paquetes.js');
 if ($tablaPaquetes !== false) {
-  if (preg_match_all("~clase:\\s*'(?:leader|killer)'\\s*,\\s*interruptor:\\s*'([A-Za-z0-9_.]+)'~", $tablaPaquetes, $mp)) {
+  if (preg_match_all("~clase:\\s*'(?:leader|killer)'\\s*,\\s*interruptor:\\s*'([A-Za-z0-9_.-]+)'~", $tablaPaquetes, $mp)) {
     $interruptoresPagos = $mp[1];
   }
 }
@@ -449,7 +449,8 @@ foreach ($interruptoresPagos as $ruta) {
      compró, el equipo la destilda en el panel. */
   if ($ruta === 'fx.raspadita.encendido') continue;
   $partes = explode('.', $ruta);          /* fx.filtro.encendido */
-  if (count($partes) < 2) continue;
+  /* ★ 30/10/2026: un interruptor suelto (c_habilitar-trivia) también se apaga */
+  if (count($partes) < 2) { if (array_key_exists($ruta, $ev)) $ev[$ruta] = false; continue; }
   $ref = &$ev;
   $ok = true;
   for ($k = 0; $k < count($partes) - 1; $k++) {
@@ -522,7 +523,7 @@ if (preg_match('/^[a-z0-9]{12,40}$/i', $formToken)) {
       $avisoPaquete[] = 'PAQUETE: ' . (isset($NOMBRES[$plan]) ? $NOMBRES[$plan] : $plan) .
                         (count($extras) ? ' + extras: ' . implode(', ', $extras) : '') . ' (del link del CRM).';
       /* las funciones pagas con interruptor: [nombre, ruta] desde paquetes.js */
-      preg_match_all("~(\w+):\s*\{\s*nombre:\s*'[^']*',\s*clase:\s*'(?:leader|killer)',\s*interruptor:\s*'([A-Za-z0-9_.]+)'~", $tablaPaquetes, $mf, PREG_SET_ORDER);
+      preg_match_all("~(\w+):\s*\{\s*nombre:\s*'[^']*',\s*clase:\s*'(?:leader|killer)',\s*interruptor:\s*'([A-Za-z0-9_.-]+)'~", $tablaPaquetes, $mf, PREG_SET_ORDER);
       foreach ($mf as $f) {
         $func = $f[1]; $ruta = $f[2];
         if (!in_array($func, $incluye, true)) continue;
@@ -535,7 +536,9 @@ if (preg_match('/^[a-z0-9]{12,40}$/i', $formToken)) {
           continue;
         }
         $partes = explode('.', $ruta);
-        if (count($partes) < 2) continue;
+        /* ★ 30/10/2026: la trivia (c_habilitar-trivia) es un campo suelto, sin punto:
+           antes nunca se prendía en Premium/Platinum. */
+        if (count($partes) < 2) { $ev[$ruta] = true; continue; }
         $ref = &$ev;
         for ($k = 0; $k < count($partes) - 1; $k++) {
           $p = $partes[$k];
