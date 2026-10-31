@@ -1,9 +1,9 @@
 {
- "cuando": "2026-10-30T22:25:34.756Z",
+ "cuando": "2026-10-31T19:33:47.580Z",
  "slug": "camila-y-tomas",
  "total": 443,
- "verde": 434,
- "amarillo": 1,
+ "verde": 427,
+ "amarillo": 8,
  "rojo": 8,
  "gris": 0,
  "items": [
@@ -521,17 +521,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.patrocinadores.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "Qué foto usar",
    "tipo": "lista",
@@ -570,6 +559,18 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.patrocinadores.titulo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -659,8 +660,9 @@
    "guarda": true,
    "dato": "c_tipografia-subtitulos",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "PRINCIPAL",
@@ -682,7 +684,7 @@
    "guarda": true,
    "dato": "c_descripcion-al-compartir",
    "llega": true,
-   "seVe": true,
+   "seVe": false,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
   },
@@ -694,8 +696,9 @@
    "guarda": true,
    "dato": "nmayus",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "PRINCIPAL",
@@ -710,17 +713,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
@@ -729,6 +721,18 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.patrocinadores.encendido",
+   "llega": true,
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "PRINCIPAL",
@@ -848,8 +852,9 @@
    "guarda": true,
    "dato": "fx.ocultas",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "PRINCIPAL",
@@ -914,8 +919,9 @@
    "guarda": true,
    "dato": "fx.ocultas",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "PRINCIPAL",
@@ -936,8 +942,9 @@
    "guarda": true,
    "dato": "fx.ocultas",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "PRINCIPAL",
@@ -2984,8 +2991,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.titulo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -3017,9 +3025,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.fecha",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
