@@ -119,6 +119,18 @@
       paleta:  ["#e6e1d5", "#e4e2d5", "#ece8df", "#dddbce"],
       tipos:   ["boda"]
     },
+    /* ★ 2/11/2026 (Jazmín): el diseño de citlalli-y-hedwin-jesus guardado como
+       muestra, con nombres y fotos de ejemplo (sale de la muestra Marfil). */
+    'elegancia-marfil-oliva': {
+      nombre:  "Elegancia en marfil y verde oliva",
+      bajada:  "Seda marfil, ramas de olivo y un sobre atado con listón.",
+      muestra: 'isabela-y-mateo',
+      foto:    '/formulario/disenos/isabela-y-mateo.webp',
+      color:   '#e6e0d3',
+      color2:  '#c1b89a',
+      paleta:  ["#e6e0d3", "#e2daca", "#eee9df", "#c1b89a"],
+      tipos:   ["boda"]
+    },
     'playa': {
       nombre:  "Playa",
       bajada:  "Mar, arena y atardecer en la costa.",
