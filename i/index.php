@@ -70,6 +70,18 @@ if ($slug !== '') {
   $res  = curl_exec($ch);
   $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
   curl_close($ch);
+  /* ★ 2/11/2026 (Jazmín, citlalli-y-hedwin-jesus: «la invitación se puso con
+     el nombre de otros novios… duró media hora»). Si la base no contesta a
+     tiempo, la página salía con la boda de EJEMPLO (María & Diego, «Familia
+     Gómez»…). Se reintenta una vez con más paciencia antes de rendirse. */
+  if (!($res && $code == 200) && ($code == 0 || $code == 429 || $code >= 500)) {
+    usleep(300000);
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_TIMEOUT => 7, CURLOPT_SSL_VERIFYPEER => true]);
+    $res  = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+  }
 
   if ($res && $code == 200) {
     $data = json_decode($res, true);
@@ -931,6 +943,39 @@ if ($title !== '') {
 if ($desc !== '') {
   $tpl = setMeta($tpl, 'property', 'og:description', $desc);
   $tpl = setMeta($tpl, 'name', 'description', $desc);
+}
+
+/* ★ 2/11/2026 — NUNCA LA BODA DE EJEMPLO EN EL LINK DE UN CLIENTE.
+   Si la base no contestó (ni acá ni después en el navegador), la plantilla
+   quedaba con «María & Diego» y los invitados de ejemplo, y WhatsApp guardaba
+   esa vista previa. Ahora:
+   · sin datos en el servidor → título y vista previa neutros, y la página se
+     tapa con «Cargando tu invitación…» hasta que el navegador la traiga;
+   · si en 10 s no llegó nada → «No pudimos cargar…» con «Reintentar», en vez
+     de mostrar la de ejemplo. */
+if ($slug !== '') {
+  if (!$leyoEvento) {
+    $tpl = setMeta($tpl, 'property', 'og:title', 'Tu invitación');
+    $tpl = setMeta($tpl, 'name', 'twitter:title', 'Tu invitación');
+    $tpl = preg_replace_callback('/<title>.*?<\/title>/is', function () { return '<title>Tu invitación</title>'; }, $tpl, 1);
+  }
+  $tapar = $leyoEvento ? 'false' : 'true';
+  $guardia = '<style>#iv-espera{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:24px;'
+    . 'background:#f6f1ea;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#4a3f37;text-align:center}'
+    . '#iv-espera b{display:block;font-size:19px;margin-bottom:8px}#iv-espera p{margin:0 0 16px;font-size:14.5px;opacity:.75}'
+    . '#iv-espera button{border:0;border-radius:999px;padding:12px 26px;background:#4a3f37;color:#fff;font-size:15px;font-weight:600}'
+    . '#iv-espera .iv-pt{width:34px;height:34px;border-radius:50%;border:3px solid rgba(74,63,55,.18);border-top-color:#4a3f37;margin:0 auto 16px;animation:ivgira 1s linear infinite}'
+    . '@keyframes ivgira{to{transform:rotate(360deg)}}</style>'
+    . '<script>(function(){var tapar=' . $tapar . ',t0=Date.now(),cart=null;'
+    . 'function listo(){return !!(window.INVEV||window.__invBloqueada||/ — Invitación$/.test(document.title||""));}'
+    . 'function poner(fallo){if(!document.body)return;if(!cart){cart=document.createElement("div");cart.id="iv-espera";document.body.appendChild(cart);}'
+    . 'cart.innerHTML=fallo?"<div><b>No pudimos cargar la invitación</b><p>Revisa tu conexión a internet y vuelve a intentarlo.</p><button type=button onclick=\\"location.reload()\\">Reintentar</button></div>"'
+    . ':"<div><div class=iv-pt></div><b>Cargando tu invitación…</b></div>";}'
+    . 'function sacar(){if(cart){cart.remove();cart=null;}}'
+    . 'var iv=setInterval(function(){if(listo()){sacar();clearInterval(iv);return;}'
+    . 'var s=(Date.now()-t0)/1000;if(tapar&&!cart)poner(false);if(s>10){poner(true);clearInterval(iv);'
+    . 'var w=setInterval(function(){if(listo()){sacar();clearInterval(w);}},500);}},250);})();</script>';
+  $tpl = preg_replace_callback('~<body([^>]*)>~i', function ($m) use ($guardia) { return '<body' . $m[1] . '>' . $guardia; }, $tpl, 1);
 }
 
 header('Content-Type: text/html; charset=utf-8');
