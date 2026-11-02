@@ -96,7 +96,8 @@
         /* los velos y pinturas de la colección (::before/::after) se apagan en esa sección */
         css.push(S + '::before,' + S + '::after{background:none!important;background-image:none!important;opacity:0!important}');
       }
-      if (tx) css.push(S + ' :is(h2,h3,p,.kick,.d,.l,li,.t,label,.rh-t,.rh-p,.rh-t b){color:' + tx + '!important;-webkit-text-fill-color:' + tx + '!important}');
+      /* :not(#iv-nada) = peso de un id: le gana a las colecciones (marfil pinta el .kick de confirmación con !important) */
+      if (tx) css.push(S + ':not(#iv-nada) :is(h2,h3,p,.kick,.d,.l,li,.t,label,.rh-t,.rh-p,.rh-t b){color:' + tx + '!important;-webkit-text-fill-color:' + tx + '!important}');
       /* ★ 30/10 (Jazmín, diego-y-viviana: «en el itinerario el color de la
          tipografía no se modifica»): las HORAS (.h) se quedaban con el color
          principal. Sólo en invitaciones nuevas (INVNUEVA). */
