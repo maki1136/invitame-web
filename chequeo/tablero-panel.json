@@ -1,10 +1,10 @@
 {
- "cuando": "2026-11-02T20:18:37.810Z",
+ "cuando": "2026-11-02T22:24:21.878Z",
  "slug": "camila-y-tomas",
- "total": 444,
- "verde": 436,
- "amarillo": 0,
- "rojo": 8,
+ "total": 445,
+ "verde": 434,
+ "amarillo": 2,
+ "rojo": 9,
  "gris": 0,
  "items": [
   {
@@ -163,6 +163,18 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "fondo-selector",
+   "control": "Qué reemplaza el papel",
+   "tipo": "text",
+   "guarda": false,
+   "dato": "",
+   "llega": false,
+   "seVe": false,
+   "estado": "rojo",
+   "nota": "lo toco y no se guarda nada"
   },
   {
    "tab": "PRINCIPAL",
@@ -361,7 +373,7 @@
    "guarda": true,
    "dato": "fx.portadaSinFoto.muestra",
    "llega": false,
-   "seVe": true,
+   "seVe": false,
    "estado": "rojo",
    "nota": "se guarda pero no le llega a la miniatura"
   },
@@ -743,6 +755,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -935,17 +958,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2595,8 +2607,9 @@
    "guarda": true,
    "dato": "fx.muestra.estado",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2637,10 +2650,12 @@
    "control": "Color texto Confirmación:",
    "tipo": "color",
    "guarda": true,
-   "dato": "cfColor",
+   "dato": "fx.sectorElegido, cfColor",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2648,12 +2663,10 @@
    "control": "Color fondo Confirmación:",
    "tipo": "color",
    "guarda": true,
-   "dato": "fx.sectorElegido, c_color-fondo-confirmacion",
+   "dato": "fx.sectorElegido.c_color-fondo-confirmacion, c_color-fondo-confirmacion",
    "llega": true,
    "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -2707,7 +2720,7 @@
    "control": "Color texto Contacto:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-texto-contacto",
+   "dato": "fx.sectorElegido.c_color-texto-contacto, c_color-texto-contacto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2718,7 +2731,7 @@
    "control": "Color fondo Contacto:",
    "tipo": "color",
    "guarda": true,
-   "dato": "c_color-fondo-contacto",
+   "dato": "fx.sectorElegido.c_color-fondo-contacto, c_color-fondo-contacto",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3116,8 +3129,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.velo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
