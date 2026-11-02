@@ -24,7 +24,12 @@
     galeria:      { bg: 'c_color-de-fondo-galeria',        img: 'c_imagen-de-fondo-seccion-galeria' },
     padres:       { bg: 'c_fondo-color-personas',          img: 'c_imagen-de-fondo-seccion-personas', texto: 'c_color-para-la-seccion-personas' },
     regalos:      { bg: 'c_color-fondo-regalos',           img: 'c_imagen-de-fondo-seccion-regalos', texto: 'c_color-para-seccion-regalos-mesa' },
-    confirmacion: { bg: 'c_color-fondo-confirmacion',      img: 'c_imagen-de-fondo-seccion-confirmacion' }
+    /* ★ 2/11 (Jazmín): «en el sector de confirmación, que cuando las chicas
+       seleccionen los colores de fondo y textos apliquen» — el texto quedaba
+       con el color de la colección (verde). Como todo acá, manda lo que se
+       ELIGE en el panel desde ahora (si ya estaba elegido, se vuelve a elegir). */
+    confirmacion: { bg: 'c_color-fondo-confirmacion',      img: 'c_imagen-de-fondo-seccion-confirmacion', texto: 'cfColor' },
+    contacto:     { bg: 'c_color-fondo-contacto',          img: 'c_imagen-de-fondo-seccion-contacto', texto: 'c_color-texto-contacto' }
   };
   /* ★ y la posición de los nombres en la portada (Diana: «puse el nombre
      centrado y aparece abajo»: la colección clavaba la suya) */
@@ -70,9 +75,10 @@
     var css = [], firma = JSON.stringify(el), antes = enLinea; enLinea = {};
     Object.keys(SEC).forEach(function (s) {
       var c = SEC[s], S = 'html body [data-sec="' + s + '"][data-sec="' + s + '"]';
-      var bg = el[c.bg] ? v(e, c.bg) : null;
-      var im = c.img && (el[c.img] || el['img_' + c.img]) ? imgDe(e, c.img) : null;
-      var tx = c.texto && el[c.texto] ? v(e, c.texto) : null;
+      var sm = false;   /* sólo lo elegido a mano: no cambia invitaciones ya armadas */
+      var bg = (el[c.bg] || sm) ? v(e, c.bg) : null;
+      var im = c.img && (el[c.img] || el['img_' + c.img] || sm) ? imgDe(e, c.img) : null;
+      var tx = c.texto && (el[c.texto] || sm) ? v(e, c.texto) : null;
       if (!bg && !im && !tx) return;
       firma += '|' + s + bg + im + tx;
       var regla = [];
@@ -90,7 +96,8 @@
         /* los velos y pinturas de la colección (::before/::after) se apagan en esa sección */
         css.push(S + '::before,' + S + '::after{background:none!important;background-image:none!important;opacity:0!important}');
       }
-      if (tx) css.push(S + ' :is(h2,h3,p,.kick,.d,.l,li,.t){color:' + tx + '!important;-webkit-text-fill-color:' + tx + '!important}');
+      /* :not(#iv-nada) = peso de un id: le gana a las colecciones (marfil pinta el .kick de confirmación con !important) */
+      if (tx) css.push(S + ':not(#iv-nada) :is(h2,h3,p,.kick,.d,.l,li,.t,label,.rh-t,.rh-p,.rh-t b){color:' + tx + '!important;-webkit-text-fill-color:' + tx + '!important}');
       /* ★ 30/10 (Jazmín, diego-y-viviana: «en el itinerario el color de la
          tipografía no se modifica»): las HORAS (.h) se quedaban con el color
          principal. Sólo en invitaciones nuevas (INVNUEVA). */
