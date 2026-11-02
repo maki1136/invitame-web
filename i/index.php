@@ -973,7 +973,7 @@ if ($slug !== '') {
     . ':"<div><div class=iv-pt></div><b>Cargando tu invitación…</b></div>";}'
     . 'function sacar(){if(cart){cart.remove();cart=null;}}'
     . 'var iv=setInterval(function(){if(listo()){sacar();clearInterval(iv);return;}'
-    . 'var s=(Date.now()-t0)/1000;if(tapar&&!cart)poner(false);if(s>10){poner(true);clearInterval(iv);'
+    . 'var s=(Date.now()-t0)/1000;if((tapar||s>3)&&!cart)poner(false);if(s>10){poner(true);clearInterval(iv);'
     . 'var w=setInterval(function(){if(listo()){sacar();clearInterval(w);}},500);}},250);})();</script>';
   $tpl = preg_replace_callback('~<body([^>]*)>~i', function ($m) use ($guardia) { return '<body' . $m[1] . '>' . $guardia; }, $tpl, 1);
 }
