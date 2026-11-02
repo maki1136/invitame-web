@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-02T17:03:58.188Z",
+ "cuando": "2026-11-02T17:16:06.083Z",
  "slug": "camila-y-tomas",
  "total": 444,
- "verde": 435,
- "amarillo": 1,
+ "verde": 436,
+ "amarillo": 0,
  "rojo": 8,
  "gris": 0,
  "items": [
@@ -2962,9 +2962,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.onda",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
