@@ -46,7 +46,7 @@
         '<div class="card">' +
           '<h3 style="margin:0 0 6px">Fotos de la fiesta</h3>' +
           '<div class="hint" style="margin:0 0 12px">Lo que suben tus invitados sale solo en la galería y en la pantalla del salón. ' +
-          'Acá podés sacar algo que no quieras que se vea, volver a ponerlo, o aprobar lo que quedó esperando.</div>' +
+          'Aquí puedes sacar algo que no quieras que se vea, volver a ponerlo, o aprobar lo que quedó esperando.</div>' +
           '<div class="gn-filtros">' +
             [['todo', 'Todo'], ['pendiente', 'Esperando'], ['aprobada', 'En pantalla'], ['rechazada', 'Sacadas']].map(function (f) {
               return '<button data-gnf="' + f[0] + '" class="' + (filtro === f[0] ? 'on' : '') + '">' + f[1] + ' (' + cuenta[f[0]] + ')</button>';
@@ -65,22 +65,42 @@
     function paraLaFiesta() {
       if (!gid) return '';
       var B = 'https://invitameok.net', g = encodeURIComponent(gid);
-      var L = [
-        ['Pantalla del salón', B + '/galeria/pantalla.html?g=' + g, 'Ábrelo en la compu o TV del salón y toca el botón para empezar: pasa las fotos que suben los invitados y cada tanto el QR para subir.'],
-        ['Cartel con el QR para imprimir', B + '/galeria/cartel.html?g=' + g, 'Para las mesas o la entrada: los invitados escanean y suben sus fotos.'],
-        ['Link para que suban fotos', B + '/galeria/?g=' + g, 'El mismo del QR, para mandarlo por WhatsApp.']
+      var pantalla = B + '/galeria/pantalla.html?g=' + g;
+      /* ★ 2/11 (Jazmín): además de los tres links, el INSTRUCTIVO para
+         proyectar, para mandárselo al salón o a quien maneje la pantalla. */
+      var pasos = [
+        'Conecta una computadora (o una Smart TV con navegador) al proyector o la pantalla del salón, con internet (wifi o cable).',
+        'Abre en Chrome el link de la pantalla del salón: ' + pantalla,
+        'Toca «Empezar»: se pone en pantalla completa y no se apaga sola.',
+        'Las fotos que suben los invitados aparecen solas (una cada 7 segundos) y cada tanto el QR para que suban las suyas.',
+        'Si se corta el internet, sigue mostrando las que ya tiene; al volver, se actualiza sola.',
+        'Para salir de la pantalla completa: tecla Esc.',
+        'Recomendado: que la compu esté enchufada y sin modo de suspensión.'
       ];
-      return '<div style="border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:12px 14px;margin:0 0 14px">' +
-        '<b style="font-size:14px">Para el día de la fiesta</b>' +
+      var instructivo = 'Instructivo para proyectar las fotos de la fiesta en la pantalla del salón:\n\n' +
+        pasos.map(function (s, i) { return (i + 1) + '. ' + s; }).join('\n');
+      var L = [
+        ['Pantalla del salón', pantalla, 'Ábrela en la compu o TV del salón y toca «Empezar»: pasa las fotos que suben los invitados y cada tanto el QR para subir.', 'Pantalla del salón de nuestra fiesta: ' + pantalla],
+        ['Cartel con el QR para imprimir', B + '/galeria/cartel.html?g=' + g, 'Para las mesas o la entrada: los invitados escanean y suben sus fotos.', 'Cartel con el QR de nuestra fiesta para imprimir: ' + B + '/galeria/cartel.html?g=' + g],
+        ['Link para que suban fotos', B + '/galeria/?g=' + g, 'El mismo del QR, para mandarlo por WhatsApp.', '¡Sube tus fotos de nuestra fiesta acá! ' + B + '/galeria/?g=' + g]
+      ];
+      var bt = 'display:inline-block;width:auto;margin:0;text-decoration:none;padding:7px 14px;font-size:12.5px;border-radius:18px';
+      var fila = function (tit, hint, botones) {
+        return '<div style="padding:10px 0;border-top:1px solid rgba(0,0,0,.07)"><div style="font-weight:600;font-size:13px">' + tit + '</div>' +
+          '<div class="hint" style="margin:2px 0 8px">' + hint + '</div><div style="display:flex;gap:8px;flex-wrap:wrap">' + botones + '</div></div>';
+      };
+      return '<div style="border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:12px 14px 4px;margin:0 0 14px">' +
+        '<b style="font-size:14px;display:block;margin-bottom:6px">Para el día de la fiesta</b>' +
         L.map(function (x) {
-          var msj = x[0] + ' de nuestra fiesta: ' + x[1];
-          return '<div style="margin-top:10px"><div style="font-weight:600;font-size:13px">' + x[0] + '</div>' +
-            '<div class="hint" style="margin:2px 0 6px">' + x[2] + '</div>' +
-            '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
-              '<a class="btn" style="text-decoration:none;padding:8px 12px;font-size:12.5px" target="_blank" rel="noopener" href="' + x[1] + '">Abrir</a>' +
-              '<a class="btn gris" style="text-decoration:none;padding:8px 12px;font-size:12.5px" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msj) + '">Enviar por WhatsApp</a>' +
-            '</div></div>';
-        }).join('') + '</div>';
+          return fila(x[0], x[2],
+            '<a class="btn" style="' + bt + '" target="_blank" rel="noopener" href="' + x[1] + '">Abrir</a>' +
+            '<a class="btn gris" style="' + bt + ';background:#efe7de;color:#5a2a3a;box-shadow:none" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(x[3]) + '">Enviar por WhatsApp</a>');
+        }).join('') +
+        fila('Instructivo para proyectar en pantalla', 'Los pasos para quien maneje la pantalla del salón, con el link incluido.',
+          '<details style="width:100%"><summary style="cursor:pointer;font-size:12.5px;font-weight:600;margin-bottom:6px">Ver los pasos</summary>' +
+            '<ol style="margin:4px 0 8px 18px;padding:0;font-size:12.5px;line-height:1.5">' + pasos.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol></details>' +
+          '<a class="btn gris" style="' + bt + ';background:#efe7de;color:#5a2a3a;box-shadow:none" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(instructivo) + '">Enviar instructivo por WhatsApp</a>') +
+        '</div>';
     }
     function tarjeta(i) {
       var cuerpo;
