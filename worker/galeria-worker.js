@@ -578,6 +578,11 @@ async function subir(req, env, ctx) {
   } else if (veredicto) {
     mod = { motor: veredicto.motor || 'sightengine', score: veredicto.score };
     if (veredicto.malo) estado = 'rechazada';
+    /* ★ 2/11/2026 (Jazmín probó con fotos en ropa interior y semidesnudos de
+       internet: «cero filtro», salieron solas en la pantalla). Lo DUDOSO ya no
+       sale solo aunque la fiesta esté en automático: queda ESPERANDO para que
+       los novios o el equipo la aprueben. */
+    else if (veredicto.dudoso) { estado = 'pendiente'; mod.dudosa = true; }
     else estado = (ev.modo === 'auto') ? 'aprobada' : 'pendiente';
   }
 
@@ -1454,7 +1459,10 @@ async function moderarOpenAI(env, blob) {
   }
   const sc = j.results[0].category_scores || {};
   const peor = Math.max(sc['sexual'] || 0, sc['violence/graphic'] || 0);
-  return { motor: 'openai', malo: peor > 0.5, score: Math.round(peor * 100) / 100 };
+  /* malo (> 0,5) se rechaza; dudoso (> 0,08: ropa interior, semidesnudos,
+     poses provocativas) espera aprobación. Mejor una foto de más esperando
+     que una de más en la pantalla del salón. */
+  return { motor: 'openai', malo: peor > 0.5, dudoso: peor > 0.08, score: Math.round(peor * 1000) / 1000 };
 }
 async function moderarUnaVez(env, blob) {
   if (!env.SIGHTENGINE_USER || !env.SIGHTENGINE_SECRET)
@@ -1488,7 +1496,9 @@ async function moderarUnaVez(env, blob) {
   const n = j.nudity || {};
   const peor = Math.max(n.sexual_activity || 0, n.sexual_display || 0, n.erotica || 0,
                         (j.gore && j.gore.prob) || 0);
-  return { malo: peor > 0.5, score: Math.round(peor * 100) / 100 };
+  /* lo sugerente (lencería, bikini, topless de espaldas) espera aprobación */
+  const sug = Math.max(n.very_suggestive || 0, n.suggestive || 0, n.mildly_suggestive || 0);
+  return { malo: peor > 0.5, dudoso: peor > 0.15 || sug > 0.5, score: Math.round(peor * 100) / 100 };
 }
 
 /* ---------------- Firestore por REST (service account) ---------------- */
