@@ -205,6 +205,9 @@
     sel.onchange = function () { fondo(d).tipo = sel.value; refrescar(); pintar(d); };
     cuerpo.appendChild(fila('Qué reemplaza el papel', sel));
 
+    /* ⭐ la biblioteca va arriba de todo: elegir uno guardado es lo más rápido */
+    cuerpo.appendChild(bloqueBiblioteca(d));
+
     /* ★ 21/10/2026 (Jazmín: «desde la compu queda súper feo ese negro
        amarronado»): qué se ve a los COSTADOS de la invitación en una compu.
        Lo pinta /efectos/encuadre-monitor.js. Se guarda '' (no se borra): el
@@ -257,6 +260,176 @@
       'Dejalas en 0 salvo que quieras perder el contraste entre secciones. Son las que le dan el ritmo a la invitación.'));
 
     cuerpo.appendChild(bloqueSuave(d));
+  }
+
+  /* ⭐⭐ LA BIBLIOTECA DE FONDOS (2/11/2026)
+     Jazmín: «Los videos que las chicas suban para los fondos, que estén
+     espectaculares, ¿podemos guardarlos en la plataforma como fondos?».
+     Se guardan en la colección `inv_fondos` (regla: sólo el equipo lee y
+     escribe). NO se copia ni se vuelve a subir el archivo: se guarda la
+     MISMA dirección de Cloudinary (ya liviana), su foto de respaldo y las
+     perillas con las que quedó lindo. Elegir uno lo pone en la invitación
+     abierta, igual que si lo hubieran subido ahí. */
+  var FS_URL = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  var BIB = { lista: null, cargando: null, error: '' };
+  function fs() { return import(FS_URL); }
+  function cargarBiblioteca(forzar) {
+    if (BIB.cargando && !forzar) return BIB.cargando;
+    BIB.cargando = fs().then(function (m) {
+      return m.getDocs(m.collection(INV.db, 'inv_fondos'));
+    }).then(function (s) {
+      BIB.lista = s.docs.map(function (x) { var o = x.data(); o.id = x.id; return o; })
+        .sort(function (a, b) { return (b.creado || 0) - (a.creado || 0); });
+      BIB.error = '';
+      return BIB.lista;
+    }).catch(function (e) {
+      BIB.lista = BIB.lista || [];
+      BIB.error = /permission/i.test(String(e && (e.code || e.message))) ?
+        'Tu usuario no tiene permiso para la biblioteca.' : 'No se pudo cargar la biblioteca. Probá de nuevo.';
+      BIB.cargando = null;
+      return BIB.lista;
+    });
+    return BIB.cargando;
+  }
+  /* miniatura chiquita y liviana (Cloudinary la fabrica sola) */
+  function miniatura(o) {
+    var u = o.poster || o.url || '';
+    var m = u.match(/^(.*\/(video|image)\/upload\/)(?:.*?\/)?(v\d+\/.*)$/);
+    if (!m || u.indexOf('res.cloudinary.com/') < 0) return o.poster || (o.tipo === 'imagen' ? o.url : '');
+    if (m[2] === 'video') return m[1] + 'so_1,w_240,c_limit,q_auto/' + m[3].replace(/\.\w+$/, '.jpg');
+    return m[1] + 'w_240,c_limit,f_auto,q_auto/' + m[3];
+  }
+  function quien() {
+    try { return (INV.auth && INV.auth.currentUser && INV.auth.currentUser.email) || ''; } catch (e) { return ''; }
+  }
+  function slugAbierto() {
+    try { return new URLSearchParams(location.search).get('e') || ''; } catch (e) { return ''; }
+  }
+
+  function bloqueBiblioteca(d) {
+    var caja = document.createElement('div');
+    caja.setAttribute('data-biblioteca', '1');
+    caja.style.cssText = 'margin:0 0 12px;padding:10px;border-radius:10px;background:rgba(0,0,0,.035)';
+    var t = document.createElement('div');
+    t.innerHTML = '⭐ <b>Biblioteca de fondos</b>';
+    t.style.cssText = 'font-size:12.5px;margin:0 0 2px';
+    caja.appendChild(t);
+    var a = document.createElement('div');
+    a.textContent = 'Los fondos que el equipo guardó. Tocá uno para ponerlo en esta invitación.';
+    a.style.cssText = 'font-size:11px;opacity:.6;margin:0 0 8px;line-height:1.35';
+    caja.appendChild(a);
+
+    var grilla = document.createElement('div');
+    grilla.setAttribute('data-bib-grilla', '1');
+    grilla.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:330px;overflow:auto';
+    grilla.textContent = 'Cargando…';
+    grilla.style.fontSize = '11.5px';
+    caja.appendChild(grilla);
+
+    function dibujar() {
+      grilla.innerHTML = '';
+      var lista = BIB.lista || [];
+      if (BIB.error) { grilla.textContent = BIB.error; return; }
+      if (!lista.length) {
+        grilla.style.display = 'block';
+        grilla.textContent = 'Todavía no hay fondos guardados. Cuando una invitación tenga un fondo lindo, guardalo con el botón de abajo.';
+        return;
+      }
+      grilla.style.display = 'grid';
+      var actual = fondo(d).url || '';
+      lista.forEach(function (o) {
+        var tile = document.createElement('div');
+        tile.setAttribute('data-fondo-id', o.id);
+        var puesto = actual && o.url === actual;
+        tile.style.cssText = 'position:relative;cursor:pointer;border-radius:8px;overflow:hidden;background:#ddd;' +
+          'outline:' + (puesto ? '3px solid #b0894f' : '1px solid rgba(0,0,0,.12)') + ';outline-offset:-1px';
+        tile.title = (o.nombre || 'Fondo') + (puesto ? ' (puesto ahora)' : ' — tocá para usarlo');
+        var mini = miniatura(o);
+        var img = document.createElement(mini ? 'img' : 'video');
+        if (mini) { img.src = mini; img.loading = 'lazy'; img.alt = ''; }
+        else { img.src = o.url; img.muted = true; img.preload = 'metadata'; img.playsInline = true; }
+        img.style.cssText = 'display:block;width:100%;aspect-ratio:9/14;object-fit:cover';
+        tile.appendChild(img);
+        var n = document.createElement('div');
+        n.textContent = (o.tipo === 'video' ? '▶ ' : '') + (o.nombre || 'Fondo');
+        n.style.cssText = 'position:absolute;left:0;right:0;bottom:0;padding:14px 5px 4px;font-size:10.5px;line-height:1.2;' +
+          'color:#fff;font-weight:600;background:linear-gradient(transparent,rgba(0,0,0,.72))';
+        tile.appendChild(n);
+        var x = document.createElement('button');
+        x.type = 'button'; x.textContent = '×'; x.title = 'Sacar de la biblioteca';
+        x.setAttribute('data-bib-quitar', '1');
+        x.style.cssText = 'position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:0;padding:0;' +
+          'background:rgba(0,0,0,.55);color:#fff;font-size:13px;line-height:20px;cursor:pointer';
+        x.onclick = function (ev) {
+          ev.stopPropagation();
+          if (!window.confirm('¿Sacar «' + (o.nombre || 'este fondo') + '» de la biblioteca? Las invitaciones que ya lo usan no cambian.')) return;
+          fs().then(function (m) { return m.deleteDoc(m.doc(INV.db, 'inv_fondos', o.id)); })
+            .then(function () { return cargarBiblioteca(true); })
+            .then(function () { pintar(d); })
+            .catch(function () { window.alert('No se pudo sacar. Probá de nuevo.'); });
+        };
+        tile.appendChild(x);
+        tile.onclick = function () {
+          var f = fondo(d);
+          f.tipo = o.tipo || (/\/video\//.test(o.url) ? 'video' : 'imagen');
+          f.url = o.url;
+          f.poster = o.poster || '';
+          ['velo', 'paso', 'oscuras'].forEach(function (k) { if (typeof o[k] === 'number') f[k] = o[k]; });
+          if (o.donde) f.donde = o.donde;
+          refrescar(); pintar(d);
+        };
+        grilla.appendChild(tile);
+      });
+    }
+    /* la primera vez se repinta el bloque entero: así el botón de guardar
+       ya sabe si este fondo estaba en la biblioteca */
+    if (BIB.lista) dibujar();
+    else cargarBiblioteca().then(function () { if (caja.isConnected) pintar(d); });
+
+    /* guardar el fondo que tiene puesto esta invitación */
+    var f = fondo(d);
+    if (f.tipo && f.url) {
+      var ya = (BIB.lista || []).filter(function (o) { return o.url === f.url; })[0];
+      var g = document.createElement('div');
+      g.style.cssText = 'margin:10px 0 0;padding:9px 0 0;border-top:1px dashed rgba(0,0,0,.12)';
+      if (ya) {
+        g.innerHTML = '<div style="font-size:11.5px;opacity:.75">' + ico('tilde') + ' Este fondo ya está en la biblioteca como «' +
+          String(ya.nombre || 'Fondo').replace(/</g, '&lt;') + '».</div>';
+      } else {
+        var nom = document.createElement('input');
+        nom.type = 'text'; nom.maxLength = 50;
+        nom.placeholder = 'Nombre (ej. Flores doradas en movimiento)';
+        nom.setAttribute('data-bib-nombre', '1');
+        nom.style.cssText = 'width:100%;box-sizing:border-box;margin:0 0 6px;font-size:12px;padding:6px 8px';
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('data-bib-guardar', '1');
+        b.textContent = '⭐ Guardar este fondo en la biblioteca';
+        b.style.cssText = 'width:100%;padding:8px;font-size:12px;font-weight:700;cursor:pointer';
+        var msg = document.createElement('div');
+        msg.style.cssText = 'font-size:11px;margin:5px 0 0;line-height:1.35';
+        b.onclick = function () {
+          var nombre = nom.value.trim();
+          if (!nombre) { msg.textContent = 'Ponele un nombre para encontrarlo después.'; nom.focus(); return; }
+          var f2 = fondo(d);
+          var reg = { nombre: nombre, tipo: f2.tipo, url: f2.url, poster: f2.poster || '',
+                      donde: f2.donde || 'marco', creado: Date.now(), por: quien(), desde: slugAbierto() };
+          ['velo', 'paso', 'oscuras'].forEach(function (k) { if (typeof f2[k] === 'number') reg[k] = f2[k]; });
+          b.disabled = true; msg.textContent = 'Guardando…';
+          fs().then(function (m) { return m.addDoc(m.collection(INV.db, 'inv_fondos'), reg); })
+            .then(function () { return cargarBiblioteca(true); })
+            .then(function () { pintar(d); })
+            .catch(function (e) {
+              b.disabled = false;
+              msg.textContent = /permission/i.test(String(e && (e.code || e.message))) ?
+                'Tu usuario no tiene permiso para guardar en la biblioteca.' : 'No se pudo guardar. Probá de nuevo.';
+            });
+        };
+        g.appendChild(nom); g.appendChild(b); g.appendChild(msg);
+      }
+      caja.appendChild(g);
+    }
+    return caja;
   }
 
   /* ⭐ SUAVIZADO DETRÁS DE LOS TEXTOS (3/10/2026). Lo pinta fondo-invitacion.js
