@@ -187,6 +187,7 @@
     "TÍTULO DEL CORREO:": "c_titulo-del-correo",
     "Frase para sección confirmación:": "c_frase-para-seccion-confirmacion",
     "Ocultar Formulario:": "c_ocultar-formulario",
+    "Habilitar fecha adelante en «confirmaste que asistirás»:": "c_habilitar-fecha-adelante-confirmaste",
     "Color texto Contacto:": "c_color-texto-contacto",
     "Color fondo Contacto:": "c_color-fondo-contacto",
     "Imagen de fondo sección \"Contacto\"": "c_imagen-de-fondo-seccion-contacto",
