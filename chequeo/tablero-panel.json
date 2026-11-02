@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-01T19:49:49.827Z",
+ "cuando": "2026-11-02T17:03:58.188Z",
  "slug": "camila-y-tomas",
- "total": 443,
+ "total": 444,
  "verde": 435,
- "amarillo": 0,
+ "amarillo": 1,
  "rojo": 8,
  "gris": 0,
  "items": [
@@ -743,6 +743,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -935,17 +946,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2894,6 +2894,17 @@
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
+   "dato": "c_habilitar-fecha-adelante-confirmaste",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "",
+   "control": "Activar",
+   "tipo": "checkbox",
+   "guarda": true,
    "dato": "c_mostrar-seccion-de-contacto",
    "llega": true,
    "seVe": true,
@@ -2951,8 +2962,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.onda",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
