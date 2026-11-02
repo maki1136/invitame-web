@@ -46,7 +46,7 @@
         '<div class="card">' +
           '<h3 style="margin:0 0 6px">Fotos de la fiesta</h3>' +
           '<div class="hint" style="margin:0 0 12px">Lo que suben tus invitados sale solo en la galería y en la pantalla del salón. ' +
-          'Acá podés sacar algo que no quieras que se vea, volver a ponerlo, o aprobar lo que quedó esperando.</div>' +
+          'Aquí puedes sacar algo que no quieras que se vea, volver a ponerlo, o aprobar lo que quedó esperando.</div>' +
           '<div class="gn-filtros">' +
             [['todo', 'Todo'], ['pendiente', 'Esperando'], ['aprobada', 'En pantalla'], ['rechazada', 'Sacadas']].map(function (f) {
               return '<button data-gnf="' + f[0] + '" class="' + (filtro === f[0] ? 'on' : '') + '">' + f[1] + ' (' + cuenta[f[0]] + ')</button>';
