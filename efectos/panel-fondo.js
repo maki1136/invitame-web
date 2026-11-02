@@ -321,7 +321,7 @@
 
     var grilla = document.createElement('div');
     grilla.setAttribute('data-bib-grilla', '1');
-    grilla.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:330px;overflow:auto';
+    grilla.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-height:300px;overflow:auto';
     grilla.textContent = 'Cargando…';
     grilla.style.fontSize = '11.5px';
     caja.appendChild(grilla);
@@ -348,7 +348,7 @@
         var img = document.createElement(mini ? 'img' : 'video');
         if (mini) { img.src = mini; img.loading = 'lazy'; img.alt = ''; }
         else { img.src = o.url; img.muted = true; img.preload = 'metadata'; img.playsInline = true; }
-        img.style.cssText = 'display:block;width:100%;aspect-ratio:9/14;object-fit:cover';
+        img.style.cssText = 'display:block;width:100%;aspect-ratio:3/4;object-fit:cover';
         tile.appendChild(img);
         var n = document.createElement('div');
         n.textContent = (o.tipo === 'video' ? '▶ ' : '') + (o.nombre || 'Fondo');
