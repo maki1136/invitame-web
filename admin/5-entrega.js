@@ -97,7 +97,8 @@
          + '</div>'
          /* (2/10/2026) la clave a la vista también antes de entregar: Jazmín
             la necesita para probar el panel de los novios ella misma */
-         + (clave ? campo('Clave del panel de los novios', clave)
+         + campo('Usuario del panel de los novios', slug)
+         + (clave ? campo('Contraseña del panel de los novios', clave)
                   : '<div style="margin-top:8px;font-size:12px;color:#7a6a55">La clave del panel de los novios se crea sola al tocar «Guardar y publicar».</div>');
     } else {
       caja.style.background = '#F1F8F1';
@@ -108,7 +109,10 @@
          + '</div>'
          + campo('Link de la invitación', linkInv)
          + campo('Panel de los novios', linkPan)
-         + (clave ? campo('Clave del panel', clave) : '')
+         /* ★ 2/11 (Jazmín): «agregar también el usuario». El usuario del
+            panel de los novios es la dirección de la invitación. */
+         + campo('Usuario del panel', slug)
+         + (clave ? campo('Contraseña del panel', clave) : '')
          + '<div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap">'
          + '<button class="btn-g" onclick="copiarMensajeEntrega(this)">Copiar el mensaje para el cliente</button>'
          + '<button class="btn-c" onclick="volverAOcultar()" title="Vuelve a esconderla mientras la corregís">Volver a ocultar</button>'
@@ -144,7 +148,8 @@
       + 'Y este es su panel, donde pueden cargar invitados, acomodar las mesas y el itinerario. '
       + 'Todo lo que cambien ahí se actualiza solo en la invitación:\n'
       + BASE + '/mi-panel.html?e=' + encodeURIComponent(slug) + '\n'
-      + (clave ? 'Clave: ' + clave + '\n' : '')
+      + 'Usuario: ' + slug + '\n'
+      + (clave ? 'Contraseña: ' + clave + '\n' : '')
       + '\nCualquier cosa nos escriben.';
     window.copiarEsto(btn, t);
   };
