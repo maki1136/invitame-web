@@ -77,6 +77,9 @@
     var h = sec.querySelector('h2'), col = h ? getComputedStyle(h).color : '';
     var fam = h ? getComputedStyle(h).fontFamily : '';
     var nuevaInv = window.INVNUEVA ? window.INVNUEVA() : false;
+    /* ★ 2/11 (Jazmín, citlalli-y-hedwin-jesus): una entregada lo puede prender
+       a mano en CONFIRMACIÓN → «Habilitar fecha adelante…» */
+    try { var fa = (window.INVEV || {})['c_habilitar-fecha-adelante-confirmaste']; if (fa === true || fa === 'true' || fa === 1 || fa === '1') nuevaInv = true; } catch (e) {}
     var texto = !nuevaInv
       /* ⛔ 29/10: las invitaciones ya hechas, con el texto de antes */
       ? (r.si ? 'Confirmaste que <b>asistirás</b>' + (r.fecha ? ' el ' + r.fecha : '')
