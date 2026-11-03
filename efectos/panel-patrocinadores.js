@@ -30,7 +30,8 @@
             /* agregar el primero la prende: si no, Jazmín carga y no ve nada */
             if (!(p().tiempos || p().logos || []).length) p().encendido = true;
             return { img: '', nombre: '', link: '' };
-          })
+          }),
+        S.estilo(caja, 'patrocinadores')   /* 3/11: fondo, letra, tamaños y colores */
       ];
     });
   }

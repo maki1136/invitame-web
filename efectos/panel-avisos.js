@@ -36,6 +36,7 @@
           var lib = ICONOS.filter(function (o) { return usados.indexOf(o[0]) < 0; })[0] || ICONOS[5];
           return { icono: lib[0], texto: SUGERIDO[lib[0]] || '' };
         }));
+      syncs.push(S.estilo(caja, 'avisos'));   /* 3/11: fondo, letra, tamaños y colores */
       return syncs;
     });
   }
