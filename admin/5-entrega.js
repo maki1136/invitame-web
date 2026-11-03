@@ -78,11 +78,34 @@
 
     /* Se vuelve a dibujar sólo si cambió algo. Si no, se le borrarían los
        «¡Copiado!» a Jazmín cada medio segundo. */
-    var firma = [slug, est, rev, clave].join('|');
+    var soloStd = esSoloStd();
+    var firma = [slug, est, rev, clave, soloStd].join('|');
     if (caja.dataset.firma === firma) return;
     caja.dataset.firma = firma;
 
     var h = '';
+
+    /* ★ 3/11/2026 (Jazmín): «cuando lo carga en el editor, lo carga como
+       invitación… y el SAVE THE DATE es una imagen». Un pedido del formulario
+       «solo Save the Date» (crear.html?std=1) no se entrega como invitación:
+       lo que se manda es la imagen. La invitación sigue escondida («por
+       revisar») por si después la compran. */
+    if (soloStd) {
+      caja.style.background = '#F7EEF3';
+      caja.style.border = '1px solid #E3C6D4';
+      h += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+         + '<b style="color:#6D1233;font-family:Epilogue,system-ui;font-weight:800">Solo Save the Date</b>'
+         + '<span style="font-size:12.5px;color:#7a5a68">Este pedido es la imagen del Save the Date, no una invitación. Ya trae el diseño, los nombres, la fecha y las frases que eligió el cliente.</span>'
+         + '</div>'
+         + '<div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap">'
+         + '<button class="btn-g" onclick="stdIrAlEditor()">Ver y ajustar el Save the Date</button>'
+         + '<button class="btn-c" onclick="stdDescargar(this)">Descargar el Save the Date (imagen)</button>'
+         + '<button class="btn-c" onclick="copiarMensajeStd(this)">Copiar el mensaje para el cliente</button>'
+         + '</div>'
+         + '<div style="margin-top:8px;font-size:11.5px;color:#7a5a68">La invitación queda escondida: si después la compran, se arma sobre esta misma y se entrega como siempre.</div>';
+      caja.innerHTML = h;
+      return;
+    }
 
     if (est === 'por-revisar') {
       caja.style.background = '#FFF6E8';
@@ -121,6 +144,54 @@
 
     caja.innerHTML = h;
   }
+
+  /* ¿es un pedido «solo Save the Date»? Lo marca el formulario (fx.soloStd y
+     tpl «save-the-date»). Si Jazmín ya le eligió un diseño de invitación, deja
+     de serlo: pasó a ser una invitación. */
+  function esSoloStd() {
+    var d = dat(); if (!d) return false;
+    var tpl = String(d.tpl || '').trim();
+    var marca = /^★ SOLO SAVE THE DATE/.test(String(d['c_pedido-especial-del-cliente'] || '').trim());
+    /* con diseño de invitación elegido en el panel, ya es una invitación */
+    return tpl === 'save-the-date' || (marca && !tpl);
+  }
+  function tabDe(id) {
+    var el = document.getElementById(id);
+    if (el && el.offsetParent) return Promise.resolve(el);
+    var tabs = [].slice.call(document.querySelectorAll('.tabs .tab'));
+    return tabs.reduce(function (p, t) {
+      return p.then(function (ya) {
+        if (ya) return ya;
+        t.click();
+        return new Promise(function (ok) { setTimeout(function () {
+          var e = document.getElementById(id); ok(e && e.offsetParent ? e : null);
+        }, 700); });
+      });
+    }, Promise.resolve(null));
+  }
+  window.stdIrAlEditor = function () {
+    return tabDe('stdg-selector').then(function (e) {
+      if (e) { e.scrollIntoView({ behavior: 'smooth', block: 'start' }); var dt = e.closest('details'); if (dt) dt.open = true; }
+      return e;
+    });
+  };
+  window.stdDescargar = function (btn) {
+    window.stdIrAlEditor().then(function (e) {
+      var b = e && [].filter.call(e.querySelectorAll('button'), function (x) { return /Descargar el save the date/i.test(x.textContent); })[0];
+      if (!b) { alert('No encontré el Save the Date. Abrí EFECTOS → Save the Date.'); return; }
+      b.click();
+      if (btn) { var t = btn.textContent; btn.textContent = '¡Descargando!'; setTimeout(function () { btn.textContent = t; }, 1800); }
+    });
+  };
+  window.copiarMensajeStd = function (btn) {
+    var d = dat() || {};
+    var quien = [d.n1, d.n2].filter(Boolean).join(' & ');
+    var txt = '¡Hola' + (quien ? ' ' + quien : '') + '! 💌\n\nAquí está su Save the Date, listo para compartir con sus invitados.\n\n' +
+              'Si quieren cambiar algo, nos avisan. Y cuando quieran, armamos la invitación completa con los mismos datos. ✨';
+    var hecho = function () { if (btn) { var t = btn.textContent; btn.textContent = '¡Copiado!'; setTimeout(function () { btn.textContent = t; }, 1800); } };
+    try { navigator.clipboard.writeText(txt).then(hecho, function () { prompt('Copiá el mensaje:', txt); }); }
+    catch (e) { prompt('Copiá el mensaje:', txt); }
+  };
 
   function campo(rot, val) {
     return '<div style="margin-top:8px">'
