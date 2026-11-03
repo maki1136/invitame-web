@@ -390,6 +390,20 @@ function marcarCelda(id, comoQuedo) {
     if (propiasSinPar.length) { propiasSinPar.shift(); b.remove(); delete celdasLocales[id]; return; }
     subidasSinPar.push(id);
     if (EV && EV.modo === 'previa') toast('¡Listo! Aparece en cuanto la aprueben', 3600);
+    /* ★ 2/11/2026 (Jazmín: «te pide permiso para aceptarla pero desde el celu
+       se ve en la galería»). La celda «tuya» es una vista previa que existe
+       SÓLO en el celular de quien la subió: nadie más la ve, ni la pantalla.
+       Pero si la foto quedó esperando aprobación (fiesta en «revisar antes»
+       o foto dudosa en automático), a los 12 s no llegó aprobada: se marca
+       con el reloj, así no parece publicada. */
+    setTimeout(function () {
+      const c = celdasLocales[id];
+      if (c && c.isConnected && c.classList.contains('ok')) {
+        c.classList.add('espera');
+        c.title = 'Esperando aprobación';
+        const im = c.querySelector('img'); if (im) im.alt = 'Tu foto, esperando aprobación';
+      }
+    }, 12000);
   } else if (comoQuedo === 'falló') {
     b.classList.add('error');
   } else {

@@ -243,6 +243,13 @@
       if (typeof g.foto === 'string' && /^https:\/\/res\.cloudinary\.com\/oc8cgqt4\//.test(g.foto)) out.foto = g.foto;
       if (g.conFoto) out.conFoto = true;
       ['foco', 'colores', 'fuentes'].forEach(function (k) { if (g[k] && typeof g[k] === 'object') out[k] = JSON.parse(JSON.stringify(g[k])); });
+      /* ★ 3/11: el formulario «solo Save the Date» (crear.html?std=1) manda la
+         frase del título y la del pie que escribió el cliente */
+      if (g.textos && typeof g.textos === 'object') {
+        var tx = {};
+        ['titulo', 'sub', 'pie'].forEach(function (k) { if (typeof g.textos[k] === 'string' && g.textos[k].trim()) tx[k] = g.textos[k].trim().slice(0, 80); });
+        if (Object.keys(tx).length) out.textos = tx;
+      }
       d.fx = d.fx || {};
       d.fx.stdg = out;
     }
