@@ -384,6 +384,17 @@
       tipos:   ['xv'],
       oculto:  true
     },
+    /* 3/11/2026 · pedido de Jazmín: el diseño de Martina, en celeste */
+    'acuarela-celeste': {
+      nombre:  "Acuarela celeste",
+      bajada:  "Rosas en acuarela celeste y mariposas doradas.",
+      muestra: 'martina-mis15-celeste',
+      foto:    '/formulario/disenos/martina-mis15-celeste.webp',
+      color:   '#6e9cc4',
+      color2:  '#2e5a80',
+      paleta:  ['#6e9cc4', '#f5f8fb', '#a9c6e0', '#2e5a80'],
+      tipos:   ['xv']
+    },
     /* ---- 19/10/2026 · eventos nuevos (las que ya tienen portada con foto) ---- */
     'fiesta-ejecutivo': {
       nombre:  "Ejecutivo azul",
