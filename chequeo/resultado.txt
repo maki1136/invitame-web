@@ -1,25 +1,38 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitameok.net/i/?e=camila-y-tomas
-Fecha: 03/11/2026, 14:58
+Fecha: 03/11/2026, 15:58
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 4 PROBLEMAS (y 82 cosas bien)
+HAY 4 PROBLEMAS (y 90 cosas bien)
 ══════════════════════════════════════════
 
 
-  ESA INVITACIÓN NO EXISTE
-  Pedimos:  https://invitameok.net/i/?e=camila-y-tomas
-  Vino:     la boda de ejemplo (sin título)
+──────────────────────────────────────────
+  Safari escritorio
+──────────────────────────────────────────
+   BIEN   no asoma otro sobre al abrir
+   BIEN   la portada no es la de otra invitación
+   BIEN   la columna ya está encuadrada en el primer pintado
+   ----   el sobre no se pudo medir todavía (no es un fallo)
+   BIEN   sin voseo desde el primer pintado
+   BIEN   la columna tiene un ancho normal
+   BIEN   no se sale nada de la columna
+   BIEN   la raspadita pone una tapa por número
+   BIEN   las tapas caen justo encima de los números
 
-  No se probó nada. Si se probaba, todo iba a dar MAL por el
-  ejemplo, no por la invitación.
+──────────────────────────────────────────
+  Safari escritorio
+──────────────────────────────────────────
+   MAL    el escenario se cortó a la mitad
+             -> alcanzó a correr 8 chequeos y se cayó
+             -> el último que sí corrió: "las tapas caen justo encima de los números"
+             -> page.evaluate: Target page, context or browser has been closed
+             -> (los chequeos que faltan NO se probaron: este verde no vale)
 
-  Probá con una que exista, por ejemplo:
-      ./probar.command camila-y-tomas
 
 ──────────────────────────────────────────
   Safari iPhone
@@ -35,7 +48,7 @@ HAY 4 PROBLEMAS (y 82 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.82 · p.frase.reveal] · "¡Gracias!" 2.8/3 [#f5edda sobre luminancia 0.01-0.27 · div.n] · "Lino, algodón, colores" 3.0/4.5 [#4c5753 sobre luminancia 0.36-0.81 · p.reveal.in] · "Escucha la música de l" 4.2/4.5 [#576560 sobre luminancia 0.66-0.78 · p.reveal.in] y 1 más
+             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.49-0.82 · p.frase.reveal] · "¡Gracias!" 2.8/3 [#f5edda sobre luminancia 0.01-0.27 · div.n] · "Escucha la música de l" 4.2/4.5 [#576560 sobre luminancia 0.66-0.78 · p.reveal.in] · "Camila & Tomás · 06.03" 4.4/4.5 [#ffffff sobre luminancia 0.01-0.19 · div.s]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -47,16 +60,15 @@ HAY 4 PROBLEMAS (y 82 cosas bien)
    BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 7.6 s)
+   (volvió a su lugar en 5.2 s)
    BIEN   al volver NO se repite el sobre
-   MAL    al volver cae en el mismo lugar
-             -> la invitación anotó 12837 y volvió a 11564
+   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 601.7 s de punta a punta)
+   (tardó 538.5 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -78,9 +90,9 @@ HAY 4 PROBLEMAS (y 82 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.3/3 [#ffffff sobre luminancia 0.50-0.79 · p.frase.reveal] · "Con mucha alegría" 2.4/3 [#4e7468 sobre luminancia 0.44-0.83 · div.kick.reveal] · "Escucha la música de l" 4.3/4.5 [#576560 sobre luminancia 0.70-0.84 · p.reveal.in]
+             -> "“El mar nos vio empeza" 1.3/3 [#ffffff sobre luminancia 0.50-0.79 · p.frase.reveal] · "Agendar" 1.4/4.5 [#ffffff sobre luminancia 0.03-0.71 · a.btn.gh] · "Lino, algodón, colores" 1.9/4.5 [#576560 sobre luminancia 0.28-0.76 · p.reveal.in] · "Recuerdos" 2.7/3 [#4f6350 sobre luminancia 0.39-0.76 · div.kick.reveal] y 1 más
    BIEN   el boleto del pase se ve entero
-   BIEN   al tocar el boleto, el pedazo se corta y baja
+   ----   el boleto no se pudo traer a la pantalla: no se midio
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
@@ -90,15 +102,15 @@ HAY 4 PROBLEMAS (y 82 cosas bien)
    BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 2.8 s)
+   (volvió a su lugar en 11.3 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 592.4 s de punta a punta)
+   (tardó 627.8 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -124,7 +136,7 @@ HAY 4 PROBLEMAS (y 82 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.1/3 [#ffffff sobre luminancia 0.60-0.87 · p.frase.reveal]
+             -> "“El mar nos vio empeza" 1.1/3 [#ffffff sobre luminancia 0.59-0.87 · p.frase.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -142,5 +154,5 @@ HAY 4 PROBLEMAS (y 82 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 128.1 s de punta a punta)
+   (tardó 129.6 s de punta a punta)
 
