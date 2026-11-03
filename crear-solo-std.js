@@ -81,6 +81,20 @@
     D.__soloStd = true;
     return true;
   }
+  /* la invitación que nace queda marcada: el admin la muestra como «Solo Save the Date» */
+  function marcarEvento() {
+    var S = window.SOLICITUD_A_EVENTO;
+    if (!S || S.__soloStd) return !!S;
+    var mapear = S.mapear;
+    S.mapear = function () {
+      var ev = mapear.apply(S, arguments);
+      if (ev) { ev.tpl = 'save-the-date'; ev.fx = ev.fx || {}; ev.fx.soloStd = true; }
+      return ev;
+    };
+    S.__soloStd = true;
+    return true;
+  }
+  if (!marcarEvento()) { var nE = 0, ivE = setInterval(function () { if (marcarEvento() || ++nE > 40) clearInterval(ivE); }, 250); }
   if (!sinModelo()) { var nM = 0, ivM = setInterval(function () { if (sinModelo() || ++nM > 40) clearInterval(ivM); }, 250); }
   var hintC = $('cwsp') && $('cwsp').closest('.two') && $('cwsp').closest('.two').nextElementSibling;
   if (hintC && hintC.classList.contains('hint')) hintC.textContent = 'Por aquí te mandamos tu Save the Date en cuanto esté listo.';
