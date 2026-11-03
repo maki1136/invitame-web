@@ -157,18 +157,28 @@
     var marca = /^★ SOLO SAVE THE DATE/.test(String(d['c_pedido-especial-del-cliente'] || '').trim());
     return !!((d.fx && d.fx.soloStd === true) || String(d.tpl || '') === 'save-the-date' || marca);
   }
+  /* el Save the Date vive en EFECTOS; el bloque se arma al abrir la pestaña
+     (tarda hasta ~1 s), así que se espera a que aparezca */
+  function esperarVisible(id, ms) {
+    return new Promise(function (ok) {
+      var t0 = Date.now();
+      (function mirar() {
+        var e = document.getElementById(id);
+        if (e && e.offsetParent) return ok(e);
+        if (Date.now() - t0 > ms) return ok(null);
+        setTimeout(mirar, 150);
+      })();
+    });
+  }
   function tabDe(id) {
     var el = document.getElementById(id);
     if (el && el.offsetParent) return Promise.resolve(el);
     var tabs = [].slice.call(document.querySelectorAll('.tabs .tab'));
-    return tabs.reduce(function (p, t) {
-      return p.then(function (ya) {
-        if (ya) return ya;
-        t.click();
-        return new Promise(function (ok) { setTimeout(function () {
-          var e = document.getElementById(id); ok(e && e.offsetParent ? e : null);
-        }, 700); });
-      });
+    var ef = tabs.filter(function (x) { return /EFECTOS/i.test(x.textContent); })[0];
+    var resto = tabs.filter(function (x) { return x !== ef; });
+    if (ef) resto.unshift(ef);
+    return resto.reduce(function (p, tb) {
+      return p.then(function (ya) { if (ya) return ya; tb.click(); return esperarVisible(id, 2500); });
     }, Promise.resolve(null));
   }
   window.stdIrAlEditor = function () {
