@@ -1,5 +1,5 @@
 {
- "cuando": "2026-11-03T21:15:31.580Z",
+ "cuando": "2026-11-03T22:13:59.804Z",
  "slug": "camila-y-tomas",
  "total": 473,
  "verde": 464,
@@ -533,50 +533,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Qué foto usar",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.origen",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Link de la imagen",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Ubicación del texto del cierre",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.pos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Tamaño de la frase del cierre (100%)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.cierre.textoTam",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "patrocinadores-selector",
    "control": "Mostrar los patrocinadores",
    "tipo": "text",
@@ -681,6 +637,50 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.patrocinadores.estilo.tarjetaOpaca",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Qué foto usar",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.origen",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Link de la imagen",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -821,22 +821,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
