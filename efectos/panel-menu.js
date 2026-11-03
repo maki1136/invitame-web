@@ -21,6 +21,8 @@
       return [
         S.interruptor(caja, R('menu.encendido', 'Mostrar el menú'),
           function () { return S.on(m().encendido); }, function (v) { m().encendido = v; }),
+        S.texto(caja, R('menu.kick', 'Subtítulo del menú (arriba del título)'), 'Para disfrutar',
+          function () { return m().kick; }, function (v) { m().kick = v; }, false, 60),
         S.texto(caja, R('menu.titulo', 'Título del menú'), 'Menú',
           function () { return m().titulo; }, function (v) { m().titulo = v; }, false, 70),
         S.texto(caja, R('menu.frase', 'Frase del menú'), 'Preparamos algo especial para esta noche.',
@@ -33,7 +35,8 @@
             /* agregar el primero la prende: si no, Jazmín carga y no ve nada */
             if (!(m().tiempos || m().logos || []).length) m().encendido = true;
             return { nombre: '', desc: '' };
-          })
+          }),
+        S.estilo(caja, 'menu')   /* 3/11: fondo, letra, tamaños y colores */
       ];
     });
   }

@@ -170,7 +170,68 @@
     var c = getComputedStyle(t).color; en.removeChild(t);
     return rgb(c);
   }
+  /* ★ 3/11/2026 (Jazmín): «en la sección de menú no se puede modificar el
+     fondo, tipografías, tamaños, colores ni nada». fx.<clave>.estilo lo
+     escribe el bloque «Diseño de la sección» del panel (estilo(), abajo).
+     Va INLINE con !important: le gana a cualquier colección, y sólo pisa lo
+     que Jazmín eligió (lo vacío queda como lo viste la colección). */
+  var PRE = /^(great vibes|rouge script|dancing script|parisienne|tangerine|sacramento|cormorant garamond|playfair display|forum|marcellus|eb garamond|lora|cinzel|prata|montserrat|poppins|jost|serif|sans-serif|cursive)$/i;
+  var fuentesPedidas = {};
+  function pedirFuente(v) {
+    var fam = String(v || '').split(',')[0].replace(/["']/g, '').trim();
+    if (!fam || PRE.test(fam) || fuentesPedidas[fam.toLowerCase()]) return;
+    fuentesPedidas[fam.toLowerCase()] = 1;
+    var l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(fam).replace(/%20/g, '+') + '&display=swap';
+    (document.head || document.documentElement).appendChild(l);
+  }
+  function poner(el, prop, val) {
+    if (!el) return;
+    if (val) { if (el.style.getPropertyValue(prop) !== val || el.style.getPropertyPriority(prop) !== 'important') el.style.setProperty(prop, val, 'important'); }
+    else if (el.style.getPropertyPriority(prop) === 'important') el.style.removeProperty(prop);
+  }
+  function hexRgba(h, a) {
+    var m = String(h || '').match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+    return m ? 'rgba(' + parseInt(m[1], 16) + ',' + parseInt(m[2], 16) + ',' + parseInt(m[3], 16) + ',' + a + ')' : '';
+  }
+  function colorOk(c) { return /^#[0-9a-f]{6}$/i.test(String(c || '')) ? c : ''; }
+  function aplicarEstilo(sec) {
+    var e = ev() || {}, key = sec.getAttribute('data-sec');
+    var es = (e.fx && e.fx[key] && e.fx[key].estilo) || {};
+    var img = /^https:\/\//.test(String(es.imagen || '')) ? es.imagen : '';
+    var bg = colorOk(es.fondo);
+    poner(sec, 'background-color', bg);
+    poner(sec, 'background-image', img ? 'url("' + img.replace(/"/g, '') + '")' : (bg ? 'none' : ''));
+    poner(sec, 'background-size', img ? 'cover' : '');
+    poner(sec, 'background-position', img ? 'center' : '');
+    /* con fondo propio, los dibujos de la colección (::before/::after) no lo tapan */
+    var idc = 'sn-est-' + key, st = document.getElementById(idc);
+    var regla = (bg || img) ? '#' + sec.id + '::before,#' + sec.id + '::after{background:none!important;background-image:none!important;opacity:0!important}' : '';
+    if (regla && !st) { st = document.createElement('style'); st.id = idc; (document.head || document.documentElement).appendChild(st); }
+    if (st && st.textContent !== regla) st.textContent = regla;
+    if (es.fuente) pedirFuente(es.fuente);
+    var h = sec.querySelector('h2'), k = sec.querySelector('.kick');
+    poner(h, 'font-family', es.fuente || '');
+    poner(h, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');
+    poner(h, 'color', colorOk(es.colorTitulo));
+    poner(k, 'color', colorOk(es.colorSub));
+    var tx = colorOk(es.colorTexto), tam = es.tamTexto ? es.tamTexto + 'px' : '';
+    [].forEach.call(sec.querySelectorAll('.sn-frase, .sn-tn, .sn-td, .sn-a span, .sn-l b'), function (el) {
+      poner(el, 'color', tx);
+      /* el nombre del tiempo va un poco más chico que la descripción, como viene */
+      poner(el, 'font-size', tam ? (el.className === 'sn-tn' ? Math.round(es.tamTexto * 0.87) + 'px' : tam) : '');
+    });
+    var tar = colorOk(es.tarjeta);
+    var al = (typeof es.tarjetaOpaca === 'number') ? es.tarjetaOpaca : 1;
+    [].forEach.call(sec.querySelectorAll('.sn-card'), function (c) {
+      poner(c, 'background-color', tar ? hexRgba(tar, al) : '');
+      if (tx) poner(c, 'color', tx);
+    });
+    return !!tx;
+  }
+
   function legible(sec) {
+    if (aplicarEstilo(sec)) return;   /* Jazmín eligió el color del texto: manda ella */
     [].forEach.call(sec.querySelectorAll('.sn-card'), function (card) {
       var bg = fondoDe(card); if (!bg) return;
       card.style.color = '';
@@ -185,7 +246,7 @@
     });
     /* la frase, con la tinta del título de la sección */
     var h = sec.querySelector('h2'), fr = sec.querySelector('.sn-frase');
-    if (h && fr) {
+    if (h && fr && fr.style.getPropertyPriority('color') !== 'important') {
       var ch = rgb(getComputedStyle(h).color);
       if (ch && ch.a > 0.5 && fr.style.color !== getComputedStyle(h).color) fr.style.color = getComputedStyle(h).color;
     }
@@ -397,6 +458,96 @@
     };
   }
 
+  /* ★ 3/11/2026 — «Diseño de la sección»: fondo, letra, tamaños y colores.
+     Escribe fx.<key>.estilo; lo pinta aplicarEstilo() (arriba). Va plegado
+     para no tapar los datos. Cada control tiene «Como viene» (vacío = lo que
+     pone la colección). */
+  function estilo(caja, key) {
+    var det = document.createElement('details');
+    det.style.cssText = 'margin:12px 0 4px;border:1px solid rgba(0,0,0,.10);border-radius:10px;padding:8px 10px';
+    var sm = document.createElement('summary');
+    sm.textContent = 'Diseño de la sección (fondo, letra, tamaños y colores)';
+    sm.style.cssText = 'cursor:pointer;font-size:12.5px;font-weight:700';
+    det.appendChild(sm); caja.appendChild(det);
+    function es() { var d = borrador(); if (!d) return {}; var x = datos(d, key); if (!x.estilo || typeof x.estilo !== 'object') x.estilo = {}; return x.estilo; }
+    var syncs = [];
+    function fila(t) {
+      var f = document.createElement('div');
+      f.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:7px 0';
+      var l = document.createElement('span'); l.textContent = t; l.style.cssText = 'font-size:12px;font-weight:600;flex:1 1 150px';
+      f.appendChild(l); det.appendChild(f); return f;
+    }
+    function boton(t) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = t;
+      b.style.cssText = 'border:1px solid rgba(0,0,0,.15);background:none;border-radius:6px;cursor:pointer;padding:3px 8px;font-size:11.5px';
+      return b;
+    }
+    function color(t, k) {
+      var f = fila(t);
+      var i = document.createElement('input'); i.type = 'color'; i.style.cssText = 'width:46px;height:28px;padding:0;border:1px solid #ddd;border-radius:6px';
+      var est = document.createElement('span'); est.style.cssText = 'font-size:11px;opacity:.6';
+      var b = boton('Como viene');
+      i.oninput = function () { es()[k] = i.value; est.textContent = ''; refrescar(); };
+      b.onclick = function () { delete es()[k]; est.textContent = 'como viene'; refrescar(); };
+      f.appendChild(i); f.appendChild(est); f.appendChild(b);
+      syncs.push(function () { var v = es()[k]; if (/^#[0-9a-f]{6}$/i.test(v || '')) { if (document.activeElement !== i) i.value = v; est.textContent = ''; } else est.textContent = 'como viene'; });
+    }
+    function rango(t, k, min, max, unidad) {
+      var f = fila(t);
+      var i = document.createElement('input'); i.type = 'range'; i.min = min; i.max = max; i.step = 1; i.style.cssText = 'flex:1 1 120px';
+      var n = document.createElement('span'); n.style.cssText = 'font-size:11.5px;font-weight:700;min-width:62px';
+      var b = boton('Como viene');
+      i.oninput = function () { es()[k] = unidad === '%' ? parseInt(i.value, 10) / 100 : parseInt(i.value, 10); n.textContent = i.value + unidad; refrescar(); };
+      b.onclick = function () { delete es()[k]; n.textContent = 'como viene'; refrescar(); };
+      f.appendChild(i); f.appendChild(n); f.appendChild(b);
+      syncs.push(function () {
+        var v = es()[k];
+        if (typeof v === 'number') { var x = unidad === '%' ? Math.round(v * 100) : v; if (document.activeElement !== i) i.value = x; n.textContent = x + unidad; }
+        else n.textContent = 'como viene';
+      });
+    }
+    function fuente(t, k) {
+      var f = fila(t);
+      var s = document.createElement('select'); s.style.cssText = 'flex:1 1 160px;max-width:230px';
+      var lista = [];
+      try { if (typeof FONTS === 'object' && FONTS.length) lista = FONTS; } catch (e) {}
+      s.innerHTML = '<option value="">Como viene</option>' + lista.map(function (o) {
+        return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>';
+      }).join('');
+      s.onchange = function () { if (s.value) es()[k] = s.value; else delete es()[k]; refrescar(); };
+      f.appendChild(s);
+      syncs.push(function () { var v = es()[k] || ''; if (document.activeElement !== s && s.value !== v) s.value = v; });
+    }
+    function imagen(t, k) {
+      var f = fila(t);
+      var im = document.createElement('img'); im.style.cssText = 'height:34px;max-width:60px;object-fit:cover;border-radius:4px;display:none';
+      var fi = document.createElement('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.style.display = 'none';
+      var b = boton('Subir imagen'), q = boton('Quitar');
+      b.onclick = function () { fi.click(); };
+      q.onclick = function () { delete es()[k]; refrescar(); sync(); };
+      fi.onchange = function () {
+        var x = fi.files && fi.files[0]; if (!x || !window.INV || !window.INV.uploadImage) return;
+        b.textContent = 'Subiendo…'; b.disabled = true;
+        window.INV.uploadImage(x).then(function (u) { es()[k] = u; b.disabled = false; refrescar(); sync(); },
+          function () { b.textContent = 'No se pudo subir'; b.disabled = false; });
+      };
+      function sync() { var v = es()[k]; im.style.display = v ? '' : 'none'; if (v && im.src !== v) im.src = v; b.textContent = v ? 'Cambiar imagen' : 'Subir imagen'; q.style.display = v ? '' : 'none'; }
+      f.appendChild(im); f.appendChild(b); f.appendChild(q); f.appendChild(fi);
+      syncs.push(sync);
+    }
+    color('Color de fondo', 'fondo');
+    imagen('Imagen de fondo', 'imagen');
+    fuente('Tipografía del título', 'fuente');
+    rango('Tamaño del título', 'tamTitulo', 16, 64, 'px');
+    color('Color del título', 'colorTitulo');
+    color('Color del subtítulo (arriba del título)', 'colorSub');
+    color('Color del texto', 'colorTexto');
+    rango('Tamaño del texto', 'tamTexto', 11, 24, 'px');
+    color('Color de la tarjeta', 'tarjeta');
+    rango('Transparencia de la tarjeta', 'tarjetaOpaca', 0, 100, '%');
+    return function sync() { syncs.forEach(function (s) { try { s(); } catch (e) {} }); };
+  }
+
   /* monta el bloque en su casa y lo mantiene sincronizado */
   function bloque(id, construir) {
     var syncs = null;
@@ -425,6 +576,6 @@
     /* panel */
     borrador: borrador, refrescar: refrescar, datos: datos, rotulo: rotulo,
     anotarCasa: anotarCasa, registrarOrden: registrarOrden, bloque: bloque,
-    titulo: titulo, interruptor: interruptor, texto: texto, lista: lista
+    titulo: titulo, interruptor: interruptor, texto: texto, lista: lista, estilo: estilo
   };
 })();
