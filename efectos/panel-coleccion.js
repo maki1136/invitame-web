@@ -155,6 +155,13 @@
              'rosas: la letra va en rosa hondo sobre las flores. El pase con el QR va ' +
              'abajo de la raspadita, que se raspa una rosa. Usa la paleta del evento ' +
              '(el rosa de los botones sale del color principal).' },
+    { id: 'acuarela-celeste', nombre: 'Acuarela celeste',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La misma de Martina (Acuarela rosa) en CELESTE: las mismas rosas en ' +
+             'acuarela y mariposas doradas, con las flores celestes, la letra en azul ' +
+             'hondo y los filetes celestes. Tapas de video y playlist y la rosa de la ' +
+             'raspadita, en celeste. Conviene elegir también una paleta celeste en ' +
+             '«Paleta de colores» para los botones.' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
