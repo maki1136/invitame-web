@@ -102,7 +102,9 @@
          + '<button class="btn-c" onclick="stdDescargar(this)">Descargar el Save the Date (imagen)</button>'
          + '<button class="btn-c" onclick="copiarMensajeStd(this)">Copiar el mensaje para el cliente</button>'
          + '</div>'
-         + '<div style="margin-top:8px;font-size:11.5px;color:#7a5a68">La invitación queda escondida: si después la compran, se arma sobre esta misma y se entrega como siempre.</div>';
+         + '<div style="margin-top:8px;font-size:11.5px;color:#7a5a68">La invitación queda escondida. Si después compran la invitación: '
+         + '<a href="#" onclick="stdAhoraInvitacion();return false" style="color:#6D1233;font-weight:700">pasar a invitación</a> '
+         + '(elegís el diseño en PRINCIPAL → Diseño del catálogo, la armás y la entregás como siempre).</div>';
       caja.innerHTML = h;
       return;
     }
@@ -150,10 +152,10 @@
      de serlo: pasó a ser una invitación. */
   function esSoloStd() {
     var d = dat(); if (!d) return false;
-    var tpl = String(d.tpl || '').trim();
+    /* «Ahora es una invitación» (compraron la invitación) lo apaga a mano */
+    if (d.fx && d.fx.soloStd === false) return false;
     var marca = /^★ SOLO SAVE THE DATE/.test(String(d['c_pedido-especial-del-cliente'] || '').trim());
-    /* con diseño de invitación elegido en el panel, ya es una invitación */
-    return tpl === 'save-the-date' || (marca && !tpl);
+    return !!((d.fx && d.fx.soloStd === true) || String(d.tpl || '') === 'save-the-date' || marca);
   }
   function tabDe(id) {
     var el = document.getElementById(id);
@@ -182,6 +184,13 @@
       b.click();
       if (btn) { var t = btn.textContent; btn.textContent = '¡Descargando!'; setTimeout(function () { btn.textContent = t; }, 1800); }
     });
+  };
+  window.stdAhoraInvitacion = function () {
+    var d = dat(); if (!d) return;
+    if (!confirm('¿Compraron la invitación? Este pedido pasa a ser una invitación y se entrega como siempre. Acordate de «Guardar y publicar».')) return;
+    d.fx = d.fx || {}; d.fx.soloStd = false;
+    var c = document.getElementById('cajaentrega'); if (c) c.dataset.firma = '';
+    pintar();
   };
   window.copiarMensajeStd = function (btn) {
     var d = dat() || {};
