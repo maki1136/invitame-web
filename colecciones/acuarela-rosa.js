@@ -28,28 +28,51 @@
       · la raspadita va SIN recuadro y se raspa una rosa de la misma acuarela
       · el formulario de confirmación, que venía pintado para fondo OSCURO
    =============================================================================== */
+/* ★ 3/11/2026 (Jazmín: «ese mismo diseño pero en celeste»). La colección es
+   UNA receta con dos vestidos: «acuarela-rosa» (la de Martina) y
+   «acuarela-celeste» (las mismas flores y mariposas, con las rosas pasadas a
+   celeste por color —no por IA—: invitame martina/*-celeste-3-11). Los dos se
+   eligen en el panel → Colección. Lo único que cambia está en VESTIDOS. */
 (function () {
   'use strict';
+  var CL = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
+  var VESTIDOS = [
+    { id: 'acuarela-rosa', global: 'INVACUARELAROSA',
+      TINTA: '#7A3F52', TINTA2: '#6A4E56', ACENTO: '#B06A7E', PAPEL: '#FBF6F5', ORO: '#B8923E',
+      rgbAcento: '176,106,126', rgbTinta: '122,63,82', rgbTinta2: '106,78,86', rgbSombra: '60,20,32', rgbPapel: '251,246,245',
+      FONDO: CL + 'q_auto,f_auto,w_1080/invitame/martina/mt-fondo-flores-29-9',
+      RASP: CL + 'q_auto,f_auto,w_480/invitame/martina/mt-rasp-rosa-29-9',
+      TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/invitame/martina/mt-tv-proy-29-9',
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/invitame/martina/mt-sp-disco-29-9' },
+    { id: 'acuarela-celeste', global: 'INVACUARELACELESTE',
+      TINTA: '#2E5A80', TINTA2: '#4B5C6B', ACENTO: '#6E9CC4', PAPEL: '#F5F8FB', ORO: '#B8923E',
+      rgbAcento: '110,156,196', rgbTinta: '46,90,128', rgbTinta2: '75,92,107', rgbSombra: '18,38,58', rgbPapel: '245,248,251',
+      FONDO: CL + 'q_auto,f_auto,w_1080/martina/mt-fondo-flores-celeste-3-11',
+      RASP: CL + 'q_auto,f_auto,w_480/martina/mt-rasp-celeste-3-11',
+      TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/martina/mt-tv-proy-celeste-3-11',
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/martina/mt-sp-disco-celeste-3-11' }
+  ];
+  VESTIDOS.forEach(function (V) { coleccion(V); });
 
-  var ID     = 'acuarela-rosa';
-  var ID_CSS = 'col-acuarela-rosa';
+function coleccion(V) {
+  var ID     = V.id;
+  var ID_CSS = 'col-' + V.id;
   var P      = 'html[data-col="' + ID + '"] ';
 
-  var TINTA  = '#7A3F52';   /* rosa hondo: títulos y nombres */
-  var TINTA2 = '#6A4E56';   /* el cuerpo */
-  var ACENTO = '#B06A7E';   /* el rosa de Martina: filetes y detalles */
-  var PAPEL  = '#FBF6F5';
-  var ORO    = '#B8923E';
+  var TINTA  = V.TINTA;    /* títulos y nombres */
+  var TINTA2 = V.TINTA2;   /* el cuerpo */
+  var ACENTO = V.ACENTO;   /* filetes y detalles */
+  var PAPEL  = V.PAPEL;
+  var ORO    = V.ORO;
 
-  var CL = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
-  var FONDO      = CL + 'q_auto,f_auto,w_1080/invitame/martina/mt-fondo-flores-29-9';
-  var RASP       = CL + 'q_auto,f_auto,w_480/invitame/martina/mt-rasp-rosa-29-9';
-  var TAPA_VIDEO = CL + 'q_auto,f_auto,w_1100/invitame/martina/mt-tv-proy-29-9';
-  var TAPA_PLAY  = CL + 'c_fill,w_800,h_730,q_auto,f_auto/invitame/martina/mt-sp-disco-29-9';
+  var FONDO      = V.FONDO;
+  var RASP       = V.RASP;
+  var TAPA_VIDEO = V.TAPA_VIDEO;
+  var TAPA_PLAY  = V.TAPA_PLAY;
 
   /* el velo sobre las flores: CLARO y bajo, para que las flores se vean
      («que más se tiene que ver»). Medido: con .30 el cuerpo #6A4E56 da > 6. */
-  var VELO = 'linear-gradient(rgba(251,246,245,.30), rgba(251,246,245,.30))';
+  var VELO = 'linear-gradient(rgba(' + V.rgbPapel + ',.30), rgba(' + V.rgbPapel + ',.30))';
 
   function ev() { try { return window.INVEV || {}; } catch (e) { return {}; } }
 
@@ -97,17 +120,17 @@
       P + '.rsvpform label, ' + P + '.rsvpform .lbl, ' + P + '.rsvp label{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
       P + '.rsvpform input, ' + P + '.rsvpform select, ' + P + '.rsvpform textarea{',
       '  background:rgba(255,255,255,.88)!important; color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important;',
-      '  border:1px solid rgba(176,106,126,.55)!important;',
+      '  border:1px solid rgba(' + V.rgbAcento + ',.55)!important;',
       '}',
-      P + '.rsvpform input::placeholder, ' + P + '.rsvpform textarea::placeholder{ color:rgba(106,78,86,.55)!important; -webkit-text-fill-color:rgba(106,78,86,.55)!important; }',
+      P + '.rsvpform input::placeholder, ' + P + '.rsvpform textarea::placeholder{ color:rgba(' + V.rgbTinta2 + ',.55)!important; -webkit-text-fill-color:rgba(' + V.rgbTinta2 + ',.55)!important; }',
       P + '.rsvp .si span, ' + P + '.rsvp .no span, ' + P + '.rsvp-sw span, ' + P + '.rsvpform small{ color:' + TINTA2 + '!important; -webkit-text-fill-color:' + TINTA2 + '!important; }',
 
       /* ---- LAS TARJETAS: papel claro con el filete rosa ---- */
-      P + ':is(.evento, .hotel){ background-color:rgba(255,255,255,.90)!important; border:1px solid rgba(176,106,126,.35)!important; }',
+      P + ':is(.evento, .hotel){ background-color:rgba(255,255,255,.90)!important; border:1px solid rgba(' + V.rgbAcento + ',.35)!important; }',
 
       /* ---- EL PASE: papel claro, filete rosa y una rosa de medallón ---- */
-      P + '.pasecard{ position:relative!important; overflow:visible!important; padding-top:34px!important; box-shadow:inset 0 0 0 7px #fff, inset 0 0 0 8px rgba(176,106,126,.55), 0 12px 28px rgba(122,63,82,.18)!important; }',
-      P + '.pasecard::before{ content:""!important; position:absolute!important; top:-18px!important; left:50%!important; width:36px!important; height:36px!important; margin-left:-18px!important; border-radius:50%!important; background:url("' + RASP + '") center/cover no-repeat!important; box-shadow:0 0 0 2px #fff, 0 0 0 3px rgba(176,106,126,.6), 0 4px 10px rgba(122,63,82,.2)!important; z-index:3!important; pointer-events:none!important; }',
+      P + '.pasecard{ position:relative!important; overflow:visible!important; padding-top:34px!important; box-shadow:inset 0 0 0 7px #fff, inset 0 0 0 8px rgba(' + V.rgbAcento + ',.55), 0 12px 28px rgba(' + V.rgbTinta + ',.18)!important; }',
+      P + '.pasecard::before{ content:""!important; position:absolute!important; top:-18px!important; left:50%!important; width:36px!important; height:36px!important; margin-left:-18px!important; border-radius:50%!important; background:url("' + RASP + '") center/cover no-repeat!important; box-shadow:0 0 0 2px #fff, 0 0 0 3px rgba(' + V.rgbAcento + ',.6), 0 4px 10px rgba(' + V.rgbTinta + ',.2)!important; z-index:3!important; pointer-events:none!important; }',
 
       /* ---- LA RASPADITA: sin recuadro, y se raspa una rosa de la acuarela ----
          ⚠️ `--r3-tapa` va SIN prefijo y en toda la rama: el canvas se pinta una
@@ -115,16 +138,16 @@
       ':is(.scratch-sec, .rasp-3, .rasp-zona, #scratchcard){ --r3-tapa:url("' + RASP + '"); }',
       P + '.scratchcard, ' + P + '#scratchcard{ background:none!important; border:0!important; box-shadow:none!important; }',
       P + '.scratchcard::after, ' + P + '#scratchcard::after{ display:none!important; }',
-      P + '.rasp-zona{ box-shadow:0 0 0 3px #fff, 0 0 0 4px rgba(176,106,126,.55), 0 6px 14px rgba(122,63,82,.18)!important; }',
+      P + '.rasp-zona{ box-shadow:0 0 0 3px #fff, 0 0 0 4px rgba(' + V.rgbAcento + ',.55), 0 6px 14px rgba(' + V.rgbTinta + ',.18)!important; }',
       P + '.rasp-zona.dormida canvas{ filter:none!important; }',
 
       /* ---- LAS TAPAS CON FOTO (§48) ---- */
-      P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(122,63,82,.30) 0, rgba(122,63,82,.10) 26%, rgba(122,63,82,0) 46%), url("' + TAPA_VIDEO + '") center 45%/cover no-repeat!important; border-radius:18px!important; border:0!important; box-shadow:0 12px 28px rgba(122,63,82,.22), 0 0 0 1px rgba(176,106,126,.5)!important; }',
-      P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(122,63,82,.30) 0, rgba(122,63,82,.10) 26%, rgba(122,63,82,0) 46%), url("' + TAPA_PLAY + '") center 50%/cover no-repeat!important; border-radius:18px!important; border:0!important; box-shadow:0 12px 28px rgba(122,63,82,.22), 0 0 0 1px rgba(176,106,126,.5)!important; }',
-      P + ':is(#video-sec, #spotify-sec) .rd-tapa .rd-txt{ color:#fff!important; -webkit-text-fill-color:#fff!important; text-shadow:0 1px 4px rgba(60,20,32,.9), 0 0 12px rgba(60,20,32,.6)!important; }',
+      P + '#video-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(' + V.rgbTinta + ',.30) 0, rgba(' + V.rgbTinta + ',.10) 26%, rgba(' + V.rgbTinta + ',0) 46%), url("' + TAPA_VIDEO + '") center 45%/cover no-repeat!important; border-radius:18px!important; border:0!important; box-shadow:0 12px 28px rgba(' + V.rgbTinta + ',.22), 0 0 0 1px rgba(' + V.rgbAcento + ',.5)!important; }',
+      P + '#spotify-sec .rd-tapa{ background:radial-gradient(circle at 50% 50%, rgba(' + V.rgbTinta + ',.30) 0, rgba(' + V.rgbTinta + ',.10) 26%, rgba(' + V.rgbTinta + ',0) 46%), url("' + TAPA_PLAY + '") center 50%/cover no-repeat!important; border-radius:18px!important; border:0!important; box-shadow:0 12px 28px rgba(' + V.rgbTinta + ',.22), 0 0 0 1px rgba(' + V.rgbAcento + ',.5)!important; }',
+      P + ':is(#video-sec, #spotify-sec) .rd-tapa .rd-txt{ color:#fff!important; -webkit-text-fill-color:#fff!important; text-shadow:0 1px 4px rgba(' + V.rgbSombra + ',.9), 0 0 12px rgba(' + V.rgbSombra + ',.6)!important; }',
 
       /* ---- el itinerario: la caja clara sobre las flores, con su filete ---- */
-      P + '.tl{ background-color:rgba(255,255,255,.82)!important; background-image:none!important; border:1px solid rgba(176,106,126,.35)!important; }',
+      P + '.tl{ background-color:rgba(255,255,255,.82)!important; background-image:none!important; border:1px solid rgba(' + V.rgbAcento + ',.35)!important; }',
       /* el «ambiente» de nubes del itinerario (fx.ambiente) pinta un cielo propio
          encima del fondo: con las flores en todas las secciones se veía como un
          parche blanco. En esta colección no va. */
@@ -210,5 +233,6 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
 
-  window.INVACUARELAROSA = { poner: poner, sacar: sacar, css: armarCSS };
+  window[V.global] = { poner: poner, sacar: sacar, css: armarCSS };
+}
 })();
