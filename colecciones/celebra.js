@@ -10,7 +10,8 @@
    ⭐ TONOS: fx.coleccion = 'celebra-<tono>'  (o ?coleccion=celebra-<tono>)
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
       editorial · rosegold · toga · kinder · generacion · grises · futbol ·
-      palmeras · cabina · collage · scrapbook · seda · lavanda
+      palmeras · cabina · collage · scrapbook · seda · lavanda · estrellada ·
+      posada
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -242,7 +243,17 @@
       nm:['Allura','clamp(62px,17vw,92px)','normal',400,'none','0',1.05],
       pk:['Jost','12px','uppercase','.38em','normal'],
       h2:['27px','.02em','none','italic',400],
-      kk:['Allura','32px','none','0','m'] }
+      kk:['Allura','32px','none','0','m'] },
+    /* 22 · POSADA · relieve perla navideño (3/11/2026, pedido de Maki; referencia:
+       el reel de perlas en relieve de thedigitalyes). Todo tallado en yeso perla:
+       nochebuenas con el pétalo apenas rojo, piñatas de siete picos y farolitos.
+       Fondo EN VIDEO (ev-posada-fondo): polvo de oro que recorre el relieve. */
+    posada: { nombre: 'Posada · Relieve perla', pa:'#FBF7F0', pa2:'#F1E8DA', ti:'#3A1A1C', ti2:'#4A2A2A', ti3:'#E3CFC0', ac:'#A8323A', mt:'oro', mtT:'#76571A', base:'posada',
+      disp:'Cormorant', scr:'Pinyon Script', txt:'Cormorant Garamond', h3:'Cormorant', adorno:'nochebuena', forma:'marco', boton:'999px', radio:'18px',
+      nm:['Pinyon Script','clamp(58px,15.5vw,84px)','normal',400,'none','0',1.12],
+      pk:['Cormorant','13px','uppercase','.42em','normal'],
+      h2:['28px','.03em','none','normal',500],
+      kk:['Pinyon Script','30px','none','0','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -416,6 +427,13 @@
       '<path fill="' + c + '" d="M26 11 C17 11 11 18 11 25 C11 33 18 39 26 38 C20 36 16 31 16 25 C16 18 20 13 26 11 Z"/>' +
       '<path d="' + estrella(35, 16, 5.2, 2.2) + '" fill="' + ACENTO + '"/>' +
       '<path d="M29 31 C33 27 39 28 40 32 C41 36 36 38 34 35 C33 33 35 31 37 32" stroke="' + c + '" stroke-width="1.3" fill="none" stroke-linecap="round"/>');
+    /* NOCHEBUENA: ocho pétalos en punta (rojo del acento), centro de perlitas en metal */
+    if (a === 'nochebuena') {
+      var pt = '';
+      for (var i = 0; i < 8; i++) pt += '<path transform="rotate(' + (i * 45 + (i % 2 ? 22 : 0)) + ' 24 24)" d="M24 24 C21 18 22 10 24 5 C26 10 27 18 24 24 Z" opacity="' + (i % 2 ? '.7' : '1') + '"/>';
+      return svg('<g fill="' + ACENTO + '">' + pt + '</g>' +
+        '<g fill="' + c + '"><circle cx="24" cy="24" r="2.6"/><circle cx="20.6" cy="22" r="1.1"/><circle cx="27.4" cy="22" r="1.1"/><circle cx="24" cy="27.8" r="1.1"/></g>');
+    }
     if (a === 'mariposa') return svg(
       '<g fill="' + c + '"><path d="M23 24 C18 10 6 8 5 16 C4 23 12 26 23 25 Z"/><path d="M25 24 C30 10 42 8 43 16 C44 23 36 26 25 25 Z"/>' +
       '<path d="M23 26 C14 27 9 33 12 38 C15 42 21 36 23 28 Z"/><path d="M25 26 C34 27 39 33 36 38 C33 42 27 36 25 28 Z"/>' +
