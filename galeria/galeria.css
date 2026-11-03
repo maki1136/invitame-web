@@ -500,3 +500,7 @@ h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;letter-spac
   color:var(--tinta);white-space:pre-wrap;overflow-wrap:anywhere;
 }
 .firma audio{width:100%;margin-top:4px}
+
+/* 2/11/2026: la «tuya» que quedó esperando aprobación dice qué pasa */
+.celda.ok.espera .estado-celda{background:rgba(74,48,56,.55);font-size:.78rem;font-weight:700;text-align:center;line-height:1.2;padding:6px}
+.celda.ok.espera .estado-celda::before{content:"⏳ Esperando aprobación"}
