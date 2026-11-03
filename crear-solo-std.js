@@ -40,7 +40,13 @@
   var css = document.createElement('style');
   css.textContent =
     'body.solo-std .ayuda, body.solo-std [data-ayuda], body.solo-std #dis-ver, body.solo-std #dis-fono,' +
-    'body.solo-std #dis-colores, body.solo-std #paq{display:none!important}';
+    'body.solo-std #dis-colores, body.solo-std #paq,' +
+    /* ★ 3/11 (Jazmín): «las muestras hay que eliminarlas de acá, porque abajo
+       aparecen las del SAVE». Sin grilla de invitaciones: sólo Save the Date. */
+    'body.solo-std #dis-modelos, body.solo-std #dis-elegido, body.solo-std #dis-perso{display:none!important}' +
+    'body.solo-std #card-modelo .subt:first-of-type{border-top:0;padding-top:0;margin-top:4px}';
+  var h2m = document.querySelector('#card-modelo > h2'); if (h2m) h2m.textContent = 'Tu Save the Date';
+  var dsm = document.querySelector('#card-modelo > .desc'); if (dsm) dsm.textContent = 'Completa tus datos y elige el diseño al final. Te lo mandamos listo para compartir.';
   document.head.appendChild(css);
   /* el «Ver opciones» de un casillero escondido, también se va */
   var nOpc = 0, ivOpc = setInterval(function () {
@@ -63,9 +69,19 @@
     if (!va) tapar(c);
   });
 
-  /* ---- 2. «Modelo elegido»: sin «personalizado» ni colores (eso es de la invitación) ---- */
-  var desc = document.querySelector('#card-modelo .desc');
-  if (desc) desc.textContent = 'Toca el diseño que más te guste: tu Save the Date sale con ese estilo. Desliza para ver todos.';
+  /* ---- 2. sin «Modelo elegido»: el diseño es el del Save the Date (abajo).
+     El envío pide un modelo: se le dice «save-the-date», que no es ninguna
+     muestra. Así la solicitud llega marcada (tpl = save-the-date) y la
+     invitación no se viste con ninguna muestra; si después compran la
+     invitación, Jazmín elige el diseño en el panel. ---- */
+  function sinModelo() {
+    var D = window.CREAR_DISENO;
+    if (!D || D.__soloStd) return !!D;
+    D.elegido = function () { return 'save-the-date'; };
+    D.__soloStd = true;
+    return true;
+  }
+  if (!sinModelo()) { var nM = 0, ivM = setInterval(function () { if (sinModelo() || ++nM > 40) clearInterval(ivM); }, 250); }
   var hintC = $('cwsp') && $('cwsp').closest('.two') && $('cwsp').closest('.two').nextElementSibling;
   if (hintC && hintC.classList.contains('hint')) hintC.textContent = 'Por aquí te mandamos tu Save the Date en cuanto esté listo.';
   var hintClave = $('orden') && $('orden').nextElementSibling;
