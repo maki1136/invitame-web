@@ -183,7 +183,12 @@
   }
   window.stdIrAlEditor = function () {
     return tabDe('stdg-selector').then(function (e) {
-      if (e) { e.scrollIntoView({ behavior: 'smooth', block: 'start' }); var dt = e.closest('details'); if (dt) dt.open = true; }
+      if (e) {
+        var dt = e.closest('details'); if (dt) dt.open = true;
+        /* sin «smooth»: el panel todavía se está acomodando y lo cancelaba */
+        e.scrollIntoView({ block: 'start' });
+        setTimeout(function () { e.scrollIntoView({ block: 'start' }); }, 400);
+      }
       return e;
     });
   };
