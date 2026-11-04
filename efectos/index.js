@@ -665,6 +665,7 @@
     '/efectos/tipos-evento.js',        /* 19/10: babyshower, graduacion y corporativo (INVTIPO) + el selector del panel */
     '/efectos/panel-compartir.js',     /* 22/10: apagado adentro («Corre la voz» se sacó de todas) */
     '/efectos/panel-std-generico.js',
+    '/efectos/std-solo-vista.js',      /* 3/11: pedido SOLO Save the Date → el link muestra la imagen, no una invitación */
     '/efectos/panel-qr-link.js',   /* 28/10: QR para abrir la invitación (pulseras, souvenirs) */  /* 27/10: save the date SIN invitación, 10 diseños, textos movibles (Maki) */
     '/efectos/panel-save-the-date.js', /* el save the date de regalo: su bloque en EFECTOS (lo arma save-the-date.js, que NO va en esta lista) */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
