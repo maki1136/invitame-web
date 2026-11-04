@@ -218,6 +218,7 @@
     'regalo-selector':['REGALOS','regalo'],
     'std-selector':['EFECTOS','savethedate'],
     'stdg-selector':['EFECTOS','savethedate'],   /* 27/10: save the date sin invitación */
+    'mision-selector':['EFECTOS','mision'],   /* 3/11: Misión secreta (la invitación se juega) */
     'ocultas-selector':['PRINCIPAL','ocultas'],
     'novedades-selector':['PRINCIPAL','ocultas'],   /* 29/10: novedades sólo en invitaciones nuevas */
     'paquete-selector':['PAQUETE','paquete'],
@@ -238,6 +239,7 @@
     compartir:{abajo:true},
     regalo:{arriba:true},
     savethedate:{abajo:true},
+    mision:{abajo:true},
     ocultas:{abajo:true},
     paquete:{arriba:true},
     qrlink:{arriba:true}

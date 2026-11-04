@@ -764,6 +764,8 @@
     '/efectos/filtro.js',              /* la cámara con el marco de la boda (fx.filtro) */
     '/efectos/panel-filtro.js',        /* y su bloque en el panel, con el subidor del marco */
     '/efectos/panel-filtro-novios.js', /* y la frase, editable por los novios desde SU panel */
+    '/efectos/mision.js',              /* 3/11: MISIÓN SECRETA — huella, dos puertas, caja fuerte, criptex y foto partida (fx.mision.on, opt-in) */
+    '/efectos/panel-mision.js',        /* y su bloque en EFECTOS */
     /* ⚠️ VA AL FINAL PERO SE DIBUJA PRIMERO: el bloque del paquete se mete
        ARRIBA de todo en la pestaña EFECTOS, porque es el que decide qué le
        corresponde al resto. Cargarlo último no cambia dónde aparece. */
