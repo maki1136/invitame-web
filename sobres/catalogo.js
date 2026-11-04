@@ -2485,6 +2485,37 @@ window.SOBRES_INVITAME = {
     eje:      { x: 50.1, y: 56.2 }
   },
 
+  /* ★ 3/11/2026 — Jazmín: «cambiar ese corazón por la R». El mismo Vino con el
+     lacre LISO (se le sacó el corazón a la foto) y la letra la graba
+     /efectos/lacre-letra.js en el lugar de la cera (lacreLetra, medido sobre
+     la foto: centro 379,661 · diámetro 235 de 768×1376). La letra sale del
+     panel: «El lacre del sobre» → Las iniciales. */
+  "vino-oro-letra": {
+    nombre:   "Vino · burdeos con damasco en relieve, lacre dorado con LETRA (la que pongas en las iniciales) (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-liso-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-liso-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-cuerpo.webp",
+    color:    "#4b1920",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.1, y: 56.2 },
+    lacreLetra: { x: 49.4, y: 48.0, d: 30.6 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
+  "vino-oro-letra-cae": {
+    nombre:   "Vino · lacre con LETRA, la solapa sube y el sobre cae (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-liso-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-liso-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/vino-oro-cuerpo.webp",
+    color:    "#4b1920",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 50.1, y: 56.2 },
+    lacreLetra: { x: 49.4, y: 48.0, d: 30.6 }
+  },
+
   "terracota-flor-seca": {
     nombre:   "Terracota · algodón de borde rústico con damasco, lacre con flores secas (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/terracota-flor-seca-poster.jpg",
