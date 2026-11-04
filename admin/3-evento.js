@@ -219,6 +219,7 @@
     'std-selector':['EFECTOS','savethedate'],
     'stdg-selector':['EFECTOS','savethedate'],   /* 27/10: save the date sin invitación */
     'mision-selector':['EFECTOS','mision'],   /* 3/11: Misión secreta (la invitación se juega) */
+    'camara-selector':['EFECTOS','mision'],   /* 4/11: la camarita (imprime el pase) */
     'ocultas-selector':['PRINCIPAL','ocultas'],
     'novedades-selector':['PRINCIPAL','ocultas'],   /* 29/10: novedades sólo en invitaciones nuevas */
     'paquete-selector':['PAQUETE','paquete'],

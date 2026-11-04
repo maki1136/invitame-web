@@ -767,6 +767,8 @@
     '/efectos/panel-filtro-novios.js', /* y la frase, editable por los novios desde SU panel */
     '/efectos/mision.js',              /* 3/11: MISIÓN SECRETA — huella, dos puertas, caja fuerte, criptex y foto partida (fx.mision.on, opt-in) */
     '/efectos/panel-mision.js',        /* y su bloque en EFECTOS */
+    '/efectos/camara-instantanea.js',  /* 4/11: LA CAMARITA — la cámara instantánea imprime el pase (fx.camara.on, especial) */
+    '/efectos/panel-camara.js',        /* y su bloque en EFECTOS */
     /* ⚠️ VA AL FINAL PERO SE DIBUJA PRIMERO: el bloque del paquete se mete
        ARRIBA de todo en la pestaña EFECTOS, porque es el que decide qué le
        corresponde al resto. Cargarlo último no cambia dónde aparece. */
