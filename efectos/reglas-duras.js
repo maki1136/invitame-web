@@ -210,7 +210,13 @@
     var cs = document.getElementById('carta-sec');
     var cartaNoSeVe = !cs || cs.style.display === 'none';
     var fraseAdentro = !!(cs && cs.querySelector('.mf-frase'));
-    var cede = loResuelveLaColeccion() || cartaFuera || (cartaNoSeVe && !fraseAdentro);
+    /* ★ 4/11/2026 — Jazmín: «la fotografía de frase larga SOLO aparece cuando
+       desactivás la carta». Si la invitación tiene SU foto de frase larga, la
+       banda con la foto se queda (la carta también). */
+    /* sólo en las invitaciones nuevas (INVNUEVA): las entregadas no cambian */
+    var fotoPropia = (window.INVNUEVA ? window.INVNUEVA() : false) && ['img_c_fondo-seccion-frase-larga', 'img_c_fondo-secci-n-frase-larga', 'img_f-fondo-secci-n-frase-larga']
+      .some(function (k) { return /^https?:\/\//.test(String(D[k] || '')); });
+    var cede = loResuelveLaColeccion() || cartaFuera || (cartaNoSeVe && !fraseAdentro) || (fotoPropia && !fraseAdentro);
     for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
       var ya = s.getAttribute('data-regla-frase') === 'fuera';
@@ -1089,6 +1095,18 @@
       var r = el.getBoundingClientRect();
       if (r.width < 4 || r.height < 4) continue;
       if (esLetraDegrade(el, cs)) continue;          /* ★ error 40 */
+      /* ★ 4/11/2026 — EL COLOR QUE ELIGIÓ JAZMÍN NO SE CORRIGE. Jazmín: «por más
+         que cambie los colores de texto, no se modifican». Este corrector le
+         ponía encima un -webkit-text-fill-color propio (que es el que se ve) y
+         el color elegido quedaba sólo en `color`. Lo que pinta
+         estilo-secciones.js lleva la marca data-estcolor: se respeta tal cual. */
+      if (el.getAttribute('data-estcolor') === '1') {
+        if (el.hasAttribute('data-regla-orig') || el.hasAttribute('data-regla-luz')) {
+          el.style.removeProperty('-webkit-text-fill-color');
+          el.removeAttribute('data-regla-orig'); el.removeAttribute('data-regla-luz'); el.removeAttribute('data-regla-opa');
+        }
+        continue;
+      }
 
       /* ⚠️⚠️ ERROR 20 — LA REGLA NO MIRABA LA OPACIDAD. (17/9/2026)
          Medía `color` y nada más. Un rótulo con `opacity:.45` sobre el papel

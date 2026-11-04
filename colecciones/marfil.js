@@ -1230,11 +1230,23 @@
     } catch (e) { return false; }
   }
 
+  function fotoPropiaDeFrase() {
+    try {
+      var e = window.INVEV || {};
+      return ['img_c_fondo-seccion-frase-larga', 'img_c_fondo-secci-n-frase-larga', 'img_f-fondo-secci-n-frase-larga']
+        .some(function (k) { return /^https?:\/\//.test(String(e[k] || '')); });
+    } catch (e2) { return false; }
+  }
+
   function mudarFrase() {
     var carta = document.getElementById('carta-sec');
     var banda = document.querySelector('.fraseSec');
     if (!carta || !banda) return;
     if ((window.INVNUEVA ? window.INVNUEVA() : false) && cartaOculta(carta)) { devolverFrase(); return; }
+    /* ★ 4/11/2026 — Jazmín: «la fotografía de frase larga SOLO aparece cuando
+       desactivás la carta». Si la invitación tiene SU foto de frase larga, la
+       frase se queda en su banda con la foto (la carta sigue, sin la frase). */
+    if ((window.INVNUEVA ? window.INVNUEVA() : false) && fotoPropiaDeFrase()) { devolverFrase(); return; }
     if (carta.querySelector('.mf-frase')) return;      /* ya está mudada */
 
     var p = banda.querySelector('p.frase') || banda.querySelector('p');
