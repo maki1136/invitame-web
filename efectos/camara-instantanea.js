@@ -110,8 +110,8 @@
       '.cam-b.late{animation:camLate 1.6s ease-in-out infinite}',
       '@keyframes camLate{50%{transform:scale(1.05)}}',
       '.cam-b2{background:transparent;border:0;margin-top:10px;font:500 11.5px/1 Jost,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#4A5568;text-decoration:underline;cursor:pointer}',
-      '.cam-ver{position:fixed;left:50%;bottom:7%;transform:translateX(-50%);z-index:99991;opacity:0;transition:opacity .8s;margin:0}',
-      '.cam-ver.v{opacity:1}',
+      '.cam-ver{position:fixed;left:50%;bottom:7%;transform:translateX(-50%);z-index:99991;opacity:0;transition:opacity .8s;margin:0;pointer-events:none}',
+      '.cam-ver.v{opacity:1;pointer-events:auto}',   /* invisible NO se toca: estaba encima de «Tomar la foto» */
       '.cam-ov .cam-b,.cam-ver{font-family:Jost,sans-serif!important}'
     ].join('\n');
     document.head.appendChild(s);
