@@ -210,7 +210,12 @@
     var cs = document.getElementById('carta-sec');
     var cartaNoSeVe = !cs || cs.style.display === 'none';
     var fraseAdentro = !!(cs && cs.querySelector('.mf-frase'));
-    var cede = loResuelveLaColeccion() || cartaFuera || (cartaNoSeVe && !fraseAdentro);
+    /* ★ 4/11/2026 — Jazmín: «la fotografía de frase larga SOLO aparece cuando
+       desactivás la carta». Si la invitación tiene SU foto de frase larga, la
+       banda con la foto se queda (la carta también). */
+    var fotoPropia = ['img_c_fondo-seccion-frase-larga', 'img_c_fondo-secci-n-frase-larga', 'img_f-fondo-secci-n-frase-larga']
+      .some(function (k) { return /^https?:\/\//.test(String(D[k] || '')); });
+    var cede = loResuelveLaColeccion() || cartaFuera || (cartaNoSeVe && !fraseAdentro) || (fotoPropia && !fraseAdentro);
     for (var i = 0; i < secs.length; i++) {
       var s = secs[i];
       var ya = s.getAttribute('data-regla-frase') === 'fuera';
