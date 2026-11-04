@@ -901,6 +901,11 @@
        desaparecen sobre la foto) */
     /* ---- 17 · letras anchas (pixel): la cuenta regresiva y el título del pase
        no pueden salirse del teléfono (medido el 19/10 en mateo-cumple5) */
+    /* ---- 18 · instantanea (4/11): «Guarda la fecha» venía en el marrón que
+       clava i/estilos-servidor.css (familia de color), y el cierre lleva la
+       foto de jardín clara detrás: el texto blanco necesita sombra para leerse */
+    if (tono() === 'instantanea') A.push(P + '.ivcal-kick, ' + P + '.banco .copy{ color:' + TINTA2 + '!important; } ' +
+      P + '.footer :is(#fin-frase, .n, h2, h3, p, div, span, a){ text-shadow:0 1px 3px rgba(20,32,52,.55), 0 4px 22px rgba(20,32,52,.6)!important; }');
     if (tono() === 'pixel') A.push(P + '.portada .num{ font-size:clamp(26px,8vw,38px)!important; } ' + P + '.pase > .t{ font-size:clamp(26px,7.4vw,34px)!important; line-height:1.12!important; }');
     if (E.disp === 'Bodoni Moda') A.push(P + ':is(h2, h3, h4, .t, .v, .num, .it .h, #pv-names, #pv-names *){ font-optical-sizing:none!important; font-variation-settings:"opsz" 11!important; }');
     return A.join('\n');
