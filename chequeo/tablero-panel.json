@@ -1,10 +1,10 @@
 {
- "cuando": "2026-11-04T09:16:35.718Z",
+ "cuando": "2026-11-04T16:06:30.155Z",
  "slug": "camila-y-tomas",
- "total": 476,
+ "total": 478,
  "verde": 465,
  "amarillo": 0,
- "rojo": 11,
+ "rojo": 13,
  "gris": 0,
  "items": [
   {
@@ -533,6 +533,50 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Qué foto usar",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.origen",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Link de la imagen",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "patrocinadores-selector",
    "control": "Mostrar los patrocinadores",
    "tipo": "text",
@@ -637,50 +681,6 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.patrocinadores.estilo.tarjetaOpaca",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Qué foto usar",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.origen",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Link de la imagen",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Ubicación del texto del cierre",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.pos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Tamaño de la frase del cierre (100%)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -821,17 +821,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "patrocinadores-selector",
-   "control": "Mostrar los patrocinadores",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.patrocinadores.encendido",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "cierre-ajustes",
    "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
    "tipo": "checkbox",
@@ -843,22 +832,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "",
-   "control": "Activar",
+   "bloque": "patrocinadores-selector",
+   "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "c_deshabilitar-seccion-frase-final",
+   "dato": "fx.patrocinadores.encendido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "bloque": "",
+   "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.novedades",
+   "dato": "c_deshabilitar-seccion-frase-final",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1057,6 +1046,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4050,6 +4050,19 @@
    "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "La camarita (la cámara imprime el pase)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras, fx.camara",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
    "tab": "EFECTOS",
    "bloque": "Efectos — sobre de entrada",
    "control": "Cómo se abre",
@@ -5257,6 +5270,17 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Marco fino",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.stdg.marco",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "mision-selector",
    "control": "Prender la misión en esta invitación",
    "tipo": "checkbox",
@@ -5270,14 +5294,16 @@
   },
   {
    "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Marco fino",
+   "bloque": "camara-selector",
+   "control": "Prender la camarita en esta invitación",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.stdg.marco",
+   "dato": "fx.camara",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   }
  ]
 }
