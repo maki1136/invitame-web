@@ -9,7 +9,7 @@
    Mesa 7». Con el link general (sin invitado): los nombres y la fecha.
    Después, «Ver la invitación».
 
-   EL DATO: fx.camara = { on, foto, camara, titulo }.
+   EL DATO: fx.camara = { on, foto, camara, modelo, fondo, titulo, fotos:{token:url}, fotoMuestra }.
      foto   → la foto que se revela (vacío = la 1.ª de la galería, si no la portada)
      camara → la imagen de la cámara, fotografiada sobre BLANCO (se funde con
               multiply). Vacío = la azul de Invítame.
@@ -25,12 +25,37 @@
 (function () {
   'use strict';
   if (window.__invCamara) return; window.__invCamara = 1;
+  var CLc = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
+  /* 4/11, Maki: «hacé 10 versiones de cámaras completamente diferentes».
+     fx.camara.modelo elige una; todas son PNG recortados en invitame/camara/.
+     La lista la usa también el panel (window.INVCAMARAS). */
+  var CAMARAS = [
+    ['azul',     'Azul empolvado',          'cam-azul-recorte'],
+    ['plegable', 'Plegable vintage crema',  'cam-01-recorte'],
+    ['cereza',   'Retro rojo cereza',       'cam-02-recorte'],
+    ['rosegold', 'Oro rosa con perlas',     'cam-03-recorte'],
+    ['negra',    'Negra y oro',             'cam-04-recorte'],
+    ['rosa',     'Rosa con corazón',        'cam-05-recorte'],
+    ['menta',    'Menta ochentera',         'cam-06-recorte'],
+    ['madera',   'Nogal y bronce',          'cam-07-recorte'],
+    ['cristal',  'Cristal transparente',    'cam-08-recorte'],
+    ['lila',     'Lila con flores en relieve', 'cam-09-recorte'],
+    ['deco',     'Cromo art déco',          'cam-10-recorte']
+  ];
+  window.INVCAMARAS = CAMARAS.map(function (c) { return { id: c[0], nombre: c[1], url: CLc + 'q_auto,f_auto,w_760/invitame/camara/' + c[2], mini: CLc + 'q_auto,f_auto,w_160/invitame/camara/' + c[2] }; });
+
   if (!/\/i\//.test(location.pathname)) return;
   if (/[?&](camara=0|chequeo=1)/.test(location.search)) return;
   try { if (window.top !== window.self && !/[?&]camara=1/.test(location.search)) return; } catch (e) { return; }
 
   var CL = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
   var CAM_DEF = CL + 'q_auto,f_auto,w_760/invitame/camara/cam-azul-recorte';   /* PNG recortado: fondo transparente */
+  function imgCamara() {
+    var q = (location.search.match(/[?&]camaramodelo=([a-z]+)/) || [])[1];   /* para mirar un modelo sin tocar el panel */
+    if (C.camara && !q) return C.camara;
+    var m = window.INVCAMARAS.filter(function (c) { return c.id === (q || C.modelo); })[0];
+    return m ? m.url : CAM_DEF;
+  }
   var EV, C;
 
   function si(v) { return v === true || v === 'true' || v === 1 || v === '1'; }
@@ -44,8 +69,19 @@
   function yaVista() { if (esMuestra()) return false; try { return sessionStorage.getItem(clave()) === '1'; } catch (e) { return false; } }
   function marcar() { if (esMuestra()) return; try { sessionStorage.setItem(clave(), '1'); } catch (e) {} }
 
+  /* 4/11, Maki: «prefiero que suban al panel una foto personalizada». La foto
+     de CADA invitado se carga en el panel (pestaña INVITADOS → «Fotos para la
+     camarita») y se guarda en fx.camara.fotos[token]. Si el invitado no tiene,
+     se revela la de los novios. En la muestra (sin invitado) va fotoMuestra. */
+  function token() { try { return (window.INVDATA && window.INVDATA.token) || (location.search.match(/[?&]g=([^&]+)/) || [])[1] || ''; } catch (e) { return ''; } }
+  function fotoInvitado() {
+    var f = C.fotos || {}, t = token();
+    if (t && f[t]) return f[t];
+    if (!t && esMuestra() && C.fotoMuestra) return C.fotoMuestra;
+    return '';
+  }
   function fotoRevelar() {
-    var u = C.foto || '';
+    var u = fotoInvitado() || C.foto || '';
     if (!u && EV.galeria && EV.galeria.length) { u = EV.galeria[0]; if (u && typeof u === 'object') u = u.url || u.src || ''; }
     if (!u) u = EV.cover || '';
     if (/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(u)) {
@@ -81,6 +117,17 @@
       '.cam-ov{position:fixed;inset:0;z-index:99988;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 18px;opacity:0;transition:opacity .6s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;',
       '  background:radial-gradient(ellipse at 50% 38%,#FFFFFF 0%,#F4F1EA 55%,#E9E3D6 100%)}',
       '.cam-ov.on{opacity:1}.cam-ov.fuera{opacity:0;pointer-events:none}',
+      /* 4/11, Maki: «ponele onda al fondo, lo dejaste blanco pelado». Detrás va
+         el FONDO DE LA INVITACIÓN (su video o su foto), suavizado, con una luz
+         clara en el centro para que el texto se lea, y luces que flotan. */
+      '.cam-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}',
+      '.cam-bg video,.cam-bg .cam-bgi{position:absolute;inset:-12px;width:calc(100% + 24px);height:calc(100% + 24px);object-fit:cover;background:center/cover no-repeat;filter:blur(2.5px) saturate(1.05);transform:scale(1.04);animation:camRespira 14s ease-in-out infinite alternate}',
+      '@keyframes camRespira{to{transform:scale(1.12) translate(-1.5%,-1%)}}',
+      '.cam-bg:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 42%,rgba(255,255,255,.78) 0%,rgba(255,255,255,.45) 55%,rgba(255,255,255,.08) 100%)}',
+      '.cam-luz{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,250,235,.95),rgba(255,250,235,0) 70%);opacity:0;animation:camLuz linear infinite}',
+      '@keyframes camLuz{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:.9}80%{opacity:.7}100%{opacity:0;transform:translateY(-140px) scale(1.1)}}',
+      '.cam-ov>*:not(.cam-bg){position:relative;z-index:2}',
+      '.cam-k,.cam-t{text-shadow:0 1px 10px rgba(255,255,255,.9)}',
       '.cam-k{font:500 11.5px/1.4 Jost,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#4A5568;margin-bottom:6px;text-align:center}',
       '.cam-t{font:700 34px/1.05 Caveat,cursive;color:#2B3A55;margin:0 0 14px;text-align:center}',
       /* 4/11, prueba: con la foto DETRÁS y la cámara en multiply, la foto se veía a
@@ -133,9 +180,31 @@
     } catch (e) {}
   }
 
+  function fondo() {
+    var bg = h('div', 'cam-bg'), f = (EV.fx && EV.fx.fondo) || {}, quiere = C.fondo || 'invitacion';
+    if (quiere === 'liso') return bg;
+    var vid = '', img = '';
+    if (/^https?:/.test(quiere)) img = quiere;
+    else if (f.tipo === 'video' && f.url) { vid = f.url; img = f.poster || ''; }
+    else img = f.url || f.poster || EV.cover || '';
+    var reduce = false; try { reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    if (vid && !reduce) {
+      var v = document.createElement('video'); v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+      v.setAttribute('playsinline', ''); v.setAttribute('muted', ''); if (img) v.poster = img; v.src = vid;
+      bg.appendChild(v); try { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {}
+    } else if (img) { var d = h('div', 'cam-bgi'); d.style.backgroundImage = 'url("' + img + '")'; bg.appendChild(d); }
+    for (var i = 0; i < 14; i++) {
+      var l = h('span', 'cam-luz'), sz = 8 + Math.random() * 26;
+      l.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;left:' + (Math.random() * 100) + '%;top:' + (35 + Math.random() * 60) + '%;animation-duration:' + (6 + Math.random() * 7) + 's;animation-delay:' + (-Math.random() * 10) + 's';
+      bg.appendChild(l);
+    }
+    return bg;
+  }
+
   function mostrar() {
     estilos();
     var ov = h('div', 'cam-ov');
+    ov.appendChild(fondo());
     var kk = h('div', 'cam-k', 'Antes de entrar'), tt = h('div', 'cam-t', C.titulo || 'Tienes un recuerdo por revelar');
     ov.appendChild(kk); ov.appendChild(tt);
     var esc = h('div', 'cam-escena');
@@ -143,7 +212,7 @@
     foto.style.backgroundImage = 'url("' + fotoRevelar() + '")';
     var L = leyenda();
     pol.appendChild(foto); pol.appendChild(h('div', 'cam-l1', L[0])); pol.appendChild(h('div', 'cam-l2', L[1]));
-    var cam = h('img', 'cam-img'); cam.src = C.camara || CAM_DEF; cam.alt = '';
+    var cam = h('img', 'cam-img'); cam.src = imgCamara(); cam.alt = '';
     var ranura = h('div', 'cam-ranura'); ranura.appendChild(pol);
     esc.appendChild(ranura); esc.appendChild(cam);
     ov.appendChild(esc);

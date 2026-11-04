@@ -223,7 +223,8 @@
     'ocultas-selector':['PRINCIPAL','ocultas'],
     'novedades-selector':['PRINCIPAL','ocultas'],   /* 29/10: novedades sólo en invitaciones nuevas */
     'paquete-selector':['PAQUETE','paquete'],
-    'qrlink-selector':['INVITADOS','qrlink']   /* 28/10: QR para abrir la invitación (Jazmín) */
+    'qrlink-selector':['INVITADOS','qrlink'],   /* 28/10: QR para abrir la invitación (Jazmín) */
+    'camarafotos-selector':['INVITADOS','camarafotos']   /* 4/11: la foto de cada invitado para la camarita */
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -243,7 +244,8 @@
     mision:{abajo:true},
     ocultas:{abajo:true},
     paquete:{arriba:true},
-    qrlink:{arriba:true}
+    qrlink:{arriba:true},
+    camarafotos:{abajo:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
