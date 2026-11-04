@@ -201,7 +201,7 @@
     return bg;
   }
 
-  function mostrar() {
+  function mostrar(debajo) {
     estilos();
     var ov = h('div', 'cam-ov');
     ov.appendChild(fondo());
@@ -210,14 +210,15 @@
     var esc = h('div', 'cam-escena');
     var pol = h('div', 'cam-pol'), foto = h('div', 'cam-foto');
     foto.style.backgroundImage = 'url("' + fotoRevelar() + '")';
-    var L = leyenda();
-    pol.appendChild(foto); pol.appendChild(h('div', 'cam-l1', L[0])); pol.appendChild(h('div', 'cam-l2', L[1]));
+    var l1 = h('div', 'cam-l1', ''), l2 = h('div', 'cam-l2', '');
+    pol.appendChild(foto); pol.appendChild(l1); pol.appendChild(l2);
     var cam = h('img', 'cam-img'); cam.src = imgCamara(); cam.alt = '';
     var ranura = h('div', 'cam-ranura'); ranura.appendChild(pol);
     esc.appendChild(ranura); esc.appendChild(cam);
     ov.appendChild(esc);
     var b = h('button', 'cam-b late', '📸 Tomar la foto'); b.type = 'button';
     var b2 = h('button', 'cam-b2', 'Ver la invitación directo'); b2.type = 'button';
+    if (debajo) ov.style.zIndex = '99';   /* debajo del sobre (#env, z 100): al abrirse ya está la cámara */
     ov.appendChild(b); ov.appendChild(b2);
     var flash = h('div', 'cam-flash'); document.body.appendChild(flash);
     document.body.appendChild(ov);
@@ -226,6 +227,8 @@
     var hecho = false;
     function disparar() {
       if (hecho) return; hecho = true;
+      var L = leyenda(); l1.textContent = L[0]; l2.textContent = L[1];   /* recién ahora: el pase ya está escrito */
+      foto.style.backgroundImage = 'url("' + fotoRevelar() + '")';
       b.style.visibility = 'hidden'; b2.style.visibility = 'hidden';
       /* 4/11, Maki: «cuando sale la foto tapa el texto, no me gusta». El texto
          de arriba es la consigna: al disparar se va, y la foto sale sola. */
@@ -261,6 +264,7 @@
     }
     ver.onclick = cerrar;
     b2.onclick = cerrar;
+    return ov;
   }
 
   /* ---------- arranque: cuando se va el sobre (y el expediente, si hay misión) ---------- */
@@ -273,17 +277,25 @@
     var cs = getComputedStyle(env);
     return !(cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) < 0.5);
   }
-  var t0 = Date.now(), quieto = 0, iv = setInterval(function () {
+  /* 4/11, Maki: «cuando abre el sobre y llega la cámara se ve un salto de la
+     foto de la portada». La cámara aparecía ~1 s DESPUÉS de irse el sobre y en
+     ese hueco se veía la portada. Ahora se arma apenas carga, DEBAJO del sobre
+     (z 99 < 100): al abrirse el sobre lo que hay detrás ya es la cámara, y
+     cuando el sobre se va del todo sube a su capa. Con la Misión secreta
+     prendida sigue esperando a que se cierre el expediente. */
+  var t0 = Date.now(), quieto = 0, montado = null, iv = setInterval(function () {
     EV = window.INVEV;
     if (!EV) { if (Date.now() - t0 > 30000) clearInterval(iv); return; }
     C = (EV.fx && EV.fx.camara) || {};
     if (!si(C.on)) { if (Date.now() - t0 > 15000) clearInterval(iv); return; }
     if (!document.querySelector('section[data-sec="eventos"]')) return;
+    if (yaVista()) { clearInterval(iv); return; }
+    var conMision = si(((EV.fx || {}).mision || {}).on);
+    if (!montado && !conMision) { montado = mostrar(true); }
     if (tapado()) { quieto = 0; return; }
-    /* la misión aparece unos ms después del sobre: se espera un poquito quieto */
-    if (++quieto < 5) return;
+    if (conMision && ++quieto < 5) return;   /* el expediente aparece unos ms después del sobre */
     clearInterval(iv);
-    if (yaVista()) return;
-    mostrar();
-  }, 150);
+    if (montado) montado.style.zIndex = '';
+    else mostrar();
+  }, 120);
 })();
