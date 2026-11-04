@@ -134,6 +134,14 @@
       d.fx.galeria.gid = '';
       hecho.push('el codigo de la galeria');
     }
+    /* 4/11/2026, Maki: la Misión secreta «siempre viene apagada a menos que la
+       pidan como especial». La muestra la trae prendida para lucirla; la copia
+       nace apagada y el equipo la prende (EFECTOS → 🕵️ Misión secreta) cuando
+       se vende. Se conservan la clave y la palabra por si se prende. */
+    if (d.fx.mision && (d.fx.mision.on === true || d.fx.mision.on === 'true')) {
+      d.fx.mision.on = false;
+      hecho.push('la misión secreta (se vende aparte)');
+    }
     return hecho;
   }
 

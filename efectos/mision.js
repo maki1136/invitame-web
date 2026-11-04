@@ -29,7 +29,7 @@
   'use strict';
   if (window.__invMision) return; window.__invMision = 1;
   if (!/\/i\//.test(location.pathname)) return;
-  if (/[?&]mision=0/.test(location.search)) return;
+  if (/[?&](mision=0|chequeo=1)/.test(location.search)) return;   /* el chequeo automático de muestras la saltea */
   try { if (window.top !== window.self && !/[?&]mision=1/.test(location.search)) return; } catch (e) { return; }
 
   var EV, M, SLUG, ESTADO = { puerta: null, ok: {} };
@@ -37,8 +37,17 @@
 
   function si(v) { return v === true || v === 'true' || v === 1 || v === '1'; }
   function sinAcentos(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, ''); }
-  function guardar() { try { sessionStorage.setItem(CLAVE_SS, JSON.stringify(ESTADO)); } catch (e) {} }
-  function leer() { try { var x = JSON.parse(sessionStorage.getItem(CLAVE_SS) || 'null'); if (x && typeof x === 'object') ESTADO = { puerta: x.puerta || null, ok: x.ok || {} }; } catch (e) {} }
+  /* 4/11, Maki: «linda la muestra pero no le agregaste las misiones». Las
+     tenía: esa pestaña ya la había resuelto y se acordaba. En una MUESTRA se
+     juega SIEMPRE desde el expediente; sólo una invitación de verdad recuerda
+     (en la pestaña) lo que el invitado ya abrió. */
+  function esMuestra() {
+    var m = (EV && EV.fx && EV.fx.muestra) || {};
+    var si_ = function (v) { return v === true || String(v) === '1' || /^(si|sí|true)$/i.test(String(v || '')); };
+    return si_(m.venta) || si_(m.rsvp) || /[?&]muestra=1/.test(location.search);
+  }
+  function guardar() { if (esMuestra()) return; try { sessionStorage.setItem(CLAVE_SS, JSON.stringify(ESTADO)); } catch (e) {} }
+  function leer() { if (esMuestra()) return; try { var x = JSON.parse(sessionStorage.getItem(CLAVE_SS) || 'null'); if (x && typeof x === 'object') ESTADO = { puerta: x.puerta || null, ok: x.ok || {} }; } catch (e) {} }
   function h(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
 
   /* ---------- los datos ---------- */
@@ -82,7 +91,11 @@
     return a + (b ? ' & ' + b : '');
   }
   function fotoPuzzle() {
-    var u = M.foto || EV.cover || EV['img_c_foto-para-el-fin-de-pagina'] || '';
+    /* la portada suele ser un fondo oscuro y parejo (o el cuadro de un video):
+       piezas que no se distinguen. La galería siempre trae gente. */
+    var gal = (EV.galeria && EV.galeria.length) ? EV.galeria[0] : '';
+    if (gal && typeof gal === 'object') gal = gal.url || gal.src || '';
+    var u = M.foto || gal || EV['img_c_foto-para-el-fin-de-pagina'] || EV.cover || '';
     if (!u) { var im = document.querySelector('.portada img'); u = im ? im.src : ''; }
     if (/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(u)) {
       u = u.replace(/\/image\/upload\/(?:[^/]*[,_][^/]*\/)*/, '/image/upload/');
@@ -113,7 +126,7 @@
       '.ms-k{font:500 11px/1.3 Oswald,sans-serif;letter-spacing:.32em;text-transform:uppercase;opacity:.7}',
       '.ms-t{font:700 44px/1 Oswald,sans-serif;letter-spacing:.02em;text-transform:uppercase;margin:12px 0 4px}',
       '.ms-n{font:400 17px/1.35 "Special Elite",monospace;margin:4px 0 18px}',
-      '.ms-sello{position:absolute;top:58px;right:-6px;transform:rotate(14deg);border:3px solid var(--ms-rojo);color:var(--ms-rojo);font:700 15px/1 Oswald,sans-serif;letter-spacing:.18em;padding:6px 10px;border-radius:4px;opacity:.85;mix-blend-mode:multiply}',
+      '.ms-sello{position:absolute;top:-12px;right:-8px;transform:rotate(10deg);background:rgba(234,223,198,.92);border:3px solid var(--ms-rojo);color:var(--ms-rojo);font:700 15px/1 Oswald,sans-serif;letter-spacing:.18em;padding:6px 10px;border-radius:4px;opacity:.85;mix-blend-mode:multiply}',
       '.ms-p{font:400 14.5px/1.5 "Special Elite",monospace;margin:0 auto 14px;max-width:290px}',
       '.ms-huella{position:relative;width:118px;height:118px;margin:6px auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:pointer;background:rgba(38,33,28,.06)}',
       '.ms-huella svg.ms-fp{width:74px;height:74px;color:var(--ms-tinta);opacity:.75;transition:color .3s,opacity .3s}',
@@ -135,7 +148,8 @@
       '@keyframes msIn{from{opacity:0;transform:translateY(10px)}}',
       /* las secciones cerradas */
       '.ms-cerrada{position:relative!important;min-height:600px!important;overflow:hidden!important}',
-      '.ms-cerrada>.ms-tapa,.ms-tapa{position:absolute!important;inset:0!important;top:0!important;left:0!important;width:auto!important;height:auto!important;margin:0!important;z-index:9000!important;display:flex;align-items:flex-start;justify-content:center;padding:70px 18px 30px;background:rgba(18,17,16,.62);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);transition:opacity .9s,transform .9s;-webkit-user-select:none;user-select:none}',
+      /* las colecciones Óleo fuerzan «.sec.verde > * {position:relative!important}»: este selector les gana */
+      'html body section.ms-cerrada.ms-cerrada>div.ms-tapa.ms-tapa,.ms-tapa{position:absolute!important;inset:0!important;top:0!important;left:0!important;width:auto!important;height:auto!important;margin:0!important;z-index:9000!important;display:flex;align-items:flex-start;justify-content:center;padding:70px 18px 30px;background:rgba(18,17,16,.62);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);transition:opacity .9s,transform .9s;-webkit-user-select:none;user-select:none}',
       '.ms-tapa.abierta{opacity:0;pointer-events:none}',
       '.ms-card{width:min(350px,100%);background:linear-gradient(170deg,var(--ms-papel),var(--ms-papel2));color:var(--ms-tinta);border-radius:6px;padding:22px 18px 20px;text-align:center;box-shadow:0 24px 50px -18px rgba(0,0,0,.75);position:sticky;top:80px}',
       '.ms-card .ms-k{margin-bottom:6px}',
@@ -407,10 +421,42 @@
         piezas[sel].classList.remove('sel');
         if (sel !== i) { var t = orden[sel]; orden[sel] = orden[i]; orden[i] = t; pinta(); }
         sel = null;
-        if (orden.every(function (v, j) { return v === j; })) listo();
+        if (armada()) listo();
       };
       pz.appendChild(d);
     });
+    /* 4/11, Maki: «armé bien el rompecabezas y no se abrió». La foto tenía
+       piezas IGUALES a la vista (rincones oscuros): armada a la vista, dos
+       negras quedaban cambiadas. Se compara cómo SE VE cada pieza (su huella
+       de 8×8 colores), no su número: si se ve igual, está bien puesta. */
+    var huellas = null;
+    (function () {
+      var im = new Image(); im.crossOrigin = 'anonymous';
+      im.onload = function () {
+        try {
+          var c = document.createElement('canvas'); c.width = c.height = 24;
+          var x = c.getContext('2d'); x.drawImage(im, 0, 0, 24, 24);
+          var px = x.getImageData(0, 0, 24, 24).data, hs = [];
+          for (var t = 0; t < 9; t++) {
+            var ox = (t % 3) * 8, oy = Math.floor(t / 3) * 8, a = [];
+            for (var yy = 0; yy < 8; yy++) for (var xx = 0; xx < 8; xx++) {
+              var k = ((oy + yy) * 24 + ox + xx) * 4; a.push(px[k], px[k + 1], px[k + 2]);
+            }
+            hs.push(a);
+          }
+          huellas = hs;
+        } catch (e) { huellas = null; }   /* sin permiso para leer la foto: se compara por número */
+      };
+      im.src = url;
+    })();
+    function seVeIgual(a, b) {
+      if (a === b) return true;
+      if (!huellas) return false;
+      var A = huellas[a], B = huellas[b], d = 0;
+      for (var i = 0; i < A.length; i++) d += Math.abs(A[i] - B[i]);
+      return d / A.length < 14;
+    }
+    function armada() { return orden.every(function (v, j) { return seVeIgual(v, j); }); }
     pinta();
     T.card.appendChild(pz);
     var resuelto = false;

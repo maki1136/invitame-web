@@ -7,7 +7,7 @@
    llevan un claro/oscuro radial chico detrás del texto.
    ⭐ TONOS: fx.coleccion = 'fiesta-<tono>'  (y ?coleccion=fiesta-<tono> para probar)
         noche · plata · ejecutivo · gala · brindis · birrete · bokeh · urbano ·
-        abordar · jardin
+        abordar · jardin · mision
       'fiesta' a secas = noche.
    ⚠️ VIENE APAGADA: sin fx.coleccion fiesta* no hace nada (viaja en todo.php).
    ⚠️ CONVIVE CON DEGRADÉ: su propio ID, su propia hoja (#col-fiesta), su propio
@@ -49,7 +49,9 @@
     bokeh:     { papel:'#100D08', papel2:'#090704', panel:'#1C1710', filete:'#5E5340', tinta:'#F2E6CC', tinta2:'#CDBFA4', base:'bokeh' },
     urbano:    { papel:'#1A1B1D', papel2:'#111214', panel:'#26282B', filete:'#5E6064', tinta:'#EDEDE8', tinta2:'#C3C4BF', base:'urbano' },
     abordar:   { papel:'#0E1A2E', papel2:'#08111F', panel:'#162640', filete:'#4A5C7A', tinta:'#F1EBDF', tinta2:'#CBC5B8', base:'abordar' },
-    jardin:    { papel:'#15221A', papel2:'#0C150F', panel:'#1E2F23', filete:'#4D6650', tinta:'#F0E8D6', tinta2:'#CCC4B0', base:'jardin' }
+    jardin:    { papel:'#15221A', papel2:'#0C150F', panel:'#1E2F23', filete:'#4D6650', tinta:'#F0E8D6', tinta2:'#CCC4B0', base:'jardin' },
+    /* 4/11 · XV · Misión secreta: bóveda negra, láseres rubí y champagne (va con efectos/mision.js) */
+    mision:    { papel:'#0E0C0F', papel2:'#070608', panel:'#1A161B', filete:'#5A4A55', tinta:'#F3EADF', tinta2:'#CFC4BB', base:'mision' }
   };
 
   /* ⭐ CADA TONO CON SU PROPIO DISEÑO (no sólo el color). Por tono:
@@ -107,7 +109,14 @@
     /* 10 · Boda · Jardín pintado — verde bosque, flores al óleo, lacre dorado */
     jardin:    { disp:'Playfair Display', scr:'Pinyon Script',   txt:'Lato',    metal:'oro',
                  adorno:'rosa', forma:'filetes', port:'italica',
-                 h2:['disp',28,'.01em',0,500], kick:['scr',26,'0',0,400], btn:['disp','.08em',0] }
+                 h2:['disp',28,'.01em',0,500], kick:['scr',26,'0',0,400], btn:['disp','.08em',0] },
+    /* 11 · XV · Misión secreta (4/11/2026, Maki: «tiene que tener algo más con el
+       estilo») — el golpe de la tiara: bóveda de mármol negro, la tiara bajo
+       vidrio y láseres rubí. Versal de expediente (Oswald), máquina de escribir
+       (Courier Prime) y la mira como viñeta. */
+    mision:    { disp:'Oswald',       scr:'Pinyon Script',       txt:'Courier Prime', metal:'champagne',
+                 adorno:'mira', forma:'deco', port:'deco',
+                 h2:['disp',30,'.06em',1,500], kick:['txt',12,'.3em',1,700], btn:['disp','.18em',1] }
   };
   var METALES = {
     oro:       ['#C9A44E', '#E0C57A'],
@@ -129,7 +138,9 @@
     'Inter':            ':wght@400;500;600',
     'Raleway':          ':ital,wght@0,400;0,500;1,400',
     'Outfit':           ':wght@400;500;600',
-    'Barlow':           ':ital,wght@0,400;0,500;0,600;1,400'
+    'Barlow':           ':ital,wght@0,400;0,500;0,600;1,400',
+    'Oswald':           ':wght@400;500;600;700',
+    'Courier Prime':    ':ital,wght@0,400;0,700;1,400'
   };
 
   /* ------------------------------------------------- lo que pinta cada tono
@@ -284,6 +295,11 @@
       '<path fill="' + c + '" d="M44 22 C44 20.4 42.6 19.5 40.8 19.5 H30 L20 6 H15.5 L21 19.5 H11 L7.5 14.5 H4 L6.5 22 L4 29.5 H7.5 L11 24.5 H21 L15.5 38 H20 L30 24.5 H40.8 C42.6 24.5 44 23.6 44 22 Z"/>' +
       '<path d="M2 36 C8 40 14 40 18 36" stroke="' + c + '" stroke-width="1.6" stroke-dasharray="2 3" stroke-linecap="round" fill="none"/>');
     /* jardín: rosa abierta de pétalos con dos hojas */
+    /* mision: la mira — aro, cruz cortada y el punto en el centro */
+    if (a === 'mira') return svg(
+      '<circle cx="24" cy="24" r="13.5" fill="none" stroke="' + c + '" stroke-width="2.6"/>' +
+      '<path d="M24 3V15M24 33V45M3 24H15M33 24H45" stroke="' + c + '" stroke-width="2.6" stroke-linecap="round"/>' +
+      '<circle cx="24" cy="24" r="3.4" fill="' + c + '"/>');
     if (a === 'rosa') return svg(
       '<g fill="' + c + '"><path d="M24 30 C14 30 11 21 16 16 C17 22 21 23 24 22 C27 23 31 22 32 16 C37 21 34 30 24 30 Z"/><path d="M24 22 C19 21 18 15 21 12 C22 15 23 16 24 16 C25 16 26 15 27 12 C30 15 29 21 24 22 Z"/>' +
       '<path d="M24 30 V45" stroke="' + c + '" stroke-width="1.8"/><path d="M24 38 C18 37 14 39 11 43 C17 43 21 42 24 38 Z"/><path d="M24 36 C30 34 34 35 37 39 C31 40 27 39 24 36 Z"/></g>' +
