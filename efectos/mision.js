@@ -29,7 +29,7 @@
   'use strict';
   if (window.__invMision) return; window.__invMision = 1;
   if (!/\/i\//.test(location.pathname)) return;
-  if (/[?&]mision=0/.test(location.search)) return;
+  if (/[?&](mision=0|chequeo=1)/.test(location.search)) return;   /* el chequeo automático de muestras la saltea */
   try { if (window.top !== window.self && !/[?&]mision=1/.test(location.search)) return; } catch (e) { return; }
 
   var EV, M, SLUG, ESTADO = { puerta: null, ok: {} };
