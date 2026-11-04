@@ -47,16 +47,16 @@
     s.id = ID + '-css';
     s.textContent =
       '#' + ID + '{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;' +
-      'pointer-events:none;z-index:3;font-family:"Pinyon Script","Great Vibes","Cormorant Garamond",serif;line-height:1;' +
+      'pointer-events:none;z-index:3;font-family:"Cormorant Garamond","Times New Roman",serif;font-style:italic;font-weight:600;line-height:1;' +
       'color:rgba(92,62,20,.78);' +
       'text-shadow:0 1px 0 rgba(255,236,178,.55),0 -1px 1px rgba(45,28,6,.55),1px 1px 2px rgba(255,226,150,.25);' +
       'mix-blend-mode:multiply;white-space:nowrap}' +
       '#' + ID + '.dos{letter-spacing:-.04em}';
     document.head.appendChild(s);
-    if (!document.querySelector('link[href*="Pinyon+Script"]')) {
+    if (!document.querySelector('link[href*="lacre-letra"]')) {
       var l = document.createElement('link');
       l.rel = 'stylesheet';
-      l.href = 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap';
+      l.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&display=swap&lacre-letra';
       document.head.appendChild(l);
     }
   }
@@ -82,7 +82,7 @@
     e.style.top = top + 'px';
     e.style.width = e.style.height = d + 'px';
     var largo = t.replace(/\s/g, '').length;
-    e.style.fontSize = (d * (largo <= 1 ? 0.56 : largo <= 3 ? 0.34 : 0.26)) + 'px';
+    e.style.fontSize = (d * (largo <= 1 ? 0.62 : largo <= 3 ? 0.36 : 0.27)) + 'px';
     e.classList.toggle('dos', largo > 1);
     if (e.textContent !== t) e.textContent = t;
   }
