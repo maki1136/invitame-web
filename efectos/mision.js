@@ -91,7 +91,11 @@
     return a + (b ? ' & ' + b : '');
   }
   function fotoPuzzle() {
-    var u = M.foto || EV.cover || EV['img_c_foto-para-el-fin-de-pagina'] || '';
+    /* la portada suele ser un fondo oscuro y parejo (o el cuadro de un video):
+       piezas que no se distinguen. La galería siempre trae gente. */
+    var gal = (EV.galeria && EV.galeria.length) ? EV.galeria[0] : '';
+    if (gal && typeof gal === 'object') gal = gal.url || gal.src || '';
+    var u = M.foto || gal || EV['img_c_foto-para-el-fin-de-pagina'] || EV.cover || '';
     if (!u) { var im = document.querySelector('.portada img'); u = im ? im.src : ''; }
     if (/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(u)) {
       u = u.replace(/\/image\/upload\/(?:[^/]*[,_][^/]*\/)*/, '/image/upload/');
@@ -417,10 +421,42 @@
         piezas[sel].classList.remove('sel');
         if (sel !== i) { var t = orden[sel]; orden[sel] = orden[i]; orden[i] = t; pinta(); }
         sel = null;
-        if (orden.every(function (v, j) { return v === j; })) listo();
+        if (armada()) listo();
       };
       pz.appendChild(d);
     });
+    /* 4/11, Maki: «armé bien el rompecabezas y no se abrió». La foto tenía
+       piezas IGUALES a la vista (rincones oscuros): armada a la vista, dos
+       negras quedaban cambiadas. Se compara cómo SE VE cada pieza (su huella
+       de 8×8 colores), no su número: si se ve igual, está bien puesta. */
+    var huellas = null;
+    (function () {
+      var im = new Image(); im.crossOrigin = 'anonymous';
+      im.onload = function () {
+        try {
+          var c = document.createElement('canvas'); c.width = c.height = 24;
+          var x = c.getContext('2d'); x.drawImage(im, 0, 0, 24, 24);
+          var px = x.getImageData(0, 0, 24, 24).data, hs = [];
+          for (var t = 0; t < 9; t++) {
+            var ox = (t % 3) * 8, oy = Math.floor(t / 3) * 8, a = [];
+            for (var yy = 0; yy < 8; yy++) for (var xx = 0; xx < 8; xx++) {
+              var k = ((oy + yy) * 24 + ox + xx) * 4; a.push(px[k], px[k + 1], px[k + 2]);
+            }
+            hs.push(a);
+          }
+          huellas = hs;
+        } catch (e) { huellas = null; }   /* sin permiso para leer la foto: se compara por número */
+      };
+      im.src = url;
+    })();
+    function seVeIgual(a, b) {
+      if (a === b) return true;
+      if (!huellas) return false;
+      var A = huellas[a], B = huellas[b], d = 0;
+      for (var i = 0; i < A.length; i++) d += Math.abs(A[i] - B[i]);
+      return d / A.length < 14;
+    }
+    function armada() { return orden.every(function (v, j) { return seVeIgual(v, j); }); }
     pinta();
     T.card.appendChild(pz);
     var resuelto = false;
