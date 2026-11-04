@@ -55,7 +55,15 @@
     if (n.length >= 3 && n.length <= 8) return n;
     return 'FIESTA';
   }
-  function tipo() { return String(EV.tipo || '').toLowerCase(); }
+  function tipo() {
+    var t = String(EV.tipo || '').toLowerCase();
+    if (t) return t;
+    /* las muestras de XV viejas no traen el tipo: se reconoce por el link o el título */
+    var pistas = [EV.slug, EV.tpl, EV['c_titulo-del-correo'], EV.titulo].join(' ');
+    if (/mis15|\bxv\b|quince/i.test(pistas)) return 'xv';
+    if (/boda|-y-/i.test(pistas)) return 'boda';
+    return '';
+  }
   function pistaCriptex() {
     if (M.pistaCriptex) return M.pistaCriptex;
     if (!(M.palabra) ) {
@@ -120,14 +128,14 @@
       '.ms-b2{background:transparent;color:var(--ms-tinta);border:1.5px solid rgba(38,33,28,.45)}',
       '.ms-paso{animation:msIn .55s both}',
       /* la colección pinta p y h4 con su letra: acá manda la del expediente */
-      '.ms-ov .ms-p,.ms-card .ms-p,.ms-toast span{font-family:"Special Elite",monospace!important;color:var(--ms-tinta)!important;text-transform:none!important;letter-spacing:0!important}',
-      '.ms-card h4,.ms-toast b{font-family:Oswald,sans-serif!important;color:var(--ms-tinta)!important;letter-spacing:.02em!important}',
+      '.ms-ov .ms-p,.ms-tapa .ms-card p.ms-p,.ms-card .ms-p,.ms-toast span{font-family:"Special Elite",monospace!important;color:var(--ms-tinta)!important;text-transform:none!important;letter-spacing:0!important}',
+      '.ms-tapa .ms-card h4,.ms-card h4,.ms-toast b{font-family:Oswald,sans-serif!important;color:var(--ms-tinta)!important;letter-spacing:.02em!important}',
       '.ms-b{font-family:Oswald,sans-serif!important}',
       '.ms-b2{letter-spacing:.08em!important;font-size:13.5px!important}',
       '@keyframes msIn{from{opacity:0;transform:translateY(10px)}}',
       /* las secciones cerradas */
       '.ms-cerrada{position:relative!important;min-height:600px!important;overflow:hidden!important}',
-      '.ms-tapa{position:absolute;inset:0;z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:70px 18px 30px;background:rgba(18,17,16,.62);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);transition:opacity .9s,transform .9s;-webkit-user-select:none;user-select:none}',
+      '.ms-cerrada>.ms-tapa,.ms-tapa{position:absolute!important;inset:0!important;top:0!important;left:0!important;width:auto!important;height:auto!important;margin:0!important;z-index:9000!important;display:flex;align-items:flex-start;justify-content:center;padding:70px 18px 30px;background:rgba(18,17,16,.62);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);transition:opacity .9s,transform .9s;-webkit-user-select:none;user-select:none}',
       '.ms-tapa.abierta{opacity:0;pointer-events:none}',
       '.ms-card{width:min(350px,100%);background:linear-gradient(170deg,var(--ms-papel),var(--ms-papel2));color:var(--ms-tinta);border-radius:6px;padding:22px 18px 20px;text-align:center;box-shadow:0 24px 50px -18px rgba(0,0,0,.75);position:sticky;top:80px}',
       '.ms-card .ms-k{margin-bottom:6px}',
