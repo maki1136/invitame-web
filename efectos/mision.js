@@ -37,8 +37,17 @@
 
   function si(v) { return v === true || v === 'true' || v === 1 || v === '1'; }
   function sinAcentos(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, ''); }
-  function guardar() { try { sessionStorage.setItem(CLAVE_SS, JSON.stringify(ESTADO)); } catch (e) {} }
-  function leer() { try { var x = JSON.parse(sessionStorage.getItem(CLAVE_SS) || 'null'); if (x && typeof x === 'object') ESTADO = { puerta: x.puerta || null, ok: x.ok || {} }; } catch (e) {} }
+  /* 4/11, Maki: «linda la muestra pero no le agregaste las misiones». Las
+     tenía: esa pestaña ya la había resuelto y se acordaba. En una MUESTRA se
+     juega SIEMPRE desde el expediente; sólo una invitación de verdad recuerda
+     (en la pestaña) lo que el invitado ya abrió. */
+  function esMuestra() {
+    var m = (EV && EV.fx && EV.fx.muestra) || {};
+    var si_ = function (v) { return v === true || String(v) === '1' || /^(si|sí|true)$/i.test(String(v || '')); };
+    return si_(m.venta) || si_(m.rsvp) || /[?&]muestra=1/.test(location.search);
+  }
+  function guardar() { if (esMuestra()) return; try { sessionStorage.setItem(CLAVE_SS, JSON.stringify(ESTADO)); } catch (e) {} }
+  function leer() { if (esMuestra()) return; try { var x = JSON.parse(sessionStorage.getItem(CLAVE_SS) || 'null'); if (x && typeof x === 'object') ESTADO = { puerta: x.puerta || null, ok: x.ok || {} }; } catch (e) {} }
   function h(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
 
   /* ---------- los datos ---------- */
