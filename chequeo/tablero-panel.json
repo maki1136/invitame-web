@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-04T00:43:37.304Z",
+ "cuando": "2026-11-04T01:40:17.890Z",
  "slug": "camila-y-tomas",
- "total": 474,
- "verde": 465,
+ "total": 475,
+ "verde": 466,
  "amarillo": 0,
  "rojo": 9,
  "gris": 0,
@@ -533,50 +533,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Qué foto usar",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.origen",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Link de la imagen",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Ubicación del texto del cierre",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.pos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Tamaño de la frase del cierre (100%)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.cierre.textoTam",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "patrocinadores-selector",
    "control": "Mostrar los patrocinadores",
    "tipo": "text",
@@ -681,6 +637,50 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.patrocinadores.estilo.tarjetaOpaca",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Qué foto usar",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.origen",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Link de la imagen",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -821,17 +821,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "patrocinadores-selector",
    "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
@@ -843,11 +832,33 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.cierre.fraseAbajo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1046,17 +1057,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5238,6 +5238,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.filtro.aGaleria",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "mision-selector",
+   "control": "Prender la misión en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.mision",
    "llega": true,
    "seVe": true,
    "estado": "verde"
