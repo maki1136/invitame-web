@@ -1,13 +1,13 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitameok.net/i/?e=camila-y-tomas
-Fecha: 04/11/2026, 09:50
+Fecha: 04/11/2026, 11:07
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
 
 ══════════════════════════════════════════
 Corrieron los 4 escenarios.
-HAY 4 PROBLEMAS (y 110 cosas bien)
+HAY 4 PROBLEMAS (y 100 cosas bien)
 ══════════════════════════════════════════
 
 
@@ -29,7 +29,7 @@ HAY 4 PROBLEMAS (y 110 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.60-0.86 · p.frase.reveal]
+             -> "“El mar nos vio empeza" 1.1/3 [#ffffff sobre luminancia 0.60-0.87 · p.frase.reveal] · "Su presencia es nuestr" 4.4/4.5 [#576560 sobre luminancia 0.70-0.83 · p.reveal.in]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -44,11 +44,11 @@ HAY 4 PROBLEMAS (y 110 cosas bien)
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 3.6 s)
+   (volvió a su lugar en 4.0 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 432.3 s de punta a punta)
+   (tardó 391.2 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -57,35 +57,21 @@ HAY 4 PROBLEMAS (y 110 cosas bien)
    BIEN   no asoma otro sobre al abrir
    BIEN   la portada no es la de otra invitación
    BIEN   sin voseo desde el primer pintado
-   BIEN   la raspadita pone una tapa por número
-   BIEN   las tapas caen justo encima de los números
-   BIEN   se puede raspar y se revela la fecha
-   BIEN   una vez raspada, queda raspada
    BIEN   está en español de México, sin voseo
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.82 · p.frase.reveal] · "¡Gracias!" 2.8/3 [#f5edda sobre luminancia 0.01-0.27 · div.n] · "Con cariño" 3.6/4.5 [#3f5d53 sobre luminancia 0.47-0.82 · div.kick.reveal] · "Lino, algodón, colores" 4.4/4.5 [#576560 sobre luminancia 0.70-0.81 · p.reveal.in] y 1 más
+             -> "Camila" 1.1/3 [#fbf7ef sobre luminancia 0.88-0.88 · span] · "& Tomás" 1.1/3 [#fbf7ef sobre luminancia 0.88-0.88 · span] · ""Hay un instante en la" 1.1/3 [#ffffff sobre luminancia 0.88-0.88 · p.frase.reveal] · "Nuestra Boda" 1.2/4.5 [#e7ddc8 sobre luminancia 0.05-0.88 · div.kicker] y 4 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
    BIEN   ninguna foto viaja sin optimizar
    BIEN   la invitación no pide un archivo por cada cosa
    BIEN   no hay ni un emoji a la vista
-   BIEN   el reproductor de Spotify está adentro de la solapa
-   BIEN   la solapa de la música viene ABIERTA
-   BIEN   al tocarla se cierra de verdad
-   BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   BIEN   al salir, la invitación anota dónde estaba
-   BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 6.6 s)
-   BIEN   al volver NO se repite el sobre
-   BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 631.6 s de punta a punta)
+   (tardó 69.0 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -95,7 +81,7 @@ HAY 4 PROBLEMAS (y 110 cosas bien)
    BIEN   en tablet la invitación ocupa la pantalla
    BIEN   en tablet no se arma la capa borrosa que traba el scroll
    BIEN   la portada no es la de otra invitación
-   ----   el sobre no se pudo medir todavía (no es un fallo)
+   BIEN   el sobre está encuadrado, no a pantalla completa
    BIEN   sin voseo desde el primer pintado
    BIEN   la columna tiene un ancho normal
    BIEN   no se sale nada de la columna
@@ -107,7 +93,7 @@ HAY 4 PROBLEMAS (y 110 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.80 · p.frase.reveal] · "Con cariño" 2.3/3 [#496c61 sobre luminancia 0.37-0.81 · div.kick.reveal]
+             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.80 · p.frase.reveal] · "Con mucha alegría" 2.6/3 [#496c61 sobre luminancia 0.42-0.82 · div.kick.reveal] · "Un ratito de nuestra h" 4.2/4.5 [#576560 sobre luminancia 0.67-0.74 · p.reveal.in] · "Su presencia es nuestr" 4.3/4.5 [#576560 sobre luminancia 0.69-0.82 · p.reveal.in] y 1 más
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -116,19 +102,18 @@ HAY 4 PROBLEMAS (y 110 cosas bien)
    BIEN   no hay ni un emoji a la vista
    BIEN   el reproductor de Spotify está adentro de la solapa
    BIEN   la solapa de la música viene ABIERTA
-   ----   la solapa de la musica no se pudo traer a la pantalla: no se midio
+   BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
-   (el botón de la galería se tocó con el mouse: la página estaba muy cargada)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 6.0 s)
+   (volvió a su lugar en 11.9 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 599.9 s de punta a punta)
+   (tardó 676.2 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -172,5 +157,5 @@ HAY 4 PROBLEMAS (y 110 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 129.3 s de punta a punta)
+   (tardó 130.3 s de punta a punta)
 
