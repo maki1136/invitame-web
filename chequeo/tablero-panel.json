@@ -1,10 +1,10 @@
 {
- "cuando": "2026-11-04T01:50:02.820Z",
+ "cuando": "2026-11-04T09:16:35.718Z",
  "slug": "camila-y-tomas",
- "total": 475,
- "verde": 466,
+ "total": 476,
+ "verde": 465,
  "amarillo": 0,
- "rojo": 9,
+ "rojo": 11,
  "gris": 0,
  "items": [
   {
@@ -4037,6 +4037,19 @@
    "estado": "verde"
   },
   {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Misión secreta (la invitación se juega)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras, fx.mision",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
    "tab": "EFECTOS",
    "bloque": "Efectos — sobre de entrada",
    "control": "Cómo se abre",
@@ -5251,7 +5264,9 @@
    "dato": "fx.mision",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "EFECTOS",
