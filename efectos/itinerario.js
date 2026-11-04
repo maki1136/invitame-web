@@ -218,8 +218,11 @@
     '.tl.tl-centro > .it{width:calc(50% - 26px);margin-bottom:20px;',
     '  min-height:46px;display:flex;flex-direction:column;justify-content:center}',
     '.tl.tl-centro > .it:last-child{margin-bottom:0}',
-    /* una palabra larga («Recibimiento») en media columna se corta en sílabas, no se sale */
-    '.tl.tl-centro > .it{min-width:0;overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto}',
+    /* una palabra larga en media columna no se sale (overflow-wrap). ★ 4/11/2026 —
+       Jazmín (maferypepe): «en el itinerario se cortan las frases»: el corte en
+       sílabas con guion («com-par-tir») se leía roto. Sin guiones: la palabra
+       pasa entera al renglón de abajo, y sólo se parte si no entra ni sola. */
+    '.tl.tl-centro > .it{min-width:0;overflow-wrap:break-word;-webkit-hyphens:manual;hyphens:manual}',
 
     '.tl.tl-centro > .it:nth-child(odd){margin-right:auto;text-align:right;',
     '  align-items:flex-end;transform:translate(-52px,0)}',
