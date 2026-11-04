@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-04T17:46:56.008Z",
+ "cuando": "2026-11-04T18:38:26.289Z",
  "total": 55,
- "verde": 46,
- "rojo": 7,
- "gris": 2,
+ "verde": 49,
+ "rojo": 5,
+ "gris": 1,
  "items": [
   {
    "slug": "abril-mis15",
@@ -174,10 +174,10 @@
   },
   {
    "slug": "julieta-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "lucia-y-sebastian",
@@ -202,17 +202,10 @@
   },
   {
    "slug": "lupita-mis15",
-   "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección carta: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección itinerario: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección dresscode: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección galeria: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección spotify: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección regalos: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»"
-   ],
-   "error": ""
+   "ver": "",
+   "estado": "gris",
+   "dif": [],
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "maria-jose-mis15",
@@ -240,19 +233,15 @@
   {
    "slug": "mariana-y-joaquin",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección frase: previa «oculta» · publicada «rgba(0, 0, 0, 0)/rgb(58, 69, 61)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
    "slug": "mariana-y-lucas",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección frase: previa «oculta» · publicada «rgba(62, 26, 16, 0.28)/rgb(198, 192, 168)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -355,8 +344,11 @@
   {
    "slug": "prueba-desde-cero",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección eventos: previa «rgb(46, 67, 60)/rgb(247, 241, 231)» · publicada «rgb(74, 59, 46)/rgb(247, 241, 231)»",
+    "sección confirmacion: previa «rgb(46, 67, 60)/rgb(247, 241, 231)» · publicada «rgb(74, 59, 46)/rgb(247, 241, 231)»"
+   ],
    "error": ""
   },
   {
@@ -389,10 +381,10 @@
   },
   {
    "slug": "sofia-y-martin",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "valentina-y-emiliano",
