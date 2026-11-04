@@ -41,7 +41,10 @@
   /* los campos viejos que ahora sí mandan (clave del panel → campo nuevo) */
   var VIEJOS = {
     padres:     { fondo: 'c_fondo-color-personas', colorTexto: 'c_color-para-la-seccion-personas', colorTitulo: 'padresColor' },
-    hashtag:    { fondo: 'c_fondo-seccion-instagram', colorTexto: 'c_color-logo-y-texto-seccion-instagram' },
+    /* «Color logo y texto sección Instagram»: es TODO el texto de la sección y el logo */
+    hashtag:    { fondo: 'c_fondo-seccion-instagram', colorTexto: 'c_color-logo-y-texto-seccion-instagram',
+                  colorTitulo: 'c_color-logo-y-texto-seccion-instagram', colorSub: 'c_color-logo-y-texto-seccion-instagram',
+                  colorHashtag: 'c_color-logo-y-texto-seccion-instagram', colorLogo: 'c_color-logo-y-texto-seccion-instagram' },
     itinerario: { colorTexto: 'c_itinerario-color-de-texto' }
   };
 
@@ -75,7 +78,9 @@
 
   function estiloDe(e, key) {
     var es = {}, fx = e.fx || {}, propio = (fx.estiloSec && fx.estiloSec[key]) || {};
-    var v = VIEJOS[key] || {};
+    /* los campos viejos mandan sólo en las invitaciones nuevas: las entregadas no cambian */
+    var nueva = window.INVNUEVA ? window.INVNUEVA(e) : false;
+    var v = nueva ? (VIEJOS[key] || {}) : {};
     Object.keys(v).forEach(function (k) { var x = e[v[k]]; if (x != null && x !== '') es[k] = x; });
     Object.keys(propio).forEach(function (k) { if (propio[k] !== '' && propio[k] != null) es[k] = propio[k]; });   /* lo nuevo manda */
     return es;
@@ -137,6 +142,15 @@
         ft.dataset.estmask = '1';
       } else if (ft && ft.dataset.estmask) { ft.style.removeProperty('-webkit-mask-image'); ft.style.removeProperty('mask-image'); delete ft.dataset.estmask; }
       poner(sec.querySelector('#cf-titulo'), 'color', colorOk(es.colorTituloHoja));
+      /* ★ «Color del sobre» (panel-carta, fx.carta.sobreColor): algunas colecciones
+         clavan el tinte del sobre con !important y el color elegido no se veía.
+         En las invitaciones nuevas, el elegido manda. */
+      var sc = colorOk(((e.fx || {}).carta || {}).sobreColor);
+      if (!(window.INVNUEVA ? window.INVNUEVA(e) : false)) sc = '';
+      todos(sec, '.cf-back-tint, .cf-front-tint').forEach(function (tn) {
+        poner(tn, 'background-color', sc);
+        poner(tn, 'opacity', sc ? '1' : '');
+      });
     }
     if (key === 'scratch') {
       todos(sec, '.sc-day, .sc-mon, .ivf .n, .r3-f').forEach(function (el) { poner(el, 'color', colorOk(es.colorNumeros)); });
