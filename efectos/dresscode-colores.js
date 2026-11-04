@@ -220,7 +220,28 @@
     }
   }
 
+  /* ★ 3/11/2026 — `fx.dresscode.sinInspiracion` = true → se esconde el botón
+     «Ver inspiración» y su panel de fotos (los links quedan guardados). */
+  function inspiracion() {
+    var sec = document.querySelector('[data-sec="dresscode"]'); if (!sec) return;
+    var off = (fx().dresscode || {}).sinInspiracion === true;
+    sec.querySelectorAll('.acc-btn').forEach(function (b) {
+      if (!/inspira/i.test(b.textContent) && !b.hasAttribute('data-insp')) return;
+      b.setAttribute('data-insp', '1');
+      var pan = b.parentNode && b.parentNode.nextElementSibling;
+      if (off) {
+        if (b.style.display !== 'none') { b.dataset.inspAntes = b.style.display || '-'; }
+        b.parentNode.style.display = 'none';
+        if (pan && pan.classList.contains('acc-panel')) pan.style.setProperty('display', 'none', 'important');
+      } else if (b.parentNode.style.display === 'none') {
+        b.parentNode.style.display = '';
+        if (pan && pan.classList.contains('acc-panel')) pan.style.removeProperty('display');
+      }
+    });
+  }
+
   function sincronizar() {
+    inspiracion();
     /* ★ 22/10/2026 (Jazmín: «un cliente no los quiere y no tengo opción de
        sacarlos»): `fx.dresscode.sinColores` = true → no se muestran ni los
        colores sugeridos ni los a evitar. Casilla en el panel. */

@@ -150,7 +150,7 @@
     caja.style.cssText = 'margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(0,0,0,.10)';
 
     var t = document.createElement('div');
-    t.textContent = 'Los colores de la boda';
+    t.textContent = 'Vestimenta: colores e inspiración';
     t.style.cssText = 'font-size:13px;font-weight:600;margin-bottom:2px';
     caja.appendChild(t);
 
@@ -170,6 +170,17 @@
     labNo.appendChild(chkNo);
     labNo.appendChild(document.createTextNode('No mostrar los colores (ni los sugeridos ni los a evitar)'));
     caja.appendChild(labNo);
+
+    /* ★ 3/11/2026 — Jazmín: «no hay ningún sector donde se pueda desactivar
+       "Ver inspiración"». Apaga el botón y sus fotos sin borrar los links. */
+    var labI = document.createElement('label');
+    labI.style.cssText = 'display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0 0 12px;cursor:pointer';
+    var chkI = document.createElement('input'); chkI.type = 'checkbox';
+    chkI.checked = !!((datos() || {}).sinInspiracion);
+    chkI.onchange = function () { var dc = datos(); if (!dc) return; dc.sinInspiracion = !!chkI.checked; refrescar(); };
+    labI.appendChild(chkI);
+    labI.appendChild(document.createTextNode('No mostrar «Ver inspiración» (ni sus fotos)'));
+    caja.appendChild(labI);
 
     /* 23/10/2026: sólo los colores a evitar, sin tachar, al pie (citlalli) */
     var labSE = document.createElement('label');
