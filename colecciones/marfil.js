@@ -1246,7 +1246,7 @@
     /* ★ 4/11/2026 — Jazmín: «la fotografía de frase larga SOLO aparece cuando
        desactivás la carta». Si la invitación tiene SU foto de frase larga, la
        frase se queda en su banda con la foto (la carta sigue, sin la frase). */
-    if (fotoPropiaDeFrase()) { devolverFrase(); return; }
+    if ((window.INVNUEVA ? window.INVNUEVA() : false) && fotoPropiaDeFrase()) { devolverFrase(); return; }
     if (carta.querySelector('.mf-frase')) return;      /* ya está mudada */
 
     var p = banda.querySelector('p.frase') || banda.querySelector('p');
