@@ -136,8 +136,8 @@
   function mostrar() {
     estilos();
     var ov = h('div', 'cam-ov');
-    ov.appendChild(h('div', 'cam-k', 'Antes de entrar'));
-    ov.appendChild(h('div', 'cam-t', C.titulo || 'Tienes un recuerdo por revelar'));
+    var kk = h('div', 'cam-k', 'Antes de entrar'), tt = h('div', 'cam-t', C.titulo || 'Tienes un recuerdo por revelar');
+    ov.appendChild(kk); ov.appendChild(tt);
     var esc = h('div', 'cam-escena');
     var pol = h('div', 'cam-pol'), foto = h('div', 'cam-foto');
     foto.style.backgroundImage = 'url("' + fotoRevelar() + '")';
@@ -158,6 +158,9 @@
     function disparar() {
       if (hecho) return; hecho = true;
       b.style.visibility = 'hidden'; b2.style.visibility = 'hidden';
+      /* 4/11, Maki: «cuando sale la foto tapa el texto, no me gusta». El texto
+         de arriba es la consigna: al disparar se va, y la foto sale sola. */
+      [kk, tt].forEach(function (e) { e.style.transition = 'opacity .5s, transform .5s'; e.style.opacity = '0'; e.style.transform = 'translateY(-10px)'; });
       sonido();
       try { if (navigator.vibrate) navigator.vibrate(40); } catch (e) {}
       flash.classList.add('va'); esc.classList.add('dispara');
