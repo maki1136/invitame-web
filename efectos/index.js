@@ -697,6 +697,8 @@
     '/efectos/panel-itinerario.js',    /* los momentos del itinerario, por fin cargables */
     '/efectos/panel-menu.js',          /* 19/10: el bloque del menú, debajo del itinerario */
     '/efectos/panel-avisos.js',        /* 19/10: el bloque de los avisos, debajo del menú */
+    '/efectos/estilo-secciones.js',    /* 4/11: fondo, letra y colores que SÍ mandan en carta, raspadita, hospedaje, personas, itinerario, Instagram y cierre */
+    '/efectos/panel-estilo-secciones.js', /* 4/11: su «Diseño de la sección» en cada pestaña */
     '/efectos/panel-patrocinadores.js',/* 19/10: el bloque de patrocinadores, junto al cierre */
     '/efectos/panel-rsvp-preguntas.js',/* 19/10: las preguntas extra, en CONFIRMACIÓN */
     '/efectos/carta-fuente.js',        /* la tipografía de la carta se aplicaba pero no se descargaba */

@@ -462,14 +462,19 @@
      Escribe fx.<key>.estilo; lo pinta aplicarEstilo() (arriba). Va plegado
      para no tapar los datos. Cada control tiene «Como viene» (vacío = lo que
      pone la colección). */
-  function estilo(caja, key) {
+  /* ★ 4/11: opts (opcional) = { obj: fn → el objeto donde se guarda,
+     campos: [['color',rótulo,clave] | ['rango',rótulo,clave,min,max,unidad] |
+     ['fuente',rótulo,clave] | ['imagen',rótulo,clave] | ['casilla',rótulo,clave]],
+     titulo: texto del desplegable }. Sin opts, lo de siempre (menú, avisos…). */
+  function estilo(caja, key, opts) {
+    opts = opts || {};
     var det = document.createElement('details');
     det.style.cssText = 'margin:12px 0 4px;border:1px solid rgba(0,0,0,.10);border-radius:10px;padding:8px 10px';
     var sm = document.createElement('summary');
-    sm.textContent = 'Diseño de la sección (fondo, letra, tamaños y colores)';
+    sm.textContent = opts.titulo || 'Diseño de la sección (fondo, letra, tamaños y colores)';
     sm.style.cssText = 'cursor:pointer;font-size:12.5px;font-weight:700';
     det.appendChild(sm); caja.appendChild(det);
-    function es() { var d = borrador(); if (!d) return {}; var x = datos(d, key); if (!x.estilo || typeof x.estilo !== 'object') x.estilo = {}; return x.estilo; }
+    function es() { var d = borrador(); if (!d) return {}; if (opts.obj) return opts.obj(d); var x = datos(d, key); if (!x.estilo || typeof x.estilo !== 'object') x.estilo = {}; return x.estilo; }
     var syncs = [];
     function fila(t) {
       var f = document.createElement('div');
@@ -488,7 +493,7 @@
       var est = document.createElement('span'); est.style.cssText = 'font-size:11px;opacity:.6';
       var b = boton('Como viene');
       i.oninput = function () { es()[k] = i.value; est.textContent = ''; refrescar(); };
-      b.onclick = function () { delete es()[k]; est.textContent = 'como viene'; refrescar(); };
+      b.onclick = function () { es()[k] = ''; est.textContent = 'como viene'; refrescar(); };
       f.appendChild(i); f.appendChild(est); f.appendChild(b);
       syncs.push(function () { var v = es()[k]; if (/^#[0-9a-f]{6}$/i.test(v || '')) { if (document.activeElement !== i) i.value = v; est.textContent = ''; } else est.textContent = 'como viene'; });
     }
@@ -498,7 +503,7 @@
       var n = document.createElement('span'); n.style.cssText = 'font-size:11.5px;font-weight:700;min-width:62px';
       var b = boton('Como viene');
       i.oninput = function () { es()[k] = unidad === '%' ? parseInt(i.value, 10) / 100 : parseInt(i.value, 10); n.textContent = i.value + unidad; refrescar(); };
-      b.onclick = function () { delete es()[k]; n.textContent = 'como viene'; refrescar(); };
+      b.onclick = function () { es()[k] = ''; n.textContent = 'como viene'; refrescar(); };
       f.appendChild(i); f.appendChild(n); f.appendChild(b);
       syncs.push(function () {
         var v = es()[k];
@@ -514,7 +519,7 @@
       s.innerHTML = '<option value="">Como viene</option>' + lista.map(function (o) {
         return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>';
       }).join('');
-      s.onchange = function () { if (s.value) es()[k] = s.value; else delete es()[k]; refrescar(); };
+      s.onchange = function () { es()[k] = s.value || ''; refrescar(); };
       f.appendChild(s);
       syncs.push(function () { var v = es()[k] || ''; if (document.activeElement !== s && s.value !== v) s.value = v; });
     }
@@ -524,7 +529,7 @@
       var fi = document.createElement('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.style.display = 'none';
       var b = boton('Subir imagen'), q = boton('Quitar');
       b.onclick = function () { fi.click(); };
-      q.onclick = function () { delete es()[k]; refrescar(); sync(); };
+      q.onclick = function () { es()[k] = ''; refrescar(); sync(); };
       fi.onchange = function () {
         var x = fi.files && fi.files[0]; if (!x || !window.INV || !window.INV.uploadImage) return;
         b.textContent = 'Subiendo…'; b.disabled = true;
@@ -534,6 +539,18 @@
       function sync() { var v = es()[k]; im.style.display = v ? '' : 'none'; if (v && im.src !== v) im.src = v; b.textContent = v ? 'Cambiar imagen' : 'Subir imagen'; q.style.display = v ? '' : 'none'; }
       f.appendChild(im); f.appendChild(b); f.appendChild(q); f.appendChild(fi);
       syncs.push(sync);
+    }
+    function casilla(t, k) {
+      var f = fila(t);
+      var i = document.createElement('input'); i.type = 'checkbox';
+      i.onchange = function () { es()[k] = !!i.checked; refrescar(); };
+      f.insertBefore(i, f.firstChild);
+      syncs.push(function () { i.checked = es()[k] === true; });
+    }
+    if (opts.campos) {
+      var TIPOS = { color: color, rango: rango, fuente: fuente, imagen: imagen, casilla: casilla };
+      opts.campos.forEach(function (c) { var fn = TIPOS[c[0]]; if (fn) fn.apply(null, c.slice(1)); });
+      return function sync() { syncs.forEach(function (s) { try { s(); } catch (e) {} }); };
     }
     color('Color de fondo', 'fondo');
     imagen('Imagen de fondo', 'imagen');
