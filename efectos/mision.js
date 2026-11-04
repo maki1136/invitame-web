@@ -135,7 +135,8 @@
       '@keyframes msIn{from{opacity:0;transform:translateY(10px)}}',
       /* las secciones cerradas */
       '.ms-cerrada{position:relative!important;min-height:600px!important;overflow:hidden!important}',
-      '.ms-cerrada>.ms-tapa,.ms-tapa{position:absolute!important;inset:0!important;top:0!important;left:0!important;width:auto!important;height:auto!important;margin:0!important;z-index:9000!important;display:flex;align-items:flex-start;justify-content:center;padding:70px 18px 30px;background:rgba(18,17,16,.62);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);transition:opacity .9s,transform .9s;-webkit-user-select:none;user-select:none}',
+      /* las colecciones Óleo fuerzan «.sec.verde > * {position:relative!important}»: este selector les gana */
+      'html body section.ms-cerrada.ms-cerrada>div.ms-tapa.ms-tapa,.ms-tapa{position:absolute!important;inset:0!important;top:0!important;left:0!important;width:auto!important;height:auto!important;margin:0!important;z-index:9000!important;display:flex;align-items:flex-start;justify-content:center;padding:70px 18px 30px;background:rgba(18,17,16,.62);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);transition:opacity .9s,transform .9s;-webkit-user-select:none;user-select:none}',
       '.ms-tapa.abierta{opacity:0;pointer-events:none}',
       '.ms-card{width:min(350px,100%);background:linear-gradient(170deg,var(--ms-papel),var(--ms-papel2));color:var(--ms-tinta);border-radius:6px;padding:22px 18px 20px;text-align:center;box-shadow:0 24px 50px -18px rgba(0,0,0,.75);position:sticky;top:80px}',
       '.ms-card .ms-k{margin-bottom:6px}',
