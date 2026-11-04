@@ -649,6 +649,19 @@
       paleta:  ["#c5b191", "#9d917e", "#5f5043", "#1d1a1c"],
       tipos:   ["boda"]
     },
+    /* 4/11/2026 · Maki: la boda de la camarita (referencia: reel de byyoya_).
+       El EFECTO «La camarita» (fx.camara) se vende aparte: al vestir una
+       invitación con este diseño llega APAGADO (vestir.js). */
+    'celebra-instantanea': {
+      nombre:  "Instantánea azul",
+      bajada:  "Fotos instantáneas, nomeolvides y notas escritas a mano.",
+      muestra: 'valeria-y-andres',
+      foto:    '/formulario/disenos/valeria-y-andres.webp',
+      color:   '#7fa3d1',
+      color2:  '#1c2b44',
+      paleta:  ["#1c2b44", "#7fa3d1", "#c3d3e8", "#f6f8fb"],
+      tipos:   ["boda"]
+    },
     'fiesta-abordar': {
       nombre:  "Pase de abordar",
       bajada:  "Azul marino con rutas de avión y boletos para cada momento.",
