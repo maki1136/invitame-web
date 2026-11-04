@@ -30,7 +30,7 @@
   try { if (window.top !== window.self && !/[?&]camara=1/.test(location.search)) return; } catch (e) { return; }
 
   var CL = 'https://res.cloudinary.com/oc8cgqt4/image/upload/';
-  var CAM_DEF = CL + 'q_auto,f_auto,w_760/invitame/camara/cam-azul';
+  var CAM_DEF = CL + 'q_auto,f_auto,w_760/invitame/camara/cam-azul-recorte';   /* PNG recortado: fondo transparente */
   var EV, C;
 
   function si(v) { return v === true || v === 'true' || v === 1 || v === '1'; }
@@ -83,21 +83,26 @@
       '.cam-ov.on{opacity:1}.cam-ov.fuera{opacity:0;pointer-events:none}',
       '.cam-k{font:500 11.5px/1.4 Jost,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#4A5568;margin-bottom:6px;text-align:center}',
       '.cam-t{font:700 34px/1.05 Caveat,cursive;color:#2B3A55;margin:0 0 14px;text-align:center}',
-      '.cam-escena{position:relative;width:min(300px,78vw);aspect-ratio:1/1;margin:46px auto 0}',
-      '.cam-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;z-index:3;transition:transform .15s;cursor:pointer}',
+      /* 4/11, prueba: con la foto DETRÁS y la cámara en multiply, la foto se veía a
+         través de la cámara y tapaba el botón. Ahora la cámara es un PNG
+         recortado (opaco) y la foto vive en una RANURA con overflow:hidden cuyo
+         borde de abajo está en el canto de arriba de la cámara: es invisible
+         hasta que se imprime y sube. */
+      '.cam-escena{position:relative;width:min(290px,74vw);margin:min(190px,50vw) auto 0}',
+      '.cam-img{position:relative;display:block;width:100%;height:auto;z-index:3;transition:transform .15s;cursor:pointer;filter:drop-shadow(0 18px 22px rgba(43,58,85,.22))}',
       '.cam-escena.dispara .cam-img{animation:camSacude .35s}',
       '@keyframes camSacude{30%{transform:translateY(3px) scale(.985)}60%{transform:translateY(-2px)}}',
-      /* la foto instantánea: nace ESCONDIDA detrás de la cámara y sube por arriba */
-      '.cam-pol{position:absolute;left:50%;top:22%;width:58%;margin-left:-29%;background:#FDFCF8;padding:7% 6% 22%;box-shadow:0 10px 26px -10px rgba(0,0,0,.45);z-index:2;transform:translateY(0) rotate(0);transition:transform 2.4s cubic-bezier(.25,.8,.3,1);border-radius:2px}',
+      '.cam-ranura{position:absolute;left:21%;width:58%;bottom:90%;height:160%;overflow:hidden;z-index:2;pointer-events:none}',
+      '.cam-pol{position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;background:#FDFCF8;padding:7% 6% 22%;box-shadow:0 10px 26px -10px rgba(0,0,0,.45);transform:translateY(102%);transition:transform 2.4s cubic-bezier(.25,.8,.3,1);border-radius:2px}',
       '.cam-pol .cam-foto{width:100%;aspect-ratio:1/1;background:#d9dcd6 center/cover no-repeat;filter:brightness(1.9) saturate(0) contrast(.35) blur(2px);transition:filter 4.2s ease-out}',
       '.cam-pol.revela .cam-foto{filter:none}',
       '.cam-pol .cam-l1,.cam-pol .cam-l2{font-family:Caveat,cursive;color:#2B3A55;text-align:center;opacity:0;transition:opacity 1.2s 1.6s;line-height:1.05}',
       '.cam-pol .cam-l1{font-size:clamp(20px,6vw,28px);font-weight:700;margin-top:6%}',
       '.cam-pol .cam-l2{font-size:clamp(14px,4.2vw,18px);font-weight:500;margin-top:2%}',
       '.cam-pol.revela .cam-l1,.cam-pol.revela .cam-l2{opacity:1}',
-      '.cam-pol.sale{transform:translateY(-78%) rotate(-1deg)}',
+      '.cam-pol.sale{transform:translateY(6%)}',
       /* al frente: la foto deja la cámara y viene a la mano del invitado */
-      '.cam-pol.frente{position:fixed;left:50%;top:50%;width:min(300px,74vw);margin:0;z-index:99990;transform:translate(-50%,-56%) rotate(-3deg);transition:transform .9s cubic-bezier(.2,.8,.2,1),width .9s,top .9s}',
+      '.cam-pol.frente{position:fixed;left:50%;top:46%;bottom:auto;width:min(300px,74vw);margin:0;z-index:99990;transform:translate(-50%,-50%) rotate(-3deg);transition:transform .9s cubic-bezier(.2,.8,.2,1),width .9s,top .9s,left .9s}',
       '.cam-flash{position:fixed;inset:0;background:#fff;z-index:99995;opacity:0;pointer-events:none}',
       '.cam-flash.va{animation:camFlash .55s ease-out}',
       '@keyframes camFlash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}',
@@ -139,7 +144,8 @@
     var L = leyenda();
     pol.appendChild(foto); pol.appendChild(h('div', 'cam-l1', L[0])); pol.appendChild(h('div', 'cam-l2', L[1]));
     var cam = h('img', 'cam-img'); cam.src = C.camara || CAM_DEF; cam.alt = '';
-    esc.appendChild(pol); esc.appendChild(cam);
+    var ranura = h('div', 'cam-ranura'); ranura.appendChild(pol);
+    esc.appendChild(ranura); esc.appendChild(cam);
     ov.appendChild(esc);
     var b = h('button', 'cam-b late', '📸 Tomar la foto'); b.type = 'button';
     var b2 = h('button', 'cam-b2', 'Ver la invitación directo'); b2.type = 'button';
@@ -161,8 +167,8 @@
         var r = pol.getBoundingClientRect();
         document.body.appendChild(pol);
         pol.style.transition = 'none';
-        pol.style.position = 'fixed'; pol.style.left = r.left + 'px'; pol.style.top = r.top + 'px';
-        pol.style.width = r.width + 'px'; pol.style.margin = '0'; pol.style.transform = 'none'; pol.style.zIndex = '99990';
+        pol.style.position = 'fixed'; pol.style.left = (r.left + r.width / 2) + 'px'; pol.style.top = (r.top + r.height / 2) + 'px'; pol.style.bottom = 'auto';
+        pol.style.width = r.width + 'px'; pol.style.margin = '0'; pol.style.transform = 'translate(-50%,-50%)'; pol.style.zIndex = '99990';
         void pol.offsetWidth;
         pol.style.transition = '';
         pol.style.left = ''; pol.style.top = ''; pol.style.width = ''; pol.style.transform = '';
