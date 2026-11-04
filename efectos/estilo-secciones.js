@@ -49,9 +49,15 @@
   function colorOk(c) { c = String(c || '').trim(); return /^#[0-9a-f]{3,8}$/i.test(c) || /^rgba?\(/i.test(c) ? c : ''; }
   function poner(el, prop, v) {
     if (!el) return;
+    /* el color va también como text-fill: algunas colecciones y el corrector de
+       contraste pintan con -webkit-text-fill-color, que es el que se ve */
+    if (prop === 'color') { ponerUno(el, '-webkit-text-fill-color', v, 'estfill'); }
+    ponerUno(el, prop, v, 'est' + prop.replace(/-/g, ''));
+  }
+  function ponerUno(el, prop, v, marca) {
     if (v) { if (el.style.getPropertyValue(prop) !== v || el.style.getPropertyPriority(prop) !== 'important') el.style.setProperty(prop, v, 'important'); }
-    else if (el.dataset['est' + prop.replace(/-/g, '')]) el.style.removeProperty(prop);
-    if (v) el.dataset['est' + prop.replace(/-/g, '')] = '1'; else delete el.dataset['est' + prop.replace(/-/g, '')];
+    else if (el.dataset[marca]) el.style.removeProperty(prop);
+    if (v) el.dataset[marca] = '1'; else delete el.dataset[marca];
   }
   function todos(raiz, sel) { if (!raiz || !sel) return []; try { return [].slice.call(raiz.querySelectorAll(sel)); } catch (e) { return []; } }
   function hexRgba(c, a) {

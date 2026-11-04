@@ -1089,6 +1089,18 @@
       var r = el.getBoundingClientRect();
       if (r.width < 4 || r.height < 4) continue;
       if (esLetraDegrade(el, cs)) continue;          /* ★ error 40 */
+      /* ★ 4/11/2026 — EL COLOR QUE ELIGIÓ JAZMÍN NO SE CORRIGE. Jazmín: «por más
+         que cambie los colores de texto, no se modifican». Este corrector le
+         ponía encima un -webkit-text-fill-color propio (que es el que se ve) y
+         el color elegido quedaba sólo en `color`. Lo que pinta
+         estilo-secciones.js lleva la marca data-estcolor: se respeta tal cual. */
+      if (el.getAttribute('data-estcolor') === '1') {
+        if (el.hasAttribute('data-regla-orig') || el.hasAttribute('data-regla-luz')) {
+          el.style.removeProperty('-webkit-text-fill-color');
+          el.removeAttribute('data-regla-orig'); el.removeAttribute('data-regla-luz'); el.removeAttribute('data-regla-opa');
+        }
+        continue;
+      }
 
       /* ⚠️⚠️ ERROR 20 — LA REGLA NO MIRABA LA OPACIDAD. (17/9/2026)
          Medía `color` y nada más. Un rótulo con `opacity:.45` sobre el papel
