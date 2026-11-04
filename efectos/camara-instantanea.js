@@ -121,7 +121,7 @@
          el FONDO DE LA INVITACIÓN (su video o su foto), suavizado, con una luz
          clara en el centro para que el texto se lea, y luces que flotan. */
       '.cam-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}',
-      '.cam-bg video,.cam-bg .cam-bgi{position:absolute;inset:-12px;width:calc(100% + 24px);height:calc(100% + 24px);object-fit:cover;background:center/cover no-repeat;filter:blur(2.5px) saturate(1.05);transform:scale(1.04);animation:camRespira 14s ease-in-out infinite alternate}',
+      '.cam-bg video,.cam-bg .cam-bgi{position:absolute;inset:-12px;width:calc(100% + 24px);height:calc(100% + 24px);object-fit:cover;background:center/cover no-repeat;filter:blur(5px) saturate(1.05);transform:scale(1.04);animation:camRespira 14s ease-in-out infinite alternate}',
       '@keyframes camRespira{to{transform:scale(1.12) translate(-1.5%,-1%)}}',
       '.cam-bg:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 42%,rgba(255,255,255,.78) 0%,rgba(255,255,255,.45) 55%,rgba(255,255,255,.08) 100%)}',
       '.cam-luz{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,250,235,.95),rgba(255,250,235,0) 70%);opacity:0;animation:camLuz linear infinite}',
@@ -140,7 +140,7 @@
       '.cam-escena.dispara .cam-img{animation:camSacude .35s}',
       '@keyframes camSacude{30%{transform:translateY(3px) scale(.985)}60%{transform:translateY(-2px)}}',
       '.cam-ranura{position:absolute;left:21%;width:58%;bottom:90%;height:160%;overflow:hidden;z-index:2;pointer-events:none}',
-      '.cam-pol{position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;background:#FDFCF8;padding:7% 6% 22%;box-shadow:0 10px 26px -10px rgba(0,0,0,.45);transform:translateY(102%);transition:transform 2.4s cubic-bezier(.25,.8,.3,1);border-radius:2px}',
+      '.cam-pol{position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;background:#FDFCF8;padding:7% 6% 10%;box-shadow:0 10px 26px -10px rgba(0,0,0,.45);transform:translateY(102%);transition:transform 2.4s cubic-bezier(.25,.8,.3,1);border-radius:2px}',
       '.cam-pol .cam-foto{width:100%;aspect-ratio:1/1;background:#d9dcd6 center/cover no-repeat;filter:brightness(1.9) saturate(0) contrast(.35) blur(2px);transition:filter 4.2s ease-out}',
       '.cam-pol.revela .cam-foto{filter:none}',
       '.cam-pol .cam-l1,.cam-pol .cam-l2{font-family:Caveat,cursive;color:#2B3A55;text-align:center;opacity:0;transition:opacity 1.2s 1.6s;line-height:1.05}',
