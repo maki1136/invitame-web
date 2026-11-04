@@ -301,6 +301,19 @@
       paleta:  ["#52291a", "#e5c1a1", "#fcdac2", "#a67052"],
       tipos:   ["xv"]
     },
+    /* 4/11/2026 · Maki: la Misión secreta con diseño propio (colección fiesta-mision).
+       El JUEGO (fx.mision) se vende aparte: al vestir una invitación con este
+       diseño la misión llega APAGADA (vestir.js) y se prende como extra. */
+    'mision-secreta': {
+      nombre:  "Misión secreta",
+      bajada:  "La tiara bajo vidrio, láseres rubí y un expediente para resolver.",
+      muestra: 'renata-mision-mis15',
+      foto:    '/formulario/disenos/renata-mision-mis15.webp',
+      color:   '#9b1b30',
+      color2:  '#0e0c0f',
+      paleta:  ["#0e0c0f", "#9b1b30", "#d8c3a0", "#f3eadf"],
+      tipos:   ["xv"]
+    },
     'monarca': {
       nombre:  "Mariposa monarca",
       bajada:  "Monarcas volando sobre un bosque de oyameles.",
