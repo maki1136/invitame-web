@@ -122,7 +122,7 @@
       '.ms-k{font:500 11px/1.3 Oswald,sans-serif;letter-spacing:.32em;text-transform:uppercase;opacity:.7}',
       '.ms-t{font:700 44px/1 Oswald,sans-serif;letter-spacing:.02em;text-transform:uppercase;margin:12px 0 4px}',
       '.ms-n{font:400 17px/1.35 "Special Elite",monospace;margin:4px 0 18px}',
-      '.ms-sello{position:absolute;top:58px;right:-6px;transform:rotate(14deg);border:3px solid var(--ms-rojo);color:var(--ms-rojo);font:700 15px/1 Oswald,sans-serif;letter-spacing:.18em;padding:6px 10px;border-radius:4px;opacity:.85;mix-blend-mode:multiply}',
+      '.ms-sello{position:absolute;top:-12px;right:-8px;transform:rotate(10deg);background:rgba(234,223,198,.92);border:3px solid var(--ms-rojo);color:var(--ms-rojo);font:700 15px/1 Oswald,sans-serif;letter-spacing:.18em;padding:6px 10px;border-radius:4px;opacity:.85;mix-blend-mode:multiply}',
       '.ms-p{font:400 14.5px/1.5 "Special Elite",monospace;margin:0 auto 14px;max-width:290px}',
       '.ms-huella{position:relative;width:118px;height:118px;margin:6px auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:pointer;background:rgba(38,33,28,.06)}',
       '.ms-huella svg.ms-fp{width:74px;height:74px;color:var(--ms-tinta);opacity:.75;transition:color .3s,opacity .3s}',
