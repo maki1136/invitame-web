@@ -142,6 +142,10 @@
       d.fx.mision.on = false;
       hecho.push('la misión secreta (se vende aparte)');
     }
+    if (d.fx.camara && (d.fx.camara.on === true || d.fx.camara.on === 'true')) {
+      d.fx.camara.on = false;
+      hecho.push('la camarita (se vende aparte)');
+    }
     return hecho;
   }
 

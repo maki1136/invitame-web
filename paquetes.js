@@ -113,7 +113,9 @@
     /* 4/11/2026 (Maki): «siempre viene apagada a menos que la gente la pida como
        especial». No está en ningún paquete: se marca como extra y se prende. */
     mision:          { nombre: 'Misión secreta (la invitación se juega)', clase: 'killer', interruptor: 'fx.mision.on',
-      nota: 'Huella para entrar, «jugar o ver directo», caja fuerte en Dónde y cuándo, criptex en Regalos y foto para armar en la galería. Se vende aparte, como especial. Se ajusta en EFECTOS → 🕵️ Misión secreta.' }
+      nota: 'Huella para entrar, «jugar o ver directo», caja fuerte en Dónde y cuándo, criptex en Regalos y foto para armar en la galería. Se vende aparte, como especial. Se ajusta en EFECTOS → 🕵️ Misión secreta.' },
+    camara:          { nombre: 'La camarita (la cámara imprime el pase)', clase: 'killer', interruptor: 'fx.camara.on',
+      nota: 'Al abrir, una cámara instantánea imprime una foto que se revela con el nombre, los lugares y la mesa del invitado. Se vende aparte, como especial. Se ajusta en EFECTOS → 📸 La camarita.' }
   };
 
   /* La invitación completa. Todo esto no cuesta nada de servir (USD 0,44 por

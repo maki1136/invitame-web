@@ -11,7 +11,7 @@
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
       editorial · rosegold · toga · kinder · generacion · grises · futbol ·
       palmeras · cabina · collage · scrapbook · seda · lavanda · estrellada ·
-      posada
+      posada · instantanea
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -253,7 +253,18 @@
       nm:['Pinyon Script','clamp(58px,15.5vw,84px)','normal',400,'none','0',1.12],
       pk:['Cormorant','13px','uppercase','.42em','normal'],
       h2:['28px','.03em','none','normal',500],
-      kk:['Pinyon Script','30px','none','0','m'] }
+      kk:['Pinyon Script','30px','none','0','m'] },
+    /* 23 · BODA · Instantánea azul (4/11/2026, Maki; referencia: el reel de
+       byyoya_ de la camarita). Fotos instantáneas, nomeolvides y papel de lino
+       en azul empolvado; notas escritas a mano (Caveat). Va con el efecto
+       «La camarita» (efectos/camara-instantanea.js), que se vende aparte.
+       Fondo EN VIDEO (ev-instantanea-fondo). */
+    instantanea: { nombre: 'Boda · Instantánea azul', pa:'#F6F8FB', pa2:'#E4ECF5', ti:'#1C2B44', ti2:'#2A3A55', ti3:'#C3D3E8', ac:'#7FA3D1', mt:'plata', mtT:'#4E5B70', base:'instantanea',
+      disp:'Playfair Display', scr:'Caveat', txt:'Jost', h3:'Playfair Display', adorno:'nomeolvides', forma:'collage', boton:'999px', radio:'6px',
+      nm:['Caveat','clamp(56px,15vw,80px)','normal',700,'none','0',1.0],
+      pk:['Jost','12px','uppercase','.36em','normal'],
+      h2:['27px','.01em','none','italic',400],
+      kk:['Caveat','30px','none','0','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -272,14 +283,15 @@
     'DM Sans': ':ital,wght@0,400;0,500;1,400', 'Libre Baskerville': ':ital,wght@0,400;0,700;1,400',
     'Baloo 2': ':wght@400;600;800', 'Patrick Hand': '', 'Oswald': ':wght@400;500;600',
     'Source Sans 3': ':ital,wght@0,400;0,600;1,400', 'DM Serif Display': ':ital@0;1',
-    'Karla': ':ital,wght@0,400;0,600;1,400', 'Lilita One': '', 'Marcellus': '', 'Special Elite': ''
+    'Karla': ':ital,wght@0,400;0,600;1,400', 'Lilita One': '', 'Marcellus': '', 'Special Elite': '',
+    'Caveat': ':wght@500;700'
   };
   var PILA = { 'Pixelify Sans':'monospace', 'Fredoka':'system-ui,sans-serif', 'Sniglet':'system-ui,sans-serif',
     'Quicksand':'system-ui,sans-serif', 'Nunito':'system-ui,sans-serif', 'Mulish':'system-ui,sans-serif',
     'Jost':'system-ui,sans-serif', 'Work Sans':'system-ui,sans-serif', 'DM Sans':'system-ui,sans-serif',
     'Baloo 2':'system-ui,sans-serif', 'Oswald':'"Arial Narrow",sans-serif', 'Source Sans 3':'system-ui,sans-serif',
     'Karla':'system-ui,sans-serif', 'Lilita One':'system-ui,sans-serif', 'Special Elite':'"Courier New",monospace', 'Marcellus':'Georgia,serif', 'Sacramento':'cursive', 'Pinyon Script':'cursive', 'Allura':'cursive',
-    'Great Vibes':'cursive', 'Patrick Hand':'cursive' };
+    'Great Vibes':'cursive', 'Patrick Hand':'cursive', 'Caveat':'cursive' };
   function ff(n) { return '"' + n + '",' + (PILA[n] || 'Georgia,serif'); }
 
   /* ------------------------------------------------------------- utilidades */
@@ -433,6 +445,12 @@
       for (var i = 0; i < 8; i++) pt += '<path transform="rotate(' + (i * 45 + (i % 2 ? 22 : 0)) + ' 24 24)" d="M24 24 C21 18 22 10 24 5 C26 10 27 18 24 24 Z" opacity="' + (i % 2 ? '.7' : '1') + '"/>';
       return svg('<g fill="' + ACENTO + '">' + pt + '</g>' +
         '<g fill="' + c + '"><circle cx="24" cy="24" r="2.6"/><circle cx="20.6" cy="22" r="1.1"/><circle cx="27.4" cy="22" r="1.1"/><circle cx="24" cy="27.8" r="1.1"/></g>');
+    }
+    /* instantanea: un nomeolvides — cinco pétalos redondos y el centro claro */
+    if (a === 'nomeolvides') {
+      var nm = '';
+      for (var j = 0; j < 5; j++) nm += '<circle transform="rotate(' + (j * 72) + ' 24 24)" cx="24" cy="13.5" r="8.2"/>';
+      return svg('<g fill="' + c + '">' + nm + '</g><circle cx="24" cy="24" r="4.2" fill="' + pa + '"/><circle cx="24" cy="24" r="1.8" fill="' + ACENTO + '"/>');
     }
     if (a === 'mariposa') return svg(
       '<g fill="' + c + '"><path d="M23 24 C18 10 6 8 5 16 C4 23 12 26 23 25 Z"/><path d="M25 24 C30 10 42 8 43 16 C44 23 36 26 25 25 Z"/>' +
@@ -883,6 +901,11 @@
        desaparecen sobre la foto) */
     /* ---- 17 · letras anchas (pixel): la cuenta regresiva y el título del pase
        no pueden salirse del teléfono (medido el 19/10 en mateo-cumple5) */
+    /* ---- 18 · instantanea (4/11): «Guarda la fecha» venía en el marrón que
+       clava i/estilos-servidor.css (familia de color), y el cierre lleva la
+       foto de jardín clara detrás: el texto blanco necesita sombra para leerse */
+    if (tono() === 'instantanea') A.push(P + '.ivcal-kick, ' + P + '.banco .copy{ color:' + TINTA2 + '!important; } ' +
+      P + '.footer :is(#fin-frase, .n, h2, h3, p, div, span, a){ text-shadow:0 1px 3px rgba(20,32,52,.55), 0 4px 22px rgba(20,32,52,.6)!important; }');
     if (tono() === 'pixel') A.push(P + '.portada .num{ font-size:clamp(26px,8vw,38px)!important; } ' + P + '.pase > .t{ font-size:clamp(26px,7.4vw,34px)!important; line-height:1.12!important; }');
     if (E.disp === 'Bodoni Moda') A.push(P + ':is(h2, h3, h4, .t, .v, .num, .it .h, #pv-names, #pv-names *){ font-optical-sizing:none!important; font-variation-settings:"opsz" 11!important; }');
     return A.join('\n');
