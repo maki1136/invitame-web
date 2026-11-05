@@ -222,9 +222,42 @@
     return null;
   }
 
+  /* ★ 5/11/2026 (maferypepe: «Un mensaje para Ximena · Renata & Patricio» y la
+     voz de la muestra en la invitación de otros novios). LA GUARDIA: en una
+     invitación que NO es muestra (sin «Que venda» ni «Que se vea funcionando»),
+     nada del pase de una muestra se muestra ni suena:
+       · la voz grabada de las muestras (carpeta invitame/voces/) no suena;
+       · «Un mensaje para <otro nombre>» pasa a «Un mensaje para ti»;
+       · «De parte de» que no nombra a los anfitriones se cambia por sus nombres;
+       · la fecha y la hora salen del evento si no coinciden. */
+  function esMuestraPV(e) {
+    var m = (e.fx && e.fx.muestra) || {};
+    var si = function (v) { return v === true || String(v) === '1' || /^(si|sí|true)$/i.test(String(v || '')); };
+    return si(m.venta) || si(m.rsvp) || /[?&]muestra=1/.test(location.search);
+  }
+  function guardia(e, f) {
+    if (esMuestraPV(e)) return f;
+    var c = {}, k;
+    for (k in f) if (Object.prototype.hasOwnProperty.call(f, k)) c[k] = f[k];
+    if (/\/invitame\/voces\//.test(String(c.audio || ''))) { c.audio = ''; c.onda = ''; }
+    if (/^\s*un mensaje para\s+(?!ti\b)/i.test(String(c.titulo || ''))) c.titulo = 'Un mensaje para ti';
+    var n1 = String(e.n1 || '').trim(), n2 = String(e.n2 || '').trim();
+    var nombres = n2 ? n1 + ' & ' + n2 : n1;
+    var pri = function (s) { return String(s || '').split(/\s+/)[0].toLowerCase(); };
+    var dp = String(c.departe || '').toLowerCase();
+    if (dp && n1 && dp.indexOf(pri(n1)) < 0 && (!n2 || dp.indexOf(pri(n2)) < 0)) c.departe = nombres;
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}:\d{2}))?/.exec(String(e.fecha || ''));
+    if (m) {
+      var fe = m[3] + ' · ' + m[2] + ' · ' + m[1];
+      if (c.fecha && String(c.fecha).replace(/\s/g, '') !== fe.replace(/\s/g, '')) c.fecha = fe;
+      if (m[4] && c.hora && String(c.hora).trim() !== m[4]) c.hora = m[4];
+    }
+    return c;
+  }
+
   function fx() {
     var e = window.INVEV || {};
-    var f = (e.fx && e.fx.pasevoz) || {};
+    var f = guardia(e, (e.fx && e.fx.pasevoz) || {});
     var g = window.INVGUEST;
     if (!g || !g.pasevozAudio) return f;
     var c = {}, k;
