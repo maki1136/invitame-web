@@ -181,6 +181,9 @@
       todos(sec, '.it .it-sep').forEach(function (el) { poner(el, 'color', cHora); });
       todos(sec, '.it .it-nom').forEach(function (el) { poner(el, 'color', cNom); });
       todos(sec, '.it .d').forEach(function (el) { poner(el, 'color', colorOk(es.colorDesc) || tx); });
+      /* las esquinas del recuadro del itinerario (el panel .tl y su fondo) */
+      var rad = (es.radio === 0 || es.radio) && es.radio !== '' ? parseInt(es.radio, 10) + 'px' : '';
+      todos(sec, '.tl, .tl-panel, .it-panel').forEach(function (el) { poner(el, 'border-radius', rad); poner(el, 'overflow', rad ? 'hidden' : ''); });
     }
     if (key === 'hashtag') {
       var big = sec.querySelector('#hashtag-big');

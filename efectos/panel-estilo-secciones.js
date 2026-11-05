@@ -27,7 +27,9 @@
         ['color', 'Color de la tarjeta del hotel', 'tarjeta'], ['rango', 'Transparencia de la tarjeta', 'tarjetaOpaca', 0, 100, '%']]) },
     { key: 'itinerario', tab: 'LUGAR_VEST', casa: 'itinerario', titulo: 'Itinerario · colores por separado (horario, momento y descripción)',
       campos: BASE_TIT.concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
-        ['color', 'Color de la descripción', 'colorDesc']]) },
+        ['color', 'Color de la descripción', 'colorDesc'],
+        /* 5/11 (Chris y Adreily): «no quiere un borde cuadrado y otro curvo» */
+        ['rango', 'Esquinas redondeadas del recuadro', 'radio', 0, 48, 'px']]) },
     { key: 'padres', tab: 'PERSONAS', casa: 'estilo-padres', lugar: { arriba: true }, titulo: 'Personas · diseño (tamaño de las fotos, letra y colores)',
       campos: [['rango', 'Tamaño de las fotos (250 = como la plataforma vieja)', 'fotoTam', 60, 250, 'px']].concat(BASE_FONDO, BASE_TIT,
         [['color', 'Color de los nombres', 'colorNombre'], ['color', 'Color de la relación (Padres de…)', 'colorRel'], ['color', 'Color de la frase', 'colorTexto']]) },
