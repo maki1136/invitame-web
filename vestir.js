@@ -146,6 +146,26 @@
       d.fx.camara.on = false;
       hecho.push('la camarita (se vende aparte)');
     }
+    /* ★ 5/11/2026 (maferypepe) — los TEXTOS del pase con voz también son de la
+       otra fiesta: «Un mensaje para Ximena», «Renata & Patricio», su fecha y
+       su hora. El diseño del boleto (textura, letras, rótulos) sí viaja. */
+    if (d.fx.pasevoz) {
+      var pv = d.fx.pasevoz, tocado = false;
+      ['titulo', 'departe', 'nota', 'fecha', 'hora'].forEach(function (k) { if (pv[k]) { pv[k] = ''; tocado = true; } });
+      if (tocado) hecho.push('los textos del pase con voz');
+    }
+    return hecho;
+  }
+
+  /* ★ 5/11/2026 — TODO lo que no viaja cuando una invitación se guarda con otra
+     dirección (Duplicar, Clonar, o abrir una muestra y cambiarle la dirección):
+     lo de arriba, más la marca de muestra (el «¿Quieres la tuya?» de venta) y la
+     galería de muestra. */
+  function limpiarParaOtraFiesta(d) {
+    var hecho = limpiarLoQueEsDeOtros(d);
+    if (!d || !d.fx) return hecho;
+    if (d.fx.muestra) { delete d.fx.muestra; hecho.push('la marca de muestra (venta)'); }
+    if (d.fx.galeria && d.fx.galeria.muestra) { d.fx.galeria.muestra = false; hecho.push('la galería de muestra'); }
     return hecho;
   }
 
@@ -342,6 +362,7 @@
     esDeDiseno: esDeDiseno,
     vestir: vestir,
     limpiarLoQueEsDeOtros: limpiarLoQueEsDeOtros,
+    limpiarParaOtraFiesta: limpiarParaOtraFiesta,
     laVozDelCliente: laVozDelCliente,
     fotosDeLaMuestra: fotosDeLaMuestra,
     secciones: secciones,
