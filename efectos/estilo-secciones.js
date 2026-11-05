@@ -214,6 +214,16 @@
   window.INVESTILO_SEC = { SEC: SEC, aplicar: aplicarTodo };
 
   if (!/^\/i\//.test(location.pathname)) return;   /* en el admin sólo se publican las tablas */
+
+  /* ★ 5/11/2026 — maferypepe: «cuando despliegan la cantidad de personas, se ve
+     en blanco». La lista que abre el <select> la dibuja el sistema con fondo
+     blanco, y las opciones heredaban la letra clara de la sección oscura. */
+  (function () {
+    var s = document.createElement('style');
+    s.id = 'opciones-legibles';
+    s.textContent = 'select option,select optgroup{color:#1d1d1d!important;-webkit-text-fill-color:#1d1d1d!important;background:#fff!important}';
+    (document.head || document.documentElement).appendChild(s);
+  })();
   function arrancar() {
     if (!document.body) { setTimeout(arrancar, 60); return; }
     aplicarTodo();

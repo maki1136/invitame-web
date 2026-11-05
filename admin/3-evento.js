@@ -961,6 +961,19 @@
           }
         }
       }catch(_e){}
+      /* ⚠️ 5/11/2026 (maferypepe: el pase decía «Un mensaje para Ximena · Renata &
+         Patricio», sonaba la voz de la muestra, el Live era el de la muestra y
+         abajo salía «¿Quieres la tuya?»). Se abrió una MUESTRA, se le cambió la
+         «Dirección del evento» y se guardó: eso escribe la muestra entera con otro
+         nombre, sin ninguna de las limpiezas de «Duplicar». Ahora, si la dirección
+         no es la que se abrió, se limpia igual que al duplicar. */
+      try{
+        const _abierta=(new URLSearchParams(location.search).get('e')||'').trim();
+        if(_abierta && _abierta!==slug && window.INVVESTIR && INVVESTIR.limpiarParaOtraFiesta){
+          const _lim=INVVESTIR.limpiarParaOtraFiesta(cfg);
+          if(_lim.length) console.info('Guardado en otra dirección: se limpió', _lim.join(', '));
+        }
+      }catch(_e){}
       cfg.guardadoPanel = new Date().toISOString();
       await INV.saveEvento(slug, cfg);
       window.__invGPBase = cfg.guardadoPanel;
