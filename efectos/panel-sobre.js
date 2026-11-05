@@ -279,12 +279,181 @@
     var sel = selector(); if (!sel) return;
     var anclaje = sel.closest ? (sel.closest('.grp') || sel.parentElement) : sel.parentElement;
     if (!anclaje || !anclaje.parentNode) return;
+    var g = document.getElementById(ID_GRILLA);
+    if (g && g.parentNode === anclaje.parentNode) anclaje = g;
     anclaje.parentNode.insertBefore(construirLacre(d), anclaje.nextSibling);
+  }
+
+  /* ===== EL CATÁLOGO CON FOTOS (5/11/2026) ===================================
+     Jazmín: «en el sector para elegir el sobre… en vez de que aparezcan así
+     [una lista de texto], se podrá hacer un catálogo para que se puedan
+     visualizar? Algo así como en las muestras de las invis».
+
+     Debajo del select va una grilla con la foto (poster) de cada sobre, un
+     buscador y el nombre. Tocar una tarjeta es lo mismo que elegir en el
+     select: se le pone el valor y se dispara SU onchange (el del panel, que
+     guarda en D.fx.sobre.modelo, refresca la miniatura y redibuja). Así hay
+     UN solo camino de guardado. El select queda igual, como respaldo.
+
+     ⚠️ El panel redibuja todo en cada cambio: la grilla es UN nodo que se
+        vuelve a enganchar (no se rearma), así no pierde la búsqueda ni el
+        scroll, ni vuelve a pedir las 190 fotos.
+     ⚠️ Las fotos van con loading=lazy y, si son imágenes de Cloudinary, se
+        piden achicadas (w_260). Los posters de video ya vienen con su medida.
+     ======================================================================== */
+
+  var ID_GRILLA = 'sobres-grilla';
+  var grilla = null, grillaN = -1;
+
+  function miniatura(u) {
+    u = String(u || '');
+    if (/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(u) && !/\/upload\/[a-z]{1,3}_[^/]*\//.test(u)) {
+      return u.replace('/image/upload/', '/image/upload/w_260,c_limit,q_auto,f_auto/');
+    }
+    return u;
+  }
+
+  function partes(nombre) {
+    var n = String(nombre || '');
+    var tipo = /\(video\)\s*$/i.test(n) ? 'video' : (/\(foto\)\s*$/i.test(n) ? 'foto' : '');
+    n = n.replace(/\s*\((video|foto)\)\s*$/i, '');
+    var i = n.indexOf(' · ');
+    return { titulo: i > 0 ? n.slice(0, i) : n, det: i > 0 ? n.slice(i + 3) : '', tipo: tipo };
+  }
+
+  function sinAcentos(s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+
+  function cssGrilla() {
+    if (document.getElementById(ID_GRILLA + '-css')) return;
+    var s = document.createElement('style');
+    s.id = ID_GRILLA + '-css';
+    s.textContent =
+      '#' + ID_GRILLA + '{margin:10px 0 6px}' +
+      '#' + ID_GRILLA + ' .sg-bus{width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid rgba(0,0,0,.18);border-radius:8px;font-size:12.5px;margin:0 0 8px}' +
+      '#' + ID_GRILLA + ' .sg-caja{max-height:460px;overflow:auto;padding:2px;border-radius:10px;background:rgba(0,0,0,.035)}' +
+      '#' + ID_GRILLA + ' .sg-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;padding:6px}' +
+      '#' + ID_GRILLA + ' .sg-t{all:unset;box-sizing:border-box;display:flex;flex-direction:column;cursor:pointer;background:#fff;border-radius:9px;overflow:hidden;' +
+        'box-shadow:0 1px 3px rgba(0,0,0,.12);border:2px solid transparent;transition:transform .12s,border-color .12s}' +
+      '#' + ID_GRILLA + ' .sg-t:hover{transform:translateY(-2px)}' +
+      '#' + ID_GRILLA + ' .sg-t.si{border-color:#2f6fed;box-shadow:0 0 0 2px rgba(47,111,237,.25)}' +
+      '#' + ID_GRILLA + ' .sg-f{position:relative;aspect-ratio:9/16;background:#e9e4dc}' +
+      '#' + ID_GRILLA + ' .sg-f img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
+      '#' + ID_GRILLA + ' .sg-tag{position:absolute;left:5px;top:5px;font:600 9.5px/1 system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;' +
+        'background:rgba(0,0,0,.55);color:#fff;padding:3px 5px;border-radius:4px}' +
+      '#' + ID_GRILLA + ' .sg-ok{position:absolute;right:5px;top:5px;width:20px;height:20px;border-radius:50%;background:#2f6fed;color:#fff;font:700 12px/20px system-ui;text-align:center;display:none}' +
+      '#' + ID_GRILLA + ' .sg-t.si .sg-ok{display:block}' +
+      '#' + ID_GRILLA + ' .sg-n{padding:6px 7px 7px;font:600 11.5px/1.25 system-ui,sans-serif;color:#222}' +
+      '#' + ID_GRILLA + ' .sg-d{display:block;font-weight:400;font-size:10.5px;opacity:.65;margin-top:2px;' +
+        'display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}' +
+      '#' + ID_GRILLA + ' .sg-vacio{padding:18px;text-align:center;font-size:12px;opacity:.6;grid-column:1/-1}';
+    document.head.appendChild(s);
+  }
+
+  function armarGrilla(cat, claves) {
+    cssGrilla();
+    var caja = document.createElement('div');
+    caja.id = ID_GRILLA;
+    var bus = document.createElement('input');
+    bus.type = 'search'; bus.className = 'sg-bus';
+    bus.placeholder = 'Buscar sobre (mariposas, olivo, lacre, video…)';
+    var marco = document.createElement('div'); marco.className = 'sg-caja';
+    marco.addEventListener('scroll', function () { caja.__top = marco.scrollTop; });
+    var lista = document.createElement('div'); lista.className = 'sg-lista';
+    marco.appendChild(lista);
+    caja.appendChild(bus); caja.appendChild(marco);
+
+    claves.forEach(function (k) {
+      var s = cat[k] || {}, p = partes(s.nombre || k);
+      var t = document.createElement('button');
+      t.type = 'button'; t.className = 'sg-t'; t.setAttribute('data-k', k);
+      t.setAttribute('data-q', sinAcentos(k + ' ' + (s.nombre || '')));
+      t.title = s.nombre || k;
+      var f = document.createElement('div'); f.className = 'sg-f';
+      var img = document.createElement('img');
+      img.loading = 'lazy'; img.decoding = 'async'; img.alt = '';
+      img.src = miniatura(s.poster || s.img || '');
+      img.onerror = function () { img.style.display = 'none'; };
+      f.appendChild(img);
+      if (p.tipo) { var tg = document.createElement('span'); tg.className = 'sg-tag'; tg.textContent = p.tipo; f.appendChild(tg); }
+      var ok = document.createElement('span'); ok.className = 'sg-ok'; ok.textContent = '✓'; f.appendChild(ok);
+      var n = document.createElement('div'); n.className = 'sg-n'; n.textContent = p.titulo;
+      if (p.det) { var dd = document.createElement('span'); dd.className = 'sg-d'; dd.textContent = p.det; n.appendChild(dd); }
+      t.appendChild(f); t.appendChild(n);
+      t.onclick = function () {
+        var sel = selector(); if (!sel) return;
+        if (!sel.querySelector('option[value="' + k + '"]')) llenar();
+        sel.value = k;
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        marcar();
+      };
+      lista.appendChild(t);
+    });
+    var vacio = document.createElement('div'); vacio.className = 'sg-vacio';
+    vacio.textContent = 'Ningún sobre coincide con la búsqueda.'; vacio.style.display = 'none';
+    lista.appendChild(vacio);
+
+    bus.oninput = function () {
+      var q = sinAcentos(bus.value).trim().split(/\s+/).filter(Boolean), vistos = 0;
+      lista.querySelectorAll('.sg-t').forEach(function (t) {
+        var dq = t.getAttribute('data-q');
+        var si = q.every(function (w) { return dq.indexOf(w) >= 0; });
+        t.style.display = si ? '' : 'none'; if (si) vistos++;
+      });
+      vacio.style.display = vistos ? 'none' : '';
+    };
+    caja.__marco = marco;
+    return caja;
+  }
+
+  function marcar() {
+    if (!grilla) return;
+    var actual = '';
+    try { actual = ((D.fx || {}).sobre || {}).modelo || ''; } catch (e) {}
+    grilla.querySelectorAll('.sg-t').forEach(function (t) {
+      t.classList.toggle('si', t.getAttribute('data-k') === actual);
+    });
+  }
+
+  function revisarGrilla() {
+    var sel = selector();
+    if (!sel) return;
+    var cat = catalogo(); if (!cat) return;
+    var actual = '';
+    try { actual = ((D.fx || {}).sobre || {}).modelo || ''; } catch (e) {}
+    var claves = Object.keys(cat).filter(function (k) { return !(cat[k] && cat[k].oculto) || k === actual; });
+    if (!grilla || grillaN !== claves.length) {
+      var viejo = grilla;
+      grilla = armarGrilla(cat, claves); grillaN = claves.length;
+      if (viejo && viejo.parentNode) viejo.parentNode.removeChild(viejo);
+    }
+    var anclaje = sel.closest ? (sel.closest('.grp') || sel.parentElement) : sel.parentElement;
+    if (!anclaje || !anclaje.parentNode) return;
+    if (grilla.parentNode !== anclaje.parentNode || grilla.previousSibling !== anclaje) {
+      anclaje.parentNode.insertBefore(grilla, anclaje.nextSibling);
+      if (grilla.__marco && grilla.__top) grilla.__marco.scrollTop = grilla.__top;
+      var lac = document.getElementById(ID_LACRE);
+      if (lac && lac.parentNode === grilla.parentNode && lac.previousSibling !== grilla) {
+        grilla.parentNode.insertBefore(lac, grilla.nextSibling);
+      }
+    }
+    marcar();
   }
 
   function arrancar() {
     llenar();
     setInterval(llenar, 600);
+    revisarGrilla();
+    setInterval(revisarGrilla, 500);
+    /* el panel redibuja al elegir: se vuelve a enganchar en el mismo cuadro, sin parpadeo */
+    var pend = false;
+    try {
+      new MutationObserver(function () {
+        if (pend) return; pend = true;
+        requestAnimationFrame(function () { pend = false; revisarGrilla(); });
+      }).observe(document.body, { childList: true, subtree: true });
+    } catch (e) {}
     revisarLacre();
     setInterval(revisarLacre, 700);
   }
