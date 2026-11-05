@@ -1,5 +1,5 @@
 {
- "cuando": "2026-11-05T19:51:20.495Z",
+ "cuando": "2026-11-05T21:54:48.509Z",
  "total": 55,
  "verde": 49,
  "rojo": 6,
@@ -205,13 +205,13 @@
    "ver": "2026-09-14",
    "estado": "rojo",
    "dif": [
-    "sección carta: previa «rgba(231, 233, 236, 0.3)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección carta: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
     "sección frase: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección itinerario: previa «rgba(231, 233, 236, 0.3)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección itinerario: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
     "sección dresscode: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
     "sección galeria: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección spotify: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
-    "sección regalos: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»"
+    "sección spotify: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección regalos: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»"
    ],
    "error": ""
   },

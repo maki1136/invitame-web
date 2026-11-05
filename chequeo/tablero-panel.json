@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-05T19:36:21.541Z",
+ "cuando": "2026-11-05T21:40:09.734Z",
  "slug": "camila-y-tomas",
- "total": 537,
- "verde": 524,
+ "total": 538,
+ "verde": 525,
  "amarillo": 0,
  "rojo": 13,
  "gris": 0,
@@ -2346,6 +2346,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.itinerario.colorDesc",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-itinerario",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.itinerario.radio",
    "llega": true,
    "seVe": true,
    "estado": "verde"
