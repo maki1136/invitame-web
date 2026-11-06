@@ -53,7 +53,8 @@
     { id: 'bandeja-plata',  nombre: 'Bandeja de plata con perlas',                               url: CL + 'mk-bandeja-plata',  tinta: '#3A3A44' },
     { id: 'acuarela-rosas', nombre: 'Corona de rosas en acuarela (centro papel crema)',          url: CL + 'mk-acuarela-rosas', tinta: '#5A4038' },
     { id: 'deco-oro',       nombre: 'Art déco dorado sobre negro',                               url: CL + 'mk-deco-oro',       tinta: '#F2E3B8' },
-    { id: 'eucalipto',      nombre: 'Corona de eucalipto (centro papel crema)',                  url: CL + 'mk-eucalipto',      tinta: '#3E4A3A' }
+    { id: 'eucalipto',      nombre: 'Corona de eucalipto (centro papel crema)',                  url: CL + 'mk-eucalipto',      tinta: '#3E4A3A' },
+    { id: 'faroles-lila',   nombre: 'Faroles de papel y glicinas lila (centro papel lavanda)',  url: CL + 'mk-faroles-lila',   tinta: '#43295F' }
   ];
   function marcoDe(c) {
     var u = String(c.marco || '').trim(); if (!u) return null;
