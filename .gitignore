@@ -13,3 +13,4 @@ backup*
 # Basura del sistema
 .DS_Store
 Thumbs.db
+chequeo/sin-ejemplo.txt
