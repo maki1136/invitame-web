@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-06T19:36:09.745Z",
+ "cuando": "2026-11-06T21:01:02.683Z",
  "slug": "camila-y-tomas",
- "total": 543,
- "verde": 529,
- "amarillo": 0,
+ "total": 545,
+ "verde": 530,
+ "amarillo": 1,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -2562,6 +2562,28 @@
   {
    "tab": "GALERIA_INSTA_VID",
    "bloque": "casa-estilo-hashtag",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.hashtag.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-hashtag",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.hashtag.sobretitulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-hashtag",
    "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
@@ -2723,8 +2745,9 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
