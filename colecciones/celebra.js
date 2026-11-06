@@ -351,14 +351,14 @@
     PAPEL = E.pa; PAPEL2 = E.pa2; TINTA = E.ti; TINTA2 = E.ti2; TINTA3 = E.ti3; ACENTO = E.ac;
     ORO = METALES[E.mt][0]; ORO_CL = METALES[E.mt][1]; ORO_T = E.mtT;
     RP = rgb(PAPEL); RP2 = rgb(PAPEL2); RT = rgb(TINTA); RT3 = rgb(TINTA3); RM = rgb(ORO);
-    var pz = CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
+    var pz = CL + 'c_fill,ar_1:1,g_center/c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
     PIEZA = pz.replace('SZ', '300'); PIEZA_CH = pz.replace('SZ', '120'); PIEZA_MD = pz.replace('SZ', '160');
     /* §48 · las tapas MUESTRAN LO QUE HACEN: proyector y tocadiscos de la
        temática (no un recorte de la base). Las genera otro agente con estos nombres. */
     TAPA_VIDEO = CL + 'c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/eventos/ev-' + k + '-tapa-video';
     TAPA_PLAY  = CL + 'c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/eventos/ev-' + k + '-tapa-play';
     /* §85.1 · la tapa de la raspadita es OPACA: la pieza aplanada sobre el papel */
-    PIEZA_TAPA = CL + 'c_crop,g_center,w_0.62,h_0.62/b_rgb:' + PAPEL2.replace('#', '') + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
+    PIEZA_TAPA = CL + 'c_fill,ar_1:1,g_center/c_crop,g_center,w_0.62,h_0.62/b_rgb:' + PAPEL2.replace('#', '') + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
   }
 
   /* ⚠️ LA TABLA QUE LA COLECCIÓN RECLAMA COMO PROPIA. Contrato de
