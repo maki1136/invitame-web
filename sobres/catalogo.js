@@ -2068,6 +2068,16 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  "mariposas-verdes-lacre-champan-video": {
+    nombre:     "Mariposas verde salvia con borde rosa, cintas y lacre champán · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.4/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/mariposa-verde-t1-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/mariposa-verde-t1-1080.jpg",
+    color:      "#D7C3B4",
+    luz:        4.0,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "puertas-cinta-olivo-video": {
     oculto:     true,
     nombre:     "Papel marfil con cinta de organza, moño y ramita de olivo · las puertas se abren y entra la luz (video)",
