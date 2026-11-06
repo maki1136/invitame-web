@@ -32,7 +32,7 @@
     if (!pos) { if (raiz.getAttribute('data-portada-pos')) raiz.removeAttribute('data-portada-pos'); var v = document.getElementById(ID_POS); if (v) v.remove(); return; }
     if (raiz.getAttribute('data-portada-pos') !== pos) raiz.setAttribute('data-portada-pos', pos);
     if (document.getElementById(ID_POS)) return;
-    var S = 'html[data-portada-pos="arriba"] body .portada';
+    var S = 'html[data-portada-pos="arriba"][data-portada-pos] body .portada.portada'; /* le gana a las colecciones (html[data-col][data-coleccion] .portada) */
     var st = document.createElement('style'); st.id = ID_POS;
     st.textContent = [
       S + '{justify-content:flex-start!important;padding-top:max(7vh,44px)!important}',
