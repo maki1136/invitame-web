@@ -194,11 +194,18 @@
     var M = METALES[E.metal] || METALES.oro;
     ORO = M[0]; ORO_CL = M[1]; ACENTO = E.acento || ORO;
     RP = rgb(PAPEL); RP2 = rgb(PAPEL2); RPN = rgb(PANEL); RO = rgb(ORO); RA = rgb(ACENTO);
-    var pz = CL + 'c_fill,ar_1:1,g_center/c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
+    /* 6/11 · LA PIEZA EN CÍRCULO, ENTERA (Maki: «si metes una flor no puedes recortar la flor»).
+       ev-<tono>-pieza-circ = cuadrado 1000 con el objeto completo adentro del círculo y el
+       fondo extendido (scratchpad circ.py). Sólo invitaciones nuevas: las entregadas siguen
+       con el recorte de antes (62 % del centro). */
+    var NUEVA = window.INVNUEVA ? window.INVNUEVA() : false;
+    var pz = NUEVA ? CL + 'r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza-circ'
+                   : CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
     PIEZA = pz.replace('SZ', '300'); PIEZA_CH = pz.replace('SZ', '120'); PIEZA_PASE = pz.replace('SZ', '160');
     /* tapa opaca de la raspadita: la pieza APLANADA sobre el papel (§85.1: con
        huecos el número de abajo se ve a través) */
-    TAPA_RASP  = CL + 'c_fill,ar_1:1,g_center/c_crop,g_center,w_0.62,h_0.62/r_max/b_rgb:' + PAPEL2.slice(1) + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
+    TAPA_RASP  = NUEVA ? CL + 'w_360,h_360,c_fill,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza-circ'
+                 : CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/b_rgb:' + PAPEL2.slice(1) + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
     /* ⚠️ §48: las tapas MUESTRAN lo que hacen — proyector y tocadiscos de la
        temática, NO recortes del fondo */
     TAPA_VIDEO = CL + 'c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/eventos/ev-' + k + '-tapa-video';

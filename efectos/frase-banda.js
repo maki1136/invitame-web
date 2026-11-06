@@ -312,6 +312,36 @@
     var il = document.createElement('input'); il.type = 'text'; il.placeholder = 'https://…'; il.value = esLink ? c.marco : ''; il.style.width = '100%';
     il.oninput = function () { var f = datos(borrador() || d); var v = il.value.trim(); if (v) f.marco = v; else delete f.marco; refrescar(); };
     gl.appendChild(il); caja.appendChild(gl);
+    /* 6/11 · Maki: «que también puedan ellas subir la imagen que quieran; decirles el tamaño» */
+    var gs = document.createElement('div'); gs.className = 'grp';
+    gs.innerHTML = '<label>…o subir un marco propio desde la compu</label>' +
+      '<div style="font-size:11.5px;opacity:.7;line-height:1.4;margin:2px 0 6px">Medida recomendada: <b>1200 × 1600 px</b> (vertical 3:4). PNG o JPG, hasta 3 MB. ' +
+      'El centro tiene que ser <b>liso</b> (sin dibujos) en por lo menos el 55 % del ancho y el 50 % del alto: ahí va la frase. ' +
+      'Que el adorno del borde tenga que ver con el diseño de la invitación (mismas flores, mismos colores, mismo motivo).</div>';
+    var fu = document.createElement('input'); fu.type = 'file'; fu.accept = 'image/png,image/jpeg,image/webp';
+    var est = document.createElement('div'); est.style.cssText = 'font-size:11.5px;margin-top:4px';
+    fu.onchange = function () {
+      var file = fu.files && fu.files[0]; if (!file) return;
+      if (file.size > 3 * 1024 * 1024) { est.textContent = 'Pesa más de 3 MB: achicala y probá de nuevo.'; return; }
+      est.textContent = 'Subiendo…';
+      var fd = new FormData(); fd.append('file', file); fd.append('upload_preset', 'invitame_unsigned'); fd.append('folder', 'invitame/marcos-propios');
+      fetch('https://api.cloudinary.com/v1_1/oc8cgqt4/image/upload', { method: 'POST', body: fd })
+        .then(function (r) { return r.json(); })
+        .then(function (r) {
+          if (!r.secure_url) throw new Error((r.error && r.error.message) || 'sin link');
+          var aviso = '';
+          if (r.width && r.height) {
+            var ar = r.width / r.height;
+            if (ar < 0.66 || ar > 0.84) aviso = ' Ojo: no es vertical 3:4 (' + r.width + '×' + r.height + '), se va a estirar.';
+            else if (r.width < 900) aviso = ' Ojo: es chica (' + r.width + ' px de ancho), puede verse borrosa.';
+          }
+          var url = r.secure_url.replace('/upload/', '/upload/q_auto,f_auto,w_900/');
+          var f = datos(borrador() || d); f.marco = url; il.value = url;
+          est.textContent = 'Listo, marco puesto.' + aviso; refrescar();
+        })
+        .catch(function (e) { est.textContent = 'No se pudo subir: ' + e.message; });
+    };
+    gs.appendChild(fu); gs.appendChild(est); caja.appendChild(gs);
     var gt = document.createElement('div'); gt.className = 'grp';
     gt.innerHTML = '<label>Color de la letra adentro del marco (vacío = el del marco)</label>';
     var it = document.createElement('input'); it.type = 'text'; it.placeholder = '#7A1A47'; it.value = c.marcoTinta || ''; it.style.width = '100%';
