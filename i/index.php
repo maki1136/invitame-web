@@ -52,7 +52,7 @@ $slug = isset($_GET['e']) ? strtolower($_GET['e']) : '';
 $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
 
 $img = ''; $title = ''; $desc = ''; $kick = ''; $ver = ''; $sobre = '';
-$coverReal = ''; $idioma = ''; $paleta = ''; $nom1 = ''; $nom2 = '';
+$coverReal = ''; $idioma = ''; $paleta = ''; $nom1 = ''; $nom2 = ''; $fechaEv = '';
 $estado = ''; $revision = ''; $bloqueoSinPase = false;
 
 $campos = array(); $tamElegidos = array(); $leyoEvento = false;
@@ -141,6 +141,7 @@ if ($slug !== '') {
 
     $kick   = $sv('kick');
     $nom1   = $sv('n1'); $nom2 = $sv('n2');   /* 27/10: para no mostrar «María & Diego» al cargar */
+    $fechaEv = $sv('fecha');                  /* 6/11: la raspadita no muestra el 28 de noviembre de ejemplo */
     $ver    = $sv('ver');
     $idioma = $sv('idioma');
     $paleta = strtolower($sv('paleta'));
@@ -1017,6 +1018,21 @@ if ($slug !== '') {
   $tpl = preg_replace_callback('~(id="pv-per"[^>]*>)[^<]*(<)~', function ($m) use ($gPer, $e) { return $m[1] . $e($gPer) . $m[2]; }, $tpl, 1);
   $tpl = preg_replace_callback('~(id="pv-mesa"[^>]*>)[^<]*(<)~', function ($m) use ($gMesa, $e) { return $m[1] . $e($gMesa) . $m[2]; }, $tpl, 1);
   $tpl = preg_replace_callback('~(<input id="rname" value=")[^"]*(")~', function ($m) use ($gNom, $e) { return $m[1] . $e($gNom) . $m[2]; }, $tpl, 1);
+
+  /* y lo demás de ejemplo que quedaba escrito (revisión completa del molde, 6/11):
+     la fecha de la raspadita (28 · Noviembre 2026) y los botones de contacto
+     («Escribir a María / a Diego»). */
+  $scD = ''; $scM = '';
+  if (!empty($fechaEv) && !preg_match('/^en/i', (string)$idioma) && ($ts = strtotime(substr($fechaEv, 0, 10))) !== false) {
+    $mesesEs = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+    $scD = (string)(int)date('j', $ts); $scM = $mesesEs[(int)date('n', $ts) - 1] . ' ' . date('Y', $ts);
+  }
+  $w1 = !empty($nom1) ? 'Escribir a ' . $nom1 : '';
+  $w2 = !empty($nom2) ? 'Escribir a ' . $nom2 : '';
+  foreach (array(array('sc-day', $scD), array('sc-mon', $scM), array('wa-p1', $w1), array('wa-p2', $w2)) as $par) {
+    $v = $par[1];
+    $tpl = preg_replace_callback('~(id="' . $par[0] . '"[^>]*>)[^<]*(<)~', function ($m) use ($v, $e) { return $m[1] . $e($v) . $m[2]; }, $tpl, 1);
+  }
 }
 
 header('Content-Type: text/html; charset=utf-8');
