@@ -11,7 +11,7 @@
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
       editorial · rosegold · toga · kinder · generacion · grises · futbol ·
       palmeras · cabina · collage · scrapbook · seda · lavanda · estrellada ·
-      posada · instantanea
+      posada · instantanea · bordado · mesa · faroles
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -264,7 +264,38 @@
       nm:['Caveat','clamp(56px,15vw,80px)','normal',700,'none','0',1.0],
       pk:['Jost','12px','uppercase','.36em','normal'],
       h2:['27px','.01em','none','italic',400],
-      kk:['Caveat','30px','none','0','m'] }
+      kk:['Caveat','30px','none','0','m'] },
+    /* 24 · XV · Bordado mexicano (5/11/2026, referencia de Jazmín: XV charra
+       rosa mexicano). Papel de algodón blanco, flores BORDADAS de colores
+       (rosa, naranja, amarillo, turquesa y verde), y las tarjetas en ROSA
+       MEXICANO con el borde CALADO como papel picado y un pespunte blanco.
+       Great Vibes para el nombre y los títulos, Cormorant en versal. */
+    bordado: { nombre: 'XV · Bordado mexicano', pa:'#FCF8F5', pa2:'#F6E9EE', ti:'#7A1A47', ti2:'#5C2440', ti3:'#F2C3D7', ac:'#C2296F', mt:'oro', mtT:'#7A5A12', base:'bordado',
+      disp:'Cormorant', scr:'Great Vibes', txt:'Cormorant Garamond', h3:'Cormorant', adorno:'bordado', forma:'picado', boton:'999px', radio:'6px',
+      nm:['Great Vibes','clamp(64px,17vw,92px)','normal',400,'none','0',1.1],
+      pk:['Cormorant','13px','uppercase','.36em','normal'],
+      h2:['40px','0','none','normal',400],
+      kk:['Cormorant','13px','uppercase','.34em','m'] },
+    /* 25 · BODA · Mesa nude (5/11/2026, referencia de Jazmín: una mesa de
+       banquete con camino de gasa nude, velas, flores de campo en rosa empolvado
+       y platos con filo dorado). Papel lino cálido, tinta cacao, acento rosa
+       empolvado; la tarjeta es un MENÚ: marco fino de oro y ramito arriba. */
+    mesa: { nombre: 'Boda · Mesa nude', pa:'#FBF7F3', pa2:'#F2E8E0', ti:'#4E3830', ti2:'#5E463D', ti3:'#E6D5C9', ac:'#B98577', mt:'oro', mtT:'#76571A', base:'mesa',
+      disp:'Cormorant', scr:'Pinyon Script', txt:'Cormorant Garamond', h3:'Cormorant', adorno:'ramillete', forma:'marco', boton:'999px', radio:'10px',
+      nm:['Pinyon Script','clamp(56px,15vw,82px)','normal',400,'none','0',1.12],
+      pk:['Cormorant','13px','uppercase','.42em','normal'],
+      h2:['30px','.02em','none','normal',500],
+      kk:['Pinyon Script','30px','none','0','m'] },
+    /* 26 · XV · Faroles lila (5/11/2026, referencia de Jazmín: XV en lila con
+       faroles flotando, torre y flores). Lila y oro sobre papel perla; tarjetas
+       en ARCO como ventanas de torre y un farolito de papel como viñeta.
+       ⚠️ Sin personajes ni emblemas de película: faroles, flores y torre son de todos. */
+    faroles: { nombre: 'XV · Faroles lila', pa:'#FAF6FC', pa2:'#EFE6F6', ti:'#43295F', ti2:'#55396F', ti3:'#DCCBEA', ac:'#9467C2', mt:'oro', mtT:'#76571A', base:'faroles',
+      disp:'Cormorant', scr:'Great Vibes', txt:'Cormorant Garamond', h3:'Cormorant', adorno:'farol', forma:'arco', boton:'999px', radio:'18px',
+      nm:['Great Vibes','clamp(62px,16.5vw,90px)','normal',400,'none','0',1.1],
+      pk:['Cormorant','13px','uppercase','.38em','normal'],
+      h2:['38px','0','none','normal',400],
+      kk:['Cormorant','13px','uppercase','.34em','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -320,14 +351,21 @@
     PAPEL = E.pa; PAPEL2 = E.pa2; TINTA = E.ti; TINTA2 = E.ti2; TINTA3 = E.ti3; ACENTO = E.ac;
     ORO = METALES[E.mt][0]; ORO_CL = METALES[E.mt][1]; ORO_T = E.mtT;
     RP = rgb(PAPEL); RP2 = rgb(PAPEL2); RT = rgb(TINTA); RT3 = rgb(TINTA3); RM = rgb(ORO);
-    var pz = CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
+    /* 6/11 · LA PIEZA EN CÍRCULO, ENTERA (Maki: «si metes una flor no puedes recortar la flor»).
+       ev-<tono>-pieza-circ = cuadrado 1000 con el objeto completo adentro del círculo y el
+       fondo extendido (scratchpad circ.py). Sólo invitaciones nuevas: las entregadas siguen
+       con el recorte de antes (62 % del centro). */
+    var NUEVA = window.INVNUEVA ? window.INVNUEVA() : false;
+    var pz = NUEVA ? CL + 'r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza-circ'
+                   : CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
     PIEZA = pz.replace('SZ', '300'); PIEZA_CH = pz.replace('SZ', '120'); PIEZA_MD = pz.replace('SZ', '160');
     /* §48 · las tapas MUESTRAN LO QUE HACEN: proyector y tocadiscos de la
        temática (no un recorte de la base). Las genera otro agente con estos nombres. */
     TAPA_VIDEO = CL + 'c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/eventos/ev-' + k + '-tapa-video';
     TAPA_PLAY  = CL + 'c_fill,w_800,h_730,g_auto,q_auto,f_auto/invitame/eventos/ev-' + k + '-tapa-play';
     /* §85.1 · la tapa de la raspadita es OPACA: la pieza aplanada sobre el papel */
-    PIEZA_TAPA = CL + 'c_crop,g_center,w_0.62,h_0.62/b_rgb:' + PAPEL2.replace('#', '') + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
+    PIEZA_TAPA = NUEVA ? CL + 'w_360,h_360,c_fill,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza-circ'
+                 : CL + 'c_crop,g_center,w_0.62,h_0.62/b_rgb:' + PAPEL2.replace('#', '') + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
   }
 
   /* ⚠️ LA TABLA QUE LA COLECCIÓN RECLAMA COMO PROPIA. Contrato de
@@ -446,6 +484,31 @@
       return svg('<g fill="' + ACENTO + '">' + pt + '</g>' +
         '<g fill="' + c + '"><circle cx="24" cy="24" r="2.6"/><circle cx="20.6" cy="22" r="1.1"/><circle cx="27.4" cy="22" r="1.1"/><circle cx="24" cy="27.8" r="1.1"/></g>');
     }
+    /* mesa: ramillete de flores de campo — tres flores redondas en rosa empolvado,
+       un capullo y tallitos finos atados */
+    if (a === 'ramillete') return svg(
+      '<g stroke="' + c + '" stroke-width="1.3" fill="none" stroke-linecap="round"><path d="M24 44 C23 36 19 28 13 20"/><path d="M24 44 C24 34 24 26 24 16"/><path d="M24 44 C26 36 30 29 35 22"/><path d="M24 44 C22 39 17 36 11 35"/></g>' +
+      '<g fill="' + ACENTO + '"><circle cx="13" cy="17" r="5"/><circle cx="24" cy="12" r="5.6"/><circle cx="35" cy="19" r="4.6"/></g>' +
+      '<g fill="' + pa + '"><circle cx="13" cy="17" r="1.8"/><circle cx="24" cy="12" r="2"/><circle cx="35" cy="19" r="1.6"/></g>' +
+      '<path fill="' + c + '" d="M11 35 C8 32 8 29 10 27 C12 29 12 32 11 35 Z"/><path d="M20 40 H28" stroke="' + c + '" stroke-width="2.2" stroke-linecap="round"/>');
+    /* faroles: farolito de papel flotando, con su llama y dos chispas */
+    if (a === 'farol') return svg(
+      '<path fill="' + c + '" d="M17 10 H31 L34 34 C34 37 31 39 24 39 C17 39 14 37 14 34 Z" opacity=".95"/>' +
+      '<rect x="16" y="7" width="16" height="3.4" rx="1.5" fill="' + c + '"/>' +
+      '<path d="M18 16 H30 M17.4 22 H30.6 M16.8 28 H31.2" stroke="' + pa + '" stroke-width="1" opacity=".55"/>' +
+      '<path fill="#F6C76A" d="M24 31 C21.6 28.6 22.4 25.4 24 23.4 C25.6 25.4 26.4 28.6 24 31 Z"/>' +
+      '<g fill="' + c + '"><circle cx="8" cy="15" r="1.6"/><circle cx="40" cy="12" r="1.3"/><circle cx="39" cy="40" r="1.1"/></g>');
+    /* bordado: flor bordada de tenango — pétalos rosa, centro naranja y amarillo,
+       dos hojas verdes y puntadas turquesa (colores fijos: son hilos) */
+    if (a === 'bordado') {
+      var pb = '';
+      for (var q = 0; q < 6; q++) pb += '<ellipse transform="rotate(' + (q * 60) + ' 24 20)" cx="24" cy="11.5" rx="4.6" ry="7.2"/>';
+      return svg('<g fill="#3E9A5A"><path d="M24 30 C18 30 11 33 7 40 C14 41 20 37 24 31 Z"/><path d="M24 30 C30 30 37 33 41 40 C34 41 28 37 24 31 Z"/></g>' +
+        '<path d="M24 28 V45" stroke="#3E9A5A" stroke-width="1.8"/>' +
+        '<g fill="' + ACENTO + '">' + pb + '</g>' +
+        '<circle cx="24" cy="20" r="5.2" fill="#F08A2E"/><circle cx="24" cy="20" r="2.4" fill="#F6C33B"/>' +
+        '<g fill="#2BA8A6"><circle cx="9" cy="14" r="1.6"/><circle cx="39" cy="14" r="1.6"/><circle cx="13" cy="25" r="1.2"/><circle cx="35" cy="25" r="1.2"/></g>');
+    }
     /* instantanea: un nomeolvides — cinco pétalos redondos y el centro claro */
     if (a === 'nomeolvides') {
       var nm = '';
@@ -527,6 +590,30 @@
         P + '.tl{ border-radius:24px!important; border:1px solid ' + B + '!important; }',
         P + '.padres .av{ border:0!important; box-shadow:0 0 0 3px rgba(' + RP + ',.95), 0 0 0 5px ' + ORO + ', 0 0 0 9px rgba(' + RP + ',.9), 0 0 0 10px ' + M + '!important; }',
         P + '.pasecard{ border-radius:24px!important; }'
+      );
+    }
+    /* picado: tarjeta ROSA MEXICANO con el borde calado (ondas y agujeritos,
+       como papel picado o encaje), pespunte blanco por dentro y letra blanca.
+       Como el boleto de abordar: se invierte la tinta SOLO adentro. */
+    if (f === 'picado') {
+      var PIC = 'radial-gradient(circle 8px at 50% 0, #0000 96%, #000) top/16px 51% repeat-x, radial-gradient(circle 8px at 50% 100%, #0000 96%, #000) bottom/16px 51% repeat-x';
+      var AG = 'radial-gradient(circle 2.2px, ' + PAPEL + ' 95%, #0000) 8px 12px/16px 100% repeat-x, radial-gradient(circle 2.2px, ' + PAPEL + ' 95%, #0000) 8px calc(100% - 12px)/16px 100% repeat-x';
+      A.push(
+        P + ':is(.evento,.hotel,.tl){ border-radius:0!important; border:0!important; background-color:' + ACENTO + '!important; background-image:none!important; -webkit-mask:' + PIC + '!important; mask:' + PIC + '!important; box-shadow:inset 0 0 0 14px ' + ACENTO + ', inset 0 0 0 15.5px rgba(255,255,255,.0)!important; outline:1.5px dashed rgba(255,255,255,.85)!important; outline-offset:-20px!important; padding-top:34px!important; padding-bottom:34px!important; overflow:hidden!important; position:relative!important; }',
+        P + ':is(.evento,.hotel,.tl)::after{ content:""!important; position:absolute!important; inset:0!important; pointer-events:none!important; background:' + AG + '!important; z-index:2!important; }',
+        P + '.evento .ph{ border-radius:0!important; margin:28px 28px 0!important; width:auto!important; border:4px solid #FFFFFF!important; }',
+        P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:none!important; }',
+        P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d,.det,p,.addr){ color:rgba(255,255,255,.92)!important; -webkit-text-fill-color:rgba(255,255,255,.92)!important; }',
+        P + '.tl::before{ background-image:radial-gradient(circle, rgba(255,255,255,.9) 1.1px, rgba(0,0,0,0) 1.2px)!important; }',
+        P + '.tl > .tl-prog{ background-color:#FFFFFF!important; }',
+        /* los botones de adentro van en la tinta (ciruela) con letra blanca */
+        P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; }',
+        /* la banda de la frase sin desenfoque en vivo (traba el iPad) */
+        P + '#bandbg{ filter:none!important; }',
+        /* la frase va sobre el papel bordado (claro): letra en la tinta, no blanca */
+        P + '.fraseSec.band .frase, ' + P + '.fraseSec.band .frase *{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; text-shadow:0 0 12px rgba(255,255,255,.9)!important; }',
+        P + '.padres .av{ border-radius:50%!important; border:0!important; box-shadow:0 0 0 3px #FFFFFF, 0 0 0 6px ' + ACENTO + ', 0 0 0 7.5px rgba(255,255,255,.9), 0 0 0 9px ' + ACENTO + '!important; }',
+        P + '.pasecard{ border-radius:6px!important; }'
       );
     }
     if (f === 'arco') A.push(

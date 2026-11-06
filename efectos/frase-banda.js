@@ -21,6 +21,12 @@
      zoom:  100–250 (%) acercar la foto, sin tocar la letra.
      foco:  0–100 (%) qué parte de la foto se ve (0 arriba, 50 centro, 100 abajo).
      Los tres son opt-in: sin tocarlos, nada cambia (invitaciones ya entregadas).
+     ★ 6/11 (Maki: «la frase queda suelta, sin diseño; acordate la bandeja de
+       plata de perlas»): EL MARCO. La frase va ADENTRO de una pieza (marco
+       barroco, corona bordada, bandeja de plata…), con el centro liso para la letra.
+     marco:      link de la imagen del marco (vertical 3:4, centro liso). Vacío = sin marco.
+     marcoTinta: color de la letra dentro del marco (vacío = la del marco elegido).
+     Biblioteca: window.INVMARCOS (abajo). Opt-in: sin marco, todo igual.
    La tipografía, el tamaño, el color y el texto ya estaban en PRINCIPAL
    (fraseFont, fraseSize, fraseColor, frase) y los sigue pintando el motor.
    La foto es «Fondo sección frase larga» (img_c_fondo-seccion-frase-larga); el
@@ -39,6 +45,22 @@
     oscuro:         'rgba(0,0,0,.50)'
   };
   var POS = { arriba: 'flex-start', centro: 'center', abajo: 'flex-end' };
+  var CL = 'https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto,w_900/invitame/marcos/';
+  /* la biblioteca de marcos: centro liso, vertical 3:4. tinta = color de letra que va bien adentro */
+  window.INVMARCOS = window.INVMARCOS || [
+    { id: 'barroco-rosas',  nombre: 'Barroco dorado con rosas rojas (centro terciopelo rojo)', url: CL + 'mk-barroco-rosas',  tinta: '#FBEFD9' },
+    { id: 'bordado-flores', nombre: 'Corona de flores bordadas mexicanas (centro algodón)',     url: CL + 'mk-bordado-flores', tinta: '#7A1A47' },
+    { id: 'bandeja-plata',  nombre: 'Bandeja de plata con perlas',                               url: CL + 'mk-bandeja-plata',  tinta: '#3A3A44' },
+    { id: 'acuarela-rosas', nombre: 'Corona de rosas en acuarela (centro papel crema)',          url: CL + 'mk-acuarela-rosas', tinta: '#5A4038' },
+    { id: 'deco-oro',       nombre: 'Art déco dorado sobre negro',                               url: CL + 'mk-deco-oro',       tinta: '#F2E3B8' },
+    { id: 'eucalipto',      nombre: 'Corona de eucalipto (centro papel crema)',                  url: CL + 'mk-eucalipto',      tinta: '#3E4A3A' },
+    { id: 'faroles-lila',   nombre: 'Faroles de papel y glicinas lila (centro papel lavanda)',  url: CL + 'mk-faroles-lila',   tinta: '#43295F' }
+  ];
+  function marcoDe(c) {
+    var u = String(c.marco || '').trim(); if (!u) return null;
+    var m = window.INVMARCOS.filter(function (x) { return x.id === u || x.url === u; })[0];
+    return { url: m ? m.url : u, tinta: String(c.marcoTinta || '').trim() || (m ? m.tinta : '') };
+  }
 
   function veloSegunLetra() {
     try {
@@ -124,7 +146,8 @@
     var alto = Math.max(0, Math.min(900, parseInt(c.alto, 10) || 0));
     var zoom = Math.max(100, Math.min(250, parseInt(c.zoom, 10) || 100));
     var foco = (c.foco === undefined || c.foco === '' || c.foco === null) ? null : Math.max(0, Math.min(100, parseInt(c.foco, 10) || 0));
-    var firma = alto + '|' + zoom + '|' + foco + '|' + (window.INVNUEVA && window.INVNUEVA() ? 'N|' : 'V|') + foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
+    var mk = marcoDe(c);
+    var firma = (mk ? mk.url + mk.tinta : '') + '|' + alto + '|' + zoom + '|' + foco + '|' + (window.INVNUEVA && window.INVNUEVA() ? 'N|' : 'V|') + foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
     if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno'); return; }
     ultima = firma;
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
@@ -149,6 +172,10 @@
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
       css.push(S + ' #bandfg{background-size:cover!important' + (foco === null ? ';background-position:center!important' : '') + '}');
+      /* ★ 6/11: la copia borrosa (#bandbg) queda TAPADA por la foto que cubre la
+         franja, pero su blur(18px) en vivo igual traba el iPad. Sin filtro no se
+         ve ninguna diferencia. Sólo en invitaciones nuevas (INVNUEVA). */
+      if (window.INVNUEVA && window.INVNUEVA()) css.push(S + ' #bandbg{filter:none!important}');
     }
     if (velo === 'sinfoto') {
       css.push(S + ' #bandbg, ' + S + ' #bandfg{background:none!important;filter:none!important}');
@@ -188,6 +215,14 @@
     if (fuente) css.push(S + ' > p.frase.frase{font-family:' + (/[,'"]/.test(fuente) ? fuente : "'" + fuente + "'") + '!important}');
     if (/^(400|500|600|700|800)$/.test(peso)) css.push(S + ' > p.frase.frase{font-weight:' + peso + '!important}');
     css.push(S + '{align-items:' + POS[pos] + '!important}');
+    /* 3. EL MARCO — la frase adentro de la pieza (va al final: gana) */
+    if (mk) {
+      var P2 = S + ' > p.frase.frase';
+      css.push(P2 + '{background:url("' + mk.url + '") center/100% 100% no-repeat!important;width:min(90%,440px)!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;aspect-ratio:3/4!important;box-sizing:border-box!important;padding:24% 22%!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;filter:drop-shadow(0 10px 22px rgba(0,0,0,.28))!important}');
+      if (mk.tinta) css.push(P2 + '{color:' + mk.tinta + '!important;-webkit-text-fill-color:' + mk.tinta + '!important;text-shadow:none!important}');
+      css.push(S + ' #frase-tint{background:transparent!important}');
+      if (!tamN) css.push(P2 + '{font-size:clamp(14px,3.9vw,18px)!important;line-height:1.5!important}');
+    }
     /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
     if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
     if (pos === 'abajo')  css.push(S + '{padding-bottom:clamp(56px,20%,140px)!important}');
@@ -263,8 +298,59 @@
     b.onclick = function () { traerDelDiseno(borrador() || d, b); };
     caja.appendChild(b);
 
-    /* ---- 2. EL TEXTO ---- */
-    caja.appendChild(titulo('2. El texto'));
+    /* ---- 2. EL MARCO ---- */
+    caja.appendChild(titulo('2. El marco (la frase adentro de una pieza)'));
+    var am = document.createElement('div');
+    am.textContent = 'Para que la frase no quede suelta: va adentro de un marco con el centro liso. La foto de fondo de la franja sigue atrás.';
+    am.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:8px;line-height:1.35';
+    caja.appendChild(am);
+    var ops = [['', 'Sin marco']].concat(window.INVMARCOS.map(function (m) { return [m.id, m.nombre]; }));
+    var esLink = c.marco && !window.INVMARCOS.some(function (m) { return m.id === c.marco; });
+    if (esLink) ops.push([c.marco, 'Marco propio (link)']);
+    caja.appendChild(select('Marco', ops, c.marco || '', function (v) { var f = datos(borrador() || d); if (v) f.marco = v; else delete f.marco; }));
+    var gl = document.createElement('div'); gl.className = 'grp';
+    gl.innerHTML = '<label>…o el link de un marco propio (vertical 3:4, centro liso)</label>';
+    var il = document.createElement('input'); il.type = 'text'; il.placeholder = 'https://…'; il.value = esLink ? c.marco : ''; il.style.width = '100%';
+    il.oninput = function () { var f = datos(borrador() || d); var v = il.value.trim(); if (v) f.marco = v; else delete f.marco; refrescar(); };
+    gl.appendChild(il); caja.appendChild(gl);
+    /* 6/11 · Maki: «que también puedan ellas subir la imagen que quieran; decirles el tamaño» */
+    var gs = document.createElement('div'); gs.className = 'grp';
+    gs.innerHTML = '<label>…o subir un marco propio desde la compu</label>' +
+      '<div style="font-size:11.5px;opacity:.7;line-height:1.4;margin:2px 0 6px">Medida recomendada: <b>1200 × 1600 px</b> (vertical 3:4). PNG o JPG, hasta 3 MB. ' +
+      'El centro tiene que ser <b>liso</b> (sin dibujos) en por lo menos el 55 % del ancho y el 50 % del alto: ahí va la frase. ' +
+      'Que el adorno del borde tenga que ver con el diseño de la invitación (mismas flores, mismos colores, mismo motivo).</div>';
+    var fu = document.createElement('input'); fu.type = 'file'; fu.accept = 'image/png,image/jpeg,image/webp';
+    var est = document.createElement('div'); est.style.cssText = 'font-size:11.5px;margin-top:4px';
+    fu.onchange = function () {
+      var file = fu.files && fu.files[0]; if (!file) return;
+      if (file.size > 3 * 1024 * 1024) { est.textContent = 'Pesa más de 3 MB: achicala y probá de nuevo.'; return; }
+      est.textContent = 'Subiendo…';
+      var fd = new FormData(); fd.append('file', file); fd.append('upload_preset', 'invitame_unsigned'); fd.append('folder', 'invitame/marcos-propios');
+      fetch('https://api.cloudinary.com/v1_1/oc8cgqt4/image/upload', { method: 'POST', body: fd })
+        .then(function (r) { return r.json(); })
+        .then(function (r) {
+          if (!r.secure_url) throw new Error((r.error && r.error.message) || 'sin link');
+          var aviso = '';
+          if (r.width && r.height) {
+            var ar = r.width / r.height;
+            if (ar < 0.66 || ar > 0.84) aviso = ' Ojo: no es vertical 3:4 (' + r.width + '×' + r.height + '), se va a estirar.';
+            else if (r.width < 900) aviso = ' Ojo: es chica (' + r.width + ' px de ancho), puede verse borrosa.';
+          }
+          var url = r.secure_url.replace('/upload/', '/upload/q_auto,f_auto,w_900/');
+          var f = datos(borrador() || d); f.marco = url; il.value = url;
+          est.textContent = 'Listo, marco puesto.' + aviso; refrescar();
+        })
+        .catch(function (e) { est.textContent = 'No se pudo subir: ' + e.message; });
+    };
+    gs.appendChild(fu); gs.appendChild(est); caja.appendChild(gs);
+    var gt = document.createElement('div'); gt.className = 'grp';
+    gt.innerHTML = '<label>Color de la letra adentro del marco (vacío = el del marco)</label>';
+    var it = document.createElement('input'); it.type = 'text'; it.placeholder = '#7A1A47'; it.value = c.marcoTinta || ''; it.style.width = '100%';
+    it.oninput = function () { var f = datos(borrador() || d); var v = it.value.trim(); if (v) f.marcoTinta = v; else delete f.marcoTinta; refrescar(); };
+    gt.appendChild(it); caja.appendChild(gt);
+
+    /* ---- 3. EL TEXTO ---- */
+    caja.appendChild(titulo('3. El texto'));
     /* la tipografía, el tamaño y el color son los campos de siempre de PRINCIPAL
        (fraseFont, fraseSize, fraseColor): se MUDAN acá, no se duplican */
     var slot = document.createElement('div'); slot.className = 'fb-texto-campos';

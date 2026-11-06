@@ -7,7 +7,7 @@
    llevan un claro/oscuro radial chico detrás del texto.
    ⭐ TONOS: fx.coleccion = 'fiesta-<tono>'  (y ?coleccion=fiesta-<tono> para probar)
         noche · plata · ejecutivo · gala · brindis · birrete · bokeh · urbano ·
-        abordar · jardin · mision
+        abordar · jardin · mision · encantada
       'fiesta' a secas = noche.
    ⚠️ VIENE APAGADA: sin fx.coleccion fiesta* no hace nada (viaja en todo.php).
    ⚠️ CONVIVE CON DEGRADÉ: su propio ID, su propia hoja (#col-fiesta), su propio
@@ -51,7 +51,10 @@
     abordar:   { papel:'#0E1A2E', papel2:'#08111F', panel:'#162640', filete:'#4A5C7A', tinta:'#F1EBDF', tinta2:'#CBC5B8', base:'abordar' },
     jardin:    { papel:'#15221A', papel2:'#0C150F', panel:'#1E2F23', filete:'#4D6650', tinta:'#F0E8D6', tinta2:'#CCC4B0', base:'jardin' },
     /* 4/11 · XV · Misión secreta: bóveda negra, láseres rubí y champagne (va con efectos/mision.js) */
-    mision:    { papel:'#0E0C0F', papel2:'#070608', panel:'#1A161B', filete:'#5A4A55', tinta:'#F3EADF', tinta2:'#CFC4BB', base:'mision' }
+    mision:    { papel:'#0E0C0F', papel2:'#070608', panel:'#1A161B', filete:'#5A4A55', tinta:'#F3EADF', tinta2:'#CFC4BB', base:'mision' },
+    /* 5/11 · XV · Rosa encantada: rojo rubí, oro y tarjetas marfil con festón */
+    /* 5/11 noche (Jazmín: «¿ese bordó no puede ser más rojo? rojo y dorado»): rojo rubí */
+    encantada: { papel:'#6A0C18', papel2:'#3C050C', panel:'#7C1220', filete:'#B07A48', tinta:'#FBEFD9', tinta2:'#F0DDBF', base:'encantada' }
   };
 
   /* ⭐ CADA TONO CON SU PROPIO DISEÑO (no sólo el color). Por tono:
@@ -116,7 +119,14 @@
        (Courier Prime) y la mira como viñeta. */
     mision:    { disp:'Oswald',       scr:'Pinyon Script',       txt:'Courier Prime', metal:'champagne',
                  adorno:'mira', forma:'deco', port:'deco',
-                 h2:['disp',30,'.06em',1,500], kick:['txt',12,'.3em',1,700], btn:['disp','.18em',1] }
+                 h2:['disp',30,'.06em',1,500], kick:['txt',12,'.3em',1,700], btn:['disp','.18em',1] },
+    /* 12 · XV · Rosa encantada (5/11/2026, referencia de Maki: XV de cuento en
+       bordó y oro). Sin personajes de nadie: la rosa bajo la campana de cristal,
+       rosas trepadoras y vitral dorado. Tarjetas MARFIL con festón y letra bordó
+       (como las de la referencia), versal Cinzel y la cursiva Great Vibes. */
+    encantada: { disp:'Cinzel',       scr:'Great Vibes',         txt:'Cormorant Garamond', metal:'oro',
+                 adorno:'campana', forma:'feston', port:'script',
+                 h2:['disp',24,'.08em',1,500], kick:['scr',30,'0',0,400], btn:['disp','.14em',1] }
   };
   var METALES = {
     oro:       ['#C9A44E', '#E0C57A'],
@@ -140,7 +150,8 @@
     'Outfit':           ':wght@400;500;600',
     'Barlow':           ':ital,wght@0,400;0,500;0,600;1,400',
     'Oswald':           ':wght@400;500;600;700',
-    'Courier Prime':    ':ital,wght@0,400;0,700;1,400'
+    'Courier Prime':    ':ital,wght@0,400;0,700;1,400',
+    'Cormorant Garamond': ':ital,wght@0,400;0,500;0,600;1,400'
   };
 
   /* ------------------------------------------------- lo que pinta cada tono
@@ -183,11 +194,18 @@
     var M = METALES[E.metal] || METALES.oro;
     ORO = M[0]; ORO_CL = M[1]; ACENTO = E.acento || ORO;
     RP = rgb(PAPEL); RP2 = rgb(PAPEL2); RPN = rgb(PANEL); RO = rgb(ORO); RA = rgb(ACENTO);
-    var pz = CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
+    /* 6/11 · LA PIEZA EN CÍRCULO, ENTERA (Maki: «si metes una flor no puedes recortar la flor»).
+       ev-<tono>-pieza-circ = cuadrado 1000 con el objeto completo adentro del círculo y el
+       fondo extendido (scratchpad circ.py). Sólo invitaciones nuevas: las entregadas siguen
+       con el recorte de antes (62 % del centro). */
+    var NUEVA = window.INVNUEVA ? window.INVNUEVA() : false;
+    var pz = NUEVA ? CL + 'r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza-circ'
+                   : CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/w_SZ,q_auto,f_png/invitame/eventos/ev-' + k + '-pieza';
     PIEZA = pz.replace('SZ', '300'); PIEZA_CH = pz.replace('SZ', '120'); PIEZA_PASE = pz.replace('SZ', '160');
     /* tapa opaca de la raspadita: la pieza APLANADA sobre el papel (§85.1: con
        huecos el número de abajo se ve a través) */
-    TAPA_RASP  = CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/b_rgb:' + PAPEL2.slice(1) + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
+    TAPA_RASP  = NUEVA ? CL + 'w_360,h_360,c_fill,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza-circ'
+                 : CL + 'c_crop,g_center,w_0.62,h_0.62/r_max/b_rgb:' + PAPEL2.slice(1) + ',c_pad,w_360,h_360,q_auto,f_jpg/invitame/eventos/ev-' + k + '-pieza';
     /* ⚠️ §48: las tapas MUESTRAN lo que hacen — proyector y tocadiscos de la
        temática, NO recortes del fondo */
     TAPA_VIDEO = CL + 'c_fill,w_900,h_506,g_auto,q_auto,f_auto/invitame/eventos/ev-' + k + '-tapa-video';
@@ -300,6 +318,16 @@
       '<circle cx="24" cy="24" r="13.5" fill="none" stroke="' + c + '" stroke-width="2.6"/>' +
       '<path d="M24 3V15M24 33V45M3 24H15M33 24H45" stroke="' + c + '" stroke-width="2.6" stroke-linecap="round"/>' +
       '<circle cx="24" cy="24" r="3.4" fill="' + c + '"/>');
+    /* encantada: la rosa bajo la campana de cristal, sobre su pie */
+    if (a === 'campana') return svg(
+      '<path d="M13 38 V20 C13 12 18 6 24 6 C30 6 35 12 35 20 V38" fill="none" stroke="' + c + '" stroke-width="2.2"/>' +
+      '<circle cx="24" cy="4.2" r="2" fill="' + c + '"/>' +
+      '<path d="M17 18 C17 13 19.5 10 22 9" fill="none" stroke="' + c + '" stroke-width="1.2" stroke-linecap="round" opacity=".7"/>' +
+      '<g fill="' + c + '"><path d="M24 26 C19 26 18 21 20.5 18.5 C21 21.5 23 22 24 21.5 C25 22 27 21.5 27.5 18.5 C30 21 29 26 24 26 Z"/>' +
+      '<path d="M24 21.5 C21.6 21 21.2 18 22.6 16.4 C23.2 18 24.8 18 25.4 16.4 C26.8 18 26.4 21 24 21.5 Z"/>' +
+      '<rect x="23.2" y="26" width="1.6" height="10"/><path d="M24 31 C21 30 19 31 18 33.5 C21 33.6 23 33 24 31 Z"/>' +
+      '<rect x="8" y="38" width="32" height="3.4" rx="1.2"/><rect x="11" y="41.4" width="26" height="3.6" rx="1.2"/></g>' +
+      '<circle cx="31" cy="29" r="1" fill="' + c + '"/><circle cx="17" cy="27" r=".9" fill="' + c + '"/>');
     if (a === 'rosa') return svg(
       '<g fill="' + c + '"><path d="M24 30 C14 30 11 21 16 16 C17 22 21 23 24 22 C27 23 31 22 32 16 C37 21 34 30 24 30 Z"/><path d="M24 22 C19 21 18 15 21 12 C22 15 23 16 24 16 C25 16 26 15 27 12 C30 15 29 21 24 22 Z"/>' +
       '<path d="M24 30 V45" stroke="' + c + '" stroke-width="1.8"/><path d="M24 38 C18 37 14 39 11 43 C17 43 21 42 24 38 Z"/><path d="M24 36 C30 34 34 35 37 39 C31 40 27 39 24 36 Z"/></g>' +
@@ -316,6 +344,7 @@
     if (a === 'burbujas') return 'radial-gradient(circle 4px at 20% 30%, rgba(' + RO + ',0) 60%, rgba(' + RO + ',.35) 70%, rgba(' + RO + ',0) 80%), radial-gradient(circle 2.5px at 70% 18%, rgba(' + RO + ',.45), rgba(' + RO + ',0) 80%), radial-gradient(circle 6px at 82% 66%, rgba(' + RO + ',0) 60%, rgba(' + RO + ',.28) 72%, rgba(' + RO + ',0) 84%)';
     if (a === 'birrete') return 'repeating-conic-gradient(from 0deg at 50% 0, rgba(' + RO + ',.06) 0 3deg, rgba(0,0,0,0) 3deg 12deg)';
     if (a === 'foquitos') return 'radial-gradient(circle 46px at 18% 26%, rgba(' + RO + ',.14), rgba(' + RO + ',0)), radial-gradient(circle 30px at 78% 14%, rgba(' + RO + ',.12), rgba(' + RO + ',0)), radial-gradient(circle 58px at 66% 72%, rgba(' + RO + ',.10), rgba(' + RO + ',0))';
+    if (a === 'campana') return 'radial-gradient(ellipse 60% 40% at 50% 0, rgba(' + RO + ',.10), rgba(' + RO + ',0) 70%), repeating-linear-gradient(90deg, rgba(0,0,0,.10) 0 2px, rgba(255,255,255,.015) 2px 5px)';
     if (a === 'rayo') return 'linear-gradient(112deg, rgba(255,255,255,0) 28%, rgba(255,255,255,.05) 36%, rgba(255,255,255,0) 44%), linear-gradient(112deg, rgba(255,255,255,0) 58%, rgba(' + RA + ',.05) 63%, rgba(255,255,255,0) 68%)';
     return 'linear-gradient(135deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.04) 50%, rgba(255,255,255,0) 70%)';
   }
@@ -676,6 +705,29 @@
         P + ':is(.evento,.hotel) .btn *{ color:inherit!important; -webkit-text-fill-color:currentColor!important; }'
       );
     }
+    /* encantada: TARJETA MARFIL CON FESTÓN (borde de ondas arriba y abajo),
+       doble filete de oro adentro y letra bordó. Como el boleto: se invierten
+       tinta y papel SOLO adentro de la tarjeta. */
+    if (f === 'feston') {
+      var FE = 'radial-gradient(circle 9px at 50% 0, #0000 97%, #000) top/18px 51% repeat-x, radial-gradient(circle 9px at 50% 100%, #0000 97%, #000) bottom/18px 51% repeat-x';
+      var BO = rgb(PAPEL);
+      A.push(
+        P + ':is(.evento,.hotel,.tl){ border-radius:0!important; border:0!important; background-color:' + TINTA + '!important; background-image:none!important; -webkit-mask:' + FE + '!important; mask:' + FE + '!important; box-shadow:inset 0 0 0 14px ' + TINTA + ', inset 0 0 0 15px ' + ORO + ', inset 0 0 0 19px ' + TINTA + ', inset 0 0 0 20px rgba(' + RO + ',.55)!important; padding-top:30px!important; padding-bottom:30px!important; }',
+        P + '.evento .ph{ border-radius:0!important; margin:24px 24px 0!important; width:auto!important; }',
+        P + '.tl > .it::before{ background-color:' + TINTA + '!important; box-shadow:0 0 0 1px ' + ORO + ', 0 0 0 5px ' + TINTA + ', 0 2px 6px rgba(0,0,0,.2)!important; }',
+        P + '.tl::before{ background-image:radial-gradient(circle, rgba(' + RO + ',.9) 1.1px, rgba(0,0,0,0) 1.2px)!important; }',
+        P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:none!important; }',
+        P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d,.det,p,.addr){ color:rgba(' + BO + ',.78)!important; -webkit-text-fill-color:rgba(' + BO + ',.78)!important; }',
+        P + ':is(.evento,.hotel,.tl) :is(.hora,.k){ color:#8A5A1E!important; -webkit-text-fill-color:#8A5A1E!important; }',
+        /* los botones de adentro quedan PERLA (los del motor) con letra bordó: el
+           perla gana el fondo con su propia regla, así que sólo se pinta la letra */
+        P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; }',
+        /* la banda de la frase SIN desenfoque en vivo (traba el iPad): la foto ya es suave */
+        P + '#bandbg{ filter:none!important; }',
+        P + '.frame .col-dc-tit.col-dc-tit, ' + P + '.frame .col-dc-tit *{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; opacity:1!important; }',
+        P + '.padres .av{ border:0!important; box-shadow:0 0 0 2px ' + PAPEL + ', 0 0 0 3px ' + ORO + ', 0 0 0 7px ' + PAPEL + ', 0 0 0 8px rgba(' + RO + ',.5)!important; }'
+      );
+    }
     /* urbano: cartel pegado — recto, sombra dura mostaza */
     if (f === 'cartel') A.push(
       P + ':is(.evento,.hotel){ border-radius:0!important; border:1px solid rgba(255,255,255,.10)!important; box-shadow:7px 7px 0 0 ' + ACENTO + '!important; margin-right:10px!important; }',
@@ -848,6 +900,10 @@
     /* el chequeo decide «oscura» mirando .frame; con el fondo adelante puede medir
        transparente. La marca queda puesta, como en Bella. */
     raiz.setAttribute('data-col-oscura', '1');
+    /* 5/11: las tarjetas de PAPEL (boleto, festón) son claras A PROPÓSITO; el
+       chequeo las reconoce por esta marca y no las cuenta como «parche claro». */
+    if (E.forma === 'boleto' || E.forma === 'feston') raiz.setAttribute('data-tarjetas-claras', '1');
+    else raiz.removeAttribute('data-tarjetas-claras');
     ponerAdornos();
     medirCarta();
     marcarPadres();
@@ -871,6 +927,7 @@
       raiz.removeAttribute('data-coleccion');
       raiz.removeAttribute('data-fiesta-tono');
       if (raiz.getAttribute('data-col-oscura') === '1') raiz.removeAttribute('data-col-oscura');
+      raiz.removeAttribute('data-tarjetas-claras');
       sacarAdornos();
       soltarCarta();
       if (raiz.getAttribute('data-marca-propia') === ID) raiz.removeAttribute('data-marca-propia');

@@ -217,6 +217,10 @@
       }
       if (n.tagName === 'SECTION' &&
           /url\(/.test(getComputedStyle(n).backgroundImage || '')) return true;
+      /* 5/11: el PIE con la foto del cierre (div.footer, background-image: --final)
+         también es una foto. Las colecciones claras la pintan ahí. */
+      if (n.classList && n.classList.contains('footer') &&
+          /url\(/.test(getComputedStyle(n).backgroundImage || '')) return true;
       if (n === marco) break;
       n = n.parentElement;
     }
@@ -503,6 +507,8 @@
          molde claro asomando, no piezas que alguien eligió. */
       if (/^(BUTTON|A|INPUT|SELECT|TEXTAREA)$/.test(el.tagName)) return;
       if (el.closest && el.closest(".pasecard")) return;
+      /* 5/11: tarjetas de papel claras por diseño (boleto, festón): las marca la colección */
+      if (document.documentElement.hasAttribute('data-tarjetas-claras') && el.closest && el.closest('.evento,.hotel,.tl')) return;
       if (r.width * r.height < 12000) return;       /* piezas chicas: no cuentan */
       if (lum(c) > 0.5) {
         malos.push((el.className || el.tagName) + ' rgb(' + c.slice(0, 3).map(Math.round) + ')');
@@ -803,6 +809,44 @@
       : Promise.resolve();
     return probar.then(function () {
       return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' problema(s) de carga' : 'todo llega', detalle: malos };
+    });
+  });
+
+  /* ★ 6/11/2026 — Maki, en la raspadita de la mexicana: «si es círculo, la
+     imagen también tiene que ser círculo». Una foto VERTICAL metida en un
+     círculo deja franjas a los costados (o se estira). Busca todo lo redondo
+     (botón, tapa, medallón, avatar) que lleva una foto y mide la foto: si no es
+     cuadrada y no está en «cover», falla. */
+  regla('circulos-llenos', 'Lo redondo lleva la foto entera (sin franjas ni estirada)', function () {
+    var cand = [];
+    [].forEach.call(document.querySelectorAll('body *'), function (e) {
+      if (!visible(e)) return;
+      var r = e.getBoundingClientRect();
+      if (r.width < 36 || Math.abs(r.width - r.height) > r.width * 0.08) return;
+      var cs = getComputedStyle(e);
+      var rad = parseFloat(cs.borderTopLeftRadius) || 0;
+      var redondo = rad >= r.width * 0.45 || /50%/.test(cs.borderTopLeftRadius) || /circle/.test(cs.clipPath || '');
+      if (!redondo) return;
+      if (e.tagName === 'IMG') { if (cs.objectFit !== 'cover') cand.push({ el: e, url: e.currentSrc || e.src, modo: 'img:' + cs.objectFit }); return; }
+      var m = (cs.backgroundImage || '').match(/url\("?([^")]+)"?\)/g);
+      if (!m || m.length !== 1) return;
+      if (cs.backgroundSize === 'cover') return;
+      cand.push({ el: e, url: m[0].replace(/^url\("?|"?\)$/g, ''), modo: 'fondo:' + cs.backgroundSize });
+    });
+    var malos = [];
+    return Promise.all(cand.slice(0, 40).map(function (c) {
+      return new Promise(function (ok) {
+        var im = new Image();
+        im.onload = function () {
+          var a = im.naturalWidth / im.naturalHeight;
+          if (Math.abs(a - 1) > 0.06) malos.push((c.el.id ? '#' + c.el.id : String(c.el.className).slice(0, 30)) + ' · foto ' + im.naturalWidth + '×' + im.naturalHeight + ' en un círculo (' + c.modo + ') · ' + c.url.slice(-60));
+          ok();
+        };
+        im.onerror = function () { ok(); };
+        im.src = c.url;
+      });
+    })).then(function () {
+      return { pasa: malos.length === 0, nota: malos.length ? malos.length + ' círculo(s) con la foto mal puesta' : cand.length + ' redondos con foto, todos llenos', detalle: malos };
     });
   });
 

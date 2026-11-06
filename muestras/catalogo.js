@@ -314,6 +314,70 @@
       paleta:  ["#0e0c0f", "#9b1b30", "#d8c3a0", "#f3eadf"],
       tipos:   ["xv"]
     },
+    /* 5/11/2026 · Maki: XV de cuento en bordó y oro (colección fiesta-encantada).
+       Motivos propios: rosa bajo campana, rosas trepadoras, vitral. Sin personajes. */
+    /* 5/11/2026 · Jazmín: XV charra en rosa mexicano (colección celebra-bordado). */
+    'bordado-mexicano': {
+      nombre:  "Bordado mexicano",
+      bajada:  "Vestido charro bordado, papel picado y flores de colores.",
+      muestra: 'fernanda-bordado-mis15',
+      foto:    '/formulario/disenos/fernanda-bordado-mis15.webp',
+      color:   '#C2296F',
+      color2:  '#7A1A47',
+      paleta:  ["#FCF8F5", "#C2296F", "#F08A2E", "#2BA8A6"],
+      tipos:   ["xv"]
+    },
+    'rosa-encantada': {
+      nombre:  "Rosa encantada",
+      bajada:  "Escalera de oro, cascadas de rosas rojas y un vitral encendido.",
+      muestra: 'isabella-rosa-mis15',
+      foto:    '/formulario/disenos/isabella-rosa-mis15.webp',
+      color:   '#7a0f1c',
+      color2:  '#2a070d',
+      paleta:  ["#2a070d", "#7a0f1c", "#c9a44e", "#f6e9d2"],
+      tipos:   ["xv"]
+    },
+    /* 6/11/2026 · Jazmín: mesa de banquete nude (celebra-mesa) y XV lila con faroles (celebra-faroles) */
+    'mesa-nude': {
+      nombre:  "Mesa nude",
+      bajada:  "Camino de gasa, velas y flores de campo en rosa empolvado.",
+      muestra: 'sofia-y-diego-mesa',
+      foto:    '/formulario/disenos/sofia-y-diego-mesa.webp',
+      color:   '#B98577',
+      color2:  '#4E3830',
+      paleta:  ["#FBF7F3", "#E6D5C9", "#B98577", "#4E3830"],
+      tipos:   ["boda"]
+    },
+    'faroles-lila': {
+      nombre:  "Faroles lila",
+      bajada:  "Un cielo de faroles, lavanda y torre de cuento.",
+      muestra: 'luna-faroles-mis15',
+      foto:    '/formulario/disenos/luna-faroles-mis15.webp',
+      color:   '#9467C2',
+      color2:  '#43295F',
+      paleta:  ["#FAF6FC", "#DCCBEA", "#9467C2", "#43295F"],
+      tipos:   ["xv"]
+    },
+    'rosa-encantada-quince': {
+      nombre:  "Rosa encantada · con la quinceañera",
+      bajada:  "La quinceañera de gala bajo el vitral, rojo y dorado.",
+      muestra: 'isabella-rosa2-mis15',
+      foto:    '/formulario/disenos/isabella-rosa2-mis15.webp',
+      color:   '#7a0f1c',
+      color2:  '#3c050c',
+      paleta:  ["#3c050c", "#6a0c18", "#c9a44e", "#fbefd9"],
+      tipos:   ["xv"]
+    },
+    'rosa-encantada-cristal': {
+      nombre:  "Rosa encantada · bajo cristal",
+      bajada:  "La rosa bajo la campana, velas y luna azul; el nombre arriba.",
+      muestra: 'isabella-rosa3-mis15',
+      foto:    '/formulario/disenos/isabella-rosa3-mis15.webp',
+      color:   '#7a0f1c',
+      color2:  '#3c050c',
+      paleta:  ["#3c050c", "#6a0c18", "#c9a44e", "#fbefd9"],
+      tipos:   ["xv"]
+    },
     'monarca': {
       nombre:  "Mariposa monarca",
       bajada:  "Monarcas volando sobre un bosque de oyameles.",
