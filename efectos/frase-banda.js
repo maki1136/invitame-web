@@ -213,10 +213,10 @@
     /* 3. EL MARCO — la frase adentro de la pieza (va al final: gana) */
     if (mk) {
       var P2 = S + ' > p.frase.frase';
-      css.push(P2 + '{background:url("' + mk.url + '") center/100% 100% no-repeat!important;width:min(90%,440px)!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;aspect-ratio:3/4!important;box-sizing:border-box!important;padding:22% 17%!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;filter:drop-shadow(0 10px 22px rgba(0,0,0,.28))!important}');
+      css.push(P2 + '{background:url("' + mk.url + '") center/100% 100% no-repeat!important;width:min(90%,440px)!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;aspect-ratio:3/4!important;box-sizing:border-box!important;padding:24% 22%!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;filter:drop-shadow(0 10px 22px rgba(0,0,0,.28))!important}');
       if (mk.tinta) css.push(P2 + '{color:' + mk.tinta + '!important;-webkit-text-fill-color:' + mk.tinta + '!important;text-shadow:none!important}');
       css.push(S + ' #frase-tint{background:transparent!important}');
-      if (!tamN) css.push(P2 + '{font-size:clamp(15px,4.4vw,19px)!important;line-height:1.5!important}');
+      if (!tamN) css.push(P2 + '{font-size:clamp(14px,3.9vw,18px)!important;line-height:1.5!important}');
     }
     /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
     if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
