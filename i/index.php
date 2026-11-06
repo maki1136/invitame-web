@@ -750,8 +750,11 @@ function iv_nombres_reales($html, $n1, $n2, $kick) {
     array('~(<h1 class="names" id="pv-names">).*?(</h1>)~s', $pv),
     array('~(<div class="epd" id="ep-date">)[^<]*(</div>)~', ''),
     array('~(<div class="s" id="fin-texto">)[^<]*(</div>)~', ''),
+    /* 6/11: la fecha de ejemplo de la portada («Sábado 28 · Noviembre 2026») */
+    array('~(<div class="fecha" id="pv-fecha">)[^<]*(</div>)~', ''),
   );
   if ($kick !== '') $cambios[] = array('~(<div class="epk" id="ep-kick">)[^<]*(</div>)~', $e($kick));
+  if ($kick !== '') $cambios[] = array('~(<div class="kicker" id="pv-kick">)[^<]*(</div>)~', $e($kick));
   foreach ($cambios as $c) {
     $adentro = $c[1]; $n = 0;
     $r = preg_replace_callback($c[0], function ($m) use ($adentro) { return $m[1] . $adentro . $m[2]; }, $html, 1, $n);
@@ -976,6 +979,44 @@ if ($slug !== '') {
     . 'var s=(Date.now()-t0)/1000;if((tapar||s>3)&&!cart)poner(false);if(s>10){poner(true);clearInterval(iv);'
     . 'var w=setInterval(function(){if(listo()){sacar();clearInterval(w);}},500);}},250);})();</script>';
   $tpl = preg_replace_callback('~<body([^>]*)>~i', function ($m) use ($guardia) { return '<body' . $m[1] . '>' . $guardia; }, $tpl, 1);
+}
+
+/* ★ 6/11/2026 — EL PASE DE «HUGO Y LUCÍA» EN EL LINK DE UN INVITADO.
+   Jazmín (citlalli-y-hedwin-jesus): «le mandé el link a la familia Zavala y
+   sale el pase de Hugo y Lucía… al rato ya está correcto».
+   El molde trae escrito un invitado de EJEMPLO en el pase (Hugo y Lucía,
+   2 personas, mesa 12) y el del formulario. El navegador lo reemplaza recién
+   cuando la base le devuelve al invitado; con señal lenta, o si esa lectura
+   falla, el invitado ve el pase de OTRO. Se resuelve ACÁ, antes de que corra
+   un solo script:
+   · con &g= → se lee el invitado y su pase sale escrito desde el servidor;
+   · sin &g=, o si la base no contesta → el pase sale VACÍO, nunca el ejemplo.
+   Mismo patrón que «NUNCA la boda de ejemplo» (2/11). */
+if ($slug !== '') {
+  $gNom = ''; $gPer = ''; $gMesa = '';
+  $tkp = isset($_GET['g']) ? preg_replace('/[^A-Za-z0-9]/', '', (string)$_GET['g']) : '';
+  if ($tkp !== '' && $tkp !== 'demo') {
+    $ugp = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT . '/databases/(default)/documents/inv_invitados/' . rawurlencode($slug . '__' . $tkp);
+    $cgp = curl_init($ugp);
+    curl_setopt_array($cgp, [CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 3, CURLOPT_TIMEOUT => 4, CURLOPT_SSL_VERIFYPEER => true]);
+    $rgp = curl_exec($cgp); $hgp = curl_getinfo($cgp, CURLINFO_HTTP_CODE); curl_close($cgp);
+    if ($rgp && $hgp == 200) {
+      $dgp = json_decode($rgp, true); $fgp = isset($dgp['fields']) ? $dgp['fields'] : array();
+      $val = function ($k) use ($fgp) {
+        if (!isset($fgp[$k]) || !is_array($fgp[$k])) return '';
+        foreach (array('stringValue', 'integerValue', 'doubleValue') as $t) if (isset($fgp[$k][$t])) return (string)$fgp[$k][$t];
+        return '';
+      };
+      $gNom = $val('nombre');
+      $gPer = $val('pases'); if ($gPer === '' || $gPer === '0') $gPer = $val('usosMax');
+      $gMesa = $val('mesa'); if ($gMesa === '') $gMesa = '-';
+    }
+  }
+  $e = function ($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); };
+  $tpl = preg_replace_callback('~(id="pv-gname"[^>]*>)[^<]*(<)~', function ($m) use ($gNom, $e) { return $m[1] . $e($gNom) . $m[2]; }, $tpl, 1);
+  $tpl = preg_replace_callback('~(id="pv-per"[^>]*>)[^<]*(<)~', function ($m) use ($gPer, $e) { return $m[1] . $e($gPer) . $m[2]; }, $tpl, 1);
+  $tpl = preg_replace_callback('~(id="pv-mesa"[^>]*>)[^<]*(<)~', function ($m) use ($gMesa, $e) { return $m[1] . $e($gMesa) . $m[2]; }, $tpl, 1);
+  $tpl = preg_replace_callback('~(<input id="rname" value=")[^"]*(")~', function ($m) use ($gNom, $e) { return $m[1] . $e($gNom) . $m[2]; }, $tpl, 1);
 }
 
 header('Content-Type: text/html; charset=utf-8');
