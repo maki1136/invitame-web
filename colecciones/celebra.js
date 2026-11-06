@@ -565,7 +565,10 @@
         P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d,.det,p,.addr){ color:rgba(255,255,255,.92)!important; -webkit-text-fill-color:rgba(255,255,255,.92)!important; }',
         P + '.tl::before{ background-image:radial-gradient(circle, rgba(255,255,255,.9) 1.1px, rgba(0,0,0,0) 1.2px)!important; }',
         P + '.tl > .tl-prog{ background-color:#FFFFFF!important; }',
-        P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:' + ACENTO + '!important; -webkit-text-fill-color:' + ACENTO + '!important; }',
+        /* los botones de adentro van en la tinta (ciruela) con letra blanca */
+        P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; }',
+        /* la banda de la frase sin desenfoque en vivo (traba el iPad) */
+        P + '#bandbg{ filter:none!important; }',
         P + '.padres .av{ border-radius:50%!important; border:0!important; box-shadow:0 0 0 3px #FFFFFF, 0 0 0 6px ' + ACENTO + ', 0 0 0 7.5px rgba(255,255,255,.9), 0 0 0 9px ' + ACENTO + '!important; }',
         P + '.pasecard{ border-radius:6px!important; }'
       );
