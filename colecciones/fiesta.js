@@ -717,7 +717,7 @@
         P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; }',
         /* la banda de la frase SIN desenfoque en vivo (traba el iPad): la foto ya es suave */
         P + '#bandbg{ filter:none!important; }',
-        P + '.frame .col-dc-tit.col-dc-tit, ' + P + '.frame .col-dc-tit *{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; }',
+        P + '.frame .col-dc-tit.col-dc-tit, ' + P + '.frame .col-dc-tit *{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; opacity:1!important; }',
         P + '.padres .av{ border:0!important; box-shadow:0 0 0 2px ' + PAPEL + ', 0 0 0 3px ' + ORO + ', 0 0 0 7px ' + PAPEL + ', 0 0 0 8px rgba(' + RO + ',.5)!important; }'
       );
     }

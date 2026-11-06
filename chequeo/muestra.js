@@ -217,6 +217,10 @@
       }
       if (n.tagName === 'SECTION' &&
           /url\(/.test(getComputedStyle(n).backgroundImage || '')) return true;
+      /* 5/11: el PIE con la foto del cierre (div.footer, background-image: --final)
+         también es una foto. Las colecciones claras la pintan ahí. */
+      if (n.classList && n.classList.contains('footer') &&
+          /url\(/.test(getComputedStyle(n).backgroundImage || '')) return true;
       if (n === marco) break;
       n = n.parentElement;
     }

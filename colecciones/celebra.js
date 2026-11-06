@@ -569,6 +569,8 @@
         P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; }',
         /* la banda de la frase sin desenfoque en vivo (traba el iPad) */
         P + '#bandbg{ filter:none!important; }',
+        /* la frase va sobre el papel bordado (claro): letra en la tinta, no blanca */
+        P + '.fraseSec.band .frase, ' + P + '.fraseSec.band .frase *{ color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; text-shadow:0 0 12px rgba(255,255,255,.9)!important; }',
         P + '.padres .av{ border-radius:50%!important; border:0!important; box-shadow:0 0 0 3px #FFFFFF, 0 0 0 6px ' + ACENTO + ', 0 0 0 7.5px rgba(255,255,255,.9), 0 0 0 9px ' + ACENTO + '!important; }',
         P + '.pasecard{ border-radius:6px!important; }'
       );
