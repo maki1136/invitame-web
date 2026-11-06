@@ -711,10 +711,9 @@
         P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:none!important; }',
         P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d,.det,p,.addr){ color:rgba(' + BO + ',.78)!important; -webkit-text-fill-color:rgba(' + BO + ',.78)!important; }',
         P + ':is(.evento,.hotel,.tl) :is(.hora,.k){ color:#8A5A1E!important; -webkit-text-fill-color:#8A5A1E!important; }',
-        /* ⚠️ el «Reservar» del hotel trae su propia regla más fuerte: se gana con .btn.btn */
-        P + '.frame :is(.evento,.hotel) .btn.btn{ background:' + PAPEL + '!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; border:0!important; box-shadow:0 4px 10px rgba(0,0,0,.25)!important; }',
-        P + '.frame :is(.evento,.hotel) .btn.btn:is(.gh,.ghost){ background:transparent!important; color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; border:1px solid rgba(' + BO + ',.55)!important; box-shadow:none!important; }',
-        P + '.frame :is(.evento,.hotel) .btn.btn *{ color:inherit!important; -webkit-text-fill-color:currentColor!important; }',
+        /* los botones de adentro quedan PERLA (los del motor) con letra bordó: el
+           perla gana el fondo con su propia regla, así que sólo se pinta la letra */
+        P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; }',
         /* la banda de la frase SIN desenfoque en vivo (traba el iPad): la foto ya es suave */
         P + '#bandbg{ filter:none!important; }',
         P + '.col-dc-tit{ color:' + TINTA + '!important; }',
