@@ -162,6 +162,13 @@
              'hondo y los filetes celestes. Tapas de video y playlist y la rosa de la ' +
              'raspadita, en celeste. Conviene elegir también una paleta celeste en ' +
              '«Paleta de colores» para los botones.' },
+    { id: 'acuarela-verde', nombre: 'Acuarela verde (toques rosados)',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La misma de Martina (Acuarela rosa) en VERDE SALVIA con toques rosados: ' +
+             'mucho follaje verde en acuarela, las rosas quedan rosas y chicas, mariposas ' +
+             'doradas. Letra verde hondo, filetes rosas. Tapas de video y playlist y la ' +
+             'rosa de la raspadita, en verde con flores rosas. Conviene elegir una paleta ' +
+             'verde salvia en «Paleta de colores» para los botones.' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
