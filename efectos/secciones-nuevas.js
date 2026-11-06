@@ -540,6 +540,15 @@
       f.appendChild(im); f.appendChild(b); f.appendChild(q); f.appendChild(fi);
       syncs.push(sync);
     }
+    /* ★ 6/11: un texto (título o sobretítulo de la sección). Vacío = como viene. */
+    function textoCampo(t, k) {
+      var f = fila(t);
+      var i = document.createElement('input'); i.type = 'text'; i.placeholder = 'Como viene';
+      i.style.cssText = 'flex:1 1 180px;min-width:0;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12.5px';
+      i.oninput = function () { es()[k] = i.value; refrescar(); };
+      f.appendChild(i);
+      syncs.push(function () { var v = es()[k] || ''; if (document.activeElement !== i && i.value !== v) i.value = v; });
+    }
     function casilla(t, k) {
       var f = fila(t);
       var i = document.createElement('input'); i.type = 'checkbox';
@@ -548,7 +557,7 @@
       syncs.push(function () { i.checked = es()[k] === true; });
     }
     if (opts.campos) {
-      var TIPOS = { color: color, rango: rango, fuente: fuente, imagen: imagen, casilla: casilla };
+      var TIPOS = { color: color, rango: rango, fuente: fuente, imagen: imagen, casilla: casilla, texto: textoCampo };
       opts.campos.forEach(function (c) { var fn = TIPOS[c[0]]; if (fn) fn.apply(null, c.slice(1)); });
       return function sync() { syncs.forEach(function (s) { try { s(); } catch (e) {} }); };
     }

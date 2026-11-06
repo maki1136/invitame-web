@@ -122,6 +122,10 @@
     }
     if (es.fuente) pedirFuente(es.fuente);
     var h = sec.querySelector('h2'), k = sec.querySelector('.kick');
+    /* ★ 6/11: el título y el sobretítulo escritos en el panel (vacío = como viene) */
+    var tTit = String(es.titulo || '').trim(), tSub = String(es.sobretitulo || '').trim();
+    if (h) { if (h.dataset.estTxt === undefined && tTit) h.dataset.estTxt = h.textContent; var qt = tTit || (h.dataset.estTxt !== undefined ? h.dataset.estTxt : null); if (qt !== null && h.textContent !== qt) h.textContent = qt; if (!tTit) delete h.dataset.estTxt; }
+    if (k) { if (k.dataset.estTxt === undefined && tSub) k.dataset.estTxt = k.textContent; var qs = tSub || (k.dataset.estTxt !== undefined ? k.dataset.estTxt : null); if (qs !== null && k.textContent !== qs) k.textContent = qs; if (!tSub) delete k.dataset.estTxt; }
     poner(h, 'font-family', es.fuente ? '"' + es.fuente + '", serif' : '');
     poner(h, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');
     poner(h, 'color', colorOk(es.colorTitulo));
