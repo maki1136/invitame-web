@@ -711,9 +711,13 @@
         P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; text-shadow:none!important; }',
         P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d,.det,p,.addr){ color:rgba(' + BO + ',.78)!important; -webkit-text-fill-color:rgba(' + BO + ',.78)!important; }',
         P + ':is(.evento,.hotel,.tl) :is(.hora,.k){ color:#8A5A1E!important; -webkit-text-fill-color:#8A5A1E!important; }',
-        P + ':is(.evento,.hotel) .btn{ background:' + PAPEL + '!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; border:0!important; box-shadow:0 4px 10px rgba(0,0,0,.25)!important; }',
-        P + ':is(.evento,.hotel) .btn.gh, ' + P + ':is(.evento,.hotel) .btn.ghost{ background:transparent!important; color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; border:1px solid rgba(' + BO + ',.55)!important; box-shadow:none!important; }',
-        P + ':is(.evento,.hotel) .btn *{ color:inherit!important; -webkit-text-fill-color:currentColor!important; }',
+        /* ⚠️ el «Reservar» del hotel trae su propia regla más fuerte: se gana con .btn.btn */
+        P + '.frame :is(.evento,.hotel) .btn.btn{ background:' + PAPEL + '!important; color:' + TINTA + '!important; -webkit-text-fill-color:' + TINTA + '!important; border:0!important; box-shadow:0 4px 10px rgba(0,0,0,.25)!important; }',
+        P + '.frame :is(.evento,.hotel) .btn.btn:is(.gh,.ghost){ background:transparent!important; color:' + PAPEL + '!important; -webkit-text-fill-color:' + PAPEL + '!important; border:1px solid rgba(' + BO + ',.55)!important; box-shadow:none!important; }',
+        P + '.frame :is(.evento,.hotel) .btn.btn *{ color:inherit!important; -webkit-text-fill-color:currentColor!important; }',
+        /* la banda de la frase SIN desenfoque en vivo (traba el iPad): la foto ya es suave */
+        P + '#bandbg{ filter:none!important; }',
+        P + '.col-dc-tit{ color:' + TINTA + '!important; }',
         P + '.padres .av{ border:0!important; box-shadow:0 0 0 2px ' + PAPEL + ', 0 0 0 3px ' + ORO + ', 0 0 0 7px ' + PAPEL + ', 0 0 0 8px rgba(' + RO + ',.5)!important; }'
       );
     }
@@ -889,6 +893,10 @@
     /* el chequeo decide «oscura» mirando .frame; con el fondo adelante puede medir
        transparente. La marca queda puesta, como en Bella. */
     raiz.setAttribute('data-col-oscura', '1');
+    /* 5/11: las tarjetas de PAPEL (boleto, festón) son claras A PROPÓSITO; el
+       chequeo las reconoce por esta marca y no las cuenta como «parche claro». */
+    if (E.forma === 'boleto' || E.forma === 'feston') raiz.setAttribute('data-tarjetas-claras', '1');
+    else raiz.removeAttribute('data-tarjetas-claras');
     ponerAdornos();
     medirCarta();
     marcarPadres();
@@ -912,6 +920,7 @@
       raiz.removeAttribute('data-coleccion');
       raiz.removeAttribute('data-fiesta-tono');
       if (raiz.getAttribute('data-col-oscura') === '1') raiz.removeAttribute('data-col-oscura');
+      raiz.removeAttribute('data-tarjetas-claras');
       sacarAdornos();
       soltarCarta();
       if (raiz.getAttribute('data-marca-propia') === ID) raiz.removeAttribute('data-marca-propia');

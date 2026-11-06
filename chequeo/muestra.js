@@ -503,6 +503,8 @@
          molde claro asomando, no piezas que alguien eligió. */
       if (/^(BUTTON|A|INPUT|SELECT|TEXTAREA)$/.test(el.tagName)) return;
       if (el.closest && el.closest(".pasecard")) return;
+      /* 5/11: tarjetas de papel claras por diseño (boleto, festón): las marca la colección */
+      if (document.documentElement.hasAttribute('data-tarjetas-claras') && el.closest && el.closest('.evento,.hotel,.tl')) return;
       if (r.width * r.height < 12000) return;       /* piezas chicas: no cuentan */
       if (lum(c) > 0.5) {
         malos.push((el.className || el.tagName) + ' rgb(' + c.slice(0, 3).map(Math.round) + ')');
