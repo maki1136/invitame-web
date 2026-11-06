@@ -52,8 +52,9 @@
     jardin:    { papel:'#15221A', papel2:'#0C150F', panel:'#1E2F23', filete:'#4D6650', tinta:'#F0E8D6', tinta2:'#CCC4B0', base:'jardin' },
     /* 4/11 · XV · Misión secreta: bóveda negra, láseres rubí y champagne (va con efectos/mision.js) */
     mision:    { papel:'#0E0C0F', papel2:'#070608', panel:'#1A161B', filete:'#5A4A55', tinta:'#F3EADF', tinta2:'#CFC4BB', base:'mision' },
-    /* 5/11 · XV · Rosa encantada: terciopelo bordó, oro viejo y tarjetas marfil con festón */
-    encantada: { papel:'#2A070D', papel2:'#170306', panel:'#3A0C14', filete:'#7A5040', tinta:'#F6E9D2', tinta2:'#DCC9AE', base:'encantada' }
+    /* 5/11 · XV · Rosa encantada: rojo rubí, oro y tarjetas marfil con festón */
+    /* 5/11 noche (Jazmín: «¿ese bordó no puede ser más rojo? rojo y dorado»): rojo rubí */
+    encantada: { papel:'#6A0C18', papel2:'#3C050C', panel:'#7C1220', filete:'#B07A48', tinta:'#FBEFD9', tinta2:'#F0DDBF', base:'encantada' }
   };
 
   /* ⭐ CADA TONO CON SU PROPIO DISEÑO (no sólo el color). Por tono:
