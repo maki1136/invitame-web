@@ -50,7 +50,15 @@
       FONDO: CL + 'q_auto,f_auto,w_1080/martina/mt-fondo-flores-celeste-3-11',
       RASP: CL + 'q_auto,f_auto,w_480/martina/mt-rasp-celeste-3-11',
       TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/martina/mt-tv-proy-celeste-3-11',
-      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/martina/mt-sp-disco-celeste-3-11' }
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/martina/mt-sp-disco-celeste-3-11' },
+    /* 6/11 · Jazmín: «ese diseño en tonos verdes y toques rosados» */
+    { id: 'acuarela-verde', global: 'INVACUARELAVERDE',
+      TINTA: '#3E5A46', TINTA2: '#4C5A50', ACENTO: '#C27A8C', PAPEL: '#F6F8F3', ORO: '#B8923E',
+      rgbAcento: '194,122,140', rgbTinta: '62,90,70', rgbTinta2: '76,90,80', rgbSombra: '24,44,30', rgbPapel: '246,248,243',
+      FONDO: CL + 'q_auto,f_auto,w_1080/martina/mt-fondo-flores-verde-6-11c',
+      RASP: CL + 'q_auto,f_auto,w_480/martina/mt-rasp-verde-6-11',
+      TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/martina/mt-tv-proy-verde-6-11b',
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/martina/mt-sp-disco-verde-6-11b' }
   ];
   VESTIDOS.forEach(function (V) { coleccion(V); });
 

@@ -472,6 +472,17 @@
       paleta:  ['#6e9cc4', '#f5f8fb', '#a9c6e0', '#2e5a80'],
       tipos:   ['xv']
     },
+    /* 6/11/2026 · pedido de Jazmín: el diseño de Martina, en verde con toques rosados */
+    'acuarela-verde': {
+      nombre:  "Acuarela verde",
+      bajada:  "Follaje verde salvia en acuarela, rosas rosadas y mariposas doradas.",
+      muestra: 'martina-mis15-verde',
+      foto:    '/formulario/disenos/martina-mis15-verde.webp',
+      color:   '#7d9a82',
+      color2:  '#3e5a46',
+      paleta:  ['#7d9a82', '#f6f8f3', '#e8b9c2', '#3e5a46'],
+      tipos:   ['xv']
+    },
     /* ---- 19/10/2026 · eventos nuevos (las que ya tienen portada con foto) ---- */
     'fiesta-ejecutivo': {
       nombre:  "Ejecutivo azul",
