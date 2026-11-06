@@ -135,7 +135,10 @@
       var jc = POS_MAPA[v(e, POS)];
       firma += '|pos' + jc;
       port.style.setProperty('justify-content', jc, 'important');
-      css.push('html body .portada.portada > .c{margin-top:' + (jc === 'flex-start' ? '0' : 'auto') + '!important;margin-bottom:' + (jc === 'flex-end' ? '0' : 'auto') + '!important;top:auto!important;bottom:auto!important;transform:none!important}');
+      /* ★ 6/11 (Jazmín, Josefa & José: «cuando seleccionamos que aparezca arriba, se
+         ve demasiado arriba, casi se sale de la invitación»): «Arriba» dejaba el
+         título pegado al borde (margen 0). Ahora deja aire arriba, más el notch. */
+      css.push('html body .portada.portada > .c{margin-top:' + (jc === 'flex-start' ? 'calc(env(safe-area-inset-top, 0px) + clamp(48px, 9vh, 96px))' : 'auto') + '!important;margin-bottom:' + (jc === 'flex-end' ? '0' : 'auto') + '!important;top:auto!important;bottom:auto!important;transform:none!important}');
     }
     for (var sa in antes) if (!enLinea[sa]) { var na = document.querySelector('[data-sec="' + sa + '"]'); if (na) na.style.removeProperty('background'); }
     var ya = document.getElementById(ID_CSS);
