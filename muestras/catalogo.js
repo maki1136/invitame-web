@@ -314,6 +314,18 @@
       paleta:  ["#0e0c0f", "#9b1b30", "#d8c3a0", "#f3eadf"],
       tipos:   ["xv"]
     },
+    /* 5/11/2026 · Maki: XV de cuento en bordó y oro (colección fiesta-encantada).
+       Motivos propios: rosa bajo campana, rosas trepadoras, vitral. Sin personajes. */
+    'rosa-encantada': {
+      nombre:  "Rosa encantada",
+      bajada:  "Una rosa bajo cristal, terciopelo bordó y oro de cuento.",
+      muestra: 'isabella-rosa-mis15',
+      foto:    '/formulario/disenos/isabella-rosa-mis15.webp',
+      color:   '#7a0f1c',
+      color2:  '#2a070d',
+      paleta:  ["#2a070d", "#7a0f1c", "#c9a44e", "#f6e9d2"],
+      tipos:   ["xv"]
+    },
     'monarca': {
       nombre:  "Mariposa monarca",
       bajada:  "Monarcas volando sobre un bosque de oyameles.",
