@@ -171,6 +171,10 @@
       /* la foto cubre toda la franja: sin la copia borrosa ni la foto chica al medio */
       /* la foto que subieron está en #bandfg (entera): pasa a cubrir toda la franja */
       css.push(S + ' #bandfg{background-size:cover!important' + (foco === null ? ';background-position:center!important' : '') + '}');
+      /* ★ 6/11: la copia borrosa (#bandbg) queda TAPADA por la foto que cubre la
+         franja, pero su blur(18px) en vivo igual traba el iPad. Sin filtro no se
+         ve ninguna diferencia. Sólo en invitaciones nuevas (INVNUEVA). */
+      if (window.INVNUEVA && window.INVNUEVA()) css.push(S + ' #bandbg{filter:none!important}');
     }
     if (velo === 'sinfoto') {
       css.push(S + ' #bandbg, ' + S + ' #bandfg{background:none!important;filter:none!important}');
