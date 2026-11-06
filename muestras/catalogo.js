@@ -316,6 +316,17 @@
     },
     /* 5/11/2026 · Maki: XV de cuento en bordó y oro (colección fiesta-encantada).
        Motivos propios: rosa bajo campana, rosas trepadoras, vitral. Sin personajes. */
+    /* 5/11/2026 · Jazmín: XV charra en rosa mexicano (colección celebra-bordado). */
+    'bordado-mexicano': {
+      nombre:  "Bordado mexicano",
+      bajada:  "Vestido charro bordado, papel picado y flores de colores.",
+      muestra: 'fernanda-bordado-mis15',
+      foto:    '/formulario/disenos/fernanda-bordado-mis15.webp',
+      color:   '#C2296F',
+      color2:  '#7A1A47',
+      paleta:  ["#FCF8F5", "#C2296F", "#F08A2E", "#2BA8A6"],
+      tipos:   ["xv"]
+    },
     'rosa-encantada': {
       nombre:  "Rosa encantada",
       bajada:  "Una rosa bajo cristal, terciopelo bordó y oro de cuento.",

@@ -11,7 +11,7 @@
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
       editorial · rosegold · toga · kinder · generacion · grises · futbol ·
       palmeras · cabina · collage · scrapbook · seda · lavanda · estrellada ·
-      posada · instantanea
+      posada · instantanea · bordado
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -264,7 +264,18 @@
       nm:['Caveat','clamp(56px,15vw,80px)','normal',700,'none','0',1.0],
       pk:['Jost','12px','uppercase','.36em','normal'],
       h2:['27px','.01em','none','italic',400],
-      kk:['Caveat','30px','none','0','m'] }
+      kk:['Caveat','30px','none','0','m'] },
+    /* 24 · XV · Bordado mexicano (5/11/2026, referencia de Jazmín: XV charra
+       rosa mexicano). Papel de algodón blanco, flores BORDADAS de colores
+       (rosa, naranja, amarillo, turquesa y verde), y las tarjetas en ROSA
+       MEXICANO con el borde CALADO como papel picado y un pespunte blanco.
+       Great Vibes para el nombre y los títulos, Cormorant en versal. */
+    bordado: { nombre: 'XV · Bordado mexicano', pa:'#FCF8F5', pa2:'#F6E9EE', ti:'#7A1A47', ti2:'#5C2440', ti3:'#F2C3D7', ac:'#C2296F', mt:'oro', mtT:'#7A5A12', base:'bordado',
+      disp:'Cormorant', scr:'Great Vibes', txt:'Cormorant Garamond', h3:'Cormorant', adorno:'bordado', forma:'picado', boton:'999px', radio:'6px',
+      nm:['Great Vibes','clamp(64px,17vw,92px)','normal',400,'none','0',1.1],
+      pk:['Cormorant','13px','uppercase','.36em','normal'],
+      h2:['40px','0','none','normal',400],
+      kk:['Cormorant','13px','uppercase','.34em','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -446,6 +457,17 @@
       return svg('<g fill="' + ACENTO + '">' + pt + '</g>' +
         '<g fill="' + c + '"><circle cx="24" cy="24" r="2.6"/><circle cx="20.6" cy="22" r="1.1"/><circle cx="27.4" cy="22" r="1.1"/><circle cx="24" cy="27.8" r="1.1"/></g>');
     }
+    /* bordado: flor bordada de tenango — pétalos rosa, centro naranja y amarillo,
+       dos hojas verdes y puntadas turquesa (colores fijos: son hilos) */
+    if (a === 'bordado') {
+      var pb = '';
+      for (var q = 0; q < 6; q++) pb += '<ellipse transform="rotate(' + (q * 60) + ' 24 20)" cx="24" cy="11.5" rx="4.6" ry="7.2"/>';
+      return svg('<g fill="#3E9A5A"><path d="M24 30 C18 30 11 33 7 40 C14 41 20 37 24 31 Z"/><path d="M24 30 C30 30 37 33 41 40 C34 41 28 37 24 31 Z"/></g>' +
+        '<path d="M24 28 V45" stroke="#3E9A5A" stroke-width="1.8"/>' +
+        '<g fill="' + ACENTO + '">' + pb + '</g>' +
+        '<circle cx="24" cy="20" r="5.2" fill="#F08A2E"/><circle cx="24" cy="20" r="2.4" fill="#F6C33B"/>' +
+        '<g fill="#2BA8A6"><circle cx="9" cy="14" r="1.6"/><circle cx="39" cy="14" r="1.6"/><circle cx="13" cy="25" r="1.2"/><circle cx="35" cy="25" r="1.2"/></g>');
+    }
     /* instantanea: un nomeolvides — cinco pétalos redondos y el centro claro */
     if (a === 'nomeolvides') {
       var nm = '';
@@ -527,6 +549,25 @@
         P + '.tl{ border-radius:24px!important; border:1px solid ' + B + '!important; }',
         P + '.padres .av{ border:0!important; box-shadow:0 0 0 3px rgba(' + RP + ',.95), 0 0 0 5px ' + ORO + ', 0 0 0 9px rgba(' + RP + ',.9), 0 0 0 10px ' + M + '!important; }',
         P + '.pasecard{ border-radius:24px!important; }'
+      );
+    }
+    /* picado: tarjeta ROSA MEXICANO con el borde calado (ondas y agujeritos,
+       como papel picado o encaje), pespunte blanco por dentro y letra blanca.
+       Como el boleto de abordar: se invierte la tinta SOLO adentro. */
+    if (f === 'picado') {
+      var PIC = 'radial-gradient(circle 8px at 50% 0, #0000 96%, #000) top/16px 51% repeat-x, radial-gradient(circle 8px at 50% 100%, #0000 96%, #000) bottom/16px 51% repeat-x';
+      var AG = 'radial-gradient(circle 2.2px, ' + PAPEL + ' 95%, #0000) 8px 12px/16px 100% repeat-x, radial-gradient(circle 2.2px, ' + PAPEL + ' 95%, #0000) 8px calc(100% - 12px)/16px 100% repeat-x';
+      A.push(
+        P + ':is(.evento,.hotel,.tl){ border-radius:0!important; border:0!important; background-color:' + ACENTO + '!important; background-image:none!important; -webkit-mask:' + PIC + '!important; mask:' + PIC + '!important; box-shadow:inset 0 0 0 14px ' + ACENTO + ', inset 0 0 0 15.5px rgba(255,255,255,.0)!important; outline:1.5px dashed rgba(255,255,255,.85)!important; outline-offset:-20px!important; padding-top:34px!important; padding-bottom:34px!important; overflow:hidden!important; position:relative!important; }',
+        P + ':is(.evento,.hotel,.tl)::after{ content:""!important; position:absolute!important; inset:0!important; pointer-events:none!important; background:' + AG + '!important; z-index:2!important; }',
+        P + '.evento .ph{ border-radius:0!important; margin:28px 28px 0!important; width:auto!important; border:4px solid #FFFFFF!important; }',
+        P + ':is(.evento,.hotel,.tl) :not(.btn):not(.btn *):not(svg):not(svg *){ color:#FFFFFF!important; -webkit-text-fill-color:#FFFFFF!important; text-shadow:none!important; }',
+        P + ':is(.evento,.hotel,.tl) :is(.sub,.lugar,small,em,i,.d,.det,p,.addr){ color:rgba(255,255,255,.92)!important; -webkit-text-fill-color:rgba(255,255,255,.92)!important; }',
+        P + '.tl::before{ background-image:radial-gradient(circle, rgba(255,255,255,.9) 1.1px, rgba(0,0,0,0) 1.2px)!important; }',
+        P + '.tl > .tl-prog{ background-color:#FFFFFF!important; }',
+        P + '.frame :is(.evento,.hotel) .btn.btn, ' + P + '.frame :is(.evento,.hotel) .btn.btn *{ color:' + ACENTO + '!important; -webkit-text-fill-color:' + ACENTO + '!important; }',
+        P + '.padres .av{ border-radius:50%!important; border:0!important; box-shadow:0 0 0 3px #FFFFFF, 0 0 0 6px ' + ACENTO + ', 0 0 0 7.5px rgba(255,255,255,.9), 0 0 0 9px ' + ACENTO + '!important; }',
+        P + '.pasecard{ border-radius:6px!important; }'
       );
     }
     if (f === 'arco') A.push(
