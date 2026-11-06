@@ -329,12 +329,32 @@
     },
     'rosa-encantada': {
       nombre:  "Rosa encantada",
-      bajada:  "Una rosa bajo cristal, terciopelo bordó y oro de cuento.",
+      bajada:  "Escalera de oro, cascadas de rosas rojas y un vitral encendido.",
       muestra: 'isabella-rosa-mis15',
       foto:    '/formulario/disenos/isabella-rosa-mis15.webp',
       color:   '#7a0f1c',
       color2:  '#2a070d',
       paleta:  ["#2a070d", "#7a0f1c", "#c9a44e", "#f6e9d2"],
+      tipos:   ["xv"]
+    },
+    'rosa-encantada-quince': {
+      nombre:  "Rosa encantada · con la quinceañera",
+      bajada:  "La quinceañera de gala bajo el vitral, rojo y dorado.",
+      muestra: 'isabella-rosa2-mis15',
+      foto:    '/formulario/disenos/isabella-rosa2-mis15.webp',
+      color:   '#7a0f1c',
+      color2:  '#3c050c',
+      paleta:  ["#3c050c", "#6a0c18", "#c9a44e", "#fbefd9"],
+      tipos:   ["xv"]
+    },
+    'rosa-encantada-cristal': {
+      nombre:  "Rosa encantada · bajo cristal",
+      bajada:  "La rosa bajo la campana, velas y luna azul; el nombre arriba.",
+      muestra: 'isabella-rosa3-mis15',
+      foto:    '/formulario/disenos/isabella-rosa3-mis15.webp',
+      color:   '#7a0f1c',
+      color2:  '#3c050c',
+      paleta:  ["#3c050c", "#6a0c18", "#c9a44e", "#fbefd9"],
       tipos:   ["xv"]
     },
     'monarca': {
