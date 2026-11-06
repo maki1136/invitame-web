@@ -9,6 +9,10 @@
    EL DATO — fx.flecha:
      tam:    'chica' (la de antes) | 'media' (por defecto) | 'grande'
      estilo: 'simple' (por defecto) | 'circulo' (dentro de un círculo)
+   5/11/2026 (Maki, portada de la Rosa encantada con la rosa ABAJO): el mismo
+   bloque elige DÓNDE VA EL NOMBRE — fx.portadaPos: 'abajo' (por defecto, lo de
+   siempre) | 'arriba' (nombre, fecha y contador arriba, para fotos con el
+   motivo abajo). Sin dato no cambia nada: las entregadas quedan iguales.
    Corre también en la miniatura (escucha los mensajes del panel).
    ============================================================================ */
 (function () {
@@ -21,9 +25,27 @@
 
   function cfg(ev) { return ((ev && ev.fx) || {}).flecha || {}; }
 
+  var ID_POS = 'inv-portada-pos';
+  function aplicarPos(ev) {
+    var pos = ((ev && ev.fx) || {}).portadaPos === 'arriba' ? 'arriba' : '';
+    var raiz = document.documentElement;
+    if (!pos) { if (raiz.getAttribute('data-portada-pos')) raiz.removeAttribute('data-portada-pos'); var v = document.getElementById(ID_POS); if (v) v.remove(); return; }
+    if (raiz.getAttribute('data-portada-pos') !== pos) raiz.setAttribute('data-portada-pos', pos);
+    if (document.getElementById(ID_POS)) return;
+    var S = 'html[data-portada-pos="arriba"] body .portada';
+    var st = document.createElement('style'); st.id = ID_POS;
+    st.textContent = [
+      S + '{justify-content:flex-start!important;padding-top:max(7vh,44px)!important}',
+      /* el oscurecido que deja leer el nombre pasa de abajo a arriba */
+      S + ' > .c::before{top:-14vh!important;bottom:auto!important;background:radial-gradient(ellipse 56% 62% at 50% 22%, rgba(0,0,0,.55) 0%, rgba(0,0,0,.26) 48%, rgba(0,0,0,0) 80%)!important}'
+    ].join('\n');
+    document.head.appendChild(st);
+  }
+
   var ultima = null;
   function aplicar() {
     var ev = window.INVEV; if (!ev) return;
+    aplicarPos(ev);
     var c = cfg(ev);
     var tam = TAM[c.tam] ? c.tam : 'media';
     var estilo = c.estilo === 'circulo' ? 'circulo' : 'simple';
@@ -77,6 +99,11 @@
     two.appendChild(select('Estilo', [['simple', 'Sola'], ['circulo', 'Dentro de un círculo']],
       c.estilo || 'simple', function (v) { datos(borrador() || d).estilo = v; }));
     caja.appendChild(two);
+    var t2 = document.createElement('div'); t2.textContent = 'Dónde va el nombre en la portada';
+    t2.style.cssText = 'font-size:13px;font-weight:600;margin:12px 0 6px';
+    caja.appendChild(t2);
+    caja.appendChild(select('Lugar', [['abajo', 'Abajo (como siempre)'], ['arriba', 'Arriba (cuando la foto tiene el motivo abajo)']],
+      (d.fx && d.fx.portadaPos) === 'arriba' ? 'arriba' : 'abajo', function (v) { var dd = borrador() || d; dd.fx = dd.fx || {}; if (v === 'arriba') dd.fx.portadaPos = 'arriba'; else delete dd.fx.portadaPos; }));
     return caja;
   }
   function firmaD(d) { return String(d.slug || '') + '|' + String(((d.fx || {}).coleccion) || '') + '|' + String(d.tpl || ''); }
