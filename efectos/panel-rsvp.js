@@ -235,6 +235,8 @@
       if (f && document.activeElement !== f && f.value !== String(r.limite || '')) f.value = String(r.limite || '');
       var c = document.getElementById('rsvp-restric-panel');
       if (c && c.checked !== !!r.restricciones) c.checked = !!r.restricciones;
+      var gg = document.getElementById('rsvp-general-panel');
+      if (gg && gg.checked !== !!r.general) gg.checked = !!r.general;   /* 7/11: lo puede apagar el bloque del paquete */
       var ps = document.getElementById('pase-simple-panel');
       var on = !!(d.fx && d.fx.pase && d.fx.pase.modo === 'simple');
       if (ps && ps.checked !== on) ps.checked = on;
