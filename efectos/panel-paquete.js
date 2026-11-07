@@ -212,9 +212,25 @@
       'border-radius:9px;background:#FDEDEE;color:#6D1233;border:1px solid #F8D3D6');
     caja.appendChild(aviso);
 
+    /* ---- 7/11: tiene pases pero sigue con «Un solo link para todos» ---- */
+    var avisoGen = chico(document.createElement('div'),
+      'display:none;font-size:11.5px;line-height:1.45;margin:0 0 6px;padding:9px 11px;' +
+      'border-radius:9px;background:#FFF6E0;color:#6b4a00;border:1px solid #F3DFA8');
+    caja.appendChild(avisoGen);
+
     function pintar() {
       var dd = borrador() || d;
       var c = cfg(dd);
+      var tg = tabla();
+      if (tg && c.plan && tg.tiene(c.plan, 'pases', c.extras) && dd.fx && dd.fx.rsvp && dd.fx.rsvp.general === true) {
+        avisoGen.style.display = 'block';
+        avisoGen.innerHTML = '<b>Tiene pases personalizados pero está con «Un solo link para todos».</b> ' +
+          'Así el cliente no ve Invitados ni puede armar los pases en su panel. ';
+        var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = 'Pasar a link por invitado';
+        bt.style.cssText = 'margin-top:6px;padding:5px 10px;border-radius:7px;border:1px solid #c9a227;background:#fff;cursor:pointer;font-size:11.5px';
+        bt.onclick = function () { var d3 = borrador(); if (!d3) return; conPasesSacarGeneral(d3); pintar(); refrescar(); };
+        avisoGen.appendChild(document.createElement('br')); avisoGen.appendChild(bt);
+      } else avisoGen.style.display = 'none';
       var p = t.PAQUETES[c.plan] || t.PAQUETES[t.POR_DEFECTO];
 
       /* qué incluye */
@@ -249,6 +265,7 @@
             if (this.checked && pos === -1) cc.extras.push(k);
             if (!this.checked && pos > -1) cc.extras.splice(pos, 1);
             prender(d2, k, this.checked);
+            if (k === 'pases' && this.checked) conPasesSacarGeneral(d2);
             pintar(); refrescar();
           };
           var txt = document.createElement('span');
@@ -292,6 +309,17 @@
       }
     }
 
+    /* ★ 7/11/2026 — Jazmín (Josefa & José, Estándar + pases comprados aparte):
+       «yo selecciono los pases personalizados pero en el panel no aparece para
+       generarlos». El Estándar nace con «Un solo link para todos»
+       (fx.rsvp.general) y con eso el panel del cliente esconde Invitados, Mesas
+       y QR. Al sumarle los pases (como extra o con un paquete que los trae), se
+       apaga el link único: cada invitado pasa a tener su link y su pase. */
+    function conPasesSacarGeneral(d2) {
+      if (d2.fx && d2.fx.rsvp && d2.fx.rsvp.general === true) d2.fx.rsvp.general = false;
+      var g = document.getElementById('rsvp-general-panel'); if (g && g.checked) g.checked = false;
+    }
+
     sel.onchange = function () {
       var d2 = borrador(); if (!d2) return;
       cfg(d2).plan = sel.value;
@@ -304,6 +332,7 @@
       if (tt && sel.value) {
         var c2 = cfg(d2), conPases = tt.tiene(sel.value, 'pases', c2.extras), conCant = tt.tiene(sel.value, 'paseCantidad', c2.extras);
         d2.fx = d2.fx || {};
+        if (conPases) conPasesSacarGeneral(d2);
         if (conPases && d2.fx.pase && String(d2.fx.pase.modo || '').toLowerCase() === 'simple') d2.fx.pase.modo = '';
         else if (!conPases && conCant) { d2.fx.pase = d2.fx.pase || {}; d2.fx.pase.modo = 'simple'; }
       }
