@@ -1,10 +1,10 @@
 {
- "cuando": "2026-11-06T21:15:17.848Z",
+ "cuando": "2026-11-08T19:53:51.237Z",
  "slug": "camila-y-tomas",
  "total": 545,
- "verde": 531,
- "amarillo": 0,
- "rojo": 14,
+ "verde": 529,
+ "amarillo": 3,
+ "rojo": 13,
  "gris": 0,
  "items": [
   {
@@ -172,7 +172,7 @@
    "guarda": false,
    "dato": "",
    "llega": false,
-   "seVe": false,
+   "seVe": true,
    "estado": "rojo",
    "nota": "lo toco y no se guarda nada"
   },
@@ -953,17 +953,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1167,6 +1156,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2745,8 +2745,9 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -3509,10 +3510,10 @@
    "guarda": true,
    "dato": "fx.sectorElegido, cfColor",
    "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano",
+   "duplicado": "fx.sectorElegido (PRINCIPAL + LUGAR_VEST + GALERIA_INSTA_VID + PERSONAS + REGALOS + CONFIRMACIÓN)"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -3953,8 +3954,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.tinta",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -5557,7 +5559,7 @@
    "guarda": true,
    "dato": "fx.std.titulo",
    "llega": true,
-   "seVe": false,
+   "seVe": true,
    "estado": "verde",
    "nota": "dato interno: se guarda; no se ve en la invitación"
   },
