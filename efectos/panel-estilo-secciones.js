@@ -52,9 +52,34 @@
         ['casilla', 'Texto final sin mayúsculas (para letras cursivas)', 'textoSinMayus']] }
   ];
 
+  /* 9/11 (Jazmín, Melany): «No pueden modificar la imagen de PLAYLIST».
+     La tapa de la playlist y la de «Nuestro video» las pone la colección;
+     /efectos/tapas-foto.js ya sabía pintar una propia (fx.tapas.playlist /
+     fx.tapas.video) pero no había control en el panel. Ahora sí. */
+  var TAPAS = [
+    { id: 'tapa-playlist', tab: 'MUSIC_PASES', casa: 'tapa-playlist', ve: '#spotify-sec', titulo: 'Playlist · imagen de la tapa',
+      campos: [['imagen', 'Imagen de la tapa de la playlist (reemplaza la de la colección; se recorta sola al centro)', 'playlist']] },
+    { id: 'tapa-video', tab: 'GALERIA_INSTA_VID', casa: 'tapa-video', ve: '#video-sec', titulo: 'Nuestro video · imagen de la tapa',
+      campos: [['imagen', 'Imagen de la tapa del video (reemplaza la de la colección; se recorta sola al centro)', 'video']] }
+  ];
+
   function arrancar() {
     var S = window.INVSN;
     if (!S || !S.estilo || !S.bloque) { setTimeout(arrancar, 300); return; }
+    TAPAS.forEach(function (t) {
+      S.anotarCasa(t.id, t.tab, t.casa, { abajo: true }, t.ve);
+      S.bloque(t.id, function (caja) {
+        return [S.estilo(caja, 'tapas', {
+          titulo: t.titulo,
+          campos: t.campos,
+          obj: function (d) {
+            if (!d.fx) d.fx = {};
+            if (!d.fx.tapas || typeof d.fx.tapas !== 'object') d.fx.tapas = {};
+            return d.fx.tapas;
+          }
+        })];
+      });
+    });
     BLOQUES.forEach(function (b) {
       var id = 'estilo-sec-' + b.key;
       S.anotarCasa(id, b.tab, b.casa, b.lugar, '[data-sec="' + b.key + '"]');

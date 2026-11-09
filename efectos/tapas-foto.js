@@ -21,8 +21,21 @@
     if (!/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(u) || /\/upload\/[^/]*(c_fill|w_)/.test(u)) return u;
     return u.replace('/image/upload/', '/image/upload/c_fill,w_900,h_506,g_auto,q_auto,f_auto/');
   }
+  /* 9/11: «Quitar» en el panel → la tapa vuelve a la de la colección sin recargar */
+  function sacar(id) {
+    var s = document.getElementById(id); if (!s) return;
+    var ts = s.querySelectorAll('[data-tapa-foto]');
+    for (var i = 0; i < ts.length; i++) {
+      var t = ts[i]; t.removeAttribute('data-tapa-foto');
+      ['background', 'border', 'border-radius', 'box-shadow'].forEach(function (k) { t.style.removeProperty(k); });
+      var x = t.querySelector('.rd-txt, .txt');
+      if (x) ['color', '-webkit-text-fill-color', 'opacity', 'text-shadow', 'background', 'padding', 'border-radius'].forEach(function (k) { x.style.removeProperty(k); });
+      var a = t.querySelector('.rd-aro, .aro'); if (a) a.style.removeProperty('background');
+    }
+  }
   function poner(id, url) {
-    var s = document.getElementById(id); if (!s || !url) return;
+    if (!url) { sacar(id); return; }
+    var s = document.getElementById(id); if (!s) return;
     var ts = s.querySelectorAll('.rd-tapa, .col-vtapa');
     for (var i = 0; i < ts.length; i++) {
       var t = ts[i];
@@ -59,7 +72,8 @@
   var cola = null;
   function pasada() {
     cola = null;
-    var c = cfg(); if (!c.video && !c.playlist) return;
+    var c = cfg();
+    if (!c.video && !c.playlist && !document.querySelector('[data-tapa-foto]')) return;
     poner('video-sec', c.video); poner('spotify-sec', c.playlist);
   }
   function pedir() { if (!cola) cola = setTimeout(pasada, 120); }
