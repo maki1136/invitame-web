@@ -1,5 +1,5 @@
 {
- "cuando": "2026-11-09T19:23:39.775Z",
+ "cuando": "2026-11-09T19:35:51.133Z",
  "slug": "camila-y-tomas",
  "total": 552,
  "verde": 538,
@@ -6074,6 +6074,28 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Marco fino",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.stdg.marco",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-carta",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.carta.bolsilloOpaco",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "mision-selector",
    "control": "Prender la misión en esta invitación",
    "tipo": "checkbox",
@@ -6097,28 +6119,6 @@
    "estado": "rojo",
    "duplicado": "fx.camara (PAQUETE + EFECTOS)",
    "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Marco fino",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.stdg.marco",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "casa-estilo-carta",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.carta.bolsilloOpaco",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
   }
  ]
 }
