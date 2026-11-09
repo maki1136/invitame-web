@@ -1148,6 +1148,18 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* 9/11/2026 · el mismo sobre de Rosé teñido en azul (las flores y el lacre),
+     para «Óleo · Azul» (ximena-y-andres-azul, pedido de Jazmín). */
+  'oleo-azul-luz': {
+    nombre:     "Óleo Azul · se abre la solapa y sale luz de adentro (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo-azul/oleo-azul-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-azul/oleo-azul-sobre-luz.jpg",
+    color:      "#E6DDD2",
+    luz:        3.0,
+    luzColor:   "#FBF6EE",
+    luzFundido: 0.9
+  },
+
   'oleo-rose-luz': {
     nombre:     "Óleo Rosé · se abre la solapa y sale luz de adentro (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre-luz-a.mp4",
