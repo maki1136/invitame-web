@@ -35,6 +35,8 @@
     padres:     { sel: '[data-sec="padres"]', texto: '.padres-frase, :scope > p' },
     itinerario: { sel: '[data-sec="itinerario"]', texto: '.it .d' },
     hashtag:    { sel: '[data-sec="hashtag"]', texto: ':scope > p' },
+    /* 9/11 (Jazmín, Alejandra): «en la trivia el textito abajo del título no se puede modificar, y el fondo tampoco» */
+    trivia:     { sel: '[data-sec="trivia"]', texto: '#tv-bajada', bajada: '#tv-bajada' },
     footer:     { sel: '.footer', texto: '' }
   };
 
@@ -125,6 +127,9 @@
     /* ★ 6/11: el título y el sobretítulo escritos en el panel (vacío = como viene) */
     var tTit = String(es.titulo || '').trim(), tSub = String(es.sobretitulo || '').trim();
     if (h) { if (h.dataset.estTxt === undefined && tTit) h.dataset.estTxt = h.textContent; var qt = tTit || (h.dataset.estTxt !== undefined ? h.dataset.estTxt : null); if (qt !== null && h.textContent !== qt) h.textContent = qt; if (!tTit) delete h.dataset.estTxt; }
+    /* ★ 9/11: la bajada (el texto chico debajo del título), si la sección la tiene */
+    var bj = SEC[key] && SEC[key].bajada ? sec.querySelector(SEC[key].bajada) : null, tBaj = String(es.bajada || '').trim();
+    if (bj) { if (bj.dataset.estTxt === undefined && tBaj) bj.dataset.estTxt = bj.textContent; var qb = tBaj || (bj.dataset.estTxt !== undefined ? bj.dataset.estTxt : null); if (qb !== null && bj.textContent !== qb) bj.textContent = qb; if (!tBaj) delete bj.dataset.estTxt; }
     if (k) { if (k.dataset.estTxt === undefined && tSub) k.dataset.estTxt = k.textContent; var qs = tSub || (k.dataset.estTxt !== undefined ? k.dataset.estTxt : null); if (qs !== null && k.textContent !== qs) k.textContent = qs; if (!tSub) delete k.dataset.estTxt; }
     poner(h, 'font-family', es.fuente ? '"' + es.fuente + '", serif' : '');
     poner(h, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');

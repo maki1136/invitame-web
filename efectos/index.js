@@ -755,6 +755,7 @@
     '/efectos/iconos-eventos.js',      /* 29/10: íconos en los lugares de Dónde y cuándo */
     '/efectos/subtitulos-fuente.js',
     '/efectos/itinerario-recuadro.js', /* 30/10: letra del título y recuadro del itinerario desde el panel */   /* 30/10: la letra de los subtítulos (.kick) desde el panel */
+    '/efectos/rsvp-sin-cantidad.js',   /* 9/11: confirmación sin «¿Cuántos asistirán?» (Estándar) */
     '/efectos/video-mas-formatos.js',
     '/efectos/panel-video-subir.js',   /* 9/11: subir el video de «Nuestro video» en vez de un link de Drive */  /* 6/11: «Nuestro video» acepta Instagram, TikTok, Drive, Facebook y todo YouTube */
     '/efectos/sector-elegido.js',      /* 29/10: el fondo/color de sección elegido en el panel le gana a la colección */

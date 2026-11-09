@@ -222,6 +222,26 @@
     filaG.appendChild(chkG); filaG.appendChild(txG);
     caja.appendChild(filaG);
 
+    /* ★ 9/11/2026 — Jazmín: «en el pack Estándar, ¿pueden eliminar la cantidad?» */
+    var filaC = document.createElement('label');
+    filaC.style.cssText = 'display:flex;gap:8px;align-items:flex-start;font-size:12px;font-weight:600;margin:10px 0 0;cursor:pointer';
+    var chkC = document.createElement('input');
+    chkC.type = 'checkbox';
+    chkC.id = 'rsvp-sincant-panel';
+    chkC.checked = !!datos(d).sinCantidad;
+    chkC.style.cssText = 'margin-top:2px';
+    chkC.onchange = function () {
+      var b = borrador() || d;
+      datos(b).sinCantidad = !!chkC.checked;
+      refrescar();
+    };
+    var txC = document.createElement('span');
+    txC.innerHTML = 'Sin «¿Cuántos asistirán?»<br><span style="font-weight:400;opacity:.62;font-size:11px">' +
+      'El formulario queda con nombre, sí/no y mensaje. Con el link general cada confirmación cuenta 1 persona; ' +
+      'con el link de un invitado, los lugares de su pase.</span>';
+    filaC.appendChild(chkC); filaC.appendChild(txC);
+    caja.appendChild(filaC);
+
     return caja;
   }
 
@@ -235,6 +255,8 @@
       if (f && document.activeElement !== f && f.value !== String(r.limite || '')) f.value = String(r.limite || '');
       var c = document.getElementById('rsvp-restric-panel');
       if (c && c.checked !== !!r.restricciones) c.checked = !!r.restricciones;
+      var gc = document.getElementById('rsvp-sincant-panel');
+      if (gc && gc.checked !== !!r.sinCantidad) gc.checked = !!r.sinCantidad;
       var gg = document.getElementById('rsvp-general-panel');
       if (gg && gg.checked !== !!r.general) gg.checked = !!r.general;   /* 7/11: lo puede apagar el bloque del paquete */
       var ps = document.getElementById('pase-simple-panel');
