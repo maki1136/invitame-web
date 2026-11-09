@@ -244,7 +244,14 @@
          y Tomás a la muestra de Valeria: el pase sonaba «Hola, somos Camila y
          Tom» en otra boda. Es la misma limpieza que hace el camino del
          formulario; vive en /vestir.js para que no haya dos versiones. */
-      if (window.INVVESTIR) (INVVESTIR.limpiarParaOtraFiesta || INVVESTIR.limpiarLoQueEsDeOtros)(cfg);
+      /* ★ 9/11/2026 (Maki): «que Jazmín tenga sus links con las otras opciones».
+         Para armar otra MUESTRA desde una muestra (p. ej. la versión Estándar o
+         Plus), la copia tiene que salir TAL CUAL: voz, pase de ejemplo, «¿Quieres
+         la tuya?». Sólo la galería de Invítame Live es de cada una (se crea aparte). */
+      const _esMuestra=!!(D.fx&&D.fx.muestra&&D.fx.muestra.venta===true);
+      const _talCual=_esMuestra && confirm('Esta invitación es una MUESTRA.\n\nAceptar = copiarla TAL CUAL como otra muestra (voz, pase de ejemplo y «¿Quieres la tuya?»). Sirve para armar la versión de otro paquete.\n\nCancelar = copia limpia, para un cliente.');
+      if (_talCual) { if (cfg.fx && cfg.fx.galeria) { cfg.fx = {...cfg.fx, galeria:{...cfg.fx.galeria, gid:''}}; } }
+      else if (window.INVVESTIR) (INVVESTIR.limpiarParaOtraFiesta || INVVESTIR.limpiarLoQueEsDeOtros)(cfg);
       const _pv={}; (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _pv[k]=cfg[k]; delete cfg[k]; } });
       await INV.saveEvento(ns,{...cfg, slug:ns, nEvento, tpl:(D.tpl||'')+' (copia)'});
       if(Object.keys(_pv).length) await INV.savePrivado(ns, _pv);
