@@ -18,7 +18,9 @@
     { key: 'carta', tab: 'EFECTOS', casa: 'estilo-carta', lugar: { abajo: true }, titulo: 'Carta · diseño (fondo, hoja, letra y colores)',
       campos: BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la hoja', 'hoja'], ['color', 'Color del encabezado de la hoja', 'colorTituloHoja'],
         ['color', 'Color del texto de la hoja', 'colorTexto'], ['rango', 'Tamaño del texto de la hoja', 'tamTexto', 11, 24, 'px'],
-        ['casilla', 'Sobre de adelante sin transparencia (la hoja no se ve a través)', 'bolsilloOpaco']]) },
+        ['casilla', 'Sobre de adelante sin transparencia (la hoja no se ve a través)', 'bolsilloOpaco'],
+        /* 9/11 (Maki): «una carta para ti con todo un texto y después el sobre: las dos cosas juntas no» */
+        ['casilla', 'Sin la frase arriba del sobre (sólo la carta)', 'sinFrase']]) },
     { key: 'scratch', tab: 'EFECTOS', casa: 'estilo-scratch', lugar: { abajo: true }, titulo: 'Raspadita · diseño (textos de arriba, fondo y colores)',
       campos: BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la ayuda («Empieza por el día»)', 'colorTexto'], ['color', 'Color de los números que se revelan', 'colorNumeros']]) },
     { key: 'hospedaje', tab: 'LUGAR_VEST', casa: 'estilo-hospedaje', lugar: { antesDe: '#f-titulo-hoteles' }, titulo: 'Hospedaje · diseño (fondo, letra y colores)',
@@ -29,7 +31,9 @@
       campos: BASE_TIT.concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
         ['color', 'Color de la descripción', 'colorDesc'],
         /* 5/11 (Chris y Adreily): «no quiere un borde cuadrado y otro curvo» */
-        ['rango', 'Esquinas redondeadas del recuadro', 'radio', 0, 48, 'px']]) },
+        ['rango', 'Esquinas redondeadas del recuadro', 'radio', 0, 48, 'px'],
+        /* 9/11 (Maki, renata platinum): «no podés poner esos tres circulitos básicos» */
+        ['imagen', 'Medallón (foto redonda con el objeto al medio): reemplaza los puntitos del itinerario y el adorno de los títulos, y va arriba del pase', 'medallon']]) },
     { key: 'padres', tab: 'PERSONAS', casa: 'estilo-padres', lugar: { arriba: true }, titulo: 'Personas · diseño (tamaño de las fotos, letra y colores)',
       campos: [['rango', 'Tamaño de las fotos (250 = como la plataforma vieja)', 'fotoTam', 60, 250, 'px']].concat(BASE_FONDO, BASE_TIT,
         [['color', 'Color de los nombres', 'colorNombre'], ['color', 'Color de la relación (Padres de…)', 'colorRel'], ['color', 'Color de la frase', 'colorTexto']]) },

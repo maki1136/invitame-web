@@ -888,6 +888,7 @@
     '/efectos/vestido-basico.js',   /* sin colección elegida: el pase con QR y el itinerario */
     '/efectos/banda-tematica.js',   /* las 7 bandas de color pleno pasan a ser la foto de la temática */
     '/efectos/simbolo-tematica.js', /* los aros de cada título y la marca del itinerario */
+    '/efectos/medallon-tematica.js', /* 9/11: el medallón propio (itinerario, adornos y pase) — fx.estiloSec.itinerario.medallon */
 
     '/efectos/tapas-foto.js',        /* 22/10: la foto propia de las tapas del video y la playlist (fx.tapas) */
 

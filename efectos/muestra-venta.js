@@ -109,6 +109,21 @@
     });
     [].forEach.call(document.querySelectorAll('.wafloat'), function (a) { lista.push(a); });
 
+    /* ★ 9/11/2026 (Maki, renata-y-patricio-platinum: «como es una muestra,
+       que todo vaya a nuestro WhatsApp»). Además de los botones de contacto y
+       el flotante, CUALQUIER botón de WhatsApp que apunte a un número (el de
+       «sugerir una canción» de la música, o el que agregue un módulo mañana)
+       va a ventas. Se deja quieto el de «Compartir» (wa.me/?text=, sin número):
+       ése no le escribe a nadie, lo reenvía el invitado. */
+    var nuestro = telVenta();
+    [].forEach.call(document.querySelectorAll('a[href*="wa.me/"],a[href*="api.whatsapp.com/send"]'), function (a) {
+      if (lista.indexOf(a) >= 0) return;
+      var h = a.getAttribute('href') || '';
+      var m = h.match(/wa\.me\/(\d{6,})/) || h.match(/[?&]phone=(\d{6,})/);
+      if (!m || m[1] === nuestro) return;
+      lista.push(a);
+    });
+
     lista.forEach(function (a) {
       if (a.getAttribute('href') === url) return;
       a.setAttribute('href', url);
