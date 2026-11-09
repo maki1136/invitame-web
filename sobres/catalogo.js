@@ -1170,6 +1170,19 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.9
   },
 
+  /* 9/11/2026 · el sobre de Rosé con las flores y el lacre en BORGOÑA claro
+     (pedido de la clienta de ivonycarlos, vía Jazmín: «burgundy más claro en vez
+     del rosa»). Mismo video, sólo cambia el color; mismos cortes y luz. */
+  'oleo-borgona': {
+    nombre:     "Óleo Borgoña · la solapa pintada en borgoña claro se abre y sale la tarjeta (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_7.9,q_auto,vc_h264:baseline:3.1/invitame/oleo-borgona/oleo-borgona-sobre.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre.jpg",
+    color:      "#E6DDD2",
+    luz:        6.0,
+    luzColor:   "#E3E2DB",
+    luzFundido: 0.6
+  },
+
   'oleo-rose': {
     nombre:     "Óleo Rosé · la solapa pintada se abre y sale la tarjeta (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_7.9,q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre.mp4",
