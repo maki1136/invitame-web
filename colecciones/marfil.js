@@ -722,38 +722,43 @@
     /* ---- 4.2 · LA PORTADA, SÓLO TIPOGRÁFICA ----------------------------
        ⚠️ La foto de portada NO se borra del documento — se tapa nada más.
           Sigue siendo contenido de la clienta y vuelve sola al apagar.
+       ★ 9/11 (Jazmín, Bany & Jorge: «le cargó una portada y cuando abro se ve
+          y después desaparece»): si la clienta SUBIÓ SU FOTO o su video de
+          portada (no el papel de la muestra, invitame/re-base), la foto se
+          muestra con la tinta clara de siempre. `h[s]` = Marfil SIN foto
+          propia (data-mf-foto). Sólo invitaciones nuevas (INVNUEVA).
        ⚠️ Y al sacar la foto, TODA la tinta clara que esa foto justificaba
           queda huérfana: los nombres, la fecha, el rótulo y la cuenta
           regresiva pasan a tinta oscura EN EL MISMO BLOQUE. */
-    'h[c] .portada #pbg, h[c] .portada .pveil, h[c] .portada #coverv,',
-    'h[c] .portada > img, h[c] .portada > video {',
+    'h[s] .portada #pbg, h[s] .portada .pveil, h[s] .portada #coverv,',
+    'h[s] .portada > img, h[s] .portada > video {',
     '  display:none !important;',
     '}',
-    'h[c] .portada { background-color:transparent !important }',
+    'h[s] .portada { background-color:transparent !important }',
     /* la tinta de la portada, ahora sobre papel */
-    'h[c] .portada .c, h[c] .portada .c * {',
+    'h[s] .portada .c, h[s] .portada .c * {',
     '  color:' + TINTA + ' !important; text-shadow:none !important;',
     '}',
-    'h[c] #pv-fecha, h[c] #pv-kick, h[c] .portada .count .lab {',
+    'h[s] #pv-fecha, h[s] #pv-kick, h[s] .portada .count .lab {',
     '  color:' + TINTA2 + ' !important;',
     '}',
-    'h[c] .portada .count #s.num { color:' + TINTA2 + ' !important }',
-    'h[c] .portada .scrollcue { color:' + TINTA2 + ' !important; opacity:.9 }',
+    'h[s] .portada .count #s.num { color:' + TINTA2 + ' !important }',
+    'h[s] .portada .scrollcue { color:' + TINTA2 + ' !important; opacity:.9 }',
 
     /* ⚠️⚠️ EL HALO SE APAGA — Y ESTA REGLA TIENE QUE LLEVAR EL ID ⚠️⚠️
        ⚠️ No alcanza con el `text-shadow:none` de la regla de `.portada .c *`:
           aquélla no tiene ningún id y el halo sí (`#pv-names`), así que el
           halo ganaba. La especificidad de un id no la alcanza ningún
           encadenado de clases. */
-    'h[c] #pv-names, h[c] #pv-names > span, h[c] #pv-names > span > span {',
+    'h[s] #pv-names, h[s] #pv-names > span, h[s] #pv-names > span > span {',
     '  color:' + TINTA + ' !important;',
     '  font-weight:300 !important;',
     '  text-shadow:none !important;',
     '}',
-    'h[c] #pv-names .' + CL_Y + ' b {',
+    'h[s] #pv-names .' + CL_Y + ' b {',
     '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
     '}',
-    'h[c] #pv-names .' + CL_Y + ' i {',
+    'h[s] #pv-names .' + CL_Y + ' i {',
     '  opacity:1 !important; box-shadow:none !important;',
     '  background:' + TINTA3 + ' !important;',
     '}',
@@ -853,16 +858,16 @@
        `.footer` NO es una `.sec`, así que las reglas que transparentan las
        bandas nunca lo tocaron: se quedó con su `background-image` y con los
        cinco textos en crema (1,05 a 1,47 de contraste). */
-    'h[c] .frame .footer {',
+    'h[s] .frame .footer {',
     '  background-image:none !important; background-color:transparent !important;',
     '}',
     /* ⚠️ `:not(.btn)` NO ES ADORNO — FASE 7. Al «Escríbenos por WhatsApp» del
           pie se le presta la clase `.btn` para que el material lo pinte; si
           esta regla siguiera agarrándolo, le pisaría el color del nácar. */
-    'h[c] .frame .footer, h[c] .frame .footer *:not(.btn):not(.btn *) {',
+    'h[s] .frame .footer, h[s] .frame .footer *:not(.btn):not(.btn *) {',
     '  color:' + TINTA2 + ' !important; text-shadow:none !important;',
     '}',
-    'h[c] .frame .footer .n, h[c] .frame .footer .col-mvta-t {',
+    'h[s] .frame .footer .n, h[s] .frame .footer .col-mvta-t {',
     '  color:' + TINTA + ' !important;',
     '}',
 
@@ -1044,11 +1049,11 @@
        ⚠️ VA DETRÁS: `z-index:0` en el velo y `z-index:1` en los hijos. Si se
           pone encima, tapa el texto — el mismo bug de `botones.js`.
        ⚠️ Y lleva `blur`, por lo mismo que en 7.3: sin él se ve el rectángulo. */
-    'h[c] .frame .sec, h[c] .frame .pase, h[c] .frame .footer {',
+    'h[c] .frame .sec, h[c] .frame .pase, h[s] .frame .footer {',
     '  position:relative;',
     '}',
     'h[c] .frame .sec::before, h[c] .frame .pase::before,',
-    'h[c] .frame .footer::before {',
+    'h[s] .frame .footer::before {',
     '  content:""; position:absolute; z-index:0; inset:0 14%;',
     '  pointer-events:none;',
     '  background:linear-gradient(90deg,',
@@ -1057,7 +1062,7 @@
     '    rgba(252,251,249,0) 100%);',
     '  filter:blur(10px);',
     '}',
-    'h[c] .frame .sec > *, h[c] .frame .pase > *, h[c] .frame .footer > * {',
+    'h[c] .frame .sec > *, h[c] .frame .pase > *, h[s] .frame .footer > * {',
     '  position:relative; z-index:1;',
     '}',
 
@@ -1123,6 +1128,7 @@
   ].join('\n')
     /* el atributo va REPETIDO: así le gana a los módulos sin depender del
        orden de carga, que es la trampa que ya se pagó en Perlas. */
+    .replace(/h\[s\]/g, 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA + '="' + NOMBRE + '"]:not([data-mf-foto])')
     .replace(/h\[c\]/g, 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA + '="' + NOMBRE + '"]')
     .replace(/h\[t\]/g, 'html[' + MARCA + '="' + NOMBRE + '"][' + MARCA_T + ']');
 
@@ -1230,6 +1236,15 @@
     } catch (e) { return false; }
   }
 
+  /* ★ 9/11: ¿la portada tiene una foto o un video SUBIDO por la clienta? */
+  function fotoPropiaDePortada() {
+    var ev = window.INVEV || {};
+    if (!(window.INVNUEVA ? window.INVNUEVA(ev) : false)) return false;
+    if (String(ev.coverVideo || '').trim()) return true;
+    var c = String(ev.cover || '').trim();
+    return !!c && !/\/invitame\/re-(base|cierre|fondo)\b/.test(c);
+  }
+
   function fotoPropiaDeFrase() {
     try {
       var e = window.INVEV || {};
@@ -1319,6 +1334,7 @@
     if (papel) raiz.style.setProperty('--mf-papel', 'url("' + papel + '")');
     if (fondo) raiz.style.setProperty('--mf-fondo', 'url("' + fondo + '")');
 
+    if (fotoPropiaDePortada()) raiz.setAttribute('data-mf-foto', '1'); else raiz.removeAttribute('data-mf-foto');
     ponerFondoDeLaColeccion();   /* la clienta elige Marfil y le sale con su fondo */
     ponerBotonDeLaColeccion();   /* y con sus botones de nácar */
     ponerSobreDeLaColeccion();   /* y con su propio sobre, distinto al de Perlas */
@@ -1342,6 +1358,7 @@
     var raiz = document.documentElement;
     raiz.removeAttribute(MARCA);
     raiz.removeAttribute(MARCA_T);
+    raiz.removeAttribute('data-mf-foto');
     if (window.INVCOLPALETA === PALETA_PROPIA) { try { delete window.INVCOLPALETA; } catch (e) { window.INVCOLPALETA = null; } }
     raiz.style.removeProperty('--mf-papel');
     raiz.style.removeProperty('--mf-fondo');

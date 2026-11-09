@@ -74,7 +74,30 @@
       var u = new URLSearchParams(location.search).get('muestra');
       if (u !== null) return u !== '0';
     } catch (e) {}
-    return siNo(cfg().rsvp);
+    /* ★ 9/11/2026 — SÓLO EN UNA MUESTRA DE VENTA. Se encontró prendido en
+       invitaciones de CLIENTES (ivonycarlos, bany-jorge): Jazmín lo prende
+       para ver la confirmación en la miniatura y queda prendido. Abierta con
+       el link general, la invitación del cliente mostraba un pase de EJEMPLO
+       («Familia Rivera», mesa 7). Las 50 muestras con esto prendido tienen
+       también fx.muestra.venta === true (medido); un cliente no. */
+    return siNo(cfg().rsvp) && cfg().venta === true;
+  }
+
+  /* ★ 9/11 — y en la invitación de un CLIENTE abierta sin link de invitado,
+     el motor dice «Esta es una muestra…» (Alejandra lo vio en la suya).
+     Para un cliente no es una muestra: se le explica al invitado qué hacer.
+     (Con «Un solo link para todos» lo maneja rsvp-general.js.) */
+  function frasePropia() {
+    try {
+      var ev = window.INVEV || {};
+      if (!ev.slug && !ev.n1) return;
+      if (cfg().venta === true) return;
+      if (ev.fx && ev.fx.rsvp && ev.fx.rsvp.general === true) return;
+      if (!sinInvitado()) return;
+      var p = document.querySelector('[data-sec="confirmacion"] p');
+      var txt = 'Para confirmar tu asistencia, abre el link personal que te enviaron.';
+      if (p && /Esta es una muestra/.test(p.textContent) && p.textContent !== txt) p.textContent = txt;
+    } catch (e) {}
   }
 
   /* vidriera = la invitación se abrió sin link de invitado */
@@ -106,6 +129,7 @@
   }
 
   function poner() {
+    frasePropia();
     if (!encendida() || !sinInvitado()) return;
 
     /* el formulario, que la vidriera escondió */

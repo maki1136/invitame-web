@@ -133,6 +133,19 @@
         'text-shadow:0 1px 0 rgba(255,255,255,.55) !important;'
     },
 
+    /* ★ 9/11 (Jazmín, Alejandra: «¿se podrá cambiar el botón por plateado?») */
+    { id:'plata', nombre:'Plata cepillada', pie:'Metal plateado con el cepillado en círculo',
+      css:
+        'color:#2f3338 !important;' +
+        'background:conic-gradient(from 210deg at 50% 50%,' +
+          ' #f4f5f7, #c9ccd1 14%, #8d9299 26%, #e6e8eb 40%, #b7bbc1 54%,' +
+          ' #7f848b 68%, #dfe1e5 84%, #f4f5f7) !important;' +
+        'border:0 !important;' +
+        'box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -3px 8px rgba(60,66,74,.45),' +
+          ' inset 0 0 0 1px rgba(110,116,124,.55), 0 4px 12px rgba(60,66,74,.30) !important;' +
+        'text-shadow:0 1px 0 rgba(255,255,255,.7) !important;'
+    },
+
     { id:'placa', nombre:'Placa grabada', pie:'Metal oscuro con la letra tallada en oro',
       css:
         'color:color-mix(in srgb,var(--oro) 88%,#fff) !important;' +
