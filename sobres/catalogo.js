@@ -2078,6 +2078,19 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* 9/11/2026 · Jazmín (Alejandra, Mis XV): el mismo sobre con el lacre PLATEADO.
+     Es el video de arriba con el sello recoloreado cuadro por cuadro (seguido
+     con su forma y su escala mientras la solapa se levanta). */
+  "mariposas-verdes-lacre-plata-video": {
+    nombre:     "Mariposas verde salvia con borde rosa, cintas y lacre plateado · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.4/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/mariposa-verde-plata-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/mariposa-verde-plata-1080.jpg",
+    color:      "#D7C3B4",
+    luz:        4.0,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   /* 9/11/2026 · pedido de Maki (video de Pinterest): en vez del sobre, un LIBRO
      lila de cuento con el 15 dorado que se abre solo y suelta humo lila con
      brillos dorados y mariposas hasta llenar la pantalla de luz. Veo 3.1 Fast,
