@@ -575,6 +575,18 @@
       paleta:  ["#FFFFFF", "#FFC928", "#FF4F9A", "#38B6F0"],
       tipos:   ["cumple"]
     },
+    /* 9/11/2026 · pedido de Maki (Pinterest): XV cuento de hadas lila con la
+       apertura del libro que se abre (sobre hadas-libro-15-video) */
+    'celebra-hadas': {
+      nombre:  "Cuento de hadas lila",
+      bajada:  "Un libro lila con el 15 se abre y suelta magia; rosas, castillo y farol.",
+      muestra: 'luna-cuento-mis15',
+      foto:    '/formulario/disenos/luna-cuento-mis15.webp',
+      color:   '#9A72C9',
+      color2:  '#4A2C6E',
+      paleta:  ["#F8F3FC", "#DCCBEE", "#9A72C9", "#4A2C6E"],
+      tipos:   ["xv"]
+    },
     'celebra-unicornio': {
       nombre:  "Cielo mágico",
       bajada:  "Nubes, unicornio y destellos pastel.",
