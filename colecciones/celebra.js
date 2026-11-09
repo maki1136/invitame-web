@@ -11,7 +11,7 @@
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
       editorial · rosegold · toga · kinder · generacion · grises · futbol ·
       palmeras · cabina · collage · scrapbook · seda · lavanda · estrellada ·
-      posada · instantanea · bordado · mesa · faroles
+      posada · instantanea · bordado · mesa · faroles · serpentina
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -295,7 +295,17 @@
       nm:['Great Vibes','clamp(62px,16.5vw,90px)','normal',400,'none','0',1.1],
       pk:['Cormorant','13px','uppercase','.38em','normal'],
       h2:['38px','0','none','normal',400],
-      kk:['Cormorant','13px','uppercase','.34em','m'] }
+      kk:['Cormorant','13px','uppercase','.34em','m'] },
+    /* 27 · KIDS · Serpentinas de colores (9/11/2026, referencia de Jazmín:
+       fondo blanco con serpentinas, espirales y confeti en colores caramelo,
+       «bien alegre, colorida»). Blanco puro, letra gordita Lilita One, tarjetas
+       blancas con borde de tres colores y una serpentina como viñeta. */
+    serpentina: { nombre: 'Kids · Serpentinas de colores', pa:'#FFFFFF', pa2:'#FFF6FA', ti:'#2E2557', ti2:'#3D3470', ti3:'#FFC2DC', ac:'#FF4F9A', mt:'rosa', mtT:'#8E2F5C', base:'serpentina',
+      disp:'Lilita One', scr:'Caveat', txt:'Fredoka', h3:'Lilita One', adorno:'serpentina', forma:'confeti', boton:'999px', radio:'26px',
+      nm:['Lilita One','clamp(54px,15vw,78px)','normal',400,'none','.01em',1.0],
+      pk:['Fredoka','14px','uppercase','.28em','normal'],
+      h2:['32px','.01em','none','normal',400],
+      kk:['Caveat','30px','none','0','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
@@ -492,6 +502,13 @@
       '<g fill="' + pa + '"><circle cx="13" cy="17" r="1.8"/><circle cx="24" cy="12" r="2"/><circle cx="35" cy="19" r="1.6"/></g>' +
       '<path fill="' + c + '" d="M11 35 C8 32 8 29 10 27 C12 29 12 32 11 35 Z"/><path d="M20 40 H28" stroke="' + c + '" stroke-width="2.2" stroke-linecap="round"/>');
     /* faroles: farolito de papel flotando, con su llama y dos chispas */
+    /* serpentina: un rulo de serpentina rosa, otro celeste y confeti (colores fijos: es papel) */
+    if (a === 'serpentina') return svg(
+      '<path d="M6 30 C10 18 16 18 15 25 C14 31 9 29 12 23 C15 17 22 17 22 24 C22 30 17 29 19 23 C21 17 28 16 29 23" fill="none" stroke="#FF4F9A" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M30 36 C33 30 37 30 36.5 34 C36 37.5 33 36.5 34.5 33 C36 29.5 40.5 29.5 41 33.5" fill="none" stroke="#38B6F0" stroke-width="2.6" stroke-linecap="round"/>' +
+      '<path d="M32 10 C35 7 38 9 36 12 C34 15 37 17 40 14" fill="none" stroke="#9BD040" stroke-width="2.4" stroke-linecap="round"/>' +
+      '<g><circle cx="8" cy="10" r="2.2" fill="#FFC928"/><circle cx="44" cy="22" r="1.8" fill="#B58BE8"/><circle cx="20" cy="40" r="1.8" fill="#FF8A3D"/>' +
+      '<rect x="24" y="5" width="5" height="2.4" rx="1.2" fill="#FF8A3D" transform="rotate(-30 26.5 6.2)"/><path d="M8 40 l2 -2 l2 2 l-2 2 z" fill="#38B6F0"/></g>');
     if (a === 'farol') return svg(
       '<path fill="' + c + '" d="M17 10 H31 L34 34 C34 37 31 39 24 39 C17 39 14 37 14 34 Z" opacity=".95"/>' +
       '<rect x="16" y="7" width="16" height="3.4" rx="1.5" fill="' + c + '"/>' +
@@ -616,6 +633,17 @@
         P + '.pasecard{ border-radius:6px!important; }'
       );
     }
+    /* confeti: tarjeta BLANCA bien redonda con un borde de tres colores
+       (rosa, amarillo, celeste) como cinta de serpentina, y retratos con
+       aro arcoíris. Kids, alegre, sin perder lectura (letra en la tinta). */
+    if (f === 'confeti') A.push(
+      P + ':is(.evento,.hotel){ border-radius:28px!important; border:0!important; overflow:hidden!important; box-shadow:0 0 0 3px #FF4F9A, 0 0 0 7px #FFFFFF, 0 0 0 10px #FFC928, 0 0 0 14px #FFFFFF, 0 0 0 17px #38B6F0, 0 12px 26px rgba(46,37,87,.12)!important; margin-left:18px!important; margin-right:18px!important; }',
+      P + '.evento .ph{ border-radius:28px 28px 0 0!important; }',
+      P + '.tl{ border-radius:28px!important; box-shadow:0 0 0 3px #FF4F9A, 0 0 0 7px #FFFFFF, 0 0 0 10px #FFC928, 0 0 0 14px #FFFFFF, 0 0 0 17px #38B6F0!important; margin-left:18px!important; margin-right:18px!important; }',
+      P + '.padres .av{ border-radius:50%!important; border:0!important; box-shadow:0 0 0 4px #FFFFFF, 0 0 0 8px #FF4F9A, 0 0 0 12px #FFC928, 0 0 0 16px #38B6F0!important; }',
+      P + '.pasecard{ border-radius:26px!important; }',
+      P + '#bandbg{ filter:none!important; }'
+    );
     if (f === 'arco') A.push(
       P + ':is(.evento,.hotel){ border-radius:50% 50% 14px 14px / 44px 44px 14px 14px!important; overflow:hidden!important; }',
       P + '.hotel{ padding-top:40px!important; }',

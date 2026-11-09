@@ -564,6 +564,17 @@
       paleta:  ["#a38e88", "#8f7c7a", "#75655d", "#45372a"],
       tipos:   ["cumple"]
     },
+    /* 9/11/2026 · pedido de Jazmín: kids «bien alegre, colorida», serpentinas y confeti */
+    'celebra-serpentina': {
+      nombre:  "Serpentinas de colores",
+      bajada:  "Serpentinas, espirales y confeti de colores que caen sobre blanco.",
+      muestra: 'sofia-cumple6-serpentinas',
+      foto:    '/formulario/disenos/sofia-cumple6-serpentinas.webp',
+      color:   '#FF4F9A',
+      color2:  '#2E2557',
+      paleta:  ["#FFFFFF", "#FFC928", "#FF4F9A", "#38B6F0"],
+      tipos:   ["cumple"]
+    },
     'celebra-unicornio': {
       nombre:  "Cielo mágico",
       bajada:  "Nubes, unicornio y destellos pastel.",
