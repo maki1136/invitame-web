@@ -66,7 +66,7 @@
     s.id = 'pase-simple-css';
     s.textContent = [
       'section.pase.pase-simple .pasecard{display:block!important;text-align:center!important;padding:26px 18px!important}',
-      'section.pase.pase-simple .pasecard > :not(.ps-caja){display:none!important}',
+      'section.pase.pase-simple .pasecard > :not(.ps-caja):not(.ps-med){display:none!important}',
       'section.pase.pase-simple .ps-caja{display:block}',
       'section.pase.pase-simple .ps-kick{font-size:11px;letter-spacing:.32em;text-transform:uppercase;opacity:.7;margin-bottom:8px}',
       'section.pase.pase-simple .ps-num{font-size:40px;line-height:1.1}',
@@ -114,7 +114,8 @@
        porque no tiene nada personal */
     sec.style.display = '';
     sec.classList.add('pase-simple');
-    sec.classList.toggle('ps-nueva', !!esNueva);
+    /* el diseño nuevo: en las invitaciones nuevas, o cuando eligieron un medallón (opt-in) */
+    sec.classList.toggle('ps-nueva', !!esNueva || document.documentElement.hasAttribute('data-medallon'));
 
     var t = sec.querySelector('.t');
     var titulo = String(cfg().titulo || '').trim() || '¡Esperamos contar contigo!';
