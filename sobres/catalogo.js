@@ -2086,6 +2086,8 @@ window.SOBRES_INVITAME = {
     nombre:     "Cuento de hadas · libro lila con el 15 que se abre y suelta humo lila y dorado (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,eo_7.0/w_720,h_1280,c_fill,q_auto:good,vc_h264,ac_none/invitame/cuento/libro-abre-a.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0/w_720,h_1280,c_fill,q_auto:best,f_jpg/invitame/cuento/libro-abre-a.jpg",
+    /* antes de tocar, el libro VIVO (bucle mudo que empieza en el primer cuadro) */
+    espera:     "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,h_1280,c_fill,q_auto:good,vc_h264,ac_none/invitame/cuento/libro-espera-2.mp4",
     color:      "#B9A3D6",
     luz:        6.1,
     luzColor:   "#F6EEFC",
