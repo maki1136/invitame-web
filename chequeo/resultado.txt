@@ -1,6 +1,6 @@
 BANCO DE PRUEBAS DE INVÍTAME
 Invitación: https://invitameok.net/i/?e=camila-y-tomas
-Fecha: 09/11/2026, 15:23
+Fecha: 09/11/2026, 16:00
 Red: lenta, como un celular con 4G (+220 ms por pedido)
 Caché: vacía, como un invitado que entra por primera vez
 Cada escenario corrió en su propia máquina, en paralelo.
@@ -29,7 +29,7 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.59-0.86 · p.frase.reveal] · "La playlist" 2.4/4.5 [#ffffff sobre luminancia 0.02-0.39 · span.txt] · "Escucha la música de l" 4.2/4.5 [#576560 sobre luminancia 0.68-0.81 · p.reveal.in]
+             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.59-0.86 · p.frase.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -44,11 +44,11 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 1.7 s)
+   (volvió a su lugar en 1.5 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 323.7 s de punta a punta)
+   (tardó 361.1 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -65,7 +65,7 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.82 · p.frase.reveal] · "Un ratito de nuestra h" 1.6/4.5 [#576560 sobre luminancia 0.22-0.76 · p.reveal.in] · "¡Gracias!" 2.8/3 [#f5edda sobre luminancia 0.01-0.27 · div.n] · "Camila & Tomás · 06.03" 4.4/4.5 [#ffffff sobre luminancia 0.01-0.19 · div.s]
+             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.82 · p.frase.reveal] · "¡Gracias!" 2.8/3 [#f5edda sobre luminancia 0.01-0.27 · div.n] · "Un ratito de nuestra h" 4.3/4.5 [#576560 sobre luminancia 0.69-0.76 · p.reveal.in] · "Camila & Tomás · 06.03" 4.4/4.5 [#ffffff sobre luminancia 0.01-0.19 · div.s]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -77,15 +77,15 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    BIEN   al tocarla se cierra de verdad
    BIEN   y se vuelve a abrir
    BIEN   sin errores de JavaScript
-   (no cuentan: 1 fallas de servicios ajenos — www.youtube.com)
+   (no cuentan: 2 fallas de servicios ajenos — www.youtube.com)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 10.7 s)
+   (volvió a su lugar en 13.2 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-iphone.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 570.5 s de punta a punta)
+   (tardó 529.8 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -107,7 +107,7 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.80 · p.frase.reveal] · "Agendar" 1.3/4.5 [#ffffff sobre luminancia 0.03-0.74 · a.btn.gh] · "Con mucha alegría" 2.6/3 [#496c61 sobre luminancia 0.42-0.82 · div.kick.reveal]
+             -> "“El mar nos vio empeza" 1.2/3 [#ffffff sobre luminancia 0.50-0.80 · p.frase.reveal] · "La fecha" 2.2/3 [#496c61 sobre luminancia 0.35-0.80 · div.kick.reveal] · "Con cariño" 2.3/3 [#496c61 sobre luminancia 0.37-0.81 · div.kick.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -123,11 +123,11 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    (no se pudo sacar la captura entera: page.screenshot: Clipped area is either empty or outside the)
    BIEN   al salir, la invitación anota dónde estaba
    BIEN   en la galería hay botón para volver a la invitación
-   (volvió a su lugar en 21.6 s)
+   (volvió a su lugar en 16.9 s)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-safari-ipad.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 792.3 s de punta a punta)
+   (tardó 631.5 s de punta a punta)
 
 
 ──────────────────────────────────────────
@@ -153,7 +153,7 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    BIEN   no se ve nada de la boda de ejemplo
    BIEN   los botones flotantes no se pisan
    MAL    todos los textos se leen
-             -> "“El mar nos vio empeza" 1.1/3 [#ffffff sobre luminancia 0.59-0.87 · p.frase.reveal]
+             -> "“El mar nos vio empeza" 1.1/3 [#ffffff sobre luminancia 0.60-0.87 · p.frase.reveal]
    BIEN   el boleto del pase se ve entero
    BIEN   al tocar el boleto, el pedazo se corta y baja
    BIEN   los módulos vienen en un solo pedido, no de a sesenta
@@ -171,5 +171,5 @@ HAY 4 PROBLEMAS (y 112 cosas bien)
    BIEN   al volver NO se repite el sobre
    BIEN   al volver cae en el mismo lugar
    (captura: captura-chrome-escritorio.png · y la tira del arranque: tira-…-1, -2, -3)
-   (tardó 131.8 s de punta a punta)
+   (tardó 130.0 s de punta a punta)
 
