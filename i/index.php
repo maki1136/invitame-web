@@ -6,6 +6,8 @@
  * Si algo falla, cae en los valores por defecto que ya trae index.html (nunca rompe).
  */
 
+$IV_T0 = microtime(true); $IV_TIEMPOS = array();
+function iv_marca($k, $t0, $extra = '') { global $IV_TIEMPOS; $IV_TIEMPOS[] = $k . ';dur=' . round((microtime(true) - $t0) * 1000) . ($extra !== '' ? ';desc="' . $extra . '"' : ''); }
 $SITE = 'https://invitameok.net';
 $PROJECT = 'invitame-9b51f';
 // Versión base: la que estaba viva cuando arrancó el versionado.
@@ -60,27 +62,45 @@ $campos = array(); $tamElegidos = array(); $leyoEvento = false;
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
          '/databases/(default)/documents/inv_eventos/' . rawurlencode($slug);
+  /* ★ 9/11/2026 (Maki y Jazmín: «están tardando en cargar»). Si la base tarda,
+     antes se esperaban hasta 4 s, se reintentaba con hasta 7 s más, y recién
+     ahí salía la página: 8 a 18 s medidos desde Argentina. Ahora se espera
+     menos y, si no contesta a tiempo, sale con la ÚLTIMA COPIA BUENA de esta
+     invitación (se guarda en el servidor cada vez que la base contesta bien).
+     Nunca sale la boda de ejemplo: sin copia, se reintenta como antes. */
+  $ivCopia = rtrim(sys_get_temp_dir(), '/') . '/invitame-ev-' . md5($slug) . '.json';
+  $ivT = microtime(true);
   $ch = curl_init($url);
   curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_CONNECTTIMEOUT => 3,
-    CURLOPT_TIMEOUT        => 4,
+    CURLOPT_CONNECTTIMEOUT => 2,
+    CURLOPT_TIMEOUT_MS     => (is_file($ivCopia) ? 2500 : 4000),
     CURLOPT_SSL_VERIFYPEER => true,
   ]);
   $res  = curl_exec($ch);
   $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $ivI = curl_getinfo($ch);
   curl_close($ch);
+  iv_marca('fs', $ivT, $code . ' dns' . round($ivI['namelookup_time'] * 1000) . ' con' . round($ivI['connect_time'] * 1000) . ' tls' . round($ivI['appconnect_time'] * 1000));
   /* ★ 2/11/2026 (Jazmín, citlalli-y-hedwin-jesus: «la invitación se puso con
      el nombre de otros novios… duró media hora»). Si la base no contesta a
      tiempo, la página salía con la boda de EJEMPLO (María & Diego, «Familia
      Gómez»…). Se reintenta una vez con más paciencia antes de rendirse. */
+  if ($res && $code == 200) {
+    @file_put_contents($ivCopia, $res, LOCK_EX);
+  } elseif (($code == 0 || $code == 429 || $code >= 500) && is_file($ivCopia)) {
+    $ivC = @file_get_contents($ivCopia);
+    if ($ivC !== false && $ivC !== '') { $res = $ivC; $code = 200; iv_marca('copia', $ivT, 'ultima copia buena'); }
+  }
   if (!($res && $code == 200) && ($code == 0 || $code == 429 || $code >= 500)) {
     usleep(300000);
+    $ivT = microtime(true);
     $ch = curl_init($url);
     curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_TIMEOUT => 7, CURLOPT_SSL_VERIFYPEER => true]);
     $res  = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+    iv_marca('fs2', $ivT, (string)$code);
   }
 
   if ($res && $code == 200) {
@@ -624,7 +644,9 @@ function iv_cache_atiende() {
   @file_put_contents($f, time() . ' ' . ($ok ? 'ok' : 'no'));
   return $ok;
 }
+$ivT = microtime(true);
 if ($conCache && $cacheQ !== '1' && !iv_cache_atiende()) $conCache = false;
+iv_marca('worker', $ivT, $conCache ? 'ok' : 'directa');
 header('X-Invitame-Cache: ' . ($conCache ? 'worker' : 'directa'));
 $fotosLivianas = ($conCache ? '<script>window.INV_CACHE_MEDIOS="https://galeria.littlemomentsok.workers.dev/";</' . 'script>' : '')
                . '<script src="/efectos/imagenes-livianas.js"></' . 'script>';
@@ -964,18 +986,45 @@ if ($slug !== '') {
     $tpl = preg_replace_callback('/<title>.*?<\/title>/is', function () { return '<title>Tu invitación</title>'; }, $tpl, 1);
   }
   $tapar = $leyoEvento ? 'false' : 'true';
-  $guardia = '<style>#iv-espera{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:24px;'
-    . 'background:#f6f1ea;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#4a3f37;text-align:center}'
-    . '#iv-espera b{display:block;font-size:19px;margin-bottom:8px}#iv-espera p{margin:0 0 16px;font-size:14.5px;opacity:.75}'
-    . '#iv-espera button{border:0;border-radius:999px;padding:12px 26px;background:#4a3f37;color:#fff;font-size:15px;font-weight:600}'
-    . '#iv-espera .iv-pt{width:34px;height:34px;border-radius:50%;border:3px solid rgba(74,63,55,.18);border-top-color:#4a3f37;margin:0 auto 16px;animation:ivgira 1s linear infinite}'
-    . '@keyframes ivgira{to{transform:rotate(360deg)}}</style>'
-    . '<script>(function(){var tapar=' . $tapar . ',t0=Date.now(),cart=null;'
+  /* ★ 9/11/2026 — la espera con diseño (Jazmín: «eso no gusta… si colocamos
+     algo más bonito»): papel crema, destellos dorados que titilan, «Algo
+     especial está por comenzar…» y tres puntitos. Sin descargas: letra del
+     sistema con serifa y destellos en SVG, así aparece al instante. */
+  $estrella = function ($x, $y, $s, $d) {
+    return '<svg class="iv-st" style="left:' . $x . '%;top:' . $y . '%;width:' . $s . 'px;height:' . $s . 'px;animation-delay:' . $d . 's" viewBox="0 0 24 24"><path d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg>';
+  };
+  $puntos = '';
+  foreach (array(array(14,27),array(20,24),array(27,22),array(34,21.5),array(41,21),array(48,20),array(55,19),array(62,17.5),array(69,16),array(76,14.5),
+                 array(24,68),array(31,70),array(38,71.5),array(45,72.5),array(52,72.8),array(59,72.5),array(66,71.5),array(73,70)) as $k => $q) {
+    $puntos .= '<i class="iv-dot" style="left:' . $q[0] . '%;top:' . $q[1] . '%;animation-delay:' . (($k % 6) * 0.35) . 's"></i>';
+  }
+  $deco = $estrella(18, 24, 26, 0) . $estrella(80, 13, 34, .8) . $estrella(70, 22, 14, 1.6) . $estrella(10, 30, 12, 1.1)
+        . $estrella(22, 66, 30, .5) . $estrella(80, 62, 22, 1.3) . $estrella(66, 70, 12, .2) . $puntos;
+  $cargaHtml = '<div class="iv-deco">' . $deco . '</div><div class="iv-txt"><h2>Algo especial<br>está por comenzar…</h2>'
+             . '<p>Estamos preparando tu experiencia</p><div class="iv-tres"><i></i><i></i><i></i></div></div>';
+  $falloHtml = '<div class="iv-deco">' . $deco . '</div><div class="iv-txt"><h2>No pudimos cargar<br>la invitación</h2>'
+             . '<p>Revisa tu conexión a internet y vuelve a intentarlo.</p><button type="button" onclick="location.reload()">Reintentar</button></div>';
+  $guardia = '<style>#iv-espera{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden;'
+    . 'background:radial-gradient(ellipse at 50% 45%,#fffdf8 0%,#f8f1e6 70%,#f2e8d9 100%);color:#5b4a3d;text-align:center;'
+    . 'font-family:"Cormorant Garamond","Cormorant",Didot,"Bodoni 72","Times New Roman",Georgia,serif}'
+    . '#iv-espera .iv-deco{position:absolute;inset:0;pointer-events:none}'
+    . '#iv-espera .iv-st{position:absolute;fill:#c9a463;filter:drop-shadow(0 0 3px rgba(201,164,99,.45));transform:translate(-50%,-50%);animation:ivtit 2.6s ease-in-out infinite}'
+    . '#iv-espera .iv-dot{position:absolute;width:3px;height:3px;border-radius:50%;background:#c9a463;opacity:.55;animation:ivtit 3s ease-in-out infinite}'
+    . '#iv-espera .iv-txt{position:relative;max-width:420px}'
+    . '#iv-espera h2{font-weight:400;font-size:clamp(30px,8.4vw,40px);line-height:1.15;margin:0 0 14px;color:#5b4a3d;letter-spacing:.005em}'
+    . '#iv-espera p{margin:0 0 26px;font-family:Georgia,"Times New Roman",serif;font-size:15px;letter-spacing:.03em;opacity:.78}'
+    . '#iv-espera .iv-tres{display:flex;gap:12px;justify-content:center}'
+    . '#iv-espera .iv-tres i{width:10px;height:10px;border-radius:50%;background:#d8b7ac;animation:ivpun 1.2s ease-in-out infinite}'
+    . '#iv-espera .iv-tres i:nth-child(2){animation-delay:.2s}#iv-espera .iv-tres i:nth-child(3){animation-delay:.4s}'
+    . '#iv-espera button{border:0;border-radius:999px;padding:12px 28px;background:#5b4a3d;color:#fff;font:600 15px/1 system-ui,-apple-system,sans-serif}'
+    . '@keyframes ivtit{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(.82)}50%{opacity:1;transform:translate(-50%,-50%) scale(1)}}'
+    . '@keyframes ivpun{0%,80%,100%{opacity:.35;transform:scale(.8)}40%{opacity:1;transform:scale(1.15)}}'
+    . '@media (prefers-reduced-motion:reduce){#iv-espera *{animation:none!important}}</style>'
+    . '<script>(function(){var tapar=' . $tapar . ',t0=Date.now(),cart=null,C=' . json_encode($cargaHtml, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) . ',F=' . json_encode($falloHtml, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) . ';'
     . 'function listo(){return !!(window.INVEV||window.__invBloqueada||/ — Invitación$/.test(document.title||""));}'
     . 'function poner(fallo){if(!document.body)return;if(!cart){cart=document.createElement("div");cart.id="iv-espera";document.body.appendChild(cart);}'
-    . 'cart.innerHTML=fallo?"<div><b>No pudimos cargar la invitación</b><p>Revisa tu conexión a internet y vuelve a intentarlo.</p><button type=button onclick=\\"location.reload()\\">Reintentar</button></div>"'
-    . ':"<div><div class=iv-pt></div><b>Cargando tu invitación…</b></div>";}'
-    . 'function sacar(){if(cart){cart.remove();cart=null;}}'
+    . 'var h=fallo?F:C;if(cart.__h!==h){cart.innerHTML=h;cart.__h=h;}}'
+    . 'function sacar(){if(cart){cart.style.transition="opacity .35s";cart.style.opacity="0";var c=cart;cart=null;setTimeout(function(){c.remove();},380);}}'
     . 'var iv=setInterval(function(){if(listo()){sacar();clearInterval(iv);return;}'
     . 'var s=(Date.now()-t0)/1000;if((tapar||s>3)&&!cart)poner(false);if(s>10){poner(true);clearInterval(iv);'
     . 'var w=setInterval(function(){if(listo()){sacar();clearInterval(w);}},500);}},250);})();</script>';
@@ -1035,6 +1084,8 @@ if ($slug !== '') {
   }
 }
 
+iv_marca('total', $IV_T0);
+header('Server-Timing: ' . implode(', ', $IV_TIEMPOS));
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 echo $tpl;
