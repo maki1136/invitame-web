@@ -1152,8 +1152,8 @@ window.SOBRES_INVITAME = {
      para «Óleo · Azul» (ximena-y-andres-azul, pedido de Jazmín). */
   'oleo-azul-luz': {
     nombre:     "Óleo Azul · se abre la solapa y sale luz de adentro (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:best,vc_h264/invitame/oleo-azul/oleo-azul-sobre-luz.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-azul/oleo-azul-sobre-luz.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1/invitame/oleo-azul/oleo-azul2-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/oleo-azul/oleo-azul2-sobre-luz.jpg",
     color:      "#E6DDD2",
     luz:        3.0,
     luzColor:   "#FBF6EE",

@@ -1047,26 +1047,29 @@
        invitame/oleo-azul/oleo-azul-{base,med,p1,p2,qr,tv,tp,filtro,fiesta,vest,insp}.
        Contrastes: TINTA #1F2E4A sobre papel #EEF2F7 ≈ 12,8; TINTA2 #3E5274 ≈ 7,2;
        CREMA #F5F8FC sobre la banda #3E5C86 ≈ 6,4. */
+    /* ⭐ 9/11 (2.ª vuelta) Jazmín: «es más bien celeste… que lo haga más azul». Acentos
+       más hondos (#5A7FB8, banda #2F548C, tinta #1B2B4D) e imágenes oleo-azul2-* teñidas
+       con más saturación (s×1,7) y un poco más oscuras; el centro claro del óleo queda claro. */
     azul: {
       hex: {
-        '#C98E8A':'#8AA3C4', '#E3C2B8':'#C3D3E6',
-        '#F7EFEA':'#EEF2F7', '#FBF6F2':'#F7F9FC', '#4A2E2C':'#1F2E4A', '#6B4744':'#3E5274',
-        '#82504C':'#3E5C86', '#FBF4EF':'#F5F8FC', '#F5E6DF':'#E3EBF5',
+        '#C98E8A':'#5A7FB8', '#E3C2B8':'#B4C8E6',
+        '#F7EFEA':'#EEF2F7', '#FBF6F2':'#F7F9FC', '#4A2E2C':'#1B2B4D', '#6B4744':'#33497A',
+        '#82504C':'#2F548C', '#FBF4EF':'#F5F8FC', '#F5E6DF':'#DCE6F4',
         '#2E1C1B':'#141E30', '#F2E4DC':'#E6EDF5'
       },
       rgb: {
-        '74,46,44':'31,46,74', '201,142,138':'138,163,196', '247,239,234':'238,242,247',
-        '40,20,18':'16,24,40', '60,34,32':'26,38,62', '240,220,211':'222,231,242',
-        '251,246,242':'247,249,252', '255,246,236':'248,250,255', '120,70,60':'52,78,118',
-        '107,71,68':'62,82,116', '251,244,239':'245,248,252'
+        '74,46,44':'27,43,77', '201,142,138':'90,127,184', '247,239,234':'238,242,247',
+        '40,20,18':'16,24,40', '60,34,32':'22,34,60', '240,220,211':'214,226,243',
+        '251,246,242':'247,249,252', '255,246,236':'248,250,255', '120,70,60':'47,84,140',
+        '107,71,68':'51,73,122', '251,244,239':'245,248,252'
       },
       url: {
-        'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-azul/oleo-azul-base.jpg',
-        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/oleo-azul/oleo-azul-med.png'
+        'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-azul/oleo-azul2-base.jpg',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/oleo-azul/oleo-azul2-med.png'
       },
       /* «NOS CASAMOS» iba en crema sobre el óleo claro (1,1 de contraste): en azul marino */
       css: [
-        P + '#pv-kick{ color:#3E5274!important; -webkit-text-fill-color:#3E5274!important; text-shadow:0 0 10px rgba(247,249,252,.95)!important; }'
+        P + '#pv-kick{ color:#33497A!important; -webkit-text-fill-color:#33497A!important; text-shadow:0 0 10px rgba(247,249,252,.95)!important; }'
       ].join('\n')
     }
   };
