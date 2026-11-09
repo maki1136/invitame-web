@@ -250,7 +250,13 @@
          la tuya?». Sólo la galería de Invítame Live es de cada una (se crea aparte). */
       const _esMuestra=!!(D.fx&&D.fx.muestra&&D.fx.muestra.venta===true);
       const _talCual=_esMuestra && confirm('Esta invitación es una MUESTRA.\n\nAceptar = copiarla TAL CUAL como otra muestra (voz, pase de ejemplo y «¿Quieres la tuya?»). Sirve para armar la versión de otro paquete.\n\nCancelar = copia limpia, para un cliente.');
-      if (_talCual) { if (cfg.fx && cfg.fx.galeria) { cfg.fx = {...cfg.fx, galeria:{...cfg.fx.galeria, gid:''}}; } }
+      if (_talCual) {
+        if (cfg.fx && cfg.fx.galeria) { cfg.fx = {...cfg.fx, galeria:{...cfg.fx.galeria, gid:''}}; }
+        /* que se vea IGUAL: el mismo diseño congelado (ver) y las novedades como
+           las tiene la original (la copia nace con nEvento nuevo y si no las prendía) */
+        if (D.ver) cfg.ver = D.ver;
+        if (typeof window.INVNUEVA === 'function') cfg.fx = {...(cfg.fx||{}), novedades: !!window.INVNUEVA(D)};
+      }
       else if (window.INVVESTIR) (INVVESTIR.limpiarParaOtraFiesta || INVVESTIR.limpiarLoQueEsDeOtros)(cfg);
       const _pv={}; (INV.CAMPOS_PRIVADOS||[]).forEach(k=>{ if(cfg[k]!==undefined){ _pv[k]=cfg[k]; delete cfg[k]; } });
       await INV.saveEvento(ns,{...cfg, slug:ns, nEvento, tpl:(D.tpl||'')+' (copia)'});
