@@ -1063,7 +1063,11 @@
       url: {
         'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-azul/oleo-azul-base.jpg',
         'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/oleo-azul/oleo-azul-med.png'
-      }
+      },
+      /* «NOS CASAMOS» iba en crema sobre el óleo claro (1,1 de contraste): en azul marino */
+      css: [
+        P + '#pv-kick{ color:#3E5274!important; -webkit-text-fill-color:#3E5274!important; text-shadow:0 0 10px rgba(247,249,252,.95)!important; }'
+      ].join('\n')
     }
   };
   function tono() {
