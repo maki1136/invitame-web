@@ -39,8 +39,14 @@
   #    Con `Expires "0"` las dos órdenes dicen lo mismo y el navegador pregunta.
   #    No agrega descargas: si el archivo no cambió, el servidor responde 304.
   <FilesMatch "\.(js|css)$">
-    Header set Cache-Control "no-cache, must-revalidate"
-    Header set Pragma "no-cache"
+    # ★ 9/11/2026 (Maki y Jazmín: «están tardando en cargar»). Medido desde
+    #   Argentina: cada .js que va al servidor tarda 0,5-1,9 s, porque la red de
+    #   Hostinger (borde «san») no lo guarda y viaja hasta el servidor cada vez;
+    #   lo que el borde SÍ guarda llega en 0,07 s. `s-maxage=120` deja que el
+    #   borde lo guarde 2 minutos; el navegador sigue preguntando siempre
+    #   (max-age=0), así que un arreglo llega en ≤2 min, no en 7 días.
+    Header set Cache-Control "public, max-age=0, s-maxage=120, must-revalidate"
+    Header unset Pragma
     Header set Expires "0"
   </FilesMatch>
 </IfModule>

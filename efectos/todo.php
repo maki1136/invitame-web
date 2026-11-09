@@ -37,7 +37,9 @@
  */
 
 header('Content-Type: application/javascript; charset=utf-8');
-header('Cache-Control: no-cache, must-revalidate');
+/* ★ 9/11/2026: el borde de Hostinger lo guarda 2 min (ver .htaccess, «s-maxage»).
+   El navegador sigue preguntando siempre: un arreglo llega en ≤2 min. */
+header('Cache-Control: public, max-age=0, s-maxage=120, must-revalidate');
 header('X-Content-Type-Options: nosniff');
 
 $dirEfectos = __DIR__;
