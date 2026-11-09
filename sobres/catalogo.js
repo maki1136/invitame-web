@@ -2078,6 +2078,20 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* 9/11/2026 · pedido de Maki (video de Pinterest): en vez del sobre, un LIBRO
+     lila de cuento con el 15 dorado que se abre solo y suelta humo lila con
+     brillos dorados y mariposas hasta llenar la pantalla de luz. Veo 3.1 Fast,
+     toma A. Va con la colección «XV · Cuento de hadas lila» (celebra-hadas). */
+  "hadas-libro-15-video": {
+    nombre:     "Cuento de hadas · libro lila con el 15 que se abre y suelta humo lila y dorado (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,eo_7.0/w_720,h_1280,c_fill,q_auto:good,vc_h264,ac_none/invitame/cuento/libro-abre-a.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0/w_720,h_1280,c_fill,q_auto:best,f_jpg/invitame/cuento/libro-abre-a.jpg",
+    color:      "#B9A3D6",
+    luz:        6.1,
+    luzColor:   "#F6EEFC",
+    luzFundido: 0.7
+  },
+
   "puertas-cinta-olivo-video": {
     oculto:     true,
     nombre:     "Papel marfil con cinta de organza, moño y ramita de olivo · las puertas se abren y entra la luz (video)",

@@ -11,7 +11,7 @@
       pixel · unicornio · osita · mono · olivo · estrellas · marmol ·
       editorial · rosegold · toga · kinder · generacion · grises · futbol ·
       palmeras · cabina · collage · scrapbook · seda · lavanda · estrellada ·
-      posada · instantanea · bordado · mesa · faroles · serpentina
+      posada · instantanea · bordado · mesa · faroles · serpentina · hadas
       'celebra' a secas = pixel.
    ⚠️ VIENE APAGADA: sin fx.coleccion celebra* no hace nada (viaja en todo.php).
       No deja nada global al cargarse: sin la colección puesta no hay hoja, ni
@@ -305,7 +305,18 @@
       nm:['Lilita One','clamp(54px,15vw,78px)','normal',400,'none','.01em',1.0],
       pk:['Fredoka','14px','uppercase','.28em','normal'],
       h2:['32px','.01em','none','normal',400],
-      kk:['Caveat','30px','none','0','m'] }
+      kk:['Caveat','30px','none','0','m'] },
+    /* 28 · XV · Cuento de hadas lila (9/11/2026, referencia de Maki: video de
+       Pinterest con un libro lila con el 15 que se abre y suelta humo lila y
+       dorado). Papel lila con marco de rosas y glicinas, farol, castillo y
+       carruaje chiquitos abajo; corona dorada como viñeta y tarjetas festón.
+       La APERTURA es el sobre «hadas-libro-15» (el libro que se abre). */
+    hadas: { nombre: 'XV · Cuento de hadas lila', pa:'#F8F3FC', pa2:'#EEE4F7', ti:'#4A2C6E', ti2:'#5A3B7E', ti3:'#DCCBEE', ac:'#9A72C9', mt:'oro', mtT:'#76571A', base:'hadas',
+      disp:'Cormorant', scr:'Great Vibes', txt:'Cormorant Garamond', h3:'Cormorant', adorno:'corona', forma:'feston', boton:'999px', radio:'20px',
+      nm:['Great Vibes','clamp(64px,17vw,92px)','normal',400,'none','0',1.1],
+      pk:['Cormorant','13px','uppercase','.38em','normal'],
+      h2:['38px','0','none','normal',400],
+      kk:['Cormorant','13px','uppercase','.34em','m'] }
   };
 
   /* ⚠️ Se pide SÓLO el nombre de la familia y SÓLO los estilos que existen:
