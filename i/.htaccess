@@ -86,3 +86,16 @@ DirectoryIndex index.php index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^sello-marfil\.png$ https://res.cloudinary.com/oc8cgqt4/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1788575008/invitame/r3v04rzv5gq9gfqaznom.png [R=302,L]
 </IfModule>
+
+# ★ 9/11/2026 (Maki y Jazmín: «están tardando en cargar»). Estos desvíos a
+#   Cloudinary salían sin permiso de guardarse: cada invitado, en cada visita,
+#   iba hasta el servidor por cada textura (medido desde Argentina: 0,5 a 11 s
+#   una sola). Las direcciones de destino llevan su versión (v…), así que el
+#   desvío se puede guardar: 1 h en el teléfono, 1 día en el borde de Hostinger.
+<IfModule mod_headers.c>
+  <FilesMatch "^(tex-papel|tex-lino|tex-kraft|tex-marmol|tex-acuarela|textura|cielo)\.jpg$|^(nube|sello-marfil)\.png$">
+    Header always set Cache-Control "public, max-age=3600, s-maxage=86400"
+    Header always unset Pragma
+    Header always unset Expires
+  </FilesMatch>
+</IfModule>
