@@ -2094,6 +2094,22 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.7
   },
 
+  /* 9/11/2026 · pedido de Maki: apertura KIDS a pantalla completa (nada de sobre
+     chiquito en el medio). Caja de regalo de lunares con moño fucsia entre globos:
+     antes de tocar se mueve impaciente (espera en bucle), al tocar salta la tapa
+     y explota confeti, serpentinas y globitos hasta llenar la pantalla de luz.
+     Veo 3.1 Fast. Va con «Kids · Serpentinas de colores» (celebra-serpentina). */
+  "kids-caja-confeti-video": {
+    nombre:     "Kids · caja de regalo de lunares que explota en confeti, serpentinas y globos (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,eo_7.6/w_720,h_1280,c_fill,q_auto:good,vc_h264,ac_none/invitame/serpentina/kc-apertura-a-9-11.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0/w_720,h_1280,c_fill,q_auto:best,f_jpg/invitame/serpentina/kc-apertura-a-9-11.jpg",
+    espera:     "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,h_1280,c_fill,q_auto:good,vc_h264,ac_none/invitame/eventos/ev-serpentina2-caja-espera.mp4",
+    color:      "#F7D9E8",
+    luz:        6.3,
+    luzColor:   "#FFF4FA",
+    luzFundido: 0.7
+  },
+
   "puertas-cinta-olivo-video": {
     oculto:     true,
     nombre:     "Papel marfil con cinta de organza, moño y ramita de olivo · las puertas se abren y entra la luz (video)",

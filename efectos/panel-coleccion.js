@@ -308,7 +308,7 @@
       ayuda: 'Pastel rosa, lila y menta con nubes y arcoíris de peluche. Letra Sniglet y Sacramento, cuerpo Quicksand; tarjetas redondeadas tipo nube, adorno de nube con arcoíris. Oro rosa. Clara. Trae su propia paleta.' },
     { id: 'celebra-serpentina', nombre: 'Kids · Serpentinas de colores',
       paleta: null, paletaNombre: null,
-      ayuda: 'Fondo blanco con serpentinas, espirales y confeti en colores caramelo (rosa, amarillo, naranja, verde lima, celeste, lila) que se mueven. Nombre en Lilita One gordita, cuerpo Fredoka, kickers en Caveat; tarjetas blancas con borde de tres colores y retratos con aro arcoíris. Clara y muy alegre. Trae su propia paleta.' },
+      ayuda: 'Fiesta de colores: globos brillantes, serpentinas arcoíris y confeti que se mueven en un fondo EN VIDEO (ev-serpentina2-fondo). Nombre en Lilita One gordita, cuerpo Fredoka, kickers en Caveat; tarjetas blancas con borde de tres colores y retratos con aro arcoíris. Va con la apertura a pantalla completa «Kids · caja de regalo que explota en confeti». Clara y muy alegre. Trae su propia paleta.' },
     { id: 'celebra-hadas', nombre: 'XV · Cuento de hadas lila',
       paleta: null, paletaNombre: null,
       ayuda: 'Cuento de hadas en lila y oro: papel lila con marco de rosas y glicinas, farol, y un castillo con carruaje chiquitos abajo; polvo de oro y mariposas que se mueven. Nombre en Great Vibes, títulos Cormorant; tarjetas festón y una corona como viñeta. Va con la apertura «Cuento · libro lila con el 15» (en vez del sobre). Trae su propia paleta.' },
