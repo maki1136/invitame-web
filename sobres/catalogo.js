@@ -1177,15 +1177,20 @@ window.SOBRES_INVITAME = {
      blanco sin nada». (1) q_auto + baseline 3.1 lo entregaba a 1,35 Mbps: va
      q_auto:best + vc_h264 (High, ~2 Mbps). (2) Desde el segundo 6,0 del original
      la tarjeta lisa llena la pantalla: se corta en 6,2 y la luz entra a los 4,2
-     (= 5,4 del original, la tarjeta recién salió del sobre). */
+     (= 5,4 del original, la tarjeta recién salió del sobre).
+     ⚠️ Jazmín (9/11, 2.ª vuelta): «cuando lo abro es como que se tilda» y «el papel
+     ocupa demasiado protagonismo» (como valeria-y-emiliano-estandar, que no muestra
+     tarjeta). Ahora: corta en 4,9 del original (la tarjeta apenas asoma), la luz
+     entra a los 2,9 y tapa en 0,8 s; y main 3.1 a q_auto:good (~0,5 MB, 1,1 Mbps
+     en vez de 1,4 MB a 2,2 Mbps: el teléfono lo decodifica sin trabarse). */
   'oleo-borgona': {
     nombre:     "Óleo Borgoña · la solapa pintada en borgoña claro se abre y sale la tarjeta (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_6.2,q_auto:best,vc_h264/invitame/oleo-borgona/oleo-borgona-sobre.mp4",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_4.9,q_auto:good,vc_h264:main:3.1/invitame/oleo-borgona/oleo-borgona-sobre.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto:best,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre.jpg",
     color:      "#E6DDD2",
-    luz:        4.2,
+    luz:        2.9,
     luzColor:   "#F4F1EA",
-    luzFundido: 0.7
+    luzFundido: 0.8
   },
 
   'oleo-rose': {
@@ -2118,6 +2123,20 @@ window.SOBRES_INVITAME = {
     color:      "#D7C3B4",
     luz:        4.0,
     luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
+  /* 9/11/2026 · Jazmín (Alejandra, Mis XV): «tal cual está pero con el sobre
+     blanco, el color de fondo también blanco». Es el video de arriba con el
+     papel durazno pasado a blanco cuadro por cuadro (mariposas, cintas verdes,
+     flores rosas, perlas y lacre plateado quedan igual). */
+  "mariposas-verdes-plata-blanco-video": {
+    nombre:     "Mariposas verde salvia con borde rosa, cintas y lacre plateado · sobre BLANCO · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.4/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/mariposa-verde-plata-blanco-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/mariposa-verde-plata-blanco-1080.jpg",
+    color:      "#F7F6F3",
+    luz:        4.0,
+    luzColor:   "#FBFAF8",
     luzFundido: 0.8
   },
 
