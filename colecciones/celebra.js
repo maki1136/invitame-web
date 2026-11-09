@@ -300,7 +300,7 @@
        fondo blanco con serpentinas, espirales y confeti en colores caramelo,
        «bien alegre, colorida»). Blanco puro, letra gordita Lilita One, tarjetas
        blancas con borde de tres colores y una serpentina como viñeta. */
-    serpentina: { nombre: 'Kids · Serpentinas de colores', pa:'#FFFFFF', pa2:'#FFF6FA', ti:'#2E2557', ti2:'#3D3470', ti3:'#FFC2DC', ac:'#FF4F9A', mt:'oro', mtT:'#8A4B12', base:'serpentina',
+    serpentina: { nombre: 'Kids · Serpentinas de colores', pa:'#FFFFFF', pa2:'#FFF6FA', ti:'#2E2557', ti2:'#3D3470', ti3:'#FFC2DC', ac:'#FF4F9A', mt:'rosa', mtT:'#8E2F5C', base:'serpentina',
       disp:'Lilita One', scr:'Caveat', txt:'Fredoka', h3:'Lilita One', adorno:'serpentina', forma:'confeti', boton:'999px', radio:'26px',
       nm:['Lilita One','clamp(54px,15vw,78px)','normal',400,'none','.01em',1.0],
       pk:['Fredoka','14px','uppercase','.28em','normal'],
