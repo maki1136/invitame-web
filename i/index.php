@@ -6,6 +6,8 @@
  * Si algo falla, cae en los valores por defecto que ya trae index.html (nunca rompe).
  */
 
+$IV_T0 = microtime(true); $IV_TIEMPOS = array();
+function iv_marca($k, $t0, $extra = '') { global $IV_TIEMPOS; $IV_TIEMPOS[] = $k . ';dur=' . round((microtime(true) - $t0) * 1000) . ($extra !== '' ? ';desc="' . $extra . '"' : ''); }
 $SITE = 'https://invitameok.net';
 $PROJECT = 'invitame-9b51f';
 // Versión base: la que estaba viva cuando arrancó el versionado.
@@ -60,6 +62,7 @@ $campos = array(); $tamElegidos = array(); $leyoEvento = false;
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
          '/databases/(default)/documents/inv_eventos/' . rawurlencode($slug);
+  $ivT = microtime(true);
   $ch = curl_init($url);
   curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
@@ -69,18 +72,22 @@ if ($slug !== '') {
   ]);
   $res  = curl_exec($ch);
   $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $ivI = curl_getinfo($ch);
   curl_close($ch);
+  iv_marca('fs', $ivT, $code . ' dns' . round($ivI['namelookup_time'] * 1000) . ' con' . round($ivI['connect_time'] * 1000) . ' tls' . round($ivI['appconnect_time'] * 1000));
   /* ★ 2/11/2026 (Jazmín, citlalli-y-hedwin-jesus: «la invitación se puso con
      el nombre de otros novios… duró media hora»). Si la base no contesta a
      tiempo, la página salía con la boda de EJEMPLO (María & Diego, «Familia
      Gómez»…). Se reintenta una vez con más paciencia antes de rendirse. */
   if (!($res && $code == 200) && ($code == 0 || $code == 429 || $code >= 500)) {
     usleep(300000);
+    $ivT = microtime(true);
     $ch = curl_init($url);
     curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_TIMEOUT => 7, CURLOPT_SSL_VERIFYPEER => true]);
     $res  = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+    iv_marca('fs2', $ivT, (string)$code);
   }
 
   if ($res && $code == 200) {
@@ -624,7 +631,9 @@ function iv_cache_atiende() {
   @file_put_contents($f, time() . ' ' . ($ok ? 'ok' : 'no'));
   return $ok;
 }
+$ivT = microtime(true);
 if ($conCache && $cacheQ !== '1' && !iv_cache_atiende()) $conCache = false;
+iv_marca('worker', $ivT, $conCache ? 'ok' : 'directa');
 header('X-Invitame-Cache: ' . ($conCache ? 'worker' : 'directa'));
 $fotosLivianas = ($conCache ? '<script>window.INV_CACHE_MEDIOS="https://galeria.littlemomentsok.workers.dev/";</' . 'script>' : '')
                . '<script src="/efectos/imagenes-livianas.js"></' . 'script>';
@@ -1035,6 +1044,8 @@ if ($slug !== '') {
   }
 }
 
+iv_marca('total', $IV_T0);
+header('Server-Timing: ' . implode(', ', $IV_TIEMPOS));
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 echo $tpl;
