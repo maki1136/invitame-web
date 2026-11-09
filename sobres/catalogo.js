@@ -1152,7 +1152,7 @@ window.SOBRES_INVITAME = {
      para «Óleo · Azul» (ximena-y-andres-azul, pedido de Jazmín). */
   'oleo-azul-luz': {
     nombre:     "Óleo Azul · se abre la solapa y sale luz de adentro (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo-azul/oleo-azul-sobre-luz.mp4",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:best,vc_h264/invitame/oleo-azul/oleo-azul-sobre-luz.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-azul/oleo-azul-sobre-luz.jpg",
     color:      "#E6DDD2",
     luz:        3.0,
@@ -1172,15 +1172,20 @@ window.SOBRES_INVITAME = {
 
   /* 9/11/2026 · el sobre de Rosé con las flores y el lacre en BORGOÑA claro
      (pedido de la clienta de ivonycarlos, vía Jazmín: «burgundy más claro en vez
-     del rosa»). Mismo video, sólo cambia el color; mismos cortes y luz. */
+     del rosa»). Mismo video, sólo cambia el color.
+     ⚠️ Maki (9/11): «está en mala calidad y cuando sale la carta queda sólo
+     blanco sin nada». (1) q_auto + baseline 3.1 lo entregaba a 1,35 Mbps: va
+     q_auto:best + vc_h264 (High, ~2 Mbps). (2) Desde el segundo 6,0 del original
+     la tarjeta lisa llena la pantalla: se corta en 6,2 y la luz entra a los 4,2
+     (= 5,4 del original, la tarjeta recién salió del sobre). */
   'oleo-borgona': {
     nombre:     "Óleo Borgoña · la solapa pintada en borgoña claro se abre y sale la tarjeta (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_7.9,q_auto,vc_h264:baseline:3.1/invitame/oleo-borgona/oleo-borgona-sobre.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_6.2,q_auto:best,vc_h264/invitame/oleo-borgona/oleo-borgona-sobre.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto:best,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre.jpg",
     color:      "#E6DDD2",
-    luz:        6.0,
-    luzColor:   "#E3E2DB",
-    luzFundido: 0.6
+    luz:        4.2,
+    luzColor:   "#F4F1EA",
+    luzFundido: 0.7
   },
 
   'oleo-rose': {
