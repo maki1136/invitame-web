@@ -49,12 +49,20 @@
   function tqDelOpt(i,j){if(D.trivia[i].o.length>2){D.trivia[i].o.splice(j,1);if(D.trivia[i].c>=D.trivia[i].o.length)D.trivia[i].c=0;renderPanel();}}
   function tqAdd(){D.trivia.push({q:'',o:['',''],c:0});renderPanel();}
   function tqDel(i){D.trivia.splice(i,1);renderPanel();}
-  const SECLABELS={frase:'Frase',eventos:'Dónde y cuándo',itinerario:'Itinerario',hospedaje:'Hospedaje',dresscode:'Dress code',padres:'Los papás',galeria:'Galería',trivia:'Trivia',regalos:'Mesa de regalos'};
-  const SECALL=['frase','eventos','itinerario','hospedaje','dresscode','padres','galeria','trivia','regalos'];
+  /* 9/11/2026 (Jazmín): «En REORDENAR no se puede modificar el video». El motor ya
+     ordena cualquier sección de la invitación; la lista sólo tenía 9. Se suman la
+     carta, el clima, Instagram, el video y la playlist, en el lugar donde vienen. */
+  const SECLABELS={frase:'Frase',carta:'Carta',eventos:'Dónde y cuándo',itinerario:'Itinerario',hospedaje:'Hospedaje',dresscode:'Dress code',padres:'Los papás',galeria:'Galería',trivia:'Trivia',regalos:'Mesa de regalos',clima:'El clima',hashtag:'Instagram (hashtag)',video:'Nuestro video',spotify:'Playlist'};
+  const SECALL=['frase','carta','eventos','itinerario','hospedaje','dresscode','padres','galeria','trivia','regalos','clima','hashtag','video','spotify'];
   let _dragO=null;
   function verOrden(){
     D.secOrden=D.secOrden||SECALL.slice();
-    SECALL.forEach(k=>{if(D.secOrden.indexOf(k)<0)D.secOrden.push(k);});
+    /* lo que falta en un orden ya guardado entra en su lugar de siempre (después
+       de la sección que lo precede en SECALL), no al final: si no, abrir la lista
+       y guardar movía la carta de lugar sin que nadie la tocara. */
+    SECALL.forEach((k,i)=>{ if(D.secOrden.indexOf(k)>=0) return;
+      let pos=0; for(let j=i-1;j>=0;j--){ const q=D.secOrden.indexOf(SECALL[j]); if(q>=0){ pos=q+1; break; } }
+      D.secOrden.splice(pos,0,k); });
     D.secOrden=D.secOrden.filter(k=>SECALL.indexOf(k)>=0);
     let box=el('ordbox');
     if(!box){box=document.createElement('div');box.id='ordbox';box.style.cssText='position:fixed;inset:0;background:rgba(73,17,26,.55);display:flex;align-items:flex-start;justify-content:center;z-index:9999;padding:26px 18px;overflow:auto';document.body.appendChild(box);}
