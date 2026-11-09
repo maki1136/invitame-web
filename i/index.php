@@ -62,12 +62,19 @@ $campos = array(); $tamElegidos = array(); $leyoEvento = false;
 if ($slug !== '') {
   $url = 'https://firestore.googleapis.com/v1/projects/' . $PROJECT .
          '/databases/(default)/documents/inv_eventos/' . rawurlencode($slug);
+  /* ★ 9/11/2026 (Maki y Jazmín: «están tardando en cargar»). Si la base tarda,
+     antes se esperaban hasta 4 s, se reintentaba con hasta 7 s más, y recién
+     ahí salía la página: 8 a 18 s medidos desde Argentina. Ahora se espera
+     menos y, si no contesta a tiempo, sale con la ÚLTIMA COPIA BUENA de esta
+     invitación (se guarda en el servidor cada vez que la base contesta bien).
+     Nunca sale la boda de ejemplo: sin copia, se reintenta como antes. */
+  $ivCopia = rtrim(sys_get_temp_dir(), '/') . '/invitame-ev-' . md5($slug) . '.json';
   $ivT = microtime(true);
   $ch = curl_init($url);
   curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_CONNECTTIMEOUT => 3,
-    CURLOPT_TIMEOUT        => 4,
+    CURLOPT_CONNECTTIMEOUT => 2,
+    CURLOPT_TIMEOUT_MS     => (is_file($ivCopia) ? 2500 : 4000),
     CURLOPT_SSL_VERIFYPEER => true,
   ]);
   $res  = curl_exec($ch);
@@ -79,6 +86,12 @@ if ($slug !== '') {
      el nombre de otros novios… duró media hora»). Si la base no contesta a
      tiempo, la página salía con la boda de EJEMPLO (María & Diego, «Familia
      Gómez»…). Se reintenta una vez con más paciencia antes de rendirse. */
+  if ($res && $code == 200) {
+    @file_put_contents($ivCopia, $res, LOCK_EX);
+  } elseif (($code == 0 || $code == 429 || $code >= 500) && is_file($ivCopia)) {
+    $ivC = @file_get_contents($ivCopia);
+    if ($ivC !== false && $ivC !== '') { $res = $ivC; $code = 200; iv_marca('copia', $ivT, 'ultima copia buena'); }
+  }
   if (!($res && $code == 200) && ($code == 0 || $code == 429 || $code >= 500)) {
     usleep(300000);
     $ivT = microtime(true);
