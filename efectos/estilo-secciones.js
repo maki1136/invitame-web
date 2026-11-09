@@ -139,6 +139,9 @@
     todos(sec, cfg.texto).forEach(function (el) { poner(el, 'color', tx); poner(el, 'font-size', tam); });
 
     if (key === 'carta') {
+      /* ★ 9/11: «Sin la frase arriba del sobre» — la frase que algunas colecciones
+         (Marfil) mudan adentro de la sección de la carta se esconde. */
+      todos(sec, '.mf-frase, :scope > p.frase').forEach(function (p) { poner(p, 'display', es.sinFrase ? 'none' : ''); });
       var hoja = sec.querySelector('.cf-letter');
       poner(hoja, 'background-color', colorOk(es.hoja));
       if (colorOk(es.hoja)) poner(hoja, 'background-image', 'none');

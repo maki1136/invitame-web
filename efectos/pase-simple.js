@@ -66,12 +66,30 @@
     s.id = 'pase-simple-css';
     s.textContent = [
       'section.pase.pase-simple .pasecard{display:block!important;text-align:center!important;padding:26px 18px!important}',
-      'section.pase.pase-simple .pasecard > :not(.ps-caja){display:none!important}',
+      'section.pase.pase-simple .pasecard > :not(.ps-caja):not(.ps-med){display:none!important}',
       'section.pase.pase-simple .ps-caja{display:block}',
       'section.pase.pase-simple .ps-kick{font-size:11px;letter-spacing:.32em;text-transform:uppercase;opacity:.7;margin-bottom:8px}',
       'section.pase.pase-simple .ps-num{font-size:40px;line-height:1.1}',
       'section.pase.pase-simple .ps-linea{width:56px;height:1px;margin:14px auto 0;background:currentColor;opacity:.45}',
-      'section.pase.pase-simple .ps-frase{margin-top:14px;font-size:17px;line-height:1.35}'
+      'section.pase.pase-simple .ps-frase{margin-top:14px;font-size:17px;line-height:1.35}',
+      /* ★ 9/11/2026 — Maki (renata-y-patricio-platinum): «Datos del invitado, pase
+         para dos personas, te esperamos: ponele un poco más de diseño, está
+         horrible esa parte». Sólo en las invitaciones nuevas (ps-nueva):
+         tarjeta con filete doble, la cantidad grande, un separador con rombo
+         y la frase en cursiva. Los colores salen del título (currentColor). */
+      'section.pase.pase-simple.ps-nueva .pasecard{border-radius:18px!important;padding:34px 24px 30px!important;',
+      '  box-shadow:0 14px 34px rgba(0,0,0,.10),inset 0 0 0 1px rgba(255,255,255,.55)!important;position:relative!important}',
+      'section.pase.pase-simple.ps-nueva .pasecard::after{content:"";position:absolute;inset:8px;border-radius:12px;',
+      '  border:1px solid currentColor;opacity:.22;pointer-events:none}',
+      'section.pase.pase-simple.ps-nueva .ps-kick{font-size:10.5px;letter-spacing:.42em;opacity:.75;margin-bottom:10px}',
+      'section.pase.pase-simple.ps-nueva .ps-num{font-size:46px;line-height:1.05}',
+      'section.pase.pase-simple.ps-nueva .ps-linea{width:auto;height:auto;background:none;opacity:1;margin:16px auto 0;',
+      '  display:flex;align-items:center;justify-content:center;gap:10px}',
+      'section.pase.pase-simple.ps-nueva .ps-linea::before,section.pase.pase-simple.ps-nueva .ps-linea::after{content:"";',
+      '  display:block;width:46px;height:1px;background:currentColor;opacity:.45}',
+      'section.pase.pase-simple.ps-nueva .ps-linea i{display:block;width:7px;height:7px;border:1px solid currentColor;',
+      '  transform:rotate(45deg);opacity:.7}',
+      'section.pase.pase-simple.ps-nueva .ps-frase{font-style:italic;font-size:19px;margin-top:14px;letter-spacing:.01em}'
     ].join('\n');
     (document.head || document.documentElement).appendChild(s);
   }
@@ -96,6 +114,8 @@
        porque no tiene nada personal */
     sec.style.display = '';
     sec.classList.add('pase-simple');
+    /* el diseño nuevo: en las invitaciones nuevas, o cuando eligieron un medallón (opt-in) */
+    sec.classList.toggle('ps-nueva', !!esNueva || document.documentElement.hasAttribute('data-medallon'));
 
     var t = sec.querySelector('.t');
     var titulo = String(cfg().titulo || '').trim() || '¡Esperamos contar contigo!';
@@ -107,7 +127,7 @@
     if (!caja) {
       caja = document.createElement('div');
       caja.className = 'ps-caja';
-      caja.innerHTML = '<div class="ps-kick">Pase para</div><div class="ps-num"></div><div class="ps-linea"></div>';
+      caja.innerHTML = '<div class="ps-kick">Pase para</div><div class="ps-num"></div><div class="ps-linea"><i></i></div>';
       card.appendChild(caja);
     }
     /* la letra de los números: la del título de la colección */
