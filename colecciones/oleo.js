@@ -1038,6 +1038,32 @@
         P + '.portada video.cover-vid{ animation:none!important; scale:1!important; translate:0 0!important; }',
         P + '.footer :is(h1,h2,h3,p,span,div){ text-shadow:0 1px 3px rgba(0,0,0,.8), 0 0 16px rgba(0,0,0,.55)!important; }'
       ].join('\n')
+    },
+    /* ⭐ AZUL (9/11/2026, pedido de Jazmín: «el diseño Óleo Rosé en tonos azules»;
+       muestra ximena-y-andres-azul). Es Rosé tal cual, con los rosas, nudes y
+       duraznos pasados a azul polvo y la tinta a azul marino; la hoja de oro, la
+       champaña y el marfil QUEDAN (azul y oro). Las imágenes se tiñeron con el
+       mismo criterio (sólo los tonos rosados, ±22° del rojo, pasan a 214°):
+       invitame/oleo-azul/oleo-azul-{base,med,p1,p2,qr,tv,tp,filtro,fiesta,vest,insp}.
+       Contrastes: TINTA #1F2E4A sobre papel #EEF2F7 ≈ 12,8; TINTA2 #3E5274 ≈ 7,2;
+       CREMA #F5F8FC sobre la banda #3E5C86 ≈ 6,4. */
+    azul: {
+      hex: {
+        '#C98E8A':'#8AA3C4', '#E3C2B8':'#C3D3E6',
+        '#F7EFEA':'#EEF2F7', '#FBF6F2':'#F7F9FC', '#4A2E2C':'#1F2E4A', '#6B4744':'#3E5274',
+        '#82504C':'#3E5C86', '#FBF4EF':'#F5F8FC', '#F5E6DF':'#E3EBF5',
+        '#2E1C1B':'#141E30', '#F2E4DC':'#E6EDF5'
+      },
+      rgb: {
+        '74,46,44':'31,46,74', '201,142,138':'138,163,196', '247,239,234':'238,242,247',
+        '40,20,18':'16,24,40', '60,34,32':'26,38,62', '240,220,211':'222,231,242',
+        '251,246,242':'247,249,252', '255,246,236':'248,250,255', '120,70,60':'52,78,118',
+        '107,71,68':'62,82,116', '251,244,239':'245,248,252'
+      },
+      url: {
+        'invitame/oleo/oleo-rose-base.webp':'invitame/oleo-azul/oleo-azul-base.jpg',
+        'invitame/piezas/oleo-medallon-rose-2.webp':'invitame/oleo-azul/oleo-azul-med.png'
+      }
     }
   };
   function tono() {

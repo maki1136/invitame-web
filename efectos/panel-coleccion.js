@@ -174,6 +174,12 @@
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
              'Rosa empolvado, nude, champaña y hoja de oro; las tarjetas son lienzos ' +
              'colgados y la marca es una pincelada. Trae su propia paleta.' },
+    { id: 'oleo-azul', nombre: 'Óleo · Azul',
+      paleta: null, paletaNombre: null,
+      ayuda: 'Linea ARTE, el mismo diseño de Óleo Rosé en azul: azul polvo, azul ' +
+             'marino, marfil y hoja de oro. Las rosas de la portada y del fondo, el ' +
+             'medallón, la raspadita y las tapas vienen teñidas en azul (carpeta ' +
+             'invitame/oleo-azul). Trae su propia paleta.' },
     { id: 'oleo-piedra', nombre: 'Óleo · Piedra',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE, el mismo diseño de Óleo en otro tono: greige, arena, ' +

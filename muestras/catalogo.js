@@ -151,6 +151,16 @@
       paleta:  ["#9c7b67", "#ccc3bb", "#ab9e8e", "#7c5241"],
       tipos:   ["boda"]
     },
+    'oleo-azul': {
+      nombre:  "Óleo Azul",
+      bajada:  "Las rosas al óleo de Rosé, en azul polvo con hoja de oro.",
+      muestra: 'ximena-y-andres-azul',
+      foto:    '/formulario/disenos/ximena-y-andres-azul.webp',
+      color:   '#5f7699',
+      color2:  '#3e5274',
+      paleta:  ["#8aa3c4", "#c3d3e6", "#3e5c86", "#d9c3a0"],
+      tipos:   ["boda"]
+    },
     'oleo-piedra': {
       nombre:  "Óleo Piedra",
       bajada:  "Óleo en greige y plata, para viñedo o hacienda.",
