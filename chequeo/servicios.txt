@@ -1,9 +1,9 @@
-CHEQUEO DE SERVICIOS — 2026-11-08 19:22 UTC
+CHEQUEO DE SERVICIOS — 2026-11-09 23:43 UTC
 🟢 TODO BIEN
 
-BIEN   Cloudinary (plan Small PAYG): 38.4 de 60 créditos = 64%
+BIEN   Cloudinary (plan Small PAYG): 41.3 de 60 créditos = 69%
 BIEN   Galería en vivo: 0.002 GB de 60 GB este mes = 0%
 BIEN   Firebase: contesta bien
-BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (2776 KB)
+BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (1477 KB)
 BIEN   Caché de fotos: prendida y entregando (r2)
 BIEN   Foto de prueba: subió, pasó el filtro (openai) y quedó APROBADA
