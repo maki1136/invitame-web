@@ -621,6 +621,29 @@
     catch (e) { return null; }
   }
 
+  /* ★ 9/11/2026 · la espera en video (ver la nota de .env-espera en el CSS) */
+  function ponerEspera(env, m) {
+    try {
+      var esp = env.querySelector('video.env-espera');
+      if (m && m.espera && m.apertura !== 'solapas') {
+        if (!esp) {
+          esp = document.createElement('video');
+          esp.className = 'env-espera';
+          esp.muted = true; esp.defaultMuted = true; esp.loop = true; esp.playsInline = true;
+          esp.setAttribute('muted', ''); esp.setAttribute('playsinline', ''); esp.setAttribute('webkit-playsinline', '');
+          esp.setAttribute('aria-hidden', 'true'); esp.setAttribute('tabindex', '-1'); esp.preload = 'auto';
+          esp.addEventListener('playing', function () { esp.classList.add('anda'); });
+          env.appendChild(esp);
+        }
+        if (esp.getAttribute('src') !== m.espera) { esp.classList.remove('anda'); esp.setAttribute('src', m.espera); try { esp.load(); } catch (e) {} }
+        var pr = esp.play(); if (pr && pr.catch) pr.catch(function () {});
+      } else if (esp && esp.parentNode) {
+        try { esp.pause(); } catch (e) {}
+        esp.parentNode.removeChild(esp);
+      }
+    } catch (e) {}
+  }
+
   function delCatalogo(modelo) {
     var cat = catalogo();
     if (!cat || !modelo) return null;
@@ -1319,26 +1342,7 @@
         solapasViejas.parentNode.removeChild(solapasViejas);
       }
       vid.setAttribute('poster', m.poster || '');
-      /* ★ 9/11 · la espera en video (ver la nota de .env-espera) */
-      try {
-        var esp = env.querySelector('video.env-espera');
-        if (m.espera) {
-          if (!esp) {
-            esp = document.createElement('video');
-            esp.className = 'env-espera';
-            esp.muted = true; esp.defaultMuted = true; esp.loop = true; esp.playsInline = true;
-            esp.setAttribute('muted', ''); esp.setAttribute('playsinline', ''); esp.setAttribute('webkit-playsinline', '');
-            esp.setAttribute('aria-hidden', 'true'); esp.setAttribute('tabindex', '-1'); esp.preload = 'auto';
-            esp.addEventListener('playing', function () { esp.classList.add('anda'); });
-            env.appendChild(esp);
-          }
-          if (esp.getAttribute('src') !== m.espera) { esp.classList.remove('anda'); esp.setAttribute('src', m.espera); try { esp.load(); } catch (e) {} }
-          var pr = esp.play(); if (pr && pr.catch) pr.catch(function () {});
-        } else if (esp && esp.parentNode) {
-          try { esp.pause(); } catch (e) {}
-          esp.parentNode.removeChild(esp);
-        }
-      } catch (e) {}
+      ponerEspera(env, m);
       if (vid.getAttribute('src') !== m.video) {
         /* ⚠️ video nuevo = buffer vacío. Se baja 'listo' hasta que cargue
            entero, si no la pista invita a tocar algo que se va a trabar. */
@@ -1392,6 +1396,7 @@
     } else {
       vid.style.display = '';
       vid.setAttribute('poster', m.poster || '');
+      ponerEspera(env, m);
       vid.setAttribute('playsinline', '');
       vid.setAttribute('webkit-playsinline', '');
       vid.setAttribute('disablepictureinpicture', '');
