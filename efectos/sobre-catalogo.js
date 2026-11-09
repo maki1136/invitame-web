@@ -621,6 +621,29 @@
     catch (e) { return null; }
   }
 
+  /* ★ 9/11/2026 · la espera en video (ver la nota de .env-espera en el CSS) */
+  function ponerEspera(env, m) {
+    try {
+      var esp = env.querySelector('video.env-espera');
+      if (m && m.espera && m.apertura !== 'solapas') {
+        if (!esp) {
+          esp = document.createElement('video');
+          esp.className = 'env-espera';
+          esp.muted = true; esp.defaultMuted = true; esp.loop = true; esp.playsInline = true;
+          esp.setAttribute('muted', ''); esp.setAttribute('playsinline', ''); esp.setAttribute('webkit-playsinline', '');
+          esp.setAttribute('aria-hidden', 'true'); esp.setAttribute('tabindex', '-1'); esp.preload = 'auto';
+          esp.addEventListener('playing', function () { esp.classList.add('anda'); });
+          env.appendChild(esp);
+        }
+        if (esp.getAttribute('src') !== m.espera) { esp.classList.remove('anda'); esp.setAttribute('src', m.espera); try { esp.load(); } catch (e) {} }
+        var pr = esp.play(); if (pr && pr.catch) pr.catch(function () {});
+      } else if (esp && esp.parentNode) {
+        try { esp.pause(); } catch (e) {}
+        esp.parentNode.removeChild(esp);
+      }
+    } catch (e) {}
+  }
+
   function delCatalogo(modelo) {
     var cat = catalogo();
     if (!cat || !modelo) return null;
@@ -685,6 +708,20 @@
       + ' background-repeat:no-repeat; z-index:2; pointer-events:none;'
       + ' opacity:1; transition:opacity .22s linear; }',
     '#env.vid-vivo .env-poster{ opacity:0; }',
+    /* ★ 9/11/2026 · LA ESPERA EN VIDEO (opt-in por sobre: `espera` en el catálogo).
+       Maki, con el libro de cuento: «el libro no viste el video? es un video no una
+       imagen». Antes de tocar, en vez de la foto quieta del sobre corre un bucle
+       mudo (mariposas, brillos) que arranca y termina en el MISMO cuadro que el
+       primero del video de apertura: al tocar, el corte no se nota.
+       Va arriba de la lámina, con su misma geometría, y sólo se ve cuando de
+       verdad está corriendo (clase .anda): si el iPhone no lo deja arrancar
+       (modo de bajo consumo) queda la foto de siempre, sin botón de play. */
+    '#env .env-espera{ visibility:visible!important; position:fixed; inset:0; width:100%; height:100%; object-fit:contain; z-index:3; pointer-events:none; opacity:0; transition:opacity .3s linear; background:transparent; }',
+    '#env .env-espera.anda{ opacity:1; }',
+    '#env.vid-vivo .env-espera{ opacity:0!important; }',
+    '#env.gone .env-espera{ visibility:hidden!important; }',
+    '@media (max-width:679px){ #env .env-espera{ object-fit:cover; } html.inv-sobre-completo #env .env-espera{ object-fit:contain!important; } }',
+    '#env .env-espera::-webkit-media-controls, #env .env-espera::-webkit-media-controls-start-playback-button, #env .env-espera::-webkit-media-controls-overlay-play-button{ display:none!important; -webkit-appearance:none; }',
     /* ★ 22/10/2026 — URGENTE iPhone: después de abrir no respondía ningún botón.
        #env quedaba a pantalla completa (fixed, z 100) con el video y la lámina
        forzados a visible: en iOS Safari un <video> fijo a pantalla completa se
@@ -1305,6 +1342,7 @@
         solapasViejas.parentNode.removeChild(solapasViejas);
       }
       vid.setAttribute('poster', m.poster || '');
+      ponerEspera(env, m);
       if (vid.getAttribute('src') !== m.video) {
         /* ⚠️ video nuevo = buffer vacío. Se baja 'listo' hasta que cargue
            entero, si no la pista invita a tocar algo que se va a trabar. */
@@ -1358,6 +1396,7 @@
     } else {
       vid.style.display = '';
       vid.setAttribute('poster', m.poster || '');
+      ponerEspera(env, m);
       vid.setAttribute('playsinline', '');
       vid.setAttribute('webkit-playsinline', '');
       vid.setAttribute('disablepictureinpicture', '');
@@ -1744,6 +1783,7 @@
       var v = document.getElementById('env-vid');
       if (v) { try { v.pause(); v.removeAttribute('src'); v.removeAttribute('poster'); v.load(); } catch (e) {} }
       var l = env.querySelector('.env-poster'); if (l && l.parentNode) l.parentNode.removeChild(l);
+      var es = env.querySelector('video.env-espera'); if (es) { try { es.pause(); es.removeAttribute('src'); es.load(); } catch (e) {} if (es.parentNode) es.parentNode.removeChild(es); }
     }
     function mirar() {
       var env = document.getElementById('env');
