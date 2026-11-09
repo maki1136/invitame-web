@@ -168,16 +168,28 @@
   /* el fondo real: se corta en el marco, como hace reglas-duras (su error 16) */
   function fondoDe(el) {
     var marco = document.querySelector('.frame');
-    var n = el;
+    /* 9/11: las capas SEMITRANSPARENTES (p. ej. las flechitas de la galería,
+       negro al 58 %) se componen sobre lo de abajo en vez de ignorarse: antes
+       medía «blanco sobre blanco = 1,00» un botón que en pantalla es oscuro. */
+    var capas = [], n = el, fin = null;
     while (n && n !== document.documentElement) {
       var c = aRGB(getComputedStyle(n).backgroundColor);
-      if (c && c[3] >= 0.85) return c;
+      if (c && c[3] >= 0.85) { fin = c; break; }
+      if (c && c[3] >= 0.3) capas.push(c);
       if (n === marco) break;
       n = n.parentElement;
     }
-    var v = '';
-    try { v = getComputedStyle(document.documentElement).getPropertyValue('--lino'); } catch (e) {}
-    return aRGB(v) || [255, 255, 255, 1];
+    if (!fin) {
+      var v = '';
+      try { v = getComputedStyle(document.documentElement).getPropertyValue('--lino'); } catch (e) {}
+      fin = aRGB(v) || [255, 255, 255, 1];
+    }
+    var res = [fin[0], fin[1], fin[2], 1];
+    for (var i = capas.length - 1; i >= 0; i--) {
+      var a = capas[i][3];
+      res = [capas[i][0] * a + res[0] * (1 - a), capas[i][1] * a + res[1] * (1 - a), capas[i][2] * a + res[2] * (1 - a), 1];
+    }
+    return res;
   }
 
   /* ★ TRAMPA 3: ¿hay una FOTO tapando el fondo de este texto?
