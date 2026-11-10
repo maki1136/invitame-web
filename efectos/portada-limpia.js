@@ -10,6 +10,8 @@
      fuenteNombres : letra de los nombres (opcional)
      tamNombres    : tamaño de los nombres en px (opcional)
      colorNombres  : color de nombres, fecha y cuenta regresiva (opcional)
+     sombra        : true → sombra suave detrás de la letra (portadas de gris medio:
+                     Pasarela tiene el panel plateado justo detrás de los nombres)
    Panel: PRINCIPAL → «Portada · letra limpia sobre la foto o el video».
    ⚠️ Sin ningún campo cargado NO HACE NADA: ninguna invitación entregada cambia.
    ============================================================================ */
@@ -41,6 +43,9 @@
     var col = hex(c.colorNombres);
     if (col) r.push(H + '#pv-names, ' + H + '#pv-names > span, ' + H + '#pv-fecha, ' + H + '#pv-kick, ' +
       H + '.portada .count .num, ' + H + '.portada .count .lab { color:' + col + ' !important }');
+    if (si(c.sombra)) r.push(H + '#pv-names, ' + H + '#pv-names > span, ' + H + '#pv-fecha, ' + H + '#pv-kick, ' +
+      H + '.portada .count .num, ' + H + '.portada .count .lab, ' + H + '.portada .count .sep' +
+      ' { text-shadow:0 1px 3px rgba(0,0,0,.55), 0 2px 18px rgba(0,0,0,.5) !important }');
     var raiz = document.documentElement, st = document.getElementById(ID);
     var txt = r.join('\n');
     if (!txt) {

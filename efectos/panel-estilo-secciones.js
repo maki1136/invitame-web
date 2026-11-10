@@ -56,7 +56,9 @@
     { key: 'portada', tab: 'PRINCIPAL', casa: 'estilo-portada', lugar: { abajo: true }, titulo: 'Portada · letra limpia sobre la foto o el video',
       campos: [['casilla', 'Sin el velo claro detrás de los nombres (para portadas oscuras: terciopelo, noche)', 'sinVelo'],
         ['fuente', 'Letra de los nombres', 'fuenteNombres'], ['rango', 'Tamaño de los nombres', 'tamNombres', 24, 72, 'px'],
-        ['color', 'Color de los nombres y la fecha', 'colorNombres']] },
+        ['color', 'Color de los nombres y la fecha', 'colorNombres'],
+        /* 10/11 (Pasarela): letra clara sobre un panel plateado de gris medio */
+        ['casilla', 'Sombra suave detrás de la letra (para fondos de gris medio)', 'sombra']] },
     /* 10/11 (Línea Roja · White Swan): la letra de Marfil en carmesí. Lo pinta /efectos/marfil-tinta.js. */
     { key: 'marfil', tab: 'PRINCIPAL', casa: 'estilo-marfil', lugar: { abajo: true }, titulo: 'Colección Marfil · color de la tinta',
       campos: [['color', 'Color de toda la letra (vacío = el gris de Marfil)', 'tinta']] },
