@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-10T17:27:06.295Z",
+ "cuando": "2026-11-10T17:59:42.272Z",
  "total": 55,
- "verde": 47,
- "rojo": 5,
- "gris": 3,
+ "verde": 48,
+ "rojo": 7,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
@@ -70,10 +70,21 @@
   },
   {
    "slug": "clara-mis15",
-   "ver": "",
-   "estado": "gris",
-   "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "ver": "2026-09-14",
+   "estado": "rojo",
+   "dif": [
+    "sección #1: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
+    "sección pv-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»",
+    "sección carta: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
+    "sección itinerario: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
+    "sección dresscode: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
+    "sección video: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
+    "sección spotify: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
+    "sección filtro-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
+    "sección gal-seccion: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
+    "sección contacto-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»"
+   ],
+   "error": ""
   },
   {
    "slug": "daniela-mis15",
@@ -177,10 +188,10 @@
   },
   {
    "slug": "luciana-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "luciana-y-sebastian",
@@ -192,8 +203,20 @@
   {
    "slug": "lupita-mis15",
    "ver": "2026-09-14",
-   "estado": "verde",
-   "dif": [],
+   "estado": "rojo",
+   "dif": [
+    "sección #1: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección pv-sec: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección carta: previa «rgba(231, 233, 236, 0.3)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección frase: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección itinerario: previa «rgba(231, 233, 236, 0.3)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección dresscode: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección galeria: previa «rgba(231, 233, 236, 0.15)/rgb(58, 69, 61)» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección spotify: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección regalos: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección filtro-sec: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»",
+    "sección gal-seccion: previa «rgba(231, 233, 236, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(21, 20, 26, 0.15)/rgb(58, 69, 61)»"
+   ],
    "error": ""
   },
   {
@@ -206,34 +229,8 @@
   {
    "slug": "maria-paz-y-joaquin",
    "ver": "2026-09-21",
-   "estado": "rojo",
-   "dif": [
-    "col: previa «» · publicada «campestre»",
-    "fondo: previa «» · publicada «video»",
-    "nombres: previa «\"Rouge Script\", cursive 54px rgb(247, 241, 228)» · publicada «Sacramento, Tangerine, c 54px rgb(247, 241, 228)»",
-    "sección #1: previa «rgb(47, 51, 32)/rgb(238, 230, 214)» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección #2: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «—»",
-    "sección frase: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «oculta»",
-    "sección eventos: previa «rgb(47, 51, 32)/rgb(238, 230, 214)» · publicada «rgba(231, 239, 221, 0.28)/rgb(47, 51, 32)»",
-    "sección itinerario: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección hospedaje: previa «rgb(47, 51, 32)/rgb(238, 230, 214)» · publicada «rgba(231, 239, 221, 0.28)/rgb(47, 51, 32)»",
-    "sección dresscode: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección padres: previa «rgb(47, 51, 32)/rgb(238, 230, 214)» · publicada «rgba(231, 239, 221, 0.28)/rgb(47, 51, 32)»",
-    "sección galeria: previa «rgb(239, 228, 209)/rgb(58, 69, 61)» · publicada «color(srgb 0.952941 0.913725 0.85098 / 0.2)/rgb(47, 51, 32)»",
-    "sección trivia: previa «rgb(47, 51, 32)/rgb(238, 230, 214)» · publicada «rgba(231, 239, 221, 0.28)/rgb(47, 51, 32)»",
-    "sección regalos: previa «rgb(239, 228, 209)/rgb(58, 69, 61)» · publicada «color(srgb 0.952941 0.913725 0.85098 / 0.2)/rgb(47, 51, 32)»",
-    "sección carta: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección hashtag: previa «rgb(47, 51, 32)/rgb(247, 241, 228)» · publicada «rgba(231, 239, 221, 0.28)/rgb(247, 241, 228)»",
-    "sección video: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección spotify: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección confirmacion: previa «rgb(85, 82, 58)/rgb(238, 230, 214)» · publicada «rgba(231, 239, 221, 0.28)/rgb(47, 51, 32)»",
-    "sección share-sec: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «oculta»",
-    "sección contacto-sec: previa «rgba(0, 0, 0, 0)/rgb(58, 69, 61)» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección pv-sec: previa «—» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección #3: previa «—» · publicada «rgba(47, 51, 32, 0.2)/rgb(247, 241, 228)»",
-    "sección filtro-sec: previa «—» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»",
-    "sección gal-seccion: previa «—» · publicada «rgba(243, 233, 217, 0.2)/rgb(47, 51, 32)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -431,10 +428,12 @@
   },
   {
    "slug": "zoe-mis15",
-   "ver": "",
-   "estado": "gris",
-   "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "ver": "2026-09-14",
+   "estado": "rojo",
+   "dif": [
+    "sección #3: previa «rgba(14, 26, 19, 0.28)/rgb(20, 37, 28)» · publicada «rgba(201, 164, 78, 0.28)/rgb(20, 37, 28)»"
+   ],
+   "error": ""
   }
  ]
 }
