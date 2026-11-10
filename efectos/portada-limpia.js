@@ -33,7 +33,9 @@
       r.push(H + '.portada .c::before, ' + H + '.portada > .c::before { display:none !important; background:none !important }');
     }
     var f = fuente(c.fuenteNombres);
-    if (f) r.push(H + '#pv-names, ' + H + '#pv-names > span { font-family:"' + f + '", "Cormorant Garamond", Georgia, serif !important }');
+    if (f) r.push(H + '#pv-names, ' + H + '#pv-names > span { font-family:"' + f + '", "Cormorant Garamond", Georgia, serif !important;' +
+      /* con letra elegida, los nombres van como se escriben: una cursiva en mayúsculas espaciadas no se lee */
+      ' text-transform:none !important; letter-spacing:.01em !important }');
     var t = Number(c.tamNombres);
     if (t >= 16 && t <= 96) r.push(H + '#pv-names, ' + H + '#pv-names > span { font-size:' + t + 'px !important }');
     var col = hex(c.colorNombres);
