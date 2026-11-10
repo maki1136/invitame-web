@@ -82,6 +82,21 @@
   function arrancar() {
     var S = window.INVSN;
     if (!S || !S.estilo || !S.bloque) { setTimeout(arrancar, 300); return; }
+    /* 10/11 (Jazmín, jakzirhy-y-alexis): «la portada en blanco y negro y no
+       encuentran dónde modificarlo». La colección Perlas pinta la foto de
+       portada en blanco y negro; ahora se puede dejar a color. */
+    S.anotarCasa('portada-color', 'PRINCIPAL', 'portada', { antesDe: '#f-frase-larga' }, '.portada');
+    S.bloque('portada-color', function (caja) {
+      return [S.estilo(caja, 'portadaFoto', {
+        titulo: 'Portada · color de la foto',
+        campos: [['casilla', 'Foto de portada A COLOR (la colección Perlas la pone en blanco y negro)', 'color']],
+        obj: function (d) {
+          if (!d.fx) d.fx = {};
+          if (!d.fx.portadaFoto || typeof d.fx.portadaFoto !== 'object') d.fx.portadaFoto = {};
+          return d.fx.portadaFoto;
+        }
+      })];
+    });
     TAPAS.forEach(function (t) {
       S.anotarCasa(t.id, t.tab, t.casa, { abajo: true }, t.ve);
       S.bloque(t.id, function (caja) {
