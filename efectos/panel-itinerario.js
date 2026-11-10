@@ -292,9 +292,10 @@
         tit.type = 'text'; tit.placeholder = 'Ceremonia'; tit.value = m.t || '';
         tit.style.cssText = 'width:100%';
         tit.oninput = function () { datos(d).momentos[i].t = tit.value; refrescar(); };
-        var det = document.createElement('input');
-        det.type = 'text'; det.placeholder = 'Detalle (opcional)'; det.value = m.d || '';
-        det.style.cssText = 'width:100%;font-size:12px';
+        /* 9/11 (Jazmín, Kairos): el detalle admite Enter (renglón aparte) */
+        var det = document.createElement('textarea');
+        det.rows = 2; det.placeholder = 'Detalle (opcional) · Enter = renglón aparte'; det.value = m.d || '';
+        det.style.cssText = 'width:100%;font-size:12px;resize:vertical;font-family:inherit';
         det.oninput = function () { datos(d).momentos[i].d = det.value; refrescar(); };
         col.appendChild(tit); col.appendChild(det);
         /* 23/10/2026: el dibujito de este momento (efectos/itinerario-iconos.js) */

@@ -90,7 +90,7 @@
       return '<div class="guest" style="align-items:center;gap:10px">'+foto+
         '<div style="flex:1;display:flex;flex-direction:column;gap:6px">'+
         '<input type="text" placeholder="Nombre" value="'+(p.nombre||'').replace(/"/g,'&quot;')+'" oninput="setPersona('+i+',\'nombre\',this.value)">'+
-        '<input type="text" placeholder="Relación (ej: Mamá de la novia)" value="'+(p.rel||'').replace(/"/g,'&quot;')+'" oninput="setPersona('+i+',\'rel\',this.value)">'+
+        '<textarea rows="2" placeholder="Relación (ej: Mamá de la novia) · Enter = renglón aparte" style="resize:vertical;font-family:inherit" oninput="setPersona('+i+',\'rel\',this.value)">'+(p.rel||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</textarea>'+
         elegir+
         (modo==='foto'?'<label class="lnk" style="cursor:pointer;color:#6D1233">'+ICO.subir+' '+(p.foto?'Cambiar foto':'Subir foto')+'<input type="file" accept="image/*" style="display:none" onchange="subirImgPersona(this,'+i+')"></label>':'')+
         '</div>'+
