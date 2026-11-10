@@ -759,6 +759,7 @@
     '/efectos/texto-con-renglones.js', /* 9/11: Enter en detalle del itinerario y descripción de personas */
     '/efectos/frase-sin-movimiento.js', /* 10/11: sin lluvia en la frase de clientes salvo elegida */
     '/efectos/portada-color.js', /* 10/11: portada a color aunque la colección la ponga en blanco y negro */
+    '/efectos/etiquetas-banco.js', /* 10/11: CLABE / Titular / Banco con palabras propias */
     '/efectos/video-mas-formatos.js',
     '/efectos/panel-video-subir.js',   /* 9/11: subir el video de «Nuestro video» en vez de un link de Drive */  /* 6/11: «Nuestro video» acepta Instagram, TikTok, Drive, Facebook y todo YouTube */
     '/efectos/sector-elegido.js',      /* 29/10: el fondo/color de sección elegido en el panel le gana a la colección */
