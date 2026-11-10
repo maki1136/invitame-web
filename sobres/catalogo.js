@@ -1152,8 +1152,8 @@ window.SOBRES_INVITAME = {
      para «Óleo · Azul» (ximena-y-andres-azul, pedido de Jazmín). */
   'oleo-azul-luz': {
     nombre:     "Óleo Azul · se abre la solapa y sale luz de adentro (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:best,vc_h264/invitame/oleo-azul/oleo-azul-sobre-luz.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto,f_jpg/invitame/oleo-azul/oleo-azul-sobre-luz.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1/invitame/oleo-azul/oleo-azul2-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/oleo-azul/oleo-azul2-sobre-luz.jpg",
     color:      "#E6DDD2",
     luz:        3.0,
     luzColor:   "#FBF6EE",
@@ -1182,11 +1182,14 @@ window.SOBRES_INVITAME = {
      ocupa demasiado protagonismo» (como valeria-y-emiliano-estandar, que no muestra
      tarjeta). Ahora: corta en 4,9 del original (la tarjeta apenas asoma), la luz
      entra a los 2,9 y tapa en 0,8 s; y main 3.1 a q_auto:good (~0,5 MB, 1,1 Mbps
-     en vez de 1,4 MB a 2,2 Mbps: el teléfono lo decodifica sin trabarse). */
+     en vez de 1,4 MB a 2,2 Mbps: el teléfono lo decodifica sin trabarse).
+     ⚠️ Maki (9/11): «¿no está pixelado?». SÍ: el recoloreo saturaba los bloques de
+     8×8 del video Rosé comprimido. -2 recolorea con la máscara y el color medidos
+     sobre la imagen suavizada (la luz/textura sale nítida del original). */
   'oleo-borgona': {
     nombre:     "Óleo Borgoña · la solapa pintada en borgoña claro se abre y sale la tarjeta (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_4.9,q_auto:good,vc_h264:main:3.1/invitame/oleo-borgona/oleo-borgona-sobre.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto:best,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_4.9,q_auto:good,vc_h264:main:3.1/invitame/oleo-borgona/oleo-borgona-sobre-2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto:best,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre-2.jpg",
     color:      "#E6DDD2",
     luz:        2.9,
     luzColor:   "#F4F1EA",
