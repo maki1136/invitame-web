@@ -2216,6 +2216,18 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
+  /* 10/11/2026 · Jazmín (Bany & Jorge): «quería el listón de la invitación azul».
+     El mismo sobre «Olivo · En tus manos» con la cinta de organza AZUL: primer
+     cuadro recoloreado en Flow (nano-pro) y animado con Veo (i2v). */
+  "puertas-cinta-azul-nudo-video": {
+    nombre:     "Cinta azul · En tus manos · papel marfil con cinta de organza azul, moño y ramita de olivo; el nudo se desata y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_7.2/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/jbmpug2d8cfni97yis04.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/jbmpug2d8cfni97yis04.jpg",
+    color:      "#F0E8DA",
+    luz:        4.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
   "tem-maria-paz-y-joaquin-video": {
     nombre:     "María Paz y Joaquín · papel kraft con espigas de trigo, lacre dorado con espiga · solapa con lacre sube y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-maria-paz-y-joaquin.mp4",
@@ -2821,6 +2833,30 @@ window.SOBRES_INVITAME = {
     poster:  "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres/sobre-marfil-3d-v4-poster.jpg",
     color:   "#f4f0e8",
     empalme: "foto"
+  },
+
+  /* ---- ★ LÍNEA ROJA · WHITE SWAN (10/11/2026) ---------------------------------
+     Copia de la apertura «Opaline» de @on_the_list._ (Maki: «las quiero iguales»).
+     No es un sobre que se abre: es una PELÍCULA. Primer plano del sobre de plumas
+     blancas sobre terciopelo rojo → la cámara se aleja y descubre que está sobre un
+     pedestal de mármol, en una alfombra roja, frente a una puerta en arco con
+     cortina de terciopelo → la cámara avanza por la alfombra, pasa por encima del
+     sobre y frena frente a la puerta. Ese último cuadro ES la portada: la portada
+     de la invitación es `invitame/linea-roja/white-swan/portada-loop` (Veo Quality,
+     la puerta quieta con la luz respirando) y arranca en el mismo cuadro, por eso
+     va `empalme: 'foto'` y el corte no se ve (comparado cuadro contra cuadro).
+     Flow · Veo 3.1 Fast x2 por tramo, 1080p reescalado de Flow, armado con ffmpeg
+     (tramo 1: 0,6–5,8 s ×1,5 · tramo 2: 0,05–2,6 s ×1,25) = 5,5 s.
+     Sin texto ni iniciales en el sobre (regla de siempre).
+     -------------------------------------------------------------------------- */
+  "linea-roja-white-swan": {
+    nombre:     "Línea Roja · White Swan · sobre de plumas → salón con alfombra roja → la puerta de terciopelo (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/linea-roja/white-swan/apertura-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/linea-roja/white-swan/apertura-1080.jpg",
+    color:      "#60000A",
+    empalme:    "foto",
+    luz:        4.9,
+    luzFundido: 0.6
   }
 
 };

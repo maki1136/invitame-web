@@ -105,7 +105,12 @@
       lino:'#f1f5f3', lino2:'#f9fcfa', cream:'#e5ebe8', muted:'#576560', seal:'#3a5d52' },
     { id:'cobre-chocolate', nombre:'Cobre y chocolate', metal:'oro',
       verde:'#33231c', verde2:'#221612', sage:'#8c5637', sageCl:'#d3a785', oro:'#b8834e',
-      lino:'#f4eee7', lino2:'#fbf8f4', cream:'#eae0d4', muted:'#655449', seal:'#5e3620' }
+      lino:'#f4eee7', lino2:'#fbf8f4', cream:'#eae0d4', muted:'#655449', seal:'#5e3620' },
+    /* 10/11/2026 · Línea Roja (White Swan): terciopelo carmesí y marfil. Medido
+       contra #f3ebdd: principal 9,9:1 · acento 6,4:1 · texto chico 5,8:1. */
+    { id:'carmesi-marfil', nombre:'Carmesí y marfil', metal:'oro',
+      verde:'#6e1420', verde2:'#55101a', sage:'#9a2a33', sageCl:'#e3b9b4', oro:'#b89a5e',
+      lino:'#f3ebdd', lino2:'#faf6ee', cream:'#ece1cf', muted:'#6b5650', seal:'#7a1622' }
   ];
 
   /* el panel arma las tarjetas leyendo de acá */
