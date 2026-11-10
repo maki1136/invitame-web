@@ -57,6 +57,9 @@
       campos: [['casilla', 'Sin el velo claro detrás de los nombres (para portadas oscuras: terciopelo, noche)', 'sinVelo'],
         ['fuente', 'Letra de los nombres', 'fuenteNombres'], ['rango', 'Tamaño de los nombres', 'tamNombres', 24, 72, 'px'],
         ['color', 'Color de los nombres y la fecha', 'colorNombres']] },
+    /* 10/11 (Línea Roja · White Swan): la letra de Marfil en carmesí. Lo pinta /efectos/marfil-tinta.js. */
+    { key: 'marfil', tab: 'PRINCIPAL', casa: 'estilo-marfil', lugar: { abajo: true }, titulo: 'Colección Marfil · color de la tinta',
+      campos: [['color', 'Color de toda la letra (vacío = el gris de Marfil)', 'tinta']] },
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
