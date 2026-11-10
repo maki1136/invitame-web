@@ -551,7 +551,13 @@
 
     if (sec.__pvTex) sec.querySelector('.pv-escena').style.setProperty('--pv-tex', sec.__pvTex);
     sec.querySelector('.pv-talon span').textContent = txt(f.talon, 'Admite dos');
-    sec.querySelector('.pv-over').textContent       = txt(f.over);
+    /* 9/11/2026 (Jazmín, maferypepe): «Que diga PASE DEL INVITADO, que no tiene
+       género». Las muestras traían «PASE DE INVITADA» y viajaba a los clientes.
+       Cualquier forma genérica (de / del · invitado / invitada) se muestra
+       «PASE DEL INVITADO»; un texto propio que no sea ese queda como está. */
+    var _over = txt(f.over);
+    if (/^\s*pase\s+del?\s+invitad[ao]s?\s*$/i.test(_over)) _over = 'PASE DEL INVITADO';
+    sec.querySelector('.pv-over').textContent       = _over;
     sec.querySelector('.pv-titulo').textContent     = txt(f.titulo);
     if (departe) sec.querySelector('.pv-departe').textContent = departe;
     var dts = sec.querySelectorAll('.pv-datos dt');

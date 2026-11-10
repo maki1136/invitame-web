@@ -323,7 +323,7 @@
 
     /* ---- los textos del ticket ---- */
     var iTalon = campo('Talon (el texto vertical)', 'talon', 'Admite dos');
-    var iOver  = campo('Renglon chico de arriba', 'over', 'PASE DE INVITADO');
+    var iOver  = campo('Renglon chico de arriba', 'over', 'PASE DEL INVITADO');
     var iTit   = campo('Titulo del pase', 'titulo', 'Un mensaje para ti');
 
     var iDeparte = campo('De parte de', 'departe', 'Camila y Tomas',
