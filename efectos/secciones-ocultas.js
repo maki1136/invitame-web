@@ -100,11 +100,54 @@
       g.appendChild(l);
     });
     caja.appendChild(g);
+    var aviso = document.createElement('div'); aviso.id = ID + '-aviso';
+    aviso.style.cssText = 'display:none;margin-top:10px;font-size:11.5px;line-height:1.45;padding:9px 11px;border-radius:9px;background:#FFF6E0;color:#6b4a00;border:1px solid #F3DFA8';
+    caja.appendChild(aviso);
+    pintarAviso(d, aviso);
     return caja;
+  }
+
+  /* 9/11/2026 (Jazmín, maferypepe): «No se visualiza el filtro de IG, y está
+     activado». Destildado acá NO quiere decir prendido: el filtro y las fotos de
+     los invitados tienen su propio interruptor (EFECTOS), que nace apagado. Si
+     no está en «no van» pero su interruptor está apagado, se avisa y se prende
+     con un toque. */
+  function on2(v) { return v === true || v === 'on' || v === 'si' || v === 1 || v === 'True'; }
+  function pintarAviso(d, aviso) {
+    if (!aviso) return;
+    var fx = d.fx || {}, oc = limpia(fx.ocultas), html = [], botones = [];
+    var fi = fx.filtro || {};
+    if (oc.indexOf('filtro') < 0 && !on2(fi.encendido)) {
+      html.push('<b>Filtro de fotos:</b> no está marcado acá, pero su interruptor está APAGADO, así que no se ve.');
+      botones.push(['Prender el filtro', function () { d.fx = d.fx || {}; d.fx.filtro = Object.assign({}, d.fx.filtro || {}, { encendido: true }); }]);
+    }
+    if (oc.indexOf('filtro') < 0 && /\/invitame\/fotos-fiesta\/[a-z0-9-]*(muestra|renata|camila|patricio|maria-y-diego)/i.test(String(fi.imagen || '')))
+      html.push('<b>Ojo:</b> la imagen del filtro es la de una MUESTRA. Subí la de esta fiesta en EFECTOS → Filtro.');
+    var ga = fx.galeria || {};
+    if (oc.indexOf('live') < 0 && !on2(ga.encendido)) {
+      if (ga.gid) {
+        html.push('<b>Fotos de los invitados:</b> no está marcado acá, pero Invítame Live está APAGADO.');
+        botones.push(['Prender Invítame Live', function () { d.fx = d.fx || {}; d.fx.galeria = Object.assign({}, d.fx.galeria || {}, { encendido: true }); }]);
+      } else {
+        html.push('<b>Fotos de los invitados:</b> no se ve porque todavía no se creó la galería (EFECTOS → Invítame Live → «Crear la galería»). Si no la compró, marcala acá como «no va».');
+      }
+    }
+    if (!html.length) { aviso.style.display = 'none'; aviso.innerHTML = ''; aviso.dataset.firma = ''; return; }
+    var firma = html.join('|');
+    if (aviso.dataset.firma === firma) return;
+    aviso.dataset.firma = firma;
+    aviso.innerHTML = html.join('<br>');
+    botones.forEach(function (b) {
+      var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = b[0];
+      bt.style.cssText = 'margin:6px 6px 0 0;padding:5px 10px;border-radius:7px;border:1px solid #c9a227;background:#fff;cursor:pointer;font-size:11.5px';
+      bt.onclick = function () { b[1](); if (typeof postPreview === 'function') { try { postPreview(); } catch (e) {} } aviso.dataset.firma = ''; pintarAviso(d, aviso); };
+      aviso.appendChild(bt);
+    });
+    aviso.style.display = 'block';
   }
   function revisarPanel() {
     var d = borrador(); if (!d) return;
-    if (document.getElementById(ID)) return;
+    if (document.getElementById(ID)) { pintarAviso(d, document.getElementById(ID + '-aviso')); return; }
     var a = window.invCasa ? window.invCasa(ID) : null;
     if (!a) return;
     a.appendChild(construir(d));
