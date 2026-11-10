@@ -158,7 +158,12 @@
     const inp=(k,ph)=>'<input type="text" value="'+String(D[k]||'').replace(/"/g,'&quot;')+'" oninput="setB(\''+k+'\',this.value)" placeholder="'+ph+'">';
     return '<div class="two" style="margin:-4px 0 14px"><div class="grp"><label>Titular de la cuenta</label>'+inp('regTitular','Nombre del titular')+'</div>'+
      '<div class="grp"><label>Banco</label>'+inp('regBanco','Banco')+'</div></div>'+
-     '<div class="hint" style="margin:-8px 0 14px">En «Datos bancarios» va sólo el número (CLABE o CBU). El titular y el banco, acá: salen en su renglón.</div>';
+     '<div class="hint" style="margin:-8px 0 14px">En «Datos bancarios» va sólo el número (CLABE o CBU). El titular y el banco, acá: salen en su renglón.</div>'+
+     /* ★ 10/11 (Jazmín, Melany): «que se puedan cambiar esas palabras» (CLABE, Titular, Banco). */
+     '<label>Palabras que se ven en los datos para transferencia (vacío = las de siempre)</label>'+
+     '<div class="two" style="margin:0 0 4px"><div class="grp">'+inp('regEtqCuenta','CLABE')+'</div><div class="grp">'+inp('regEtqTitular','Titular')+'</div></div>'+
+     '<div class="two" style="margin:0 0 14px"><div class="grp">'+inp('regEtqBanco','Banco')+'</div><div class="grp"></div></div>'+
+     '<div class="hint" style="margin:-8px 0 14px">Ej.: «Alias» en vez de «CLABE», o «A nombre de» en vez de «Titular».</div>';
   }
   async function subirAudio(input){
     const f=input.files&&input.files[0]; if(!f)return;
