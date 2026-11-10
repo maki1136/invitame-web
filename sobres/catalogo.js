@@ -2216,6 +2216,18 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFFBF0",
     luzFundido: 0.8
   },
+  /* 10/11/2026 · Jazmín (Bany & Jorge): «quería el listón de la invitación azul».
+     El mismo sobre «Olivo · En tus manos» con la cinta de organza AZUL: primer
+     cuadro recoloreado en Flow (nano-pro) y animado con Veo (i2v). */
+  "puertas-cinta-azul-nudo-video": {
+    nombre:     "Cinta azul · En tus manos · papel marfil con cinta de organza azul, moño y ramita de olivo; el nudo se desata y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_7.2/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/jbmpug2d8cfni97yis04.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/jbmpug2d8cfni97yis04.jpg",
+    color:      "#F0E8DA",
+    luz:        4.9,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
   "tem-maria-paz-y-joaquin-video": {
     nombre:     "María Paz y Joaquín · papel kraft con espigas de trigo, lacre dorado con espiga · solapa con lacre sube y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_5.2/w_1080,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/tem-maria-paz-y-joaquin.mp4",
