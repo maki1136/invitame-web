@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-10T01:25:55.386Z",
+ "cuando": "2026-11-10T04:48:57.392Z",
  "slug": "camila-y-tomas",
- "total": 553,
- "verde": 539,
+ "total": 556,
+ "verde": 542,
  "amarillo": 0,
  "rojo": 14,
  "gris": 0,
@@ -953,6 +953,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1156,17 +1167,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3826,6 +3826,28 @@
   },
   {
    "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.colorFilete",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tarjeta",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
    "bloque": "pasevoz-selector",
    "control": "Link del audio",
    "tipo": "text",
@@ -3996,6 +4018,17 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.pasevoz.velo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tarjetaFina",
    "llega": true,
    "seVe": true,
    "estado": "verde"
