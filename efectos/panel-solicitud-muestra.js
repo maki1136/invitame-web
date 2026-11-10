@@ -78,7 +78,7 @@
   var DISENO = [
     'fx', 'tema', 'color', 'ver', 'tpl',
     'nfont', 'fTit', 'fTit2', 'fraseFont', 'fraseSize', 'nsize', 'ncolor', 'layout',
-    'kickColor', 'fraseColor', 'fraseFx',
+    'kickColor', 'fraseColor', /* fraseFx NO viaja (10/11, Jazmín): el movimiento de la frase lo elige el panel */
     'evColor', 'evTextColor', 'evBtnColor', 'evBtnTextColor',
     'galTextColor', 'padresColor', 'regColor', 'cfColor',
     'secOrden'

@@ -401,13 +401,17 @@
        ['petalos', 'Pétalos cayendo'], ['gradiente', 'Degradado animado'], ['ondas', 'Ondas suaves']].forEach(function (o) {
         var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op);
       });
-      sel.onchange = function () { var dd = borrador(); if (!dd) return; dd.fraseFx = sel.value; refrescar(); };
+      sel.onchange = function () { var dd = borrador(); if (!dd) return; dd.fraseFx = sel.value; dd.fraseFxElegido = sel.value !== 'none'; refrescar(); };
       g.appendChild(sel);
       var h = document.createElement('div'); h.className = 'hint'; h.textContent = '«Ninguno» saca la lluvia de círculos o pétalos que se mueve sobre la frase.';
       g.appendChild(h);
       slot.appendChild(g);
     }
-    if (sel && d && document.activeElement !== sel) { var v = d.fraseFx || 'none'; if (sel.value !== v) sel.value = v; }
+    if (sel && d && document.activeElement !== sel) {
+      /* 10/11: en una invitación de cliente, el movimiento heredado de la muestra
+         ya no se ve (efectos/frase-sin-movimiento.js): el panel lo muestra «Ninguno» */
+      var esM = !!(d.fx && d.fx.muestra && d.fx.muestra.venta === true);
+      var v = (esM || d.fraseFxElegido) ? (d.fraseFx || 'none') : 'none'; if (sel.value !== v) sel.value = v; }
   }
 
   function traerDelDiseno(d, btn) {
