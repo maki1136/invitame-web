@@ -850,6 +850,210 @@
       paleta:  ["#FBF6EE", "#D9BC7A", "#8E2433", "#3E1520"],
       tipos:   ["xv"]
     },
+    /* 10/11/2026 · Jazmín: «Ese diseño no aparece en la plataforma de invis»
+       (daniela-y-joaquin). Estas 20 muestras están en la web (invitameok.com)
+       pero nunca se sumaron al catálogo: el cliente las veía en la web y ni el
+       formulario ni el panel las ofrecían. Nombre y bajada, los de la web. */
+    'web-maria-paz-y-santiago': {
+      nombre:  "Arco de pampas",
+      bajada:  "Tu foto entre flores secas al atardecer, sobre papel hecho a mano.",
+      muestra: 'maria-paz-y-santiago',
+      foto:    '/formulario/disenos/maria-paz-y-santiago.webp',
+      color:   '#7a6d5d',
+      color2:  '#504030',
+      paleta:  ["#949086", "#7a6d5d", "#504030", "#2e251a"],
+      tipos:   ["boda"]
+    },
+    'web-fernanda-y-alejandro': {
+      nombre:  "Óleo Champagne",
+      bajada:  "Una fuente entre arcos y un cielo al óleo a la hora dorada.",
+      muestra: 'fernanda-y-alejandro',
+      foto:    '/formulario/disenos/fernanda-y-alejandro.webp',
+      color:   '#aba27c',
+      color2:  '#a68e6d',
+      paleta:  ["#c8b8a0", "#aba27c", "#a68e6d", "#7b6a54"],
+      tipos:   ["boda"]
+    },
+    'web-daniela-y-rodrigo': {
+      nombre:  "Óleo Jardín",
+      bajada:  "Un arco de rosas blancas y glicinas pintado al óleo con espátula.",
+      muestra: 'daniela-y-rodrigo',
+      foto:    '/formulario/disenos/daniela-y-rodrigo.webp',
+      color:   '#acb9a1',
+      color2:  '#98977f',
+      paleta:  ["#d6d0b8", "#acb9a1", "#98977f", "#585045"],
+      tipos:   ["boda"]
+    },
+    'web-andrea-y-felipe': {
+      nombre:  "Degradé oliva",
+      bajada:  "Tu foto bajo un olivo y el verde oliva del sobre al pase.",
+      muestra: 'andrea-y-felipe',
+      foto:    '/formulario/disenos/andrea-y-felipe.webp',
+      color:   '#493d29',
+      color2:  '#342b1b',
+      paleta:  ["#696a5a", "#493d29", "#342b1b", "#201b11"],
+      tipos:   ["boda"]
+    },
+    'web-carolina-y-diego': {
+      nombre:  "Degradé ónix",
+      bajada:  "Brocado negro, oro y tu foto bajo un candelabro de cristal.",
+      muestra: 'carolina-y-diego',
+      foto:    '/formulario/disenos/carolina-y-diego.webp',
+      color:   '#5a4d3e',
+      color2:  '#2a241f',
+      paleta:  ["#7e7865", "#5a4d3e", "#2a241f", "#121110"],
+      tipos:   ["boda"]
+    },
+    'web-daniela-y-joaquin': {
+      nombre:  "Degradé azul noche",
+      bajada:  "Flores en relieve azul noche y tu foto en una gran escalinata.",
+      muestra: 'daniela-y-joaquin',
+      foto:    '/formulario/disenos/daniela-y-joaquin.webp',
+      color:   '#425156',
+      color2:  '#323c3f',
+      paleta:  ["#597175", "#425156", "#323c3f", "#16191f"],
+      tipos:   ["boda"]
+    },
+    'web-elena-y-rodrigo': {
+      nombre:  "Degradé ciruela",
+      bajada:  "Terciopelo ciruela y tu foto en un pasillo de cientos de velas.",
+      muestra: 'elena-y-rodrigo',
+      foto:    '/formulario/disenos/elena-y-rodrigo.webp',
+      color:   '#382819',
+      color2:  '#201613',
+      paleta:  ["#62563e", "#382819", "#201613", "#100c0c"],
+      tipos:   ["boda"]
+    },
+    'web-mariana-y-lucas': {
+      nombre:  "Degradé terracota",
+      bajada:  "Tu foto entre agaves y un sobre terracota atado con cordel.",
+      muestra: 'mariana-y-lucas',
+      foto:    '/formulario/disenos/mariana-y-lucas.webp',
+      color:   '#7a6f64',
+      color2:  '#453d33',
+      paleta:  ["#a1a29d", "#7a6f64", "#453d33", "#211c16"],
+      tipos:   ["boda"]
+    },
+    'web-mateo-y-adrian': {
+      nombre:  "Degradé petróleo",
+      bajada:  "Tu foto bajo faroles coloniales y verde petróleo hasta el pase.",
+      muestra: 'mateo-y-adrian',
+      foto:    '/formulario/disenos/mateo-y-adrian.webp',
+      color:   '#1e241f',
+      color2:  '#22150e',
+      paleta:  ["#4a4f35", "#1e241f", "#22150e", "#0d1413"],
+      tipos:   ["boda"]
+    },
+    'web-natalia-y-pablo': {
+      nombre:  "Degradé esmeralda",
+      bajada:  "Encaje verde, tu foto bajo una bóveda iluminada y mármol esmeralda.",
+      muestra: 'natalia-y-pablo',
+      foto:    '/formulario/disenos/natalia-y-pablo.webp',
+      color:   '#4d3921',
+      color2:  '#2a1809',
+      paleta:  ["#a87531", "#4d3921", "#2a1809", "#0f110c"],
+      tipos:   ["boda"]
+    },
+    'web-paula-e-ines': {
+      nombre:  "Degradé magenta",
+      bajada:  "Tu foto bajo un arco de bugambilias en una calle empedrada.",
+      muestra: 'paula-e-ines',
+      foto:    '/formulario/disenos/paula-e-ines.webp',
+      color:   '#40121e',
+      color2:  '#2e2219',
+      paleta:  ["#5e594e", "#40121e", "#2e2219", "#17100d"],
+      tipos:   ["boda"]
+    },
+    'web-sofia-y-martin': {
+      nombre:  "Degradé borgoña",
+      bajada:  "Muros de rosas al atardecer, del rosa del sobre al borgoña del pase.",
+      muestra: 'sofia-y-martin',
+      foto:    '/formulario/disenos/sofia-y-martin.webp',
+      color:   '#686668',
+      color2:  '#402e22',
+      paleta:  ["#7b8989", "#686668", "#402e22", "#1f1310"],
+      tipos:   ["boda"]
+    },
+    'web-luciana-y-sebastian': {
+      nombre:  "Colorama",
+      bajada:  "Humo de todos los colores sobre un pasillo de pétalos en el campo.",
+      muestra: 'luciana-y-sebastian',
+      foto:    '/formulario/disenos/luciana-y-sebastian.webp',
+      color:   '#aec1c1',
+      color2:  '#977e60',
+      paleta:  ["#e5d4c4", "#aec1c1", "#977e60", "#483b24"],
+      tipos:   ["boda"]
+    },
+    'web-mariana-y-rodrigo': {
+      nombre:  "Talavera",
+      bajada:  "Un arco de azulejos azules, un limonero y lacre azul cobalto.",
+      muestra: 'mariana-y-rodrigo',
+      foto:    '/formulario/disenos/mariana-y-rodrigo.webp',
+      color:   '#abada3',
+      color2:  '#818481',
+      paleta:  ["#e6ded2", "#abada3", "#818481", "#49473e"],
+      tipos:   ["boda"]
+    },
+    'web-sofia-y-emilio': {
+      nombre:  "Mexicana",
+      bajada:  "Bordado de flores y pájaros, papel picado y sagrados corazones.",
+      muestra: 'sofia-y-emilio',
+      foto:    '/formulario/disenos/sofia-y-emilio.webp',
+      color:   '#dde3e2',
+      color2:  '#d6d0c3',
+      paleta:  ["#e9e3d7", "#dde3e2", "#d6d0c3", "#877163"],
+      tipos:   ["boda"]
+    },
+    'web-elena-y-julian': {
+      nombre:  "Eucalipto en acuarela",
+      bajada:  "Acuarela verde, eucalipto en el sobre y tu foto bajo un arco de flores.",
+      muestra: 'elena-y-julian',
+      foto:    '/formulario/disenos/elena-y-julian.webp',
+      color:   '#d7dacd',
+      color2:  '#a2a08f',
+      paleta:  ["#edede8", "#d7dacd", "#a2a08f", "#4c4e3c"],
+      tipos:   ["boda"]
+    },
+    'web-lucia-y-sebastian': {
+      nombre:  "Eucalipto",
+      bajada:  "Un arco de rosas blancas en el bosque, con el sol entre los árboles.",
+      muestra: 'lucia-y-sebastian',
+      foto:    '/formulario/disenos/lucia-y-sebastian.webp',
+      color:   '#cfcebb',
+      color2:  '#ab9a78',
+      paleta:  ["#f3e7cf", "#cfcebb", "#ab9a78", "#5b4f3d"],
+      tipos:   ["boda"]
+    },
+    'web-isabel-y-gonzalo': {
+      nombre:  "Espatulado",
+      bajada:  "Relieves blancos de yeso, hojas doradas y un sobre atado con moño.",
+      muestra: 'isabel-y-gonzalo',
+      foto:    '/formulario/disenos/isabel-y-gonzalo.webp',
+      color:   '#d8dcda',
+      color2:  '#b9b8b5',
+      paleta:  ["#ebeae9", "#d8dcda", "#b9b8b5", "#8a8982"],
+      tipos:   ["boda"]
+    },
+    'web-ana-paula-y-marcelo': {
+      nombre:  "Mármol",
+      bajada:  "Iglesia llena de luz, lacre con cruz dorada y mármol con vetas de oro.",
+      muestra: 'ana-paula-y-marcelo',
+      foto:    '/formulario/disenos/ana-paula-y-marcelo.webp',
+      color:   '#a5aaa4',
+      color2:  '#85827c',
+      paleta:  ["#d5d5d2", "#a5aaa4", "#85827c", "#665f59"],
+      tipos:   ["boda"]
+    },
+    'web-romina-mis15': {
+      nombre:  "Degradé lavanda",
+      bajada:  "Tu foto frente a una iglesia rosa y un telón de terciopelo lila.",
+      muestra: 'romina-mis15',
+      foto:    '/formulario/disenos/romina-mis15.webp',
+      color:   '#555f74',
+      color2:  '#48364a',
+      paleta:  ["#637d8e", "#555f74", "#48364a", "#1b1a22"],
+      tipos:   ["xv"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
