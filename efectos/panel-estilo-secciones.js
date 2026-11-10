@@ -46,6 +46,11 @@
     { key: 'trivia', tab: 'TRIVIA', casa: 'estilo-trivia', lugar: { abajo: true }, titulo: 'Trivia · título, texto de abajo y fondo',
       campos: [['texto', 'Título (dice «Trivia»)', 'titulo'], ['texto', 'Texto debajo del título («¿Cuánto conoces…?»)', 'bajada']].concat(BASE_FONDO,
         [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'], ['color', 'Color del texto de abajo', 'colorTexto']]) },
+    /* 9/11 (Maki, isabela platinum): «mejorá el diseño del "Con cariño, te esperamos" y la parte del QR».
+       Lo pinta /efectos/pase-qr-fino.js; sin la casilla no cambia nada. */
+    { key: 'pase', tab: 'MUSIC_PASES', casa: 'estilo-pase', lugar: { abajo: true }, titulo: 'Pase con QR · diseño de la tarjeta',
+      campos: [['casilla', 'Diseño fino de la tarjeta (papel con filete, QR enmarcado, letra de la invitación)', 'tarjetaFina'],
+        ['color', 'Color del filete y los detalles', 'colorFilete'], ['color', 'Color del papel de la tarjeta', 'tarjeta']] },
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
