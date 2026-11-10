@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-10T17:41:22.980Z",
+ "cuando": "2026-11-10T20:45:40.431Z",
  "slug": "camila-y-tomas",
- "total": 556,
- "verde": 541,
+ "total": 560,
+ "verde": 545,
  "amarillo": 1,
  "rojo": 14,
  "gris": 0,
@@ -887,6 +887,39 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.fuenteNombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.tamNombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.colorNombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "Empezá por acá",
    "control": "Nombres en MAYÚSCULAS",
    "tipo": "checkbox",
@@ -1167,6 +1200,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinVelo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3711,9 +3755,8 @@
    "guarda": true,
    "dato": "fx.rsvp.general",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -3778,8 +3821,9 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
