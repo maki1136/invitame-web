@@ -2880,6 +2880,28 @@ window.SOBRES_INVITAME = {
     empalme:    "foto",
     luz:        6.1,
     luzFundido: 0.5
+  },
+
+  /* ---- ★ LÍNEA ROJA · PASARELA (10/11/2026) -----------------------------------
+     Copia de la apertura «The Show» de @on_the_list._ (la marca se renombró a
+     «Pasarela»). Sobre de papel aluminio arrugado bajo un cenital, sobre piso negro
+     espejado → la solapa se abre y sube una tarjeta blanca → la tarjeta se vuelve
+     un panel de acero cepillado y se funde a una pasarela de moda: panel plateado
+     entre cortinados de seda blanca, cenitales y flashes. El último cuadro ES la
+     portada: `invitame/linea-roja/pasarela/portada-loop` son los segundos 5–8 del
+     mismo video en ida y vuelta.
+     Flow · Veo 3.1 Fast x2 por tramo, 1080p reescalado. Tramo 1 (abre): 0,3–4,0 s
+     ×1,25 · tramo 2 (trans): 0–2 ×1,5, 2–3,5 ×1,3, 3,5–5 ×1 = 6,9 s. De la otra
+     toma del tramo 2 se descartó: tenía un barrido gris de un cuadro.
+     -------------------------------------------------------------------------- */
+  "linea-roja-pasarela": {
+    nombre:     "Línea Roja · Pasarela · sobre de aluminio que se abre → pasarela plateada con cortinas blancas (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/linea-roja/pasarela/apertura-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/linea-roja/pasarela/apertura-1080.jpg",
+    color:      "#000000",
+    empalme:    "foto",
+    luz:        6.4,
+    luzFundido: 0.5
   }
 
 };
