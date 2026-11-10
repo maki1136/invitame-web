@@ -110,7 +110,11 @@
        contra #f3ebdd: principal 9,9:1 · acento 6,4:1 · texto chico 5,8:1. */
     { id:'carmesi-marfil', nombre:'Carmesí y marfil', metal:'oro',
       verde:'#6e1420', verde2:'#55101a', sage:'#9a2a33', sageCl:'#e3b9b4', oro:'#b89a5e',
-      lino:'#f3ebdd', lino2:'#faf6ee', cream:'#ece1cf', muted:'#6b5650', seal:'#7a1622' }
+      lino:'#f3ebdd', lino2:'#faf6ee', cream:'#ece1cf', muted:'#6b5650', seal:'#7a1622' },
+    /* 10/11/2026 · Línea Roja (Pasarela): negro de pasarela y plata, papel blanco frío. */
+    { id:'negro-plata', nombre:'Negro y plata', metal:'plata',
+      verde:'#161616', verde2:'#0a0a0a', sage:'#4d4f53', sageCl:'#c9cbcf', oro:'#a7aab0',
+      lino:'#f1f1ef', lino2:'#fafafa', cream:'#e4e4e2', muted:'#56585c', seal:'#2b2c2e' }
   ];
 
   /* el panel arma las tarjetas leyendo de acá */

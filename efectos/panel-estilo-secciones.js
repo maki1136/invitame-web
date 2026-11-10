@@ -56,7 +56,12 @@
     { key: 'portada', tab: 'PRINCIPAL', casa: 'estilo-portada', lugar: { abajo: true }, titulo: 'Portada · letra limpia sobre la foto o el video',
       campos: [['casilla', 'Sin el velo claro detrás de los nombres (para portadas oscuras: terciopelo, noche)', 'sinVelo'],
         ['fuente', 'Letra de los nombres', 'fuenteNombres'], ['rango', 'Tamaño de los nombres', 'tamNombres', 24, 72, 'px'],
-        ['color', 'Color de los nombres y la fecha', 'colorNombres']] },
+        ['color', 'Color de los nombres y la fecha', 'colorNombres'],
+        /* 10/11 (Pasarela): letra clara sobre un panel plateado de gris medio */
+        ['casilla', 'Sombra suave detrás de la letra (para fondos de gris medio)', 'sombra']] },
+    /* 10/11 (Línea Roja · White Swan): la letra de Marfil en carmesí. Lo pinta /efectos/marfil-tinta.js. */
+    { key: 'marfil', tab: 'PRINCIPAL', casa: 'estilo-marfil', lugar: { abajo: true }, titulo: 'Colección Marfil · color de la tinta',
+      campos: [['color', 'Color de toda la letra (vacío = el gris de Marfil)', 'tinta']] },
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
@@ -77,6 +82,21 @@
   function arrancar() {
     var S = window.INVSN;
     if (!S || !S.estilo || !S.bloque) { setTimeout(arrancar, 300); return; }
+    /* 10/11 (Jazmín, jakzirhy-y-alexis): «la portada en blanco y negro y no
+       encuentran dónde modificarlo». La colección Perlas pinta la foto de
+       portada en blanco y negro; ahora se puede dejar a color. */
+    S.anotarCasa('portada-color', 'PRINCIPAL', 'portada', { antesDe: '#f-frase-larga' }, '.portada');
+    S.bloque('portada-color', function (caja) {
+      return [S.estilo(caja, 'portadaFoto', {
+        titulo: 'Portada · color de la foto',
+        campos: [['casilla', 'Foto de portada A COLOR (la colección Perlas la pone en blanco y negro)', 'color']],
+        obj: function (d) {
+          if (!d.fx) d.fx = {};
+          if (!d.fx.portadaFoto || typeof d.fx.portadaFoto !== 'object') d.fx.portadaFoto = {};
+          return d.fx.portadaFoto;
+        }
+      })];
+    });
     TAPAS.forEach(function (t) {
       S.anotarCasa(t.id, t.tab, t.casa, { abajo: true }, t.ve);
       S.bloque(t.id, function (caja) {
