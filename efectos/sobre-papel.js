@@ -112,12 +112,18 @@
       'z-index:4;pointer-events:none;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
       'gap:' + Math.round(H0 * 0.045) + 'px;padding:0 9%;box-sizing:border-box;text-align:center;color:' + col + ';' +
       'mix-blend-mode:multiply;will-change:transform,opacity;backface-visibility:hidden;';
+    /* el motor esconde todo lo de #env que no conoce (visibility:hidden !important): la tarjeta se pide visible */
+    if (!document.getElementById(ID + '-css')) {
+      var st = document.createElement('style'); st.id = ID + '-css';
+      st.textContent = 'html body #env:not(.gone) #' + ID + ', html body #env:not(.gone) #' + ID + ' *{visibility:visible!important}';
+      document.head.appendChild(st);
+    }
     var esc = function (s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
     caja.innerHTML =
       (l1 ? '<div style="font-family:\'' + fC + '\',Georgia,serif;font-size:' + Math.round(42 * tam) + 'px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;line-height:1.1">' + esc(l1) + '</div>' : '') +
       '<div style="font-family:\'' + fG + '\',\'Cormorant Garamond\',Georgia,serif;font-size:' + Math.round(150 * tam * largo) + 'px;line-height:1.05;font-weight:400">' + esc(l2) + '</div>' +
       (l3 ? '<div style="width:' + Math.round(W0 * 0.16) + 'px;height:2px;background:currentColor;opacity:.55"></div>' +
-        '<div style="font-family:\'' + fC + '\',Georgia,serif;font-size:' + Math.round(40 * tam) + 'px;letter-spacing:.22em;font-weight:500">' + esc(l3) + '</div>' : '');
+        '<div style="font-family:\'' + fC + '\',Georgia,serif;font-size:' + Math.round(50 * tam) + 'px;letter-spacing:.2em;font-weight:500">' + esc(l3) + '</div>' : '');
   }
 
   function rectVideo(vid, F) {
