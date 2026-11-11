@@ -1185,11 +1185,15 @@ window.SOBRES_INVITAME = {
      en vez de 1,4 MB a 2,2 Mbps: el teléfono lo decodifica sin trabarse).
      ⚠️ Maki (9/11): «¿no está pixelado?». SÍ: el recoloreo saturaba los bloques de
      8×8 del video Rosé comprimido. -2 recolorea con la máscara y el color medidos
-     sobre la imagen suavizada (la luz/textura sale nítida del original). */
+     sobre la imagen suavizada (la luz/textura sale nítida del original).
+     ⚠️ Jazmín (11/11, ivonycarlos): «el sobre está pixelado». Quedaban manchitas
+     rosas en bloques adentro del sobre abierto (el recoloreo agarraba el residuo
+     rosado de la compresión). -3: sólo se tiñen manchas grandes (≥900 px, con
+     apertura morfológica) y se sirve con q_auto:best. */
   'oleo-borgona': {
     nombre:     "Óleo Borgoña · la solapa pintada en borgoña claro se abre y sale la tarjeta (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_4.9,q_auto:good,vc_h264:main:3.1/invitame/oleo-borgona/oleo-borgona-sobre-2.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto:best,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre-2.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,eo_4.9,q_auto:best,vc_h264:main:3.1/invitame/oleo-borgona/oleo-borgona-sobre-3.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_1.2,q_auto:best,f_jpg/invitame/oleo-borgona/oleo-borgona-sobre-3.jpg",
     color:      "#E6DDD2",
     luz:        2.9,
     luzColor:   "#F4F1EA",
