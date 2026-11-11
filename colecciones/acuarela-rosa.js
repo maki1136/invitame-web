@@ -68,6 +68,15 @@
       FONDO: CL + 'q_auto,f_auto,w_1080/invitame/xv-sobria/xs-fondo-11-11',
       RASP: CL + 'q_auto,f_auto,w_480/invitame/xv-sobria/xs-rasp-11-11',
       TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/invitame/martina/mt-tv-proy-29-9',
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/invitame/martina/mt-sp-disco-29-9' },
+    /* 11/11 · Jazmín (referencia «Paola Sofía»): papel blanco, rosas rosa en los
+       costados y la letra en rosa vivo. */
+    { id: 'acuarela-rosa-viva', global: 'INVACUARELAROSAVIVA',
+      TINTA: '#C4566A', TINTA2: '#6E5258', ACENTO: '#E0808F', PAPEL: '#FFFFFF', ORO: '#C9A46A',
+      rgbAcento: '224,128,143', rgbTinta: '196,86,106', rgbTinta2: '110,82,88', rgbSombra: '90,30,44', rgbPapel: '255,255,255',
+      FONDO: CL + 'q_auto,f_auto,w_1080/invitame/xv-sobria/xv-fondo-viva-11-11',
+      RASP: CL + 'q_auto,f_auto,w_480/invitame/xv-sobria/xs-rasp-11-11',
+      TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/invitame/martina/mt-tv-proy-29-9',
       TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/invitame/martina/mt-sp-disco-29-9' }
   ];
   VESTIDOS.forEach(function (V) { coleccion(V); });

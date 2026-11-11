@@ -526,6 +526,17 @@
       paleta:  ['#c79aa2', '#fcfaf9', '#ead3d6', '#8a5560'],
       tipos:   ['xv']
     },
+    /* 11/11/2026 · Jazmín (referencia «Paola Sofía»): blanco y rosa vivo */
+    'acuarela-rosa-viva': {
+      nombre:  "Acuarela rosa viva",
+      bajada:  "Papel blanco, rosas en acuarela a los costados y detalles en rosa vivo.",
+      muestra: 'paola-mis15',
+      foto:    '/formulario/disenos/paola-mis15.webp',
+      color:   '#e0808f',
+      color2:  '#c4566a',
+      paleta:  ['#e0808f', '#ffffff', '#f6d3d8', '#c4566a'],
+      tipos:   ['xv']
+    },
     /* ---- 19/10/2026 · eventos nuevos (las que ya tienen portada con foto) ---- */
     'fiesta-ejecutivo': {
       nombre:  "Ejecutivo azul",

@@ -114,7 +114,11 @@
     /* 10/11/2026 · Línea Roja (Pasarela): negro de pasarela y plata, papel blanco frío. */
     { id:'negro-plata', nombre:'Negro y plata', metal:'plata',
       verde:'#161616', verde2:'#0a0a0a', sage:'#4d4f53', sageCl:'#c9cbcf', oro:'#a7aab0',
-      lino:'#f1f1ef', lino2:'#fafafa', cream:'#e4e4e2', muted:'#56585c', seal:'#2b2c2e' }
+      lino:'#f1f1ef', lino2:'#fafafa', cream:'#e4e4e2', muted:'#56585c', seal:'#2b2c2e' },
+    /* 11/11/2026 · XV rosa sobre blanco (referencia de Jazmín «Paola Sofía»): botones rosa vivo. */
+    { id:'rosa-coral', nombre:'Rosa coral y blanco', metal:'oro',
+      verde:'#c4566a', verde2:'#a8435a', sage:'#e0808f', sageCl:'#f6d3d8', oro:'#c9a46a',
+      lino:'#fdf7f7', lino2:'#ffffff', cream:'#f8e9eb', muted:'#7a5a60', seal:'#c4566a' }
   ];
 
   /* el panel arma las tarjetas leyendo de acá */
