@@ -62,6 +62,16 @@
     /* 10/11 (Línea Roja · White Swan): la letra de Marfil en carmesí. Lo pinta /efectos/marfil-tinta.js. */
     { key: 'marfil', tab: 'PRINCIPAL', casa: 'estilo-marfil', lugar: { abajo: true }, titulo: 'Colección Marfil · color de la tinta',
       campos: [['color', 'Color de toda la letra (vacío = el gris de Marfil)', 'tinta']] },
+    /* 11/11 (Maki): «poner un texto en los papeles blancos» de los sobres en video
+       (Línea Roja). Lo pinta /efectos/sobre-papel.js, sólo si el sobre elegido trae
+       el papel medido (`papel` en sobres/catalogo.js). Sin la casilla no cambia nada. */
+    { key: 'sobreTexto', tab: 'PRINCIPAL', casa: 'diseno', titulo: 'Sobre · texto impreso en la tarjeta del video (White Swan, Monogramme, Pasarela)',
+      campos: [['casilla', 'Mostrar el texto en la tarjeta en blanco del sobre', 'on'],
+        ['texto', 'Línea de arriba (vacío = la frase del sobre, ej. «Estás invitado a»)', 'l1'],
+        ['texto', 'Nombres (vacío = los nombres de la invitación)', 'l2'],
+        ['texto', 'Fecha (vacío = la fecha del evento, 16 · 10 · 2027)', 'l3'],
+        ['fuente', 'Letra de los nombres (vacío = la del sobre)', 'fuente'], ['color', 'Color de la tinta (vacío = el del sobre)', 'color'],
+        ['rango', 'Tamaño del texto', 'tam', 60, 140, '%']] },
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
