@@ -169,6 +169,11 @@
              'doradas. Letra verde hondo, filetes rosas. Tapas de video y playlist y la ' +
              'rosa de la raspadita, en verde con flores rosas. Conviene elegir una paleta ' +
              'verde salvia en «Paleta de colores» para los botones.' },
+    { id: 'acuarela-sobria', nombre: 'Acuarela rosa sobria (básica)',
+      paleta: null, paletaNombre: null,
+      ayuda: 'La versión SOBRIA de Acuarela rosa: papel blanco con apenas dos ramitos de ' +
+             'rosas rubor en acuarela (arriba a la izquierda y abajo a la derecha), sin ' +
+             'mariposas ni brillos. Letra en rosa viejo. La raspadita se raspa una rosa sola.' },
     { id: 'oleo', nombre: 'Óleo',
       paleta: null, paletaNombre: null,
       ayuda: 'Linea ARTE: pintura al oleo con espatula de fondo, en video. ' +
