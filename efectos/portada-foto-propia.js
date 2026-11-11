@@ -20,7 +20,7 @@
 
   if (/\/i\//.test(location.pathname)) {
     var st = document.createElement('style');
-    st.textContent = 'html[data-portada-propia] .portada video.cover-vid{display:none!important}';
+    st.textContent = 'html[data-portada-propia] .portada video.cover-vid{display:none!important}html[data-portada-propia] .portada .pbg{display:block!important}';
     (document.head || document.documentElement).appendChild(st);
     var aplicar = function () {
       var si = manda(window.INVEV);
