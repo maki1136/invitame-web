@@ -1050,6 +1050,32 @@
     el.setAttribute('data-regla-fondo', aTexto(fondo));   /* ★ error 13 */
   }
 
+  /* Los campos de color del panel que el motor pinta en línea (i/index.html):
+     clave del evento → qué elementos pinta. Ver «★ 11/11/2026» en legibles(). */
+  var COLORES_PANEL = [
+    ['evColor',      '[data-sec="eventos"] #dq-h2, [data-sec="eventos"] .kick, [data-sec="eventos"] h3'],
+    ['evTextColor',  '[data-sec="eventos"] .sub, [data-sec="eventos"] .addr'],
+    ['cfColor',      '#cf-h2, #cf-kick2'],
+    ['regColor',     '#reg-h2, #reg-kick'],
+    ['padresColor',  '#padres-h2, #padres-kick'],
+    ['galTextColor', '[data-sec="galeria"] h2, [data-sec="galeria"] .kick'],
+    ['kickColor',    '#pv-kick, #ep-kick'],
+    ['c_vestimenta-color', '[data-sec="dresscode"], [data-sec="dresscode"] :is(h2,h3,p,.kick,.d,.l,li)'],
+    ['c_itinerario-color-de-texto', '[data-sec="itinerario"], [data-sec="itinerario"] :is(h2,h3,p,.kick,.d,.l,li)'],
+    ['c_color-logo-y-texto-seccion-instagram', '[data-sec="hashtag"], [data-sec="hashtag"] :is(h2,h3,p,.kick,.d,.l,li)'],
+    ['c_color-para-la-seccion-personas', '[data-sec="padres"], [data-sec="padres"] :is(h2,h3,p,.kick,.d,.l,li)'],
+    ['c_color-para-seccion-regalos-mesa', '[data-sec="regalos"], [data-sec="regalos"] :is(h2,h3,p,.kick,.d,.l,li)']
+  ];
+  function colorDelPanel(el) {
+    var ev = window.INVEV; if (!ev || !el.matches) return '';
+    for (var i = 0; i < COLORES_PANEL.length; i++) {
+      var v = String(ev[COLORES_PANEL[i][0]] || '').trim();
+      if (!v || !/^(#|rgb|hsl)/i.test(v)) continue;
+      try { if (el.matches(COLORES_PANEL[i][1])) return v; } catch (e) {}
+    }
+    return '';
+  }
+
   function legibles() {
     var marco = elMarco();
     if (!marco) return;
@@ -1100,6 +1126,24 @@
          ponía encima un -webkit-text-fill-color propio (que es el que se ve) y
          el color elegido quedaba sólo en `color`. Lo que pinta
          estilo-secciones.js lleva la marca data-estcolor: se respeta tal cual. */
+      /* ★ 11/11/2026 — Y TAMPOCO EL QUE ELIGIÓ CON LOS CAMPOS DE COLOR DEL MOTOR.
+         Jazmín (mia-martinez): «le pongo las letras en blanco en varios sectores
+         y no me la cambia». evColor, evTextColor, cfColor, galTextColor,
+         c_vestimenta-color… los pinta el motor en línea, sin la marca de
+         estilo-secciones.js, y este corrector los pasaba a gris oscuro porque
+         el blanco sobre el fondo claro «no se lee». Lo que Jazmín eligió manda. */
+      var elegido = colorDelPanel(el);
+      if (elegido) {
+        if (el.hasAttribute('data-regla-luz') || el.hasAttribute('data-regla-orig')) {
+          el.style.removeProperty('-webkit-text-fill-color');
+          el.style.removeProperty('text-shadow');
+          el.removeAttribute('data-regla-orig'); el.removeAttribute('data-regla-luz');
+          el.removeAttribute('data-regla-opa'); el.removeAttribute('data-regla-fondo');
+          el.removeAttribute('data-regla-inline'); el.removeAttribute('data-regla-flojo');
+        }
+        el.style.setProperty('color', elegido);
+        continue;
+      }
       if (el.getAttribute('data-estcolor') === '1') {
         if (el.hasAttribute('data-regla-orig') || el.hasAttribute('data-regla-luz')) {
           el.style.removeProperty('-webkit-text-fill-color');
