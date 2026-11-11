@@ -897,6 +897,7 @@
     '/efectos/pase-qr-fino.js',      /* 9/11: diseño fino del pase con QR (opt-in) — fx.estiloSec.pase.tarjetaFina */
     '/efectos/marfil-tinta.js',      /* 10/11: Marfil con la tinta en otro color (opt-in) — fx.estiloSec.marfil.tinta */
     '/efectos/portada-limpia.js',    /* 10/11: portada sin velo claro y letra propia (opt-in) — fx.estiloSec.portada */
+    '/efectos/sobre-papel.js',       /* 11/11: texto impreso en la tarjeta del sobre en video (opt-in) — fx.estiloSec.sobreTexto */
 
     '/efectos/tapas-foto.js',        /* 22/10: la foto propia de las tapas del video y la playlist (fx.tapas) */
 
