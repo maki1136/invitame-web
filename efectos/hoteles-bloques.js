@@ -84,6 +84,8 @@
   var ultima = '', pintando = false;
   function aplicar() {
     var ev = window.INVEV; if (!ev) return;
+    /* 11/11: con la lista por tarjetas (fx.hoteles, hoteles-tarjetas.js) dibuja aquel */
+    if (ev.fx && ev.fx.hoteles && ev.fx.hoteles.lista && ev.fx.hoteles.lista.length) return;
     var txt = String(ev['c_datos-de-hoteles-recomendados'] || '').trim();
     if (!txt || txt.indexOf('|') >= 0) return;            /* formato del motor: lo dibuja él */
     var cont = document.getElementById('hosp-lista'); if (!cont) return;
