@@ -471,6 +471,17 @@
       tipos:   ['xv'],
       oculto:  true
     },
+    /* 11/11/2026 · pedido de Jazmín: el diseño de Martina (rosa) en el formulario */
+    'acuarela-rosa': {
+      nombre:  "Acuarela rosa",
+      bajada:  "Rosas en acuarela rosa empolvado y mariposas doradas.",
+      muestra: 'martina-mis15',
+      foto:    '/formulario/disenos/martina-mis15.webp',
+      color:   '#b06a7e',
+      color2:  '#8a4f60',
+      paleta:  ['#b06a7e', '#f7eef0', '#c9a0b0', '#8a4f60'],
+      tipos:   ['xv']
+    },
     /* 3/11/2026 · pedido de Jazmín: el diseño de Martina, en celeste */
     'acuarela-celeste': {
       nombre:  "Acuarela celeste",
