@@ -201,6 +201,17 @@
       paleta:  ["#524a2d", "#3b3823", "#272519", "#6f6544"],
       tipos:   ["xv"]
     },
+    /* 11/11/2026 · el diseño que armó Aylén (princesa-yel-sapo), como muestra con fotos propias */
+    'sapo-nenufar': {
+      nombre:  "Princesa del lago",
+      bajada:  "Nenúfares, luciérnagas y el lago encantado en verde salvia.",
+      muestra: 'isabella-mis15',
+      foto:    '/formulario/disenos/isabella-mis15.webp',
+      color:   '#5f7d5a',
+      color2:  '#3e5a3c',
+      paleta:  ['#5f7d5a', '#eef3e8', '#a9c29a', '#3e5a3c'],
+      tipos:   ['xv']
+    },
     'alicia': {
       nombre:  "Alicia en el país de las maravillas",
       bajada:  "La merienda en el jardín de las rosas.",
