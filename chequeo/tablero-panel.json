@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-11T17:16:18.918Z",
+ "cuando": "2026-11-11T18:19:46.413Z",
  "slug": "camila-y-tomas",
- "total": 565,
- "verde": 551,
- "amarillo": 0,
+ "total": 580,
+ "verde": 565,
+ "amarillo": 1,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -577,6 +577,50 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Qué foto usar",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.origen",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Link de la imagen",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "casa-cierre",
    "control": "(sin rótulo)",
    "tipo": "lista",
@@ -725,50 +769,6 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.patrocinadores.estilo.tarjetaOpaca",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Qué foto usar",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.origen",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Link de la imagen",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Ubicación del texto del cierre",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.pos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Tamaño de la frase del cierre (100%)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -953,6 +953,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.cierre.fraseAbajo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "casa-cierre",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -975,33 +986,11 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1211,6 +1200,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1807,6 +1807,138 @@
    "tipo": "textarea",
    "guarda": true,
    "dato": "c_datos-de-hoteles-recomendados",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles, c_datos-de-hoteles-recomendados",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista, c_datos-de-hoteles-recomendados",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista, c_datos-de-hoteles-recomendados",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Datos de hoteles recomendados:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2544,6 +2676,39 @@
    "tipo": "range",
    "guarda": true,
    "dato": "c_itinerario-transparencia-recuadro",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Mostrar el botón (sólo si hay link)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Mostrar el botón (sólo si hay link)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Mostrar el botón (sólo si hay link)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3865,8 +4030,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
