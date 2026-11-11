@@ -59,12 +59,17 @@
 
   var cargadas = {};
   function cargarFuente(f) {
-    if (!f || cargadas[f]) return; cargadas[f] = 1;
-    try {
-      var l = document.createElement('link'); l.rel = 'stylesheet';
-      l.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f).replace(/%20/g, '+') + ':ital,wght@0,400;0,500;0,600;1,400&display=swap';
-      document.head.appendChild(l);
-    } catch (e) {}
+    if (!f) return Promise.resolve();
+    if (cargadas[f]) return cargadas[f];
+    cargadas[f] = new Promise(function (ok) {
+      try {
+        var l = document.createElement('link'); l.rel = 'stylesheet';
+        l.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f).replace(/%20/g, '+') + ':ital,wght@0,400;0,500;0,600;0,700;1,400&display=block';
+        l.onload = ok; l.onerror = ok;
+        document.head.appendChild(l);
+      } catch (e) { ok(); }
+    });
+    return cargadas[f];
   }
 
   /* cuadrado unidad → cuadrilátero (Heckbert) */
@@ -92,25 +97,55 @@
     return null;
   }
 
-  var caja = null, firma = '', H0 = 600;
+  /* ★ 11/11 (Maki: «aparece en una tipografía y pasa a otra»): el texto NO se
+     muestra hasta que sus letras están bajadas. Si en 5 s no llegan, se muestra igual. */
+  var fuentesListas = {};
+  function esperarFuentes(clave, fG, fC) {
+    if (fuentesListas[clave]) return fuentesListas[clave] === 2;
+    fuentesListas[clave] = 1;
+    var hecho = function () { if (fuentesListas[clave] !== 2) { fuentesListas[clave] = 2; firma = ''; } };
+    var probar = ['400 100px "' + fG + '"', '600 50px "' + fC + '"', '400 50px "' + fC + '"'];
+    /* primero la hoja de Google (si no, fonts.load contesta «listo» sin nada), después las letras */
+    Promise.all([cargarFuente(fG), cargarFuente(fC)]).then(function () {
+      return Promise.all(probar.map(function (f) { try { return document.fonts.load(f, 'NuestraBoda 0123'); } catch (e) { return null; } }));
+    }).then(function () {
+      var n = 0, mirar = function () {
+        var ok = true; try { ok = probar.every(function (f) { return document.fonts.check(f, 'NuestraBoda'); }); } catch (e) {}
+        if (ok || ++n > 40) hecho(); else setTimeout(mirar, 100);
+      };
+      mirar();
+    }, hecho);
+    setTimeout(hecho, 6000);
+    return false;
+  }
+
+  /* los nombres en UNA línea: se achican hasta entrar en el ancho de la tarjeta */
+  function ajustar() {
+    if (!caja) return;
+    var n = caja.querySelector('.pp-nombres'); if (!n) return;
+    var max = W0 * 0.86, fs = parseFloat(n.style.fontSize) || 150, i = 0;
+    while (n.scrollWidth > max && fs > 40 && i++ < 40) { fs *= 0.94; n.style.fontSize = Math.round(fs) + 'px'; }
+  }
+
+  var caja = null, firma = '', H0 = 600, listo = false;
   function armar(env, F, c) {
     var asp = Number((F.papel || {}).aspecto) || 1.5; H0 = Math.round(W0 / asp);
     var col = hex(c.color) || hex(F.papel.color) || '#3a2a22';
     var fG = fuenteOk(c.fuente) || F.papel.fuente || 'Cormorant Garamond';
     var fC = F.papel.fuenteChica || 'Cormorant Garamond';
-    var tam = Math.max(60, Math.min(140, Number(c.tam) || 100)) / 100;
+    var tam = Math.max(60, Math.min(160, Number(c.tam) || Number(F.papel.tam) || 100)) / 100;
     var l1 = limpio(c.l1).trim() || F.papel.linea1 || ev().kick || '';
     var l2 = limpio(c.l2).trim() || nombresAuto();
     var l3 = limpio(c.l3).trim() || fechaAuto();
     var nueva = [modelo(), col, fG, fC, tam, l1, l2, l3, H0].join('|');
+    listo = esperarFuentes(fG + '|' + fC, fG, fC);
     if (caja && firma === nueva && caja.parentNode === env) return;
-    firma = nueva; cargarFuente(fG); cargarFuente(fC);
+    firma = nueva;
     if (!caja) { caja = document.createElement('div'); caja.id = ID; caja.setAttribute('aria-hidden', 'true'); }
     if (caja.parentNode !== env) env.appendChild(caja);
-    var largo = l2.length > 18 ? 0.8 : 1;
-    caja.style.cssText = 'position:fixed;left:0;top:0;width:' + W0 + 'px;height:' + H0 + 'px;transform-origin:0 0;' +
+        caja.style.cssText = 'position:fixed;left:0;top:0;width:' + W0 + 'px;height:' + H0 + 'px;transform-origin:0 0;' +
       'z-index:4;pointer-events:none;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
-      'gap:' + Math.round(H0 * 0.045) + 'px;padding:0 9%;box-sizing:border-box;text-align:center;color:' + col + ';' +
+      'gap:' + Math.round(H0 * 0.045) + 'px;padding:0 6%;box-sizing:border-box;text-align:center;color:' + col + ';' +
       'mix-blend-mode:multiply;will-change:transform,opacity;backface-visibility:hidden;';
     /* el motor esconde todo lo de #env que no conoce (visibility:hidden !important): la tarjeta se pide visible */
     if (!document.getElementById(ID + '-css')) {
@@ -119,11 +154,13 @@
       document.head.appendChild(st);
     }
     var esc = function (s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+    var trazo = 'paint-order:stroke fill;-webkit-text-stroke:' + (fG.match(/script|vibes|pinyon|allura|parisienne|tangerine|alex|italianno|great/i) ? 3 : 1.4) + 'px currentColor;';
     caja.innerHTML =
-      (l1 ? '<div style="font-family:\'' + fC + '\',Georgia,serif;font-size:' + Math.round(42 * tam) + 'px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;line-height:1.1">' + esc(l1) + '</div>' : '') +
-      '<div style="font-family:\'' + fG + '\',\'Cormorant Garamond\',Georgia,serif;font-size:' + Math.round(150 * tam * largo) + 'px;line-height:1.05;font-weight:400">' + esc(l2) + '</div>' +
-      (l3 ? '<div style="width:' + Math.round(W0 * 0.16) + 'px;height:2px;background:currentColor;opacity:.55"></div>' +
-        '<div style="font-family:\'' + fC + '\',Georgia,serif;font-size:' + Math.round(50 * tam) + 'px;letter-spacing:.2em;font-weight:500">' + esc(l3) + '</div>' : '');
+      (l1 ? '<div style="font-family:\'' + fC + '\',Georgia,serif;font-size:' + Math.round(54 * tam) + 'px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;line-height:1.1;white-space:nowrap">' + esc(l1) + '</div>' : '') +
+      '<div class="pp-nombres" style="font-family:\'' + fG + '\',\'Cormorant Garamond\',Georgia,serif;font-size:' + Math.round(200 * tam) + 'px;line-height:1.1;font-weight:400;white-space:nowrap;' + trazo + '">' + esc(l2) + '</div>' +
+      (l3 ? '<div style="width:' + Math.round(W0 * 0.18) + 'px;height:3px;background:currentColor;opacity:.7"></div>' +
+        '<div style="font-family:\'' + fC + '\',Georgia,serif;font-size:' + Math.round(60 * tam) + 'px;letter-spacing:.18em;font-weight:600;white-space:nowrap">' + esc(l3) + '</div>' : '');
+    ajustar();
   }
 
   function rectVideo(vid, F) {
@@ -148,7 +185,9 @@
     var m = homografia(p); if (!m) return;
     var a = m[0] / W0, d = m[3] / W0, g = m[6] / W0, b = m[1] / H0, e = m[4] / H0, h = m[7] / H0;
     caja.style.transform = 'matrix3d(' + [a, d, 0, g, b, e, 0, h, 0, 0, 1, 0, m[2], m[5], 0, 1].join(',') + ')';
-    caja.style.opacity = String(op ? Math.max(0, Math.min(1, op[0])) * 0.94 : 0);
+    if (!listo) { caja.style.opacity = '0'; return; }
+    ajustar();
+    caja.style.opacity = String(op ? Math.max(0, Math.min(1, op[0])) : 0);
   }
 
   function bucle() {
