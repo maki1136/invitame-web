@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-11T19:42:09.088Z",
+ "cuando": "2026-11-11T21:51:28.128Z",
  "slug": "camila-y-tomas",
- "total": 581,
- "verde": 566,
+ "total": 587,
+ "verde": 573,
  "amarillo": 0,
  "rojo": 14,
- "gris": 1,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -249,6 +249,72 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.motivo.juego, fx.motivo.densidad, fx.motivo.donde",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.sobreTexto.l1",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.sobreTexto.l2",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.sobreTexto.l3",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.sobreTexto.fuente",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.sobreTexto.color",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.sobreTexto.tam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -577,6 +643,50 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Qué foto usar",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.origen",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Link de la imagen",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "casa-cierre",
    "control": "(sin rótulo)",
    "tipo": "lista",
@@ -725,50 +835,6 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.patrocinadores.estilo.tarjetaOpaca",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Qué foto usar",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.origen",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Link de la imagen",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Ubicación del texto del cierre",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.pos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Tamaño de la frase del cierre (100%)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -953,11 +1019,25 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
+   "bloque": "casa-diseno",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.estiloSec.sobreTexto.on",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.cierre.fraseAbajo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
@@ -983,44 +1063,11 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinVelo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sombra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1241,6 +1288,28 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinVelo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sombra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
