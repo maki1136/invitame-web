@@ -28,7 +28,7 @@
     if (typeof pf.velo === 'number') css += P + '.portada .pbg::after,' + P + '.portada .pveil{opacity:' + Math.max(0, Math.min(1, pf.velo)) + '!important}';
     if (typeof pf.tamKick === 'number') css += P + '.portada #pv-kick{font-size:' + pf.tamKick + 'px!important}';
     if (/^#[0-9a-f]{3,8}$/i.test(String(pf.colorKick || ''))) css += P + '.portada #pv-kick{color:' + pf.colorKick + '!important;-webkit-text-fill-color:' + pf.colorKick + '!important}';
-    if (e.fx && e.fx.dresscodeOpc && e.fx.dresscodeOpc.sin === true) css += P + '#dc-mono{display:none!important}';
+
     if (css) h.setAttribute('data-pajuste', ''); else h.removeAttribute('data-pajuste');
     if (st2.textContent !== css) st2.textContent = css;
   }

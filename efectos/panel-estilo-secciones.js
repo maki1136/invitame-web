@@ -113,15 +113,51 @@
     /* ★ 12/11 (Jazmín, xv-maria-ines): «sacar los íconos predeterminados del dress code» */
     S.anotarCasa('dresscode-dibujos', 'LUGAR_VEST', 'dresscode', { antesDe: '#f-dresscode-texto' }, '[data-sec=dresscode]');
     S.bloque('dresscode-dibujos', function (caja) {
-      return [S.estilo(caja, 'dresscodeDibujos', {
-        titulo: 'Vestimenta · dibujos',
-        campos: [['casilla', 'Sacar los dibujos del traje y el vestido (que quede sólo el texto)', 'sin']],
-        obj: function (d) {
-          if (!d.fx) d.fx = {};
-          if (!d.fx.dresscodeOpc || typeof d.fx.dresscodeOpc !== 'object') d.fx.dresscodeOpc = {};
-          return d.fx.dresscodeOpc;
-        }
-      })];
+      /* ★ 12/11 (Jazmín): «diferentes opciones para colocar en el sector de código de
+         vestimenta… que no haya tantas, que sea como los sobres y los regalitos» y
+         Maki: «mejor que puedas vos cargar las que quieran además del catálogo».
+         fx.dresscodeOpc = { dibujo: ''|'sin'|<id del catálogo>|'propia', url } */
+      var OPC = window.INVDRESS_CATALOGO || [];
+      var h = document.createElement('div');
+      h.innerHTML = '<div style="font-weight:700;margin-bottom:4px">Vestimenta · dibujo</div>' +
+        '<div class="hint" style="margin-bottom:8px">Elegí el dibujo que va arriba del texto, sacalo, o subí una imagen propia.</div>';
+      caja.appendChild(h);
+      var g = document.createElement('div'); g.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px';
+      caja.appendChild(g);
+      var btns = [];
+      function opc() { var d = S.borrador(); if (!d) return null; if (!d.fx) d.fx = {}; if (!d.fx.dresscodeOpc || typeof d.fx.dresscodeOpc !== 'object') d.fx.dresscodeOpc = {}; return d.fx.dresscodeOpc; }
+      function actual(o) { return o.dibujo || (o.sin === true ? 'sin' : ''); }
+      function boton(id, rot, img) {
+        var b = document.createElement('button'); b.type = 'button';
+        b.style.cssText = 'border:1px solid #d9cbbf;border-radius:10px;background:#fff;padding:6px;cursor:pointer;font-size:11px;line-height:1.2;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:86px;justify-content:center';
+        b.innerHTML = (img ? '<img src="' + img + '" style="height:54px;max-width:100%;object-fit:contain">' : '') + '<span>' + rot + '</span>';
+        b.onclick = function () { var o = opc(); if (!o) return; o.dibujo = id; o.sin = (id === 'sin'); S.refrescar(); sync(); };
+        b.__id = id; btns.push(b); g.appendChild(b);
+      }
+      boton('', 'El de siempre (traje y vestido)');
+      boton('sin', 'Sin dibujo (sólo texto)');
+      OPC.forEach(function (o) { boton(o.id, o.nombre, o.url); });
+      var up = document.createElement('div'); up.style.cssText = 'margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap';
+      var bu = document.createElement('button'); bu.type = 'button'; bu.className = 'addbtn gh'; bu.style.cssText = 'padding:6px 12px;font-size:12px'; bu.textContent = 'Subir mi propia imagen';
+      var fi = document.createElement('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.style.display = 'none';
+      var pv = document.createElement('img'); pv.style.cssText = 'height:44px;border-radius:6px;display:none';
+      bu.onclick = function () { fi.click(); };
+      fi.onchange = async function () {
+        var f = fi.files && fi.files[0]; if (!f) return;
+        if (!window.INV || !INV.uploadImage) { alert('Todavía no cargó la base. Esperá 2 seg.'); return; }
+        bu.textContent = 'Subiendo…';
+        try { var u = await INV.uploadImage(f); var o = opc(); o.url = u; o.dibujo = 'propia'; o.sin = false; S.refrescar(); }
+        catch (e) { alert('No se pudo subir: ' + (e.message || e)); }
+        bu.textContent = 'Subir mi propia imagen'; sync();
+      };
+      up.appendChild(bu); up.appendChild(fi); up.appendChild(pv); caja.appendChild(up);
+      function sync() {
+        var o = opc() || {}, a = actual(o);
+        btns.forEach(function (b) { var on = b.__id === a; b.style.borderColor = on ? '#b06a7e' : '#d9cbbf'; b.style.boxShadow = on ? '0 0 0 2px rgba(176,106,126,.35)' : 'none'; });
+        if (o.url) { pv.src = o.url; pv.style.display = ''; pv.style.outline = a === 'propia' ? '2px solid #b06a7e' : 'none'; pv.title = 'Tocá para usarla'; pv.onclick = function () { o.dibujo = 'propia'; o.sin = false; S.refrescar(); sync(); }; }
+        else pv.style.display = 'none';
+      }
+      return [sync];
     });
     TAPAS.forEach(function (t) {
       S.anotarCasa(t.id, t.tab, t.casa, { abajo: true }, t.ve);
