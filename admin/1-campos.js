@@ -62,7 +62,10 @@
     /* sumadas a pedido de Jazmín (29/9/2026). No están en el <link> del motor:
        las pide /efectos/fuentes-extra.js cuando se eligen. */
     ["'Mea Culpa',cursive","Mea Culpa"],["'Pinyon Script',cursive","Pinyon Script"],["'Allura',cursive","Allura"],["'Alex Brush',cursive","Alex Brush"],
-    ["'Libre Baskerville',serif","Baskerville"],["'Bodoni Moda',serif","Bodoni Moda"],["'Italiana',serif","Italiana"]];
+    ["'Libre Baskerville',serif","Baskerville"],["'Bodoni Moda',serif","Bodoni Moda"],["'Italiana',serif","Italiana"],
+    /* 12/11 (Jazmín): «la tipografía Lucida Handwriting». Lucida es de Microsoft y no se
+       puede servir en la web (los iPhone no la tienen): va Merienda, la parecida libre. */
+    ["'Merienda',cursive","Lucida Handwriting (parecida: Merienda)"]];
   /* La última opción de toda lista de tipografías: pegar un link o un nombre de
      Google Fonts (Jazmín: «no podemos colocar links de Fonts»). La atiende
      otraFuente() en 3-evento.js. */
