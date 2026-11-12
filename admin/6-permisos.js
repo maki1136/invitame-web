@@ -261,9 +261,42 @@
     c.style.cssText = 'margin:10px 0 16px;padding:11px 12px;border-radius:8px;' +
       'background:rgba(0,0,0,.045);border:1px solid rgba(0,0,0,.08)';
     m.appendChild(c);
+    llenarEquipo('permequipo');
+  }
 
+  /* ★ 12/11/2026 · Maki: «eso tiene que estar a la vista para mí». La caja vivía
+     sólo al final de «Empezá por acá», adentro de una invitación. Ahora además
+     hay un botón «Equipo» arriba, al lado de Solicitudes, que la abre en una
+     ventana. Lo ve sólo quien tiene permiso de equipo (la dueña). */
+  function botonEquipo() {
+    if (!puede('equipo') || document.getElementById('btn-equipo')) return;
+    var ref = botonQueLlama('verSolicitudes(');
+    if (!ref || !ref.parentNode) return;
+    var b = document.createElement('button');
+    b.id = 'btn-equipo'; b.className = 'btn-c'; b.type = 'button';
+    b.title = 'Quién entra al panel y con qué permiso';
+    b.textContent = 'Equipo';
+    b.onclick = abrirEquipo;
+    ref.parentNode.insertBefore(b, ref);
+  }
+  function abrirEquipo() {
+    var viejo = document.getElementById('equipobox'); if (viejo) viejo.remove();
+    var box = document.createElement('div'); box.id = 'equipobox';
+    box.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.45);display:flex;align-items:flex-start;justify-content:center;padding:40px 14px;overflow:auto';
+    box.onclick = function (e) { if (e.target === box) box.remove(); };
+    box.innerHTML = '<div style="background:#fff;max-width:520px;width:100%;border-radius:14px;padding:18px 18px 14px;font-family:Nunito,sans-serif">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+        '<b style="color:#6D1233;font-size:17px">Equipo del panel</b>' +
+        '<button type="button" class="btn-c" id="equipocerrar">Cerrar</button></div>' +
+      '<div id="permequipo-modal"></div></div>';
+    document.body.appendChild(box);
+    box.querySelector('#equipocerrar').onclick = function () { box.remove(); };
+    llenarEquipo('permequipo-modal');
+  }
+
+  function llenarEquipo(idCaja) {
     function pintar() {
-      var c = document.getElementById('permequipo');   // ver la nota de arriba
+      var c = document.getElementById(idCaja);   // ver la nota de arriba
       if (!c) return;
       window.INV.listEquipo().then(function (lista) {
         var h = '<div style="font-size:12.5px;font-weight:600;margin-bottom:2px">Equipo</div>' +
@@ -375,6 +408,7 @@
        Por eso NO se marca nada como pintado: cada latido se fija si el nodo
        sigue en el documento y, si no está, lo vuelve a poner. Las cajas ya
        traen su propia guarda por id, así que esto no duplica nada. */
+    try { botonEquipo(); } catch (e) { PASOS.push('botonEquipo:' + e); }
     if (!anclaje()) { PASOS.push('sin .mejoras'); return; }
     try {
       if (!document.getElementById('permchapa')) chapita(AVISO);
