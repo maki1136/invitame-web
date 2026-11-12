@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-12T19:44:56.886Z",
+ "cuando": "2026-11-12T22:22:58.940Z",
  "slug": "camila-y-tomas",
- "total": 592,
- "verde": 577,
- "amarillo": 1,
+ "total": 596,
+ "verde": 578,
+ "amarillo": 0,
  "rojo": 14,
- "gris": 0,
+ "gris": 4,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -475,6 +475,30 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
@@ -1027,6 +1051,14 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
@@ -4173,9 +4205,8 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
