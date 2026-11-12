@@ -58,7 +58,26 @@
       FONDO: CL + 'q_auto,f_auto,w_1080/martina/mt-fondo-flores-verde-6-11c',
       RASP: CL + 'q_auto,f_auto,w_480/martina/mt-rasp-verde-6-11',
       TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/martina/mt-tv-proy-verde-6-11b',
-      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/martina/mt-sp-disco-verde-6-11b' }
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/martina/mt-sp-disco-verde-6-11b' },
+    /* 11/11 · Jazmín: «algo más sobrio» (referencia de Pinterest: papel blanco,
+       pocas rosas en acuarela en las esquinas). Sin mariposas ni brillos: papel
+       blanco con dos ramitos de rosas rubor, letra en rosa viejo. */
+    { id: 'acuarela-sobria', global: 'INVACUARELASOBRIA',
+      TINTA: '#8A5560', TINTA2: '#6B5A5D', ACENTO: '#C79AA2', PAPEL: '#FCFAF9', ORO: '#B99A5C',
+      rgbAcento: '199,154,162', rgbTinta: '138,85,96', rgbTinta2: '107,90,93', rgbSombra: '70,40,46', rgbPapel: '252,250,249',
+      FONDO: CL + 'q_auto,f_auto,w_1080/invitame/xv-sobria/xs-fondo-11-11',
+      RASP: CL + 'q_auto,f_auto,w_480/invitame/xv-sobria/xs-rasp-11-11',
+      TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/invitame/martina/mt-tv-proy-29-9',
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/invitame/martina/mt-sp-disco-29-9' },
+    /* 11/11 · Jazmín (referencia «Paola Sofía»): papel blanco, rosas rosa en los
+       costados y la letra en rosa vivo. */
+    { id: 'acuarela-rosa-viva', global: 'INVACUARELAROSAVIVA',
+      TINTA: '#C4566A', TINTA2: '#6E5258', ACENTO: '#E0808F', PAPEL: '#FFFFFF', ORO: '#C9A46A',
+      rgbAcento: '224,128,143', rgbTinta: '196,86,106', rgbTinta2: '110,82,88', rgbSombra: '90,30,44', rgbPapel: '255,255,255',
+      FONDO: CL + 'q_auto,f_auto,w_1080/invitame/xv-sobria/xv-fondo-viva-11-11',
+      RASP: CL + 'q_auto,f_auto,w_480/invitame/xv-sobria/xs-rasp-11-11',
+      TAPA_VIDEO: CL + 'q_auto,f_auto,w_1100/invitame/martina/mt-tv-proy-29-9',
+      TAPA_PLAY: CL + 'c_fill,w_800,h_730,q_auto,f_auto/invitame/martina/mt-sp-disco-29-9' }
   ];
   VESTIDOS.forEach(function (V) { coleccion(V); });
 

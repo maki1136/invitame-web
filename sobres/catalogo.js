@@ -1430,6 +1430,20 @@ window.SOBRES_INVITAME = {
     luzColor:   "#FFF1D6",
     luzFundido: 0.5
   },
+  /* 12/11/2026 · Jazmín: «¿Se podrá agregar el sobre de la Bella y la Bestia en color
+     rosa?». Es el `bella-luz` teñido cuadro por cuadro (sólo el papel: el lacre, los
+     pétalos y la luz quedan iguales). Receta: scratchpad sc2/rosa.py — H 348°,
+     S 0,22+0,25·S, V 0,50+0,95·V sobre la imagen suavizada; lacre protegido por
+     R>70 y G<0,36·R + casco convexo.                                              */
+  'bella-luz-rosa': {
+    nombre:     "La Bella y la Bestia · sobre ROSA con rosas en relieve y lacre de rosa; se abre y sale luz dorada con pétalos (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/bella/vic-sobre-luz-rosa.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/bella/vic-sobre-luz-rosa.jpg",
+    color:      "#B66E79",
+    luz:        4.35,
+    luzColor:   "#FFF1D6",
+    luzFundido: 0.5
+  },
   'sirena-luz': { nombre: "Sirena · sobre nácar sobre arena con lacre coral de vieira; el lacre se parte, se abre y sale luz perlada con burbujas (video)",
     video: "https://res.cloudinary.com/oc8cgqt4/video/upload/w_720,q_auto,vc_h264,ac_none/invitame/sirena/mar-sobre-luz-29-9.mp4",
     poster: "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,w_720,q_auto,f_jpg/invitame/sirena/mar-sobre-luz-29-9.jpg",

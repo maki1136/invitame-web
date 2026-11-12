@@ -515,6 +515,28 @@
       paleta:  ['#7d9a82', '#f6f8f3', '#e8b9c2', '#3e5a46'],
       tipos:   ['xv']
     },
+    /* 11/11/2026 · Jazmín: «algo más sobrio» — la básica de XV en papel blanco */
+    'acuarela-sobria': {
+      nombre:  "Acuarela rosa sobria",
+      bajada:  "Papel blanco y dos ramitos de rosas en acuarela. Sencilla y elegante.",
+      muestra: 'valentina-mis15',
+      foto:    '/formulario/disenos/valentina-mis15.webp',
+      color:   '#c79aa2',
+      color2:  '#8a5560',
+      paleta:  ['#c79aa2', '#fcfaf9', '#ead3d6', '#8a5560'],
+      tipos:   ['xv']
+    },
+    /* 11/11/2026 · Jazmín (referencia «Paola Sofía»): blanco y rosa vivo */
+    'acuarela-rosa-viva': {
+      nombre:  "Acuarela rosa viva",
+      bajada:  "Papel blanco, rosas en acuarela a los costados y detalles en rosa vivo.",
+      muestra: 'paola-mis15',
+      foto:    '/formulario/disenos/paola-mis15.webp',
+      color:   '#e0808f',
+      color2:  '#c4566a',
+      paleta:  ['#e0808f', '#ffffff', '#f6d3d8', '#c4566a'],
+      tipos:   ['xv']
+    },
     /* ---- 19/10/2026 · eventos nuevos (las que ya tienen portada con foto) ---- */
     'fiesta-ejecutivo': {
       nombre:  "Ejecutivo azul",
