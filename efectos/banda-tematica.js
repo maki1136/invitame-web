@@ -120,10 +120,10 @@
       /* el contenido queda por encima de la capa */
       '.sec.verde > *:not(.inv-banda-deco){position:relative;z-index:1}',
       /* los colores que nacieron para fondo oscuro */
-      '.sec.verde h2{color:' + tinta + ' !important}',
-      '.sec.verde .kick{color:' + suave(tinta) + ' !important}',
-      '.sec.verde p{color:' + suave(tinta) + ' !important}',
-      '.sec.verde .adorno{color:' + suave(tinta) + ' !important}',
+      '.sec.verde:not([data-banda-propia]) h2{color:' + tinta + ' !important}',
+      '.sec.verde:not([data-banda-propia]) .kick{color:' + suave(tinta) + ' !important}',
+      '.sec.verde:not([data-banda-propia]) p{color:' + suave(tinta) + ' !important}',
+      '.sec.verde:not([data-banda-propia]) .adorno{color:' + suave(tinta) + ' !important}',
       /* las tarjetas de hoteles nacieron translucidas sobre oscuro */
       '.sec.verde .hotel{background:rgba(255,255,255,.55) !important;',
       '  border-color:rgba(0,0,0,.12) !important}',
@@ -150,6 +150,17 @@
     var color = conAlfa(t.bandaColor || '#dcecf2', a);
     var secs = document.querySelectorAll('.sec.verde');
     for (var i = 0; i < secs.length; i++) {
+      /* ★ 12/11/2026 (Jazmín, xv-juliana): «se me están superponiendo dos imágenes
+         de fondo, una que yo coloco y una que no sé de dónde sale». La sección
+         con FOTO PROPIA (la pinta otro módulo, inline) no lleva la banda de la
+         temática encima: ni la capa de objetos ni la tinta de la banda. */
+      var bi = secs[i].style.getPropertyValue('background-image') || secs[i].style.getPropertyValue('background') || '';
+      if (/url\(/.test(bi) && bi.indexOf(String(t.banda).split('/').pop()) < 0) {
+        secs[i].setAttribute('data-banda-propia', '');
+        var vieja = secs[i].querySelector(':scope > .inv-banda-deco'); if (vieja) vieja.remove();
+        continue;
+      }
+      if (secs[i].hasAttribute('data-banda-propia')) continue;
       secs[i].style.setProperty('background-color', color, 'important');
       secs[i].style.setProperty('background-image', 'none', 'important');
       /* una capa de objetos por banda, ni mas ni menos */

@@ -208,6 +208,10 @@
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     try{ const url=await INV.uploadImage(f); ensureFX(); D.fx.raspadita.tapa=url; renderPanel(); postPreview(); }
     catch(e){ console.error(e); alert('No se pudo subir: '+(e.message||e)); } }
+  async function subirTextura(input){ const f=input.files&&input.files[0]; if(!f)return;
+    if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
+    try{ const url=await INV.uploadImage(f); ensureFX(); D.fx.diseno.texturaUrl=url; D.fx.diseno.textura='propia'; renderPanel(); if(typeof postPreview==='function')postPreview(); }
+    catch(e){ console.error(e); alert('No se pudo subir: '+(e.message||e)); } }
   async function subirAdorno(input){ const f=input.files&&input.files[0]; if(!f)return;
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     try{ const url=await INV.uploadImage(f); ensureFX(); D.fx.diseno.adornoCustom=url; D.fx.diseno.adorno=''; renderPanel(); }
@@ -340,7 +344,13 @@
       '<div class="mejoras"><div class="h efx">'+ICO.destello+' Cortes y textura de fondo</div>'+
         '<div class="hint" style="margin-bottom:10px">El borde entre secciones y la textura del fondo. En vez de líneas rectas y color plano, elegí un corte con diseño y una textura real (le da el toque premium).</div>'+
         '<div class="grp"><label>Estilo del corte entre secciones</label>'+sel('diseno','cortes',[['','Recto (sin corte)'],['onda','Onda'],['curva','Curva suave'],['diagonal','Diagonal'],['arco','Arcos / festón'],['rasgado','Papel rasgado']])+'</div>'+
-        '<div class="grp"><label>Textura del fondo</label>'+sel('diseno','textura',[['','Color liso (sin textura)'],['papel','Papel'],['lino','Lino'],['kraft','Kraft'],['marmol','Mármol'],['acuarela','Acuarela']])+'</div>'+
+        '<div class="grp"><label>Textura del fondo</label>'+sel('diseno','textura',[['','Color liso (sin textura)'],['papel','Papel'],['lino','Lino'],['kraft','Kraft'],['marmol','Mármol'],['acuarela','Acuarela'],['propia','Mi imagen (la que subo abajo)']])+'</div>'+
+        /* ★ 12/11 (Jazmín, xv-juliana): «en este sector estaría bueno que podamos colocar alguna imagen
+           nosotros, porque las texturas de fondo a veces quedan nada que ver con la invi». */
+        '<div class="grp"><div class="file" onclick="document.getElementById(\'texturafile\').click()">'+ICO.subir+' Subir mi propia textura (imagen)</div>'+
+          '<input type="file" id="texturafile" accept="image/*" style="display:none" onchange="subirTextura(this)">'+
+          (D.fx.diseno.texturaUrl?'<div style="margin-top:8px;display:flex;align-items:center;gap:10px"><img src="'+D.fx.diseno.texturaUrl+'" style="height:44px;width:44px;object-fit:cover;border-radius:6px"><button class="lnk" onclick="D.fx.diseno.texturaUrl=\'\';if(D.fx.diseno.textura===\'propia\')D.fx.diseno.textura=\'\';renderPanel();postPreview()">Quitar mi textura</button></div>':'')+
+        '</div>'+
         '<div class="hint">La textura se tiñe con el color de cada sección, así combina con tu paleta.</div>'+
       '</div>'+
       '<div class="mejoras"><div class="h efx">'+ICO.destello+' Adorno de las secciones</div>'+
