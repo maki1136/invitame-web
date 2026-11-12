@@ -40,7 +40,7 @@
 
   var DUENA_FIJA = 'littlemomentsok@gmail.com';   // la llave de repuesto
 
-  var ROTULO = { duena: 'Dueña', calidad: 'Control de calidad', carga: 'Carga' };
+  var ROTULO = { duena: 'Dueño', calidad: 'Control de calidad', carga: 'Carga' };
 
   /* Qué puede cada rol. Todo lo que no está acá lo pueden todas. */
   var PUEDE = {
@@ -312,7 +312,7 @@
                (baja ? ' <span style="color:#9b2c2c">(dada de baja)</span>' : '') +
                '<br><span style="opacity:.7">' + esc(p.mail) + '</span><br>' +
                '<select class="permrol" style="margin-top:5px">' +
-                 '<option value="duena">Dueña</option>' +
+                 '<option value="duena">Dueño</option>' +
                  '<option value="calidad">Control de calidad</option>' +
                  '<option value="carga">Carga</option>' +
                '</select> ' +
@@ -327,7 +327,7 @@
              '<select id="permnvrol" style="width:100%;margin-top:5px">' +
                '<option value="carga">Carga</option>' +
                '<option value="calidad">Control de calidad</option>' +
-               '<option value="duena">Dueña</option>' +
+               '<option value="duena">Dueño</option>' +
              '</select>' +
              '<button id="permnvbtn" class="btn-c" style="margin-top:6px">Agregar al equipo</button>' +
              '<div style="font-size:10.5px;opacity:.6;margin-top:5px;line-height:1.35">' +
