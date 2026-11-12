@@ -567,12 +567,18 @@
   }
   function postPreview(){
     const fr=el('pv-frame'); if(!fr||!fr.contentWindow)return;
-    try{ const {invitados, ..._cfg}=D; fr.contentWindow.postMessage({type:'inv-preview', ev:_cfg},'*'); }catch(e){}
+    try{ const {invitados, ..._cfg}=D;
+      /* ★ 12/11/2026 · Maki: en la invitación NUEVA (sin ?e=) la vista previa
+         muestra la foto de la Boho en vez de la de fábrica. SÓLO en la vista
+         previa: D no se toca, así que nada de esto se guarda en ninguna invitación. */
+      if(!new URLSearchParams(location.search).get('e') && /photo-1519741497674/.test(String(_cfg.cover||''))){
+        _cfg.cover='https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/bohemia/bh-portada.webp'; _cfg.cx=50; _cfg.cy=100; _cfg.cz=112; }
+      fr.contentWindow.postMessage({type:'inv-preview', ev:_cfg},'*'); }catch(e){}
   }
   function render(){
     // editor de foto del panel (no es el preview)
     const ie=el('imgedit');
-    if(ie){ie.style.backgroundImage="url('"+D.cover+"')";ie.style.backgroundPosition=D.cx+'% '+D.cy+'%';ie.style.backgroundSize='auto '+D.cz+'%';}
+    if(ie){const _nv=!new URLSearchParams(location.search).get('e')&&/photo-1519741497674/.test(String(D.cover||''));ie.style.backgroundImage="url('"+(_nv?'https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/bohemia/bh-portada.webp':D.cover)+"')";ie.style.backgroundPosition=D.cx+'% '+D.cy+'%';ie.style.backgroundSize='auto '+D.cz+'%';}
     postPreview();
   }
   // por las dudas: si el iframe carga después, mandamos igual
