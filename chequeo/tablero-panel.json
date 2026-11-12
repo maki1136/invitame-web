@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-12T16:13:39.439Z",
+ "cuando": "2026-11-12T17:19:28.141Z",
  "slug": "camila-y-tomas",
- "total": 587,
- "verde": 573,
+ "total": 588,
+ "verde": 574,
  "amarillo": 0,
  "rojo": 14,
  "gris": 0,
@@ -2819,6 +2819,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.dresscode.soloEvitar",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-dresscode",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.dresscodeOpc.sin",
    "llega": true,
    "seVe": true,
    "estado": "verde"
