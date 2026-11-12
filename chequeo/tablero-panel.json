@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-12T17:19:28.141Z",
+ "cuando": "2026-11-12T19:44:56.886Z",
  "slug": "camila-y-tomas",
- "total": 588,
- "verde": 574,
- "amarillo": 0,
+ "total": 592,
+ "verde": 577,
+ "amarillo": 1,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -1310,6 +1310,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.portada.sombra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinOscurecer",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2673,6 +2684,50 @@
    "tab": "LUGAR_VEST",
    "bloque": "casa-itinerario",
    "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.itinerario.fuenteHora",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-itinerario",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.itinerario.tamHora",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-itinerario",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.itinerario.fuenteDesc",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-itinerario",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.itinerario.tamDesc",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-itinerario",
+   "control": "(sin rótulo)",
    "tipo": "range",
    "guarda": true,
    "dato": "fx.estiloSec.itinerario.radio",
@@ -2819,17 +2874,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.dresscode.soloEvitar",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "LUGAR_VEST",
-   "bloque": "casa-dresscode",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.dresscodeOpc.sin",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4129,8 +4173,9 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
