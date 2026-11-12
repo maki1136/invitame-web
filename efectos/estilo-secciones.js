@@ -111,6 +111,16 @@
     var cfg = SEC[key], sec = document.querySelector(cfg.sel); if (!sec) return;
     var es = estiloDe(e, key);
     var bg = colorOk(es.fondo), img = /^https?:\/\//.test(String(es.imagen || '')) ? es.imagen : '';
+    /* ★ 12/11 (Jazmín, xv-maria-ines: «Personas hace destellos entre rosa claro
+       y rosa, como un prender y apagar»). El color VIEJO del panel («Fondo color
+       Personas») lo leían dos módulos: éste lo ponía liso y sector-elegido.js lo
+       ponía con la «Imagen de fondo sección personas» encima; se pisaban uno al
+       otro cada medio segundo. Si el fondo sale sólo del campo viejo y hay
+       imagen vieja, el fondo es de sector-elegido.js y acá no se toca. */
+    var pr = (e.fx && e.fx.estiloSec && e.fx.estiloSec[key]) || {};
+    var IMG_VIEJA = { padres: 'c_imagen-de-fondo-seccion-personas' };
+    var eleg = (e.fx && e.fx.sectorElegido) || {}, iv = IMG_VIEJA[key];
+    if (!pr.fondo && !pr.imagen && iv && (eleg[iv] || eleg['img_' + iv]) && /^https?:/.test(String(e['img_' + IMG_VIEJA[key]] || e[IMG_VIEJA[key]] || ''))) { bg = ''; img = ''; }
     if (key !== 'footer') {
       poner(sec, 'background-color', bg);
       poner(sec, 'background-image', img ? 'url("' + img.replace(/"/g, '') + '")' : (bg ? 'none' : ''));

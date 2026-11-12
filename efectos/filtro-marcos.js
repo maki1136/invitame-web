@@ -88,8 +88,17 @@
     var puesta = String((cfg && cfg.frase) || '').trim();
     if (puesta) return puesta.slice(0, 60);
     /* el tipo normalizado: el selector viejo del panel guardaba «Cumple XV» */
+    return FRASES[tipoFiltro(ev, cfg)] || FRASES.otro;
+  }
+  /* 12/11/2026: hay XV armados sin «tipo de evento» (vacío = boda) y el filtro
+     decía «En la boda de». Si el tipo no está cargado, se mira si la propia
+     invitación dice XV / quince en sus títulos. Sólo para la frase del filtro. */
+  function tipoFiltro(ev, cfg) {
+    ev = ev || {};
     var t = window.invTipoDe ? window.invTipoDe(ev) : String(ev.tipoEvento || ev.tipo || 'boda').toLowerCase();
-    return FRASES[t] || FRASES.otro;
+    if (String(ev.tipoEvento || ev.tipo || '').trim()) return t;
+    var txt = [ev.kick, ev['c_titulo-al-compartir'], cfg && cfg.titulo].join(' ');
+    return /\bXV\b|quince/i.test(txt) ? 'xv' : t;
   }
 
   /* ⚠️ EN EL PANEL NO SE PUEDEN LEER LAS VARIABLES DE COLOR DE LA INVITACIÓN.
@@ -356,6 +365,7 @@
     ANCHO: ANCHO, ALTO: ALTO,
     disenos: DISENOS,
     frases: FRASES,
+    tipoDe: tipoFiltro,
     tema: tema,
     dibujar: dibujar
   };

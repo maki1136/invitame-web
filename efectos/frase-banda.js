@@ -113,9 +113,20 @@
   /* ================= LADO INVITACIÓN ================= */
   var ID_CSS = 'inv-frase-banda';
   var ultima = null;
+  /* ★ 12/11 (Jazmín: «sacar estas comillas predeterminadas»): el motor envuelve
+     la frase en “ ”. Con fx.frase.sinComillas se sacan las del principio y el
+     final (las que el cliente escribió adentro del texto quedan). Opt-in. */
+  function comillas(c) {
+    var f = document.querySelector('p.frase') || document.querySelector('.frase'); if (!f) return;
+    if (!c.sinComillas) return;
+    var t = f.textContent || '';
+    var n = t.replace(/^\s*[“"«]\s*/, '').replace(/\s*[”"»]\s*$/, '');
+    if (n !== t && f.children.length === 0) f.textContent = n;
+  }
   function aplicar() {
     var ev = window.INVEV; if (!ev) return;
     var c = cfg(ev);
+    try { comillas(c); } catch (e) {}
     var foto = c.foto === 'entera' ? 'entera' : 'llena';
     /* sin elegir: el velo sigue a la letra — letra clara, oscurece; letra oscura, aclara */
     var pos = POS[c.pos] ? c.pos : 'centro';
@@ -272,6 +283,14 @@
     a.style.cssText = 'font-size:11.5px;opacity:.62;margin-bottom:4px;line-height:1.35';
     caja.appendChild(t); caja.appendChild(a);
     var c = datos(d);
+
+    /* ---- las comillas ---- */
+    var gq = document.createElement('label');
+    gq.style.cssText = 'display:flex;gap:8px;align-items:center;font-size:12.5px;margin:8px 0 2px;cursor:pointer';
+    var cq = document.createElement('input'); cq.type = 'checkbox'; cq.style.width = 'auto'; cq.checked = !c.sinComillas;
+    cq.onchange = function () { var f = datos(borrador() || d); if (cq.checked) delete f.sinComillas; else f.sinComillas = true; refrescar(); };
+    gq.appendChild(cq); gq.appendChild(document.createTextNode('Poner comillas “ ” alrededor de la frase'));
+    caja.appendChild(gq);
 
     /* ---- 1. LA IMAGEN ---- */
     caja.appendChild(titulo('1. La imagen'));

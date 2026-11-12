@@ -113,16 +113,19 @@
 
   /* Devuelve el marco listo para dibujar. Promesa, porque el subido tarda. */
   function conseguirMarco() {
-    if (marco) return Promise.resolve(marco);
     var k = cfg() || {};
     var url = String(k.marco || '').trim();
+    /* 12/11/2026 (Jazmín: «no se cambia la frase en el filtro»): el de fábrica
+       se dibuja de nuevo CADA vez, así toma la frase, los nombres y la paleta
+       que haya en ese momento. Sólo el PNG subido se guarda, y por su URL. */
     if (!url) { marco = marcoDeFabrica(); return Promise.resolve(marco); }
+    if (marco && marco.tagName === 'IMG' && marco.__url === url) return Promise.resolve(marco);
 
     return new Promise(function (listo) {
       var img = new Image();
       /* ⚠️ SIN ESTO el canvas queda "sucio" y la foto no se puede guardar. */
       img.crossOrigin = 'anonymous';
-      img.onload = function () { marco = img; listo(marco); };
+      img.onload = function () { img.__url = url; marco = img; listo(marco); };
       /* Si el marco subido no carga, la fiesta sigue: sale el de fábrica. */
       img.onerror = function () { marco = marcoDeFabrica(); listo(marco); };
       img.src = url;
@@ -683,6 +686,11 @@
       var prendida = on(c.encendido);
       if (!prendida && sec) sec.remove();
       else if (prendida && !sec) arrancar();
+      /* si la cámara está abierta en la miniatura, el marco se redibuja */
+      var o = document.getElementById('filtro-overlay');
+      if (o && prendida) conseguirMarco().then(function (m) {
+        o.src = (m.tagName === 'IMG') ? m.src : m.toDataURL('image/png');
+      });
     }, 120);
   });
   if (window.INVEV) arrancar();

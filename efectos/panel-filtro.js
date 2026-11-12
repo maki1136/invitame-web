@@ -83,8 +83,8 @@
     var i = document.createElement('input');
     i.type = 'text';
     i.maxLength = 60;
-    var tipo = String(d.tipoEvento || d.tipo || 'boda').toLowerCase();
     var F = (window.INVFILTRO && window.INVFILTRO.frases) || {};
+    var tipo = (window.INVFILTRO && window.INVFILTRO.tipoDe) ? window.INVFILTRO.tipoDe(d, cfg(d)) : String(d.tipoEvento || d.tipo || 'boda').toLowerCase();
     i.placeholder = F[tipo] || F.otro || 'En la fiesta de';
     i.value = String(cfg(d).frase || '');
     i.oninput = function () { cfg(d).frase = this.value; refrescar(); };
