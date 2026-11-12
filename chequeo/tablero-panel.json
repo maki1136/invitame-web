@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-12T22:22:58.940Z",
+ "cuando": "2026-11-12T22:55:24.921Z",
  "slug": "camila-y-tomas",
- "total": 596,
- "verde": 578,
- "amarillo": 0,
+ "total": 593,
+ "verde": 576,
+ "amarillo": 3,
  "rojo": 14,
- "gris": 4,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -475,30 +475,6 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "estado": "gris",
-   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
@@ -1054,11 +1030,14 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
+   "bloque": "frase-ajustes",
+   "control": "Poner comillas “ ” alrededor de la frase",
    "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.frase.sinComillas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "PRINCIPAL",
@@ -4018,8 +3997,9 @@
    "guarda": true,
    "dato": "fx.sectorElegido.c_color-fondo-contacto, c_color-fondo-contacto",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -4194,8 +4174,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -4293,8 +4274,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.onda",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
