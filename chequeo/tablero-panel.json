@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-12T22:55:24.921Z",
+ "cuando": "2026-11-12T23:03:21.934Z",
  "slug": "camila-y-tomas",
  "total": 593,
- "verde": 576,
- "amarillo": 3,
+ "verde": 577,
+ "amarillo": 2,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -3883,8 +3883,9 @@
    "guarda": true,
    "dato": "fx.muestra.tel",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -3997,9 +3998,8 @@
    "guarda": true,
    "dato": "fx.sectorElegido.c_color-fondo-contacto, c_color-fondo-contacto",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -4174,9 +4174,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -4186,8 +4185,9 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -4274,9 +4274,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.onda",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
