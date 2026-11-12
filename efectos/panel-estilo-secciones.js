@@ -98,12 +98,28 @@
     S.anotarCasa('portada-color', 'PRINCIPAL', 'portada', { antesDe: '#f-frase-larga' }, '.portada');
     S.bloque('portada-color', function (caja) {
       return [S.estilo(caja, 'portadaFoto', {
-        titulo: 'Portada · color de la foto',
-        campos: [['casilla', 'Foto de portada A COLOR (la colección Perlas la pone en blanco y negro)', 'color']],
+        titulo: 'Portada · foto y sobretítulo',
+        campos: [['casilla', 'Foto de portada A COLOR (la colección Perlas la pone en blanco y negro)', 'color'],
+          ['rango', 'Velo oscuro sobre la foto (0 = la foto con su color normal)', 'velo', 0, 100, '%'],
+          ['rango', 'Tamaño del sobretítulo (ej. «XV Años»)', 'tamKick', 9, 40, 'px'],
+          ['color', 'Color del sobretítulo', 'colorKick']],
         obj: function (d) {
           if (!d.fx) d.fx = {};
           if (!d.fx.portadaFoto || typeof d.fx.portadaFoto !== 'object') d.fx.portadaFoto = {};
           return d.fx.portadaFoto;
+        }
+      })];
+    });
+    /* ★ 12/11 (Jazmín, xv-maria-ines): «sacar los íconos predeterminados del dress code» */
+    S.anotarCasa('dresscode-dibujos', 'LUGAR_VEST', 'dresscode', { antesDe: '#f-dresscode-texto' }, '[data-sec=dresscode]');
+    S.bloque('dresscode-dibujos', function (caja) {
+      return [S.estilo(caja, 'dresscodeDibujos', {
+        titulo: 'Vestimenta · dibujos',
+        campos: [['casilla', 'Sacar los dibujos del traje y el vestido (que quede sólo el texto)', 'sin']],
+        obj: function (d) {
+          if (!d.fx) d.fx = {};
+          if (!d.fx.dresscodeOpc || typeof d.fx.dresscodeOpc !== 'object') d.fx.dresscodeOpc = {};
+          return d.fx.dresscodeOpc;
         }
       })];
     });
