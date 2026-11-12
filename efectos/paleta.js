@@ -118,7 +118,11 @@
     /* 11/11/2026 · XV rosa sobre blanco (referencia de Jazmín «Paola Sofía»): botones rosa vivo. */
     { id:'rosa-coral', nombre:'Rosa coral y blanco', metal:'oro',
       verde:'#c4566a', verde2:'#a8435a', sage:'#e0808f', sageCl:'#f6d3d8', oro:'#c9a46a',
-      lino:'#fdf7f7', lino2:'#ffffff', cream:'#f8e9eb', muted:'#7a5a60', seal:'#c4566a' }
+      lino:'#fdf7f7', lino2:'#ffffff', cream:'#f8e9eb', muted:'#7a5a60', seal:'#c4566a' },
+    /* 12/11/2026 · Encaje y nácar (reel @thedigitalyes): lila perlado y plata. */
+    { id:'lila-plata', nombre:'Lila perlado y plata', metal:'plata',
+      verde:'#6d6175', verde2:'#564b5e', sage:'#9a8da3', sageCl:'#e3dbe8', oro:'#a9a7b0',
+      lino:'#f3eff5', lino2:'#faf8fb', cream:'#e9e2ed', muted:'#6f6676', seal:'#8d8796' }
   ];
 
   /* el panel arma las tarjetas leyendo de acá */

@@ -10,6 +10,8 @@
      fuenteNombres : letra de los nombres (opcional)
      tamNombres    : tamaño de los nombres en px (opcional)
      colorNombres  : color de nombres, fecha y cuenta regresiva (opcional)
+     sinOscurecer  : true → saca el oscurecido que se le pone a la foto de portada
+                     (para fotos claras: la tarjeta de encaje de «Encaje y nácar»)
      sombra        : true → sombra suave detrás de la letra (portadas de gris medio:
                      Pasarela tiene el panel plateado justo detrás de los nombres)
    Panel: PRINCIPAL → «Portada · letra limpia sobre la foto o el video».
@@ -33,6 +35,9 @@
     var c = cfg(), r = [], H = 'html[data-portada-limpia][data-portada-limpia][data-portada-limpia] ';
     if (si(c.sinVelo)) {
       r.push(H + '.portada .c::before, ' + H + '.portada > .c::before { display:none !important; background:none !important }');
+    }
+    if (si(c.sinOscurecer)) {
+      r.push(H + '.portada .pveil, ' + H + '.portada #pbg::after, ' + H + '.portada .pbg::after { background:none !important; display:none !important }');
     }
     var f = fuente(c.fuenteNombres);
     if (f) r.push(H + '#pv-names, ' + H + '#pv-names > span { font-family:"' + f + '", "Cormorant Garamond", Georgia, serif !important;' +

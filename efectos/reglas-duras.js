@@ -1141,7 +1141,9 @@
           el.removeAttribute('data-regla-opa'); el.removeAttribute('data-regla-fondo');
           el.removeAttribute('data-regla-inline'); el.removeAttribute('data-regla-flojo');
         }
-        el.style.setProperty('color', elegido);
+        /* !important: le gana también a la tinta de la banda temática (12/11, xv-juliana) */
+        el.style.setProperty('color', elegido, 'important');
+        el.style.setProperty('-webkit-text-fill-color', elegido, 'important');
         continue;
       }
       if (el.getAttribute('data-estcolor') === '1') {

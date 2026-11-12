@@ -2926,6 +2926,28 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.5,
     /* texto impreso en la tarjeta en blanco: esquinas medidas cuadro por cuadro (efectos/sobre-papel.js) */
     papel:      {"k":[[2.75,0.3084,0.4179,0.6814,0.4179,0.6814,0.5961,0.3084,0.5961],[2.833,0.3042,0.4062,0.678,0.4062,0.678,0.5849,0.3042,0.5849],[2.917,0.3108,0.2829,0.6818,0.2829,0.6818,0.4602,0.3108,0.4602],[3.0,0.3148,0.2239,0.6843,0.2239,0.6843,0.4006,0.3148,0.4006],[3.083,0.3148,0.2239,0.6843,0.2239,0.6843,0.4006,0.3148,0.4006],[3.167,0.3148,0.2235,0.6843,0.2235,0.6843,0.4003,0.3148,0.4003],[3.25,0.3142,0.2231,0.6845,0.2231,0.6845,0.4002,0.3142,0.4002],[3.333,0.3139,0.2224,0.6852,0.2224,0.6852,0.3999,0.3139,0.3999],[3.417,0.3133,0.2218,0.6854,0.2218,0.6854,0.3997,0.3133,0.3997],[3.5,0.3125,0.2169,0.6863,0.2169,0.6863,0.3956,0.3125,0.3956],[3.583,0.31,0.2052,0.6891,0.2052,0.6891,0.3864,0.31,0.3864],[3.667,0.3044,0.1963,0.6941,0.1963,0.6941,0.3826,0.3044,0.3826],[3.75,0.2968,0.1863,0.7014,0.1863,0.7014,0.3797,0.2968,0.3797],[3.833,0.2869,0.1718,0.7112,0.1718,0.7112,0.3746,0.2869,0.3746],[3.917,0.2744,0.1609,0.7247,0.1609,0.7247,0.3762,0.2744,0.3762],[4.0,0.2597,0.1607,0.7437,0.1607,0.7437,0.3921,0.2597,0.3921],[4.042,0.2528,0.1636,0.7537,0.1636,0.7537,0.4031,0.2528,0.4031]],"o":[[2.88,0],[3.0,1],[3.88,1],[4.05,0]],"tam":125,"aspecto":1.176,"linea1":"Estás invitado a","fuente":"Playfair Display","color":"#161616","w":1080,"h":1920}
+  },
+
+  /* ---- ★ ENCAJE Y NÁCAR (12/11/2026) -------------------------------------------
+     Copia de la apertura del reel DfZYoZOy9gR (@thedigitalyes): sobre de papel
+     nacarado lila con relieve de hojas de ginkgo y lacre plateado → la solapa sube
+     con el lacre y aparece la tarjeta de encaje con un moño de satén → el moño se
+     desata y la cinta sale de cuadro → queda la tarjeta con el arco de encaje.
+     Flow · Veo 3.1 Fast x2 por tramo (se eligió v-abre-1 y v-mono-1), 1080p.
+     Tramo 1: 3,6–6,3 s · tramo 2: 2,6–5,9 s · fundido de 0,5 s entre los dos = 5,5 s.
+     El último cuadro es la portada (`invitame/encaje-nacar/portada`, foto fija).
+     La tarjeta lleva el texto impreso (efectos/sobre-papel.js): cámara quieta,
+     recuadro fijo dentro del arco.
+     -------------------------------------------------------------------------- */
+  "encaje-nacar": {
+    nombre:     "Encaje y nácar · sobre lila con lacre plateado → moño de satén → tarjeta de encaje (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/encaje-nacar/apertura-1080-v2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/encaje-nacar/apertura-1080-v2.jpg",
+    color:      "#C2B6C6",
+    empalme:    "foto",
+    luz:        6.3,
+    luzFundido: 0.6,
+    papel:      {"k":[[3.6,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719],[6.9,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719]],"o":[[5.4,0],[5.75,1],[7.0,1]],"aspecto":0.8,"linea1":"Nos casamos","fuente":"Pinyon Script","color":"#5f5368","w":1080,"h":1920,"tam":105}
   }
 
 };
