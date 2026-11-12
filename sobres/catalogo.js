@@ -2941,13 +2941,13 @@ window.SOBRES_INVITAME = {
      -------------------------------------------------------------------------- */
   "encaje-nacar": {
     nombre:     "Encaje y nácar · sobre lila con lacre plateado → moño de satén → tarjeta de encaje (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/encaje-nacar/apertura-1080.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/encaje-nacar/apertura-1080.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/encaje-nacar/apertura-1080-v2.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/encaje-nacar/apertura-1080-v2.jpg",
     color:      "#C2B6C6",
     empalme:    "foto",
-    luz:        4.95,
+    luz:        6.3,
     luzFundido: 0.6,
-    papel:      {"k":[[3.6,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719],[5.5,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719]],"o":[[3.8,0],[4.15,1],[5.6,1]],"aspecto":0.8,"linea1":"Nos casamos","fuente":"Pinyon Script","color":"#5f5368","w":1080,"h":1920,"tam":105}
+    papel:      {"k":[[3.6,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719],[6.9,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719]],"o":[[5.4,0],[5.75,1],[7.0,1]],"aspecto":0.8,"linea1":"Nos casamos","fuente":"Pinyon Script","color":"#5f5368","w":1080,"h":1920,"tam":105}
   }
 
 };
