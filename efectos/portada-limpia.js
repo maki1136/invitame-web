@@ -45,7 +45,7 @@
     if (f && !document.querySelector('link[data-portada-limpia-fuente="' + f + '"]')) {
       try {
         var lk = document.createElement('link'); lk.rel = 'stylesheet'; lk.setAttribute('data-portada-limpia-fuente', f);
-        lk.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f).replace(/%20/g, '+') + ':wght@300;400;500;600&display=swap';
+        lk.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f).replace(/%20/g, '+') + '&display=swap';
         (document.head || document.documentElement).appendChild(lk);
       } catch (e) {}
     }
