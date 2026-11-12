@@ -359,7 +359,9 @@
         const fecha=s.fecha?new Date(s.fecha):null; const fstr=(fecha&&!isNaN(fecha))?fecha.toLocaleDateString('es'):'—';
         const obs=s.observaciones?('<div style="background:#fff6e9;border-left:3px solid #c98a2e;border-radius:8px;padding:7px 10px;margin-top:7px;font-size:12.5px">'+ICO.papel+' <b>Pedido especial:</b> '+_esc(s.observaciones)+'</div>'):'';
         const extra=[s.dress?(ICO.percha+' '+_esc(s.dress)):'',s.regalos?(ICO.regalo+' '+_esc(s.regalos)):''].filter(Boolean).join(' · ');
-        return '<div style="border:1px solid #eee2d8;border-radius:12px;padding:12px;margin-bottom:10px">'+
+        /* ★ 12/11 (Jazmín): «que haya un buscador, así cuando un cliente nos dice que envió el formulario podamos buscar la clave» */
+        const busca=[s.orden,s.n1,s.n2,s.contactoNombre,s.contactoWsp,s.contactoEmail].map(x=>String(x||'')).join(' ').toLowerCase().replace(/\s+/g,'');
+        return '<div class="solic-fila" data-busca="'+_esc(busca)+'" style="border:1px solid #eee2d8;border-radius:12px;padding:12px;margin-bottom:10px">'+
           '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'+
             '<div style="min-width:0"><b style="color:#6D1233;font-size:16px">'+_esc((s.n1||'')+(s.n2?' & '+s.n2:''))+'</b>'+
               /* ★ 29/10 (Jazmín): «que también aparezca la clave de compra» */
@@ -375,7 +377,9 @@
             '</div>'+
           '</div></div>';
       }).join('')||'<div style="color:#9a8f88;padding:14px;text-align:center">No hay solicitudes pendientes.</div>';
-      box.querySelector('.invmodal').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="margin:0;color:#6D1233;font-weight:900">'+ICO.entrada+' Solicitudes de clientes <span style="color:#b0a89f;font-weight:700;font-size:13px">('+list.length+')</span></h3><button style="background:#efe7de;border:0;border-radius:20px;padding:8px 16px;font-family:Nunito;font-weight:700;cursor:pointer" onclick="document.getElementById(\'solicbox\').remove()">Cerrar</button></div>'+rows;
+      box.querySelector('.invmodal').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="margin:0;color:#6D1233;font-weight:900">'+ICO.entrada+' Solicitudes de clientes <span style="color:#b0a89f;font-weight:700;font-size:13px">('+list.length+')</span></h3><button style="background:#efe7de;border:0;border-radius:20px;padding:8px 16px;font-family:Nunito;font-weight:700;cursor:pointer" onclick="document.getElementById(\'solicbox\').remove()">Cerrar</button></div>'+
+        (list.length?'<input id="solic-buscar" type="search" placeholder="Buscar por clave, nombre, teléfono o correo" oninput="filtrarSolic(this.value)" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #e2d6cc;border-radius:10px;font-size:14px;margin:0 0 12px;font-family:Nunito,sans-serif"><div id="solic-nada" style="display:none;color:#9a8f88;padding:14px;text-align:center">Ninguna solicitud coincide con esa búsqueda.</div>':'')+rows;
+      const sb=el('solic-buscar'); if(sb) setTimeout(()=>{try{sb.focus();}catch(_e){}},50);
     }catch(e){console.error(e);box.querySelector('.invmodal').innerHTML='<p style="color:#F56770">Error: '+(e.message||e)+'</p>';}
   }
   /* ⚠️⚠️ EL MAPEO NO ESTÁ ACÁ. Vive en /solicitud-a-evento.js.  (8/9/2026)
@@ -407,6 +411,10 @@
     let extra=''; if(s.observaciones)extra+='\n\nPEDIDO ESPECIAL:\n'+s.observaciones; if(s.dress)extra+='\n\nDress code: '+s.dress; if(s.regalos)extra+='\n\nRegalos: '+s.regalos;
     alert('Cargué los datos de '+(s.n1||'')+(s.n2?' & '+s.n2:'')+'.\n\nRevisá, ajustá lo que haga falta y tocá "Guardar y publicar".'+extra+'\n\nCuando termines, volvé a Solicitudes y tocá "Marcar resuelta".');
   }
+  function filtrarSolic(q){ q=String(q||'').toLowerCase().replace(/\s+/g,''); let n=0;
+    document.querySelectorAll('#solicbox .solic-fila').forEach(f=>{ const ok=!q||(f.getAttribute('data-busca')||'').indexOf(q)>=0; f.style.display=ok?'':'none'; if(ok)n++; });
+    const z=el('solic-nada'); if(z) z.style.display=n?'none':''; }
+  window.filtrarSolic=filtrarSolic;
   async function marcarResuelta(id){ if(!confirm('¿Marcar esta solicitud como resuelta? Sale de la lista de pendientes.'))return; try{ await window.solicResolver(id); actualizarBadgeSolic(); verSolicitudes(); }catch(e){alert('No se pudo: '+(e.message||e));} }
   buildTabs();renderPanel();render();setInterval(updCount,1000);
   if(window.INV) cargarEvento(); else window.addEventListener('inv-ready',cargarEvento);
