@@ -40,6 +40,15 @@
       r.push(H + '.portada .pveil, ' + H + '.portada #pbg::after, ' + H + '.portada .pbg::after { background:none !important; display:none !important }');
     }
     var f = fuente(c.fuenteNombres);
+    /* 12/11: la letra elegida se baja de Google Fonts si la invitación no la tiene ya
+       (Encaje y nácar: Pinyon Script salía en la letra de reemplazo) */
+    if (f && !document.querySelector('link[data-portada-limpia-fuente="' + f + '"]')) {
+      try {
+        var lk = document.createElement('link'); lk.rel = 'stylesheet'; lk.setAttribute('data-portada-limpia-fuente', f);
+        lk.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f).replace(/%20/g, '+') + '&display=swap';
+        (document.head || document.documentElement).appendChild(lk);
+      } catch (e) {}
+    }
     if (f) r.push(H + '#pv-names, ' + H + '#pv-names > span { font-family:"' + f + '", "Cormorant Garamond", Georgia, serif !important;' +
       /* con letra elegida, los nombres van como se escriben: una cursiva en mayúsculas espaciadas no se lee */
       ' text-transform:none !important; letter-spacing:.01em !important }');

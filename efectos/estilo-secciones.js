@@ -193,6 +193,18 @@
       todos(sec, '.it .it-sep').forEach(function (el) { poner(el, 'color', cHora); });
       todos(sec, '.it .it-nom').forEach(function (el) { poner(el, 'color', cNom); });
       todos(sec, '.it .d').forEach(function (el) { poner(el, 'color', colorOk(es.colorDesc) || tx); });
+      /* 12/11: tipografía y tamaño del horario/momento y de la descripción */
+      if (es.fuenteHora) pedirFuente(es.fuenteHora);
+      if (es.fuenteDesc) pedirFuente(es.fuenteDesc);
+      var tH = parseInt(es.tamHora, 10) || 0, tD = parseInt(es.tamDesc, 10) || 0;
+      todos(sec, '.it .h, .it .it-hora, .it .it-sep, .it .it-nom').forEach(function (el) {
+        poner(el, 'font-family', es.fuenteHora ? '"' + es.fuenteHora + '", serif' : '');
+        poner(el, 'font-size', tH ? tH + 'px' : '');
+      });
+      todos(sec, '.it .d').forEach(function (el) {
+        poner(el, 'font-family', es.fuenteDesc ? '"' + es.fuenteDesc + '", serif' : '');
+        poner(el, 'font-size', tD ? tD + 'px' : '');
+      });
       /* las esquinas del recuadro del itinerario (el panel .tl y su fondo) */
       var rad = (es.radio === 0 || es.radio) && es.radio !== '' ? parseInt(es.radio, 10) + 'px' : '';
       todos(sec, '.tl, .tl-panel, .it-panel').forEach(function (el) { poner(el, 'border-radius', rad); poner(el, 'overflow', rad ? 'hidden' : ''); });

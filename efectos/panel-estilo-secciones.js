@@ -30,6 +30,9 @@
     { key: 'itinerario', tab: 'LUGAR_VEST', casa: 'itinerario', titulo: 'Itinerario · colores por separado (horario, momento y descripción)',
       campos: BASE_TIT.concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
         ['color', 'Color de la descripción', 'colorDesc'],
+        /* 12/11 (Jazmín): «cambiar tamaño y letra del itinerario, no el título, sí los detalles y horario» */
+        ['fuente', 'Tipografía del horario y momento (11:00 am · Misa)', 'fuenteHora'], ['rango', 'Tamaño del horario y momento', 'tamHora', 10, 36, 'px'],
+        ['fuente', 'Tipografía de la descripción', 'fuenteDesc'], ['rango', 'Tamaño de la descripción', 'tamDesc', 10, 30, 'px'],
         /* 5/11 (Chris y Adreily): «no quiere un borde cuadrado y otro curvo» */
         ['rango', 'Esquinas redondeadas del recuadro', 'radio', 0, 48, 'px'],
         /* 9/11 (Maki, renata platinum): «no podés poner esos tres circulitos básicos» */
