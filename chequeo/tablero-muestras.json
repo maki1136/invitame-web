@@ -1,30 +1,30 @@
 {
- "cuando": "2026-11-12T19:37:56.331Z",
+ "cuando": "2026-11-12T20:00:21.510Z",
  "total": 55,
- "verde": 32,
+ "verde": 48,
  "rojo": 7,
- "gris": 16,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "aitana-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "alexa-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "ana-paula-y-marcelo",
@@ -35,10 +35,10 @@
   },
   {
    "slug": "andrea-y-felipe",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "barbara-mis15",
@@ -56,10 +56,10 @@
   },
   {
    "slug": "camila-y-tomas",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "carolina-y-diego",
@@ -74,8 +74,8 @@
    "estado": "rojo",
    "dif": [
     "sección carta: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
-    "sección itinerario: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
-    "sección dresscode: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
+    "sección itinerario: previa «rgba(229, 235, 232, 0.5)/rgb(58, 69, 61) ~velo» · publicada «rgba(242, 247, 252, 0.55)/rgb(58, 69, 61) ~velo»",
+    "sección dresscode: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»",
     "sección video: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección spotify: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.3)/rgb(58, 69, 61) ~velo»",
     "sección contacto-sec: previa «rgba(229, 235, 232, 0.15)/rgb(58, 69, 61)» · publicada «rgba(242, 247, 252, 0.15)/rgb(58, 69, 61)»"
@@ -84,10 +84,10 @@
   },
   {
    "slug": "daniela-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "daniela-y-joaquin",
@@ -147,10 +147,10 @@
   },
   {
    "slug": "isabella",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-07",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "ivanna-mis15",
@@ -184,10 +184,10 @@
   },
   {
    "slug": "luciana-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "luciana-y-sebastian",
@@ -217,10 +217,10 @@
   },
   {
    "slug": "maria-jose-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "maria-paz-y-joaquin",
@@ -247,10 +247,10 @@
   },
   {
    "slug": "mariana-y-lucas",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "mariana-y-rodrigo",
@@ -268,10 +268,10 @@
   },
   {
    "slug": "martina-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "mateo-y-adrian",
@@ -309,10 +309,10 @@
   },
   {
    "slug": "montserrat-mis15",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "natalia-y-pablo",
@@ -344,10 +344,10 @@
   },
   {
    "slug": "paulina-y-gerardo",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "prueba-desde-cero",
@@ -368,10 +368,10 @@
   },
   {
    "slug": "renata-y-patricio",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "romina-mis15",
@@ -396,17 +396,17 @@
   },
   {
    "slug": "valentina-y-emiliano",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "valeria-y-emiliano",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "victoria-mis15",
