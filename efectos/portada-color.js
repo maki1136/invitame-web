@@ -29,6 +29,19 @@
     if (typeof pf.tamKick === 'number') css += P + '.portada #pv-kick{font-size:' + pf.tamKick + 'px!important}';
     if (/^#[0-9a-f]{3,8}$/i.test(String(pf.colorKick || ''))) css += P + '.portada #pv-kick{color:' + pf.colorKick + '!important;-webkit-text-fill-color:' + pf.colorKick + '!important}';
 
+    /* ★ 13/11 (Jazmín, Ornela & Juan Rodolfo): «que la foto de portada quede del
+       tamaño como es, así no se corta». fx.portadaFoto.entera: la foto entera
+       (contain), sin el zoom lento, con la misma foto desenfocada de relleno
+       detrás. «Arriba/Centro/Abajo» del encuadre la suben o la bajan. */
+    var ent = pf.entera === true;
+    var pb = document.getElementById('pbg');
+    var rel = document.getElementById('pbg-relleno');
+    if (ent && pb && pb.parentNode) {
+      if (!rel) { rel = document.createElement('div'); rel.id = 'pbg-relleno'; rel.setAttribute('aria-hidden', 'true'); pb.parentNode.insertBefore(rel, pb); }
+      css += '#pbg-relleno{position:absolute;inset:0;background:var(--cover) center/cover no-repeat;filter:blur(26px) saturate(1.05) brightness(.82);transform:scale(1.18);pointer-events:none}' +
+        P + '.portada #pbg{inset:0!important;background-size:contain!important;background-repeat:no-repeat!important;animation:none!important;transform:none!important}';
+    } else if (rel) rel.remove();
+
     if (css) h.setAttribute('data-pajuste', ''); else h.removeAttribute('data-pajuste');
     if (st2.textContent !== css) st2.textContent = css;
   }
