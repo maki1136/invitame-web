@@ -77,6 +77,17 @@
         ['texto', 'Fecha (vacío = la fecha del evento, 16 · 10 · 2027)', 'l3'],
         ['fuente', 'Letra de los nombres (vacío = la del sobre)', 'fuente'], ['color', 'Color de la tinta (vacío = el del sobre)', 'color'],
         ['rango', 'Tamaño del texto', 'tam', 60, 140, '%']] },
+    /* 12/11 (Jazmín): «el efecto de sobre, pero cuando lo abran aparezca esta imagen».
+       Lo pinta /efectos/invitacion-imagen.js. Guarda en fx.invImagen (no en estiloSec). */
+    { key: 'invImagen', objFx: 'invImagen', tab: 'PRINCIPAL', casa: 'diseno', titulo: 'Invitación en imagen (el sobre se abre y aparece la imagen del cliente)',
+      campos: [['casilla', 'Usar la imagen del cliente como invitación (reemplaza toda la invitación)', 'on'],
+        ['imagen', 'La imagen de la invitación (vertical, la que mandó el cliente)', 'url'],
+        ['texto', 'WhatsApp para confirmar (vacío = el de Contacto)', 'wa'],
+        ['texto', 'Mensaje que llega al confirmar (vacío = «¡Hola! Confirmo mi asistencia…»)', 'mensaje'],
+        ['texto', 'Texto del botón de confirmar (vacío = «Confirmar asistencia»)', 'textoConfirmar'],
+        ['texto', 'Ubicación: dirección o link de Google Maps (vacío = sin botón)', 'mapa'],
+        ['casilla', 'Sin el botón de confirmar', 'sinConfirmar'],
+        ['casilla', 'Sin el botón de descargar', 'sinDescarga']] },
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
@@ -182,11 +193,15 @@
       var id = 'estilo-sec-' + b.key;
       S.anotarCasa(id, b.tab, b.casa, b.lugar, '[data-sec="' + b.key + '"]');
       S.bloque(id, function (caja) {
-        return [S.estilo(caja, 'estiloSec', {
+        return [S.estilo(caja, b.objFx || 'estiloSec', {
           titulo: b.titulo,
           campos: b.campos,
           obj: function (d) {
             if (!d.fx) d.fx = {};
+            if (b.objFx) {
+              if (!d.fx[b.objFx] || typeof d.fx[b.objFx] !== 'object') d.fx[b.objFx] = {};
+              return d.fx[b.objFx];
+            }
             if (!d.fx.estiloSec || typeof d.fx.estiloSec !== 'object') d.fx.estiloSec = {};
             if (!d.fx.estiloSec[b.key] || typeof d.fx.estiloSec[b.key] !== 'object') d.fx.estiloSec[b.key] = {};
             return d.fx.estiloSec[b.key];

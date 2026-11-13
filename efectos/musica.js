@@ -92,7 +92,10 @@
      fondo y robarlo apagaría la bocina. */
   function rescate() {
     var u = limpio(ev().musicaUrl);
-    return (u && !esAudio(u)) ? u : '';
+    /* ★ 13/11: sólo un link de SPOTIFY se rescata. Ahora la sección también
+       acepta YouTube, y en `musicaUrl` suele vivir la canción de fondo de
+       YouTube: rescatarla la mostraría como playlist en todas esas invitaciones. */
+    return (u && !esAudio(u) && /spotify\.com/i.test(u)) ? u : '';
   }
 
   function playlist() { return limpio(ev().spotifyUrl) || rescate(); }
@@ -113,7 +116,32 @@
 
   /* Arma el reproductor y muestra la sección del motor. Mismo criterio que el
      motor (i/index.html, línea 1897): un track mide 152 px, todo lo demás 352. */
+  /* ★ 13/11/2026 (Jazmín, Chris & Adreily: «quiere que la playlist sea para que
+     los invitados escuchen sus canciones», y la tienen en YouTube). La sección
+     acepta también un link de YouTube: una lista (…list=…) o un video suelto. */
+  function youtube(url) {
+    url = String(url || '');
+    if (!/youtube\.com|youtu\.be/i.test(url)) return '';
+    var l = url.match(/[?&]list=([A-Za-z0-9_-]+)/);
+    if (l) return 'https://www.youtube-nocookie.com/embed/videoseries?list=' + l[1] + '&rel=0&playsinline=1';
+    var v = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{6,})/);
+    return v ? 'https://www.youtube-nocookie.com/embed/' + v[1] + '?rel=0&playsinline=1' : '';
+  }
+  function encenderYoutube(s, src) {
+    var caja = document.getElementById('spotify-embed');
+    if (caja && caja.getAttribute('data-yt') !== src) {
+      caja.innerHTML = '<iframe style="border-radius:12px;width:100%;aspect-ratio:16/9;height:auto;display:block;border:0" ' +
+        'src="' + src + '" loading="lazy" title="Playlist" ' +
+        'allow="autoplay;encrypted-media;fullscreen;picture-in-picture" allowfullscreen></iframe>';
+      caja.setAttribute('data-yt', src);
+    }
+    s.style.display = '';
+    encender(s);
+    return true;
+  }
   function encenderSeccion(s, url) {
+    var yt = youtube(url);
+    if (yt) return encenderYoutube(s, yt);
     var m = String(url).match(/(playlist|album|track|artist)\/([A-Za-z0-9]+)/);
     if (!m) return false;
     var caja = document.getElementById('spotify-embed');
@@ -191,10 +219,23 @@
     return limpio(t.de) || 'la fiesta';
   }
 
+  /* ★ 13/11: para qué es la playlist. fx.musica.modo = 'escuchar' saca el botón
+     de sugerir y cambia el texto de fábrica; fx.musica.texto lo reemplaza por
+     el que escriban. Sin nada de esto, todo queda como siempre. */
+  function cfgMus() { var f = ev().fx || {}; return f.musica || {}; }
+  function soloEscuchar() { return cfgMus().modo === 'escuchar'; }
+  var TXT_ESCUCHAR = 'Escuchá las canciones que elegimos para este día.';
+  function textoFabrica() {
+    var s = seccion(); if (!s) return;
+    var p = s.querySelector(':scope > p'); if (!p) return;
+    if (p.__orig == null) p.__orig = p.textContent;
+    var c = cfgMus(), n = limpio(c.texto) || (soloEscuchar() ? TXT_ESCUCHAR : p.__orig);
+    if (p.textContent !== n) p.textContent = n;
+  }
   function bloque() {
     var e = ev();
     var texto = limpio(e.musica);
-    var tel   = telefono();
+    var tel   = soloEscuchar() ? '' : telefono();
     if (!texto && !tel) return null;      /* nada que agregar */
 
     var nombres = [limpio(e.n1), limpio(e.n2)].filter(Boolean).join(' y ');
@@ -228,7 +269,15 @@
     var v = document.getElementById(VIEJA);
     if (v && v.parentNode) v.parentNode.removeChild(v);
 
-    if (document.getElementById(MARCA)) return true;
+    try { textoFabrica(); } catch (e) {}
+    var ya = document.getElementById(MARCA);
+    if (ya) {
+      /* el motor vuelve a esconder la sección en cada redibujo si el link no es
+         de Spotify: se vuelve a prender, y el bloque se rehace por si cambió el modo */
+      var s0 = seccion();
+      if (s0 && playlist() && youtube(playlist())) encenderYoutube(s0, youtube(playlist()));
+      if (ya.__modo !== String(soloEscuchar())) { ya.remove(); } else return true;
+    }
 
     /* ⚠️⚠️ ACÁ SÓLO SE DEVUELVE `true` CUANDO EL TRABAJO YA ESTÁ HECHO.
        `true` significa «listo, no me llames más» y apaga el reintento. La
@@ -248,7 +297,8 @@
     solapa();                    /* el reproductor, adentro de la solapa */
 
     var b = bloque();
-    if (!b) return true;
+    if (!b) { b = document.createElement('div'); b.id = MARCA; }
+    b.__modo = String(soloEscuchar());
     s.appendChild(b);
     setTimeout(function () { encender(b); }, 120);
     setTimeout(function () { encender(b); }, 900);

@@ -133,7 +133,9 @@
     var col = hex(c.color) || hex(F.papel.color) || '#3a2a22';
     var fG = fuenteOk(c.fuente) || F.papel.fuente || 'Cormorant Garamond';
     var fC = F.papel.fuenteChica || 'Cormorant Garamond';
-    var tam = Math.max(60, Math.min(160, Number(c.tam) || Number(F.papel.tam) || 100)) / 100;
+    /* el rango del panel en «%» guarda 0,6–1,4; la ficha guarda 60–160 */
+    var tamP = Number(c.tam); if (tamP > 0 && tamP <= 3) tamP = tamP * 100;
+    var tam = Math.max(60, Math.min(160, tamP || Number(F.papel.tam) || 100)) / 100;
     var l1 = limpio(c.l1).trim() || F.papel.linea1 || ev().kick || '';
     var l2 = limpio(c.l2).trim() || nombresAuto();
     var l3 = limpio(c.l3).trim() || fechaAuto();

@@ -690,6 +690,7 @@
     '/efectos/menu.js',                /* el menú por tiempos (fx.menu), después del itinerario */
     '/efectos/avisos.js',              /* avisos importantes con ícono (fx.avisos), después del menú */
     '/efectos/patrocinadores.js',      /* logos de patrocinadores (fx.patrocinadores), antes del cierre */
+    '/efectos/libre.js',               /* 13/11: dos secciones libres (fx.libre, fx.libre2) para pedidos distintos */
     '/efectos/calendario.js',          /* el calendario del mes con la fecha marcada */
     '/efectos/fecha.js',               /* las nueve maneras de mostrar la fecha */
     '/efectos/raspadita.js',           /* la raspadita: se monta sobre la fecha */
@@ -701,6 +702,7 @@
     '/efectos/vestimenta-dibujo.js', /* 12/11: catálogo de dibujos de vestimenta (antes del panel) */
     '/efectos/panel-estilo-secciones.js', /* 4/11: su «Diseño de la sección» en cada pestaña */
     '/efectos/panel-patrocinadores.js',/* 19/10: el bloque de patrocinadores, junto al cierre */
+    '/efectos/panel-libre.js',         /* 13/11: el bloque de las secciones libres, junto al cierre */
     '/efectos/panel-rsvp-preguntas.js',/* 19/10: las preguntas extra, en CONFIRMACIÓN */
     '/efectos/carta-fuente.js',        /* la tipografía de la carta se aplicaba pero no se descargaba */
     '/efectos/panel-carta.js',         /* la carta tenía SIETE campos y ningún control en el panel */
@@ -902,6 +904,7 @@
     '/efectos/marfil-tinta.js',      /* 10/11: Marfil con la tinta en otro color (opt-in) — fx.estiloSec.marfil.tinta */
     '/efectos/portada-limpia.js',    /* 10/11: portada sin velo claro y letra propia (opt-in) — fx.estiloSec.portada */
     '/efectos/sobre-papel.js',       /* 11/11: texto impreso en la tarjeta del sobre en video (opt-in) — fx.estiloSec.sobreTexto */
+    '/efectos/invitacion-imagen.js', /* 12/11: sobre + la imagen del cliente como invitación (opt-in) — fx.invImagen */
 
     '/efectos/tapas-foto.js',        /* 22/10: la foto propia de las tapas del video y la playlist (fx.tapas) */
 

@@ -80,14 +80,30 @@
        '<div id="inv-mus-aviso" style="display:none;margin-top:6px;color:#a4243b;font-size:13px"></div>' +
       '</div>' +
       '<div class="mejoras"><div class="h">Playlist de Spotify</div>' +
-       '<div class="hint" style="margin-bottom:8px">En Spotify: Compartir y después Copiar enlace de la ' +
-       'playlist, y pegalo acá. Se muestra en la sección «Playlist del evento», con el ' +
-       'reproductor y el botón para sugerir una canción.</div>' +
+       '<div class="hint" style="margin-bottom:8px">Pegá el link de la playlist de <b>Spotify o de YouTube</b> ' +
+       '(en la app: Compartir → Copiar enlace). Se muestra en la sección «Playlist del evento».</div>' +
        '<input value="' + esc(dato('spotifyUrl')) + '" oninput="setB(\'spotifyUrl\',this.value)" ' +
-       'placeholder="https://open.spotify.com/playlist/...">' +
+       'placeholder="https://open.spotify.com/playlist/...  o  https://youtube.com/playlist?list=...">' +
+       /* ★ 13/11 (Jazmín, Chris & Adreily): la playlist puede ser sólo para escuchar */
+       '<label style="display:block;font-size:12px;font-weight:600;margin:10px 0 4px">Para qué es la playlist</label>' +
+       '<select onchange="invMusFx(\'modo\',this.value)">' +
+        '<option value=""' + (musFx('modo') !== 'escuchar' ? ' selected' : '') + '>Escuchar y sugerir canciones (con el botón «Sugerir una canción»)</option>' +
+        '<option value="escuchar"' + (musFx('modo') === 'escuchar' ? ' selected' : '') + '>Sólo para escuchar las canciones de los novios (sin sugerencias)</option>' +
+       '</select>' +
+       '<label style="display:block;font-size:12px;font-weight:600;margin:10px 0 4px">Texto debajo del título (opcional)</label>' +
+       '<textarea rows="2" oninput="invMusFx(\'texto\',this.value)" placeholder="Vacío = el texto de siempre">' + esc(musFx('texto')) + '</textarea>' +
       '</div>';
   }
 
+  function musFx(k) { try { var f = (D && D.fx && D.fx.musica) || {}; return f[k] == null ? '' : String(f[k]); } catch (e) { return ''; } }
+  window.invMusFx = function (k, v) {
+    try {
+      D.fx = D.fx || {}; D.fx.musica = D.fx.musica || {};
+      if (v === '' || v == null) delete D.fx.musica[k]; else D.fx.musica[k] = v;
+      if (typeof marcarCambios === 'function') { try { marcarCambios(); } catch (e) {} }
+      if (typeof postPreview === 'function') postPreview();
+    } catch (e) {}
+  };
   function revisarAviso() {
     var i = document.getElementById('inv-mus-fondo');
     var a = document.getElementById('inv-mus-aviso');
