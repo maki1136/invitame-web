@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-13T19:31:45.488Z",
+ "cuando": "2026-11-13T19:30:12.218Z",
  "slug": "camila-y-tomas",
  "total": 632,
- "verde": 618,
- "amarillo": 0,
+ "verde": 617,
+ "amarillo": 1,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -4723,8 +4723,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.over",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -6943,6 +6944,32 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "mision-selector",
+   "control": "Prender la misión en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.mision",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "camara-selector",
+   "control": "Prender la camarita en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.camara",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Marco fino",
    "tipo": "checkbox",
@@ -6973,32 +7000,6 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "mision-selector",
-   "control": "Prender la misión en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.mision",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "camara-selector",
-   "control": "Prender la camarita en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.camara",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   }
  ]
 }
