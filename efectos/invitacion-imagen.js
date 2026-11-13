@@ -77,10 +77,12 @@
     marco.appendChild(im);
     var barra = document.createElement('div');
     barra.style.cssText = 'position:relative;display:flex;gap:8px;padding:12px 12px calc(14px + env(safe-area-inset-bottom));max-width:560px;width:100%;margin:0 auto;box-sizing:border-box';
-    if (wa && !si(c.sinConfirmar)) barra.appendChild(boton(String(c.textoConfirmar || '').trim() || 'Confirmar asistencia', 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msj), true));
-    if (mapa) barra.appendChild(boton('Ver ubicación', mapa, false));
+    /* con los tres botones, rótulos cortos: en un celular no entran los largos */
+    var cuantos = (wa && !si(c.sinConfirmar) ? 1 : 0) + (mapa ? 1 : 0) + (si(c.sinDescarga) ? 0 : 1), corto = cuantos >= 3;
+    if (wa && !si(c.sinConfirmar)) barra.appendChild(boton(String(c.textoConfirmar || '').trim() || (corto ? 'Confirmar' : 'Confirmar asistencia'), 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msj), true));
+    if (mapa) barra.appendChild(boton(corto ? 'Ubicación' : 'Ver ubicación', mapa, false));
     if (!si(c.sinDescarga)) {
-      var d = boton('Descargar imagen', img, false);
+      var d = boton(corto ? 'Descargar' : 'Descargar imagen', img, false);
       d.removeAttribute('target');
       d.addEventListener('click', function (e) {
         e.preventDefault();
