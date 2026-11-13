@@ -740,6 +740,22 @@ window.SOBRES_INVITAME = {
     eje:      { x: 49.6, y: 49.9 }
   },
 
+  /* ★ 13/11/2026 — Jazmín (Ornela & Juan Rodolfo): querían un sobre marfil en
+     relieve con lacre de oro y su monograma. Es el Maestro con el lacre teñido
+     a oro (sólo la cera de la solapa) y la letra la graba /efectos/lacre-letra.js
+     (lacreLetra medido sobre la solapa: centro 381,687 · diámetro 296 de 768×1376).
+     Las letras salen del panel: «El lacre del sobre» → Las iniciales (ej. OJR). */
+  "maestro-oro-letra": {
+    nombre:   "Marfil botánico · lacre de ORO con las iniciales (las que pongas en el lacre) (foto)",
+    poster:   "/sobres/sobre-maestro.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/v1794595912/invitame/sobres/maestro-oro-solapa.webp",
+    color:    "#e8e2d8",
+    apertura: "solapas",
+    empalme:  "foto",
+    eje:      { x: 49.6, y: 49.9 },
+    lacreLetra: { x: 49.6, y: 49.9, d: 38.5 }
+  },
+
 
   /* ---- ★ EL SOBRE DE CENICIENTA  (21/9/2026) ----------------------------
      El primero de hielo. Va con la colección `cenicienta`: papel de algodón
