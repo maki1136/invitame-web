@@ -116,6 +116,7 @@
       return [S.estilo(caja, 'portadaFoto', {
         titulo: 'Portada · foto y sobretítulo',
         campos: [['casilla', 'Foto de portada A COLOR (la colección Perlas la pone en blanco y negro)', 'color'],
+          ['casilla', 'Foto de portada ENTERA, sin recortar (para fotos horizontales; el resto se rellena con la misma foto desenfocada)', 'entera'],
           ['rango', 'Velo oscuro sobre la foto (0 = la foto con su color normal)', 'velo', 0, 100, '%'],
           ['rango', 'Tamaño del sobretítulo (ej. «XV Años»)', 'tamKick', 9, 40, 'px'],
           ['color', 'Color del sobretítulo', 'colorKick']],
