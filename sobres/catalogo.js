@@ -756,6 +756,25 @@ window.SOBRES_INVITAME = {
     lacreLetra: { x: 49.6, y: 49.9, d: 38.5 }
   },
 
+  /* ★ 13/11/2026 — A MEDIDA para Ornela & Juan Rodolfo (Jazmín mandó la foto:
+     «pedile que aparezca así»). Hecho en Flow a partir de esa foto: marfil con
+     lirios en relieve, solapa con filete de oro, ramitas de olivo y lacre de oro
+     con el monograma OJR y laurel YA GRABADO en la foto (no usa las iniciales del
+     panel). Solapa y cuerpo recortados de la misma foto: el lacre y las ramitas
+     se van con la solapa. eje = punta de la solapa (384,706 de 768×1376). */
+  "marfil-oro-laurel-ojr": {
+    nombre:   "A medida · Ornela & Juan Rodolfo · marfil con lirios, lacre de oro OJR con laurel (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/v1794599720/invitame/sobres/marfil-oro-laurel-ojr-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/v1794599721/invitame/sobres/marfil-oro-laurel-ojr-solapa.webp",
+    cuerpo:   "https://res.cloudinary.com/oc8cgqt4/image/upload/v1794599721/invitame/sobres/marfil-oro-laurel-ojr-cuerpo.webp",
+    color:    "#eadfcd",
+    apertura: "solapas",
+    empalme:  "blanco",
+    eje:      { x: 50.0, y: 51.3 },
+    luzFundido: 1.0,
+    ficha:    { solapa: 2.6, destello: 2.7, ease: "cubic-bezier(.5,0,.75,.5)" }
+  },
+
 
   /* ---- ★ EL SOBRE DE CENICIENTA  (21/9/2026) ----------------------------
      El primero de hielo. Va con la colección `cenicienta`: papel de algodón
