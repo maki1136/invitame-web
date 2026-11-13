@@ -33,6 +33,13 @@
        tamaño como es, así no se corta». fx.portadaFoto.entera: la foto entera
        (contain), sin el zoom lento, con la misma foto desenfocada de relleno
        detrás. «Arriba/Centro/Abajo» del encuadre la suben o la bajan. */
+    /* ★ 13/11 (Jazmín, Ornela & Juan Rodolfo: «necesito que no amplíe la foto de
+       portada, le corta la cabeza al novio»). fx.portadaFoto.sinZoom: la foto
+       queda QUIETA y al tamaño de la portada (sin el acercamiento lento, sin el
+       margen extra del parallax). Así lo que se ve es lo que se encuadró. */
+    if (pf.sinZoom === true && pf.entera !== true) {
+      css += P + '.portada #pbg{inset:0!important;animation:none!important;transform:none!important}';
+    }
     var ent = pf.entera === true;
     var pb = document.getElementById('pbg');
     var rel = document.getElementById('pbg-relleno');
