@@ -1,17 +1,15 @@
 {
- "cuando": "2026-11-13T20:49:41.948Z",
+ "cuando": "2026-11-13T22:03:17.875Z",
  "total": 55,
- "verde": 46,
- "rojo": 9,
+ "verde": 48,
+ "rojo": 7,
  "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(74, 58, 40)» · publicada «rgba(248, 240, 220, 0.28)/rgb(74, 58, 40)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -333,10 +331,8 @@
   {
    "slug": "paloma-mis15",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección contacto-sec: previa «rgba(249, 238, 242, 0.28)/rgb(62, 44, 37)» · publicada «rgba(246, 240, 228, 0.28)/rgb(62, 44, 37)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
