@@ -942,7 +942,7 @@
     return base + ' ' + linkDe(g);
   }
   document.addEventListener('click', async e=>{
-    const t = e.target.closest('button, a[data-vista], .lnk');
+    const t = e.target.closest('button, a[data-vista], .lnk, #verInv, #verInv2');
     if(!t) return;
 
     if(t.dataset && t.dataset.vista){ VISTA=t.dataset.vista; $('lat').classList.remove('abierto'); pintar(); return; }
@@ -955,8 +955,17 @@
     if(t.id==='imprimir')   return window.print();
     if(t.id==='nuevaMesa')  return nuevaMesa();
     if(t.id==='verInv' || t.id==='verInv2'){
-      if(window.__invBloqueoSinPase && GENTE.length){ toast('Tu invitación sólo se abre con el link de un pase: te mostramos la de '+(GENTE[0].nombre||'un invitado')); return window.open(linkDe(GENTE[0]),'_blank'); }
-      return window.open('/i/?e='+encodeURIComponent(SLUG),'_blank');
+      e.preventDefault();
+      /* ★ 14/11: el «Ver mi invitación» del lateral es un <a> sin data-vista y
+         el closest() de arriba no lo agarraba: no hacía NADA. Y con «Bloquear
+         acceso sin pase» los novios ven la suya con el link de revisión. */
+      let url = '/i/?e='+encodeURIComponent(SLUG);
+      if(window.__invBloqueoSinPase){
+        if(window.__invRev) url += '&rev='+encodeURIComponent(window.__invRev);
+        else if(GENTE.length){ toast('Tu invitación sólo se abre con el link de un pase: te mostramos la de '+(GENTE[0].nombre||'un invitado')); url = linkDe(GENTE[0]); }
+      }
+      const w = window.open(url,'_blank'); if(!w) location.href = url;
+      return;
     }
 
     if(t.dataset && t.dataset.borrar) return borrarMesa(t.dataset.borrar);
@@ -1122,7 +1131,7 @@
       /* ★ 30/10: si la invitación tiene «Bloquear acceso a personas sin pase»,
          el link general ya no abre: «Ver invitación» abre la de un pase. */
       try{ const s0=await getDoc(doc(db,'inv_eventos', slug)); const v0=s0.exists()?s0.data()['c_bloquear-acceso-sin-pase']:null;
-           window.__invBloqueoSinPase = (v0===true||v0==='true'||v0==='1'||v0===1); }catch(e){}
+           window.__invBloqueoSinPase = (v0===true||v0==='true'||v0==='1'||v0===1); window.__invRev = s0.exists()? String(s0.data().revision||'') : ''; }catch(e){}
       const yaTiene = PANEL.itinerario && Array.isArray(PANEL.itinerario.momentos) && PANEL.itinerario.momentos.length;
       if(!yaTiene){
         const se = await getDoc(doc(db,'inv_eventos', slug));
