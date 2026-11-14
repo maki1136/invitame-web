@@ -189,6 +189,26 @@
         poner(tn, 'opacity', sc ? '1' : '');
       });
     }
+    if (key === 'eventos') {
+      /* ★ 13/11 (Jazmín, Ornela & Juan Rodolfo): «que en este sector se puedan
+         colocar saltos para abajo: fecha y hora / dirección». Con la casilla, se
+         respetan los Enter de la descripción y la dirección va en su renglón
+         (el motor lo junta todo con « · »). */
+      [1, 2, 3].forEach(function (n) {
+        var a = document.getElementById('ev' + n + '-a'); if (!a) return;
+        if (es.renglones) {
+          var f = String(e['ev' + n + 'fecha'] || '').trim(), d = String(e['ev' + n + 'dir'] || '').trim();
+          if (!f && !d) return;
+          if (a.dataset.estOrig === undefined) a.dataset.estOrig = a.textContent;
+          var nuevo = [f, d].filter(Boolean).join('\n');
+          if (!f) nuevo = a.dataset.estOrig.replace(/ · (?=[^·]*$)/, '\n');
+          if (a.textContent !== nuevo) a.textContent = nuevo;
+          poner(a, 'white-space', 'pre-line');
+        } else if (a.dataset.estOrig !== undefined) {
+          a.textContent = a.dataset.estOrig; delete a.dataset.estOrig; poner(a, 'white-space', '');
+        }
+      });
+    }
     if (key === 'scratch') {
       todos(sec, '.sc-day, .sc-mon, .ivf .n, .r3-f').forEach(function (el) { poner(el, 'color', colorOk(es.colorNumeros)); });
     }

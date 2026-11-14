@@ -20,7 +20,8 @@
   var GEN = function (extra) { return SIN_TIT.concat(BASE_FONDO, BASE_TIT,
     [['color', 'Color del texto', 'colorTexto'], ['rango', 'Tamaño del texto', 'tamTexto', 11, 24, 'px']], extra || []); };
   var BLOQUES = [
-    { key: 'eventos', tab: 'LUGAR_VEST', casa: 'eventos', titulo: 'Dónde y cuándo · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'eventos', tab: 'LUGAR_VEST', casa: 'eventos', titulo: 'Dónde y cuándo · diseño (fondo, letra, colores, sin título, renglones)',
+      campos: [['casilla', 'Respetar los renglones (Enter) de la descripción y poner la dirección en un renglón aparte', 'renglones']].concat(GEN()) },
     { key: 'dresscode', tab: 'LUGAR_VEST', casa: 'vestimenta', titulo: 'Vestimenta · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'galeria', tab: 'GALERIA_INSTA_VID', casa: 'estilo-galeria', lugar: { arriba: true }, titulo: 'Galería · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'video', tab: 'GALERIA_INSTA_VID', casa: 'estilo-video', lugar: { abajo: true }, titulo: 'Nuestro video · diseño (fondo, letra, colores, sin título)', campos: GEN() },
