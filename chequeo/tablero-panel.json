@@ -1,5 +1,5 @@
 {
- "cuando": "2026-11-14T03:35:08.448Z",
+ "cuando": "2026-11-14T16:44:04.959Z",
  "slug": "camila-y-tomas",
  "total": 746,
  "verde": 729,
@@ -1492,17 +1492,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1706,6 +1695,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3984,7 +3984,7 @@
    "tab": "GALERIA_INSTA_VID",
    "bloque": "",
    "control": "Título secundario de la galería (opcional)",
-   "tipo": "textarea",
+   "tipo": "text",
    "guarda": true,
    "dato": "galFrase",
    "llega": true,
@@ -4868,7 +4868,7 @@
    "tab": "REGALOS",
    "bloque": "",
    "control": "TEXTO BOTÓN \"Ver datos bancarios\":",
-   "tipo": "textarea",
+   "tipo": "text",
    "guarda": true,
    "dato": "c_texto-boton-ver-datos-bancarios",
    "llega": true,
@@ -5174,9 +5174,8 @@
    "guarda": true,
    "dato": "fx.sectorElegido.c_color-fondo-contacto, c_color-fondo-contacto",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5259,7 +5258,7 @@
    "tab": "CONFIRMACIÓN",
    "bloque": "",
    "control": "Frase del mensaje de WhatsApp (al tocar el botón):",
-   "tipo": "textarea",
+   "tipo": "text",
    "guarda": true,
    "dato": "c_mensaje-wsp-contacto",
    "llega": true,
@@ -5484,9 +5483,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5496,8 +5494,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -5694,8 +5693,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.over",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -6330,7 +6330,7 @@
    "tab": "TRIVIA",
    "bloque": "",
    "control": "Texto \"Hola\" antes del nombre:",
-   "tipo": "text",
+   "tipo": "textarea",
    "guarda": true,
    "dato": "c_texto-hola-antes-del-nombre",
    "llega": true,
@@ -6363,7 +6363,7 @@
    "tab": "TRIVIA",
    "bloque": "",
    "control": "Texto \"No sos\" para cerrar sesión:",
-   "tipo": "text",
+   "tipo": "textarea",
    "guarda": true,
    "dato": "c_texto-no-sos-para-cerrar-sesion",
    "llega": true,
@@ -6374,7 +6374,7 @@
    "tab": "TRIVIA",
    "bloque": "",
    "control": "Texto columna \"Nombre\" en tabla de resultados:",
-   "tipo": "text",
+   "tipo": "textarea",
    "guarda": true,
    "dato": "c_texto-columna-nombre-en-tabla-de-resulta",
    "llega": true,
