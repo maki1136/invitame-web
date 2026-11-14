@@ -212,7 +212,12 @@
         if (es.renglones || /\n/.test(f) || /\n/.test(d)) {
           if (!f.trim() && !d) return;
           if (a.dataset.estOrig === undefined) a.dataset.estOrig = a.textContent;
-          var nuevo = !f.trim() ? a.dataset.estOrig.replace(/ · (?=[^·]*$)/, '\n') : (d ? (/\n$/.test(f) ? f + d : f + '\n' + d) : f);
+          /* entre la descripción y la dirección: si la descripción termina con
+             Enter, queda un renglón vacío (con 1 o 2 Enter, uno; con 3, dos…);
+             sin Enter, la dirección va en el renglón de abajo */
+          var cola = (f.match(/\n+$/) || [''])[0].length;
+          var sep = '\n' + (cola ? new Array(Math.max(1, cola - 1) + 1).join('\n') : '');
+          var nuevo = !f.trim() ? a.dataset.estOrig.replace(/ · (?=[^·]*$)/, '\n') : (d ? f.replace(/\n+$/, '') + sep + d : f);
           if (a.textContent !== nuevo) a.textContent = nuevo;
           poner(a, 'white-space', 'pre-line');
         } else if (a.dataset.estOrig !== undefined) {

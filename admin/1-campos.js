@@ -137,7 +137,11 @@
     if(/deshabilitar|ocultar|es demo|habilitar|bloquear|usar en el cat|mostrar secc/i.test(l))return'k';
     if(/transparencia|tama[ñn]o/i.test(l))return'r';
     if(/fecha/i.test(l)&&!/descrip/i.test(l))return'd';   // "Fecha descripción" = texto libre, no calendario
-    if(/datos de hoteles|datos bancarios|descripci[oó]n|frase|texto secc|dresscode texto|itinerario descrip/i.test(l))return'a';
+    /* ★ 14/11/2026 (Maki: «la macro, no de a parches»): todo campo de TEXTO LARGO
+       deja escribir Enter (textarea); la invitación respeta esos renglones en
+       cualquier sección (/efectos/texto-con-renglones.js). Los títulos siguen
+       siendo de un renglón. */
+    if(/datos de hoteles|datos bancarios|descripci[oó]n|frase|texto|dresscode texto|itinerario descrip|direcci[oó]n|mensaje|nota|leyenda|p[aá]rrafo|indicaciones|instrucciones|dedicatoria|agradecimiento|bienvenida/i.test(l)&&!/t[ií]tulo|bot[oó]n|link|url|correo|mail|tel[eé]fono|whatsapp|^texto '|texto del campo|texto tabla/i.test(l))return'a';
     return't';
   }
   // Cada campo del panel necesita una clave donde guardar su valor.
