@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-14T16:44:04.959Z",
+ "cuando": "2026-11-14T16:58:38.020Z",
  "slug": "camila-y-tomas",
- "total": 746,
- "verde": 729,
+ "total": 762,
+ "verde": 745,
  "amarillo": 3,
  "rojo": 14,
  "gris": 0,
@@ -1206,7 +1206,7 @@
    "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Texto final:",
-   "tipo": "text",
+   "tipo": "textarea",
    "guarda": true,
    "dato": "c_texto-final",
    "llega": true,
@@ -1492,6 +1492,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1695,17 +1706,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2002,7 +2002,7 @@
    "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "Ceremonia 1 - Dirección:",
-   "tipo": "text",
+   "tipo": "textarea",
    "guarda": true,
    "dato": "ev1dir",
    "llega": true,
@@ -2112,7 +2112,7 @@
    "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "Ceremonia 2 - Dirección:",
-   "tipo": "text",
+   "tipo": "textarea",
    "guarda": true,
    "dato": "ev2dir",
    "llega": true,
@@ -2222,7 +2222,7 @@
    "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "Ceremonia 3 - Dirección:",
-   "tipo": "text",
+   "tipo": "textarea",
    "guarda": true,
    "dato": "ev3dir",
    "llega": true,
@@ -4644,6 +4644,28 @@
   },
   {
    "tab": "REGALOS",
+   "bloque": "casa-regalo",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.regalos.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "casa-regalo",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.regalos.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
    "bloque": "Más formas de regalar",
    "control": "Venmo",
    "tipo": "text",
@@ -5087,6 +5109,28 @@
   },
   {
    "tab": "CONFIRMACIÓN",
+   "bloque": "casa-confirmacion",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.confirmacion.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-confirmacion",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.confirmacion.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
    "bloque": "",
    "control": "Color texto Confirmación:",
    "tipo": "color",
@@ -5344,6 +5388,28 @@
   },
   {
    "tab": "CONFIRMACIÓN",
+   "bloque": "casa-estilo-contacto",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.contacto.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-estilo-contacto",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.contacto.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
    "bloque": "rsvp-selector",
    "control": "Preguntar restricciones alimentariasSuma al formulario «¿Alguna restricción alimentaria?».",
    "tipo": "checkbox",
@@ -5449,8 +5515,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5460,9 +5527,8 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5483,8 +5549,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5494,9 +5561,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
@@ -5632,6 +5698,28 @@
   },
   {
    "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-spotify",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.spotify.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-spotify",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.spotify.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
    "bloque": "casa-estilo-pase",
    "control": "(sin rótulo)",
    "tipo": "color",
@@ -5693,9 +5781,8 @@
    "guarda": true,
    "dato": "fx.pasevoz.over",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
@@ -5859,8 +5946,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.tarjetaFina",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -6476,6 +6564,28 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.trivia.colorTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "TRIVIA",
+   "bloque": "casa-estilo-trivia",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.trivia.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "TRIVIA",
+   "bloque": "casa-estilo-trivia",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.trivia.botonLetra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -7661,6 +7771,28 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "casa-estilo-filtro",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.filtro.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-filtro",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.filtro.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "casa-estilo-live",
    "control": "(sin rótulo)",
    "tipo": "color",
@@ -7732,6 +7864,28 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.estiloSec.live.tamTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-live",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.live.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-live",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.live.botonLetra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -7831,6 +7985,28 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.estiloSec.carta.tamTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-carta",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.carta.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-carta",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.carta.botonLetra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
