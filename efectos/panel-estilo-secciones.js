@@ -14,21 +14,35 @@
   var BASE_TIT = [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'],
     ['color', 'Color del título', 'colorTitulo'], ['color', 'Color del subtítulo (arriba del título)', 'colorSub']];
 
+  /* ★ 13/11 (Jazmín): sin título / sin sobretítulo de fábrica, en todas las secciones */
+  var SIN_TIT = [['casilla', 'Sin título (no mostrar el título de esta sección)', 'sinTitulo'],
+    ['casilla', 'Sin sobretítulo (no mostrar el texto chico de arriba del título)', 'sinSub']];
+  var GEN = function (extra) { return SIN_TIT.concat(BASE_FONDO, BASE_TIT,
+    [['color', 'Color del texto', 'colorTexto'], ['rango', 'Tamaño del texto', 'tamTexto', 11, 24, 'px']], extra || []); };
   var BLOQUES = [
+    { key: 'eventos', tab: 'LUGAR_VEST', casa: 'eventos', titulo: 'Dónde y cuándo · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'dresscode', tab: 'LUGAR_VEST', casa: 'vestimenta', titulo: 'Vestimenta · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'galeria', tab: 'GALERIA_INSTA_VID', casa: 'estilo-galeria', lugar: { arriba: true }, titulo: 'Galería · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'video', tab: 'GALERIA_INSTA_VID', casa: 'estilo-video', lugar: { abajo: true }, titulo: 'Nuestro video · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'spotify', tab: 'MUSIC_PASES', casa: 'estilo-spotify', lugar: { abajo: true }, titulo: 'Playlist · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'regalos', tab: 'REGALOS', casa: 'regalo', titulo: 'Mesa de regalos · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'confirmacion', tab: 'CONFIRMACIÓN', casa: 'confirmacion', titulo: 'Confirmar asistencia · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'clima', tab: 'LUGAR_VEST', casa: 'estilo-clima', lugar: { abajo: true }, titulo: 'Clima · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'contacto', tab: 'CONFIRMACIÓN', casa: 'estilo-contacto', lugar: { abajo: true }, titulo: '¿Alguna duda? · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'carta', tab: 'EFECTOS', casa: 'estilo-carta', lugar: { abajo: true }, titulo: 'Carta · diseño (fondo, hoja, letra y colores)',
-      campos: BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la hoja', 'hoja'], ['color', 'Color del encabezado de la hoja', 'colorTituloHoja'],
+      campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la hoja', 'hoja'], ['color', 'Color del encabezado de la hoja', 'colorTituloHoja'],
         ['color', 'Color del texto de la hoja', 'colorTexto'], ['rango', 'Tamaño del texto de la hoja', 'tamTexto', 11, 24, 'px'],
         ['casilla', 'Sobre de adelante sin transparencia (la hoja no se ve a través)', 'bolsilloOpaco'],
         /* 9/11 (Maki): «una carta para ti con todo un texto y después el sobre: las dos cosas juntas no» */
-        ['casilla', 'Sin la frase arriba del sobre (sólo la carta)', 'sinFrase']]) },
+        ['casilla', 'Sin la frase arriba del sobre (sólo la carta)', 'sinFrase']])) },
     { key: 'scratch', tab: 'EFECTOS', casa: 'estilo-scratch', lugar: { abajo: true }, titulo: 'Raspadita · diseño (textos de arriba, fondo y colores)',
-      campos: BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la ayuda («Empieza por el día»)', 'colorTexto'], ['color', 'Color de los números que se revelan', 'colorNumeros']]) },
+      campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la ayuda («Empieza por el día»)', 'colorTexto'], ['color', 'Color de los números que se revelan', 'colorNumeros']])) },
     { key: 'hospedaje', tab: 'LUGAR_VEST', casa: 'estilo-hospedaje', lugar: { antesDe: '#f-titulo-hoteles' }, titulo: 'Hospedaje · diseño (fondo, letra y colores)',
-      campos: BASE_FONDO.concat(BASE_TIT, [['color', 'Color del texto', 'colorTexto'], ['rango', 'Tamaño del texto', 'tamTexto', 11, 24, 'px'],
+      campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color del texto', 'colorTexto'], ['rango', 'Tamaño del texto', 'tamTexto', 11, 24, 'px'],
         ['color', 'Color del nombre del hotel', 'colorNombre'], ['color', 'Color de la descripción del hotel', 'colorDesc'],
-        ['color', 'Color de la tarjeta del hotel', 'tarjeta'], ['rango', 'Transparencia de la tarjeta', 'tarjetaOpaca', 0, 100, '%']]) },
+        ['color', 'Color de la tarjeta del hotel', 'tarjeta'], ['rango', 'Transparencia de la tarjeta', 'tarjetaOpaca', 0, 100, '%']])) },
     { key: 'itinerario', tab: 'LUGAR_VEST', casa: 'itinerario', titulo: 'Itinerario · colores por separado (horario, momento y descripción)',
-      campos: BASE_TIT.concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
+      campos: SIN_TIT.concat(BASE_TIT).concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
         ['color', 'Color de la descripción', 'colorDesc'],
         /* 12/11 (Jazmín): «cambiar tamaño y letra del itinerario, no el título, sí los detalles y horario» */
         ['fuente', 'Tipografía del horario y momento (11:00 am · Misa)', 'fuenteHora'], ['rango', 'Tamaño del horario y momento', 'tamHora', 10, 36, 'px'],
@@ -38,17 +52,17 @@
         /* 9/11 (Maki, renata platinum): «no podés poner esos tres circulitos básicos» */
         ['imagen', 'Medallón (foto redonda con el objeto al medio): reemplaza los puntitos del itinerario y el adorno de los títulos, y va arriba del pase', 'medallon']]) },
     { key: 'padres', tab: 'PERSONAS', casa: 'estilo-padres', lugar: { arriba: true }, titulo: 'Personas · diseño (tamaño de las fotos, letra y colores)',
-      campos: [['rango', 'Tamaño de las fotos (250 = como la plataforma vieja)', 'fotoTam', 60, 250, 'px']].concat(BASE_FONDO, BASE_TIT,
-        [['color', 'Color de los nombres', 'colorNombre'], ['color', 'Color de la relación (Padres de…)', 'colorRel'], ['color', 'Color de la frase', 'colorTexto']]) },
+      campos: SIN_TIT.concat([['rango', 'Tamaño de las fotos (250 = como la plataforma vieja)', 'fotoTam', 60, 250, 'px']].concat(BASE_FONDO, BASE_TIT,
+        [['color', 'Color de los nombres', 'colorNombre'], ['color', 'Color de la relación (Padres de…)', 'colorRel'], ['color', 'Color de la frase', 'colorTexto']])) },
     { key: 'hashtag', tab: 'GALERIA_INSTA_VID', casa: 'estilo-hashtag', lugar: { arriba: true }, titulo: 'Instagram · títulos, diseño (logo, letra y colores)',
       /* 6/11 (Jazmín, Alejandra): «hay que cambiarle el título al sector de insta, dice "Nuestro hashtag"» */
-      campos: [['texto', 'Título de la sección (dice «Nuestro Hashtag»)', 'titulo'], ['texto', 'Sobretítulo (arriba del título)', 'sobretitulo']].concat(BASE_FONDO, BASE_TIT, [['color', 'Color de la frase', 'colorTexto'], ['color', 'Color del hashtag', 'colorHashtag'],
-        ['color', 'Color del logo de Instagram', 'colorLogo'], ['casilla', 'Sin el logo de Instagram', 'sinLogo']]) },
+      campos: SIN_TIT.concat([['texto', 'Título de la sección (dice «Nuestro Hashtag»)', 'titulo'], ['texto', 'Sobretítulo (arriba del título)', 'sobretitulo']].concat(BASE_FONDO, BASE_TIT, [['color', 'Color de la frase', 'colorTexto'], ['color', 'Color del hashtag', 'colorHashtag'],
+        ['color', 'Color del logo de Instagram', 'colorLogo'], ['casilla', 'Sin el logo de Instagram', 'sinLogo']])) },
     /* 9/11 (Jazmín, Alejandra): el texto de abajo del título y el fondo de la trivia.
        El sobretítulo y los colores del título ya tienen campo en TRIVIA: no se repiten. */
     { key: 'trivia', tab: 'TRIVIA', casa: 'estilo-trivia', lugar: { abajo: true }, titulo: 'Trivia · título, texto de abajo y fondo',
-      campos: [['texto', 'Título (dice «Trivia»)', 'titulo'], ['texto', 'Texto debajo del título («¿Cuánto conoces…?»)', 'bajada']].concat(BASE_FONDO,
-        [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'], ['color', 'Color del texto de abajo', 'colorTexto']]) },
+      campos: SIN_TIT.concat([['texto', 'Título (dice «Trivia»)', 'titulo'], ['texto', 'Texto debajo del título («¿Cuánto conoces…?»)', 'bajada']].concat(BASE_FONDO,
+        [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'], ['color', 'Color del texto de abajo', 'colorTexto']])) },
     /* 9/11 (Maki, isabela platinum): «mejorá el diseño del "Con cariño, te esperamos" y la parte del QR».
        Lo pinta /efectos/pase-qr-fino.js; sin la casilla no cambia nada. */
     { key: 'pase', tab: 'MUSIC_PASES', casa: 'estilo-pase', lugar: { abajo: true }, titulo: 'Pase con QR · diseño de la tarjeta',

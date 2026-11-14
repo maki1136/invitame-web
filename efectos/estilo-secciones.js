@@ -37,7 +37,19 @@
     hashtag:    { sel: '[data-sec="hashtag"]', texto: ':scope > p' },
     /* 9/11 (Jazmín, Alejandra): «en la trivia el textito abajo del título no se puede modificar, y el fondo tampoco» */
     trivia:     { sel: '[data-sec="trivia"]', texto: '#tv-bajada', bajada: '#tv-bajada' },
-    footer:     { sel: '.footer', texto: '' }
+    footer:     { sel: '.footer', texto: '' },
+    /* ★ 13/11 (Jazmín): «aunque elijamos un estilo, tenemos que poder realizar
+       todos los ajustes»: el mismo diseño (fondo, letra, colores, sin título /
+       sin sobretítulo) en TODAS las secciones que no lo tenían. */
+    eventos:      { sel: '[data-sec="eventos"]', texto: ':scope > p, .evento .sub, .evento .addr, .evento h3, .evento .when, .evento p' },
+    dresscode:    { sel: '[data-sec="dresscode"]', texto: ':scope > p, #dc-texto' },
+    galeria:      { sel: '[data-sec="galeria"]', texto: ':scope > p' },
+    video:        { sel: '[data-sec="video"]', texto: ':scope > p' },
+    spotify:      { sel: '[data-sec="spotify"]', texto: ':scope > p' },
+    regalos:      { sel: '[data-sec="regalos"]', texto: ':scope > p, #reg-texto' },
+    confirmacion: { sel: '[data-sec="confirmacion"]', texto: ':scope > p' },
+    clima:        { sel: '[data-sec="clima"]', texto: ':scope > p' },
+    contacto:     { sel: '[data-sec="contacto"]', texto: ':scope > p' }
   };
 
   /* los campos viejos que ahora sí mandan (clave del panel → campo nuevo) */
@@ -141,6 +153,9 @@
     var bj = SEC[key] && SEC[key].bajada ? sec.querySelector(SEC[key].bajada) : null, tBaj = String(es.bajada || '').trim();
     if (bj) { if (bj.dataset.estTxt === undefined && tBaj) bj.dataset.estTxt = bj.textContent; var qb = tBaj || (bj.dataset.estTxt !== undefined ? bj.dataset.estTxt : null); if (qb !== null && bj.textContent !== qb) bj.textContent = qb; if (!tBaj) delete bj.dataset.estTxt; }
     if (k) { if (k.dataset.estTxt === undefined && tSub) k.dataset.estTxt = k.textContent; var qs = tSub || (k.dataset.estTxt !== undefined ? k.dataset.estTxt : null); if (qs !== null && k.textContent !== qs) k.textContent = qs; if (!tSub) delete k.dataset.estTxt; }
+    /* ★ 13/11: «poder no colocar títulos o subtítulos predeterminados» */
+    poner(h, 'display', es.sinTitulo ? 'none' : '');
+    poner(k, 'display', es.sinSub ? 'none' : '');
     poner(h, 'font-family', es.fuente ? '"' + es.fuente + '", serif' : '');
     poner(h, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');
     poner(h, 'color', colorOk(es.colorTitulo));
