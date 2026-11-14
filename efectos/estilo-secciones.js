@@ -196,8 +196,10 @@
          (el motor lo junta todo con « · »). */
       [1, 2, 3].forEach(function (n) {
         var a = document.getElementById('ev' + n + '-a'); if (!a) return;
-        if (es.renglones) {
-          var f = String(e['ev' + n + 'fecha'] || '').trim(), d = String(e['ev' + n + 'dir'] || '').trim();
+        var f = String(e['ev' + n + 'fecha'] || '').trim(), d = String(e['ev' + n + 'dir'] || '').trim();
+        /* ★ 13/11 (Jazmín: «no se guardan los saltos»): si escribieron un Enter en
+           la descripción, se respeta solo, sin tener que tildar nada. */
+        if (es.renglones || /\n/.test(f)) {
           if (!f && !d) return;
           if (a.dataset.estOrig === undefined) a.dataset.estOrig = a.textContent;
           var nuevo = [f, d].filter(Boolean).join('\n');
