@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-13T21:49:20.667Z",
+ "cuando": "2026-11-13T23:22:44.467Z",
  "slug": "camila-y-tomas",
- "total": 632,
- "verde": 616,
- "amarillo": 2,
+ "total": 638,
+ "verde": 618,
+ "amarillo": 0,
  "rojo": 14,
- "gris": 0,
+ "gris": 6,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -489,6 +489,30 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "flecha-selector",
    "control": "Tamaño",
    "tipo": "lista",
@@ -681,50 +705,6 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.frase.peso",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Qué foto usar",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.origen",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Link de la imagen",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Ubicación del texto del cierre",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.pos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Tamaño de la frase del cierre (100%)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1193,6 +1173,50 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Qué foto usar",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.origen",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Link de la imagen",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Frase final:",
    "tipo": "textarea",
@@ -1415,22 +1439,35 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
    "control": "Poner comillas “ ” alrededor de la frase",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.frase.sinComillas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1481,11 +1518,66 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.cierre.fraseAbajo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinVelo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sombra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinOscurecer",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1695,50 +1787,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinVelo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sombra",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinOscurecer",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4268,9 +4316,8 @@
    "guarda": true,
    "dato": "fx.muestra.mesa",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -4581,9 +4628,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6323,78 +6369,6 @@
   },
   {
    "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.frase",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.nombres",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.fecha",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.detalle",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.pie",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
@@ -6568,6 +6542,78 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.frase",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.nombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.fecha",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.detalle",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.pie",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
   },
   {
    "tab": "EFECTOS",
@@ -6945,32 +6991,6 @@
   },
   {
    "tab": "EFECTOS",
-   "bloque": "mision-selector",
-   "control": "Prender la misión en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.mision",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "camara-selector",
-   "control": "Prender la camarita en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.camara",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Marco fino",
    "tipo": "checkbox",
@@ -7001,6 +7021,32 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "mision-selector",
+   "control": "Prender la misión en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.mision",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "camara-selector",
+   "control": "Prender la camarita en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.camara",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   }
  ]
 }
