@@ -234,6 +234,10 @@
       css.push(S + ' #frase-tint{background:transparent!important}');
       if (!tamN) css.push(P2 + '{font-size:clamp(14px,3.9vw,18px)!important;line-height:1.5!important}');
     }
+    /* ★ 13/11 (Jazmín: «en el sector de frase, en algunos casos no se puede
+       modificar el color»): sin velo, o con un marco que trae su tinta, el color
+       elegido en el panel no se aplicaba. Va al final: el del panel gana siempre. */
+    if (colorPropio && /^(#|rgb|hsl)/i.test(colorPropio)) css.push(S + ' > p.frase.frase{color:' + colorPropio + '!important;-webkit-text-fill-color:' + colorPropio + '!important}');
     /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
     if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
     if (pos === 'abajo')  css.push(S + '{padding-bottom:clamp(56px,20%,140px)!important}');
