@@ -204,14 +204,15 @@
          (el motor lo junta todo con « · »). */
       [1, 2, 3].forEach(function (n) {
         var a = document.getElementById('ev' + n + '-a'); if (!a) return;
-        var f = String(e['ev' + n + 'fecha'] || '').trim(), d = String(e['ev' + n + 'dir'] || '').trim();
-        /* ★ 13/11 (Jazmín: «no se guardan los saltos»): si escribieron un Enter en
-           la descripción, se respeta solo, sin tener que tildar nada. */
-        if (es.renglones || /\n/.test(f)) {
-          if (!f && !d) return;
+        /* ★ 14/11 (Jazmín: «no me hace todos los saltos»): los renglones vacíos
+           también cuentan (también al principio y al final), y la dirección
+           respeta sus propios Enter. Sólo se limpian espacios sueltos. */
+        var crudo = function (s) { return String(s || '').replace(/\r/g, '').replace(/[ \t]+\n/g, '\n').replace(/[ \t]+$/, ''); };
+        var f = crudo(e['ev' + n + 'fecha']), d = crudo(e['ev' + n + 'dir']).replace(/^\s+|\s+$/g, '');
+        if (es.renglones || /\n/.test(f) || /\n/.test(d)) {
+          if (!f.trim() && !d) return;
           if (a.dataset.estOrig === undefined) a.dataset.estOrig = a.textContent;
-          var nuevo = [f, d].filter(Boolean).join('\n');
-          if (!f) nuevo = a.dataset.estOrig.replace(/ · (?=[^·]*$)/, '\n');
+          var nuevo = !f.trim() ? a.dataset.estOrig.replace(/ · (?=[^·]*$)/, '\n') : (d ? (/\n$/.test(f) ? f + d : f + '\n' + d) : f);
           if (a.textContent !== nuevo) a.textContent = nuevo;
           poner(a, 'white-space', 'pre-line');
         } else if (a.dataset.estOrig !== undefined) {
