@@ -108,6 +108,17 @@ if ($slug !== '') {
     $f = isset($data['fields']) ? $data['fields'] : [];
     $sv = function ($k) use ($f) { return isset($f[$k]['stringValue']) ? trim($f[$k]['stringValue']) : ''; };
 
+    /* ★ 13/11/2026 — EL LINK CAMBIÓ («Cambiar link» del panel). La invitación se
+       mudó a otro nombre: el link viejo (y el de cada pase, con su &g=) lleva
+       solo al nuevo, con todo lo demás del link igual. */
+    $mudadaA = preg_replace('/[^a-z0-9\-]/', '', strtolower($sv('mudadaA')));
+    if ($mudadaA !== '' && $mudadaA !== $slug) {
+      $q = $_GET; $q['e'] = $mudadaA;
+      header('Cache-Control: no-store');
+      header('Location: /i/?' . http_build_query($q), true, 302);
+      exit;
+    }
+
     // Devuelve el primer valor no vacío de una lista de claves.
     $firstOf = function ($keys) use ($sv) {
       foreach ($keys as $k) {

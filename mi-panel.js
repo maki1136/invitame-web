@@ -1104,8 +1104,14 @@
     pintar();
   }
   async function hacerLogin(slug, clave){
-    const p = await traerPanel(slug, clave);
+    let p = await traerPanel(slug, clave);
     if(!p) return false;
+    /* ★ 13/11/2026 — la invitación se mudó a otro link («Cambiar link»): se
+       entra al panel nuevo y se recuerda el nombre nuevo. */
+    if(p.mudadaA && p.mudadaA!==slug){
+      const p2 = await traerPanel(p.mudadaA, clave);
+      if(p2){ slug=p.mudadaA; p=p2; try{ localStorage.setItem('inv_panel_novios', JSON.stringify({slug,clave})); }catch(_){} }
+    }
     SLUG=slug; CLAVE=clave; PANEL=p;
     /* ★ 30/10/2026 — EL ITINERARIO ARRANCA CON EL DE LA INVITACIÓN. Antes el
        panel decía «todavía no cargaron ningún momento» aunque la diseñadora ya
