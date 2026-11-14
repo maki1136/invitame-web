@@ -165,6 +165,18 @@
     poner(k, 'color', colorOk(es.colorSub));
     var tx = colorOk(es.colorTexto), tam = es.tamTexto ? es.tamTexto + 'px' : '';
     todos(sec, cfg.texto).forEach(function (el) { poner(el, 'color', tx); poner(el, 'font-size', tam); });
+    /* ★ 14/11 (Jazmín: «Ver hoteles» con letra blanca sobre crema, «eso no me
+       deja modificarlo el panel»). TODOS los botones de CADA sección: color del
+       botón y de su letra. Los botones de contorno (.gh) toman el color en el
+       borde. Si no se elige nada, /efectos/botones-legibles.js cuida que se lean. */
+    var bF = colorOk(es.botonFondo), bL = colorOk(es.botonLetra);
+    todos(sec, '.btn, .wsp, .tv-btn, .acc-btn').forEach(function (b) {
+      var gh = b.classList.contains('gh');
+      poner(b, 'background-color', gh ? '' : bF);
+      poner(b, 'background-image', (bF && !gh) ? 'none' : '');
+      poner(b, 'border-color', bF);
+      poner(b, 'color', bL);
+    });
 
     if (key === 'carta') {
       /* ★ 9/11: «Sin la frase arriba del sobre» — la frase que algunas colecciones

@@ -111,6 +111,16 @@
         ['casilla', 'Texto final sin mayúsculas (para letras cursivas)', 'textoSinMayus']] }
   ];
 
+  /* ★ 14/11 (Jazmín: «Ver hoteles» ilegible y «eso no me deja modificarlo el
+     panel»). Toda sección que tenga botones lleva el color de sus botones y de
+     su letra. Lo aplica /efectos/estilo-secciones.js. */
+  var CON_BOTONES = { eventos: 1, hospedaje: 1, dresscode: 1, galeria: 1, video: 1, spotify: 1, regalos: 1, confirmacion: 1,
+    clima: 1, contacto: 1, filtro: 1, live: 1, trivia: 1, hashtag: 1, carta: 1 };
+  BLOQUES.forEach(function (b) {
+    if (!CON_BOTONES[b.key] || !b.campos) return;
+    b.campos = b.campos.concat([['color', 'Color de los botones de esta sección', 'botonFondo'], ['color', 'Color de la letra de los botones', 'botonLetra']]);
+  });
+
   /* 9/11 (Jazmín, Melany): «No pueden modificar la imagen de PLAYLIST».
      La tapa de la playlist y la de «Nuestro video» las pone la colección;
      /efectos/tapas-foto.js ya sabía pintar una propia (fx.tapas.playlist /
