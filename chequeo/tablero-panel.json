@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-14T01:07:12.031Z",
+ "cuando": "2026-11-14T01:53:01.025Z",
  "slug": "camila-y-tomas",
  "total": 728,
- "verde": 711,
- "amarillo": 3,
+ "verde": 710,
+ "amarillo": 4,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -5273,8 +5273,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.fondo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5449,9 +5450,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5484,9 +5484,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5496,8 +5495,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -5859,8 +5859,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.tarjetaFina",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -7336,6 +7337,78 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.frase",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.nombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.fecha",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.detalle",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "std-selector",
+   "control": "Save the date · título de arriba",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.std.pie",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
@@ -7509,78 +7582,6 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.frase",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.nombres",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.fecha",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.detalle",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "std-selector",
-   "control": "Save the date · título de arriba",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.std.pie",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde",
-   "nota": "dato interno: se guarda; no se ve en la invitación"
   },
   {
    "tab": "EFECTOS",
