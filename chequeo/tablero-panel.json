@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-14T17:22:56.707Z",
+ "cuando": "2026-11-14T20:28:15.872Z",
  "slug": "camila-y-tomas",
  "total": 776,
- "verde": 759,
- "amarillo": 3,
+ "verde": 761,
+ "amarillo": 1,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -5670,9 +5670,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5704,9 +5703,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
