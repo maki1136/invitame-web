@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-14T16:58:38.020Z",
+ "cuando": "2026-11-14T17:22:56.707Z",
  "slug": "camila-y-tomas",
- "total": 762,
- "verde": 745,
+ "total": 776,
+ "verde": 759,
  "amarillo": 3,
  "rojo": 14,
  "gris": 0,
@@ -1912,6 +1912,28 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "Ceremonia 1 - Titulo:",
    "tipo": "text",
@@ -2363,6 +2385,28 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-hospedaje",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.hospedaje.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-hospedaje",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.hospedaje.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "Titulo hoteles:",
    "tipo": "text",
@@ -2621,6 +2665,28 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.estiloSec.dresscode.tamTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-vestimenta",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.dresscode.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-vestimenta",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.dresscode.botonLetra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3463,6 +3529,28 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "casa-eventos",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -3804,6 +3892,28 @@
   },
   {
    "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-hashtag",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.hashtag.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-hashtag",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.hashtag.botonLetra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
    "bloque": "casa-estilo-galeria",
    "control": "(sin rótulo)",
    "tipo": "color",
@@ -3875,6 +3985,28 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.estiloSec.galeria.tamTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-galeria",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.galeria.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-galeria",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.galeria.botonLetra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4086,6 +4218,28 @@
    "tipo": "range",
    "guarda": true,
    "dato": "fx.estiloSec.video.tamTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-video",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.video.botonFondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-video",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.video.botonLetra",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5504,8 +5658,9 @@
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5946,9 +6101,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.tarjetaFina",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
