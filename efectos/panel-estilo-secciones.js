@@ -29,6 +29,8 @@
     { key: 'regalos', tab: 'REGALOS', casa: 'regalo', titulo: 'Mesa de regalos · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'confirmacion', tab: 'CONFIRMACIÓN', casa: 'confirmacion', titulo: 'Confirmar asistencia · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'clima', tab: 'LUGAR_VEST', casa: 'estilo-clima', lugar: { abajo: true }, titulo: 'Clima · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'filtro', tab: 'EFECTOS', casa: 'estilo-filtro', lugar: { abajo: true }, titulo: 'El filtro · diseño (letra, colores, tamaño, sin título)', campos: GEN() },
+    { key: 'live', tab: 'EFECTOS', casa: 'estilo-live', lugar: { abajo: true }, titulo: 'Las fotos de la fiesta (Live) · diseño (letra, colores, tamaño, sin título)', campos: GEN() },
     { key: 'contacto', tab: 'CONFIRMACIÓN', casa: 'estilo-contacto', lugar: { abajo: true }, titulo: '¿Alguna duda? · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'carta', tab: 'EFECTOS', casa: 'estilo-carta', lugar: { abajo: true }, titulo: 'Carta · diseño (fondo, hoja, letra y colores)',
       campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la hoja', 'hoja'], ['color', 'Color del encabezado de la hoja', 'colorTituloHoja'],

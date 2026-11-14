@@ -49,7 +49,10 @@
     regalos:      { sel: '[data-sec="regalos"]', texto: ':scope > p, #reg-texto' },
     confirmacion: { sel: '[data-sec="confirmacion"]', texto: ':scope > p' },
     clima:        { sel: '[data-sec="clima"]', texto: ':scope > p' },
-    contacto:     { sel: '[data-sec="contacto"]', texto: ':scope > p' }
+    contacto:     { sel: '[data-sec="contacto"]', texto: ':scope > p' },
+    /* ★ 13/11 (Jazmín): el filtro y las fotos de la fiesta (Live) también */
+    filtro:       { sel: '#filtro-sec', texto: 'p' },
+    live:         { sel: '#gal-seccion', texto: 'p' }
   };
 
   /* los campos viejos que ahora sí mandan (clave del panel → campo nuevo) */
@@ -188,6 +191,11 @@
         poner(tn, 'background-color', sc);
         poner(tn, 'opacity', sc ? '1' : '');
       });
+    }
+    /* ★ 13/11 (Jazmín: «que en confirmación se pueda colocar un salto»): los
+       Enter del texto de confirmación se respetan. */
+    if (key === 'confirmacion') {
+      todos(sec, ':scope > p').forEach(function (p) { if (/\n/.test(p.textContent)) poner(p, 'white-space', 'pre-line'); });
     }
     if (key === 'eventos') {
       /* ★ 13/11 (Jazmín, Ornela & Juan Rodolfo): «que en este sector se puedan

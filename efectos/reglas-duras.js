@@ -1064,10 +1064,13 @@
     ['c_itinerario-color-de-texto', '[data-sec="itinerario"], [data-sec="itinerario"] :is(h2,h3,p,.kick,.d,.l,li)'],
     ['c_color-logo-y-texto-seccion-instagram', '[data-sec="hashtag"], [data-sec="hashtag"] :is(h2,h3,p,.kick,.d,.l,li)'],
     ['c_color-para-la-seccion-personas', '[data-sec="padres"], [data-sec="padres"] :is(h2,h3,p,.kick,.d,.l,li)'],
-    ['c_color-para-seccion-regalos-mesa', '[data-sec="regalos"], [data-sec="regalos"] :is(h2,h3,p,.kick,.d,.l,li)']
+    ['c_color-para-seccion-regalos-mesa', '[data-sec="regalos"], [data-sec="regalos"] :is(h2,h3,p,.kick,.d,.l,li)'],
+    ['fraseColor', 'p.frase']
   ];
   function colorDelPanel(el) {
     var ev = window.INVEV; if (!ev || !el.matches) return '';
+    /* ★ 13/11: lo pintado desde «[Sección] · diseño» (estilo-secciones.js) también manda */
+    try { if (el.dataset && el.dataset.estcolor) { var ce = el.style.getPropertyValue('color'); if (ce) return ce; } } catch (e) {}
     for (var i = 0; i < COLORES_PANEL.length; i++) {
       var v = String(ev[COLORES_PANEL[i][0]] || '').trim();
       if (!v || !/^(#|rgb|hsl)/i.test(v)) continue;
