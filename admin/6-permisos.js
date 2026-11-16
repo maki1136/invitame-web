@@ -318,6 +318,7 @@
                '</select> ' +
                (baja ? '<button class="btn-c permalta" style="margin-top:5px">Reactivar</button>'
                      : '<button class="btn-c permbaja" style="margin-top:5px">Dar de baja</button>') +
+               (baja ? '' : '<br><button class="btn-c permclave" style="margin-top:5px">Mandarle el mail para crear su contraseña</button>') +
                '</div>';
         });
 
@@ -331,8 +332,8 @@
              '</select>' +
              '<button id="permnvbtn" class="btn-c" style="margin-top:6px">Agregar al equipo</button>' +
              '<div style="font-size:10.5px;opacity:.6;margin-top:5px;line-height:1.35">' +
-             'Agregarla acá le da el permiso. La CUENTA se crea aparte, en Firebase → ' +
-             'Authentication → Add user, con el mismo correo.</div>' +
+             'Agregarla acá le da el permiso, pero NO le manda nada. La CUENTA se crea aparte, en Firebase → ' +
+             'Authentication → Add user, con el mismo correo; después tocá «Mandarle el mail para crear su contraseña».</div>' +
              '</div>';
 
         c.innerHTML = h;
@@ -351,6 +352,24 @@
             if (p.mail === DUENA_FIJA) { alert('A Maki no se le puede sacar el permiso.'); return; }
             if (!confirm('Sacarle el permiso a ' + p.mail + '?')) return;
             window.INV.bajaMiembro(p.mail).then(pintar)['catch'](function (e) { alert('No se pudo: ' + e); });
+          };
+          /* ★ 16/11 (Jazmín: «a Pau no le llegó el permiso»). Agregar a alguien al
+             equipo NO le manda nada: el permiso es un renglón acá. Para entrar
+             necesita su CUENTA (Firebase → Authentication → Add user) y su
+             contraseña. Con este botón le llega un mail de Firebase para que
+             la cree ella: la contraseña no pasa por nadie. */
+          var bc = fila.querySelector('.permclave');
+          if (bc) bc.onclick = function () {
+            if (!window.INV.mailClave) { alert('Recargá el panel y probá de nuevo.'); return; }
+            bc.disabled = true;
+            window.INV.mailClave(p.mail).then(function () {
+              bc.textContent = 'Mail enviado ✓';
+              alert('Listo: le llega a ' + p.mail + ' un mail de Firebase para crear su contraseña (puede caer en spam).\n\nSi no le llega, es que todavía no tiene cuenta: hay que crearla en Firebase → Authentication → Add user con ese mismo correo, y volver a tocar este botón.');
+            })['catch'](function (e) {
+              bc.disabled = false;
+              var m = String(e && e.code || e);
+              alert(/user-not-found/.test(m) ? 'Esa persona todavía no tiene cuenta. Primero hay que crearla en Firebase → Authentication → Add user con el correo ' + p.mail + ', y después tocar este botón.' : 'No se pudo mandar: ' + m);
+            });
           };
           var ba = fila.querySelector('.permalta');
           if (ba) ba.onclick = function () {

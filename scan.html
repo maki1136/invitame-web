@@ -285,5 +285,5 @@ window.PU={
     const t=setInterval(()=>{ if(window.PUERTA){ clearInterval(t); return; } if(window.INV&&window.INV.ok&&window.INV.user){ clearInterval(t); cargar(); } },400);
     setTimeout(()=>{ clearInterval(t); if(!SLUG&&!(window.INV&&window.INV.user)&&!window.PUERTA) el('loadmsg').textContent='Inicia sesión para cargar el evento.'; },12000); })();
 </script>
-<script type="module" src="firebase-inv.js?v=26"></script>
+<script type="module" src="firebase-inv.js?v=27"></script>
 </body></html>
