@@ -901,6 +901,7 @@
     '/efectos/banda-tematica.js',   /* las 7 bandas de color pleno pasan a ser la foto de la temática */
     '/efectos/simbolo-tematica.js', /* los aros de cada título y la marca del itinerario */
     '/efectos/medallon-tematica.js', /* 9/11: el medallón propio (itinerario, adornos y pase) — fx.estiloSec.itinerario.medallon */
+    '/efectos/adorno-propio.js',     /* 16/11: el adorno propio (imagen subida) va sin la viñeta de la colección detrás */
     '/efectos/pase-qr-fino.js',      /* 9/11: diseño fino del pase con QR (opt-in) — fx.estiloSec.pase.tarjetaFina */
     '/efectos/marfil-tinta.js',      /* 10/11: Marfil con la tinta en otro color (opt-in) — fx.estiloSec.marfil.tinta */
     '/efectos/portada-limpia.js',    /* 10/11: portada sin velo claro y letra propia (opt-in) — fx.estiloSec.portada */
