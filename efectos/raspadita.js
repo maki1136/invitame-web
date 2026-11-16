@@ -337,12 +337,51 @@
     var t = setInterval(function () { repasarTapas(); if (++n > 30) clearInterval(t); }, 500);
   })();
 
+  function transparente(img) {
+    if (img.__transp !== undefined) return img.__transp;
+    var t = false;
+    try {
+      var N = 40, c = document.createElement('canvas'); c.width = N; c.height = N;
+      var x = c.getContext('2d'); x.drawImage(img, 0, 0, N, N);
+      var d = x.getImageData(0, 0, N, N).data, n = 0;
+      [[1, 1], [N - 2, 1], [1, N - 2], [N - 2, N - 2], [N >> 1, 1], [1, N >> 1], [N - 2, N >> 1], [N >> 1, N - 2]]
+        .forEach(function (q) { if (d[(q[1] * N + q[0]) * 4 + 3] < 40) n++; });
+      t = n >= 3;
+    } catch (e) {}
+    return (img.__transp = t);
+  }
+  function opaco(c) {
+    var m = /rgba?\((\d+)[ ,]+(\d+)[ ,]+(\d+)(?:[ ,/]+([\d.]+))?/.exec(c || '');
+    return m && (m[4] === undefined || parseFloat(m[4]) >= 0.6) ? 'rgb(' + m[1] + ',' + m[2] + ',' + m[3] + ')' : '';
+  }
+  function papelFicha(cv) {
+    try {
+      var f = document.querySelector('.rasp-3 .r3-f, .rasp-3 > *');
+      var c = f && opaco(getComputedStyle(f).backgroundColor);
+      if (c) return c;
+      var el = cv.parentElement;
+      while (el && el !== document.body) { c = opaco(getComputedStyle(el).backgroundColor); if (c) return c; el = el.parentElement; }
+    } catch (e) {}
+    return '#F7F1EA';
+  }
   function dibujarEn(cv, img) {
     var g = cv.getContext('2d');
     var w = cv.width, h = cv.height;
     g.globalCompositeOperation = 'source-over';
     g.clearRect(0, 0, w, h);
-    var e = Math.max(w / img.naturalWidth, h / img.naturalHeight);   /* como cover */
+    /* ★ 16/11/2026 (Jazmín, ailicec-mishell: subió un MOÑO en PNG transparente
+       como tapa y los números se veían a través). Una tapa tiene que ser OPACA.
+       Si la foto tiene transparencia (un ícono, un moño, un logo), va ENTERA
+       al medio sobre el papel de la ficha, como un sello; una foto común sigue
+       cubriendo todo como siempre. */
+    var e;
+    if (transparente(img)) {
+      g.fillStyle = papelFicha(cv);
+      g.fillRect(0, 0, w, h);
+      e = Math.min(w / img.naturalWidth, h / img.naturalHeight) * 0.78;   /* como contain, con aire */
+    } else {
+      e = Math.max(w / img.naturalWidth, h / img.naturalHeight);   /* como cover */
+    }
     var dw = img.naturalWidth * e, dh = img.naturalHeight * e;
     g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
     polvillo(g, w, h);

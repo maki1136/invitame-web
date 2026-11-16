@@ -424,7 +424,16 @@
       slot.appendChild(g);
     });
     /* el orden: tipografía, tamaño, color */
-    CAMPOS_TEXTO.forEach(function (k) { var g = slot.querySelector('[data-fb-campo="' + k[0] + '"]'); if (g) slot.appendChild(g); });
+    /* ⚠️ 16/11/2026 (Jazmín, regina16-01: «quiero cambiar el color de la frase
+       pero no me deja abrir la paleta de colores… y con la tipografía también
+       pasa»). Esto corre cada 0,7 s y volvía a MOVER los tres campos aunque ya
+       estuvieran en orden: mover un <input type=color> o un <select> en la
+       página cierra la paleta o el desplegable al instante. Sólo se mueven si
+       el orden está mal, y nunca el que se está usando. */
+    var orden = CAMPOS_TEXTO.map(function (k) { return slot.querySelector('[data-fb-campo="' + k[0] + '"]'); }).filter(Boolean);
+    var enUso = orden.some(function (g) { return g.contains(document.activeElement); });
+    var bien = orden.every(function (g, i) { return i === 0 || orden[i - 1].compareDocumentPosition(g) & Node.DOCUMENT_POSITION_FOLLOWING; });
+    if (!bien && !enUso) orden.forEach(function (g) { slot.appendChild(g); });
     /* ★ 30/10/2026 (Jazmín, diego-y-viviana: «no se puede sacar esa lluvia
        roja»): el «Fondo con movimiento» de la frase (bokeh, pétalos…) vivía
        en la pestaña GALERÍA y nadie lo encontraba. Ahora va ACÁ, en la caja
