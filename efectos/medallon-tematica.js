@@ -150,6 +150,84 @@
     } else if (!on && m) { m.remove(); }
   }
 
+  /* ★ 16/11/2026 (Jazmín, ailicec-mishell, Celebra · Scrapbook: «sacar el lacre
+     que tiene toda la invi y dejar el moño que yo puse»). Las colecciones con
+     PIEZA fotografiada (Celebra, Fiesta, Degradé, Óleo) la pintan en sus propias
+     hojas: marcas del itinerario, pase, tapa de la raspadita… y el medallón sólo
+     tapaba algunas. Con medallón cargado, TODA pieza de la colección pasa a ser
+     el medallón, en cualquier colección: se reescriben las direcciones de la
+     pieza en las hojas que inyectan las colecciones. Sin medallón, todo vuelve.
+     La tapa de la raspadita tiene que ser OPACA (si no se ven los números): ahí
+     va el medallón aplanado sobre el papel. */
+  var PIEZA_RE = /url\(\s*["']?([^"')]*?(?:-pieza(?:-circ)?(?:[0-9]*)?(?:\.(?:webp|png|jpg))?|dg-pieza-[a-z0-9]+|\/piezas\/[^"')]*medallon[^"')]*))["']?\s*\)/g;
+  function papelHex() {
+    var c = '';
+    try { var s = document.querySelector('.sec.scratch-sec') || document.body; c = getComputedStyle(s).backgroundColor; } catch (e) {}
+    var m = /rgba?\((\d+)[ ,]+(\d+)[ ,]+(\d+)(?:[ ,/]+([\d.]+))?/.exec(c || '');
+    if (!m || (m[4] !== undefined && parseFloat(m[4]) < 0.5)) return 'F7F1EA';
+    return [m[1], m[2], m[3]].map(function (x) { return ('0' + (+x).toString(16)).slice(-2); }).join('').toUpperCase();
+  }
+  /* ⚠️ NO se reescriben las hojas de la colección: la colección vuelve a
+     escribir la suya cada 1,2 s y quedaba una pelea (titila). Se arma una hoja
+     PROPIA con las mismas reglas que usan la pieza, con el medallón y un
+     selector más fuerte (html[data-medallon]), puesta al final. */
+  function partir(sel) {
+    var out = [], prof = 0, ini = 0;
+    for (var i = 0; i < sel.length; i++) {
+      var c = sel.charAt(i);
+      if (c === '(') prof++; else if (c === ')') prof--;
+      else if (c === ',' && !prof) { out.push(sel.slice(ini, i).trim()); ini = i + 1; }
+    }
+    out.push(sel.slice(ini).trim());
+    return out;
+  }
+  function fuerte(sel) {
+    if (/^html\b/.test(sel)) return sel.replace(/^html/, 'html[data-medallon]');
+    if (/^:root\b/.test(sel)) return sel.replace(/^:root/, 'html[data-medallon]');
+    return 'html[data-medallon] ' + sel;
+  }
+  var firmaPiezas = '';
+  function piezas(u) {
+    var dest = document.getElementById(ID + '-piezas');
+    if (!u) { if (dest) dest.textContent = ''; firmaPiezas = ''; return; }
+    var hojas = document.querySelectorAll('style'), firma = u + '|' + LOGO[u];
+    for (var i = 0; i < hojas.length; i++) if (hojas[i].id !== ID && hojas[i].id !== ID + '-piezas') firma += '|' + (hojas[i].textContent || '').length;
+    if (firma === firmaPiezas && dest) return;
+    firmaPiezas = firma;
+    var nueva = chico(u, 220), tapa = nueva;
+    if (u.indexOf('res.cloudinary.com') >= 0 && u.indexOf('/image/upload/') >= 0)
+      tapa = u.replace('/image/upload/', '/image/upload/b_rgb:' + papelHex() + ',c_pad,w_360,h_360,q_auto,f_jpg/');
+    var reglas = [];
+    function recorrer(lista) {
+      for (var j = 0; j < lista.length; j++) {
+        var r = lista[j];
+        if (r.cssRules && !r.selectorText) { try { recorrer(r.cssRules); } catch (e) {} continue; }
+        if (!r.style || !r.selectorText) continue;
+        var decl = [];
+        for (var k = 0; k < r.style.length; k++) {
+          var prop = r.style[k], val = r.style.getPropertyValue(prop);
+          PIEZA_RE.lastIndex = 0;
+          if (!PIEZA_RE.test(val)) continue;
+          PIEZA_RE.lastIndex = 0;
+          decl.push(prop + ':' + val.replace(PIEZA_RE, 'url("' + (prop === '--r3-tapa' ? tapa : nueva) + '")') + ' !important');
+        }
+        if (decl.length) reglas.push(partir(r.selectorText).map(fuerte).join(',') + '{' + decl.join(';') + '}');
+      }
+    }
+    for (var h = 0; h < hojas.length; h++) {
+      var st = hojas[h];
+      if (st.id === ID || st.id === ID + '-piezas' || !st.sheet) continue;
+      PIEZA_RE.lastIndex = 0;
+      if (!PIEZA_RE.test(st.textContent || '')) continue;
+      try { recorrer(st.sheet.cssRules); } catch (e) {}
+    }
+    /* el logo transparente: la pieza va entera, sin recorte redondo */
+    if (LOGO[u] === true) reglas.push('html[data-medallon] .tl > .it::before{background-size:contain!important;background-repeat:no-repeat!important;background-position:center!important;border-radius:0!important;box-shadow:none!important;background-color:transparent!important}');
+    if (!dest) { dest = document.createElement('style'); dest.id = ID + '-piezas'; }
+    document.head.appendChild(dest);   /* siempre la última */
+    dest.textContent = reglas.join('\n');
+  }
+
   var ultimo = null;
   function aplicar() {
     var u = url();
@@ -160,7 +238,7 @@
         if (st) st.textContent = '';
         raiz.removeAttribute('data-medallon');
         if (raiz.getAttribute('data-marca-propia') === 'medallon') raiz.removeAttribute('data-marca-propia');
-        adornos(false); pase(false);
+        adornos(false); pase(false); piezas('');
         ultimo = '';
       }
       return;
@@ -171,7 +249,7 @@
     if (ultimo !== firma) { st.textContent = css(u); ultimo = firma; }
     raiz.setAttribute('data-medallon', '1');
     if (!raiz.getAttribute('data-marca-propia')) raiz.setAttribute('data-marca-propia', 'medallon');
-    adornos(true); pase(true);
+    adornos(true); pase(true); piezas(u);
   }
 
   var n = 0;
