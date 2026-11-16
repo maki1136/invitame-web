@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-15T20:54:03.958Z",
+ "cuando": "2026-11-16T17:37:34.696Z",
  "slug": "camila-y-tomas",
- "total": 776,
+ "total": 777,
  "verde": 761,
- "amarillo": 1,
+ "amarillo": 2,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -1442,6 +1442,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.footer.textoSinMayus",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-cierre",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.footer.sinFiltro",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5427,9 +5438,8 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp-2",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5670,8 +5680,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5703,8 +5714,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
