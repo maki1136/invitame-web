@@ -19,7 +19,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-  setPersistence, browserLocalPersistence
+  setPersistence, browserLocalPersistence, sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // Config pública del proyecto de Little Moments (la apiKey web NO es secreta).
@@ -68,6 +68,9 @@ const INV = {
   // ---- Login del equipo (admin + escáner) ----
   login(email, pass) { return signInWithEmailAndPassword(auth, email, pass); },
   logout() { return signOut(auth); },
+  /* 16/11: el mail para que una persona del equipo cree (o cambie) SU contraseña.
+     Nadie más la ve ni la tipea. Sólo llega si la cuenta ya existe en Firebase. */
+  mailClave(email) { return sendPasswordResetEmail(auth, String(email||'').trim().toLowerCase()); },
   onAuth(cb) { return onAuthStateChanged(auth, cb); },
   get user() { return auth ? auth.currentUser : null; },
 
