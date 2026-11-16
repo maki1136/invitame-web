@@ -1649,6 +1649,18 @@ window.SOBRES_INVITAME = {
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres-eventos/sobre-ejecutivo-poster-b.jpg",
     solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres-eventos/sobre-ejecutivo-solapa-b.webp",
     color: "#2C394E", apertura: "solapas", empalme: "foto", eje: { x: 49.9, y: 33.7 } },
+  /* 16/11 (Jazmín, evento corporativo ALSEC): «¿se podrá hacer que el sobre y el sello
+     sean de otro color? Terracota #B75232 o dorado: dejarlo azul con las líneas y el
+     sello en ese color». Misma foto que ev-ejecutivo: sólo las partes plateadas
+     (líneas y lacre) recoloreadas, conservando el brillo del metal. */
+  'ev-ejecutivo-terracota': { nombre: "Ejecutivo terracota · azul marino con líneas y lacre terracota (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1794851120/invitame/sobres-eventos/sobre-ejecutivo-terracota-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1794851121/invitame/sobres-eventos/sobre-ejecutivo-terracota-solapa.webp",
+    color: "#2C394E", apertura: "solapas", empalme: "foto", eje: { x: 49.9, y: 33.7 } },
+  'ev-ejecutivo-dorado': { nombre: "Ejecutivo dorado · azul marino con líneas y lacre dorado (foto)",
+    poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1794851122/invitame/sobres-eventos/sobre-ejecutivo-dorado-poster.jpg",
+    solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/v1794851122/invitame/sobres-eventos/sobre-ejecutivo-dorado-solapa.webp",
+    color: "#2C394E", apertura: "solapas", empalme: "foto", eje: { x: 49.9, y: 33.7 } },
   'ev-gala': { nombre: "Gala déco · negro con abanicos dorados y lacre de sol (foto)",
     poster:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres-eventos/sobre-gala-poster-b.jpg",
     solapa:   "https://res.cloudinary.com/oc8cgqt4/image/upload/q_auto,f_auto/invitame/sobres-eventos/sobre-gala-solapa-b.webp",

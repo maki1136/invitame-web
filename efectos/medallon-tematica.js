@@ -58,6 +58,17 @@
 
       /* ---- el adorno de los títulos ---- */
       H + ' .adorno > svg,' + H + ' .adorno > span[data-simbolo-inv]{display:none!important}',
+      /* ★ 16/11 (Jazmín, evento corporativo: «si le coloco yo un iconito se
+         superpone con el que está puesto de la plantilla»). Hay colecciones que
+         pintan su adorno como FONDO del .adorno, o cuelgan uno propio
+         (.fiesta-adorno y similares): el medallón ponía el suyo encima. Con
+         medallón, el de la colección se apaga en TODAS sus formas. */
+      H + ' .adorno,' + H + ' [data-md-adorno]{background-image:none!important;-webkit-mask-image:none!important;mask-image:none!important}',
+      H + ' .adorno::before,' + H + ' .adorno::after,' + H + ' [data-md-adorno]::before,' + H + ' [data-md-adorno]::after{content:none!important;display:none!important}',
+      H + ' [data-md-adorno] .md-orn{display:flex!important;align-items:center;justify-content:center;gap:12px;height:100%;min-height:34px}',
+      H + ' [data-md-adorno] .md-orn i{display:block;width:38px;height:1px;background:currentColor;opacity:.45}',
+      H + ' [data-md-adorno] .md-orn b{display:block;width:34px;height:34px;border-radius:50%;background:#fff url("' + m + '") center/cover no-repeat;box-shadow:0 0 0 1px rgba(255,255,255,.9),0 3px 10px rgba(0,0,0,.14)}',
+      H + ' [data-md-adorno]{width:auto!important;height:auto!important;min-height:34px}',
       H + ' .adorno .md-orn{display:flex!important;align-items:center;justify-content:center;gap:12px;height:100%;min-height:34px}',
       H + ' .adorno .md-orn i{display:block;width:38px;height:1px;background:currentColor;opacity:.45}',
       H + ' .adorno .md-orn b{display:block;width:34px;height:34px;border-radius:50%;background:#fff url("' + m + '") center/cover no-repeat;',
@@ -72,7 +83,18 @@
   }
 
   function adornos(on) {
-    [].forEach.call(document.querySelectorAll('.adorno'), function (a) {
+    if (!on) [].forEach.call(document.querySelectorAll('.md-orn'), function (n) { n.remove(); });
+    /* los adornos propios de las colecciones (.fiesta-adorno y similares): sólo
+       piezas chicas sueltas, nunca una sección o el documento */
+    [].forEach.call(document.querySelectorAll('div[class*="-adorno"], span[class*="-adorno"], i[class*="-adorno"]'), function (x) {
+      if (x.closest('.md-orn') || x.children.length > 1) return;
+      if (!x.hasAttribute('data-md-adorno') && (x.offsetHeight > 90 || x.offsetWidth > 260)) return;
+      /* en línea: la colección pinta su adorno con selectores largos y !important */
+      if (on) { x.setAttribute('data-md-adorno', ''); x.style.setProperty('background-image', 'none', 'important'); x.style.setProperty('height', 'auto', 'important'); x.style.setProperty('width', 'auto', 'important'); }
+      else if (x.hasAttribute('data-md-adorno')) { x.removeAttribute('data-md-adorno'); x.style.removeProperty('background-image'); x.style.removeProperty('height'); x.style.removeProperty('width'); }
+    });
+    [].forEach.call(document.querySelectorAll('.adorno, [data-md-adorno]'), function (a) {
+      if (a.classList.contains('md-orn') || a.closest('.md-orn')) return;
       var o = a.querySelector(':scope > .md-orn');
       if (on && !o) {
         o = document.createElement('span');
