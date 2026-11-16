@@ -161,6 +161,7 @@
     "Itinerario transparencia del recuadro:": "c_itinerario-transparencia-recuadro",
     "Color logo y texto seccion Instagram:": "c_color-logo-y-texto-seccion-instagram",
     "Usuario de instragram:": "c_usuario-de-instragram",
+    "Usuario de Instagram (la cuenta: @usuario o el link):": "c_usuario-de-instragram",
     "Frase sección instagram:": "c_frase-seccion-instagram",
     "Fondo sección instagram": "c_fondo-seccion-instagram",
     "Texto \"botón\" \"Ver vídeo\":": "c_texto-boton-ver-video",
