@@ -254,11 +254,11 @@
     $('ttNombres').textContent = PANEL.nombres || SLUG;
     $('ttFecha').textContent   = PANEL.fechaTexto || '';
     $('topSub').textContent    = ({resumen:'Panel de control', invitados:'Personas y pases',
-      mesas:'Mesas', confirmaciones:'Confirmaciones', itinerario:'Itinerario', mensajes:'Mensajes', qr:'QR para imprimir', puerta:'Puerta (escáner QR)', std:'Save the date', fotos:'Fotos de la fiesta', opciones:'Opciones'})[VISTA] || 'Mi panel';
+      mesas:'Mesas', confirmaciones:'Confirmaciones', itinerario:'Itinerario', mensajes:'Mensajes', trivia:'Trivia', qr:'QR para imprimir', puerta:'Puerta (escáner QR)', std:'Save the date', fotos:'Fotos de la fiesta', opciones:'Opciones'})[VISTA] || 'Mi panel';
     document.querySelectorAll('.lat a[data-vista]').forEach(a=>
       a.classList.toggle('on', a.dataset.vista===VISTA));
     ({resumen:vResumen, confirmaciones:vConfirmaciones, invitados:vInvitados, mesas:vMesas, itinerario:vItinerario,
-      mensajes:vMensajes, qr:vQR, puerta:vPuerta, std:vSTD, fotos:vFotos, opciones:vOpciones}[VISTA] || vResumen)();
+      mensajes:vMensajes, trivia:vTrivia, qr:vQR, puerta:vPuerta, std:vSTD, fotos:vFotos, opciones:vOpciones}[VISTA] || vResumen)();
   }
 
   /* ★ 19/10/2026 (Jazmín, «Ajustes de plataforma», punto 2): los números de
@@ -675,6 +675,11 @@
   function vFotos(){
     if(!window.INVGAL_NOVIOS){ $('vista').innerHTML='<div class="card">Cargando…</div>'; setTimeout(()=>{ if(VISTA==='fotos') vFotos(); }, 400); return; }
     window.INVGAL_NOVIOS.pintar($('vista'), { slug:SLUG, clave:CLAVE });
+  }
+  /* ★ 16/11 (Jazmín): la trivia en el panel — tabla de posiciones y preguntas */
+  function vTrivia(){
+    if(!window.INVTRIVIA_NOVIOS){ $('vista').innerHTML='<div class="card">Cargando…</div>'; setTimeout(()=>{ if(VISTA==='trivia') vTrivia(); }, 400); return; }
+    window.INVTRIVIA_NOVIOS.pintar($('vista'), { slug:SLUG, clave:CLAVE });
   }
   function vSTD(){
     if(!window.INVSTD_NOVIOS){ $('vista').innerHTML='<div class="card">Cargando…</div>'; setTimeout(()=>{ if(VISTA==='std') vSTD(); }, 400); return; }
