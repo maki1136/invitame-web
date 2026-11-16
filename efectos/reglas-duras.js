@@ -1071,7 +1071,20 @@
     var ev = window.INVEV; if (!ev || !el.matches) return '';
     /* ★ 13/11: lo pintado desde «[Sección] · diseño» (estilo-secciones.js) también manda */
     try { if (el.dataset && el.dataset.estcolor) { var ce = el.style.getPropertyValue('color'); if (ce) return ce; } } catch (e) {}
+    /* ★ 16/11/2026 — «LAS LETRAS DE ARRIBA SE CAMBIARON A BLANCO» (Jazmín, en
+       julia-y-santiago, citlalli y otras de la web: «Nuestro Hashtag» en crema
+       sobre papel claro). Los campos de color de SECCIÓN del panel viejo
+       (c_color-logo-y-texto-seccion-instagram, c_vestimenta-color, el de
+       Personas, Regalos, Itinerario…) vienen RELLENOS desde la muestra que se
+       copió, pensados para la foto de fondo de esa sección. Esa foto sólo se
+       pone si se ELIGIÓ en el panel (sector-elegido.js), pero el color se
+       forzaba siempre: letra crema sin su fondo oscuro. Regla única, la misma
+       de sector-elegido.js: esos campos mandan sólo si se eligieron a mano
+       (fx.sectorElegido). Los colores propios de cada bloque (evColor, cfColor,
+       galTextColor, fraseColor…) siguen mandando siempre. */
+    var elegidos = (ev.fx && ev.fx.sectorElegido) || {}, deSeccion = window.INVSECTOR_CLAVES || {};
     for (var i = 0; i < COLORES_PANEL.length; i++) {
+      if (deSeccion[COLORES_PANEL[i][0]] && !elegidos[COLORES_PANEL[i][0]]) continue;
       var v = String(ev[COLORES_PANEL[i][0]] || '').trim();
       if (!v || !/^(#|rgb|hsl)/i.test(v)) continue;
       try { if (el.matches(COLORES_PANEL[i][1])) return v; } catch (e) {}
@@ -1147,7 +1160,15 @@
         /* !important: le gana también a la tinta de la banda temática (12/11, xv-juliana) */
         el.style.setProperty('color', elegido, 'important');
         el.style.setProperty('-webkit-text-fill-color', elegido, 'important');
+        el.setAttribute('data-regla-panel', '1');
         continue;
+      }
+      /* lo que pintó la vuelta anterior como «elegido» y ya no lo es (se sacó el
+         color del panel): se suelta, y abajo se mide como cualquier texto */
+      if (el.hasAttribute('data-regla-panel')) {
+        el.removeAttribute('data-regla-panel');
+        el.style.removeProperty('color'); el.style.removeProperty('-webkit-text-fill-color');
+        cs = getComputedStyle(el);
       }
       if (el.getAttribute('data-estcolor') === '1') {
         if (el.hasAttribute('data-regla-orig') || el.hasAttribute('data-regla-luz')) {
