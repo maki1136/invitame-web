@@ -731,6 +731,18 @@
       paleta:  ["#c7bfb3", "#a49d93", "#857769", "#463728"],
       tipos:   ["bautismo"]
     },
+    /* 16/11 (Jazmín: «la invi de la posada no está en el catálogo»). Muestra
+       armada el 3/11 (claude/MUESTRA-posada-2026-relieve-perla-3-11.md). */
+    'celebra-posada': {
+      nombre:  "Posada · Relieve perla",
+      bajada:  "Nochebuenas, piñatas y farolitos en relieve marfil.",
+      muestra: 'posada-2026',
+      foto:    '/formulario/disenos/posada-2026.webp',
+      color:   '#a58776',
+      color2:  '#735e52',
+      paleta:  ["#ebe5d8", "#cbbcaa", "#a58776", "#3a1a1c"],
+      tipos:   ["corporativo", "otro"]
+    },
     'celebra-marmol': {
       nombre:  "Mármol fabulous",
       bajada:  "Mármol rosa con vetas doradas.",
