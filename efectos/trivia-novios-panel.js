@@ -53,6 +53,7 @@
     function dibujar() {
       var h = '<div class="tn-tabs"><button data-p="resultados" class="' + (pest === 'resultados' ? 'on' : '') + '">Tabla de posiciones</button>' +
         '<button data-p="preguntas" class="' + (pest === 'preguntas' ? 'on' : '') + '">Preguntas</button></div>';
+      if (datos && datos.muestra) h += '<div class="card tn-gris" style="margin-bottom:12px">Esta es una <b>muestra de venta</b>: la trivia se puede jugar todas las veces que quieras, pero los puntajes no se guardan, así que la tabla queda vacía. En la invitación de un cliente, cada invitado que juega aparece acá.</div>';
       if (datos && !datos.habilitada) h += '<div class="card tn-gris" style="margin-bottom:12px">La trivia está <b>apagada</b> en tu invitación: tus invitados todavía no la ven. Si la querés, pedile a tu diseñadora que la prenda.</div>';
       h += pest === 'preguntas' ? htmlPreguntas() : htmlResultados();
       cont.innerHTML = h;

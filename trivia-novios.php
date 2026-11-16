@@ -196,13 +196,15 @@ if ($accion === 'borrar' || $accion === 'reiniciar') {
 }
 
 // ---------- VER ----------
-list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($slug) . '?mask.fieldPaths=trivia&mask.fieldPaths=' . rawurlencode('`c_habilitar-trivia`'), 'GET', null, $auth);
+list($re, $ce) = pedir($FS . 'inv_eventos/' . rawurlencode($slug) . '?mask.fieldPaths=trivia&mask.fieldPaths=fx.muestra&mask.fieldPaths=' . rawurlencode('`c_habilitar-trivia`'), 'GET', null, $auth);
 $campos = array();
 if ($ce == 200) { $e = json_decode($re, true); $campos = isset($e['fields']) ? $e['fields'] : array(); }
 $hab = isset($campos['c_habilitar-trivia']) ? (isset($campos['c_habilitar-trivia']['booleanValue']) ? $campos['c_habilitar-trivia']['booleanValue'] : (string)($campos['c_habilitar-trivia']['stringValue'] ?? '')) : '';
 echo json_encode(array(
   'ok'         => true,
   'habilitada' => ($hab === true || preg_match('/^(true|si|sí|1)$/i', (string)$hab) === 1),
+  /* una muestra de venta no guarda puntajes (trivia-guardar.php, 19/10): se avisa */
+  'muestra'    => !empty($campos['fx']['mapValue']['fields']['muestra']['mapValue']['fields']['venta']['booleanValue']),
   'preguntas'  => leerPreguntas($campos),
   'jugadores'  => leerJugadores($FS, $slug, $auth),
 ), JSON_UNESCAPED_UNICODE);
