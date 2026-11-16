@@ -38,7 +38,34 @@
   /* el mismo archivo, redondo y del tamaño justo (si es de Cloudinary) */
   function chico(u, w) {
     if (u.indexOf('res.cloudinary.com') < 0 || u.indexOf('/image/upload/') < 0) return u;
+    /* un logo/ícono con fondo transparente va ENTERO (sin recortar en círculo) */
+    if (LOGO[u] === true) return u.replace('/image/upload/', '/image/upload/c_fit,w_' + w + ',h_' + w + ',q_auto,f_png/');
     return u.replace('/image/upload/', '/image/upload/r_max,c_fill,w_' + w + ',h_' + w + ',q_auto,f_png/');
+  }
+
+  /* ★ 16/11 (Jazmín, ALSEC: «lo subí como dice pero queda con fondo blanco y
+     queda raro»). El medallón está pensado para una FOTO redonda y le ponía un
+     disco blanco atrás. Un logo o ícono en PNG con fondo transparente quedaba
+     metido en un círculo blanco. Se mira si la imagen tiene transparencia en
+     las esquinas: si la tiene, va sola, sin disco blanco, sin recorte y sin aro. */
+  var LOGO = {};
+  function medirLogo(u) {
+    if (LOGO[u] !== undefined) return;
+    LOGO[u] = 'midiendo';
+    var im = new Image(); im.crossOrigin = 'anonymous';
+    im.onload = function () {
+      try {
+        var N = 48, c = document.createElement('canvas'); c.width = N; c.height = N;
+        var x = c.getContext('2d'); x.drawImage(im, 0, 0, N, N);
+        var d = x.getImageData(0, 0, N, N).data, tr = 0;
+        [[1, 1], [N - 2, 1], [1, N - 2], [N - 2, N - 2], [N >> 1, 1], [1, N >> 1]].forEach(function (q) { if (d[(q[1] * N + q[0]) * 4 + 3] < 40) tr++; });
+        LOGO[u] = tr >= 3;
+      } catch (e) { LOGO[u] = false; }
+      ultimo = null; aplicar();
+    };
+    im.onerror = function () { LOGO[u] = false; };
+    var s = u.indexOf('res.cloudinary.com') >= 0 && u.indexOf('/image/upload/') >= 0 ? u.replace('/image/upload/', '/image/upload/w_96,f_png/') : u;
+    im.src = s;
   }
 
   function css(u) {
@@ -79,7 +106,12 @@
       H + ' section.pase.pase-simple .ps-med{display:block;position:absolute;left:50%;top:-36px;width:72px;height:72px;margin-left:-36px;',
       '  border-radius:50%;background:#fff url("' + g + '") center/cover no-repeat;',
       '  box-shadow:0 0 0 3px rgba(255,255,255,.95),0 6px 18px rgba(0,0,0,.18)}'
-    ].join('\n');
+    ].concat(LOGO[u] === true ? [
+      /* logo con transparencia: sin disco blanco, sin aro, entero */
+      H + ' body .tl > .it::before{background-color:transparent!important;background-size:contain!important;border-radius:0!important;box-shadow:none!important}',
+      H + ' .adorno .md-orn b,' + H + ' [data-md-adorno] .md-orn b{background-color:transparent!important;background-size:contain!important;border-radius:0!important;box-shadow:none!important;width:40px!important;height:40px!important}',
+      H + ' section.pase.pase-simple .ps-med{background-color:transparent!important;background-size:contain!important;border-radius:0!important;box-shadow:none!important}'
+    ] : []).join('\n');
   }
 
   function adornos(on) {
@@ -133,8 +165,10 @@
       }
       return;
     }
+    medirLogo(u);
     if (!st) { st = document.createElement('style'); st.id = ID; (document.head || raiz).appendChild(st); }
-    if (ultimo !== u) { st.textContent = css(u); ultimo = u; }
+    var firma = u + '|' + LOGO[u];
+    if (ultimo !== firma) { st.textContent = css(u); ultimo = firma; }
     raiz.setAttribute('data-medallon', '1');
     if (!raiz.getAttribute('data-marca-propia')) raiz.setAttribute('data-marca-propia', 'medallon');
     adornos(true); pase(true);
