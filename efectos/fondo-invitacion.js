@@ -523,6 +523,26 @@
     /* ---- la de ADENTRO, siempre: es el papel de la invitación ---- */
     var caja = document.createElement('div');
     caja.id = ID;
+    /* ★ 16/11/2026 — «QUE PASA CON ESTO» (citlalli, iPhone por WhatsApp).
+       El marco se vuelve transparente para que el fondo sea el papel, pero
+       mientras la foto o el video del fondo NO LLEGARON (en el WhatsApp del
+       iPhone tardan varios segundos) atrás no había nada: se veía el cuerpo
+       de la colección (marrón oscuro en Marfil, con su textura desenfocada) y
+       la portada quedaba marrón y borrosa. La caja del fondo nace con el MISMO
+       papel que tenía el marco: hasta que carga la foto, se ve el papel de
+       siempre, y la foto lo tapa apenas llega. Vale para todas las colecciones. */
+    try {
+      var mq = document.querySelector('.frame');
+      if (mq && mq.getAttribute('data-fondo-pinta') !== 'marco') {
+        var cm = getComputedStyle(mq), bc = rgba(cm.backgroundColor);
+        caja.style.backgroundColor = (bc && bc.a > 0.5) ? cm.backgroundColor : '#f4efe6';
+        if (cm.backgroundImage && cm.backgroundImage !== 'none') {
+          caja.style.backgroundImage = cm.backgroundImage;
+          caja.style.backgroundSize = cm.backgroundSize;
+          caja.style.backgroundRepeat = cm.backgroundRepeat;
+        }
+      } else caja.style.backgroundColor = '#f4efe6';
+    } catch (e) {}
 
     var usaVideo = f.tipo === 'video' && videoConviene();
     if (usaVideo) {
