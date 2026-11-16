@@ -24,7 +24,9 @@
   'use strict';
   if (window.__invBotonesLegibles) return; window.__invBotonesLegibles = 1;
 
-  var DONDE = '.btn, .wsp, .tv-btn, .acc-btn, #btn-ingresar';
+  /* 16/11: también los <button> y links-botón sin clase (filtro, Live): sólo se
+     tocan si tienen fondo propio liso y la letra no se lee */
+  var DONDE = '.btn, .wsp, .tv-btn, .acc-btn, #btn-ingresar, button, a[href], [role="button"]';
   var OSCURO = '#1f1f1f', CLARO = '#ffffff';
 
   function rgba(s) {

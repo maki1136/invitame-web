@@ -108,7 +108,9 @@
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
-        ['casilla', 'Texto final sin mayúsculas (para letras cursivas)', 'textoSinMayus']] }
+        ['casilla', 'Texto final sin mayúsculas (para letras cursivas)', 'textoSinMayus'],
+        /* 16/11 (Jazmín): «en la foto final no se puede quitar el filtro» */
+        ['casilla', 'Foto final sin filtro (sin el oscurecido encima de la foto)', 'sinFiltro']] }
   ];
 
   /* ★ 14/11 (Jazmín: «Ver hoteles» ilegible y «eso no me deja modificarlo el

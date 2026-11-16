@@ -52,7 +52,7 @@
     contacto:     { sel: '[data-sec="contacto"]', texto: ':scope > p' },
     /* ★ 13/11 (Jazmín): el filtro y las fotos de la fiesta (Live) también */
     filtro:       { sel: '#filtro-sec', texto: 'p' },
-    live:         { sel: '#gal-seccion', texto: 'p' }
+    live:         { sel: '#gal-seccion', texto: 'p, .si-nota, li span, .si-paso span, .si-paso b' }
   };
 
   /* los campos viejos que ahora sí mandan (clave del panel → campo nuevo) */
@@ -121,6 +121,25 @@
   var LOGO_IG = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">' +
     '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>';
 
+  /* ★ 16/11 (Jazmín: «en filtro y galería de invitados no se pueden modificar
+     los botones»). Ahí los botones son <button> y <a> sin clase: buscar sólo
+     .btn los dejaba afuera. Botón = lo que tiene pinta de botón (clase de
+     botón, <button>, o un link con fondo o borde propio), en cualquier sección. */
+  function pareceBoton(b) {
+    if (!b.textContent.trim()) return false;
+    if (b.dataset.estbackgroundcolor || b.dataset.estcolor || b.dataset.estbordercolor) return true;
+    if (/(^|\s)(btn|wsp|tv-btn|acc-btn)(\s|$)/.test(b.className || '') || b.tagName === 'BUTTON' || b.getAttribute('role') === 'button') return true;
+    var c = getComputedStyle(b), m = /rgba?\(([^)]+)\)/.exec(c.backgroundColor || ''), al = 1;
+    if (m) { var pz = m[1].split(/[ ,\/]+/); al = pz.length > 3 ? parseFloat(pz[3]) : 1; } else al = 0;
+    return al > 0.05 || (c.backgroundImage && c.backgroundImage !== 'none') || parseFloat(c.borderTopWidth) > 0;
+  }
+  function botonesDe(sec) {
+    return todos(sec, '.btn, .wsp, .tv-btn, .acc-btn, button, a[href], [role="button"]').filter(function (b) {
+      if (b.closest('.ar, .gal-visor, [data-no-boton]')) return false;
+      return pareceBoton(b);
+    });
+  }
+
   function aplicar(key) {
     var e = ev(); if (!e) return;
     var cfg = SEC[key], sec = document.querySelector(cfg.sel); if (!sec) return;
@@ -170,7 +189,7 @@
        botón y de su letra. Los botones de contorno (.gh) toman el color en el
        borde. Si no se elige nada, /efectos/botones-legibles.js cuida que se lean. */
     var bF = colorOk(es.botonFondo), bL = colorOk(es.botonLetra);
-    todos(sec, '.btn, .wsp, .tv-btn, .acc-btn').forEach(function (b) {
+    botonesDe(sec).forEach(function (b) {
       var gh = b.classList.contains('gh');
       poner(b, 'background-color', gh ? '' : bF);
       poner(b, 'background-image', (bF && !gh) ? 'none' : '');
@@ -294,6 +313,34 @@
       }
     }
     if (key === 'footer') {
+      /* ★ 16/11 (Jazmín: «en la foto final no se puede quitar el filtro que
+         aparece»). El oscurecido es un degradado que el motor y las colecciones
+         ponen ENCIMA de la foto, en el mismo fondo del pie. Con la casilla se
+         dejan sólo las capas de foto (url) y se sacan los degradados. */
+      if (es.sinFiltro) {
+        if (sec.dataset.estbackgroundimage) { sec.style.removeProperty('background-image'); delete sec.dataset.estbackgroundimage; }
+        var capas = [], prof = 0, ini = 0, bi = getComputedStyle(sec).backgroundImage || '';
+        for (var ci = 0; ci < bi.length; ci++) {
+          var ch = bi.charAt(ci);
+          if (ch === '(') prof++; else if (ch === ')') prof--;
+          else if (ch === ',' && !prof) { capas.push(bi.slice(ini, ci).trim()); ini = ci + 1; }
+        }
+        capas.push(bi.slice(ini).trim());
+        /* el degradado se cambia por uno transparente, SIN sacar la capa: los
+           tamaños y posiciones del fondo van capa por capa, y sacarla corría
+           el encuadre de la foto */
+        var hayFoto = capas.some(function (c) { return /^url\(/i.test(c); });
+        var limpias = capas.map(function (c) { return /^url\(/i.test(c) ? c : 'linear-gradient(transparent, transparent)'; });
+        if (hayFoto && limpias.join(', ') !== capas.join(', ')) poner(sec, 'background-image', limpias.join(', '));
+        sec.setAttribute('data-sin-filtro', '');
+      } else {
+        if (sec.dataset.estbackgroundimage) poner(sec, 'background-image', '');
+        sec.removeAttribute('data-sin-filtro');
+      }
+      var stf = document.getElementById('est-footer-sin-filtro');
+      if (!stf) { stf = document.createElement('style'); stf.id = 'est-footer-sin-filtro'; document.head.appendChild(stf);
+        stf.textContent = '.footer[data-sin-filtro] .velo,.footer[data-sin-filtro] .fin-velo,.footer[data-sin-filtro] [class*="tint"]{display:none!important}' +
+          '.footer[data-sin-filtro], .footer[data-sin-filtro] img{filter:none!important}'; }
       var ff = document.getElementById('fin-frase'), fte = document.getElementById('fin-texto'), fno = document.getElementById('fin-nombres');
       if (es.fuenteFrase) pedirFuente(es.fuenteFrase);
       if (es.fuenteTexto) pedirFuente(es.fuenteTexto);

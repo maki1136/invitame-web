@@ -226,6 +226,24 @@
     if (fuente) css.push(S + ' > p.frase.frase{font-family:' + (/[,'"]/.test(fuente) ? fuente : "'" + fuente + "'") + '!important}');
     if (/^(400|500|600|700|800)$/.test(peso)) css.push(S + ' > p.frase.frase{font-weight:' + peso + '!important}');
     css.push(S + '{align-items:' + POS[pos] + '!important}');
+    /* ★ 16/11 (Jazmín: «cuando coloco que esté arriba o abajo no se modifica,
+       queda centrada»). Dos causas, en TODAS las colecciones:
+         1. la franja mide lo que mide su contenido (height:auto): no sobra lugar
+            para mover el texto, así que arriba/centro/abajo daban lo mismo;
+         2. algunas colecciones la arman en fila con adornos (Perlas), y ahí
+            align-items no mueve el texto en vertical.
+       Con «Arriba» o «Abajo» la franja pasa a ser una columna con alto propio y
+       el texto se va de verdad al borde elegido. «Centrado» queda como estaba. */
+    if (pos === 'arriba' || pos === 'abajo') {
+      /* sin tocar display: una franja apagada (display:none) sigue apagada */
+      css.push(S + '{flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch!important;' +
+        'justify-content:' + POS[pos] + '!important;height:auto!important;max-height:none!important;' +
+        (alto > 0 ? 'min-height:' + alto + 'px!important;' : '') +
+        /* el lado contrario lleva el aire: así el texto se mueve SIEMPRE, mida lo que mida */
+        'padding-top:' + (pos === 'arriba' ? '56px' : 'clamp(150px,34vh,320px)') + '!important;' +
+        'padding-bottom:' + (pos === 'abajo' ? '56px' : 'clamp(150px,34vh,320px)') + '!important;box-sizing:border-box!important}');
+      css.push(S + ' > p.frase.frase{margin-top:0!important;margin-bottom:0!important;flex:0 0 auto!important}');
+    }
     /* 3. EL MARCO — la frase adentro de la pieza (va al final: gana) */
     if (mk) {
       var P2 = S + ' > p.frase.frase';
@@ -239,8 +257,6 @@
        elegido en el panel no se aplicaba. Va al final: el del panel gana siempre. */
     if (colorPropio && /^(#|rgb|hsl)/i.test(colorPropio)) css.push(S + ' > p.frase.frase{color:' + colorPropio + '!important;-webkit-text-fill-color:' + colorPropio + '!important}');
     /* lejos de los bordes: arriba y abajo la franja se esfuma (máscara del 14 %) */
-    if (pos === 'arriba') css.push(S + '{padding-top:clamp(56px,20%,140px)!important}');
-    if (pos === 'abajo')  css.push(S + '{padding-bottom:clamp(56px,20%,140px)!important}');
     soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno');
     if (velo !== 'sinfoto') ponerPapel('');
     var st = document.getElementById(ID_CSS);
