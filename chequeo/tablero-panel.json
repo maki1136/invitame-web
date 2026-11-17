@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-17T00:21:44.385Z",
+ "cuando": "2026-11-17T01:30:48.907Z",
  "slug": "camila-y-tomas",
- "total": 777,
- "verde": 762,
+ "total": 796,
+ "verde": 781,
  "amarillo": 1,
  "rojo": 14,
  "gris": 0,
@@ -1503,17 +1503,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1717,6 +1706,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5669,9 +5669,8 @@
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5906,6 +5905,160 @@
   },
   {
    "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.titulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.fuente",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tamTitulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.colorTitulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.fondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.fuenteDatos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.colorRotulos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tamRotulos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.colorDatos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tamDatos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.rotNombre",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.rotPersonas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.rotMesa",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.rotEstado",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
    "bloque": "pasevoz-selector",
    "control": "Link del audio",
    "tipo": "text",
@@ -6099,6 +6252,18 @@
    "guarda": true,
    "dato": "fx.estiloSec.spotify.sinSub",
    "llega": true,
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tarjetaFina",
+   "llega": true,
    "seVe": true,
    "estado": "verde"
   },
@@ -6108,7 +6273,51 @@
    "control": "(sin rótulo)",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.estiloSec.pase.tarjetaFina",
+   "dato": "fx.estiloSec.pase.sinTitulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.sinNombre",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.sinPersonas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.sinMesa",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.sinEstado",
    "llega": true,
    "seVe": true,
    "estado": "verde"
