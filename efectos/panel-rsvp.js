@@ -242,6 +242,30 @@
     filaC.appendChild(chkC); filaC.appendChild(txC);
     caja.appendChild(filaC);
 
+    /* ★ 17/11/2026 (Jazmín, Melissa: «¿se puede hacer que sólo aparezca hasta 5
+       en el sector de confirmación?»). El tope de la lista «¿Cuántos asistirán?».
+       Lo aplica /efectos/rsvp-max.js. Vacío = como viene. */
+    var filaM = document.createElement('div');
+    filaM.style.cssText = 'margin:10px 0 0';
+    var labM = document.createElement('label');
+    labM.textContent = 'Máximo de personas en «¿Cuántos asistirán?»';
+    labM.style.cssText = 'display:block;font-size:12px;font-weight:600;margin:0 0 3px';
+    var maxP = document.createElement('input');
+    maxP.type = 'number'; maxP.min = '1'; maxP.max = '30'; maxP.placeholder = 'Como viene';
+    maxP.id = 'rsvp-max-panel';
+    maxP.value = String(datos(d).maxPersonas || '');
+    maxP.style.cssText = 'width:120px';
+    maxP.oninput = function () {
+      var b = borrador() || d, n = parseInt(maxP.value, 10);
+      if (n >= 1 && n <= 30) datos(b).maxPersonas = n; else delete datos(b).maxPersonas;
+      refrescar();
+    };
+    var ayM = document.createElement('div');
+    ayM.textContent = 'Ej: 5 → la lista va de 1 a 5. Con el link de un invitado, nunca pasa de los lugares de su pase. Vacío, como viene.';
+    ayM.style.cssText = 'font-size:11px;opacity:.6;line-height:1.35;margin-top:3px';
+    filaM.appendChild(labM); filaM.appendChild(maxP); filaM.appendChild(ayM);
+    caja.appendChild(filaM);
+
     return caja;
   }
 
@@ -257,6 +281,8 @@
       if (c && c.checked !== !!r.restricciones) c.checked = !!r.restricciones;
       var gc = document.getElementById('rsvp-sincant-panel');
       if (gc && gc.checked !== !!r.sinCantidad) gc.checked = !!r.sinCantidad;
+      var mx = document.getElementById('rsvp-max-panel');
+      if (mx && document.activeElement !== mx && mx.value !== String(r.maxPersonas || '')) mx.value = String(r.maxPersonas || '');
       var gg = document.getElementById('rsvp-general-panel');
       if (gg && gg.checked !== !!r.general) gg.checked = !!r.general;   /* 7/11: lo puede apagar el bloque del paquete */
       var ps = document.getElementById('pase-simple-panel');

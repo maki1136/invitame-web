@@ -83,8 +83,15 @@
       firma += '|' + s + bg + im + tx;
       var regla = [];
       if (im) {
-        var base = bg || '#ffffff', velo = rgba(base, 0.55);
-        regla.push('background:linear-gradient(' + velo + ',' + velo + '),url("' + im.replace(/"/g, '') + '") center/cover no-repeat' + (bg ? ' ' + bg : '') + '!important');
+        /* ★ 17/11/2026 (Jazmín, maria-y-diego: «coloco otra imagen en esos
+           sectores y se ve esa pantalla verde, eso no debería pasar»). Encima de
+           la imagen iba un velo del color elegido al 55 %: con un color fuerte
+           (verde) la foto quedaba tapada. La imagen se ve tal cual; el color
+           queda DETRÁS, por si la imagen tarda o no llega. */
+        /* y el color elegido NO va detrás: la imagen puede tener partes
+           transparentes (un marco con el centro calado) y por ahí asomaba el
+           verde. Detrás queda el papel de la colección, como en la muestra. */
+        regla.push('background-image:url("' + im.replace(/"/g, '') + '")!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important');
       } else if (bg) {
         regla.push('background:' + bg + '!important');
       }
@@ -92,7 +99,24 @@
         css.push(S + '{' + regla.join(';') + '}');
         /* y EN LÍNEA con !important: le gana a cualquier hoja, por específica que sea */
         var nodo = document.querySelector('[data-sec="' + s + '"]');
-        if (nodo) { var val = regla[0].replace(/^background:/, '').replace(/!important$/, ''); nodo.style.setProperty('background', val, 'important'); enLinea[s] = val; }
+        if (nodo) {
+          var val;
+          if (im) {
+            val = 'url("' + im.replace(/"/g, '') + '")';
+            if (nodo.style.getPropertyValue('background-color') && nodo.dataset.secElegidoBg) nodo.style.removeProperty('background-color');
+            if (nodo.style.getPropertyValue('background-image') !== val || nodo.style.getPropertyPriority('background-image') !== 'important') {
+              nodo.style.removeProperty('background');
+              nodo.style.setProperty('background-image', val, 'important');
+              nodo.style.setProperty('background-size', 'cover', 'important');
+              nodo.style.setProperty('background-position', 'center', 'important');
+              nodo.style.setProperty('background-repeat', 'no-repeat', 'important');
+            }
+          } else {
+            val = regla[0].replace(/^background:/, '').replace(/!important$/, '');
+            nodo.style.setProperty('background', val, 'important');
+          }
+          enLinea[s] = val;
+        }
         /* los velos y pinturas de la colección (::before/::after) se apagan en esa sección */
         css.push(S + '::before,' + S + '::after{background:none!important;background-image:none!important;opacity:0!important}');
       }
