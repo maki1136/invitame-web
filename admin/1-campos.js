@@ -199,7 +199,13 @@
     const t=typeFor(l),id='f-'+slug(l),bind=claveDe(l);
     const oi=bind?(' oninput="setB(\''+bind+'\',this.value)"'):'';
     let inp;
-    if(t==='c')inp='<input type="color" id="'+id+'"'+oi+' value="'+((bind&&D[bind])?D[bind]:'#2e433c')+'">';
+    /* ★ 17/11/2026 (Jazmín, xv-valentina: «le puse un color de fondo al sector de
+       personas pero ahora no puedo sacárselo y quiero que se vea como estaba»).
+       Un selector de color no se puede dejar vacío: cada color tiene ahora su
+       «Quitar color», que lo borra y la sección vuelve a como viene el diseño. */
+    if(t==='c')inp='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><input type="color" id="'+id+'"'+oi+' value="'+((bind&&D[bind])?D[bind]:'#2e433c')+'">'+
+      (bind?'<button type="button" class="addbtn gh" style="padding:5px 10px;font-size:12px" onclick="quitarColor(\''+bind+'\',\''+id+'\')">Quitar color (como viene el diseño)</button>'+
+        '<span class="hint" id="qc-'+id+'" style="margin:0">'+(D[bind]?'':'Sin color propio: va el del diseño.')+'</span>':'')+'</div>';
     else if(t==='f'){const _k=bind?('img_'+bind):('img_'+id);inp='<div class="file" onclick="this.nextElementSibling.click()">'+ICO.subir+' Subir imagen · '+l.replace(/\(.*?\)/,'').trim()+'</div><input type="file" accept="image/*" style="display:none" onchange="subirImg(this,\''+_k+'\',\''+id+'\')"><div id="prev-'+id+'">'+(D[_k]?fotoCargadaHtml(D[_k],_k,id):'')+'</div>'+
       /* ★ 21/10/2026 (Jazmín): en las fotos de los LUGARES, en vez de una foto se
          puede poner la portada o la imagen del diseño (la de la muestra elegida).
