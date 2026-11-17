@@ -358,7 +358,7 @@
   // no se veía). Se anota que fue ELEGIDA, así las invitaciones viejas, que
   // tienen la de fábrica, siguen con la de su colección. Lo aplica
   // /efectos/fuentes-extra.js.
-  function setB(k,v){D[k]=v; /* 29/10: color de sección elegido a mano → manda sobre la colección (efectos/sector-elegido.js) */ if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[k]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[k]=true;} /* 28/10: subir foto o video de portada = quieren la portada CON foto: se apaga «portada sin foto» */ if((k==='cover'||k==='coverVideo')&&v&&D.fx&&D.fx.portadaSinFoto&&D.fx.portadaSinFoto.fondo){D.fx.portadaSinFoto.fondo='';D.fx.portadaSinFoto.cual='';} if(k==='nfont'){D.fx=D.fx||{}; D.fx.nfontElegida=true;} if(k==='ncolor'){D.fx=D.fx||{}; D.fx.ncolorElegido=true;} if(k==='nsize'){D.fx=D.fx||{}; D.fx.nsizeElegido=true;} render();}
+  function setB(k,v){D[k]=v; try{const q=document.querySelector('[id^="qc-"][id$="'+k.replace(/^c_/,'')+'"]'); if(q&&v) q.textContent='';}catch(e){} /* 29/10: color de sección elegido a mano → manda sobre la colección (efectos/sector-elegido.js) */ if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[k]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[k]=true;} /* 28/10: subir foto o video de portada = quieren la portada CON foto: se apaga «portada sin foto» */ if((k==='cover'||k==='coverVideo')&&v&&D.fx&&D.fx.portadaSinFoto&&D.fx.portadaSinFoto.fondo){D.fx.portadaSinFoto.fondo='';D.fx.portadaSinFoto.cual='';} if(k==='nfont'){D.fx=D.fx||{}; D.fx.nfontElegida=true;} if(k==='ncolor'){D.fx=D.fx||{}; D.fx.ncolorElegido=true;} if(k==='nsize'){D.fx=D.fx||{}; D.fx.nsizeElegido=true;} render();}
 
   // ==== Editor de foto: arrastrar para mover + zoom (tipo Instagram) ====
   let edOn=false,edX=0,edY=0;
@@ -422,6 +422,13 @@
     }
     setB(b, a+'-'+m+'-'+d+'T'+(g('h')||'00')+':'+(g('i')||'00'));
   }
+  /* ★ 17/11: «Quitar color» (ver fieldHtml en 1-campos.js) */
+  function quitarColor(key,id){
+    D[key]=''; if(D.fx&&D.fx.sectorElegido&&D.fx.sectorElegido[key]) D.fx.sectorElegido[key]=false;
+    const h=el('qc-'+id); if(h) h.textContent='Sin color propio: va el del diseño.';
+    if(typeof postPreview==='function') postPreview();
+  }
+  window.quitarColor=quitarColor;
   function sacarImg(key,id){
     if(!confirm('¿Sacamos esta foto? La sección queda sin foto.')) return;
     D[key]=''; if(D.fx&&D.fx.sectorElegido&&D.fx.sectorElegido[key]) D.fx.sectorElegido[key]=false;
