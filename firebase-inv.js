@@ -59,6 +59,35 @@ const rndToken = () => {
   return Array.from(b, x => ABC_TOKEN[x % ABC_TOKEN.length]).join('');
 };
 
+
+/* achica una imagen grande antes de subirla (ver uploadImage) */
+async function achicarImagen(file) {
+  const MAX = 2000, PESADA = 700 * 1024;
+  if (!file || !/^image\/(jpeg|jpg|png|webp|heic|heif)$/i.test(file.type || '')) return file;
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, mal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = mal; i.src = url; });
+    const w = img.naturalWidth, h = img.naturalHeight;
+    if (!w || !h) return file;
+    if (file.size <= PESADA && Math.max(w, h) <= MAX) return file;      /* ya es liviana */
+    const k = Math.min(1, MAX / Math.max(w, h));
+    const c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+    const g = c.getContext('2d'); g.drawImage(img, 0, 0, c.width, c.height);
+    /* ¿tiene transparencia? (sólo puede si es PNG o WebP) */
+    let alfa = false;
+    if (/png|webp/i.test(file.type)) {
+      const d = g.getImageData(0, 0, c.width, c.height).data;
+      for (let i = 3; i < d.length; i += 4 * 97) { if (d[i] < 250) { alfa = true; break; } }
+    }
+    const blob = (t, q) => new Promise(ok => c.toBlob(ok, t, q));
+    let b = alfa ? await blob('image/webp', 0.88) : await blob('image/jpeg', 0.86);
+    if (alfa && (!b || b.type !== 'image/webp')) b = await blob('image/png');   /* Safari viejo no hace WebP */
+    if (!b || b.size >= file.size) return file;                              /* no ganó nada: va la original */
+    const ext = b.type === 'image/webp' ? '.webp' : b.type === 'image/png' ? '.png' : '.jpg';
+    return new File([b], String(file.name || 'imagen').replace(/\.[^.]+$/, '') + ext, { type: b.type });
+  } finally { URL.revokeObjectURL(url); }
+}
+
 const INV = {
   db,
   auth,
@@ -358,6 +387,14 @@ const INV = {
     throw new Error((j.error && j.error.message) || "Falló la subida del video");
   },
   async uploadImage(file) {
+    /* ★ 17/11/2026 (Jazmín: «puede ser que los fondos que colocan son pesados y
+       por eso a veces fallan»). Una foto de celular pesa 3 a 12 MB y se subía
+       tal cual: tarda en subir, tarda en verse (sobre todo en el WhatsApp del
+       iPhone) y en la miniatura del panel. Ahora, antes de subir, toda imagen
+       grande se achica en el navegador a 2000 px de lado mayor (alcanza para
+       cualquier pantalla) y se comprime. Las PNG con transparencia (moños,
+       logos) siguen con transparencia. GIF y SVG no se tocan. */
+    try { file = await achicarImagen(file); } catch (e) {}
     const fd = new FormData();
     fd.append("file", file);
     fd.append("upload_preset", this.CLOUD.preset);
