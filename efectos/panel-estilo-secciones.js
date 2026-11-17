@@ -68,9 +68,23 @@
         [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'], ['color', 'Color del texto de abajo', 'colorTexto']])) },
     /* 9/11 (Maki, isabela platinum): «mejorá el diseño del "Con cariño, te esperamos" y la parte del QR».
        Lo pinta /efectos/pase-qr-fino.js; sin la casilla no cambia nada. */
-    { key: 'pase', tab: 'MUSIC_PASES', casa: 'estilo-pase', lugar: { abajo: true }, titulo: 'Pase con QR · diseño de la tarjeta',
+    { key: 'pase', tab: 'MUSIC_PASES', casa: 'estilo-pase', lugar: { abajo: true }, titulo: 'Pase con QR · diseño (título, fondo, letras, colores, rótulos y qué datos se ven)',
       campos: [['casilla', 'Diseño fino de la tarjeta (papel con filete, QR enmarcado, letra de la invitación)', 'tarjetaFina'],
-        ['color', 'Color del filete y los detalles', 'colorFilete'], ['color', 'Color del papel de la tarjeta', 'tarjeta']] },
+        ['color', 'Color del filete y los detalles', 'colorFilete'], ['color', 'Color del papel de la tarjeta', 'tarjeta'],
+        /* ★ 16/11 (Jazmín, zorely-y-fernando): título, fondo, letras, colores,
+           tamaños, rótulos y sacar los datos que no quieran. Lo pinta
+           /efectos/estilo-secciones.js (aplicarPase). */
+        ['casilla', 'Sin título (no mostrar «Con cariño, te esperamos»)', 'sinTitulo'],
+        ['texto', 'Título (vacío = «Con cariño, te esperamos»)', 'titulo'],
+        ['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 14, 48, 'px'],
+        ['color', 'Color del título', 'colorTitulo']].concat(BASE_FONDO, [
+        ['fuente', 'Tipografía de los datos (rótulos y valores)', 'fuenteDatos'],
+        ['color', 'Color de los rótulos (NOMBRE, PERSONAS, MESA)', 'colorRotulos'], ['rango', 'Tamaño de los rótulos', 'tamRotulos', 8, 22, 'px'],
+        ['color', 'Color de los datos (el nombre, la cantidad, la mesa)', 'colorDatos'], ['rango', 'Tamaño de los datos', 'tamDatos', 10, 32, 'px'],
+        ['texto', 'Rótulo «Nombre» (vacío = como viene)', 'rotNombre'], ['texto', 'Rótulo «Personas» (vacío = como viene)', 'rotPersonas'],
+        ['texto', 'Rótulo «Mesa» (vacío = como viene)', 'rotMesa'], ['texto', 'Rótulo «Estado del pase» (vacío = como viene)', 'rotEstado'],
+        ['casilla', 'Sacar el nombre', 'sinNombre'], ['casilla', 'Sacar la cantidad de personas', 'sinPersonas'],
+        ['casilla', 'Sacar la mesa', 'sinMesa'], ['casilla', 'Sacar el estado del pase («Habilitado»)', 'sinEstado']]) },
     /* 10/11 (Línea Roja · White Swan): portada en video oscuro, la letra va limpia
        sobre el terciopelo. Lo pinta /efectos/portada-limpia.js; sin la casilla no cambia nada. */
     { key: 'portada', tab: 'PRINCIPAL', casa: 'estilo-portada', lugar: { abajo: true }, titulo: 'Portada · letra limpia sobre la foto o el video',

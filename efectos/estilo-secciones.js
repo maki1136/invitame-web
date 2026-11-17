@@ -52,7 +52,11 @@
     contacto:     { sel: '[data-sec="contacto"]', texto: ':scope > p' },
     /* ★ 13/11 (Jazmín): el filtro y las fotos de la fiesta (Live) también */
     filtro:       { sel: '#filtro-sec', texto: 'p' },
-    live:         { sel: '#gal-seccion', texto: 'p, .si-nota, li span, .si-paso span, .si-paso b' }
+    live:         { sel: '#gal-seccion', texto: 'p, .si-nota, li span, .si-paso span, .si-paso b' },
+    /* ★ 16/11 (Jazmín, zorely-y-fernando): «que podamos modificar ese sector»
+       — el pase con QR: título, fondo, letras, colores, tamaños, los rótulos
+       (NOMBRE, PERSONAS, MESA) y sacar los datos que no quieran. */
+    pase:         { sel: '.pase', texto: '' }
   };
 
   /* los campos viejos que ahora sí mandan (clave del panel → campo nuevo) */
@@ -256,6 +260,7 @@
         }
       });
     }
+    if (key === 'pase') aplicarPase(sec, es);
     if (key === 'scratch') {
       todos(sec, '.sc-day, .sc-mon, .ivf .n, .r3-f').forEach(function (el) { poner(el, 'color', colorOk(es.colorNumeros)); });
     }
@@ -354,6 +359,48 @@
         poner(el, 'letter-spacing', es.textoSinMayus ? 'normal' : '');
       });
     }
+  }
+
+  /* un texto escrito en el panel (vacío = el de fábrica, que se guarda para volver) */
+  function ponerTexto(el, t) {
+    if (!el) return; t = String(t || '').trim();
+    if (el.dataset.estTxt === undefined && t) el.dataset.estTxt = el.textContent;
+    var q = t || (el.dataset.estTxt !== undefined ? el.dataset.estTxt : null);
+    if (q !== null && el.textContent !== q) el.textContent = q;
+    if (!t) delete el.dataset.estTxt;
+  }
+  function aplicarPase(sec, es) {
+    /* el título («Con cariño, te esperamos») */
+    var t = sec.querySelector(':scope > .t');
+    ponerTexto(t, es.titulo);
+    poner(t, 'display', es.sinTitulo ? 'none' : '');
+    poner(t, 'font-family', es.fuente ? '"' + es.fuente + '", serif' : '');
+    poner(t, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');
+    poner(t, 'color', colorOk(es.colorTitulo));
+    /* la tarjeta: el papel (con el «diseño fino» lo pinta pase-qr-fino.js) */
+    var card = sec.querySelector('.pasecard'); if (!card) return;
+    var fina = es.tarjetaFina === true || es.tarjetaFina === 'true' || es.tarjetaFina === 1;
+    var pap = fina ? '' : colorOk(es.tarjeta);
+    poner(card, 'background-color', pap);
+    poner(card, 'background-image', pap ? 'none' : '');
+    /* los datos: cada uno con su rótulo, su valor y su casilla para sacarlo */
+    var DATOS = [['Nombre', '#pv-gname'], ['Personas', '#pv-per'], ['Mesa', '#pv-mesa'], ['Estado', '#pv-estado']];
+    if (es.fuenteDatos) pedirFuente(es.fuenteDatos);
+    var cR = colorOk(es.colorRotulos), cD = colorOk(es.colorDatos);
+    var tR = parseInt(es.tamRotulos, 10) || 0, tD = parseInt(es.tamDatos, 10) || 0;
+    DATOS.forEach(function (d) {
+      var v = card.querySelector(d[1]); if (!v) return;
+      var k = v.previousElementSibling && v.previousElementSibling.classList.contains('k') ? v.previousElementSibling : null;
+      ponerTexto(k, es['rot' + d[0]]);
+      [k, v].forEach(function (el) { poner(el, 'font-family', es.fuenteDatos ? '"' + es.fuenteDatos + '", serif' : ''); });
+      poner(k, 'color', cR); poner(k, 'font-size', tR ? tR + 'px' : '');
+      if (d[0] !== 'Estado') { poner(v, 'color', cD); poner(v, 'font-size', tD ? tD + 'px' : ''); }
+      /* sacar el dato entero: Nombre es su renglón; Personas y Mesa, su columna;
+         el estado, su rótulo y su cartelito */
+      var sin = !!es['sin' + d[0]];
+      if (d[0] === 'Estado') { poner(k, 'display', sin ? 'none' : ''); poner(v, 'display', sin ? 'none' : ''); }
+      else { var caja = d[0] === 'Nombre' ? v.closest('.row') : v.parentElement; if (caja && caja !== card) poner(caja, 'display', sin ? 'none' : ''); }
+    });
   }
 
   function aplicarTodo() { Object.keys(SEC).forEach(function (k) { try { aplicar(k); } catch (e) {} }); }
