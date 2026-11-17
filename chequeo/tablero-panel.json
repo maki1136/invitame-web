@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-16T22:43:02.055Z",
+ "cuando": "2026-11-16T23:28:10.269Z",
  "slug": "camila-y-tomas",
- "total": 777,
- "verde": 763,
- "amarillo": 0,
- "rojo": 14,
- "gris": 0,
+ "total": 782,
+ "verde": 764,
+ "amarillo": 1,
+ "rojo": 13,
+ "gris": 4,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -173,8 +173,8 @@
    "dato": "",
    "llega": false,
    "seVe": false,
-   "estado": "rojo",
-   "nota": "lo toco y no se guarda nada"
+   "estado": "gris",
+   "nota": "no se pudo probar: page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "tab": "PRINCIPAL",
@@ -483,7 +483,7 @@
    "guarda": true,
    "dato": "fx.portadaSinFoto.muestra",
    "llega": false,
-   "seVe": true,
+   "seVe": false,
    "estado": "rojo",
    "nota": "se guarda pero no le llega a la miniatura"
   },
@@ -622,17 +622,6 @@
   {
    "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
-   "control": "Movimiento sobre la frase (círculos, pétalos, destellos)",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fraseFx, fraseFxElegido",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "frase-ajustes",
    "control": "Tipografía",
    "tipo": "lista",
    "guarda": true,
@@ -659,6 +648,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fraseColor",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "frase-ajustes",
+   "control": "Movimiento sobre la frase (círculos, pétalos, destellos)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fraseFx, fraseFxElegido",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5680,8 +5680,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -7631,6 +7632,61 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.stdg.fuentes",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.luz",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.foco",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.foco.zoom",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.velo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
    "control": "Letra principal",
    "tipo": "color",
    "guarda": true,
@@ -7688,33 +7744,24 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "una sola opción"
   },
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes.nom",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "una sola opción"
   },
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes.txt",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "una sola opción"
   },
   {
    "tab": "EFECTOS",
