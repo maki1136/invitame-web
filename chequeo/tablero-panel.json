@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-17T17:40:03.179Z",
+ "cuando": "2026-11-17T19:49:45.872Z",
  "slug": "camila-y-tomas",
- "total": 803,
+ "total": 802,
  "verde": 781,
  "amarillo": 2,
  "rojo": 14,
- "gris": 6,
+ "gris": 5,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -519,30 +519,6 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "estado": "gris",
-   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
@@ -1439,30 +1415,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
    "control": "Poner comillas “ ” alrededor de la frase",
    "tipo": "checkbox",
@@ -1545,6 +1497,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1754,17 +1717,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -7901,6 +7853,52 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.stdg.fuentes",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.luz",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
    "control": "Letra principal",
    "tipo": "color",
    "guarda": true,
@@ -7947,11 +7945,8 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "guarda": true,
-   "dato": "fx.stdg.luz",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "EFECTOS",
@@ -7970,7 +7965,7 @@
    "control": "Diseño",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.stdg.fuentes.nom",
+   "dato": "fx.stdg.fuentes.txt",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -7980,11 +7975,8 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes.txt",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "EFECTOS",
