@@ -283,6 +283,24 @@
     return url.slice(0, i) + pre + paso + '/' + cola;
   }
 
+  /* ★ 17/11/2026 (Maki: «si suben uno pesado, ¿vos no lo achicás y listo?»).
+     Las FOTOS ya viajan livianas (efectos/imagenes-livianas.js: f_auto,
+     q_auto:good, w_800). El VIDEO del fondo no: se servía TAL CUAL se subió, y
+     un video de celular de 40 MB viajaba entero a cada invitado. Ahora
+     Cloudinary entrega una versión liviana (720 px de ancho, calidad
+     automática), también de los ya subidos; el Worker la guarda en caché, así
+     que se convierte una sola vez. Si la versión liviana no llega (un video muy
+     grande que Cloudinary todavía está procesando), se usa el original: nunca
+     queda sin fondo. Si la dirección ya trae ajustes (las muestras), no se toca. */
+  function livianoVideo(url) {
+    if (typeof url !== 'string' || url.indexOf('res.cloudinary.com/') < 0) return url;
+    var i = url.indexOf('/video/upload/'); if (i < 0) return url;
+    i += 14;
+    var cola = url.slice(i);
+    if (!/^v\d+\//.test(cola) && /^[a-z]{1,4}_[^\/]*\//.test(cola)) return url;   /* ya trae ajustes */
+    return url.slice(0, i) + 'q_auto,w_720,c_limit/' + cola;
+  }
+
   function foto(caja, src) {
     var im = document.createElement('img');
     var h = (caja.id === ID) ? horneado(src) : '';
@@ -547,9 +565,14 @@
     var usaVideo = f.tipo === 'video' && videoConviene();
     if (usaVideo) {
       var v = document.createElement('video');
-      var hv = horneado(f.url), hp = f.poster ? horneado(f.poster) : '';
+      var vurl = livianoVideo(f.url);
+      var hv = horneado(vurl), hp = f.poster ? horneado(f.poster) : '';
       if (hv && (!f.poster || hp)) caja.classList.add('horneado');
-      v.src = hv || f.url;
+      v.src = hv || vurl;
+      if (vurl !== f.url) v.addEventListener('error', function volver() {
+        v.removeEventListener('error', volver);
+        v.src = horneado(f.url) || f.url; try { v.load(); v.play(); } catch (e) {}
+      });
       if (f.poster) v.poster = hp || f.poster;
       v.autoplay = true; v.loop = true; v.muted = true;
       v.setAttribute('muted', '');
