@@ -38,6 +38,24 @@
     return n >= CORTE;
   };
 
+  /* ★ 17/11/2026 — Maki: «ojo con las invitaciones que ya están hechas, por
+     dios no toques eso». Un ARREGLO de la plataforma que cambia cómo se ve algo
+     (fecha = cuándo se publicó) aplica:
+       · a toda invitación que NO está entregada, y
+       · a una ENTREGADA sólo cuando alguien del equipo la vuelve a guardar desde
+         el panel después de esa fecha (la está tocando: ve el cambio en la
+         miniatura antes de guardar), o si tiene «Novedades» prendido a mano.
+     Una entregada que nadie toca queda exactamente como se entregó. */
+  window.INVCAMBIO = function (e, desde) {
+    e = e || window.INVEV || (typeof D === 'object' && D) || null;
+    if (!e) return false;
+    /* la miniatura del panel muestra lo que va a quedar al guardar */
+    try { if ((typeof D === 'object' && D && e === D) || /[?&]preview=1/.test(location.search)) return true; } catch (x) {}
+    if (si((e.fx || {}).novedades)) return true;
+    if (e.estado !== 'entregada') return true;
+    return !!(e.guardadoPanel && String(e.guardadoPanel) >= desde);
+  };
+
   /* ================= PANEL ================= */
   var ID = 'novedades-selector';
   function borrador() { try { return (typeof D === 'object' && D) ? D : null; } catch (e) { return null; } }

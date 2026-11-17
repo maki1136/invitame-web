@@ -73,6 +73,9 @@
     var e = ev(); if (!e) return;
     var el = (e.fx && e.fx.sectorElegido) || {};
     var css = [], firma = JSON.stringify(el), antes = enLinea; enLinea = {};
+    /* ★ 17/11: la imagen de sección sin el velo del color — sólo donde aplica (INVCAMBIO) */
+    var sinVelo = window.INVCAMBIO ? window.INVCAMBIO(e, '2026-11-17T16:30:00Z') : true;
+    firma += '|sv' + sinVelo;
     Object.keys(SEC).forEach(function (s) {
       var c = SEC[s], S = 'html body [data-sec="' + s + '"][data-sec="' + s + '"]';
       var sm = false;   /* sólo lo elegido a mano: no cambia invitaciones ya armadas */
@@ -91,7 +94,9 @@
         /* y el color elegido NO va detrás: la imagen puede tener partes
            transparentes (un marco con el centro calado) y por ahí asomaba el
            verde. Detrás queda el papel de la colección, como en la muestra. */
-        regla.push('background-image:url("' + im.replace(/"/g, '') + '")!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important');
+        if (sinVelo) regla.push('background-image:url("' + im.replace(/"/g, '') + '")!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important');
+        else { var velo = rgba(bg || '#ffffff', 0.55);   /* como se entregó (ver INVCAMBIO) */
+          regla.push('background:linear-gradient(' + velo + ',' + velo + '),url("' + im.replace(/"/g, '') + '") center/cover no-repeat' + (bg ? ' ' + bg : '') + '!important'); }
       } else if (bg) {
         regla.push('background:' + bg + '!important');
       }
@@ -101,7 +106,7 @@
         var nodo = document.querySelector('[data-sec="' + s + '"]');
         if (nodo) {
           var val;
-          if (im) {
+          if (im && sinVelo) {
             val = 'url("' + im.replace(/"/g, '') + '")';
             if (nodo.style.getPropertyValue('background-color') && nodo.dataset.secElegidoBg) nodo.style.removeProperty('background-color');
             if (nodo.style.getPropertyValue('background-image') !== val || nodo.style.getPropertyPriority('background-image') !== 'important') {

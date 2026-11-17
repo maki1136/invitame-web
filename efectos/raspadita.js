@@ -375,7 +375,7 @@
        al medio sobre el papel de la ficha, como un sello; una foto común sigue
        cubriendo todo como siempre. */
     var e;
-    if (transparente(img)) {
+    if (transparente(img) && (window.INVCAMBIO ? window.INVCAMBIO(null, '2026-11-16T23:00:00Z') : true)) {
       g.fillStyle = papelFicha(cv);
       g.fillRect(0, 0, w, h);
       e = Math.min(w / img.naturalWidth, h / img.naturalHeight) * 0.78;   /* como contain, con aire */

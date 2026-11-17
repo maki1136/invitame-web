@@ -565,7 +565,7 @@
     var usaVideo = f.tipo === 'video' && videoConviene();
     if (usaVideo) {
       var v = document.createElement('video');
-      var vurl = livianoVideo(f.url);
+      var vurl = (window.INVCAMBIO ? window.INVCAMBIO(null, '2026-11-17T16:45:00Z') : true) ? livianoVideo(f.url) : f.url;
       var hv = horneado(vurl), hp = f.poster ? horneado(f.poster) : '';
       if (hv && (!f.poster || hp)) caja.classList.add('horneado');
       v.src = hv || vurl;
