@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-17T17:26:45.351Z",
+ "cuando": "2026-11-17T17:40:03.179Z",
  "slug": "camila-y-tomas",
- "total": 797,
- "verde": 782,
- "amarillo": 1,
+ "total": 803,
+ "verde": 781,
+ "amarillo": 2,
  "rojo": 14,
- "gris": 0,
+ "gris": 6,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -519,6 +519,30 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
@@ -1412,6 +1436,30 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
@@ -5680,9 +5728,8 @@
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5703,8 +5750,9 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5736,8 +5784,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
