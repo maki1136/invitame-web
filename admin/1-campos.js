@@ -362,6 +362,15 @@
       '<label style="display:flex;gap:6px;align-items:center;margin-top:6px;font-weight:500"><input type="checkbox" '+(D.nmayus?'checked':'')+' onchange="setB(\'nmayus\',this.checked)"> Nombres en MAYÚSCULAS</label></div></div>'+
       '<div class="two"><div class="grp"><label>Color nombres</label><input type="color" value="'+(/^#[0-9a-f]{6}$/i.test(D.ncolor||'')?D.ncolor:'#fbf7ef')+'" oninput="setB(\'ncolor\',this.value)"></div>'+
       '<div class="grp"><label>Tamaño nombres</label><input type="range" min="20" max="90" value="'+(parseInt(D.nsize,10)||52)+'" oninput="setB(\'nsize\',this.value)"></div></div>'+
+      /* ★ 18/11/2026 (Jazmín, monse-y-diego: «se puso toda la invitación violeta»). El
+         COLOR PRINCIPAL (botones, íconos, bandas) venía de la invitación copiada y no
+         había dónde verlo ni sacarlo. Con colección, manda la colección; sin
+         colección, manda éste; vacío, el de la paleta. */
+      '<div class="grp"><label>Color principal (botones, íconos y bandas)</label><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+
+        '<input type="color" id="f-color-principal" value="'+(/^#[0-9a-f]{6}$/i.test(D.color||'')?D.color:'#3d4426')+'" oninput="setB(\'color\',this.value)">'+
+        '<button type="button" class="addbtn gh" style="padding:5px 10px;font-size:12px" onclick="D.color=\'\';this.nextElementSibling.textContent=\'Sin color propio: va el de la paleta.\';render();">Quitar color (va el de la paleta)</button>'+
+        '<span class="hint" style="margin:0">'+(D.color?'Tiene color propio: '+D.color+'.':'Sin color propio: va el de la paleta.')+'</span></div>'+
+        '<div class="hint">Si la invitación tiene colección, manda la colección. Sin colección, manda este color.</div></div>'+
       '<div class="grp"><label>Foto de portada</label><select onchange="setB(\'cover\',this.value)"><option value="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80">Campo</option><option value="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=80">Elegante</option><option value="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1000&q=80">Rosas</option></select><div class="file" style="margin-top:6px" id="coverbtn" onclick="document.getElementById(\'coverfile\').click()">'+ICO.subir+' Subir tu propia foto</div><div class="hint">Medida: 1080 × 1920 px (vertical, como la pantalla del celular). Las caras, en el centro: es lo que queda siempre a la vista.</div><input type="file" id="coverfile" accept="image/*" style="display:none" onchange="subirFoto(this,\'cover\')"></div>'+
       '<div class="grp"><label>Acomodá la foto — arrastrala para centrar</label>'+
       '<div id="imgedit" class="imgedit" onmousedown="edStart(event)" ontouchstart="edStart(event)"><span class="edtag">Arrastrá para mover</span></div>'+
