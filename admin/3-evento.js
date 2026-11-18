@@ -618,20 +618,49 @@
     _bajar('plantilla-invitados.csv', filas.map(f=>f.map(x=>/[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x).join(',')).join('\n'));
   }
   function _parseCSVline(line){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(q){if(ch==='"'){if(line[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=ch;}else{if(ch==='"')q=true;else if(ch===',' ){out.push(cur);cur='';}else cur+=ch;}}out.push(cur);return out;}
+  /* ★ 18/11/2026 (Jazmín, Chris & Adreily: «hay que pedirle a Claude que suba ese
+     listado… ya probamos y no se sube»). Se leía SÓLO la plantilla exacta: nombres en
+     la columna A y el encabezado en la fila 1. La lista que manda el cliente casi
+     nunca es así: un título arriba, filas vacías, una columna «N°» antes del nombre,
+     «Pases» o «Cantidad» en vez de «Personas», el total al final. Ahora se busca el
+     ENCABEZADO en las primeras filas y cada columna por su nombre; sin encabezado,
+     la columna de nombres es la que más texto tiene y la de personas la de números. */
+  function _detectarColumnas(filas){
+    const t=v=>(v==null?'':v.toString()).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const RX={n:/^(nombre|nombres|invitado|invitados|familia|familias|name|guest|apellido|nombre y apellido|nombre completo)/,
+      p:/(personas|pases|pase|cantidad|cant\.?|lugares|asistentes|adultos|numero de personas|n de personas|boletos|cupos)/,
+      m:/^(mesa|mesas|table)/, r:/(restric|alergi|dieta|observ|nota)/};
+    for(let i=0;i<Math.min(filas.length,15);i++){
+      const f=filas[i]||[]; const col={};
+      if(f.some(v=>v!=null&&v!==''&&!isNaN(Number(v))))continue;   /* un encabezado no tiene números */
+      f.forEach((v,j)=>{const x=t(v); if(!x)return; for(const k in RX){ if(col[k]==null&&RX[k].test(x)){ col[k]=j; break; } }});
+      if(col.n!=null) return {ini:i+1,n:col.n,p:col.p,m:col.m,r:col.r};
+    }
+    /* sin encabezado: la columna con más textos (no números) es la de nombres */
+    const ancho=Math.max(0,...filas.slice(0,60).map(f=>(f||[]).length));
+    let mejor=0,cN=0;
+    for(let j=0;j<ancho;j++){let c=0;filas.slice(0,60).forEach(f=>{const v=f&&f[j];if(v!=null&&isNaN(Number(v))&&t(v).length>1)c++;});if(c>mejor){mejor=c;cN=j;}}
+    let cP=null;
+    for(let j=cN+1;j<ancho&&cP==null;j++){let c=0,tot=0;filas.slice(0,60).forEach(f=>{const v=f&&f[j];if(v!=null&&v!==''){tot++;if(!isNaN(Number(v))&&Number(v)>0&&Number(v)<60)c++;}});if(tot&&c/tot>0.7)cP=j;}
+    return {ini:0,n:cN,p:cP,m:(cP!=null?cP+1:cN+2),r:null};
+  }
   function _cargarFilas(filas){
-    let ini=0;
-    if(filas.length){const h=(filas[0][0]||'').toString().toLowerCase();if(h.indexOf('nombre')>=0||h.indexOf('name')>=0)ini=1;}
+    const C=_detectarColumnas(filas||[]);
+    let ini=C.ini;
+    const _esTotal=s=>/^(total|totales|suma|subtotal)\b/i.test(s);
     // Anti-duplicados: si sube/pega la misma lista dos veces (pasa siempre, porque
     // uno duda de si se cargó), antes se duplicaban TODOS en silencio y el día del
     // evento había el doble de pases. Ahora los repetidos se saltean y se avisa.
     const _norm=s=>(s||'').toString().trim().toLowerCase().replace(/\s+/g,' ');
     const yaEstan=new Set(D.invitados.map(g=>_norm(g.n)));
     let n=0, repes=[];
-    for(let i=ini;i<filas.length;i++){const c=filas[i];if(!c)continue;const nom=(c[0]||'').toString().trim();if(!nom)continue;
+    for(let i=ini;i<filas.length;i++){const c=filas[i];if(!c)continue;const nom=(c[C.n]||'').toString().trim().replace(/\s+/g,' ');if(!nom||_esTotal(nom)||!isNaN(Number(nom)))continue;
       const k=_norm(nom);
       if(yaEstan.has(k)){ repes.push(nom); continue; }
       yaEstan.add(k);
-      D.invitados.push({n:nom,p:((c[1]!=null&&c[1]!=='')?c[1]:'1').toString().trim(),m:((c[2]!=null&&c[2]!=='')?c[2]:'-').toString().trim(),restriccion:(c[3]||'').toString().trim(),t:nuevoTokenSeguro()});n++;}
+      const vP=C.p!=null?c[C.p]:null, vM=C.m!=null?c[C.m]:null, vR=C.r!=null?c[C.r]:null;
+      const per=(vP!=null&&vP!==''&&!isNaN(parseInt(vP,10)))?String(parseInt(vP,10)):'1';
+      D.invitados.push({n:nom,p:per,m:((vM!=null&&vM!=='')?vM:'-').toString().trim(),restriccion:(vR||'').toString().trim(),t:nuevoTokenSeguro()});n++;}
     renderGuests();
     let msg;
     if(n>0){ msg='Se cargaron '+n+' invitados.';
