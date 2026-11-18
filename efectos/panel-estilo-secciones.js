@@ -60,7 +60,12 @@
     { key: 'hashtag', tab: 'GALERIA_INSTA_VID', casa: 'estilo-hashtag', lugar: { arriba: true }, titulo: 'Instagram · títulos, diseño (logo, letra y colores)',
       /* 6/11 (Jazmín, Alejandra): «hay que cambiarle el título al sector de insta, dice "Nuestro hashtag"» */
       campos: SIN_TIT.concat([['texto', 'Título de la sección (dice «Nuestro Hashtag»)', 'titulo'], ['texto', 'Sobretítulo (arriba del título)', 'sobretitulo']].concat(BASE_FONDO, BASE_TIT, [['color', 'Color de la frase', 'colorTexto'], ['color', 'Color del hashtag', 'colorHashtag'],
-        ['color', 'Color del logo de Instagram', 'colorLogo'], ['casilla', 'Sin el logo de Instagram', 'sinLogo']])) },
+        ['color', 'Color del logo de Instagram', 'colorLogo'], ['casilla', 'Sin el logo de Instagram', 'sinLogo'],
+        /* ★ 18/11 (Jazmín, festival-instituto-toluca): el hashtag también para Facebook (lo pinta efectos/hashtag-ajuste.js) */
+        ['casilla', 'Sumar Facebook (logo, hashtag y botón «Ver en Facebook» debajo del de Instagram)', 'facebook'],
+        ['texto', 'Hashtag de Facebook (vacío = el mismo de Instagram)', 'fbHashtag'],
+        ['texto', 'Página de Facebook (link o nombre; vacío = abre la búsqueda del hashtag)', 'fbLink'],
+        ['texto', 'Texto del botón de Facebook (vacío = «Ver en Facebook»)', 'fbBoton']])) },
     /* 9/11 (Jazmín, Alejandra): el texto de abajo del título y el fondo de la trivia.
        El sobretítulo y los colores del título ya tienen campo en TRIVIA: no se repiten. */
     { key: 'trivia', tab: 'TRIVIA', casa: 'estilo-trivia', lugar: { abajo: true }, titulo: 'Trivia · título, texto de abajo y fondo',
