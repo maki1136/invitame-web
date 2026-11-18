@@ -167,6 +167,9 @@
           ['casilla', 'Foto de portada QUIETA, sin zoom (que no se agrande: lo que encuadrás es lo que se ve)', 'sinZoom'],
           ['casilla', 'Foto de portada ENTERA, sin recortar (para fotos horizontales; el resto se rellena con la misma foto desenfocada)', 'entera'],
           ['rango', 'Velo oscuro sobre la foto (0 = la foto con su color normal)', 'velo', 0, 100, '%'],
+          /* ★ 18/11 (Jazmín, indira-y-rogelio: «baja demasiado o sube demasiado… para que
+             podamos seleccionar el lugar exacto de acuerdo al fondo»). Lo aplica /efectos/ajuste-altura.js */
+          ['rango', 'Subir o bajar los nombres, al lugar exacto (− sube · + baja · 0 = donde los deja Arriba/Centrado/Abajo)', 'alturaNombres', -350, 350, 'px'],
           ['rango', 'Tamaño del sobretítulo (ej. «XV Años»)', 'tamKick', 9, 40, 'px'],
           ['color', 'Color del sobretítulo', 'colorKick']],
         obj: function (d) {
@@ -174,6 +177,15 @@
           if (!d.fx.portadaFoto || typeof d.fx.portadaFoto !== 'object') d.fx.portadaFoto = {};
           return d.fx.portadaFoto;
         }
+      })];
+    });
+    /* ★ 18/11 (Jazmín, indira-y-rogelio): la frase larga también al lugar exacto */
+    S.anotarCasa('frase-altura', 'PRINCIPAL', 'frase', null, '.fraseSec');
+    S.bloque('frase-altura', function (caja) {
+      return [S.estilo(caja, 'frase', {
+        titulo: 'Frase larga · subir o bajar el texto al lugar exacto',
+        campos: [['rango', 'Subir o bajar la frase (− sube · + baja · 0 = donde la deja Arriba/Centro/Abajo)', 'altura', -300, 300, 'px']],
+        obj: function (d) { if (!d.fx) d.fx = {}; if (!d.fx.frase || typeof d.fx.frase !== 'object') d.fx.frase = {}; return d.fx.frase; }
       })];
     });
     /* ★ 12/11 (Jazmín, xv-maria-ines): «sacar los íconos predeterminados del dress code» */
