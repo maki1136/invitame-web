@@ -607,6 +607,15 @@
       caja.dataset.tocado = '1';
 
       var c = deId(sel.value);
+      /* ★ 18/11/2026 (Jazmín, monse-y-diego: «se puso toda la invitación violeta
+         sola»). La colección había quedado en «sin colección»: sin Marfil manda
+         el color principal de la copia (#463b52, violeta). Un desplegable cambia
+         con un toque o con la ruedita del mouse sin querer, y sacar la colección
+         le cambia TODO el diseño a la invitación: ahora se pregunta antes. */
+      var antes = fx.coleccion || '';
+      if (antes && !c.id && !confirm('¿Sacarle la colección «' + (deId(antes).nombre || antes) + '» a esta invitación?\n\nCambia TODO el diseño (colores, letras, adornos). Si fue sin querer, tocá Cancelar.')) {
+        sel.value = antes; return;
+      }
       fx.coleccion = c.id;                 /* ⚠️ vacío, NO borrar la clave */
 
       avPaleta.style.display = 'none';
