@@ -94,7 +94,11 @@
         /* y el color elegido NO va detrás: la imagen puede tener partes
            transparentes (un marco con el centro calado) y por ahí asomaba el
            verde. Detrás queda el papel de la colección, como en la muestra. */
-        if (sinVelo) regla.push('background-image:url("' + im.replace(/"/g, '') + '")!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important');
+        /* ⚠️ 18/11 (monse-y-diego quedó VIOLETA): dejar el color de la sección
+           detrás NO sirve: las bandas (.sec.verde) llevan el color principal y
+           `background-blend-mode:multiply`, así que la foto beige × violeta =
+           violeta. La imagen va sola, con fondo transparente y sin mezcla. */
+        if (sinVelo) regla.push('background:url("' + im.replace(/"/g, '') + '") center/cover no-repeat transparent!important', 'background-blend-mode:normal!important');
         else { var velo = rgba(bg || '#ffffff', 0.55);   /* como se entregó (ver INVCAMBIO) */
           regla.push('background:linear-gradient(' + velo + ',' + velo + '),url("' + im.replace(/"/g, '') + '") center/cover no-repeat' + (bg ? ' ' + bg : '') + '!important'); }
       } else if (bg) {
@@ -106,19 +110,11 @@
         var nodo = document.querySelector('[data-sec="' + s + '"]');
         if (nodo) {
           var val;
-          if (im && sinVelo) {
-            val = 'url("' + im.replace(/"/g, '') + '")';
-            if (nodo.style.getPropertyValue('background-color') && nodo.dataset.secElegidoBg) nodo.style.removeProperty('background-color');
-            if (nodo.style.getPropertyValue('background-image') !== val || nodo.style.getPropertyPriority('background-image') !== 'important') {
-              nodo.style.removeProperty('background');
-              nodo.style.setProperty('background-image', val, 'important');
-              nodo.style.setProperty('background-size', 'cover', 'important');
-              nodo.style.setProperty('background-position', 'center', 'important');
-              nodo.style.setProperty('background-repeat', 'no-repeat', 'important');
-            }
-          } else {
+          {
             val = regla[0].replace(/^background:/, '').replace(/!important$/, '');
             nodo.style.setProperty('background', val, 'important');
+            if (im && sinVelo) nodo.style.setProperty('background-blend-mode', 'normal', 'important');
+            else if (nodo.style.getPropertyValue('background-blend-mode')) nodo.style.removeProperty('background-blend-mode');
           }
           enLinea[s] = val;
         }
@@ -169,7 +165,7 @@
          título pegado al borde (margen 0). Ahora deja aire arriba, más el notch. */
       css.push('html body .portada.portada > .c{margin-top:' + (jc === 'flex-start' ? 'calc(env(safe-area-inset-top, 0px) + clamp(48px, 9vh, 96px))' : 'auto') + '!important;margin-bottom:' + (jc === 'flex-end' ? '0' : 'auto') + '!important;top:auto!important;bottom:auto!important;transform:none!important}');
     }
-    for (var sa in antes) if (!enLinea[sa]) { var na = document.querySelector('[data-sec="' + sa + '"]'); if (na) na.style.removeProperty('background'); }
+    for (var sa in antes) if (!enLinea[sa]) { var na = document.querySelector('[data-sec="' + sa + '"]'); if (na) { na.style.removeProperty('background'); na.style.removeProperty('background-blend-mode'); } }
     var ya = document.getElementById(ID_CSS);
     var faltaRecuadro = Object.keys(RECU).some(function (s) { return (el[RECU[s].alpha] || el[RECU[s].color]) && document.querySelector('[data-sec="' + s + '"] ' + RECU[s].sel + ':not([data-recuadro-elegido])'); });
     if (firma === ultima && ya && !faltaEnLinea() && !faltaRecuadro) {
