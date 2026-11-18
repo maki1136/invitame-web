@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-18T18:40:30.671Z",
+ "cuando": "2026-11-18T21:59:15.875Z",
  "slug": "camila-y-tomas",
- "total": 808,
- "verde": 791,
- "amarillo": 3,
+ "total": 805,
+ "verde": 789,
+ "amarillo": 2,
  "rojo": 14,
  "gris": 0,
  "items": [
@@ -533,39 +533,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.velo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.tamKick",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.portadaFoto.colorKick",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Frase Larga:",
    "tipo": "textarea",
@@ -725,6 +692,17 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.frase.peso",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-frase",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.frase.altura",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1459,39 +1437,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.color",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.sinZoom",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.entera",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
    "control": "Poner comillas “ ” alrededor de la frase",
    "tipo": "checkbox",
@@ -1536,6 +1481,28 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "casa-cierre",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.footer.fotoEntera",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-cierre",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.footer.sinTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "patrocinadores-selector",
    "control": "Mostrar los patrocinadores",
    "tipo": "checkbox",
@@ -1574,6 +1541,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1783,17 +1761,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6067,9 +6034,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.tamTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
