@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-18T17:26:23.531Z",
+ "cuando": "2026-11-18T17:02:00.512Z",
  "slug": "camila-y-tomas",
- "total": 798,
+ "total": 804,
  "verde": 783,
  "amarillo": 1,
  "rojo": 14,
- "gris": 0,
+ "gris": 6,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -497,6 +497,30 @@
    "seVe": true,
    "estado": "rojo",
    "nota": "se guarda pero no le llega a la miniatura"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
@@ -1423,6 +1447,30 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "PRINCIPAL",
