@@ -734,7 +734,11 @@
     '    rgba(242,247,252,.88) 87%, rgba(242,247,252,0) 100%)!important;',
     '  filter:blur(16px)!important;',
     '}',
-    P + '.sec:not([style*="url("]) > *:not(.inv-banda-deco){ position:relative!important; z-index:1!important; }',   /* 9/10: la capa de la banda no (hacía caer Safari) */
+    /* ⚠️ 18/11 (Jazmín, xv-valentina: «colocamos la foto de frase y no se guarda»): se
+       guardaba, pero esta regla le ponía position:relative a la capa de la FOTO de la
+       frase (.bg) y a sus velos (.capa), que son absolutas: quedaban de 0×0 y la foto no
+       se veía. Se excluyen — sólo donde aplica (INVCAMBIO: las entregadas quedan igual). */
+    P + '.sec:not([style*="url("]) > *:not(.inv-banda-deco)' + ((window.INVCAMBIO ? window.INVCAMBIO(null, '2026-11-18T19:00:00Z') : true) ? ':not(.bg):not(.capa)' : '') + '{ position:relative!important; z-index:1!important; }',   /* 9/10: la capa de la banda no (hacía caer Safari) */
 
     P + '.sec:not(.verde) + .sec:not(.verde){ padding-top:14px!important; }',
     P + '.sec:not(.verde):has(+ .sec:not(.verde)){ padding-bottom:14px!important; }',
