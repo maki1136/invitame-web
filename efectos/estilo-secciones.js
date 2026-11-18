@@ -347,6 +347,34 @@
         stf.textContent = '.footer[data-sin-filtro] .velo,.footer[data-sin-filtro] .fin-velo,.footer[data-sin-filtro] [class*="tint"]{display:none!important}' +
           '.footer[data-sin-filtro], .footer[data-sin-filtro] img{filter:none!important}'; }
       var ff = document.getElementById('fin-frase'), fte = document.getElementById('fin-texto'), fno = document.getElementById('fin-nombres');
+      /* ★ 18/11 (Jazmín, festival-instituto-toluca: «¿se puede ver la foto final
+         completa? y sin todo el texto predeterminado»). Dos casillas:
+         · sinTexto   → se ocultan la frase, el texto final y los nombres/fecha
+           (el aviso de «Invitación creada con Invítame» queda);
+         · fotoEntera → el pie toma la proporción de la foto y la muestra ENTERA,
+           sin recortar (para afiches o fotos con texto propio). */
+      [ff, fte, fno].forEach(function (x) { poner(x, 'display', es.sinTexto ? 'none' : ''); });
+      if (es.fotoEntera) {
+        var mu = /url\(["']?([^"')]+)["']?\)/.exec(getComputedStyle(sec).backgroundImage || '');
+        var fu = mu && mu[1];
+        if (fu && sec.dataset.estFotoUrl !== fu) {
+          sec.dataset.estFotoUrl = fu;
+          var imf = new Image();
+          imf.onload = function () { if (imf.naturalWidth) { sec.dataset.estFotoProp = imf.naturalWidth + ' / ' + imf.naturalHeight; aplicarTodo(); } };
+          imf.src = fu;
+        }
+        if (sec.dataset.estFotoProp) {
+          poner(sec, 'aspect-ratio', sec.dataset.estFotoProp);
+          poner(sec, 'min-height', '0');
+          poner(sec, 'height', 'auto');
+          poner(sec, 'background-size', 'contain');
+          poner(sec, 'background-position', 'center');
+          poner(sec, 'background-repeat', 'no-repeat');
+        }
+      } else if (sec.dataset.estFotoProp || sec.dataset.estFotoUrl) {
+        ['aspect-ratio', 'min-height', 'height', 'background-size', 'background-position', 'background-repeat'].forEach(function (k) { poner(sec, k, ''); });
+        delete sec.dataset.estFotoProp; delete sec.dataset.estFotoUrl;
+      }
       if (es.fuenteFrase) pedirFuente(es.fuenteFrase);
       if (es.fuenteTexto) pedirFuente(es.fuenteTexto);
       poner(ff, 'font-family', es.fuenteFrase ? '"' + es.fuenteFrase + '", serif' : '');

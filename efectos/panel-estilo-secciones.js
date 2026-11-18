@@ -129,7 +129,10 @@
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
         ['casilla', 'Texto final sin mayúsculas (para letras cursivas)', 'textoSinMayus'],
         /* 16/11 (Jazmín): «en la foto final no se puede quitar el filtro» */
-        ['casilla', 'Foto final sin filtro (sin el oscurecido encima de la foto)', 'sinFiltro']] }
+        ['casilla', 'Foto final sin filtro (sin el oscurecido encima de la foto)', 'sinFiltro'],
+        /* 18/11 (Jazmín, festival-instituto-toluca): «la foto final completa y sin el texto predeterminado» */
+        ['casilla', 'Foto final ENTERA, sin recortar (para afiches o fotos con su propio texto)', 'fotoEntera'],
+        ['casilla', 'Sin el texto del cierre (frase, texto final y nombres/fecha)', 'sinTexto']] }
   ];
 
   /* ★ 14/11 (Jazmín: «Ver hoteles» ilegible y «eso no me deja modificarlo el
