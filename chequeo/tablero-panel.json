@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-17T19:49:45.872Z",
+ "cuando": "2026-11-17T23:37:09.159Z",
  "slug": "camila-y-tomas",
- "total": 802,
- "verde": 781,
- "amarillo": 2,
+ "total": 792,
+ "verde": 772,
+ "amarillo": 3,
  "rojo": 14,
- "gris": 5,
+ "gris": 3,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -5891,8 +5891,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.spotify.botonLetra",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -6888,121 +6889,11 @@
   },
   {
    "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "Como viene",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.titulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "Como viene",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.bajada",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.fondo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.fuente",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.tamTitulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.colorTexto",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.botonFondo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.botonLetra",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
    "bloque": "",
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_habilitar-trivia",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.sinTitulo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "TRIVIA",
-   "bloque": "casa-estilo-trivia",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.trivia.sinSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -7877,24 +7768,33 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.stdg.foco",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.stdg.foco.zoom",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.stdg.velo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
@@ -7945,27 +7845,8 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "lista",
    "guarda": true,
-   "dato": "fx.stdg.fuentes",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes.txt",
+   "dato": "fx.stdg.luz",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -7976,7 +7857,23 @@
    "control": "Diseño",
    "tipo": "lista",
    "estado": "gris",
-   "nota": "no está"
+   "nota": "una sola opción"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "lista",
+   "estado": "gris",
+   "nota": "una sola opción"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "lista",
+   "estado": "gris",
+   "nota": "una sola opción"
   },
   {
    "tab": "EFECTOS",
