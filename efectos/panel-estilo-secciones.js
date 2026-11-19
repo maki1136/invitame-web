@@ -178,6 +178,8 @@
           /* ★ 18/11 (Jazmín, indira-y-rogelio: «baja demasiado o sube demasiado… para que
              podamos seleccionar el lugar exacto de acuerdo al fondo»). Lo aplica /efectos/ajuste-altura.js */
           ['rango', 'Subir o bajar los nombres, al lugar exacto (− sube · + baja · 0 = donde los deja Arriba/Centrado/Abajo)', 'alturaNombres', -350, 350, 'px'],
+          /* ★ 19/11 (Maki, jardin-de-papel: «la cuenta regresiva tiene que estar más abajo»). Lo aplica /efectos/ajuste-altura.js */
+          ['rango', 'Subir o bajar SOLO la cuenta regresiva (− sube · + baja · 0 = pegada a los nombres)', 'alturaCuenta', -350, 500, 'px'],
           ['rango', 'Tamaño del sobretítulo (ej. «XV Años»)', 'tamKick', 9, 40, 'px'],
           ['color', 'Color del sobretítulo', 'colorKick']],
         obj: function (d) {

@@ -13,7 +13,7 @@
 (function () {
   'use strict';
   if (window.__invAjusteAltura) return; window.__invAjusteAltura = 1;
-  function num(v) { var n = parseFloat(v); return isFinite(n) ? Math.max(-400, Math.min(400, n)) : 0; }
+  function num(v) { var n = parseFloat(v); return isFinite(n) ? Math.max(-400, Math.min(500, n)) : 0; }
   function mover(el, px) {
     if (!el) return;
     var val = px ? '0 ' + px + 'px' : '';
@@ -25,6 +25,8 @@
     var fx = e.fx;
     mover(document.querySelector('.portada > .c'), num((fx.portadaFoto || {}).alturaNombres));
     mover(document.querySelector('.fraseSec .frase'), num((fx.frase || {}).altura));
+    /* ★ 19/11: la cuenta regresiva sola (fx.portadaFoto.alturaCuenta). En 0 o vacío no hace nada. */
+    mover(document.querySelector('.portada .count'), num((fx.portadaFoto || {}).alturaCuenta));
   }
   window.INVAJUSTE_ALTURA = aplicar;
   var n = 0, t = setInterval(function () { aplicar(); if (++n > 40) { clearInterval(t); setInterval(aplicar, 2000); } }, 400);
