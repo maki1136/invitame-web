@@ -14,6 +14,11 @@
                      (para fotos claras: la tarjeta de encaje de «Encaje y nácar»)
      sombra        : true → sombra suave detrás de la letra (portadas de gris medio:
                      Pasarela tiene el panel plateado justo detrás de los nombres)
+     cuentaVisible : true → la cuenta regresiva se lee siempre: números más gruesos y
+                     grandes, rótulos más grandes, y un recuadro claro translúcido detrás
+                     de cada número (Encaje y nácar, Maki 19/11: «sigue sin verse en la
+                     portada cuántos días, minutos y segundos faltan»)
+     colorCuenta   : color de los números y rótulos de la cuenta (vacío = el de los nombres)
      sinSombra     : true → saca la sombra oscura que Marfil le pone a los nombres y a
                      la cuenta regresiva (pensada para letra clara sobre foto) y deja
                      un brillo claro apenas. Para letra OSCURA sobre portada clara:
@@ -71,6 +76,17 @@
     if (si(c.sinSombra)) r.push(H + '#pv-names, ' + H + '#pv-names > span, ' + H + '#pv-fecha, ' + H + '#pv-kick, ' +
       H + '.portada .count .num, ' + H + '.portada .count .lab, ' + H + '.portada .count .sep' +
       ' { text-shadow:0 0 1px rgba(255,255,255,.55), 0 0 12px rgba(255,255,255,.35) !important }');
+    if (si(c.cuentaVisible)) {
+      var cc = hex(c.colorCuenta) || col || '';
+      r.push(H + '.portada .count { gap:8px !important; opacity:1 }');
+      r.push(H + '.portada .count .b { background:rgba(255,255,255,.55) !important; border-radius:12px !important;' +
+        ' padding:8px 6px 6px !important; min-width:62px !important; box-shadow:0 2px 10px rgba(0,0,0,.06) !important;' +
+        ' -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px) }');
+      r.push(H + '.portada .count .num { font-weight:600 !important; font-size:32px !important; text-shadow:none !important;' + (cc ? ' color:' + cc + ' !important;' : '') + ' }');
+      r.push(H + '.portada .count .lab { font-size:10.5px !important; opacity:1 !important; font-weight:600 !important;' +
+        ' letter-spacing:.08em !important; text-shadow:none !important;' + (cc ? ' color:' + cc + ' !important;' : '') + ' }');
+      r.push(H + '.portada .count .sep { display:none !important }');
+    }
     var raiz = document.documentElement, st = document.getElementById(ID);
     var txt = r.join('\n');
     if (!txt) {

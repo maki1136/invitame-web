@@ -101,7 +101,10 @@
         /* 12/11 (Encaje y nácar): la portada es una foto CLARA de la tarjeta */
         ['casilla', 'Sin el oscurecido sobre la foto (para portadas claras, con letra oscura)', 'sinOscurecer'],
         /* 19/11 (Encaje y nácar): letra oscura con la sombra oscura de Marfil = borrosa */
-        ['casilla', 'Sin sombra oscura en la letra (letra oscura sobre portada clara: queda nítida)', 'sinSombra']] },
+        ['casilla', 'Sin sombra oscura en la letra (letra oscura sobre portada clara: queda nítida)', 'sinSombra'],
+        /* 19/11 (Encaje y nácar): «sigue sin verse cuántos días, minutos y segundos faltan» */
+        ['casilla', 'Cuenta regresiva bien visible (números más grandes, con recuadro claro)', 'cuentaVisible'],
+        ['color', 'Color de la cuenta regresiva (vacío = el de los nombres)', 'colorCuenta']] },
     /* 10/11 (Línea Roja · White Swan): la letra de Marfil en carmesí. Lo pinta /efectos/marfil-tinta.js. */
     { key: 'marfil', tab: 'PRINCIPAL', casa: 'estilo-marfil', lugar: { abajo: true }, titulo: 'Colección Marfil · color de la tinta',
       campos: [['color', 'Color de toda la letra (vacío = el gris de Marfil)', 'tinta']] },
