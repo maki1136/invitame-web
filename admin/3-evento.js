@@ -488,7 +488,10 @@
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     const box=input.previousElementSibling; const prev=box?box.innerHTML:'';
     if(box)box.textContent='Subiendo…';
-    try{const url=await INV.uploadImage(f); D[key]=url; if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[key]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[key]=true;}
+    try{const url=await INV.uploadImage(f); D[key]=url;
+      /* ★ 19/11 (jardin-de-papel): al SUBIR la foto del fin de página quedaba el link viejo en fx.cierre y la invitación seguía mostrando la foto anterior. Subirla ES elegir el cierre, igual que con el botón de la muestra. */
+      if(/fin-de-pagina/.test(key)){ D.fx=D.fx||{}; D.fx.cierre=Object.assign({},D.fx.cierre||{},{origen:'link',url:url}); }
+      if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[key]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[key]=true;}
       if(box)box.innerHTML=ICO.tilde+' Imagen subida (tocá para cambiar)';
       const p=el('prev-'+id); if(p)p.innerHTML=fotoCargadaHtml(url,key,id);
       if(/fondo/i.test(key)) avisarFotoFondo(url,id);
