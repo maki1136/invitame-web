@@ -2941,8 +2941,8 @@ window.SOBRES_INVITAME = {
      -------------------------------------------------------------------------- */
   "linea-roja-monogramme": {
     nombre:     "Línea Roja · Monogramme · caja de laca carmesí que se abre → salón dorado con rosas y velas (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/linea-roja/monogramme/apertura-1080-v1.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/linea-roja/monogramme/apertura-1080-v1.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/linea-roja/monogramme/apertura-1080-v3-sindedo.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/linea-roja/monogramme/apertura-1080-v3-sindedo.jpg",
     color:      "#2D0003",
     empalme:    "foto",
     luz:        6.1,
@@ -2965,14 +2965,15 @@ window.SOBRES_INVITAME = {
      -------------------------------------------------------------------------- */
   "linea-roja-pasarela": {
     nombre:     "Línea Roja · Pasarela · sobre de aluminio que se abre → pasarela plateada con cortinas blancas (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/linea-roja/pasarela/apertura-1080.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/linea-roja/pasarela/apertura-1080.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/linea-roja/pasarela/apertura-1080-v2-pausa.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/linea-roja/pasarela/apertura-1080-v2-pausa.jpg",
     color:      "#000000",
     empalme:    "foto",
-    luz:        6.4,
+    luz:        7.3,
+    luzColor:   "#161618",   /* 19/11: oscuro, el escenario de la portada es negro (Maki: «sigue blanco») */
     luzFundido: 0.5,
-    /* texto impreso en la tarjeta en blanco: esquinas medidas cuadro por cuadro (efectos/sobre-papel.js) */
-    papel:      {"k":[[2.75,0.3084,0.4179,0.6814,0.4179,0.6814,0.5961,0.3084,0.5961],[2.833,0.3042,0.4062,0.678,0.4062,0.678,0.5849,0.3042,0.5849],[2.917,0.3108,0.2829,0.6818,0.2829,0.6818,0.4602,0.3108,0.4602],[3.0,0.3148,0.2239,0.6843,0.2239,0.6843,0.4006,0.3148,0.4006],[3.083,0.3148,0.2239,0.6843,0.2239,0.6843,0.4006,0.3148,0.4006],[3.167,0.3148,0.2235,0.6843,0.2235,0.6843,0.4003,0.3148,0.4003],[3.25,0.3142,0.2231,0.6845,0.2231,0.6845,0.4002,0.3142,0.4002],[3.333,0.3139,0.2224,0.6852,0.2224,0.6852,0.3999,0.3139,0.3999],[3.417,0.3133,0.2218,0.6854,0.2218,0.6854,0.3997,0.3133,0.3997],[3.5,0.3125,0.2169,0.6863,0.2169,0.6863,0.3956,0.3125,0.3956],[3.583,0.31,0.2052,0.6891,0.2052,0.6891,0.3864,0.31,0.3864],[3.667,0.3044,0.1963,0.6941,0.1963,0.6941,0.3826,0.3044,0.3826],[3.75,0.2968,0.1863,0.7014,0.1863,0.7014,0.3797,0.2968,0.3797],[3.833,0.2869,0.1718,0.7112,0.1718,0.7112,0.3746,0.2869,0.3746],[3.917,0.2744,0.1609,0.7247,0.1609,0.7247,0.3762,0.2744,0.3762],[4.0,0.2597,0.1607,0.7437,0.1607,0.7437,0.3921,0.2597,0.3921],[4.042,0.2528,0.1636,0.7537,0.1636,0.7537,0.4031,0.2528,0.4031]],"o":[[2.88,0],[3.0,1],[3.88,1],[4.05,0]],"tam":125,"aspecto":1.176,"linea1":"Estás invitado a","fuente":"Playfair Display","color":"#161616","w":1080,"h":1920}
+    /* texto impreso en la tarjeta: sigue a la tarjeta hasta que se funde (19/11: pausa de 1,7 s para leerlo; Maki: «no se llega a leer») */
+    papel:      {"k":[[2.958,0.3207,0.2172,0.6784,0.2172,0.6784,0.3883,0.3207,0.3883],[3.0,0.3207,0.2172,0.6784,0.2172,0.6784,0.3883,0.3207,0.3883],[3.042,0.3207,0.2172,0.6784,0.2172,0.6784,0.3883,0.3207,0.3883],[3.083,0.3207,0.2172,0.6784,0.2172,0.6784,0.3883,0.3207,0.3883],[3.125,0.3207,0.2171,0.6784,0.2171,0.6784,0.3882,0.3207,0.3882],[3.167,0.3207,0.2169,0.6784,0.2169,0.6784,0.388,0.3207,0.388],[3.208,0.3205,0.2166,0.6784,0.2166,0.6784,0.3878,0.3205,0.3878],[3.25,0.32,0.2164,0.6786,0.2164,0.6786,0.3879,0.32,0.3879],[4.95,0.32,0.2164,0.6786,0.2164,0.6786,0.3879,0.32,0.3879],[4.992,0.3199,0.216,0.679,0.216,0.679,0.3878,0.3199,0.3878],[5.033,0.3199,0.2154,0.6792,0.2154,0.6792,0.3873,0.3199,0.3873],[5.075,0.3197,0.2146,0.6792,0.2146,0.6792,0.3866,0.3197,0.3866],[5.117,0.3192,0.214,0.6794,0.214,0.6794,0.3863,0.3192,0.3863],[5.158,0.3188,0.2136,0.6798,0.2136,0.6798,0.3863,0.3188,0.3863],[5.2,0.3182,0.2107,0.6802,0.2107,0.6802,0.3838,0.3182,0.3838],[5.242,0.317,0.2046,0.6812,0.2046,0.6812,0.3788,0.317,0.3788],[5.283,0.3153,0.2001,0.683,0.2001,0.683,0.3759,0.3153,0.3759],[5.325,0.3133,0.1962,0.6853,0.1962,0.6853,0.3742,0.3133,0.3742],[5.367,0.3105,0.1916,0.6879,0.1916,0.6879,0.3721,0.3105,0.3721],[5.408,0.307,0.1879,0.6912,0.1879,0.6912,0.3716,0.307,0.3716],[5.45,0.3031,0.1833,0.695,0.1833,0.695,0.3708,0.3031,0.3708],[5.492,0.2984,0.1764,0.6995,0.1764,0.6995,0.3682,0.2984,0.3682],[5.533,0.2895,0.1662,0.7087,0.1662,0.7087,0.3668,0.2895,0.3668],[5.617,0.2755,0.1571,0.7247,0.1571,0.7247,0.3719,0.2755,0.3719],[5.7,0.2607,0.1592,0.7435,0.1592,0.7435,0.3901,0.2607,0.3901],[5.783,0.2481,0.1771,0.7598,0.1771,0.7598,0.4218,0.2481,0.4218],[5.867,0.2412,0.199,0.7674,0.199,0.7674,0.4507,0.2412,0.4507],[5.95,0.2403,0.2113,0.7667,0.2113,0.7667,0.4631,0.2403,0.4631],[6.033,0.2449,0.2217,0.7602,0.2217,0.7602,0.4682,0.2449,0.4682],[6.117,0.2557,0.243,0.7471,0.243,0.7471,0.478,0.2557,0.478],[6.2,0.2734,0.2806,0.7287,0.2806,0.7287,0.4983,0.2734,0.4983],[6.283,0.2991,0.3349,0.7065,0.3349,0.7065,0.5298,0.2991,0.5298]],"o":[[2.95,0],[3.2,1],[6.2,1],[6.3,0]],"tam":115,"aspecto":1.176,"linea1":"Est\u00e1s invitado a","fuente":"Playfair Display","color":"#161616","w":1080,"h":1920}
   },
 
   /* ---- ★ ENCAJE Y NÁCAR (12/11/2026) -------------------------------------------
@@ -2988,13 +2989,13 @@ window.SOBRES_INVITAME = {
      -------------------------------------------------------------------------- */
   "encaje-nacar": {
     nombre:     "Encaje y nácar · sobre lila con lacre plateado → moño de satén → tarjeta de encaje (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/encaje-nacar/apertura-1080-v2.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/encaje-nacar/apertura-1080-v2.jpg",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/encaje-nacar/apertura-1080-v3-lectura.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/encaje-nacar/apertura-1080-v3-lectura.jpg",
     color:      "#C2B6C6",
     empalme:    "foto",
-    luz:        6.3,
+    luz:        8.7,   /* 19/11: la tarjeta queda quieta 2,6 s más para leer el texto (Maki: «dura un segundo») */
     luzFundido: 0.6,
-    papel:      {"k":[[3.6,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719],[6.9,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719]],"o":[[5.4,0],[5.75,1],[7.0,1]],"aspecto":0.8,"linea1":"Nos casamos","fuente":"Pinyon Script","color":"#5f5368","w":1080,"h":1920,"tam":105}
+    papel:      {"k":[[3.6,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719],[9.5,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719]],"o":[[5.2,0],[5.6,1],[9.5,1]],"aspecto":0.8,"linea1":"Nos casamos","fuente":"Pinyon Script","color":"#5f5368","w":1080,"h":1920,"tam":125}
   }
 
 };
