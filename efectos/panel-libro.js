@@ -104,6 +104,7 @@
       fondo('El fondo (mármol con flores)', 'marmol') + fondo('La tela de la tapa (lino blanco)', 'tela'));
     h += seccion('portada', '2 · La portada',
       foto('Foto de los novios', 'portada', 'La foto principal, vertical. Es también la que se ve al compartir el link.') +
+      '<label style="' + S.lab + '">Los nombres en la portada van</label><select data-l="portada.nombres" style="width:100%"><option value=""' + (L.portada && L.portada.nombres === 'abajo' ? '' : ' selected') + '>Arriba (si la foto tiene cielo o aire arriba)</option><option value="abajo"' + (L.portada && L.portada.nombres === 'abajo' ? ' selected' : '') + '>Abajo (si arriba están las caras)</option></select>' +
       l('Título', 'titulo', 'text', 'Nuestra historia') +
       k('Fecha y hora del evento', 'fecha', 'datetime-local', '', 'La misma de PRINCIPAL. De acá salen la portada, la tapa, la cuenta regresiva y «Guardar la fecha».'));
     h += seccion('prologo', '3 · El prólogo',
