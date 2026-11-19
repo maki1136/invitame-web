@@ -138,7 +138,7 @@
     if (!pal) { if (document.documentElement.hasAttribute('data-paleta-coleccion')) apagarTodo(); firmaPal = ''; return; }
     var pares = armarPares(pal);
     if (!pares.length) return;                           /* la colección todavía no publicó sus colores */
-    var firma = pal.id + '|' + JSON.stringify(window.INVCOLPALETA);
+    var firma = pal.id + '|' + (pal.propia ? [pal.verde, pal.sage, pal.oro, pal.lino].join(',') + '|' : '') + JSON.stringify(window.INVCOLPALETA);   /* ★ 19/11: la paleta propia cambia de colores sin cambiar de id */
     var cambio = firma !== firmaPal; firmaPal = firma;
     document.documentElement.setAttribute('data-paleta-coleccion', pal.id);
     hojas().forEach(function (s) {
