@@ -10,7 +10,9 @@
   if (window.__invPanelEstiloSec) return; window.__invPanelEstiloSec = 1;
   if (/^\/i\//.test(location.pathname)) return;
 
-  var BASE_FONDO = [['color', 'Color de fondo de la sección', 'fondo'], ['imagen', 'Imagen de fondo de la sección', 'imagen']];
+  var BASE_FONDO = [['color', 'Color de fondo de la sección', 'fondo'], ['imagen', 'Imagen de fondo de la sección', 'imagen'],
+    /* ★ 19/11 (Jazmín, ana-patricia-y-aldo: «en el fondo de familia y hospedaje se ven las imágenes predeterminadas de la muestra, no sé cómo sacarlas») */
+    ['casilla', 'Sin el dibujo del diseño en el fondo (flores, texturas de la colección): queda liso', 'sinDiseno']];
   var BASE_TIT = [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'],
     ['color', 'Color del título', 'colorTitulo'], ['color', 'Color del subtítulo (arriba del título)', 'colorSub']];
 
@@ -184,7 +186,7 @@
           ['rango', 'Velo oscuro sobre la foto (0 = la foto con su color normal)', 'velo', 0, 100, '%'],
           /* ★ 18/11 (Jazmín, indira-y-rogelio: «baja demasiado o sube demasiado… para que
              podamos seleccionar el lugar exacto de acuerdo al fondo»). Lo aplica /efectos/ajuste-altura.js */
-          ['rango', 'Subir o bajar los nombres, al lugar exacto (− sube · + baja · 0 = donde los deja Arriba/Centrado/Abajo)', 'alturaNombres', -350, 350, 'px'],
+          ['rango', 'Subir o bajar los nombres, al lugar exacto (− sube · + baja · 0 = donde los deja Arriba/Centrado/Abajo)', 'alturaNombres', -350, 700, 'px'],
           /* ★ 19/11 (Maki, jardin-de-papel: «la cuenta regresiva tiene que estar más abajo»). Lo aplica /efectos/ajuste-altura.js */
           ['rango', 'Subir o bajar SOLO la cuenta regresiva (− sube · + baja · 0 = pegada a los nombres)', 'alturaCuenta', -350, 500, 'px'],
           ['rango', 'Tamaño del sobretítulo (ej. «XV Años»)', 'tamKick', 9, 40, 'px'],
