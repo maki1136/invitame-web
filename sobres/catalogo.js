@@ -2178,6 +2178,7 @@ window.SOBRES_INVITAME = {
   "ubaldo-karla-monograma-video": {
     nombre:     "Ubaldo y Karla · sobre marfil con monograma U&K y lacre dorado, a medida (video)",
     oculto:     true,
+    para:       "ubaldo-y-karla",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.3/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/uk-t2-1080.mp4",
     poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/uk-t2-1080.jpg",
     color:      "#DFD4C7",

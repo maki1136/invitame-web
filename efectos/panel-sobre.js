@@ -80,6 +80,19 @@
     return null;
   }
 
+  /* ★ 19/11/2026 — SOBRES A MEDIDA. Un sobre hecho para un cliente va `oculto`
+     (no se le ofrece a nadie más) con `para: '<slug>'` (o una lista): en el panel
+     de ESA invitación sí aparece, para que Jazmín lo elija sin tipear ids. */
+  function esDeEsta(s) {
+    try {
+      if (!s || !s.para) return false;
+      var slug = String((D && D.slug) || new URLSearchParams(location.search).get('e') || '').trim();
+      if (!slug) return false;
+      var l = Array.isArray(s.para) ? s.para : [s.para];
+      return l.indexOf(slug) >= 0;
+    } catch (e) { return false; }
+  }
+
   function llenar() {
     var sel = selector();
     if (!sel) return;
@@ -92,7 +105,7 @@
        nombre, Jazmín no encontraba la buena. */
     var actual = '';
     try { actual = ((D.fx || {}).sobre || {}).modelo || ''; } catch (e) {}
-    var claves = Object.keys(cat).filter(function (k) { return !(cat[k] && cat[k].oculto) || k === actual || k === sel.value; });
+    var claves = Object.keys(cat).filter(function (k) { return !(cat[k] && cat[k].oculto) || k === actual || k === sel.value || esDeEsta(cat[k]); });
     if (!claves.length) return;
 
     /* ¿ya está lleno? no lo toco: si lo redibujo pierdo el foco y el desplegable
@@ -422,7 +435,7 @@
     var cat = catalogo(); if (!cat) return;
     var actual = '';
     try { actual = ((D.fx || {}).sobre || {}).modelo || ''; } catch (e) {}
-    var claves = Object.keys(cat).filter(function (k) { return !(cat[k] && cat[k].oculto) || k === actual; });
+    var claves = Object.keys(cat).filter(function (k) { return !(cat[k] && cat[k].oculto) || k === actual || esDeEsta(cat[k]); });
     if (!grilla || grillaN !== claves.length) {
       var viejo = grilla;
       grilla = armarGrilla(cat, claves); grillaN = claves.length;
