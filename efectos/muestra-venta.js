@@ -164,6 +164,18 @@
     if (!g || !tt) return;
     var c = getComputedStyle(g);
     if (!c || !c.fontFamily) return;
+    /* ★ 19/11 (jardin-de-papel): si el panel le puso color al texto final del
+       cierre (fx.estiloSec.footer.colorTextoFinal), «¿Quieres la tuya?» va del
+       mismo color y sin el halo oscuro. Sin ese color, nada cambia. */
+    var es = (window.INVEV && INVEV.fx && INVEV.fx.estiloSec && INVEV.fx.estiloSec.footer) || {};
+    if (es.colorTextoFinal) {
+      if (tt.style.getPropertyValue('color') !== es.colorTextoFinal) {
+        tt.style.setProperty('color', es.colorTextoFinal, 'important');
+        tt.style.setProperty('-webkit-text-fill-color', es.colorTextoFinal, 'important');
+        tt.style.setProperty('text-shadow', 'none', 'important');
+        tt.setAttribute('data-regla-luz', 'foto');
+      }
+    }
     if (tt.dataset.letra === c.fontFamily) return;
     tt.dataset.letra = c.fontFamily;
     tt.style.fontFamily = c.fontFamily;
