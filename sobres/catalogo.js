@@ -2171,6 +2171,21 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* 19/11/2026 · Jazmín (Ubaldo y Karla): sobre A MEDIDA con el monograma U&K, los
+     nombres y el lacre dorado con el monograma, tal cual el que mandó el cliente.
+     Video Flow (Veo Quality, toma 2): la solapa se levanta con el lacre y sale por
+     arriba, y entra la luz. Va oculto: es de ese cliente, no se ofrece a otros. */
+  "ubaldo-karla-monograma-video": {
+    nombre:     "Ubaldo y Karla · sobre marfil con monograma U&K y lacre dorado, a medida (video)",
+    oculto:     true,
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.3/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/uk-t2-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/uk-t2-1080.jpg",
+    color:      "#DFD4C7",
+    luz:        4.0,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   "mariposas-verdes-lacre-champan-video": {
     nombre:     "Mariposas verde salvia con borde rosa, cintas y lacre champán · la solapa se levanta y entra la luz (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.4/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/mariposa-verde-t1-1080.mp4",
