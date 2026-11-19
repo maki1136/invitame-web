@@ -122,11 +122,11 @@
   }
 
   let cur="PRINCIPAL";
-  function buildTabs(){el('tabs').innerHTML=ORDER.map(t=>'<div class="tab '+(t===cur?'on':'')+(t==='INVITADOS'||t==='EFECTOS'?' nuevo':'')+'" onclick="go(\''+t+'\')">'+(t==='INVITADOS'?'INVITADOS':t==='EFECTOS'?ICO.destello+' EFECTOS':t)+'</div>').join('');}
+  function buildTabs(){el('tabs').innerHTML=ORDER.map(t=>'<div class="tab '+(t===cur?'on':'')+(t==='INVITADOS'||t==='EFECTOS'?' nuevo':'')+'" onclick="go(\''+t+'\')">'+(t==='INVITADOS'?'INVITADOS':t==='EFECTOS'?ICO.destello+' EFECTOS':t==='LIBRO'?'📖 LIBRO':t)+'</div>').join('');}
   // Cada pestaña edita principalmente una sección de la invitación.
   // Al cambiar de pestaña, scrolleamos el preview a esa sección para que
   // la diseñadora VEA lo que está tocando (antes el preview se quedaba en la portada).
-  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',PAQUETE:'',EFECTOS:'',INVITADOS:''};
+  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',PAQUETE:'',LIBRO:'',EFECTOS:'',INVITADOS:''};
   function scrollPreviewTo(sec){
     const fr=el('pv-frame'); if(!fr||!fr.contentDocument)return;
     try{
@@ -224,7 +224,8 @@
     'novedades-selector':['PRINCIPAL','ocultas'],   /* 29/10: novedades sólo en invitaciones nuevas */
     'paquete-selector':['PAQUETE','paquete'],
     'qrlink-selector':['INVITADOS','qrlink'],   /* 28/10: QR para abrir la invitación (Jazmín) */
-    'camarafotos-selector':['INVITADOS','camarafotos']   /* 4/11: la foto de cada invitado para la camarita */
+    'camarafotos-selector':['INVITADOS','camarafotos'],   /* 4/11: la foto de cada invitado para la camarita */
+    'libro-editor':['LIBRO','libro']   /* 19/11: el formato Libro (efectos/panel-libro.js) */
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -245,7 +246,8 @@
     ocultas:{abajo:true},
     paquete:{arriba:true},
     qrlink:{arriba:true},
-    camarafotos:{abajo:true}
+    camarafotos:{abajo:true},
+    libro:{arriba:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).

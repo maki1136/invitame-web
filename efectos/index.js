@@ -669,6 +669,7 @@
     '/efectos/std-solo-vista.js',      /* 3/11: pedido SOLO Save the Date → el link muestra la imagen, no una invitación */
     '/efectos/panel-qr-link.js',   /* 28/10: QR para abrir la invitación (pulseras, souvenirs) */  /* 27/10: save the date SIN invitación, 10 diseños, textos movibles (Maki) */
     '/efectos/panel-save-the-date.js', /* el save the date de regalo: su bloque en EFECTOS (lo arma save-the-date.js, que NO va en esta lista) */
+    '/efectos/panel-libro.js',         /* 19/11: la pestaña LIBRO (formato que se lee pasando páginas) */
     '/efectos/panel-sobre.js',         /* el selector de sobres estaba VACÍO: lo llena. Y el lacre */
     '/efectos/fondo-invitacion.js',    /* imagen o video en lugar del papel de la invitación */
     '/efectos/videos-arrancan.js',      /* los videos decorativos arrancan al primer toque del invitado */
