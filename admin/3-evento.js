@@ -491,6 +491,8 @@
     try{const url=await INV.uploadImage(f); D[key]=url;
       /* ★ 19/11 (jardin-de-papel): al SUBIR la foto del fin de página quedaba el link viejo en fx.cierre y la invitación seguía mostrando la foto anterior. Subirla ES elegir el cierre, igual que con el botón de la muestra. */
       if(/fin-de-pagina/.test(key)){ D.fx=D.fx||{}; D.fx.cierre=Object.assign({},D.fx.cierre||{},{origen:'link',url:url}); }
+      /* ★ 19/11 (jardin-de-papel): subir una «Imagen decorativa (sobre o regalo)» propia saca el dibujo del catálogo; si no, el dibujo le ganaba y la foto nueva no se veía. */
+      if(/imagen-decorativa-sobre-o-regalo/.test(key)){ D.fx=D.fx||{}; if(D.fx.regalo&&D.fx.regalo.dibujo) D.fx.regalo.dibujo=''; }
       if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[key]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[key]=true;}
       if(box)box.innerHTML=ICO.tilde+' Imagen subida (tocá para cambiar)';
       const p=el('prev-'+id); if(p)p.innerHTML=fotoCargadaHtml(url,key,id);
