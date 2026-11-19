@@ -2996,6 +2996,24 @@ window.SOBRES_INVITAME = {
     luz:        8.7,   /* 19/11: la tarjeta queda quieta 2,6 s más para leer el texto (Maki: «dura un segundo») */
     luzFundido: 0.6,
     papel:      {"k":[[3.6,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719],[9.5,0.2593,0.3333,0.7407,0.3333,0.7407,0.6719,0.2593,0.6719]],"o":[[5.2,0],[5.6,1],[9.5,1]],"aspecto":0.8,"linea1":"Nos casamos","fuente":"Pinyon Script","color":"#5f5368","w":1080,"h":1920,"tam":125}
+  },
+  /* --------------------------------------------------------------------------
+     JARDÍN DE PAPEL (19/11/2026) · copia de la presentación del reel Df4vQDFsRPd:
+     un arco de papel crema vacío y la escena se arma capa por capa (nubes, cipreses,
+     fuente, pérgola con moño, rosas) hasta que baja un cartel en blanco. NO es un
+     sobre: es la presentación, y su último cuadro ES la portada (empalme foto).
+     Kling 3.0 Standard (API de Higgsfield) desde la foto del arco vacío (Flow, Nano
+     Banana Pro). 10 s + 1,6 s del último cuadro quieto para el empalme.
+     -------------------------------------------------------------------------- */
+  "jardin-papel": {
+    nombre:     "Jardín de papel · arco de papel que se arma capa por capa → cartel para los nombres (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto:good,vc_h264:main:3.1,ac_none/invitame/jardin-papel/apertura-v1.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0,q_auto:best,f_jpg/invitame/jardin-papel/apertura-v1.jpg",
+    color:      "#F8F4E8",
+    empalme:    "foto",
+    luz:        10.2,
+    luzColor:   "#F8F4E8",
+    luzFundido: 0.8
   }
 
 };
