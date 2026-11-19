@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Aurora & Leo · Nos casamos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+:root{--tinta:#4a3426;--oro:#a8823f;--crema:#fff8ee}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#1a120c;color:var(--tinta);font-family:'Cormorant Garamond',Georgia,serif;-webkit-font-smoothing:antialiased}
+body{height:var(--largo,1400vh)}
+#fondoPc{position:fixed;inset:0;background:url(img/tira.webp) center 70%/cover;filter:blur(28px) brightness(.55) saturate(1.1);transform:scale(1.2)}
+#escena{position:fixed;top:0;left:50%;transform:translateX(-50%);width:min(100vw,calc(100dvh*.5625));height:100dvh;overflow:hidden;background:#f3e6d6;box-shadow:0 0 80px rgba(0,0,0,.5)}
+.toma{position:absolute;inset:0;opacity:0;will-change:opacity}
+.toma img{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;user-select:none;-webkit-user-drag:none}
+#marco,#barrido{position:absolute;inset:0;pointer-events:none}
+#marco img,#barrido img{position:absolute;left:0;bottom:0;width:100%;will-change:transform,opacity,filter}
+#marco img{transform-origin:50% 100%;bottom:-16%}
+#barrido img{transform-origin:50% 92%;opacity:0}
+#brillos{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#velo{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 55%,rgba(255,236,200,.95),rgba(255,236,200,0) 70%);opacity:0}
+.puff{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,246,236,.95),rgba(255,240,226,.6) 55%,rgba(255,240,226,0));filter:blur(6px);opacity:0}
+
+.nube{position:absolute;left:50%;width:84%;padding:9% 9% 8%;text-align:center;opacity:0;pointer-events:none;transform:translate(-50%,0);will-change:transform,opacity,filter}
+.nube::before{content:"";position:absolute;inset:-2% -3%;z-index:-1;
+ background:
+ radial-gradient(circle at 18% 34%,#fffbf5 0 17%,rgba(255,251,245,0) 23%),
+ radial-gradient(circle at 36% 18%,#fffbf5 0 19%,rgba(255,251,245,0) 25%),
+ radial-gradient(circle at 60% 15%,#fffbf5 0 21%,rgba(255,251,245,0) 27%),
+ radial-gradient(circle at 82% 32%,#fffbf5 0 17%,rgba(255,251,245,0) 23%),
+ radial-gradient(circle at 12% 66%,#fffaf2 0 15%,rgba(255,251,245,0) 21%),
+ radial-gradient(circle at 88% 68%,#fffaf2 0 15%,rgba(255,251,245,0) 21%),
+ radial-gradient(circle at 34% 86%,#fffaf2 0 16%,rgba(255,251,245,0) 22%),
+ radial-gradient(circle at 66% 86%,#fffaf2 0 16%,rgba(255,251,245,0) 22%),
+ radial-gradient(ellipse 44% 40% at 50% 52%,#fffbf5 0 92%,rgba(255,251,245,0) 100%);
+ filter:blur(3px) drop-shadow(0 10px 22px rgba(120,80,40,.22));opacity:.97;animation:flota 7s ease-in-out infinite}
+@keyframes flota{50%{transform:translateY(-3px) scale(1.015)}}
+.nube.activa{pointer-events:auto}
+.guion{font-family:'Great Vibes',cursive;font-weight:400;color:#5a3d2a;line-height:1}
+.chico{font-size:clamp(11px,3.1vw,14px);letter-spacing:.32em;text-transform:uppercase;color:var(--oro);font-weight:600}
+.texto{font-size:clamp(18px,5.2vw,23px);line-height:1.35;font-weight:500;font-style:italic}
+.raya{width:46px;height:1px;margin:.7em auto;background:linear-gradient(90deg,transparent,var(--oro),transparent)}
+.fecha{display:flex;justify-content:center;align-items:center;gap:.5em;font-weight:600;font-size:clamp(14px,4vw,18px);letter-spacing:.12em;text-transform:uppercase}
+.fecha b{font-family:'Cormorant Garamond';font-size:2.6em;font-weight:500;letter-spacing:0;line-height:1;padding:0 .25em;border-left:1px solid #c9ad7c;border-right:1px solid #c9ad7c}
+.cuenta{display:flex;justify-content:center;gap:.9em;margin-top:.8em}
+.cuenta div{min-width:2.6em}.cuenta span{display:block;font-size:clamp(20px,6vw,28px);font-weight:600;line-height:1}.cuenta small{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
+.lugar{margin:.4em 0 .2em}.lugar h3{font-family:'Great Vibes';font-weight:400;font-size:clamp(24px,7vw,32px);line-height:1.1}
+.lugar p{font-size:clamp(13.5px,3.8vw,16px);line-height:1.3;font-weight:500}
+.boton{display:inline-block;margin-top:.55em;padding:.62em 1.3em;border-radius:999px;border:1px solid #b8955a;background:linear-gradient(#fffaf2,#f4e6cf);color:#5a3d2a;font:600 11.5px/1 'Cormorant Garamond',serif;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;box-shadow:0 4px 14px rgba(120,80,30,.18)}
+.boton.lleno{background:linear-gradient(#b8955a,#9a7740);color:#fff;border-color:#8f6c37}
+
+#portadaInicio{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;
+ background:radial-gradient(70% 45% at 50% 46%,rgba(255,250,242,.92),rgba(255,246,236,.55) 60%,rgba(255,240,226,.15)),url(img/tira.webp) center 12%/cover;transition:opacity 1.4s ease}
+#portadaInicio.va{opacity:0;pointer-events:none}
+#portadaInicio .ini{font-family:'Great Vibes';font-size:clamp(60px,20vw,96px);color:#6b4a30;line-height:1}
+#portadaInicio .nom{font-family:'Great Vibes';font-size:clamp(34px,10vw,48px);color:#5a3d2a;margin-top:.1em}
+#portadaInicio .toca{margin-top:2.2em;font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:#6d5032;font-weight:700;animation:late 2.2s ease-in-out infinite}
+@keyframes late{50%{opacity:.45}}
+#desliza{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);z-index:9;text-align:center;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#fff;font-weight:700;text-shadow:0 1px 8px rgba(80,50,20,.7);transition:opacity .6s;pointer-events:none}
+#desliza i{display:block;margin:6px auto 0;width:1px;height:26px;background:linear-gradient(#fff,transparent);animation:baja 1.6s ease-in-out infinite}
+@keyframes baja{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+#musica{position:absolute;top:14px;right:14px;z-index:15;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(90,60,35,.35);backdrop-filter:blur(6px);color:#fff;font-size:15px;cursor:pointer;display:none}
+#barra{position:absolute;left:0;top:0;height:2px;background:linear-gradient(90deg,#e8cf9c,#b8955a);z-index:15;width:0}
+body.video #desliza,body.video #musica,body.video #barra,body.video #portadaInicio,body.video #fondoPc{display:none}
+body.video #escena{width:100vw;height:100vh;box-shadow:none}
+@media (prefers-reduced-motion:reduce){.nube::before{animation:none}}
+</style>
+</head>
+<body>
+<div id="fondoPc"></div>
+<div id="escena">
+  <div class="toma" id="t-tira"><img src="img/tira.webp" alt="" data-w="768" data-h="2232"></div>
+  <div class="toma" id="t-novios"><img src="img/novios.webp" alt="" data-w="768" data-h="1376"></div>
+  <div class="toma" id="t-novia"><img src="img/novia.webp" alt="" data-w="768" data-h="1376"></div>
+  <div class="toma" id="t-rama"><img src="img/rama.webp" alt="" data-w="768" data-h="1376"></div>
+  <div class="toma" id="t-glorieta"><img src="img/glorieta.webp" alt="" data-w="768" data-h="1376"></div>
+
+  <div id="puffs"></div>
+  <canvas id="brillos"></canvas>
+  <div id="marco"><img src="img/flores-2.webp" alt=""></div>
+
+  <div class="nube" id="n-frase" style="top:30%">
+    <div class="texto">«Hay historias que se escriben<br>en el cielo mucho antes<br>de que lleguen a la tierra.»</div>
+    <div class="raya"></div><div class="chico">La nuestra empieza así</div>
+  </div>
+  <div class="nube" id="n-nombres" style="top:7%;width:80%">
+    <div class="chico">Nos casamos</div>
+    <div class="guion" style="font-size:clamp(46px,14vw,64px);margin:.12em 0 .05em">Aurora <span style="font-size:.6em">&amp;</span> Leo</div>
+    <div class="chico" style="letter-spacing:.24em">Valle de Bravo · 2027</div>
+  </div>
+  <div class="nube" id="n-mensaje" style="top:24%;left:40%;width:66%">
+    <div class="texto">Cuando lo encontré supe que todos mis caminos llevaban a él.</div>
+    <div class="raya"></div>
+    <div class="texto" style="font-size:.9em">Y queremos que estés en el día en que empezamos el nuestro.</div>
+  </div>
+  <div class="nube" id="n-fecha" style="top:30%">
+    <div class="chico">Guarda la fecha</div><div class="raya"></div>
+    <div class="fecha"><span>Sábado</span><b>9</b><span>Octubre</span></div>
+    <div class="chico" style="margin-top:.6em;letter-spacing:.24em">2027 · 17:30 h</div>
+    <div class="cuenta" id="cuenta"></div>
+  </div>
+  <div class="nube" id="n-lugar" style="top:5%;width:88%;padding-top:7%;padding-bottom:7%">
+    <div class="lugar"><div class="chico">Ceremonia · 17:30</div><h3>Templo Santa María Ahuacatlán</h3><p>Valle de Bravo, Estado de México</p>
+      <a class="boton" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Santa+Mar%C3%ADa+Ahuacatl%C3%A1n+Valle+de+Bravo">Cómo llegar</a></div>
+    <div class="raya"></div>
+    <div class="lugar"><div class="chico">Recepción</div><h3>Jardín de cristal</h3><p>Hotel Avándaro · Valle de Bravo</p>
+      <a class="boton" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Hotel+Av%C3%A1ndaro+Valle+de+Bravo">Cómo llegar</a></div>
+  </div>
+  <div class="nube" id="n-final" style="top:6%;width:82%">
+    <div class="guion" style="font-size:clamp(36px,11vw,50px)">¿Nos acompañas?</div>
+    <div class="texto" style="font-size:.95em;margin-top:.3em">Tu lugar ya está reservado en nuestra historia.</div>
+    <a class="boton lleno" target="_blank" rel="noopener" href="https://wa.me/?text=%C2%A1Confirmo%20mi%20asistencia%20a%20la%20boda%20de%20Aurora%20y%20Leo!%20%F0%9F%A4%8D">Confirmar asistencia</a>
+    <div class="chico" style="margin-top:1em;font-size:10px">Vestimenta · Formal de jardín</div>
+  </div>
+
+  <div id="barrido"><img src="img/flores-1.webp" alt=""></div>
+  <div id="velo"></div>
+  <div id="barra"></div>
+  <div id="desliza">Desliza<i></i></div>
+  <button id="musica" aria-label="Música">♪</button>
+  <div id="portadaInicio">
+    <div class="ini">A L</div><div class="nom">Aurora &amp; Leo</div>
+    <div class="chico" style="margin-top:.6em">09 · 10 · 2027</div>
+    <div class="toca">Toca para comenzar</div>
+  </div>
+</div>
+<audio id="audio" src="musica.mp3" loop preload="auto"></audio>
+<script>
+(()=>{
+const VIDEO=/[?&]video=1/.test(location.search);
+if(VIDEO)document.body.classList.add('video');
+const $=id=>document.getElementById(id);
+const esc=$('escena');
+const U=13;                       // largo del viaje, en "tramos"
+const PX=()=>innerHeight*.95;     // scroll por tramo
+document.documentElement.style.setProperty('--largo',(U*95+100)+'vh');
+
+const ease=t=>t<0?0:t>1?1:t*t*(3-2*t);
+const eio=t=>t<0?0:t>1?1:(t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2);
+const lerp=(a,b,t)=>a+(b-a)*t;
+const tramo=(u,a,b)=>Math.min(1,Math.max(0,(u-a)/(b-a)));
+
+// ── LAS TOMAS: cámara [cx,cy,zoom] de→a, en qué tramo ──
+const TOMAS=[
+ {id:'t-tira',    a:-1,  b:4.05, cam:u=>{ if(u<1) return [.5,.13,1];
+                     if(u<3) {const q=eio(tramo(u,1,3));return [.5,lerp(.13,.70,q),1]}
+                     const q=eio(tramo(u,3,4.05));return [.5,lerp(.70,.721,q),lerp(1,3.1,q)]}},
+ {id:'t-novios',  a:3.75,b:5.55, cam:u=>{const q=tramo(u,3.75,5.55);return [.5,lerp(.6,.55,q),lerp(1.32,1.06,eio(q))]}},
+ {id:'t-novia',   a:5.45,b:7.55, cam:u=>{const q=tramo(u,5.45,7.55);return [lerp(.62,.5,eio(q)),.5,lerp(1.18,1.05,q)]}},
+ {id:'t-rama',    a:7.45,b:9.55, cam:u=>{const q=eio(tramo(u,7.45,9.4));return [.5,lerp(.82,.36,q),lerp(1.25,1.08,q)]}},
+ {id:'t-glorieta',a:9.45,b:11.55,cam:u=>{const q=tramo(u,9.45,11.55);return [.5,lerp(.6,.62,q),lerp(1.0,1.45,eio(q))]}},
+ {id:'t-novios',  a:11.45,b:99,  cam:u=>{const q=eio(tramo(u,11.45,12.6));return [.5,lerp(.62,.6,q),lerp(1.35,1.0,q)]}, fin:true},
+];
+// barridos de flores (pasan por delante de la cámara y tapan el corte)
+const BARRIDOS=[5.15,7.15,9.15,11.15];
+const BL=.6; // largo de cada barrido
+// nubes de texto: [id, entra, sale]
+const NUBES=[['n-frase',.15,1.05],['n-nombres',4.35,5.25],['n-mensaje',6.0,7.15],['n-fecha',8.1,9.2],['n-lugar',10.05,11.2],['n-final',12.1,99]];
+
+const imgs={};document.querySelectorAll('.toma').forEach(t=>{const i=t.querySelector('img');imgs[t.id]={el:t,img:i,w:+i.dataset.w,h:+i.dataset.h}});
+function camara(T,cx,cy,z){
+  const VW=esc.clientWidth,VH=esc.clientHeight;
+  const k=Math.max(VW/T.w,VH/T.h)*z, DW=T.w*k, DH=T.h*k;
+  let tx=VW/2-cx*DW, ty=VH/2-cy*DH;
+  tx=Math.min(0,Math.max(VW-DW,tx)); ty=Math.min(0,Math.max(VH-DH,ty));
+  T.img.style.width=T.w+'px';
+  T.img.style.transform=`translate3d(${tx}px,${ty}px,0) scale(${k})`;
+}
+// ── nubes que pasan durante la bajada ──
+const puffs=[];for(let i=0;i<9;i++){const d=document.createElement('div');d.className='puff';$('puffs').appendChild(d);
+  puffs.push({el:d,x:(i*37%100)/100,s:.7+(i*53%60)/100,v:1+(i%3)*.55,o:(i*29%100)/100})}
+// ── brillos ──
+const cv=$('brillos'),cx=cv.getContext('2d');let P=[];
+function tam(){const r=devicePixelRatio>1?2:1;cv.width=esc.clientWidth*r;cv.height=esc.clientHeight*r;cx.setTransform(r,0,0,r,0,0)}
+for(let i=0;i<70;i++)P.push({x:Math.random(),y:Math.random(),z:.3+Math.random()*.9,f:Math.random()*6.28,v:.2+Math.random()*.6});
+// semilla fija en video, para que cada cuadro sea igual al renderizar
+if(VIDEO){let s=7;const R=()=>(s=(s*16807)%2147483647)/2147483647;P=P.map(()=>({x:R(),y:R(),z:.3+R()*.9,f:R()*6.28,v:.2+R()*.6}))}
+
+function cuenta(){const d=new Date('2027-10-09T17:30:00-06:00')-new Date();const v=Math.max(0,d);
+  const D=Math.floor(v/864e5),H=Math.floor(v/36e5)%24,M=Math.floor(v/6e4)%60;
+  $('cuenta').innerHTML=`<div><span>${D}</span><small>días</small></div><div><span>${H}</span><small>horas</small></div><div><span>${M}</span><small>min</small></div>`}
+cuenta();setInterval(cuenta,30000);
+
+function pintar(u,seg){
+  const VW=esc.clientWidth,VH=esc.clientHeight;
+  // tomas
+  const vis={};
+  TOMAS.forEach(t=>{
+    if(u<t.a-.001||u>t.b+.001)return;
+    const fi=t.a<0?1:ease(tramo(u,t.a,t.a+.3)), fo=t.fin?1:1-ease(tramo(u,t.b-.3,t.b));
+    const o=Math.min(fi,fo); vis[t.id]=Math.max(vis[t.id]||0,o);
+    if(o>0){const [a,b,z]=t.cam(u);camara(imgs[t.id],a,b,z)}
+  });
+  for(const id in imgs)imgs[id].el.style.opacity=vis[id]||0;
+  // orden: la toma que entra va arriba
+  // nubes en la bajada
+  const qb=tramo(u,.9,3.2);
+  puffs.forEach(p=>{const y=1.2-((qb*1.9*p.v+p.o)%1.6);const w=VW*p.s;
+    p.el.style.width=w+'px';p.el.style.height=w*.55+'px';
+    p.el.style.transform=`translate3d(${p.x*VW-w/2}px,${y*VH}px,0)`;
+    p.el.style.opacity=(qb>0&&qb<1)?(Math.sin(qb*Math.PI)*.85):0});
+  // marco de flores de adelante (paralaje): sube al llegar al jardín y en las tomas con novios
+  let mo=0,my=0,ms=1.0;
+  mo=Math.max(mo,ease(tramo(u,2.4,3.1))*(1-ease(tramo(u,3.7,4.0))));          // la bajada termina entre flores
+  my=lerp(VH*.35,0,ease(tramo(u,2.2,3.1)));
+  const fN=(a,b)=>ease(tramo(u,a,a+.35))*(1-ease(tramo(u,b-.35,b)));
+  mo=Math.max(mo,fN(4.0,5.4),fN(9.7,11.4),fN(11.6,99));
+  const der=(u%2)*6-3;
+  $('marco').firstElementChild.style.opacity=mo;
+  $('marco').firstElementChild.style.transform=`translate3d(${der}px,${my}px,0) scale(${ms+Math.sin(seg*.4)*.006})`;
+  // barridos
+  let bo=0,bs=1,bb=0;
+  BARRIDOS.forEach(a=>{const q=tramo(u,a,a+BL);if(q<=0||q>=1)return;
+    bs=lerp(1,9,Math.pow(q,1.6));bo=q<.15?q/.15:q>.62?1-(q-.62)/.38:1;bb=q>.5?(q-.5)*18:0});
+  const bi=$('barrido').firstElementChild;bi.style.opacity=bo;bi.style.transform=`scale(${bs})`;bi.style.filter=bb?`blur(${bb.toFixed(1)}px)`:'none';
+  // destello suave en cada corte
+  let vo=0;BARRIDOS.forEach(a=>{const q=tramo(u,a+.2,a+.45);if(q>0&&q<1)vo=Math.max(vo,Math.sin(q*Math.PI)*.55)});
+  vo=Math.max(vo,Math.sin(tramo(u,3.6,4.0)*Math.PI)*.7);
+  $('velo').style.opacity=vo;
+  // nubes de texto
+  NUBES.forEach(([id,a,b])=>{const el=$(id);const i=ease(tramo(u,a,a+.35)),o=1-ease(tramo(u,b-.3,b));const v=Math.min(i,o);
+    el.style.opacity=v;el.style.transform=`translate(-50%,${(1-i)*26-(1-o)*18}px) scale(${.92+.08*i})`;
+    el.style.filter=v<.99?`blur(${((1-v)*6).toFixed(1)}px)`:'none';el.classList.toggle('activa',v>.6)});
+  // brillos
+  cx.clearRect(0,0,VW,VH);
+  P.forEach(p=>{const t=seg*p.v*.05;let x=(p.x+Math.sin(seg*.3+p.f)*.02)*VW,y=((p.y-t-u*.06*p.z)%1+1)%1*VH;
+    const r=p.z*1.9,a=(.35+.45*Math.sin(seg*1.7+p.f*3))*p.z;
+    const g=cx.createRadialGradient(x,y,0,x,y,r*4);g.addColorStop(0,`rgba(255,240,200,${a})`);g.addColorStop(.35,`rgba(255,214,140,${a*.4})`);g.addColorStop(1,'rgba(255,214,140,0)');
+    cx.fillStyle=g;cx.beginPath();cx.arc(x,y,r*4,0,6.29);cx.fill()});
+  $('barra').style.width=(Math.min(1,u/12.4)*100)+'%';
+  $('desliza').style.opacity=u<.25?1:0;
+}
+tam();addEventListener('resize',()=>{tam();pintar(cur,performance.now()/1000)});
+
+let cur=0;
+if(VIDEO){
+  window.render=(u,seg)=>pintar(u,seg);
+  window.listo=Promise.all([...document.images].map(i=>i.decode().catch(()=>0)).concat(document.fonts.ready));
+  pintar(0,0);return;
+}
+// ── modo web: el scroll mueve la cámara, suavizado ──
+const audio=$('audio'),bm=$('musica');
+$('portadaInicio').onclick=()=>{$('portadaInicio').classList.add('va');bm.style.display='block';audio.play().catch(()=>{});};
+bm.onclick=()=>{if(audio.paused){audio.play();bm.textContent='♪'}else{audio.pause();bm.textContent='×'}};
+function frame(){const tgt=Math.min(U,scrollY/PX());cur+= (tgt-cur)*.075;if(Math.abs(tgt-cur)<.0005)cur=tgt;
+  pintar(cur,performance.now()/1000);requestAnimationFrame(frame)}
+frame();
+})();
+</script>
+</body>
+</html>
