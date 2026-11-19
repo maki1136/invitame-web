@@ -129,6 +129,13 @@
         ['texto', 'Ubicación: dirección o link de Google Maps (vacío = sin botón)', 'mapa'],
         ['casilla', 'Sin el botón de confirmar', 'sinConfirmar'],
         ['casilla', 'Sin el botón de descargar', 'sinDescarga']] },
+    /* 19/11 (Jazmín, Any y Luismi): «en vez del sobre, que aparezca esa imagen como inicio».
+       Lo pinta /efectos/entrada-imagen.js. Guarda en fx.entradaImagen. */
+    { key: 'entradaImagen', objFx: 'entradaImagen', tab: 'PRINCIPAL', casa: 'diseno', titulo: 'Entrada con imagen (en vez del sobre, la imagen del cliente: se toca y se abre la invitación)',
+      campos: [['casilla', 'Usar la imagen del cliente como entrada (reemplaza al sobre)', 'on'],
+        ['imagen', 'La imagen de entrada (vertical, la que mandó el cliente)', 'url'],
+        ['casilla', 'Que llene toda la pantalla (si no, se ve entera con el fondo desenfocado)', 'llenar'],
+        ['casilla', 'Sumar abajo la pastilla «Toca para abrir» (si la imagen no lo dice)', 'aviso']] },
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
