@@ -122,11 +122,11 @@
   }
 
   let cur="PRINCIPAL";
-  function buildTabs(){el('tabs').innerHTML=ORDER.map(t=>'<div class="tab '+(t===cur?'on':'')+(t==='INVITADOS'||t==='EFECTOS'?' nuevo':'')+'" onclick="go(\''+t+'\')">'+(t==='INVITADOS'?'INVITADOS':t==='EFECTOS'?ICO.destello+' EFECTOS':t)+'</div>').join('');}
+  function buildTabs(){el('tabs').innerHTML=ORDER.map(t=>'<div class="tab '+(t===cur?'on':'')+(t==='INVITADOS'||t==='EFECTOS'?' nuevo':'')+'" onclick="go(\''+t+'\')">'+(t==='INVITADOS'?'INVITADOS':t==='EFECTOS'?ICO.destello+' EFECTOS':t==='LIBRO'?'📖 LIBRO':t)+'</div>').join('');}
   // Cada pestaña edita principalmente una sección de la invitación.
   // Al cambiar de pestaña, scrolleamos el preview a esa sección para que
   // la diseñadora VEA lo que está tocando (antes el preview se quedaba en la portada).
-  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',PAQUETE:'',EFECTOS:'',INVITADOS:''};
+  const TAB2SEC={PRINCIPAL:'',LUGAR_VEST:'eventos',GALERIA_INSTA_VID:'galeria',PERSONAS:'padres',REGALOS:'regalos','CONFIRMACIÓN':'confirmacion',MUSIC_PASES:'spotify',AVANZADO:'',TRIVIA:'trivia',PAQUETE:'',LIBRO:'',EFECTOS:'',INVITADOS:''};
   function scrollPreviewTo(sec){
     const fr=el('pv-frame'); if(!fr||!fr.contentDocument)return;
     try{
@@ -224,7 +224,8 @@
     'novedades-selector':['PRINCIPAL','ocultas'],   /* 29/10: novedades sólo en invitaciones nuevas */
     'paquete-selector':['PAQUETE','paquete'],
     'qrlink-selector':['INVITADOS','qrlink'],   /* 28/10: QR para abrir la invitación (Jazmín) */
-    'camarafotos-selector':['INVITADOS','camarafotos']   /* 4/11: la foto de cada invitado para la camarita */
+    'camarafotos-selector':['INVITADOS','camarafotos'],   /* 4/11: la foto de cada invitado para la camarita */
+    'libro-editor':['LIBRO','libro']   /* 19/11: el formato Libro (efectos/panel-libro.js) */
   };
   // dónde va cada casa dentro de su pestaña: antes del campo con ese id, o
   // (sin campo) después del bloque «Empezá por acá» / arriba de todo / al final
@@ -245,7 +246,8 @@
     ocultas:{abajo:true},
     paquete:{arriba:true},
     qrlink:{arriba:true},
-    camarafotos:{abajo:true}
+    camarafotos:{abajo:true},
+    libro:{arriba:true}
   };
   // Los módulos llegan en cualquier orden: dentro de la casa se acomodan en el
   // orden de CASA_DE_MODULO (la colección primero, que es la que manda).
@@ -488,7 +490,12 @@
     if(!window.INV||!INV.uploadImage){alert('Todavía no cargó la base. Esperá 2 seg.');return;}
     const box=input.previousElementSibling; const prev=box?box.innerHTML:'';
     if(box)box.textContent='Subiendo…';
-    try{const url=await INV.uploadImage(f); D[key]=url; if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[key]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[key]=true;}
+    try{const url=await INV.uploadImage(f); D[key]=url;
+      /* ★ 19/11 (jardin-de-papel): al SUBIR la foto del fin de página quedaba el link viejo en fx.cierre y la invitación seguía mostrando la foto anterior. Subirla ES elegir el cierre, igual que con el botón de la muestra. */
+      if(/fin-de-pagina/.test(key)){ D.fx=D.fx||{}; D.fx.cierre=Object.assign({},D.fx.cierre||{},{origen:'link',url:url}); }
+      /* ★ 19/11 (jardin-de-papel): subir una «Imagen decorativa (sobre o regalo)» propia saca el dibujo del catálogo; si no, el dibujo le ganaba y la foto nueva no se veía. */
+      if(/imagen-decorativa-sobre-o-regalo/.test(key)){ D.fx=D.fx||{}; if(D.fx.regalo&&D.fx.regalo.dibujo) D.fx.regalo.dibujo=''; }
+      if(window.INVSECTOR_CLAVES&&INVSECTOR_CLAVES[key]){D.fx=D.fx||{};D.fx.sectorElegido=D.fx.sectorElegido||{};D.fx.sectorElegido[key]=true;}
       if(box)box.innerHTML=ICO.tilde+' Imagen subida (tocá para cambiar)';
       const p=el('prev-'+id); if(p)p.innerHTML=fotoCargadaHtml(url,key,id);
       if(/fondo/i.test(key)) avisarFotoFondo(url,id);
@@ -729,6 +736,12 @@
     if(/^Mar[íi]a$/.test((D.n1||'').trim())&&/^Diego$/.test((D.n2||'').trim())) av.push('Los nombres siguen siendo los del ejemplo («'+P+'»)');
     if((D.slug||'')==='maria-y-diego') av.push('La dirección del link sigue siendo «maria-y-diego»');
     if(String(D.fecha||'').indexOf('2026-11-28')===0) av.push('La fecha sigue siendo la del ejemplo (28/11/2026)');
+    /* ★ 19/11: en el formato LIBRO la frase larga, la portada de siempre y la trivia no se ven (el invitado ve el libro): se avisa por lo del libro */
+    const _lb=D.fx&&D.fx.libro&&D.fx.libro.on?D.fx.libro:null;
+    if(_lb){ if(!(_lb.portada&&_lb.portada.foto)) av.push('El libro no tiene foto de portada (pestaña LIBRO)');
+      if(!((_lb.caps||[]).filter(c=>c&&(c.titulo||c.texto)).length>=3)) av.push('El libro tiene menos de 3 capítulos con texto (pestaña LIBRO)');
+      if(!String(D['c_numero-de-whatsapp']||D['c_numero-de-whatsapp-2']||'').replace(/\D/g,'')) av.push('El libro no tiene WhatsApp para «Confirmar asistencia» (pestaña LIBRO)');
+      return av; }
     if(/Hay un instante en la vida/.test(D.frase||'')) av.push('La «Frase Larga» es la del ejemplo (pestaña PRINCIPAL)');   /* 1/10/2026: decía «frase principal», que es OTRO campo (kick): Jazmín cambiaba ése y el aviso no se iba */
     if(/images\.unsplash\.com/.test(D.cover||'')) av.push('La foto de portada es una del ejemplo (no es de la pareja)');
     // la trivia sólo cuenta si está PRENDIDA (TRIVIA → Habilitar trivia): apagada no se ve

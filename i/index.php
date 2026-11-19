@@ -271,6 +271,16 @@ if ($estado === 'por-revisar') {
   if (!$puede) { include __DIR__ . '/en-preparacion.php'; exit; }
 }
 
+/* ===== FORMATO «LIBRO» (19/11/2026) ==========================================
+   Opt-in: sólo si el evento tiene fx.libro.on === true (lo prende el panel,
+   pestaña LIBRO). Va DESPUÉS de los portones de arriba, así respeta «por
+   revisar» y «sólo con pase». Las invitaciones sin la marca no cambian nada. */
+if ($leyoEvento && isset($data['fields']['fx']['mapValue']['fields']['libro']['mapValue']['fields']['on']['booleanValue'])
+    && $data['fields']['fx']['mapValue']['fields']['libro']['mapValue']['fields']['on']['booleanValue'] === true) {
+  include __DIR__ . '/libro.php';
+  exit;
+}
+
 /* Para poder PROBAR una paleta o un tamaño sin guardarlos:
    ?paleta=olivo   ?tam_titulo=40                                            */
 if (isset($_GET['paleta']) && $_GET['paleta'] !== '') {

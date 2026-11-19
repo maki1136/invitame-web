@@ -128,6 +128,50 @@
   /* el panel arma las tarjetas leyendo de acá */
   window.INVPALETAS = PALETAS;
 
+  /* ★ 19/11/2026 · LA PALETA PROPIA (Jazmín: «tiene que estar la opción de
+     colocar paletas de colores personalizadas, para poder colocar los colores
+     de los clientes»). fx.paleta.id = 'propia' y fx.paleta.propia =
+     {verde, sage, oro, lino}: el principal, el acento, el metal y el papel.
+     Las otras seis variables SALEN de esas cuatro, y el principal, el acento y
+     el texto chico se CORRIGEN solos hasta leerse (7 · 4,6 · 5 contra el
+     papel), igual que se midieron las de fábrica. Se publica como una entrada
+     más de INVPALETAS (id 'propia'), así la encuentran todos los módulos que
+     buscan la paleta por id (botones, perla, vestimenta, colección…).
+     ⚠️ Opt-in: sólo cambia algo si alguien elige «Paleta propia». */
+  function hex(c) { c = String(c || '').trim(); if (/^#[0-9a-f]{3}$/i.test(c)) c = '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3]; return /^#[0-9a-f]{6}$/i.test(c) ? c.toLowerCase() : ''; }
+  function rgb(c) { c = hex(c); return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
+  function aHex(r) { return '#' + r.map(function (v) { v = Math.max(0, Math.min(255, Math.round(v))); return (v < 16 ? '0' : '') + v.toString(16); }).join(''); }
+  function mezcla(a, b, k) { var x = rgb(a), y = rgb(b); return aHex([0, 1, 2].map(function (i) { return x[i] + (y[i] - x[i]) * k; })); }
+  function lum(c) { return rgb(c).map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }).reduce(function (s, v, i) { return s + v * [0.2126, 0.7152, 0.0722][i]; }, 0); }
+  function contraste(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function aHsl(c) { var x = rgb(c).map(function (v) { return v / 255; }), mx = Math.max.apply(null, x), mn = Math.min.apply(null, x), l = (mx + mn) / 2, h = 0, s = 0, d = mx - mn;
+    if (d) { s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === x[0] ? (x[1] - x[2]) / d + (x[1] < x[2] ? 6 : 0) : mx === x[1] ? (x[2] - x[0]) / d + 2 : (x[0] - x[1]) / d + 4; h /= 6; } return [h, s, l]; }
+  function deHsl(h, s, l) { function f(p, q, t) { if (t < 0) t += 1; if (t > 1) t -= 1; return t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p; }
+    if (!s) return aHex([l * 255, l * 255, l * 255]); var q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q; return aHex([f(p, q, h + 1 / 3) * 255, f(p, q, h) * 255, f(p, q, h - 1 / 3) * 255]); }
+  /* se oscurece (o aclara, si el papel es oscuro) SIN perder el tono: un rosa sigue siendo rosa, más profundo */
+  function legible(c, papel, min) { var hsl = aHsl(c), baja = lum(papel) > 0.35, r = c, n = 0;
+    while (contraste(r, papel) < min && n++ < 50) { hsl[2] = Math.max(0, Math.min(1, hsl[2] + (baja ? -0.02 : 0.02))); r = deHsl(hsl[0], hsl[1], hsl[2]); } return r; }
+  function armarPropia(o) {
+    o = o || {};
+    var lino = hex(o.lino) || '#f5f1ea', verde0 = hex(o.verde) || '#3d3329', sage0 = hex(o.sage) || '#8a6a4f', oro = hex(o.oro) || '#c2a35f';
+    var verde = legible(verde0, lino, 7), sage = legible(sage0, lino, 4.6);
+    var x = rgb(oro), mx = Math.max.apply(null, x), mn = Math.min.apply(null, x), sat = mx ? (mx - mn) / mx : 0;
+    var r = { id: 'propia', nombre: 'Paleta propia', propia: true, metal: sat < 0.18 ? 'plata' : 'oro',
+      verde: verde, verde2: mezcla(verde, lum(lino) > 0.35 ? '#000000' : '#ffffff', 0.25), sage: sage, sageCl: mezcla(sage0, lino, 0.6), oro: oro,
+      lino: lino, lino2: mezcla(lino, '#ffffff', 0.6), cream: mezcla(lino, verde, 0.07), muted: legible(mezcla(verde, '#808080', 0.45), lino, 5), seal: verde };
+    r.ajustes = [];
+    if (verde !== verde0) r.ajustes.push('principal');
+    if (sage !== sage0) r.ajustes.push('acento');
+    return r;
+  }
+  window.INVPALETA_ARMAR = armarPropia;
+  function propiaDe(ev) { try { var p = ((ev || {}).fx || {}).paleta || {}; return p.id === 'propia' ? (p.propia || {}) : null; } catch (e) { return null; } }
+  function ponerPropia(o) {
+    var nueva = armarPropia(o), i;
+    for (i = 0; i < PALETAS.length; i++) if (PALETAS[i].id === 'propia') { for (var k in nueva) PALETAS[i][k] = nueva[k]; return PALETAS[i]; }
+    PALETAS.push(nueva); return nueva;
+  }
+
   /* ---- LOS DOS GRUPOS ---------------------------------------------------- */
 
   /* 1) SIN CAMPO A MANO: la paleta manda siempre.
@@ -166,6 +210,7 @@
 
   function buscar(id) {
     if (!id) return null;
+    if (id === 'propia') { var pp = propiaDe(window.INVEV); return pp ? ponerPropia(pp) : null; }
     for (var i = 0; i < PALETAS.length; i++) if (PALETAS[i].id === id) return PALETAS[i];
     return null;
   }
@@ -271,8 +316,9 @@
     if (pintando) return;
     var id  = leerId();
     var pal = buscar(id);
-    if (id === firmaAnterior && sigueAplicada(pal)) return;
-    firmaAnterior = id;
+    var firma = id === 'propia' ? id + JSON.stringify(propiaDe(window.INVEV) || {}) : id;
+    if (firma === firmaAnterior && sigueAplicada(pal)) return;
+    firmaAnterior = firma;
     pintando = true;
     try { pintar(pal); } finally { pintando = false; }
   }
