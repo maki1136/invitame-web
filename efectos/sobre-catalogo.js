@@ -810,6 +810,13 @@
       'html.inv-datos-esperan .portada .scrollcue{opacity:0!important}',
       '.portada .c,.portada .scrollcue{transition:opacity .75s ease}',
       'html.inv-datos-esperan .portada .pbg{transform:scale(1.045)}',
+      /* 19/11 (Maki, Pasarela): «dice nuestra boda y es como que aparece y desaparece».
+         Al empezar el fundido los textos se apagaban con la MISMA transición de .75 s
+         con la que después entran: mientras el sobre se iba transparentando se veían
+         irse, desaparecían y volvían a entrar. Ahora se esconden al instante y sólo
+         la entrada es suave. Va con INVCAMBIO: las entregadas siguen como estaban. */
+      'html.inv-datos-al-toque.inv-datos-esperan .portada .c,',
+      'html.inv-datos-al-toque.inv-datos-esperan .portada .scrollcue{transition:none!important}',
       '.portada .pbg{transition:transform 1.1s cubic-bezier(.22,.72,.28,1)}'
     ].join('\n');
     (document.head || document.documentElement).appendChild(s);
@@ -818,6 +825,10 @@
   var destrabado = false;
   function retenerDatos() {
     if (destrabado) return;
+    try {
+      var ya = window.INVCAMBIO ? window.INVCAMBIO(null, '2026-11-19T06:00:00Z') : false;
+      if (ya) document.documentElement.classList.add('inv-datos-al-toque');
+    } catch (e) {}
     document.documentElement.classList.add('inv-datos-esperan');
     setTimeout(soltarDatos, TOPE);
   }

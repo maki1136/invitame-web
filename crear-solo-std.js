@@ -213,8 +213,8 @@
   /* ---- 8. el «¡Listo!» habla del Save the Date ---- */
   var done = $('done');
   if (done) {
-    var h1 = done.querySelector('h1'); if (h1) h1.textContent = '¡Listo! Recibimos tus datos';
+    var h1 = done.querySelector('h1'); if (h1) h1.textContent = '¡Importante!';
     var dt = $('done-txt');
-    if (dt) dt.innerHTML = 'Ya estamos armando tu Save the Date.<br>Te lo mandamos por WhatsApp en cuanto esté listo. ¡Gracias!';
+    if (dt) dt.innerHTML = 'Avísale a tu diseñadora que has enviado el formulario para comenzar a trabajar en tu Save the Date.';
   }
 })();

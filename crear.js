@@ -549,6 +549,7 @@
       if(fono) fono.remove(); if(ver) ver.remove();
       const _e = window.__entregada, _t = $('done-txt');
       if(_e && _t){
+        const _h=$('done-h1'); if(_h) _h.textContent='¡Listo! Tu invitación está lista';
         _t.innerHTML = 'Tu invitación ya está lista.<br><br>'
           + '<b>Link para compartir con tus invitados</b><br>'
           + '<a href="'+_e.link+'" target="_blank" style="color:var(--rosa);word-break:break-all">'+_e.link+'</a>'
