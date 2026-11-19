@@ -166,7 +166,9 @@
       poner(sec, 'background-position', img ? 'center' : '');
       var idc = 'est-sec-' + key, st = document.getElementById(idc);
       var marca = 'est-' + key; sec.setAttribute('data-est', marca);
-      var regla = (bg || img) ? '[data-est="' + marca + '"]::before,[data-est="' + marca + '"]::after{background:none!important;background-image:none!important;opacity:0!important}' : '';
+      var regla = (bg || img || es.sinDiseno) ? '[data-est="' + marca + '"]::before,[data-est="' + marca + '"]::after{background:none!important;background-image:none!important;opacity:0!important}' : '';
+      /* ★ 19/11: «Sin el dibujo del diseño» — también las piezas decorativas que la colección cuelga adentro (las flores de la banda) y la textura del propio fondo */
+      if (es.sinDiseno) regla += '[data-est="' + marca + '"] .inv-banda-deco,[data-est="' + marca + '"] > .deco,[data-est="' + marca + '"] > .flor{display:none!important}' + (img ? '' : '[data-est="' + marca + '"]{background-image:none!important}');
       if (regla && !st) { st = document.createElement('style'); st.id = idc; document.head.appendChild(st); }
       if (st && st.textContent !== regla) st.textContent = regla;
     }

@@ -13,7 +13,7 @@
 (function () {
   'use strict';
   if (window.__invAjusteAltura) return; window.__invAjusteAltura = 1;
-  function num(v) { var n = parseFloat(v); return isFinite(n) ? Math.max(-400, Math.min(500, n)) : 0; }
+  function num(v) { var n = parseFloat(v); return isFinite(n) ? Math.max(-400, Math.min(700, n)) : 0; }
   function mover(el, px) {
     if (!el) return;
     var val = px ? '0 ' + px + 'px' : '';
@@ -23,7 +23,12 @@
   function aplicar() {
     var e = window.INVEV; if (!e || !e.fx) return;
     var fx = e.fx;
-    mover(document.querySelector('.portada > .c'), num((fx.portadaFoto || {}).alturaNombres));
+    /* ★ 19/11 (Jazmín, ana-patricia-y-aldo: «intenté bajarle los textos de la portada pero están trabadas»):
+       la barrita llega hasta +700. Más allá de +350 (lo que antes no se podía) se frena sola donde
+       los nombres todavía entran en la portada, en cualquier celular. Hasta 350 queda igual que antes. */
+    var cN = document.querySelector('.portada > .c'), pN = num((fx.portadaFoto || {}).alturaNombres);
+    if (cN && pN > 350) { var po = cN.closest('.portada'); if (po) pN = Math.max(350, Math.min(pN, po.clientHeight - cN.offsetTop - cN.offsetHeight - 64)); }
+    mover(cN, pN);
     mover(document.querySelector('.fraseSec .frase'), num((fx.frase || {}).altura));
     /* ★ 19/11: la cuenta regresiva sola (fx.portadaFoto.alturaCuenta). En 0 o vacío no hace nada. */
     mover(document.querySelector('.portada .count'), num((fx.portadaFoto || {}).alturaCuenta));
