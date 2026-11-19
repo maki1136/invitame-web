@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-19T20:46:57.271Z",
+ "cuando": "2026-11-19T22:29:12.601Z",
  "slug": "camila-y-tomas",
- "total": 835,
- "verde": 813,
- "amarillo": 2,
+ "total": 830,
+ "verde": 812,
+ "amarillo": 3,
  "rojo": 15,
- "gris": 5,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -5967,8 +5967,9 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -8173,52 +8174,6 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.stdg.luz",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
    "control": "Letra principal",
    "tipo": "color",
    "guarda": true,
@@ -8265,8 +8220,11 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.stdg.luz",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
@@ -8285,7 +8243,7 @@
    "control": "Diseño",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.stdg.fuentes.txt",
+   "dato": "fx.stdg.fuentes.nom",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8295,8 +8253,11 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.stdg.fuentes.txt",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
