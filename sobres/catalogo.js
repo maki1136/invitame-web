@@ -2210,6 +2210,21 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.8
   },
 
+  /* 19/11/2026 · Jazmín: «el mismo diseño pero con el moño y las mariposas
+     azules, en vez de verde, azul». Es el video de arriba (lacre plateado) con
+     los verdes pasados a azul cuadro por cuadro: el borde rosa de las alas, las
+     flores, las perlas, el lacre plateado y el papel durazno quedan igual; la
+     luz del final no se toca. */
+  "mariposas-azules-lacre-plata-video": {
+    nombre:     "Mariposas AZULES con borde rosa, moño azul y lacre plateado · la solapa se levanta y entra la luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_6.4/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:good,vc_h264,ac_none/invitame/sobres/gen22v/mariposa-azul-plata-1080.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6/c_crop,g_south,w_0.9,h_0.9/w_1080,h_1920,c_fill,q_auto:best,f_jpg/invitame/sobres/gen22v/mariposa-azul-plata-1080.jpg",
+    color:      "#D7C3B4",
+    luz:        4.0,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
+  },
+
   /* 9/11/2026 · Jazmín (Alejandra, Mis XV): «tal cual está pero con el sobre
      blanco, el color de fondo también blanco». Es el video de arriba con el
      papel durazno pasado a blanco cuadro por cuadro (mariposas, cintas verdes,
