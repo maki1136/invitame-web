@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-19T19:44:05.888Z",
+ "cuando": "2026-11-19T20:46:57.271Z",
  "slug": "camila-y-tomas",
- "total": 812,
- "verde": 795,
+ "total": 835,
+ "verde": 813,
  "amarillo": 2,
  "rojo": 15,
- "gris": 0,
+ "gris": 5,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -3705,6 +3705,17 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "casa-estilo-hospedaje",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -3721,6 +3732,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.hospedaje.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-hospedaje",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.hospedaje.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3815,6 +3837,17 @@
   },
   {
    "tab": "LUGAR_VEST",
+   "bloque": "casa-vestimenta",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.dresscode.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
    "bloque": "itinerario-selector",
    "control": "Con dibujitos en cada momento (iglesia, copas, baile…)",
    "tipo": "checkbox",
@@ -3897,6 +3930,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.clima.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4426,6 +4470,17 @@
    "control": "(sin rótulo)",
    "tipo": "checkbox",
    "guarda": true,
+   "dato": "fx.estiloSec.hashtag.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-hashtag",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
    "dato": "fx.estiloSec.hashtag.sinLogo",
    "llega": true,
    "seVe": true,
@@ -4466,6 +4521,17 @@
   },
   {
    "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-galeria",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.galeria.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
    "bloque": "Clima del día del evento",
    "control": "Mostrar el clima",
    "tipo": "checkbox",
@@ -4493,6 +4559,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.video.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-video",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.video.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4825,6 +4902,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.padres.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PERSONAS",
+   "bloque": "casa-estilo-padres",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.padres.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5245,6 +5333,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.regalos.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "casa-regalo",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.regalos.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5828,6 +5927,17 @@
   },
   {
    "tab": "CONFIRMACIÓN",
+   "bloque": "casa-confirmacion",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.confirmacion.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
    "bloque": "",
    "control": "Activar",
    "tipo": "checkbox",
@@ -5845,8 +5955,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5856,9 +5967,8 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5879,8 +5989,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5890,9 +6001,19 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-estilo-contacto",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.contacto.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
@@ -6424,6 +6545,17 @@
   },
   {
    "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-spotify",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.spotify.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
    "bloque": "casa-estilo-pase",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -6440,6 +6572,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.pase.sinTitulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -7157,6 +7300,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.trivia.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "TRIVIA",
+   "bloque": "casa-estilo-trivia",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.trivia.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8019,6 +8173,52 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.stdg.fuentes",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.luz",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
    "control": "Letra principal",
    "tipo": "color",
    "guarda": true,
@@ -8065,11 +8265,8 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "guarda": true,
-   "dato": "fx.stdg.luz",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "EFECTOS",
@@ -8088,7 +8285,7 @@
    "control": "Diseño",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.stdg.fuentes.nom",
+   "dato": "fx.stdg.fuentes.txt",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8098,11 +8295,8 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes.txt",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "EFECTOS",
@@ -8897,6 +9091,17 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "casa-estilo-filtro",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.filtro.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "casa-estilo-live",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -8919,6 +9124,17 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "casa-estilo-live",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.live.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "casa-estilo-carta",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -8935,6 +9151,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.carta.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-carta",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.carta.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8979,6 +9206,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.scratch.sinSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-scratch",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.scratch.sinDiseno",
    "llega": true,
    "seVe": true,
    "estado": "verde"
