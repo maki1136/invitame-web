@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ximena & Diego · Nuestra historia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+SC:wght@500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+:root{--tinta:#3a2a1f;--oro:#a8844b;--papel:#f7f1e6}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#15100c;font-family:'Cormorant Garamond',Georgia,serif;color:var(--tinta);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+#fondoPc{position:fixed;inset:0;background:url(img/portada.webp?v=2) center/cover;filter:blur(32px) brightness(.4);transform:scale(1.2)}
+#libro{position:fixed;top:0;left:50%;transform:translateX(-50%);width:min(100vw,calc(100dvh*.5625));height:100dvh;overflow:hidden;background:#1d1612;touch-action:none;box-shadow:0 0 90px rgba(0,0,0,.6)}
+.pag{position:absolute;inset:0;overflow:hidden;background:var(--papel)}
+.pag canvas.ft{position:absolute;inset:0;width:100%;height:100%;display:block}
+.pag::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(40,25,12,.28),rgba(40,25,12,0) 5%,rgba(255,255,255,0) 94%,rgba(255,255,255,.12))}
+.papel{background:
+ radial-gradient(120% 80% at 50% 0%,rgba(255,255,255,.55),rgba(255,255,255,0) 60%),
+ url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .32  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"),
+ #f7f1e6}
+.vel{position:absolute;left:0;right:0;bottom:0;height:52%;pointer-events:none;background:linear-gradient(rgba(18,12,8,0),rgba(18,12,8,.42) 35%,rgba(18,12,8,.82))}
+.pie{position:absolute;left:0;right:0;bottom:0;padding:0 9% 13%;color:#fbf5ea;text-align:center}
+.cap{font-family:'Cormorant SC',serif;font-weight:600;letter-spacing:.32em;font-size:clamp(11px,3.1vw,13.5px);color:#e9cf9c}
+.tit{font-family:'Pinyon Script',cursive;font-size:clamp(34px,10.5vw,48px);line-height:1.05;margin:.12em 0 .25em;text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.txt{font-size:clamp(16.5px,4.7vw,20.5px);line-height:1.38;font-weight:500;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+.num{position:absolute;bottom:3.2%;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.3em;opacity:.75}
+.pie+.num,.foto .num{color:#f1e4cc}
+.centro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12% 11%}
+.raya{width:54px;height:1px;margin:1.1em auto;background:linear-gradient(90deg,transparent,var(--oro),transparent)}
+.mono{font-family:'Cormorant SC',serif;font-size:15px;letter-spacing:.5em;color:var(--oro)}
+.prologo{font-size:clamp(19px,5.6vw,24px);line-height:1.45;font-style:italic;font-weight:500}
+.firma{font-family:'Pinyon Script',cursive;font-size:clamp(30px,9vw,40px);color:#5a3f2b;margin-top:.5em}
+/* tapa */
+.tapa .nombres{position:absolute;left:0;right:0;top:9%;text-align:center;color:#fffaf2;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.tapa .nombres h1{font-family:'Cormorant SC',serif;font-weight:500;font-size:clamp(38px,12.5vw,58px);letter-spacing:.06em;line-height:.95}
+.tapa .nombres h1 i{display:block;font-family:'Pinyon Script',cursive;font-style:normal;font-size:.62em;letter-spacing:0;margin:.08em 0}
+.tapa .nombres p{font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:.42em;margin-top:.9em;color:#f4e2c0}
+.tapa .vel2{position:absolute;left:0;right:0;top:0;height:45%;background:linear-gradient(rgba(20,12,6,.55),rgba(20,12,6,0));pointer-events:none}
+/* fecha */
+.fechaG{display:flex;align-items:center;justify-content:center;gap:.45em;margin:.3em 0}
+.fechaG b{font-family:'Cormorant Garamond';font-weight:500;font-size:clamp(64px,20vw,92px);line-height:1;padding:0 .18em;border-left:1px solid #cdb48a;border-right:1px solid #cdb48a}
+.fechaG span{font-family:'Cormorant SC',serif;font-size:clamp(13px,3.8vw,16px);letter-spacing:.3em}
+.lacre{width:78px;height:78px;border-radius:50%;margin:0 auto 1em;position:relative;display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(circle at 35% 30%,#f4dca4,#c99a4e 42%,#9b6f2c 72%,#7a5420);box-shadow:0 4px 10px rgba(90,60,20,.35),inset 0 -3px 6px rgba(80,50,10,.45),inset 0 3px 6px rgba(255,240,200,.5);
+ clip-path:polygon(50% 0,61% 4%,72% 2%,80% 10%,91% 13%,93% 24%,100% 33%,97% 45%,100% 56%,94% 66%,95% 78%,85% 85%,79% 95%,67% 95%,57% 100%,46% 97%,35% 100%,26% 93%,15% 91%,10% 80%,2% 72%,4% 60%,0 49%,4% 38%,2% 26%,11% 18%,15% 7%,27% 6%,38% 1%)}
+.lacre::before{content:"";position:absolute;inset:12%;border-radius:50%;border:1.5px solid rgba(255,235,190,.55);box-shadow:inset 0 0 0 4px rgba(120,80,25,.25)}
+.lacre span{font-family:'Pinyon Script',cursive;font-size:30px;color:#6e4a1a;text-shadow:0 1px 0 rgba(255,236,190,.7),0 -1px 0 rgba(70,40,10,.5)}
+.cuenta{display:flex;justify-content:center;gap:1.1em;margin-top:1.2em}
+.cuenta div{min-width:3em}.cuenta strong{display:block;font-size:clamp(24px,7vw,32px);font-weight:500;line-height:1}.cuenta small{font-family:'Cormorant SC';font-size:10.5px;letter-spacing:.2em;color:var(--oro)}
+/* detalles */
+.lug h3{font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(28px,8.5vw,38px);line-height:1.05;margin:.1em 0 .05em}
+.lug p{font-size:clamp(15px,4.2vw,17.5px);line-height:1.3;font-weight:500}
+.iconos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:1.6em;width:100%}
+.ico{display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none;color:var(--tinta);font-family:'Cormorant SC';font-size:10.5px;letter-spacing:.08em;line-height:1.15;cursor:pointer}
+.ico i{width:50px;height:50px;border-radius:13px;background:#3a2a1f;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(58,42,31,.25)}
+.ico svg{width:23px;height:23px;stroke:#f3e3c4;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.boton{display:inline-block;margin-top:1.3em;padding:.85em 1.7em;border-radius:999px;background:#fbf5ea;color:#3a2a1f;font:600 12px/1 'Cormorant SC',serif;letter-spacing:.24em;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+/* hoja que se da vuelta */
+#dorso{position:absolute;left:0;top:0;width:100%;height:100%;transform-origin:0 0;pointer-events:none;display:none;overflow:hidden;
+ background:linear-gradient(var(--ang,90deg),#efe6d6,#fbf6ec 30%,#f3eadb 70%,#e2d5bf)}
+#dorso canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.13;transform:scaleX(-1);filter:grayscale(.3)}
+#sombra{position:absolute;inset:0;pointer-events:none;display:none}
+#brillo{position:absolute;inset:0;pointer-events:none;display:none}
+#esquina{position:absolute;right:0;bottom:0;width:120px;height:120px;z-index:30;pointer-events:none}
+#esquina b{position:absolute;right:0;bottom:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(0,0,0,0) 50%,#efe5d3 50%,#fbf6ec 70%,#d9caae);clip-path:polygon(100% 0,100% 100%,0 100%);box-shadow:-4px -4px 10px rgba(0,0,0,.2);transform-origin:100% 100%;animation:pela 2.6s ease-in-out infinite}
+#esquina span{position:absolute;right:10px;bottom:14px;padding:7px 11px;border-radius:999px;background:#3a2a1f;color:#fbf3e4;font:700 11px/1 'Cormorant SC',serif;letter-spacing:.16em;box-shadow:0 3px 10px rgba(0,0,0,.35);white-space:nowrap}
+@keyframes pela{0%,100%{transform:scale(.55)}50%{transform:scale(.8)}}
+
+#motas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:20}
+#grano{position:absolute;inset:-50%;pointer-events:none;opacity:.06;mix-blend-mode:overlay;z-index:21;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+#musica{position:absolute;top:14px;right:14px;z-index:40;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(40,25,12,.35);backdrop-filter:blur(6px);color:#fff;font-size:15px;cursor:pointer;display:none}
+#ayuda{position:absolute;left:50%;bottom:3.2%;transform:translateX(-62%);z-index:31;padding:10px 16px;border-radius:999px;background:rgba(251,245,234,.94);color:#3a2a1f;font:700 12px/1 'Cormorant SC',serif;letter-spacing:.2em;box-shadow:0 4px 16px rgba(0,0,0,.3);pointer-events:none;transition:opacity .5s;white-space:nowrap}
+#gl{display:none}
+.pag.arriba .vel{top:0;bottom:auto;height:50%;background:linear-gradient(rgba(18,12,8,.85),rgba(18,12,8,.45) 62%,rgba(18,12,8,0))}
+.pag.arriba .pie{top:0;bottom:auto;padding:14% 9% 0}
+/* palabras que aparecen */
+.rev .w{opacity:0;display:inline-block;transform:translateY(6px);filter:blur(3px)}
+/* hojas emergentes */
+.hoja{position:absolute;inset:0;z-index:50;display:none;align-items:flex-end;background:rgba(20,12,6,.45);backdrop-filter:blur(3px)}
+.hoja.ver{display:flex}
+.hoja .caja{position:relative;width:100%;max-height:88%;overflow:auto;border-radius:22px 22px 0 0;padding:30px 24px 30px;text-align:center;box-shadow:0 -10px 30px rgba(0,0,0,.3)}
+.hoja .cerrar{position:absolute;top:10px;right:14px;width:34px;height:34px;border:0;border-radius:50%;background:#efe3cf;color:#3a2a1f;font-size:22px;line-height:1;cursor:pointer}
+.hp{font-size:17px;line-height:1.35;font-weight:500;margin:.2em 0 1em}
+.opc{display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid #e3d5bd;font-size:16px}
+.opc b{font-family:'Cormorant SC';letter-spacing:.14em;font-size:14px;color:#6b4f2e}
+.opc a{align-self:center;margin-top:4px;font:700 11px/1 'Cormorant SC';letter-spacing:.18em;color:#3a2a1f;padding:8px 14px;border:1px solid #b8955a;border-radius:999px;text-decoration:none}
+.hoja label{display:block;text-align:left;font-family:'Cormorant SC';font-size:12.5px;letter-spacing:.14em;color:#6b4f2e;margin:12px 0 0}
+.hoja input,.hoja select,.hoja textarea{display:block;width:100%;margin-top:6px;padding:11px 12px;border:1px solid #d8c6a6;border-radius:10px;background:#fffdf8;font:500 17px 'Cormorant Garamond',serif;color:#3a2a1f}
+.sino{display:flex;gap:8px;margin-top:14px}.sino button{flex:1;padding:11px 6px;border-radius:999px;border:1px solid #b8955a;background:#fffdf8;font:700 11.5px 'Cormorant SC';letter-spacing:.14em;color:#3a2a1f;cursor:pointer}
+.sino button.on{background:#3a2a1f;color:#fbf3e4}
+.boton.oscuro{background:#3a2a1f;color:#fbf3e4;margin-top:18px}
+/* apertura: el libro cerrado */
+#apertura{position:absolute;inset:0;z-index:60;overflow:hidden;cursor:pointer}
+#apertura .mesa{position:absolute;inset:0;background:#eeece8 url(img/marmol.webp?v=3) center/cover}
+#apertura .mesa:after{content:"";position:absolute;inset:0;background:radial-gradient(75% 55% at 50% 48%,rgba(255,255,255,0),rgba(60,55,50,.10))}
+#apertura .esc3d{position:absolute;inset:0;perspective:1800px;perspective-origin:50% 40%}
+.libro3d{position:absolute;left:0;top:0;width:100%;height:100%;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;will-change:transform}
+.libro3d .sombra{position:absolute;inset:2% -1% -1.5% 1%;border-radius:4px;background:rgba(70,62,55,.42);filter:blur(14px);transform:translateZ(-2px)}
+.libro3d .interior{position:absolute;inset:0;overflow:hidden;background:#f7f4ee;box-shadow:0 2px 6px rgba(60,50,40,.18)}
+.libro3d .interior img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 72%;transform:scale(1.16);transform-origin:50% 72%}
+.libro3d .interior .nombres{position:absolute;left:0;right:0;top:9%;text-align:center;color:#fffaf2;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.libro3d .interior .nombres h1{font-family:'Cormorant SC',serif;font-weight:500;font-size:clamp(38px,12.5vw,58px);letter-spacing:.06em;line-height:.95}
+.libro3d .interior .nombres h1 i{display:block;font-family:'Pinyon Script',cursive;font-style:normal;font-size:.62em;letter-spacing:0;margin:.08em 0}
+.libro3d .interior .nombres p{font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:.42em;margin-top:.9em;color:#f4e2c0}
+.libro3d .interior .vel2{position:absolute;left:0;right:0;top:0;height:45%;background:linear-gradient(rgba(20,12,6,.55),rgba(20,12,6,0))}
+.libro3d .cantos{position:absolute;top:1%;bottom:1%;right:0;width:24px;transform-origin:100% 50%;transform:rotateY(90deg);
+ background:repeating-linear-gradient(90deg,#fbfaf7 0 1px,#e6e2da 1px 2px),#f6f3ee}
+.libro3d .cinta{position:absolute;left:64%;bottom:-13%;width:14px;height:16%;transform:translateZ(.5px);
+ background:linear-gradient(90deg,#c9b99c,#ece0c8 35%,#f8f0de 50%,#e2d3b6 70%,#c2b090);clip-path:polygon(0 0,100% 0,100% 100%,50% 86%,0 100%);
+ box-shadow:0 0 0 1px rgba(0,0,0,.03);filter:drop-shadow(1px 3px 2px rgba(60,50,40,.25))}
+.libro3d .cubierta{-webkit-transform-style:preserve-3d;position:absolute;inset:-1% -1.4% -1% 0;transform-origin:0 50%;transform-style:preserve-3d;will-change:transform}
+.libro3d .frente,.libro3d .guarda{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:2px 5px 5px 2px}
+.libro3d .frente{-webkit-transform:translateZ(1px);transform:translateZ(1px);overflow:hidden;
+ background:linear-gradient(90deg,rgba(90,80,70,.20),rgba(90,80,70,0) 3.2%,rgba(255,255,255,.55) 4%,rgba(90,80,70,.10) 5.2%,rgba(255,255,255,0) 6.5%),
+ linear-gradient(160deg,rgba(255,255,255,.35),rgba(255,255,255,0) 45%,rgba(120,105,90,.10)),
+ #f3efe8 url(img/tela.webp?v=3) center/cover;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.4),inset 0 0 40px rgba(140,125,110,.18)}
+.libro3d .marco{position:absolute;inset:8% 11% 8% 13%;border:1px solid rgba(120,108,95,.16);box-shadow:0 1px 0 rgba(255,255,255,.75),inset 0 1px 0 rgba(255,255,255,.75)}
+.libro3d .foil{position:absolute;inset:0 0 0 3%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+ color:rgba(184,172,157,.95);text-shadow:0 1.2px 0 rgba(255,255,255,.95),0 -1px 0 rgba(95,82,68,.42),0 0 1px rgba(95,82,68,.2)}
+.libro3d .foil span{font-family:'Cormorant SC',serif;font-weight:500;font-size:clamp(30px,9vw,44px);letter-spacing:.14em;line-height:1.05}
+.libro3d .foil em{font-family:'Pinyon Script',cursive;font-style:normal;font-size:clamp(34px,10.5vw,50px);line-height:.85;margin:.05em 0}
+.libro3d .foil small{font-family:'Cormorant SC',serif;font-size:10.5px;letter-spacing:.5em;margin:2em 0}
+.libro3d .foil .raya{width:34px;height:1px;background:rgba(150,138,124,.45);box-shadow:0 1px 0 rgba(255,255,255,.9);margin:1.6em 0 0}
+.libro3d .brillo{position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;background:linear-gradient(105deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 62%);background-size:300% 100%;animation:brilla 6s ease-in-out infinite}
+@keyframes brilla{0%{background-position:120% 0}60%,100%{background-position:-60% 0}}
+.libro3d .guarda{-webkit-transform:rotateY(180deg) translateZ(1px);transform:rotateY(180deg) translateZ(1px);background:linear-gradient(90deg,rgba(0,0,0,0) 92%,rgba(120,105,90,.12)),#f8f5ef}
+#apertura .toca{position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);padding:12px 20px;border-radius:999px;background:rgba(43,38,34,.88);color:#fbf7f0;font:700 12.5px/1 'Cormorant SC',serif;letter-spacing:.2em;white-space:nowrap;box-shadow:0 6px 20px rgba(40,30,20,.25);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:late 2.2s ease-in-out infinite}
+@keyframes late{50%{opacity:.55}}
+body.video .hoja{display:none!important}
+
+body.video #fondoPc,body.video #musica,body.video #ayuda{display:none}
+body.video #libro{width:100vw;height:100vh;box-shadow:none}
+</style>
+</head>
+<body>
+<div id="fondoPc"></div>
+<div id="libro">
+  <div id="paginas"></div>
+  <div id="sombra"></div>
+  <div id="dorso"><canvas></canvas></div>
+  <div id="brillo"></div>
+  <canvas id="motas"></canvas>
+  <div id="grano"></div>
+  <div id="esquina"><b></b><span>pasa →</span></div>
+  <div id="ayuda">Desliza para pasar la página</div>
+  <button id="musica" aria-label="Música">♪</button>
+  <div class="hoja" id="h-regalos"><div class="caja papel">
+    <button class="cerrar" aria-label="Cerrar">×</button>
+    <div class="cap" style="color:var(--oro)">Mesa de regalos</div>
+    <div class="tit" style="color:#4a3426;text-shadow:none;font-size:34px">Tu presencia es el mejor regalo</div>
+    <p class="hp">Si además quieres consentirnos, te dejamos estas opciones:</p>
+    <div class="opc"><b>Liverpool</b><span>Número de evento 51 234 567</span><a target="_blank" rel="noopener" href="https://mesaderegalos.liverpool.com.mx/">Ver la mesa</a></div>
+    <div class="opc"><b>Lluvia de sobres</b><span>Habrá un buzón el día de la boda</span></div>
+    <div class="opc"><b>Transferencia</b><span>BBVA · Ximena R. · CLABE 012 180 0012 3456 7890</span><a href="#" data-copia="012180001234567890">Copiar CLABE</a></div>
+  </div></div>
+  <div class="hoja" id="h-rsvp"><div class="caja papel">
+    <button class="cerrar" aria-label="Cerrar">×</button>
+    <div class="cap" style="color:var(--oro)">Confirmar asistencia</div>
+    <div class="tit" style="color:#4a3426;text-shadow:none;font-size:34px">¿Nos acompañas?</div>
+    <p class="hp">Por favor confirma antes del 18 de agosto de 2027.</p>
+    <label>Tu nombre<input id="r-nom" placeholder="Nombre y apellido"></label>
+    <div class="sino"><button data-v="si" class="on">Sí, ahí estaré</button><button data-v="no">No podré ir</button></div>
+    <label>¿Cuántos asistirán?<select id="r-cant"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+    <label>Un mensaje para los novios<textarea id="r-msj" rows="2" placeholder="Opcional"></textarea></label>
+    <a class="boton oscuro" href="#" id="r-env">Enviar por WhatsApp</a>
+  </div></div>
+  <div id="apertura">
+    <div class="mesa"></div>
+    <div class="esc3d"><div class="libro3d">
+      <div class="sombra"></div><div class="interior"><img src="img/portada.webp?v=2" alt=""><div class="vel2"></div><div class="nombres"><p style="margin:0 0 1em">Nuestra historia</p><h1>Ximena <i>&amp;</i> Diego</h1><p>18 · 09 · 2027</p></div></div>
+      <div class="cantos"></div><div class="cinta"></div>
+      <div class="cubierta"><div class="frente"><div class="marco"></div><div class="foil"><small>Nuestra historia</small><span>Ximena</span><em>&amp;</em><span>Diego</span><i class="raya"></i><small>MMXXVII</small></div><div class="brillo"></div></div><div class="guarda"></div></div>
+    </div></div>
+    <div class="toca">Toca el libro para abrirlo</div>
+  </div>
+</div>
+<canvas id="gl"></canvas>
+<audio id="audio" src="musica.mp3" loop preload="auto"></audio>
+
+<template id="t-paginas">
+  <section class="pag foto tapa" data-f="portada" data-cam="0.5,0.66,1.16,1.24">
+    <canvas class="ft"></canvas><div class="vel2"></div>
+    <div class="nombres"><p style="margin:0 0 1em">Nuestra historia</p><h1>Ximena <i>&amp;</i> Diego</h1><p>18 · 09 · 2027</p></div>
+  </section>
+  <section class="pag papel">
+    <div class="centro">
+      <div class="mono">X · D</div><div class="raya"></div>
+      <p class="prologo rev">Antes del «sí» hubo un café equivocado, una tormenta, un pez, una sola silla y un puente en París.</p>
+      <p class="prologo rev" style="margin-top:.9em">Esta es nuestra historia. Pasa la página: queremos que la conozcas antes de escribir juntos el último capítulo.</p>
+      <div class="firma">Ximena y Diego</div>
+    </div><div class="num">— I —</div>
+  </section>
+  <section class="pag foto" data-f="cap1-cafe" data-cam="0.5,0.5,1.06,1.16">
+    <canvas class="ft"></canvas><div class="vel"></div>
+    <div class="pie"><div class="cap">Capítulo uno · Ciudad de México</div><div class="tit">El café equivocado</div>
+      <div class="txt rev">El barista cambió los vasos. Ella se llevó su americano sin azúcar; él, su latte de avena con canela. Diego corrió hasta la esquina: «Creo que te llevaste mi café… y de paso mi día».</div></div>
+    <div class="num">— II —</div>
+  </section>
+  <section class="pag foto arriba" data-f="cap2-lluvia" data-cam="0.5,0.45,1.05,1.15">
+    <canvas class="ft"></canvas><div class="vel"></div>
+    <div class="pie"><div class="cap">Capítulo dos</div><div class="tit">La primera cita que fueron tres</div>
+      <div class="txt rev">Íbamos por tacos. Cayó el diluvio y terminamos en una lavandería esperando que parara. No paró. Hablamos hasta que nos apagaron la luz.</div></div>
+    <div class="num">— III —</div>
+  </section>
+  <section class="pag foto" data-f="cap3-playa" data-cam="0.5,0.45,1.05,1.15">
+    <canvas class="ft"></canvas><div class="vel"></div>
+    <div class="pie"><div class="cap">Capítulo tres · Playa del Carmen</div><div class="tit">Ella y el mar</div>
+      <div class="txt rev">Él juró que ahí no había peces. Había uno. Ximena salió del agua a una velocidad que todavía no tiene récord oficial… y Diego lo sigue contando en cada cena.</div></div>
+    <div class="num">— IV —</div>
+  </section>
+  <section class="pag foto" data-f="cap4-depa" data-cam="0.5,0.5,1.05,1.14">
+    <canvas class="ft"></canvas><div class="vel"></div>
+    <div class="pie"><div class="cap">Capítulo cuatro</div><div class="tit">Una sola silla</div>
+      <div class="txt rev">Nos mudamos con más cajas que muebles y una sola silla, que nos turnábamos. Cenamos en el piso un mes entero. Fue el mejor mes.</div></div>
+    <div class="num">— V —</div>
+  </section>
+  <section class="pag foto" data-f="cap5-paris" data-cam="0.5,0.45,1.05,1.16">
+    <canvas class="ft"></canvas><div class="vel"></div>
+    <div class="pie"><div class="cap">Capítulo cinco · París</div><div class="tit">El plan B</div>
+      <div class="txt rev">El plan era la Torre Eiffel al atardecer. Llovió y cerraron el mirador. Diego terminó de rodillas en un puente sobre el Sena, empapado y temblando.</div></div>
+    <div class="num">— VI —</div>
+  </section>
+  <section class="pag foto" data-f="cap5-anillo" data-cam="0.5,0.5,1.06,1.18">
+    <canvas class="ft"></canvas><div class="vel" style="height:40%"></div>
+    <div class="pie"><div class="tit" style="font-size:clamp(30px,9vw,42px)">Dijo «sí» antes de que terminara la pregunta.</div></div>
+    <div class="num">— VII —</div>
+  </section>
+  <section class="pag papel">
+    <div class="centro">
+      <div class="lacre"><span>XD</span></div>
+      <div class="cap" style="color:var(--oro)">Y ahora</div>
+      <div class="tit" style="color:#4a3426;font-size:clamp(30px,9vw,40px);text-shadow:none">el capítulo que queremos escribir contigo</div>
+      <div class="raya" style="margin:.6em auto"></div>
+      <div class="fechaG"><span>Sábado</span><b>18</b><span>Septiembre</span></div>
+      <div class="mono" style="letter-spacing:.35em">2027 · 17:00 h</div>
+      <div class="cuenta" id="cuenta"></div>
+    </div><div class="num">— VIII —</div>
+  </section>
+  <section class="pag papel">
+    <div class="centro" style="padding-top:9%">
+      <div class="lug"><div class="cap" style="color:var(--oro)">Ceremonia · 17:00</div><h3>Templo de la Concepción</h3><p>Canal s/n, Centro · San Miguel de Allende</p></div>
+      <div class="raya" style="margin:.9em auto"></div>
+      <div class="lug"><div class="cap" style="color:var(--oro)">Recepción · 19:30</div><h3>Rosewood San Miguel</h3><p>Nemesio Diez 11, Zona Centro · San Miguel de Allende</p></div>
+      <div class="raya" style="margin:.9em auto"></div>
+      <p style="font-size:15px;font-weight:500"><span class="cap" style="color:var(--oro);letter-spacing:.25em">Vestimenta</span><br>Formal · tonos neutros</p>
+      <div class="iconos">
+        <a class="ico" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Templo+de+la+Inmaculada+Concepci%C3%B3n+Las+Monjas+San+Miguel+de+Allende"><i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg></i>Llegar a la ceremonia</a>
+        <a class="ico" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Rosewood+San+Miguel+de+Allende"><i><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg></i>Llegar a la recepción</a>
+        <a class="ico" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Ximena%20y%20Diego&dates=20270918T230000Z/20270919T070000Z&location=San%20Miguel%20de%20Allende%2C%20Guanajuato&details=Ceremonia%2017%3A00%20%C2%B7%20Templo%20de%20la%20Concepci%C3%B3n.%20Recepci%C3%B3n%2019%3A30%20%C2%B7%20Rosewood%20San%20Miguel%20de%20Allende."><i><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13.2v4M10 15.2h4"/></svg></i>Guardar la fecha</a>
+        <a class="ico" href="#" data-hoja="regalos"><i><svg viewBox="0 0 24 24"><rect x="3.5" y="9" width="17" height="11.5" rx="1.5"/><path d="M2.5 9h19M12 9v11.5M12 9C10 4 6.5 5 7.5 7.5 8.3 9 12 9 12 9zm0 0c2-5 5.5-4 4.5-1.5C15.7 9 12 9 12 9z"/></svg></i>Mesa de regalos</a>
+      </div>
+    </div><div class="num">— IX —</div>
+  </section>
+  <section class="pag foto" data-f="final" data-cam="0.5,0.5,1.02,1.07">
+    <canvas class="ft"></canvas><div class="vel" style="height:60%"></div>
+    <div class="pie" style="padding-bottom:15%"><div class="cap">Fin… o mejor dicho</div><div class="tit">el principio</div>
+      <div class="txt rev">Nos falta una sola cosa para empezar este capítulo: tú.</div>
+      <a class="boton" href="#" data-hoja="rsvp">Confirmar asistencia</a></div>
+  </section>
+</template>
+
+<script>
+(()=>{
+const VIDEO=/[?&]video=1/.test(location.search);
+if(VIDEO)document.body.classList.add('video');
+const $=id=>document.getElementById(id);
+const libro=$('libro');
+$('paginas').appendChild($('t-paginas').content.cloneNode(true));
+const PAG=[...document.querySelectorAll('.pag')];
+const N=PAG.length;
+document.querySelectorAll('.rev').forEach(el=>{const tx=el.textContent.trim().split(/\s+/);el.innerHTML=tx.map(w=>'<span class="w">'+w+'</span>').join(' ')});
+const PAL=PAG.map(p=>[...p.querySelectorAll('.rev .w')]);
+function revela(k){const ws=PAL[k];if(!ws||!ws.length)return;const t=visto[k];
+ ws.forEach((w,i)=>{const o=Math.max(0,Math.min(1,(t-.45-i*.06)/.5));if(w._o===o)return;w._o=o;w.style.opacity=o;w.style.transform=`translateY(${(1-o)*6}px)`;w.style.filter=o<1?`blur(${(1-o)*3}px)`:'none'})}
+const ease=t=>t<0?0:t>1?1:t*t*(3-2*t);
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+// ── WebGL: foto + mapa de profundidad = foto en 3D ──
+const gc=$('gl');const gl=gc.getContext('webgl',{preserveDrawingBuffer:true,antialias:false});
+const VS=`attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;v.y=1.-v.y;gl_Position=vec4(p,0,1);}`;
+const FS=`precision highp float;varying vec2 v;uniform sampler2D T,D;uniform vec2 C,F,P;
+vec2 cl(vec2 u){return clamp(u,vec2(.001),vec2(.999));}
+void main(){vec2 uv=C+(v-.5)*F;float d=texture2D(D,cl(uv)).r;vec2 o=P*(d-.5);d=texture2D(D,cl(uv+o)).r;o=P*(d-.5);d=texture2D(D,cl(uv+o)).r;o=P*(d-.5);
+ gl_FragColor=vec4(texture2D(T,cl(uv+o)).rgb,1.);}`;
+function sh(t,s){const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);return x}
+const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);gl.useProgram(pr);
+const bf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+const U={};['T','D','C','F','P'].forEach(k=>U[k]=gl.getUniformLocation(pr,k));gl.uniform1i(U.T,0);gl.uniform1i(U.D,1);
+function tex(img){const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
+ [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER].forEach(k=>gl.texParameteri(gl.TEXTURE_2D,k,gl.LINEAR));
+ [gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T].forEach(k=>gl.texParameteri(gl.TEXTURE_2D,k,gl.CLAMP_TO_EDGE));return t}
+const carga=s=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=s});
+const FOTO={};
+const listo=Promise.all(PAG.filter(p=>p.dataset.f).map(async p=>{const f=p.dataset.f;if(FOTO[f])return;const [a,b]=await Promise.all([carga('img/'+f+'.webp?v=2'),carga('img/'+f+'-p.png?v=2')]);FOTO[f]={t:tex(a),d:tex(b),w:a.naturalWidth,h:a.naturalHeight}}));
+
+let W=0,H=0,R=1;
+function tam(){W=libro.clientWidth;H=libro.clientHeight;R=Math.min(2,devicePixelRatio||1);gc.width=Math.round(W*R);gc.height=Math.round(H*R);gl.viewport(0,0,gc.width,gc.height);
+ PAG.forEach(p=>{const c=p.querySelector('canvas.ft');if(c){c.width=gc.width;c.height=gc.height}});
+ const dc=$('dorso').querySelector('canvas');dc.width=gc.width;dc.height=gc.height;
+ mo.width=W*R;mo.height=H*R;mx.setTransform(R,0,0,R,0,0);}
+// pinta la foto de la página k con su cámara (z va de cam[2] a cam[3] mientras la página está a la vista)
+const visto=new Array(N).fill(0);
+function foto(k,seg){const p=PAG[k];const F=FOTO[p.dataset.f];if(!F)return;
+ const c=p.dataset.cam.split(',').map(Number);const q=Math.min(1,visto[k]/9);
+ const z=lerp(c[2],c[3],ease(q)), va=gc.width/gc.height, ia=F.w/F.h;
+ let fx,fy;if(va<ia){fy=1/z;fx=(va/ia)/z}else{fx=1/z;fy=(ia/va)/z} fx*=.97;fy*=.97;
+ const X=Math.min(1-fx/2-.01,Math.max(fx/2+.01,c[0])),Y=Math.min(1-fy/2-.01,Math.max(fy/2+.01,c[1]));
+ const px=(Math.sin(seg*.42+k)*.0065+inc.x*.008), py=(Math.cos(seg*.33+k)*.0035+inc.y*.005);
+ gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,F.t);gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,F.d);
+ gl.uniform2f(U.C,X,Y);gl.uniform2f(U.F,fx,fy);gl.uniform2f(U.P,px*fx*2.2,py*fy*2.2);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+ const cx=p.querySelector('canvas.ft').getContext('2d');cx.drawImage(gc,0,0);}
+// inclinación del teléfono = la cámara gira un poquito
+const inc={x:0,y:0};
+addEventListener('deviceorientation',e=>{if(e.gamma==null)return;inc.x=Math.max(-1,Math.min(1,e.gamma/25));inc.y=Math.max(-1,Math.min(1,(e.beta-45)/25))});
+
+// ── la hoja que se despega desde la esquina ──
+function corta(poly,n,q,lado){ // Sutherland-Hodgman con el semiplano (X-q)·n  * lado >= 0
+ const out=[];const s=P=>((P[0]-q[0])*n[0]+(P[1]-q[1])*n[1])*lado;
+ for(let i=0;i<poly.length;i++){const A=poly[i],B=poly[(i+1)%poly.length];const sa=s(A),sb=s(B);
+  if(sa>=0)out.push(A);if((sa>=0)!==(sb>=0)){const t=sa/(sa-sb);out.push([A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t])}}return out}
+const pct=poly=>'polygon('+poly.map(p=>p[0].toFixed(1)+'px '+p[1].toFixed(1)+'px').join(',')+')';
+function hoja(k,t){ // página k se da vuelta; t 0..1
+ const front=PAG[k], dor=$('dorso'), som=$('sombra'), bri=$('brillo');
+ PAG.forEach((p,i)=>{p.style.zIndex=i===k?3:(i===k+1?2:0);p.style.visibility=(i===k||i===k+1)?'visible':'hidden'});
+ if(t<=0.0005){front.style.clipPath='none';dor.style.display=som.style.display=bri.style.display='none';return}
+ const e=ease(t);
+ const Px=W-e*2.05*W, Py=H-Math.sin(Math.min(1,t*1.15)*Math.PI)*H*.18-e*H*.02;
+ const Cx=W,Cy=H; let nx=Cx-Px,ny=Cy-Py;const L=Math.hypot(nx,ny)||1;nx/=L;ny/=L;
+ const q=[(Cx+Px)/2,(Cy+Py)/2];
+ const rect=[[0,0],[W,0],[W,H],[0,H]];
+ const queda=corta(rect,[nx,ny],q,-1), vuela=corta(rect,[nx,ny],q,1);
+ front.style.clipPath=queda.length>2?pct(queda):'polygon(0 0,0 0,0 0)';
+ // dorso: reflejo de la parte que vuela sobre la línea del doblez
+ const d=q[0]*nx+q[1]*ny;
+ const m=[1-2*nx*nx,-2*nx*ny,-2*nx*ny,1-2*ny*ny,2*d*nx,2*d*ny];
+ dor.style.display='block';dor.style.clipPath=vuela.length>2?pct(vuela):'polygon(0 0,0 0,0 0)';
+ dor.style.transform=`matrix(${m.join(',')})`;
+ const ang=Math.atan2(ny,nx)*180/Math.PI+90; dor.style.setProperty('--ang',ang+'deg');
+ // sombra que la hoja proyecta sobre la página de abajo, y brillo del doblez
+ som.style.display='block';som.style.zIndex=2.5;
+ som.style.clipPath=vuela.length>2?pct(vuela):'none';
+ const g=Math.atan2(ny,nx)*180/Math.PI+90;
+ som.style.background=`linear-gradient(${g}deg, rgba(20,12,6,${.45*(1-e*.6)}) 0, rgba(20,12,6,0) ${30+e*40}px)`;
+ som.style.backgroundOrigin='border-box';
+ // como el gradiente arranca en el borde de la caja y no en el doblez, se pinta con una máscara posicionada
+ som.style.background='none';
+ som.style.backgroundImage=`linear-gradient(${g+180}deg, rgba(20,12,6,0) calc(50% - 1px), rgba(20,12,6,${.5*(1-e*.5)}) 50%, rgba(20,12,6,0) calc(50% + ${26+e*50}px))`;
+ som.style.backgroundSize=(W*3)+'px '+(H*3)+'px';
+ som.style.backgroundPosition=`${q[0]-W*1.5}px ${q[1]-H*1.5}px`;
+ bri.style.display='block';bri.style.zIndex=5;bri.style.clipPath=dor.style.clipPath;bri.style.transform=dor.style.transform;bri.style.transformOrigin='0 0';
+ bri.style.backgroundImage=`linear-gradient(${g}deg, rgba(255,255,255,0) calc(50% - 40px), rgba(120,90,60,.28) calc(50% - 2px), rgba(255,255,255,.5) calc(50% + 6px), rgba(255,255,255,0) calc(50% + 70px))`;
+ bri.style.backgroundSize=(W*3)+'px '+(H*3)+'px';bri.style.backgroundPosition=`${q[0]-W*1.5}px ${q[1]-H*1.5}px`;
+ dor.style.zIndex=4;
+ // el dorso deja ver la foto en transparencia, como papel fino
+ const fc=front.querySelector('canvas.ft'), dc=dor.querySelector('canvas').getContext('2d');
+ dc.clearRect(0,0,gc.width,gc.height); if(fc)dc.drawImage(fc,0,0);
+}
+function mostrar(k){PAG.forEach((p,i)=>{p.style.clipPath='none';p.style.zIndex=i===k?3:0;p.style.visibility=i===k?'visible':'hidden'});
+ $('dorso').style.display=$('sombra').style.display=$('brillo').style.display='none'}
+
+function cuenta(){const v=Math.max(0,new Date('2027-09-18T17:00:00-06:00')-new Date());
+ $('cuenta').innerHTML=`<div><strong>${Math.floor(v/864e5)}</strong><small>días</small></div><div><strong>${Math.floor(v/36e5)%24}</strong><small>horas</small></div><div><strong>${Math.floor(v/6e4)%60}</strong><small>min</small></div>`}
+cuenta();setInterval(cuenta,30000);
+
+// motas de luz
+const mo=$('motas'),mx=mo.getContext('2d');let s=17;const RN=()=>(s=(s*16807)%2147483647)/2147483647;const M=[];
+for(let i=0;i<26;i++)M.push({x:RN(),y:RN(),z:.3+RN()*.9,f:RN()*6.28,v:.2+RN()*.5});
+function motas(seg){mx.clearRect(0,0,W,H);M.forEach(p=>{const x=(p.x+Math.sin(seg*.25+p.f)*.03)*W,y=((p.y-seg*p.v*.012)%1+1)%1*H,r=p.z*1.5,a=(.2+.3*Math.sin(seg*1.3+p.f*3))*p.z;
+ const g=mx.createRadialGradient(x,y,0,x,y,r*4);g.addColorStop(0,`rgba(255,236,200,${a})`);g.addColorStop(1,'rgba(255,220,160,0)');mx.fillStyle=g;mx.beginPath();mx.arc(x,y,r*4,0,6.29);mx.fill()});
+ $('grano').style.transform=`translate(${(seg*37%8)-4}%,${(seg*53%8)-4}%)`}
+
+// ── estado: página actual y una vuelta en curso ──
+let cur=0, giro=null; // giro={k, t, obj, v}
+function frame(seg,dt){
+ if(giro){const sp=giro.drag?0:dt/1.05;giro.t+=giro.obj>giro.t?Math.min(sp,giro.obj-giro.t):-Math.min(sp,giro.t-giro.obj);
+   if(!giro.drag&&Math.abs(giro.t-giro.obj)<1e-4){ if(giro.obj>=1){cur=giro.k+1}else{cur=giro.k} giro=null; mostrar(cur)} }
+ const vis=giro?[giro.k,giro.k+1]:[cur];
+ vis.forEach(k=>{if(k<N){visto[k]+=dt;if(PAG[k].dataset.f)foto(k,seg);revela(k)}});
+ if(giro)hoja(giro.k,giro.t);
+ motas(seg);
+ $('esquina').style.display=(!giro&&cur<N-1)?'block':'none';
+ $('ayuda').style.opacity=(!giro&&cur===0)?1:0;
+}
+function adelante(){if(giro||cur>=N-1)return;arranca();giro={k:cur,t:0,obj:1}}
+function atras(){if(giro||cur<=0)return;giro={k:cur-1,t:1,obj:0};visto[cur-1]=Math.max(visto[cur-1],0)}
+
+// ── apertura: el libro cerrado que se abre ──
+const AP=$('apertura'),L3=AP.querySelector('.libro3d'),CUB=AP.querySelector('.cubierta'),FR=AP.querySelector('.frente'),GU=AP.querySelector('.guarda');GU.style.visibility='hidden';let apIni=null,apFin=false;
+function aper(t,seg){ // t<0 = esperando el toque
+ const flota=Math.sin(seg*.9)*1.5;
+ const q1=ease(t/1.5),q2=ease((t-.8)/1.4);
+ const ang=-172*q1;CUB.style.transform=`rotateY(${ang}deg)`;FR.style.visibility=ang>-90?'visible':'hidden';GU.style.visibility=ang>-90?'hidden':'visible';
+ const W=AP.clientWidth,H=AP.clientHeight,bw=Math.min(W*.64,H*.44),bh=bw*1.42,bx=(W-bw)/2,by=H*.47-bh/2;L3.style.left=lerp(bx,0,q2)+'px';L3.style.top=lerp(by,0,q2)+'px';L3.style.width=lerp(bw,W,q2)+'px';L3.style.height=lerp(bh,H,q2)+'px';L3.style.transform=`translateY(${lerp(flota,0,q2)}px) rotateX(${lerp(8,0,q2)}deg) rotateY(${lerp(-9,0,q2)}deg) rotateZ(${lerp(-3,0,q2)}deg)`;
+ const o=1-ease((t-2.3)/.5);AP.style.opacity=o;AP.querySelector('.toca').style.visibility=t>0?'hidden':'visible';
+ if(t>2.85&&!apFin){apFin=true;AP.style.display='none'}}
+AP.addEventListener('click',()=>{if(apIni==null){apIni=performance.now()/1000;arranca()}});
+// ── hojas: regalos y confirmación ──
+document.querySelectorAll('[data-hoja]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();$('h-'+a.dataset.hoja).classList.add('ver')}));
+document.querySelectorAll('.hoja').forEach(h=>{h.addEventListener('click',e=>{if(e.target===h||e.target.closest('.cerrar'))h.classList.remove('ver')});h.addEventListener('pointerdown',e=>e.stopPropagation())});
+let rsv='si';document.querySelectorAll('.sino button').forEach(b=>b.onclick=()=>{rsv=b.dataset.v;document.querySelectorAll('.sino button').forEach(x=>x.classList.toggle('on',x===b))});
+$('r-env').onclick=e=>{e.preventDefault();const n=$('r-nom').value.trim()||'(sin nombre)';
+ const m=rsv==='si'?`¡Hola! Soy ${n}. Confirmo que SÍ asistiré a la boda de Ximena y Diego. Seremos ${$('r-cant').value}.`:`¡Hola! Soy ${n}. Lamentablemente NO podré asistir a la boda de Ximena y Diego.`;
+ const x=$('r-msj').value.trim();
+ open('https://wa.me/5219994160750?text='+encodeURIComponent(m+(x?`\nMensaje: ${x}`:'')+'\n\n(Vi la muestra «Libro» de Invítame)'),'_blank')};
+document.querySelectorAll('[data-copia]').forEach(a=>a.onclick=e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText(a.dataset.copia);a.textContent='¡Copiada!'});
+// toque y arrastre
+let ini=null;
+libro.addEventListener('pointerdown',e=>{if(!apFin||e.target.closest('a,button,.hoja'))return;const r=libro.getBoundingClientRect();ini={x:e.clientX-r.left,y:e.clientY-r.top,t:performance.now(),mov:false};
+ if(!giro&&cur<N-1&&ini.x>W*.45){arranca();giro={k:cur,t:0,obj:0,drag:true}}});
+libro.addEventListener('pointermove',e=>{if(!ini)return;const r=libro.getBoundingClientRect();const x=e.clientX-r.left;if(Math.abs(x-ini.x)>8)ini.mov=true;
+ if(giro&&giro.drag){giro.t=Math.max(0,Math.min(1,(ini.x-x)/(W*1.3)+.02))}});
+addEventListener('pointerup',e=>{if(!ini)return;const r=libro.getBoundingClientRect();const x=e.clientX-r.left;const rapido=performance.now()-ini.t<350;
+ if(giro&&giro.drag){giro.drag=false;giro.obj=(!ini.mov||giro.t>.22||(rapido&&ini.x-x>30))?1:0}
+ else if(!giro){ if(ini.mov&&x-ini.x>40)atras(); else if(!ini.mov&&ini.x<W*.3)atras(); }
+ ini=null});
+addEventListener('keydown',e=>{if(!apFin)return;if(e.key==='ArrowRight')adelante();if(e.key==='ArrowLeft')atras()});
+
+// música: arranca con el primer toque
+const audio=$('audio'),bm=$('musica');let sonando=false;
+function arranca(){if(sonando||VIDEO)return;sonando=true;bm.style.display='block';audio.play().catch(()=>{})}
+bm.onclick=e=>{e.stopPropagation();if(audio.paused){audio.play();bm.textContent='♪'}else{audio.pause();bm.textContent='×'}};
+
+tam();addEventListener('resize',tam);
+mostrar(0);
+if(VIDEO){
+ // modo video: cada página se queda `QUEDA` s y la vuelta dura `VUELTA` s
+ const QUEDA=4.6,VUELTA=1.35,AP0=1.6,APD=3.0;window.DUR=AP0+APD+N*QUEDA+(N-1)*VUELTA+1;
+ window.render=(T0)=>{if(T0<AP0+APD){AP.style.display='';apFin=false;aper(T0-AP0,T0);if(T0<AP0+2.3){mostrar(0);visto.fill(0);return}}else{AP.style.display='none';apFin=true}
+  const T=Math.max(0,T0-AP0-APD+.55);const blk=QUEDA+VUELTA;let k=Math.min(N-1,Math.floor(T/blk));const r=T-k*blk;
+   for(let i=0;i<N;i++)visto[i]=i<k?9:(i===k?Math.min(r,QUEDA)+ (k>0?VUELTA:0):(i===k+1?Math.max(0,r-QUEDA):0));
+   if(k<N-1&&r>QUEDA){giro={k,t:(r-QUEDA)/VUELTA,obj:2,drag:true};}else{giro=null;mostrar(k)}
+   const vis=giro?[k,k+1]:[k];vis.forEach(i=>{if(PAG[i].dataset.f)foto(i,T);revela(i)});if(giro)hoja(k,giro.t);motas(T0);
+   $('esquina').style.display=(!giro&&k<N-1&&r>1.5)?'block':'none'};
+ window.listo=Promise.all([listo,document.fonts.ready]);return;
+}
+listo.then(()=>{let last=performance.now();(function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;const seg=now/1000;if(!apFin)aper(apIni==null?-1:seg-apIni,seg);if(apIni!=null)frame(seg,dt);requestAnimationFrame(loop)})(last)});
+})();
+</script>
+</body>
+</html>
