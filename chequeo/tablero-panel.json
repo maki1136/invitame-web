@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-19T18:53:18.877Z",
+ "cuando": "2026-11-19T19:44:05.888Z",
  "slug": "camila-y-tomas",
- "total": 809,
- "verde": 792,
+ "total": 812,
+ "verde": 795,
  "amarillo": 2,
  "rojo": 15,
  "gris": 0,
@@ -1442,6 +1442,39 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.invImagen.sinDescarga",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.entradaImagen.on",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.entradaImagen.llenar",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.entradaImagen.aviso",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5846,9 +5879,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5858,8 +5890,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
