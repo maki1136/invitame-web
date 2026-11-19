@@ -736,6 +736,12 @@
     if(/^Mar[íi]a$/.test((D.n1||'').trim())&&/^Diego$/.test((D.n2||'').trim())) av.push('Los nombres siguen siendo los del ejemplo («'+P+'»)');
     if((D.slug||'')==='maria-y-diego') av.push('La dirección del link sigue siendo «maria-y-diego»');
     if(String(D.fecha||'').indexOf('2026-11-28')===0) av.push('La fecha sigue siendo la del ejemplo (28/11/2026)');
+    /* ★ 19/11: en el formato LIBRO la frase larga, la portada de siempre y la trivia no se ven (el invitado ve el libro): se avisa por lo del libro */
+    const _lb=D.fx&&D.fx.libro&&D.fx.libro.on?D.fx.libro:null;
+    if(_lb){ if(!(_lb.portada&&_lb.portada.foto)) av.push('El libro no tiene foto de portada (pestaña LIBRO)');
+      if(!((_lb.caps||[]).filter(c=>c&&(c.titulo||c.texto)).length>=3)) av.push('El libro tiene menos de 3 capítulos con texto (pestaña LIBRO)');
+      if(!String(D['c_numero-de-whatsapp']||D['c_numero-de-whatsapp-2']||'').replace(/\D/g,'')) av.push('El libro no tiene WhatsApp para «Confirmar asistencia» (pestaña LIBRO)');
+      return av; }
     if(/Hay un instante en la vida/.test(D.frase||'')) av.push('La «Frase Larga» es la del ejemplo (pestaña PRINCIPAL)');   /* 1/10/2026: decía «frase principal», que es OTRO campo (kick): Jazmín cambiaba ése y el aviso no se iba */
     if(/images\.unsplash\.com/.test(D.cover||'')) av.push('La foto de portada es una del ejemplo (no es de la pareja)');
     // la trivia sólo cuenta si está PRENDIDA (TRIVIA → Habilitar trivia): apagada no se ve
