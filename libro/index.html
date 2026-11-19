@@ -241,7 +241,7 @@ function modelo(ev){
   clabe:String(ev.regClabe||'').trim(),etq:ev.regEtqCuenta||'CLABE',titular:ev.regTitular||'',banco:ev.regBanco||'',
   wa:digitos(ev['c_numero-de-whatsapp'+w]||ev['c_numero-de-whatsapp']||ev['c_numero-de-whatsapp-2']),
   musica:/youtu\.?be/i.test(String(ev.musicaUrl||''))?'':String(ev.musicaUrl||'').trim(),
-  tipo:ev.tipoEvento||ev.tema||'boda',
+  tipo:String(ev.tipoEvento||'boda').toLowerCase(),
   maxP:Math.max(1,Math.min(20,+((ev.fx&&ev.fx.rsvp&&ev.fx.rsvp.maxPersonas)||L.maxPersonas)||6))};
 }
 function nombresH(M){return esc(M.n1||'Nombre')+' <i>&amp;</i> '+esc(M.n2||'Nombre')}
@@ -249,7 +249,7 @@ function fechaCorta(M){return M.f?String(M.f.getDate()).padStart(2,'0')+' · '+S
 function paginasHtml(M){
  const L=M.L,out=[];let num=0;const pie=()=>'<div class="num">— '+romano(++num)+' —</div>';
  const P=L.portada||{};
- out.push('<section class="pag foto tapa'+(P.foto?'':' sinfoto papel')+'" data-id="portada" '+(P.foto?'data-f="'+esc(P.foto)+'" data-p="'+esc(P.prof||'')+'" data-cam="0.5,0.62,1.12,1.2"':'')+'>'+
+ out.push('<section class="pag foto tapa'+(P.foto?'':' sinfoto papel')+'" data-id="portada" '+(P.foto?'data-f="'+esc(P.foto)+'" data-p="'+esc(P.prof||'')+'" data-cam="0.5,0.5,1.04,1.1"':'')+'>'+
   (P.foto?'<canvas class="ft"></canvas><div class="vel2"></div>':'')+
   '<div class="nombres"'+(P.foto?'':' style="color:var(--tinta);text-shadow:none;top:34%"')+'><p style="margin:0 0 1em">'+esc(M.tit)+'</p><h1>'+nombresH(M)+'</h1><p>'+fechaCorta(M)+'</p></div></section>');
  const PR=L.prologo||{};
@@ -425,8 +425,8 @@ document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest
 document.querySelectorAll('.hoja').forEach(h=>{h.addEventListener('click',e=>{if(e.target===h||e.target.closest('.cerrar'))h.classList.remove('ver')});h.addEventListener('pointerdown',e=>e.stopPropagation())});
 let rsv='si';document.querySelectorAll('.sino button').forEach(b=>b.onclick=()=>{rsv=b.dataset.v;document.querySelectorAll('.sino button').forEach(x=>x.classList.toggle('on',x===b));$('r-cant-l').style.display=rsv==='si'?'':'none'});
 $('r-env').onclick=e=>{e.preventDefault();if(!M)return;const n=$('r-nom').value.trim();if(!n){$('r-nom').focus();$('r-nom').style.borderColor='#b0654a';return}
- const ev=M.tipo==='boda'?'la boda':'el evento';
- const t=rsv==='si'?`¡Hola! Soy ${n}. Confirmo que SÍ asistiré a ${ev} de ${M.n1} y ${M.n2}. Seremos ${$('r-cant').value}.`:`¡Hola! Soy ${n}. Lamentablemente NO podré asistir a ${ev} de ${M.n1} y ${M.n2}.`;
+ const ev=M.tipo==='boda'?'la boda':/^xv/.test(M.tipo)?'los XV años':'el evento';
+ const t=rsv==='si'?`¡Hola! Soy ${n}. Confirmo que SÍ asistiré ${ev==='el evento'?'al evento':'a '+ev} de ${M.n1} y ${M.n2}. Seremos ${$('r-cant').value}.`:`¡Hola! Soy ${n}. Lamentablemente NO podré asistir ${ev==='el evento'?'al evento':'a '+ev} de ${M.n1} y ${M.n2}.`;
  const x=$('r-msj').value.trim();
  open('https://wa.me/'+M.wa+'?text='+encodeURIComponent(t+(x?`\nMensaje: ${x}`:'')),'_blank')};
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-copia]');if(!a)return;e.preventDefault();
