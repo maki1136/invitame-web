@@ -36,8 +36,11 @@
 
   var ultimo = null;
   function aplicar() {
-    /* el atributo va repetido: Marfil escribe sus reglas con DOS atributos + id y !important */
-    var c = cfg(), r = [], H = 'html[data-portada-limpia][data-portada-limpia][data-portada-limpia] ';
+    /* el atributo va repetido: Marfil escribe sus reglas con DOS atributos + id y !important.
+       19/11: CUATRO veces. Marfil pone `#pv-names > span:not(.col-mf-y)`: el :not suma una clase
+       y empataba con tres atributos; con el empate ganaba el que cargara último y la letra elegida
+       salía a veces y a veces no (Encaje y nácar: Pinyon Script ↔ Cormorant según la carga). */
+    var c = cfg(), r = [], H = 'html[data-portada-limpia][data-portada-limpia][data-portada-limpia][data-portada-limpia] ';
     if (si(c.sinVelo)) {
       r.push(H + '.portada .c::before, ' + H + '.portada > .c::before { display:none !important; background:none !important }');
     }
