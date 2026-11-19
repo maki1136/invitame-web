@@ -83,7 +83,7 @@
     return '<label style="' + S.lab + '">' + rot + '</label>' +
       '<div style="display:flex;gap:10px;align-items:center">' +
       '<div style="width:62px;height:88px;border-radius:8px;flex:none;background:#eee center/cover' + (u ? ' url(&quot;' + esc(chica(u, 160)) + '&quot;)' : '') + '"></div>' +
-      '<div style="flex:1"><button type="button" class="btn-c" data-subir="' + ruta + '">' + (u ? 'Cambiar la foto' : 'Subir la foto') + '</button>' +
+      '<div style="flex:1"><input type="file" accept="image/*" data-archivo="' + ruta + '" hidden><button type="button" class="btn-c" data-subir="' + ruta + '">' + (u ? 'Cambiar la foto' : 'Subir la foto') + '</button>' +
       (u ? ' <button type="button" class="btn-c" data-quitar="' + ruta + '">Quitar</button>' : '') +
       '<div data-estado="' + ruta + '" style="' + S.ay + '">' + (u ? (p ? 'Con profundidad 3D.' : 'Sin 3D (va plana). <a href="#" data-3d="' + ruta + '">Calcular el 3D</a>') : (ayuda || 'Vertical, como de celular.')) + '</div></div></div>';
   }
@@ -107,7 +107,7 @@
       l('Título', 'titulo', 'text', 'Nuestra historia') +
       k('Fecha y hora del evento', 'fecha', 'datetime-local', '', 'La misma de PRINCIPAL. De acá salen la portada, la tapa, la cuenta regresiva y «Guardar la fecha».'));
     h += seccion('prologo', '3 · El prólogo',
-      l('Texto', 'prologo.texto', 'area', 'Antes del «sí» hubo un café equivocado, una tormenta…', 'Aparece palabra por palabra. Un renglón vacío = otro párrafo. Vacío, no hay prólogo.') +
+      l('Texto', 'prologo.texto', 'area', 'Antes del «sí» hubo un café equivocado, una tormenta…', 'Aparece palabra por palabra. Cada renglón es un párrafo. Vacío, no hay prólogo.') +
       l('Firma', 'prologo.firma', 'text', (d.n1 && d.n2) ? d.n1 + ' y ' + d.n2 : 'Ximena y Diego'));
     var hc = '<div style="' + S.ay + '">De 3 a 8. El número («Capítulo uno»…) sale solo, en el orden de la lista. El texto, corto (unas 40 palabras): si es largo se achica la letra para que entre.</div>';
     caps.forEach(function (c, i) {
@@ -153,20 +153,19 @@
       l('Confirmar antes del (opcional)', 'limite', 'date') + l('Máximo de personas en «¿Cuántos asistirán?»', 'maxPersonas', 'number', '6'));
     h += seccion('portada', '10 · La música',
       k('Música (mp3)', 'musicaUrl', 'text', 'https://res.cloudinary.com/…/cancion.mp3', 'Sólo un archivo de audio (.mp3). De YouTube no: no suena en el iPhone.') +
-      '<button type="button" class="btn-c" id="libro-mp3" style="margin-top:6px">Subir el mp3</button> <span id="libro-mp3-e" style="' + S.ay + '"></span>');
+      '<input type="file" accept="audio/*,.mp3,.m4a" id="libro-mp3-in" hidden><button type="button" class="btn-c" id="libro-mp3" style="margin-top:6px">Subir el mp3</button> <span id="libro-mp3-e" style="' + S.ay + '"></span>');
     return h;
   }
   function fondo(rot, clave) {
     var u = LB()[clave];
     return '<label style="' + S.lab + '">' + rot + '</label><div style="' + S.ay + ';margin-top:0">' + (u ? 'Uno propio. <a href="#" data-fabrica="' + clave + '">Volver al de fábrica</a>' : 'El de fábrica.') + '</div>' +
-      '<button type="button" class="btn-c" data-fondo="' + clave + '" style="margin-top:4px">Subir otro</button>';
+      '<input type="file" accept="image/*" data-archivo-fondo="' + clave + '" hidden><button type="button" class="btn-c" data-fondo="' + clave + '" style="margin-top:4px">Subir otro</button>';
   }
 
   /* ── armar y escuchar ─────────────────────────────────────────────────── */
   var caja = null, slugCaja = null;
   function pintar() { if (!caja) return; var y = caja.closest('.panel') ? caja.closest('.panel').scrollTop : 0; caja.innerHTML = html(); var pn = caja.closest('.panel'); if (pn) pn.scrollTop = y; }
   function ir(id) { var fr = document.getElementById('pv-frame'); if (fr && fr.contentWindow && /\/libro\//.test(fr.src)) { try { fr.contentWindow.postMessage({ type: 'libro-ir', id: id }, '*'); } catch (e) {} } }
-  function elegirArchivo(acepta, cb) { var i = document.createElement('input'); i.type = 'file'; i.accept = acepta; i.onchange = function () { if (i.files && i.files[0]) cb(i.files[0]); }; i.click(); }
   function estado(ruta, txt) { var e = caja && caja.querySelector('[data-estado="' + ruta + '"]'); if (e) e.innerHTML = txt; }
   function calcular3d(ruta) {
     var u = get(LB(), ruta + '.foto'); if (!u) return;
@@ -179,6 +178,24 @@
       estado(ruta, 'No se pudo calcular el 3D: la página va plana, sin problema. <a href="#" data-3d="' + ruta + '">Probar de nuevo</a>');
     });
   }
+  function archivo(t, f) {
+    var L = LB();
+    if (t.dataset.archivo) {
+      var ruta = t.dataset.archivo;
+      estado(ruta, 'Subiendo la foto…');
+      window.INV.uploadImage(f).then(function (u) { put(LB(), ruta + '.foto', u); put(LB(), ruta + '.prof', ''); prev(); pintar(); ir(ruta.replace(/^caps\.(\d+)$/, function (_, n) { return 'cap' + (+n + 1); })); calcular3d(ruta); })
+        .catch(function () { estado(ruta, 'No se pudo subir. Probá de nuevo.'); });
+    } else if (t.dataset.archivoFondo) {
+      var cl = t.dataset.archivoFondo;
+      window.INV.uploadImage(f).then(function (u) { LB()[cl] = u; prev(); pintar(); ir('apertura'); }).catch(function () { alert('No se pudo subir. Probá de nuevo.'); });
+    } else if (t.id === 'libro-mp3-in') {
+      var es = caja.querySelector('#libro-mp3-e');
+      if (!/^audio\//.test(f.type || '') && !/\.(mp3|m4a|aac|ogg|wav)$/i.test(f.name || '')) { if (es) es.textContent = 'Eso no es un audio.'; return; }
+      if (es) es.textContent = 'Subiendo…';
+      window.INV.uploadVideo(f).then(function (u) { compartido('musicaUrl', u); pintar(); var e2 = caja.querySelector('#libro-mp3-e'); if (e2) e2.textContent = 'Música subida.'; })
+        .catch(function () { if (es) es.textContent = 'No se pudo subir. Probá de nuevo.'; });
+    }
+  }
   function montar(c) {
     c.addEventListener('input', function (e) {
       var t = e.target;
@@ -190,6 +207,7 @@
     });
     c.addEventListener('change', function (e) {
       var t = e.target;
+      if (t.type === 'file') { var f = t.files && t.files[0]; if (f) archivo(t, f); t.value = ''; return; }
       if (t.id === 'libro-on') {
         var d = DD(); if (!d) return;
         if (t.checked && String(d.estado || '') === 'entregada' &&
@@ -204,18 +222,10 @@
     c.addEventListener('click', function (e) {
       var b = e.target.closest('button,a'); if (!b || !c.contains(b)) return;
       var L = LB();
-      if (b.dataset.subir) {
-        e.preventDefault(); var ruta = b.dataset.subir;
-        elegirArchivo('image/*', function (f) {
-          estado(ruta, 'Subiendo la foto…');
-          window.INV.uploadImage(f).then(function (u) { put(L, ruta + '.foto', u); put(L, ruta + '.prof', ''); prev(); pintar(); ir(ruta.replace(/^caps\.(\d+)$/, function (_, n) { return 'cap' + (+n + 1); })); calcular3d(ruta); })
-            .catch(function () { estado(ruta, 'No se pudo subir. Probá de nuevo.'); });
-        });
-      } else if (b.dataset.quitar) { e.preventDefault(); put(L, b.dataset.quitar + '.foto', ''); put(L, b.dataset.quitar + '.prof', ''); prev(); pintar(); }
+      if (b.dataset.subir) { e.preventDefault(); var fi = c.querySelector('[data-archivo="' + b.dataset.subir + '"]'); if (fi) fi.click(); } else if (b.dataset.quitar) { e.preventDefault(); put(L, b.dataset.quitar + '.foto', ''); put(L, b.dataset.quitar + '.prof', ''); prev(); pintar(); }
       else if (b.dataset['3d']) { e.preventDefault(); calcular3d(b.dataset['3d']); }
       else if (b.dataset.fondo) {
-        e.preventDefault(); var cl = b.dataset.fondo;
-        elegirArchivo('image/*', function (f) { b.textContent = 'Subiendo…'; window.INV.uploadImage(f).then(function (u) { L[cl] = u; prev(); pintar(); ir('apertura'); }).catch(function () { b.textContent = 'No se pudo subir'; }); });
+        e.preventDefault(); var ff = c.querySelector('[data-archivo-fondo="' + b.dataset.fondo + '"]'); if (ff) ff.click();
       } else if (b.dataset.fabrica) { e.preventDefault(); L[b.dataset.fabrica] = ''; prev(); pintar(); }
       else if (b.id === 'libro-cap-mas') { L.caps = Array.isArray(L.caps) ? L.caps : []; if (L.caps.length < 8) L.caps.push({}); prev(); pintar(); }
       else if (b.dataset.borrar != null && b.dataset.borrar !== undefined && b.hasAttribute('data-borrar')) {
@@ -224,15 +234,7 @@
       } else if (b.dataset.mover) {
         var m = b.dataset.mover.split(',').map(Number), j = m[0] + m[1];
         if (j < 0 || j >= L.caps.length) return; var x = L.caps[m[0]]; L.caps[m[0]] = L.caps[j]; L.caps[j] = x; prev(); pintar(); ir('cap' + (j + 1));
-      } else if (b.id === 'libro-mp3') {
-        elegirArchivo('audio/*,.mp3,.m4a', function (f) {
-          var es = caja.querySelector('#libro-mp3-e');
-          if (!/^audio\//.test(f.type || '') && !/\.(mp3|m4a|aac|ogg|wav)$/i.test(f.name || '')) { if (es) es.textContent = 'Eso no es un audio.'; return; }
-          if (es) es.textContent = 'Subiendo…';
-          window.INV.uploadVideo(f).then(function (u) { compartido('musicaUrl', u); pintar(); var e2 = caja.querySelector('#libro-mp3-e'); if (e2) e2.textContent = 'Música subida.'; })
-            .catch(function () { if (es) es.textContent = 'No se pudo subir. Probá de nuevo.'; });
-        });
-      }
+      } else if (b.id === 'libro-mp3') { var fm = c.querySelector('#libro-mp3-in'); if (fm) fm.click(); }
     });
   }
 
