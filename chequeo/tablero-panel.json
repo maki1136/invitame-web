@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-20T17:02:14.010Z",
+ "cuando": "2026-11-20T17:23:05.382Z",
  "slug": "camila-y-tomas",
- "total": 838,
- "verde": 820,
+ "total": 832,
+ "verde": 815,
  "amarillo": 2,
  "rojo": 15,
- "gris": 1,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -527,58 +527,6 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.portadaPos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.alturaNombres",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.alturaCuenta",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.tamKick",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.portadaFoto.colorKick",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1527,39 +1475,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.entradaImagen.aviso",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.color",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.sinZoom",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.entera",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6040,9 +5955,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6052,8 +5966,9 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6074,9 +5989,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6086,8 +6000,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6668,6 +6583,28 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.pase.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.fondoEntero",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.sinSello",
    "llega": true,
    "seVe": true,
    "estado": "verde"
