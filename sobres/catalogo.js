@@ -228,6 +228,18 @@ window.SOBRES_INVITAME = {
        cerrarse. La mitad de vuelta del video no se ve nunca. */
     luz:    2.9
   },
+  /* 20/11/2026 · Jazmín (festival-instituto-toluca): «apenas la abren aparecen
+     unos anillos, ¿los podés sacar?». Es el MISMO video de «perlas»: adentro del
+     tríptico venía dibujado un par de anillos de boda. Acá se borraron cuadro por
+     cuadro (el interior queda azul noche liso). Para eventos que no son bodas.
+     El de arriba no se tocó: lo usan invitaciones entregadas. */
+  'perlas-sin-anillos': {
+    nombre: "Perlas · moño de perlas, se abre al medio, SIN anillos adentro (para eventos que no son bodas) (video)",
+    video:  "/sobres/sobre-perlas-sin-anillos.mp4",
+    poster: "/sobres/sobre-perlas-sin-anillos-poster.jpg",
+    color:  "#f2f2f4",
+    luz:    2.9
+  },
 
   /* ---- ★ EL SOBRE DE PLAYA  (17/9/2026) ---------------------------------
      El sobre propio de la muestra de Riviera Maya (Valeria & Emiliano). Salió
