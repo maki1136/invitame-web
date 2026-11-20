@@ -40,17 +40,18 @@
   }
   function medir(el) {
     var alto = el.offsetHeight; if (!alto) return null;
+    var top = el.getBoundingClientRect().top;
     if (el.classList.contains('evento')) {
       var ph = el.querySelector(':scope > .ph');
-      if (ph && ph.offsetHeight > 20 && getComputedStyle(ph).display !== 'none') return ph.offsetTop + ph.offsetHeight;
+      if (ph && ph.offsetHeight > 20 && getComputedStyle(ph).display !== 'none') return Math.round(ph.getBoundingClientRect().bottom - top);
       return 'no';
     }
     /* hotel: entre lo último escrito y el botón */
     var btn = el.querySelector(':scope > .btn, :scope > a.btn, :scope .btnrow');
     if (!btn || !btn.offsetHeight) return 'no';
     var prev = btn.previousElementSibling;
-    var fin = prev ? prev.offsetTop + prev.offsetHeight : 0;
-    return Math.round((fin + btn.offsetTop) / 2);
+    var fin = prev ? prev.getBoundingClientRect().bottom - top : 0;
+    return Math.round((fin + btn.getBoundingClientRect().top - top) / 2);
   }
 
   function aplicar() {
