@@ -1072,7 +1072,8 @@ if ($leyoEvento && isset($data['fields']['fx']['mapValue']['fields']['entradaIma
       . '<div style="position:absolute;inset:0;background:url(&quot;' . $eiImg . '&quot;) center/' . ($eiLl ? 'cover' : 'contain') . ' no-repeat"></div>'
       . ($eiAv ? '<div style="position:absolute;left:50%;bottom:max(28px,env(safe-area-inset-bottom));transform:translateX(-50%);padding:11px 22px;border-radius:999px;background:rgba(30,22,16,.72);color:#fbf7ef;font:600 13px/1 \'Cormorant Garamond\',Georgia,serif;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)">Toca para abrir</div>' : '')
       . '</div>';
-    $tpl = str_replace('</head>', '<link rel="preload" as="image" href="' . $eiImg . '"></head>', $tpl);
+    /* la imagen hace de pantalla de espera: el cartel «cargando» (#iv-espera) no la tapa; si la tocan antes de que cargue, se abre apenas esté */
+    $tpl = str_replace('</head>', '<link rel="preload" as="image" href="' . $eiImg . '"><style>#inv-entrada-img ~ #iv-espera{display:none!important}</style></head>', $tpl);
     $tpl = preg_replace_callback('~<body([^>]*)>~i', function ($m) use ($eiHtml) { return '<body' . $m[1] . '>' . $eiHtml; }, $tpl, 1);
   }
 }
