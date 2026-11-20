@@ -401,7 +401,24 @@
     if (q !== null && el.textContent !== q) el.textContent = q;
     if (!t) delete el.dataset.estTxt;
   }
+  /* ★ 20/11: el sello de arriba de la tarjeta (lo pone cada colección con
+     .pasecard::before) y el fondo entero. Van en una hoja propia, con el
+     selector repetido para ganarle a las colecciones. Sin los campos, la hoja
+     queda vacía: ninguna invitación cambia. */
+  function paseExtra(es) {
+    var css = '', S = 'html body .pase .pasecard.pasecard.pasecard::before', ok = function (u) { return /^https?:\/\//.test(String(u || '')) ? String(u).replace(/"/g, '%22') : ''; };
+    var sello = ok(es.sello), img = ok(es.imagen);
+    if (es.sinSello === true || es.sinSello === 'true') css += S + '{display:none!important}';
+    else if (sello) css += S + '{content:""!important;background:url("' + sello + '") center/contain no-repeat transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important}';
+    if ((es.fondoEntero === true || es.fondoEntero === 'true') && img)
+      css += 'html body .pase.pase.pase{background-image:url("' + img + '"),linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.55)),url("' + img + '")!important;background-size:contain,cover,cover!important;background-position:center,center,center!important;background-repeat:no-repeat,no-repeat,no-repeat!important}';
+    var st = document.getElementById('est-pase-extra');
+    if (!css) { if (st) st.textContent = ''; return; }
+    if (!st) { st = document.createElement('style'); st.id = 'est-pase-extra'; (document.head || document.documentElement).appendChild(st); }
+    if (st.textContent !== css) st.textContent = css;
+  }
   function aplicarPase(sec, es) {
+    try { paseExtra(es); } catch (e) {}
     /* el título («Con cariño, te esperamos») */
     var t = sec.querySelector(':scope > .t');
     ponerTexto(t, es.titulo);

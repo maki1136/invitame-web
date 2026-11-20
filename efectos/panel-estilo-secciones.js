@@ -85,6 +85,10 @@
         ['texto', 'Título (vacío = «Con cariño, te esperamos»)', 'titulo'],
         ['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 14, 48, 'px'],
         ['color', 'Color del título', 'colorTitulo']].concat(BASE_FONDO, [
+        /* ★ 20/11 (Jazmín, xv-ximena: «en el sector de pases se sigue viendo el iconito del diseño original» · «la imagen se ve cortada siendo horizontal») */
+        ['casilla', 'Imagen de fondo ENTERA, sin recortar (para imágenes horizontales o con texto)', 'fondoEntero'],
+        ['imagen', 'Sello o ícono de arriba de la tarjeta (vacío = el del diseño)', 'sello'],
+        ['casilla', 'Sin sello ni ícono arriba de la tarjeta', 'sinSello'],
         ['fuente', 'Tipografía de los datos (rótulos y valores)', 'fuenteDatos'],
         ['color', 'Color de los rótulos (NOMBRE, PERSONAS, MESA)', 'colorRotulos'], ['rango', 'Tamaño de los rótulos', 'tamRotulos', 8, 22, 'px'],
         ['color', 'Color de los datos (el nombre, la cantidad, la mesa)', 'colorDatos'], ['rango', 'Tamaño de los datos', 'tamDatos', 10, 32, 'px'],
