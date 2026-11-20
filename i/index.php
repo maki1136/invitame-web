@@ -1052,6 +1052,31 @@ if ($slug !== '') {
   $tpl = preg_replace_callback('~<body([^>]*)>~i', function ($m) use ($guardia) { return '<body' . $m[1] . '>' . $guardia; }, $tpl, 1);
 }
 
+/* ★ 20/11/2026 — ENTRADA CON IMAGEN DESDE EL SERVIDOR (Jazmín, any-luismi: «el sobre no
+   tiene que aparecer, el ingreso es la foto del cliente»). /efectos/entrada-imagen.js
+   la ponía recién cuando cargaban los efectos, y en ese segundo y medio se veía el
+   sobre. Acá sale escrita en el HTML, encima de todo, desde el primer cuadro; el
+   módulo la encuentra hecha y sólo le engancha el toque. Opt-in: fx.entradaImagen.on. */
+if ($leyoEvento && isset($data['fields']['fx']['mapValue']['fields']['entradaImagen']['mapValue']['fields'])) {
+  $eiF = $data['fields']['fx']['mapValue']['fields']['entradaImagen']['mapValue']['fields'];
+  $eiOn = isset($eiF['on']['booleanValue']) && $eiF['on']['booleanValue'] === true;
+  $eiUrl = isset($eiF['url']['stringValue']) ? trim($eiF['url']['stringValue']) : '';
+  if ($eiOn && preg_match('#^https://#i', $eiUrl) && !isset($_GET['preview'])) {
+    $eiLl = isset($eiF['llenar']['booleanValue']) && $eiF['llenar']['booleanValue'] === true;
+    $eiAv = isset($eiF['aviso']['booleanValue']) && $eiF['aviso']['booleanValue'] === true;
+    $eiLiv = function ($u, $w) { return preg_replace('#(res\.cloudinary\.com/[^/]+/image/upload/)(?!f_auto)#', '$1f_auto,q_auto:good,w_' . $w . ',c_limit/', $u, 1); };
+    $eiImg = htmlspecialchars($eiLiv($eiUrl, 1440), ENT_QUOTES, 'UTF-8');
+    $eiFon = htmlspecialchars($eiLiv($eiUrl, 400), ENT_QUOTES, 'UTF-8');
+    $eiHtml = '<div id="inv-entrada-img" role="button" aria-label="Abrir la invitación" onclick="window.__invEntradaPend=1" style="position:fixed;inset:0;z-index:2147483000;cursor:pointer;overflow:hidden;background:#1a1512;transition:opacity .8s ease;-webkit-tap-highlight-color:transparent">'
+      . ($eiLl ? '' : '<div style="position:absolute;inset:-40px;background:url(&quot;' . $eiFon . '&quot;) center/cover;filter:blur(26px) brightness(.85);transform:scale(1.1)"></div>')
+      . '<div style="position:absolute;inset:0;background:url(&quot;' . $eiImg . '&quot;) center/' . ($eiLl ? 'cover' : 'contain') . ' no-repeat"></div>'
+      . ($eiAv ? '<div style="position:absolute;left:50%;bottom:max(28px,env(safe-area-inset-bottom));transform:translateX(-50%);padding:11px 22px;border-radius:999px;background:rgba(30,22,16,.72);color:#fbf7ef;font:600 13px/1 \'Cormorant Garamond\',Georgia,serif;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)">Toca para abrir</div>' : '')
+      . '</div>';
+    $tpl = str_replace('</head>', '<link rel="preload" as="image" href="' . $eiImg . '"></head>', $tpl);
+    $tpl = preg_replace_callback('~<body([^>]*)>~i', function ($m) use ($eiHtml) { return '<body' . $m[1] . '>' . $eiHtml; }, $tpl, 1);
+  }
+}
+
 /* ★ 6/11/2026 — EL PASE DE «HUGO Y LUCÍA» EN EL LINK DE UN INVITADO.
    Jazmín (citlalli-y-hedwin-jesus): «le mandé el link a la familia Zavala y
    sale el pase de Hugo y Lucía… al rato ya está correcto».
