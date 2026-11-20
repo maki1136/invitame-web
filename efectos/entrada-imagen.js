@@ -39,18 +39,26 @@
     setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 900);
   }
 
+  function enganchar(el) {
+    if (el.__toque) return; el.__toque = 1;
+    el.onclick = null;
+    el.addEventListener('click', function () { abrirInvitacion(el); });
+    if (window.__invEntradaPend) abrirInvitacion(el);   /* la tocaron antes de que esto cargara */
+  }
   function armar() {
     var c = cfg(), u = url(c.url), el = document.getElementById(ID);
     var env = document.getElementById('env');
+    /* todavía no llegaron los datos: si el servidor ya la escribió, se la deja como está */
+    if (!window.INVEV) { if (el) enganchar(el); return; }
     if (!si(c.on) || !u || abierto || !env || env.classList.contains('gone')) { if (el && !abierto) el.parentNode.removeChild(el); return; }
     var llenar = si(c.llenar), aviso = si(c.aviso), firma = u + '|' + llenar + '|' + aviso;
     if (el && el.__f === firma) return;
     if (!el) {
       el = document.createElement('div'); el.id = ID;
       el.setAttribute('role', 'button'); el.setAttribute('aria-label', 'Abrir la invitación');
-      el.addEventListener('click', function () { abrirInvitacion(el); });
       document.body.appendChild(el);
     }
+    enganchar(el);   /* la puede haber escrito ya i/index.php (20/11) */
     el.__f = firma;
     var img = liviana(u, 1440), fondo = liviana(u, 400);
     el.style.cssText = 'position:fixed;inset:0;z-index:2147483000;cursor:pointer;overflow:hidden;background:#1a1512;transition:opacity .8s ease;-webkit-tap-highlight-color:transparent';
