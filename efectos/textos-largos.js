@@ -126,9 +126,19 @@
     'form'
   ].join(',');
 
+  /* ★ 20/11 (cesar-helene 12-01): las secciones libres con «Texto siempre completo»
+     (fx.libre.completo / fx.libre2.completo) no se pliegan nunca */
+  function completa(el) {
+    try {
+      var s = el.closest('[data-sec]'); if (!s) return false;
+      var k = s.getAttribute('data-sec'); if (k !== 'libre' && k !== 'libre2') return false;
+      var c = window.INVEV && window.INVEV.fx && window.INVEV.fx[k];
+      return !!(c && (c.completo === true || c.completo === 'true'));
+    } catch (e) { return false; }
+  }
   function prohibido(el) {
     if (!el) return true;
-    return !!el.closest(PROHIBIDOS);
+    return !!el.closest(PROHIBIDOS) || completa(el);
   }
 
   function plegar(p) {

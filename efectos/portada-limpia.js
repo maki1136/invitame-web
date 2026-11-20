@@ -87,7 +87,10 @@
         ' letter-spacing:.08em !important; text-shadow:none !important;' + (cc ? ' color:' + cc + ' !important;' : '') + ' }');
       r.push(H + '.portada .count .sep { display:none !important }');
     }
-    var raiz = document.documentElement, st = document.getElementById(ID);
+    /* ★ 20/11 (cesar-helene 01-03): achicar o agrandar la cuenta regresiva entera */
+    var tc = Number(c.tamCuenta);
+    if (tc >= 30 && tc <= 150 && tc !== 100) r.push(H + '.portada .count { zoom:' + (tc / 100) + ' !important }');
+        var raiz = document.documentElement, st = document.getElementById(ID);
     var txt = r.join('\n');
     if (!txt) {
       if (ultimo !== '') { if (st) st.textContent = ''; raiz.removeAttribute('data-portada-limpia'); ultimo = ''; }

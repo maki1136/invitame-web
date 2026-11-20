@@ -413,6 +413,22 @@
     else if (sello) css += S + '{content:""!important;background:url("' + sello + '") center/contain no-repeat transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important}';
     if ((es.fondoEntero === true || es.fondoEntero === 'true') && img)
       css += 'html body .pase.pase.pase{background-image:url("' + img + '"),linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.55)),url("' + img + '")!important;background-size:contain,cover,cover!important;background-position:center,center,center!important;background-repeat:no-repeat,no-repeat,no-repeat!important}';
+    /* ★ 20/11 (cesar-helene, guía de los novios 02-01 y 02-03): «eliminar el código QR y
+       redistribuir los datos sin dejar huecos» · «dar protagonismo al nombre del invitado» */
+    if (es.sinQR === true || es.sinQR === 'true') {
+      var Q = 'html body .pase .pasecard.pasecard.pasecard';
+      css += Q + ' #qr{display:none!important}' +
+        Q + '{justify-content:center!important;text-align:center!important}' +
+        Q + ' > div:not(#qr){flex:0 1 auto!important;width:100%!important}' +
+        Q + ' .row[style*="flex"]{justify-content:center!important}' +
+        Q + ' .estado{margin-left:auto!important;margin-right:auto!important}';
+    }
+    var tN = parseInt(es.tamNombre, 10) || 0;
+    if (tN) css += 'html body .pase .pasecard.pasecard.pasecard #pv-gname{font-size:' + tN + 'px!important;line-height:1.15!important}';
+    if (es.fuenteNombre) {
+      pedirFuente(es.fuenteNombre);
+      css += 'html body .pase .pasecard.pasecard.pasecard #pv-gname{font-family:"' + String(es.fuenteNombre).replace(/["<>;{}]/g, '') + '", serif!important;text-transform:none!important;letter-spacing:.01em!important}';
+    }
     var st = document.getElementById('est-pase-extra');
     if (!css) { if (st) st.textContent = ''; return; }
     if (!st) { st = document.createElement('style'); st.id = 'est-pase-extra'; (document.head || document.documentElement).appendChild(st); }

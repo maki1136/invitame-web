@@ -53,6 +53,9 @@
           function () { return a().boton; }, function (v) { a().boton = v; }, false, 50));
         syncs.push(S.texto(caja, R(key + '.link', 'Link del botón (sin link no hay botón)'), 'https://…',
           function () { return a().link; }, function (v) { a().link = v; }, false, 500));
+        /* ★ 20/11 (cesar-helene 12-01): «mostrar todo el texto permanentemente, eliminar VER MÁS y VER MENOS» */
+        syncs.push(S.interruptor(caja, R(key + '.completo', 'Texto siempre completo (sin «Ver más»)'),
+          function () { return S.on(a().completo); }, function (v) { a().completo = v; }));
         syncs.push(S.estilo(caja, key));
         return syncs;
       });

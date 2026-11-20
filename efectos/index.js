@@ -910,6 +910,8 @@
     '/efectos/portada-limpia.js',    /* 10/11: portada sin velo claro y letra propia (opt-in) — fx.estiloSec.portada */
     '/efectos/sobre-papel.js',       /* 11/11: texto impreso en la tarjeta del sobre en video (opt-in) — fx.estiloSec.sobreTexto */
     '/efectos/entrada-imagen.js',      /* 19/11: en vez del sobre, la imagen del cliente que se toca para abrir (opt-in) — fx.entradaImagen */
+    '/efectos/boleto-corte.js',        /* 20/11: boletos (Pase de abordar): la línea troquelada no cruza los textos (opt-in) — fx.estiloSec.eventos.corteJusto */
+    '/efectos/clima-extra.js',         /* 20/11: clima con lugar propio, coordenadas propias y botón a un pronóstico (opt-in) — fx.estiloSec.clima */
     '/efectos/invitacion-imagen.js', /* 12/11: sobre + la imagen del cliente como invitación (opt-in) — fx.invImagen */
 
     '/efectos/tapas-foto.js',        /* 22/10: la foto propia de las tapas del video y la playlist (fx.tapas) */
