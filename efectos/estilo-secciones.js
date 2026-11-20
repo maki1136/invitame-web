@@ -407,7 +407,8 @@
      queda vacía: ninguna invitación cambia. */
   function paseExtra(es) {
     var css = '', S = 'html body .pase .pasecard.pasecard.pasecard::before', ok = function (u) { return /^https?:\/\//.test(String(u || '')) ? String(u).replace(/"/g, '%22') : ''; };
-    var sello = ok(es.sello), img = ok(es.imagen);
+    /* la imagen de fondo puede venir de este bloque o del campo de siempre «Imagen fondo QR» (img_c_imagen-fondo-qr) */
+    var e0 = ev() || {}, sello = ok(es.sello), img = ok(es.imagen) || ok(e0['img_c_imagen-fondo-qr']);
     if (es.sinSello === true || es.sinSello === 'true') css += S + '{display:none!important}';
     else if (sello) css += S + '{content:""!important;background:url("' + sello + '") center/contain no-repeat transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important}';
     if ((es.fondoEntero === true || es.fondoEntero === 'true') && img)
