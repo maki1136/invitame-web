@@ -39,6 +39,25 @@
   function hex(v) { v = String(v || '').trim(); return /^#[0-9a-f]{3,8}$/i.test(v) ? v : ''; }
   function fuente(v) { v = String(v || '').trim().replace(/["<>;{}]/g, ''); return v; }
 
+  function pedirLetra(f) {
+    if (!f || document.querySelector('link[data-portada-limpia-fuente="' + f + '"]')) return;
+    try {
+      var lk = document.createElement('link'); lk.rel = 'stylesheet'; lk.setAttribute('data-portada-limpia-fuente', f);
+      lk.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f).replace(/%20/g, '+') + '&display=swap';
+      (document.head || document.documentElement).appendChild(lk);
+    } catch (e) {}
+  }
+  /* la fecha cambia de lugar dentro de la portada; sin posición vuelve a donde estaba */
+  function moverFecha(pos) {
+    var pf = document.getElementById('pv-fecha'); if (!pf || !pf.parentNode) return;
+    var c = pf.parentNode, kick = document.getElementById('pv-kick'), cnt = c.querySelector(':scope > .count');
+    var nom = document.getElementById('pv-names');
+    if (pos !== 'arriba' && pos !== 'abajo' && !pf.__movida) return;   /* nunca se toca una fecha que no movimos nosotros */
+    pf.__movida = (pos === 'arriba' || pos === 'abajo');
+    if (pos === 'arriba') { var a = kick && kick.parentNode === c ? kick : c.firstElementChild; if (a && pf.nextElementSibling !== a && a !== pf) c.insertBefore(pf, a); }
+    else if (pos === 'abajo') { if (cnt && pf.previousElementSibling !== cnt) c.insertBefore(pf, cnt.nextSibling); }
+    else if (nom && nom.parentNode === c && pf.previousElementSibling !== nom) c.insertBefore(pf, nom.nextSibling);
+  }
   var DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   /* «2027-01-23T17:00» → «Sábado 23 de enero de 2027 · 17:00 hs» (sin hora si no la tiene) */
@@ -107,10 +126,20 @@
       if (pf.style.display === 'none') pf.style.display = '';
       r.push(H + '#pv-fecha { display:block !important; visibility:visible !important; opacity:1 !important;' +
         ' text-transform:none !important; letter-spacing:.05em !important; line-height:1.35 !important; margin-top:6px !important }');
+      /* ★ 21/11 (Jazmín): letra, tamaño, color y lugar de la fecha */
+      var ff = fuente(c.fechaFuente);
+      if (ff) { pedirLetra(ff); r.push(H + '#pv-fecha { font-family:"' + ff + '", "Cormorant Garamond", Georgia, serif !important }'); }
+      var fs = Number(c.fechaTam);
+      if (fs >= 8 && fs <= 60) r.push(H + '#pv-fecha { font-size:' + fs + 'px !important }');
+      if (/^#[0-9a-f]{6}$/i.test(c.fechaColor || '')) r.push(H + '#pv-fecha { color:' + c.fechaColor + ' !important }');
+      if (c.fechaPos === 'arriba') r.push(H + '#pv-fecha { margin:0 0 10px !important }');
+      if (c.fechaPos === 'abajo') r.push(H + '#pv-fecha { margin:14px 0 0 !important }');
     }
+    moverFecha(si(c.fechaVer) ? c.fechaPos : '');
     /* ★ 20/11 (cesar-helene 01-03): achicar o agrandar la cuenta regresiva entera */
     var tc = Number(c.tamCuenta);
-    if (tc >= 30 && tc <= 150 && tc !== 100) r.push(H + '.portada .count { zoom:' + (tc / 100) + ' !important }');
+    if (tc > 1.5) tc = tc / 100;   /* el rango con «%» del panel guarda la fracción (0.62); por las dudas se acepta 62 */
+    if (tc >= 0.3 && tc <= 1.5 && tc !== 1) r.push(H + '.portada .count { zoom:' + tc + ' !important }');
         var raiz = document.documentElement, st = document.getElementById(ID);
     var txt = r.join('\n');
     if (!txt) {

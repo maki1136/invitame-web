@@ -126,7 +126,12 @@
         ['rango', 'Tamaño de la cuenta regresiva (100 = como viene · menos = más chica)', 'tamCuenta', 40, 130, '%'],
         /* ★ 20/11 (Diana XV): «quiere que en la portada aparezca también: Sábado 23 de enero de 2027 · 17:00hs» */
         ['casilla', 'Mostrar la fecha en la portada (día, fecha y hora)', 'fechaVer'],
-        ['texto', 'Texto de la fecha en la portada (vacío = «Sábado 23 de enero de 2027 · 17:00 hs», sale de la fecha del evento)', 'fechaTexto']] },
+        ['texto', 'Texto de la fecha en la portada (vacío = «Sábado 23 de enero de 2027 · 17:00 hs», sale de la fecha del evento)', 'fechaTexto'],
+        /* ★ 21/11 (Jazmín): «que deje modificar: tipografía, tamaño, (arriba/centrado/abajo), color» */
+        ['opciones', 'Dónde va la fecha', 'fechaPos', [['', 'Debajo de los nombres (como viene)'], ['arriba', 'Arriba de todo (antes del sobretítulo)'], ['abajo', 'Debajo de la cuenta regresiva']]],
+        ['fuente', 'Letra de la fecha', 'fechaFuente'],
+        ['rango', 'Tamaño de la fecha', 'fechaTam', 10, 40, 'px'],
+        ['color', 'Color de la fecha (vacío = el de los nombres)', 'fechaColor']] },
     /* 10/11 (Línea Roja · White Swan): la letra de Marfil en carmesí. Lo pinta /efectos/marfil-tinta.js. */
     { key: 'marfil', tab: 'PRINCIPAL', casa: 'estilo-marfil', lugar: { abajo: true }, titulo: 'Colección Marfil · color de la tinta',
       campos: [['color', 'Color de toda la letra (vacío = el gris de Marfil)', 'tinta']] },
