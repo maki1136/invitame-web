@@ -1,9 +1,9 @@
-CHEQUEO DE SERVICIOS — 2026-11-20 22:08 UTC
+CHEQUEO DE SERVICIOS — 2026-11-21 20:48 UTC
 🟡 TODO ANDA, pero hay 1 aviso(s)
 
-OJO    Cloudinary (plan Small PAYG): 57.7 de 60 créditos = 96% → cerca del tope, subir de plan antes de fin de mes.
+OJO    Cloudinary (plan Small PAYG): 55.2 de 60 créditos = 92% → cerca del tope, subir de plan antes de fin de mes.
 BIEN   Galería en vivo: 0.003 GB de 60 GB este mes = 0%
 BIEN   Firebase: contesta bien
-BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (1612 KB)
-BIEN   Caché de fotos: prendida y entregando (borde)
+BIEN   Servidor: la invitación y el paquete de módulos llegan enteros (1627 KB)
+BIEN   Caché de fotos: prendida y entregando (r2)
 BIEN   Foto de prueba: subió, pasó el filtro (openai) y quedó APROBADA
