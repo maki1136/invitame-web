@@ -60,7 +60,7 @@
     /* 27/10 Jazmín (Citlalli): «el dibujo arriba, la hora abajo y la frase
        abajo», todo centrado → fx.itinerario.apilado (panel: casilla
        «La hora y el nombre en renglones separados, centrados»). */
-    var api = apilado();
+    var api = apilado() || programa();
     var html = momentos.map(function (m) {
       var titulo = api
         ? (m.h ? '<span class="tl-hora">' + esc(m.h) + '</span>' : '') + (m.t ? '<span class="tl-nom">' + esc(m.t) + '</span>' : '')
@@ -84,7 +84,33 @@
     try { return !!(window.INVEV && window.INVEV.fx && window.INVEV.fx.itinerario && window.INVEV.fx.itinerario.apilado); }
     catch (e) { return false; }
   }
+  /* ★ 20/11 (cesar-helene 07-01): el PROGRAMA — sin íconos ni vía, la hora en su
+     columna a la izquierda y el momento (con su detalle debajo) a la derecha */
+  function programa() {
+    try { return !!(window.INVEV && window.INVEV.fx && window.INVEV.fx.itinerario && window.INVEV.fx.itinerario.programa); }
+    catch (e) { return false; }
+  }
+  function estiloPrograma() {
+    var h = document.documentElement;
+    if (programa()) h.setAttribute('data-tl-programa', '1'); else h.removeAttribute('data-tl-programa');
+    if (document.getElementById('tl-programa-css')) return;
+    var P = 'html[data-tl-programa][data-tl-programa][data-tl-programa] body ';
+    var s = document.createElement('style'); s.id = 'tl-programa-css';
+    s.textContent =
+      P + '.tl.tl::before,' + P + '.tl.tl::after,' + P + '.tl .tl-prog,' + P + '.tl > .it::before,' + P + '.tl > .it::after,' + P + '.tl .it-ico{display:none!important}' +
+      P + '.tl.tl{padding:14px 22px!important}' +
+      P + '.tl.tl > .it.it{display:grid!important;grid-template-columns:auto 1fr!important;column-gap:18px!important;align-items:baseline!important;' +
+        'text-align:left!important;padding:12px 0!important;margin:0!important;left:auto!important;right:auto!important;width:auto!important;max-width:none!important;' +
+        'border-bottom:1px solid color-mix(in srgb, currentColor 16%, transparent)!important}' +
+      P + '.tl.tl > .it.it:last-of-type{border-bottom:0!important}' +
+      P + '.tl > .it .h{display:contents!important}' +
+      P + '.tl > .it .tl-hora{grid-column:1!important;grid-row:1 / span 2!important;display:block!important;min-width:3.2em;font-variant-numeric:tabular-nums;white-space:nowrap!important}' +
+      P + '.tl > .it .tl-nom{grid-column:2!important;display:block!important;white-space:normal!important}' +
+      P + '.tl > .it > .d{grid-column:2!important;font-style:italic;margin:2px 0 0!important;text-align:left!important;white-space:pre-line}';
+    (document.head || document.documentElement).appendChild(s);
+  }
   function estiloApilado() {
+    estiloPrograma();
     var h = document.documentElement, on = apilado();
     if (on) h.setAttribute('data-tl-apilado', '1'); else h.removeAttribute('data-tl-apilado');
     if (document.getElementById('tl-apilado-css')) return;
@@ -98,7 +124,7 @@
       'html[data-tl-apilado] .tl > .it .it-ico{margin-left:auto!important;margin-right:auto!important}';
     (document.head || document.documentElement).appendChild(s);
   }
-  function firmaDe(ms) { try { return JSON.stringify(ms) + (apilado() ? '|ap' : ''); } catch (e) { return ''; } }
+  function firmaDe(ms) { try { return JSON.stringify(ms) + (apilado() ? '|ap' : '') + (programa() ? '|pr' : ''); } catch (e) { return ''; } }
   var firmaVieja = null;
 
   function armar() {

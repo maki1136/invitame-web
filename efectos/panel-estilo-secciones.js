@@ -23,14 +23,21 @@
     [['color', 'Color del texto', 'colorTexto'], ['rango', 'Tamaño del texto', 'tamTexto', 11, 24, 'px']], extra || []); };
   var BLOQUES = [
     { key: 'eventos', tab: 'LUGAR_VEST', casa: 'eventos', titulo: 'Dónde y cuándo · diseño (fondo, letra, colores, sin título, renglones)',
-      campos: [['casilla', 'Respetar los renglones (Enter) de la descripción y poner la dirección en un renglón aparte', 'renglones']].concat(GEN()) },
+      campos: [['casilla', 'Respetar los renglones (Enter) de la descripción y poner la dirección en un renglón aparte', 'renglones'],
+        /* ★ 20/11 (cesar-helene 05-01 y 09-01): en los boletos la línea punteada cruzaba «CEREMONIA» y las direcciones */
+        ['casilla', 'Boletos (Pase de abordar): la línea punteada va entre la foto y el texto, sin cruzar letras (también en los hoteles)', 'corteJusto']].concat(GEN()) },
     { key: 'dresscode', tab: 'LUGAR_VEST', casa: 'vestimenta', titulo: 'Vestimenta · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'galeria', tab: 'GALERIA_INSTA_VID', casa: 'estilo-galeria', lugar: { arriba: true }, titulo: 'Galería · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'video', tab: 'GALERIA_INSTA_VID', casa: 'estilo-video', lugar: { abajo: true }, titulo: 'Nuestro video · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'spotify', tab: 'MUSIC_PASES', casa: 'estilo-spotify', lugar: { abajo: true }, titulo: 'Playlist · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'regalos', tab: 'REGALOS', casa: 'regalo', titulo: 'Mesa de regalos · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'confirmacion', tab: 'CONFIRMACIÓN', casa: 'confirmacion', titulo: 'Confirmar asistencia · diseño (fondo, letra, colores, sin título)', campos: GEN() },
-    { key: 'clima', tab: 'LUGAR_VEST', casa: 'estilo-clima', lugar: { abajo: true }, titulo: 'Clima · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'clima', tab: 'LUGAR_VEST', casa: 'estilo-clima', lugar: { abajo: true }, titulo: 'Clima · diseño (fondo, letra, colores, sin título, lugar y botón)',
+      /* ★ 20/11 (cesar-helene 11): el clima del lugar de la fiesta, con su nombre y un botón al pronóstico (Yr). Lo pinta /efectos/clima-extra.js */
+      campos: [['texto', 'Lugar que se muestra (ej. Ebberup, Dinamarca)', 'lugar'],
+        ['texto', 'Coordenadas del clima (ej. 55.1023, 10.0371 · vacío = las del mapa de la ceremonia)', 'coords'],
+        ['texto', 'Link del botón (ej. el pronóstico de Yr) · sin link no hay botón', 'link'],
+        ['texto', 'Texto del botón (vacío = «Ver pronóstico»)', 'boton']].concat(GEN()) },
     { key: 'filtro', tab: 'EFECTOS', casa: 'estilo-filtro', lugar: { abajo: true }, titulo: 'El filtro · diseño (letra, colores, tamaño, sin título)', campos: GEN() },
     { key: 'live', tab: 'EFECTOS', casa: 'estilo-live', lugar: { abajo: true }, titulo: 'Las fotos de la fiesta (Live) · diseño (letra, colores, tamaño, sin título)', campos: GEN() },
     { key: 'contacto', tab: 'CONFIRMACIÓN', casa: 'estilo-contacto', lugar: { abajo: true }, titulo: '¿Alguna duda? · diseño (fondo, letra, colores, sin título)', campos: GEN() },
@@ -89,6 +96,10 @@
         ['casilla', 'Imagen de fondo ENTERA, sin recortar (para imágenes horizontales o con texto)', 'fondoEntero'],
         ['imagen', 'Sello o ícono de arriba de la tarjeta (vacío = el del diseño)', 'sello'],
         ['casilla', 'Sin sello ni ícono arriba de la tarjeta', 'sinSello'],
+        /* ★ 20/11 (cesar-helene): sin QR y el nombre del invitado como protagonista */
+        ['casilla', 'Sin el código QR (los datos se reacomodan al centro)', 'sinQR'],
+        ['fuente', 'Tipografía del nombre del invitado (vacío = la de los datos)', 'fuenteNombre'],
+        ['rango', 'Tamaño del nombre del invitado', 'tamNombre', 12, 56, 'px'],
         ['fuente', 'Tipografía de los datos (rótulos y valores)', 'fuenteDatos'],
         ['color', 'Color de los rótulos (NOMBRE, PERSONAS, MESA)', 'colorRotulos'], ['rango', 'Tamaño de los rótulos', 'tamRotulos', 8, 22, 'px'],
         ['color', 'Color de los datos (el nombre, la cantidad, la mesa)', 'colorDatos'], ['rango', 'Tamaño de los datos', 'tamDatos', 10, 32, 'px'],
@@ -110,7 +121,12 @@
         ['casilla', 'Sin sombra oscura en la letra (letra oscura sobre portada clara: queda nítida)', 'sinSombra'],
         /* 19/11 (Encaje y nácar): «sigue sin verse cuántos días, minutos y segundos faltan» */
         ['casilla', 'Cuenta regresiva bien visible (números más grandes, con recuadro claro)', 'cuentaVisible'],
-        ['color', 'Color de la cuenta regresiva (vacío = el de los nombres)', 'colorCuenta']] },
+        ['color', 'Color de la cuenta regresiva (vacío = el de los nombres)', 'colorCuenta'],
+        /* ★ 20/11 (cesar-helene 01-03): «la cuenta regresiva debe ser menor que los nombres» */
+        ['rango', 'Tamaño de la cuenta regresiva (100 = como viene · menos = más chica)', 'tamCuenta', 40, 130, '%'],
+        /* ★ 20/11 (Diana XV): «quiere que en la portada aparezca también: Sábado 23 de enero de 2027 · 17:00hs» */
+        ['casilla', 'Mostrar la fecha en la portada (día, fecha y hora)', 'fechaVer'],
+        ['texto', 'Texto de la fecha en la portada (vacío = «Sábado 23 de enero de 2027 · 17:00 hs», sale de la fecha del evento)', 'fechaTexto']] },
     /* 10/11 (Línea Roja · White Swan): la letra de Marfil en carmesí. Lo pinta /efectos/marfil-tinta.js. */
     { key: 'marfil', tab: 'PRINCIPAL', casa: 'estilo-marfil', lugar: { abajo: true }, titulo: 'Colección Marfil · color de la tinta',
       campos: [['color', 'Color de toda la letra (vacío = el gris de Marfil)', 'tinta']] },

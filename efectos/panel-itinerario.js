@@ -270,6 +270,16 @@
     filaAp.appendChild(document.createTextNode('La hora arriba y el nombre abajo, centrados'));
     caja.appendChild(filaAp);
 
+    /* ---- 20/11/2026 (cesar-helene 07-01): «sustituir brújulas por horas tipográficas, sin imágenes» ---- */
+    var filaPr = chico(document.createElement('label'),
+      'display:flex;gap:7px;align-items:flex-start;font-size:12.5px;margin:0 0 12px;cursor:pointer');
+    var chkPr = document.createElement('input'); chkPr.type = 'checkbox';
+    chkPr.checked = !!datos(d).programa;
+    chkPr.onchange = function () { datos(borrador() || d).programa = chkPr.checked; refrescar(); };
+    filaPr.appendChild(chkPr);
+    filaPr.appendChild(document.createTextNode('Programa sin íconos: la hora a la izquierda y el momento a la derecha, con líneas finas (como una tarjeta impresa). El detalle va debajo del momento, en cursiva: sirve para el segundo idioma.'));
+    caja.appendChild(filaPr);
+
     /* ---- los momentos ---- */
     var lista = document.createElement('div');
     caja.appendChild(lista);

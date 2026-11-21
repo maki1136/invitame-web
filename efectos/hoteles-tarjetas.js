@@ -5,7 +5,10 @@
    porque hay mucha gente que no coloca links, sólo info, y queda el botón ahí
    pero no es necesario».
 
-   DATO: fx.hoteles.lista = [{ nombre, desc, link, boton, sinBoton }]
+   DATO: fx.hoteles.lista = [{ nombre, desc, link, boton, sinBoton, destacado, cartel }]
+     · destacado (20/11, cesar-helene 09-02): «destacar Gl. Avernæs como opción
+       preferente» → la tarjeta va resaltada, con un cartelito arriba (`cartel`,
+       vacío = «Nuestra recomendación»). Sin la casilla, la tarjeta es la de siempre.
      · desc: varios renglones (se respetan los Enter).
      · el botón sale SÓLO si hay link y no está apagado; su texto es `boton`
        (vacío = «Reservar»).
@@ -38,7 +41,11 @@
   /* ---------------- en la invitación ---------------- */
   if (EN_INV) {
     var st = document.createElement('style');
-    st.textContent = '#hosp-lista[data-tarjetas] .hotel .d{white-space:pre-line}';
+    st.textContent = '#hosp-lista[data-tarjetas] .hotel .d{white-space:pre-line}' +
+      'html body #hosp-lista[data-tarjetas] .hotel.hotel-dest.hotel-dest{outline:2px solid color-mix(in srgb, currentColor 55%, transparent)!important;outline-offset:-7px!important;padding-top:22px!important;padding-bottom:22px!important}' +
+      'html body #hosp-lista[data-tarjetas] .hotel-dest .hotel-cartel{display:block;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;opacity:.75;margin:0 0 6px}' +
+      'html body #hosp-lista[data-tarjetas] .hotel-dest h4{font-size:1.25em!important}' +
+      'html body #hosp-lista[data-tarjetas] .hotel-dest .d{line-height:1.55!important}';
     (document.head || document.documentElement).appendChild(st);
     var hecho = '';
     var pintar = function () {
@@ -49,7 +56,9 @@
         if (!n && !d) return '';
         var u = urlOk(h.link), b = '';
         if (u && !h.sinBoton) b = '<a class="btn" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(String(h.boton || '').trim() || 'Reservar') + '</a>';
-        return '<div class="hotel">' + (n ? '<h4>' + esc(n) + '</h4>' : '') + (d ? '<div class="d">' + esc(d) + '</div>' : '') + b + '</div>';
+        var dest = h.destacado === true || h.destacado === 'true';
+        var cartel = dest ? '<span class="hotel-cartel">' + esc(String(h.cartel || '').trim() || 'Nuestra recomendación') + '</span>' : '';
+        return '<div class="hotel' + (dest ? ' hotel-dest' : '') + '">' + cartel + (n ? '<h4>' + esc(n) + '</h4>' : '') + (d ? '<div class="d">' + esc(d) + '</div>' : '') + b + '</div>';
       }).join('');
       if (cont.getAttribute('data-tarjetas') === '1' && cont.innerHTML === hecho) return;
       cont.innerHTML = html; hecho = cont.innerHTML;
@@ -120,6 +129,13 @@
       campo('Descripción (dirección, código, cómo reservar…)', 'desc', 'a', 'Dirección: …\nReservaciones: …');
       campo('Link (página, WhatsApp, mapa, correo o teléfono) — opcional', 'link', 't', 'https://…');
       campo('Texto del botón', 'boton', 't', 'Reservar');
+      /* 20/11 (cesar-helene 09-02): el hotel recomendado, resaltado */
+      var chkD = document.createElement('label'); chkD.style.cssText = 'display:flex;gap:6px;align-items:center;font-size:12px;margin:0 0 6px';
+      var cbD = document.createElement('input'); cbD.type = 'checkbox'; cbD.style.width = 'auto'; cbD.checked = ho.destacado === true;
+      cbD.onchange = function () { ho.destacado = cbD.checked; guardar(d, l); construir(caja); };
+      chkD.appendChild(cbD); chkD.appendChild(document.createTextNode('Destacar este hotel (el que recomiendan los novios)'));
+      c.appendChild(chkD);
+      if (ho.destacado === true) campo('Cartelito arriba del nombre (vacío = «Nuestra recomendación»)', 'cartel', 't', 'Nuestra recomendación');
       var fila = document.createElement('div'); fila.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap';
       var chk = document.createElement('label'); chk.style.cssText = 'display:flex;gap:6px;align-items:center;font-size:12px';
       var cb = document.createElement('input'); cb.type = 'checkbox'; cb.style.width = 'auto'; cb.checked = !ho.sinBoton;
