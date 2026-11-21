@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-20T22:53:41.070Z",
+ "cuando": "2026-11-21T16:06:01.908Z",
  "slug": "camila-y-tomas",
- "total": 832,
- "verde": 815,
- "amarillo": 2,
+ "total": 849,
+ "verde": 833,
+ "amarillo": 1,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -1371,6 +1371,28 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.tamCuenta",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.fechaTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "casa-estilo-marfil",
    "control": "(sin rótulo)",
    "tipo": "color",
@@ -1570,10 +1592,32 @@
   {
    "tab": "PRINCIPAL",
    "bloque": "casa-cierre",
+   "control": "Texto siempre completo (sin «Ver más»)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.libre.completo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-cierre",
    "control": "Mostrar esta sección",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.libre2.encendido",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-cierre",
+   "control": "Texto siempre completo (sin «Ver más»)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.libre2.completo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1585,6 +1629,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1800,17 +1855,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "casa-estilo-portada",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -1860,6 +1904,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.portada.cuentaVisible",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.fechaVer",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3574,6 +3629,50 @@
   {
    "tab": "LUGAR_VEST",
    "bloque": "casa-estilo-clima",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.lugar",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.coords",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.link",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.boton",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
    "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
@@ -3687,6 +3786,17 @@
    "control": "(sin rótulo)",
    "tipo": "checkbox",
    "guarda": true,
+   "dato": "fx.estiloSec.eventos.corteJusto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
    "dato": "fx.estiloSec.eventos.sinTitulo",
    "llega": true,
    "seVe": true,
@@ -3750,7 +3860,7 @@
   {
    "tab": "LUGAR_VEST",
    "bloque": "",
-   "control": "Mostrar el botón (sólo si hay link)",
+   "control": "Destacar este hotel (el que recomiendan los novios)",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.hoteles.lista",
@@ -3762,6 +3872,39 @@
    "tab": "LUGAR_VEST",
    "bloque": "",
    "control": "Mostrar el botón (sólo si hay link)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Destacar este hotel (el que recomiendan los novios)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Mostrar el botón (sólo si hay link)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.hoteles.lista",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "",
+   "control": "Destacar este hotel (el que recomiendan los novios)",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.hoteles.lista",
@@ -3864,6 +4007,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.itinerario.apilado",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "itinerario-selector",
+   "control": "Programa sin íconos: la hora a la izquierda y el momento a la derecha, con líneas finas (c",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.itinerario.programa",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5955,8 +6109,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5966,9 +6121,8 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6000,9 +6154,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6242,6 +6395,28 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.pase.fondo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.fuenteNombre",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tamNombre",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6605,6 +6780,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.pase.sinSello",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.sinQR",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -9014,32 +9200,6 @@
   },
   {
    "tab": "EFECTOS",
-   "bloque": "mision-selector",
-   "control": "Prender la misión en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.mision",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "camara-selector",
-   "control": "Prender la camarita en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.camara",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Marco fino",
    "tipo": "checkbox",
@@ -9202,6 +9362,32 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "mision-selector",
+   "control": "Prender la misión en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.mision",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "camara-selector",
+   "control": "Prender la camarita en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.camara",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   }
  ]
 }
