@@ -39,6 +39,17 @@
   function hex(v) { v = String(v || '').trim(); return /^#[0-9a-f]{3,8}$/i.test(v) ? v : ''; }
   function fuente(v) { v = String(v || '').trim().replace(/["<>;{}]/g, ''); return v; }
 
+  var DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  /* «2027-01-23T17:00» → «Sábado 23 de enero de 2027 · 17:00 hs» (sin hora si no la tiene) */
+  function fechaCompleta(iso) {
+    var m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/); if (!m) return '';
+    var d = new Date(+m[1], +m[2] - 1, +m[3]); if (isNaN(d)) return '';
+    var s = DIAS[d.getDay()] + ' ' + (+m[3]) + ' de ' + MESES[+m[2] - 1] + ' de ' + m[1];
+    if (m[4] && !(m[4] === '00' && m[5] === '00')) s += ' · ' + m[4] + ':' + m[5] + ' hs';
+    return s;
+  }
+
   var ultimo = null;
   function aplicar() {
     /* el atributo va repetido: Marfil escribe sus reglas con DOS atributos + id y !important.
@@ -87,6 +98,16 @@
         ' letter-spacing:.08em !important; text-shadow:none !important;' + (cc ? ' color:' + cc + ' !important;' : '') + ' }');
       r.push(H + '.portada .count .sep { display:none !important }');
     }
+    /* ★ 20/11 (Diana XV): la fecha completa en la portada, con día y hora. El motor
+       la trae escondida (CONFIG.mostrarFecha=false) y en formato corto («Sábado 23 · Enero 2027») */
+    var pf = document.getElementById('pv-fecha');
+    if (si(c.fechaVer) && pf) {
+      var ft = String(c.fechaTexto || '').trim() || fechaCompleta((window.INVEV || {}).fecha);
+      if (ft && pf.textContent !== ft) pf.textContent = ft;
+      if (pf.style.display === 'none') pf.style.display = '';
+      r.push(H + '#pv-fecha { display:block !important; visibility:visible !important; opacity:1 !important;' +
+        ' text-transform:none !important; letter-spacing:.05em !important; line-height:1.35 !important; margin-top:6px !important }');
+    }
     /* ★ 20/11 (cesar-helene 01-03): achicar o agrandar la cuenta regresiva entera */
     var tc = Number(c.tamCuenta);
     if (tc >= 30 && tc <= 150 && tc !== 100) r.push(H + '.portada .count { zoom:' + (tc / 100) + ' !important }');
@@ -102,6 +123,7 @@
   }
 
   var n = 0, iv = setInterval(function () { aplicar(); if (++n > 40) clearInterval(iv); }, 300);
+  var n2 = 0, iv2 = setInterval(function () { aplicar(); if (++n2 > 30) clearInterval(iv2); }, 2000);   /* 20/11: el motor reescribe #pv-fecha cuando llegan los datos */
   addEventListener('message', function () { setTimeout(aplicar, 150); });
   setInterval(aplicar, 1500);
 })();
