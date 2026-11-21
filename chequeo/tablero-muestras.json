@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-21T16:26:44.140Z",
+ "cuando": "2026-11-21T16:46:10.810Z",
  "total": 55,
- "verde": 46,
- "rojo": 8,
- "gris": 1,
+ "verde": 48,
+ "rojo": 7,
+ "gris": 0,
  "items": [
   {
    "slug": "abril-mis15",
@@ -397,10 +397,8 @@
   {
    "slug": "valentina-y-emiliano",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección clima: previa «oculta» · publicada «rgba(238, 230, 214, 0.6)/rgb(58, 69, 61) ~velo»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
@@ -419,10 +417,10 @@
   },
   {
    "slug": "ximena-y-andres",
-   "ver": "",
-   "estado": "gris",
+   "ver": "2026-09-14",
+   "estado": "verde",
    "dif": [],
-   "error": "page.waitForFunction: Timeout 90000ms exceeded."
+   "error": ""
   },
   {
    "slug": "zoe-mis15",
