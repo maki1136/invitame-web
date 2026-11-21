@@ -556,8 +556,17 @@
       f.insertBefore(i, f.firstChild);
       syncs.push(function () { i.checked = es()[k] === true; });
     }
+    /* ★ 21/11: elegir entre varias opciones — ['opciones', rótulo, clave, [[valor, texto], …]]. '' = como viene */
+    function opcionesCampo(t, k, ops) {
+      var f = fila(t);
+      var s = document.createElement('select'); s.style.cssText = 'flex:1 1 160px;max-width:230px';
+      s.innerHTML = (ops || []).map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
+      s.onchange = function () { es()[k] = s.value || ''; refrescar(); };
+      f.appendChild(s);
+      syncs.push(function () { var v = es()[k] || ''; if (document.activeElement !== s && s.value !== v) s.value = v; });
+    }
     if (opts.campos) {
-      var TIPOS = { color: color, rango: rango, fuente: fuente, imagen: imagen, casilla: casilla, texto: textoCampo };
+      var TIPOS = { color: color, rango: rango, fuente: fuente, imagen: imagen, casilla: casilla, texto: textoCampo, opciones: opcionesCampo };
       opts.campos.forEach(function (c) { var fn = TIPOS[c[0]]; if (fn) fn.apply(null, c.slice(1)); });
       return function sync() { syncs.forEach(function (s) { try { s(); } catch (e) {} }); };
     }
