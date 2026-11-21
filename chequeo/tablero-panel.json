@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-21T16:27:32.414Z",
+ "cuando": "2026-11-21T21:35:34.665Z",
  "slug": "camila-y-tomas",
  "total": 853,
- "verde": 832,
- "amarillo": 6,
+ "verde": 836,
+ "amarillo": 2,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -5599,9 +5599,8 @@
    "guarda": true,
    "dato": "fx.muestra.pases",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -5901,9 +5900,8 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp-2",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6256,9 +6254,8 @@
    "guarda": true,
    "dato": "fx.musica.texto",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
@@ -6400,9 +6397,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.titulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
