@@ -27,9 +27,15 @@ if ((int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 20000) {
 $in = json_decode(file_get_contents('php://input'), true);
 if (!is_array($in)) $in = array();
 
-require_once __DIR__ . '/anti-robot-lib.php';
-$robot = iv_anti_robot($in);
-if ($robot !== '') { http_response_code(403); echo json_encode(array('ok' => false, 'error' => 'anti-robot')); exit; }
+/* ANTI-ROBOTS LIVIANO: campo trampa y tiempo mínimo, SIN Turnstile.
+   (23/11: con Turnstile, en Safari la casilla a veces no aparece y el cliente
+   se quedaba sin ver su invitación. Acá sólo se guarda un contacto: el freno
+   por IP y global de abajo alcanza.) */
+$ar = isset($in['antiRobot']) && is_array($in['antiRobot']) ? $in['antiRobot'] : array();
+$seg = (float)($ar['segundos'] ?? 0);
+if (trim((string)($ar['trampa'] ?? '')) !== '' || $seg < 4) {
+  http_response_code(403); echo json_encode(array('ok' => false, 'error' => 'anti-robot')); exit;
+}
 
 $rutaLim = __DIR__ . '/invitame-limite.php';
 if (is_readable($rutaLim)) {

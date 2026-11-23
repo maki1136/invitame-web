@@ -105,7 +105,6 @@
       <span>Quiero recibir promociones y todo lo nuevo que vamos sacando: en Invítame siempre estamos creando diseños y funciones nuevas.</span></label>
 
     <div class="trampa" aria-hidden="true"><input type="text" id="sitio" tabindex="-1" autocomplete="off"></div>
-    <div id="robot" style="margin:14px 0 0"></div>
 
     <div id="err" style="margin-top:16px"></div>
     <button class="ir" id="ir" type="submit" style="margin-top:16px">Ver mi invitación ✨</button>
@@ -227,23 +226,6 @@
     });
   });
 
-  /* ---------- anti-robots, igual que el formulario de compra ---------- */
-  fetch('/anti-robot.php', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
-    if (!j || !j.sitekey) return;
-    AR.activo = true;
-    window.__ivTurnstile = function () {
-      try {
-        window.turnstile.render('#robot', { sitekey: j.sitekey, language: 'es', theme: 'light',
-          callback: function (tk) { AR.token = tk; },
-          'expired-callback': function () { AR.token = ''; },
-          'error-callback': function () { AR.token = ''; } });
-      } catch (e) {}
-    };
-    var s = document.createElement('script');
-    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__ivTurnstile';
-    s.async = true; document.head.appendChild(s);
-  }).catch(function () {});
-
   function error(m, campo) {
     var e = $('err'); e.textContent = m; e.style.display = 'block';
     var c = campo && $(campo); (c || e).scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -269,7 +251,6 @@
     var mail = ($('mail').value || '').trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) return error('Revisa tu correo.', 'mail');
 
-    if (AR.activo && !AR.token) return error('Marca la casilla «Verifique que es un ser humano».', 'robot');
     var msj = ($('msj').value || '').trim().slice(0, 220);
     var b = $('ir'); b.disabled = true; b.textContent = 'Armando tu invitación…';
     var destino = '/i/?e=' + encodeURIComponent(sel.muestra) + '&pr=' +
@@ -279,7 +260,7 @@
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ muestra: sel.muestra, tipo: t, n1: n1, n2: n2, fecha: fecha, msj: msj, mail: mail,
         acepta: $('acepta').checked, foto: fotoUrl,
-        antiRobot: { trampa: $('sitio').value, segundos: (Date.now() - AR.t0) / 1000, turnstile: AR.token } })
+        antiRobot: { trampa: $('sitio').value, segundos: (Date.now() - AR.t0) / 1000 } })
     }).catch(function () {});
     /* la invitación se muestra aunque el guardado tarde o falle */
     Promise.race([guardado, new Promise(function (ok) { setTimeout(ok, 3500); })]).then(function () {
