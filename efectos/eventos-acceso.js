@@ -66,7 +66,7 @@
       var a = document.getElementById('ev' + n + '-a'); if (!a) return;
       var hecho = a.querySelector(':scope > .ev-fh');
       if (!tam && !col) {
-        if (hecho && a.dataset.fhOrig !== undefined) { a.textContent = a.dataset.fhOrig; delete a.dataset.fhOrig; delete a.dataset.fhHecho; }
+        if (hecho && a.dataset.fhOrig !== undefined) { a.innerHTML = a.dataset.fhOrig; delete a.dataset.fhOrig; delete a.dataset.fhHecho; }
         return;
       }
       /* si el motor (o los renglones) reescribieron el texto, se vuelve a partir */
@@ -74,13 +74,14 @@
         hecho.style.fontSize = tam ? tam + 'px' : ''; hecho.style.color = col;
         return;
       }
-      var txt = a.textContent; if (!txt.trim()) return;
+      /* innerText respeta los <br> y los bloques que pone el motor (textContent los pega: «20:00 hsIslas») */
+      var txt = (a.innerText || a.textContent || '').replace(/\r/g, ''); if (!txt.trim()) return;
       var renglones = txt.split('\n'), primero = renglones[0];
       var partes = primero.split(/\s+·\s+/), fecha = [], i = 0;
       while (i < partes.length && ES_FECHA.test(partes[i])) { fecha.push(partes[i]); i++; }
       if (!fecha.length) return;
       var resto = [partes.slice(i).join(' · ')].concat(renglones.slice(1)).join('\n').replace(/^\n+/, '');
-      a.dataset.fhOrig = txt;
+      a.dataset.fhOrig = a.innerHTML;
       a.textContent = '';
       var s = document.createElement('span'); s.className = 'ev-fh';
       s.textContent = fecha.join(' · ');
@@ -88,7 +89,7 @@
       s.style.fontSize = tam ? tam + 'px' : ''; s.style.color = col;
       if (col) s.style.setProperty('-webkit-text-fill-color', col, 'important');
       a.appendChild(s);
-      if (resto) a.appendChild(document.createTextNode(resto));
+      if (resto) { var r = document.createElement('span'); r.className = 'ev-dir'; r.style.cssText = 'display:block;white-space:pre-line'; r.textContent = resto; a.appendChild(r); }
       a.style.whiteSpace = 'pre-line';
       a.dataset.fhHecho = a.innerHTML;
     });
