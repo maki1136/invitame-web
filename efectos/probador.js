@@ -31,6 +31,11 @@
   function prepararCambios(ev) {
     var viejos = [[ev.n1, P.n1], [ev.n2, P.n2 || P.n1]];
     String(ev.titulo || '').split(/\s*(?:&|\by\b|·|,)\s*/).forEach(function (x, i) { viejos.push([x, i === 0 ? P.n1 : (P.n2 || P.n1)]); });
+    /* también sin acentos: #MisXVLia es «Lía» */
+    viejos.slice().forEach(function (v) {
+      var s = String(v[0] || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (s !== String(v[0] || '')) viejos.push([s, v[1]]);
+    });
     viejos.forEach(function (v) {
       var a = String(v[0] || '').trim();
       if (a.length < 3 || a.toLowerCase() === String(v[1] || '').toLowerCase()) return;
