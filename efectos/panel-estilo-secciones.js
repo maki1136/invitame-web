@@ -25,13 +25,23 @@
     { key: 'eventos', tab: 'LUGAR_VEST', casa: 'eventos', titulo: 'Dónde y cuándo · diseño (fondo, letra, colores, sin título, renglones)',
       campos: [['casilla', 'Respetar los renglones (Enter) de la descripción y poner la dirección en un renglón aparte', 'renglones'],
         /* ★ 20/11 (cesar-helene 05-01 y 09-01): en los boletos la línea punteada cruzaba «CEREMONIA» y las direcciones */
-        ['casilla', 'Boletos (Pase de abordar): la línea punteada va entre la foto y el texto, sin cruzar letras (también en los hoteles)', 'corteJusto']].concat(GEN()) },
+        ['casilla', 'Boletos (Pase de abordar): la línea punteada va entre la foto y el texto, sin cruzar letras (también en los hoteles)', 'corteJusto'],
+        /* ★ 23/11 (Jazmín, Promo 2026): «Ver mapa» → «Cómo llegar», «Agendar» → «Agendar la fecha», uno abajo del otro, fecha más grande. Lo hace /efectos/eventos-acceso.js */
+        ['texto', 'Texto del botón del mapa (vacío = «Ver mapa»; ej. Cómo llegar)', 'txtMapa'],
+        ['texto', 'Texto del botón de agendar (vacío = «Agendar»; ej. Agendar la fecha)', 'txtAgendar'],
+        ['casilla', 'Botones uno debajo del otro (no uno al lado del otro)', 'apilados'],
+        ['rango', 'Tamaño de la fecha y la hora (van en su renglón, en negrita)', 'tamFecha', 12, 34, 'px'],
+        ['color', 'Color de la fecha y la hora', 'colorFecha']].concat(GEN()) },
     { key: 'dresscode', tab: 'LUGAR_VEST', casa: 'vestimenta', titulo: 'Vestimenta · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'galeria', tab: 'GALERIA_INSTA_VID', casa: 'estilo-galeria', lugar: { arriba: true }, titulo: 'Galería · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'video', tab: 'GALERIA_INSTA_VID', casa: 'estilo-video', lugar: { abajo: true }, titulo: 'Nuestro video · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'spotify', tab: 'MUSIC_PASES', casa: 'estilo-spotify', lugar: { abajo: true }, titulo: 'Playlist · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'regalos', tab: 'REGALOS', casa: 'regalo', titulo: 'Mesa de regalos · diseño (fondo, letra, colores, sin título)', campos: GEN() },
-    { key: 'confirmacion', tab: 'CONFIRMACIÓN', casa: 'confirmacion', titulo: 'Confirmar asistencia · diseño (fondo, letra, colores, sin título)', campos: GEN() },
+    { key: 'confirmacion', tab: 'CONFIRMACIÓN', casa: 'confirmacion', titulo: 'Confirmar asistencia · diseño (fondo, letra, colores, sin título, sin formulario)',
+      /* ★ 23/11 (Jazmín, Promo 2026): «en vez de confirmar asistencia, porque no lo vamos a tener: TU ACCESO A LA FIESTA…». El título se cambia en «CONFIRMAR ASISTENCIA (MENÚ Y TITULOS)» */
+      campos: [['casilla', 'Sin confirmación: esconder el formulario (y el aviso del link personal)', 'sinRsvp'],
+        ['texto', 'Texto que va en su lugar (ej. La pulsera de acceso se entregará en la entrada del evento…)', 'textoPropio'],
+        ['fuente', 'Tipografía de ese texto', 'fuenteTexto']].concat(GEN()) },
     { key: 'clima', tab: 'LUGAR_VEST', casa: 'estilo-clima', lugar: { abajo: true }, titulo: 'Clima · diseño (fondo, letra, colores, sin título, lugar y botón)',
       /* ★ 20/11 (cesar-helene 11): el clima del lugar de la fiesta, con su nombre y un botón al pronóstico (Yr). Lo pinta /efectos/clima-extra.js */
       campos: [['texto', 'Lugar que se muestra (ej. Ebberup, Dinamarca)', 'lugar'],
