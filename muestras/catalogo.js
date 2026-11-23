@@ -1132,6 +1132,17 @@
       paleta:  ["#f4ede0", "#e8c4bc", "#9fb39a", "#6a4a45"],
       tipos:   ["boda"]
     },
+    /* 23/11 (Maki, referencia «Sofía y Diego» que mandó Jazmín). */
+    'web-regina-y-mateo': {
+      nombre:  "Mármol en relieve",
+      bajada:  "Mármol gris en acuarela, laurel en relieve, lacre dorado y dibujos a tinta.",
+      muestra: 'regina-y-mateo',
+      foto:    '/formulario/disenos/regina-y-mateo.webp',
+      color:   '#b9b4ad',
+      color2:  '#5f5a54',
+      paleta:  ["#ecebe8", "#cfcbc5", "#b09260", "#3b3733"],
+      tipos:   ["boda"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
