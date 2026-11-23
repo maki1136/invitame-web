@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-23T20:11:39.771Z",
+ "cuando": "2026-11-23T21:54:17.903Z",
  "slug": "camila-y-tomas",
- "total": 859,
- "verde": 841,
- "amarillo": 3,
+ "total": 870,
+ "verde": 854,
+ "amarillo": 1,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -266,6 +266,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "papeleria-selector",
+   "control": "Usar el diseño de tarjetas de papelería",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.papeleria.color",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "casa-diseno",
    "control": "Como viene",
    "tipo": "text",
@@ -494,7 +505,7 @@
    "guarda": true,
    "dato": "fx.portadaSinFoto.muestra",
    "llega": false,
-   "seVe": true,
+   "seVe": false,
    "estado": "rojo",
    "nota": "se guarda pero no le llega a la miniatura"
   },
@@ -527,6 +538,61 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.portadaPos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.portadaFoto.velo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.portadaFoto.alturaNombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.portadaFoto.alturaCuenta",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.portadaFoto.tamKick",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.portadaFoto.colorKick",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1470,6 +1536,28 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "papeleria-selector",
+   "control": "Usar el diseño de tarjetas de papelería",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.papeleria.on",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "papeleria-selector",
+   "control": "Lacre arriba de algunas tarjetas (usa el medallón del itinerario)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.papeleria.sello",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "casa-diseno",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -1541,6 +1629,39 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.entradaImagen.aviso",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.portadaFoto.color",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.portadaFoto.sinZoom",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.portadaFoto.entera",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6219,9 +6340,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6276,9 +6396,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinDiseno",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
