@@ -122,7 +122,7 @@
   var TIPOS = window.MUESTRAS_TIPOS || [];
   var q = new URLSearchParams(location.search);
   var sel = null, fotoUrl = '', fotoPath = '', subiendo = false;
-  var AR = { t0: Date.now(), token: '' };
+  var AR = { t0: Date.now(), token: '', activo: false };
 
   /* ---------- la muestra: por id del catálogo o por el slug ---------- */
   function buscar(x) {
@@ -230,6 +230,7 @@
   /* ---------- anti-robots, igual que el formulario de compra ---------- */
   fetch('/anti-robot.php', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
     if (!j || !j.sitekey) return;
+    AR.activo = true;
     window.__ivTurnstile = function () {
       try {
         window.turnstile.render('#robot', { sitekey: j.sitekey, language: 'es', theme: 'light',
@@ -268,6 +269,7 @@
     var mail = ($('mail').value || '').trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) return error('Revisa tu correo.', 'mail');
 
+    if (AR.activo && !AR.token) return error('Marca la casilla «Verifique que es un ser humano».', 'robot');
     var msj = ($('msj').value || '').trim().slice(0, 220);
     var b = $('ir'); b.disabled = true; b.textContent = 'Armando tu invitación…';
     var destino = '/i/?e=' + encodeURIComponent(sel.muestra) + '&pr=' +
