@@ -83,7 +83,7 @@
     <label for="fecha">Fecha del evento</label>
     <input type="date" id="fecha" required>
 
-    <label>Tu foto para la portada <span class="ayuda">(vertical se ve mejor)</span></label>
+    <label>Tu foto para la portada <span class="ayuda">(opcional · vertical se ve mejor. Si no pones una, queda la foto del diseño)</span></label>
     <div class="foto">
       <div class="prev" id="prev">📷</div>
       <div>
@@ -249,7 +249,6 @@
     var fecha = $('fecha').value;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return error('Elige la fecha del evento.', 'fecha');
     if (subiendo) return error('Espera un segundo, tu foto se está subiendo.', null);
-    if (!fotoPath) return error('Elige una foto para la portada.', null);
     var mail = ($('mail').value || '').trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) return error('Revisa tu correo.', 'mail');
 
