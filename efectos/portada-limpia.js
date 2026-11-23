@@ -117,6 +117,9 @@
         ' letter-spacing:.08em !important; text-shadow:none !important;' + (cc ? ' color:' + cc + ' !important;' : '') + ' }');
       r.push(H + '.portada .count .sep { display:none !important }');
     }
+    /* ★ 23/11 (CUHE): la foto ya trae su texto → sin sobretítulo y/o sin nombres */
+    if (si(c.sinKick)) r.push(H + '#pv-kick { display:none !important }');
+    if (si(c.sinNombres)) r.push(H + '#pv-names, ' + H + '.portada .names, ' + H + '.portada .amp { display:none !important }');
     /* ★ 20/11 (Diana XV): la fecha completa en la portada, con día y hora. El motor
        la trae escondida (CONFIG.mostrarFecha=false) y en formato corto («Sábado 23 · Enero 2027») */
     var pf = document.getElementById('pv-fecha');

@@ -124,6 +124,9 @@
         ['color', 'Color de la cuenta regresiva (vacío = el de los nombres)', 'colorCuenta'],
         /* ★ 20/11 (cesar-helene 01-03): «la cuenta regresiva debe ser menor que los nombres» */
         ['rango', 'Tamaño de la cuenta regresiva (100 = como viene · menos = más chica)', 'tamCuenta', 40, 130, '%'],
+        /* ★ 23/11 (CUHE): «sacar directamente nombre y subtítulo para que quede solo la cuenta regresiva» (la foto ya trae el texto) */
+        ['casilla', 'Sin el sobretítulo en la portada (el texto chico de arriba)', 'sinKick'],
+        ['casilla', 'Sin los nombres en la portada (queda la foto y la cuenta regresiva)', 'sinNombres'],
         /* ★ 20/11 (Diana XV): «quiere que en la portada aparezca también: Sábado 23 de enero de 2027 · 17:00hs» */
         ['casilla', 'Mostrar la fecha en la portada (día, fecha y hora)', 'fechaVer'],
         ['texto', 'Texto de la fecha en la portada (vacío = «Sábado 23 de enero de 2027 · 17:00 hs», sale de la fecha del evento)', 'fechaTexto'],

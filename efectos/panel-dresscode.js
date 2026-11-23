@@ -182,6 +182,17 @@
     labI.appendChild(document.createTextNode('No mostrar «Ver inspiración» (ni sus fotos)'));
     caja.appendChild(labI);
 
+    /* ★ 23/11/2026 — Jazmín (MamiSú): «¿se podrá sacar la paleta que aparece en
+       inspiración?». Son los cuatro puntitos de fábrica debajo de las fotos. */
+    var labP = document.createElement('label');
+    labP.style.cssText = 'display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0 0 12px;cursor:pointer';
+    var chkP = document.createElement('input'); chkP.type = 'checkbox';
+    chkP.checked = !!((datos() || {}).sinPaletaInsp);
+    chkP.onchange = function () { var dc = datos(); if (!dc) return; dc.sinPaletaInsp = !!chkP.checked; refrescar(); };
+    labP.appendChild(chkP);
+    labP.appendChild(document.createTextNode('Sin la paleta de puntitos debajo de las fotos de inspiración'));
+    caja.appendChild(labP);
+
     /* 23/10/2026: sólo los colores a evitar, sin tachar, al pie (citlalli) */
     var labSE = document.createElement('label');
     labSE.style.cssText = 'display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0 0 12px;cursor:pointer';
