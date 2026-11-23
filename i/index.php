@@ -209,6 +209,46 @@ if ($slug !== '') {
   }
 }
 
+/* ===== EL PROBADOR (23/11/2026) ===============================================
+   Maki: «un generador para que el cliente vea su muestra con una imagen de
+   ellos, sus nombres y su fecha». /probar.html arma el link con `&pr=` (los
+   datos del cliente en base64). Acá se ponen en la portada desde el servidor
+   —también la miniatura al compartir por WhatsApp— y se carga
+   /efectos/probador.js, que los pone en el evento y suma el corazón para
+   raspar con su mensaje y el botón «Compártela con tu novio».
+   ⚠️ SÓLO EN LAS MUESTRAS (fx.muestra.venta). En la invitación de un cliente
+      el `&pr=` no hace nada: nadie le puede poner otra foto a una boda real.
+   ⚠️ No se guarda NADA en la invitación: los datos viven sólo en el link.
+   ============================================================================ */
+$probar = null;
+if ($leyoEvento && isset($_GET['pr']) && is_string($_GET['pr']) && strlen($_GET['pr']) < 2500) {
+  $esMuestra = isset($fxF['muestra']['mapValue']['fields']['venta']['booleanValue'])
+            && $fxF['muestra']['mapValue']['fields']['venta']['booleanValue'] === true;
+  $crudo = base64_decode(strtr($_GET['pr'], '-_', '+/'), true);
+  $j = $crudo !== false ? json_decode($crudo, true) : null;
+  if ($esMuestra && is_array($j)) {
+    $limpio = function ($v, $max) {
+      $s = trim(preg_replace('/\s+/u', ' ', strip_tags((string)$v)));
+      return function_exists('mb_substr') ? mb_substr($s, 0, $max, 'UTF-8') : substr($s, 0, $max);
+    };
+    $pa = $limpio($j['a'] ?? '', 40); $pb = $limpio($j['b'] ?? '', 40);
+    $pf = (preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)($j['f'] ?? ''))) ? $j['f'] : '';
+    $pc = (string)($j['c'] ?? '');
+    $pc = preg_match('~^(v\d+/)?invitame/probador/[A-Za-z0-9_\-]+\.(jpg|jpeg|png|webp)$~', $pc)
+        ? 'https://res.cloudinary.com/oc8cgqt4/image/upload/' . $pc : '';
+    $pt = preg_replace('/[^a-z]/', '', strtolower((string)($j['t'] ?? '')));
+    if ($pa !== '') {
+      $probar = array('slug' => $slug, 'n1' => $pa, 'n2' => $pb, 'fecha' => $pf, 'foto' => $pc,
+                      'msj' => $limpio($j['m'] ?? '', 220), 'tipo' => $pt);
+      $nom1 = $pa; $nom2 = $pb;
+      $title = trim($pa . ($pb !== '' ? ' & ' . $pb : ''));
+      $titleEsPropio = true;
+      if ($pf !== '') $fechaEv = $pf . (strlen($fechaEv) > 10 ? substr($fechaEv, 10) : 'T18:00');
+      if ($pc !== '') { $coverReal = $pc; $img = $pc; }
+    }
+  }
+}
+
 /* ===== ¿ESTA INVITACIÓN YA SE PUEDE VER?  (8/9/2026) =========================
 
    Desde que la invitación SE CREA SOLA al enviar el formulario, existe un rato
@@ -863,7 +903,7 @@ if ($sobreCat) {
                       '<link rel="preload" as="image" href="' . htmlspecialchars($sobreCat['poster'], ENT_QUOTES) . '">';
   }
 }
-$aInyectar = $aparatoLiviano . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
+$aInyectar = ($probar ? '<script>window.__probar=' . json_encode($probar, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) . ';</script><script src="/efectos/probador.js?v=1"></script>' : '') . $aparatoLiviano . $preCarga . $fotosLivianas . $apagarBanner . $encuadreColumna . $encuadreSobre . $sinDemo .
              $estilosServidor . $paletaCss . $engancheModulos;
 $aInyectar = iv_fotos_livianas($aInyectar);
 if ($aInyectar !== '') {
