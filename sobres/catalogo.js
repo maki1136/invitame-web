@@ -3060,6 +3060,20 @@ window.SOBRES_INVITAME = {
     luz:        10.2,
     luzColor:   "#F8F4E8",
     luzFundido: 0.8
+  },
+
+  /* 23/11 (muestra regina-y-mateo, referencia «Sofía y Diego» de Jazmín): sobre
+     gris perla con vetas de mármol y lacre dorado GENÉRICO (rosa, sin
+     iniciales). Foto: Flow nano-pro · video: Kling 3.0 std por la API de
+     Higgsfield (10 s). La solapa sale por arriba hacia el s 6 → luz 5.7. */
+  "marmol-gris-lacre": {
+    nombre:     "Mármol gris · lacre dorado con rosa, la solapa sube y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,eo_8.0,w_720,q_auto:good,vc_h264:main:3.1,ac_none/invitame/sobres/gen22v/marmol-gris-lacre-rosa-23-11.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/video/upload/so_0.6,w_720,q_auto:best,f_jpg/invitame/sobres/gen22v/marmol-gris-lacre-rosa-23-11.jpg",
+    color:      "#D2CCC5",
+    luz:        5.7,
+    luzColor:   "#FFFBF0",
+    luzFundido: 0.8
   }
 
 };

@@ -240,8 +240,20 @@
     });
   }
 
+  /* ★ 23/11/2026 — `fx.dresscode.sinPaletaInsp` = true → se esconden los puntitos
+     (.swatches) debajo de las fotos de inspiración. Sin la casilla no cambia nada. */
+  function paletaInsp() {
+    var sec = document.querySelector('[data-sec="dresscode"]'); if (!sec) return;
+    var off = (fx().dresscode || {}).sinPaletaInsp === true;
+    sec.querySelectorAll('.acc-panel .swatches').forEach(function (s) {
+      if (off) s.style.setProperty('display', 'none', 'important');
+      else if (s.style.display === 'none') s.style.removeProperty('display');
+    });
+  }
+
   function sincronizar() {
     inspiracion();
+    paletaInsp();
     /* ★ 22/10/2026 (Jazmín: «un cliente no los quiere y no tengo opción de
        sacarlos»): `fx.dresscode.sinColores` = true → no se muestran ni los
        colores sugeridos ni los a evitar. Casilla en el panel. */

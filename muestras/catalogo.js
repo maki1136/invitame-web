@@ -1120,6 +1120,29 @@
       paleta:  ["#637d8e", "#555f74", "#48364a", "#1b1a22"],
       tipos:   ["xv"]
     },
+    /* 23/11 (Maki: «dejala publicada y con las muestras»). Muestra del 19/11:
+       claude/JARDIN-DE-PAPEL-presentacion-y-fondos-higgsfield-19-11.md */
+    'web-jardin-de-papel': {
+      nombre:  "Jardín de papel",
+      bajada:  "Un jardín de papel que se arma capa por capa hasta formar tu portada.",
+      muestra: 'jardin-de-papel',
+      foto:    '/formulario/disenos/jardin-de-papel.webp',
+      color:   '#c9a49a',
+      color2:  '#6a4a45',
+      paleta:  ["#f4ede0", "#e8c4bc", "#9fb39a", "#6a4a45"],
+      tipos:   ["boda"]
+    },
+    /* 23/11 (Maki, referencia «Sofía y Diego» que mandó Jazmín). */
+    'web-regina-y-mateo': {
+      nombre:  "Mármol en relieve",
+      bajada:  "Mármol gris en acuarela, laurel en relieve, lacre dorado y dibujos a tinta.",
+      muestra: 'regina-y-mateo',
+      foto:    '/formulario/disenos/regina-y-mateo.webp',
+      color:   '#b9b4ad',
+      color2:  '#5f5a54',
+      paleta:  ["#ecebe8", "#cfcbc5", "#b09260", "#3b3733"],
+      tipos:   ["boda"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★
