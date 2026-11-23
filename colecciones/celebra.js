@@ -214,6 +214,16 @@
       pk:['Special Elite','13px','lowercase','.12em','normal'],
       h2:['24px','.02em','lowercase','normal',400],
       kk:['Allura','30px','none','0','m'] },
+    /* 17b · XV · collage ESMERALDA (23/11/2026, pedido de Jazmín: «este mismo diseño
+       pero en verde esmeralda y dorado»). El collage rosa pasado a esmeralda cuadro por
+       cuadro: portada ccollage-esm, fondo fcollage-esm, piezas ev-esmeralda-*.
+       Misma letra y misma forma; la tiara y las mariposas en oro. */
+    esmeralda: { nombre: 'XV · Collage esmeralda', pa:'#F7F5EE', pa2:'#E4ECE4', ti:'#163A2B', ti2:'#1F4A38', ti3:'#B9D3C2', ac:'#1E7A55', mt:'oro', mtT:'#76571A', base:'esmeralda',
+      disp:'Special Elite', scr:'Allura', txt:'Nunito', h3:'Special Elite', adorno:'lazo', forma:'collage', boton:'3px', radio:'3px',
+      nm:['Allura','clamp(60px,16vw,86px)','normal',400,'none','0',1.1],
+      pk:['Special Elite','13px','lowercase','.12em','normal'],
+      h2:['24px','.02em','lowercase','normal',400],
+      kk:['Allura','30px','none','0','m'] },
     /* 18 · XV · scrapbook vintage: papel antiguo, encaje, ticket y lacre rosa */
     scrapbook: { nombre: 'XV · Scrapbook vintage', pa:'#F8F1E7', pa2:'#EEE1D0', ti:'#3E2A24', ti2:'#4D3730', ti3:'#E3C5BA', ac:'#C98F8A', mt:'rosa', mtT:'#8E4A50', base:'scrapbook',
       disp:'Playfair Display', scr:'Pinyon Script', txt:'EB Garamond', h3:'Playfair Display', adorno:'lacre', forma:'ticket', boton:'2px', radio:'2px',
