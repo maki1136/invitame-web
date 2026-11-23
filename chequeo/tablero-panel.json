@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-23T21:54:17.903Z",
+ "cuando": "2026-11-23T23:29:14.471Z",
  "slug": "camila-y-tomas",
  "total": 870,
- "verde": 854,
- "amarillo": 1,
+ "verde": 852,
+ "amarillo": 3,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -538,61 +538,6 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.portadaPos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.velo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.alturaNombres",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.alturaCuenta",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.portadaFoto.tamKick",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "guarda": true,
-   "dato": "fx.portadaFoto.colorKick",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1635,39 +1580,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.color",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.sinZoom",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.portadaFoto.entera",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
    "control": "Poner comillas “ ” alrededor de la frase",
    "tipo": "checkbox",
@@ -2192,6 +2104,50 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.sectorElegido.c_color-de-los-recuadros-de-texto, c_color-de-los-recuadros-de-texto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.txtMapa",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.txtAgendar",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.tamFecha",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.colorFecha",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3974,6 +3930,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.eventos.corteJusto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.apilados",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5814,6 +5781,28 @@
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "casa-confirmacion",
+   "control": "Como viene",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.estiloSec.confirmacion.textoPropio",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-confirmacion",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.confirmacion.fuenteTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-confirmacion",
    "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
@@ -6294,6 +6283,17 @@
    "control": "(sin rótulo)",
    "tipo": "checkbox",
    "guarda": true,
+   "dato": "fx.estiloSec.confirmacion.sinRsvp",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-confirmacion",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
    "dato": "fx.estiloSec.confirmacion.sinTitulo",
    "llega": true,
    "seVe": true,
@@ -6340,8 +6340,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -8584,8 +8585,9 @@
    "guarda": true,
    "dato": "fx.filtro.boton",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "EFECTOS",
