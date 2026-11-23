@@ -698,6 +698,8 @@
     '/efectos/panel-fecha.js',         /* y las dos, por fin, en el panel */
     '/efectos/panel-itinerario.js',    /* los momentos del itinerario, por fin cargables */
     '/efectos/panel-menu.js',          /* 19/10: el bloque del menú, debajo del itinerario */
+    '/efectos/papeleria.js',           /* 23/11: diseño de tarjetas de papelería (fx.papeleria, apagado por defecto) */
+    '/efectos/panel-papeleria.js',     /* 23/11: su interruptor, en PRINCIPAL */
     '/efectos/panel-avisos.js',        /* 19/10: el bloque de los avisos, debajo del menú */
     '/efectos/estilo-secciones.js',    /* 4/11: fondo, letra y colores que SÍ mandan en carta, raspadita, hospedaje, personas, itinerario, Instagram y cierre */
     '/efectos/vestimenta-dibujo.js', /* 12/11: catálogo de dibujos de vestimenta (antes del panel) */
