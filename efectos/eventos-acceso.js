@@ -113,7 +113,11 @@
       return;
     }
     sec.setAttribute('data-sin-rsvp', '1');
-    hoja('inv-cf-sin', '[data-sec="confirmacion"][data-sin-rsvp]>*:not(.kick):not(h2):not(.adorno):not(.inv-banda-deco):not(#cf-propio){display:none!important}');
+    /* ⚠️ Disco pone `filter:grayscale(.88)` a la sección entera cuando tiene foto de
+       fondo, y eso grisaba también el título: el rojo de «Tu acceso a la fiesta»
+       salía marrón. Sin formulario, la sección va sin ese filtro. */
+    hoja('inv-cf-sin', '[data-sec="confirmacion"][data-sin-rsvp]>*:not(.kick):not(h2):not(.adorno):not(.inv-banda-deco):not(#cf-propio){display:none!important}' +
+      'html body [data-sec="confirmacion"][data-sin-rsvp][data-sin-rsvp]{filter:none!important}');
     if (txt) {
       if (!p) {
         p = document.createElement('p'); p.id = 'cf-propio';
