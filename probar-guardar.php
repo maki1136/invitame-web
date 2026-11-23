@@ -8,7 +8,7 @@
  *
  * La página /probar.html arma la muestra con los datos del cliente EN EL LINK
  * (no se guarda ninguna invitación). Este archivo sólo guarda el contacto en
- * `inv_probadores`, para la lista de retargeting:
+ * `inv_privado/__probadores-AAAA-MM` (lista `lista`), para el retargeting:
  *     muestra · tipo · nombres · fecha · mail · acepta promos · foto · mensaje · día
  *
  * ⚠️ PUERTA PÚBLICA Y ANÓNIMA: anti-robots, freno por IP y global, campos
@@ -101,8 +101,21 @@ list($ra, $ca) = pedir('https://identitytoolkit.googleapis.com/v1/accounts:signI
 $tok = ($ca == 200) ? (json_decode($ra, true)['idToken'] ?? '') : '';
 if ($tok === '') { echo json_encode(array('ok' => false, 'error' => 'login')); exit; }
 
-$campos = array();
-foreach ($doc as $k => $v) $campos[$k] = is_bool($v) ? array('booleanValue' => $v) : array('stringValue' => (string)$v);
-list($rw, $cw) = pedir($FS . 'inv_probadores', 'POST', json_encode(array('fields' => $campos)), array('Authorization: Bearer ' . $tok));
+/* ⚠️ DÓNDE SE GUARDA: `inv_privado/__probadores-AAAA-MM`, una lista por mes.
+   Una colección nueva (inv_probadores) la rechazan las reglas de Firestore (403,
+   probado el 23/11), y `inv_privado` ya guarda cosas del sistema así
+   (`__marcas`, ver marcas.php). Sólo se lee con sesión: el mail no queda público.
+   Se agrega con `appendMissingElements`, así dos clientes a la vez no se pisan. */
+$valores = array();
+foreach ($doc as $k => $v) $valores[$k] = is_bool($v) ? array('booleanValue' => $v) : array('stringValue' => (string)$v);
+$nombreDoc = 'projects/' . $PROJECT . '/databases/(default)/documents/inv_privado/__probadores-' . gmdate('Y-m');
+$commit = array('writes' => array(array(
+  'transform' => array('document' => $nombreDoc, 'fieldTransforms' => array(array(
+    'fieldPath' => 'lista',
+    'appendMissingElements' => array('values' => array(array('mapValue' => array('fields' => $valores)))),
+  ))),
+)));
+list($rw, $cw) = pedir('https://firestore.googleapis.com/v1/projects/' . $PROJECT . '/databases/(default)/documents:commit',
+                       'POST', json_encode($commit), array('Authorization: Bearer ' . $tok));
 if ($cw != 200) { echo json_encode(array('ok' => false, 'error' => 'guardar', 'codigo' => $cw)); exit; }
 echo json_encode(array('ok' => true));
