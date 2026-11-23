@@ -23,9 +23,60 @@
   window.__invProbador = 1;
 
   /* ---------- 1. los datos en el evento, en el momento en que llega ---------- */
+  /* ★ 23/11 (Jazmín: «hay que quitarle el nombre de esos novios»): los nombres de
+     la muestra aparecen también en el pase, el cierre, la carta, el hashtag…
+     Se cambian en TODO el evento y en la página por los del cliente. */
+  var CAMBIOS = [];
+  function escRe(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function prepararCambios(ev) {
+    var viejos = [[ev.n1, P.n1], [ev.n2, P.n2 || P.n1]];
+    String(ev.titulo || '').split(/\s*(?:&|\by\b|·|,)\s*/).forEach(function (x, i) { viejos.push([x, i === 0 ? P.n1 : (P.n2 || P.n1)]); });
+    /* también sin acentos: #MisXVLia es «Lía» */
+    viejos.slice().forEach(function (v) {
+      var s = String(v[0] || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (s !== String(v[0] || '')) viejos.push([s, v[1]]);
+    });
+    viejos.forEach(function (v) {
+      var a = String(v[0] || '').trim();
+      if (a.length < 3 || a.toLowerCase() === String(v[1] || '').toLowerCase()) return;
+      if (CAMBIOS.some(function (c) { return c.de === a; })) return;
+      CAMBIOS.push({ de: a, a: String(v[1] || ''), re: new RegExp('(^|[^\\wÀ-ÿ])(' + escRe(a) + ')(?![\\wÀ-ÿ])', 'gi') });
+    });
+  }
+  function reemplazar(s) {
+    if (typeof s !== 'string' || !s || /^https?:\/\//.test(s)) return s;
+    CAMBIOS.forEach(function (c) {
+      s = s.replace(c.re, function (m, pre, nom) { return pre + (nom === nom.toUpperCase() ? c.a.toUpperCase() : c.a); });
+      /* y dentro de los hashtags (#ReginaYMateo2027 → #AnaYLuis2027) */
+      if (s.indexOf('#') >= 0) {
+        var pegado = c.a.replace(/\s+/g, '');
+        s = s.replace(/#[0-9A-Za-zÀ-ÿ_]+/g, function (tag) { return tag.replace(new RegExp(escRe(c.de.replace(/\s+/g, '')), 'gi'), pegado); });
+      }
+    });
+    return s;
+  }
+  function recorrer(o, prof) {
+    if (!o || typeof o !== 'object' || prof > 6) return;
+    Object.keys(o).forEach(function (k) {
+      var v = o[k];
+      if (typeof v === 'string') o[k] = reemplazar(v);
+      else if (v && typeof v === 'object') recorrer(v, prof + 1);
+    });
+  }
+  function limpiarPagina() {
+    if (!CAMBIOS.length || !document.body) return;
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), n;
+    while ((n = w.nextNode())) {
+      if (n.parentNode && /^(SCRIPT|STYLE|TEXTAREA)$/.test(n.parentNode.nodeName)) continue;
+      var v = reemplazar(n.nodeValue);
+      if (v !== n.nodeValue) n.nodeValue = v;
+    }
+  }
   function vestir(ev) {
     try {
       if (!ev || typeof ev !== 'object' || (ev.slug && ev.slug !== P.slug)) return;
+      if (!CAMBIOS.length) prepararCambios(ev);
+      recorrer(ev, 0);
       ev.n1 = P.n1; ev.n2 = P.n2 || '';
       ev.titulo = P.n1 + (P.n2 ? ' & ' + P.n2 : '');
       if (P.fecha) {
@@ -173,9 +224,11 @@
   function arrancar() {
     var n = 0;
     var t = setInterval(function () {
-      if (window.INVEV) { armarCorazon(); armarBoton(); }
+      if (window.INVEV) { armarCorazon(); armarBoton(); limpiarPagina(); }
       if (document.getElementById('pr-corazon') || ++n > 60) { if (document.getElementById('pr-compartir') || n > 60) clearInterval(t); }
     }, 400);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar); else arrancar();
+  /* los módulos siguen escribiendo un rato (pase, cierre, trivia): se repasa */
+  var rep = 0, tr = setInterval(function () { limpiarPagina(); if (++rep > 40) clearInterval(tr); }, 1500);
 })();
