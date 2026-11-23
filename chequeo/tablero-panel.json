@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-23T18:40:22.359Z",
+ "cuando": "2026-11-23T20:11:39.771Z",
  "slug": "camila-y-tomas",
- "total": 858,
- "verde": 837,
- "amarillo": 1,
+ "total": 859,
+ "verde": 841,
+ "amarillo": 3,
  "rojo": 15,
- "gris": 5,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -1948,6 +1948,28 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.portada.cuentaVisible",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinKick",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinNombres",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3992,6 +4014,17 @@
   {
    "tab": "LUGAR_VEST",
    "bloque": "dresscode-selector",
+   "control": "Sin la paleta de puntitos debajo de las fotos de inspiración",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.dresscode.sinPaletaInsp",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "dresscode-selector",
    "control": "Mostrar sólo los colores a evitar (sin tachar, abajo del texto y la imagen)",
    "tipo": "checkbox",
    "guarda": true,
@@ -5818,6 +5851,39 @@
   {
    "tab": "CONFIRMACIÓN",
    "bloque": "",
+   "control": "Carta · encabezado:",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "cartaTitulo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "",
+   "control": "Carta · texto:",
+   "tipo": "textarea",
+   "guarda": true,
+   "dato": "cartaTexto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "",
+   "control": "Carta · color de la hoja:",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "cartaPapel",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "",
    "control": "Frase para sección confirmación:",
    "tipo": "textarea",
    "guarda": true,
@@ -6153,8 +6219,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6209,8 +6276,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinDiseno",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -8425,52 +8493,6 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.stdg.luz",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
-   "control": "Diseño",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "stdg-selector",
    "control": "Letra principal",
    "tipo": "color",
    "guarda": true,
@@ -8517,8 +8539,11 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.stdg.luz",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
@@ -8537,7 +8562,7 @@
    "control": "Diseño",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.stdg.fuentes.txt",
+   "dato": "fx.stdg.fuentes.nom",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8547,8 +8572,11 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "estado": "gris",
-   "nota": "no está"
+   "guarda": true,
+   "dato": "fx.stdg.fuentes.txt",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
