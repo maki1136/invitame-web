@@ -42,6 +42,11 @@
     if (typeof s !== 'string' || !s || /^https?:\/\//.test(s)) return s;
     CAMBIOS.forEach(function (c) {
       s = s.replace(c.re, function (m, pre, nom) { return pre + (nom === nom.toUpperCase() ? c.a.toUpperCase() : c.a); });
+      /* y dentro de los hashtags (#ReginaYMateo2027 → #AnaYLuis2027) */
+      if (s.indexOf('#') >= 0) {
+        var pegado = c.a.replace(/\s+/g, '');
+        s = s.replace(/#[0-9A-Za-zÀ-ÿ_]+/g, function (tag) { return tag.replace(new RegExp(escRe(c.de.replace(/\s+/g, '')), 'gi'), pegado); });
+      }
     });
     return s;
   }
