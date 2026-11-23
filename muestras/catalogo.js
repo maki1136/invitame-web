@@ -856,6 +856,16 @@
       paleta:  ["#9e8b7d", "#90756d", "#83584a", "#5c392a"],
       tipos:   ["xv"]
     },
+    'celebra-esmeralda': {
+      nombre:  "Collage esmeralda",
+      bajada:  "El collage de moños, encaje y perlas en verde esmeralda y dorado.",
+      muestra: 'lia-esmeralda-mis15',
+      foto:    '/formulario/disenos/lia-esmeralda-mis15.webp',
+      color:   '#1e5a43',
+      color2:  '#163a2b',
+      paleta:  ["#b9d3c2", "#1e7a55", "#1e5a43", "#163a2b"],
+      tipos:   ["xv"]
+    },
     'celebra-scrapbook': {
       nombre:  "Scrapbook vintage",
       bajada:  "Papel antiguo, rosas secas y boletos de recuerdo.",
