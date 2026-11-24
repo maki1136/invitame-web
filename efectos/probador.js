@@ -97,7 +97,7 @@
 
   /* ---------- textos según el festejo ---------- */
   var T = String(P.tipo || '');
-  var A_QUIEN = T === 'boda' ? 'con tu novio' : T === 'xv' ? 'con tu hija' : 'con quien festeja';
+  var A_QUIEN = T === 'boda' ? 'con tu novio' : T === 'xv' ? 'con tu hija' : 'con esa persona especial';
   var TXT_COMP = T === 'boda'
     ? 'Mi amor 💍 mira la invitación que estoy armando para nuestra boda:'
     : T === 'xv' ? 'Mira la invitación que estoy armando para tus XV 👑:'
