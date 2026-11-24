@@ -332,9 +332,26 @@
       });
     } catch (e) {}
   }
+  /* ★ 24/11 (Jazmín, Promo 2026): «le pongo la letra de la raspadita en negro y
+     no me lo toma». Las fichas a veces se arman antes de que lleguen los datos
+     del panel, y el corrector de contraste las pasa a blanco. El color elegido
+     en el panel (fx.raspadita.num) se vuelve a poner, con prioridad, durante 20 s
+     y cada vez que el panel manda un cambio. Sin color elegido no toca nada. */
+  function repasarColores() {
+    try {
+      var c = config(); if (!c.num) return;
+      [].forEach.call(document.querySelectorAll('.rasp-3 .r3-f'), function (el) {
+        if (el.style.getPropertyValue('color') !== c.num || el.style.getPropertyPriority('color') !== 'important') {
+          el.style.setProperty('color', c.num, 'important');
+          el.style.setProperty('-webkit-text-fill-color', c.num, 'important');
+        }
+      });
+    } catch (e) {}
+  }
+  addEventListener('message', function () { setTimeout(repasarColores, 400); setTimeout(repasarColores, 1200); });
   (function () {
     var n = 0;
-    var t = setInterval(function () { repasarTapas(); if (++n > 30) clearInterval(t); }, 500);
+    var t = setInterval(function () { repasarTapas(); repasarColores(); if (++n > 40) clearInterval(t); }, 500);
   })();
 
   function transparente(img) {
