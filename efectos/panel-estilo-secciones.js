@@ -47,7 +47,8 @@
       campos: [['texto', 'Lugar que se muestra (ej. Ebberup, Dinamarca)', 'lugar'],
         ['texto', 'Coordenadas del clima (ej. 55.1023, 10.0371 · vacío = las del mapa de la ceremonia)', 'coords'],
         ['texto', 'Link del botón (ej. el pronóstico de Yr) · sin link no hay botón', 'link'],
-        ['texto', 'Texto del botón (vacío = «Ver pronóstico»)', 'boton']].concat(GEN()) },
+        ['texto', 'Texto del botón (vacío = «Ver pronóstico»)', 'boton'],
+        ['texto', 'Texto descriptivo antes del botón (ej. Te recomendamos revisar el pronóstico unos días antes…)', 'texto']].concat(GEN()) },
     { key: 'filtro', tab: 'EFECTOS', casa: 'estilo-filtro', lugar: { abajo: true }, titulo: 'El filtro · diseño (letra, colores, tamaño, sin título)', campos: GEN() },
     { key: 'live', tab: 'EFECTOS', casa: 'estilo-live', lugar: { abajo: true }, titulo: 'Las fotos de la fiesta (Live) · diseño (letra, colores, tamaño, sin título)', campos: GEN() },
     { key: 'contacto', tab: 'CONFIRMACIÓN', casa: 'estilo-contacto', lugar: { abajo: true }, titulo: '¿Alguna duda? · diseño (fondo, letra, colores, sin título)', campos: GEN() },
@@ -137,6 +138,7 @@
         /* ★ 23/11 (CUHE): «sacar directamente nombre y subtítulo para que quede solo la cuenta regresiva» (la foto ya trae el texto) */
         ['casilla', 'Sin el sobretítulo en la portada (el texto chico de arriba)', 'sinKick'],
         ['casilla', 'Sin los nombres en la portada (queda la foto y la cuenta regresiva)', 'sinNombres'],
+        ['casilla', 'Nombres como están escritos (sin pasarlos a mayúsculas)', 'nombresComoEstan'],
         /* ★ 20/11 (Diana XV): «quiere que en la portada aparezca también: Sábado 23 de enero de 2027 · 17:00hs» */
         ['casilla', 'Mostrar la fecha en la portada (día, fecha y hora)', 'fechaVer'],
         ['texto', 'Texto de la fecha en la portada (vacío = «Sábado 23 de enero de 2027 · 17:00 hs», sale de la fecha del evento)', 'fechaTexto'],

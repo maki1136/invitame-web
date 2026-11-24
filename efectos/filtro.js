@@ -686,6 +686,13 @@
       var prendida = on(c.encendido);
       if (!prendida && sec) sec.remove();
       else if (prendida && !sec) arrancar();
+      /* ★ 24/11 (Jazmín: «el texto descriptivo no se cambia aunque lo modifique»):
+         con la sección ya armada, la miniatura no cambiaba los textos. Ahora se
+         rehace con los textos nuevos. */
+      else if (prendida && sec) {
+        var nueva = seccion();
+        if (nueva.innerHTML !== sec.innerHTML) { sec.parentNode.replaceChild(nueva, sec); }
+      }
       /* si la cámara está abierta en la miniatura, el marco se redibuja */
       var o = document.getElementById('filtro-overlay');
       if (o && prendida) conseguirMarco().then(function (m) {

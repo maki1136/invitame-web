@@ -3,7 +3,8 @@
    Gl. Avernæs (Ebberup), no el de la iglesia; «mostrar datos históricos claramente
    identificados hasta que exista pronóstico» y «añadir botón al pronóstico local de Yr».
 
-   EL DATO — fx.estiloSec.clima = { lugar, coords, link, boton }
+   EL DATO — fx.estiloSec.clima = { lugar, coords, link, boton, texto }
+     · texto (24/11): un texto descriptivo antes del botón.
      · coords: «lat, lon». Con coordenadas, el motor vuelve a buscar el clima ahí
        (con su misma función _clima: histórico del año anterior o pronóstico si faltan
        ≤ 15 días, y su misma leyenda que lo aclara).
@@ -52,6 +53,35 @@
       if (el.textContent !== lugar) el.textContent = lugar;
     } else if (el) el.remove();
 
+    /* 2b · ★ 24/11 (Jazmín: «los colores no se modifican por más que los cambie»):
+       «Color del texto» no llegaba a la tarjeta del clima (la colección la pinta
+       con prioridad). Se pone en línea, con prioridad, sólo si está elegido. */
+    var colT = String((((window.INVEV.fx || {}).estiloSec || {}).clima || {}).colorTexto || '').trim();
+    if (card && /^#[0-9a-f]{3,8}$/i.test(colT)) {
+      [].forEach.call(card.querySelectorAll('*'), function (e) {
+        if (e.id === 'clima-btn' || e.closest('#clima-btn')) return;
+        if (e.style.getPropertyValue('color') !== colT) {
+          e.style.setProperty('color', colT, 'important');
+          e.style.setProperty('-webkit-text-fill-color', colT, 'important');
+        }
+      });
+    }
+
+    /* 2c · ★ 24/11 (Jazmín: «quiere colocar un texto descriptivo antes del botón») */
+    var txtD = String(c.texto || '').trim(), pt = document.getElementById('clima-texto');
+    if (txtD) {
+      if (!pt) {
+        pt = document.createElement('p'); pt.id = 'clima-texto';
+        pt.style.cssText = 'white-space:pre-line;max-width:420px;margin:18px auto 0;line-height:1.55;font-size:15px';
+        (card || sec).appendChild(pt);
+      }
+      /* siempre ANTES del botón */
+      var bt = document.getElementById('clima-btn');
+      if (bt && bt.parentNode === pt.parentNode && pt.nextElementSibling !== bt) bt.parentNode.insertBefore(pt, bt);
+      if (pt.textContent !== txtD) pt.textContent = txtD;
+      if (/^#[0-9a-f]{3,8}$/i.test(colT)) { pt.style.setProperty('color', colT, 'important'); pt.style.setProperty('-webkit-text-fill-color', colT, 'important'); }
+    } else if (pt) pt.remove();
+
     /* 3 · el botón al pronóstico */
     var u = urlOk(c.link), b = document.getElementById('clima-btn');
     if (u) {
@@ -62,6 +92,8 @@
         b.style.cssText = 'display:inline-block;margin-top:16px';
         var cont = card && card.parentNode === sec ? card : sec;
         cont.appendChild(b);
+        var ptx = document.getElementById('clima-texto');
+        if (ptx && ptx.parentNode === cont) cont.insertBefore(ptx, b);
       }
       if (b.getAttribute('href') !== u) b.setAttribute('href', u);
       var html = esc(txt) + ' ↗';

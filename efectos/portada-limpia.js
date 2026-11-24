@@ -119,6 +119,8 @@
     }
     /* ★ 23/11 (CUHE): la foto ya trae su texto → sin sobretítulo y/o sin nombres */
     if (si(c.sinKick)) r.push(H + '#pv-kick { display:none !important }');
+    /* ★ 24/11 (Jazmín, César & Helene: «los nombres están en minúsculas pero aparecen en mayúsculas»): la colección los pasa a mayúsculas */
+    if (si(c.nombresComoEstan)) r.push(H + '#pv-names, ' + H + '#pv-names *, ' + H + '.portada h1 { text-transform:none !important; font-variant:normal !important }');
     if (si(c.sinNombres)) r.push(H + '#pv-names, ' + H + '.portada .names, ' + H + '.portada .amp { display:none !important }');
     /* ★ 20/11 (Diana XV): la fecha completa en la portada, con día y hora. El motor
        la trae escondida (CONFIG.mostrarFecha=false) y en formato corto («Sábado 23 · Enero 2027») */

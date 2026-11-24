@@ -85,6 +85,10 @@
   }
 
   function fraseDe(ev, cfg) {
+    /* ★ 24/11 (Jazmín, César & Helene: «el subtítulo "En la boda de", por más que
+       lo borre, se sigue viendo»): vacío vuelve a la de fábrica; para que no vaya
+       ninguna, la casilla «Sin frase arriba de los nombres». */
+    if (cfg && (cfg.sinFrase === true || cfg.sinFrase === 'true')) return '';
     var puesta = String((cfg && cfg.frase) || '').trim();
     if (puesta) return puesta.slice(0, 60);
     /* el tipo normalizado: el selector viejo del panel guardaba «Cumple XV» */
