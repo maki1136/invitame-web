@@ -565,8 +565,35 @@
       f.appendChild(s);
       syncs.push(function () { var v = es()[k] || ''; if (document.activeElement !== s && s.value !== v) s.value = v; });
     }
+    /* ★ 24/11: texto largo (varios renglones). Con traer:true, un botón que copia
+       los textos que se ven en la vista previa (lo usa «Invitación en dos idiomas») */
+    function areaCampo(t, k, o) {
+      o = o || {};
+      var f = fila(t); f.style.alignItems = 'flex-start';
+      var col = document.createElement('div'); col.style.cssText = 'flex:1 1 100%;display:flex;flex-direction:column;gap:6px';
+      var a = document.createElement('textarea'); a.rows = o.filas || 8; a.placeholder = o.ayuda || '';
+      a.style.cssText = 'width:100%;box-sizing:border-box;padding:7px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px;line-height:1.45;font-family:inherit';
+      a.oninput = function () { es()[k] = a.value; refrescar(); };
+      col.appendChild(a);
+      if (o.traer) {
+        var b = boton('Traer los textos de la invitación');
+        b.onclick = function () {
+          var fr = document.getElementById('pv-frame'), lista = [];
+          try { lista = fr.contentWindow.__invBilingue.textos(); } catch (e) {}
+          if (!lista.length) { b.textContent = 'Prendé la casilla y esperá que cargue la vista previa'; return; }
+          var ya = {}; String(a.value || '').split(/\r?\n/).forEach(function (l) { var i = l.indexOf('=>'); if (i >= 0) ya[l.slice(0, i).trim().toLowerCase()] = 1; });
+          var nuevos = lista.filter(function (x) { return !ya[x.toLowerCase()]; }).map(function (x) { return x + ' => '; });
+          a.value = (a.value ? a.value.replace(/\s+$/, '') + '\n' : '') + nuevos.join('\n');
+          es()[k] = a.value; refrescar();
+          b.textContent = nuevos.length + ' textos nuevos: completá la derecha de cada flecha';
+        };
+        col.appendChild(b);
+      }
+      f.appendChild(col);
+      syncs.push(function () { var v = es()[k] || ''; if (document.activeElement !== a && a.value !== v) a.value = v; });
+    }
     if (opts.campos) {
-      var TIPOS = { color: color, rango: rango, fuente: fuente, imagen: imagen, casilla: casilla, texto: textoCampo, opciones: opcionesCampo };
+      var TIPOS = { color: color, rango: rango, fuente: fuente, imagen: imagen, casilla: casilla, texto: textoCampo, opciones: opcionesCampo, area: areaCampo };
       opts.campos.forEach(function (c) { var fn = TIPOS[c[0]]; if (fn) fn.apply(null, c.slice(1)); });
       return function sync() { syncs.forEach(function (s) { try { s(); } catch (e) {} }); };
     }
