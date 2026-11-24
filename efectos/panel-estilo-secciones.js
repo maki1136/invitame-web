@@ -179,6 +179,8 @@
     { key: 'footer', tab: 'PRINCIPAL', casa: 'cierre', titulo: 'Cierre · letra y colores de la frase y del texto final',
       campos: [['fuente', 'Letra de la frase grande (¡Gracias!)', 'fuenteFrase'], ['color', 'Color de la frase grande', 'colorFrase'],
         ['fuente', 'Letra del texto final (el largo)', 'fuenteTexto'], ['color', 'Color del texto final', 'colorTextoFinal'],
+        /* ★ 24/11 (Jazmín, Valentina: el sombreado del texto final lo hace ilegible) */
+        ['casilla', 'Sin sombra en la frase y el texto final (letra limpia)', 'sinSombraTexto'],
         ['casilla', 'Texto final sin mayúsculas (para letras cursivas)', 'textoSinMayus'],
         /* 16/11 (Jazmín): «en la foto final no se puede quitar el filtro» */
         ['casilla', 'Foto final sin filtro (sin el oscurecido encima de la foto)', 'sinFiltro'],

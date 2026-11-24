@@ -89,7 +89,8 @@
     var m = String(c || '').match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i); if (!m) return '';
     var h = m[1]; if (h.length === 3) h = h.replace(/(.)/g, '$1$1');
     var r = parseInt(h.substr(0, 2), 16), g = parseInt(h.substr(2, 2), 16), b = parseInt(h.substr(4, 2), 16);
-    return (0.299 * r + 0.587 * g + 0.114 * b) < 120 ? '0 0 12px rgba(255,255,255,.7), 0 1px 2px rgba(255,255,255,.55)' : '';
+    /* oscura → halo claro; clara → una sombra fina (la de fábrica, marrón de 14 px, la emborronaba: Valentina, rosa) */
+    return (0.299 * r + 0.587 * g + 0.114 * b) < 120 ? '0 0 12px rgba(255,255,255,.7), 0 1px 2px rgba(255,255,255,.55)' : '0 1px 2px rgba(0,0,0,.28)';
   }
   function hexRgba(c, a) {
     var m = /^#([0-9a-f]{6})$/i.exec(c || ''); if (!m || a >= 1) return c;
@@ -396,11 +397,12 @@
          Con un color oscuro elegido, la sombra pasa a un halo claro.
          Sólo en las que se guardan desde hoy (INVCAMBIO). */
       var nuevaSombra = window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-24T03:00:00Z') : true;
-      poner(ff, 'text-shadow', nuevaSombra ? sombraPara(colorOk(es.colorFrase)) : '');
+      var sinSom = es.sinSombraTexto === true || es.sinSombraTexto === 'true';
+      poner(ff, 'text-shadow', sinSom ? 'none' : (nuevaSombra ? sombraPara(colorOk(es.colorFrase)) : ''));
       [fte, fno].forEach(function (el) {
         poner(el, 'font-family', es.fuenteTexto ? '"' + es.fuenteTexto + '", serif' : '');
         poner(el, 'color', colorOk(es.colorTextoFinal));
-        poner(el, 'text-shadow', nuevaSombra ? sombraPara(colorOk(es.colorTextoFinal)) : '');
+        poner(el, 'text-shadow', sinSom ? 'none' : (nuevaSombra ? sombraPara(colorOk(es.colorTextoFinal)) : ''));
         /* una letra cursiva no se lee en mayúsculas separadas */
         poner(el, 'text-transform', es.textoSinMayus ? 'none' : '');
         poner(el, 'letter-spacing', es.textoSinMayus ? 'normal' : '');
