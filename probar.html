@@ -128,8 +128,12 @@
     if (!x) return null;
     if (M[x]) return Object.assign({ id: x }, M[x]);
     for (var k in M) if (M[k].muestra === x) return Object.assign({ id: k }, M[k]);
+    /* ★ por el NOMBRE del diseño (?m=marmol-en-relieve): el link que ve el cliente
+       no lleva los nombres de los novios de la muestra (Jazmín, 23/11) */
+    for (var j in M) if (!M[j].oculto && porNombre(M[j].nombre) === x) return Object.assign({ id: j }, M[j]);
     return null;
   }
+  function porNombre(n) { return String(n || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
   /* las tres pantallas (sobre, portada y por dentro), como en la web */
   function mock(m) { return '/formulario/disenos3/' + m.muestra + '.webp'; }
   function tipoDe(m) { return ((m && m.tipos) || [])[0] || 'boda'; }
