@@ -120,6 +120,12 @@
         ['casilla', 'Sacar la mesa', 'sinMesa'], ['casilla', 'Sacar el estado del pase («Habilitado»)', 'sinEstado']]) },
     /* 10/11 (Línea Roja · White Swan): portada en video oscuro, la letra va limpia
        sobre el terciopelo. Lo pinta /efectos/portada-limpia.js; sin la casilla no cambia nada. */
+    /* ★ 24/11 (Jazmín: «esta muestra en dos idiomas, español e inglés»). Lo pinta /efectos/bilingue.js */
+    { key: 'bilingue', tab: 'PRINCIPAL', casa: 'estilo-bilingue', lugar: { abajo: true }, titulo: 'Invitación en dos idiomas (cada texto con su traducción)',
+      obj: function (d) { if (!d.fx) d.fx = {}; if (!d.fx.bilingue || typeof d.fx.bilingue !== 'object') d.fx.bilingue = {}; return d.fx.bilingue; },
+      campos: [['casilla', 'Prender: cada texto lleva su traducción debajo', 'on'],
+        ['area', 'Traducciones, una por renglón: texto como se ve => traducción', 'trad',
+          { traer: true, filas: 12, ayuda: 'Te esperamos => We look forward to seeing you\nConfirmar asistencia => RSVP' }]] },
     { key: 'portada', tab: 'PRINCIPAL', casa: 'estilo-portada', lugar: { abajo: true }, titulo: 'Portada · letra limpia sobre la foto o el video',
       campos: [['casilla', 'Sin el velo claro detrás de los nombres (para portadas oscuras: terciopelo, noche)', 'sinVelo'],
         ['fuente', 'Letra de los nombres', 'fuenteNombres'], ['rango', 'Tamaño de los nombres', 'tamNombres', 24, 72, 'px'],

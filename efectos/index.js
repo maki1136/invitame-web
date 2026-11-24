@@ -913,6 +913,7 @@
     '/efectos/sobre-papel.js',       /* 11/11: texto impreso en la tarjeta del sobre en video (opt-in) — fx.estiloSec.sobreTexto */
     '/efectos/entrada-imagen.js',      /* 19/11: en vez del sobre, la imagen del cliente que se toca para abrir (opt-in) — fx.entradaImagen */
     '/efectos/boleto-corte.js',        /* 20/11: boletos (Pase de abordar): la línea troquelada no cruza los textos (opt-in) — fx.estiloSec.eventos.corteJusto */
+    '/efectos/bilingue.js',             /* 24/11: invitación en dos idiomas (fx.bilingue, opt-in) */
     '/efectos/regalos-contacto.js',     /* 24/11: botones de WhatsApp y mail en la mesa de regalos (opt-in) */
     '/efectos/desplegables-completos.js',  /* 24/11: hoteles/inspiración se abren enteros (no más tope de 560 px) */
     '/efectos/eventos-acceso.js',      /* 23/11: textos de «Ver mapa»/«Agendar», botones apilados, fecha grande y confirmación sin formulario (opt-in) — Promo 2026 */
