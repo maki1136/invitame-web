@@ -23,7 +23,7 @@
 
   function norm(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
   function clave(s) { return norm(s).toLowerCase(); }
-  function cfg() { try { return ((window.INVEV || {}).fx || {}).bilingue || {}; } catch (e) { return {}; } }
+  function cfg() { try { var f = (window.INVEV || {}).fx || {}; return f.bilingue || (f.estiloSec || {}).bilingue || {}; } catch (e) { return {}; } }
   function on() { var c = cfg(); return c.on === true || c.on === 'true'; }
 
   var mapa = {}, crudo = null;
