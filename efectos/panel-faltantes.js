@@ -127,6 +127,19 @@
     var fu = campo('reg_otro_u', 'Su link', 'https://…');
     hijos.push(fn, fu); caja.appendChild(fn); caja.appendChild(fu);
 
+    /* ★ 24/11 (Jazmín, César & Helene: «pide que en regalos haya dos botones:
+       uno con el contacto y otro con un mail»). Los dibuja /efectos/regalos-contacto.js */
+    var sep2 = chico(document.createElement('div'),
+      'font-size:11.5px;opacity:.62;margin:10px 0 6px');
+    sep2.textContent = 'Botones de contacto (quien coordina los regalos)';
+    caja.appendChild(sep2);
+    [['reg_wa_n', 'Texto del botón de WhatsApp', 'Ej: Escribir a Christine'],
+     ['reg_wa', 'Su WhatsApp, con código de país', 'Ej: +45 31 17 27 83'],
+     ['reg_mail_n', 'Texto del botón de mail', 'Ej: Enviar un correo'],
+     ['reg_mail', 'Su mail', 'Ej: nombre@gmail.com']].forEach(function (c) {
+      var f = campo(c[0], c[1], c[2]); hijos.push(f); caja.appendChild(f);
+    });
+
     caja.__sync = function () { hijos.forEach(function (h) { if (h.__sync) h.__sync(); }); };
     return caja;
   }

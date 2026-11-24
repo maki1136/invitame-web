@@ -257,6 +257,8 @@
       'de evento. Los novios también pueden cambiarla desde su panel: vale la última ' +
       'que se guarda.'));
 
+    caja.appendChild(grupo('', tilde(d, 'sinFrase', 'Sin frase arriba de los nombres (que no diga «En la boda de»)')));
+
     caja.appendChild(grupo('El marco de la foto', subidor(d),
       'Un PNG con fondo transparente, de 1080 × 1920 (una historia). Si no subís ninguno, ' +
       'se dibuja solo con los nombres y la fecha de esta invitación.'));
