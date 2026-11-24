@@ -916,6 +916,7 @@
     '/efectos/bilingue.js',             /* 24/11: invitación en dos idiomas (fx.bilingue, opt-in) */
     '/efectos/regalos-contacto.js',     /* 24/11: botones de WhatsApp y mail en la mesa de regalos (opt-in) */
     '/efectos/desplegables-completos.js',  /* 24/11: hoteles/inspiración se abren enteros (no más tope de 560 px) */
+    '/efectos/pase-al-final.js',        /* 24/11: el pase al final de la invitación (fx.estiloSec.pase.alFinal, opt-in) — any-luismi */
     '/efectos/eventos-acceso.js',      /* 23/11: textos de «Ver mapa»/«Agendar», botones apilados, fecha grande y confirmación sin formulario (opt-in) — Promo 2026 */
     '/efectos/clima-extra.js',         /* 20/11: clima con lugar propio, coordenadas propias y botón a un pronóstico (opt-in) — fx.estiloSec.clima */
     '/efectos/invitacion-imagen.js', /* 12/11: sobre + la imagen del cliente como invitación (opt-in) — fx.invImagen */
