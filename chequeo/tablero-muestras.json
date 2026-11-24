@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-23T23:44:08.450Z",
+ "cuando": "2026-11-24T00:23:48.084Z",
  "total": 55,
  "verde": 47,
- "rojo": 8,
- "gris": 0,
+ "rojo": 7,
+ "gris": 1,
  "items": [
   {
    "slug": "abril-mis15",
@@ -21,10 +21,10 @@
   },
   {
    "slug": "alexa-mis15",
-   "ver": "2026-09-14",
-   "estado": "verde",
+   "ver": "",
+   "estado": "gris",
    "dif": [],
-   "error": ""
+   "error": "page.waitForFunction: Timeout 90000ms exceeded."
   },
   {
    "slug": "ana-paula-y-marcelo",
@@ -397,10 +397,8 @@
   {
    "slug": "valentina-y-emiliano",
    "ver": "2026-09-14",
-   "estado": "rojo",
-   "dif": [
-    "sección clima: previa «oculta» · publicada «rgba(238, 230, 214, 0.2)/rgb(58, 69, 61)»"
-   ],
+   "estado": "verde",
+   "dif": [],
    "error": ""
   },
   {
