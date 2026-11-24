@@ -44,8 +44,11 @@
     if (/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|INPUT|SELECT|OPTION|SVG|CANVAS|VIDEO|IFRAME)$/.test(el.nodeName)) return false;
     if (el.closest('.bi-en, #pr-compartir, #pr-corazon, #env, script, style')) return false;
     for (var c = el.firstElementChild; c; c = c.nextElementSibling) {
-      if (c.classList.contains('bi-en')) continue;
+      if (c.classList.contains('bi-en') || c.nodeName === 'BR') continue;
       if (!INLINE_OK.test(c.nodeName)) return false;
+      /* si un hijo ya tiene texto propio, se traduce el hijo, no el padre
+         («Toca el botón» + «Se abre la cámara…» van cada uno por su lado) */
+      if (/[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(c.textContent)) return false;
     }
     return true;
   }
