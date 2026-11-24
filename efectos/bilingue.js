@@ -53,7 +53,7 @@
     return true;
   }
   function textoPropio(el) {
-    if (el.dataset && el.dataset.biOrig && el.textContent.indexOf(el.dataset.biOrig) === 0) return el.dataset.biOrig;
+    if (el.dataset && el.dataset.biOrig && (el.dataset.biNodo || el.textContent.indexOf(el.dataset.biOrig) === 0)) return el.dataset.biOrig;
     var t = '';
     el.childNodes.forEach(function (n) {
       if (n.nodeType === 1 && n.classList.contains('bi-en')) return;
