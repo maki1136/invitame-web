@@ -31,7 +31,9 @@
         ['texto', 'Texto del botón de agendar (vacío = «Agendar»; ej. Agendar la fecha)', 'txtAgendar'],
         ['casilla', 'Botones uno debajo del otro (no uno al lado del otro)', 'apilados'],
         ['rango', 'Tamaño de la fecha y la hora (van en su renglón, en negrita)', 'tamFecha', 12, 34, 'px'],
-        ['color', 'Color de la fecha y la hora', 'colorFecha']].concat(GEN()) },
+        ['color', 'Color de la fecha y la hora', 'colorFecha'],
+        /* ★ 24/11 (Jazmín, any-luismi): «ese fondo no es verde, es igual que el del itinerario» */
+        ['casilla', 'Sin la franja de color (la sección va con el fondo de la invitación, como las demás)', 'sinBanda']].concat(GEN()) },
     { key: 'dresscode', tab: 'LUGAR_VEST', casa: 'vestimenta', titulo: 'Vestimenta · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'galeria', tab: 'GALERIA_INSTA_VID', casa: 'estilo-galeria', lugar: { arriba: true }, titulo: 'Galería · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'video', tab: 'GALERIA_INSTA_VID', casa: 'estilo-video', lugar: { abajo: true }, titulo: 'Nuestro video · diseño (fondo, letra, colores, sin título)', campos: GEN() },
@@ -93,7 +95,7 @@
         [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'], ['color', 'Color del texto de abajo', 'colorTexto']])) },
     /* 9/11 (Maki, isabela platinum): «mejorá el diseño del "Con cariño, te esperamos" y la parte del QR».
        Lo pinta /efectos/pase-qr-fino.js; sin la casilla no cambia nada. */
-    { key: 'pase', tab: 'MUSIC_PASES', casa: 'estilo-pase', lugar: { abajo: true }, titulo: 'Pase con QR · diseño (título, fondo, letras, colores, rótulos y qué datos se ven)',
+    { key: 'pase', tab: 'MUSIC_PASES', casa: 'estilo-pase', lugar: { abajo: true }, titulo: 'Pase del invitado · diseño (título, fondo, letras, colores, qué datos se ven: nombre, personas, mesa — y pase al final)',
       campos: [['casilla', 'Diseño fino de la tarjeta (papel con filete, QR enmarcado, letra de la invitación)', 'tarjetaFina'],
         ['color', 'Color del filete y los detalles', 'colorFilete'], ['color', 'Color del papel de la tarjeta', 'tarjeta'],
         /* ★ 16/11 (Jazmín, zorely-y-fernando): título, fondo, letras, colores,
@@ -117,7 +119,9 @@
         ['texto', 'Rótulo «Nombre» (vacío = como viene)', 'rotNombre'], ['texto', 'Rótulo «Personas» (vacío = como viene)', 'rotPersonas'],
         ['texto', 'Rótulo «Mesa» (vacío = como viene)', 'rotMesa'], ['texto', 'Rótulo «Estado del pase» (vacío = como viene)', 'rotEstado'],
         ['casilla', 'Sacar el nombre', 'sinNombre'], ['casilla', 'Sacar la cantidad de personas', 'sinPersonas'],
-        ['casilla', 'Sacar la mesa', 'sinMesa'], ['casilla', 'Sacar el estado del pase («Habilitado»)', 'sinEstado']]) },
+        ['casilla', 'Sacar la mesa', 'sinMesa'],
+        /* ★ 24/11 (Jazmín, any-luismi): «que el sector de pases aparezca al final de la invitación». Lo hace /efectos/pase-final-y-banda.js */
+        ['casilla', 'Pase al final de la invitación (antes del pie)', 'alFinal'], ['casilla', 'Sacar el estado del pase («Habilitado»)', 'sinEstado']]) },
     /* 10/11 (Línea Roja · White Swan): portada en video oscuro, la letra va limpia
        sobre el terciopelo. Lo pinta /efectos/portada-limpia.js; sin la casilla no cambia nada. */
     /* ★ 24/11 (Jazmín: «esta muestra en dos idiomas, español e inglés»). Lo pinta /efectos/bilingue.js */
