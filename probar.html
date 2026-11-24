@@ -95,7 +95,7 @@
 
     <label for="msj" id="l-msj">Escríbele algo lindo</label>
     <textarea id="msj" maxlength="220"></textarea>
-    <div class="ayuda">Aparece en un corazón que se raspa dentro de la invitación.</div>
+    <div class="ayuda">Aparece en un corazón que se raspa dentro de la invitación. Aprovecha y mándasela para sorprenderla 💌</div>
 
     <label for="mail">Tu correo</label>
     <input type="email" id="mail" autocomplete="email" placeholder="tucorreo@ejemplo.com" required>
@@ -180,15 +180,15 @@
     if (t === 'boda') {
       n.innerHTML = '<div class="two"><div><label for="n1">Tu nombre</label><input type="text" id="n1" maxlength="40" required></div>' +
                     '<div><label for="n2">Nombre de tu pareja</label><input type="text" id="n2" maxlength="40" required></div></div>';
-      $('l-msj').textContent = 'Escríbele algo lindo a tu novio para sorprenderlo';
+      $('l-msj').textContent = 'Escríbele unas palabras especiales a esa persona que tanto quieres';
       $('msj').placeholder = 'Mi amor, te amo. Mira qué linda invitación para nuestra boda 💍';
     } else if (t === 'xv') {
       n.innerHTML = '<label for="n1">Nombre de la quinceañera</label><input type="text" id="n1" maxlength="40" required>';
-      $('l-msj').textContent = 'Escríbele algo lindo a tu hija para sorprenderla';
+      $('l-msj').textContent = 'Escríbele unas palabras especiales a esa persona que tanto quieres';
       $('msj').placeholder = 'Mi princesa, mira qué linda invitación para tus XV 👑';
     } else {
       n.innerHTML = '<label for="n1">Nombre de quien festeja</label><input type="text" id="n1" maxlength="40" required>';
-      $('l-msj').textContent = 'Escribe algo lindo para sorprender a quien festeja';
+      $('l-msj').textContent = 'Escríbele unas palabras especiales a esa persona que tanto quieres';
       $('msj').placeholder = 'Mira qué linda invitación para tu fiesta 🎉';
     }
     if ($('n1')) $('n1').value = v1;
