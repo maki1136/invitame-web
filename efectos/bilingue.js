@@ -53,6 +53,7 @@
     return true;
   }
   function textoPropio(el) {
+    if (el.dataset && el.dataset.biOrig && el.textContent.indexOf(el.dataset.biOrig) === 0) return el.dataset.biOrig;
     var t = '';
     el.childNodes.forEach(function (n) {
       if (n.nodeType === 1 && n.classList.contains('bi-en')) return;
@@ -94,11 +95,38 @@
     var activo = on();
     if (!activo) {
       [].forEach.call(document.querySelectorAll('.bi-en'), function (s) { s.remove(); });
+      [].forEach.call(document.querySelectorAll('[data-bi-orig]'), function (e) {
+        var n = [].filter.call(e.childNodes, function (x) { return x.nodeType === 3 && x.nodeValue.trim(); })[0];
+        if (n) n.nodeValue = e.dataset.biOrig; delete e.dataset.biOrig;
+      });
       return;
     }
-    var m = leerMapa();
+    var m = leerMapa(), claves = null;
+    function buscar(t) {
+      var en = m[clave(t)]; if (en) return en;
+      /* textos cortados con «Ver más» (terminan en …): se buscan por el principio */
+      var c = clave(t);
+      if (/(…|\.\.\.)$/.test(c) && c.length > 30) {
+        var pre = c.replace(/(…|\.\.\.)$/, '').trim();
+        claves = claves || Object.keys(m);
+        for (var i = 0; i < claves.length; i++) if (claves[i].indexOf(pre) === 0) return m[claves[i]];
+      }
+      return '';
+    }
     hojas().forEach(function (h) {
-      var el = h[0], t = h[1], en = m[clave(t)];
+      var el = h[0], t = h[1], en = buscar(t);
+      /* botones flex (WhatsApp de contacto, etc.): un <span> más sería otra columna;
+         la traducción va pegada al mismo texto */
+      var cs = getComputedStyle(el).display;
+      if (en && /flex|grid/.test(cs) && corto(el, t)) {
+        var nodos = [].filter.call(el.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); });
+        if (nodos.length === 1) {
+          if (!el.dataset.biOrig) el.dataset.biOrig = t;
+          var v = el.dataset.biOrig + ' / ' + en;
+          if (nodos[0].nodeValue.trim() !== v) nodos[0].nodeValue = v;
+          return;
+        }
+      }
       var ya = el.querySelector(':scope > .bi-en');
       if (!en) { if (ya) ya.remove(); return; }
       if (ya && ya.getAttribute('data-t') === en) return;
