@@ -97,7 +97,7 @@
       [].forEach.call(document.querySelectorAll('.bi-en'), function (s) { s.remove(); });
       [].forEach.call(document.querySelectorAll('[data-bi-orig]'), function (e) {
         var n = [].filter.call(e.childNodes, function (x) { return x.nodeType === 3 && x.nodeValue.trim(); })[0];
-        if (n) n.nodeValue = e.dataset.biOrig; delete e.dataset.biOrig;
+        if (n) n.nodeValue = (e.dataset.biNodo ? e.dataset.biNodo + ' ' : e.dataset.biOrig); delete e.dataset.biOrig; delete e.dataset.biNodo;
       });
       return;
     }
@@ -121,9 +121,10 @@
       if (en && /flex|grid/.test(cs) && corto(el, t)) {
         var nodos = [].filter.call(el.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); });
         if (nodos.length === 1) {
-          if (!el.dataset.biOrig) el.dataset.biOrig = t;
-          var v = el.dataset.biOrig + ' / ' + en;
-          if (nodos[0].nodeValue.trim() !== v) nodos[0].nodeValue = v;
+          if (!el.dataset.biOrig) { el.dataset.biOrig = t; el.dataset.biNodo = nodos[0].nodeValue.replace(/\s+$/, ''); }
+          /* sólo el texto del nodo (sin la flechita ▾ del <span>, que ya está al lado) */
+          var v = (el.dataset.biNodo || el.dataset.biOrig) + ' / ' + en + ' ';
+          if (nodos[0].nodeValue !== v) nodos[0].nodeValue = v;
           return;
         }
       }

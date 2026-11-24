@@ -50,13 +50,18 @@
       var t = b.firstChild;
       if (!t || t.nodeType !== 3) return;
       if (b.dataset.txtOrig === undefined) b.dataset.txtOrig = t.nodeValue;
+      /* sin texto propio no se toca (si no, pisa a otros módulos, p. ej. la traducción de /efectos/bilingue.js) */
+      if (!tm && !b.dataset.txtPuesto) return;
       var v = tm ? tm + ' ' : b.dataset.txtOrig;
+      if (tm) b.dataset.txtPuesto = '1'; else delete b.dataset.txtPuesto;
       if (t.nodeValue !== v) t.nodeValue = v;
     });
     [1, 2, 3].forEach(function (n) {
       var a = document.getElementById('ev' + n + '-cal'); if (!a) return;
       if (a.dataset.txtOrig === undefined) a.dataset.txtOrig = a.textContent;
+      if (!ta && !a.dataset.txtPuesto) return;
       var v = ta || a.dataset.txtOrig;
+      if (ta) a.dataset.txtPuesto = '1'; else delete a.dataset.txtPuesto;
       if (a.textContent !== v) a.textContent = v;
     });
 
