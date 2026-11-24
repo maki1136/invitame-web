@@ -22,6 +22,10 @@
     var html = '';
     if (tel.length >= 8) html += '<a class="reg-contacto" href="https://wa.me/' + tel + '" target="_blank" rel="noopener">' + esc(String(ev.reg_wa_n || '').trim() || 'Escribir por WhatsApp') + '</a>';
     if (mail) html += '<a class="reg-contacto" href="mailto:' + esc(mail) + '">' + esc(String(ev.reg_mail_n || '').trim() || 'Enviar un correo') + '</a>';
+    var rs = document.querySelector('[data-sec="regalos"]');
+    /* el motor esconde la sección si no hay tiendas ni banco: con contacto, va */
+    if (html && rs && rs.style.display === 'none' && !((window.INVEV.fx || {}).ocultas || []).includes('regalos')) rs.style.display = '';
+    if (html && rb.style.display === 'none') rb.style.display = 'flex';
     var ya = rb.querySelectorAll('.reg-contacto'), firma = rb.getAttribute('data-reg-contacto') || '';
     if (firma === html && ya.length === (html ? html.split('<a ').length - 1 : 0)) return;
     [].forEach.call(ya, function (a) { a.remove(); });
@@ -29,7 +33,7 @@
     if (!html) return;
     rb.insertAdjacentHTML('beforeend', html);
     rb.style.display = 'flex';
-    var rs = document.querySelector('[data-sec="regalos"]'); if (rs && rs.style.display === 'none') rs.style.display = '';
+    if (rs && rs.style.display === 'none') rs.style.display = '';
   }
   var n = 0, t = setInterval(function () { aplicar(); if (++n > 40) clearInterval(t); }, 500);
   setInterval(aplicar, 2500);
