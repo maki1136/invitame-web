@@ -122,7 +122,8 @@
        sobre el terciopelo. Lo pinta /efectos/portada-limpia.js; sin la casilla no cambia nada. */
     /* ★ 24/11 (Jazmín: «esta muestra en dos idiomas, español e inglés»). Lo pinta /efectos/bilingue.js */
     { key: 'bilingue', tab: 'PRINCIPAL', casa: 'estilo-bilingue', lugar: { abajo: true }, titulo: 'Invitación en dos idiomas (cada texto con su traducción)',
-      obj: function (d) { if (!d.fx) d.fx = {}; if (!d.fx.bilingue || typeof d.fx.bilingue !== 'object') d.fx.bilingue = {}; return d.fx.bilingue; },
+      /* ⚠️ el armador de bloques NO lee `obj`: usa `objFx` (sin esto guardaba en fx.estiloSec.bilingue y la invitación no lo veía) */
+      objFx: 'bilingue',
       campos: [['casilla', 'Prender: cada texto lleva su traducción debajo', 'on'],
         ['area', 'Traducciones, una por renglón: texto como se ve => traducción', 'trad',
           { traer: true, filas: 12, ayuda: 'Te esperamos => We look forward to seeing you\nConfirmar asistencia => RSVP' }]] },
