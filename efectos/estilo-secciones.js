@@ -84,6 +84,13 @@
     if (v) el.dataset[marca] = '1'; else delete el.dataset[marca];
   }
   function todos(raiz, sel) { if (!raiz || !sel) return []; try { return [].slice.call(raiz.querySelectorAll(sel)); } catch (e) { return []; } }
+  /* con letra OSCURA, un halo claro (la sombra oscura de fábrica la emborrona); con letra clara, la de siempre */
+  function sombraPara(c) {
+    var m = String(c || '').match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i); if (!m) return '';
+    var h = m[1]; if (h.length === 3) h = h.replace(/(.)/g, '$1$1');
+    var r = parseInt(h.substr(0, 2), 16), g = parseInt(h.substr(2, 2), 16), b = parseInt(h.substr(4, 2), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) < 120 ? '0 0 12px rgba(255,255,255,.7), 0 1px 2px rgba(255,255,255,.55)' : '';
+  }
   function hexRgba(c, a) {
     var m = /^#([0-9a-f]{6})$/i.exec(c || ''); if (!m || a >= 1) return c;
     var n = parseInt(m[1], 16); return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
@@ -383,9 +390,17 @@
       if (es.fuenteTexto) pedirFuente(es.fuenteTexto);
       poner(ff, 'font-family', es.fuenteFrase ? '"' + es.fuenteFrase + '", serif' : '');
       poner(ff, 'color', colorOk(es.colorFrase));
+      /* ★ 24/11 (Jazmín, Valentina: «en el texto final, si pongo un color oscuro,
+         predeterminadamente tiene un sombreado que lo hace ilegible»): la
+         colección le pone una sombra OSCURA, pensada para letra clara sobre foto.
+         Con un color oscuro elegido, la sombra pasa a un halo claro.
+         Sólo en las que se guardan desde hoy (INVCAMBIO). */
+      var nuevaSombra = window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-24T03:00:00Z') : true;
+      poner(ff, 'text-shadow', nuevaSombra ? sombraPara(colorOk(es.colorFrase)) : '');
       [fte, fno].forEach(function (el) {
         poner(el, 'font-family', es.fuenteTexto ? '"' + es.fuenteTexto + '", serif' : '');
         poner(el, 'color', colorOk(es.colorTextoFinal));
+        poner(el, 'text-shadow', nuevaSombra ? sombraPara(colorOk(es.colorTextoFinal)) : '');
         /* una letra cursiva no se lee en mayúsculas separadas */
         poner(el, 'text-transform', es.textoSinMayus ? 'none' : '');
         poner(el, 'letter-spacing', es.textoSinMayus ? 'normal' : '');

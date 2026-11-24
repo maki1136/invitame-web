@@ -156,7 +156,13 @@
     });
     /* la posición de los nombres */
     var port = document.querySelector('.portada');
-    if (el[POS] && POS_MAPA[v(e, POS) || ''] && port) {
+    /* ★ 24/11 (Jazmín, Valentina: «por más que quiera centrar los textos de
+       portada siguen quedando abajo»): si el valor ya estaba en «Centrado», volver
+       a elegirlo no cambia nada y no se anotaba como elegido. Desde hoy, toda
+       invitación que se guarda desde el panel (INVCAMBIO) respeta la posición
+       que tiene puesta, la haya tocado o no. */
+    var posManda = el[POS] || (window.INVCAMBIO ? window.INVCAMBIO(e, '2026-11-24T03:00:00Z') : false);
+    if (posManda && POS_MAPA[v(e, POS) || ''] && port) {
       var jc = POS_MAPA[v(e, POS)];
       firma += '|pos' + jc;
       port.style.setProperty('justify-content', jc, 'important');
