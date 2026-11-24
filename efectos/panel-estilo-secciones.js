@@ -31,9 +31,7 @@
         ['texto', 'Texto del botón de agendar (vacío = «Agendar»; ej. Agendar la fecha)', 'txtAgendar'],
         ['casilla', 'Botones uno debajo del otro (no uno al lado del otro)', 'apilados'],
         ['rango', 'Tamaño de la fecha y la hora (van en su renglón, en negrita)', 'tamFecha', 12, 34, 'px'],
-        ['color', 'Color de la fecha y la hora', 'colorFecha'],
-        /* ★ 24/11 (Jazmín, any-luismi): «ese fondo no es verde, es igual que el del itinerario» */
-        ['casilla', 'Sin la franja de color (la sección va con el fondo de la invitación, como las demás)', 'sinBanda']].concat(GEN()) },
+        ['color', 'Color de la fecha y la hora', 'colorFecha']].concat(GEN()) },
     { key: 'dresscode', tab: 'LUGAR_VEST', casa: 'vestimenta', titulo: 'Vestimenta · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'galeria', tab: 'GALERIA_INSTA_VID', casa: 'estilo-galeria', lugar: { arriba: true }, titulo: 'Galería · diseño (fondo, letra, colores, sin título)', campos: GEN() },
     { key: 'video', tab: 'GALERIA_INSTA_VID', casa: 'estilo-video', lugar: { abajo: true }, titulo: 'Nuestro video · diseño (fondo, letra, colores, sin título)', campos: GEN() },
