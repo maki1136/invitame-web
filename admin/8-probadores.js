@@ -19,12 +19,13 @@
     return slug;
   }
   var LISTA = [];
+  function porNombre(n) { return String(n || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
   function opcionesMuestras() {
     var M = window.MUESTRAS_INVITAME || {}, T = window.MUESTRAS_TIPOS || [], h = '';
     T.forEach(function (t) {
       var ids = window.muestrasDeTipo ? window.muestrasDeTipo(t[0]) : [];
       if (!ids.length) return;
-      h += '<optgroup label="' + esc(t[1]) + '">' + ids.map(function (id) { return '<option value="' + esc(M[id].muestra) + '">' + esc(M[id].nombre) + '</option>'; }).join('') + '</optgroup>';
+      h += '<optgroup label="' + esc(t[1]) + '">' + ids.map(function (id) { return '<option value="' + esc(porNombre(M[id].nombre)) + '">' + esc(M[id].nombre) + '</option>'; }).join('') + '</optgroup>';
     });
     return h;
   }
