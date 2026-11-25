@@ -687,7 +687,7 @@
        en «Sin suavizado», la banda de la colección también se va. Sólo para las
        guardadas desde el panel desde hoy (INVCAMBIO): las entregadas no cambian. */
     var sinVeloCol = !!(f.url && f.suave && f.suave.modo === '' &&
-      (window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-25T19:30:00Z') : false));
+      (window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-25T19:00:00Z') : false));
     if (sinVeloCol) raiz.setAttribute('data-sin-velo-col', '1'); else raiz.removeAttribute('data-sin-velo-col');
 
     alinear(caja);

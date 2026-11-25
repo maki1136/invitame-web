@@ -200,7 +200,7 @@
            vez el navegador no la reconoce → se usa sólo el nombre;
          · en Vestimenta, «Colores sugeridos / Colores a evitar» (.col-dc-tit) van
            con la misma letra que el título. */
-    var nuevaF = window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-25T19:30:00Z') : false;
+    var nuevaF = window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-25T19:00:00Z') : false;
     var famF = es.fuente ? (nuevaF ? String(es.fuente).split(',')[0].replace(/["'<>;{}]/g, '').trim() : es.fuente) : '';
     if (nuevaF && famF) pedirFuente(famF);
     poner(h, 'font-family', famF ? '"' + famF + '", serif' : '');
