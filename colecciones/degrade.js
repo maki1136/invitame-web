@@ -377,9 +377,13 @@
 
     /* ---- 2 · EL VELO: UNA SOLA CAPA, SOBRE EL FONDO ---------------------
        ⚠️ NO un ::before por sección: eso hace crashear WebKit al cargar.
-       ⚠️ Se abre sólo en los 8 % de cada punta, donde no hay letra. */
+       ⚠️ Se abre sólo en los 8 % de cada punta, donde no hay letra.
+       ★ 25/11 (Jazmín, dalia-ivonne: «le cambié el fondo a uno más claro pero se
+         sigue viendo oscuro»): cuánto oscurece sale de --inv-velo-col, que pone
+         /efectos/fondo-invitacion.js con la perilla «Velo oscuro del diseño».
+         Sin tocarla queda en .58, como siempre. */
     A.push(
-      P + '#inv-fondo::after{ content:""!important; position:fixed!important; inset:0!important; pointer-events:none!important; z-index:1!important; background:linear-gradient(to right, rgba(8,18,13,0) 0%, rgba(8,18,13,.58) 8%, rgba(8,18,13,.58) 92%, rgba(8,18,13,0) 100%)!important; }'
+      P + '#inv-fondo::after{ content:""!important; position:fixed!important; inset:0!important; pointer-events:none!important; z-index:1!important; background:linear-gradient(to right, rgba(8,18,13,0) 0%, rgba(8,18,13,var(--inv-velo-col,.58)) 8%, rgba(8,18,13,var(--inv-velo-col,.58)) 92%, rgba(8,18,13,0) 100%)!important; }'
     );
 
     /* ---- 3 · LA ESCALA TIPOGRÁFICA, REESCRITA ENTERA --------------------

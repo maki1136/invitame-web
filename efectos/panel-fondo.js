@@ -259,6 +259,10 @@
     cuerpo.appendChild(perilla(d, 'oscuras', 'Y las secciones de color', 0, 0.6, 0,
       'Dejalas en 0 salvo que quieras perder el contraste entre secciones. Son las que le dan el ritmo a la invitación.'));
 
+    /* ★ 25/11 (Jazmín, dalia-ivonne: «le cambié el fondo a uno más claro pero se sigue viendo oscuro») */
+    cuerpo.appendChild(perilla(d, 'veloCol', 'Velo oscuro del diseño (diseños oscuros, como Degradé)', 0, 0.7, 0.58,
+      'Los diseños oscuros ponen un velo oscuro sobre el fondo. Si subiste un fondo claro y se ve oscuro, bajalo. Ojo: con el fondo claro, mirá que los títulos sueltos se sigan leyendo.'));
+
     cuerpo.appendChild(bloqueSuave(d));
   }
 
