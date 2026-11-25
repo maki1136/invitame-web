@@ -165,6 +165,7 @@
     raiz.style.removeProperty('--inv-paso');
     raiz.style.removeProperty('--inv-oscuras');
     raiz.style.removeProperty('--inv-velo-col');
+    raiz.removeAttribute('data-sin-velo-col');
     raiz.style.removeProperty('--inv-fuerza');
   }
 
@@ -680,6 +681,14 @@
        fondo; sin tocar la perilla no se escribe y cada diseño usa el suyo */
     if (typeof f.veloCol === 'number') raiz.style.setProperty('--inv-velo-col', String(Math.max(0, Math.min(0.7, f.veloCol))));
     else raiz.style.removeProperty('--inv-velo-col');
+    /* ★ 25/11 (Jazmín, paulette-y-german: «por más que le saque el suavizado de
+       atrás de los textos, sigue apareciendo»): Marfil trae SU banda clara detrás
+       de cada sección (pensada para las perlas). Con foto propia y el suavizado
+       en «Sin suavizado», la banda de la colección también se va. Sólo para las
+       guardadas desde el panel desde hoy (INVCAMBIO): las entregadas no cambian. */
+    var sinVeloCol = !!(f.url && f.suave && f.suave.modo === '' &&
+      (window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-25T19:00:00Z') : false));
+    if (sinVeloCol) raiz.setAttribute('data-sin-velo-col', '1'); else raiz.removeAttribute('data-sin-velo-col');
 
     alinear(caja);
     pintar();

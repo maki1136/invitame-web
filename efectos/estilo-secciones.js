@@ -194,7 +194,17 @@
     /* ★ 13/11: «poder no colocar títulos o subtítulos predeterminados» */
     poner(h, 'display', es.sinTitulo ? 'none' : '');
     poner(k, 'display', es.sinSub ? 'none' : '');
-    poner(h, 'font-family', es.fuente ? '"' + es.fuente + '", serif' : '');
+    /* ★ 25/11 (Jazmín, paulette-y-german: «los subtítulos del dress code no respetan
+       la tipografía elegida»). Dos cosas, sólo para las guardadas desde hoy:
+         · la fuente a veces llega como «'Bodoni Moda',serif» y entre comillas otra
+           vez el navegador no la reconoce → se usa sólo el nombre;
+         · en Vestimenta, «Colores sugeridos / Colores a evitar» (.col-dc-tit) van
+           con la misma letra que el título. */
+    var nuevaF = window.INVCAMBIO ? window.INVCAMBIO(window.INVEV, '2026-11-25T19:00:00Z') : false;
+    var famF = es.fuente ? (nuevaF ? String(es.fuente).split(',')[0].replace(/["'<>;{}]/g, '').trim() : es.fuente) : '';
+    if (nuevaF && famF) pedirFuente(famF);
+    poner(h, 'font-family', famF ? '"' + famF + '", serif' : '');
+    if (nuevaF && key === 'dresscode') [].forEach.call(sec.querySelectorAll('.col-dc-tit'), function (el) { poner(el, 'font-family', famF ? '"' + famF + '", serif' : ''); });
     poner(h, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');
     poner(h, 'color', colorOk(es.colorTitulo));
     poner(k, 'color', colorOk(es.colorSub));
