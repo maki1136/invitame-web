@@ -460,6 +460,14 @@
     poner(t, 'font-family', es.fuente ? '"' + es.fuente + '", serif' : '');
     poner(t, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');
     poner(t, 'color', colorOk(es.colorTitulo));
+    /* ★ 25/11 (Jazmín, xv-regina: «¿se podrá cambiar tamaño y tipografía de la frase de abajo del pase?»)
+       el mensaje para cada invitado (#pv-mensaje); vacío = como viene */
+    var msj = sec.querySelector('#pv-mensaje');
+    if (es.fuenteMensaje) pedirFuente(es.fuenteMensaje);
+    poner(msj, 'font-family', es.fuenteMensaje ? '"' + String(es.fuenteMensaje).replace(/["<>;{}]/g, '') + '", serif' : '');
+    poner(msj, 'font-size', es.tamMensaje ? es.tamMensaje + 'px' : '');
+    poner(msj, 'line-height', es.tamMensaje ? '1.45' : '');
+    poner(msj, 'color', colorOk(es.colorMensaje));
     /* la tarjeta: el papel (con el «diseño fino» lo pinta pase-qr-fino.js) */
     var card = sec.querySelector('.pasecard'); if (!card) return;
     var fina = es.tarjetaFina === true || es.tarjetaFina === 'true' || es.tarjetaFina === 1;
