@@ -1,8 +1,8 @@
 {
- "cuando": "2026-11-25T00:34:24.212Z",
+ "cuando": "2026-11-25T16:10:18.931Z",
  "slug": "camila-y-tomas",
- "total": 881,
- "verde": 863,
+ "total": 885,
+ "verde": 867,
  "amarillo": 3,
  "rojo": 15,
  "gris": 0,
@@ -1734,6 +1734,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1943,17 +1954,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "casa-estilo-bilingue",
    "control": "(sin rótulo)",
    "tipo": "checkbox",
@@ -2036,6 +2036,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.portada.sinNombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinCuenta",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6340,8 +6351,9 @@
    "guarda": true,
    "dato": "fx.rsvp.general",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6451,9 +6463,8 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6848,6 +6859,39 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.estiloSec.pase.rotEstado",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.fuenteMensaje",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.tamMensaje",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.colorMensaje",
    "llega": true,
    "seVe": true,
    "estado": "verde"
