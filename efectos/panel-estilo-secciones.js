@@ -147,6 +147,8 @@
         /* ★ 23/11 (CUHE): «sacar directamente nombre y subtítulo para que quede solo la cuenta regresiva» (la foto ya trae el texto) */
         ['casilla', 'Sin el sobretítulo en la portada (el texto chico de arriba)', 'sinKick'],
         ['casilla', 'Sin los nombres en la portada (queda la foto y la cuenta regresiva)', 'sinNombres'],
+        /* ★ 25/11 (Jazmín, Diego y Sofía): «no quiere cuenta regresiva». Lo aplica /efectos/portada-limpia.js */
+        ['casilla', 'Sin la cuenta regresiva en la portada', 'sinCuenta'],
         ['casilla', 'Nombres como están escritos (sin pasarlos a mayúsculas)', 'nombresComoEstan'],
         /* ★ 20/11 (Diana XV): «quiere que en la portada aparezca también: Sábado 23 de enero de 2027 · 17:00hs» */
         ['casilla', 'Mostrar la fecha en la portada (día, fecha y hora)', 'fechaVer'],
