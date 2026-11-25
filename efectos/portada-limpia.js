@@ -121,6 +121,8 @@
     if (si(c.sinKick)) r.push(H + '#pv-kick { display:none !important }');
     /* ★ 24/11 (Jazmín, César & Helene: «los nombres están en minúsculas pero aparecen en mayúsculas»): la colección los pasa a mayúsculas */
     if (si(c.nombresComoEstan)) r.push(H + '#pv-names, ' + H + '#pv-names *, ' + H + '.portada h1 { text-transform:none !important; font-variant:normal !important }');
+    /* ★ 25/11 (Jazmín, Diego y Sofía: «no quiere cuenta regresiva y no sé cómo sacarla») */
+    if (si(c.sinCuenta)) r.push(H + '.portada .count, ' + H + '.portada .countdown, ' + H + '.portada [class*="cuenta-reg"] { display:none !important }');
     if (si(c.sinNombres)) r.push(H + '#pv-names, ' + H + '.portada .names, ' + H + '.portada .amp { display:none !important }');
     /* ★ 20/11 (Diana XV): la fecha completa en la portada, con día y hora. El motor
        la trae escondida (CONFIG.mostrarFecha=false) y en formato corto («Sábado 23 · Enero 2027») */
