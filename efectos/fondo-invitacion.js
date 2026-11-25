@@ -675,7 +675,7 @@
     raiz.style.setProperty('--inv-paso', String(
       Math.max(0, Math.min(1, (typeof f.paso === 'number') ? f.paso : 0.85))));
     raiz.style.setProperty('--inv-oscuras', String(
-      Math.max(0, Math.min(0.6, (typeof f.oscuras === 'number') ? f.oscuras : 0))));
+      Math.max(0, Math.min(1, (typeof f.oscuras === 'number') ? f.oscuras : 0))));
     /* ★ 25/11 · el velo oscuro que ponen los diseños oscuros (Degradé) sobre el
        fondo; sin tocar la perilla no se escribe y cada diseño usa el suyo */
     if (typeof f.veloCol === 'number') raiz.style.setProperty('--inv-velo-col', String(Math.max(0, Math.min(0.7, f.veloCol))));

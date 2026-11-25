@@ -256,7 +256,7 @@
     cuerpo.appendChild(perilla(d, 'paso', 'Cuánto lo dejan pasar las secciones claras', 0, 1, 0.85,
       'Es la perilla principal: en 0 el papel sigue crudo y no cambia nada. En 85% el fondo ES el papel.'));
 
-    cuerpo.appendChild(perilla(d, 'oscuras', 'Y las secciones de color', 0, 0.6, 0,
+    cuerpo.appendChild(perilla(d, 'oscuras', 'Y las secciones de color', 0, 1, 0,
       'Dejalas en 0 salvo que quieras perder el contraste entre secciones. Son las que le dan el ritmo a la invitación.'));
 
     /* ★ 25/11 (Jazmín, dalia-ivonne: «le cambié el fondo a uno más claro pero se sigue viendo oscuro») */
