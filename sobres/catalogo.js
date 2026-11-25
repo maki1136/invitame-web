@@ -1222,6 +1222,20 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.9
   },
 
+  /* 25/11/2026 · el mismo, con un MOÑO de cinta de raso amarillo atado bajo el
+     lacre (Maki: «hacelo dale el moño»). El moño es una foto de Higgsfield (Soul)
+     recortada y pegada sobre la solapa: se mueve y se aplana con ella cuadro por
+     cuadro, y se esconde cuando la solapa da la vuelta. */
+  'oleo-azul-mono-amarillo-luz': {
+    nombre:     "Óleo Azul con moño amarillo · lacre y moño de raso amarillo, sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/v1795623844/invitame/oleo-azul-amarillo/oleo-azul-mono-amarillo-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/image/upload/v1795623845/invitame/oleo-azul-amarillo/oleo-azul-mono-amarillo-sobre-luz.jpg",
+    color:      "#E6DDD2",
+    luz:        3.0,
+    luzColor:   "#FBF6EE",
+    luzFundido: 0.9
+  },
+
   'oleo-rose-luz': {
     nombre:     "Óleo Rosé · se abre la solapa y sale luz de adentro (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre-luz-a.mp4",
