@@ -30,8 +30,10 @@
   /* ★ 25/11 (Jazmín, Diego y Sofía: «quiere la frase arriba de la carta pero no me
      deja subirla»): con Marfil la frase vive ADENTRO de la carta y «Reordenar» no
      la mueve. Casilla del panel: fx.estiloSec.carta.fraseArriba → la frase va
-     arriba de todo de la carta (antes de «Con cariño / Una carta para ti»), o, si
-     la frase está en su banda aparte, la banda va justo antes de la carta.
+     arriba de todo de la carta (antes de «Con cariño / Una carta para ti»).
+     (Si la frase está en su banda aparte, eso ya lo hace «Reordenar»: mover la
+     banda desde acá se pelea con el orden del motor y las dos secciones se iban
+     al final — medido en camila-y-tomas.)
      Apagada no hace nada: ninguna invitación entregada cambia. */
   var marcaFrase = null;
   function fraseArriba() {
@@ -47,12 +49,9 @@
           if (!marcaFrase) { marcaFrase = document.createComment('lugar-de-la-frase'); adentro.parentNode.insertBefore(marcaFrase, adentro); }
           cs.insertBefore(adentro, cs.firstChild);
         }
-      } else if (banda && banda.parentNode === cs.parentNode && banda.nextElementSibling !== cs && banda.style.display !== 'none') {
-        if (!marcaFrase) { marcaFrase = document.createComment('lugar-de-la-frase'); banda.parentNode.insertBefore(marcaFrase, banda); }
-        cs.parentNode.insertBefore(banda, cs);
       }
     } else if (marcaFrase && marcaFrase.parentNode) {
-      var el = adentro || banda;
+      var el = adentro;
       if (el) marcaFrase.parentNode.insertBefore(el, marcaFrase);
       marcaFrase.remove(); marcaFrase = null;
     }
