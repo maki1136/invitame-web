@@ -1065,6 +1065,12 @@
     'h[c] .frame .sec > *, h[c] .frame .pase > *, h[s] .frame .footer > * {',
     '  position:relative; z-index:1;',
     '}',
+    /* ★ 25/11 · con foto propia y «Sin suavizado» en el panel, la banda se va
+       (la pone /efectos/fondo-invitacion.js como data-sin-velo-col) */
+    'h[c][data-sin-velo-col] .frame .sec::before, h[c][data-sin-velo-col] .frame .pase::before,',
+    'h[c][data-sin-velo-col] .frame .footer::before, h[c][data-sin-velo-col] .portada .c::before {',
+    '  background:none !important; filter:none !important;',
+    '}',
 
     /* ── LA TARJETA GRABADA: CEREMONIA Y FIESTA, Y LA RASPADITA ───────────
        Maki, 17/9: «en la parte de ceremonia y fiesta estaría bueno que le
