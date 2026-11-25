@@ -116,9 +116,13 @@
         ['color', 'Color de los datos (el nombre, la cantidad, la mesa)', 'colorDatos'], ['rango', 'Tamaño de los datos', 'tamDatos', 10, 32, 'px'],
         ['texto', 'Rótulo «Nombre» (vacío = como viene)', 'rotNombre'], ['texto', 'Rótulo «Personas» (vacío = como viene)', 'rotPersonas'],
         ['texto', 'Rótulo «Mesa» (vacío = como viene)', 'rotMesa'], ['texto', 'Rótulo «Estado del pase» (vacío = como viene)', 'rotEstado'],
+        /* ★ 25/11 (Jazmín, xv-regina): la frase de abajo del pase (el mensaje para cada invitado) */
+        ['fuente', 'Tipografía de la frase de abajo del pase (el mensaje para el invitado)', 'fuenteMensaje'],
+        ['rango', 'Tamaño de la frase de abajo del pase', 'tamMensaje', 10, 32, 'px'],
+        ['color', 'Color de la frase de abajo del pase', 'colorMensaje'],
         ['casilla', 'Sacar el nombre', 'sinNombre'], ['casilla', 'Sacar la cantidad de personas', 'sinPersonas'],
         ['casilla', 'Sacar la mesa', 'sinMesa'],
-        /* ★ 24/11 (Jazmín, any-luismi): «que el sector de pases aparezca al final de la invitación». Lo hace /efectos/pase-final-y-banda.js */
+        /* ★ 24/11 (Jazmín, any-luismi): «que el sector de pases aparezca al final de la invitación». Lo hace /efectos/pase-al-final.js */
         ['casilla', 'Pase al final de la invitación (antes del pie)', 'alFinal'], ['casilla', 'Sacar el estado del pase («Habilitado»)', 'sinEstado']]) },
     /* 10/11 (Línea Roja · White Swan): portada en video oscuro, la letra va limpia
        sobre el terciopelo. Lo pinta /efectos/portada-limpia.js; sin la casilla no cambia nada. */
