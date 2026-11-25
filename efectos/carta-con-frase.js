@@ -27,11 +27,44 @@
       });
     }
   }
+  /* ★ 25/11 (Jazmín, Diego y Sofía: «quiere la frase arriba de la carta pero no me
+     deja subirla»): con Marfil la frase vive ADENTRO de la carta y «Reordenar» no
+     la mueve. Casilla del panel: fx.estiloSec.carta.fraseArriba → la frase va
+     arriba de todo de la carta (antes de «Con cariño / Una carta para ti»), o, si
+     la frase está en su banda aparte, la banda va justo antes de la carta.
+     Apagada no hace nada: ninguna invitación entregada cambia. */
+  var marcaFrase = null;
+  function fraseArriba() {
+    var ev = window.INVEV; if (!ev) return;
+    var c = (((ev.fx || {}).estiloSec || {}).carta) || {};
+    var on = c.fraseArriba === true || c.fraseArriba === 'true';
+    var cs = document.getElementById('carta-sec'); if (!cs) return;
+    var adentro = cs.querySelector('.mf-frase');
+    var banda = document.querySelector('.fraseSec');
+    if (on) {
+      if (adentro) {
+        if (cs.firstElementChild !== adentro) {
+          if (!marcaFrase) { marcaFrase = document.createComment('lugar-de-la-frase'); adentro.parentNode.insertBefore(marcaFrase, adentro); }
+          cs.insertBefore(adentro, cs.firstChild);
+        }
+      } else if (banda && banda.parentNode === cs.parentNode && banda.nextElementSibling !== cs && banda.style.display !== 'none') {
+        if (!marcaFrase) { marcaFrase = document.createComment('lugar-de-la-frase'); banda.parentNode.insertBefore(marcaFrase, banda); }
+        cs.parentNode.insertBefore(banda, cs);
+      }
+    } else if (marcaFrase && marcaFrase.parentNode) {
+      var el = adentro || banda;
+      if (el) marcaFrase.parentNode.insertBefore(el, marcaFrase);
+      marcaFrase.remove(); marcaFrase = null;
+    }
+  }
+  var _aplicar = aplicar;
+  aplicar = function () { try { _aplicar(); } catch (e) {} try { fraseArriba(); } catch (e) {} };
   function arrancar() {
     if (!document.body) { setTimeout(arrancar, 60); return; }
     aplicar();
     addEventListener('message', function () { setTimeout(aplicar, 150); });
     var n = 0, t = setInterval(function () { aplicar(); if (++n > 40) clearInterval(t); }, 500);
+    setInterval(aplicar, 2000);
   }
   arrancar();
 })();

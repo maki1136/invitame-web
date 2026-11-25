@@ -57,7 +57,9 @@
         ['color', 'Color del texto de la hoja', 'colorTexto'], ['rango', 'Tamaño del texto de la hoja', 'tamTexto', 11, 24, 'px'],
         ['casilla', 'Sobre de adelante sin transparencia (la hoja no se ve a través)', 'bolsilloOpaco'],
         /* 9/11 (Maki): «una carta para ti con todo un texto y después el sobre: las dos cosas juntas no» */
-        ['casilla', 'Sin la frase arriba del sobre (sólo la carta)', 'sinFrase']])) },
+        ['casilla', 'Sin la frase arriba del sobre (sólo la carta)', 'sinFrase'],
+        /* ★ 25/11 (Jazmín, Diego y Sofía: «quiere la frase arriba de la carta pero no me deja subirla»). Lo hace /efectos/carta-con-frase.js */
+        ['casilla', 'La frase va ARRIBA de la carta (antes de «Con cariño · Una carta para ti»)', 'fraseArriba']])) },
     { key: 'scratch', tab: 'EFECTOS', casa: 'estilo-scratch', lugar: { abajo: true }, titulo: 'Raspadita · diseño (textos de arriba, fondo y colores)',
       campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la ayuda («Empieza por el día»)', 'colorTexto'], ['color', 'Color de los números que se revelan', 'colorNumeros']])) },
     { key: 'hospedaje', tab: 'LUGAR_VEST', casa: 'estilo-hospedaje', lugar: { antesDe: '#f-titulo-hoteles' }, titulo: 'Hospedaje · diseño (fondo, letra y colores)',
