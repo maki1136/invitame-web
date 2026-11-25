@@ -1207,6 +1207,21 @@ window.SOBRES_INVITAME = {
     luzFundido: 0.9
   },
 
+  /* 25/11/2026 · Óleo Azul con detalles en amarillo: el lacre amarillo girasol y
+     la hoja de oro más viva; las flores siguen azules. Pedido de Jazmín (clienta
+     monse-y-samuel): «un sobre con algunos detalles en amarillo, y que lo deje en
+     el catálogo de la plataforma». Teñido con código cuadro por cuadro (el lacre
+     se sigue mientras la solapa se abre), sin IA. */
+  'oleo-azul-amarillo-luz': {
+    nombre:     "Óleo Azul y Amarillo · lacre amarillo, se abre la solapa y sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/v1795622015/invitame/oleo-azul-amarillo/oleo-azul-amarillo-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/image/upload/v1795622016/invitame/oleo-azul-amarillo/oleo-azul-amarillo-sobre-luz.jpg",
+    color:      "#E6DDD2",
+    luz:        3.0,
+    luzColor:   "#FBF6EE",
+    luzFundido: 0.9
+  },
+
   'oleo-rose-luz': {
     nombre:     "Óleo Rosé · se abre la solapa y sale luz de adentro (video)",
     video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/q_auto,vc_h264:baseline:3.1/invitame/oleo/oleo-xa-sobre-luz-a.mp4",
