@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-24T23:34:09.710Z",
+ "cuando": "2026-11-25T00:04:26.659Z",
  "slug": "camila-y-tomas",
- "total": 880,
- "verde": 863,
- "amarillo": 2,
+ "total": 881,
+ "verde": 862,
+ "amarillo": 4,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -1342,7 +1342,7 @@
    "control": "Te esperamos => We look forward to seeing you Confirmar asistencia => RSVP",
    "tipo": "textarea",
    "guarda": true,
-   "dato": "fx.estiloSec.bilingue.trad",
+   "dato": "fx.bilingue.trad",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1738,7 +1738,7 @@
    "control": "(sin rótulo)",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.estiloSec.bilingue.on",
+   "dato": "fx.bilingue.on",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6417,8 +6417,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.confirmacion.sinDiseno",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6485,8 +6486,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -7155,6 +7157,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.pase.sinMesa",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-pase",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.pase.alFinal",
    "llega": true,
    "seVe": true,
    "estado": "verde"
