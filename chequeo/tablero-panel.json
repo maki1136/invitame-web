@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-25T16:10:18.931Z",
+ "cuando": "2026-11-25T17:06:40.501Z",
  "slug": "camila-y-tomas",
- "total": 885,
- "verde": 867,
- "amarillo": 3,
+ "total": 886,
+ "verde": 866,
+ "amarillo": 5,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -505,7 +505,7 @@
    "guarda": true,
    "dato": "fx.portadaSinFoto.muestra",
    "llega": false,
-   "seVe": false,
+   "seVe": true,
    "estado": "rojo",
    "nota": "se guarda pero no le llega a la miniatura"
   },
@@ -1734,17 +1734,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1948,6 +1937,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6351,9 +6351,8 @@
    "guarda": true,
    "dato": "fx.rsvp.general",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6429,8 +6428,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.confirmacion.sinDiseno",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6439,17 +6439,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "",
-   "control": "Activar",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "c_ocultar-formulario",
    "llega": true,
    "seVe": false,
    "estado": "amarillo",
@@ -6461,10 +6450,22 @@
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "c_habilitar-fecha-adelante-confirmaste",
+   "dato": "c_ocultar-formulario",
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "",
+   "control": "Activar",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "c_habilitar-fecha-adelante-confirmaste",
+   "llega": true,
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6485,9 +6486,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6508,8 +6508,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinDiseno",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -7113,8 +7114,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.tarjetaFina",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -9750,6 +9752,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.carta.sinFrase",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-carta",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.carta.fraseArriba",
    "llega": true,
    "seVe": true,
    "estado": "verde"
