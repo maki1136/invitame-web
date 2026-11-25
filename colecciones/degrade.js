@@ -372,7 +372,7 @@
       P + 'section.sec.verde{ background-color:' + MUSGO + '!important; }',
       /* el claro radial detrás del bloque de texto: el fondo va ADELANTE
          (paso .72) y sin esto los textos sueltos quedan sobre el agua */
-      P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 74% 52% at 50% 44%, rgba(20,37,28,.72) 0%, rgba(20,37,28,.44) 48%, rgba(20,37,28,0) 80%)!important; }'
+      P + '.frame > section.sec:not(#contacto-sec):not(.scratch-sec){ background-image:radial-gradient(ellipse 74% 52% at 50% 44%, rgba(20,37,28,calc(var(--inv-velo-col,.58) * 1.24)) 0%, rgba(20,37,28,calc(var(--inv-velo-col,.58) * .76)) 48%, rgba(20,37,28,0) 80%)!important; }'
     );
 
     /* ---- 2 · EL VELO: UNA SOLA CAPA, SOBRE EL FONDO ---------------------
