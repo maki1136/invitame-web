@@ -425,7 +425,7 @@
         '<button class="accion" id="cargarPase">+ Cargar pases</button>'+
         '<button class="lnk" id="bajar">Descargar lista</button>'+
       '</div>'+
-      (lista.length ? '<div class="desliza">Desliza la tabla de costado para ver más →</div>' : '')+
+      (lista.length ? '<div class="desliza">Desliza la tabla para ver más →</div>' : '')+
       '<div class="tablaWrap">'+
         (lista.length ? '<table><thead><tr>'+
           '<th>Invitado</th><th>Personas</th><th>Mesa</th><th class="ocultar-chico">WhatsApp</th><th class="ocultar-chico">Usos</th>'+
@@ -657,7 +657,7 @@
       '<div class="card" style="max-width:560px">'+
         '<h3 style="margin:0 0 6px">La puerta de tu fiesta</h3>'+
         '<p style="margin:0 0 14px;color:var(--text-secondary);font-size:13.5px">Envíale esto a quien vaya a controlar la entrada (el salón, el organizador o un familiar). '+
-          'Escanea el QR del pase de cada invitado con su celular. No necesita cuenta: solo el link y la clave, y únicamente ve tu fiesta.</p>'+
+          'Escanea el QR del pase de cada invitado con su celular. No necesita cuenta, le basta el link y la clave. Y no puede ver nada más que tu fiesta.</p>'+
         '<label style="font-size:12px;font-weight:600">Link del escáner</label>'+
         '<div style="font-family:monospace;font-size:13px;background:var(--bg-soft,#f5f1ea);padding:10px;border-radius:8px;overflow-wrap:anywhere;margin:4px 0 12px">'+esc(link).replace(/([?&])/g,'<wbr>$1')+'</div>'+
         '<label style="font-size:12px;font-weight:600">Clave de la puerta</label>'+
