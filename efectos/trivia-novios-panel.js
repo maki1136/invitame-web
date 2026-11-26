@@ -53,8 +53,8 @@
     function dibujar() {
       var h = '<div class="tn-tabs"><button data-p="resultados" class="' + (pest === 'resultados' ? 'on' : '') + '">Tabla de posiciones</button>' +
         '<button data-p="preguntas" class="' + (pest === 'preguntas' ? 'on' : '') + '">Preguntas</button></div>';
-      if (datos && datos.muestra) h += '<div class="card tn-gris" style="margin-bottom:12px">Esta es una <b>muestra de venta</b>: la trivia se puede jugar todas las veces que quieras, pero los puntajes no se guardan, así que la tabla queda vacía. En la invitación de un cliente, cada invitado que juega aparece acá.</div>';
-      if (datos && !datos.habilitada) h += '<div class="card tn-gris" style="margin-bottom:12px">La trivia está <b>apagada</b> en tu invitación: tus invitados todavía no la ven. Si la querés, pedile a tu diseñadora que la prenda.</div>';
+      if (datos && datos.muestra) h += '<div class="card tn-gris" style="margin-bottom:12px">Esta es una <b>muestra de venta</b>: la trivia se puede jugar todas las veces que quieras, pero los puntajes no se guardan, así que la tabla queda vacía. En la invitación de un cliente, cada invitado que juega aparece aquí.</div>';
+      if (datos && !datos.habilitada) h += '<div class="card tn-gris" style="margin-bottom:12px">La trivia está <b>apagada</b> en tu invitación: tus invitados todavía no la ven. Si la quieres, pídele a tu diseñadora que la prenda.</div>';
       h += pest === 'preguntas' ? htmlPreguntas() : htmlResultados();
       cont.innerHTML = h;
       [].forEach.call(cont.querySelectorAll('.tn-tabs button'), function (b) { b.onclick = function () { pest = b.getAttribute('data-p'); dibujar(); }; });
@@ -80,7 +80,7 @@
               '<td class="n">' + x.pts + '</td><td style="white-space:nowrap;color:#6b6058">' + esc(fecha(x.at)) + '</td>' +
               '<td><button class="tn-x" data-borrar="' + esc(x.clave) + '" data-nombre="' + esc(x.nombre) + '">Quitar</button></td></tr>';
           }).join('') + '</tbody></table></div>'
-          : '<div class="vacio">Todavía no jugó nadie. Cuando tus invitados respondan la trivia en la invitación, aparecen acá con sus puntos.</div>') +
+          : '<div class="vacio">Todavía no jugó nadie. Cuando tus invitados respondan la trivia en la invitación, aparecen aquí con sus puntos.</div>') +
         '<p class="tn-gris" style="margin:12px 0 0">Cada respuesta correcta suma 10 puntos. Cada invitado juega una sola vez. «Reiniciar» deja la tabla en cero para que todos puedan volver a jugar.</p></div>';
     }
     function conectarResultados() {
@@ -109,10 +109,10 @@
     /* ---------- preguntas ---------- */
     function htmlPreguntas() {
       return '<div class="card"><h3>Preguntas de tu trivia</h3>' +
-        '<p class="tn-gris" style="margin:0 0 12px">Escribí cada pregunta y sus opciones (de 2 a 4). Marcá el círculo de la respuesta correcta. Al guardar, tu invitación se actualiza sola.</p>' +
+        '<p class="tn-gris" style="margin:0 0 12px">Escribe cada pregunta y sus opciones (de 2 a 4). Marca el círculo de la respuesta correcta. Al guardar, tu invitación se actualiza sola.</p>' +
         preg.map(function (p, i) {
           return '<div class="tn-q"><div class="tn-h"><span>Pregunta ' + (i + 1) + '</span><button class="tn-x" data-qx="' + i + '">Quitar pregunta</button></div>' +
-            '<input type="text" data-q="' + i + '" maxlength="200" placeholder="Escribí la pregunta" value="' + esc(p.q) + '">' +
+            '<input type="text" data-q="' + i + '" maxlength="200" placeholder="Escribe la pregunta" value="' + esc(p.q) + '">' +
             p.o.map(function (o, j) {
               return '<div class="tn-op"><input type="radio" name="tnc' + i + '" data-c="' + i + '-' + j + '" title="Respuesta correcta"' + (p.c === j ? ' checked' : '') + '>' +
                 '<input type="text" data-o="' + i + '-' + j + '" maxlength="100" placeholder="Opción ' + (j + 1) + '" value="' + esc(o) + '">' +

@@ -157,10 +157,10 @@
         listo = r;
         return r.descargar().then(function (res) {
           b.disabled = false;
-          if (res === 'otra-vez') { b.textContent = 'Guardar el recuerdo'; nota.textContent = 'Ya está listo: tocá el botón para guardarlo.'; }
+          if (res === 'otra-vez') { b.textContent = 'Guardar el recuerdo'; nota.textContent = 'Ya está listo: toca el botón para guardarlo.'; }
           else { b.textContent = base; nota.textContent = 'Listo: ' + r.cuantas + ' imágenes (la hoja con todo y la invitación larga en partes).'; listo = null; }
         });
-      }).catch(function () { b.disabled = false; b.textContent = base; nota.textContent = 'No se pudo armar el recuerdo. ¿Está publicada la invitación? Probá de nuevo.'; });
+      }).catch(function () { b.disabled = false; b.textContent = base; nota.textContent = 'No se pudo armar el recuerdo. ¿Está publicada la invitación? Prueba de nuevo.'; });
     };
   }
 

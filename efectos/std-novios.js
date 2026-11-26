@@ -35,14 +35,14 @@
     vista.innerHTML =
       '<div class="card" style="max-width:760px">' +
         '<h3>Tu save the date</h3>' +
-        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5">Viene de regalo con tu invitación: una imagen con la portada de tu invitación para mandar por WhatsApp o subir a tus estados. Cambiá los textos que quieras y descargala.</p>' +
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5">Viene de regalo con tu invitación: una imagen con la portada de tu invitación para mandar por WhatsApp o subir a tus estados. Cambia los textos que quieras y descárgala.</p>' +
         '<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">' +
           '<div id="std-vista" style="width:180px;flex:none"></div>' +
           '<div style="flex:1;min-width:220px">' +
             CAMPOS.map(function (c) {
               return '<label for="std-' + c[0] + '">' + c[1] + '</label><input type="text" id="std-' + c[0] + '" data-std="' + c[0] + '" value="' + esc(mios[c[0]] || '') + '">';
             }).join('') +
-            '<p style="font-size:12px;color:var(--muted);margin:6px 0 12px;line-height:1.45">Si dejás un campo vacío, sale el texto en gris. Para que un renglón no salga, escribí un guion: -</p>' +
+            '<p style="font-size:12px;color:var(--muted);margin:6px 0 12px;line-height:1.45">Si dejas un campo vacío, sale el texto en gris. Para que un renglón no salga, escribe un guion: -</p>' +
             '<button class="btn" id="std-bajar" disabled style="max-width:240px">Descargar imagen</button>' +
             '<p id="std-nota" style="font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.45"></p>' +
           '</div>' +
@@ -66,8 +66,8 @@
         CAMPOS.forEach(function (c) { var i = $('std-' + c[0]); if (i) i.placeholder = base[c[0]] || r.auto[c[0]] || ''; });
         m.armar(juntar());
         $('std-bajar').disabled = false;
-      }, function () { $('std-nota').textContent = 'No pudimos abrir tu invitación. Probá de nuevo en un rato.'; });
-    }, function () { $('std-nota').textContent = 'No se pudo cargar. Revisá tu conexión.'; });
+      }, function () { $('std-nota').textContent = 'No pudimos abrir tu invitación. Prueba de nuevo en un rato.'; });
+    }, function () { $('std-nota').textContent = 'No se pudo cargar. Revisa tu conexión.'; });
 
     vista.oninput = function (e) {
       var k = e.target && e.target.dataset && e.target.dataset.std; if (!k) return;
@@ -83,9 +83,9 @@
       b.disabled = true; b.textContent = 'Armando la imagen…'; $('std-nota').textContent = '';
       m.descargar('save-the-date-' + ctx.slug + '.jpg').then(function (r) {
         b.disabled = false;
-        if (r === 'otra-vez') { b.textContent = 'Guardar la imagen'; $('std-nota').textContent = 'Ya está lista: tocá de nuevo para guardarla.'; }
+        if (r === 'otra-vez') { b.textContent = 'Guardar la imagen'; $('std-nota').textContent = 'Ya está lista: toca de nuevo para guardarla.'; }
         else { b.textContent = txt; }
-      }, function () { b.disabled = false; b.textContent = txt; $('std-nota').textContent = 'No se pudo armar la imagen. Probá de nuevo.'; });
+      }, function () { b.disabled = false; b.textContent = txt; $('std-nota').textContent = 'No se pudo armar la imagen. Prueba de nuevo.'; });
     };
   }
 

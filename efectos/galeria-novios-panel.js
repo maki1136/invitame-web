@@ -55,13 +55,13 @@
           '</div>' +
           paraLaFiesta() +
           (lista.length ? '<div class="gn-grilla">' + lista.map(tarjeta).join('') + '</div>'
-                        : '<div class="hint">Todavía no hay nada acá.</div>') +
+                        : '<div class="hint">Todavía no hay nada aquí.</div>') +
         '</div>';
     }
     /* ★ 30/10/2026 — Maki: «como vamos a ir nosotros a todas las fiestas».
        Los links que hacen falta EL DÍA (la pantalla del salón, el cartel con
        el QR para imprimir y el link para subir fotos) sólo estaban en el panel
-       del equipo. Ahora los novios los tienen acá y los mandan por WhatsApp. */
+       del equipo. Ahora los novios los tienen aquí y los mandan por WhatsApp. */
     function paraLaFiesta() {
       if (!gid) return '';
       var B = 'https://invitameok.net', g = encodeURIComponent(gid);
@@ -82,7 +82,7 @@
       var L = [
         ['Pantalla del salón', pantalla, 'Ábrela en la compu o TV del salón y toca «Empezar»: pasa las fotos que suben los invitados y cada tanto el QR para subir.', 'Pantalla del salón de nuestra fiesta: ' + pantalla],
         ['Cartel con el QR para imprimir', B + '/galeria/cartel.html?g=' + g, 'Para las mesas o la entrada: los invitados escanean y suben sus fotos.', 'Cartel con el QR de nuestra fiesta para imprimir: ' + B + '/galeria/cartel.html?g=' + g],
-        ['Link para que suban fotos', B + '/galeria/?g=' + g, 'El mismo del QR, para mandarlo por WhatsApp.', '¡Sube tus fotos de nuestra fiesta acá! ' + B + '/galeria/?g=' + g]
+        ['Link para que suban fotos', B + '/galeria/?g=' + g, 'El mismo del QR, para mandarlo por WhatsApp.', '¡Sube tus fotos de nuestra fiesta aquí! ' + B + '/galeria/?g=' + g]
       ];
       var bt = 'display:inline-block;width:auto;margin:0;text-decoration:none;padding:7px 14px;font-size:12.5px;border-radius:18px';
       var fila = function (tit, hint, botones) {
@@ -118,10 +118,10 @@
     }
     function cargar() {
       api(cfg, { accion: 'listar' }).then(function (j) {
-        if (!j || !j.ok) { cont.innerHTML = '<div class="card">No pudimos traer las fotos (' + esc(j && j.error) + '). Probá de nuevo en un rato.</div>'; return; }
+        if (!j || !j.ok) { cont.innerHTML = '<div class="card">No pudimos traer las fotos (' + esc(j && j.error) + '). Prueba de nuevo en un rato.</div>'; return; }
         if (j.sinGaleria) { cont.innerHTML = '<div class="card"><h3 style="margin:0 0 6px">Fotos de la fiesta</h3><div class="hint">Tu invitación todavía no tiene la galería de fotos de los invitados. Si la contrataste, escribinos y la activamos.</div></div>'; return; }
         items = j.items || []; gid = j.gid || ''; dibujar();
-      }).catch(function () { cont.innerHTML = '<div class="card">Sin conexión. Probá de nuevo.</div>'; });
+      }).catch(function () { cont.innerHTML = '<div class="card">Sin conexión. Prueba de nuevo.</div>'; });
     }
     cont.onclick = function (e) {
       var b = e.target.closest('button'); if (!b) return;
@@ -131,7 +131,7 @@
         var it = b.closest('.gn-it'); if (!it) return;
         b.disabled = true;
         api(cfg, { accion: 'estado', col: it.dataset.col, fid: it.dataset.fid, estado: b.dataset.gne }).then(function (j) {
-          if (!j || !j.ok) { b.disabled = false; alert('No se pudo guardar. Probá de nuevo.'); return; }
+          if (!j || !j.ok) { b.disabled = false; alert('No se pudo guardar. Prueba de nuevo.'); return; }
           items.forEach(function (x) { if (x.fid === it.dataset.fid && x.col === it.dataset.col) x.estado = j.estado; });
           dibujar();
         });
