@@ -1,5 +1,5 @@
 {
- "cuando": "2026-11-26T00:17:01.659Z",
+ "cuando": "2026-11-26T14:16:12.953Z",
  "slug": "camila-y-tomas",
  "total": 887,
  "verde": 869,
@@ -516,7 +516,7 @@
    "guarda": true,
    "dato": "fx.portadaSinFoto.muestra",
    "llega": false,
-   "seVe": false,
+   "seVe": true,
    "estado": "rojo",
    "nota": "se guarda pero no le llega a la miniatura"
   },
@@ -1745,6 +1745,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1948,17 +1959,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5940,9 +5940,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.confirmacion.fuente",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6451,8 +6450,9 @@
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6462,9 +6462,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6496,17 +6495,6 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "CONFIRMACIÓN",
-   "bloque": "casa-estilo-contacto",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.contacto.sinSub",
-   "llega": true,
    "seVe": false,
    "estado": "amarillo",
    "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
@@ -6517,10 +6505,22 @@
    "control": "(sin rótulo)",
    "tipo": "checkbox",
    "guarda": true,
-   "dato": "fx.estiloSec.contacto.sinDiseno",
+   "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-estilo-contacto",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.contacto.sinDiseno",
+   "llega": true,
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
