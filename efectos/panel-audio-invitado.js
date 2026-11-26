@@ -127,15 +127,15 @@
         var e = (j && j.error) || 'red';
         /* las claves son EXACTAMENTE las que devuelve pase-voz-guardar.php */
         throw new Error({
-          'clave':          'Tu clave no coincide. Volvé a entrar al panel.',
+          'clave':          'Tu clave no coincide. Vuelve a entrar al panel.',
           'invitado':       'No encontramos a esa persona en tu lista.',
           'invitado-ajeno': 'Esa persona no es de tu evento.',
           'audio-ajeno':    'Ese audio no salió de nuestro servidor.',
-          'faltan-datos':   'Faltaron datos. Recargá el panel y probá de nuevo.',
+          'faltan-datos':   'Faltaron datos. Recarga el panel y prueba de nuevo.',
           'muy-grande':     'El pedido salió demasiado grande.',
           'sin-config':     'El servidor no está configurado. Avisanos.',
-          'login':          'El servidor no pudo entrar a la base. Probá en un rato.',
-          'guardar':        'La base no aceptó el cambio. Probá en un rato.',
+          'login':          'El servidor no pudo entrar a la base. Prueba en un rato.',
+          'guardar':        'La base no aceptó el cambio. Prueba en un rato.',
           'metodo':         'El pedido salió mal armado.'
         }[e] || 'No se pudo guardar (' + e + ').');
       });
@@ -229,14 +229,14 @@
 
     revisarSiEstaPrendido().then(function (ok) {
       if (ok === false) {
-        avisoOff.innerHTML = '<p class="pv-apagado">El pase con voz esta apagado en tu invitacion, ' +
-          'asi que estos mensajes todavia no se escuchan. Pedile a quien te armo la invitacion que lo prenda.</p>';
+        avisoOff.innerHTML = '<p class="pv-apagado">El pase con voz está apagado en tu invitación, ' +
+          'así que estos mensajes todavía no se escuchan. Pídele a quien te armó la invitación que lo active.</p>';
       }
     });
 
     if (!navigator.mediaDevices || !window.MediaRecorder) {
       rec.style.opacity = '.5'; rec.style.pointerEvents = 'none';
-      est.textContent = 'Este navegador no puede grabar. Probá desde el celular, o mandanos el audio y lo cargamos nosotros.';
+      est.textContent = 'Este navegador no puede grabar. Prueba desde el celular, o envíanos el audio y lo cargamos nosotros.';
       return;
     }
 
@@ -264,12 +264,12 @@
           rec.style.display = 'none';
           quitar.style.display = 'none';
           fila.style.display = 'flex';
-          est.textContent = 'Escuchalo. Si te gusta, guardalo; si no, grabalo de nuevo.';
+          est.textContent = 'Escúchalo. Si te gusta, guárdalo; si no, grábalo de nuevo.';
         };
         grabadora.start();
         rec.textContent = 'Detener';
         rec.classList.add('grabando');
-        est.textContent = 'Grabando… hablá tranquilo.';
+        est.textContent = 'Grabando… habla tranquilo.';
         corte = setTimeout(parar, TOPE);          /* el minuto, solo */
       }).catch(function () {
         est.textContent = 'No nos dejó usar el micrófono. Se habilita en los permisos del navegador.';

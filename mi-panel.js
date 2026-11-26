@@ -158,7 +158,7 @@
       }
     }catch(e){
       console.error('sincronizar', e);
-      toast('Se guardo, pero la invitacion no se actualizo. Proba de nuevo.');
+      toast('Se guardó, pero la invitación no se actualizó. Prueba de nuevo.');
     }
     const otra = _sinc.pendiente;
     _sinc.pendiente = null;
@@ -243,7 +243,7 @@
               '<span class="chip '+e+'">'+(e==='si'?'Asistirá':'No asistirá')+'</span></div>'+
               (g.rsvpMensaje?'<div style="color:#6b6058;font-size:13px;font-style:italic;margin-top:3px">'+esc(g.rsvpMensaje)+'</div>':'')+
             '</div>';}).join('')+
-          '</div>':'<div class="vacio">Todavía no respondió nadie. Cuando tus invitados confirmen desde la invitación, aparecen acá.</div>')+
+          '</div>':'<div class="vacio">Todavía no respondió nadie. Cuando tus invitados confirmen desde la invitación, aparecen aquí.</div>')+
       '</div>';
     const b=$('btnBajarConf'); if(b) b.onclick=()=>bajarCSV('confirmaciones-'+SLUG+'.csv',
       [['Nombre y apellido','Asistirá','Personas','Mensaje']].concat(l.map(g=>{const e=estadoDe(g); return [g.nombre, e==='si'?'Sí':'No', e==='si'?Math.max(1,personasDe(g)):0, g.rsvpMensaje||''];})));
@@ -328,15 +328,15 @@
     const it = ITIN(), ms = ITIN_MS();
     const modo = String(it.modo||'');
     $('vista').innerHTML =
-      '<div class="card"><h3>Como se muestra el itinerario</h3>'+
+      '<div class="card"><h3>Cómo se muestra el itinerario</h3>'+
         '<div style="display:grid;gap:8px;margin:8px 0 4px">'+
           '<label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer">'+
             '<input type="radio" name="itmodo" value="texto" '+(modo==='texto'?'checked':'')+'>'+
-            '<span><b>Escrito</b><br><span style="color:#6b6058;font-size:12.5px">Cada momento con su hora. Se dibuja con el diseno de la invitacion y va apareciendo al bajar.</span></span>'+
+            '<span><b>Escrito</b><br><span style="color:#6b6058;font-size:12.5px">Cada momento con su hora. Se dibuja con el diseño de la invitación y va apareciendo al bajar.</span></span>'+
           '</label>'+
           '<label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer">'+
             '<input type="radio" name="itmodo" value="imagen" '+(modo==='imagen'?'checked':'')+'>'+
-            '<span><b>Una imagen</b><br><span style="color:#6b6058;font-size:12.5px">Suben su propio diseno. Reemplaza a la lista escrita.</span></span>'+
+            '<span><b>Una imagen</b><br><span style="color:#6b6058;font-size:12.5px">Suben su propio diseño. Reemplaza a la lista escrita.</span></span>'+
           '</label>'+
         '</div>'+
         (modo==='imagen'
@@ -350,7 +350,7 @@
           : '')+
       '</div>'+
       (modo==='imagen' ? '' :
-      '<div class="card"><h3>Los momentos del dia</h3>'+
+      '<div class="card"><h3>Los momentos del día</h3>'+
         '<div id="itLista">'+
           (ms.length ? ms.map((m,i)=>
             '<div style="display:grid;grid-template-columns:80px 1fr auto;gap:6px;margin-bottom:6px;align-items:start">'+
@@ -366,7 +366,7 @@
         '<button class="lnk" id="itMas" style="margin-top:8px">+ Agregar momento</button>'+
       '</div>')+
       '<div class="card"><button class="btn" id="itGuardar" style="max-width:200px">Guardar</button>'+
-        '<div style="color:#6b6058;font-size:12.5px;margin-top:8px">Cuando guardes, se actualiza solo en tu invitacion.</div>'+
+        '<div style="color:#6b6058;font-size:12.5px;margin-top:8px">Cuando guardes, se actualiza solo en tu invitación.</div>'+
       '</div>';
   }
 
@@ -458,8 +458,8 @@
         }).join('')+'</tbody></table>'
         : '<div class="vacio">No hay invitados que coincidan.</div>')+
       '</div>'+
-      '<div class="hint" style="margin-top:10px">Podés cambiar el número de mesa escribiéndolo directo en la tabla. '+
-        'Para cambiar nombres o cantidad de personas, escribile a quien te armó la invitación.</div>';
+      '<div class="hint" style="margin-top:10px">Puedes cambiar el número de mesa escribiéndolo directo en la tabla. '+
+        'Para cambiar nombres o cantidad de personas, escríbele a quien te armó la invitación.</div>';
   }
 
   // ---------- 3. MESAS ----------
@@ -597,7 +597,7 @@
             '<div class="txt">“'+esc(g.rsvpMensaje)+'”</div>'+
             '<div class="pie">'+esc(fechaCorta(g.rsvpAt))+'</div></div>';}).join('')+'</div>'
       : '<div class="card"><div class="vacio">Todavía no te dejaron mensajes.<br>'+
-        '<span style="font-size:12.5px">Aparecen acá cuando un invitado escribe algo al confirmar.</span></div></div>');
+        '<span style="font-size:12.5px">Aparecen aquí cuando un invitado escribe algo al confirmar.</span></div></div>');
   }
   function fechaCorta(ts){
     try{
@@ -661,7 +661,7 @@
           '<td class="lk">'+esc(linkDe(g))+'</td>'+
           '<td><div class="qrbox" data-qr="'+esc(linkDe(g))+'"></div></td></tr>').join('')+
       '</tbody></table></div>';
-    // los códigos se dibujan acá, en el navegador: no viaja nada a ningún servidor de afuera
+    // los códigos se dibujan aquí, en el navegador: no viaja nada a ningún servidor de afuera
     document.querySelectorAll('.qrbox').forEach(b=>{
       try{ new QRCode(b,{text:b.dataset.qr,width:130,height:130,correctLevel:QRCode.CorrectLevel.M}); }
       catch(e){ b.textContent='—'; }
@@ -670,7 +670,7 @@
 
   // ---------- 6. OPCIONES ----------
   // ---------- SAVE THE DATE (regalo) ----------
-  // La vista entera vive en /efectos/std-novios.js; acá sólo se le pasa lo suyo.
+  // La vista entera vive en /efectos/std-novios.js; aquí sólo se le pasa lo suyo.
   /* 23/10/2026: Invítame Live — los novios moderan su galería (efectos/galeria-novios-panel.js) */
   function vFotos(){
     if(!window.INVGAL_NOVIOS){ $('vista').innerHTML='<div class="card">Cargando…</div>'; setTimeout(()=>{ if(VISTA==='fotos') vFotos(); }, 400); return; }
@@ -703,10 +703,10 @@
         '<button class="accion gris" id="verInv2">Abrir mi invitación</button>'+
       '</div>'+
       '<div class="card" style="max-width:560px">'+
-        '<h3>Cosas que no podés cambiar desde acá</h3>'+
+        '<h3>Cosas que no puedes cambiar desde aquí</h3>'+
         '<p style="font-size:13px;color:#6b6058;margin:0;line-height:1.6">Los nombres de tus invitados, '+
           'cuántos lugares tiene cada uno, y el diseño de la invitación los maneja quien te la armó. '+
-          'Escribile y lo cambia en el momento. Vos manejás las mesas, que es lo que se mueve todo el tiempo.</p>'+
+          'Escríbele y lo cambia en el momento. Tú manejas las mesas, que es lo que se mueve todo el tiempo.</p>'+
       '</div>';
   }
 
@@ -770,7 +770,7 @@
      invitación tiene «Bloquear acceso a personas sin pase», su link ya no abre. */
   async function borrarPase(f,g){
     const q=s=>f.querySelector(s), err=q('#ep-err'), b=q('#ep-borrar');
-    if(!confirm('¿Borrar el pase de «'+(g.nombre||'este invitado')+'»?\n\nYa no podrá entrar en la puerta con su código. No se puede deshacer desde acá.')) return;
+    if(!confirm('¿Borrar el pase de «'+(g.nombre||'este invitado')+'»?\n\nYa no podrá entrar en la puerta con su código. No se puede deshacer desde aquí.')) return;
     b.disabled=true; b.textContent='Borrando…'; err.textContent='';
     try{
       const r=await fetch('/pase-datos.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:SLUG,clave:CLAVE,token:g.token,baja:true})});
@@ -1173,11 +1173,11 @@
   $('btnEntrar').addEventListener('click', async ()=>{
     const slug=limpiarSlug($('slug').value), clave=$('clave').value.trim();
     const err=$('errLogin');
-    if(!slug || !clave){ err.textContent='Completá la dirección de tu invitación y tu clave.'; return; }
+    if(!slug || !clave){ err.textContent='Completa la dirección de tu invitación y tu clave.'; return; }
     err.textContent='Buscando…';
     const ok = await hacerLogin(slug, clave);
     if(ok){ err.textContent=''; try{ localStorage.setItem('inv_panel_novios', JSON.stringify({slug,clave})); }catch(_){} }
-    else err.textContent='No encontramos ese panel. Revisá la dirección y la clave.';
+    else err.textContent='No encontramos ese panel. Revisa la dirección y la clave.';
   });
   $('clave').addEventListener('keydown', e=>{ if(e.key==='Enter') $('btnEntrar').click(); });
   $('btnRecargar').addEventListener('click', async ()=>{
