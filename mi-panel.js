@@ -529,16 +529,34 @@
     PANEL.asig = a; vMesas();
     await guardarPanel({asig:a});
   }
+  /* ★ 26/11/2026 — EN EL CELULAR SE ELIGE LA MESA CON BOTONES. Antes era un
+     prompt() del navegador («1) Mesa de honor … escribe el número»): en el
+     celular sale como ventana del sistema y confunde. Ahora es una hoja con un
+     botón por mesa, más «Sin mesa» y «Cancelar». */
   function elegirMesa(token){
     const ms = mesasDe();
-    if(!ms.length){ alert('Primero crea una mesa con «+ Nueva mesa».'); return; }
+    if(!ms.length){ toast('Primero crea una mesa con «+ Nueva mesa»'); return; }
     const g = GENTE.find(x=>x.token===token); if(!g) return;
-    const op = ms.map((m,i)=>(i+1)+') '+m.nombre).join('\n');
-    const r = prompt('¿A qué mesa va '+g.nombre+'?\n\n'+op+'\n\n0) Sacarlo de la mesa', '1');
-    if(r===null) return;
-    const n = parseInt(r,10);
-    if(n===0) return moverA(token,'');
-    if(n>=1 && n<=ms.length) moverA(token, ms[n-1].id);
+    const actual = mesaDe(g);
+    let hoja = document.getElementById('hojaMesa'); if(hoja) hoja.remove();
+    hoja = document.createElement('div'); hoja.id='hojaMesa';
+    hoja.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(40,12,20,.45);display:flex;align-items:flex-end;justify-content:center';
+    hoja.innerHTML='<div style="background:#fff;width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:18px 16px 22px;max-height:78vh;overflow:auto;box-shadow:0 -10px 30px rgba(0,0,0,.18)">'+
+      '<div style="font-weight:900;color:var(--uva);font-size:16px;margin:0 4px 4px">¿En qué mesa va?</div>'+
+      '<div style="color:#6b6058;font-size:13.5px;margin:0 4px 12px">'+esc(g.nombre)+' · '+personasDe(g)+(personasDe(g)===1?' persona':' personas')+'</div>'+
+      ms.map(m=>{ const n=sumaPers(enMesa(m.id)); const es=String(m.id)===String(actual);
+        return '<button data-elige="'+esc(m.id)+'" style="display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px;padding:13px 14px;border-radius:12px;border:1.5px solid '+(es?'var(--uva)':'#ece2d8')+';background:'+(es?'#f7eef0':'#fff')+';font:800 15px Nunito,sans-serif;color:#3a1218;cursor:pointer">'+
+          '<span>'+esc(m.nombre)+'</span><span style="font-weight:700;font-size:12.5px;color:#6b6058">'+n+' '+(n===1?'persona':'personas')+'</span></button>'; }).join('')+
+      '<div style="display:flex;gap:8px;margin-top:6px">'+
+        '<button data-elige="" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid #ece2d8;background:#fff;font:800 14px Nunito,sans-serif;color:#6b6058;cursor:pointer">Sin mesa</button>'+
+        '<button data-cerrar="1" style="flex:1;padding:12px;border-radius:12px;border:0;background:#f1ebe4;font:800 14px Nunito,sans-serif;color:#3a1218;cursor:pointer">Cancelar</button>'+
+      '</div></div>';
+    hoja.addEventListener('click', ev=>{
+      const b = ev.target.closest('button');
+      if(ev.target===hoja || (b && b.dataset.cerrar)){ hoja.remove(); return; }
+      if(b && b.dataset.elige!==undefined){ ev.stopPropagation(); hoja.remove(); moverA(token, b.dataset.elige); }
+    });
+    document.body.appendChild(hoja);
   }
   async function nuevaMesa(){
     const ms = mesasDe().slice();
