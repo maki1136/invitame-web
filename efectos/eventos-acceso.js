@@ -56,8 +56,12 @@
       if (tm) b.dataset.txtPuesto = '1'; else delete b.dataset.txtPuesto;
       if (t.nodeValue !== v) t.nodeValue = v;
     });
+    /* ★ 26/11 (CUHE): «Sin el botón de agendar» */
+    var sinAg = c.sinAgendar === true || c.sinAgendar === 'true' || c.sinAgendar === 1 || c.sinAgendar === '1';
     [1, 2, 3].forEach(function (n) {
       var a = document.getElementById('ev' + n + '-cal'); if (!a) return;
+      if (sinAg) { if (a.style.display !== 'none') { a.dataset.agOculto = '1'; a.style.setProperty('display', 'none', 'important'); } }
+      else if (a.dataset.agOculto) { a.style.removeProperty('display'); delete a.dataset.agOculto; }
       if (a.dataset.txtOrig === undefined) a.dataset.txtOrig = a.textContent;
       if (!ta && !a.dataset.txtPuesto) return;
       var v = ta || a.dataset.txtOrig;

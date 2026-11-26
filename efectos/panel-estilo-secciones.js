@@ -14,7 +14,9 @@
     /* ★ 19/11 (Jazmín, ana-patricia-y-aldo: «en el fondo de familia y hospedaje se ven las imágenes predeterminadas de la muestra, no sé cómo sacarlas») */
     ['casilla', 'Sin el dibujo del diseño en el fondo (flores, texturas de la colección): queda liso', 'sinDiseno']];
   var BASE_TIT = [['fuente', 'Tipografía del título', 'fuente'], ['rango', 'Tamaño del título', 'tamTitulo', 16, 64, 'px'],
-    ['color', 'Color del título', 'colorTitulo'], ['color', 'Color del subtítulo (arriba del título)', 'colorSub']];
+    ['color', 'Color del título', 'colorTitulo'], ['color', 'Color del subtítulo (arriba del título)', 'colorSub'],
+    /* ★ 26/11 (Dalia Ivonne): el subtítulo más grande */
+    ['rango', 'Tamaño del subtítulo (arriba del título)', 'tamSub', 10, 36, 'px']];
 
   /* ★ 13/11 (Jazmín): sin título / sin sobretítulo de fábrica, en todas las secciones */
   var SIN_TIT = [['casilla', 'Sin título (no mostrar el título de esta sección)', 'sinTitulo'],
@@ -30,6 +32,8 @@
         ['texto', 'Texto del botón del mapa (vacío = «Ver mapa»; ej. Cómo llegar)', 'txtMapa'],
         ['texto', 'Texto del botón de agendar (vacío = «Agendar»; ej. Agendar la fecha)', 'txtAgendar'],
         ['casilla', 'Botones uno debajo del otro (no uno al lado del otro)', 'apilados'],
+        /* ★ 26/11 (Jazmín, CUHE: «necesito sacar el botón de agendar, no lo quiere el cliente») */
+        ['casilla', 'Sin el botón de agendar', 'sinAgendar'],
         ['rango', 'Tamaño de la fecha y la hora (van en su renglón, en negrita)', 'tamFecha', 12, 34, 'px'],
         ['color', 'Color de la fecha y la hora', 'colorFecha']].concat(GEN()) },
     { key: 'dresscode', tab: 'LUGAR_VEST', casa: 'vestimenta', titulo: 'Vestimenta · diseño (fondo, letra, colores, sin título)', campos: GEN() },
@@ -71,6 +75,8 @@
     { key: 'itinerario', tab: 'LUGAR_VEST', casa: 'itinerario', titulo: 'Itinerario · colores por separado (horario, momento y descripción)',
       campos: SIN_TIT.concat(BASE_TIT).concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
         ['color', 'Color de la descripción', 'colorDesc'],
+        /* ★ 26/11 (Dalia Ivonne): el color de los iconitos */
+        ['color', 'Color de los iconos', 'colorIcono'],
         /* 12/11 (Jazmín): «cambiar tamaño y letra del itinerario, no el título, sí los detalles y horario» */
         ['fuente', 'Tipografía del horario y momento (11:00 am · Misa)', 'fuenteHora'], ['rango', 'Tamaño del horario y momento', 'tamHora', 10, 36, 'px'],
         ['fuente', 'Tipografía de la descripción', 'fuenteDesc'], ['rango', 'Tamaño de la descripción', 'tamDesc', 10, 30, 'px'],
@@ -172,6 +178,10 @@
     /* 11/11 (Maki): «poner un texto en los papeles blancos» de los sobres en video
        (Línea Roja). Lo pinta /efectos/sobre-papel.js, sólo si el sobre elegido trae
        el papel medido (`papel` en sobres/catalogo.js). Sin la casilla no cambia nada. */
+    /* ★ 26/11 (Jazmín, Dalia Ivonne: «¿se podrá en general hacer que los sobretítulos se hagan más grandes?»).
+       Vale para todas las secciones; el tamaño de cada sección, si se pone, gana. Lo aplica /efectos/estilo-secciones.js */
+    { key: 'todas', tab: 'PRINCIPAL', casa: 'diseno', titulo: 'Todas las secciones · subtítulos (el texto chico arriba de cada título)',
+      campos: [['rango', 'Tamaño de los subtítulos en toda la invitación', 'tamSub', 10, 36, 'px'], ['color', 'Color de los subtítulos en toda la invitación', 'colorSub']] },
     { key: 'sobreTexto', tab: 'PRINCIPAL', casa: 'diseno', titulo: 'Sobre · texto impreso en la tarjeta del video (White Swan, Monogramme, Pasarela)',
       campos: [['casilla', 'Mostrar el texto en la tarjeta en blanco del sobre', 'on'],
         ['texto', 'Línea de arriba (vacío = la frase del sobre, ej. «Estás invitado a»)', 'l1'],
