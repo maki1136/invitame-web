@@ -243,9 +243,12 @@ function modelo(ev){
   clabe:String(ev.regClabe||'').trim(),etq:ev.regEtqCuenta||'CLABE',titular:ev.regTitular||'',banco:ev.regBanco||'',
   wa:digitos(ev['c_numero-de-whatsapp'+w]||ev['c_numero-de-whatsapp']||ev['c_numero-de-whatsapp-2']),
   musica:/youtu\.?be/i.test(String(ev.musicaUrl||''))?'':String(ev.musicaUrl||'').trim(),
+  yt:ytId(ev.musicaUrl),
   tipo:String(ev.tipoEvento||'boda').toLowerCase(),
   maxP:Math.max(1,Math.min(20,+((ev.fx&&ev.fx.rsvp&&ev.fx.rsvp.maxPersonas)||L.maxPersonas)||6))};
 }
+/* 26/11/2026: la canción también puede ser un link de YouTube (como en las demás invitaciones). En iPhone, como siempre con YouTube, puede necesitar el toque en ♪. */
+function ytId(u){u=String(u||'');const m=u.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/);return m?m[1]:''}
 function nombresH(M){return esc(M.n1||'Nombre')+' <i>&amp;</i> '+esc(M.n2||'Nombre')}
 function fechaCorta(M){return M.f?String(M.f.getDate()).padStart(2,'0')+' · '+String(M.f.getMonth()+1).padStart(2,'0')+' · '+M.f.getFullYear():''}
 function paginasHtml(M){
@@ -449,9 +452,13 @@ addEventListener('pointerup',e=>{if(!ini)return;const r=libro.getBoundingClientR
 addEventListener('keydown',e=>{if(!apFin)return;if(e.key==='ArrowRight')adelante();if(e.key==='ArrowLeft')atras()});
 
 // música (sólo mp3/audio subido; nunca YouTube): arranca con el primer toque
-const audio=$('audio'),bm=$('musica');let sonando=false;
-function arranca(){if(sonando||PREVIEW||!audio.src)return;sonando=true;bm.style.display='block';audio.play().catch(()=>{})}
-bm.onclick=e=>{e.stopPropagation();if(audio.paused){audio.play();bm.textContent='♪'}else{audio.pause();bm.textContent='×'}};
+const audio=$('audio'),bm=$('musica');let sonando=false,YT='',ytOn=false;
+function ytPoner(on){let f=$('yt-musica');if(f)f.remove();ytOn=on;if(!on||!YT)return;
+ f=document.createElement('iframe');f.id='yt-musica';f.allow='autoplay; encrypted-media';f.setAttribute('aria-hidden','true');
+ f.style.cssText='position:fixed;left:-9999px;top:0;width:200px;height:120px;border:0;opacity:0;pointer-events:none';
+ f.src='https://www.youtube-nocookie.com/embed/'+YT+'?autoplay=1&loop=1&playlist='+YT+'&controls=0&playsinline=1';document.body.appendChild(f)}
+function arranca(){if(sonando||PREVIEW)return;if(YT){sonando=true;bm.style.display='block';ytPoner(true);return}if(!audio.src)return;sonando=true;bm.style.display='block';audio.play().catch(()=>{})}
+bm.onclick=e=>{e.stopPropagation();if(YT){ytPoner(!ytOn);bm.textContent=ytOn?'♪':'×';return}if(audio.paused){audio.play();bm.textContent='♪'}else{audio.pause();bm.textContent='×'}};
 
 /* ── armar (o rearmar, en el panel) el libro con los datos ── */
 let firma='';
@@ -487,6 +494,7 @@ function construir(ev){
  const lim=fechaDe(L.limite);$('r-limite').textContent=lim?'Por favor confirma antes del '+lim.getDate()+' de '+MES[lim.getMonth()]+' de '+lim.getFullYear()+'.':'Nos encantará saber si nos acompañas.';
  $('r-cant').innerHTML=Array.from({length:M.maxP},(_,i)=>'<option'+(i===Math.min(1,M.maxP-1)?' selected':'')+'>'+(i+1)+'</option>').join('');
  // música
+ YT=M.yt||'';
  if(M.musica&&audio.getAttribute('src')!==M.musica){audio.src=M.musica}
  if(!M.musica){audio.removeAttribute('src')}
  PAG.forEach(p=>{if(p.dataset.f)cargarFoto(p.dataset.f,p.dataset.p||'')});
