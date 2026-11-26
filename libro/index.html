@@ -249,7 +249,9 @@ function modelo(ev){
 }
 /* 26/11/2026: la canción también puede ser un link de YouTube (como en las demás invitaciones). En iPhone, como siempre con YouTube, puede necesitar el toque en ♪. */
 function ytId(u){u=String(u||'');const m=u.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/);return m?m[1]:''}
-function nombresH(M){return esc(M.n1||'Nombre')+' <i>&amp;</i> '+esc(M.n2||'Nombre')}
+/* 26/11: XV (o un solo nombre): sin «&» ni segundo nombre */
+function nombresH(M){return M.n2?esc(M.n1||'Nombre')+' <i>&amp;</i> '+esc(M.n2):esc(M.n1||'Nombre')}
+function nombresT(M){return M.n2?M.n1+' y '+M.n2:M.n1}
 function fechaCorta(M){return M.f?String(M.f.getDate()).padStart(2,'0')+' · '+String(M.f.getMonth()+1).padStart(2,'0')+' · '+M.f.getFullYear():''}
 function paginasHtml(M){
  const L=M.L,out=[];let num=0;const pie=()=>'<div class="num">— '+romano(++num)+' —</div>';
@@ -282,7 +284,7 @@ function paginasHtml(M){
  M.lug.forEach((l,i)=>{if(l.m)icos.push(ico(l.m,i?CASA:PIN,'Llegar a la '+esc(String(l.t).toLowerCase())))});
  if(f){const p=n=>String(n).padStart(2,'0'),g=d=>d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'T'+p(d.getHours())+p(d.getMinutes())+'00';
   const fin=new Date(f.getTime()+7*36e5),det=M.lug.map(l=>l.t+(l.h?' '+l.h:'')+' · '+l.n).join('. ');
-  icos.push(ico('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent((M.tipo==='boda'?'Boda de ':'')+M.n1+' y '+M.n2)+'&dates='+g(f)+'/'+g(fin)+'&details='+encodeURIComponent(det)+(M.lug[0]?'&location='+encodeURIComponent(M.lug[0].n+', '+M.lug[0].d):''),CAL,'Guardar la fecha'))}
+  icos.push(ico('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent((M.tipo==='boda'?'Boda de ':/^xv/.test(M.tipo)?'XV años de ':'')+nombresT(M))+'&dates='+g(f)+'/'+g(fin)+'&details='+encodeURIComponent(det)+(M.lug[0]?'&location='+encodeURIComponent(M.lug[0].n+', '+M.lug[0].d):''),CAL,'Guardar la fecha'))}
  if(M.liv||M.clabe||L.lluvia)icos.push(ico('',REG,'Mesa de regalos',' data-hoja="regalos"'));
  out.push('<section class="pag papel" data-id="lugares"><div class="centro" style="padding-top:9%">'+
   M.lug.map((l,i)=>(i?'<div class="raya" style="margin:.9em auto"></div>':'')+'<div class="lug"><div class="cap" style="color:var(--oro)">'+esc(l.t)+(l.h?' · '+l.h:'')+'</div><h3>'+esc(l.n)+'</h3><p>'+esc(l.d)+'</p></div>').join('')+
@@ -431,7 +433,7 @@ document.querySelectorAll('.hoja').forEach(h=>{h.addEventListener('click',e=>{if
 let rsv='si';document.querySelectorAll('.sino button').forEach(b=>b.onclick=()=>{rsv=b.dataset.v;document.querySelectorAll('.sino button').forEach(x=>x.classList.toggle('on',x===b));$('r-cant-l').style.display=rsv==='si'?'':'none'});
 $('r-env').onclick=e=>{e.preventDefault();if(!M)return;const n=$('r-nom').value.trim();if(!n){$('r-nom').focus();$('r-nom').style.borderColor='#b0654a';return}
  const ev=M.tipo==='boda'?'la boda':/^xv/.test(M.tipo)?'los XV años':'el evento';
- const t=rsv==='si'?`¡Hola! Soy ${n}. Confirmo que SÍ asistiré ${ev==='el evento'?'al evento':'a '+ev} de ${M.n1} y ${M.n2}. Seremos ${$('r-cant').value}.`:`¡Hola! Soy ${n}. Lamentablemente NO podré asistir ${ev==='el evento'?'al evento':'a '+ev} de ${M.n1} y ${M.n2}.`;
+ const t=rsv==='si'?`¡Hola! Soy ${n}. Confirmo que SÍ asistiré ${ev==='el evento'?'al evento':'a '+ev} de ${nombresT(M)}. Seremos ${$('r-cant').value}.`:`¡Hola! Soy ${n}. Lamentablemente NO podré asistir ${ev==='el evento'?'al evento':'a '+ev} de ${nombresT(M)}.`;
  const x=$('r-msj').value.trim();
  open('https://wa.me/'+M.wa+'?text='+encodeURIComponent(t+(x?`\nMensaje: ${x}`:'')),'_blank')};
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-copia]');if(!a)return;e.preventDefault();
@@ -470,7 +472,7 @@ function construir(ev){
  raiz.setProperty('--tela','url("'+(L.tela?cl(L.tela,1000):'/libro/img/tela.webp?v=1')+'")');
  const pf=L.portada&&L.portada.foto;
  raiz.setProperty('--fondo-pc',pf?'url("'+cl(pf,600)+'")':'none');
- document.title=(M.n1&&M.n2?M.n1+' & '+M.n2+' · ':'')+M.tit;
+ document.title=(M.n1&&M.n2?M.n1+' & '+M.n2+' · ':M.n1?M.n1+' · ':'')+M.tit;
  const viejaId=PAG[cur]&&PAG[cur].dataset.id;
  $('paginas').innerHTML=paginasHtml(M);
  PAG=[...document.querySelectorAll('#paginas .pag')];N=PAG.length;
@@ -482,7 +484,7 @@ function construir(ev){
  document.querySelectorAll('.ap-tit').forEach(e=>e.textContent=M.tit);
  document.querySelectorAll('.ap-nom').forEach(e=>e.innerHTML=nombresH(M));
  document.querySelectorAll('.ap-fecha').forEach(e=>e.textContent=fechaCorta(M));
- $('foil-1').textContent=M.n1;$('foil-2').textContent=M.n2;$('foil-anio').textContent=M.anio;
+ $('foil-1').textContent=M.n1;$('foil-2').textContent=M.n2;{const am=$('foil-2').previousElementSibling;if(am&&am.tagName==='EM')am.style.display=M.n2?'':'none';$('foil-2').style.display=M.n2?'':'none'}$('foil-anio').textContent=M.anio;
  const ai=$('ap-foto');if(pf)ai.src=cl(pf,800);ai.style.display=pf?'':'none';ai.parentNode.classList.toggle('abajo',!!(pf&&L.portada.nombres==='abajo'));
  // regalos
  const op=[];
