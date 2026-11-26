@@ -659,7 +659,7 @@
         '<p style="margin:0 0 14px;color:var(--text-secondary);font-size:13.5px">Envíale esto a quien vaya a controlar la entrada (el salón, el organizador o un familiar). '+
           'Escanea el QR del pase de cada invitado con su celular. No necesita cuenta: solo el link y la clave, y únicamente ve tu fiesta.</p>'+
         '<label style="font-size:12px;font-weight:600">Link del escáner</label>'+
-        '<div style="font-family:monospace;font-size:13px;background:var(--bg-soft,#f5f1ea);padding:10px;border-radius:8px;word-break:break-all;margin:4px 0 12px">'+esc(link)+'</div>'+
+        '<div style="font-family:monospace;font-size:13px;background:var(--bg-soft,#f5f1ea);padding:10px;border-radius:8px;overflow-wrap:anywhere;margin:4px 0 12px">'+esc(link).replace(/([?&])/g,'<wbr>$1')+'</div>'+
         '<label style="font-size:12px;font-weight:600">Clave de la puerta</label>'+
         '<div id="pu-k" style="font-family:monospace;font-size:26px;letter-spacing:.18em;font-weight:700;margin:4px 0 16px">'+esc(k)+'</div>'+
         '<div style="display:flex;gap:10px;flex-wrap:wrap">'+
