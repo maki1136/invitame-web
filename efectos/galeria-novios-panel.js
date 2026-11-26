@@ -82,7 +82,7 @@
       var L = [
         ['Pantalla del salón', pantalla, 'Ábrela en la compu o TV del salón y toca «Empezar»: pasa las fotos que suben los invitados y cada tanto el QR para subir.', 'Pantalla del salón de nuestra fiesta: ' + pantalla],
         ['Cartel con el QR para imprimir', B + '/galeria/cartel.html?g=' + g, 'Para las mesas o la entrada: los invitados escanean y suben sus fotos.', 'Cartel con el QR de nuestra fiesta para imprimir: ' + B + '/galeria/cartel.html?g=' + g],
-        ['Link para que suban fotos', B + '/galeria/?g=' + g, 'El mismo del QR, para mandarlo por WhatsApp.', '¡Sube tus fotos de nuestra fiesta aquí! ' + B + '/galeria/?g=' + g]
+        ['Link para que suban fotos', B + '/galeria/?g=' + g, 'El mismo del QR, para enviarlo por WhatsApp.', '¡Sube tus fotos de nuestra fiesta aquí! ' + B + '/galeria/?g=' + g]
       ];
       var bt = 'display:inline-block;width:auto;margin:0;text-decoration:none;padding:7px 14px;font-size:12.5px;border-radius:18px';
       var fila = function (tit, hint, botones) {

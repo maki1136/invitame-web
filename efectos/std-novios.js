@@ -35,7 +35,7 @@
     vista.innerHTML =
       '<div class="card" style="max-width:760px">' +
         '<h3>Tu save the date</h3>' +
-        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5">Viene de regalo con tu invitación: una imagen con la portada de tu invitación para mandar por WhatsApp o subir a tus estados. Cambia los textos que quieras y descárgala.</p>' +
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5">Viene de regalo con tu invitación: una imagen con la portada de tu invitación para enviar por WhatsApp o subir a tus estados. Cambia los textos que quieras y descárgala.</p>' +
         '<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">' +
           '<div id="std-vista" style="width:180px;flex:none"></div>' +
           '<div style="flex:1;min-width:220px">' +

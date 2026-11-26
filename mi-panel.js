@@ -498,7 +498,7 @@
         '<span><i style="background:var(--no)"></i>No asistirán</span>'+
         '<span><i style="background:var(--sin)"></i>Sin confirmar</span>'+
       '</div>'+
-      '<div class="aviso">Arrastra cada invitado a su mesa. Se guarda solo. '+
+      '<div class="aviso">Toca a un invitado para elegir su mesa (en la compu también puedes arrastrarlo). Se guarda solo. '+
         'Si una mesa se pasa de lugares, se pone roja.</div>'+
       '<div class="grillaMesas">'+
         tarjetaMesa('', '', sinMesa(), true, cap)+
@@ -710,7 +710,7 @@
     $('vista').innerHTML =
       '<div class="card" style="max-width:560px">'+
         '<h3>Mensaje para compartir</h3>'+
-        '<p style="font-size:13px;color:var(--muted);margin:0 0 10px">Es el texto que se manda junto '+
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 10px">Es el texto que se envía junto '+
           'con el link cuando tocas el botón de WhatsApp o de Telegram en la lista de invitados. Escríbelo como quieras: el link de cada invitado se agrega solo al final.</p>'+
         '<textarea id="msjComp" rows="3">'+esc(msj)+'</textarea>'+
         '<button class="btn" id="guardarOps" style="max-width:200px">Guardar</button>'+
