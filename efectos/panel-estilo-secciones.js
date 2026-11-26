@@ -77,6 +77,9 @@
         ['color', 'Color de la descripción', 'colorDesc'],
         /* ★ 26/11 (Dalia Ivonne): el color de los iconitos */
         ['color', 'Color de los iconos', 'colorIcono'],
+        /* ★ 26/11 (Paulette & German): la imagen del itinerario recta y sin marco */
+        ['casilla', 'Imagen del itinerario derecha (sin inclinación)', 'imgRecta'],
+        ['casilla', 'Imagen del itinerario sin marco ni sombra', 'imgSinBorde'],
         /* 12/11 (Jazmín): «cambiar tamaño y letra del itinerario, no el título, sí los detalles y horario» */
         ['fuente', 'Tipografía del horario y momento (11:00 am · Misa)', 'fuenteHora'], ['rango', 'Tamaño del horario y momento', 'tamHora', 10, 36, 'px'],
         ['fuente', 'Tipografía de la descripción', 'fuenteDesc'], ['rango', 'Tamaño de la descripción', 'tamDesc', 10, 30, 'px'],
