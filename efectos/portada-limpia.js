@@ -36,6 +36,12 @@
     try { return (((window.INVEV || {}).fx || {}).estiloSec || {}).portada || {}; } catch (e) { return {}; }
   }
   function si(v) { return v === true || v === 'true' || v === 1; }
+  /* lo mismo que window.INVCAMBIO, por si este archivo corre antes de que esté definido */
+  function nuevoDesde(desde) {
+    if (window.INVCAMBIO) return window.INVCAMBIO(null, desde);
+    var e = window.INVEV || {}; if (/[?&]preview=1/.test(location.search)) return true;
+    return e.estado !== 'entregada' || !!(e.guardadoPanel && String(e.guardadoPanel) >= desde);
+  }
   function hex(v) { v = String(v || '').trim(); return /^#[0-9a-f]{3,8}$/i.test(v) ? v : ''; }
   function fuente(v) { v = String(v || '').trim().replace(/["<>;{}]/g, ''); return v; }
 
@@ -108,7 +114,7 @@
       /* ★ 26/11 (Jazmín, Valentina Gpe: «por más que le saque el sombreado se sigue viendo así»): «sin sombra»
          dejaba un halo blanco que sobre fondos claros empasta la letra. Ahora es SIN sombra de verdad.
          Las entregadas que no se vuelven a guardar quedan como estaban (INVCAMBIO). */
-      (window.INVCAMBIO && window.INVCAMBIO(null, '2026-11-26T18:30:00Z') ? ' { text-shadow:none !important }'
+      (nuevoDesde('2026-11-26T18:30:00Z') ? ' { text-shadow:none !important }'
         : ' { text-shadow:0 0 1px rgba(255,255,255,.55), 0 0 12px rgba(255,255,255,.35) !important }'));
     if (si(c.cuentaVisible)) {
       var cc = hex(c.colorCuenta) || col || '';
