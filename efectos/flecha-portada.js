@@ -42,10 +42,26 @@
     document.head.appendChild(st);
   }
 
+  /* 26/11/2026 (Jazmín, Valentina Gpe: «La flechita… ¿podrías colocarla un
+     poquito más arriba? Para que la gente sepa que hay que deslizar») —
+     fx.flecha.alto: 'alta' la sube por encima de la barra del navegador y del
+     botón de WhatsApp. Sin dato queda donde estaba (entregadas iguales). */
+  var ID_ALTO = 'inv-flecha-alta';
+  function aplicarAlto(ev) {
+    var alta = cfg(ev).alto === 'alta';
+    var v = document.getElementById(ID_ALTO);
+    if (!alta) { if (v) v.remove(); return; }
+    if (v) return;
+    v = document.createElement('style'); v.id = ID_ALTO;
+    v.textContent = 'html body .portada .scrollcue, html body .portada .scrollcue[data-flecha]{bottom:max(13vh,96px)!important}';
+    document.head.appendChild(v);
+  }
+
   var ultima = null;
   function aplicar() {
     var ev = window.INVEV; if (!ev) return;
     aplicarPos(ev);
+    aplicarAlto(ev);
     var c = cfg(ev);
     var tam = TAM[c.tam] ? c.tam : 'media';
     var estilo = c.estilo === 'circulo' ? 'circulo' : 'simple';
@@ -99,6 +115,8 @@
     two.appendChild(select('Estilo', [['simple', 'Sola'], ['circulo', 'Dentro de un círculo']],
       c.estilo || 'simple', function (v) { datos(borrador() || d).estilo = v; }));
     caja.appendChild(two);
+    caja.appendChild(select('Altura', [['normal', 'Abajo (como siempre)'], ['alta', 'Más arriba (para que se vea que hay que deslizar)']],
+      c.alto === 'alta' ? 'alta' : 'normal', function (v) { var f = datos(borrador() || d); if (v === 'alta') f.alto = 'alta'; else delete f.alto; }));
     var t2 = document.createElement('div'); t2.textContent = 'Dónde va el nombre en la portada';
     t2.style.cssText = 'font-size:13px;font-weight:600;margin:12px 0 6px';
     caja.appendChild(t2);
