@@ -501,7 +501,7 @@
         '<span><i style="background:var(--no)"></i>No asistirán</span>'+
         '<span><i style="background:var(--sin)"></i>Sin confirmar</span>'+
       '</div>'+
-      '<div class="aviso">Toca a un invitado para elegir su mesa (en la compu también puedes arrastrarlo). Se guarda solo. '+
+      '<div class="aviso"><span class="solo-chico">Toca a un invitado para elegir su mesa (en la compu también puedes arrastrarlo).</span><span class="solo-grande">Arrastra cada invitado a su mesa (en el celular, lo tocas y eliges la mesa).</span> Se guarda solo. '+
         'Si una mesa se pasa de lugares, se pone roja.</div>'+
       '<div class="grillaMesas">'+
         tarjetaMesa('', '', sinMesa(), true, cap)+
