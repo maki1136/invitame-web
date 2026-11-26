@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-26T16:19:52.968Z",
+ "cuando": "2026-11-26T18:03:57.285Z",
  "slug": "camila-y-tomas",
- "total": 887,
- "verde": 868,
- "amarillo": 4,
+ "total": 893,
+ "verde": 871,
+ "amarillo": 2,
  "rojo": 15,
- "gris": 0,
+ "gris": 5,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -1745,6 +1745,17 @@
   },
   {
    "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1948,17 +1959,6 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4681,9 +4681,8 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -6473,9 +6472,8 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6508,9 +6506,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6520,8 +6517,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinDiseno",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -8780,6 +8778,52 @@
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.stdg.fuentes",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.stdg.luz",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
+   "control": "Diseño",
+   "tipo": "range",
+   "estado": "gris",
+   "nota": "no está"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "stdg-selector",
    "control": "Letra principal",
    "tipo": "color",
    "guarda": true,
@@ -8826,11 +8870,8 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "range",
-   "guarda": true,
-   "dato": "fx.stdg.luz",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "EFECTOS",
@@ -8849,7 +8890,7 @@
    "control": "Diseño",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.stdg.fuentes.nom",
+   "dato": "fx.stdg.fuentes.txt",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8859,11 +8900,8 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.stdg.fuentes.txt",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "estado": "gris",
+   "nota": "no está"
   },
   {
    "tab": "EFECTOS",
@@ -9806,6 +9844,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.scratch.sinDiseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-scratch",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.scratch.sinRaspar",
    "llega": true,
    "seVe": true,
    "estado": "verde"
