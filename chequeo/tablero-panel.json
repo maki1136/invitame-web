@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-26T18:20:53.347Z",
+ "cuando": "2026-11-26T19:28:58.912Z",
  "slug": "camila-y-tomas",
- "total": 888,
- "verde": 872,
- "amarillo": 1,
+ "total": 909,
+ "verde": 892,
+ "amarillo": 2,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -282,6 +282,28 @@
    "tipo": "text",
    "guarda": true,
    "dato": "fx.papeleria.color",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.todas.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-diseno",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.todas.colorSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2277,6 +2299,17 @@
    "tab": "LUGAR_VEST",
    "bloque": "casa-eventos",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.eventos.colorTexto",
@@ -2706,6 +2739,17 @@
    "tab": "LUGAR_VEST",
    "bloque": "casa-estilo-hospedaje",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.hospedaje.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-hospedaje",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.hospedaje.colorTexto",
@@ -3028,6 +3072,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.dresscode.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-vestimenta",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.dresscode.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3674,6 +3729,17 @@
    "tab": "LUGAR_VEST",
    "bloque": "casa-itinerario",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.itinerario.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-itinerario",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.itinerario.colorHora",
@@ -3699,6 +3765,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.itinerario.colorDesc",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-itinerario",
+   "control": "(sin rótulo)",
+   "tipo": "color",
+   "guarda": true,
+   "dato": "fx.estiloSec.itinerario.colorIcono",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -3949,6 +4026,17 @@
    "tab": "LUGAR_VEST",
    "bloque": "casa-estilo-clima",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.clima.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-estilo-clima",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.clima.colorTexto",
@@ -4018,6 +4106,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.estiloSec.eventos.apilados",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "LUGAR_VEST",
+   "bloque": "casa-eventos",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.eventos.sinAgendar",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4422,6 +4521,17 @@
    "tab": "GALERIA_INSTA_VID",
    "bloque": "casa-estilo-hashtag",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.hashtag.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-hashtag",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.hashtag.colorTexto",
@@ -4557,6 +4667,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.galeria.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-galeria",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.galeria.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4790,6 +4911,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.video.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "GALERIA_INSTA_VID",
+   "bloque": "casa-estilo-video",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.video.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5032,6 +5164,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.padres.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PERSONAS",
+   "bloque": "casa-estilo-padres",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.padres.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5419,6 +5562,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.regalos.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "REGALOS",
+   "bloque": "casa-regalo",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.regalos.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5980,6 +6134,17 @@
    "tab": "CONFIRMACIÓN",
    "bloque": "casa-confirmacion",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.confirmacion.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-confirmacion",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.confirmacion.colorTexto",
@@ -6292,6 +6457,17 @@
    "tab": "CONFIRMACIÓN",
    "bloque": "casa-estilo-contacto",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.contacto.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "CONFIRMACIÓN",
+   "bloque": "casa-estilo-contacto",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.contacto.colorTexto",
@@ -6472,8 +6648,9 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6494,9 +6671,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinTitulo",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6626,6 +6802,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.spotify.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "MUSIC_PASES",
+   "bloque": "casa-estilo-spotify",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.spotify.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -6935,8 +7122,9 @@
    "guarda": true,
    "dato": "fx.pasevoz.talon",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -9059,6 +9247,17 @@
    "tab": "EFECTOS",
    "bloque": "casa-estilo-filtro",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.filtro.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-filtro",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.filtro.colorTexto",
@@ -9158,6 +9357,17 @@
    "tab": "EFECTOS",
    "bloque": "casa-estilo-live",
    "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.live.tamSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-live",
+   "control": "(sin rótulo)",
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.live.colorTexto",
@@ -9249,6 +9459,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.carta.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-carta",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.carta.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -9370,6 +9591,17 @@
    "tipo": "color",
    "guarda": true,
    "dato": "fx.estiloSec.scratch.colorSub",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "casa-estilo-scratch",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.estiloSec.scratch.tamSub",
    "llega": true,
    "seVe": true,
    "estado": "verde"
