@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-25T20:25:56.077Z",
+ "cuando": "2026-11-26T00:17:01.659Z",
  "slug": "camila-y-tomas",
- "total": 883,
- "verde": 866,
- "amarillo": 2,
- "rojo": 11,
- "gris": 4,
+ "total": 887,
+ "verde": 869,
+ "amarillo": 3,
+ "rojo": 15,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -1745,17 +1745,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "ocultas-selector",
    "control": "Frase larga",
    "tipo": "checkbox",
@@ -1959,6 +1948,17 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -5940,8 +5940,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.confirmacion.fuente",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6197,9 +6198,8 @@
    "guarda": true,
    "dato": "c_numero-de-whatsapp-2",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6507,8 +6507,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -7921,6 +7922,55 @@
    "estado": "verde"
   },
   {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Paquete",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.paquete.plan",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde",
+   "nota": "dato interno: se guarda; no se ve en la invitación"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Save the Date (lo elige en el formulario)· aparece cuando cargás sus datos",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "Misión secreta (la invitación se juega)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras, fx.mision",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "PAQUETE",
+   "bloque": "paquete-selector",
+   "control": "La camarita (la cámara imprime el pase)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.paquete.extras, fx.camara",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
    "tab": "LIBRO",
    "bloque": "casa-libro",
    "control": "Esta invitación es un Libro",
@@ -8709,16 +8759,22 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "estado": "gris",
-   "nota": "una sola opción"
+   "guarda": true,
+   "dato": "fx.stdg.diseno",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "estado": "gris",
-   "nota": "una sola opción"
+   "guarda": true,
+   "dato": "fx.stdg.lay",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
@@ -8770,7 +8826,7 @@
    "control": "Diseño",
    "tipo": "range",
    "guarda": true,
-   "dato": "fx.stdg.foco",
+   "dato": "fx.stdg.luz",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8781,7 +8837,7 @@
    "control": "Diseño",
    "tipo": "lista",
    "guarda": true,
-   "dato": "fx.stdg.modoFoto",
+   "dato": "fx.stdg.fuentes",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -8791,16 +8847,22 @@
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "estado": "gris",
-   "nota": "una sola opción"
+   "guarda": true,
+   "dato": "fx.stdg.fuentes.nom",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Diseño",
    "tipo": "lista",
-   "estado": "gris",
-   "nota": "una sola opción"
+   "guarda": true,
+   "dato": "fx.stdg.fuentes.txt",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "EFECTOS",
@@ -9554,7 +9616,9 @@
    "dato": "fx.mision",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "EFECTOS",
@@ -9565,7 +9629,9 @@
    "dato": "fx.camara",
    "llega": true,
    "seVe": true,
-   "estado": "verde"
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   },
   {
    "tab": "EFECTOS",
