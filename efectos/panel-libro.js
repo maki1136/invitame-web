@@ -153,7 +153,7 @@
       '<label style="' + S.lab + '">«Confirmar asistencia» le llega a</label><select data-l="rsvpA" style="width:100%"><option value="1"' + (a === '1' ? ' selected' : '') + '>WhatsApp 1' + (d['c_texto-corto-boton-wsp'] ? ' (' + esc(d['c_texto-corto-boton-wsp']) + ')' : '') + '</option><option value="2"' + (a === '2' ? ' selected' : '') + '>WhatsApp 2' + (d['c_texto-corto-boton-wsp-2'] ? ' (' + esc(d['c_texto-corto-boton-wsp-2']) + ')' : '') + '</option></select>' +
       l('Confirmar antes del (opcional)', 'limite', 'date') + l('Máximo de personas en «¿Cuántos asistirán?»', 'maxPersonas', 'number', '6'));
     h += seccion('portada', '10 · La música',
-      k('Música (mp3)', 'musicaUrl', 'text', 'https://res.cloudinary.com/…/cancion.mp3', 'Sólo un archivo de audio (.mp3). De YouTube no: no suena en el iPhone.') +
+      k('Música (mp3 o YouTube)', 'musicaUrl', 'text', 'https://www.youtube.com/watch?v=… o un .mp3', 'Sirve un link de YouTube (como en las demás invitaciones) o un mp3. Con mp3 arranca sola también en el iPhone; con YouTube, en el iPhone puede hacer falta tocar ♪.') +
       '<input type="file" accept="audio/*,.mp3,.m4a" id="libro-mp3-in" hidden><button type="button" class="btn-c" id="libro-mp3" style="margin-top:6px">Subir el mp3</button> <span id="libro-mp3-e" style="' + S.ay + '"></span>');
     return h;
   }

@@ -42,14 +42,16 @@
        todos los ajustes»: el mismo diseño (fondo, letra, colores, sin título /
        sin sobretítulo) en TODAS las secciones que no lo tenían. */
     eventos:      { sel: '[data-sec="eventos"]', texto: ':scope > p, .evento .sub, .evento .addr, .evento h3, .evento .when, .evento p' },
-    dresscode:    { sel: '[data-sec="dresscode"]', texto: ':scope > p, #dc-texto' },
+    /* ★ 26/11 (Dalia Ivonne: «el texto descriptivo de la paleta de dress code no se puede modificar el color») */
+    dresscode:    { sel: '[data-sec="dresscode"]', texto: ':scope > p, #dc-texto', texto26: ':scope > p, #dc-texto, .col-dc-tit' },
     galeria:      { sel: '[data-sec="galeria"]', texto: ':scope > p' },
     video:        { sel: '[data-sec="video"]', texto: ':scope > p' },
     spotify:      { sel: '[data-sec="spotify"]', texto: ':scope > p' },
     regalos:      { sel: '[data-sec="regalos"]', texto: ':scope > p, #reg-texto' },
     confirmacion: { sel: '[data-sec="confirmacion"]', texto: ':scope > p' },
     clima:        { sel: '[data-sec="clima"]', texto: ':scope > p' },
-    contacto:     { sel: '[data-sec="contacto"]', texto: ':scope > p' },
+    /* ★ 26/11 (Jazmín, Dalia Ivonne: «el sector de colores y fuentes de contactos no es funcional»): la sección es #contacto-sec, sin data-sec */
+    contacto:     { sel: '[data-sec="contacto"]', sel26: '[data-sec="contacto"], #contacto-sec', texto: ':scope > p, #contacto-frase' },
     /* ★ 13/11 (Jazmín): el filtro y las fotos de la fiesta (Live) también */
     filtro:       { sel: '#filtro-sec', texto: 'p' },
     live:         { sel: '#gal-seccion', texto: 'p, .si-nota, li span, .si-paso span, .si-paso b' },
@@ -154,7 +156,10 @@
 
   function aplicar(key) {
     var e = ev(); if (!e) return;
-    var cfg = SEC[key], sec = document.querySelector(cfg.sel); if (!sec) return;
+    /* ★ 26/11: lo nuevo (contacto, texto de la paleta, itinerario centro, iconos) sólo en las guardadas desde hoy */
+    var n26 = window.INVCAMBIO ? window.INVCAMBIO(e, '2026-11-26T18:30:00Z') : false;
+    var cfg0 = SEC[key], cfg = n26 ? { sel: cfg0.sel26 || cfg0.sel, texto: cfg0.texto26 || cfg0.texto, bajada: cfg0.bajada } : cfg0;
+    var sec = document.querySelector(cfg.sel); if (!sec) return;
     var es = estiloDe(e, key);
     var bg = colorOk(es.fondo), img = /^https?:\/\//.test(String(es.imagen || '')) ? es.imagen : '';
     /* ★ 12/11 (Jazmín, xv-maria-ines: «Personas hace destellos entre rosa claro
@@ -207,7 +212,12 @@
     if (nuevaF && key === 'dresscode') [].forEach.call(sec.querySelectorAll('.col-dc-tit'), function (el) { poner(el, 'font-family', famF ? '"' + famF + '", serif' : ''); });
     poner(h, 'font-size', es.tamTitulo ? es.tamTitulo + 'px' : '');
     poner(h, 'color', colorOk(es.colorTitulo));
-    poner(k, 'color', colorOk(es.colorSub));
+    /* ★ 26/11 (Dalia Ivonne: «que los sobretítulos se hagan más grandes, en general»):
+       tamaño del subtítulo por sección, o para toda la invitación (estiloSec.todas) */
+    var gT = ((((e.fx || {}).estiloSec) || {}).todas) || {};
+    var tSubPx = n26 ? (parseInt(es.tamSub, 10) || parseInt(gT.tamSub, 10) || 0) : 0;
+    poner(k, 'font-size', tSubPx ? tSubPx + 'px' : '');
+    poner(k, 'color', colorOk(es.colorSub) || (n26 ? colorOk(gT.colorSub) : ''));
     var tx = colorOk(es.colorTexto), tam = es.tamTexto ? es.tamTexto + 'px' : '';
     todos(sec, cfg.texto).forEach(function (el) { poner(el, 'color', tx); poner(el, 'font-size', tam); });
     /* ★ 14/11 (Jazmín: «Ver hoteles» con letra blanca sobre crema, «eso no me
@@ -311,6 +321,13 @@
       todos(sec, '.it .it-hora').forEach(function (el) { poner(el, 'color', cHora); });
       todos(sec, '.it .it-sep').forEach(function (el) { poner(el, 'color', cHora); });
       todos(sec, '.it .it-nom').forEach(function (el) { poner(el, 'color', cNom); });
+      /* ★ 26/11 (Dalia Ivonne: «los iconitos no se pueden modificar de color y los textos no leen el cambio»):
+         los diseños de itinerario que usan .tl-hora / .tl-nom, y el color de los iconos */
+      if (n26) {
+        todos(sec, '.it .tl-hora').forEach(function (el) { poner(el, 'color', cHora || cNom || tx); });
+        todos(sec, '.it .tl-nom').forEach(function (el) { poner(el, 'color', cNom || cHora || tx); });
+        todos(sec, '.it .it-ico, .it .it-ico svg').forEach(function (el) { poner(el, 'color', colorOk(es.colorIcono)); });
+      }
       todos(sec, '.it .d').forEach(function (el) { poner(el, 'color', colorOk(es.colorDesc) || tx); });
       /* 12/11: tipografía y tamaño del horario/momento y de la descripción */
       if (es.fuenteHora) pedirFuente(es.fuenteHora);
