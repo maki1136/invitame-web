@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-26T16:19:53.297Z",
+ "cuando": "2026-11-26T16:44:25.408Z",
  "slug": "camila-y-tomas",
  "total": 887,
- "verde": 871,
- "amarillo": 1,
+ "verde": 870,
+ "amarillo": 2,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -4681,8 +4681,9 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -6461,8 +6462,9 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -7154,9 +7156,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.fondoEntero",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "MUSIC_PASES",
