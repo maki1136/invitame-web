@@ -202,7 +202,6 @@
       var t = e.target;
       if (t.dataset.l) { var v = t.value; if (t.dataset.l === 'maxPersonas') v = v ? Math.max(1, Math.min(20, parseInt(v, 10) || 0)) : ''; put(LB(), t.dataset.l, v); prev(); }
       else if (t.dataset.k) {
-        if (t.dataset.k === 'musicaUrl' && /youtu\.?be/i.test(t.value)) { t.style.borderColor = '#c0392b'; return; }
         t.style.borderColor = ''; compartido(t.dataset.k, t.value);
       }
     });
