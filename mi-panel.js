@@ -331,11 +331,11 @@
       '<div class="card"><h3>Cómo se muestra el itinerario</h3>'+
         '<div style="display:grid;gap:8px;margin:8px 0 4px">'+
           '<label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer">'+
-            '<input type="radio" name="itmodo" value="texto" '+(modo==='texto'?'checked':'')+'>'+
+            '<input type="radio" name="itmodo" value="texto" style="width:auto;flex:none;margin:3px 0 0" '+(modo==='texto'?'checked':'')+'>'+
             '<span><b>Escrito</b><br><span style="color:#6b6058;font-size:12.5px">Cada momento con su hora. Se dibuja con el diseño de la invitación y va apareciendo al bajar.</span></span>'+
           '</label>'+
           '<label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer">'+
-            '<input type="radio" name="itmodo" value="imagen" '+(modo==='imagen'?'checked':'')+'>'+
+            '<input type="radio" name="itmodo" value="imagen" style="width:auto;flex:none;margin:3px 0 0" '+(modo==='imagen'?'checked':'')+'>'+
             '<span><b>Una imagen</b><br><span style="color:#6b6058;font-size:12.5px">Suben su propio diseño. Reemplaza a la lista escrita.</span></span>'+
           '</label>'+
         '</div>'+
@@ -345,7 +345,7 @@
               '<input type="file" id="itFile" accept="image/*" style="display:none">'+
               '<div id="itPrev" style="margin-top:8px">'+
                 (it.imagen ? '<img src="'+esc(it.imagen)+'" style="max-height:120px;border-radius:10px;display:block">'
-                           : '<span class="vacio">Todavia no subieron la imagen.</span>')+
+                           : '<span class="vacio">Todavía no suben la imagen.</span>')+
               '</div></div>'
           : '')+
       '</div>'+
