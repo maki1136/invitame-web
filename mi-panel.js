@@ -64,6 +64,8 @@
         : (g.rsvp==='rechazado' ? 0 : num(g.pases));
   const estadoDe = g => g.rsvp==='confirmado' ? 'si' : (g.rsvp==='rechazado' ? 'no' : 'sin');
   const colorDe  = e => e==='si' ? 'var(--ok)' : (e==='no' ? 'var(--no)' : 'var(--sin)');
+  /* 26/11/2026: el botón de WhatsApp de cada fila con su logo (antes un 📱 gris que no se reconocía) */
+  const ICONO_WA = '<svg width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#25D366"/><path fill="#fff" d="M23.3 19.1c-.4-.2-2.3-1.1-2.6-1.3-.4-.1-.6-.2-.9.2s-1 1.3-1.2 1.5c-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.6.1-.3.1-.5 0-.7l-1.2-2.8c-.3-.7-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.4 1.3-1.4 3.2s1.4 3.7 1.6 4c.2.3 2.8 4.2 6.7 5.9.9.4 1.7.6 2.2.8.9.3 1.8.3 2.5.2.8-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5zM16 6.5C10.8 6.5 6.5 10.8 6.5 16c0 1.7.4 3.3 1.3 4.7L6.4 25.6l5-1.3c1.4.8 3 1.2 4.6 1.2 5.2 0 9.5-4.3 9.5-9.5S21.2 6.5 16 6.5z" fill-opacity="0"/></svg>';
   const linkDe   = g => location.origin + '/i/?e=' + encodeURIComponent(SLUG) + '&g=' + encodeURIComponent(g.token);
 
   function toast(txt){ const t=$('toast'); t.textContent=txt||'Guardado'; t.classList.add('ver');
@@ -423,6 +425,7 @@
         '<button class="accion" id="cargarPase">+ Cargar pases</button>'+
         '<button class="lnk" id="bajar">Descargar lista</button>'+
       '</div>'+
+      (lista.length ? '<div class="desliza">Desliza la tabla de costado para ver más →</div>' : '')+
       '<div class="tablaWrap">'+
         (lista.length ? '<table><thead><tr>'+
           '<th>Invitado</th><th>Personas</th><th>Mesa</th><th class="ocultar-chico">WhatsApp</th><th class="ocultar-chico">Usos</th>'+
@@ -451,7 +454,7 @@
                 'title="'+(g.pasevozAudio?'Ya tiene un mensaje de voz':'Grabarle un mensaje de voz')+'"></button></td>'
               : '')+
             '<td><div class="comp">'+
-              '<button data-wa="'+esc(g.token)+'" title="Enviar por WhatsApp">&#128241;</button>'+
+              '<button class="wa" data-wa="'+esc(g.token)+'" title="Enviar por WhatsApp" aria-label="Enviar por WhatsApp">'+ICONO_WA+'</button>'+
               '<button data-tg="'+esc(g.token)+'" title="Enviar por Telegram">&#9992;</button>'+
               '<button data-cp="'+esc(g.token)+'" title="Copiar el link">&#128203;</button>'+
             '</div></td></tr>';
@@ -592,7 +595,7 @@
 
   // ---------- 4. MENSAJES ----------
   function vMensajes(){
-    const con = GENTE.filter(g=>g.rsvpMensaje);
+    const con = GENTE.filter(g=>g.rsvpMensaje).sort((a,b)=>tiempo(b)-tiempo(a));  /* 26/11/2026: el más nuevo arriba */
     /* ★ 15/10/2026: arriba de los mensajes, las restricciones alimentarias */
     const res = GENTE.filter(g=>g.rsvpRestriccion);
     const cajaRes = res.length
@@ -653,8 +656,8 @@
     v.innerHTML=
       '<div class="card" style="max-width:560px">'+
         '<h3 style="margin:0 0 6px">La puerta de tu fiesta</h3>'+
-        '<p style="margin:0 0 14px;color:var(--text-secondary);font-size:13.5px">Mándale esto a quien vaya a controlar la entrada (el salón, el organizador o un familiar). '+
-          'Escanea el QR del pase de cada invitado con su celular. No necesita cuenta: sólo el link y la clave, y únicamente ve tu fiesta.</p>'+
+        '<p style="margin:0 0 14px;color:var(--text-secondary);font-size:13.5px">Envíale esto a quien vaya a controlar la entrada (el salón, el organizador o un familiar). '+
+          'Escanea el QR del pase de cada invitado con su celular. No necesita cuenta: solo el link y la clave, y únicamente ve tu fiesta.</p>'+
         '<label style="font-size:12px;font-weight:600">Link del escáner</label>'+
         '<div style="font-family:monospace;font-size:13px;background:var(--bg-soft,#f5f1ea);padding:10px;border-radius:8px;word-break:break-all;margin:4px 0 12px">'+esc(link)+'</div>'+
         '<label style="font-size:12px;font-weight:600">Clave de la puerta</label>'+
