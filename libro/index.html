@@ -143,6 +143,37 @@ body.video #libro{width:100vw;height:100vh;box-shadow:none}
 .tapa.abajo .nombres,.interior.abajo .nombres{top:auto!important;bottom:11%}
 .tapa.abajo .vel2,.interior.abajo .vel2{top:auto;bottom:0;height:55%;background:linear-gradient(rgba(20,12,6,0),rgba(20,12,6,.62))}
 .vacio{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:12%;color:#f3e6cf;font:500 18px/1.4 'Cormorant Garamond',serif}
+/* ── 26/11/2026 ESTILOS DEL LIBRO (Jazmín: «eso es muy boda, necesito más cuento de hadas» · «en las páginas también un poquito más de magia» · el de la mamá «más magia, más dulzura, más emoción»).
+   L.estilo: '' clásico (lo de siempre) · 'cuento' (lila, oro y destellos) · 'dulce' (rosa, flores y perlas). Sin dato no cambia nada. ── */
+html[data-estilo] .papel,html[data-estilo] .pag.sinfoto{background:radial-gradient(ellipse 58% 50% at 50% 50%,var(--papel-luz),rgba(255,255,255,0) 78%),var(--papel-img) center/cover,var(--papel)}
+html[data-estilo] .pag.papel .tit,html[data-estilo] .pag.sinfoto .tit{color:var(--tit)!important}
+html[data-estilo] .pag.papel .cap,html[data-estilo] .pag.sinfoto .cap{color:var(--oro)!important}
+html[data-estilo] .prologo,html[data-estilo] .pag.papel p,html[data-estilo] .lug h3{color:var(--tinta)}
+html[data-estilo] .firma{color:var(--tit)}
+html[data-estilo] .centro,html[data-estilo] .pie{z-index:2}
+html[data-estilo] .pag::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background-image:
+ radial-gradient(2.2px 2.2px at 12% 18%,var(--chispa),transparent 70%),radial-gradient(1.6px 1.6px at 83% 11%,var(--chispa),transparent 70%),
+ radial-gradient(2.6px 2.6px at 91% 42%,var(--chispa),transparent 70%),radial-gradient(1.8px 1.8px at 7% 57%,var(--chispa),transparent 70%),
+ radial-gradient(2px 2px at 24% 86%,var(--chispa),transparent 70%),radial-gradient(2.4px 2.4px at 76% 79%,var(--chispa),transparent 70%),
+ radial-gradient(1.5px 1.5px at 52% 6%,var(--chispa),transparent 70%),radial-gradient(1.7px 1.7px at 63% 93%,var(--chispa),transparent 70%),
+ radial-gradient(1.4px 1.4px at 38% 31%,var(--chispa),transparent 70%),radial-gradient(1.4px 1.4px at 68% 64%,var(--chispa),transparent 70%);
+ animation:chispea 3.4s ease-in-out infinite}
+html[data-estilo] .pag.foto::before{opacity:.8}
+@keyframes chispea{0%,100%{opacity:.35;transform:translateY(0)}50%{opacity:1;transform:translateY(-6px)}}
+html[data-estilo] .libro3d .foil{color:var(--foil);text-shadow:0 1px 0 var(--foil-luz),0 -1px 0 var(--foil-sombra),0 0 8px var(--foil-halo)}
+html[data-estilo] .libro3d .foil .raya{background:var(--foil);box-shadow:none}
+html[data-estilo] .libro3d .frente{background:linear-gradient(90deg,rgba(40,20,50,.22),rgba(0,0,0,0) 3.2%,rgba(255,255,255,.35) 4%,rgba(0,0,0,0) 6.5%),linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,0) 45%,rgba(40,20,50,.12)),var(--papel) var(--tela) center/cover}
+html[data-estilo] .libro3d .marco{border:1.5px solid var(--foil);outline:1px solid var(--foil);outline-offset:5px;box-shadow:0 0 14px var(--foil-halo)}
+html[data-estilo] .libro3d .cinta{background:var(--cinta)}
+html[data-estilo] .libro3d .guarda{background:var(--papel-img) center/cover,var(--papel)}
+html[data-estilo] #apertura .toca,html[data-estilo] #esquina span,html[data-estilo] .boton.oscuro{background:var(--boton)}
+html[data-estilo="cuento"]{--tinta:#4a3458;--tit:#5b3a73;--oro:#b48a3c;--papel:#f6f0f4;--papel-luz:rgba(255,252,248,.72);--chispa:rgba(236,196,108,.95);
+ --foil:#c9a14e;--foil-luz:rgba(255,238,190,.75);--foil-sombra:rgba(80,50,20,.55);--foil-halo:rgba(255,215,140,.35);--cinta:linear-gradient(90deg,#9c7bb8,#d9c3ec 50%,#9c7bb8);--boton:rgba(74,46,96,.9)}
+html[data-estilo="dulce"]{--tinta:#5a3a40;--tit:#8a4a5a;--oro:#b5737c;--papel:#fbf1ef;--papel-luz:rgba(255,251,249,.6);--chispa:rgba(255,236,236,.95);
+ --foil:#b76e79;--foil-luz:rgba(255,226,226,.8);--foil-sombra:rgba(90,40,50,.45);--foil-halo:rgba(255,190,200,.35);--cinta:linear-gradient(90deg,#d79aa5,#f6d5da 50%,#d79aa5);--boton:rgba(138,74,90,.9)}
+html[data-estilo="dulce"] .lacre{background:radial-gradient(circle at 35% 30%,#f6c3cb,#d77f8f 45%,#b05a6a 75%,#8e4352)}
+html[data-estilo="dulce"] .lacre span{color:#6e2a38;text-shadow:0 1px 0 rgba(255,220,225,.7)}
+html[data-estilo="dulce"] .pag.foto::before{opacity:.45}
 </style>
 </head>
 <body>
@@ -463,13 +494,17 @@ function arranca(){if(sonando||PREVIEW)return;if(YT){sonando=true;bm.style.displ
 bm.onclick=e=>{e.stopPropagation();if(YT){ytPoner(!ytOn);bm.textContent=ytOn?'♪':'×';return}if(audio.paused){audio.play();bm.textContent='♪'}else{audio.pause();bm.textContent='×'}};
 
 /* ── armar (o rearmar, en el panel) el libro con los datos ── */
-let firma='';
+let firma='';const CLD='https://res.cloudinary.com/oc8cgqt4/image/upload/invitame/';
 function construir(ev){
  const nuevo=modelo(ev);const f=JSON.stringify([nuevo.L,nuevo.n1,nuevo.n2,ev&&ev.fecha,nuevo.lug,nuevo.vest,nuevo.liv,nuevo.clabe,nuevo.titular,nuevo.banco,nuevo.wa,nuevo.musica,nuevo.maxP]);
  if(f===firma)return;firma=f;M=nuevo;const L=M.L;
  const raiz=document.documentElement.style;
- raiz.setProperty('--marmol','url("'+(L.marmol?cl(L.marmol,1400):'/libro/img/marmol.webp?v=1')+'")');
- raiz.setProperty('--tela','url("'+(L.tela?cl(L.tela,1000):'/libro/img/tela.webp?v=1')+'")');
+ const EST={cuento:'cuento',dulce:'dulce'}[L.estilo]||'';
+ if(EST)document.documentElement.setAttribute('data-estilo',EST);else document.documentElement.removeAttribute('data-estilo');
+ const DEF=EST?{marmol:CLD+'libro-estilos/'+EST+'-mesa.png',tela:CLD+'libro-estilos/'+EST+'-tela.png',papel:CLD+'libro-estilos/'+EST+'-papel.png'}:{};
+ raiz.setProperty('--marmol','url("'+(L.marmol?cl(L.marmol,1400):DEF.marmol?cl(DEF.marmol,1400):'/libro/img/marmol.webp?v=1')+'")');
+ raiz.setProperty('--tela','url("'+(L.tela?cl(L.tela,1000):DEF.tela?cl(DEF.tela,1000):'/libro/img/tela.webp?v=1')+'")');
+ raiz.setProperty('--papel-img',L.papel?'url("'+cl(L.papel,1080)+'")':DEF.papel?'url("'+cl(DEF.papel,1080)+'")':'none');
  const pf=L.portada&&L.portada.foto;
  raiz.setProperty('--fondo-pc',pf?'url("'+cl(pf,600)+'")':'none');
  document.title=(M.n1&&M.n2?M.n1+' & '+M.n2+' · ':M.n1?M.n1+' · ':'')+M.tit;

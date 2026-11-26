@@ -101,6 +101,10 @@
     h += seccion('apertura', '1 · La tapa (apertura)',
       '<div class="two" style="display:flex;gap:8px"><div style="flex:1">' + k('Nombre 1', 'n1', 'text', 'Ximena') + '</div><div style="flex:1">' + k('Nombre 2', 'n2', 'text', 'Diego') + '</div></div>' +
       '<div style="' + S.ay + '">Son los nombres de la invitación (los mismos de PRINCIPAL). El año en la tapa sale solo de la fecha: <b>' + anio + '</b>.</div>' +
+      '<label style="' + S.lab + '">El estilo del libro</label><select data-l="estilo" style="width:100%">' +
+        [['', 'Clásico (lino blanco y mármol)'], ['cuento', 'Cuento de hadas (lila, oro y destellos · XV)'], ['dulce', 'Dulce (rosa, flores y perlas · carta de mamá)']]
+          .map(function (o) { return '<option value="' + o[0] + '"' + ((L.estilo || '') === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select>' +
+      '<div style="' + S.ay + '">Cambia la mesa de la apertura, la tela y las letras de la tapa, el papel de las páginas y les suma destellos. Si subes un fondo o una tela propios, mandan esos.</div>' +
       fondo('El fondo (mármol con flores)', 'marmol') + fondo('La tela de la tapa (lino blanco)', 'tela'));
     h += seccion('portada', '2 · La portada',
       foto('Foto de los novios', 'portada', 'La foto principal, vertical. Es también la que se ve al compartir el link.') +
