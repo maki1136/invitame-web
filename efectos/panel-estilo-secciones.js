@@ -61,7 +61,9 @@
         /* ★ 25/11 (Jazmín, Diego y Sofía: «quiere la frase arriba de la carta pero no me deja subirla»). Lo hace /efectos/carta-con-frase.js */
         ['casilla', 'La frase va ARRIBA de la carta (antes de «Con cariño · Una carta para ti»)', 'fraseArriba']])) },
     { key: 'scratch', tab: 'EFECTOS', casa: 'estilo-scratch', lugar: { abajo: true }, titulo: 'Raspadita · diseño (textos de arriba, fondo y colores)',
-      campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la ayuda («Empieza por el día»)', 'colorTexto'], ['color', 'Color de los números que se revelan', 'colorNumeros']])) },
+      campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color de la ayuda («Empieza por el día»)', 'colorTexto'], ['color', 'Color de los números que se revelan', 'colorNumeros'],
+        /* ★ 26/11 (Jazmín, Ana Patricia & Aldo: «no quiere la raspadita, pero quiere que se vea así la fecha»). Lo hace /efectos/fecha-sin-raspar.js */
+        ['casilla', 'La fecha se ve sin raspar (sin «Raspa para revelar»)', 'sinRaspar']])) },
     { key: 'hospedaje', tab: 'LUGAR_VEST', casa: 'estilo-hospedaje', lugar: { antesDe: '#f-titulo-hoteles' }, titulo: 'Hospedaje · diseño (fondo, letra y colores)',
       campos: SIN_TIT.concat(BASE_FONDO.concat(BASE_TIT, [['color', 'Color del texto', 'colorTexto'], ['rango', 'Tamaño del texto', 'tamTexto', 11, 24, 'px'],
         ['color', 'Color del nombre del hotel', 'colorNombre'], ['color', 'Color de la descripción del hotel', 'colorDesc'],
