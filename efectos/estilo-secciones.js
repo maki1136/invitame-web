@@ -323,6 +323,17 @@
       todos(sec, '.it .it-nom').forEach(function (el) { poner(el, 'color', cNom); });
       /* ★ 26/11 (Dalia Ivonne: «los iconitos no se pueden modificar de color y los textos no leen el cambio»):
          los diseños de itinerario que usan .tl-hora / .tl-nom, y el color de los iconos */
+      /* ★ 26/11 (Jazmín, Paulette & German: «necesito que el itinerario quede recto… y si se puede sacarle los bordes»):
+         la imagen del itinerario sin inclinación y sin el marco tipo polaroid (opt-in) */
+      var itImg = document.getElementById('it-img');
+      if (itImg) {
+        var sii = function (v) { return v === true || v === 'true' || v === 1 || v === '1'; };
+        poner(itImg, 'transform', sii(es.imgRecta) ? 'none' : '');
+        poner(itImg, 'padding', sii(es.imgSinBorde) ? '0' : '');
+        poner(itImg, 'background', sii(es.imgSinBorde) ? 'transparent' : '');
+        poner(itImg, 'box-shadow', sii(es.imgSinBorde) ? 'none' : '');
+        poner(itImg, 'border', sii(es.imgSinBorde) ? '0' : '');
+      }
       if (n26) {
         todos(sec, '.it .tl-hora').forEach(function (el) { poner(el, 'color', cHora || cNom || tx); });
         todos(sec, '.it .tl-nom').forEach(function (el) { poner(el, 'color', cNom || cHora || tx); });
