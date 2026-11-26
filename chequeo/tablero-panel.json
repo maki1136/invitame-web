@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-26T15:58:43.173Z",
+ "cuando": "2026-11-26T16:19:53.297Z",
  "slug": "camila-y-tomas",
  "total": 887,
- "verde": 870,
- "amarillo": 2,
+ "verde": 871,
+ "amarillo": 1,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -6461,9 +6461,8 @@
    "guarda": true,
    "dato": "c_ocultar-formulario",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6506,9 +6505,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.contacto.sinSub",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -7156,8 +7154,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.pase.fondoEntero",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
@@ -9608,6 +9607,32 @@
   },
   {
    "tab": "EFECTOS",
+   "bloque": "mision-selector",
+   "control": "Prender la misión en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.mision",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "EFECTOS",
+   "bloque": "camara-selector",
+   "control": "Prender la camarita en esta invitación",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.camara",
+   "llega": true,
+   "seVe": true,
+   "estado": "rojo",
+   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
+   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
+  },
+  {
+   "tab": "EFECTOS",
    "bloque": "stdg-selector",
    "control": "Marco fino",
    "tipo": "checkbox",
@@ -9781,32 +9806,6 @@
    "llega": true,
    "seVe": true,
    "estado": "verde"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "mision-selector",
-   "control": "Prender la misión en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.mision",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.mision (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
-  },
-  {
-   "tab": "EFECTOS",
-   "bloque": "camara-selector",
-   "control": "Prender la camarita en esta invitación",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.camara",
-   "llega": true,
-   "seVe": true,
-   "estado": "rojo",
-   "duplicado": "fx.camara (PAQUETE + EFECTOS)",
-   "nota": "DUPLICADO: el mismo dato se toca desde dos pestañas"
   }
  ]
 }
