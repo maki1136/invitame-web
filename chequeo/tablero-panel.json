@@ -1,11 +1,11 @@
 {
- "cuando": "2026-11-26T22:22:56.782Z",
+ "cuando": "2026-11-26T23:36:03.693Z",
  "slug": "camila-y-tomas",
- "total": 919,
- "verde": 892,
- "amarillo": 4,
+ "total": 912,
+ "verde": 897,
+ "amarillo": 0,
  "rojo": 15,
- "gris": 8,
+ "gris": 0,
  "items": [
   {
    "tab": "PRINCIPAL",
@@ -544,46 +544,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "color",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "flecha-selector",
    "control": "Tamaño",
    "tipo": "lista",
@@ -607,6 +567,17 @@
   {
    "tab": "PRINCIPAL",
    "bloque": "flecha-selector",
+   "control": "Altura",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.flecha.alto",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "flecha-selector",
    "control": "Lugar",
    "tipo": "lista",
    "guarda": true,
@@ -622,17 +593,6 @@
    "tipo": "textarea",
    "guarda": true,
    "dato": "frase",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-frase",
-   "control": "(sin rótulo)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.frase.altura",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -787,6 +747,61 @@
    "tipo": "lista",
    "guarda": true,
    "dato": "fx.frase.peso",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-frase",
+   "control": "(sin rótulo)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.frase.altura",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Qué foto usar",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.origen",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Link de la imagen",
+   "tipo": "text",
+   "guarda": true,
+   "dato": "fx.cierre.url",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Ubicación del texto del cierre",
+   "tipo": "lista",
+   "guarda": true,
+   "dato": "fx.cierre.pos",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "Tamaño de la frase del cierre (100%)",
+   "tipo": "range",
+   "guarda": true,
+   "dato": "fx.cierre.textoTam",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1255,50 +1270,6 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Qué foto usar",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.origen",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Link de la imagen",
-   "tipo": "text",
-   "guarda": true,
-   "dato": "fx.cierre.url",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Ubicación del texto del cierre",
-   "tipo": "lista",
-   "guarda": true,
-   "dato": "fx.cierre.pos",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "Tamaño de la frase del cierre (100%)",
-   "tipo": "range",
-   "guarda": true,
-   "dato": "fx.cierre.textoTam",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Frase final:",
    "tipo": "textarea",
@@ -1664,35 +1635,22 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "estado": "gris",
-   "nota": "no está"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "frase-ajustes",
    "control": "Poner comillas “ ” alrededor de la frase",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.frase.sinComillas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "cierre-ajustes",
+   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.cierre.fraseAbajo",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -1809,154 +1767,11 @@
   },
   {
    "tab": "PRINCIPAL",
-   "bloque": "cierre-ajustes",
-   "control": "La frase final («¡Gracias!») abajo del texto final, no arriba",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.cierre.fraseAbajo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
    "bloque": "",
    "control": "Activar",
    "tipo": "checkbox",
    "guarda": true,
    "dato": "c_deshabilitar-seccion-frase-final",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-bilingue",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.bilingue.on",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinVelo",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sombra",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinOscurecer",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinSombra",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.cuentaVisible",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinKick",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinNombres",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.sinCuenta",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.nombresComoEstan",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "casa-estilo-portada",
-   "control": "(sin rótulo)",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.estiloSec.portada.fechaVer",
-   "llega": true,
-   "seVe": true,
-   "estado": "verde"
-  },
-  {
-   "tab": "PRINCIPAL",
-   "bloque": "novedades-selector",
-   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
-   "tipo": "checkbox",
-   "guarda": true,
-   "dato": "fx.novedades",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -2166,6 +1981,138 @@
    "tipo": "checkbox",
    "guarda": true,
    "dato": "fx.ocultas",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "novedades-selector",
+   "control": "Novedades de la plataformaEl pie nuevo «¿Quieres una invitación como esta?», la frase larg",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.novedades",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-bilingue",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.bilingue.on",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinVelo",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sombra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinOscurecer",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinSombra",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.cuentaVisible",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinKick",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinNombres",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.sinCuenta",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.nombresComoEstan",
+   "llega": true,
+   "seVe": true,
+   "estado": "verde"
+  },
+  {
+   "tab": "PRINCIPAL",
+   "bloque": "casa-estilo-portada",
+   "control": "(sin rótulo)",
+   "tipo": "checkbox",
+   "guarda": true,
+   "dato": "fx.estiloSec.portada.fechaVer",
    "llega": true,
    "seVe": true,
    "estado": "verde"
@@ -4888,9 +4835,8 @@
    "guarda": true,
    "dato": "c_texto-boton-ver-video",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "GALERIA_INSTA_VID",
@@ -6702,9 +6648,8 @@
    "guarda": true,
    "dato": "fx.estiloSec.confirmacion.sinDiseno",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6714,9 +6659,8 @@
    "guarda": true,
    "dato": "c_habilitar-aviso-por-mail",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6737,9 +6681,8 @@
    "guarda": true,
    "dato": "c_habilitar-fecha-adelante-confirmaste",
    "llega": true,
-   "seVe": false,
-   "estado": "amarillo",
-   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
+   "seVe": true,
+   "estado": "verde"
   },
   {
    "tab": "CONFIRMACIÓN",
