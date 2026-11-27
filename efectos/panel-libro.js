@@ -135,7 +135,8 @@
       foto('Foto del anillo o de la pedida', 'anillo') + l('Frase', 'anillo.frase', 'text', 'Dijo «sí» antes de que terminara la pregunta.', 'Sin foto, la página no aparece.'));
     h += seccion('fecha', '6 · La fecha',
       '<div style="' + S.ay + '">El lacre con las iniciales (<b>' + esc(((d.n1 || ' ')[0] + (d.n2 || ' ')[0]).toUpperCase()) + '</b>), el día, la hora y la cuenta regresiva salen solos de los nombres y de la fecha.</div>' +
-      l('Encima', 'fechaKick', 'text', 'Y ahora') + l('Frase', 'fechaTit', 'text', 'el capítulo que queremos escribir contigo'));
+      l('Encima', 'fechaKick', 'text', 'Y ahora') + l('Frase', 'fechaTit', 'text', 'el capítulo que queremos escribir contigo') +
+      '<label style="display:flex;gap:6px;align-items:center;font-size:12px;margin-top:10px"><input type="checkbox" data-lc="sinCuenta"' + (L.sinCuenta ? ' checked' : '') + '> Sin la cuenta regresiva (días, horas, minutos y segundos)</label>');
     h += seccion('lugares', '7 · Los lugares y la vestimenta',
       k('Ceremonia · nombre del lugar', 'ev1sub', 'text', 'Templo de la Concepción') + k('Ceremonia · dirección', 'ev1dir', 'text', 'Canal s/n, Centro') +
       k('Ceremonia · link de Google Maps', 'ev1maps', 'text', 'https://maps.app.goo.gl/…', 'Vacío, se busca por el nombre y la dirección.') +

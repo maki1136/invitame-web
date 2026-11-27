@@ -47,7 +47,8 @@ html,body{height:100%;overflow:hidden;background:#15100c;font-family:'Cormorant 
  clip-path:polygon(50% 0,61% 4%,72% 2%,80% 10%,91% 13%,93% 24%,100% 33%,97% 45%,100% 56%,94% 66%,95% 78%,85% 85%,79% 95%,67% 95%,57% 100%,46% 97%,35% 100%,26% 93%,15% 91%,10% 80%,2% 72%,4% 60%,0 49%,4% 38%,2% 26%,11% 18%,15% 7%,27% 6%,38% 1%)}
 .lacre::before{content:"";position:absolute;inset:12%;border-radius:50%;border:1.5px solid rgba(255,235,190,.55);box-shadow:inset 0 0 0 4px rgba(120,80,25,.25)}
 .lacre span{font-family:'Pinyon Script',cursive;font-size:30px;color:#6e4a1a;text-shadow:0 1px 0 rgba(255,236,190,.7),0 -1px 0 rgba(70,40,10,.5)}
-.cuenta{display:flex;justify-content:center;gap:1.1em;margin-top:1.2em}
+.cuenta{display:flex;justify-content:center;gap:.9em;margin-top:1.2em}
+.cuenta strong{font-variant-numeric:tabular-nums}
 .cuenta div{min-width:3em}.cuenta strong{display:block;font-size:clamp(24px,7vw,32px);font-weight:500;line-height:1}.cuenta small{font-family:'Cormorant SC';font-size:10.5px;letter-spacing:.2em;color:var(--oro)}
 /* detalles */
 .lug h3{font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(28px,8.5vw,38px);line-height:1.05;margin:.1em 0 .05em}
@@ -413,9 +414,12 @@ function hoja(k,t){const front=PAG[k], dor=$('dorso'), som=$('sombra'), bri=$('b
 function mostrar(k){PAG.forEach((p,i)=>{p.style.clipPath='none';p.style.zIndex=i===k?3:0;p.style.visibility=i===k?'visible':'hidden'});
  $('dorso').style.display=$('sombra').style.display=$('brillo').style.display='none'}
 
-function cuenta(){const c=$('cuenta');if(!c||!M||!M.f)return;const v=Math.max(0,M.f-new Date());
- c.innerHTML=`<div><strong>${Math.floor(v/864e5)}</strong><small>días</small></div><div><strong>${Math.floor(v/36e5)%24}</strong><small>horas</small></div><div><strong>${Math.floor(v/6e4)%60}</strong><small>min</small></div>`}
-setInterval(cuenta,30000);
+/* 27/11/2026 (Maki: «está el contador pero eso está estático»): antes se refrescaba cada 30 s y sin segundos,
+   así que parecía una foto. Ahora corre cada segundo, con segundos. Y con fx.libro.sinCuenta no se muestra. */
+function cuenta(){const c=$('cuenta');if(!c||!M||!M.f)return;if(M.L.sinCuenta){c.style.display='none';return}c.style.display='';const v=Math.max(0,M.f-new Date());
+ const p=n=>String(n).padStart(2,'0');
+ c.innerHTML=`<div><strong>${Math.floor(v/864e5)}</strong><small>días</small></div><div><strong>${p(Math.floor(v/36e5)%24)}</strong><small>horas</small></div><div><strong>${p(Math.floor(v/6e4)%60)}</strong><small>min</small></div><div><strong>${p(Math.floor(v/1e3)%60)}</strong><small>seg</small></div>`}
+setInterval(cuenta,1000);
 
 /* ningún texto se corta: se achica hasta entrar */
 function ajusta(el,cabe){if(!el)return;el.style.fontSize='';let fs=parseFloat(getComputedStyle(el).fontSize),n=0;while(!cabe(el)&&fs>11&&n++<40){fs-=1;el.style.fontSize=fs+'px'}}
