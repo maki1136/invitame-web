@@ -121,7 +121,11 @@
   }
   /* ★ 23/10/2026 (Jazmín): «que la raspadita siempre esté tapada por predeterminado».
      Sin dato, va PRENDIDA. Sólo se apaga si alguien la destildó en el panel (false). */
-  function encendido() { return siNo(opt('encendido', 'rasp'), true); }
+  /* ★ 27/11 (Jazmín, Ana Patricia & Aldo: «sí o sí tengo que activar la raspadita para que se vea»):
+     con «La fecha se ve sin raspar» tildada, la sección de la fecha se muestra aunque la raspadita
+     esté apagada (la tapa no aparece igual). Opt-in: sin esa casilla, todo como antes. */
+  function sinRaspar() { try { var e = window.INVEV || (typeof D === 'object' && D) || {}; var v = ((((e.fx || {}).estiloSec || {}).scratch) || {}).sinRaspar; return v === true || v === 'true' || v === 1 || v === '1'; } catch (x) { return false; } }
+  function encendido() { return sinRaspar() || siNo(opt('encendido', 'rasp'), true); }
 
   function config() {
     var f = String(opt('forma', 'raspForma') || 'cuadrado').toLowerCase();
