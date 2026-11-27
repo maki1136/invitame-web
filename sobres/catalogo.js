@@ -1227,9 +1227,11 @@ window.SOBRES_INVITAME = {
      recortada y pegada sobre la solapa: se mueve y se aplana con ella cuadro por
      cuadro, y se esconde cuando la solapa da la vuelta. */
   'oleo-azul-mono-amarillo-luz': {
-    nombre:     "Óleo Azul con moño amarillo · lacre y moño de raso amarillo, sale luz (video)",
-    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/v1795623844/invitame/oleo-azul-amarillo/oleo-azul-mono-amarillo-sobre-luz.mp4",
-    poster:     "https://res.cloudinary.com/oc8cgqt4/image/upload/v1795623845/invitame/oleo-azul-amarillo/oleo-azul-mono-amarillo-sobre-luz.jpg",
+    /* 27/11/2026 (Jazmín, 3.ª vez: «hay que sacarle el sello, que quede solo el moñito»):
+       el lacre se borra cuadro por cuadro y queda SOLO el moño, con el nudo en la punta de la solapa. */
+    nombre:     "Óleo Azul con moño amarillo · solo el moño de raso amarillo (sin lacre), sale luz (video)",
+    video:      "https://res.cloudinary.com/oc8cgqt4/video/upload/v1795792330/invitame/oleo-azul-amarillo/oleo-azul-solo-mono-amarillo-sobre-luz.mp4",
+    poster:     "https://res.cloudinary.com/oc8cgqt4/image/upload/v1795792331/invitame/oleo-azul-amarillo/oleo-azul-solo-mono-amarillo-sobre-luz.jpg",
     color:      "#E6DDD2",
     luz:        3.0,
     luzColor:   "#FBF6EE",
