@@ -13,7 +13,7 @@
   'use strict';
   if (window.__invFinSinSeccion) return; window.__invFinSinSeccion = 1;
   if (!/^\/i\//.test(location.pathname) && !/[?&]preview=1/.test(location.search)) return;
-  var DESDE = '2026-11-27T16:30:00Z';
+  var DESDE = '2026-11-27T16:00:00Z';
   function si(v) { return v === true || v === 'true' || v === 1 || v === '1'; }
 
   var css = document.createElement('style');
