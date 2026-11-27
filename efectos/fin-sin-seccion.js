@@ -27,7 +27,21 @@
     try {
       var ev = window.INVEV; if (!ev) return;
       var nuevo = typeof window.INVCAMBIO === 'function' ? window.INVCAMBIO(ev, DESDE) : false;
-      document.documentElement.classList.toggle('fin-sin-seccion', !!(nuevo && si(ev['c_deshabilitar-seccion-frase-final'])));
+      var on = !!(nuevo && si(ev['c_deshabilitar-seccion-frase-final']));
+      document.documentElement.classList.toggle('fin-sin-seccion', on);
+      /* ★ las colecciones pintan el cierre con reglas que a veces cargan después (html[data-oleo] .footer…)
+         y el motor le pone en línea un aspect-ratio con !important: sólo en línea se le gana.
+         Si la marca de Invítame no se muestra, el cierre se esconde entero. */
+      var f = document.querySelector('.footer'); if (!f) return;
+      var pie = document.getElementById('pie-pub');
+      var conPie = pie && pie.style.display !== 'none' && getComputedStyle(pie).display !== 'none';
+      if (on) {
+        if (!f.hasAttribute('data-fss')) f.setAttribute('data-fss', f.style.getPropertyValue('display') || '');
+        if (conPie) { f.style.setProperty('aspect-ratio', 'auto', 'important'); f.style.setProperty('background', 'none', 'important'); f.style.removeProperty('display'); }
+        else f.style.setProperty('display', 'none', 'important');
+      } else if (f.hasAttribute('data-fss')) {
+        f.style.removeProperty('display'); f.style.removeProperty('background'); f.style.removeProperty('aspect-ratio'); f.removeAttribute('data-fss');
+      }
     } catch (e) {}
   }
   aplicar();
