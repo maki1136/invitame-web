@@ -1143,6 +1143,18 @@
       paleta:  ["#ecebe8", "#cfcbc5", "#b09260", "#3b3733"],
       tipos:   ["boda"]
     },
+    /* 26/11 (Jazmín: «una similar a valentina-gpe-delgadillo-balam-2 que se llame
+       Cuento de hadas, con movimiento y platinum, la apertura como esa»). */
+    'web-cuento-de-hadas': {
+      nombre:  "Cuento de hadas",
+      bajada:  "Castillo rosa, rosas y mariposas que se mueven; abre con el libro mágico.",
+      muestra: 'abigail-cuento-mis15',
+      foto:    '/formulario/disenos/abigail-cuento-mis15.webp',
+      color:   '#f2c6d2',
+      color2:  '#8a3a5a',
+      paleta:  ["#fff4f2", "#f6c9d3", "#e58fa8", "#b0466c"],
+      tipos:   ["xv"]
+    },
   };
 
   /* ★★ 19/10/2026 — UNA FILA POR TIPO DE EVENTO  ★★

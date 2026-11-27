@@ -50,6 +50,10 @@ $lbImg = '';
 if (isset($lbFx['libro']->portada->foto)) $lbImg = (string)$lbFx['libro']->portada->foto;
 if ($lbImg !== '') $lbImg = preg_replace('#(res\.cloudinary\.com/[^/]+/image/upload/)#', '$1c_fill,g_auto,w_1200,h_630,f_jpg,q_auto/', $lbImg, 1);
 $lbDesc = 'Te invitamos a leer nuestra historia y a escribir con nosotros el último capítulo.';
+/* 27/11/2026 (Jazmín: en XV la vista previa decía «escribir con nosotros»): título y frase al compartir,
+   opcionales desde el panel (fx.libro.compartirTit / compartirDesc). Sin dato queda como estaba. */
+if (isset($lbFx['libro']->compartirTit) && trim((string)$lbFx['libro']->compartirTit) !== '') $lbTit = trim((string)$lbFx['libro']->compartirTit);
+if (isset($lbFx['libro']->compartirDesc) && trim((string)$lbFx['libro']->compartirDesc) !== '') $lbDesc = trim((string)$lbFx['libro']->compartirDesc);
 $lbMeta = '<meta property="og:type" content="website">' .
   '<meta property="og:title" content="' . $lbE($lbTit) . '">' .
   '<meta property="og:description" content="' . $lbE($lbDesc) . '">' .
