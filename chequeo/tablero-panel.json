@@ -1,9 +1,9 @@
 {
- "cuando": "2026-11-27T17:33:54.697Z",
+ "cuando": "2026-11-27T17:31:37.343Z",
  "slug": "camila-y-tomas",
  "total": 913,
- "verde": 897,
- "amarillo": 1,
+ "verde": 895,
+ "amarillo": 3,
  "rojo": 15,
  "gris": 0,
  "items": [
@@ -6659,8 +6659,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.confirmacion.sinDiseno",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "CONFIRMACIÓN",
@@ -6858,8 +6859,9 @@
    "guarda": true,
    "dato": "fx.estiloSec.spotify.tamSub",
    "llega": true,
-   "seVe": true,
-   "estado": "verde"
+   "seVe": false,
+   "estado": "amarillo",
+   "nota": "se guarda y llega, pero la miniatura no cambió: revisar a mano"
   },
   {
    "tab": "MUSIC_PASES",
