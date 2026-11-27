@@ -180,6 +180,10 @@
       var idc = 'est-sec-' + key, st = document.getElementById(idc);
       var marca = 'est-' + key; sec.setAttribute('data-est', marca);
       var regla = (bg || img || es.sinDiseno) ? '[data-est="' + marca + '"]::before,[data-est="' + marca + '"]::after{background:none!important;background-image:none!important;opacity:0!important}' : '';
+      /* ★ 27/11 (Jazmín, dany: «los fondos predeterminados (itinerario, personas) no se modifican»): el fondo
+         ANIMADO del diseño (cielo, nubes, estrellas: .ambiente) va como capa encima del color de la sección.
+         Si eligen color, imagen o «sin el dibujo del diseño», esa capa se saca de esa sección. */
+      if (bg || img || es.sinDiseno) regla += '[data-est="' + marca + '"] > .ambiente,[data-est="' + marca + '"] > .amb-front{display:none!important}';
       /* ★ 19/11: «Sin el dibujo del diseño» — también las piezas decorativas que la colección cuelga adentro (las flores de la banda) y la textura del propio fondo */
       /* las colecciones pintan su dibujo con selectores largos y !important: acá se repite el atributo para ganarles */
       var F = 'html body [data-est="' + marca + '"][data-est="' + marca + '"][data-est="' + marca + '"]';

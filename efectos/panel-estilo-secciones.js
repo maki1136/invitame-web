@@ -73,7 +73,8 @@
         ['color', 'Color del nombre del hotel', 'colorNombre'], ['color', 'Color de la descripción del hotel', 'colorDesc'],
         ['color', 'Color de la tarjeta del hotel', 'tarjeta'], ['rango', 'Transparencia de la tarjeta', 'tarjetaOpaca', 0, 100, '%']])) },
     { key: 'itinerario', tab: 'LUGAR_VEST', casa: 'itinerario', titulo: 'Itinerario · colores por separado (horario, momento y descripción)',
-      campos: SIN_TIT.concat(BASE_TIT).concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
+      /* ★ 27/11 (Jazmín, dany): el itinerario no tenía fondo propio para elegir */
+      campos: SIN_TIT.concat(BASE_FONDO, BASE_TIT).concat([['color', 'Color del horario (17:00)', 'colorHora'], ['color', 'Color del nombre del momento (Ceremonia)', 'colorNombre'],
         ['color', 'Color de la descripción', 'colorDesc'],
         /* ★ 26/11 (Dalia Ivonne): el color de los iconitos */
         ['color', 'Color de los iconos', 'colorIcono'],
