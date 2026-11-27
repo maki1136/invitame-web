@@ -110,6 +110,8 @@
       foto('Foto de los novios', 'portada', 'La foto principal, vertical. Es también la que se ve al compartir el link.') +
       '<label style="' + S.lab + '">Los nombres en la portada van</label><select data-l="portada.nombres" style="width:100%"><option value=""' + (L.portada && L.portada.nombres === 'abajo' ? '' : ' selected') + '>Arriba (si la foto tiene cielo o aire arriba)</option><option value="abajo"' + (L.portada && L.portada.nombres === 'abajo' ? ' selected' : '') + '>Abajo (si arriba están las caras)</option></select>' +
       l('Título', 'titulo', 'text', 'Nuestra historia') +
+      l('Título al compartir el link (opcional)', 'compartirTit', 'text', 'Ximena & Diego · Nuestra historia', 'Lo que se lee en negrita cuando se envía el link por WhatsApp. Vacío, va «Nombres · Nuestra historia».') +
+      l('Frase al compartir el link (opcional)', 'compartirDesc', 'text', 'Te invitamos a leer nuestra historia y a escribir con nosotros el último capítulo.', 'La frase de abajo en la vista previa de WhatsApp. Para XV conviene cambiarla.') +
       k('Fecha y hora del evento', 'fecha', 'datetime-local', '', 'La misma de PRINCIPAL. De acá salen la portada, la tapa, la cuenta regresiva y «Guardar la fecha».'));
     h += seccion('prologo', '3 · El prólogo',
       l('Texto', 'prologo.texto', 'area', 'Antes del «sí» hubo un café equivocado, una tormenta…', 'Aparece palabra por palabra. Cada renglón es un párrafo. Vacío, no hay prólogo.') +
