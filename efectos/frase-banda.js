@@ -159,7 +159,13 @@
     var foco = (c.foco === undefined || c.foco === '' || c.foco === null) ? null : Math.max(0, Math.min(100, parseInt(c.foco, 10) || 0));
     var mk = marcoDe(c);
     var firma = (mk ? mk.url + mk.tinta : '') + '|' + alto + '|' + zoom + '|' + foco + '|' + (window.INVNUEVA && window.INVNUEVA() ? 'N|' : 'V|') + foto + '|' + velo + '|' + pos + '|' + colorPropio + '|' + peso + '|' + tamN + '|' + fuente;
-    if (firma === ultima && document.getElementById(ID_CSS)) { soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno'); return; }
+    /* ★ 27/11 (Jazmín, constanza: «el sector aparece verde, debería aparecer el mismo fondo de toda la
+       invitación»). El papel de la sección vecina se leía UNA sola vez, a veces antes de que la colección
+       pintara esa sección: quedaba el verde de fábrica del motor (.sec.verde). Ahora se vuelve a leer en
+       cada pasada mientras no haya foto, así toma el color que la colección le pone al final. */
+    if (firma === ultima && document.getElementById(ID_CSS)) {
+      if (velo === 'sinfoto') { try { var pv = papelVecino(); var sa = document.querySelector('section.fraseSec'); if (sa && pv && sa.style.getPropertyValue('background-color') !== pv) ponerPapel(pv); } catch (e) {} }
+      soltarCorrector(velo !== 'sinfoto' && velo !== 'ninguno'); return; }
     ultima = firma;
     /* dos :not(#id) para ganarle a las colecciones, que pintan la frase con selectores largos */
     var S = 'html body section.fraseSec.fraseSec:not(#fb-a):not(#fb-b)';
